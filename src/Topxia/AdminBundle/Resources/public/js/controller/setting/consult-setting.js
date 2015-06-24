@@ -19,6 +19,7 @@ define(function(require, exports, module) {
                 response = $.parseJSON(response);
                 $("#consult-container").html('<img src="' + response.url + '?'+ (new Date()).getTime() + '">');
                 $form.find('[name=webchatURI]').val(response.path);
+                $("#consult-webchat-del").show();
                 Notify.success('上传微信二维码成功！');
             }
         });
@@ -57,6 +58,15 @@ define(function(require, exports, module) {
         
         $('[data-role=item-delete]').on('click',function(){
                 $(this).parent().parent().remove();
+        });
+
+        $('#consult-webchat-del').on('click',function(){
+            if (!confirm('确认要删除吗？')) return false;
+            $.post($(this).data('url'),function(response){
+               $("#consult-container").html('');
+               $('[name=webchatURI]').val('');
+               $("#consult-webchat-del").hide();
             });
+        });
     }
 });

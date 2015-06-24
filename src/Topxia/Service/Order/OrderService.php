@@ -10,9 +10,9 @@ interface OrderService
 
     public function findOrdersByIds(array $ids);
 
-    public function searchOrders($conditions, $sort = 'latest', $start, $limit);
+    public function searchOrders($conditions, $sort, $start, $limit);
     
-    public function searchBill($conditions, $sort = 'latest', $start, $limit);
+    public function searchBill($conditions, $sort, $start, $limit);
 
     public function countUserBillNum($conditions);
     
@@ -28,7 +28,7 @@ interface OrderService
 
     public function canOrderPay($order);
 
-    public function cancelOrder($id, $message = '', $data);
+    public function cancelOrder($id, $message, $data);
 
     public function sumOrderPriceByTarget($targetType, $targetId);
 
@@ -40,7 +40,7 @@ interface OrderService
 
     public function findUserRefunds($userId, $start, $limit);
 
-    public function searchRefunds($conditions, $sort = 'latest', $start, $limit);
+    public function searchRefunds($conditions, $sort, $start, $limit);
     
     public function searchRefundCount($conditions);
 

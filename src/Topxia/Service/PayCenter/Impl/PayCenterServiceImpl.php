@@ -76,7 +76,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 			$processor = OrderProcessorFactory::create($order["targetType"]);
 
-	        if ($order['status'] == 'paid' and $processor) {
+	        if ($order['status'] == 'paid' && $processor) {
 	            $processor->doPaySuccess($success, $order);
 	        }
 	        if($lock){
@@ -109,7 +109,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
 
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 

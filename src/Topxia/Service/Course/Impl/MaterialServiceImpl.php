@@ -61,7 +61,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	public function deleteMaterial($courseId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
-		if (empty($material) or $material['courseId'] != $courseId) {
+		if (empty($material) || $material['courseId'] != $courseId) {
 			throw $this->createNotFoundException('课程资料不存在，删除失败。');
 		}
 		$this->getMaterialDao()->deleteMaterial($materialId);
@@ -108,7 +108,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	public function getMaterial($courseId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
-		if (empty($material) or $material['courseId'] != $courseId) {
+		if (empty($material) || $material['courseId'] != $courseId) {
 			return null;
 		}
 		return $material;

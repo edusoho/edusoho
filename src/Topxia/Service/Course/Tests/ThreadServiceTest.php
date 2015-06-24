@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Service\User\CurrentUser;
 
 class ThreadServiceTest extends BaseTestCase
 {
@@ -299,6 +300,18 @@ class ThreadServiceTest extends BaseTestCase
      */
     public function testDeletePost()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
         $thread = array(
             'courseId' => $course['id'],
@@ -326,6 +339,17 @@ class ThreadServiceTest extends BaseTestCase
 		$this->assertEquals(0, $thread['postNum']);
     }
 
+    private function createUser()
+    {
+        $user = array();
+        $user['email'] = "user@user.com";
+        $user['nickname'] = "user";
+        $user['password'] = "user";
+        $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
+
+        return $this->getUserService()->register($user);
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -334,5 +358,9 @@ class ThreadServiceTest extends BaseTestCase
     protected function getThreadService()
     {
     	return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+    private function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }

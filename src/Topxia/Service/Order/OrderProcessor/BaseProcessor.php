@@ -12,8 +12,9 @@ class BaseProcessor {
         if(!empty($coinPayAmount) && $coinPayAmount>0 && $coinEnabled) {
         	$user = $this->getAuthService()->getCurrentUser();
             $isRight = $this->getAuthService()->checkPayPassword($user["id"], $payPassword);
-            if(!$isRight)
+            if(!$isRight){
             	throw new Exception("支付密码不正确，创建订单失败!");
+            }
         }
 
         $coinPreferentialPrice = 0;

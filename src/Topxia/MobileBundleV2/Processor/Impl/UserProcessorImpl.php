@@ -68,7 +68,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', "您尚未登录！");
         }
         $conversation = $this->getMessageService()->getConversation($conversationId);
-        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+        if (empty($conversation) || $conversation['toId'] != $user['id']) {
             throw $this->createNotFoundException('私信会话不存在！');
         }
 
@@ -420,7 +420,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($followingId);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $result[$index++] = $this->controller->filterUser($user);
+            $result[$index] = $this->controller->filterUser($user);
+            $index++;
         }
         return $result;
     }
@@ -440,7 +441,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($followerId);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
-            $result[$index++] = $this->controller->filterUser($user);
+            $result[$index] = $this->controller->filterUser($user);
+            $index++;
         }
         return $result;
     }
@@ -590,10 +592,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'time' => $liveCourse['liveStartTime']
                 );
         }
-        $result[$index++] = array(
+        $result[$index] = array(
             'title' => '在学直播',
             'data' => $dataLiveCourse
         );
+         $index++;
         
         $courseConditions = array(
             'userId' => $user['id']
@@ -629,10 +632,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }else{
             $data = null;
         }
-        $result[$index++] = array(
+        $result[$index] = array(
             'title' => '在学课程',
             'data' => $data
         );
+        $index++;
 
         $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
         $learningCourses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'],0,$learningCourseTotal);
@@ -683,16 +687,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         
-        $result[$index++] = array(
+        $result[$index] = array(
             'title' => '问答',
             'data' => $threadData
         ); 
+        $index++;
                
-        $result[$index++] = array(
+        $result[$index] = array(
             'title' => '讨论',
             'data' => $discussionData
         );
-
+        $index++;
         $conditions = array(
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0
@@ -731,10 +736,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }else{
             $data = null;
         }
-        $result[$index++] = array(
+        $result[$index] = array(
             'title' => '笔记',
             'data' => $data
-        );     
+        );    
+        $index++; 
 
         
         $messageConditions = array(
@@ -764,10 +770,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }else{
             $data = null;
         }
-        $result[$index++] = array(
+        $result[$index] = array(
             'title' => '私信',
             'data' => $data
         );
+        $index++;
         
         return $result;
     }

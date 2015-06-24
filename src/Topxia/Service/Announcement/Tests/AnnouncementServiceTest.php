@@ -13,6 +13,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetType' => 'course',
         	'targetId' => '1',
         	'content' => 'test_announcement',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -26,6 +28,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetType' => 'course',
         	'targetId' => '1',
         	'content' => 'test_announcement',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -43,12 +47,16 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetType' => 'course',
         	'targetId' => '1',
         	'content' => 'test_announcement1',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000
         );
 
         $announcementInfo2 = array(
         	'targetType' => 'course',
         	'targetId' => '1',
         	'content' => 'test_announcement2',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000
         );
 
         $announcement1 = $this->getAnnouncementService()->createAnnouncement($announcementInfo1);
@@ -65,6 +73,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetType' => 'course',
         	'targetId' => '1',
         	'content' => 'test_deleteAnnouncement',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -80,10 +90,17 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetType' => 'course',
         	'targetId' => '1',
         	'content' => 'test_updateAnnouncement',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
-        $updateInfo = array('content'=>'update_content');
+        $updateInfo = array(
+            'targetType' => 'course',
+            'targetId' => '1',
+            'content' => 'update_info',
+            'startTime'=>time(),
+            'endTime'=>time()+3600*1000);
         $this->getAnnouncementService()->updateAnnouncement($createdAnnouncement['id'], $updateInfo);
         
         $getAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);

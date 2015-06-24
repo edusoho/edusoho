@@ -57,7 +57,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) AND ( not( `type` = 'material' AND `subCount` = 0 )) LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND (`type` in ({$types})) and ( not( `type` = 'material' and `subCount` = 0 )) LIMIT {$start},{$limit} ";
         $questions = $this->getConnection()->fetchAll($sql, array($types));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
@@ -73,7 +73,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) AND  (`type` in ($types)) AND ( not( `type` = 'material' AND `subCount` = 0 )) AND (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
+        $sql ="SELECT * FROM {$this->table} WHERE (`parentId` = 0) and  (`type` in ($types)) and ( not( `type` = 'material' and `subCount` = 0 )) and (`target` like '{$target}/%' OR `target` = '{$target}') LIMIT {$start},{$limit} ";
         
         $questions = $this->getConnection()->fetchAll($sql, array());
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -94,7 +94,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         }else if ($questionSource == 'lesson'){
             $target = 'course-'.$courseId.'/lesson-'.$lessonId;
         }
-        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) AND (`type` in ({$types})) AND (`target` like '{$target}/%' OR `target` = '{$target}')";
+        $sql ="SELECT count(*) FROM {$this->table} WHERE  (`parentId` = 0) and (`type` in ({$types})) and (`target` like '{$target}/%' OR `target` = '{$target}')";
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
@@ -190,16 +190,16 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         $sql = "";
         if(isset($conditions["types"])){
             $marks = str_repeat('?,', count($conditions["types"]) - 1) . '?';
-            $sql .= " AND type IN ({$marks}) ";
+            $sql .= " and type IN ({$marks}) ";
             $sqlConditions = array_merge($sqlConditions, $conditions["types"]);
         }
         if(isset($conditions["targets"])) {
             $targetMarks = str_repeat('?,', count($conditions["targets"]) - 1) . '?';
             $sqlConditions = array_merge($sqlConditions, $conditions["targets"]);
-            $sql .= " AND target IN ({$targetMarks}) ";
+            $sql .= " and target IN ({$targetMarks}) ";
         }
         if(isset($conditions["courseId"])) {
-            $sql .= " AND (target=? or target like ?) ";   
+            $sql .= " and (target=? OR target like ?) ";
             $sqlConditions[] = "course-{$conditions['courseId']}";
             $sqlConditions[] = "course-{$conditions['courseId']}/%";
         }
@@ -210,7 +210,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function($value) {
-            if ($value === '' or is_null($value)) {
+            if ($value === '' || is_null($value)) {
                 return false;
             }
             return true;
@@ -242,8 +242,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->andWhere("type IN ( :types )")
             ->andWhere("id NOT IN ( :excludeIds ) ");
 
-        if (isset($conditions['excludeUnvalidatedMaterial']) and ($conditions['excludeUnvalidatedMaterial'] == 1)){
-            $builder->andStaticWhere(" not( type = 'material' and subCount = 0 )");
+        if (isset($conditions['excludeUnvalidatedMaterial']) && ($conditions['excludeUnvalidatedMaterial'] == 1)){
+            $builder->andStaticWhere(" not( type = 'material' AND subCount = 0 )");
         }
         return $builder;
     }

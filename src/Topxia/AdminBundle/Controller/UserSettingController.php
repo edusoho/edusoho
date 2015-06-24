@@ -116,10 +116,33 @@ class UserSettingController extends BaseController
                 }
             }
 
+            if($auth["register_mode"] == "mobile") {
+                foreach ($auth['registerSort'] as $key => $value) {
+                    if($value == "emailOrMobile" || $value == "email") {
+                        unset($auth['registerSort'][$key]);
+                    }
+                }
+                if(!in_array('mobile', $auth['registerSort'])) {
+                    array_unshift($auth['registerSort'], 'mobile');
+                }
+
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if($value == "emailOrMobile" || $value == "email") {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
+                    array_unshift($auth['registerFieldNameArray'], 'mobile');
+                }
+                if(!in_array('email', $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] =  'email';
+                }
+            }
+
 
             if($auth["register_mode"] == "email") {
                 foreach ($auth['registerSort'] as $key => $value) {
-                    if($value == "emailOrMobile") {
+                    if($value == "emailOrMobile" || $value == "mobile") {
                         unset($auth['registerSort'][$key]);
                     }
                 }
@@ -128,7 +151,7 @@ class UserSettingController extends BaseController
                 }
 
                 foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "emailOrMobile") {
+                    if($value == "emailOrMobile" || $value == "mobile") {
                         unset($auth['registerFieldNameArray'][$key]);
                     }
                 }
@@ -161,11 +184,25 @@ class UserSettingController extends BaseController
                 }
             }
 
+            if($auth["register_mode"] == "mobile") {
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if($value == "emailOrMobile" || $value == "email") {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
+                    array_unshift($auth['registerFieldNameArray'], 'mobile');
+                }
+                if(!in_array('email', $auth['registerFieldNameArray'])) {
+                    $auth['registerFieldNameArray'][] =  'email';
+                }
+            }
+
 
             if($auth["register_mode"] == "email") {
 
                 foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "emailOrMobile") {
+                    if($value == "emailOrMobile" || $value == "mobile") {
                         unset($auth['registerFieldNameArray'][$key]);
                     }
                 }
@@ -228,6 +265,7 @@ class UserSettingController extends BaseController
             'captcha_enabled' => 0,
             'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
+            'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes' => 20,
         );
 
@@ -280,13 +318,13 @@ class UserSettingController extends BaseController
             $phpwindConfig = $data['phpwind_config'];
 
             if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) or !is_writeable($discuzConfigPath)) {
+                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
-                if (!file_exists($phpwindConfigPath) or !is_writeable($phpwindConfigPath)) {
+                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
                     goto response;
                 }

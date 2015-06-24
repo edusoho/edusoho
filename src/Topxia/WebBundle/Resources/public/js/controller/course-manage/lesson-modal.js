@@ -314,12 +314,24 @@ define(function(require, exports, module) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
             updateDuration(item.length);
+            var $title = $form.find('[id="lesson-title-field"]');
+            if($title.val()==""){
+                var ext = "." + item.name.replace(/.+\./, "");
+                var filenameNoExt = item.name.replace(ext, "");
+                $title.val(filenameNoExt);
+            }
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
             updateDuration(item.length);
+            var $title = $form.find('[id="lesson-title-field"]');
+            if($title.val()==""){
+                var ext = "." + item.name.replace(/.+\./, "");
+                var filenameNoExt = item.name.replace(ext, "");
+                $title.val(filenameNoExt);
+            }
         });
 
         pptChooser.on('change', function(item) {

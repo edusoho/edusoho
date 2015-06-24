@@ -26,7 +26,7 @@ class ArticleThreadFirewall
 
             $post = $this->getThreadService()->getPost($post['id']);
 
-            if ($post['userId'] == $user['id'] or $user->isAdmin() ) {
+            if ($post['userId'] == $user['id'] || $user->isAdmin() ) {
 
                 return true;
             }

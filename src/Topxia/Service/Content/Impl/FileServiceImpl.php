@@ -218,7 +218,7 @@ class FileServiceImpl extends BaseService implements FileService
     {
     	$parsed = array();
     	$parts = explode('://', $uri);
-    	if (empty($parts) or count($parts)!=2) {
+    	if (empty($parts) || count($parts)!=2) {
     		throw $this->createServiceException('解析文件URI({$uri})失败！');
     	}
     	$parsed['access'] = $parts[0];

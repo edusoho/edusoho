@@ -131,7 +131,8 @@ class NavigationServiceImpl extends BaseService implements NavigationService
     {
         $index = 1;
         foreach ($ids as $key => $id) {
-            $this->updateNavigation($id, array('sequence' => $index++));
+            $this->updateNavigation($id, array('sequence' => $index));
+            $index++;
         }
     }
 

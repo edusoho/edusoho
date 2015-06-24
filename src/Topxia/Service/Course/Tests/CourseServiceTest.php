@@ -5,6 +5,7 @@ use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\User\UserService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\User\CurrentUser;
 
 class CourseServiceTest extends BaseTestCase
 {
@@ -238,6 +239,19 @@ class CourseServiceTest extends BaseTestCase
 
     public function testDeleteChapter()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+
         $course = $this->getCourseService()->createCourse(array(
             'title' => 'online test course 1',
         ));
@@ -510,6 +524,18 @@ class CourseServiceTest extends BaseTestCase
     }
 
 
+    
+    private function createUser()
+    {
+        $user = array();
+        $user['email'] = "user@user.com";
+        $user['nickname'] = "user";
+        $user['password'] = "user";
+        $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
+
+        return $this->getUserService()->register($user);
+    }
+    
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

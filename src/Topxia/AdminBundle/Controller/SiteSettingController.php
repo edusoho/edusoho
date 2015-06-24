@@ -82,6 +82,16 @@ class SiteSettingController extends BaseController
         ));
     }
 
+    public function deleteWebchatAction(Request $request)
+    {
+        $consult = $this->getSettingService()->get('consult', array());
+        if(isset($consult['webchatURI'])){
+            $consult['webchatURI'] = '';
+            $this->getSettingService()->set('consult', $consult);
+        }
+        return $this->createJsonResponse(true);
+    }
+
     public function consultUploadAction(Request $request)
     {
         $file = $request->files->get('consult');

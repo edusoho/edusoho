@@ -398,9 +398,10 @@ class GroupThreadController extends BaseController
         if($goods['coin'] > 0 && $user['id']!=$file['userId']){
 
             $Trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user['id'],$goods['id']);
-            if(!$Trade) 
+            if(!$Trade) {
+                return $this->createMessageResponse('info','您未购买该附件!');
+            }
 
-            return $this->createMessageResponse('info','您未购买该附件!');
         }
 
         $file=$this->getFileService()->getFile($goods['fileId']); 
@@ -439,8 +440,9 @@ class GroupThreadController extends BaseController
 
         $attach=$this->getThreadService()->getGoods($attachId);
 
-        if(isset($account['cash']))
+        if(isset($account['cash'])){
             $account['cash']=intval($account['cash']);
+        }
 
         $Trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user->id,$attach['id']);
 
@@ -465,8 +467,9 @@ class GroupThreadController extends BaseController
                     $this->getThreadService()->addTrade($data);
 
                     $reward=$attach['coin']*0.5;
-                    if(intval($reward)<1)
-                    $reward=1;
+                    if(intval($reward)<1){
+                        $reward=1;
+                    }
                     $file=$this->getFileService()->getFile($attach['fileId']);
                     
                     $this->getCashAccountService()->reward(intval($reward),'您发表的附件<'.$attach['title'].'>被购买下载！',$file['userId']);
@@ -664,8 +667,9 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
         $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
-        if(isset($account['cash']))
+        if(isset($account['cash'])){
             $account['cash']=intval($account['cash']);
+        }
 
         if($request->getMethod()=="POST"){
 
@@ -766,8 +770,9 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
         $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
-        if(isset($account['cash']))
+        if(isset($account['cash'])){
             $account['cash']=intval($account['cash']);
+        }
 
         $need=$this->getThreadService()->sumGoodsCoinsByThreadId($threadId);
         if($request->getMethod()=="POST"){
@@ -787,8 +792,9 @@ class GroupThreadController extends BaseController
             $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
             
             $reward=$need*0.5;
-            if(intval($reward)<1)
-            $reward=1;
+            if(intval($reward)<1){
+                $reward=1;
+            }
 
             $this->getCashAccountService()->reward(intval($reward),'您发表的话题<'.$thread['title'].'>的隐藏内容被查看！',$thread['userId']);
 
@@ -843,7 +849,9 @@ class GroupThreadController extends BaseController
     protected function getPost($postId,$threadId,$id)
     {   
         $post=$this->getThreadService()->getPost($postId);
-        if($post['postId']!=0)$postId=$post['postId'];
+        if($post['postId']!=0){
+            $postId=$post['postId'];
+        }
         $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
 
         $page= $this->getPostPage($postId, $threadId);
@@ -922,8 +930,9 @@ class GroupThreadController extends BaseController
                 
             }
 
-            if($replyHideContent)
-            $context.=$this->replyCanSee($role,$thread,$content,$replyHideContent);
+            if($replyHideContent){
+                $context.=$this->replyCanSee($role,$thread,$content,$replyHideContent);
+            }
 
             unset($coin);
             unset($content);
@@ -932,8 +941,10 @@ class GroupThreadController extends BaseController
             unset($replyContent);
         }
         
-        if($context)
-        $thread['content']=$context;
+        if($context){
+            $thread['content']=$context;
+        }
+        
         $thread['count']=$count;
 
         $thread['content']=str_replace("<!--></>", "#", $thread['content']);
@@ -1051,18 +1062,25 @@ class GroupThreadController extends BaseController
     }
     protected function getPostCondition($filters,$ownId,$threadId)
     {
-        if($filters=='all') return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+        if($filters=='all'){
+            return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+        }
 
-        if($filters=='onlyOwner') return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
-
+        if($filters=='onlyOwner'){
+            return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
+        }
         return false;
 
     }
     protected function getPostOrderBy($sort)
     {
-        if($sort=='asc') return array('createdTime','asc');
+        if($sort=='asc'){
+            return array('createdTime','asc');
+        }
 
-        if($sort=='desc') return array('createdTime','desc');
+        if($sort=='desc'){
+            return array('createdTime','desc');
+        }
     }
 
     protected function getSettingService()
@@ -1119,13 +1137,21 @@ class GroupThreadController extends BaseController
     {
        $user = $this->getCurrentUser();
 
-       if (!$user['id']) return 0;
+       if (!$user['id']){
+        return 0;
+       }
 
-       if ($this->getGroupService()->isOwner($groupId, $user['id'])) return 2;
+       if ($this->getGroupService()->isOwner($groupId, $user['id'])){
+        return 2;
+       }
 
-       if ($this->getGroupService()->isAdmin($groupId, $user['id'])) return 3;
+       if ($this->getGroupService()->isAdmin($groupId, $user['id'])){
+        return 3;
+       }
 
-       if ($this->getGroupService()->isMember($groupId, $user['id'])) return 1;
+       if ($this->getGroupService()->isMember($groupId, $user['id'])){
+        return 1;
+       }
 
        return 0;
     }
@@ -1134,10 +1160,18 @@ class GroupThreadController extends BaseController
     {   
         $user=$this->getCurrentUser();
 
-        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
-        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
-        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
-        if($thread['userId']==$user['id']) return true;
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+            return true;
+        }
+        if($this->getGroupService()->isOwner($id, $user['id'])){
+            return true;
+        }
+        if($this->getGroupService()->isAdmin($id, $user['id'])){
+            return true;
+        }
+        if($thread['userId']==$user['id']){
+            return true;
+        }
         return false;
     }
 

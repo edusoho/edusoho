@@ -32,8 +32,9 @@ class NoteServiceTest extends BaseTestCase
         ));
 
         $foundNote = $this->getNoteService()->getNote($note['id']);
+        $this->assertEquals($note['userId'], $foundNote['userId']);
 
-        $this->assertEquals($note['id'], $foundNote['userId']);
+
     }
 
 

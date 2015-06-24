@@ -18,6 +18,11 @@
         {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
         {% block course_main %}{% endblock %}
       </section>
+      {% block dashboard_relatedCoursesBlock %}
+        {% if setting('course.relatedCourses') == 1 %}
+          {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
+        {% endif %}
+      {% endblock %}
     </div>
 
     <div class="col-lg-3 col-md-4  course-sidebar">

@@ -42,7 +42,7 @@ class EduCloudController extends BaseController
     public function smsAction(Request $request)
     {
         $settings = $this->getSettingService()->get('storage', array());
-        if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }

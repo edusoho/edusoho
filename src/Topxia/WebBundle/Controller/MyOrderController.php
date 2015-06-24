@@ -12,7 +12,9 @@ class MyOrderController extends BaseController
     {
         if(isset($fields['startTime'])&&isset($fields['endTime'])&&$fields['startTime']!=""&&$fields['endTime']!="")
         {   
-            if($fields['startTime']>$fields['endTime']) return false;
+            if($fields['startTime']>$fields['endTime']){
+                return false;
+            }
             return array('startTime'=>strtotime($fields['startTime']),'endTime'=>(strtotime($fields['endTime'])+24*3600));
         }
 

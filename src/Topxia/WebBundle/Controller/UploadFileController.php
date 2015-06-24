@@ -34,7 +34,7 @@ class UploadFileController extends BaseController
         $originalFile = $this->get('request')->files->get('file');
 
         $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
-    	return $this->createJsonResponse($file);
+        return $this->createJsonResponse($file);
     }
 
     public function browserAction(Request $request)
@@ -261,7 +261,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('转换失败');
         }
 
-        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];
 
         $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
 

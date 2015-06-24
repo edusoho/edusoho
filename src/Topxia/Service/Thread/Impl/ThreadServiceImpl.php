@@ -315,7 +315,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadDao()->waveThread($threadId, 'hitNum', +1);
     }
 
-    public function findThreadPosts($targetId, $threadId, $sort = 'default', $start, $limit)
+    public function findThreadPosts($targetId, $threadId, $sort, $start, $limit)
     {
         $thread = $this->getThread($targetId, $threadId);
         if (empty($thread)) {
@@ -664,7 +664,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getTargetFirewall($resource)
     {
         if (empty($resource['targetType']) || empty($resource['targetId'])) {
-            throw new \InvalidArgumentException("Resource  targetType or targetId argument missing."); 
+            throw new \InvalidArgumentException("Resource  targetType or targetId argument missing.");
         }
 
         $class = __NAMESPACE__."\\".ucfirst($resource['targetType']).'ThreadFirewall';

@@ -57,7 +57,7 @@ class MessageController extends BaseController
     {
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
-        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+        if (empty($conversation) || $conversation['toId'] != $user['id']) {
             throw $this->createNotFoundException('私信会话不存在！');
         }
         $paginator = new Paginator(
@@ -165,7 +165,7 @@ class MessageController extends BaseController
     {
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
-        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+        if (empty($conversation) || $conversation['toId'] != $user['id']) {
             throw $this->createAccessDeniedException('您无权删除此私信！');
         }
 
@@ -177,7 +177,7 @@ class MessageController extends BaseController
     {
         $user = $this->getCurrentUser();
         $conversation = $this->getMessageService()->getConversation($conversationId);
-        if (empty($conversation) or $conversation['toId'] != $user['id']) {
+        if (empty($conversation) || $conversation['toId'] != $user['id']) {
             throw $this->createAccessDeniedException('您无权删除此私信！');
         }
         

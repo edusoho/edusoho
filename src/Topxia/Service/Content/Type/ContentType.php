@@ -37,7 +37,7 @@ abstract class ContentType
 	protected function _convert($fields, $mode = 'in')
 	{
 		$extendFields = $this->getExtendedFields();
-		if (empty($extendFields) or !is_array($extendFields)) {
+		if (empty($extendFields) || !is_array($extendFields)) {
 			return $fields;
 		}
 

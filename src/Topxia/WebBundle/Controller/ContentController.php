@@ -99,7 +99,7 @@ class ContentController extends BaseController
             $content = $this->getContentService()->getContentByAlias($alias);
         }
 
-        if (empty($content) or ($content['type'] != $type)) {
+        if (empty($content) || ($content['type'] != $type)) {
             throw $this->createNotFoundException();
         }
 
