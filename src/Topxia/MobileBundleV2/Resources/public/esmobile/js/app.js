@@ -399,6 +399,8 @@ app.run(["applicationProvider", "$rootScope", '$timeout',
   };
 
   app.host = window.location.origin;
+  app.rootPath = window.location.origin + window.location.pathname;
+  
   $rootScope.stateParams = {};
   angular.$client = {};
 

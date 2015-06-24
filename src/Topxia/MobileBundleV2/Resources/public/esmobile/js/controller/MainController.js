@@ -40,11 +40,19 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 	var self = this;
 	this.parseBannerAction = function(action) {
 		this.courseAction = function(params) {
+			if ($scope.platform.native) {
+				esNativeCore.openWebView(app.rootPath + "#/course/" + params);
+				return;
+			}
 			$state.go("course", { courseId : params });
 		}
 
 		this.webviewAction = function(params) {
-
+			if ($scope.platform.native) {
+				esNativeCore.openWebView(app.rootPath + params);
+				return;
+			}
+			window.location.href = params;
 		}
 
 		this.noneAction = function() {
@@ -55,7 +63,6 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 
 	$scope.bannerClick = function(banner) {
 		var bannerAction = self.parseBannerAction(banner.action);
-		console.log(banner);
 		bannerAction(banner.params);
 	}
 }
