@@ -15,6 +15,9 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$courseSetting = $this->getSettingService()->get('course', array());
+		if (!isset($courseSetting['orderBy'])) {
+			$courseSetting['orderBy'] = 'latest';
+		}
 		$orderBy = $courseSetting['orderBy'];
 		$default = $this->getSettingService()->get('default', array());
 
@@ -39,9 +42,6 @@ class CourseController extends CourseBaseController
 		}
 		$fliter = $conditions['fliter'];
 		unset($conditions['fliter']);
-		// if(!isset($conditions['orderBy'])){
-		// 	$conditions['orderBy'] = 'latest';
-		// }
 
 		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
 		unset($conditions['orderBy']);
