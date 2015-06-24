@@ -13,17 +13,21 @@ class FileUtil
 	    $fileSystem = new FileSystem();
 	    $rm = $fileSystem->exists($path);
 	    $f = fopen($path, 'a');
-	    if ($f===false)
+	    if ($f===false){
 	        return false;
+	    }
 	    fclose($f);
-	    if (!$rm)
+	    if (!$rm){
 	        $fileSystem->remove($path);
+	    }
 	    return true;
 	}
 	
 	public static function emptyDir($dirPath,$includeDir=false){
 		$fileSystem = new FileSystem();
-		if(!$fileSystem->exists($dirPath)) return ;
+		if(!$fileSystem->exists($dirPath)){
+			return ;
+		}
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
     		$path->isFile() ? $fileSystem->remove($path->getPathname()) : rmdir($path->getPathname());
 		}
@@ -35,7 +39,9 @@ class FileUtil
  	public static function deepCopy($src,$dest,array $patternMatch=null)
  	{
  		$fileSystem = new FileSystem();
-		if(!$fileSystem->exists($src)) return ;
+		if(!$fileSystem->exists($src)){
+			return ;
+		}
 		if(!$fileSystem->exists($dest)){
 			$fileSystem->mkdir($dest,0777) ;
 		}
@@ -57,8 +63,9 @@ class FileUtil
 
 			$destFile = $dest.$relativeFile;	
 			if($path->isDir() ){
-				if(!$fileSystem->exists($destFile))
+				if(!$fileSystem->exists($destFile)){
 					$fileSystem->mkdir($destFile,0777);
+				}
 			}else{
 				if(strpos( $path->getFilename(), ".") ===0 ){
 					continue;

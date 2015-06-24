@@ -181,8 +181,9 @@ class CoinController extends BaseController
 
         if($request->getMethod()=="POST"){
 
-            if($canChange>0)
-            $this->getCashAccountService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
+            if($canChange>0){
+                $this->getCashAccountService()->changeCoin($changeAmount-$canUseAmount,$canChange,$userId);
+            }
 
             return $this->redirect($this->generateUrl('my_coin'));
         }
@@ -218,7 +219,9 @@ class CoinController extends BaseController
 
         $coinRanges=$coinSetting['coin_consume_range_and_present'];
 
-        if($coinRanges==array(array(0,0))) return array($amount,$canChange,$data);
+        if($coinRanges==array(array(0,0))){
+            return array($amount,$canChange,$data);
+        }
 
         for($i=0;$i<count($coinRanges);$i++){
 

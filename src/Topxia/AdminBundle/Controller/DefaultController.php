@@ -126,7 +126,9 @@ class DefaultController extends BaseController
         $unInstallAppCount=count($appsAll)-count($installedApps);
 
         $app_count=count($apps);
-        if(isset($apps['error'])) $error="error";
+        if(isset($apps['error'])){
+            $error="error";
+        }
 
         $mainAppUpgrade = null;
         foreach ($apps as $key => $value) {
