@@ -150,7 +150,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($discountId));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -235,7 +235,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
          return $this->getConnection()->fetchAll($sql);
     }
 
-    private function getTablename()
+    protected function getTablename()
     {
         return self::TABLENAME;
     }

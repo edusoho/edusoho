@@ -31,7 +31,7 @@ class CategoryController extends BaseController
         ));
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

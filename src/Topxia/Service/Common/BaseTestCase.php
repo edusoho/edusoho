@@ -38,7 +38,7 @@ class BaseTestCase extends WebTestCase
      * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
      */
 
-    private function setServiceKernel()
+    protected function setServiceKernel()
     {
         if (static::$serviceKernel) {
             return ;
@@ -105,7 +105,7 @@ class BaseTestCase extends WebTestCase
     
     }
 
-    private  function createAppDatabase()
+    protected function createAppDatabase()
     {
         // 执行数据库的migrate脚本
         $application = new Application(static::$kernel);
@@ -118,7 +118,7 @@ class BaseTestCase extends WebTestCase
         );
     }
 
-    private function emptyAppDatabase($emptyAll = true)
+    protected function emptyAppDatabase($emptyAll = true)
     {
         $connection = static::$serviceKernel->getConnection();
 

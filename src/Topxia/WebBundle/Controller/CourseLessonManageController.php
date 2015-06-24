@@ -447,53 +447,53 @@ class CourseLessonManageController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-	private function secondsToText($value)
+	protected function secondsToText($value)
 	{
 		$minutes = intval($value / 60);
 		$seconds = $value - $minutes * 60;
 		return array($minutes, $seconds);
 	}
 
-	private function textToSeconds($minutes, $seconds)
+	protected function textToSeconds($minutes, $seconds)
 	{
 		return intval($minutes) * 60 + intval($seconds);
 	}
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
     
-    private function getAppService(){
+    protected function getAppService(){
 		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
     
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getCourseMaterialService()
+    protected function getCourseMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
-    private function getDiskService()
+    protected function getDiskService()
     {
         return $this->getServiceKernel()->createService('User.DiskService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
     
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

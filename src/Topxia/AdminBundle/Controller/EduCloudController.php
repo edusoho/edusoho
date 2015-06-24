@@ -86,7 +86,7 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud:apply-sms-form.html.twig', array());
     }
 
-    private function handleSmsSetting(Request $request)
+    protected function handleSmsSetting(Request $request)
     {
         list($smsStatus, $schoolNames) = $this->getSchoolName();
 
@@ -151,7 +151,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-    private function getSchoolName()
+    protected function getSchoolName()
     {
         $schoolName = $this->getCloudSmsKey('sms_school_name');
         $schoolCandidateName = $this->getCloudSmsKey('sms_school_candidate_name');
@@ -195,19 +195,19 @@ class EduCloudController extends BaseController
         );
     }
 
-    private function calStrlen($str)
+    protected function calStrlen($str)
     {
         return (strlen($str) + mb_strlen($str, 'UTF8')) / 2;
     }
 
-    private function setCloudSmsKey($key, $val)
+    protected function setCloudSmsKey($key, $val)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
         $this->getSettingService()->set('cloud_sms', $setting);
     }
 
-    private function getCloudSmsKey($key)
+    protected function getCloudSmsKey($key)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         if (isset($setting[$key])){
@@ -216,32 +216,32 @@ class EduCloudController extends BaseController
         return null;
     }
 
-    private function getAccount()
+    protected function getAccount()
     {
         return $this->getEduCloudService()->getAccount();
     }
 
-    private function applyForSms($name = 'smsHead')
+    protected function applyForSms($name = 'smsHead')
     {
         return $this->getEduCloudService()->applyForSms($name);
     }
 
-    private function getSmsOpenStatus()
+    protected function getSmsOpenStatus()
     {
         return $this->getEduCloudService()->getSmsOpenStatus();
     }
 
-    private function getBills($type = 'sms', $page=1, $limit=20)
+    protected function getBills($type = 'sms', $page=1, $limit=20)
     {
         return $this->getEduCloudService()->getBills($type, $page, $limit);
     }
 
-    private function sendSms($to, $verify, $category = 'verify')
+    protected function sendSms($to, $verify, $category = 'verify')
     {
         return $this->getEduCloudService()->sendSms($to, $verify, $category);
     }
 
-    private function verifyKeys()
+    protected function verifyKeys()
     {
         return $this->getEduCloudService()->verifyKeys();
     }

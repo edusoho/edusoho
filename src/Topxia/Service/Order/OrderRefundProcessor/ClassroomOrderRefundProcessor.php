@@ -57,7 +57,7 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 		$this->getClassroomOrderService()->cancelRefundOrder($id);
 	}
 
-	private function sendAuditRefundNotification($order, $pass, $amount, $note)
+	protected function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
         $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
         if (empty($classroom)) {

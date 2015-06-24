@@ -136,7 +136,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getConversationDao()->getConversationByFromIdAndToId($fromId, $toId);
     }
 
-    private function addMessage($fromId, $toId, $content)
+    protected function addMessage($fromId, $toId, $content)
     {
         $message = array(
             'fromId' => $fromId,
@@ -148,7 +148,7 @@ class MessageServiceImpl extends BaseService implements MessageService
     }
 
 
-    private function prepareConversationAndRelationForSender($message, $toId, $fromId)
+    protected function prepareConversationAndRelationForSender($message, $toId, $fromId)
     {
         $conversation = $this->getConversationDao()->getConversationByFromIdAndToId($toId, $fromId);
         if ($conversation) {
@@ -181,7 +181,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     }
 
-    private function prepareConversationAndRelationForReceiver($message, $fromId, $toId)
+    protected function prepareConversationAndRelationForReceiver($message, $fromId, $toId)
     {
         $conversation = $this->getConversationDao()->getConversationByFromIdAndToId($fromId, $toId);
         if ($conversation) {
@@ -213,7 +213,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation = $this->getRelationDao()->addRelation($relation);
     }
 
-    private function safelyUpdateConversationMessageNum($conversation)
+    protected function safelyUpdateConversationMessageNum($conversation)
     {
         if ($conversation['messageNum'] <= 0) {
             $this->getConversationDao()->updateConversation($conversation['id'], 
@@ -224,7 +224,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
     }
 
-    private function safelyUpdateConversationunreadNum($conversation)
+    protected function safelyUpdateConversationunreadNum($conversation)
     {
         if ($conversation['unreadNum'] <= 0) {
             $this->getConversationDao()->updateConversation($conversation['id'], 
@@ -235,7 +235,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
     }
 
-    private function sortMessages($messages)
+    protected function sortMessages($messages)
     {
         usort($messages ,function($a, $b){
             if($a['createdTime'] > $b['createdTime']){
@@ -249,22 +249,22 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $messages;
     }
 
-    private function getMessageDao()
+    protected function getMessageDao()
     {
         return $this->createDao('User.MessageDao');
     }
 
-    private function getConversationDao()
+    protected function getConversationDao()
     {
         return $this->createDao('User.MessageConversationDao');
     }
 
-    private function getRelationDao()
+    protected function getRelationDao()
     {
         return $this->createDao('User.MessageRelationDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
