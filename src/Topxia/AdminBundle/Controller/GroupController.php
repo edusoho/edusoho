@@ -90,7 +90,7 @@ class GroupController extends BaseController
                 'userId' => $user['id'],
                 'userName' => $user['nickname']);
             $this->getNotifiactionService()->notify($thread['userId'],'group-thread',
-                $$message);
+                $message);
             $this->getThreadService()->deleteThread($threadId); 
         }
         return new Response('success');

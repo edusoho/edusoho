@@ -32,7 +32,7 @@ interface CourseService
 
 	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
-	public function searchCourses($conditions, $sort = 'latest', $start, $limit);
+	public function searchCourses($conditions, $sort, $start, $limit);
 
 	public function searchCourseCount($conditions);
 
@@ -52,9 +52,9 @@ interface CourseService
 
 	public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
 
-	public function findUserTeachCourseCount($userId, $onlyPublished = true);
+	public function findUserTeachCourseCount($conditions, $onlyPublished = true);
 	
-	public function findUserTeachCourses($userId, $start, $limit, $onlyPublished = true);
+	public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
 	public function findUserFavoritedCourseCount($userId);
 
@@ -232,7 +232,7 @@ interface CourseService
 
 	public function getCourseMember($courseId, $userId);
 
-	public function searchMemberIds($conditions, $sort = 'latest', $start, $limit);
+	public function searchMemberIds($conditions, $sort, $start, $limit);
 
 	public function updateCourseMember($id, $fields);
 

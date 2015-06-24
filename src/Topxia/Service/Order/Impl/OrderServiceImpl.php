@@ -207,7 +207,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->addLog($log);
     }
 
-    public function cancelOrder($id, $message = '', $data = array())
+    public function cancelOrder($id, $message, $data = array())
     {
         $order = $this->getOrder($id);
         if (empty($order)) {
@@ -260,7 +260,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderRefundDao()->findRefundsByUserId($userId, $start, $limit);
     }
 
-    public function searchRefunds($conditions, $sort = 'latest', $start, $limit)
+    public function searchRefunds($conditions, $sort, $start, $limit)
     {
         $conditions = array_filter($conditions);
         $orderBy = array('createdTime', 'DESC');
@@ -293,7 +293,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $setting = $this->getSettingService()->get('refund');
 
         // 系统未设置退款期限，不能退款
-        if (empty($setting) or empty($setting['maxRefundDays'])) {
+        if (empty($setting) || empty($setting['maxRefundDays'])) {
             $expectedAmount = 0;
         }
 
@@ -412,7 +412,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("用户未登录，订单(#{$id})取消退款失败");
         }
 
-        if ($order['userId'] != $user['id'] and !$user->isAdmin()) {
+        if ($order['userId'] != $user['id'] && !$user->isAdmin()) {
             throw $this->createServiceException("订单(#{$id})，你无权限取消退款");
         }
 
@@ -441,7 +441,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 
-    public function searchOrders($conditions, $sort = 'latest', $start, $limit)
+    public function searchOrders($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -458,7 +458,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
-    public function searchBill($conditions, $sort = 'latest', $start, $limit)
+    public function searchBill($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {

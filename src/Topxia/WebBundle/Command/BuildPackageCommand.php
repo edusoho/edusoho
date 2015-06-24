@@ -75,7 +75,7 @@ class BuildPackageCommand extends BaseCommand
 
             $opBundleFile = $this->getBundleFile($opFile);
 
-            if ($op == 'M' or $op == 'A') {
+            if ($op == 'M' || $op == 'A') {
                 $output->writeln("<info>增加更新文件：{$opFile}</info>");
                 $this->copyFileAndDir($opFile, $packageDirectory);
                 if ($opBundleFile) {

@@ -207,16 +207,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('categoryId IN ( :categoryIds )')
             ->andWhere('vipLevelId IN ( :vipLevelIds )')
             ->andWhere('parentId = :parentId')
+            ->andWhere('parentId > :parentId_GT')
             ->andWhere('parentId IN ( :parentIds )')
             ->andWhere('id NOT IN ( :excludeIds )')
-            ->andWhere('id NOT IN ( :courseIds )');
+            ->andWhere('id IN ( :courseIds )');
 
         return $builder;
     }
 
     public function analysisCourseDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
     }
