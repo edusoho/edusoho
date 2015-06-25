@@ -273,4 +273,9 @@ class PartnerDiscuzController extends BaseController
         return $string;
     }
 
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
 }
