@@ -42,7 +42,7 @@
     </ul>
 
     <div class="ui-scroller course-card" ui-scroll data="courses" on-infinite="loadMore()">
-      <ul class="ui-list ui-list-link ui-border-tb">
+      <ul class="ui-list ui-border-tb">
           <li class="ui-border-t" ng-repeat="course in courses"  ui-sref="course({ courseId : course.id })">
               <div class="ui-list-img">
                   <img ng-src="{{ course.middlePicture }} " img-error="course" />

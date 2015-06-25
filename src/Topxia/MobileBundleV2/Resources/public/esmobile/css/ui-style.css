@@ -1222,6 +1222,11 @@ a {
   font-size: 35px;
 }
 
+.ui-vip-price>sup{
+  position: relative;
+  top: -10px;
+}
+
 .ui-vip .ui-panel .ui-avatar {
   border: solid 1px #ccc;
   padding: 8px;
@@ -1296,6 +1301,8 @@ a {
 .ui-vippay {
   height: 100%;
   background: #f0f0f0;
+  top: 0;
+  padding-top: 45px;
 }
 
 .ui-vippay .ui-form {
