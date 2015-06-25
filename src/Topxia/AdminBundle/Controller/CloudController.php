@@ -60,9 +60,14 @@ class CloudController extends BaseController
 
     public function videoAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        $param = array( 'type' => 'video' );
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_show&param='.urldecode(json_encode($param)));
+        $params = array( 'type' => 'video' );
+        return $this->redirectUrl('edu_cloud_show', $params);
+    }
+
+    public function liveAction(Request $request)
+    {
+        $params = array( 'type' => 'live' );
+        return $this->redirectUrl('edu_cloud_show', $params);
     }
 
     public function videoUpgradeAction(Request $request)

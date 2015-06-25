@@ -10,7 +10,7 @@
                    <!--未购买-->
                     {% if not live %}
                       <div class="alert alert-warning alert-sm" role="alert">
-                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">这里</a>了解详情
+                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">这里</a>了解详情
                       </div>
                     {% else %}
                       <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>

@@ -681,6 +681,10 @@ admin_cloud_video:
     pattern:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
 
+admin_cloud_live:
+    pattern:  /cloud/live
+    defaults: { _controller: TopxiaAdminBundle:Cloud:live }
+
 admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
