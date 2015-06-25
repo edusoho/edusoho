@@ -71,7 +71,6 @@
 .es-icon-flashclass:before { content: "\e612"; }
 .es-icon-pptclass:before { content: "\e613"; }
 .es-icon-videoclass:before { content: "\e614"; }
-.es-icon-assignment1:before { content: "\e615"; }
 .es-icon-crown:before { content: "\e616"; }
 .es-icon-exit:before { content: "\e617"; }
 .es-icon-arrowback:before { content: "\e618"; }
@@ -134,10 +133,18 @@
 .es-icon-findinpage:before { content: "\e651"; }
 .es-icon-headset:before { content: "\e652"; }
 .es-icon-landscape:before { content: "\e653"; }
-.es-icon-assignment2:before { content: "\e654"; }
+.es-icon-assignment1:before { content: "\e654"; }
 .es-icon-accountwallet:before { content: "\e655"; }
 .es-icon-dashboard:before { content: "\e656"; }
 .es-icon-web:before { content: "\e67c"; }
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
 .es-icon-icattachfileblack24px:before { content: "\e681"; }
+.es-icon-introduction1:before { content: "\e673"; }
+.es-icon-introduction2:before { content: "\e674"; }
+.es-icon-introduction3:before { content: "\e675"; }
+.es-icon-videoplay:before { content: "\e677"; }
+.es-icon-chatcircle:before { content: "\e682"; }
+.es-icon-locationcircle:before { content: "\e683"; }
+.es-icon-qacircle:before { content: "\e684"; }
+.es-icon-warning:before { content: "\e685"; }
