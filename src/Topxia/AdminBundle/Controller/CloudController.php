@@ -29,25 +29,25 @@ class CloudController extends BaseController
     public function accessAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=edu_cloud');
+        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud');
     }
 
     public function rechargeAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=order_recharge');
+        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=order_recharge');
     }
 
     public function detailAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=bill_list');
+        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=bill_list');
     }
 
     public function smsAccountAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=service_sms_accout');
+        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=service_sms_accout');
     }
 
     public function buyAction(Request $request,$type)
