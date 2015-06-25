@@ -548,7 +548,7 @@ class GroupThreadController extends BaseController
                     $message);
             }
 
-            return new Response($url);
+            return new Response($this->generateUrl('group_thread_show', array('id' => $groupId,'threadId'=> $threadId)));
 
     }
     
