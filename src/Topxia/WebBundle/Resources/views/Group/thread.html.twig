@@ -18,13 +18,14 @@
   height: 16px;
 }
 </style>
-  <ol class="breadcrumb es-section">
-    <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
-    <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
-    <li class="active">{{ threadMain.title }}</li>
-  </ol>
+  
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
+      <ol class="breadcrumb">
+        <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
+        <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
+        <li class="active">{{ threadMain.title }}</li>
+      </ol>
       <h2>
         {{ threadMain.title }}
         {% if threadMain.isElite %}
