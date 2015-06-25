@@ -48,6 +48,8 @@ class CloudController extends BaseController
 
     public function buyAction(Request $request,$type)
     {
+        var_dump($type);
+        exit();
         $params = array( 'type' => $type );
         return $this->redirectUrl('edu_cloud_buy', $params);
     }
@@ -56,6 +58,13 @@ class CloudController extends BaseController
     {
         $params = array( 'type' => 'tlp' );
         return $this->redirectUrl('edu_cloud_show', $params);
+    }
+
+    public function videoAction(Request $request)
+    {
+        $loginToken = $this->getAppService()->getLoginToken();
+        $param = array( 'type' => 'video' );
+        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_show&param='.urldecode(json_encode($param)));
     }
 
     public function videoUpgradeAction(Request $request)

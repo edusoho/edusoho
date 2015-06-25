@@ -12,7 +12,7 @@
                     {% if not storage %}
 
                       <div class="alert alert-warning alert-sm" role="alert">
-                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
+                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云功能，点击<a href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">这里</a>了解详情
                       </div>
                     {% else %}
 
@@ -47,16 +47,16 @@
                       {% if storage.freeTransfer|default(0) != 0 or storage.freeSpace|default(0) != 0 %}
 
                       {% if storageDate|default(31)  == 0 %}
-                          <p class="text-danger text-sm" >云视频视频包将于明天过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                          <p class="text-danger text-sm" >云视频视频包将于明天过期</p>
                       {% endif %}
                     <!--30天过期  -->
                       {% if 30 >= storageDate|default(31)  and storageDate|default(31)  > 0 %}
-                          <p class="text-danger text-sm" >云视频视频包将于{{storageDate}}天后过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a></p>
+                          <p class="text-danger text-sm" >云视频视频包将于{{storageDate}}天后过期</p>
                       {% endif %}
                       <!--已过期 -->
                       {% if storageDate|default(31)  < 0 %}
                           <p class="text-danger text-sm" >
-                            云视频包已过期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>
+                            云视频包已过期
                           </p>
                       {% endif %}
 
