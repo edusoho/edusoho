@@ -6,7 +6,7 @@
 </div>
 
 <div class="top-header ui-vip">
-	<ul class="ui-list ui-border-tb">
+	<ul class="ui-list ui-vip-header ui-border-tb">
 	    <li class="ui-border-t ui-vip-avatar">
 	        <div class="ui-avatar">
 	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar" />
@@ -22,8 +22,8 @@
 	</ul>
 
 	<div class="ui-panel" ng-repeat="vip in data.vips">
-		<ul class="ui-list ui-border-b">
-		    <li class="ui-border-t">
+		<ul class="ui-list">
+		    <li class="ui-border-b">
 		        <div class="ui-avatar">
 		            <img ng-src="{{ vip.picture }}" img-error="vip" />
 		        </div>
@@ -36,7 +36,7 @@
 		        	1个月
 		        </div>
 		    </li>
-		    <li>
+		    <li class="ui-border-b">
 		        	<div class="ui-list-info">
 		        		<div class="ui-vip-content">{{ vip.description | blockStr }}</div>
 		        		<p ng-if="! vip.description || vip.description.length == 0">没有会员简介</p>

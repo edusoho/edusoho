@@ -12,7 +12,7 @@
 	        </div>
 	        <div class="ui-form-item ui-vippay-item ui-border-b">
 	             <ul class="ui-grid-halve">
-					<li>
+					<li class="ui-border-r">
 						<a ng-click="showPopover($event)">
 							{{ selectedPayMode.title }}
 							<i class="iconfont icon-arrowdropdown"></i>
@@ -24,31 +24,28 @@
 						</ul>
 					</li>
 					<li>
-						    <a class="ui-vippay-btn iconfont icon-personw btn-gray" ng-click="sub()">
-								    	-
+						    <a class="ui-vippay-btn iconfont icon-jian btn-gray" ng-click="sub()">
+								    	
 						    </a>
-						    <a class="ui-vippay-btn">
+						    <a class="ui-vippay-btn btn-border">
 						     {{ selectedNum }}
 						    </a>
-						    <a class="ui-vippay-btn iconfont icon-personw btn-green" ng-click="add()">
-						    	+
+						    <a class="ui-vippay-btn iconfont icon-jia btn-green" ng-click="add()">
+						    	
 						    </a>
 					</li>
 				   </ul>
 	        </div>
 
-	        <div class="ui-form-item" style="margin-top : 16px;">
-	             <p>
+	        <div class="ui-btn-wrap">
+			<div class="pay-body">
 		  		需支付:<span class="pay-price">{{ totalPayPrice | formatPrice}}</span>
-		  	  </p>
-	        </div>
-
-	        <div class="ui-form-item">
-	             <div class="ui-btn-wrap">
-		            <button class="ui-btn-lg btn-green" ng-click="registWithPhone(user)">
-		                注 册
-		            </button>
-		        </div>
-	        </div>
+		  	</div>
+		    
+			<button class="ui-btn-lg btn-yellow" ng-click="payVip()">
+	                去支付
+	           </button>
+		   </div>
+	        
 	</div>
 </div>

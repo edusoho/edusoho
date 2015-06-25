@@ -12,8 +12,8 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil)
 		token : $scope.token
 	}, function(data) {
 		$scope.hideLoad();
-		$scope.data = data.data;
-		$scope.payModes = VipUtil.getPayMode(data.data.buyType);
+		$scope.data = data;
+		$scope.payModes = VipUtil.getPayMode(data.buyType);
 		$scope.selectedNum = 1;
 		$scope.selectedPayMode = $scope.payModes[0];
 
@@ -63,7 +63,7 @@ function VipListController($scope, $stateParams, SchoolService)
 	SchoolService.getSchoolVipList({
 		userId : $scope.user.id
 	}, function(data) {
-		$scope.data = data.data;
+		$scope.data = data;
 	});
 }
 

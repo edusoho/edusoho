@@ -1011,6 +1011,7 @@ a {
 
 .ui-course-pay .ui-form-item {
   padding-left: 20px;
+  padding-right: 20px;
 }
 
 .ui-course-pay .pay-price {
@@ -1205,9 +1206,16 @@ a {
 
 /** ui-vip **/
 .ui-vip-price {
-  height: 50px;
-  line-height: 50px;
   color: #37b97d;
+  height: 70px;
+  line-height: 70px;
+  top: 0;
+  margin-top: 0;
+  position: relative;
+}
+
+.ui-vip {
+  background: #f0f0f0;
 }
 
 .ui-vip-price>span{
@@ -1217,6 +1225,20 @@ a {
 .ui-vip .ui-panel .ui-avatar {
   border: solid 1px #ccc;
   padding: 8px;
+}
+
+.ui-vip .ui-panel .ui-list>li {
+  padding: 16px;
+  margin-left: 0;
+}
+
+.ui-vip .ui-panel {
+  background: #fff;
+  margin-bottom: 8px
+}
+
+.ui-vip .ui-list.ui-vip-header>li{
+  margin-left: 0;
 }
 
 .ui-vip .ui-vip-content img{
@@ -1271,7 +1293,18 @@ a {
   height: 35px;
 }
 
+.ui-vippay {
+  height: 100%;
+  background: #f0f0f0;
+}
+
+.ui-vippay .ui-form {
+  background: none;
+}
+
 .ui-vippay .ui-vippay-item {
+  height: 45px;
+  background: #fff;
   padding: 0;
 }
 
@@ -1287,22 +1320,26 @@ a {
 .ui-vippay-btn{
   opacity: 1;
   display: inline-block;
-  border: solid 1px #ddd;
   height: 30px;
   line-height: 30px;
   font-size: 10px;
   margin: 5px;
+  vertical-align: top;
   width: 30px;
 }
 
+.ui-vippay-btn.btn-border {
+  border: solid 1px #ddd;
+}
+
 .ui-vippay-btn.btn-green {
-  color: #fff;
-  background-color: #37b97d;
+  color: #37b97d;
+  font-size: 28px;
 }
 
 .ui-vippay-btn.btn-gray {
-  color: #fff;
-  background-color: #ddd;
+  color: #ddd;
+  font-size: 28px;
 }
 
 .ui-vippay-modal {
