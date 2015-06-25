@@ -103,7 +103,7 @@ class OrderController extends BaseController
 
     }
 
-    private function sendAuditRefundNotification($order, $pass, $amount, $note)
+    protected function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
         $course = $this->getClassroomService()->getClassroom($order['targetId']);
         if (empty($course)) {

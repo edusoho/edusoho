@@ -1016,7 +1016,7 @@ class AnalysisController extends BaseController
         ));
     }
 
-    private function fillAnalysisUserSum($condition,$currentData)
+    protected function fillAnalysisUserSum($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
         $currentData=ArrayToolkit::index($currentData,'date');
@@ -1045,7 +1045,7 @@ class AnalysisController extends BaseController
         return json_encode($zeroData);
     }
 
-    private function fillAnalysisCourseSum($condition,$currentData)
+    protected function fillAnalysisCourseSum($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
         $currentData=ArrayToolkit::index($currentData,'date');
@@ -1076,7 +1076,7 @@ class AnalysisController extends BaseController
         return json_encode($zeroData);
     }
 
-    private function fillAnalysisData($condition,$currentData)
+    protected function fillAnalysisData($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
 
@@ -1097,7 +1097,7 @@ class AnalysisController extends BaseController
         return json_encode($data);
     }
 
-    private function getDatesByCondition($condition)
+    protected function getDatesByCondition($condition)
     {   
         $timeRange=$this->getTimeRange($condition);
 
@@ -1106,7 +1106,7 @@ class AnalysisController extends BaseController
         return $dates;
     }
 
-    private function getDataInfo($condition,$timeRange)
+    protected function getDataInfo($condition,$timeRange)
     {
         return array(            
             'startTime'=>date("Y-m-d",$timeRange['startTime']),
@@ -1120,7 +1120,7 @@ class AnalysisController extends BaseController
             'analysisDateType'=>$condition["analysisDateType"],);
     }
 
-    private function getTimeRange($fields)
+    protected function getTimeRange($fields)
     {
         if(isset($fields['startTime'])&&isset($fields['endTime'])&&$fields['startTime']!=""&&$fields['endTime']!="")
         {   
@@ -1133,7 +1133,7 @@ class AnalysisController extends BaseController
         return array('startTime'=>strtotime(date("Y-m",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)));
     }
 
-    private function makeDateRange($startTime, $endTime)
+    protected function makeDateRange($startTime, $endTime)
     {
         $dates = array();
 
@@ -1155,17 +1155,17 @@ class AnalysisController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-     }
+    }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }

@@ -53,7 +53,7 @@ class CourseMediaManageController extends BaseController
     	return $this->createJsonResponse($item);
     }
 
-    private function getMediaConfig($type)
+    protected function getMediaConfig($type)
     {
 		$config = array(
 			'video' => array(

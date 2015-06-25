@@ -61,7 +61,7 @@ class CloudAPI
         return $this;
     }
 
-    private function _request($method, $uri, $params, $headers)
+    protected function _request($method, $uri, $params, $headers)
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
@@ -130,7 +130,7 @@ class CloudAPI
         return $result;
     }
 
-    private function _makeAuthToken($url, $params)
+    protected function _makeAuthToken($url, $params)
     {
         $matched = preg_match('/:\/\/.*?(\/.*)$/', $url, $matches);
         if (!$matched) {

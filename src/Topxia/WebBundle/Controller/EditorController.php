@@ -56,7 +56,7 @@ class EditorController extends BaseController
         }
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }

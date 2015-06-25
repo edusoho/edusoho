@@ -40,43 +40,12 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
             }
         }
 
-        $this->sendAuditRefundNotification($order, $pass, $data['amount'], $data['note']);
 	}
 
 	public function cancelRefundOrder($id)
 	{
 		$this->getCourseOrderService()->cancelRefundOrder($id);
 	}
-
-	private function sendAuditRefundNotification($order, $pass, $amount, $note)
-    {
-        $course = $this->getCourseService()->getCourse($order['targetId']);
-        if (empty($course)) {
-            return false;
-        }
-
-        if ($pass) {
-            $message = $this->getSettingService()->get('refund.successNotification', '');
-        } else {
-            $message = $this->getSettingService()->get('refund.failedNotification', '');
-        }
-
-        if (empty($message)) {
-            return false;
-        }
-
-        $courseUrl = $this->generateUrl('course_show', array('id' => $course['id']));
-        $variables = array(
-            'course' => "<a href='{$courseUrl}'>{$course['title']}</a>",
-            'amount' => $amount,
-            'note' => $note,
-        );
-        
-        $message = StringToolkit::template($message, $variables);
-        $this->getNotificationService()->notify($order['userId'], 'default', $message);
-
-        return true;
-    }
 
     public function getTarget($id)
     {

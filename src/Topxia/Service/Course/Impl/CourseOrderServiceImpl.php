@@ -233,7 +233,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return $this->createService('System.SettingService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->createService('User.NotificationService');
     }

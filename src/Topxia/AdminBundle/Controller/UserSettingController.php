@@ -506,7 +506,7 @@ class UserSettingController extends BaseController
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
     }
 
-    private function getUserDefaultSet()
+    protected function getUserDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -521,7 +521,7 @@ class UserSettingController extends BaseController
         return $default;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

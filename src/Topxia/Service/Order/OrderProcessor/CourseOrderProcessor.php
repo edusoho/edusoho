@@ -134,7 +134,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 		return $this->getCourseOrderService()->createOrder($orderInfo);
 	}
 
-    private function getTotalPrice($targetId, $priceType)
+    protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
         $course = $this->getCourseService()->getCourse($targetId);

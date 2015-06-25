@@ -367,7 +367,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
     }
 
-    private function getRandomChar(){
+    protected function getRandomChar(){
           return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
@@ -1139,7 +1139,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getProfileDao()->dropFieldData($fieldName);
     }
 
-    private function getUserApprovalDao()
+    protected function getUserApprovalDao()
     {
         return $this->createDao("User.UserApprovalDao");
     }
@@ -1193,52 +1193,52 @@ class UserServiceImpl extends BaseService implements UserService
         return $ats;
     }
 
-    private function getFriendDao()
+    protected function getFriendDao()
     {
         return $this->createDao("User.FriendDao");
     }
 
-    private function getUserDao()
+    protected function getUserDao()
     {
         return $this->createDao('User.UserDao');
     }
 
-    private function getProfileDao()
+    protected function getProfileDao()
     {
         return $this->createDao('User.UserProfileDao');
     }
 
-    private function getUserSecureQuestionDao()
+    protected function getUserSecureQuestionDao()
     {
         return $this->createDao('User.UserSecureQuestionDao');
     }
 
-    private function getUserBindDao()
+    protected function getUserBindDao()
     {
         return $this->createDao('User.UserBindDao');
     }
 
-    private function getUserTokenDao()
+    protected function getUserTokenDao()
     {
         return $this->createDao('User.TokenDao');
     }
 
-    private function getUserFortuneLogDao()
+    protected function getUserFortuneLogDao()
     {
         return $this->createDao('User.UserFortuneLogDao');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->createService('Content.FileService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->createService('User.NotificationService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
@@ -1253,7 +1253,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createService('System.IpBlacklistService');
     }
 
-    private function getPasswordEncoder()
+    protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
     }

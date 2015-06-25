@@ -350,12 +350,12 @@ class ThreadServiceTest extends BaseTestCase
         return $this->getUserService()->register($user);
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
     
-    private function getThreadService()
+    protected function getThreadService()
     {
     	return $this->getServiceKernel()->createService('Course.ThreadService');
     }
