@@ -2472,7 +2472,7 @@ a:focus {
   -moz-border-radius: none;
   border-radius: none;
   margin-bottom: 0;
-  padding: 0;
+  padding: 5px 0;
   border: none;
   color: #37b97d;
 }
@@ -2589,7 +2589,7 @@ a:focus {
 }
 .course-list .course-item.course-empty {
   background-color: #f5f5f5;
-  padding: 58px 20px;
+  padding: 48px 20px;
   border: 1px dashed #e0e0e0;
   color: #e0e0e0;
   text-align: center;
@@ -2597,17 +2597,7 @@ a:focus {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  margin-bottom: 21px;
-}
-@media (max-width: 1199px) {
-  .course-list .course-item.course-empty {
-    padding: 67px 20px;
-  }
-}
-@media (max-width: 991px) {
-  .course-list .course-item.course-empty {
-    padding: 81px 20px;
-  }
+  margin-bottom: 31px;
 }
 .course-list .course-item.course-empty:hover {
   transform: translateY(0);
