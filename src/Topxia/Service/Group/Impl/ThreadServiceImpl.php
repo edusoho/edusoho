@@ -342,12 +342,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $this->getThreadDao()->updateThread($threadId,array('lastPostMemberId'=>$memberId,'lastPostTime'=>time()));
         $this->getGroupService()->waveGroup($groupId,'postNum',+1);
         $this->getGroupService()->waveMember($groupId,$memberId,'postNum',+1);
-        if ($postId != 0) {
-            $this->waveThread($threadId,'postNum',+0);
-        }else {
+        if ($postId == 0) {
             $this->waveThread($threadId,'postNum',+1);
         }
-
         $thread=$this->getThread($threadId); 
         return $post;
     }
