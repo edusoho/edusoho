@@ -28,40 +28,34 @@ class CloudController extends BaseController
     }
     public function accessAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud');
+        return $this->redirectUrl('edu_cloud');
     }
 
     public function rechargeAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=order_recharge');
+        return $this->redirectUrl('order_recharge');
     }
 
     public function detailAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=bill_list');
+        return $this->redirectUrl('bill_list');
     }
 
     public function smsAccountAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=service_sms_accout');
+        return $this->redirectUrl('service_sms_accout');
     }
 
     public function buyAction(Request $request,$type)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        $param = array( 'type' => $type );
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_buy&param='.urldecode(json_encode($param)));
+        $params = array( 'type' => $type );
+        return $this->redirectUrl('edu_cloud_buy', $params);
     }
 
     public function tlpAction(Request $request)
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        $param = array( 'type' => 'tlp' );
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_show&param='.urldecode(json_encode($param)));
+        $params = array( 'type' => 'tlp' );
+        return $this->redirectUrl('edu_cloud_show', $params);
     }
 
     public function videoAction(Request $request)
@@ -73,8 +67,17 @@ class CloudController extends BaseController
 
     public function videoUpgradeAction(Request $request)
     {
+        return $this->redirectUrl('edu_cloud_video_upgrade');
+    }
+
+    protected function redirectUrl($routingName, $params = array())
+    {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_video_upgrade');
+        $url = 'http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        if(!empty($params)){
+            $url .= '&param='.urldecode(json_encode($param));
+        }
+        return $url;
     }
     
     protected function getAppService()
