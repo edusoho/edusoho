@@ -677,6 +677,11 @@ admin_cloud_tlp:
     pattern:  /cloud/tlp
     defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
 
+
+admin_cloud_video:
+    pattern:  /cloud/video
+    defaults: { _controller: TopxiaAdminBundle:Cloud:video }
+
 admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
