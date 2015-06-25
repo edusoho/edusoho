@@ -8,10 +8,12 @@
                     <!--未购买-->
                     {% if not storage %}
 
-                        <div class="alert alert-warning alert-sm" role="alert">
-                          <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
-                        </div>
-
+                      <div class="alert alert-warning alert-sm" role="alert">
+                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频云功能，点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了解详情
+                      </div>
+                      <p class="panel-bottom">
+                        TLP2.0加密，为您的网校保驾护航！
+                      </p>
                     {% else %}
 
                       {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and not bill %}
@@ -59,11 +61,12 @@
                       {% endif %}
 
                       {% endif %}
-
+                      <a href="{{ path('admin_cloud_tpl') }}">
+                        <p class="panel-bottom">
+                          TLP2.0加密，为您的网校保驾护航！
+                        </p>
+                      </a>
                     {% endif %}
-                    <p class="panel-bottom">
-                      TLP2.0加密，为您的网校保驾护航！
-                    </p>
                   </div>
                 </div>
               </div>
