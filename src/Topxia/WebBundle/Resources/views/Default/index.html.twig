@@ -92,8 +92,9 @@
       <div class="container">
         <div class="index-class-header">
           <div class="text-line">
-            <h5><span>推荐班级</span></h5>
+            <h5><span>推荐{{ setting('classroom.name')|default("班级") }}</span></h5>
             <div class="line"></div>
+            <a href="{{path('classroom_explore')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
           </div>
         </div>
         <div class="recommend-class-list row">
