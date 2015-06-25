@@ -83,7 +83,7 @@
                   <a  class="btn btn-primary btn-lg"  href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
                 {% else %}
                   <a  class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
-                    {% if canFreeJoin and app.user %}
+                    {% if canFreeJoin and app.user and classroom.price > 0 %}
                     data-toggle="tooltip"
                     data-placement="top"
                     title="您之前已购买了本{{setting('classroom.name')|default('班级')}}的所有收费课程，可免费学习！"
