@@ -53,7 +53,8 @@ class CloudController extends BaseController
     public function buyVideoAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=edu_cloud_buy');
+        $param = array( 'type' => 'video' );
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=edu_cloud_buy&param='.json_encode($param));
     }
     protected function getAppService()
     {
