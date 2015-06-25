@@ -1001,10 +1001,17 @@ textarea {
   visibility: hidden;
   background: #f3f3f3;
   border-left: 1px solid #ddd;
-  margin-left: 10px;
   position: absolute;
-  float: right;
-  right: 50px;
+  right: 15px;
+  padding-right: 35px;
+}
+
+.lesson-list .item-actions .btn,
+.lesson-list .item-actions .dropdown-menu > li > a {
+  -webkit-transition: none;
+  -o-transition: none;
+  -moz-transition: none;
+  transition: none;
 }
 
 .lesson-list .item-actions a.dropdown-toggle:hover,
