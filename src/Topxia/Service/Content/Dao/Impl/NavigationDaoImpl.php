@@ -8,15 +8,10 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 {
     protected $table = 'navigation';
 
-    public function getNavigationsCountByType($type, $isOpen = null)
+    public function getNavigationsCountByType($type)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  type = ?";
-        if(is_null($isOpen)){
-            return $this->getConnection()->fetchColumn($sql, array($type));       
-        }else{
-            $sql = $sql." and isOpen = ?";
-            return $this->getConnection()->fetchColumn($sql, array($type, $isOpen));
-        }
+        return $this->getConnection()->fetchColumn($sql, array($type));
     }
 
     public function getNavigation($id)
@@ -56,28 +51,18 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         return $this->getConnection()->fetchColumn($sql, array());
     }
 
-    public function findNavigationsByType($type, $start, $limit, $isOpen = null)
+    public function findNavigationsByType($type, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        if(is_null($isOpen)){
-            $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-            return $this->getConnection()->fetchAll($sql, array($type));
-        }else{
-            $sql = "SELECT * FROM {$this->table} WHERE type = ? and isOpen = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-            return $this->getConnection()->fetchAll($sql, array($type,$isOpen));
-        }
+        $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($type));
     }
 
-    public function findNavigations($start, $limit, $isOpen = null)
+    public function findNavigations($start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        if(is_null($isOpen)){
-            $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-            return $this->getConnection()->fetchAll($sql, array());
-        }else{
-            $sql = "SELECT * FROM {$this->table} where isOpen = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-            return $this->getConnection()->fetchAll($sql, array($isOpen));
-        }
+        $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array());
     }
 
 }

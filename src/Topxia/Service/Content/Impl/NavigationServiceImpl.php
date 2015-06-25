@@ -12,9 +12,9 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->getNavigation($id);
     }
 
-    public function findNavigations($start, $limit, $isOpen = null)
+    public function findNavigations($start, $limit)
     {
-        return $this->getNavigationDao()->findNavigations($start, $limit, $isOpen);
+        return $this->getNavigationDao()->findNavigations($start, $limit);
     }
 
     public function getNavigationsCount()
@@ -22,23 +22,29 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->getNavigationsCount();
     }
 
-    public function getNavigationsCountByType($type, $isOpen = null)
+    public function getNavigationsCountByType($type)
     {
-        return $this->getNavigationDao()->getNavigationsCountByType($type, $isOpen);
+        return $this->getNavigationDao()->getNavigationsCountByType($type);
     }
 
-    public function findNavigationsByType($type, $start, $limit, $isOpen = null)
+    public function findNavigationsByType($type, $start, $limit)
     {
-        return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit, $isOpen);
+        return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit);
     }
 
-    public function getNavigationsTreeByType($type, $isOpen = null)
+    public function getOpenedNavigationsTreeByType($type)
     {
-        $count = $this->getNavigationsCountByType($type, $isOpen);
-        $navigations = $this->findNavigationsByType($type, 0, $count, $isOpen);
+        $count = $this->getNavigationsCountByType($type);
+        $navigations = $this->findNavigationsByType($type, 0, $count);
 
         $navigations = ArrayToolkit::index($navigations, 'id');
         foreach ($navigations as $index => $nav) {
+
+            if(empty($nav['isOpen']) || $nav['isOpen'] == "0") {
+                unset($navigations[$index]);
+                continue;
+            }
+
             if ($nav['parentId'] == 0) {
                 continue;
             }
@@ -48,18 +54,18 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             }
 
             if ($nav['isOpen']) {
-            $navigations[$nav['parentId']]['children'][] = $nav;
-            unset($navigations[$index]);
+                $navigations[$nav['parentId']]['children'][] = $nav;
+                unset($navigations[$index]);
             }
         }
 
         return $navigations;
     }
 
-    public function getNavigationsListByType($type, $isOpen = null)
+    public function getNavigationsListByType($type)
     {
-        $count = $this->getNavigationsCountByType($type, $isOpen);
-        $navigations = $this->findNavigationsByType($type, 0, $count, $isOpen);
+        $count = $this->getNavigationsCountByType($type);
+        $navigations = $this->findNavigationsByType($type, 0, $count);
 
         $prepare = function($navigations) {
             $prepared = array();
