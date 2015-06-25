@@ -1,7 +1,7 @@
 <?php
 
 namespace Topxia\Api\Filter;
-
+use Topxia\Service\Common\ServiceKernel;
 class MeFilter implements Filter
 {
 	//输出前的字段控制
@@ -15,9 +15,13 @@ class MeFilter implements Filter
         unset($data['salt']);
         unset($data['payPassword']);
         unset($data['payPasswordSalt']);
+        $data['promotedTime'] = date('c', $data['promotedTime']);
+        $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
+        $data['loginTime'] = date('c', $data['loginTime']);
+        $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
-
-        return $data;
+        $profile = ServiceKernel::instance()->createService('User.UserService')->getUserProfile($data['id']);
+        return array_merge($data,$profile);
     }
 
     public function filters(array &$datas)

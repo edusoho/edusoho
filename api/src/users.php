@@ -185,14 +185,17 @@ $api->post('/{id}/vips', function (Request $request, $id) {
     );
 });
 
-// 关注用户,method为delete时为取消关注用户
+
 /*
+## （取消）关注用户
+    POST /users/{id}/followers
+
 ** 参数 **
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
 | userId | int | 否 | 发起关注操作的用户id,未传则默认为当前用户 |
-| method | string | 否 | 值为delete,表明当前为delete方法 |
+| method | string | 否 | 值为delete时为取消关注用户 |
 
 ** 响应 **
 
