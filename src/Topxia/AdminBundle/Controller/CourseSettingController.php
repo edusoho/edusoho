@@ -32,6 +32,7 @@ class CourseSettingController extends BaseController
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
             'student_download_media' => '0',
+            'explore_default_orderBy' => 'latest',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'coursesPrice' => '0',
@@ -197,7 +198,7 @@ class CourseSettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
     }
     
-    private function getCourseDefaultSet()
+    protected function getCourseDefaultSet()
     {
         $default = array(
             'defaultCoursePicture' => 0,
@@ -213,7 +214,7 @@ class CourseSettingController extends BaseController
         return $default;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

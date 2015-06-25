@@ -145,7 +145,7 @@ class PasswordResetController extends BaseController
         return 'http://mail.' . $host;
     }
 
-    private function getAuthService()
+    protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }

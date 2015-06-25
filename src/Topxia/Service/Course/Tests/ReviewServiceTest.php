@@ -214,17 +214,17 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertContains($savedReview2, $searchedReviews);
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getReviewService()
+    protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course.ReviewService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

@@ -38,7 +38,7 @@ class BlockController extends BaseController
             'type' => $category
         ));
     }
-    private function dealQueryFields($category)
+    protected function dealQueryFields($category)
     {
         $sort = array();
         $condation = array();

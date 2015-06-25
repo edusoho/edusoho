@@ -64,7 +64,7 @@ class ArticleThreadFirewall
         return $this->getKernel()->getCurrentUser();
     }
     
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getKernel()->createService('Thread.ThreadService');
     }

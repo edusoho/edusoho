@@ -40,7 +40,7 @@ class LessonLessonPluginController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -50,12 +50,12 @@ class LessonLessonPluginController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getHomeworkService()
+    protected function getHomeworkService()
     {
             return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     } 
 
-    private function getExerciseService()
+    protected function getExerciseService()
     {
             return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }

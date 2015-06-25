@@ -59,7 +59,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
         $this->getConnection()->delete($this->table,array('id' => $id));
     }
 
-    private function createBatchQueryBuilder($conditions)
+    protected function createBatchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'batch')

@@ -36,7 +36,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return false;
     }
 
-    private  function getThemeConfigByName($name)
+    protected function getThemeConfigByName($name)
     {
         $config = $this->getThemeConfigDao()->getThemeConfigByName($name);
         $config['allConfig'] = $this->allConfig;
@@ -98,7 +98,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->saveCurrentThemeConfig($this->defaultConfig);
     }
 
-    private function createThemeConfig($name, $config)
+    protected function createThemeConfig($name, $config)
     {
         return $this->getThemeConfigDao()->addThemeConfig(array(
             'name' => $name,
@@ -109,7 +109,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         ));
     }
 
-    private function editThemeConfig($name, $config)
+    protected function editThemeConfig($name, $config)
     {
         $config['updatedTime'] = time();
         $config['updatedUserId'] = $this->getCurrentUser()->id;

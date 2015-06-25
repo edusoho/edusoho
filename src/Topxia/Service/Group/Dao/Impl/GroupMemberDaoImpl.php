@@ -91,7 +91,7 @@ class GroupMemberDaoImpl extends BaseDao implements GroupMemberDao
 
     }
 
-     private function _createGroupMemberSearchBuilder($conditions)
+     protected function _createGroupMemberSearchBuilder($conditions)
     {
 
         $builder = $this->createDynamicQueryBuilder($conditions)

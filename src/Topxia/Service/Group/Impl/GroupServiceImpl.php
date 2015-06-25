@@ -241,7 +241,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $this->getGroupMemberDao()->getMemberByGroupIdAndUserId($groupid,$userId);
     }
 
-    private function reCountGroupMember($groupId)
+    protected function reCountGroupMember($groupId)
     {
         $groupMemberNum=$this->getGroupMemberDao()->getMembersCountByGroupId($groupId);
         $this->getGroupDao()->updateGroup($groupId,array('memberNum'=>$groupMemberNum));
@@ -271,7 +271,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
         $this->reCountGroupMember($groupId);
     }
 
-    private function prepareGroupConditions($conditions)
+    protected function prepareGroupConditions($conditions)
     {
 
         if(isset($conditions['ownerName'])&&$conditions['ownerName']!==""){
@@ -295,22 +295,22 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $conditions;
     }
 
-    private function getLogService() 
+    protected function getLogService() 
     {
         return $this->createService('System.LogService');
     }
 
-    private function getGroupDao() 
+    protected function getGroupDao() 
     {
         return $this->createDao('Group.GroupDao');
     }
 
-    private function getGroupMemberDao() 
+    protected function getGroupMemberDao() 
     {
         return $this->createDao('Group.GroupMemberDao');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->createService('Content.FileService');
     }
@@ -320,7 +320,7 @@ class GroupServiceImpl extends BaseService implements GroupService {
         return $this->createService('User.UserService');
     }
 
-    private function getMessageService() 
+    protected function getMessageService() 
     {
         return $this->createService('User.MessageService');
     }
