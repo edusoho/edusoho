@@ -1,0 +1,5 @@
+{% block keywords %}
+{% if category %}{{ category.name }}{% endif %}
+{% for tag in tags %}{{ tag.name }}{% endfor %}
+{{ course.title }} {{ setting('site.name') }}
+{% endblock %}
