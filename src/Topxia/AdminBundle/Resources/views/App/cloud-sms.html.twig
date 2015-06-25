@@ -20,6 +20,9 @@
                         {% endif %}
 
                         {% if status == 'used' %}
+                            <div class="alert alert-warning alert-sm" role="alert">
+                              <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank">购买</a>云短信包，享受优惠的短信服务
+                            </div>
                             <p class="text-muted">昨日用量：{{sms.yestoday|default(0)}}条</p>
                             <p class="text-muted">上月使用：{{sms.lastMonth|default(0)}}条</p>
                         {% endif %}
