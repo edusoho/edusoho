@@ -5506,8 +5506,7 @@ textarea.form-control-o {
     margin: 10px auto 20px auto;
   }
 }
-.article-text p > img,
-.article-text > img {
+.article-text img {
   margin: 10px auto;
   display: block;
   max-width: 100%;
