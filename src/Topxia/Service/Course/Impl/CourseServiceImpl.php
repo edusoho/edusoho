@@ -925,6 +925,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function createLesson($lesson)
 	{
+		if (isset($lesson['reservationIds']) && !empty($lesson['reservationIds'])) {
+			$reservationIds = $lesson['reservationIds'];
+			unset($lesson['reservationIds']);
+		}
+
 		$lesson = ArrayToolkit::filter($lesson, array(
 			'courseId' => 0,
 			'chapterId' => 0,
@@ -1004,6 +1009,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"courseId"=>$lesson["courseId"], 
 			"lessonId"=>$lesson["id"]
 		));
+
+		$LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
+		if ($LiveReservation && !empty($reservationIds) && $lesson['type'] == 'live') {
+			$this->dispatchEvent("reseravtion.lesson.create", 
+				array('lessonId' => $lesson['id'], 'reservationIds' => $reservationIds)
+			);
+		}
 
 		return $lesson;
 	}
@@ -1103,6 +1115,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时(#{$lessonId})不存在！");
 		}
 
+		if (isset($fields['reservationIds']) && !empty($fields['reservationIds'])) {
+			$reservationIds = $fields['reservationIds'];
+		}
+
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'summary' => '',
@@ -1151,6 +1167,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
+		$LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
+		if ($LiveReservation && !empty($reservationIds) && $updatedLesson['type'] == 'live') {
+			$this->dispatchEvent("reseravtion.lesson.create", 
+				new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
+			);
+		}
+
+		/*$this->dispatchEvent("course.lesson.create", array(
+			"courseId"=>$lesson["courseId"], 
+			"lessonId"=>$lesson["id"]
+		));*/
 
 		return $updatedLesson;
 	}

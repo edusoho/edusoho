@@ -182,13 +182,13 @@ a {
   background: none;
 }
 
-.teacher-box .es-teacher-list .media .btn {
+.teacher-box .es-teacher-list .media .course-btn {
   position: absolute;
   bottom: 10px;
   right: 10px;
   display: none;
 }
 
-.teacher-box .es-teacher-list .media:hover .btn {
+.teacher-box .es-teacher-list .media:hover .course-btn {
   display: block;
 }
