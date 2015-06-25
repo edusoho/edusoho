@@ -86,7 +86,7 @@
                     {% if canFreeJoin and app.user %}
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="您之前已购买了本班级{{setting('classroom.name')}}的所有收费课程，可免费学习！"
+                    title="您之前已购买了本{{setting('classroom.name')|default('班级')}}的所有收费课程，可免费学习！"
                     {% endif %}
                   >免费加入</a>
                 {% endif %}
