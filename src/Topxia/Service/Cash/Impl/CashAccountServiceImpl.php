@@ -147,7 +147,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             $account = $this->getAccountDao()->getAccountByUserId($userId, true);
             
             if(empty($account)){
-                $this->createAccount($userId);
+                $account = $this->createAccount($userId);
             }
 
             $inflow = array();
@@ -155,14 +155,14 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             if($type=="cut"){
 
                 $inflow=array(
-                'userId'=>$userId,
-                'sn'=>$this->makeSn(),
-                'type'=>'outflow',
-                'amount'=>$amount,
-                'name'=>$name,
-                'category'=>"exchange",
-                'orderSn'=>'R'.$this->makeSn(),
-                'createdTime'=>time(),
+                    'userId'=>$userId,
+                    'sn'=>$this->makeSn(),
+                    'type'=>'outflow',
+                    'amount'=>$amount,
+                    'name'=>$name,
+                    'category'=>"exchange",
+                    'orderSn'=>'R'.$this->makeSn(),
+                    'createdTime'=>time(),
                 );
 
                 $inflow = $this->getFlowDao()->addFlow($inflow);
@@ -172,14 +172,14 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             }else{
 
                 $inflow=array(
-                'userId'=>$userId,
-                'sn'=>$this->makeSn(),
-                'type'=>'inflow',
-                'amount'=>$amount,
-                'name'=>$name,
-                'category'=>"exchange",
-                'orderSn'=>'R'.$this->makeSn(),
-                'createdTime'=>time(),
+                    'userId'=>$userId,
+                    'sn'=>$this->makeSn(),
+                    'type'=>'inflow',
+                    'amount'=>$amount,
+                    'name'=>$name,
+                    'category'=>"exchange",
+                    'orderSn'=>'R'.$this->makeSn(),
+                    'createdTime'=>time(),
                 );
 
                 $inflow = $this->getFlowDao()->addFlow($inflow);
