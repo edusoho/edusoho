@@ -331,7 +331,7 @@ define(function(require, exports, module) {
                             
                             player.on('error', function(error){
                                 hasPlayerError = true;
-                                var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
+                                var message = '您的浏览器不能播放当前视频。';
                                 Notify.danger(message, 60);
                             });
                             $("#lesson-video-content").show();
