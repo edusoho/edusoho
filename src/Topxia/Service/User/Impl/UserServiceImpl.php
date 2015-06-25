@@ -1098,7 +1098,7 @@ class UserServiceImpl extends BaseService implements UserService
         
         $currentUser = $this->getCurrentUser();
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
-        $mesage = array(
+        $message = array(
             'note' => $note ? $note : '',
             'type' =>'through');
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
@@ -1127,7 +1127,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getLogService()->info('user', 'approval_fail', "用户{$user['nickname']}实名认证失败，操作人:{$currentUser['nickname']} !" );
-        $mesage = array(
+        $message = array(
             'note' => $note ? $note : '',
             'type' =>'reject');
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
