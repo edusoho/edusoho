@@ -87,8 +87,6 @@ class AppController extends BaseController
 
         $notices = $EduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
-        var_dump($sms);
-        exit();
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
             'packageDate' =>$packageDate,
