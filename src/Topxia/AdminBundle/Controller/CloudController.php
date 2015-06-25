@@ -75,7 +75,7 @@ class CloudController extends BaseController
         $loginToken = $this->getAppService()->getLoginToken();
         $url = 'http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto='.$routingName;
         if(!empty($params)){
-            $url .= '&param='.urldecode(json_encode($param));
+            $url .= '&param='.urldecode(json_encode($params));
         }
         return $this->redirect($url);
     }
