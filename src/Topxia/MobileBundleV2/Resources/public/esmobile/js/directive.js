@@ -98,7 +98,7 @@ directive('imgError', function() {
                   var errorSrc = "";
                   switch (attributes.imgError) {
                     case "avatar":
-                      errorSrc = app.viewFloder  + "img/avatar.jpg";
+                      errorSrc = app.viewFloder  + "img/avatar.png";
                       break;
                     case "course":
                       errorSrc = app.viewFloder  + "img/course_default.jpg";

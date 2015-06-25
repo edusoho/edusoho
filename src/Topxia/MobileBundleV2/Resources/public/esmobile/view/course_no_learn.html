@@ -72,8 +72,8 @@
 			    </h2>
 			    <div class="ui-panel-content">
 			    	<ul class="ui-list">  
-			    		<li class="ui-border-t" ng-if="course.teachers[0]" ui-sref="userInfo({ userId : course.teachers[0].id })">
-				        <div class="ui-avatar-s">
+			    		<li class="ui-border-t" ng-if="course.teachers[0]">
+				        <div class="ui-avatar-s" ui-sref="userInfo({ userId : course.teachers[0].id })">
 				            <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
 				        </div>
 				        <div class="ui-list-info">
@@ -82,10 +82,10 @@
 				            </h4>
 				            <p class="ui-nowrap">{{ course.teachers[0].title }}</p>
 				        </div>
-				    </li>
-				    <li ng-if="! course.teachers[0]">
-				    	<p>该课程暂无教师</p>
-				    </i>
+				    	</li>
+				    	<li ng-if="! course.teachers[0]">
+				    		<p>该课程暂无教师</p>
+				    	</i>
 				</ul>
 			    </div>
 			</section>
@@ -101,8 +101,8 @@
 			    <div class="ui-panel-content ui-review">
 			    	<ul class="ui-list">  
 			    		<li class="ui-border-t" ng-if="reviews[0]">
-					        <div class="ui-avatar-s">
-					            <img ng-src="{{ reviews[0].avatar | coverAvatar }}" />
+					        <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
+					            <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" />
 					        </div>
 					        <div class="ui-list-info">
 					            <h4 class="ui-nowrap ui-review-header">

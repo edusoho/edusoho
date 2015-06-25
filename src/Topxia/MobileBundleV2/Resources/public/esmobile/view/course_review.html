@@ -34,8 +34,8 @@
 		<div class="ui-panel-content ui-review">
 		    	<ul class="ui-list" style="padding : 16px;">  
 		    		<li class="ui-border-t" ng-repeat="review in reviews">
-				        <div class="ui-avatar-s">
-				            <img ng-src="{{ reviews.avatar | coverAvatar }}" />
+				        <div class="ui-avatar-s" ui-sref="userInfo({ userId : review.user.id })">
+				            <img ng-src="{{ review.user.mediumAvatar | coverAvatar }}" img-error="avatar" />
 				        </div>
 				        <div class="ui-list-info">
 				            <h4 class="ui-nowrap ui-review-header">

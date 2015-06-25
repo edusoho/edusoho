@@ -7,7 +7,7 @@
 
 <div class="top-header">
 	<ul class="ui-list ui-list-text ui-list-active">  
-		<li class="ui-border-t" ng-repeat="user in users">
+		<li class="ui-border-t" ng-repeat="user in users" ui-sref="userInfo({ userId : user.id })">
 	        <div class="ui-avatar-s">
 	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" />
 	        </div>

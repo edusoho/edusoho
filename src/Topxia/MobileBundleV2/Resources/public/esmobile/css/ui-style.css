@@ -8,6 +8,10 @@ a {
   color: #37b97d;
 }
 
+.ui-avatar, .ui-avatar-lg, .ui-avatar-s, .ui-avatar-one, .ui-avatar-tiled {
+  background-image : none ! important;
+}
+
 .rootView , .side-content{
   height: 100%;
   background: #fff;

@@ -9,7 +9,7 @@
     	<li>
     		<div class="ui-details-avatar">
     			   <div class="ui-avatar-lg">
-		            <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" />
+		            <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" img-error="avatar" />
 		        </div>
 		        <h4 class="ui-nowrap">{{ userinfo.nickname }}</h4>
 		        <p class="ui-nowrap">{{ userinfo.signature }}</p>
@@ -54,7 +54,7 @@
 			<ul class="ui-list ui-list-link ui-border-tb">
 			    <li class="ui-border-t" ng-repeat="course in courses" ui-sref="course({ courseId : course.id })">
 			        <div class="ui-list-img">
-			            <span style="background-image:url( {{ course.middlePicture }} )"></span>
+			            <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course"/>
 			        </div>
 			        <div class="ui-list-info">
 			            <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
