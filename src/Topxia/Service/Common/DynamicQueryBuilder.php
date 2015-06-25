@@ -2,31 +2,31 @@
 namespace Topxia\Service\Common;
 
 use Doctrine\DBAL\Query\QueryBuilder,
-	Doctrine\DBAL\Connection;
+    Doctrine\DBAL\Connection;
 
 class DynamicQueryBuilder extends QueryBuilder
 {
-	protected $conditions;
+    protected $conditions;
 
     public function __construct(Connection $connection, $conditions)
     {
-    	parent::__construct($connection);
-    	$this->conditions = $conditions;
+        parent::__construct($connection);
+        $this->conditions = $conditions;
     }
 
     public function where($where)
     {
-    	if (!$this->isWhereInConditions($where)) {
-    		return $this;
-    	}
-    	return parent::where($where);
+        if (!$this->isWhereInConditions($where)) {
+            return $this;
+        }
+        return parent::where($where);
     }
 
     public function andWhere($where)
     {
-    	if (!$this->isWhereInConditions($where)) {
-    		return $this;
-    	}
+        if (!$this->isWhereInConditions($where)) {
+            return $this;
+        }
 
         if($this->isInCondition($where)) {
             return $this->addWhereIn($where);
@@ -38,33 +38,37 @@ class DynamicQueryBuilder extends QueryBuilder
 
     public function andStaticWhere($where)
     {
-    	return parent::andWhere($where);
+        return parent::andWhere($where);
     }
 
     protected function addWhereIn($where)
     {
-        $conditionName = $this->getConditionName($where);
-        if (empty($this->conditions[$conditionName]) || !is_array($this->conditions[$conditionName])) {
-            return $this;
-        }
 
-        $marks = array();
-        foreach (array_values($this->conditions[$conditionName]) as $index => $value) {
-            $marks[] = ":{$conditionName}_{$index}";
-             $this->conditions["{$conditionName}_{$index}"] = $value;
+        $conditionNames = $this->getConditionName($where);
+
+        foreach($conditionNames as $key => $conditionName) {
+            if (empty($this->conditions[$conditionName]) || !is_array($this->conditions[$conditionName])) {
+                continue;
+            }
+
+            $marks = array();
+            foreach (array_values($this->conditions[$conditionName]) as $index => $value) {
+                $marks[] = ":{$conditionName}_{$index}";
+                $this->conditions["{$conditionName}_{$index}"] = $value;
+            }
+
+            $where = str_replace(":{$conditionName}", join(',', $marks), $where);
         }
-        
-        $where = str_replace(":{$conditionName}", join(',', $marks), $where);
 
         return parent::andWhere($where);
     }
 
     public function execute()
     {
-    	foreach ($this->conditions as $field => $value) {
-    		$this->setParameter(":{$field}", $value);
-    	}
-    	return parent::execute();
+        foreach ($this->conditions as $field => $value) {
+            $this->setParameter(":{$field}", $value);
+        }
+        return parent::execute();
     }
 
     protected function isInCondition($where)
@@ -78,20 +82,29 @@ class DynamicQueryBuilder extends QueryBuilder
     }
 
     protected function getConditionName($where) {
-        $matched = preg_match('/:([a-zA-z0-9_]+)/', $where, $matches);
+        $matched = preg_match('/:([a-zA-Z0-9_]+)/', $where, $matches);
         if (empty($matched)) {
             return false;
         }
+
         return $matches[1];
     }
 
     protected function isWhereInConditions($where)
     {
-        $conditionName = $this->getConditionName($where);
-    	if (!$conditionName) {
-    		return false;
-    	}
+        $conditionNames = $this->getConditionName($where);
 
-        return array_key_exists($conditionName, $this->conditions) && !is_null($this->conditions[$conditionName]);
+        if (!$conditionNames) {
+            return false;
+        }
+
+        foreach($conditionNames as $key => $conditionName) {
+            $isInConditions = array_key_exists($conditionName, $this->conditions) && !is_null($this->conditions[$conditionName]);
+            if(!$isInConditions){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
