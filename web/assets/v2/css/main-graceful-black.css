@@ -2574,7 +2574,7 @@ a:focus {
   border: none;
 }
 .course-list .course-item {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -2670,9 +2670,12 @@ a:focus {
   background: url("/assets/v2/img/tag_live.png") no-repeat;
 }
 .course-list .course-item .title {
-  height: 40px;
   margin: 10px auto;
+  display: block;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 .course-list .course-item .metas {
   padding: 10px 0;
