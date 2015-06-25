@@ -217,6 +217,15 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
       
     }
 
+    $scope.shardCourse = function() {
+      if (! $scope.platform.native) {
+        alert("请在客户端分享课程");
+        return;
+      }
+
+      esNativeCore.share("", "课程", "关于", $scope.course.largePicture);
+    }
+
     $scope.$parent.$on("refresh", function(event, data) {
       window.location.reload();
     });

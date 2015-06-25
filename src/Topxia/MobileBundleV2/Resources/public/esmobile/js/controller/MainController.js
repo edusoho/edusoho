@@ -49,7 +49,7 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 
 		this.webviewAction = function(params) {
 			if ($scope.platform.native) {
-				esNativeCore.openWebView(app.rootPath + params);
+				esNativeCore.openWebView(params);
 				return;
 			}
 			window.location.href = params;

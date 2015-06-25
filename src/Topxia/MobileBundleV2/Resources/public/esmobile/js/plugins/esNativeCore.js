@@ -33,8 +33,8 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         saveUserToken : function(user, token){
             exec(null, null, "ESNativeCore", "saveUserToken", [user, token]);
         },
-        share : function(data){
-            exec(null, null, "ESNativeCore", "share", [data]);
+        share : function(url, title, about, pic){
+            exec(null, null, "ESNativeCore", "share", [url, title, about, pic]);
         },
         payCourse : function(title, url){
             exec(null, null, "ESNativeCore", "payCourse", [title, url]);
