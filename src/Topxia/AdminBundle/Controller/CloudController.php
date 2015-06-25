@@ -26,6 +26,11 @@ class CloudController extends BaseController
         ));
 
     }
+    public function accessAction(Request $request)
+    {
+        $loginToken = $this->getAppService()->getLoginToken();
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=edu_cloud');
+    }
 
     public function rechargeAction(Request $request)
     {
@@ -36,7 +41,7 @@ class CloudController extends BaseController
     public function detailAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=account_person');
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=bill_list');
     }
 
     public function smsAccountAction(Request $request)

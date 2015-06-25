@@ -653,6 +653,10 @@ admin_logs_prod:
     pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
+admin_cloud_access:
+    pattern:  /cloud/access
+    defaults: { _controller: TopxiaAdminBundle:Cloud:access }
+
 admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
