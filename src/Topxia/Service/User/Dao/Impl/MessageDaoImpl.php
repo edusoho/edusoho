@@ -31,7 +31,7 @@ class MessageDaoImpl extends BaseDao implements MessageDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     } 
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'message')

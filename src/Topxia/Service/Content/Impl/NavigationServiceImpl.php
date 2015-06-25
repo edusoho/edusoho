@@ -81,7 +81,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     }
 
-    private function makeNavigationTreeList(&$tree, &$navigations, $parentId)
+    protected function makeNavigationTreeList(&$tree, &$navigations, $parentId)
     {
         static $depth = 0;
         static $leaf = false;
@@ -131,7 +131,8 @@ class NavigationServiceImpl extends BaseService implements NavigationService
     {
         $index = 1;
         foreach ($ids as $key => $id) {
-            $this->updateNavigation($id, array('sequence' => $index++));
+            $this->updateNavigation($id, array('sequence' => $index));
+            $index++;
         }
     }
 
@@ -140,7 +141,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return ($this->getNavigationDao()->deleteNavigation($id)) + ($this->getNavigationDao()->deleteNavigationByParentId($id));
     }
 
-    private function getNavigationDao()
+    protected function getNavigationDao()
     {
         return $this->createDao('Content.NavigationDao');
     }

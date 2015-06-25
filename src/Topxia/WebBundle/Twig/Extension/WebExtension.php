@@ -302,8 +302,9 @@ class WebExtension extends \Twig_Extension
         
         if(!empty($IP)){
                 $location = ConvertIpToolkit::convertIp($IP);
-            if ($location === 'INNA') 
+            if ($location === 'INNA'){
                 return '未知区域';
+            } 
             return $location;
         }
         return '';
@@ -533,9 +534,7 @@ class WebExtension extends \Twig_Extension
             }
 
             return $url;
-        } else {
-
-        }
+        }   
     }
 
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
@@ -773,7 +772,9 @@ class WebExtension extends \Twig_Extension
     {
         $fileName=explode(".", $fileName);
         
-        if($string) $name=strtolower($fileName[count($fileName)-1]).$string;
+        if($string){
+            $name=strtolower($fileName[count($fileName)-1]).$string;
+        }
 
         return $name;
     }
@@ -794,11 +795,14 @@ class WebExtension extends \Twig_Extension
 
             $value=" ".$value;
             sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
-            if($replyHideContent)
+            if($replyHideContent){
                 return true;
+            }
         }
 
-        if($need) return true;
+        if($need){
+            return true;
+        }
 
         return false;
     }

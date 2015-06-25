@@ -54,10 +54,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
-	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+	public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
 	{
 		$courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByAnyTagIdsAndStatus($tagIds, $status, $orderBy, $start, $limit)
+            $this->getCourseDao()->findNormalCoursesByAnyTagIdsAndStatus($tagIds, $status, $orderBy, $start, $limit)
         );
         return ArrayToolkit::index($courses, 'id');
     }
@@ -124,7 +124,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getCourseDao()->searchCourseCount($conditions);
 	}
 
-	private function _prepareCourseConditions($conditions)
+	protected function _prepareCourseConditions($conditions)
 	{
 		$conditions = array_filter($conditions, function($value){
 			if($value == 0) {
@@ -406,7 +406,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseDao()->updateCourse($id, $fields);
 	}
 
-	private function _filterCourseFields($fields)
+	protected function _filterCourseFields($fields)
 	{
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
@@ -468,7 +468,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->updateCourse($courseId, $fields);
     }
 
-    private function deleteNotUsedPictures($course)
+    protected function deleteNotUsedPictures($course)
     {
     	$oldPictures = array(
             'smallPicture' => $course['smallPicture'] ? $course['smallPicture'] : null,
@@ -1013,7 +1013,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	    	return $this->getLessonDao()->analysisLessonDataByTime($startTime,$endTime);
 	}
 
-	private function fillLessonMediaFields(&$lesson)
+	protected function fillLessonMediaFields(&$lesson)
 	{
 		if (in_array($lesson['type'], array('video', 'audio', 'ppt','document','flash'))) {
 			$media = empty($lesson['media']) ? null : $lesson['media'];
@@ -1080,7 +1080,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	}
 
-	private function _filterDraftFields($fields)
+	protected function _filterDraftFields($fields)
 	{
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
@@ -1724,7 +1724,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 	}
 
-	private function getNextCourseItemSeq($courseId)
+	protected function getNextCourseItemSeq($courseId)
 	{
 		$chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
 		$lessonMaxSeq = $this->getLessonDao()->getLessonMaxSeqByCourseId($courseId);
@@ -2061,7 +2061,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	}
 
-	private function getWelcomeMessageBody($user, $course)
+	protected function getWelcomeMessageBody($user, $course)
     {
         $setting = $this->getSettingService()->get('course', array());
         $valuesToBeReplace = array('{{nickname}}', '{{course}}');
@@ -2388,8 +2388,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		);
 
 		$client = LiveClientFactory::createClient();
-		$url = $client->entryReplay($args);
-		return $url['url'];
+		$result = $client->entryReplay($args);
+		return $result;
 	}
 
 	public function getCourseLessonReplayByLessonId($lessonId)
@@ -2411,7 +2411,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $courseMembers;
 	}
 
-	private function isClassroomMember($course, $userId)
+	protected function isClassroomMember($course, $userId)
 	{
 		$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 		if ($classroom['classroomId']) {
@@ -2424,12 +2424,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return false; 
 	}
 
-	private function getCourseLessonReplayDao()
+	protected function getCourseLessonReplayDao()
     {
         return $this->createDao('Course.CourseLessonReplayDao');
     }
 
-	private function hasCourseManagerRole($courseId, $userId) 
+	protected function hasCourseManagerRole($courseId, $userId) 
 	{
 		if($this->getUserService()->hasAdminRoles($userId)){
 			return true;
@@ -2443,72 +2443,72 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return false;
 	}
 
-	private function getClassroomService()
+	protected function getClassroomService()
 	{
 		return $this->createService('Classroom:Classroom.ClassroomService');
 	}
 
-    private function getCourseDao ()
+    protected function getCourseDao ()
     {
         return $this->createDao('Course.CourseDao');
     }
 
-    private function getFavoriteDao ()
+    protected function getFavoriteDao ()
     {
         return $this->createDao('Course.FavoriteDao');
     }
 
-    private function getMemberDao ()
+    protected function getMemberDao ()
     {
         return $this->createDao('Course.CourseMemberDao');
     }
 
-    private function getLessonDao ()
+    protected function getLessonDao ()
     {
         return $this->createDao('Course.LessonDao');
     }
 
-        private function getCourseDraftDao ()
+        protected function getCourseDraftDao ()
     {
         return $this->createDao('Course.CourseDraftDao');
     }
 
-    private function getLessonLearnDao ()
+    protected function getLessonLearnDao ()
     {
         return $this->createDao('Course.LessonLearnDao');
     }
 
-    private function getLessonViewDao ()
+    protected function getLessonViewDao ()
     {
         return $this->createDao('Course.LessonViewDao');
     }
 
-    private function getChapterDao()
+    protected function getChapterDao()
     {
         return $this->createDao('Course.CourseChapterDao');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
     	return $this->createService('Taxonomy.CategoryService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
     	return $this->createService('Content.FileService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
     	return $this->createService('User.UserService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
     	return $this->createService('Order.OrderService');
     }
 
-    private function getVipService()
+    protected function getVipService()
     {
     	return $this->createService('Vip:Vip.VipService');
     }
@@ -2518,31 +2518,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('System.LogService');        
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
     }
 
-    private function getMessageService(){
+    protected function getMessageService(){
         return $this->createService('User.MessageService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
     
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
     }
 
-    private function getNoteDao()
+    protected function getNoteDao()
     {
     	return $this->createDao('Course.CourseNoteDao');
     }
 
-    private function getCourseMaterialService()
+    protected function getCourseMaterialService()
     {
         return $this->createService('Course.MaterialService');
     }

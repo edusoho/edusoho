@@ -79,7 +79,7 @@ class DefaultController extends BaseController
             ));
     }
 
-    private function getRecentLiveCourses()
+    protected function getRecentLiveCourses()
     {
 
         $recenntLessonsCondition = array(
@@ -126,8 +126,9 @@ class DefaultController extends BaseController
             );
         }
 
-        if(isset($teacher['locked']) && $teacher['locked'] !== '0')
+        if(isset($teacher['locked']) && $teacher['locked'] !== '0'){
             $teacher = null;
+        }
 
         return $this->render('TopxiaWebBundle:Default:promoted-teacher-block.html.twig', array(
             'teacher' => $teacher,
@@ -215,7 +216,7 @@ class DefaultController extends BaseController
         ));
     }
 
-    private function calculateUserLearnProgress($course, $member)
+    protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -265,7 +266,7 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getClassroomService() 
+    protected function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }

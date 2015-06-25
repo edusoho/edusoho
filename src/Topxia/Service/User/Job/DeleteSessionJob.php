@@ -12,17 +12,17 @@ class DeleteSessionJob implements Job
       $number = $this->getSessionService()->deleteInvalidSession($retentionTime);
     }
 
-    private function getSessionService()
+    protected function getSessionService()
     {
         return $this->getServiceKernel()->createService('System.SessionService');
     }
 
-    private function getServiceKernel()
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->getServiceKernel()->createService('Log.LogService'); 
     }

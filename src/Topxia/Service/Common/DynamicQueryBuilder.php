@@ -41,7 +41,7 @@ class DynamicQueryBuilder extends QueryBuilder
         return parent::andWhere($where);
     }
 
-    private function addWhereIn($where)
+    protected function addWhereIn($where)
     {
 
         $conditionNames = $this->getConditionName($where);
@@ -71,7 +71,7 @@ class DynamicQueryBuilder extends QueryBuilder
         return parent::execute();
     }
 
-    private function isInCondition($where)
+    protected function isInCondition($where)
     {
         $matched = preg_match('/\s+(IN)\s+/', $where, $matches);
         if (empty($matched)) {
@@ -81,8 +81,8 @@ class DynamicQueryBuilder extends QueryBuilder
         }
     }
 
-    private function getConditionName($where) {
-        $matched = preg_match_all('/:([a-zA-Z0-9_]+)/', $where, $matches);
+    protected function getConditionName($where) {
+        $matched = preg_match('/:([a-zA-Z0-9_]+)/', $where, $matches);
         if (empty($matched)) {
             return false;
         }
@@ -90,7 +90,7 @@ class DynamicQueryBuilder extends QueryBuilder
         return $matches[1];
     }
 
-    private function isWhereInConditions($where)
+    protected function isWhereInConditions($where)
     {
         $conditionNames = $this->getConditionName($where);
 

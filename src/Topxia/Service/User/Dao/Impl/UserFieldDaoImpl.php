@@ -60,9 +60,11 @@ class UserFieldDaoImpl extends BaseDao implements UserFieldDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    private function _createSearchQueryBuilder($condition)
+    protected function _createSearchQueryBuilder($condition)
     {   
-        if(isset($condition['fieldName'])) $condition['fieldName']="%".$condition['fieldName']."%";
+        if(isset($condition['fieldName'])){
+            $condition['fieldName']="%".$condition['fieldName']."%";
+        }
 
         $builder = $this->createDynamicQueryBuilder($condition)
             ->from($this->table, $this->table)

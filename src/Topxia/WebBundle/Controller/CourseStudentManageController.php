@@ -179,7 +179,9 @@ class CourseStudentManageController extends BaseController
 
 		$fields=array_intersect_key($fields, $userinfoFields);
 		
-		if(!$courseSetting['buy_fill_userinfo']) $fields=array();
+		if(!$courseSetting['buy_fill_userinfo']){
+			$fields=array();
+		}
 		$studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
 
 		$users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -292,11 +294,21 @@ class CourseStudentManageController extends BaseController
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 		for($i=0;$i<count($userFields);$i++){
-			if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
-			if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
-			if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
-			if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
-			if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+			if(strstr($userFields[$i]['fieldName'], "textField")){
+				$userFields[$i]['type']="text";
+			}
+			if(strstr($userFields[$i]['fieldName'], "varcharField")){
+				$userFields[$i]['type']="varchar";
+			}
+			if(strstr($userFields[$i]['fieldName'], "intField")){
+				$userFields[$i]['type']="int";
+			}
+			if(strstr($userFields[$i]['fieldName'], "floatField")){
+				$userFields[$i]['type']="float";
+			}
+			if(strstr($userFields[$i]['fieldName'], "dateField")){
+				$userFields[$i]['type']="date";
+			}
 		}
 
 		return $this->render('TopxiaWebBundle:CourseStudentManage:show-modal.html.twig', array(
@@ -312,17 +324,29 @@ class CourseStudentManageController extends BaseController
 
 		$userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 		for($i=0;$i<count($userFields);$i++){
-			if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
-			if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
-			if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
-			if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
-			if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+			if(strstr($userFields[$i]['fieldName'], "textField")){
+				$userFields[$i]['type']="text";
+			}
+			if(strstr($userFields[$i]['fieldName'], "varcharField")){
+				$userFields[$i]['type']="varchar";
+			}
+			if(strstr($userFields[$i]['fieldName'], "intField")){
+				$userFields[$i]['type']="int";
+			}
+			if(strstr($userFields[$i]['fieldName'], "floatField")){
+				$userFields[$i]['type']="float";
+			}
+			if(strstr($userFields[$i]['fieldName'], "dateField")){
+				$userFields[$i]['type']="date";
+			}
 		}
 
 		$course = $this->getSettingService()->get('course',array());
 
 		$userinfoFields = array();
-		if(isset($course['userinfoFields'])) $userinfoFields=$course['userinfoFields'];
+		if(isset($course['userinfoFields'])){
+			$userinfoFields=$course['userinfoFields'];
+		}
 		
 		return $this->render('TopxiaWebBundle:CourseStudentManage:defined-show-modal.html.twig', array(
 			'profile' => $profile,
@@ -331,7 +355,7 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	private function calculateUserLearnProgress($course, $member)
+	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
 			return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -346,7 +370,7 @@ class CourseStudentManageController extends BaseController
 		);
 	}
 
-	private function createStudentTrResponse($course, $student)
+	protected function createStudentTrResponse($course, $student)
 	{
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
@@ -366,22 +390,22 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	private function getSettingService()
+	protected function getSettingService()
 	{
 		return $this->getServiceKernel()->createService('System.SettingService');
 	}
 
-	private function getCourseService()
+	protected function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 
-	private function getNotificationService()
+	protected function getNotificationService()
 	{
 		return $this->getServiceKernel()->createService('User.NotificationService');
 	}
 
-	private function getOrderService()
+	protected function getOrderService()
 	{
 		return $this->getServiceKernel()->createService('Order.OrderService');
 	}

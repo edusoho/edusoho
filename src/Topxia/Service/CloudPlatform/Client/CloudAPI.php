@@ -61,7 +61,7 @@ class CloudAPI
         return $this;
     }
 
-    private function _request($method, $uri, $params, $headers)
+    protected function _request($method, $uri, $params, $headers)
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
@@ -114,6 +114,7 @@ class CloudAPI
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_BODY {$body}");
 
         curl_close($curl);
+
         $result = json_decode($body, true);
 
         if (empty($result)) {
@@ -129,7 +130,7 @@ class CloudAPI
         return $result;
     }
 
-    private function _makeAuthToken($url, $params)
+    protected function _makeAuthToken($url, $params)
     {
         $matched = preg_match('/:\/\/.*?(\/.*)$/', $url, $matches);
         if (!$matched) {

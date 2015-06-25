@@ -86,7 +86,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 
