@@ -1,7 +1,7 @@
 {% if classrooms %}
   <section class="recommend-class">
     <div class="container">
-      <div class="class-label hidden-xs hidden-sm">推荐班级</div>
+      <div class="class-label hidden-xs hidden-sm">推荐{{ setting('classroom.name')|default("班级") }}</div>
       <div class="recommend-class-list">
         <div class="swiper-container">
           <div class="swiper-wrapper">
@@ -14,7 +14,7 @@
                     <h3>{{ classroom.title }}</h3>
                     <div class="image-overlay"></div>
                     {% if classroom.belogCourse|default(false) %}
-                      <div class="class-belong hidden-xs hidden-sm">所属班级</div>
+                      <div class="class-belong hidden-xs hidden-sm">所属{{ setting('classroom.name')|default("班级") }}</div>
                     {% endif %}
                   </a>
                 </div>
