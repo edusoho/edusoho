@@ -6,7 +6,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
 
-      {% if data.opration == 'create' %}
+      {% if data.type == 'create' %}
           您被
           <a href="{{ path('user_show', {id:data.userId}) }}" target='_blank'>
             <strong>{{data.userName}}</strong>
@@ -16,7 +16,7 @@
              <strong>{{data.classroomTitle}}</strong>
           </a>
           成为正式学员
-      {% elseif data.opration == 'remove'%}
+      {% elseif data.type == 'remove'%}
           您被
           <a href="{{ path('user_show', {id:data.userId}) }}" target='_blank'>
             <strong>{{data.userName}}</strong>
