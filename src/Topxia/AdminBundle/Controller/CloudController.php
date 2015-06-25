@@ -50,6 +50,11 @@ class CloudController extends BaseController
         return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=service_sms_accout');
     }
 
+    public function buyVideoAction(Request $request)
+    {
+        $loginToken = $this->getAppService()->getLoginToken();
+        return $this->redirect('http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto=edu_cloud_buy');
+    }
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
