@@ -534,9 +534,7 @@ class WebExtension extends \Twig_Extension
             }
 
             return $url;
-        } else {
-
-        }
+        }   
     }
 
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
