@@ -673,9 +673,9 @@ admin_cloud_video_buy:
     pattern:  /cloud/video/buy
     defaults: { _controller: TopxiaAdminBundle:Cloud:buyVideo }
 
-admin_cloud_tpl:
-    pattern:  /cloud/tpl
-    defaults: { _controller: TopxiaAdminBundle:Cloud:tpl }
+admin_cloud_tlp:
+    pattern:  /cloud/tlp
+    defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
 
 admin_cloud_sms_account:
     pattern:  /cloud/sms/account

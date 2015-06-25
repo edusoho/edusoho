@@ -57,10 +57,10 @@ class CloudController extends BaseController
         return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_buy&param='.urldecode(json_encode($param)));
     }
 
-    public function tplAction(Request $request)
+    public function tlpAction(Request $request)
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        $param = array( 'type' => 'tpl' );
+        $param = array( 'type' => 'tlp' );
         return $this->redirect('http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto=edu_cloud_show&param='.urldecode(json_encode($param)));
     }
 
