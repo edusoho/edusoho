@@ -112,7 +112,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('roles = :role')
-            ->andWhere('nickname LIKE :nickname')
+            ->andWhere('UPPER(nickname) LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('createdIp = :createdIp')
             ->andWhere('approvalStatus = :approvalStatus')
@@ -163,7 +163,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
-        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? and `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 

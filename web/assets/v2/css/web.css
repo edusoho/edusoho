@@ -112,22 +112,6 @@ a.link-muted {
   zoom: 1;
 }
 
-.panel-page {
-  padding: 45px 50px 50px;
-  min-height: 500px;
-}
-
-.panel-page .panel-heading {
-  background: transparent;
-  border-bottom: none;
-  margin: 0 0 30px 0;
-  padding: 0;
-}
-
-.panel-page .panel-heading h2 {
-  font-size: 25px;
-  margin-top: 0;
-}
 
 .control-text {
   display: inline-block;
@@ -4399,18 +4383,7 @@ body {
   min-height: 500px;
 }
 
-.slide-player-body {
-  position: absolute;
-  text-align: center;
-  width: 100%;
-  top: 0px;
-  bottom: 50px;
-}
 
-.slide-player-body img.side {
-  max-width: 100%;
-  height: auto;
-}
 
 .loading-background  {
   background: #fff url(../img/loader.gif) no-repeat center center;
@@ -4487,13 +4460,20 @@ body {
 }
 
 .slide-player-body {
+  position: absolute;
   text-align: center;
+  width: 100%;
+  top: 0px;
+  bottom: 50px;
 }
 
 .slide-player-body .slide {
   display: none;
   position: relative;
-  height: 100%;
+  max-height: 100%;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .slide-player-body .slide.active {

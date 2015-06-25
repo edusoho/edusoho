@@ -28,7 +28,7 @@ class UserCommonAdminDaoImpl extends BaseDao implements UserCommonAdminDao
 
     public function getCommonAdminByUserIdAndUrl($userId, $url)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and url = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND url = ? LIMIT 1";
         
         return $this->getConnection()->fetchAssoc($sql, array($userId, $url)) ? : null;
     }

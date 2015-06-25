@@ -285,10 +285,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $courses = ArrayToolkit::index($courses,'id');
         $sortedCourses = array();
         foreach ( $courseIds as $value){
-            if(!empty($value))
+            if(!empty($value)){
                 if(array_key_exists($value, $courses)){
                     $sortedCourses[] = $courses[$value];
                 }
+            }
         } 
          
         $result = array(
@@ -466,7 +467,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         }
 
         $token = $this->controller->getUserToken($request);
-        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+        if (empty($token) ||  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 

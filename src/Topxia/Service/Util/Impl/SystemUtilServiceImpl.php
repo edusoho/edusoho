@@ -12,7 +12,9 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	public function removeUnusedUploadFiles()
 	{
 		$targets = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
-		if(empty($targets)) return ;
+		if(empty($targets)){
+			return ;
+		}
 		$targets = $this->plainTargetId($targets);
 		foreach ($targets as $target) {
 	        $conditions = array(

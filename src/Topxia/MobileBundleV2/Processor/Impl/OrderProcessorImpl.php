@@ -290,11 +290,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $result['message'] = '支付功能未开启！';
             return $result;
         }
-        if (empty($payment['alipay_key']) or empty($payment['alipay_secret']) or empty($payment['alipay_account'])) {
+        if (empty($payment['alipay_key']) || empty($payment['alipay_secret']) || empty($payment['alipay_account'])) {
             $result['message'] = '支付宝参数不正确！';
             return $result;
         }
-        if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
+        if (empty($payment['alipay_type']) || $payment['alipay_type'] != 'direct') {
             $payUrl = $this->controller->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token), true);
             $result['payUrl'] = $payUrl;
         } else {

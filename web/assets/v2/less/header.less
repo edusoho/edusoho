@@ -8,6 +8,7 @@
   background: @gray-darker;
   height: 60px;
   border: none;
+  padding: 0 20px;
   .container {
     position: relative;
   }
@@ -17,6 +18,7 @@
   .navbar-header {
     @media (max-width: @screen-xs-max) {
       text-align: center;
+      float: none;
       .navbar-brand { 
         display: inline-block;
         float: none;
@@ -47,8 +49,7 @@
   }
   // 菜单
   .nav.navbar-nav {
-    @media (max-width: @screen-xs-max) {
-      float: right;
+    @media (max-width: @screen-sm-max) {
       margin-left: 0;
       margin-right: 0;
     }
@@ -60,8 +61,8 @@
         background: none;
         .es-transition;
         @media (max-width: @screen-md-max) {
-          padding-left: 25px;
-          padding-right: 25px;
+          padding-left: 20px;
+          padding-right: 20px;
         }
         @media (max-width: @screen-sm-max) {
           padding-left: 10px;
@@ -90,55 +91,60 @@
       border-radius: 5px;
     }
   }
-  // 手机端
-  .navbar-mobile {
-    position: absolute;
-    left: 0;
-    left: 0;
-    .navbar-more { 
-      position: relative;
-      padding: 20px 10px;
-      line-height: 20px;
-      display: block;
-      color: #fff;
-      z-index: 1001;
+  
+  .navbar-form {
+    margin: 15px 10px;
+    @media (max-width: @screen-md-max) {
+      margin: 15px 0;
     }
-    .nav-mobile {
-      width: 250px;
-      overflow-x: hidden;
-      overflow-y: auto;
-      position: fixed;
-      left: -250px;
-      top: 0;
-      height: 100%;
-      background: #3f3f3f;
-      visibility: hidden;
+  }
+}
+
+// 移动端
+.navbar-mobile {
+  position: absolute;
+  left: 0;
+  left: 0;
+  .navbar-more { 
+    position: relative;
+    padding: 20px 10px;
+    line-height: 20px;
+    display: block;
+    color: #fff;
+    z-index: 1001;
+  }
+  .nav-mobile {
+    width: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100%;
+    background: #3f3f3f;
+    visibility: hidden;
+    .es-transition;
+    &.active {
+      visibility: visible;
       .es-transition;
-      &.active {
-        visibility: visible;
-        .es-transition;
-      }
     }
-    .nav { 
-      float: none;
-      text-align: left;
-      padding: 0 20px;
-    }
-    .dropdown-menu {
-      >li>a {
-        color: #fff;
-      }
-    }
-    .navbar-form {
-      width: 80%;
-      margin: 60px auto 20px auto;
-      .form-control {
-        width:100%;
-      }
+  }
+  .nav { 
+    float: none;
+    text-align: left;
+    padding: 0 20px;
+  }
+  .dropdown-menu {
+    >li>a {
+      color: #fff;
     }
   }
   .navbar-form {
-    margin: 15px 10px;
+    width: 80%;
+    margin: 60px auto 20px auto;
+    .form-control {
+      width:100%;
+    }
   }
 }
 
@@ -157,6 +163,8 @@
     height: 30px;
     width: 100px;
     border-radius: 20px;
+    line-height: 28px;
+    padding: 0 12px;
     .es-transition;
     &.active {
       width: 150px;
@@ -205,7 +213,7 @@
   z-index: 1;
   position: absolute;
   top: 0;
-  right: 0;
+  right: 20px;
 }
 
 .nav.user-nav {
@@ -218,6 +226,9 @@
       padding: 20px 15px;
       color: #fff;
       .es-transition;
+      @media (max-width: @screen-md-max) {
+        padding: 20px 10px;
+      }
       &.dropdown-toggle { 
         padding: 15px 15px;
         @media (max-width: @screen-sm-max) {
@@ -247,20 +258,18 @@
       }
     }
   }
-  .dropdown-menu {
-    margin-left: -50px;
-    @media(max-width:@screen-md-max){
-      width: 160px;
-      position: absolute;
-      top: 100%;
-      left: auto;
-      right: 0;
-      background: #fff;
-      li {
-        width: 100%;
-      }
+  .user-avatar-li .dropdown-menu {
+    @media(min-width:@screen-lg-min){
+      margin-right: -50px;
     }
+  }
+  .dropdown-menu {
+    width: 160px;
+    background: #fff;
+    left: auto;
+    right: 0;
     >li {
+      width: 100%;
       > a { 
         padding-left: 10px;
         &:hover {

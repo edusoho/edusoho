@@ -7,7 +7,8 @@
   .class-item {
     background-color: #fff;
     margin: 10px auto;
-    .es-border;
+    .border-radius;
+    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
     .class-img {
       position: relative;
     }
@@ -51,4 +52,8 @@
       height: 70px;
     }
   }
+}
+
+.lt-ie9 .class-list .class-item {
+  border: 1px solid @gray-light;
 }

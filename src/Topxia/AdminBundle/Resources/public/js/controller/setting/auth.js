@@ -43,7 +43,7 @@ define(function(require, exports, module) {
     $('input[name=register_mode]:radio').change(function(){
       var selected_value = $("input[name='register_mode']:checked").val();
 
-      if(selected_value !='email_or_mobile'){
+      if(selected_value !='email_or_mobile' && selected_value !='mobile'){
         old_selected_value = selected_value; //记住上一次的记录
       }else{
         if($('input[name=_cloud_sms]').val() !=1){
