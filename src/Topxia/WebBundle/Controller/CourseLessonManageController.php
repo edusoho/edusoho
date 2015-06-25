@@ -266,14 +266,14 @@ class CourseLessonManageController extends BaseController
 		$targetId = $course['id'];
 		$draft = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
 		$setting = $this->setting('storage');
-		if ($setting['upload_mode'] == 'local') {
-			// $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
-			//     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-			//     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
-			// );
-		} else {
+		// if ($setting['upload_mode'] == 'local') {
+		// 	// $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+		// 	//     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+		// 	//     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+		// 	// );
+		// } else {
 
-		}
+		// }
 		$lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
