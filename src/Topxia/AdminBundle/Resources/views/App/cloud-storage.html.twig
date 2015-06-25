@@ -4,7 +4,6 @@
                     {% set bill = storage.bill|default(null) %}
 
                     <h4 class="eduyun-title">云视频{% if storage %}<a href="{{path('admin_cloud_detail')}}" target="_blank" >账单</a>{% endif %}{% if (storage and storage.freeTransfer|default(0) > 0) or  (storage and storage.freeSpace|default(0) > 0) %}<a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a> {% endif %}
-                    <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a>
                     </h4>
                     <!--未购买-->
                     {% if not storage %}
