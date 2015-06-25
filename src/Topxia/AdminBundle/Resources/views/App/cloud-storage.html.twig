@@ -16,7 +16,7 @@
 
                       {% if storage.freeTransfer|default(0) == 0 and storage.freeSpace|default(0) == 0 and not bill %}
                            <div class="alert alert-warning alert-sm" role="alert">
-                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_video_buy') }}" target="_blank">购买</a>云视频包，享受优惠的视频文档服务
+                            <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_video_buy') }}" target="_blank">购买</a>云视频包，享受优惠的视频服务
                           </div>
                           <p class="text-muted">空间用量暂无记录</p>
                           <p class="text-muted">已用流量暂无记录</p>
