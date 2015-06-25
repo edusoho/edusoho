@@ -63,9 +63,15 @@
 
                       {% endif %}
                     {% endif %}
-                      <p class="panel-bottom" style="color:#555">
-                        尚未开通TLP安全加固服务&nbsp;&nbsp;<a href="{{ path('admin_cloud_tlp') }}" target="_blank">详情</a>
-                      </p>
+                    <p class="panel-bottom" style="color:#555">
+                      {% if storage %}
+                        <a href="{{ path('admin_cloud_tlp') }}" target="_blank">
+                          尚未开通TLP安全加固服务
+                        </a>
+                      {% else %}
+                        已开通TLP安全加固服务
+                      {% endif %}
+                    </p>
                   </div>
                 </div>
               </div>
