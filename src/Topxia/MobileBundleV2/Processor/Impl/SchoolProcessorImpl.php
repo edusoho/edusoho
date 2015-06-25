@@ -45,11 +45,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             $buyType = 10;
         }
 
-        return $this->createMetaAndData(
-            array(
+        return array(
                 'level' => $level,
                 'buyType' => $buyType
-                ), 200, "ok");
+        );
     }
 
     public function getSchoolVipList()
@@ -70,11 +69,10 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             return $level;
         }, $levels);
         $user = $this->controller->getUserService()->getUser($userId);
-        return $this->createMetaAndData(
-            array(
+        return array(
                 'user' => $this->controller->filterUser($user),
                 'vips' => $levels
-                ), 200, "ok");
+        );
     }
 
     public function getSchoolPlugins()
