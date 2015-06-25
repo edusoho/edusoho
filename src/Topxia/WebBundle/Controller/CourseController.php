@@ -233,6 +233,19 @@ class CourseController extends CourseBaseController
 
 	}
 
+	public function keywordsAction($course)
+	{
+		$category = $this->getCategoryService()->getCategory($course['categoryId']);
+    	$tags = $this->getTagService()->findTagsByIds($course['tags']);
+
+    	return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
+			'category' => $category,
+			'tags' => $tags,
+			'course' => $course
+		));
+	}
+
+
 	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
@@ -703,7 +716,7 @@ class CourseController extends CourseBaseController
 	public function relatedCoursesBlockAction($course)
 	{   
 
-		$courses = $this->getCourseService()->findCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
+		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
 		
 		return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
 			'courses' => $courses,
