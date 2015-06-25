@@ -6,6 +6,10 @@
 {% set groupNav = 'index' %}
 
 {% block group_main %}
+  <ol class="breadcrumb es-section">
+    <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
+    <li class="active">{{groupinfo.title}}</li>
+  </ol>
   <div class="panel panel-default">
     <div class="panel-body">
       <ul class="nav nav-tabs">
