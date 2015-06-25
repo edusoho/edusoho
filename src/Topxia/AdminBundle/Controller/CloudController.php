@@ -77,7 +77,7 @@ class CloudController extends BaseController
         if(!empty($params)){
             $url .= '&param='.urldecode(json_encode($param));
         }
-        return $url;
+        return $this->redirect($url);
     }
     
     protected function getAppService()
