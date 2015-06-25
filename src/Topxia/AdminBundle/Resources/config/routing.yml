@@ -677,7 +677,6 @@ admin_cloud_tlp:
     pattern:  /cloud/tlp
     defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
 
-
 admin_cloud_video:
     pattern:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }

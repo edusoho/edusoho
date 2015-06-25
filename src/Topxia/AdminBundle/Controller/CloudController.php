@@ -48,8 +48,6 @@ class CloudController extends BaseController
 
     public function buyAction(Request $request,$type)
     {
-        var_dump($type);
-        exit();
         $params = array( 'type' => $type );
         return $this->redirectUrl('edu_cloud_buy', $params);
     }
