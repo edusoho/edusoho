@@ -681,6 +681,10 @@ admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
 
+admin_cloud_video_upgrade:
+    pattern:  /cloud/video/upgrade
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }
