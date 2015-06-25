@@ -8,7 +8,7 @@
 {% block main %}
   	{{ web_macro.flash_messages() }}
 
-    {% if smsStatus.status == 'error' %}
+    {% if smsStatus.status|default('') == 'error' %}
     	<div class="panel panel-default">
 			<table class="table table-striped table-hover" style="word-break:break-all;">
 				<thead>
