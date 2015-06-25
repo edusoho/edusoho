@@ -78,7 +78,7 @@ class CloudController extends BaseController
     protected function redirectUrl($routingName, $params = array())
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        $url = 'http://115.29.78.158:99/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        $url = 'http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto='.$routingName;
         if(!empty($params)){
             $url .= '&param='.urldecode(json_encode($params));
         }
