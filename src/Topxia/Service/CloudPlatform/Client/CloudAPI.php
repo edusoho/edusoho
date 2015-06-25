@@ -66,8 +66,6 @@ class CloudAPI
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl . '/' . self::VERSION . $uri;
-        var_dump($this->apiUrl);
-        exit();
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';
