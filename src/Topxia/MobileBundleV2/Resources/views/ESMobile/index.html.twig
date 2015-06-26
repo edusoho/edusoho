@@ -8,16 +8,16 @@
 {% block stylesheets %}
 
 <link href="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.2.1/css/frozen.css') }}" rel="stylesheet" />
-<link href="{{ asset('bundles/topxiamobilebundlev2/esmobile/css/ui-style.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/mobile_main/css/ui-style.css') }}" rel="stylesheet" />
 <link href="{{ asset('bundles/topxiamobilebundlev2/libs/sideview-component.css') }}" rel="stylesheet" />
-<link href="{{ asset('bundles/topxiamobilebundlev2/esmobile/fonts/iconfont.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/mobile_main/fonts/iconfont.css') }}" rel="stylesheet" />
 
 {% endblock %}
 {% if clientType == 'Android' %}
-    <script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/cordova_Android.js') }}"></script>
-    <link href="{{ asset('bundles/topxiamobilebundlev2/esmobile/css/android-style.css') }}" rel="stylesheet" />
+    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/cordova_Android.js') }}"></script>
+    <link href="{{ asset('bundles/topxiamobilebundlev2/mobile_main/css/android-style.css') }}" rel="stylesheet" />
 {%  elseif clientType == 'iOS' %} 
-    <script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/cordova_iOS.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/cordova_iOS.js') }}"></script>
 {% endif %}
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
@@ -29,29 +29,29 @@
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.3.0/js/frozen.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/bindonce.min.js') }}"></script>
 
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/app.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/service.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/filter.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/directive.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/factory.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/provider.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/app.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/service.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/filter.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/directive.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/factory.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/provider.js') }}"></script>
 
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/AppInitController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/MainController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/FoundTabController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/LoginController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/RegistController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/UserController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/SettingController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/CourseController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/LessonController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/CourseListController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/MyLearnController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/MyFavoriteController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/MyGroupController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/QuestionController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/CourseNoticeController.js') }}"></script>
-<script src="{{ asset('bundles/topxiamobilebundlev2/esmobile/js/controller/PayController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/AppInitController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/MainController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/FoundTabController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/LoginController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/RegistController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/UserController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/SettingController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/CourseController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/LessonController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/CourseListController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/MyLearnController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/MyFavoriteController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/MyGroupController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/QuestionController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/CourseNoticeController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/controller/PayController.js') }}"></script>
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-sideview.js') }}"></script>
 
