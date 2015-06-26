@@ -1,6 +1,6 @@
 Gruntfile.js
 package.json
-/node_modules/
+*/node_modules/
 /.idea
 /web/bundles/
 /app/bootstrap.php.cache
