@@ -94,35 +94,38 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $appsInstalled;
     }
 
+    public function getAppRecourse()
+    {
+        $code = $this->getParam("code");
+        $userAgent = $this->request->headers->get("user-agent");
+        $clientType = "iOS";
+        if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
+            $clientType = "iOS";
+        } else if (strpos($userAgent, "Android")) {
+            $clientType = "Android";
+        }
+
+        $assets = $this->controller->getContainer()->get('templating.helper.assets');
+        return $this->controller->redirect($assets->getUrl("bundles/topxiamobilebundlev2/{$code}/release/app_{$clientType}.zip"));
+    }
+
     public function getSchoolApps()
     {
         $host = $this->request->getSchemeAndHttpHost();
-        $article = array(
-            "code"=>"Article",
+        $main = array(
+            "code"=>"mobile_main",
             "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/article.png",
-            "name"=>"网校资讯",
-            "description"=>"EduSoho官方应用，网校资讯。",
+            "name"=>"移动App",
+            "description"=>"EduSoho官方移动App",
             "author"=>"官方",
             "version"=>"1.0.0",
-            "support_version"=>"2.4.0+",
-            "action"=>array(),
-            "url"=>"articleApp"
-        );
-
-        $group = array(
-            "code"=>"Group",
-            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/group.png",
-            "name"=>"网校小组社区",
-            "description"=>"网校小组社区",
-            "author"=>"官方",
-            "version"=>"1.0.0",
-            "support_version"=>"2.4.0+",
-            "action"=>array(),
-            "url"=>""
+            "support_version"=>"6.0.0+",
+            "resource"=>$host . "/mapi_v2/School/getAppRecourse?code=mobile_main",
+            "url"=>"mapi_v2/mobileApp"
         );
         return array(
-            $article, $group
-            );
+            $main
+        );
     }
     
     public function registDevice()
