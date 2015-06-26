@@ -62,14 +62,14 @@ function CourseSettingController($scope, $stateParams, CourseService, $window)
       token : $scope.token
     }, function(data) {
       $scope.hideLoad();
-      if (data.meta.code == 200) {
+      if (! data.error) {
         $window.history.back();
         setTimeout(function() {
           $scope.$emit("refresh", {});
         }, 10);
         
       } else {
-        $scope.toast(data.meta.message);
+        $scope.toast(data.error.message);
       }
     });
   }

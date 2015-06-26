@@ -8,7 +8,7 @@ var app = angular.module('EduSohoApp', [
             'pasvaz.bindonce'
   ]);
 
-app.viewFloder = "/bundles/topxiamobilebundlev2/esmobile/";
+app.viewFloder = "/bundles/topxiamobilebundlev2/mobile_main/";
 
 app.config(['$httpProvider', function($httpProvider) {
 

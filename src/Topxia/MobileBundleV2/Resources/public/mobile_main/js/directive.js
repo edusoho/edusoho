@@ -116,6 +116,23 @@ directive('imgError', function() {
     }
   }
 }).
+directive('ngImgShow', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+      setTimeout(function() {
+        var imgArray = [];
+        angular.forEach(element[0].getElementsByTagName("img"), function(item, i) {
+          imgArray.push[item.src];
+          item.alt = i;
+          item.addEventListener("click", function() {
+            esNativeCore.showImages(this.alt, imageArray);
+          });
+        });
+      }, 100);   
+    }
+  }
+}).
 directive('back', function($window, $state) {
   return {
     restrict: 'A',

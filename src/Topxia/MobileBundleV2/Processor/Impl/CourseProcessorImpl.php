@@ -884,17 +884,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseId = $this->getParam("courseId");
         $user     = $this->controller->getUserByToken($this->request);
         if (!$user->isLogin()) {
-                return $this->createMetaAndData(array(), 500, "您尚未登录，不能查看该课时");
+                return $this->createErrorResponse('no_login', "您尚未登录，不能查看该课时");
         }
         list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
         
         if (empty($member)) {
-                return $this->createMetaAndData(array(), 500, "您不是课程的学员或尚未购买该课程，不能退学。");
+                return $this->createErrorResponse('error', "您不是课程的学员或尚未购买该课程，不能退学。");
         }
         if (!empty($member['orderId'])) {
             $order = $this->getOrderService()->getOrder($member['orderId']);
             if (empty($order)) {
-                return $this->createMetaAndData(array(), 500, "订单不存在，不能退学。");
+                return $this->createErrorResponse('error', "订单不存在，不能退学。");
             }
             
             $reason = $this->getParam("reason", "");
@@ -904,18 +904,18 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 "note" => $reason
             ), $this->getContainer());
             if (empty($refund) || $refund['status'] != "success") {
-                return $this->createMetaAndData(array(), 500, "退出课程失败");
+                return $this->createErrorResponse('error', "退出课程失败");
             }
-            return $this->createMetaAndData(array(), 200, "ok");;
+            return true;
         }
         
         try {
             $this->getCourseService()->removeStudent($course['id'], $user['id']);
         } catch(\Exception $e) {
-            return $this->createMetaAndData(array(), 500, $e->getMessage());
+                return $this->createErrorResponse('error', $e->getMessage());
         }
         
-        return $this->createMetaAndData(array(), 200, "ok");
+        return true;
     }
     
     public function getCourse()

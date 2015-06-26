@@ -114,7 +114,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         $host = $this->request->getSchemeAndHttpHost();
         $main = array(
             "code"=>"mobile_main",
-            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/article.png",
+            "icon"=>"",
             "name"=>"移动App",
             "description"=>"EduSoho官方移动App",
             "author"=>"官方",
