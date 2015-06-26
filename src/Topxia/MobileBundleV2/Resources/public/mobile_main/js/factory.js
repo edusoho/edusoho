@@ -172,61 +172,80 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		}
 	};
 }]).
-factory('ImageUtil', ['$rootScope', function($rootScope){
-	function getScreenWidth() {
-		var width = window.screen.width;
-		switch (window.orientation) {
-		case 0:
-			width = window.screen.width;
-			break;
-		case 90:
-		case - 90 : width = window.screen.height;
-			break
-		}
-		width = width * 0.96;
-		return width
-	}
-	function zoomImage(img, width) {
-		var oldH = img.height;
-		var oldW = img.width;
-		img.width = width;
-		img.height = width / oldW * oldH
-	}
-	function adaptationImage() {
-		var width = getScreenWidth();
-		var imgs = angular.element(document.images);
-		for (var i = 0; i < imgs.length; i++) {
-			zoomImage(imgs[i], width)
-		}
-	}
+factory('platformUtil', function($browser) {
+	var browser = {
+	    v: (function(){
+	        var u = navigator.userAgent, p = navigator.platform;
+	        return {
+	            trident: u.indexOf('Trident') > -1, //IE内核
+	            presto: u.indexOf('Presto') > -1, //opera内核
+	            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+	            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+	            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+	            ios: !!u.match(/i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+	            android: u.indexOf('Android') > -1, //android终端
+	            iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+	            iPad: u.indexOf('iPad') > -1, //是否iPad
+	            weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+	            webApp: u.indexOf('Safari') == -1, //是否web应用程序，没有头部与底部
+	            UCB: u.match(/UCBrowser/i) == "UCBrowser",
+	            QQB: u.match(/MQQBrowser/i) == "MQQBrowser",
+	            win: p.indexOf('Win') > -1,//判断是否是WIN操作系统
+	            mac: p.indexOf('Mac') > -1,//判断是否是Mac操作系统
+	            native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
+	        };
+	    })()
+	};
 
-	var util = {
-		zoom : function(){
-			var imageArray = new Array();
-			var imgs = angular.element(document.images);
-			for (var i = 0; i < imgs.length; i++) {
-				var img = imgs[i];
-				img.addEventListener('load',
-				function() {
-					var width = getScreenWidth();
-					zoomImage(this, width)
-				});
-				img.alt = i;
-				imageArray.push(img.src);
-				img.addEventListener('click',
-				function() {
-					window.location = 'imageIndexNUrls://?' + this.alt + '.partation.' + imageArray.join('.partation.');
-					window.jsobj.showImages(this.alt,imageArray);
-				})
-			}
-			window.addEventListener('orientationchange',
-			function() {
-				adaptationImage()
-			},
-			false);
+	return browser.v;
+}).
+factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUtil', 
+	function($rootScope, sideDelegate, localStore, platformUtil){
+	var cordovaUtil =  {
+		learnCourseLesson : function(courseId, lessonId) {
+			alert("请在客户端学习非图文课时");
+		},
+		share : function(url, title, about, pic) {
+			alert("请在客户端分享课程");
+		},
+		openDrawer : function(state) {
+			sideDelegate.toggleMenu();
+		},
+		openWebView : function(url) {
+			window.location.href = url;
+		},
+		payCourse : function(title, url) {
+			alert("请在客户端内支付!");
+		},
+		getUserToken : function($q) {
+			var deferred = $q.defer();
+			deferred.resolve({
+				user : angular.fromJson(localStore.get("user")),
+				token : localStore.get("token")
+			});
+
+			return deferred.promise;
+		},
+		clearUserToken : function() {
+			localStore.remove("user");
+			localStore.remove("token");
+		},
+		saveUserToken : function(user, token) {
+			localStore.save("user", angular.toJson(user));
+			localStore.save("token", token);
 		}
 	};
 
-	return util;
+	var proxy = function() {
+		var self = {};
+
+		var isNative = platformUtil.native;
+		for ( var func in cordovaUtil) {
+			self[func] = isNative ? esNativeCore[func] : cordovaUtil[func];
+		}
+
+		return self;
+	}
 	
+	return proxy();
 }]);

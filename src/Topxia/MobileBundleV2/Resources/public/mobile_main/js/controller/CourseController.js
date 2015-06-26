@@ -1,4 +1,4 @@
-app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$state', CourseController]);
+app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$state', 'cordovaUtil', CourseController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
 app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$window', CourseSettingController]);
 
@@ -85,7 +85,7 @@ function CourseDetailController($scope, $stateParams, CourseService)
     });
 }
 
-function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
+function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, cordovaUtil)
 {
     $scope.showLoad();
 
@@ -125,7 +125,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
           for( index in data.learnStatuses ) {
             $scope.lastLearnStatusIndex = index;
           }
-          
         });
       });
     }
@@ -218,12 +217,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
     }
 
     $scope.shardCourse = function() {
-      if (! $scope.platform.native) {
-        alert("请在客户端分享课程");
-        return;
-      }
-
-      esNativeCore.share("", "课程", "关于", $scope.course.largePicture);
+      cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
     }
 
     $scope.$parent.$on("refresh", function(event, data) {
@@ -241,11 +235,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
         return;
       }
 
-      if (! $scope.platform.native) {
-        alert("请在客户端学习非图文课时");
-        return;
-      }
-
-      esNativeCore.learnCourseLesson(lesson.courseId, lesson.id);
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
     }
 }

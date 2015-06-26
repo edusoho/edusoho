@@ -121,9 +121,9 @@ directive('ngImgShow', function() {
     restrict: 'A',
     link : function(scope, element, attrs) {
       setTimeout(function() {
-        var imgArray = [];
+        var imageArray = [];
         angular.forEach(element[0].getElementsByTagName("img"), function(item, i) {
-          imgArray.push[item.src];
+          imageArray.push(item.src);
           item.alt = i;
           item.addEventListener("click", function() {
             esNativeCore.showImages(this.alt, imageArray);

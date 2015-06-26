@@ -92,7 +92,7 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 	}
 }
 
-function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
+function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordovaUtil)
 {
 	var self = this;
 	ServcieUtil.getService("OrderService").getPayOrder({
@@ -122,11 +122,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
         			token : $scope.token
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				if (! $scope.platform.native) {
-					alert("请在客户端内支付!");
-					return;
-				}
-				esNativeCore.payCourse("支付课程", data.payUrl);
+				cordovaUtil.payCourse("支付课程", data.payUrl);
 			}
 		});
 	}

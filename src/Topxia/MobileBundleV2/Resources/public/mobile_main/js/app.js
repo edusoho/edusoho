@@ -1,7 +1,7 @@
 var app = angular.module('EduSohoApp', [
             'ngSanitize',
             'ui.router',
-             'AppService',
+            'AppService',
             'AppFactory',
             'AppProvider',
             'ngSideView',
@@ -363,10 +363,10 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             });
 }]);
 
-app.run(["applicationProvider", "$rootScope", '$timeout',
-  function(applicationProvider, $rootScope, $timeout) {
+app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
+  function(applicationProvider, $rootScope, $timeout, platformUtil) {
 
-  $rootScope.platform = browser.v;
+  $rootScope.platform = platformUtil;
   $rootScope.showLoad = function(template) {
     $rootScope.loadPop = $.loading({
         content: "加载中...",
@@ -432,12 +432,15 @@ var browser = {
     })()
 };
 
-if (browser.v.native) {
-  document.addEventListener("deviceready", function() {
-      angular.bootstrap( document, ["EduSohoApp"] );
-  });
-} else {
-  angular.element(document).ready(function() {
+angular.element(document).ready(function() {
+    var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
+
+    if (platformUtil.native) {
+      document.addEventListener("deviceready", function() {
+          angular.bootstrap( document, ["EduSohoApp"] );
+      });
+      return;
+    }
+    
     angular.bootstrap( document, ["EduSohoApp"] );
-  });
-}
+});

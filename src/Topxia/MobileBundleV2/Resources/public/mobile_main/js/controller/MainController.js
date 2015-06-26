@@ -5,7 +5,7 @@ function MainTabController($scope, sideDelegate, $state)
 
 app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', 'sideDelegate', '$state', FoundTabController]);
 
-function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $state)
+function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $state)
 {
 	console.log("FoundTabController");
 	$scope.toggleView = function(view) {
@@ -13,13 +13,7 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 	};
 
 	$scope.toggle = function() {
-		
-		if ($scope.platform.native) {
-			window.esNativeCore.openDrawer("open");
-			return;
-		}
-
-		sideDelegate.toggleMenu();
+		cordovaUtil.openDrawer("open");
 	};
 
 	$scope.categorySelectedListener  = function(category) {
@@ -40,19 +34,11 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 	var self = this;
 	this.parseBannerAction = function(action) {
 		this.courseAction = function(params) {
-			if ($scope.platform.native) {
-				esNativeCore.openWebView(app.rootPath + "#/course/" + params);
-				return;
-			}
-			$state.go("course", { courseId : params });
+			cordovaUtil.openWebView(app.rootPath + "#/course/" + params);
 		}
 
 		this.webviewAction = function(params) {
-			if ($scope.platform.native) {
-				esNativeCore.openWebView(params);
-				return;
-			}
-			window.location.href = params;
+			cordovaUtil.openWebView(params);
 		}
 
 		this.noneAction = function() {
@@ -80,5 +66,4 @@ app.controller('ContactTabController', ['$scope', ContactTabController]);
 function ContactTabController($scope)
 {
 	console.log("ContactTabController");
-	console.log($scope);
 }

@@ -6253,7 +6253,7 @@ function handlePluginsObject(path, moduleList) {
 }
 
 function injectPluginScript(pathPrefix) {
-    pathPrefix = "/bundles/topxiamobilebundlev2/js/";
+
     injectScript(pathPrefix + 'cordova_plugins.js', function(){
         try {
             var moduleList = require("cordova/plugin_list");
@@ -6269,14 +6269,16 @@ function injectPluginScript(pathPrefix) {
 function findCordovaPath() {
     var path = null;
     var scripts = document.getElementsByTagName('script');
-    var term = 'cordova_iOS.js';
+    var term = 'cordova.js';
     for (var n = scripts.length-1; n>-1; n--) {
         var src = scripts[n].src;
-        if (src.indexOf(term) == (src.length - term.length)) {
-            path = src.substring(0, src.length - term.length);
+        var pos = src.indexOf(term);
+        if (pos > 0) {
+            path = src.substring(0, pos);
             break;
         }
     }
+
     return path;
 }
 
@@ -6289,6 +6291,7 @@ exports.load = function() {
         console.log('Could not find cordova.js script tag. Plugin loading may fail.');
         pathPrefix = '';
     }
+
     injectPluginScript(pathPrefix);
 };
 

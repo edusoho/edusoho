@@ -9,7 +9,7 @@ function SettingController($scope, UserService, $state)
 			token : $scope
 		}, function(data) {
 			$scope.hideLoad();
-			$state.go("slideView.mainTab.found");
+			$state.go("slideView.mainTab");
 		});
 	}
 }

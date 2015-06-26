@@ -14,10 +14,9 @@
 
 {% endblock %}
 {% if clientType == 'Android' %}
-    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/cordova_Android.js') }}"></script>
-    <link href="{{ asset('bundles/topxiamobilebundlev2/mobile_main/css/android-style.css') }}" rel="stylesheet" />
+    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/Android/cordova.js') }}"></script>
 {%  elseif clientType == 'iOS' %} 
-    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/cordova_iOS.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/iOS/cordova.js') }}"></script>
 {% endif %}
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
