@@ -2472,14 +2472,14 @@ a:focus {
   -moz-border-radius: none;
   border-radius: none;
   margin-bottom: 0;
-  padding: 5px 0;
+  padding: 0;
   border: none;
   color: #7cb132;
 }
 .alert-notice .swiper-container {
   position: relative;
-  height: 28px;
-  line-height: 28px;
+  height: 38px;
+  line-height: 38px;
   overflow: hidden;
 }
 .alert-notice .swiper-wrapper {
@@ -2496,7 +2496,7 @@ a:focus {
 .alert-notice .close {
   float: none;
   position: absolute;
-  top: 2px;
+  top: 5px;
   right: 0;
   width: 30px;
 }
