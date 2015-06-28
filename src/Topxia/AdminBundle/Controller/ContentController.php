@@ -11,8 +11,8 @@ use Topxia\Service\Content\Type\ContentTypeFactory;
 class ContentController extends BaseController
 {
 
-	public function indexAction(Request $request)
-	{
+    public function indexAction(Request $request)
+    {
         $conditions = array_filter($request->query->all());
 
         $paginator = new Paginator(
@@ -36,21 +36,21 @@ class ContentController extends BaseController
 
         return $this->render('TopxiaAdminBundle:Content:index.html.twig',array(
         	'contents' => $contents,
-            'users' => $users,
-            'categories' => $categories,
+                'users' => $users,
+                'categories' => $categories,
         	'paginator' => $paginator,
     	));
-	}
+    }
 
-	public function createAction(Request $request, $type)
-	{
+    public function createAction(Request $request, $type)
+    {
         $type = ContentTypeFactory::create($type);
         if ($request->getMethod() == 'POST') {
 
 
             $content = $request->request->all();
             $content['type'] = $type->getAlias();
-
+            $content['template'] = $request->get('template');
             $file = $request->files->get('picture');
             if(!empty($file)){
                 $record = $this->getFileService()->uploadFile('default', $file);
@@ -70,7 +70,7 @@ class ContentController extends BaseController
         return $this->render('TopxiaAdminBundle:Content:content-modal.html.twig',array(
             'type' => $type,
         ));
-	}
+    }
 
     public function editAction(Request $request, $id)
     {
