@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class KernelRequestListener
 {
@@ -23,7 +24,7 @@ class KernelRequestListener
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->server->get('REQUEST_URI');
-        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled'] && $_target_path != '/login/bind/weixinweb/choose') {
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
         } 
         else{
@@ -70,6 +71,11 @@ class KernelRequestListener
     	}
     }
 
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
     protected function getKernel()
     {
         return ServiceKernel::instance();
@@ -89,7 +95,7 @@ class KernelRequestListener
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-    
+
     public function redirect($url, $status = 302)
     {
         return new RedirectResponse($url, $status);
