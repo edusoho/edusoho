@@ -75,8 +75,8 @@
             <p class="teacher-info">
               {{ profile.about|plain_text(40)| raw}}
             </p>
-             {% set teacherCourses = data('TeacherCourses',{ userId:teacher.id,count:100 }) %}
-            <span class="course-num">在教课程：{{ teacherCourses|length }}</span>
+             {% set teacherCoursesCount = data('TeacherCoursesCount',{ userId:teacher.id,count:100 }) %}
+            <span class="course-num">在教课程：{{ teacherCoursesCount }}</span>
             <span class="course-btn">
               <a href="{{path('user_teach', {id:teacher.id})}}" class="btn btn-sm btn-warning mrm">在教课程</a>
               <a href="{{path('user_reservation', {id:teacher.id})}}" class="btn btn-warning btn-sm">在线辅导</a>
