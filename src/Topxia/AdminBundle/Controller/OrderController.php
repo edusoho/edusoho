@@ -34,6 +34,15 @@ class OrderController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+
+        foreach ($orders as $index => $expiredOrderToBeUpdated ){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+               $orders[$index]['status'] = 'cancelled';
+            }
+        }
         if ($type = 'classroom') {
             foreach ($orders as $key => &$value) {
                 $classroom = $this->getClassroomService()->getClassroom($value['targetId']);
@@ -48,15 +57,6 @@ class OrderController extends BaseController
                 if ($course['status'] == 'closed') {
                     $value['status'] = 'cancelled';
                 }
-            }
-        }
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
-
-        foreach ($orders as $index => $expiredOrderToBeUpdated ){
-            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
-               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-               $orders[$index]['status'] = 'cancelled';
             }
         }
 
