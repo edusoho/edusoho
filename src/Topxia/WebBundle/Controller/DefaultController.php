@@ -223,10 +223,10 @@ class DefaultController extends BaseController
         $toId = $this->getCurrentUser()->id;
         $bind = $this->getUserService()->getBindByToIdAndType('weixinweb',$toId);
         if ($bind['isBind']) {
-            return createJsonResponse(true);
+            return $this->createJsonResponse(true);
         }
         else{
-            return createJsonResponse(false);
+            return $this->createJsonResponse(false);
         }
     }
     private function calculateUserLearnProgress($course, $member)
