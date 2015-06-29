@@ -19,8 +19,7 @@ class UserBindDataTag extends BaseDataTag implements DataTag
     
     public function getData(array $arguments)
     {
-        $user = $this->getUserService()->getCurrentUser();
-
+        $user = $this->getUserService()->getCurrentUser()->id;
     	$userbind = $this->getUserService()->findBindsByUserId($user['id']);
         
         return $userbind;
