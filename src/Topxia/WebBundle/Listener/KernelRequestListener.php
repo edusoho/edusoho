@@ -22,7 +22,7 @@ class KernelRequestListener
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->server->get('REQUEST_URI');
-        if (strpos($user_agent,"MicroMessenger ") && !$user->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
         } 
         else{
