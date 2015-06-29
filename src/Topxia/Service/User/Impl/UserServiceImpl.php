@@ -704,7 +704,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
     }
 
-    public function bindUser($type, $fromId, $toId, $token)
+    public function bindUser($type, $fromId, $toId, $token,$isBind = 0)
     {
         $user = $this->getUserDao()->getUser($toId);
         if (empty($user)) {
@@ -724,7 +724,7 @@ class UserServiceImpl extends BaseService implements UserService
             'token'=> empty($token['token']) ? '' : $token['token'],
             'createdTime'=>time(),
             'expiredTime'=>empty($token['expiredTime']) ? 0 : $token['expiredTime'],
-            'isBind'=>1,
+            'isBind'=>$isBind,
         ));
     }
 

@@ -262,7 +262,7 @@ class LoginBindController extends BaseController
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
             $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
-            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
+            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token,1);
             $this->authenticateUser($user);
         }
 
