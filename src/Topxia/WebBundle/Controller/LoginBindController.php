@@ -30,6 +30,7 @@ class LoginBindController extends BaseController
                 $bind = $this->getUserService()->getUserBindByTypeAndFromId('weixinmob', $token['userId']);
             }
         }
+        $request->getSession()->set('oauth_token', $token);
         if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
@@ -44,7 +45,6 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            $request->getSession()->set('oauth_token', $token);
             if ($type == 'weixinweb') {
                 $response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
