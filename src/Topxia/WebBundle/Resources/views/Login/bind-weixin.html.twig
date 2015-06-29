@@ -5,7 +5,7 @@
   <div class="col-md-6 col-md-offset-3">
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>绑定到已有帐号</h2></div>
-      <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_exist', {type:'weixinweb'}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
+      <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_existbind') }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
 
         <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
 

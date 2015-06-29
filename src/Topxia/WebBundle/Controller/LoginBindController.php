@@ -244,6 +244,29 @@ class LoginBindController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function existBindAction(Request $request)
+    {
+        $token = $request->getSession()->get('oauth_token');
+        $type = "weixinweb";
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
+        $data = $request->request->all();
+        $user = $this->getUserService()->getUserByEmail($data['email']);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+        } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
+            $response = array('success' => false, 'message' => '密码不正确，请重试！');
+        } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
+            $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
+        } else {
+            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
+            $this->authenticateUser($user);
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     private function createOAuthClient($type)
     {
         $settings = $this->setting('login_bind');        

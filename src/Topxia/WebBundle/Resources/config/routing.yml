@@ -54,6 +54,12 @@ login_bind_exist:
     pattern:  /login/bind/{type}/exist
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
     methods: [POST]
+
+login_bind_existbind:
+    pattern:  /login/bind/weixinmob/existbind
+    defaults: { _controller: TopxiaWebBundle:LoginBind:existBind }
+    methods: [POST]
+
 login_bind_weixin:
     pattern:  /login/weixinmob
     defaults: { _controller: TopxiaWebBundle:LoginBind:weixinIndex }
