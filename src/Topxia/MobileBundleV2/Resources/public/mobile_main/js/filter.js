@@ -33,6 +33,19 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 		return AppUtil.createArray(num);
 	};
 }]).
+filter('lessonType', function() {
+	var lessonType = {
+		text  : "图文",
+		video  : "视频",
+		audio  : "音频",
+		textpaper  : "考试",
+		document  : "文档",
+		ppt  : "PPT"
+	};
+	return function(type) {
+		return lessonType[type];
+	}
+}).
 filter('coverIncludePath', function() {
 	return function(path) {
 		return app.viewFloder + path;

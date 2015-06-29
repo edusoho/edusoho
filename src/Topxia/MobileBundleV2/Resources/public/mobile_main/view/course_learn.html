@@ -20,7 +20,10 @@
 		        <div class="ui-list-info ui-border-t" ng-class="lesson.type">
 		            <h4 class="ui-nowrap"> {{ lesson | formatChapterNumber }} {{ lesson.title }}</h4>
 		        </div>
-		        <div class="ui-list-action lesson-time">{{ lesson.length }}</div>
+		        <div class="ui-list-action lesson-time" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
+		        	{{ lesson.length }}
+		        	<label class="ui-label">{{ lesson.type | lessonType }}</label>
+		        </div>
 		</li>
 		<list-empty-view class="lesson-empty" data="lessons" title="暂无课时">
            </list-empty-view>

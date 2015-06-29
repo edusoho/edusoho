@@ -30,7 +30,7 @@
 
     <div class="ui-tab tab-top" ui-tab>
 	    <ul class="ui-tab-nav ui-border-tb">
-	        <li><span class="line">课程标题</span></li>
+	        <li><span class="line">课程课时</span></li>
 	        <li><span>课程详情</span></li>
 	    </ul>
 	    <ul class="ui-tab-content tab-display">
@@ -43,7 +43,10 @@
 			        <div class="ui-list-info ui-border-t" ng-class="lesson.type">
 			        	<h4 class="ui-nowrap"> {{ lesson | formatChapterNumber }} {{ lesson.title }}</h4>
 			        </div>
-			        <div class="ui-list-action lesson-time">{{ lesson.length }}</div>
+			        <div class="ui-list-action lesson-time" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
+			        	{{ lesson.length }}
+			        	<label class="ui-label">{{ lesson.type | lessonType }}</label>
+			        </div>
 				  </li>
 				  <list-empty-view class="lesson-empty" data="lessons" title="暂无课时">
 	              	  </list-empty-view>
@@ -77,8 +80,8 @@
 				            <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
 				        </div>
 				        <div class="ui-list-info">
-				            <h4 class="ui-nowrap">{{ course.teachers[0].nickname }} 
-				            	<span class="teacher-label">教师</span>
+				            <h4 class="ui-nowrap">{{ course.teachers[0].nickname }}
+				            	<label class="ui-label">教师</label>
 				            </h4>
 				            <p class="ui-nowrap">{{ course.teachers[0].title }}</p>
 				        </div>
