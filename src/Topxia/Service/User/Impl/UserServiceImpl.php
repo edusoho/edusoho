@@ -724,6 +724,7 @@ class UserServiceImpl extends BaseService implements UserService
             'token'=> empty($token['token']) ? '' : $token['token'],
             'createdTime'=>time(),
             'expiredTime'=>empty($token['expiredTime']) ? 0 : $token['expiredTime'],
+            'isBind'=>1,
         ));
     }
 

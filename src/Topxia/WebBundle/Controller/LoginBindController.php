@@ -250,6 +250,8 @@ class LoginBindController extends BaseController
         $type = "weixinweb";
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
+        $olduser = $this->getCurrentUser();
+        $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
         $data = $request->request->all();
         $user = $this->getUserService()->getUserByEmail($data['email']);
         if (empty($user)) {
