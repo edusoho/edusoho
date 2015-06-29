@@ -45,8 +45,27 @@ $app->view(function (array $result, Request $request) use ($app) {
     return new JsonResponse($result);
 });
 
-$app->before(function (Request $request) {
-    setCurrentUser($request->query->get('token',''));
+
+$app->before(function (Request $request) use ($app) {
+    $token = $request->headers->get('Auth-Token', '');
+    if (empty($token)) {
+        return array('error' => array('code' => 'AUTH_TOKEN_EMPTY', 'message' => 'AuthToken is not exist.'));
+    }
+
+    $userService = ServiceKernel::instance()->create('User.UserService');
+
+    $token = $userService->getToken('api_login', $token);
+    if (empty($token['userId'])) {
+        return array('error' => array('code' => 'AUTH_TOKEN_INVALID', 'message' => 'AuthToken is invalid.'));
+    }
+
+    $user = $userService->getUser($token['userId']);
+    if (empty($user)) {
+        return array('error' => array('code' => 'AUTH_USER_NOT_FOUND', 'message' => 'Auth user is not found'));
+    }
+
+    setCurrentUser($user);
+
 });
 
 $app->error(function (\Exception $e, $code) {
