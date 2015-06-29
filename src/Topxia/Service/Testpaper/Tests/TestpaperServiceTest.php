@@ -14,7 +14,7 @@ class TestpaperServiceTest extends BaseTestCase
 
     }
 
-    private function generateChoiceQuestions($target, $count, $difficulty = null)
+    protected function generateChoiceQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -37,7 +37,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateFillQuestions($target, $count, $difficulty = null)
+    protected function generateFillQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -53,7 +53,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateDetermineQuestions($target, $count, $difficulty = null)
+    protected function generateDetermineQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -70,7 +70,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateEssayQuestions($target, $count, $difficulty = null)
+    protected function generateEssayQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -87,7 +87,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateMaterialQuestions($target, $count, $difficulty = null)
+    protected function generateMaterialQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -103,12 +103,12 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }

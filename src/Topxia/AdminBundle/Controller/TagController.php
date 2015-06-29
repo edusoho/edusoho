@@ -73,12 +73,12 @@ class TagController extends BaseController
         return $this->createJsonResponse($response);
 	}
 
-	private function getTagService()
+	protected function getTagService()
 	{
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
 	}
 
-	private function getTagWithException($tagId)
+	protected function getTagWithException($tagId)
 	{
 		$tag = $this->getTagService()->getTag($tagId);
 		if (empty($tag)) {

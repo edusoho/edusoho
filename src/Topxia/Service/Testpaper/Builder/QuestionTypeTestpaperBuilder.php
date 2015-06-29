@@ -54,7 +54,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    private function fillQuestionsToNeedCount($selectedQuestions, $allQuestions, $needCount)
+    protected function fillQuestionsToNeedCount($selectedQuestions, $allQuestions, $needCount)
     {
         $indexedQuestions = ArrayToolkit::index($allQuestions, 'id');
         foreach ($selectedQuestions as $question) {
@@ -76,7 +76,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $selectedQuestions;
     }
 
-    private function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
+    protected function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
     {
         $selectedQuestions = array();
         foreach ($percentages as $difficulty => $percentage) {
@@ -95,7 +95,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $selectedQuestions;
     }
 
-    private function canBuildWithQuestions($options, $questions)
+    protected function canBuildWithQuestions($options, $questions)
     {
         $missing = array();
 
@@ -131,7 +131,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return array('status' => 'no', 'missing' => $missing);
     }
 
-    private function getQuestions($options)
+    protected function getQuestions($options)
     {
         $conditions = array();
 
@@ -148,7 +148,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
-    private function convertQuestionsToItems($testpaper, $questions, $count, $options)
+    protected function convertQuestionsToItems($testpaper, $questions, $count, $options)
     {
         $items = array();
         for ($i=0; $i<$count; $i++) {
@@ -167,7 +167,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $items;
     }
 
-    private function makeItem($testpaper, $question, $score, $missScore)
+    protected function makeItem($testpaper, $question, $score, $missScore)
     {
         return array(
             'testId' => $testpaper['id'],
@@ -179,7 +179,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         );
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->createService('Question.QuestionService');
     }

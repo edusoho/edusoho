@@ -162,7 +162,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, $lessonIds);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
 
         $builder = $this->createDynamicQueryBuilder($conditions)

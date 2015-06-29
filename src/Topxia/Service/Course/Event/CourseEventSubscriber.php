@@ -154,7 +154,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $this->getNoteService()->count($note['id'], 'likeNum', -1);
     }
 
-    private function simplifyCousrse($course)
+    protected function simplifyCousrse($course)
     {
         return array(
             'id' => $course['id'],
@@ -167,7 +167,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function simplifyLesson($lesson)
+    protected function simplifyLesson($lesson)
     {
         return array(
             'id' => $lesson['id'],
@@ -178,22 +178,22 @@ class CourseEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function getStatusService()
+    protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
     }
 
-    private function getNoteService()
+    protected function getNoteService()
     {
         return ServiceKernel::instance()->createService('Course.NoteService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
-    private function getClassroomService()
+    protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }

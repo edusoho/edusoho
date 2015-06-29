@@ -311,7 +311,7 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function tryGetUser($id)
+    protected function tryGetUser($id)
     {
         $user = $this->getUserService()->getUser($id);
         if (empty($user)) {
@@ -320,7 +320,7 @@ class UserController extends BaseController
         return $user;
     }
 
-    private function _learnAction($user)
+    protected function _learnAction($user)
     {
         $paginator = new Paginator(
             $this->get('request'),
@@ -342,7 +342,7 @@ class UserController extends BaseController
         ));
     }
 
-    private function _teachAction($user)
+    protected function _teachAction($user)
     {
         $conditions = array(
             'userId' => $user['id'],
@@ -369,7 +369,7 @@ class UserController extends BaseController
         ));
     }
 
-    private function getGroupService() 
+    protected function getGroupService() 
     {   
         return $this->getServiceKernel()->createService('Group.GroupService');
     }

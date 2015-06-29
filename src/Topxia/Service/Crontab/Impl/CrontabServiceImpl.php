@@ -110,7 +110,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         }
     }
 
-    private function refreshNextExecutedTime()
+    protected function refreshNextExecutedTime()
     {
         $conditions = array(
             'executing' => 0,
@@ -130,12 +130,12 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return $this->createDao('Crontab.JobDao');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }

@@ -546,7 +546,7 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
+    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
@@ -568,7 +568,7 @@ class CourseLessonController extends BaseController
         return $response;
     }
 
-    private function isMobile()
+    protected function isMobile()
     {
         // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
@@ -633,33 +633,33 @@ class CourseLessonController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTokenService()
+    protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     //Homework plugins(contains Exercise)
-    private function getHomeworkService()
+    protected function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 
-    private function getExerciseService()
+    protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }

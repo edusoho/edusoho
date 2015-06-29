@@ -355,7 +355,7 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	private function calculateUserLearnProgress($course, $member)
+	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
 			return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -370,7 +370,7 @@ class CourseStudentManageController extends BaseController
 		);
 	}
 
-	private function createStudentTrResponse($course, $student)
+	protected function createStudentTrResponse($course, $student)
 	{
 		$courseSetting = $this->getSettingService()->get('course', array());
 		$isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1: 0;
@@ -390,22 +390,22 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
-	private function getSettingService()
+	protected function getSettingService()
 	{
 		return $this->getServiceKernel()->createService('System.SettingService');
 	}
 
-	private function getCourseService()
+	protected function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 
-	private function getNotificationService()
+	protected function getNotificationService()
 	{
 		return $this->getServiceKernel()->createService('User.NotificationService');
 	}
 
-	private function getOrderService()
+	protected function getOrderService()
 	{
 		return $this->getServiceKernel()->createService('Order.OrderService');
 	}
