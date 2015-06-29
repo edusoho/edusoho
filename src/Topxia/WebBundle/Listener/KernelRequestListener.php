@@ -89,4 +89,9 @@ class KernelRequestListener
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
+    
+    public function redirect($url, $status = 302)
+    {
+        return new RedirectResponse($url, $status);
+    }
 }
