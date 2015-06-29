@@ -45,7 +45,7 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            if ($type == 'weixinweb') {
+            if ($type == 'weixinmob') {
                 $response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);
@@ -247,7 +247,7 @@ class LoginBindController extends BaseController
     public function existBindAction(Request $request)
     {
         $token = $request->getSession()->get('oauth_token');
-        $type = "weixinweb";
+        $type = "weixinmob";
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $olduser = $this->getCurrentUser();

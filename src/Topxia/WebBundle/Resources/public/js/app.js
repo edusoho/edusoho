@@ -147,11 +147,7 @@ define(function(require, exports, module) {
         is_weixin(); 
     if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
     };
-    function is_weixin(){     
-        $_target_path = window.location.pathname;
-        if($('meta[name=is-login]').attr('content') == 0 && $_target_path != '/login/bind/weixinweb/choose') {
-            window.location.href = '/login/bind/weixinweb'+'?_target_path='+$_target_path; 
-   		}
+    function is_weixin(){
 
         $(".weixin-alert .close").click(function(){
             Cookie.set("close_weixin_alert",'true',{path: '/'});

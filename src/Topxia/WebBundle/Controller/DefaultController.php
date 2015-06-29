@@ -221,7 +221,7 @@ class DefaultController extends BaseController
     public function weixinCheckAction(Request $request)
     {
         $toId = $this->getCurrentUser()->id;
-        $bind = $this->getUserService()->getBindByToIdAndType('weixinweb',$toId);
+        $bind = $this->getUserService()->getBindByToIdAndType('weixinmob',$toId);
         if ($bind['isBind']) {
             return $this->createJsonResponse(true);
         }

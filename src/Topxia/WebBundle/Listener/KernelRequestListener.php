@@ -6,6 +6,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class KernelRequestListener
 {
@@ -17,8 +18,19 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
     	$request = $event->getRequest();
-
-    	if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
+        $currentUser = $this->getCurrentUser();
+        $setting = $this->getSettingService()->get('login_bind');
+        if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'GET')) {
+            $user_agent = $request->server->get('HTTP_USER_AGENT');
+            $_target_path = $request->server->get('REQUEST_URI');
+            if (strpos($_SERVER['HTTP_USER_AGENT'],"MicroMessenger ") && !$user->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+                return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
+            } 
+            else{
+                return ;
+            }
+        }
+        if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
 
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
@@ -58,4 +70,23 @@ class KernelRequestListener
     	}
     }
 
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    public function getCurrentUser()
+    {
+        return $this->getKernel()->getCurrentUser();
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }
