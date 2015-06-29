@@ -73,5 +73,24 @@
     </div>
   </div>
 {% endif %}
-
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+            if (window.history && window.history.pushState) {
+                $(window).on('popstate', function () {
+                var hashLocation = location.hash;
+                var hashSplit = hashLocation.split("#!/");
+                var hashName = hashSplit[1];
+            if (hashName !== '') {
+                var hash = window.location.hash;
+            if (hash === '') {
+                alert("您已经提交试卷！不能再次进入考试页面");
+                location.reload();
+            }
+          }
+        });
+        window.history.pushState('forward', null, './#forward');
+      }
+    });
+</script>
 {% endblock %}
