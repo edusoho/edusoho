@@ -35,10 +35,10 @@
             {% elseif content.template == 'default'%}
              checked="checked"
             {% endif %}>
-            带有默认导航栏</label>
+            使用默认导航栏</label>
         <label><input type="radio" name="template" value="blank"
           {% if content and content.template == 'blank' %} checked="checked" {% endif %}
-          >使用空白页</label>
+          >不使用导航栏</label>
         </div>
       </div>
 
@@ -135,7 +135,7 @@
             </select>
           </div>
         </div>
-      {% endif %}
+      {% endif %} 
 
       <input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
 

@@ -35,10 +35,10 @@ class ContentController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         return $this->render('TopxiaAdminBundle:Content:index.html.twig',array(
-        	'contents' => $contents,
+        	   'contents' => $contents,
                 'users' => $users,
                 'categories' => $categories,
-        	'paginator' => $paginator,
+        	   'paginator' => $paginator,
     	));
     }
 
@@ -50,7 +50,7 @@ class ContentController extends BaseController
 
             $content = $request->request->all();
             $content['type'] = $type->getAlias();
-            $content['template'] = $request->get('template');
+
             $file = $request->files->get('picture');
             if(!empty($file)){
                 $record = $this->getFileService()->uploadFile('default', $file);
