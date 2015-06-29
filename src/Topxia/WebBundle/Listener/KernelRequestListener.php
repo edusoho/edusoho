@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class KernelRequestListener
+class KernelRequestListener extends Controller
 {
     public function __construct($container)
     {
@@ -23,7 +23,7 @@ class KernelRequestListener
         $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
-        $_target_path = $request->server->get('REQUEST_URI');
+        $_target_path = $request->getPathInfo();
         if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled'] && $_target_path != '/login/bind/weixinweb/choose') {
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
         } 
@@ -69,11 +69,6 @@ class KernelRequestListener
 
     		}
     	}
-    }
-
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
-        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     protected function getKernel()
