@@ -125,7 +125,31 @@ class LoginBindController extends BaseController
 
     public function weixinIndexAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig');
+        $token = $request->getSession()->get('oauth_token');
+        $type = "weixinweb";
+        $client = $this->createOAuthClient($type);
+        $clientMetas = OAuthClientFactory::clients();
+        $clientMeta = $clientMetas[$type];
+
+        try {
+            $oauthUser = $client->getUserInfo($token);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            if ($message == 'unaudited') {
+                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientMeta['name'].'登录连接的审核还未通过。';
+            } else {
+                $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+            }
+            $this->setFlashMessage('danger', $message);
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
+            'oauthUser' => $oauthUser,
+            'type' => $type,
+            'clientMeta' => $clientMeta,
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
+        ));
     }
 
     public function newSetAction(Request $request, $type)
