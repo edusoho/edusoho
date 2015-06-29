@@ -144,8 +144,8 @@ define(function(require, exports, module) {
     	});
     }
     var ua = navigator.userAgent.toLowerCase();
-        if($('.weixin-alert.hide'))
-            $('.weixin-alert.hide').removeClass('hide');
+/*        if($('.weixin-alert.hide'))
+            $('.weixin-alert.hide').removeClass('hide');*/
     if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
     };
     function is_weixin(){
