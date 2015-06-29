@@ -69,6 +69,7 @@ class AppController extends BaseController
         $startDate = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '' ;
         $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
 
+        $tlp = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0 ;
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
         $storageDate = isset($content['service']['storage']['expire']) ? ceil( ($content['service']['storage']['expire'] - strtotime($currentTime) ) /86400) : '' ;
         $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],0,1) : '' ;
@@ -86,7 +87,6 @@ class AppController extends BaseController
 
         $notices = $EduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
-
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
             'packageDate' =>$packageDate,
@@ -107,10 +107,11 @@ class AppController extends BaseController
             'info' => $info,
             'isBinded' => $isBinded,
             'email' => $email,
+            'tlp' => $tlp
         ));
     }
 
-    private function isLocalAddress($address)
+    protected function isLocalAddress($address)
     {
         if (in_array($address, array('localhost', '127.0.0.1'))) {
             return true;

@@ -37,7 +37,7 @@ class NoteServiceImpl extends BaseService implements NoteService
         return $this->getNoteDao()->searchNoteCount($conditions);
     }
 
-    private function prepareSearchNoteConditions($conditions)
+    protected function prepareSearchNoteConditions($conditions)
     {
         $conditions = array_filter($conditions);
 
@@ -222,34 +222,34 @@ class NoteServiceImpl extends BaseService implements NoteService
     }
 
     // @todo HTML Purifier
-    private function calculateContnentLength($content)
+    protected function calculateContnentLength($content)
     {
         $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '', $content)));
 
         return mb_strlen($content, 'utf-8');
     }
 
-    private function getNoteDao()
+    protected function getNoteDao()
     {
         return $this->createDao('Course.CourseNoteDao');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getNoteLikeDao()
+    protected function getNoteLikeDao()
     {
         return $this->createDao('Course.CourseNoteLikeDao');
     }

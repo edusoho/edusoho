@@ -109,7 +109,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql, array_merge(array($startTime, $endTime), $courseId));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if(isset($conditions["title"])) {
             $conditions["title"] = '%' . $conditions["title"] . "%";

@@ -400,16 +400,16 @@ class GroupServiceTest extends BaseTestCase
 
     }
 
-    private function getGroupService()
+    protected function getGroupService()
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-    private function createUser(){
+    protected function createUser(){
         $user = array();
         $user['email'] = "user@user.com";
         $user['nickname'] = "user";
@@ -417,7 +417,7 @@ class GroupServiceTest extends BaseTestCase
         return $this->getUserService()->register($user);
     }
 
-    private function createUser1(){
+    protected function createUser1(){
         $user = array();
         $user['email'] = "user1@user1.com";
         $user['nickname'] = "user1";

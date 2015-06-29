@@ -150,7 +150,7 @@ class MobileController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-   private function getCourseService()
+   protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

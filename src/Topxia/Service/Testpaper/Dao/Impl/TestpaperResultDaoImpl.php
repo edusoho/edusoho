@@ -142,7 +142,7 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 

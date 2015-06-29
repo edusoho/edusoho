@@ -1,3 +1,4 @@
+/* =========================== img =========================== */
 /* =========================== color =========================== */
 /* =========================== media =========================== */
 .group-page .grouplist {
@@ -124,6 +125,7 @@
 }
 #post-action img {
   max-width: 100%;
+  height: auto;
 }
 #post-action {
   word-break: break-all;
@@ -1418,8 +1420,8 @@ Pagination Styles
 }
 @font-face {
   font-family: 'webfont';
-  src: url('fonts/webfont.eot');
-  src: url('fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('fonts/webfont.woff') format('woff'), /* chrome、firefox */ url('fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('fonts/webfont.svg#webfont') format('svg');
+  src: url('/assets/v2/css/fonts/webfont.eot');
+  src: url('/assets/v2/css/fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/assets/v2/css/fonts/webfont.woff') format('woff'), /* chrome、firefox */ url('/assets/v2/css/fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('/assets/v2/css/fonts/webfont.svg#webfont') format('svg');
   
   /* IE9*/
   /* iOS 4.1- */
@@ -1601,9 +1603,10 @@ a:focus {
   -webkit-transform: translateY(-5px);
   -moz-transform: translateY(-5px);
   -o-transform: translateY(-5px);
-  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -1624,10 +1627,10 @@ a:focus {
   top: 0;
   width: 68px;
   height: 68px;
-  background: url("../img/tag_discount.png");
+  background: url("@img-src/tag_discount.png");
 }
 .course-list .course-item .course-img .tag-discount.free {
-  background: url("../img/tag_limitfree.png");
+  background: url("/assets/v2/img/tag_limitfree.png");
 }
 .course-list .course-item .course-img .img-responsive {
   width: 100%;
@@ -1641,7 +1644,7 @@ a:focus {
   display: inline-block;
   width: 40px;
   height: 50px;
-  background: url("../img/tag_live.png") no-repeat;
+  background: url("/assets/v2/img/tag_live.png") no-repeat;
 }
 .course-list .course-item .title {
   height: 40px;
@@ -3456,6 +3459,7 @@ textarea.form-control-o {
   }
 }
 .form-control {
+  color: #616161;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -4048,42 +4052,8 @@ textarea.form-control-o {
   padding-bottom: 40px;
   background: #fff;
 }
-.course-list-section .course-more {
-  position: absolute;
-  bottom: -29px;
-  left: 50%;
-  margin: -29px 0 0 -29px;
-  z-index: 1;
-}
-.course-list-section .course-more > a {
-  border-radius: 50%;
-  width: 58px;
-  height: 58px;
-  background: #fff;
-  color: #a6a6a6;
-  display: inline-block;
-  text-align: center;
-  -webkit-box-shadow: 0 4px 12px -2px rgba(51, 51, 51, 0.5);
-  -moz-box-shadow: 0 4px 12px -2px rgba(51, 51, 51, 0.5);
-  box-shadow: 0 4px 12px -2px rgba(51, 51, 51, 0.5);
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.course-list-section .course-more > a:hover {
-  color: #666;
-  -webkit-box-shadow: 0 10px 15px 0px rgba(51, 51, 51, 0.5);
-  -moz-box-shadow: 0 10px 15px 0px rgba(51, 51, 51, 0.5);
-  box-shadow: 0 10px 15px 0px rgba(51, 51, 51, 0.5);
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.course-list-section .course-more > a > i {
-  line-height: 58px;
-  font-size: 30px;
+.live-course-section {
+  background: #fafafa;
 }
 .introduction-section {
   position: relative;
@@ -4556,7 +4526,7 @@ textarea.form-control-o {
 }
 .course-detail-header {
   position: relative;
-  background: url("../img/course_detail_header.jpg");
+  background: url("/assets/v2/img/course_detail_header.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
   padding: 30px 0 10px 0;
@@ -4650,19 +4620,19 @@ textarea.form-control-o {
   width: 40px;
   height: 50px;
   margin-right: 6px;
-  background: url("../img/tag_serialing.png") no-repeat;
+  background: url("/assets/v2/img/tag_serialing.png") no-repeat;
 }
 .course-detail-header .course-img .tag-live {
   display: inline-block;
   width: 40px;
   height: 50px;
-  background: url("../img/tag_live.png") no-repeat;
+  background: url("/assets/v2/img/tag_live.png") no-repeat;
 }
 .course-detail-header .course-img .tag-finished {
   display: inline-block;
   width: 40px;
   height: 50px;
-  background: url("../img/tag_finished.png") no-repeat;
+  background: url("/assets/v2/img/tag_finished.png") no-repeat;
 }
 .course-detail-header .subtitle {
   color: #9e9e9e;
@@ -5223,10 +5193,10 @@ textarea.form-control-o {
   transition: all 0.3s ease;
 }
 .course-banner {
-  background: url("../img/course_banner.jpg") center center;
+  background: url("/assets/v2/img/course_banner.jpg") center center;
 }
 .class-header {
-  background: url("../img/class_bg.jpg");
+  background: url("/assets/v2/img/class_bg.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
   padding: 30px 0 40px 0;
@@ -5403,7 +5373,7 @@ textarea.form-control-o {
   color: #fff;
   font-size: 12px;
   overflow: hidden;
-  background: url("../img/price_bg.png");
+  background: url("/assets/v2/img/price_bg.png");
 }
 .class-header .price span {
   font-size: 22px;
@@ -6239,7 +6209,7 @@ textarea.form-control-o {
   padding: 8px 15px;
 }
 .class-banner {
-  background: url("../img/class_banner.jpg") center center;
+  background: url("/assets/v2/img/class_banner.jpg") center center;
 }
 .class-list .class-item {
   background-color: #fff;
@@ -6464,9 +6434,10 @@ textarea.form-control-o {
   -webkit-transform: translateY(-5px);
   -moz-transform: translateY(-5px);
   -o-transform: translateY(-5px);
-  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.2);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;

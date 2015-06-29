@@ -32,13 +32,19 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return $this->getNavigationDao()->findNavigationsByType($type, $start, $limit);
     }
 
-    public function getNavigationsTreeByType($type)
+    public function getOpenedNavigationsTreeByType($type)
     {
         $count = $this->getNavigationsCountByType($type);
         $navigations = $this->findNavigationsByType($type, 0, $count);
 
         $navigations = ArrayToolkit::index($navigations, 'id');
         foreach ($navigations as $index => $nav) {
+
+            if(empty($nav['isOpen']) || $nav['isOpen'] == "0") {
+                unset($navigations[$index]);
+                continue;
+            }
+
             if ($nav['parentId'] == 0) {
                 continue;
             }
@@ -48,8 +54,8 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             }
 
             if ($nav['isOpen']) {
-            $navigations[$nav['parentId']]['children'][] = $nav;
-            unset($navigations[$index]);
+                $navigations[$nav['parentId']]['children'][] = $nav;
+                unset($navigations[$index]);
             }
         }
 
@@ -81,7 +87,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     }
 
-    private function makeNavigationTreeList(&$tree, &$navigations, $parentId)
+    protected function makeNavigationTreeList(&$tree, &$navigations, $parentId)
     {
         static $depth = 0;
         static $leaf = false;
@@ -141,7 +147,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         return ($this->getNavigationDao()->deleteNavigation($id)) + ($this->getNavigationDao()->deleteNavigationByParentId($id));
     }
 
-    private function getNavigationDao()
+    protected function getNavigationDao()
     {
         return $this->createDao('Content.NavigationDao');
     }

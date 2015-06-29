@@ -156,14 +156,14 @@ class PhpwindAuthProvider implements AuthProvider
         return 'phpwind';
     }
 
-    private function getWindidApi($name)
+    protected function getWindidApi($name)
     {
         define('WEKIT_TIMESTAMP', time());
         require_once __DIR__ .'/../../../../../vendor_user/windid_client/src/windid/WindidApi.php';
         return \WindidApi::api($name);
     }
 
-    private function convertApiResult($result)
+    protected function convertApiResult($result)
     {
         switch ($result) {
             case \WindidError::SUCCESS:

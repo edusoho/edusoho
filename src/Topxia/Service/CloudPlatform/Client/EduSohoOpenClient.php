@@ -22,7 +22,7 @@ class EduSohoOpenClient
         return $notices;
     }
 
-    private function getContents($url)
+    protected function getContents($url)
     {
         $userAgent = 'Open Edusoho App Client 1.0';
         $connectTimeout = 10;

@@ -27,7 +27,7 @@ class SessionServiceImpl extends BaseService implements SessionService
         return $this->getSessionDao()->deleteInvalidSession($retentionTime);
     }
 
-	private function getSessionDao()
+	protected function getSessionDao()
 	{
 		return $this->createDao('System.SessionDao');
 	}

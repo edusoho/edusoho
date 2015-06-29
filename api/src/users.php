@@ -114,7 +114,7 @@ $api->post('/login', function (Request $request) {
         throw new \Exception('password error');
     }
 
-    $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('login',$user['id']);
+    $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('api_login',$user['id']);
     setCurrentUser($token);
     return array(
         'user' => filter($user, 'user'),
