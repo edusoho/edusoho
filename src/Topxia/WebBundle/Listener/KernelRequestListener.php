@@ -20,16 +20,15 @@ class KernelRequestListener
     	$request = $event->getRequest();
         $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('login_bind');
-        if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'GET')) {
-            $user_agent = $request->server->get('HTTP_USER_AGENT');
-            $_target_path = $request->server->get('REQUEST_URI');
-            if (strpos($_SERVER['HTTP_USER_AGENT'],"MicroMessenger ") && !$user->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
-                return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
-            } 
-            else{
-                return ;
-            }
+        $user_agent = $request->server->get('HTTP_USER_AGENT');
+        $_target_path = $request->server->get('REQUEST_URI');
+        if (strpos($_SERVER['HTTP_USER_AGENT'],"MicroMessenger ") && !$user->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
+        } 
+        else{
+            return ;
         }
+
         if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
 
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
