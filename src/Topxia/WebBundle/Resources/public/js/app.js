@@ -144,19 +144,14 @@ define(function(require, exports, module) {
     	});
     }
     var ua = navigator.userAgent.toLowerCase();
-        is_weixin(); 
+        if($('.weixin-alert.hide'))
+            $('.weixin-alert.hide').removeClass('hide');
     if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
     };
     function is_weixin(){
 
         $(".weixin-alert .close").click(function(){
             Cookie.set("close_weixin_alert",'true',{path: '/'});
-        });
-
-        $.get('/weixin/check',function(response) {
-            if (response &&　$('.hide')) {
-                $('.weixin-alert').removeClass('hide');
-            };
         });
    	}
    
