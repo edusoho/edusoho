@@ -34,6 +34,22 @@ class OrderController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        if ($type = 'classroom') {
+            foreach ($orders as $key => &$value) {
+                $classroom = $this->getClassroomService()->getClassroom($value['targetId']);
+                if($classroom['status'] == 'closed'){
+                    $value['status'] = 'cancelled';
+                }
+            }
+        }
+        if ($type = 'course') {
+            foreach ($orders as $key => &$value) {
+                $course = $this->getCourseService()->getCourse($value['targetId']);
+                if ($course['status'] == 'closed') {
+                    $value['status'] = 'cancelled';
+                }
+            }
+        }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
@@ -136,5 +152,15 @@ class OrderController extends BaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    private function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
