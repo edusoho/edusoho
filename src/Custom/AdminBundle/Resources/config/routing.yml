@@ -26,12 +26,12 @@ admin_group_recommend:
 admin_group_recommend_delete:
     pattern: /group/{id}/recommend/delete
     defaults: { _controller: CustomAdminBundle:Group:delete }
+admin_tag_create:
+    path:  /tag/create
+    defaults: { _controller: CustomAdminBundle:Tag:create }
 admin_tag:
     pattern:  /tag/{type}
     defaults: { _controller: CustomAdminBundle:Tag:index }
-admin_tag_add:
-    path:  /tag/create
-    defaults: { _controller: CustomAdminBundle:Tag:create }
 admin_tag_update:
     pattern:  /tag/{id}/update
     defaults: { _controller: CustomAdminBundle:Tag:update }

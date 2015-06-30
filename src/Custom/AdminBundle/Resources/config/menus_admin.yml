@@ -17,6 +17,6 @@ admin_course_tag:
 admin_course_tag_add:
     name: 新增标签
     parent: admin_course_tag
-    router_name: admin_tag_add
+    router_name: admin_tag_create
     mode: modal
     group: 2
