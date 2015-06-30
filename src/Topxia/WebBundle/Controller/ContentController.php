@@ -76,7 +76,9 @@ class ContentController extends BaseController
 
         if ($content['template'] == 'default') {
             $template = 'TopxiaWebBundle:Content:page-show.html.twig';
-        } else {
+        } elseif ($content['template'] == 'blank') {
+            $template = 'TopxiaWebBundle:Content:blank.html.twig';
+        } else{
             $alias = $content['alias'] ? : $content['id'];
             $template = "@customize/content/page/{$alias}/index.html.twig";
         }

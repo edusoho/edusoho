@@ -27,22 +27,6 @@
       {% endif %}
 
       <div class="form-group">
-        <label for="model-field" class="control-label">页面模板类型</label>
-        <div class="controls radios">
-          <label><input type="radio" name="template" value="default" 
-            {% if content is empty %}
-             checked="checked" 
-            {% elseif content.template == 'default'%}
-             checked="checked"
-            {% endif %}>
-            使用默认导航栏</label>
-        <label><input type="radio" name="template" value="blank"
-          {% if content and content.template == 'blank' %} checked="checked" {% endif %}
-          >不使用导航栏</label>
-        </div>
-      </div>
-
-      <div class="form-group">
         <label for="editor-field" class="control-label">编辑器类型</label>
         <div class="controls radios">
           <label><input type="radio" name="editor" value="richeditor" 
@@ -125,16 +109,17 @@
       {% endif %}
 
       {% if 'template' in type.basicFields %}
-        <div class="panel panel-default" style="display:none">
+        <div class="panel panel-default" >
           <div class="panel-heading">模版</div>
           <div class="panel-body">
-            {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
-            {% set templates = {'default': '默认模版'} %}
+            {% set templates = {'default': '默认模版','no-nav':'无导航栏','blank':'空白网页'} %}
+
             <select class="form-control" name="template">
               {{ select_options(templates, field_value(content, 'template')) }}
             </select>
           </div>
         </div>
+        <h4>注意:<small></small></h4>
       {% endif %} 
 
       <input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
