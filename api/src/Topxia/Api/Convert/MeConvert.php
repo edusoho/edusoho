@@ -8,7 +8,7 @@ class MeConvert implements Convert
     //根据token获取当前用户完整数据
     public function convert($token)
     {
-        $token = ServiceKernel::instance()->createService('User.UserService')->getToken('login',$token);
+        $token = ServiceKernel::instance()->createService('User.UserService')->getToken('api_login',$token);
         if (empty($token)) {
             return array(
                 'id' => 0,

@@ -61,12 +61,11 @@ class CloudAPI
         return $this;
     }
 
-    private function _request($method, $uri, $params, $headers)
+    protected function _request($method, $uri, $params, $headers)
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl . '/' . self::VERSION . $uri;
-
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';
@@ -130,7 +129,7 @@ class CloudAPI
         return $result;
     }
 
-    private function _makeAuthToken($url, $params)
+    protected function _makeAuthToken($url, $params)
     {
         $matched = preg_match('/:\/\/.*?(\/.*)$/', $url, $matches);
         if (!$matched) {

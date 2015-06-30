@@ -548,8 +548,7 @@ class GroupThreadController extends BaseController
                     $message);
             }
 
-            return new Response($url);
-
+            return $this->createJsonResponse($post);
     }
     
     public function searchResultAction(Request $request,$id)
@@ -807,7 +806,7 @@ class GroupThreadController extends BaseController
             ));
     }
 
-    private function postAction($threadId,$action)
+    protected function postAction($threadId,$action)
     {
         $thread=$this->getThreadService()->getThread($threadId);
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
@@ -846,7 +845,7 @@ class GroupThreadController extends BaseController
             'threadId'=>$threadId,
         )));
     }
-    private function getPost($postId,$threadId,$id)
+    protected function getPost($postId,$threadId,$id)
     {   
         $post=$this->getThreadService()->getPost($postId);
         if($post['postId']!=0){
@@ -952,7 +951,7 @@ class GroupThreadController extends BaseController
         
     }
 
-    private function replyCanSee($role,$thread,$content,$replyHideContent)
+    protected function replyCanSee($role,$thread,$content,$replyHideContent)
     {   
         $context="";
         $user=$this->getCurrentUser();
@@ -1016,7 +1015,7 @@ class GroupThreadController extends BaseController
         return new Response(json_encode($record));
     }
 
-    private function isFeatureEnabled($feature)
+    protected function isFeatureEnabled($feature)
     {         
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();         
         return in_array($feature, $features);     
@@ -1027,7 +1026,7 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
@@ -1035,12 +1034,12 @@ class GroupThreadController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-    private function getGroupService() 
+    protected function getGroupService() 
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-    private function getPostSearchFilters($request)
+    protected function getPostSearchFilters($request)
     {
         $filters=array();
 
@@ -1060,7 +1059,7 @@ class GroupThreadController extends BaseController
 
         return $filters;
     }
-    private function getPostCondition($filters,$ownId,$threadId)
+    protected function getPostCondition($filters,$ownId,$threadId)
     {
         if($filters=='all'){
             return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
@@ -1072,7 +1071,7 @@ class GroupThreadController extends BaseController
         return false;
 
     }
-    private function getPostOrderBy($sort)
+    protected function getPostOrderBy($sort)
     {
         if($sort=='asc'){
             return array('createdTime','asc');
@@ -1093,7 +1092,7 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-     private function filterSort($sort)
+     protected function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
@@ -1133,7 +1132,7 @@ class GroupThreadController extends BaseController
         return $orderBys;
     }
 
-    private function getGroupMemberRole($groupId)
+    protected function getGroupMemberRole($groupId)
     {
        $user = $this->getCurrentUser();
 
@@ -1156,7 +1155,7 @@ class GroupThreadController extends BaseController
        return 0;
     }
 
-    private function checkManagePermission($id,$thread)
+    protected function checkManagePermission($id,$thread)
     {   
         $user=$this->getCurrentUser();
 
@@ -1175,12 +1174,12 @@ class GroupThreadController extends BaseController
         return false;
     }
 
-    private function getCashService()
+    protected function getCashService()
     {
         return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
-    private function getCashAccountService()
+    protected function getCashAccountService()
     {
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
