@@ -1004,6 +1004,11 @@ class UserServiceImpl extends BaseService implements UserService
         if($fromId == $toId) {
             throw $this->createServiceException('不能关注自己！');
         }
+
+        $blacklist = $this->getBlacklistService()->getBlacklistByUserIdAndBlackId($toId,$fromId);
+        if (!empty($blacklist)) {
+            throw $this->createServiceException('关注失败！');
+        }
         $friend = $this->getFriendDao()->getFriendByFromIdAndToId($fromId, $toId);
         if(!empty($friend)) {
             throw $this->createServiceException('不允许重复关注!');
@@ -1276,6 +1281,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getBlacklistService()
+    {
+        return $this->createService('User.BlacklistService');
     }
 
 }
