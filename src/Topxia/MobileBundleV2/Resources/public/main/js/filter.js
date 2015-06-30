@@ -38,7 +38,7 @@ filter('lessonType', function() {
 		text  : "图文",
 		video  : "视频",
 		audio  : "音频",
-		textpaper  : "考试",
+		testpaper  : "考试",
 		document  : "文档",
 		ppt  : "PPT"
 	};

@@ -1,14 +1,14 @@
-var app = angular.module('EduSohoApp', [
+var app = angular.module('app', [
             'ngSanitize',
             'ui.router',
-             'AppService',
+            'AppService',
             'AppFactory',
             'AppProvider',
             'ngSideView',
             'pasvaz.bindonce'
   ]);
 
-app.viewFloder = "/bundles/topxiamobilebundlev2/esmobile/";
+app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
 app.config(['$httpProvider', function($httpProvider) {
 
@@ -363,10 +363,10 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
             });
 }]);
 
-app.run(["applicationProvider", "$rootScope", '$timeout',
-  function(applicationProvider, $rootScope, $timeout) {
+app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
+  function(applicationProvider, $rootScope, $timeout, platformUtil) {
 
-  $rootScope.platform = browser.v;
+  $rootScope.platform = platformUtil;
   $rootScope.showLoad = function(template) {
     $rootScope.loadPop = $.loading({
         content: "加载中...",
@@ -432,15 +432,18 @@ var browser = {
     })()
 };
 
-if (browser.v.native) {
-  document.addEventListener("deviceready", function() {
-      angular.bootstrap( document, ["EduSohoApp"] );
-  });
-} else {
-  angular.element(document).ready(function() {
-    angular.bootstrap( document, ["EduSohoApp"] );
-  });
-}
+angular.element(document).ready(function() {
+    var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
+
+    if (platformUtil.native) {
+      document.addEventListener("deviceready", function() {
+          angular.bootstrap( document, ["app"] );
+      });
+      return;
+    }
+    
+    angular.bootstrap( document, ["app"] );
+});
 ;
 var appService = angular.module('AppService', []);
 appService.service('localStore', ['$rootScope', function($rootScope) {
@@ -973,6 +976,19 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 		return AppUtil.createArray(num);
 	};
 }]).
+filter('lessonType', function() {
+	var lessonType = {
+		text  : "图文",
+		video  : "视频",
+		audio  : "音频",
+		testpaper  : "考试",
+		document  : "文档",
+		ppt  : "PPT"
+	};
+	return function(type) {
+		return lessonType[type];
+	}
+}).
 filter('coverIncludePath', function() {
 	return function(path) {
 		return app.viewFloder + path;
@@ -1101,6 +1117,420 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 		return app.viewFloder  + "img/avatar.png";
 	}
 }]);;
+app.directive('onContentLoaded', function ($parse) {
+    return {
+        restrict: 'A',
+        compile: function(tElem, tAttrs) {
+
+            function bindImgClick(imgs) {
+              var imageArray = new Array();
+              for (var i = 0; i < imgs.length; i++) {
+                var img = imgs[i];
+                img.alt = i;
+                imageArray.push(img.src);
+                img.addEventListener('click',
+                function() {
+                  esNativeCore.showImages(this.alt,imageArray);
+                })
+              }
+            }
+
+            return { 
+                post: function postLink(scope, element, attributes) { 
+
+                  var ngBindHtmlGetter = $parse(tAttrs.onContentLoaded);
+                  var ngBindHtmlWatch = $parse(tAttrs.onContentLoaded, function getStringValue(value) {
+                    return (value || '').toString();
+                  });
+                    scope.$watch(ngBindHtmlWatch, function() {
+                        element.html(ngBindHtmlGetter(scope));
+                        bindImgClick(element.find("img"));
+                    });
+                }  
+            };
+        } 
+    };
+}).
+directive('uiTab', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+
+          var self = this;
+          var scroller = element[0].querySelector('.ui-tab-content');
+          var nav = element[0].querySelector('.ui-tab-nav');
+
+          if ("empty"  != attrs.select) {
+            angular.element(scroller.children[0]).addClass('current');
+            angular.element(nav.children[0]).addClass('current');
+          }
+
+          this.currentPage = 0;
+          scroller.style.width = "100%";
+
+          this.itemWidth = scroller.children[0].clientWidth;
+          this.scrollWidth = this.itemWidth * this.count;
+
+          function changeTabContentHeight(height) {
+              var tabContent = element[0].querySelector('.ui-tab-content');
+              $(tabContent).height(height);
+          }
+
+          angular.forEach(nav.children, function(item) {
+            angular.element(item).on("touchstart", function(e) {
+
+                var tagetHasCurrent = $(item).hasClass('current');
+                var tempCurrentPage = self.currentPage;
+                self.currentPage = $(item).index();
+
+                $(nav).children().removeClass('current');
+                $(scroller).children().removeClass('current');
+
+                if (tempCurrentPage == self.currentPage && "empty"  == attrs.select && tagetHasCurrent) {
+                  changeTabContentHeight(0);
+                  return;
+                }
+
+                var currentScrooler = angular.element(scroller.children[self.currentPage]);
+                $(item).addClass('current');
+                currentScrooler.addClass("current");
+                changeTabContentHeight("100%");
+            });
+          });
+
+          if ("empty"  == attrs.select) {
+              scope.$on("closeTab", function(event, data) {
+                angular.element(scroller.children[self.currentPage]).removeClass('current');
+                angular.element(nav.children[self.currentPage]).removeClass('current');
+                changeTabContentHeight(0);
+              });
+          }
+    }
+  }
+}).
+directive('imgError', function() {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+                  var errorSrc = "";
+                  switch (attributes.imgError) {
+                    case "avatar":
+                      errorSrc = app.viewFloder  + "img/avatar.png";
+                      break;
+                    case "course":
+                      errorSrc = app.viewFloder  + "img/course_default.jpg";
+                      break;
+                    case "vip":
+                      errorSrc = app.viewFloder  + "img/vip_default.jpg";
+                      break;
+                  }
+
+                  element.on("error", function(e) {
+                    element.attr("src", errorSrc);
+                  });
+                }
+            };
+    }
+  }
+}).
+directive('ngImgShow', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+      setTimeout(function() {
+        var imageArray = [];
+        angular.forEach(element[0].getElementsByTagName("img"), function(item, i) {
+          imageArray.push(item.src);
+          item.alt = i;
+          item.addEventListener("click", function() {
+            esNativeCore.showImages(this.alt, imageArray);
+          });
+        });
+      }, 100);   
+    }
+  }
+}).
+directive('back', function($window, $state) {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+
+                  element.on("click", function(){
+                    if (attributes["back"] == "go") {
+                      if (scope.platform.native) {
+                        esNativeCore.closeWebView();
+                      } else {
+                        $window.history.back();
+                      }
+                      return;
+                    }
+                    if (attributes["back"] == "close" && scope.close) {
+                      scope.close();
+                      return;
+                    }
+                    $state.go("slideView.mainTab");
+                  });
+                }
+            };
+    }
+  }
+}).
+directive('ngHtml', function($window, $state) {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+                  scope.$watch(attributes.ngHtml, function(newValue) {
+                    element.html(newValue);
+                  });
+                }
+            };
+    }
+  }
+}).
+directive('uiBar', function($window) {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+        var toolEL = element[0].querySelector(".bar-tool");
+        var titleEL = element[0].querySelector(".title");
+        
+        var toolELWidth = toolEL ? toolEL.offsetWidth : 44;
+        titleEL.style.paddingRight = toolELWidth + "px";
+        titleEL.style.paddingLeft = toolELWidth + "px";
+    }
+  }
+}).
+directive('ngHref', function($window) {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return function ngEventHandler(scope, element, attr) {
+              element.on("click", function(e) {
+                var url = [$window.location.origin, $window.location.pathname, attr.ngHref].join("");
+                if (scope.platform.native) {
+                  esNativeCore.openWebView(url);
+                  return;
+                }
+                $window.location.href = url;
+              });
+            };
+    }
+  }
+}).
+directive('uiScroll', function($parse) {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+      scope.$watch(attrs.data, function(newValue) {
+
+          if (newValue) {
+                if (angular.isArray(newValue) && newValue.length == 0) {
+                  return;
+                }
+                var uiHead = element[0].querySelector(".ui-details-head");
+                element.on("scroll", function() {
+                  var scrollHeight = element[0].scrollHeight;
+                  var scrollTop = element[0].scrollTop;
+                  var clientHeight = element[0].clientHeight;
+
+                  if (attrs.onScroll) {
+                    scope.headTop = uiHead.offsetHeight;
+                    scope.scrollTop = scrollTop;
+                    $parse(attrs.onScroll)(scope);
+                  }
+                  if ( !scope.isLoading && ( (scrollTop + clientHeight) >= scrollHeight ) ) {
+                    scope.isLoading = true;
+                    $parse(attrs.onInfinite)(scope);
+                  }
+                });
+          }
+      });
+      
+    }
+  }
+}).
+directive('uiSliderBox', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+          scope.$watch(attrs.uiSliderBox, function(newValue) {
+            if (newValue && newValue.length > 0) {
+                initSlider();
+            }
+          });
+
+          function initSlider () {
+              var slider = new fz.Scroll('.' + attrs.slider, {
+                  role: 'slider',
+                  indicator: true,
+                  autoplay: false,
+                  interval: 3000
+              });
+
+              slider.on('beforeScrollStart', function(fromIndex, toIndex) {
+
+              });
+
+              slider.on('scrollEnd', function() {
+
+              });
+          }
+          
+    }
+  }
+}).
+directive('slideIndex', function() {
+  return {
+    restrict: 'A',
+    link : function(scope, element, attrs) {
+          var total = 0;
+          var $currentIndex = 0;
+          scope.slideHasChanged = function($index) {
+            $currentIndex = $index;
+            changeSlidePointStatus();
+          }
+
+          scope.$watch("banners", function(newValue) {
+            if (newValue && newValue.length > 0) {
+                total = newValue.length;
+                initSlideIndex();
+            }
+          });
+          
+          function changeSlidePointStatus()
+          {
+            angular.forEach(element[0].querySelectorAll('.point'), function(item, index){
+
+              if (index == $currentIndex) {
+                item.classList.add("active");
+              } else {
+                item.classList.remove("active");
+              }
+            });
+          }
+
+          function initSlideIndex() {
+                var points = "";
+            
+                for (var i = 0 ; i < total; i++) {
+                  if (i == $currentIndex) {
+                    points += "<span class='point active'></span>";
+                  } else {
+                    points += "<span class='point'></span>";
+                  }
+                  
+                };
+
+                element.append("<p class='slide-index'>" + points + "</p>");
+          }
+    }
+  }
+}).
+directive('lazyLoad', function () {
+  return function(scope, elm, attr) {
+            echo.init({
+            root:elm[0],
+            offset: 100,
+            throttle: 250,
+            unload: false,
+            callback: function (element, op) {
+
+            }
+        });
+    }
+}).
+directive('modal', function () {
+  return {
+    restrict: 'EA',
+    priority : 10000,
+    controller : function($scope, $element) {
+    },
+    link : function(scope, element, attrs) {
+      element.addClass("ui-modal");
+      element.on('click', function(event) {
+        scope.$emit("closeTab", {});
+      });
+
+    }
+  }
+}).
+directive('listEmptyView', function () {
+  return {
+    restrict: 'EA',
+    link : function(scope, element, attrs) {
+      var html = '<div class="list-empty">' + 
+      '<a> <i class="icon iconfont icon-ebook"></i> <span>' + attrs.title + '</span> </a>' +
+      '</div>';
+      scope.$watch(attrs.data, function(newValue) {
+        if (newValue && newValue.length == 0) {
+          element.html(html);
+        } else {
+          element.html("");
+        }
+      });
+    }
+  }
+}).
+directive('categoryTree', function () {
+    return {
+        restrict: 'E',
+        scope: {  
+            data: '=data',
+            listener : '=listener'
+        }, 
+        templateUrl: app.viewFloder + 'view/category_tree.html', 
+
+        link : function(scope, element, attrs) {
+
+          function initCategory($scope) {
+            var realityDepth = $scope.data.realityDepth > 3 ? 3 : $scope.data.realityDepth - 1;
+            var categoryCols = [];
+            var categoryTree = $scope.data.data[0];
+            for (var i = realityDepth- 1; i >= 0; i--) {
+                categoryCols[i] = [];
+            };
+
+            var getRootCategory = function(categoryId) {
+              return {
+                name : "全部",
+                id : categoryId ? categoryId : 0
+              }
+            };
+
+            categoryCols[0] = [getRootCategory()].concat(categoryTree.childs);
+            $scope.categoryCols = categoryCols;
+
+            $scope.selectCategory = function($event, category) {
+                    if (category.childs) {
+                      for (var i = $scope.categoryCols.length- 1; i >= category.depth; i--) {
+                          $scope.categoryCols[i] = [];
+                      };
+                      var categoryColIndex = category.depth;
+                      if (category.depth > 2) {
+                        categoryColIndex = 2;
+                      }
+                      $scope.categoryCols[categoryColIndex] = [getRootCategory(category.id)].concat(category.childs);
+                      $event.stopPropagation();
+                    } else {
+                      $scope.listener(category);
+                    }
+            };
+          }
+
+          scope.$watch("data", function(newValue) {
+            if (newValue) {
+                initCategory(scope);
+            }
+          });
+        }
+    };
+});;
 var appFactory = angular.module('AppFactory', []);
 appFactory.factory('AppUtil', ['$rootScope', '$timeout', function($rootScope, $timeout) {
 	var utils = {
@@ -1275,69 +1705,88 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		}
 	};
 }]).
-factory('ImageUtil', ['$rootScope', function($rootScope){
-	function getScreenWidth() {
-		var width = window.screen.width;
-		switch (window.orientation) {
-		case 0:
-			width = window.screen.width;
-			break;
-		case 90:
-		case - 90 : width = window.screen.height;
-			break
-		}
-		width = width * 0.96;
-		return width
-	}
-	function zoomImage(img, width) {
-		var oldH = img.height;
-		var oldW = img.width;
-		img.width = width;
-		img.height = width / oldW * oldH
-	}
-	function adaptationImage() {
-		var width = getScreenWidth();
-		var imgs = angular.element(document.images);
-		for (var i = 0; i < imgs.length; i++) {
-			zoomImage(imgs[i], width)
-		}
-	}
+factory('platformUtil', function($browser) {
+	var browser = {
+	    v: (function(){
+	        var u = navigator.userAgent, p = navigator.platform;
+	        return {
+	            trident: u.indexOf('Trident') > -1, //IE内核
+	            presto: u.indexOf('Presto') > -1, //opera内核
+	            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+	            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+	            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+	            ios: !!u.match(/i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+	            android: u.indexOf('Android') > -1, //android终端
+	            iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+	            iPad: u.indexOf('iPad') > -1, //是否iPad
+	            weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+	            webApp: u.indexOf('Safari') == -1, //是否web应用程序，没有头部与底部
+	            UCB: u.match(/UCBrowser/i) == "UCBrowser",
+	            QQB: u.match(/MQQBrowser/i) == "MQQBrowser",
+	            win: p.indexOf('Win') > -1,//判断是否是WIN操作系统
+	            mac: p.indexOf('Mac') > -1,//判断是否是Mac操作系统
+	            native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
+	        };
+	    })()
+	};
 
-	var util = {
-		zoom : function(){
-			var imageArray = new Array();
-			var imgs = angular.element(document.images);
-			for (var i = 0; i < imgs.length; i++) {
-				var img = imgs[i];
-				img.addEventListener('load',
-				function() {
-					var width = getScreenWidth();
-					zoomImage(this, width)
-				});
-				img.alt = i;
-				imageArray.push(img.src);
-				img.addEventListener('click',
-				function() {
-					window.location = 'imageIndexNUrls://?' + this.alt + '.partation.' + imageArray.join('.partation.');
-					window.jsobj.showImages(this.alt,imageArray);
-				})
-			}
-			window.addEventListener('orientationchange',
-			function() {
-				adaptationImage()
-			},
-			false);
+	return browser.v;
+}).
+factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUtil', 
+	function($rootScope, sideDelegate, localStore, platformUtil){
+	var cordovaUtil =  {
+		learnCourseLesson : function(courseId, lessonId) {
+			alert("请在客户端学习非图文课时");
+		},
+		share : function(url, title, about, pic) {
+			alert("请在客户端分享课程");
+		},
+		openDrawer : function(state) {
+			sideDelegate.toggleMenu();
+		},
+		openWebView : function(url) {
+			window.location.href = url;
+		},
+		payCourse : function(title, url) {
+			alert("请在客户端内支付!");
+		},
+		getUserToken : function($q) {
+			var deferred = $q.defer();
+			deferred.resolve({
+				user : angular.fromJson(localStore.get("user")),
+				token : localStore.get("token")
+			});
+
+			return deferred.promise;
+		},
+		clearUserToken : function() {
+			localStore.remove("user");
+			localStore.remove("token");
+		},
+		saveUserToken : function(user, token) {
+			localStore.save("user", angular.toJson(user));
+			localStore.save("token", token);
 		}
 	};
 
-	return util;
+	var proxy = function() {
+		var self = {};
+
+		var isNative = platformUtil.native;
+		for ( var func in cordovaUtil) {
+			self[func] = isNative ? esNativeCore[func] : cordovaUtil[func];
+		}
+
+		return self;
+	}
 	
+	return proxy();
 }]);;
 var appProvider= angular.module('AppProvider', []);
 appProvider.provider('applicationProvider', function() {
 
 	var self = this;
-	this.$get = function(localStore, $rootScope, $q) {
+	this.$get = function(localStore, $rootScope, $q, cordovaUtil) {
 		var application = {
 			host : null,
 			user : null,
@@ -1350,18 +1799,11 @@ appProvider.provider('applicationProvider', function() {
 
 		application.init = function(host) {
 			application.setHost(host);
-			if ($rootScope.platform.native) {
-				var promise = esNativeCore.getUserToken($q);
-				promise.then(function(data) {
-					application.user = data.user;
-					application.token = data.token;
-      					application.updateScope($rootScope);
-				});
-				return;
-			}
-			application.user = angular.fromJson(localStore.get("user"));
-			application.token = localStore.get("token");
-			application.updateScope($rootScope);
+			cordovaUtil.getUserToken($q).then(function(data) {
+				application.user = data.user;
+				application.token = data.token;
+      				application.updateScope($rootScope);
+			});
 		}
 
 		application.clearUser = function() {
@@ -1369,23 +1811,14 @@ appProvider.provider('applicationProvider', function() {
 			this.token = null;
 			$rootScope.user = null;
 			$rootScope.token = null;
-			localStore.remove("user");
-			localStore.remove("token");
-			if ($rootScope.platform.native) {
-				esNativeCore.clearUserToken();
-			}
+			cordovaUtil.clearUserToken();
 		}
 
 		application.setUser = function(user, token) {
 			this.user = user;
 			this.token = token;
 			this.updateScope($rootScope);
-			localStore.save("user", angular.toJson(user));
-			localStore.save("token", token);
-			if ($rootScope.platform.native) {
-				console.log(token);
-				esNativeCore.saveUserToken(user, token);
-			}
+			cordovaUtil.saveUserToken(user, token);
 		}
 
 		application.updateScope = function($scope) {
@@ -1423,7 +1856,7 @@ function AppInitController($scope, $state, sideDelegate, SchoolService)
 		$scope.plugins = data;
 	});
 };
-app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$state', CourseController]);
+app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$state', 'cordovaUtil', CourseController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
 app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$window', CourseSettingController]);
 
@@ -1487,14 +1920,14 @@ function CourseSettingController($scope, $stateParams, CourseService, $window)
       token : $scope.token
     }, function(data) {
       $scope.hideLoad();
-      if (data.meta.code == 200) {
+      if (! data.error) {
         $window.history.back();
         setTimeout(function() {
           $scope.$emit("refresh", {});
         }, 10);
         
       } else {
-        $scope.toast(data.meta.message);
+        $scope.toast(data.error.message);
       }
     });
   }
@@ -1510,7 +1943,7 @@ function CourseDetailController($scope, $stateParams, CourseService)
     });
 }
 
-function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
+function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, cordovaUtil)
 {
     $scope.showLoad();
 
@@ -1550,7 +1983,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
           for( index in data.learnStatuses ) {
             $scope.lastLearnStatusIndex = index;
           }
-          
         });
       });
     }
@@ -1643,12 +2075,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
     }
 
     $scope.shardCourse = function() {
-      if (! $scope.platform.native) {
-        alert("请在客户端分享课程");
-        return;
-      }
-
-      esNativeCore.share("", "课程", "关于", $scope.course.largePicture);
+      cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
     }
 
     $scope.$parent.$on("refresh", function(event, data) {
@@ -1666,12 +2093,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state)
         return;
       }
 
-      if (! $scope.platform.native) {
-        alert("请在客户端学习非图文课时");
-        return;
-      }
-
-      esNativeCore.learnCourseLesson(lesson.courseId, lesson.id);
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
     }
 };
 app.controller('CourseListController', ['$scope', '$stateParams', '$state', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
@@ -1921,7 +2343,7 @@ function MainTabController($scope, sideDelegate, $state)
 
 app.controller('FoundTabController', ['$scope', 'CategoryService', 'AppUtil', 'sideDelegate', '$state', FoundTabController]);
 
-function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $state)
+function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $state)
 {
 	console.log("FoundTabController");
 	$scope.toggleView = function(view) {
@@ -1929,13 +2351,7 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 	};
 
 	$scope.toggle = function() {
-		
-		if ($scope.platform.native) {
-			window.esNativeCore.openDrawer("open");
-			return;
-		}
-
-		sideDelegate.toggleMenu();
+		cordovaUtil.openDrawer("open");
 	};
 
 	$scope.categorySelectedListener  = function(category) {
@@ -1956,19 +2372,11 @@ function FoundTabController($scope, CategoryService, AppUtil, sideDelegate, $sta
 	var self = this;
 	this.parseBannerAction = function(action) {
 		this.courseAction = function(params) {
-			if ($scope.platform.native) {
-				esNativeCore.openWebView(app.rootPath + "#/course/" + params);
-				return;
-			}
-			$state.go("course", { courseId : params });
+			cordovaUtil.openWebView(app.rootPath + "#/course/" + params);
 		}
 
 		this.webviewAction = function(params) {
-			if ($scope.platform.native) {
-				esNativeCore.openWebView(params);
-				return;
-			}
-			window.location.href = params;
+			cordovaUtil.openWebView(params);
 		}
 
 		this.noneAction = function() {
@@ -1996,7 +2404,6 @@ app.controller('ContactTabController', ['$scope', ContactTabController]);
 function ContactTabController($scope)
 {
 	console.log("ContactTabController");
-	console.log($scope);
 }
 ;
 app.controller('MyFavoriteController', ['$scope', 'httpService', '$timeout', MyFavoriteController]);
@@ -2275,7 +2682,7 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 	}
 }
 
-function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
+function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordovaUtil)
 {
 	var self = this;
 	ServcieUtil.getService("OrderService").getPayOrder({
@@ -2305,11 +2712,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil)
         			token : $scope.token
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				if (! $scope.platform.native) {
-					alert("请在客户端内支付!");
-					return;
-				}
-				esNativeCore.payCourse("支付课程", data.payUrl);
+				cordovaUtil.payCourse("支付课程", data.payUrl);
 			}
 		});
 	}
@@ -2505,7 +2908,7 @@ function SettingController($scope, UserService, $state)
 			token : $scope
 		}, function(data) {
 			$scope.hideLoad();
-			$state.go("slideView.mainTab.found");
+			$state.go("slideView.mainTab");
 		});
 	}
 };

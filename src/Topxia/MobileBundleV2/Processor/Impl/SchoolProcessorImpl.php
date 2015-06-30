@@ -94,38 +94,9 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $appsInstalled;
     }
 
-    public function getAppRecourse()
-    {
-        $code = $this->getParam("code");
-        $userAgent = $this->request->headers->get("user-agent");
-        $clientType = "iOS";
-        if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
-            $clientType = "iOS";
-        } else if (strpos($userAgent, "Android")) {
-            $clientType = "Android";
-        }
-
-        $assets = $this->controller->getContainer()->get('templating.helper.assets');
-        return $this->controller->redirect($assets->getUrl("bundles/topxiamobilebundlev2/{$code}/release/app_{$clientType}.zip"));
-    }
-
     public function getSchoolApps()
     {
-        $host = $this->request->getSchemeAndHttpHost();
-        $main = array(
-            "code"=>"mobile_main",
-            "icon"=>"",
-            "name"=>"移动App",
-            "description"=>"EduSoho官方移动App",
-            "author"=>"官方",
-            "version"=>"1.0.0",
-            "support_version"=>"6.0.0+",
-            "resource"=>$host . "/mapi_v2/School/getAppRecourse?code=mobile_main",
-            "url"=>"mapi_v2/mobileApp"
-        );
-        return array(
-            $main
-        );
+        return array();
     }
     
     public function registDevice()

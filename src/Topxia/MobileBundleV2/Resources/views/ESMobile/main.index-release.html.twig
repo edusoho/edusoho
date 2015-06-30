@@ -7,17 +7,18 @@
 <meta name="viewport" content="initial-scale=1, width=device-width, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
 {% block stylesheets %}
 
-<link href="{{ asset('bundles/topxiamobilebundlev2/mobile_main/release/app.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/main/release/all.min.css') }}" rel="stylesheet" />
 
 {% endblock %}
 {% if clientType == 'Android' %}
-    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/cordova_Android.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Android/cordova.js') }}"></script>
 {%  elseif clientType == 'iOS' %} 
-    <script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/js/cordova_iOS.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOS/cordova.js') }}"></script>
 {% endif %}
 
-<script src="{{ asset('bundles/topxiamobilebundlev2/mobile_main/release/app.js') }}"></script>
-
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/release/libs.all.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/release/app.all.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/release/template.js') }}"></script>
 {% block head_scripts %}
 
 {% endblock %}

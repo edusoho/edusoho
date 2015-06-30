@@ -36,7 +36,6 @@ interface SchoolProcessor
 	public function loginSchoolWithSite();
 
 	public function getSchoolApps();
-	public function getAppRecourse();
 
 	public function getSchoolPlugins();
 
