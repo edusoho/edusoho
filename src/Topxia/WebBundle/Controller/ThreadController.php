@@ -334,7 +334,7 @@ class ThreadController extends BaseController
         return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
-    private function convertFiltersToConditions($id, $filters)
+    protected function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('targetId' => $id);
         switch ($filters['type']) {
@@ -354,7 +354,7 @@ class ThreadController extends BaseController
     /**
      * This function is from Cakephp TextHelper Class
      */
-    private function autoParagraph($text)
+    protected function autoParagraph($text)
     {
         if (trim($text) !== '') {
             $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
@@ -370,7 +370,7 @@ class ThreadController extends BaseController
         return $text;
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

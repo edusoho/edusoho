@@ -35,7 +35,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 		return $this->getContentDao()->searchContentCount($conditions);
 	}
 
-	private function prepareSearchConditions($conditions)
+	protected function prepareSearchConditions($conditions)
 	{
 		$conditions = array_filter($conditions);
 		if (isset($conditions['categoryId'])) {
@@ -133,17 +133,17 @@ class ContentServiceImpl extends BaseService implements ContentService
 		return $content ? false : true;
 	}
 
-	private function getContentDao()
+	protected function getContentDao()
 	{
 		return $this->createDao('Content.ContentDao');
 	}
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->createService('Taxonomy.CategoryService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

@@ -71,7 +71,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $this->getConnection()->fetchAll($sql, $params);
 	}
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_lesson_view')
@@ -82,7 +82,7 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $builder;
     }
 
-    private function _filterTypeCondition($type)
+    protected function _filterTypeCondition($type)
     {
         if (in_array($type, array('net','local','cloud'))) {
            return "WHERE `fileType` = '{$type}'";

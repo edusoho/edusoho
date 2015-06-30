@@ -20,7 +20,7 @@ interface NavigationDao
     public function getNavigationsCountByType($type);
 
     public function findNavigations($start, $limit);
-    
+
     public function findNavigationsByType($type, $start, $limit);
     
 }

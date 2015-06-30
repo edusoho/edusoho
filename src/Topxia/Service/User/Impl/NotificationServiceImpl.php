@@ -42,7 +42,7 @@ class NotificationServiceImpl extends BaseService implements NotificationService
     }
 
     
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }

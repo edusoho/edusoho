@@ -82,7 +82,7 @@ class SearchController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -107,7 +107,7 @@ class SearchController extends BaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }    
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

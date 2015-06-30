@@ -6,22 +6,26 @@
 {% block group_main %}
 <style>
 .ke-icon-accessory {
-
-        background-image: url('/assets/img/default/iconfont-accessory.png');
-        background-position:center;
-        width: 16px;
-        height: 16px;
+  background-image: url('/assets/img/default/iconfont-accessory.png');
+  background-position:center;
+  width: 16px;
+  height: 16px;
 }
 .ke-icon-accessory-red {
-
-        background-image: url('/assets/img/default/iconfont-accessory-red.png');
-        background-position:center;
-        width: 16px;
-        height: 16px;
+  background-image: url('/assets/img/default/iconfont-accessory-red.png');
+  background-position:center;
+  width: 16px;
+  height: 16px;
 }
 </style>
+  
   <div class="panel panel-default group-thread">
     <div class="panel-heading">
+      <ol class="breadcrumb">
+        <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
+        <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
+        <li class="active">{{ threadMain.title }}</li>
+      </ol>
       <h2>
         {{ threadMain.title }}
         {% if threadMain.isElite %}

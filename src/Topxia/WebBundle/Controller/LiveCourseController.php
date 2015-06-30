@@ -266,7 +266,7 @@ class LiveCourseController extends BaseController
     }
 
 
-    private function getRootCategory($categoryTree, $category)
+    protected function getRootCategory($categoryTree, $category)
     {
         $start = false;
         foreach (array_reverse($categoryTree) as $treeCategory) {
@@ -282,7 +282,7 @@ class LiveCourseController extends BaseController
         return null;
     }
 
-    private function getSubCategories($categoryTree, $rootCategory)
+    protected function getSubCategories($categoryTree, $rootCategory)
     {
         $categories = array();
 
@@ -306,17 +306,17 @@ class LiveCourseController extends BaseController
         return $categories;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

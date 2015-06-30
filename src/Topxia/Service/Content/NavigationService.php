@@ -11,7 +11,7 @@ interface NavigationService
 
     public function findNavigationsByType($type, $start, $limit);
 
-    public function getNavigationsTreeByType($type);
+    public function getOpenedNavigationsTreeByType($type);
 
     public function getNavigationsCountByType($type);
 

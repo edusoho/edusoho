@@ -42,7 +42,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $tree;
     }
 
-    private function makeCategoryTree(&$tree, &$categories, $parentId)
+    protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
         static $leaf = false;
@@ -201,7 +201,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $this->getLogService()->info('category', 'delete', "删除栏目{$category['name']}(#{$id})");
     }
 
-    private function _filterCategoryFields($fields)
+    protected function _filterCategoryFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
             'name' => '',
@@ -266,12 +266,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findCategoriesCountByParentId($parentId);
     }
 
-    private function getCategoryDao()
+    protected function getCategoryDao()
     {
         return $this->createDao('Article.CategoryDao');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

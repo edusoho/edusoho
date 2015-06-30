@@ -44,7 +44,7 @@ class MoneyController extends BaseController
 		));
 	}
 
-	private function getMoneyService()
+	protected function getMoneyService()
     {
         return $this->getServiceKernel()->createService('Order.MoneyService');
     }

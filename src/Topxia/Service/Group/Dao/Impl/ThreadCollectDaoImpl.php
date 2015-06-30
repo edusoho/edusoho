@@ -53,7 +53,7 @@ class ThreadCollectDaoImpl extends BaseDao implements ThreadCollectDao
         return $builder->execute()->fetchColumn(0); 
     }
 
-    private function _createThreadCollectSearchBuilder($conditions)
+    protected function _createThreadCollectSearchBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table,$this->table)

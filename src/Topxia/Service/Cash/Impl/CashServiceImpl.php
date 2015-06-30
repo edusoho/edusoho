@@ -182,12 +182,12 @@ class CashServiceImpl extends BaseService implements CashService
         return $inflow;
     }
 
-    private function makeSn()
+    protected function makeSn()
     {
         return date('YmdHis') . rand(10000, 99999);
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->createService('User.NotificationService');
     }

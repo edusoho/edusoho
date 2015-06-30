@@ -46,7 +46,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $newCourse;
     }
     
-    private function copyTeachers($courseId, $newCourse)
+    protected function copyTeachers($courseId, $newCourse)
     {
         $count = $this->getCourseMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'teacher');
         $members = $this->getCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, $count);
@@ -62,7 +62,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         }
     }
 
-    private function copyTestpapers($courseId, $newCourse, $newQuestions)
+    protected function copyTestpapers($courseId, $newCourse, $newQuestions)
     {
         $testpapers = $this->getTestpaperDao()->searchTestpapers(array('target' => "course-{$courseId}"), array('createdTime', 'DESC'), 0, 100000);
 
@@ -95,7 +95,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function convertTestpaperLesson($newLessons, $newTestpapers)
+    protected function convertTestpaperLesson($newLessons, $newTestpapers)
     {
         foreach ($newLessons as $lesson) {
             if ($lesson['type'] != 'testpaper') {
@@ -110,7 +110,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         }
     }
 
-    private function copyQuestions($courseId, $newCourse, $newLessons)
+    protected function copyQuestions($courseId, $newCourse, $newLessons)
     {
         $conditions = array('targetPrefix' => "course-{$courseId}", 'parentId' => 0);
         $count = $this->getQuestionDao()->searchQuestionsCount($conditions);
@@ -158,13 +158,13 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function copyLessons($courseId, $newCourse, $chapters)
+    protected function copyLessons($courseId, $newCourse, $chapters)
     {
         $lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
         $map = array();
 
         foreach ($lessons as $lesson) {
-            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'replayStatus', 'liveProvider', 'userId'));
+            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId'));
             $fields['courseId'] = $newCourse['id'];
             if ($lesson['chapterId']) {
                 $fields['chapterId'] = $chapters[$lesson['chapterId']]['id'];
@@ -184,7 +184,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function copyChapters($courseId, $newCourse)
+    protected function copyChapters($courseId, $newCourse)
     {
         $chapters = $this->getCourseChapterDao()->findChaptersByCourseId($courseId);
 
@@ -221,7 +221,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function copyCourse($course, $link = false)
+    protected function copyCourse($course, $link = false)
     {
         $fields = ArrayToolkit::parts($course, array('coinPrice', 'originCoinPrice', 'price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId'));
         $fields['createdTime'] = time();
@@ -237,7 +237,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }
 
-    private function copyMaterials($courseId, $newCourse, $newLessons)
+    protected function copyMaterials($courseId, $newCourse, $newLessons)
     {
         $count = $this->getMaterialDao()->getMaterialCountByCourseId($courseId);
         $materials = $this->getMaterialDao()->findMaterialsByCourseId($courseId, 0, $count);
@@ -267,7 +267,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function copyHomeworks($courseId, $newCourse, $newLessons, $newQuestions)
+    protected function copyHomeworks($courseId, $newCourse, $newLessons, $newQuestions)
     {
         $homeworks = $this->getHomeworkDao()->findHomeworksByCourseId($courseId);
 
@@ -305,7 +305,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function copyExercises($courseId, $newCourse, $newLessons)
+    protected function copyExercises($courseId, $newCourse, $newLessons)
     {
         $exercises = $this->getExerciseDao()->findExercisesByCourseId($courseId);
 
@@ -329,67 +329,67 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
-    private function getUploadFileDao()
+    protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
     }
 
-    private function getCourseMemberDao()
+    protected function getCourseMemberDao()
     {
         return $this->createDao('Course.CourseMemberDao');
     }
 
-    private function getTestpaperItemDao()
+    protected function getTestpaperItemDao()
     {
         return $this->createDao('Testpaper.TestpaperItemDao');
     }
 
-    private function getTestpaperDao()
+    protected function getTestpaperDao()
     {
         return $this->createDao('Testpaper.TestpaperDao');
     }
 
-    private function getQuestionDao()
+    protected function getQuestionDao()
     {
         return $this->createDao('Question.QuestionDao');
     }
 
-    private function getCourseChapterDao()
+    protected function getCourseChapterDao()
     {
         return $this->createDao('Course.CourseChapterDao');
     }
 
-    private function getLessonDao()
+    protected function getLessonDao()
     {
         return $this->createDao('Course.LessonDao');
     }
 
-    private function getCourseDao()
+    protected function getCourseDao()
     {
         return $this->createDao('Course.CourseDao');
     }
 
-    private function getMaterialDao()
+    protected function getMaterialDao()
     {
         return $this->createDao('Course.CourseMaterialDao');
     }
 
-    private function getHomeworkDao()
+    protected function getHomeworkDao()
     {
         return $this->createDao('Homework:Homework.HomeworkDao');
     }
 
-    private function getHomeworkItemDao()
+    protected function getHomeworkItemDao()
     {
         return $this->createDao('Homework:Homework.HomeworkItemDao');
     }
 
-    private function getExerciseDao()
+    protected function getExerciseDao()
     {
         return $this->createDao('Homework:Homework.ExerciseDao');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }

@@ -2,6 +2,7 @@ define(function (require, exports, module) {
 
     bindCardEvent('.js-card-content');
     $(".js-user-card").on("mouseenter", function () {
+
         var _this = $(this);
         var userId = _this.data('userId');
         var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
@@ -10,17 +11,6 @@ define(function (require, exports, module) {
 
             if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
                 
-
-                $.ajax ({
-                    type:"GET",
-                    url: _this.data('cardUrl'),
-                    dataType: "html",
-                    beforeSend: beforeSend,
-                    success: callback
-
-                });
-
-                    
                 function beforeSend () {
 
                     _this.popover({
@@ -72,6 +62,15 @@ define(function (require, exports, module) {
                         $(_this).popover('hide');
                     });
                 };
+
+                $.ajax ({
+                    type:"GET",
+                    url: _this.data('cardUrl'),
+                    dataType: "html",
+                    beforeSend: beforeSend,
+                    success: callback
+
+                });
 
             } else {
                 _this.popover("show");
