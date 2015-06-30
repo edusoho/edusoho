@@ -27,7 +27,6 @@ class UserProvider implements UserProviderInterface {
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
-
         return $currentUser;
     }
 

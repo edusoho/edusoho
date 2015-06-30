@@ -31,7 +31,8 @@
                   <div class="pay-type-lable">支付方式</div>
                   {% for payment, options in payments %}
                   <div class="check">
-                    <img src="{{ asset('assets/img/order/alipay.gif') }}" width="100px"/>
+                    {% set picture = 'assets/img/order/'~payment~'.gif' %}
+                    <img src="{{ asset(picture) }}" width="100px"/>
                     <span class="icon"></span>
                   </div>
                   {% endfor %}

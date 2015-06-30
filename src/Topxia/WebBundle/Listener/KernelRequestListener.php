@@ -22,6 +22,7 @@ class KernelRequestListener
     {
     	$request = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();
+        
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
@@ -65,19 +66,6 @@ class KernelRequestListener
     		}
     	}
 
-
-        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
-            $route = 'login_bind';
-            $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/existbind','/register','/partner/login');
-            if (in_array($request->getPathInfo(), $whiteList)) {
-                return ;
-            }
-            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob'));
-            $response = new RedirectResponse($url);
-            $event->setResponse($response);
-            return ;
-        } 
-
     }
 
     protected function getServiceKernel()
@@ -88,11 +76,6 @@ class KernelRequestListener
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    public function redirect($url, $status = 302)
-    {
-        return new RedirectResponse($url, $status);
     }
 
     protected function getUserService()
