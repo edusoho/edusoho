@@ -64,10 +64,8 @@ class KernelRequestListener
 
     		}
     	}
-        
-        if (!$currentUser->islogin()) {
-            return;
-        }
+
+
         if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             $route = 'login_bind';
             $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/existbind','/register','/partner/login');
