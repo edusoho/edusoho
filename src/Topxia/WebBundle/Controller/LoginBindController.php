@@ -42,6 +42,7 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('partner_login', array('goto'=>$request->getSession()->get('_target_path', ''))));
             } else {
                 $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
+                exit();
                 return $this->redirect($goto);
             }
         } else {
