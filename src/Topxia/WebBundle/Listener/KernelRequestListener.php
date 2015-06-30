@@ -21,27 +21,10 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
     	$request = $event->getRequest();
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getUserService()->getCurrentUser();
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
-            $myfile = fopen("testfile.txt", "w");
-            $text = (string)($currentUser->isLogin());
-            fwrite($myfile, $text);
-            fclose($myfile);
-        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
-            
-
-            $route = 'login_bind';
-            $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/existbind','/register','/partner/login');
-            if (in_array($request->getPathInfo(), $whiteList)) {
-                return ;
-            }
-            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob'));
-            $response = new RedirectResponse($url);
-            $event->setResponse($response);
-            return ;
-        } 
 
         if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
 
@@ -81,16 +64,22 @@ class KernelRequestListener
 
     		}
     	}
-    }
+        
+        if (!$currentUser->islogin()) {
+            return;
+        }
+        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+            $route = 'login_bind';
+            $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/existbind','/register','/partner/login');
+            if (in_array($request->getPathInfo(), $whiteList)) {
+                return ;
+            }
+            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob'));
+            $response = new RedirectResponse($url);
+            $event->setResponse($response);
+            return ;
+        } 
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
-    public function getCurrentUser()
-    {
-        return $this->getKernel()->getCurrentUser();
     }
 
     protected function getServiceKernel()
@@ -106,5 +95,10 @@ class KernelRequestListener
     public function redirect($url, $status = 302)
     {
         return new RedirectResponse($url, $status);
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }
