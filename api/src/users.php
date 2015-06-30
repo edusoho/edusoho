@@ -2,7 +2,9 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Api\Util\UserUtil;
 use Silex\Application;
 
 $api = $app['controllers_factory'];
@@ -122,6 +124,84 @@ $api->post('/login', function (Request $request) {
     );
 });
 
+
+/*
+
+## 第三方登陆
+
+    POST /users/bind_login
+
+** 参数 **
+
+| 名称  | 类型  | 必需   | 说明 |
+| ---- | ----- | ----- | ---- |
+| type | string | 是 | 第三方类型,值有qq,weibo,renren |
+| token | string | 是 | 第三方授权token |
+
+** 响应 **
+
+```
+{
+    "user": "{user-data}"
+    "token": "{user-token}"
+}
+```
+
+此处`token`为ES端记录通过接口登陆的用户的唯一凭证
+
+*/
+$api->post('/bind_login', function (Request $request) {
+    $token = $request->request->get('token');
+    $type = $request->request->get('type');
+    if (empty($token) || empty($type)) {
+        throw new \Exception('parameter error');
+    }
+    $token = array('access_token' => $token);
+    $settings = ServiceKernel::instance()->createService('System.SettingService')->get('login_bind');       
+
+    if (empty($settings)) {
+        throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+    }
+
+    if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
+        throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
+    }
+
+    if (!$settings[$type.'_enabled']) {
+        throw new \RuntimeException("第三方登录({$type})未开启");
+    }
+
+    $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+    $client = OAuthClientFactory::create($type, $config);
+
+    $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByToken($token['access_token']);
+    if (empty($userBind)) {
+        $oauthUser = $client->getUserInfo($token);
+        $oauthUser['createdIp'] = $request->getClientIp();
+        $token['userId'] = $oauthUser['id'];
+        if (empty($oauthUser['id'])) {
+            throw new \RuntimeException("获取用户信息失败，请重试。");
+        }
+
+        if(!ServiceKernel::instance()->createService('User.AuthService')->isRegisterEnabled()) {
+            throw new \RuntimeException("注册功能未开启，请联系管理员！");
+        }   
+        $userUtil = new UserUtil();
+        $user = $userUtil->generateUser($type, $token, $oauthUser,$setData=array());
+        if (empty($user)) {
+            throw new \RuntimeException("登录失败，请重试！");
+        }
+    } else {
+        $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userBind['toId']);
+    }
+
+    $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('api_login',$user['id']);
+    setCurrentUser($token);
+    return array(
+        'user' => filter($user, 'user'),
+        'token' => $token
+    );
+});
 
 /*
 ## 登出
