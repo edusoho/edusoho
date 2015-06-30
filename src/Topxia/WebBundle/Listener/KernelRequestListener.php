@@ -25,13 +25,13 @@ class KernelRequestListener
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
-        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
-            
             $myfile = fopen("testfile.txt", "w");
-            $text = $currentUser->isLogin();
+            $text = $currentUser;
             fwrite($myfile, $text);
             fclose($myfile);
+        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             
+
             $route = 'login_bind';
             $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/existbind','/register','/partner/login');
             if (in_array($request->getPathInfo(), $whiteList)) {
