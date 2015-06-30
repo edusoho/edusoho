@@ -26,7 +26,7 @@ class KernelRequestListener
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
             $myfile = fopen("testfile.txt", "w");
-            $text = $currentUser;
+            $text = (string)$currentUser;
             fwrite($myfile, $text);
             fclose($myfile);
         if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
