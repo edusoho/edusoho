@@ -22,3 +22,7 @@ course_explore:
     pattern:  /explore/{category}
     defaults: { _controller: CustomWebBundle:Course:explore, category:'' }
 
+guide:
+    path:    /guide
+    defaults: { _controller: CustomWebBundle:Default:guide }
+

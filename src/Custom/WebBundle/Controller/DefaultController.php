@@ -213,6 +213,13 @@ class DefaultController extends BaseController
         exit();
     }
 
+    public function guideAction()
+    {
+        /*$site = $this->getServiceKernel()->createService('System.SettingService')->get('site', array());
+        print_r($site);*/
+        return $this->render('CustomWebBundle:Default:guide.html.twig');
+    }
+
     private function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {

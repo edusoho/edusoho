@@ -1,0 +1,117 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+  
+{% block title %}功能向导 - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/qiushi/css/direct.css') }}" />
+{% endblock %}
+
+{% block body %}
+  {% block content %}
+    <div class="direct-nav">
+      <a class="btn btn-warning" id="btn-step-1" href="javasript:;" data-url="#step-1"><span class="direct-icon">1</span>选择课程</a>
+      <a class="btn btn-default" id="btn-step-2" href="javasript:;" data-url="#step-2"><span class="direct-icon">2</span>学习课程</a>
+      <a class="btn btn-default" id="btn-step-3" href="javasript:;" data-url="#step-3"><span class="direct-icon">3</span>直播互动</a>
+      <a class="btn btn-default" id="btn-step-4" href="javasript:;" data-url="#step-4"><span class="direct-icon">4</span>预约辅导</a>
+    </div>
+    <div id="mask"></div>
+    <div class="direct-step step-homepage active">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn-lg next" href="javasript:;" data-url="#step-1">立即体验</a>
+          <a class="step-btn-lg exit" href="{{ setting('site.url') }}">暂不需要</a>
+        </div>
+      </div>
+    </div>
+    <div class="direct-step step-1" id="step-1">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-1-2">继续</a>
+        </div>
+      </div>
+    </div>
+    <div class="direct-step step-1-2" id="step-1-2">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-1-3">继续</a>
+        </div>
+      </div>
+    </div>
+    <div class="direct-step step-1-3" id="step-1-3">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-2">继续</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="direct-step step-2" id="step-2">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-2-2">继续</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="direct-step step-2-2" id="step-2-2">
+      <div class="step-content">
+        <a class="close" href="{{ setting('site.url') }}">关闭</a>
+        <a class="step-btn next" href="javasript:;" data-url="#step-3">继续</a>
+      </div>
+    </div>
+
+    <div class="direct-step step-3" id="step-3">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-4">继续</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="direct-step step-4" id="step-4">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-4-2">继续</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="direct-step step-4-2" id="step-4-2">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-4-3">继续</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="direct-step step-4-3" id="step-4-3">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn next" href="javasript:;" data-url="#step-4-4">继续</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="direct-step step-4-4" id="step-4-4">
+      <div class="container">
+        <div class="step-content">
+          <a class="close" href="{{ setting('site.url') }}">关闭</a>
+          <a class="step-btn" href="{{ setting('site.url') }}">开始</a>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+{% endblock %}
+
+
+{% block bottom %}{% endblock %}

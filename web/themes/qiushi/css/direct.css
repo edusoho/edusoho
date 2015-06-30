@@ -1,0 +1,314 @@
+html,
+body {
+  height: 100%;
+}
+
+#mask {
+  height: 150%;
+  width: 100%;
+  background: #000;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  position: absolute;
+  left: 0;
+  /*top: 48px;*/
+  /*display: none;*/
+}
+.direct-nav {
+  display: none;
+  text-align: center;
+  margin: 0 auto;
+  height: 60px;
+  background-color: #fff;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.5);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,.5);
+  box-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+.direct-nav a {
+  margin: 12px 10px;
+}
+.direct-nav .direct-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  background: url("../img/icon_direct.png") no-repeat;
+}
+.direct-step {
+  margin: 0px auto;
+  width: 100%;
+  height: 150%;
+  background: url('../img/index_bg.jpg') center top no-repeat;
+}
+.direct-step .container {
+  position: relative;
+  width: 1160px !important;
+}
+
+.direct-step .step-btn {
+  position: absolute;
+  width: 88px;
+  height: 36px;
+  text-indent: -9999px;
+}
+.direct-step .step-btn-lg {
+  position: absolute;
+  width: 110px;
+  height: 50px;
+  text-indent: -9999px;
+}
+.direct-step .close {
+  position: absolute;
+  text-indent: -9999px;
+}
+
+.direct-step {
+  display: none;
+}
+.direct-step.active {
+  display: block;
+}
+
+.step-homepage .step-content {
+  position: relative;
+  margin: 10% auto 0;
+  width: 620px;
+  height: 360px;
+  background: url('../img/index_content.jpg') center top no-repeat;
+}
+
+.step-homepage .next {
+  bottom: 30px;
+  left: 180px;
+}
+.step-homepage .exit {
+  bottom: 30px;
+  right: 180px;
+}
+.step-homepage .close {
+  top: 18px;
+  right: 19px;
+}
+
+.step-1 .step-content {
+  position: absolute;
+  top: 134px;
+  left: 135px;
+  width: 428px;
+  height: 260px;
+  background: url('../img/step_1.png') no-repeat;
+}
+
+.step-1 .step-btn {
+  bottom: 26px;
+  right: 19px;
+}
+
+.step-1 .close {
+  right: 19px;
+  top: 78px;
+}
+
+.step-1-2,
+.step-1-3 {
+  background: url('../img/step_1_2_bg.jpg') center top no-repeat;
+}
+
+.step-1-2 .step-content {
+  position: absolute;
+  top: 289px;
+  left: 10px;
+  width: 803px;
+  height: 200px;
+  background: url('../img/step_1_2.png') center top no-repeat;
+}
+
+.step-1-2 .close {
+  right: 19px;
+  top: 18px;
+}
+
+.step-1-2 .step-btn {
+  bottom: 26px;
+  right: 19px;
+}
+
+.step-1-3 .step-content {
+  position: absolute;
+  top: 510px;
+  right: 30px;
+  width: 711px;
+  height: 254px;
+  background: url('../img/step_1_3.png') center top no-repeat;
+}
+
+.step-1-3 .step-btn {
+  bottom: 60px;
+  left: 310px;
+}
+
+.step-1-3 .close {
+  top: 40px;
+  left: 380px;
+}
+
+.step-2 {
+  background: url('../img/step_2_bg.jpg') center top no-repeat;
+}
+
+.step-2 .step-content {
+  position: absolute;
+  top: 312px;
+  right: 5px;
+  width: 671px;
+  height: 300px;
+  background: url('../img/step_2.png') center top no-repeat;
+}
+
+.step-2 .step-btn {
+  left: 310px;
+  bottom: 20px;
+}
+
+.step-2 .close {
+  left: 380px;
+  top: 65px;
+}
+
+.step-2-2 {
+  background: url('../img/step_2_2_bg.jpg') center top no-repeat;
+  background-size: 100%;
+}
+
+.step-2-2 .step-content {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 863px;
+  height: 869px;
+  background: url('../img/step_2_2.png') center top no-repeat;
+}
+
+.step-2-2 .step-btn {
+  left: 310px;
+  top: 336px;
+}
+
+.step-2-2 .close {
+  left: 380px;
+  top: 155px;
+}
+
+.step-3 {
+  background: url('../img/step_3_bg.jpg') center top no-repeat;
+}
+
+.step-3 .step-content {
+  position: absolute;
+  top: 134px;
+  left: 223px;
+  width: 422px;
+  height: 261px;
+  background: url('../img/step_3.png') center top no-repeat;
+}
+
+.step-3 .step-btn {
+  right: 19px;
+  bottom: 26px;
+}
+
+.step-3 .close {
+  right: 19px;
+  top: 78px;
+}
+
+.step-4,
+.step-4-2 {
+  background: url('../img/step_4_bg.jpg') center top no-repeat;
+}
+
+.step-4 .step-content {
+  position: absolute;
+  top: 130px;
+  left: 300px;
+  width: 418px;
+  height: 274px;
+  background: url('../img/step_4.png') center top no-repeat;
+}
+
+.step-4 .step-btn {
+  right: 19px;
+  bottom: 26px;
+}
+
+.step-4 .close {
+  right: 19px;
+  top: 91px;
+}
+
+
+.step-4-2 .step-content {
+  position: absolute;
+  top: 410px;
+  left: 40px;
+  width: 975px;
+  height: 207px;
+  background: url('../img/step_4_2.png') center top no-repeat;
+}
+
+.step-4-2 .step-btn {
+  right: 19px;
+  bottom: 26px;
+}
+
+.step-4-2 .close {
+  right: 19px;
+  top: 26px;
+}
+
+.step-4-3,
+.step-4-4 {
+  /*height: 1057px;*/
+  background: url('../img/step_4_2_bg.jpg') center top no-repeat;
+}
+
+.step-4-3 .step-content {
+  position: absolute;
+  top: 524px;
+  left: 3px;
+  width: 1189px;
+  height: 237px;
+  background: url('../img/step_4_3.png') center top no-repeat;
+}
+
+.step-4-3 .step-btn {
+  right: 19px;
+  bottom: 41px;
+}
+
+.step-4-3 .close {
+  right: 19px;
+  top: 40px;
+}
+
+
+.step-4-4 .step-content {
+  position: relative;
+  margin: 10% auto 0;
+  width: 901px;
+  height: 810px;
+  background: url('../img/step_4_4.png') center top no-repeat;
+}
+
+.step-4-4 .step-btn {
+  right: 422px;
+  bottom: 26px;
+}
+
+.step-4-4 .close {
+  right: 490px;
+  bottom: 160px;
+}
+
+
+
