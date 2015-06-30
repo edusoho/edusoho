@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class KernelRequestListener
+
 {
     public function __construct($container)
     {
@@ -24,9 +25,9 @@ class KernelRequestListener
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
-        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled'] $$ !strpos($_target_path,'login/bind')) {
             $route = 'login_bind';
-            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob')).'?_target_path='.$_target_path;
+            $url = $this->container->get('router')->generate($route,array('type' => 'weixinweb'));
             $response = new RedirectResponse($url);
             $event->setResponse($response);
             return ;
