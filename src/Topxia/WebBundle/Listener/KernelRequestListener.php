@@ -26,7 +26,7 @@ class KernelRequestListener
         $_target_path = $request->getPathInfo();
         if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             $route = 'login_bind';
-            $url = $this->container->get('router')->generate($route).'weixinmob'.'?_target_path='.$_target_path;
+            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob')).'?_target_path='.$_target_path;
             $response = new RedirectResponse($url);
             $event->setResponse($response);
             return ;
