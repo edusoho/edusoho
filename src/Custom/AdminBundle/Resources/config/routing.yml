@@ -31,7 +31,7 @@ admin_tag:
     defaults: { _controller: CustomAdminBundle:Tag:index }
 admin_tag_add:
     path:  /tag/create
-    defaults: { _controller: CustomAdminBundle:Tag:index }
+    defaults: { _controller: CustomAdminBundle:Tag:create }
 admin_tag_update:
     pattern:  /tag/{id}/update
     defaults: { _controller: CustomAdminBundle:Tag:update }
