@@ -24,8 +24,12 @@ class KernelRequestListener
         $setting = $this->getSettingService()->get('login_bind');
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
-        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled'] && $_target_path != '/login/bind/weixinweb/choose') {
-            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob').'?_target_path='.$_target_path));
+        if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
+            $route = 'login_bind';
+            $url = $this->container->get('router')->generate($route).'weixinmob'.'?_target_path='.$_target_path;
+            $response = new RedirectResponse($url);
+            $event->setResponse($response);
+            return ;
         } 
 
         if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
