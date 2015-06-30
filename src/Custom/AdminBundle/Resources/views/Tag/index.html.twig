@@ -6,32 +6,30 @@
 
 {% block main %}
 
-
-<div data-role="teacher-tag">
-  <ul class="nav nav-tabs">
-  	{% for key, name in types %}
-	<li {% if type == key %} class="active"{% endif %}><a href="{{ url('admin_tag', {type:key}) }}">{{ name }}标签</a></li>
-  	{% endfor %}
-  </ul>
+<div class="btn-group">
+  <a href="{{ path('admin_tag', {type:'kind'}) }}" type="button" class="btn btn-default btn-sm btn-primary">类别标签</a>
+  <a href="{{ path('admin_tag', {type:'material'}) }}" type="button" class="btn btn-default btn-sm ">教材标签</a>
 </div>
-<table id="tag-table" class="table table-striped">
-    <thead>
-        <th width="10%">ID</th>
-        <th width="60%">名称</th>
-        <th width="20%">添加时间</th>
-        <th width="10%">操作</th>
-    </thead>
-    <tbody>
-      {% if tags %}
-        {% for tag in tags %}
-          {% include 'CustomAdminBundle:Tag:list-tr.html.twig' %}
-        {% endfor %}
-      {% else %}
-       <tr><td colspan="20"><div class="empty">暂无标签记录</div></td></tr>
-      {% endif %}
 
-    </tbody>
+<table id="tag-table" class="table table-striped table-hover mtl">
+  <thead>
+    <th width="10%">ID</th>
+    <th width="60%">名称</th>
+    <th width="20%">添加时间</th>
+    <th width="10%">操作</th>
+  </thead>
+  <tbody>
+    {% if tags %}
+      {% for tag in tags %}
+        {% include 'CustomAdminBundle:Tag:list-tr.html.twig' %}
+      {% endfor %}
+    {% else %}
+     <tr><td colspan="20"><div class="empty">暂无标签记录</div></td></tr>
+    {% endif %}
+
+  </tbody>
 </table>
+
 
 {{ web_macro.paginator(paginator) }}
 

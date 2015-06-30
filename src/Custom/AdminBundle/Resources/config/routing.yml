@@ -1,69 +1,50 @@
 custom_admin_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: CustomAdminBundle:Default:index }
-
 admin_teacher_tag:
     pattern:  /teacher/tag
     defaults: { _controller: CustomAdminBundle:TeacherTag:index }
-    
 admin_teacher_tag_create:
     pattern:  /teacher/tag/create
     defaults: { _controller: CustomAdminBundle:TeacherTag:create }
-    
 admin_teacher_tag_checkname:
     pattern:  /teacher/tag/checkname
     defaults: { _controller: CustomAdminBundle:TeacherTag:checkName}
-
 admin_teacher_tag_update:
     pattern:  /teacher/tag/{id}/update
     defaults: { _controller: CustomAdminBundle:TeacherTag:update }
-
 admin_teacher_tag_delete:
     pattern:  /teacher/tag/{id}/delete
     defaults: { _controller: CustomAdminBundle:TeacherTag:delete }
     methods:  [POST]
-    
 admin_group:
     pattern:  /group/
     defaults: { _controller: CustomAdminBundle:Group:index }
-    
 admin_group_recommend:
     pattern: /group/{id}/recommend
     defaults: { _controller: CustomAdminBundle:Group:recommend }
 admin_group_recommend_delete:
     pattern: /group/{id}/recommend/delete
     defaults: { _controller: CustomAdminBundle:Group:delete }
-    
 admin_tag:
-    pattern:  /tag
+    pattern:  /tag/{type}
     defaults: { _controller: CustomAdminBundle:Tag:index }
-
-admin_tag_create:
-    pattern:  /tag/create
-    defaults: { _controller: CustomAdminBundle:Tag:create }
-
-admin_tag_checkname:
-    pattern:  /tag/checkname
-    defaults: { _controller: CustomAdminBundle:Tag:checkName}
-
+admin_tag_add:
+    path:  /tag/create
+    defaults: { _controller: CustomAdminBundle:Tag:index }
 admin_tag_update:
     pattern:  /tag/{id}/update
     defaults: { _controller: CustomAdminBundle:Tag:update }
-
 admin_tag_delete:
     pattern:  /tag/{id}/delete
     defaults: { _controller: CustomAdminBundle:Tag:delete }
     methods:  [POST]
-
-    
 admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
-    
 admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: CustomAdminBundle:User:edit }
-    
 admin_teacher_tag_match:
     pattern: /teacher/tag/match_jsonp
     defaults: { _controller: CustomAdminBundle:TagTeacher:match }

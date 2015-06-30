@@ -9,14 +9,8 @@ use Topxia\Service\Common\ServiceException;
 class TagController extends BaseController
 {
 
-	public function indexAction(Request $request)
+	public function indexAction(Request $request, $type)
 	{
-		$type = $request->query->get('type','0');
-		if($type==0){
-			$type='kind';
-		}else{
-			$type='material';
-		}
 		$total = $this->getTagService()->getTagCountByType($type);
 		$paginator = new Paginator($request, $total, 20);
 		$tags = $this->getTagService()->findAllTagsByType($paginator->getOffsetCount(), $paginator->getPerPageCount(),$type);
@@ -28,6 +22,7 @@ class TagController extends BaseController
 		));
 	}
 
+
 	public function createAction(Request $request)
 	{
 		
@@ -35,14 +30,9 @@ class TagController extends BaseController
 			$tag = $this->getTagService()->addTag($request->request->all());
 			return $this->render('CustomAdminBundle:Tag:list-tr.html.twig', array('tag' => $tag));
 		}
-		$type = $request->query->get('type','kind');
-		if($type==0){
-			$type='kind';
-		}else{
-			$type='material';
-		}
+		
 		return $this->render('CustomAdminBundle:Tag:tag-modal.html.twig', array(
-			'tag' => array('id' => 0, 'name' => '','type' => $type)
+			'tag' => array('id' => 0, 'name' => '')
 		));
 	}
 

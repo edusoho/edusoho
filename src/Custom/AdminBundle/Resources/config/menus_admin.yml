@@ -1,19 +1,22 @@
-# admin_course_tag_add:
-#     name: 新增标签
-#     parent: admin_course_tag
-#     router_name: admin_tag_create
-#     router_params: {'type': 'type'}
-#     router_params_context: 1
-#     mode: modal
-#     group: 2
 admin_teacher_tag:
     name: 教师标签管理
     parent: admin_user
     router_name: admin_teacher_tag
     after: admin_teacher
-admin_course_tag_add:
+admin_teacher_tag_add:
     name: 新增教师标签
     parent: admin_teacher_tag
     router_name: admin_teacher_tag_create
+    mode: modal
+    group: 2
+admin_course_tag:
+    name: 标签管理
+    parent: admin_course
+    router_name: admin_tag
+    router_params: {'type': 'kind'}
+admin_course_tag_add:
+    name: 新增标签
+    parent: admin_course_tag
+    router_name: admin_tag_add
     mode: modal
     group: 2
