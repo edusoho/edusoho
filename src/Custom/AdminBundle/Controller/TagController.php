@@ -14,7 +14,7 @@ class TagController extends BaseController
 		$total = $this->getTagService()->getTagCountByType($type);
 		$paginator = new Paginator($request, $total, 20);
 		$tags = $this->getTagService()->findAllTagsByType($paginator->getOffsetCount(), $paginator->getPerPageCount(),$type);
-		$type = $request->query->get('type','0');
+		
 		return $this->render('CustomAdminBundle:Tag:index.html.twig', array(
 			'tags' => $tags,
 			'paginator' => $paginator,
