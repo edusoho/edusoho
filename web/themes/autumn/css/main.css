@@ -7607,6 +7607,106 @@ textarea.form-control-o {
   max-width: 100%;
   height: auto;
 }
+.error-panel {
+  margin-top: 10%;
+}
+.error-panel .panel-heading {
+  text-align: center;
+  font-size: 22px;
+}
+@media (max-width: 767px) {
+  .error-panel .panel-heading {
+    font-size: 16px;
+  }
+}
+.error-panel .panel-body {
+  padding: 60px 0;
+}
+@media (max-width: 767px) {
+  .error-panel .panel-body {
+    padding: 30px 0;
+  }
+}
+.error-panel .well {
+  position: relative;
+  width: 60%;
+  margin-left: 20%;
+}
+@media (max-width: 1199px) {
+  .error-panel .well {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+@media (max-width: 991px) {
+  .error-panel .well {
+    width: 90%;
+    margin-left: 5%;
+  }
+}
+@media (max-width: 991px) {
+  .error-panel .well {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+.error-panel .well p {
+  margin: 30px 20px;
+}
+@media (max-width: 767px) {
+  .error-panel .well p {
+    margin: 10px 0;
+  }
+}
+.error-panel .well .error-icon {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  width: 191px;
+  height: 241px;
+  background: url('../img/icon_search.png') no-repeat;
+}
+.error-panel .well .error-500-icon {
+  position: absolute;
+  top: 20px;
+  right: -140px;
+  width: 297px;
+  height: 219px;
+  background: url('../img/icon_server.png') no-repeat;
+}
+@media (max-width: 1199px) {
+  .error-panel .well .error-500-icon {
+    right: -80px;
+  }
+}
+@media (max-width: 991px) {
+  .error-panel .well .error-500-icon {
+    right: -20px;
+  }
+}
+.error-title {
+  font-family: Phosphate;
+  font-size: 200px;
+  text-transform: uppercase;
+  color: #9a9a9a;
+  margin-right: 30px;
+}
+@media (max-width: 1199px) {
+  .error-title {
+    font-size: 180px;
+  }
+}
+@media (max-width: 991px) {
+  .error-title {
+    font-size: 160px;
+  }
+}
+@media (max-width: 767px) {
+  .error-title {
+    font-size: 40px;
+    margin-right: 10px;
+  }
+}
 .pemember-password-wrap {
   position: relative;
 }
