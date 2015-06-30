@@ -30,7 +30,7 @@ interface CourseService
 
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
 
-	public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
+	public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
 	public function searchCourses($conditions, $sort, $start, $limit);
 

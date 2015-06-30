@@ -1243,7 +1243,7 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->unBindUserByTypeAndToId('douban', $registeredUser['id']);
     }
 
-    private function createUser($user)
+    protected function createUser($user)
     {
         $userInfo = array();
         $userInfo['email'] = "{$user}@{$user}.com";
@@ -1253,7 +1253,7 @@ class UserServiceTest extends BaseTestCase
         return $this->getUserService()->register($userInfo);
     }
 
-    private function createFromUser()
+    protected function createFromUser()
     {
         $fromUser = array();
         $fromUser['email'] = 'fromUser@fromUser.com';
@@ -1262,7 +1262,7 @@ class UserServiceTest extends BaseTestCase
         return $this->getUserService()->register($fromUser);
     }
 
-    private function createToUser()
+    protected function createToUser()
     {
         $toUser = array();
         $toUser['email'] = 'toUser@toUser.com';
@@ -1271,7 +1271,7 @@ class UserServiceTest extends BaseTestCase
         return $this->getUserService()->register($toUser);
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }

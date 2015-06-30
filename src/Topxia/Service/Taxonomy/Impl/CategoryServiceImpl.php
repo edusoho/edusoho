@@ -122,7 +122,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 $activeIds[] = $parentId;
                 $sibling = $this->findAllCategoriesByParentId($parentId);
                 if ($sibling) {
-                    $categories[$level++] = $sibling;
+                    $categories[$level] = $sibling;
+                    $level++;
                 }
                 $parent = $this->getCategory($parentId);
                 $parentId = $parent['parentId'];
@@ -245,7 +246,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getGroupDao()->deleteGroup($id);
     }
 
-    private function makeCategoryTree(&$tree, &$categories, $parentId)
+    protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
         static $leaf = false;
@@ -261,7 +262,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $tree;
     }
 
-    private function filterCategoryFields(&$category, $releatedCategory = null)
+    protected function filterCategoryFields(&$category, $releatedCategory = null)
     {
         foreach (array_keys($category) as $key) {
             switch ($key) {
@@ -309,17 +310,17 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $category;
     }
 
-    private function getCategoryDao ()
+    protected function getCategoryDao ()
     {
         return $this->createDao('Taxonomy.CategoryDao');
     }
 
-    private function getGroupDao()
+    protected function getGroupDao()
     {
         return $this->createDao('Taxonomy.CategoryGroupDao');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

@@ -81,12 +81,12 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
 
-	private function getAnnouncementDao()
+	protected function getAnnouncementDao()
     {
         return $this->createDao('Announcement.AnnouncementDao');
     }
 
-    private function _prepareSearchConditions($conditions)
+    protected function _prepareSearchConditions($conditions)
     {
     	$targetType = array('course','classroom','global');
     	if(!in_array($conditions['targetType'], $targetType)){
@@ -96,7 +96,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     	return $conditions;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
     	return $this->createService('Course.CourseService');
     }

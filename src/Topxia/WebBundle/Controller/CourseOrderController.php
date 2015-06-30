@@ -41,8 +41,9 @@ class CourseOrderController extends OrderController
             $this->getCashAccountService()->createAccount($user['id']);
         }
 
-        if(isset($account['cash']))
-        $account['cash']=intval($account['cash']);
+        if(isset($account['cash'])){
+            $account['cash']=intval($account['cash']);
+        }
     
         $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
@@ -52,11 +53,21 @@ class CourseOrderController extends OrderController
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         for($i=0;$i<count($userFields);$i++){
-           if(strstr($userFields[$i]['fieldName'], "textField")) $userFields[$i]['type']="text";
-           if(strstr($userFields[$i]['fieldName'], "varcharField")) $userFields[$i]['type']="varchar";
-           if(strstr($userFields[$i]['fieldName'], "intField")) $userFields[$i]['type']="int";
-           if(strstr($userFields[$i]['fieldName'], "floatField")) $userFields[$i]['type']="float";
-           if(strstr($userFields[$i]['fieldName'], "dateField")) $userFields[$i]['type']="date";
+           if(strstr($userFields[$i]['fieldName'], "textField")){
+            $userFields[$i]['type']="text";
+           }
+           if(strstr($userFields[$i]['fieldName'], "varcharField")){
+            $userFields[$i]['type']="varchar";
+           }
+           if(strstr($userFields[$i]['fieldName'], "intField")){
+            $userFields[$i]['type']="int";
+           }
+           if(strstr($userFields[$i]['fieldName'], "floatField")){
+            $userFields[$i]['type']="float";
+           }
+           if(strstr($userFields[$i]['fieldName'], "dateField")){
+            $userFields[$i]['type']="date";
+           }
         }
 
         if($course['approval'] == 1 && ($userInfo['approvalStatus'] == 'unapprove' || $userInfo['approvalStatus'] == 'approve_fail')){
@@ -179,7 +190,7 @@ class CourseOrderController extends OrderController
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
     }
 
-    private function getOrderInfo($id)
+    protected function getOrderInfo($id)
     {
         $course = $this->getCourseService()->getCourse($id);
         $userIds = array();
@@ -244,7 +255,7 @@ class CourseOrderController extends OrderController
         );
     }
 
-    private function getEnabledPayments()
+    protected function getEnabledPayments()
     {
         $enableds = array();
 
@@ -266,7 +277,7 @@ class CourseOrderController extends OrderController
         return $enableds;
     }
 
-    private function getRemainStudentNum($course)
+    protected function getRemainStudentNum($course)
     {
         $remainingStudentNum = $course['maxStudentNum'];
 
@@ -287,7 +298,7 @@ class CourseOrderController extends OrderController
         return $remainingStudentNum;
     }
 
-    private function previewAsMember($as, $member, $course)
+    protected function previewAsMember($as, $member, $course)
     {
         $user = $this->getCurrentUser();
         if (empty($user->id)) {
