@@ -124,6 +124,46 @@ $api->post('/login', function (Request $request) {
 
 
 /*
+
+## 登陆
+
+    POST /users/bind_login
+
+** 参数 **
+
+| 名称  | 类型  | 必需   | 说明 |
+| ---- | ----- | ----- | ---- |
+| nickname | string | 是 | 昵称 |
+| password | string | 是 | 密码 |
+
+** 响应 **
+
+```
+{
+    "xxx": "xxx"
+}
+```
+*/
+$api->post('/bind_login', function (Request $request) {
+    $fields = $request->request->all();
+    $user = ServiceKernel::instance()->createService('User.UserService')->getUserByLoginField($fields['nickname']);
+    if (empty($user)) {
+        throw new \Exception('user not found');
+    }
+
+    if (!ServiceKernel::instance()->createService('User.UserService')->verifyPassword($user['id'], $fields['password'])) {
+        throw new \Exception('password error');
+    }
+
+    $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('api_login',$user['id']);
+    setCurrentUser($token);
+    return array(
+        'user' => filter($user, 'user'),
+        'token' => $token
+    );
+});
+
+/*
 ## 登出
 
     POST /users/logout

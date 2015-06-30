@@ -26,4 +26,22 @@ $api->get('/about', function () {
         'about' => isset($mobile['about']) ? $mobile['about'] : ''
     );
 });
+
+/*
+## 获取手机网校token
+    GET /mobileschools/token
+
+** 响应 **
+
+```
+{
+    'token' => 'vPb16d4L9YFm9mqlvTyoCo0Y5og1vZL'
+}
+```
+*/
+
+$api->get('/token', function () {
+    $token = ServiceKernel::instance()->createService('EduCloud.EduCloudService')->getToken();
+    return $token;
+});
 return $api;
