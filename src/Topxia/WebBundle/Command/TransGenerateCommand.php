@@ -113,14 +113,15 @@ class TransGenerateCommand extends BaseCommand
             $output->write("{$file->getRealpath()}");
             $yaml = new Yaml();
             $menus = $yaml->parse(file_get_contents($file->getRealpath()));
-            $menuKeywords = ArrayToolkit::column($menus, 'name');
+            $names = ArrayToolkit::column($menus, 'name');
+            $fullnames = ArrayToolkit::column($menus, 'fullname');
+            $menuKeywords = array_merge($names, $fullnames);
             $keywords = array_merge($keywords, $menuKeywords);
             $output->writeln(sprintf("<info> ... %s</info>", count($menuKeywords)));
         }
 
         return $keywords;
     }
-
 
     protected function scanViewTrans($dir, $output)
     {
