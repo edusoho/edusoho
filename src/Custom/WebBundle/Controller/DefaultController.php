@@ -215,8 +215,6 @@ class DefaultController extends BaseController
 
     public function guideAction()
     {
-        /*$site = $this->getServiceKernel()->createService('System.SettingService')->get('site', array());
-        print_r($site);*/
         return $this->render('CustomWebBundle:Default:guide.html.twig');
     }
 
