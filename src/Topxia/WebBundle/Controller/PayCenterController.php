@@ -82,7 +82,6 @@ class PayCenterController extends BaseController
 	{
 		$fields = $request->request->all();
 		$user = $this->getCurrentUser();
-
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
@@ -90,8 +89,8 @@ class PayCenterController extends BaseController
 		if(!array_key_exists("orderId", $fields)) {
 			return $this->createMessageResponse('error', '缺少订单，支付失败');
 		}
-
 		$order = $this->getOrderService()->getOrder($fields["orderId"]);
+        $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields["payment"]));
 
 		if($user["id"] != $order["userId"]) {
 			return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
