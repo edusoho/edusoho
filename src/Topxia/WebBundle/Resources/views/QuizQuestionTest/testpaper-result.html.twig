@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
-
+{% do load_script('quiz-question/testpaper-result') %}
 {% block testpaper_heading_status %}
   {% if paperResult.status == 'finished' %}
     <div class="label label-success">批阅完成</div>
