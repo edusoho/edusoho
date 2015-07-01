@@ -613,12 +613,21 @@ class CourseLessonController extends BaseController
         $homeworkLessonIds =array();
         $exercisesLessonIds =array();
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+
         if($homeworkPlugin) {
             $lessonIds = ArrayToolkit::column($items, 'id');
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
             $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
             $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+        }
+
+        if ($course['price'] == 0 && $course['coinPrice'] == 0 && $courseSetting['buy_fill_userinfo'] == 0) {
+            if(empty($member)) {
+                $user = $this->getCurrentUser();
+                $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
+            }
         }
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
@@ -667,5 +676,10 @@ class CourseLessonController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
