@@ -133,5 +133,17 @@ class EduCloudServiceImpl extends BaseService
             return $setting[$key];
         }
         return null;
-    }    
+    }
+
+    public function addStudent($user)
+    {
+        $api = $this->getCloudApi();
+        return $api->post('/tui/student/add', array(
+            'id' => $user['id'],
+            'username' => $user['nickname'],
+            'email' => $user['email'],
+            'name' => '',
+            'mobile' => ''
+        ));
+    }   
 }
