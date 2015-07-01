@@ -42,6 +42,10 @@ $api->get('/about', function () {
 
 $api->get('/token', function () {
     $token = ServiceKernel::instance()->createService('EduCloud.EduCloudService')->getToken();
+    if (isset($token['error'])) {
+        throw new Exception($token['error']);
+        
+    }
     return $token;
 });
 return $api;
