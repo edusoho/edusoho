@@ -3,19 +3,19 @@ define(function(require, exports, module) {
         Class = require('class'),
         Store = require('store'),
         Backbone = require('backbone'),
-        VideoJSA = require('video-js'),
+        VideoJS = require('video-js'),
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
         chapterAnimate = require('../course/widget/chapter-animate');
-        VideoPlayer = require("video-player");
-    require('mediaelementplayer');
+        
+        require('mediaelementplayer');
 
 
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var MediaPlayer = require('../widget/media-player4');
+    var EsCloudPlayer = require("../widget/video-js-player");
     var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -277,66 +277,43 @@ define(function(require, exports, module) {
                     $('#lesson-video-content').html(html.join('\n'));
                     $("#lesson-video-content").show();
 
-                    $.get(lesson.mediaHLSUri, function(playlist) {
-                        var player = videojs('example-video', {
-                          techOrder: ["flash", "html5"],
-                          controls: true,
-                          autoplay: false,
-                          preload: 'none',
-                          language: 'zh-CN',
-                          plugins: {
-                              fingerprint: {
-                                html: '你好',
-                                duration: 5000
-                              },
-                              watermark: {
-                                  file: 'custom/img/btn_play.png',
-                                  xpos: 50,
-                                  ypos: 50,
-                                  xrepeat: 0,
-                                  opacity: 0.5,
-                              }
-                          }
+                    var esCloudPlayer = new EsCloudPlayer({
+                        element: '#example-video',
+                        fingertext: '你好',
+                        watermark: 'custom/img/btn_play.png',
+                        url: lesson.mediaHLSUri,
+                        dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
+                    });
 
-                        });
+                    esCloudPlayer.on('beforePlay', function(player){
+                        var userId = $('#lesson-video-content').data("userId");
+                        player.currentTime(DurationStorage.get(userId, lesson.mediaId));
+                    });
 
-                        player.ready(function() {
-                            $.each(playlist, function(i, source) {
-                              player.options().sources.push({'type': 'video/mp4', 'src': source.src, 'data-res': source.name, 'data-level': source.level});
-                            });
-                            player.resolutionSelector({
-                              default_res : "HD,SD",
-                              dynamic_source : 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
-                            });
+                    esCloudPlayer.on('beforePlay', function(player){
+                        var userId = $('#lesson-video-content').data("userId");
+                        player.currentTime(DurationStorage.get(userId, lesson.mediaId));
+                    });
 
-                        });
+                    var player = esCloudPlayer.get('player');
+                   
+                    player.on("timeupdate", function(){
+                        var currentTime = player.currentTime();
+                        var userId = $('#lesson-video-content').data("userId");
+                        if(parseInt(currentTime) != parseInt(player.duration())){
+                            DurationStorage.set(userId, lesson.mediaId, currentTime);
+                        }
+                    });
 
-                        player.on('loadedmetadata', function(){
-                            var userId = $('#lesson-video-content').data("userId");
-                            player.currentTime(DurationStorage.get(userId, lesson.mediaId));
-                            player.play();
-                        });
+                    player.on('ended', function() {
+                        var userId = $('#lesson-video-content').data("userId");
+                        DurationStorage.del(userId, lesson.mediaId);
+                        if (that._counter) {
+                            that._counter.watched = false;
+                        }
 
-                        player.on("timeupdate", function(){
-                            var currentTime = player.currentTime();
-                            var userId = $('#lesson-video-content').data("userId");
-                            if(parseInt(currentTime) != parseInt(player.duration())){
-                                DurationStorage.set(userId, lesson.mediaId, currentTime);
-                            }
-                        });
-
-                        player.on('ended', function() {
-                            var userId = $('#lesson-video-content').data("userId");
-                            DurationStorage.del(userId, lesson.mediaId);
-                            if (that._counter) {
-                                that._counter.watched = false;
-                            }
-
-                            that._onFinishLearnLesson();
-                        });
-
-                    }, 'json');
-
+                        that._onFinishLearnLesson();
+                    });
 
                 } else {
                     if (lesson.type == 'video') {
@@ -348,7 +325,7 @@ define(function(require, exports, module) {
                                 return ;
                             }
 
-                            var player = VideoJSA("lesson-video-player", {
+                            var player = VideoJS("lesson-video-player", {
                                 techOrder: ['flash','html5']
                             });
                             var hasPlayerError = false;
