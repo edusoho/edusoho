@@ -212,6 +212,7 @@ directive('uiBar', function() {
         var titleEL = element[0].querySelector(".title");
         
         var toolELWidth = toolEL ? toolEL.offsetWidth : 44;
+        toolELWidth = toolELWidth < 44 ? 44 : toolELWidth;
         titleEL.style.paddingRight = toolELWidth + "px";
         titleEL.style.paddingLeft = toolELWidth + "px";
     }

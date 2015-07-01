@@ -17,6 +17,11 @@ a {
   background: #fff;
 }
 
+.rootView {
+  position: relative;
+  top: 0;
+}
+
 .top-tab-header {
   top: 90px;
   position: absolute;
@@ -263,7 +268,7 @@ a {
 }
 
 .ui-bar.transparent {
-  background : none;
+  background : rgba(0,0,0,0);
 }
 
 .ui-bar.transparent .ui-bar-bg{

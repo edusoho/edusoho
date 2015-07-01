@@ -37,18 +37,14 @@ class MobileAppController extends MobileAppBaseController
             		$clientType = "Android";
         		}
 
+        		$main = array();
+        		$appDir = dirname(__DIR__);
+        		$versionFile = $appDir . "/Resources/public/main/version.json";
+        		if (file_exists($versionFile)) {
+        			$main = json_decode(file_get_contents($versionFile));
+        		}
+        		
 		$host = $request->getSchemeAndHttpHost();
-	        	$main = array(
-		            "code"=>"main",
-		            "icon"=>"",
-		            "name"=>"移动App",
-		            "description"=>"EduSoho官方移动App",
-		            "author"=>"官方",
-		            "version"=>"1.0.0",
-		            "support_version"=>"6.0.0+",
-		            "resource"=>$host . "/bundles/topxiamobilebundlev2/main/release/{$clientType}.zip",
-		            "url"=>"mapi_v2/mobile/main"
-	        	);
 	        	return $this->createJson($request, $main);
 	}
 }

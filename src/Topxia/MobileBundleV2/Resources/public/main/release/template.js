@@ -17,7 +17,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('/bundles/topxiamobilebundlev2/main/view/course.html',
-    "<div class=\"ui-bar\" ui-bar><div class=\"ui-bar-bg\"><button class=\"ui-btn btn-outline iconfont icon-fanhui\" back=\"go\"></button><h3 class=\"title\">{{ course.title }}</h3><div class=\"bar-tool\" ng-show=\"member\"><button class=\"ui-btn btn-outline iconfont icon-gengduo\" ng-click=\"showMenuPop()\"></button><ul class=\"ui-pop\" ng-show=\"isShowMenuPop\"><li><a class=\"ui-btn btn-outline iconfont icon-xiazai\" ng-click=\"showDownLesson()\">下载</a></li><li><a class=\"ui-btn btn-outline iconfont icon-tixing\" href=\"#/coursenotice/{{ course.id }}\">通知</a></li><li><a class=\"ui-btn btn-outline iconfont icon-shezhi\" ng-click=\"exitLearnCourse()\">退出</a></li></ul></div></div></div><div ng-include=\"courseView\"></div>"
+    "<div class=\"ui-bar\" ui-bar><div class=\"ui-bar-bg\"><button class=\"ui-btn btn-outline iconfont icon-fanhui\" back=\"go\"></button><h3 class=\"title\">{{ course.title }}</h3><div class=\"bar-tool\" ng-show=\"member\"><div class=\"ui-pop\" ui-pop><button class=\"ui-btn btn-outline iconfont icon-gengduo ui-pop-btn\"></button><div class=\"ui-pop-bg\" ng-show=\"isShowMenuPop\"></div><ul class=\"ui-pop-content\" ng-show=\"isShowMenuPop\"><li><a class=\"ui-btn btn-outline iconfont icon-xiazai\" ng-click=\"showDownLesson()\">下载</a></li><li><a class=\"ui-btn btn-outline iconfont icon-tixing\" href=\"#/coursenotice/{{ course.id }}\">通知</a></li><li><a class=\"ui-btn btn-outline iconfont icon-shezhi\" ng-click=\"exitLearnCourse()\">退出</a></li></ul></div></div></div></div><div ng-include=\"courseView\"></div>"
   );
 
 
