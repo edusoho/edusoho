@@ -7,7 +7,7 @@
 		      	<span>
 		      		<i class="iconfont" ng-class="course.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
 		      	</span>
-		      	<span class="rating">{{ course.rating }}</span>
+		      	<span class="rating">{{ course.rating | limitTo : 3 }}</span>
 		      </a>
 		      <a class="right">{{ course.studentNum }} 人在学</a>
 		    </p>

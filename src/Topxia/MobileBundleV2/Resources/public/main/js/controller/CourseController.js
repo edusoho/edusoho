@@ -216,16 +216,27 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
       
     }
 
-    $scope.showMenuPop = function() {
-      $scope.isShowMenuPop = ! $scope.isShowMenuPop;
-    }
-
     $scope.shardCourse = function() {
       cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
     }
 
     $scope.showDownLesson = function() {
       cordovaUtil.showDownLesson($scope.course.id);
+    }
+
+    $scope.exitLearnCourse = function() {
+      $scope.showLoad();
+      CourseService.unLearnCourse({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        $scope.hideLoad();
+        if (! data.error) {
+          window.location.reload();
+        } else {
+          $scope.toast(data.error.message);
+        }
+      });
     }
 
     $scope.$parent.$on("refresh", function(event, data) {

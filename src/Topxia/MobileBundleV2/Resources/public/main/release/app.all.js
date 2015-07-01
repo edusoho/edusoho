@@ -1766,6 +1766,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		saveUserToken : function(user, token) {
 			localStore.save("user", angular.toJson(user));
 			localStore.save("token", token);
+		},
+		showDownLesson : function(courseId) {
+			alert("请在客户端下载课时");
 		}
 	};
 
@@ -2074,8 +2077,31 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
       
     }
 
+    $scope.showMenuPop = function() {
+      $scope.isShowMenuPop = ! $scope.isShowMenuPop;
+    }
+
     $scope.shardCourse = function() {
       cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
+    }
+
+    $scope.showDownLesson = function() {
+      cordovaUtil.showDownLesson($scope.course.id);
+    }
+
+    $scope.exitLearnCourse = function() {
+      $scope.showLoad();
+      CourseService.unLearnCourse({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        $scope.hideLoad();
+        if (! data.error) {
+          window.location.reload();
+        } else {
+          $scope.toast(data.error.message);
+        }
+      });
     }
 
     $scope.$parent.$on("refresh", function(event, data) {
@@ -2287,8 +2313,13 @@ function LessonController($scope, $stateParams, LessonService)
 	self.loadLesson = function() {
 		LessonService.getLesson({
 			courseId : $stateParams.courseId,
-			lessonId : $stateParams.lessonId
+			lessonId : $stateParams.lessonId,
+			token : $scope.token
 		},function(data) {
+			if (data.error) {
+				$scope.toast(data.error.message);
+				return;
+			}
 			$scope.lesson = data;
 			$scope.lessonView = "view/lesson_" + data.type + ".html";
 		});
@@ -2355,7 +2386,7 @@ function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $stat
 	};
 
 	$scope.categorySelectedListener  = function(category) {
-		$state.go('courseList' , { categoryId : category.id } );
+		cordovaUtil.openWebView(app.rootPath + "#/courselist/" + category.id);
 	};
 
 	CategoryService.getCategorieTree(function(data) {

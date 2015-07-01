@@ -766,6 +766,7 @@ a {
 .ui-course .ui-list-lesson .ui-list-info {
   padding-left: 32px;
   line-height: 55px;
+  padding-right: 45px;
   border-left: 1px solid #e0e0e0;
 }
 
@@ -1512,6 +1513,24 @@ a {
 
 /** ui-pop **/
 .ui-pop {
+  display: -webkit-box;
+}
+
+.ui-pop .ui-pop-bg {
+  top: 0;
+  right: 0;
+  position: absolute;
+}
+
+.ui-pop-content .ui-btn {
+  width: 100% ! important;
+}
+
+.ui-pop-content .ui-btn:before, .ui-pop .ui-btn-s:before {
+  margin-right: 8px;
+}
+
+.ui-pop .ui-pop-content {
   display: block;
   position: absolute;
   right: 0;
@@ -1521,13 +1540,5 @@ a {
   width: 96px;
   background: #fff;
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
-}
-
-.ui-pop .ui-btn {
-  width: 100% ! important;
-}
-
-.ui-pop .ui-btn:before, .ui-pop .ui-btn-s:before {
-  margin-right: 8px;
 }
 /** ui-pop **/

@@ -170,11 +170,41 @@ directive('ngHtml', function($window, $state) {
                     element.html(newValue);
                   });
                 }
-            };
+           };
     }
   }
 }).
-directive('uiBar', function($window) {
+directive('uiPop', function($window) {
+  return {
+    restrict: 'A',
+    compile: function(tElem, tAttrs) {
+            return { 
+                post: function postLink(scope, element, attributes) {
+
+                    function changePopStatus() {
+                      scope.$apply(function() {
+                        scope.isShowMenuPop = ! scope.isShowMenuPop;
+                      });
+                    }
+
+                    var popBtn = element[0].querySelector(".ui-pop-btn");
+                    var popBg = element[0].querySelector(".ui-pop-bg");
+
+                    popBg.style.width = $window.innerWidth + "px";
+                    popBg.style.height = $window.innerHeight + "px";
+                    angular.element(popBg).on("click", function(e) {
+                      changePopStatus();
+                    });
+
+                    angular.element(popBtn).on("click", function(e) {
+                      changePopStatus();
+                    });
+                }
+           };
+    }
+  }
+}).
+directive('uiBar', function() {
   return {
     restrict: 'A',
     link : function(scope, element, attrs) {
