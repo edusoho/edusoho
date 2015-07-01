@@ -23,7 +23,7 @@ $api = $app['controllers_factory'];
 
 ```
 {
-    "data": [
+    'data': [
         datalist
     ],
     "total": {total}
@@ -388,7 +388,7 @@ $api->get('/{id}/followings', function ($id) {
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| toId | int | 否 | 被选方的的用户id,未传则默认为当前登录用户 |
+| toIds | int | 否 | 被选方的的用户id,未传则默认为当前登录用户 1,2,3|
 
 ** 响应 **
 
@@ -406,19 +406,30 @@ friend : 互相关注
 */
 $api->get('/{id}/friendship', function (Request $request, $id) {
     $user = convert($id,'user');
-    $toId = $request->query->get('toId');
-    $toUser = empty($toId) ? getCurrentUser() : convert($toId,'user');
-    //关注id的人
-    $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
-    //id关注的人
-    $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
-    
-    $toId = $toUser['id'];
-    if (!empty($follwers[$toId])) {
-        return !empty($follwings[$toId]) ? array('friendship' => 'friend') : array('friendship' => 'follower');
+    $currentUser = getCurrentUser();
+    $toIds = $request->query->get('toIds');
+    if (!empty($toIds)) {
+        $toIds = explode(',', $toIds);
+    } else {
+        $toIds = array($currentUser['id']);
     }
 
-    return !empty($follwings[$toId]) ? array('friendship' => 'following') : array('friendship' => 'none');
+    foreach ($toIds as $toId) {
+        $toUser = convert($toId,'user');
+        //关注id的人
+        $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
+        //id关注的人
+        $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
+        
+        $toId = $toUser['id'];
+        if (!empty($follwers[$toId])) {
+            $result[] =!empty($follwings[$toId]) ? 'friend' : 'follower';
+        } else {
+            $result[] = !empty($follwings[$toId]) ? 'following' : 'none';
+        }
+    }
+
+    return $result;
 });
 
 

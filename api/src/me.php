@@ -201,9 +201,19 @@ $api->get('/coursethreads', function (Request $request) {
 ** 响应 **
 
 ```
-{
-    "xxx": "xxx"
-}
+[
+    {
+        id:{blacklist-id},
+        userId:{blacklist-userId},
+        ...
+    },
+    {
+        id:{blacklist-id},
+        userId:{blacklist-userId},
+        ...
+    },
+    ...
+]
 ```
 
 */
@@ -211,9 +221,7 @@ $api->get('/coursethreads', function (Request $request) {
 $api->get('/blacklists', function () {
     $user = getCurrentUser();
     $blacklists = ServiceKernel::instance()->createService('User.BlacklistService')->findBlacklistsByUserId($user['id']);
-    return array(
-        "data" => filters($blacklists, 'blacklist')
-    );
+    return filters($blacklists, 'blacklist');
 });
 
 /*
