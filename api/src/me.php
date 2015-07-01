@@ -215,4 +215,30 @@ $api->get('/blacklists', function () {
         "data" => filters($blacklists, 'blacklist')
     );
 });
+
+/*
+## 获取当前用户互粉用户
+    GET /me/friends
+
+** 响应 **
+
+```
+{
+    "xxx": "xxx"
+}
+```
+
+*/
+
+$api->get('/friends', function (Request $request) {
+    $user = getCurrentUser();
+    $start = $request->query->get('start', 0);
+    $limit = $request->query->get('limit', 10);
+    $friends = ServiceKernel::instance()->createService('User.UserService')->findFriends($user['id'], $start, $limit);
+    $count = ServiceKernel::instance()->createService('User.UserService')->findFriendCount($user['id']);
+    return array(
+        'data' => filters($friends, 'user'),
+        'total' => $count
+    );
+});
 return $api;

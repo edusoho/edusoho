@@ -50,7 +50,7 @@ $app->view(function (array $result, Request $request) use ($app) {
 
 
 $app->before(function (Request $request) use ($app) {
-    $token = $request->headers->get('token', '');
+    $token = $request->headers->get('Auth-Token', '');
     // if (empty($token)) {
     //     return array('error' => array('code' => 'AUTH_TOKEN_EMPTY', 'message' => 'AuthToken is not exist.'));
     // }
