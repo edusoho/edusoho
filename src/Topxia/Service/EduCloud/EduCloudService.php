@@ -20,4 +20,6 @@ interface EduCloudService
     public function getCloudSmsKey($key);
 
     public function getLiveCourseStatus();
+
+    public function addStudent($user);
 }
