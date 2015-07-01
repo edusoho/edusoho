@@ -5,6 +5,8 @@ interface EduCloudService
 {
     public function getAccount();
 
+    public function getToken();
+
     public function applyForSms($name = 'smsHead');
 
     public function getSmsOpenStatus();
