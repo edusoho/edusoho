@@ -112,14 +112,13 @@
         <div class="panel panel-default" >
           <div class="panel-heading">模版</div>
           <div class="panel-body">
-            {% set templates = {'default': '默认模版','no-nav':'无导航栏','blank':'空白网页'} %}
+            {% set templates = {'default': '默认模版','blank':'无导航栏'} %}
 
             <select class="form-control" name="template">
               {{ select_options(templates, field_value(content, 'template')) }}
             </select>
           </div>
         </div>
-        <h4>注意:<small></small></h4>
       {% endif %} 
 
       <input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
