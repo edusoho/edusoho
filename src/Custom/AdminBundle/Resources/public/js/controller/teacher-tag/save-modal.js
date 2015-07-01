@@ -39,6 +39,13 @@ define(function(require, exports, module) {
             rule: 'remote'
         });
 
+        if ($('#sort').length > 0 ) {
+            validator.addItem({
+                element: '#sort',
+                rule: 'positive_integer'
+            });
+        }
+
         $modal.find('.delete-tag').on('click', function() {
             if (!confirm('真的要删除该标签吗？')) {
                 return ;

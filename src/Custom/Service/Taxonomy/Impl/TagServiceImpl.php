@@ -100,7 +100,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException("标签(#{$id})不存在，更新失败！");
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name'));
+        $fields = ArrayToolkit::parts($fields, array('name','type','sort'));
         $this->filterTagFields($fields, $tag);
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");

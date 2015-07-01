@@ -32,7 +32,7 @@ class TagController extends BaseController
 		}
 		
 		return $this->render('CustomAdminBundle:Tag:tag-modal.html.twig', array(
-			'tag' => array('id' => 0, 'name' => '')
+			'tag' => array('id' => 0, 'name' => '', 'sort' => 50)
 		));
 	}
 
