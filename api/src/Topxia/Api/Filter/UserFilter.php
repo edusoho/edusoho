@@ -20,6 +20,7 @@ class UserFilter implements Filter
         $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
         $user = getCurrentUser();
+        $profile = ServiceKernel::instance()->createService('User.UserService')->getUserProfile($data['id']);
         if (!($user->isAdmin() || $user['id'] == $data['id'])) {
             unset($data['email']);
             unset($data['verifiedMobile']);
@@ -45,9 +46,9 @@ class UserFilter implements Filter
             unset($data['newNotificationNum']);
             unset($data['createdIp']);
             unset($data['createdTime']);
+            $data['about'] = $profile['about'];
             return $data;
         }
-        $profile = ServiceKernel::instance()->createService('User.UserService')->getUserProfile($data['id']);
         return array_merge($data,$profile);
 
     }
