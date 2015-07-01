@@ -1950,7 +1950,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createNotFoundException();
 		}
 
-		if(!$course['status'] in_array('published', 'closed')) {
+		if(!in_array($course['status'],array('published', 'closed'))) {
 			throw $this->createServiceException('不能加入未发布课程');
 		}
 

@@ -417,7 +417,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createNotFoundException();
         }
 
-        if (!$classroom['status'] in_array('published','closed')) {
+        if (!in_array($classroom['status'],array('published','closed'))) {
             throw $this->createServiceException('不能加入未发布班级');
         }
 
