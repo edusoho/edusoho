@@ -214,6 +214,29 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         		return "learning";
     	}
 
+           public function getCourseDownLessons()
+           {
+                $token = $this->controller->getUserToken($this->request);
+                $user = $this->controller->getUser();
+                $courseId = $this->getParam("courseId");
+
+                $course  = $this->controller->getCourseService()->getCourse($courseId);
+                $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+                $lessons = $this->controller->filterItems($lessons);
+                if ($user->isLogin()) {
+                    $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+                } else {
+                    $learnStatuses = null;
+                }
+
+                $files = $this->getUploadFiles($courseId);
+                $lessons = $this->filterLessons($lessons, $files);
+                return array(
+                    "lessons"=>array_values($lessons),
+                    "course"=>$this->controller->filterCourse($course)
+                    );
+           }
+
 	public function getCourseLessons()
 	{
 		$token = $this->controller->getUserToken($this->request);
