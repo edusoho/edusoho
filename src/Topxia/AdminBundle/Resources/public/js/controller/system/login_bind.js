@@ -53,7 +53,9 @@ define(function(require, exports, module) {
         });
 
         $('#help').popover({
-            html: true
+            html: true,
+            container:"body",
+            template: '<div class="popover help-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
         });
 
     };
