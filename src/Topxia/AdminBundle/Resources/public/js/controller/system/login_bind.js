@@ -52,6 +52,10 @@ define(function(require, exports, module) {
             $('[name=' + type + '_enabled]:checked').change();
         });
 
+        $('#help').popover({
+            html: true
+        });
+
     };
 
 });
