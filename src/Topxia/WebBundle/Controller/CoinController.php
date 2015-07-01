@@ -29,7 +29,7 @@ class CoinController extends BaseController
 
         $account = $this->getCashAccountService()->getAccountByUserId($user->id,true);
 
-        $ChargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
+        $chargeCoin = $this->getAppService()->findInstallApp('ChargeCoin');
         
         if(empty($account)){
             $this->getCashAccountService()->createAccount($user->id);
@@ -94,7 +94,7 @@ class CoinController extends BaseController
           'cashes'=>$cashes,
           'paginator'=>$paginator,
           // 'amount'=>$amount,
-          'ChargeCoin' => $ChargeCoin,
+          'ChargeCoin' => $chargeCoin,
           'amountInflow' => $amountInflow?:0,
           'amountOutflow' => $amountOutflow?:0
         ));
