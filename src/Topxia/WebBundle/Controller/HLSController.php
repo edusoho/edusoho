@@ -71,6 +71,24 @@ class HLSController extends BaseController
             return $this->createMessageResponse('error', '生成视频播放列表失败！');
         }
 
+        return $this->createJsonResponse(array(
+            array(
+                'level' => 'hls-sd',
+                'src' => 'http://drools3.qiniudn.com/20140810025415/sa0xxqdbc6scg04s89h9hiui/69202eb0d1205f66_sd.m3u8?' . time(),
+                'name' => 'SD'
+            ),
+            array(
+                'level' => 'hls-hd',
+                'src' => 'http://drools3.qiniudn.com/20140810025415/sa0xxqdbc6scg04s89h9hiui/69202eb0d1205f66_md.m3u8?' . time(),
+                'name' => 'HD'
+            ),
+            array(
+                'level' => 'hls-shd',
+                'src' => 'http://drools3.qiniudn.com/20140810025415/sa0xxqdbc6scg04s89h9hiui/69202eb0d1205f66_hd.m3u8?' . time(),
+                'name' => 'SHD'
+            )
+        ));
+
         return new Response($playlist['playlist'], 200, array(
             'Content-Type' => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="playlist.m3u8"',

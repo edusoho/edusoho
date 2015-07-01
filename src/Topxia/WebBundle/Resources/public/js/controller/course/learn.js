@@ -3,12 +3,12 @@ define(function(require, exports, module) {
         Class = require('class'),
         Store = require('store'),
         Backbone = require('backbone'),
-        VideoJS = require('video-js'),
+        VideoJSA = require('video-js'),
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
         chapterAnimate = require('../course/widget/chapter-animate');
-
+        VideoPlayer = require("video-player");
     require('mediaelementplayer');
 
 
@@ -270,38 +270,73 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-                    $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
+                    var html = [];
+                    html.push('<video id="example-video" class="video-js vjs-default-skin" width="100%" height="100%">');
+                    html.push('</video>');
+                    $('#lesson-video-content').addClass("ballon-video-player");
+                    $('#lesson-video-content').html(html.join('\n'));
                     $("#lesson-video-content").show();
 
-                    var mediaPlayer = new MediaPlayer({
-                        element: '#lesson-video-content',
-                        playerId: 'lesson-video-player'
-                    });
-                    mediaPlayer.on("timeChange", function(data){
-                        var userId = $('#lesson-video-content').data("userId");
-                        if(parseInt(data.currentTime) != parseInt(data.duration)){
-                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
-                        }
-                    });
-                    mediaPlayer.on("ready", function(playerId, data){
-                        var player = document.getElementById(playerId);
-                        var userId = $('#lesson-video-content').data("userId");
-                        player.seek(DurationStorage.get(userId, lesson.mediaId));
-                    });
-                    mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
-                    mediaPlayer.on('ended', function() {
-                        var userId = $('#lesson-video-content').data("userId");
-                        DurationStorage.del(userId, lesson.mediaId);
-                        if (that._counter) {
-                            that._counter.watched = false;
-                        }
+                    $.get(lesson.mediaHLSUri, function(playlist) {
+                        var player = videojs('example-video', {
+                          techOrder: ["flash", "html5"],
+                          controls: true,
+                          autoplay: false,
+                          preload: 'none',
+                          language: 'zh-CN',
+                          plugins: {
+                              fingerprint: {
+                                html: '你好',
+                                duration: 5000
+                              },
+                              watermark: {
+                                  file: 'custom/img/btn_play.png',
+                                  xpos: 50,
+                                  ypos: 50,
+                                  xrepeat: 0,
+                                  opacity: 0.5,
+                              }
+                          }
 
-                        that._onFinishLearnLesson();
-                    });
+                        });
 
-                    mediaPlayer.play();
+                        player.ready(function() {
+                            $.each(playlist, function(i, source) {
+                              player.options().sources.push({'type': 'video/mp4', 'src': source.src, 'data-res': source.name, 'data-level': source.level});
+                            });
+                            player.resolutionSelector({
+                              default_res : "HD,SD",
+                              dynamic_source : 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
+                            });
 
-                    that.set('mediaPlayer', mediaPlayer);
+                        });
+
+                        player.on('loadedmetadata', function(){
+                            var userId = $('#lesson-video-content').data("userId");
+                            player.currentTime(DurationStorage.get(userId, lesson.mediaId));
+                            player.play();
+                        });
+
+                        player.on("timeupdate", function(){
+                            var currentTime = player.currentTime();
+                            var userId = $('#lesson-video-content').data("userId");
+                            if(parseInt(currentTime) != parseInt(player.duration())){
+                                DurationStorage.set(userId, lesson.mediaId, currentTime);
+                            }
+                        });
+
+                        player.on('ended', function() {
+                            var userId = $('#lesson-video-content').data("userId");
+                            DurationStorage.del(userId, lesson.mediaId);
+                            if (that._counter) {
+                                that._counter.watched = false;
+                            }
+
+                            that._onFinishLearnLesson();
+                        });
+
+                    }, 'json');
+
 
                 } else {
                     if (lesson.type == 'video') {
@@ -313,7 +348,7 @@ define(function(require, exports, module) {
                                 return ;
                             }
 
-                            var player = VideoJS("lesson-video-player", {
+                            var player = VideoJSA("lesson-video-player", {
                                 techOrder: ['flash','html5']
                             });
                             var hasPlayerError = false;
