@@ -177,24 +177,47 @@ body {
 
 .step-2-2 {
   background: url('../img/step_2_2_bg.jpg') center top no-repeat;
-  background-size: 100%;
 }
 
 .step-2-2 .step-content {
+  position: absolute;
+  top: 548px;
+  left: 5px;
+  width: 899px;
+  height: 296px;
+  background: url('../img/step_2_2.png') center top no-repeat;
+}
+
+.step-2-2 .step-btn {
+  right: 19px;
+  bottom: 28px;
+}
+
+.step-2-2 .close {
+  right: 112px;
+  top: 26px;
+}
+
+.step-2-3 {
+  background: url('../img/step_2_3_bg.jpg') center top no-repeat;
+  background-size: 100%;
+}
+
+.step-2-3 .step-content {
   position: absolute;
   top: 60px;
   right: 0;
   width: 863px;
   height: 869px;
-  background: url('../img/step_2_2.png') center top no-repeat;
+  background: url('../img/step_2_3.png') center top no-repeat;
 }
 
-.step-2-2 .step-btn {
+.step-2-3 .step-btn {
   left: 310px;
   top: 336px;
 }
 
-.step-2-2 .close {
+.step-2-3 .close {
   left: 380px;
   top: 155px;
 }
