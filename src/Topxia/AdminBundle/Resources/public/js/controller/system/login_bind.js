@@ -52,6 +52,12 @@ define(function(require, exports, module) {
             $('[name=' + type + '_enabled]:checked').change();
         });
 
+        $('#help').popover({
+            html: true,
+            container:"body",
+            template: '<div class="popover help-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+        });
+
     };
 
 });
