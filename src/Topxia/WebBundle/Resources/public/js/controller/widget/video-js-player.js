@@ -20,19 +20,19 @@ define(function(require, exports, module) {
 
         		var plugins = {};
 
-        		if(this.get('fingertext') != '') {
+        		if(self.get('fingertext') != '') {
         			plugins = $.extend(plugins, {
         				fingerprint: {
-	                        html: this.get('fingertext'),
+	                        html: self.get('fingertext'),
 	                        duration: 5000
                      	}
                  	});
         		}
 
-        		if(this.get('watermark') != '') {
+        		if(self.get('watermark') != '') {
         			plugins = $.extend(plugins, {
         				watermark: {
-							file: this.get('watermark'),
+							file: self.get('watermark'),
 							xpos: 50,
 							ypos: 50,
 							xrepeat: 0,
@@ -67,10 +67,22 @@ define(function(require, exports, module) {
                     player.play();
                 });
 
+                player.on("timeupdate", function(){
+                	self.trigger("timeupdate", player);
+                });
+
+                player.on("ended", function(){
+                	self.trigger("ended", player);
+                });
+
                 self.set('player', player);
 
             }, 'json');
 
+        },
+
+        destroy: function() {
+        	this.get("player").dispose();
         }
     });
 

@@ -290,14 +290,7 @@ define(function(require, exports, module) {
                         player.currentTime(DurationStorage.get(userId, lesson.mediaId));
                     });
 
-                    esCloudPlayer.on('beforePlay', function(player){
-                        var userId = $('#lesson-video-content').data("userId");
-                        player.currentTime(DurationStorage.get(userId, lesson.mediaId));
-                    });
-
-                    var player = esCloudPlayer.get('player');
-                   
-                    player.on("timeupdate", function(){
+                    esCloudPlayer.on("timeupdate", function(player){
                         var currentTime = player.currentTime();
                         var userId = $('#lesson-video-content').data("userId");
                         if(parseInt(currentTime) != parseInt(player.duration())){
@@ -305,7 +298,7 @@ define(function(require, exports, module) {
                         }
                     });
 
-                    player.on('ended', function() {
+                    esCloudPlayer.on('ended', function(player) {
                         var userId = $('#lesson-video-content').data("userId");
                         DurationStorage.del(userId, lesson.mediaId);
                         if (that._counter) {

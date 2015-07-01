@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
 	require('mediaelementplayer');
 
-	var MediaPlayer = require('../widget/media-player4');
+	var EsCloudPlayer = require('../widget/video-js-player');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -15,27 +15,24 @@ define(function(require, exports, module) {
 
 			if ($("#lesson-preview-video-player").data('hlsUrl')) {
 
-		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
-			        
-        		var mediaPlayer = new MediaPlayer({
-        			element: '#lesson-preview-video-player',
-        			playerId: 'lesson-video-player',
-        			height: '360px'
-        		});
+                var html = [];
+                html.push('<video id="lesson-video-player" class="video-js vjs-default-skin" width="100%" height="360px">');
+                html.push('</video>');
+                $("#lesson-preview-video-player").addClass("ballon-video-player");
+                $("#lesson-preview-video-player").html(html.join('\n'));
+
                 var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
-                if ($("#lesson-preview-video-player").data('timelimit')) {
-                    $("#lesson-preview-video-player").append($('.js-buy-text').html());
 
-                    mediaPlayer.on('ended', function() {
-                        $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
-                    });
-                }
-
-        		mediaPlayer.setSrc($hlsUrl, 'video');
-        		mediaPlayer.play();
+                var esCloudPlayer = new EsCloudPlayer({
+                    element: '#lesson-video-player',
+                    fingertext: '你好',
+                    watermark: 'custom/img/btn_play.png',
+                    url: $hlsUrl,
+                    dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
+                });
 
                 $('#modal').one('hidden.bs.modal', function () {
-                    mediaPlayer.dispose();
+                    esCloudPlayer.destroy();
                 });
 
 			} else {
