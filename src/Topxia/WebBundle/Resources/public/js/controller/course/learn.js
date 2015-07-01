@@ -271,16 +271,17 @@ define(function(require, exports, module) {
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
                     var html = [];
-                    html.push('<video id="example-video" class="video-js vjs-default-skin" width="100%" height="100%">');
+                    html.push('<video id="video-player" class="video-js vjs-default-skin" width="100%" height="100%">');
                     html.push('</video>');
-                    $('#lesson-video-content').addClass("ballon-video-player");
-                    $('#lesson-video-content').html(html.join('\n'));
-                    $("#lesson-video-content").show();
+                    var lessonVideoDiv = $('#lesson-video-content');
+                    lessonVideoDiv.addClass("ballon-video-player");
+                    lessonVideoDiv.html(html.join('\n'));
+                    lessonVideoDiv.show();
 
                     var esCloudPlayer = new EsCloudPlayer({
-                        element: '#example-video',
-                        fingertext: '你好',
-                        watermark: 'custom/img/btn_play.png',
+                        element: '#video-player',
+                        fingerUrl: lessonVideoDiv.data('fingerprint'),
+                        watermark: lessonVideoDiv.data('watermark'),
                         url: lesson.mediaHLSUri,
                         dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
                     });

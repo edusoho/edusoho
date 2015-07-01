@@ -18,16 +18,15 @@ define(function(require, exports, module) {
                 var html = [];
                 html.push('<video id="lesson-video-player" class="video-js vjs-default-skin" width="100%" height="360px">');
                 html.push('</video>');
-                $("#lesson-preview-video-player").addClass("ballon-video-player");
-                $("#lesson-preview-video-player").html(html.join('\n'));
-
-                var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
+                var videoPlayerDiv = $("#lesson-preview-video-player");
+                videoPlayerDiv.addClass("ballon-video-player");
+                videoPlayerDiv.html(html.join('\n'));
 
                 var esCloudPlayer = new EsCloudPlayer({
                     element: '#lesson-video-player',
-                    fingertext: '你好',
-                    watermark: 'custom/img/btn_play.png',
-                    url: $hlsUrl,
+                    fingerUrl: videoPlayerDiv.data('fingerprint'),
+                    watermark: videoPlayerDiv.data('watermark'),
+                    url: videoPlayerDiv.data('hlsUrl'),
                     dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
                 });
 

@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
     var VideoPlayer = Widget.extend({
     	attrs: {
-            fingertext: '',
+            fingerUrl: '',
             watermark: '',
             url: '',
             dynamicSource: ''
@@ -19,15 +19,6 @@ define(function(require, exports, module) {
         	$.get(self.get('url'), function(playlist) {
 
         		var plugins = {};
-
-        		if(self.get('fingertext') != '') {
-        			plugins = $.extend(plugins, {
-        				fingerprint: {
-	                        html: self.get('fingertext'),
-	                        duration: 5000
-                     	}
-                 	});
-        		}
 
         		if(self.get('watermark') != '') {
         			plugins = $.extend(plugins, {
@@ -49,6 +40,22 @@ define(function(require, exports, module) {
 					language: 'zh-CN',
 					plugins: plugins
                 });
+
+                if(self.get('fingerUrl') != '') {
+        			$.ajax({
+        				url: self.get('fingerUrl'), 
+        				success: function(data){
+		        			player.options({
+		        				plugins: $.extend(plugins, {
+			        				fingerprint: {
+				                        html: data,
+				                        duration: 5000
+			                     	}
+			                 	})
+		                 	});
+	        			}
+        			})
+        		}
 
                 player.ready(function() {
                     $.each(playlist, function(i, source) {
