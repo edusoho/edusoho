@@ -13,6 +13,45 @@ define(function(require, exports, module) {
 				}
 			}, 'json');
 		});
+
+		var $table = $('#tag-table');
+
+		$table.on('click','.tag_sort',function(){
+			currentSort = parseInt($(this).text());
+			
+			$(this).replaceWith('<input type="text" class="tag_sort_input width-input-mini" value="'+ currentSort +'" />');
+			$('.tag_sort_input').focus();
+		})
+		.on('blur','.tag_sort_input',function(){
+			var updateSort = $(this).val();
+			
+			if (!/^[1-9][0-9]*$/.test(updateSort) || isNaN(updateSort)) {
+				
+				$(this).siblings('.text-danger').html('排序号必须为正整数');
+				$(this).siblings('.text-danger').show();
+
+				return false;
+			} else {
+				$(this).siblings('.text-danger').hide();
+			}
+
+			var update_url = $(this).closest('tr').find('.btn-sm').data('url');
+			var tag_name = $(this).closest('tr').find('.tag_name').html();
+
+			if (updateSort != currentSort) {
+				$.post(update_url, {name:tag_name, sort:updateSort},function(html){
+					$html = $(html);
+					if ($table.find( '#' +  $html.attr('id')).length > 0) {
+	                    $('#' + $html.attr('id')).replaceWith($html);
+	                    Notify.success('排序号更新成功！');
+	                }
+				})
+			} else {
+				$(this).replaceWith('<a href="javascript:;" class="tag_sort">'+ currentSort +'</a>');
+			}
+			
+		})
+
 	};
 
 });
