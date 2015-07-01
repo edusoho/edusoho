@@ -195,6 +195,10 @@ interface UserService
     //当前用户关注的人们
     public function findAllUserFollower($userId);
 
+    public function findFriends($userId, $start, $limit);
+
+    public function findFriendCount($userId);
+
     /**
      * 过滤得到用户关注中的用户ID列表
      *

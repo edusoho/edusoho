@@ -201,9 +201,19 @@ $api->get('/coursethreads', function (Request $request) {
 ** 响应 **
 
 ```
-{
-    "xxx": "xxx"
-}
+[
+    {
+        id:{blacklist-id},
+        userId:{blacklist-userId},
+        ...
+    },
+    {
+        id:{blacklist-id},
+        userId:{blacklist-userId},
+        ...
+    },
+    ...
+]
 ```
 
 */
@@ -211,8 +221,32 @@ $api->get('/coursethreads', function (Request $request) {
 $api->get('/blacklists', function () {
     $user = getCurrentUser();
     $blacklists = ServiceKernel::instance()->createService('User.BlacklistService')->findBlacklistsByUserId($user['id']);
+    return filters($blacklists, 'blacklist');
+});
+
+/*
+## 获取当前用户互粉用户
+    GET /me/friends
+
+** 响应 **
+
+```
+{
+    "xxx": "xxx"
+}
+```
+
+*/
+
+$api->get('/friends', function (Request $request) {
+    $user = getCurrentUser();
+    $start = $request->query->get('start', 0);
+    $limit = $request->query->get('limit', 10);
+    $friends = ServiceKernel::instance()->createService('User.UserService')->findFriends($user['id'], $start, $limit);
+    $count = ServiceKernel::instance()->createService('User.UserService')->findFriendCount($user['id']);
     return array(
-        "data" => filters($blacklists, 'blacklist')
+        'data' => filters($friends, 'user'),
+        'total' => $count
     );
 });
 return $api;
