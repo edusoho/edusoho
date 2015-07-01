@@ -44,6 +44,9 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         },
         clearUserToken : function(){
             exec(null, null, "ESNativeCore", "clearUserToken", []);
+        },
+        showDownLesson : function(courseId) {
+            exec(null, null, "ESNativeCore", "showDownLesson", [courseId]);
         }
     };
 });

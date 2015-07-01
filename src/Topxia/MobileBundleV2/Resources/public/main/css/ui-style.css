@@ -736,12 +736,12 @@ a {
 }
 
 .ui-course .ui-list-lesson .lesson-status {
-  margin: 3px 0px 3px 0;
+  //margin: 3px 0px 3px 0;
   background-image : none;
   position: relative;
   right: -15px;
   width: 30px;
-  height: 30px;
+  height: 55px;
   display: block;
   text-align: center;
 }
@@ -1509,3 +1509,25 @@ a {
 }
 
 /** ui-list **/
+
+/** ui-pop **/
+.ui-pop {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 45px;
+  border: 1px solid #c7c7c7;
+  border-radius: 5px;
+  width: 96px;
+  background: #fff;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.ui-pop .ui-btn {
+  width: 100% ! important;
+}
+
+.ui-pop .ui-btn:before, .ui-pop .ui-btn-s:before {
+  margin-right: 8px;
+}
+/** ui-pop **/

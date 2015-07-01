@@ -17,7 +17,7 @@ function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $stat
 	};
 
 	$scope.categorySelectedListener  = function(category) {
-		$state.go('courseList' , { categoryId : category.id } );
+		cordovaUtil.openWebView(app.rootPath + "#/courselist/" + category.id);
 	};
 
 	CategoryService.getCategorieTree(function(data) {

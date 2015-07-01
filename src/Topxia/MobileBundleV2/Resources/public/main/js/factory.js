@@ -233,6 +233,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		saveUserToken : function(user, token) {
 			localStore.save("user", angular.toJson(user));
 			localStore.save("token", token);
+		},
+		showDownLesson : function(courseId) {
+			alert("请在客户端下载课时");
 		}
 	};
 

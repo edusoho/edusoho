@@ -216,8 +216,16 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
       
     }
 
+    $scope.showMenuPop = function() {
+      $scope.isShowMenuPop = ! $scope.isShowMenuPop;
+    }
+
     $scope.shardCourse = function() {
       cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
+    }
+
+    $scope.showDownLesson = function() {
+      cordovaUtil.showDownLesson($scope.course.id);
     }
 
     $scope.$parent.$on("refresh", function(event, data) {
