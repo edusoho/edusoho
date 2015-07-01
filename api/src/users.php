@@ -173,6 +173,9 @@ $api->post('/login', function (Request $request) {
 | ---- | ----- | ----- | ---- |
 | type | string | 是 | 第三方类型,值有qq,weibo,renren |
 | token | string | 是 | 第三方授权token |
+| id | string | 是 | 用户在第三方的id,qq:id,weibo:idstr,renren:id |
+| name | string | 是 | 第三方的昵称,qq:nickname,weibo:screen_name,renren:name |
+
 
 ** 响应 **
 
@@ -189,6 +192,8 @@ $api->post('/login', function (Request $request) {
 $api->post('/bind_login', function (Request $request) {
     $token = $request->request->get('token');
     $type = $request->request->get('type');
+    $id = $request->request->get('id');
+    $name = $request->request->get('name');
     if (empty($token) || empty($type)) {
         throw new \Exception('parameter error');
     }
@@ -212,7 +217,10 @@ $api->post('/bind_login', function (Request $request) {
 
     $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByToken($token['access_token']);
     if (empty($userBind)) {
-        $oauthUser = $client->getUserInfo($token);
+        $oauthUser = array(
+            'id' => $id,
+            'name' > $name
+        );
         $oauthUser['createdIp'] = $request->getClientIp();
         $token['userId'] = $oauthUser['id'];
         if (empty($oauthUser['id'])) {
