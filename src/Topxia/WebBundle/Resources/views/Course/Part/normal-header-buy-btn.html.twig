@@ -1,5 +1,5 @@
 <a class="btn btn-primary btn-lg btn-high" 
-  {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and (app.user.approvalStatus != 'approved')) %}
+  {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and (app.user.approvalStatus != 'approved')) %}
     href="#modal" 
     data-toggle="modal" 
     data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
