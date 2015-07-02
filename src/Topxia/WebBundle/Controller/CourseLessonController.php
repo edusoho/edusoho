@@ -22,16 +22,22 @@ class CourseLessonController extends BaseController
         $user = $this->getCurrentUser();
 
         $courseSetting = $this->getSettingService()->get('course', array());
+        $coinSetting = $this->getSettingService()->get('coin');
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
 
-        if ($course['price'] == 0 && $course['coinPrice'] == 0 && $courseSetting['buy_fill_userinfo'] == 0) {
-            if(empty($member)) {
-                $user = $this->getCurrentUser();
-                $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
+        if ($courseSetting['buy_fill_userinfo'] == 0) {
+            if (($coinEnable && $coinSetting['priceType'] = "Coin" && $course['coinPrice'] == 0 ) 
+                || (!$coinEnable && $coinSetting['priceType'] = "RMB" && $course['price'] == 0 )) {
+                if(empty($member)) {
+                    $user = $this->getCurrentUser();
+                    $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
+                }
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $courseId)).'#lesson/'.$lessonId);
             }
-            return $this->redirect($this->generateUrl('course_learn', array(
-                'id' => $courseId
-            )).'#lesson/'.$lessonId);
         }
+
+
+
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
@@ -625,8 +631,6 @@ class CourseLessonController extends BaseController
         $homeworkLessonIds =array();
         $exercisesLessonIds =array();
 
-        $courseSetting = $this->getSettingService()->get('course', array());
-
         if($homeworkPlugin) {
             $lessonIds = ArrayToolkit::column($items, 'id');
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
@@ -643,8 +647,7 @@ class CourseLessonController extends BaseController
             'learnStatuses' => $learnStatuses,
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds,
-            'courseSetting' => $courseSetting
+            'exercisesLessonIds' => $exercisesLessonIds
         ));
     }
 
