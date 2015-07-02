@@ -11,11 +11,10 @@
 
 {% endblock %}
 {% if clientType == 'Android' %}
-    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Android/cordova.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
 {%  elseif clientType == 'iOS' %} 
-    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOS/cordova.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOScordova.js') }}"></script>
 {% endif %}
-
 <script src="{{ asset('bundles/topxiamobilebundlev2/main/release/libs.all.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/main/release/app.all.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/main/release/template.js') }}"></script>

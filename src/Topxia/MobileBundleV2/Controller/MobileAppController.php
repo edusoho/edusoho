@@ -16,10 +16,10 @@ class MobileAppController extends MobileAppBaseController
 
 		$render  = "TopxiaMobileBundleV2:ESMobile:main.index-{$debug}.html.twig";
 		if (!strpos($userAgent, "kuozhi") ) {
-			return $this->render($render, array("clientType"=>$clientType));
+			return $this->render($render, array("clientType"=>"pc"));
 		}
 
-		return $this->render($render, array("clientType"=>"pc"));
+		return $this->render($render, array("clientType"=>$clientType));
 	}
 
 	public function versionAction(Request $request)
