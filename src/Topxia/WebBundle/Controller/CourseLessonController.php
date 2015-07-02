@@ -27,7 +27,7 @@ class CourseLessonController extends BaseController
 
         if ($courseSetting['buy_fill_userinfo'] == 0) {
             if (($coinEnable && $coinSetting['price_type'] = "Coin" && $course['coinPrice'] == 0 ) 
-                || (!$coinEnable && $coinSetting['price_type'] = "RMB" && $course['price'] == 0 )) {
+                || ($coinSetting['price_type'] = "RMB" && $course['price'] == 0 )) {
                 if(empty($member)) {
                     $user = $this->getCurrentUser();
                     $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
