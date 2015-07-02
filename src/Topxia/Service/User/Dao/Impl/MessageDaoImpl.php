@@ -47,6 +47,9 @@ class MessageDaoImpl extends BaseDao implements MessageDao
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";
+            if($conditions['content'] == '%%'){
+                unset($conditions['content']);
+            }
         }
 
         $builder = $this->_createSearchQueryBuilder($conditions)
