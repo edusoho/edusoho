@@ -23,11 +23,6 @@ body {
 html.html-nav-active {
   position: relative;
   overflow: hidden;
-  // overflow-y: auto;
-  body {
-    // position: fixed;
-    overflow: hidden;
-  }
 }
 
 .es-wrap {
@@ -45,9 +40,11 @@ html.html-nav-active {
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  bottom: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.2);
+  -ms-touch-action: none;
+  touch-action: none;
 }
 
 .tooltip {
@@ -72,13 +69,13 @@ a:focus {
 .alert-notice {
   .border-radius(none);
   margin-bottom: 0;
-  padding: 5px 0;
+  padding: 0;
   border: none;
   color: @brand-primary;
   .swiper-container {
     position: relative;
-    height: 28px;
-    line-height: 28px;
+    height: 38px;
+    line-height: 38px;
     overflow: hidden;
   }
   .swiper-wrapper {
@@ -91,7 +88,7 @@ a:focus {
   .close {
     float: none;
     position: absolute;
-    top: 2px;
+    top: 5px;
     right: 0;
     width: 30px;
   }

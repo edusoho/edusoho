@@ -86,35 +86,35 @@ class DeveloperSettingController extends BaseController
     {
         $result = '';
         $level = 0;
-        $in_quotes = false;
-        $in_escape = false;
-        $ends_line_level = NULL;
-        $json_length = strlen( $json );
+        $inQuotes = false;
+        $inEscape = false;
+        $endsLineLevel = NULL;
+        $jsonLength = strlen( $json );
 
-        for( $i = 0; $i < $json_length; $i++ ) {
+        for( $i = 0; $i < $jsonLength; $i++ ) {
             $char = $json[$i];
-            $new_line_level = NULL;
+            $newLineLevel = NULL;
             $post = "";
-            if( $ends_line_level !== NULL ) {
-                $new_line_level = $ends_line_level;
-                $ends_line_level = NULL;
+            if( $endsLineLevel !== NULL ) {
+                $newLineLevel = $endsLineLevel;
+                $endsLineLevel = NULL;
             }
-            if ( $in_escape ) {
-                $in_escape = false;
+            if ( $inEscape ) {
+                $inEscape = false;
             } else if( $char === '"' ) {
-                $in_quotes = !$in_quotes;
-            } else if( ! $in_quotes ) {
+                $inQuotes = !$inQuotes;
+            } else if( ! $inQuotes ) {
                 switch( $char ) {
                     case '}': case ']':
                         $level--;
-                        $ends_line_level = NULL;
-                        $new_line_level = $level;
+                        $endsLineLevel = NULL;
+                        $newLineLevel = $level;
                         break;
 
                     case '{': case '[':
                         $level++;
                     case ',':
-                        $ends_line_level = $level;
+                        $endsLineLevel = $level;
                         break;
 
                     case ':':
@@ -123,15 +123,15 @@ class DeveloperSettingController extends BaseController
 
                     case " ": case "\t": case "\n": case "\r":
                         $char = "";
-                        $ends_line_level = $new_line_level;
-                        $new_line_level = NULL;
+                        $endsLineLevel = $newLineLevel;
+                        $newLineLevel = NULL;
                         break;
                 }
             } else if ( $char === '\\' ) {
-                $in_escape = true;
+                $inEscape = true;
             }
-            if( $new_line_level !== NULL ) {
-                $result .= "\n".str_repeat( "\t", $new_line_level );
+            if( $newLineLevel !== NULL ) {
+                $result .= "\n".str_repeat( "\t", $newLineLevel );
             }
             $result .= $char.$post;
         }
