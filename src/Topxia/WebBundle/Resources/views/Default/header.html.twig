@@ -50,14 +50,13 @@
             <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
           </ul>
         </li>
-        <li>
+        <li class="hidden-xs">
           <a href="{{ path('my') }}">
-         {% if 'ROLE_TEACHER' in app.user.roles %}
-            教学中心
-         {% else %} 
-            学习中心
-         {% endif %}
-
+            {% if 'ROLE_TEACHER' in app.user.roles %}
+              教学中心
+            {% else %} 
+              学习中心
+            {% endif %}
           </a>
         </li>
         <li class="visible-lg nav-hover">
@@ -82,8 +81,17 @@
           </ul>
         </li>
         {% else %}
-          <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
-          <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+        <li class="user-avatar-li nav-hover visible-xs">
+          <a href="javascript:;" class="dropdown-toggle">
+            <img class="avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+          </ul>
+        </li>
+        <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+        <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
         {% endif %}
       </ul>
       <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
