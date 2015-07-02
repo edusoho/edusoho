@@ -169,7 +169,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'unreadNum' => 0,
                 'createdTime' => time(),
             );
-        $conversation = $this->getConversationDao()->addConversation($conversation);
+            $conversation = $this->getConversationDao()->addConversation($conversation);
         }
 
         $relation = array(

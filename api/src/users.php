@@ -386,11 +386,10 @@ $api->get('/{id}/followings', function ($id) {
 ## 获得用户的好友关系
     GET /users/{id}/friendship
 
-** 参数 **
-
+ddddd
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| toIds | int | 否 | 被选方的的用户id,未传则默认为当前登录用户 1,2,3|
+| toIds | int | 否 | 被选方的的用户id,未传则默认为当前登录用户,多id格式为id-1,id-2,id-3|
 
 ** 响应 **
 
