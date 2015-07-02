@@ -35,13 +35,24 @@
         margin: 10px 0;
       }
     }
-    .error-icon {
+    .error-404-icon {
       position: absolute;
       top: 20px;
       right: 30px;
       width: 191px;
       height: 241px;
-      background: url('../img/icon_search.png') no-repeat;
+      background: url('@{img-src}icon_search.png') no-repeat;
+    }
+    .error-403-icon {
+      position: absolute;
+      right: -44px;
+      bottom: -28px;
+      width: 245px;
+      height: 248px;
+      background: url('@{img-src}icon_lock.png') no-repeat;
+      @media (max-width: @screen-md-max) {
+        right: -30px;
+      }
     }
     .error-500-icon {
       position: absolute;
@@ -49,7 +60,7 @@
       right: -140px;
       width: 297px;
       height: 219px;
-      background: url('../img/icon_server.png') no-repeat;
+      background: url('@{img-src}icon_server.png') no-repeat;
       @media (max-width: @screen-md-max) {
         right: -80px;
       }

@@ -7710,13 +7710,26 @@ textarea.form-control-o {
     margin: 10px 0;
   }
 }
-.error-panel .well .error-icon {
+.error-panel .well .error-404-icon {
   position: absolute;
   top: 20px;
   right: 30px;
   width: 191px;
   height: 241px;
-  background: url('../img/icon_search.png') no-repeat;
+  background: url('/assets/v2/img/icon_search.png') no-repeat;
+}
+.error-panel .well .error-403-icon {
+  position: absolute;
+  right: -44px;
+  bottom: -28px;
+  width: 245px;
+  height: 248px;
+  background: url('/assets/v2/img/icon_lock.png') no-repeat;
+}
+@media (max-width: 1199px) {
+  .error-panel .well .error-403-icon {
+    right: -30px;
+  }
 }
 .error-panel .well .error-500-icon {
   position: absolute;
@@ -7724,7 +7737,7 @@ textarea.form-control-o {
   right: -140px;
   width: 297px;
   height: 219px;
-  background: url('../img/icon_server.png') no-repeat;
+  background: url('/assets/v2/img/icon_server.png') no-repeat;
 }
 @media (max-width: 1199px) {
   .error-panel .well .error-500-icon {
