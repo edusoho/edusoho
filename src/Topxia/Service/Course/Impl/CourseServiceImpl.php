@@ -1276,6 +1276,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+
+		if ($this->getAppService()->findInstallApp('LiveReservation')) {
+			$this->dispatchEvent("reseravtion.lesson.publish", 
+				new ServiceEvent($lesson)
+			);
+		}
+		
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
