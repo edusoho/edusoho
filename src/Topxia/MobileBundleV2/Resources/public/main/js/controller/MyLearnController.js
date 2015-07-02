@@ -7,12 +7,12 @@ function MyLearnController($scope, CourseService)
 		course : {
 			start : 0,
 			canLoad : true,
-			data : []
+			data : undefined
 		},
 		live : {
 			start : 0,
 			canLoad : true,
-			data : []
+			data : undefined
 		}
 	};
 
@@ -30,6 +30,7 @@ function MyLearnController($scope, CourseService)
 	    			content.canLoad = false;
 	    		}
 
+	    		content.data = content.data || [];
 	    		content.data = content.data.concat(data.data);
 	    		content.start += data.limit;
 

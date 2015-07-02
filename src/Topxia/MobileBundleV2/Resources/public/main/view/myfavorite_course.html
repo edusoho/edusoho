@@ -1,30 +1,24 @@
-<ion-view>
-	<ion-content class="padding content-padding">
+<div class="ui-scroller course-card" ng-controller="MyFavoriteCourseController">
+  <ul class="ui-list ui-border-tb">
+      <li class="ui-list-avatar" ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
+          <div class="ui-list-img">
+              <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
+          </div>
+          <div class="ui-list-info ui-border-t">
+              <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+              <p class="bottom price-body">
+                <span class="origin-price">
+                      {{ course.price | formatPrice }}
+                      <s class="discount-color" ng-if="course.discountId > 0">
+                        {{ course.originPrice | formatPrice }}
+                      </s>
+                </span>
+              </p>
+          </div>
+      </li>
+  </ul>
 
-		<div class="course-card">
-		          <div class="list">
+  <list-empty-view data="data.course.data" title="暂时没有收藏课程">
+  </list-empty-view>
 
-		              <a class="item item-thumbnail-left" href="#" ng-repeat="course in data.course.data">
-		                <img src="{{ course.middlePicture | coverPic}}">
-		                <h2>{{ course.title }}</h2>
-		                <p class="bottom">
-		                  	<span>
-				      <i class="iconfont icon-person"></i>
-				      {{ course.studentNum }}
-				</span>
-				
-			                <span class="price light-color ">
-					     ...
-				    </span>
-		                </p>
-		              </a>
-		          </div>
-		</div>
-
-		<ion-infinite-scroll
-		        ng-if="canLoadMore('course')"
-		        on-infinite="loadMore('course')"
-		        distance="1%">
-		</ion-infinite-scroll>
-	</ion-content>
-</ion-view>
+</div>

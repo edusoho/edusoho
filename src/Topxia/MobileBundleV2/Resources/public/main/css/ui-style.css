@@ -95,6 +95,11 @@ a {
   padding-top: 90px;
 }
 
+.ui-scroller.top-header {
+  top: 0;
+  padding-top: 45px;
+}
+
 /** ui-scroll */
 
 /** ui-modal **/
@@ -267,6 +272,10 @@ a {
   top: 0;
 }
 
+.ui-bar.search-bar {
+  background: #f8f9fa;
+}
+
 .ui-bar.transparent {
   background : rgba(0,0,0,0);
 }
@@ -331,6 +340,10 @@ a {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.ui-bar.search-bar .title{
+  padding-left: 44px;
 }
 /* ui-bar */
 
@@ -469,7 +482,6 @@ a {
 /* course-card*/ 
 
 .course-card {
-  margin-bottom: 16px;
   background: #fff;
 }
 
@@ -1146,9 +1158,14 @@ a {
 }
 
 /** ui-course-review **/
-
 /** ui-course */
 
+/**ui-found-course **/
+.ui-found-course .course-card{
+    margin-bottom: 16px;
+}
+
+/**ui-found-course **/
 
 /** ui-question **/
 
@@ -1514,6 +1531,11 @@ a {
   -webkit-transition: all 0.2s ease-in-out 200ms;
 }
 
+.ui-list-link li:after, li.ui-list-item-link:after {
+  background: url(../img/icon.png) no-repeat 0 -75px;
+  -webkit-background-size: 150px auto;
+}
+
 /** ui-list **/
 
 /** ui-pop **/
@@ -1547,3 +1569,16 @@ a {
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
 }
 /** ui-pop **/
+
+/** .ui-loading, bright **/
+.ui-loading {
+    background: url(../img/loading_sprite.png);
+    -webkit-background-size: auto 20px;
+}
+
+.ui-loading-bright {
+  background-image: url(../img/loading_sprite_white.png);
+  -webkit-background-size: auto 37px;
+}
+
+/** .ui-loading **/

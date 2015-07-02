@@ -12,7 +12,7 @@
     </ul>
     <ul class="ui-tab-content tab-display ui-course-learn">
         <li>
-            <div class="ui-scroller">
+            <div class="ui-scroller" ui-scroll data="course.data" on-infinite="loadMore()">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in course.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
@@ -35,11 +35,15 @@
               <list-empty-view data="course.data" title="暂时没有课程">
               </list-empty-view>
 
+              <div class="ui-loading-wrap" ng-show="canLoadMore('course')">
+                <p>正在加载中...</p>
+                <i class="ui-loading"></i>
+              </div>
             </div>
 
         </li>
         <li>
-            <div class="ui-scroller">
+            <div class="ui-scroller" ui-scroll data="live.data" on-infinite="loadMore()">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in live.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
@@ -62,6 +66,10 @@
               <list-empty-view data="live.data" title="暂时没有直播课程">
               </list-empty-view>
 
+              <div class="ui-loading-wrap" ng-show="canLoadMore('live')">
+                <p>正在加载中...</p>
+                <i class="ui-loading"></i>
+              </div>
             </div>
         </li>
     </ul>

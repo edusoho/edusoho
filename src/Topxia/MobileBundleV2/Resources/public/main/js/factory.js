@@ -124,13 +124,13 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 			return {
 				'course' : {
 					url : "Course/getFavoriteNormalCourse",
-					data : [],
+					data : undefined,
 					start : 0,
 					canLoad : true
 				},
 				'live' : {
 					url : "Course/getFavoriteLiveCourse",
-					data : [],
+					data : undefined,
 					start : 0,
 					canLoad : true
 				}

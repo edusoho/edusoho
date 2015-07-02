@@ -1,42 +1,60 @@
-app.controller('MyFavoriteController', ['$scope', 'httpService', '$timeout', MyFavoriteController]);
+app.controller('MyFavoriteCourseController', ['$scope', 'CourseService', 'CourseUtil', MyFavoriteCourseController]);
+app.controller('MyFavoriteLiveController', ['$scope', 'CourseService', 'CourseUtil', MyFavoriteLiveController]);
 
-function MyFavoriteController($scope, CourseService, CourseUtil, $timeout)
+function MyFavoriteBaseController($scope, CourseService, CourseUtil)
 {
-	console.log("MyFavoriteController");
-	var self = this;
-	$scope.data  = CourseUtil.getFavoriteListTypes();
+  var self = this;
+  $scope.data  = CourseUtil.getFavoriteListTypes();
 
-  	this.loadDataList = function(type) {
-  		var dataList = $scope.data[type];
-  		CourseService.getFavoriteCourse(
-  			dataList.url,
-  			{
-	  			limit : 100,
-				start: dataList.start,
-				token : $scope.token
-			}, function(data) {
-	  			if (!data || data.data.length == 0) {
-		    			dataList.canLoad = false;
-		    		}
+    this.loadDataList = function(type) {
+      $scope.showLoad();
+      var content = $scope.data[type];
+      CourseService.getFavoriteCourse(
+        content.url,
+        {
+          limit : 100,
+        start: content.start,
+        token : $scope.token
+      }, function(data) {
+            $scope.hideLoad();
+            if (!data || data.data.length == 0) {
+              content.canLoad = false;
+            }
 
-		    		dataList.data = dataList.data.concat(data.data);
-		    		dataList.start += data.limit;
+            content.data = content.data || [];
+            content.data = content.data.concat(data.data);
+            content.start += data.limit;
 
-		    		if (data.total && dataList.start >= data.total) {
-		    			dataList.canLoad = false;
-		    		}
-  			}
-  		);
-  	}
+            if (data.total && content.start >= data.total) {
+              content.canLoad = false;
+            }
+        }
+      );
+    }
+}
 
-  	this.loadCourses = function() {
-  		self.loadDataList("course");
-  	}
+function MyFavoriteCourseController($scope, CourseService, CourseUtil)
+{
+      console.log("MyFavoriteCourseController");
+	this.__proto__ = new MyFavoriteBaseController($scope, CourseService, CourseUtil);
 
-  	this.loadLiveCourses = function() {
-  		self.loadDataList("live");
-  	}
+      var self = this;
+      this.loadCourses = function() {
+        self.loadDataList("course");
+      }
 
-  	this.loadCourses();
-  	this.loadLiveCourses();
+      this.loadCourses();
+}
+
+function MyFavoriteLiveController($scope, CourseService, CourseUtil)
+{
+      console.log("MyFavoriteLiveController");
+      this.__proto__ = new MyFavoriteBaseController($scope, CourseService, CourseUtil);
+
+      var self = this;
+      this.loadLiveCourses = function() {
+        self.loadDataList("live");
+      }
+
+      this.loadLiveCourses();
 }

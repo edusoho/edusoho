@@ -83,31 +83,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 controller : FoundTabController
               }
             }
-          }).state('slideView.mainTab.found', {
-              url: "/found",
-              views: {
-                'found-tab': {
-                  templateUrl: app.viewFloder  + "view/found.html",
-                  controller: FoundTabController
-                }
-              }
-            }).state('slideView.mainTab.found.course', {
-              url: "/course",
-              views: {
-                'found-course': {
-                  templateUrl: app.viewFloder  + "view/found_course.html",
-                  controller: FoundCourseController
-                },
-                 'found-live': {
-                  templateUrl: app.viewFloder  + "view/found_live.html",
-                  controller: FoundLiveController
-                },
-                'found-classroom': {
-                  templateUrl: app.viewFloder  + "view/found_classroom.html",
-                  controller: FoundClassRoomController
-                }
-              }
-            });
+          });
 
             $stateProvider.state('courseList', {
               url: "/courselist/:categoryId",
@@ -175,8 +151,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               url: "/myfavorite",
               views: {
                 'rootView': {
-                  templateUrl: app.viewFloder  + "view/myfavorite.html",
-                  controller : MyFavoriteController
+                  templateUrl: app.viewFloder  + "view/myfavorite.html"
                 }
               }
             })
@@ -361,6 +336,15 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 }
               }
             });
+            $stateProvider.state('search', {
+              url: "/search",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/search.html",
+                  controller : SearchController
+                }
+              }
+            });
 }]);
 
 app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
@@ -368,9 +352,13 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 
   $rootScope.platform = platformUtil;
   $rootScope.showLoad = function(template) {
+    if ($rootScope.loadPop) {
+      $rootScope.loadPop.loading("hide");
+    }
     $rootScope.loadPop = $.loading({
         content: "加载中...",
     });
+
     $timeout(function(){
         if ($rootScope.loadPop) {
           $rootScope.loadPop.loading("hide");
@@ -407,30 +395,6 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
   applicationProvider.init(app.host);
   FastClick.attach(document.body);
 }]);
-
-var browser = {
-    v: (function(){
-        var u = navigator.userAgent, p = navigator.platform;
-        return {
-            trident: u.indexOf('Trident') > -1, //IE内核
-            presto: u.indexOf('Presto') > -1, //opera内核
-            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-            ios: !!u.match(/i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-            android: u.indexOf('Android') > -1, //android终端
-            iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
-            iPad: u.indexOf('iPad') > -1, //是否iPad
-            weixin: u.indexOf('MicroMessenger') > -1, //是否微信
-            webApp: u.indexOf('Safari') == -1, //是否web应用程序，没有头部与底部
-            UCB: u.match(/UCBrowser/i) == "UCBrowser",
-            QQB: u.match(/MQQBrowser/i) == "MQQBrowser",
-            win: p.indexOf('Win') > -1,//判断是否是WIN操作系统
-            mac: p.indexOf('Mac') > -1,//判断是否是Mac操作系统
-            native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
-        };
-    })()
-};
 
 angular.element(document).ready(function() {
     var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");

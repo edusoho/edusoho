@@ -343,13 +343,7 @@ service('CourseService', ['httpService', function(httpService) {
 	this.searchCourse = function(params, callback, error) {
 		httpService.get({
 			url : app.host + '/mapi_v2/Course/searchCourse',
-			params : {
-				limit : params.limit,
-				start: params.start,
-				categoryId : params.categoryId,
-				sort : params.sort,
-				type : params.type
-			},
+			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 			},
