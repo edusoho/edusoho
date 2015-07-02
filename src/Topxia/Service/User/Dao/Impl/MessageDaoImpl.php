@@ -79,7 +79,9 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     public function findMessagesByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -87,7 +89,9 @@ class MessageDaoImpl extends BaseDao implements MessageDao
 
     public function deleteMessagesByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="DELETE FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->executeUpdate($sql, $ids);

@@ -496,7 +496,9 @@ class SettingsController extends BaseController
 
 	protected function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
 	{
-		$question1 = null;$question2 = null;$question3 = null;
+		$question1 = null;
+		$question2 = null;
+		$question3 = null;
 		if ($hasSecurityQuestions){
 			$question1 = $userSecureQuestions[0]['securityQuestionCode'];
 			$question2 = $userSecureQuestions[1]['securityQuestionCode'];

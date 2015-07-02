@@ -356,3 +356,7 @@ fieldset #checkboxChoices{
   padding: 2px 5px;
   border-radius: 12px;
 }
+
+.popover.help-popover {
+  max-width: 500px;
+}
