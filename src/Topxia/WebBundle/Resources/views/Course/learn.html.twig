@@ -2,10 +2,6 @@
 
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-  {{ parent() }}
-{% endblock %}
-
 {% set hideSetupHint = true %}
 
 {% if is_plugin_installed('Homework') %}
