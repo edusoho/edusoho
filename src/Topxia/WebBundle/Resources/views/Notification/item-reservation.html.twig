@@ -1,0 +1,17 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+       您预约的
+        <a href='{{ path('user_show', {id:data.teacherId}) }}' target='_blank'>{{ data.teacherName }}老师</a>
+        创建了{{ data.playTime|date('Y-m-d H:i') }}的
+        <a href='{{ path('course_learn',{id:data.courseId}) }}#lesson/{{ data.lessonId }}' target='_blank'>{{ data.lessonTitle }}</a>直播课时，请及时报名！
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>
