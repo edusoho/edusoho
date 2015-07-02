@@ -23,11 +23,9 @@
   {% endblock %}
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
-  <![endif]-->
-
-  <!--[if IE 8]>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
+
 </head>
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
   {% block body %}{% endblock %}
