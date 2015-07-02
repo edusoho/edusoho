@@ -28,10 +28,10 @@ class CourseLessonController extends BaseController
         if ($courseSetting['buy_fill_userinfo'] == 0) {
             if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
                 || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
-                if(empty($member)) {
-                    $user = $this->getCurrentUser();
-                    $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
-                }
+                
+                $data = array("price" => 0, "remark"=>'');
+                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $courseId, $data);
+
                 return $this->redirect($this->generateUrl('course_learn', array('id' => $courseId)).'#lesson/'.$lessonId);
             }
         }
@@ -682,6 +682,11 @@ class CourseLessonController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
     }
 
     protected function getSettingService()
