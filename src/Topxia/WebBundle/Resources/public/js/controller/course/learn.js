@@ -280,7 +280,7 @@ define(function(require, exports, module) {
 
                     var esCloudPlayer = new EsCloudPlayer({
                         element: '#video-player',
-                        fingerUrl: lessonVideoDiv.data('fingerprint'),
+                        fingerprint: lessonVideoDiv.data('fingerprint'),
                         watermark: lessonVideoDiv.data('watermark'),
                         url: lesson.mediaHLSUri,
                         dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'

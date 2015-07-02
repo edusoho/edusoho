@@ -67,10 +67,7 @@ class HLSController extends BaseController
 
         $playlist = $api->get('/hls/playlist/json', array( 'streams' => $streams, 'qualities' => $qualities));
 
-        return new Response($playlist['playlist'], 200, array(
-            'Content-Type' => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="playlist.m3u8"',
-        ));
+        return $this->createJsonResponse($playlist);
     }
 
     public function streamAction(Request $request, $id, $level, $token)

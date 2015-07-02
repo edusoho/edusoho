@@ -51,7 +51,7 @@
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+            data-fingerprint="{{ finger_print() }}"
           {% endif %}
             data-user-id="{{ app.user.id }}"
         ></div>

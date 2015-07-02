@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 
                 var esCloudPlayer = new EsCloudPlayer({
                     element: '#lesson-video-player',
-                    fingerUrl: videoPlayerDiv.data('fingerprint'),
+                    fingerprint: videoPlayerDiv.data('fingerprint'),
                     watermark: videoPlayerDiv.data('watermark'),
                     url: videoPlayerDiv.data('hlsUrl'),
                     dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
