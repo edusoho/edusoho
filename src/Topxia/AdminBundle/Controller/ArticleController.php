@@ -115,7 +115,7 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function thumbRemoveAction(Request $Request,$id)
+    public function thumbRemoveAction(Request $request,$id)
     {
         $this->getArticleService()->removeArticlethumb($id);
         return $this->createJsonResponse(true);
