@@ -36,7 +36,7 @@ use Topxia\Service\Common\ServiceKernel;
      {
         $connection = $this->getConnection();
        
-        $connection->exec("update notification set content = REPLACE(content,'"opration":', '"type":') where type='classroom-student';");
+        $connection->exec("update notification set content = REPLACE(content,'\"opration\":', '\"type\":') where type='classroom-student';");
 
      }
 
