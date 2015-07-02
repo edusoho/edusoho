@@ -8,7 +8,7 @@
        您预约的
         <a href='{{ path('user_show', {id:data.teacherId}) }}' target='_blank'>{{ data.teacherName }}老师</a>
         创建了{{ data.playTime|date('Y-m-d H:i') }}的
-        <a href='{{ path('course_learn',{id:data.courseId}) }}#lesson/{{ data.lessonId }}' target='_blank'>{{ data.lessonTitle }}</a>直播课时，请及时报名！
+        <a href='{{ path('course_show',{id:data.courseId}) }}#course-item-list' target='_blank'>{{ data.lessonTitle }}</a>直播课时，请及时报名！
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  
