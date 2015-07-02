@@ -83,31 +83,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 controller : FoundTabController
               }
             }
-          }).state('slideView.mainTab.found', {
-              url: "/found",
-              views: {
-                'found-tab': {
-                  templateUrl: app.viewFloder  + "view/found.html",
-                  controller: FoundTabController
-                }
-              }
-            }).state('slideView.mainTab.found.course', {
-              url: "/course",
-              views: {
-                'found-course': {
-                  templateUrl: app.viewFloder  + "view/found_course.html",
-                  controller: FoundCourseController
-                },
-                 'found-live': {
-                  templateUrl: app.viewFloder  + "view/found_live.html",
-                  controller: FoundLiveController
-                },
-                'found-classroom': {
-                  templateUrl: app.viewFloder  + "view/found_classroom.html",
-                  controller: FoundClassRoomController
-                }
-              }
-            });
+          });
 
             $stateProvider.state('courseList', {
               url: "/courselist/:categoryId",
@@ -175,8 +151,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
               url: "/myfavorite",
               views: {
                 'rootView': {
-                  templateUrl: app.viewFloder  + "view/myfavorite.html",
-                  controller : MyFavoriteController
+                  templateUrl: app.viewFloder  + "view/myfavorite.html"
                 }
               }
             })
@@ -361,6 +336,15 @@ app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $u
                 }
               }
             });
+            $stateProvider.state('search', {
+              url: "/search",
+              views: {
+                'rootView': {
+                  templateUrl: app.viewFloder  + "view/search.html",
+                  controller : SearchController
+                }
+              }
+            });
 }]);
 
 app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
@@ -368,9 +352,13 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 
   $rootScope.platform = platformUtil;
   $rootScope.showLoad = function(template) {
+    if ($rootScope.loadPop) {
+      $rootScope.loadPop.loading("hide");
+    }
     $rootScope.loadPop = $.loading({
         content: "加载中...",
     });
+
     $timeout(function(){
         if ($rootScope.loadPop) {
           $rootScope.loadPop.loading("hide");
@@ -407,30 +395,6 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
   applicationProvider.init(app.host);
   FastClick.attach(document.body);
 }]);
-
-var browser = {
-    v: (function(){
-        var u = navigator.userAgent, p = navigator.platform;
-        return {
-            trident: u.indexOf('Trident') > -1, //IE内核
-            presto: u.indexOf('Presto') > -1, //opera内核
-            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-            ios: !!u.match(/i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-            android: u.indexOf('Android') > -1, //android终端
-            iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
-            iPad: u.indexOf('iPad') > -1, //是否iPad
-            weixin: u.indexOf('MicroMessenger') > -1, //是否微信
-            webApp: u.indexOf('Safari') == -1, //是否web应用程序，没有头部与底部
-            UCB: u.match(/UCBrowser/i) == "UCBrowser",
-            QQB: u.match(/MQQBrowser/i) == "MQQBrowser",
-            win: p.indexOf('Win') > -1,//判断是否是WIN操作系统
-            mac: p.indexOf('Mac') > -1,//判断是否是Mac操作系统
-            native: u.indexOf('kuozhi') > -1, //是否native应用程序，没有头部与底部
-        };
-    })()
-};
 
 angular.element(document).ready(function() {
     var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
@@ -790,13 +754,7 @@ service('CourseService', ['httpService', function(httpService) {
 	this.searchCourse = function(params, callback, error) {
 		httpService.get({
 			url : app.host + '/mapi_v2/Course/searchCourse',
-			params : {
-				limit : params.limit,
-				start: params.start,
-				categoryId : params.categoryId,
-				sort : params.sort,
-				type : params.type
-			},
+			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 			},
@@ -1688,13 +1646,13 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 			return {
 				'course' : {
 					url : "Course/getFavoriteNormalCourse",
-					data : [],
+					data : undefined,
 					start : 0,
 					canLoad : true
 				},
 				'live' : {
 					url : "Course/getFavoriteLiveCourse",
-					data : [],
+					data : undefined,
 					start : 0,
 					canLoad : true
 				}
@@ -2464,47 +2422,65 @@ function ContactTabController($scope)
 	console.log("ContactTabController");
 }
 ;
-app.controller('MyFavoriteController', ['$scope', 'httpService', '$timeout', MyFavoriteController]);
+app.controller('MyFavoriteCourseController', ['$scope', 'CourseService', 'CourseUtil', MyFavoriteCourseController]);
+app.controller('MyFavoriteLiveController', ['$scope', 'CourseService', 'CourseUtil', MyFavoriteLiveController]);
 
-function MyFavoriteController($scope, CourseService, CourseUtil, $timeout)
+function MyFavoriteBaseController($scope, CourseService, CourseUtil)
 {
-	console.log("MyFavoriteController");
-	var self = this;
-	$scope.data  = CourseUtil.getFavoriteListTypes();
+  var self = this;
+  $scope.data  = CourseUtil.getFavoriteListTypes();
 
-  	this.loadDataList = function(type) {
-  		var dataList = $scope.data[type];
-  		CourseService.getFavoriteCourse(
-  			dataList.url,
-  			{
-	  			limit : 100,
-				start: dataList.start,
-				token : $scope.token
-			}, function(data) {
-	  			if (!data || data.data.length == 0) {
-		    			dataList.canLoad = false;
-		    		}
+    this.loadDataList = function(type) {
+      $scope.showLoad();
+      var content = $scope.data[type];
+      CourseService.getFavoriteCourse(
+        content.url,
+        {
+          limit : 100,
+        start: content.start,
+        token : $scope.token
+      }, function(data) {
+            $scope.hideLoad();
+            if (!data || data.data.length == 0) {
+              content.canLoad = false;
+            }
 
-		    		dataList.data = dataList.data.concat(data.data);
-		    		dataList.start += data.limit;
+            content.data = content.data || [];
+            content.data = content.data.concat(data.data);
+            content.start += data.limit;
 
-		    		if (data.total && dataList.start >= data.total) {
-		    			dataList.canLoad = false;
-		    		}
-  			}
-  		);
-  	}
+            if (data.total && content.start >= data.total) {
+              content.canLoad = false;
+            }
+        }
+      );
+    }
+}
 
-  	this.loadCourses = function() {
-  		self.loadDataList("course");
-  	}
+function MyFavoriteCourseController($scope, CourseService, CourseUtil)
+{
+      console.log("MyFavoriteCourseController");
+	this.__proto__ = new MyFavoriteBaseController($scope, CourseService, CourseUtil);
 
-  	this.loadLiveCourses = function() {
-  		self.loadDataList("live");
-  	}
+      var self = this;
+      this.loadCourses = function() {
+        self.loadDataList("course");
+      }
 
-  	this.loadCourses();
-  	this.loadLiveCourses();
+      this.loadCourses();
+}
+
+function MyFavoriteLiveController($scope, CourseService, CourseUtil)
+{
+      console.log("MyFavoriteLiveController");
+      this.__proto__ = new MyFavoriteBaseController($scope, CourseService, CourseUtil);
+
+      var self = this;
+      this.loadLiveCourses = function() {
+        self.loadDataList("live");
+      }
+
+      this.loadLiveCourses();
 };
 app.controller('MyGroupQuestionController', ['$scope', 'QuestionService', MyGroupQuestionController]);
 
@@ -2595,12 +2571,12 @@ function MyLearnController($scope, CourseService)
 		course : {
 			start : 0,
 			canLoad : true,
-			data : null
+			data : undefined
 		},
 		live : {
 			start : 0,
 			canLoad : true,
-			data : null
+			data : undefined
 		}
 	};
 
@@ -2955,6 +2931,61 @@ function RegistController($scope, $http, UserService, $state)
 			$scope.toast("注册失败");
 		});
 	}
+};
+app.controller('SearchController', ['$scope', 'ServcieUtil', SearchController]);
+
+function SearchController($scope, ServcieUtil)
+{
+	$scope.search = "";
+	var self = this;
+	var CourseService = ServcieUtil.getService("CourseService");
+	$scope.showSearch = function() {
+		$('.ui-searchbar-wrap').addClass('focus');
+        		$('.ui-searchbar-input input').focus();
+	}
+
+	$scope.seach = function() {
+		if ($scope.search.length == 0) {
+			window.history.back();
+			return;
+		}
+		$scope.start = 0;
+		$scope.searchDatas = undefined;
+		self.loadSearchData();
+	}
+
+	$scope.canLoad = false;
+    	$scope.start = $scope.start || 0;
+
+	this.loadSearchData = function() {
+             $scope.showLoad();
+              CourseService.searchCourse({
+                limit : 10,
+                start: $scope.start,
+                search : $scope.search
+              }, function(data) {
+                        $scope.hideLoad();
+                        var length  = data ? data.data.length : 0;
+                        $scope.canLoad = ! (! data || length < 10);
+
+                        $scope.searchDatas = $scope.searchDatas || [];
+                        for (var i = 0; i < length; i++) {
+                          $scope.searchDatas.push(data.data[i]);
+                        };
+
+                        $scope.start += data.limit;
+                        $scope.$apply();
+              });
+
+              $scope.loadMore = function(){
+	            if (! $scope.canLoad) {
+	              return;
+	            }
+	           setTimeout(function() {
+	              self.loadSearchData();
+	           }, 200); 
+	  };
+      }
 };
 app.controller('SettingController', ['$scope', 'UserService', '$state', SettingController]);
 
