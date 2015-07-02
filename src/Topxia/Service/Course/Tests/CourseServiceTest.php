@@ -66,30 +66,6 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result[1]['title'],$course_like['title']);
     }
 
-    // public function testFindCoursesByTagIdsAndStatus()
-    // {   
-    //     $tags = array(
-    //         'name' => 'tags1',
-    //         'name' => 'tags2',
-    //         'name' => 'tags3'
-    //     );
-    //     $this->getTagService()->addTag($tags);
-    //     $course = array(
-    //         'title' => 'online test course 1',
-    //         'tags' => '1'
-    //     );
-    //     $createdCourse = $this->getCourseService()->createCourse($course);
-    //     $updateCourse = $this->getCourseService()->updateCourse($createdCourse['id'],$course);
-    //     $result = $this->getCourseService()->findCoursesByTagIdsAndStatus(array(1), 'draft', 0,1 );
-    //     // $this->assertNotEmpty($result);
-    //     $this->assertEquals($result[1]['title'],$cuorse['title']);
-    // }
-
-    public function testFindNormalCoursesByAnyTagIdsAndStatus()
-    {
-        //waiting code...
-    }
-
     public function testFindMinStartTimeByCourseId()
     {
         $course = array(
@@ -99,36 +75,6 @@ class CourseServiceTest extends BaseTestCase
         $result = $this->getCourseService()->findMinStartTimeByCourseId($createCourse['id']);
         $this->assertNotEmpty($result);
     }
-
-    // public function testFindLessonsByIds()
-    // {
-    //     $course = array(
-    //         'title' => 'online test course1'
-    //     );
-    //     $createCourse = $this->getCourseService()->createCourse($course);
-    //     $lesson = array(
-    //         'courseId' => 1,
-    //         'chapterId' => 0,
-    //         'free' => 0,
-    //         'title' => '',
-    //         'summary' => '',
-    //         'tags' => array(),
-    //         'type' => 'text',
-    //         'content' => '',
-    //         'media' => array(),
-    //         'mediaId' => 0,
-    //         'length' => 0,
-    //         'startTime' => 0,
-    //         'giveCredit' => 0,
-    //         'requireCredit' => 0,
-    //         'liveProvider' => 'none'
-    //     );
-    //     $createLesson = $this->getCourseService()->createLesson($lesson);
-    //     $result = $this->getCourseService()->findLessonsByIds($createLesson['id']);
-
-    // }
-
-
 
     public function testGetCourse()
     {
