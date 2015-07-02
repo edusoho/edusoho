@@ -46,7 +46,11 @@ class MessageDaoImpl extends BaseDao implements MessageDao
     public function searchMessagesCount($conditions)
     {
         if (isset($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
+            if(empty($conditions['content'])){
+                unset($conditions['content']);
+            } else {
+                $conditions['content'] = "%{$conditions['content']}%";
+            }
         }
 
         $builder = $this->_createSearchQueryBuilder($conditions)

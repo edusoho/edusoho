@@ -38,7 +38,7 @@ interface CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime);
     	
-    	public function analysisCourseSumByTime($endTime);
+    public function analysisCourseSumByTime($endTime);
 
 	public function findUserLearnCourses($userId, $start, $limit);
 
@@ -345,5 +345,7 @@ interface CourseService
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
 
 	public function becomeStudentByClassroomJoined($courseId, $userId);
+
+	
 
 }
