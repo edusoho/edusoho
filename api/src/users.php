@@ -383,6 +383,8 @@ $api->get('/{id}/followings', function ($id) {
 
 //获得用户的好友关系
 /*
+## 获得用户的好友关系
+    GET /users/{id}/friendship
 
 ** 参数 **
 
@@ -393,11 +395,15 @@ $api->get('/{id}/followings', function ($id) {
 ** 响应 **
 
 ```
-{
-    "friendship": "none"
-}
+[
+    none,
+    following,
+    follower,
+    friend,
+    ...
+]
 ```
-friendship的值有：
+返回数组，排序与传入id对应,好友关系的值有：
 
 none : 双方无关系
 following : id用户关注了toId用户

@@ -228,11 +228,14 @@ $api->get('/blacklists', function () {
 ## 获取当前用户互粉用户
     GET /me/friends
 
+[支持分页](global-parameter.md)
+
 ** 响应 **
 
 ```
 {
-    "xxx": "xxx"
+    "data": "{friend-list}"
+    "total": "{totalCount}"
 }
 ```
 
