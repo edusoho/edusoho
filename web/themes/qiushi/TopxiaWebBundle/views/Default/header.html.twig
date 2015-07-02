@@ -55,6 +55,11 @@
 <li><a href="tel:4008006219"><i class="fa fa-phone" style="margin-right:5px;"></i>400-800-6219</a></li>
       	{% if app.user %}
 	        <li><a href="{{ path('my') }}">我的课程</a></li>
+          <li><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
+                <span class="glyphicon glyphicon-bullhorn hidden-lt-ie8"></span>
+                <span class="visible-lt-ie8">通知</span>
+                {% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
+              <li>
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img
 	            class="img-circle" src="{{ file_path(app.user.smallAvatar, 'avatar.png') }}" alt=""/></a>
