@@ -21,6 +21,18 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if ($course['price'] == 0 && $course['coinPrice'] == 0 && $courseSetting['buy_fill_userinfo'] == 0) {
+            if(empty($member)) {
+                $user = $this->getCurrentUser();
+                $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
+            }
+            return $this->redirect($this->generateUrl('course_learn', array(
+                'id' => $courseId
+            )).'#lesson/'.$lessonId);
+        }
+
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -623,13 +635,6 @@ class CourseLessonController extends BaseController
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
         }
 
-        if ($course['price'] == 0 && $course['coinPrice'] == 0 && $courseSetting['buy_fill_userinfo'] == 0) {
-            if(empty($member)) {
-                $user = $this->getCurrentUser();
-                $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
-            }
-        }
-
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
@@ -639,6 +644,7 @@ class CourseLessonController extends BaseController
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
+            'courseSetting' => $courseSetting
         ));
     }
 
