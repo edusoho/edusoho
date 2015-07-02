@@ -14,6 +14,12 @@ class HLSController extends BaseController
 
     public function playlistAction(Request $request, $id, $token)
     {
+        $level = $request->query->get('level', null);
+
+        if(in_array($level, array('HD','SHD'))){
+            throw $this->createNotFoundException();
+        }
+
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
