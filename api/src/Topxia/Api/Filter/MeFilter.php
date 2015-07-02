@@ -11,6 +11,8 @@ class MeFilter implements Filter
         if (empty($data['id'])) {
             return $data;
         }
+        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $userService = ServiceKernel::instance()->createService('User.UserService');
         unset($data['password']);
         unset($data['salt']);
         unset($data['payPassword']);
@@ -20,7 +22,17 @@ class MeFilter implements Filter
         $data['loginTime'] = date('c', $data['loginTime']);
         $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
-        $profile = ServiceKernel::instance()->createService('User.UserService')->getUserProfile($data['id']);
+
+        $smallAvatar = empty($data['smallAvatar']) ? '' : $fileService->parseFileUri($data['smallAvatar']);
+        $data['smallAvatar'] = '/files'.$smallAvatar['fullpath'];
+
+        $mediumAvatar = empty($data['mediumAvatar']) ? '' : $fileService->parseFileUri($data['mediumAvatar']);
+        $data['mediumAvatar'] = '/files'.$mediumAvatar['fullpath'];
+
+        $largeAvatar = empty($data['largeAvatar']) ? '' : $fileService->parseFileUri($data['largeAvatar']);
+        $data['largeAvatar'] = '/files'.$largeAvatar['fullpath'];
+
+        $profile = $userService->getUserProfile($data['id']);
         return array_merge($data,$profile);
     }
 
