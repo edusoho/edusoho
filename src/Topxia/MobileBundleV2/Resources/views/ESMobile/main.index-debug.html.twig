@@ -14,9 +14,9 @@
 
 {% endblock %}
 {% if clientType == 'Android' %}
-    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/cordovaAndroid.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
 {%  elseif clientType == 'iOS' %} 
-    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/cordovaiOS.js') }}"></script>
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOScordova.js') }}"></script>
 {% endif %}
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
