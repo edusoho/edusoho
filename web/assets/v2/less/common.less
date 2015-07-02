@@ -23,11 +23,6 @@ body {
 html.html-nav-active {
   position: relative;
   overflow: hidden;
-  // overflow-y: auto;
-  body {
-    // position: fixed;
-    overflow: hidden;
-  }
 }
 
 .es-wrap {
@@ -45,9 +40,11 @@ html.html-nav-active {
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  bottom: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.2);
+  -ms-touch-action: none;
+  touch-action: none;
 }
 
 .tooltip {

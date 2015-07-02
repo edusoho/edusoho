@@ -2110,9 +2110,10 @@ Pagination Styles
   position: fixed;
   left: -250px;
   top: 0;
-  height: 100%;
+  bottom: 0;
   background: #3f3f3f;
   visibility: hidden;
+  -webkit-overflow-scrolling: touch;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -2500,9 +2501,6 @@ html.html-nav-active {
   position: relative;
   overflow: hidden;
 }
-html.html-nav-active body {
-  overflow: hidden;
-}
 .es-wrap {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -2520,9 +2518,11 @@ html.html-nav-active body {
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  bottom: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.2);
+  -ms-touch-action: none;
+  touch-action: none;
 }
 .tooltip {
   min-width: 40px;
@@ -5191,7 +5191,6 @@ textarea.form-control-o {
   background-image: -moz-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-image: -o-linear-gradient(left, #97e09f 10%, #39ba7f 70%, #51c9ab);
   background-color: #02b980;
-  min-height: 3px;
 }
 .introduction-section h4,
 .introduction-section h5 {
@@ -7110,6 +7109,10 @@ textarea.form-control-o {
   margin-bottom: 30px;
 }
 .class-detail-content .class-about img {
+  max-width: 100%;
+  height: auto;
+}
+.topic-detail img {
   max-width: 100%;
   height: auto;
 }
