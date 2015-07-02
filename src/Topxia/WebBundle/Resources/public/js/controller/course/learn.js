@@ -283,12 +283,17 @@ define(function(require, exports, module) {
                         fingerprint: lessonVideoDiv.data('fingerprint'),
                         watermark: lessonVideoDiv.data('watermark'),
                         url: lesson.mediaHLSUri,
-                        dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
+                        dynamicSource: '/hls/'+lesson.mediaId+'/change_res'
                     });
 
                     esCloudPlayer.on('beforePlay', function(player){
                         var userId = $('#lesson-video-content').data("userId");
-                        player.currentTime(DurationStorage.get(userId, lesson.mediaId));
+                        var currentTime = DurationStorage.get(userId, lesson.mediaId);
+                        if(currentTime < 0) {
+                            currentTime = 0;
+                        }
+                        currentTime = currentTime/10;
+                        player.currentTime(currentTime*10);
                     });
 
                     esCloudPlayer.on("timeupdate", function(player){

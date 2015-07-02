@@ -173,6 +173,10 @@ hls_clef:
     pattern: /hls/{id}/clef/{token}
     defaults: { _controller: TopxiaWebBundle:HLS:clef}
 
+hls_change_res:
+    pattern: /hls/{id}/change_res
+    defaults: { _controller: TopxiaWebBundle:HLS:changeRes}
+
 editor_upload:
     pattern:  /editor/upload
     defaults: { _controller: TopxiaWebBundle:Editor:upload }

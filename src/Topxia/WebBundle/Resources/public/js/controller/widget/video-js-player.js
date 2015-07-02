@@ -44,10 +44,10 @@ define(function(require, exports, module) {
                 var player = videojs(elementId, {
 					techOrder: ["flash", "html5"],
 					controls: true,
-					autoplay: false,
+					autoplay: true,
 					preload: 'none',
 					language: 'zh-CN',
-					plugins: plugins
+					plugins: plugins,
                 });
 
                 player.ready(function() {
@@ -56,15 +56,18 @@ define(function(require, exports, module) {
                     });
 
                     player.resolutionSelector({
-                    	default_res : "HD,SD",
+                    	default_res : "SHD,HD,SD",
                     	dynamic_source : self.get('dynamicSource')
                     });
 
                 });
 
+                player.on( 'changeRes', function() {
+                    console.log( 'Current Res is: ' + player.getCurrentRes() );
+                });
+
                 player.on('loadedmetadata', function(){
                 	self.trigger("beforePlay", player);
-                    player.play();
                 });
 
                 player.on("timeupdate", function(){

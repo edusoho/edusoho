@@ -76,6 +76,58 @@ class HLSController extends BaseController
         return $this->createJsonResponse($playlist);
     }
 
+    public function changeResAction(Request $request, $id)
+    {
+        $level = $request->query->get('level', null);
+
+        if(in_array($level, array('HD','SHD'))){
+            throw $this->createNotFoundException();
+        }
+
+        $line = $request->query->get('line', null);
+        $hideBeginning = $request->query->get('hideBeginning', false);
+
+        $file = $this->getUploadFileService()->getFile($id);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $streams = array();
+
+        foreach (array('sd', 'hd', 'shd') as $level) {
+            if (empty($file['metas2'][$level])) {
+                continue;
+            }
+
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => '') , 'times' => 1, 'duration' => 3600));
+            $params = array(
+                'id' => $file['id'],
+                'level' => $level,
+                'token' => $token['token'], 
+            );
+
+            if ($line) {
+                $params['line'] = $line;
+            }
+
+            if ($hideBeginning) {
+                $params['hideBeginning'] = 1;
+            }
+            $streams[$level] = $this->generateUrl('hls_stream', $params, true);
+        }
+
+        $qualities = array(
+            'video' => $file['convertParams']['videoQuality'],
+            'audio' => $file['convertParams']['audioQuality'],
+        );
+
+        $api = CloudAPIFactory::create();
+
+        $playlist = $api->get('/hls/playlist/json', array( 'streams' => $streams, 'qualities' => $qualities));
+
+        return $this->createJsonResponse($playlist);
+    }
+
     public function streamAction(Request $request, $id, $level, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
