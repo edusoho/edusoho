@@ -55,9 +55,9 @@
 
 	</div>
 
-{% if is_plugin_installed('LiveReservation') %}
-  {{ render(controller('LiveReservationBundle:ReservationWeb:lessonBlock')) }}
-{% endif %}
+  {% if is_plugin_installed('LiveReservation') %}
+    {{ render(controller('LiveReservationBundle:ReservationWeb:reservationBlock',{'courseId':liveCourse.id})) }}
+  {% endif %}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
   </form>
