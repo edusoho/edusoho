@@ -14,13 +14,25 @@ class UserFilter implements Filter
         unset($data['payPassword']);
         unset($data['payPasswordSalt']);
 
+        $fileService = ServiceKernel::instance()->createService('Content.FileService');
+        $userService = ServiceKernel::instance()->createService('User.UserService');
         $data['promotedTime'] = date('c', $data['promotedTime']);
         $data['lastPasswordFailTime'] = date('c', $data['lastPasswordFailTime']);
         $data['loginTime'] = date('c', $data['loginTime']);
         $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
+
+        $smallAvatar = empty($data['smallAvatar']) ? '' : $fileService->parseFileUri($data['smallAvatar']);
+        $data['smallAvatar'] = 'files'.$smallAvatar['fullpath'];
+
+        $mediumAvatar = empty($data['mediumAvatar']) ? '' : $fileService->parseFileUri($data['mediumAvatar']);
+        $data['mediumAvatar'] = 'files'.$mediumAvatar['fullpath'];
+
+        $largeAvatar = empty($data['largeAvatar']) ? '' : $fileService->parseFileUri($data['largeAvatar']);
+        $data['largeAvatar'] = 'files'.$largeAvatar['fullpath'];
+        
         $user = getCurrentUser();
-        $profile = ServiceKernel::instance()->createService('User.UserService')->getUserProfile($data['id']);
+        $profile = $userService->getUserProfile($data['id']);
         if (!($user->isAdmin() || $user['id'] == $data['id'])) {
             unset($data['email']);
             unset($data['verifiedMobile']);
