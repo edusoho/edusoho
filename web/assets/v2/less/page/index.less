@@ -179,33 +179,11 @@
   position: relative;
   padding-bottom: 40px;
   background: #fff;
-  .course-more {
-    position: absolute;
-    bottom: -29px;
-    left: 50%;
-    margin: -29px 0 0 -29px;
-    z-index: 1;
-    >a {
-      border-radius: 50%;
-      width: 58px;
-      height: 58px;
-      background: #fff;
-      color: #a6a6a6;
-      display: inline-block;
-      text-align: center;
-      .box-shadow(0 4px 12px -2px rgba(51, 51, 51, 0.5));
-      .es-transition;
-      &:hover {
-        color: #666;
-        .box-shadow(0 10px 15px 0px rgba(51, 51, 51, 0.5));
-        .es-transition;
-      }
-      >i {
-        line-height: 58px;
-        font-size: 30px;
-      }
-    }
-  }
+}
+
+// 直播
+.live-course-section {
+  background: #fafafa;
 }
 
 //学习介绍
@@ -216,7 +194,6 @@
   background-image: -moz-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
   background-image: -o-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
   background-color: @brand-primary;
-  min-height: 3px;
   h4, h5 {
     color: #fff;
   }
@@ -275,16 +252,7 @@
 }
 
 .index-group {
-  padding-bottom: 23px;
-  margin-bottom: 20px;
-  .panel-body {
-    padding-bottom: 30px !important;
-  }
-}
-
-.index-dynamic {
   padding-bottom: 15px;
-  margin-bottom: 20px;
 }
 
 // 推荐教师

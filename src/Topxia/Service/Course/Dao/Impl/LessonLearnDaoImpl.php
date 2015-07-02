@@ -115,7 +115,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetType'])) {
             $builder=$this->createDynamicQueryBuilder($conditions)
@@ -141,7 +141,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
     public function analysisLessonFinishedDataByTime($startTime,$endTime)
     {
-        $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>=? and `finishedTime`<=? and `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
+        $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>=? AND `finishedTime`<=? AND `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
     }
 }

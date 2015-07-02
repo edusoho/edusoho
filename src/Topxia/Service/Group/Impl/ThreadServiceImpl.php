@@ -149,7 +149,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
             $file=$this->getFileService()->getFile($files['id'][$i]);
 
-            if($file['userId'] != $user->id) continue;
+            if($file['userId'] != $user->id){
+                continue;
+            }
             
             $hide=$this->getThreadGoodsDao()->searchGoods(array('threadId'=>$threadId,'fileId'=>$files['id'][$i]),array('createdTime','desc'),0,1);
             
@@ -183,7 +185,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
             $file=$this->getFileService()->getFile($files['id'][$i]);
 
-            if($file['userId'] != $user->id) continue;
+            if($file['userId'] != $user->id){
+                continue;
+            }
               
             $files['title'][$i]=$this->subTxt($files['title'][$i]);
 
@@ -221,7 +225,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
             $value=" ".$value;
             sscanf($value,"%[^#]#[hide=coin%[^]]]%[^$$]",$content,$coin,$title);
 
-            if(!is_numeric($coin)) $coin=0;
+            if(!is_numeric($coin)){
+                $coin=0;
+            }
 
             if($coin >=0 && $title !="" ){
 
@@ -241,7 +247,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     }
 
-    private function subTxt($string,$length = 10)
+    protected function subTxt($string,$length = 10)
     {
         $string=explode(".", $string);
       
@@ -256,7 +262,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $text.".".$string[count($string)-1];
     }
 
-    private function pureString($string){
+    protected function pureString($string){
         $text = $string[0];
         $text = strip_tags($text);
  
@@ -336,7 +342,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $this->getThreadDao()->updateThread($threadId,array('lastPostMemberId'=>$memberId,'lastPostTime'=>time()));
         $this->getGroupService()->waveGroup($groupId,'postNum',+1);
         $this->getGroupService()->waveMember($groupId,$memberId,'postNum',+1);
-        $this->waveThread($threadId,'postNum',+1);
+        if ($postId == 0) {
+            $this->waveThread($threadId,'postNum',+1);
+        }
         $thread=$this->getThread($threadId); 
         return $post;
     }
@@ -423,7 +431,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadTradeDao()->getTrade($id);
     }
 
-    private function waveThread($id,$field, $diff)
+    protected function waveThread($id,$field, $diff)
     {
         return $this->getThreadDao()->waveThread($id, $field, $diff);
 
@@ -434,21 +442,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         return $this->getThreadTradeDao()->getTradeByUserIdAndThreadId($userId,$threadId);
     }
 
-    private function getThreadTradeDao()
+    protected function getThreadTradeDao()
     {
         return $this->createDao('Group.ThreadTradeDao');
     }
 
-    private function getThreadGoodsDao()
+    protected function getThreadGoodsDao()
     {
         return $this->createDao('Group.ThreadGoodsDao');
     }
 
-    private function getThreadDao()
+    protected function getThreadDao()
     {
         return $this->createDao('Group.ThreadDao');
     }
-    private function getGroupService()
+    protected function getGroupService()
     {
         return $this->createService('Group.GroupService');
     }
@@ -457,11 +465,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createService('Content.FileService');
     }
-    private function getThreadPostDao()
+    protected function getThreadPostDao()
     {
         return $this->createDao('Group.ThreadPostDao');
     }
-    private function getThreadCollectDao()
+    protected function getThreadCollectDao()
     {
         return $this->createDao('Group.ThreadCollectDao');
     }

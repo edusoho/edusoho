@@ -3,7 +3,7 @@
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -27,11 +27,9 @@
   {% block stylesheets %}
     {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
   {% endblock %}
+  
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
-  <![endif]-->
-
-  <!--[if IE 8]>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 
@@ -56,7 +54,7 @@
       
       <div id="content-container" class="container">
         {% block content %}{% endblock %}
-      </div><!-- /container -->
+      </div>
     {% endblock %}
     
     {% block footer %}

@@ -247,7 +247,7 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function setCloudSmsKey($key, $val)
+    protected function setCloudSmsKey($key, $val)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
@@ -323,7 +323,7 @@ class SettingController extends BaseController
         ));
     }
 
-    private function getDefaultSet()
+    protected function getDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -424,13 +424,13 @@ class SettingController extends BaseController
             $phpwindConfig = $data['phpwind_config'];
 
             if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) or !is_writeable($discuzConfigPath)) {
+                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
-                if (!file_exists($phpwindConfigPath) or !is_writeable($phpwindConfigPath)) {
+                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
@@ -552,7 +552,7 @@ class SettingController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('user_partner', array());
-        if (empty($setting['mode']) or !in_array($setting['mode'], array('phpwind', 'discuz'))) {
+        if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
             return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
@@ -590,7 +590,7 @@ class SettingController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

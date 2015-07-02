@@ -86,7 +86,7 @@ class UserController extends BaseController
         return $this->validateResult($result, $message);
     }
 
-    private function validateResult($result, $message){
+    protected function validateResult($result, $message){
         if ($result == 'success') {
            $response = array('success' => true, 'message' => '');
         } else {
@@ -115,7 +115,7 @@ class UserController extends BaseController
         return $this->render($this->getCreateUserModal());
     }
 
-    private function getRegisterData($formData, $clientIp){
+    protected function getRegisterData($formData, $clientIp){
         if(isset($formData['email'])){
             $userData['email'] = $formData['email'];
         }
@@ -128,7 +128,7 @@ class UserController extends BaseController
         return $userData;
     }
 
-    private function getCreateUserModal(){
+    protected function getCreateUserModal(){
         $auth = $this->getSettingService()->get('auth');
         if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
             return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
@@ -181,7 +181,7 @@ class UserController extends BaseController
     public function rolesAction(Request $request, $id)
     {
         if (false === $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
-            and false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            && false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
 
@@ -249,15 +249,25 @@ class UserController extends BaseController
         ));
     }
 
-    private function getFields()
+    protected function getFields()
     {
         $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         for($i=0;$i<count($fields);$i++){
-            if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
-            if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
-            if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
-            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
-            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+            if(strstr($fields[$i]['fieldName'], "textField")){
+                $fields[$i]['type']="text";
+            }
+            if(strstr($fields[$i]['fieldName'], "varcharField")){
+                $fields[$i]['type']="varchar";
+            }
+            if(strstr($fields[$i]['fieldName'], "intField")){
+                $fields[$i]['type']="int";
+            }
+            if(strstr($fields[$i]['fieldName'], "floatField")){
+                $fields[$i]['type']="float";
+            }
+            if(strstr($fields[$i]['fieldName'], "dateField")){
+                $fields[$i]['type']="date";
+            }
         }
 
         return $fields;
@@ -441,7 +451,7 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }

@@ -76,7 +76,9 @@ class ContentController extends BaseController
 
         if ($content['template'] == 'default') {
             $template = 'TopxiaWebBundle:Content:page-show.html.twig';
-        } else {
+        } elseif ($content['template'] == 'blank') {
+            $template = 'TopxiaWebBundle:Content:blank.html.twig';
+        } else{
             $alias = $content['alias'] ? : $content['id'];
             $template = "@customize/content/page/{$alias}/index.html.twig";
         }
@@ -91,7 +93,7 @@ class ContentController extends BaseController
         ));
     }
 
-    private function getContentByAlias($type, $alias)
+    protected function getContentByAlias($type, $alias)
     {
         if (ctype_digit($alias)) {
             $content = $this->getContentService()->getContent($alias);
@@ -99,19 +101,19 @@ class ContentController extends BaseController
             $content = $this->getContentService()->getContentByAlias($alias);
         }
 
-        if (empty($content) or ($content['type'] != $type)) {
+        if (empty($content) || ($content['type'] != $type)) {
             throw $this->createNotFoundException();
         }
 
         return $content;
     }
 
-    private function getContentService()
+    protected function getContentService()
     {
         return $this->getServiceKernel()->createService('Content.ContentService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

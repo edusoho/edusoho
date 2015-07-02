@@ -164,7 +164,7 @@ class CloudController extends BaseController
         return $this->createJsonResponse($watermark);
     }
 
-    private function parsePattern($pattern, $user)
+    protected function parsePattern($pattern, $user)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
@@ -175,7 +175,7 @@ class CloudController extends BaseController
         return $this->get('topxia.twig.web_extension')->simpleTemplateFilter($pattern, $values);
     }
 
-    private function checkSign($server, $sign, $secretKey)
+    protected function checkSign($server, $sign, $secretKey)
     {
         return md5($server . $secretKey) == $sign;
     }
@@ -185,7 +185,7 @@ class CloudController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

@@ -79,7 +79,7 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    private function createReviewSearchBuilder($conditions)
+    protected function createReviewSearchBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

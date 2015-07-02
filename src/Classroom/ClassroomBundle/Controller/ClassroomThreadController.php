@@ -36,6 +36,7 @@ class ClassroomThreadController extends BaseController
 
     public function createAction(Request $request, $classroomId, $type)
     {
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {

@@ -175,7 +175,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
     }
 
-    private function generateOrderSn($order)
+    protected function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
         return  $prefix . date('YmdHis', time()) . mt_rand(10000,99999);
@@ -190,7 +190,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->_createLog($orderId, $type, $message, $data);
     }
 
-    private function _createLog($orderId, $type, $message = '', array $data = array())
+    protected function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();
 
@@ -207,7 +207,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->addLog($log);
     }
 
-    public function cancelOrder($id, $message = '', $data = array())
+    public function cancelOrder($id, $message='', $data = array())
     {
         $order = $this->getOrder($id);
         if (empty($order)) {
@@ -260,7 +260,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderRefundDao()->findRefundsByUserId($userId, $start, $limit);
     }
 
-    public function searchRefunds($conditions, $sort = 'latest', $start, $limit)
+    public function searchRefunds($conditions, $sort, $start, $limit)
     {
         $conditions = array_filter($conditions);
         $orderBy = array('createdTime', 'DESC');
@@ -293,7 +293,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $setting = $this->getSettingService()->get('refund');
 
         // 系统未设置退款期限，不能退款
-        if (empty($setting) or empty($setting['maxRefundDays'])) {
+        if (empty($setting) || empty($setting['maxRefundDays'])) {
             $expectedAmount = 0;
         }
 
@@ -412,7 +412,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("用户未登录，订单(#{$id})取消退款失败");
         }
 
-        if ($order['userId'] != $user['id'] and !$user->isAdmin()) {
+        if ($order['userId'] != $user['id'] && !$user->isAdmin()) {
             throw $this->createServiceException("订单(#{$id})，你无权限取消退款");
         }
 
@@ -441,7 +441,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->_createLog($order['id'], 'refund_cancel', "取消退款申请(ID:{$refund['id']})");
     }
 
-    public function searchOrders($conditions, $sort = 'latest', $start, $limit)
+    public function searchOrders($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -458,7 +458,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
-    public function searchBill($conditions, $sort = 'latest', $start, $limit)
+    public function searchBill($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -492,7 +492,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->searchOrderCount($conditions);
     }
 
-    private function _prepareSearchConditions($conditions)
+    protected function _prepareSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
         
@@ -570,42 +570,42 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getOrderRefundDao()
+    protected function getOrderRefundDao()
     {
         return $this->createDao('Order.OrderRefundDao');
     }
 
-    private function getOrderDao()
+    protected function getOrderDao()
     {
         return $this->createDao('Order.OrderDao');
     }
 
-    private function getOrderLogDao()
+    protected function getOrderLogDao()
     {
         return $this->createDao('Order.OrderLogDao');
     }
 
-    private function getCouponService()
+    protected function getCouponService()
     {
         return $this->createService('Coupon:Coupon.CouponService');
     }
 
-    private function getPayCenterService()
+    protected function getPayCenterService()
     {
         return $this->createService('PayCenter.PayCenterService');
     }

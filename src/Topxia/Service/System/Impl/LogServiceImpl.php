@@ -80,7 +80,7 @@ class LogServiceImpl extends BaseService implements  LogService
 		return $this->createService('User.UserService');
 	}
 
-	private function prepareSearchConditions($conditions)
+	protected function prepareSearchConditions($conditions)
 	{
         if (!empty($conditions['nickname'])) {
             $existsUser = $this->getUserService()->getUserByNickname($conditions['nickname']);

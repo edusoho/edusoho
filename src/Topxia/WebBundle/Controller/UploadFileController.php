@@ -34,7 +34,7 @@ class UploadFileController extends BaseController
         $originalFile = $this->get('request')->files->get('file');
 
         $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
-    	return $this->createJsonResponse($file);
+        return $this->createJsonResponse($file);
     }
 
     public function browserAction(Request $request)
@@ -95,7 +95,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($params);
     }
 
-    private function cloudCallBack(Request $request)
+    protected function cloudCallBack(Request $request)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -151,7 +151,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file['metas2']);
     }
 
-    private function cloudConvertCallback2(Request $request)
+    protected function cloudConvertCallback2(Request $request)
     {
         $result = $request->getContent();
         $result = preg_replace_callback(
@@ -261,7 +261,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('转换失败');
         }
 
-        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];
 
         $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
 
@@ -300,7 +300,7 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
@@ -320,12 +320,12 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function createFilesJsonResponse($files)
+    protected function createFilesJsonResponse($files)
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);

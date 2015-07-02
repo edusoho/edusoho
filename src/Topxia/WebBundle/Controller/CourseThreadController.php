@@ -86,7 +86,7 @@ class CourseThreadController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        if ($thread['type'] == 'question' and $paginator->getCurrentPage() == 1) {
+        if ($thread['type'] == 'question' && $paginator->getCurrentPage() == 1) {
             $elitePosts = $this->getThreadService()->findThreadElitePosts($thread['courseId'], $thread['id'], 0, 10);
         } else {
             $elitePosts = array();
@@ -164,7 +164,7 @@ class CourseThreadController extends CourseBaseController
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $thread['userId']) {
+        if ($user->isLogin() && $user->id == $thread['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -205,7 +205,7 @@ class CourseThreadController extends CourseBaseController
 
     }
 
-    private function createThreadForm($data = array())
+    protected function createThreadForm($data = array())
     {
         return $this->createNamedFormBuilder('thread', $data)
             ->add('title', 'text')
@@ -388,7 +388,7 @@ class CourseThreadController extends CourseBaseController
         ));
     }
 
-    private function replaceMention($postData)
+    protected function replaceMention($postData)
     {   
         $currentUser = $this->getCurrentUser();
         $content=$postData['content'];
@@ -429,7 +429,7 @@ class CourseThreadController extends CourseBaseController
         }
 
         $user = $this->getCurrentUser();
-        if ($user->isLogin() and $user->id == $post['userId']) {
+        if ($user->isLogin() && $user->id == $post['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
             $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -546,7 +546,7 @@ class CourseThreadController extends CourseBaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
-    private function createPostForm($data = array())
+    protected function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)
             ->add('content', 'textarea')

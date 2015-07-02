@@ -172,7 +172,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->fetchAll($sql, $tagArray);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 

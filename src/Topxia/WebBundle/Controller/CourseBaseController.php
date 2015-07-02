@@ -75,7 +75,7 @@ abstract class CourseBaseController extends BaseController
                 );
             }
 
-            if (empty($member) or $member['role'] != 'teacher') {
+            if (empty($member) || $member['role'] != 'teacher') {
                 return $member;
             }
 

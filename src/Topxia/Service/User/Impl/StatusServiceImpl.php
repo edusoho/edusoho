@@ -28,7 +28,7 @@ class StatusServiceImpl extends BaseService implements StatusService
         return $this->getStatusDao()->addStatus($status);
     }
 
-    private function  deleteOldStatus($status)
+    protected function  deleteOldStatus($status)
     {
         if(!empty($status['userId']) && !empty($status['type']) && !empty($status['objectType']) && !empty($status['objectId'])){
             return $this->getStatusDao()->deleteStatusesByUserIdAndTypeAndObject($status['userId'], $status['type'], $status['objectType'], $status['objectId']);
@@ -45,7 +45,7 @@ class StatusServiceImpl extends BaseService implements StatusService
         return $this->getStatusDao()->findStatusesByUserIds($userIds, $start, $limit);
     }
 
-    private function getStatusDao()
+    protected function getStatusDao()
     {
         return $this->createDao('User.StatusDao');
     }

@@ -21,7 +21,7 @@ class PayCenterController extends BaseController
 
         $paymentSetting = $this->setting("payment");
         if(!isset($paymentSetting["enabled"]) || $paymentSetting["enabled"] == 0) {
-            return $this->createMessageResponse('error', '支付中心未开启。');
+            return $this->createMessageResponse('error', $paymentSetting["disabled_message"]);
         }
 
 		$fields = $request->query->all();
@@ -225,7 +225,7 @@ class PayCenterController extends BaseController
         return $this->render('TopxiaWebBundle:PayCenter:resultNotice.html.twig');
     }
 
-    private function createPaymentRequest($order, $requestParams)
+    protected function createPaymentRequest($order, $requestParams)
     {   
         $options = $this->getPaymentOptions($order['payment']);
         $request = Payment::createRequest($order['payment'], $options);
@@ -240,7 +240,7 @@ class PayCenterController extends BaseController
     }
 
 
-    private function getPaymentOptions($payment)
+    protected function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
 
@@ -256,7 +256,7 @@ class PayCenterController extends BaseController
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
 
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 
@@ -269,7 +269,7 @@ class PayCenterController extends BaseController
         return $options;
     }
 
-    private function createPaymentResponse($name, $params)
+    protected function createPaymentResponse($name, $params)
     {
         $options = $this->getPaymentOptions($name);
         $response = Payment::createResponse($name, $options);
@@ -277,7 +277,7 @@ class PayCenterController extends BaseController
         return $response->setParams($params);
     }
 
-	private function getEnabledPayments()
+	protected function getEnabledPayments()
     {
         $enableds = array();
 

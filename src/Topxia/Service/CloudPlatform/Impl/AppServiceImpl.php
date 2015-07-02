@@ -100,7 +100,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         $lastCheck = intval($this->getSettingService()->get('_app_last_check'));
-        if (empty($lastCheck) or ((time() - $lastCheck) > 86400) ) {
+        if (empty($lastCheck) || ((time() - $lastCheck) > 86400) ) {
             $coursePublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'published'));
             $courseUnpublishedCount = $this->getCourseService()->searchCourseCount(array('status'=>'draft'));
 
@@ -140,7 +140,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppLogDao()->findLogCount();
     }
 
-    private function createPackageUpdateLog($package, $status='SUCCESS', $message='')
+    protected function createPackageUpdateLog($package, $status='SUCCESS', $message='')
     {
         $result = array(
             'code'=>$package['product']['code'],
@@ -528,7 +528,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $result;
     }
 
-    private function _replaceFileForPackageUpdate($package, $packageDir)
+    protected function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
         $filesystem->mirror("{$packageDir}/source",  $this->getPackageRootDirectory($package, $packageDir) , null, array(
@@ -537,7 +537,7 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
-    private function _execScriptForPackageUpdate($package, $packageDir, $type)
+    protected function _execScriptForPackageUpdate($package, $packageDir, $type)
     {
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return ;
@@ -555,7 +555,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
     }
 
-    private function _deleteFilesForPackageUpdate($package, $packageDir)
+    protected function _deleteFilesForPackageUpdate($package, $packageDir)
     {
         if (!file_exists($packageDir . '/delete')) {
             return ;
@@ -572,7 +572,7 @@ class AppServiceImpl extends BaseService implements AppService
         fclose($fh);
     }
 
-    private function _submitRunLogForPackageUpdate($message, $package, $errors)
+    protected function _submitRunLogForPackageUpdate($message, $package, $errors)
     {
         $this->createAppClient()->submitRunLog(array(
             'level' => empty($errors) ? 'info' : 'error',
@@ -585,7 +585,7 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
-    private function unzipPackageFile($filepath, $unzipDir)
+    protected function unzipPackageFile($filepath, $unzipDir)
     {
         $filesystem = new Filesystem();
 
@@ -611,7 +611,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
     }
 
-    private function getPackageRootDirectory($package, $packageDir) 
+    protected function getPackageRootDirectory($package, $packageDir) 
     {
         if ($package['product']['code'] == 'MAIN') {
             return $this->getSystemRootDirectory();
@@ -624,28 +624,28 @@ class AppServiceImpl extends BaseService implements AppService
         return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
     }
 
-    private function getSystemRootDirectory()
+    protected function getSystemRootDirectory()
     {
         return dirname($this->getKernel()->getParameter('kernel.root_dir'));
     }
 
-    private function getDownloadDirectory()
+    protected function getDownloadDirectory()
     {
         return $this->getKernel()->getParameter('topxia.disk.update_dir');
     }
 
-    private function getBackUpDirectory()
+    protected function getBackUpDirectory()
     {
         return $this->getKernel()->getParameter('topxia.disk.backup_dir');
     }
 
 
-    private function makePackageFileUnzipDir($package)
+    protected function makePackageFileUnzipDir($package)
     {
         return $this->getDownloadDirectory(). '/' . $package['fileName'];
     }   
 
-    private function addEduSohoMainApp()
+    protected function addEduSohoMainApp()
     {
         $app = array(
             'code' => 'MAIN',
@@ -662,7 +662,7 @@ class AppServiceImpl extends BaseService implements AppService
         $this->getAppDao()->addApp($app);
     }
 
-    private function updateAppForPackageUpdate($package, $packageDir)
+    protected function updateAppForPackageUpdate($package, $packageDir)
     {
         $newApp = array(
             'code' => $package['product']['code'],
@@ -693,17 +693,17 @@ class AppServiceImpl extends BaseService implements AppService
     }
 
 
-    private function getAppDao ()
+    protected function getAppDao ()
     {
         return $this->createDao('CloudPlatform.CloudAppDao');
     }
 
-    private function getAppLogDao ()
+    protected function getAppLogDao ()
     {
         return $this->createDao('CloudPlatform.CloudAppLogDao');
     }
 
-    private function createAppClient()
+    protected function createAppClient()
     {
         if (!isset($this->client)) {
             $cloud = $this->getSettingService()->get('storage', array());

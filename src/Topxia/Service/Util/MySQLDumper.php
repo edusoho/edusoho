@@ -29,7 +29,7 @@ class MySQLDumper
  
     }
 
-    private function getSet($key){
+    protected function getSet($key){
         if(array_key_exists($key, $this->dbSettings)){
             return $this->dbSettings[$key];
         }else{
@@ -81,13 +81,13 @@ class MySQLDumper
        return $target;
     }
 
-    private function lineWrite($file,$line)
+    protected function lineWrite($file,$line)
     {
         gzwrite($file, $line);
     }
 
 
-    private function exportTableCreateSql($file,$table)
+    protected function exportTableCreateSql($file,$table)
     {
         $sql = "SHOW CREATE TABLE {$table}";
         foreach ($this->connection->query($sql) as $row) {
@@ -119,7 +119,7 @@ class MySQLDumper
     }
 
 
-    private function exportValues($file,$table)
+    protected function exportValues($file,$table)
     {
         $this->lineWrite($file,"-- ----------- {$table} 的数据 ---------\n\n");
 

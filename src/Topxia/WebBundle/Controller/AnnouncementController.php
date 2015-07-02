@@ -141,11 +141,9 @@ class AnnouncementController extends BaseController
 			'targetId' => $targetObject['id'],
 			'endTime' => time()
 		);
-
 		$processor = $this->getAnnouncementProcessor($targetType);
 		$canManage = $processor->checkManage($targetObject['id']);
 		$canTake = $processor->checkTake($targetObject['id']);
-
 		$announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), 0, 10);
 
 		return $this->render('TopxiaWebBundle:Announcement:announcement-block.html.twig',array(
@@ -158,7 +156,7 @@ class AnnouncementController extends BaseController
 	}
 
 
-	private function getAnnouncementProcessor($targetType)
+	protected function getAnnouncementProcessor($targetType)
 	{
 		$processor = AnnouncementProcessorFactory::create($targetType);
 		return $processor;

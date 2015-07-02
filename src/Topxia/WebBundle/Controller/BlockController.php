@@ -19,7 +19,7 @@ class BlockController extends BaseController
         ));
     }
 
-    private function getBlockService()
+    protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');
     }

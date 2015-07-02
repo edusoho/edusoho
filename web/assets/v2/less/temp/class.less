@@ -1,0 +1,40 @@
+.class-join-header {
+  .title {
+    margin: 0 100px 20px 0;
+    font-size: 24px;
+    overflow: hidden;
+    @media (min-width: @screen-md-min) {
+      height: 36px;
+      line-height: 36px;
+    }
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+      height: 30px;
+      line-height: 30px;
+      font-size: 18px;
+    }
+    @media (max-width: @screen-xs-max) {
+      margin-right: 0;
+      font-size: 18px;
+    }
+    .label {
+      .inline-block;
+    }
+  }
+  .class-metas {
+    color: #999;
+    font-size: 16px;
+    .course-num {
+      margin-right: 40px;
+    }
+  }
+  .class-student {
+    font-size: 18px;
+    line-height: 18px;
+    margin-bottom: 20px;
+    color: #999;
+    .fa {
+      margin-right: 10px;
+    }
+  }
+
+}
