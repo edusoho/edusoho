@@ -6,6 +6,5 @@
   "author" : "官方",
   "version" : "1.0.5",
   "support_version" : "6.0.0+",
-  "resource" : "/mapi_v2/mobile/main/resource",
   "url" : "mapi_v2/mobile/main"
 }

@@ -10,8 +10,8 @@ class MobileAppController extends MobileAppBaseController
 {
 	public function indexAction(Request $request)
 	{
-		$clientType = "pc";
 		$userAgent = $request->headers->get("user-agent");
+		$clientType = $this->getClientType($userAgent);
 		$debug = "release";
 
 		$render  = "TopxiaMobileBundleV2:ESMobile:main.index-{$debug}.html.twig";
@@ -19,23 +19,13 @@ class MobileAppController extends MobileAppBaseController
 			return $this->render($render, array("clientType"=>$clientType));
 		}
 
-		if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
-			$clientType = "iOS";
-		} else if (strpos($userAgent, "Android")) {
-		           $clientType = "Android";
-		}
 		return $this->render($render, array("clientType"=>$clientType));
 	}
 
 	public function versionAction(Request $request)
 	{
-		$clientType = "iOS";
 		$userAgent = $request->headers->get("user-agent");
-        		if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
-            		$clientType = "iOS";
-        		} else if (strpos($userAgent, "Android")) {
-            		$clientType = "Android";
-        		}
+		$clientType = $this->getClientType($userAgent);
 
         		$main = array();
         		$appDir = dirname(__DIR__);
@@ -43,8 +33,21 @@ class MobileAppController extends MobileAppBaseController
         		if (file_exists($versionFile)) {
         			$main = json_decode(file_get_contents($versionFile));
         		}
-        		
-		$host = $request->getSchemeAndHttpHost();
+
+        		$host = $request->getSchemeAndHttpHost();
+        		$main->resource = $host . "/bundles/topxiamobilebundlev2/main/release/{$clientType}.zip";
 	        	return $this->createJson($request, $main);
+	}
+
+	private function getClientType($userAgent)
+	{
+		$clientType = "pc";
+        		if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
+            		$clientType = "iOS";
+        		} else if (strpos($userAgent, "Android")) {
+            		$clientType = "Android";
+        		}
+
+        		return $clientType;
 	}
 }
