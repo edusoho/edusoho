@@ -89,7 +89,7 @@
 }
 .group-page .group-thread .panel-heading .thread-list {
   float: right;
-  margin-top: -9px;
+  margin-top: -7px;
 }
 .group-page .group-thread .panel-heading .metas {
   font-size: 12px;
@@ -4683,9 +4683,18 @@ textarea.form-control-o {
   margin-left: 20px;
 }
 .sidenav .list-group .list-group-item {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
   border: none;
-  padding: 10px 15px 10px 35px;
+  padding: 0;
   border-left: 2px solid transparent;
+}
+.sidenav .list-group .list-group-item:last-child,
+.sidenav .list-group .list-group-item:first-child {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 .sidenav .list-group .list-group-item:hover {
   background-color: #f5f5f5;
@@ -4693,6 +4702,7 @@ textarea.form-control-o {
 .sidenav .list-group .list-group-item > a {
   display: block;
   color: #616161;
+  padding: 10px 15px 10px 35px;
 }
 .sidenav .list-group .list-group-item.active {
   border-left: 2px solid #ffae00;

@@ -24,13 +24,13 @@ class MeFilter implements Filter
         $data['createdTime'] = date('c', $data['createdTime']);
 
         $smallAvatar = empty($data['smallAvatar']) ? '' : $fileService->parseFileUri($data['smallAvatar']);
-        $data['smallAvatar'] = 'files'.$smallAvatar['fullpath'];
+        $data['smallAvatar'] = empty($smallAvatar) ? '' : 'files'.$smallAvatar['fullpath'];
 
         $mediumAvatar = empty($data['mediumAvatar']) ? '' : $fileService->parseFileUri($data['mediumAvatar']);
-        $data['mediumAvatar'] = 'files'.$mediumAvatar['fullpath'];
+        $data['mediumAvatar'] = empty($mediumAvatar) ? '' : 'files'.$mediumAvatar['fullpath'];
 
         $largeAvatar = empty($data['largeAvatar']) ? '' : $fileService->parseFileUri($data['largeAvatar']);
-        $data['largeAvatar'] = 'files'.$largeAvatar['fullpath'];
+        $data['largeAvatar'] = empty($largeAvatar) ? '' : 'files'.$largeAvatar['fullpath'];
 
         $profile = $userService->getUserProfile($data['id']);
         return array_merge($data,$profile);

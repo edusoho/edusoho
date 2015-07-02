@@ -210,12 +210,12 @@ class AnalysisController extends BaseController
               $paginator->getPerPageCount()
          );
 
-        $LoginData="";
+        $loginData="";
 
         if($tab=="trend"){
-            $LoginData=$this->getLogService()->analysisLoginDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $loginData=$this->getLogService()->analysisLoginDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
-            $data=$this->fillAnalysisData($condition,$LoginData);           
+            $data=$this->fillAnalysisData($condition,$loginData);
         }
 
         $userIds = ArrayToolkit::column($loginDetail, 'userId');
