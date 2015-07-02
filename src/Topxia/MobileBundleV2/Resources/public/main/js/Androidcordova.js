@@ -1535,10 +1535,12 @@ function findCordovaPath() {
         var src = scripts[n].src;
         var pos = src.indexOf(term);
         if (pos > 0) {
-            path = src.substring(0, pos);
+            var speration = src.lastIndexOf("/", pos);
+            path = src.substring(0, speration + 1);
             break;
         }
     }
+    
     return path;
 }
 

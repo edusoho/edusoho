@@ -19,7 +19,7 @@ class MobileAppController extends MobileAppBaseController
 			return $this->render($render, array("clientType"=>$clientType));
 		}
 
-		return $this->render($render, array("clientType"=>$clientType));
+		return $this->render($render, array("clientType"=>"pc"));
 	}
 
 	public function versionAction(Request $request)
