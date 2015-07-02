@@ -27,7 +27,7 @@ define(function(require, exports, module) {
                     fingerprint: videoPlayerDiv.data('fingerprint'),
                     watermark: videoPlayerDiv.data('watermark'),
                     url: videoPlayerDiv.data('hlsUrl'),
-                    dynamicSource: 'http://192.168.31.219/escloud/VideoPlayer/examples/playlist.php'
+                    dynamicSource: videoPlayerDiv.data('changeResUrl')
                 });
 
                 $('#modal').one('hidden.bs.modal', function () {
