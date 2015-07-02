@@ -9,7 +9,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 {
 	public function becomeStudentAndCreateOrder($userId, $courseId, $data)
 	{
-		if(ArrayToolkit::requireds($data, array("price", "remark"))) {
+		if(!ArrayToolkit::requireds($data, array("price", "remark"))) {
 			throw $this->createServiceException("参数不对！");
 		}
 

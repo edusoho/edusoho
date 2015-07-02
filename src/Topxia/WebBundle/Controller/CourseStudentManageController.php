@@ -76,6 +76,8 @@ class CourseStudentManageController extends BaseController
 			$data = $request->request->all();
 			$user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
+			$data["isAdminAdded"] = 1;
+			
 			list($course, $member, $order) = $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course["id"], $data);
 			return $this->createStudentTrResponse($course, $member);
 		}
