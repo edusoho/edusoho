@@ -1013,7 +1013,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
 		if ($LiveReservation && !empty($reservationIds) && $lesson['type'] == 'live') {
 			$this->dispatchEvent("reseravtion.lesson.create", 
-				array('lessonId' => $lesson['id'], 'reservationIds' => $reservationIds)
+				new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
 			);
 		}
 
@@ -1174,11 +1174,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 				new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
 			);
 		}
-
-		/*$this->dispatchEvent("course.lesson.create", array(
-			"courseId"=>$lesson["courseId"], 
-			"lessonId"=>$lesson["id"]
-		));*/
 
 		return $updatedLesson;
 	}
