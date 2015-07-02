@@ -21,6 +21,21 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $coinSetting = $this->getSettingService()->get('coin');
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+
+        if ($courseSetting['buy_fill_userinfo'] == 0) {
+            if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+                || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
+                if(empty($member)) {
+                    $user = $this->getCurrentUser();
+                    $member = $this->getCourseService()->becomeStudent($courseId, $user['id'], $info = array());
+                }
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $courseId)).'#lesson/'.$lessonId);
+            }
+        }
+
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -629,7 +644,7 @@ class CourseLessonController extends BaseController
             'learnStatuses' => $learnStatuses,
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds,
+            'exercisesLessonIds' => $exercisesLessonIds
         ));
     }
 
@@ -667,5 +682,10 @@ class CourseLessonController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
