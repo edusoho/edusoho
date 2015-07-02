@@ -80,7 +80,7 @@ class HLSController extends BaseController
     {
         $level = $request->query->get('level', null);
 
-        if(in_array($level, array('HD','SHD'))){
+        if(in_array($level, array('SD','SHD'))){
             throw $this->createNotFoundException();
         }
 
