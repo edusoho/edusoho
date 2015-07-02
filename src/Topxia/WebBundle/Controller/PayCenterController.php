@@ -21,7 +21,7 @@ class PayCenterController extends BaseController
 
         $paymentSetting = $this->setting("payment");
         if(!isset($paymentSetting["enabled"]) || $paymentSetting["enabled"] == 0) {
-            return $this->createMessageResponse('error', '支付中心未开启。');
+            return $this->createMessageResponse('error', $paymentSetting["disabled_message"]);
         }
 
 		$fields = $request->query->all();
