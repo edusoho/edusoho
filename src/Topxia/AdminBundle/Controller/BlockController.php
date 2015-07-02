@@ -291,7 +291,6 @@ class BlockController extends BaseController
             $block = $this->getBlockService()->getBlock($blockId);
 
             $url = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
-            $url = ltrim($url, '/');
 
             $response = array(
                 'url' => $url,
