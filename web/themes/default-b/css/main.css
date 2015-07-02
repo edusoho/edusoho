@@ -4687,7 +4687,7 @@ textarea.form-control-o {
   -moz-border-radius: 0;
   border-radius: 0;
   border: none;
-  padding: 10px 15px 10px 35px;
+  padding: 0;
   border-left: 2px solid transparent;
 }
 .sidenav .list-group .list-group-item:last-child,
@@ -4702,6 +4702,7 @@ textarea.form-control-o {
 .sidenav .list-group .list-group-item > a {
   display: block;
   color: #616161;
+  padding: 10px 15px 10px 35px;
 }
 .sidenav .list-group .list-group-item.active {
   border-left: 2px solid #009966;
