@@ -9,8 +9,8 @@
     if (setting('course.buy_fill_userinfo') == 0)
     and 
     (
-      (setting('coin.coin_enable') == 1 and setting('coin.price_type') == 'Coin' and course.coinPrice == 0) 
-      or (setting('coin.coin_enable') == 0 and  setting('coin.price_type') == 'RMB' and course.price == 0)
+      (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.coinPrice == 0.00) 
+      or (setting('coin.coin_enabled') == 0 and  setting('coin.price_type') == 'RMB' and course.price == 0.00)
     ) 
     %}
         <a href="{{ lessonUrl }}" >
