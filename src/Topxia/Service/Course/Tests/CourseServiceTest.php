@@ -85,6 +85,11 @@ class CourseServiceTest extends BaseTestCase
     //     $this->assertEquals($result[1]['title'],$cuorse['title']);
     // }
 
+    public function testFindNormalCoursesByAnyTagIdsAndStatus()
+    {
+        //waiting code...
+    }
+
     public function testFindMinStartTimeByCourseId()
     {
         $course = array(
@@ -95,6 +100,36 @@ class CourseServiceTest extends BaseTestCase
         $this->assertNotEmpty($result);
     }
 
+    // public function testFindLessonsByIds()
+    // {
+    //     $course = array(
+    //         'title' => 'online test course1'
+    //     );
+    //     $createCourse = $this->getCourseService()->createCourse($course);
+    //     $lesson = array(
+    //         'courseId' => 1,
+    //         'chapterId' => 0,
+    //         'free' => 0,
+    //         'title' => '',
+    //         'summary' => '',
+    //         'tags' => array(),
+    //         'type' => 'text',
+    //         'content' => '',
+    //         'media' => array(),
+    //         'mediaId' => 0,
+    //         'length' => 0,
+    //         'startTime' => 0,
+    //         'giveCredit' => 0,
+    //         'requireCredit' => 0,
+    //         'liveProvider' => 'none'
+    //     );
+    //     $createLesson = $this->getCourseService()->createLesson($lesson);
+    //     $result = $this->getCourseService()->findLessonsByIds($createLesson['id']);
+
+    // }
+
+
+
     public function testGetCourse()
     {
         $course = array(
@@ -103,6 +138,20 @@ class CourseServiceTest extends BaseTestCase
         $createdCourse = $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->getCourse($createdCourse['id']);
         $this->assertEquals($course['title'], $result['title']);
+    }
+
+    public function testGetCoursesCount()
+    {
+        $course1 = array(
+            'title' => 'online test course 1'
+        );
+        $course2 = array(
+            'title' => 'online test course 2'
+        );
+        $createdCourse1 = $this->getCourseService()->createCourse($course1);
+        $createdCourse2 = $this->getCourseService()->createCourse($course2);
+        $result = $this->getCourseService()->getCoursesCount();
+        $this->assertEquals(2,$result);
     }
 
     /**
