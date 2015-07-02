@@ -575,6 +575,7 @@ class ClassroomController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+        $courses = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;

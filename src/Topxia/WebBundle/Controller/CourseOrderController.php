@@ -70,7 +70,7 @@ class CourseOrderController extends OrderController
            }
         }
 
-        if($course['approval'] == 1 && ($userInfo['approvalStatus'] == 'unapprove' || $userInfo['approvalStatus'] == 'approve_fail')){
+        if($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')){
             return $this->render('TopxiaWebBundle:CourseOrder:approve-modal.html.twig', array(
                 'course' => $course
             ));

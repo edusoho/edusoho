@@ -37,7 +37,9 @@ class TagDaoImpl extends BaseDao implements TagDao
 
     public function findTagsByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -45,7 +47,9 @@ class TagDaoImpl extends BaseDao implements TagDao
 
     public function findTagsByNames(array $names)
     {
-        if(empty($names)){ return array(); }
+        if(empty($names)){
+            return array();
+        }
         $marks = str_repeat('?,', count($names) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE name IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $names);
