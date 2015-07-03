@@ -100,6 +100,97 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(2,$result);
     }
 
+    public function testFindCoursesCountByLessThanCreatedTime()
+    {
+        $course1 = array(
+            'title' => 'online test course 1'
+        );
+        $course2 = array(
+            'title' => 'online test course 2'
+        );
+
+        $createdCourse1 = $this->getCourseService()->createCourse($course1);
+        $createdCourse2 = $this->getCourseService()->createCourse($course2);
+        $endTime = strtotime(date("Y-m-d",time()+ 24*3600));
+        $result = $this->getCourseService()->findCoursesCountByLessThanCreatedTime($endTime);
+        $this->assertEquals($result,2);
+    }
+
+    public function testSearchCourses()
+    {
+        $course1 = array(
+            'title' => 'test course 1'
+        );
+        $course2 = array(
+            'title' => 'test course 2'
+        );
+        $course3 = array(
+            'title' => 'test course 3'
+        );
+
+        $createdCourse1 = $this->getCourseService()->createCourse($course1);
+        $createdCourse2 = $this->getCourseService()->createCourse($course2);
+        $createdCourse3 = $this->getCourseService()->createCourse($course3);
+
+        $conditions = array(
+            'status' => 'draft'
+        );
+
+        $result = $this->getCourseService()->searchCourses($conditions,'popular',0,5);
+        $this->assertCount(3,$result);
+    }
+
+    public function testSearchCourseCount()
+    {
+        $course1 = array(
+            'title' => 'test course 1'
+        );
+        $course2 = array(
+            'title' => 'test course 2'
+        );
+        $course3 = array(
+            'title' => 'test course 3'
+        );
+
+        $conditions = array(
+            'status' => 'draft'
+        );
+
+        $createdCourse1 = $this->getCourseService()->createCourse($course1);
+        $createdCourse2 = $this->getCourseService()->createCourse($course2);
+        $createdCourse3 = $this->getCourseService()->createCourse($course3);
+
+        $result = $this->getCourseService()->searchCourseCount($conditions);
+        $this->assertEquals(3,$result);
+    }
+
+    public function testFindUserLearnCourses()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course = array(
+            'title' => 'test course 1',
+            'status' => 'published'
+        );
+
+        $createdCourse = $this->getCourseService()->createCourse($course);
+        $updateCourse = $this->getCourseService()->updateCourse($createdCourse['id'],$course);
+        $return = $this->getCourseService()->tryLearnCourse($createdCourse['id']);
+
+        $result = $this->getCourseService()->findUserLearnCourses(2,0,2);
+        $this->assertCount(1,$result);
+    }
+
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
