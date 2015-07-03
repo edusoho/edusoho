@@ -1,0 +1,15 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}微信支付 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div id="page-message-container" class="page-message-container">
+  <div class="page-message-panel">
+    <div class="page-message-body">
+      <img src="{{ path('common_qrcode',{text:url}) }}">
+		</div>
+	</div>
+  </div>
+</div>
+{% endblock %}
