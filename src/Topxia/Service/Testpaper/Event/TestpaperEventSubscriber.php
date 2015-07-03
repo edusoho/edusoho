@@ -37,7 +37,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         ));
     }
 
-    private function simplifyTestpaper($testpaper)
+    protected function simplifyTestpaper($testpaper)
     {
         return array(
             'id' => $testpaper['id'],
@@ -49,7 +49,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function simplifyTestpaperResult($testpaperResult)
+    protected function simplifyTestpaperResult($testpaperResult)
     {
         return array(
             'id' => $testpaperResult['id'],
@@ -61,12 +61,12 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
-    private function getStatusService()
+    protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
     }

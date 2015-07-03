@@ -14,7 +14,7 @@ class ArticleDaoImplTest extends BaseTestCase
        var_dump($articles);
     }
 
-    private function getArticleDao()
+    protected function getArticleDao()
     {
         return $this->getServiceKernel()->createDao('Article.ArticleDao');
     }

@@ -29,7 +29,9 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function findFilesByIds($ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -99,7 +101,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAssoc($sql, array($targetType));
     }
 
-    private function createSearchQueryBuilder($conditions)
+    protected function createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 

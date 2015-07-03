@@ -2,8 +2,9 @@
 <div class="container">
   <div class="index-course-header">
     <div class="text-line">
-      <h5><span>精品课程</span></h5>
+      <h5><span>网校课程</span></h5>
       <div class="line"></div>
+      <a href="{{ path('course_explore') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
     </div>
   </div>
   <div class="course-filter" id="course-filter">
@@ -50,9 +51,6 @@
           {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
         </div>
       {% endfor %}
-    </div>
-    <div class="course-more">
-      <a href="{{ path('course_explore') }}" data-toggle="tooltip" data-placement="top" title="更多"><i class="es-icon es-icon-morehoriz"></i></a>
     </div>
   </div>
 </div>

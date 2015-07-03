@@ -174,7 +174,7 @@ class CourseController extends BaseController
         return array($mapping, $classrooms);
     }
 
-    private function previewAsMember($previewAs = "", $member, $classroom)
+    private function previewAsMember($previewAs, $member, $classroom)
     {
         $user = $this->getCurrentUser();
 

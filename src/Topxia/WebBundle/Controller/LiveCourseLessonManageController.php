@@ -44,7 +44,7 @@ class LiveCourseLessonManageController extends BaseController
 				'liveLogoUrl' => $liveLogoUrl
 			));
 
-			if (empty($live) or isset($live['error'])) {
+			if (empty($live) || isset($live['error'])) {
 				throw new \RuntimeException('创建直播教室失败，请重试！');
 			}
 
@@ -152,12 +152,12 @@ class LiveCourseLessonManageController extends BaseController
 		return $this->createJsonResponse($leftCapacity);
 	}
 
-	private function getCourseService()
+	protected function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 
-	private function getSettingService()
+	protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

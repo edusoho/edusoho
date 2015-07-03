@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack2');
     require("placeholder");
     require('./util/card');
+    require('./util/es-bar');
     var Swiper=require('swiper');
 	var Cookie = require('cookie');
 
@@ -60,8 +61,8 @@ define(function(require, exports, module) {
 
 	if ($('html').hasClass('lt-ie8')) {
 		var message = '<div class="alert alert-warning" style="margin-bottom:0;text-align:center;">';
-		message += '您的浏览器版本太低，不能正常使用本站，请使用';
-		message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">IE8浏览器</a>、';
+		message += '由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的';
+		message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">IE浏览器</a>、';
 		message += '<a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">谷歌浏览器</a><strong>(推荐)</strong>、';
 		message += '<a href="http://firefox.com.cn/download/" target="_blank">Firefox浏览器</a>，访问本站。';
 		message += '</div>';
@@ -152,7 +153,7 @@ define(function(require, exports, module) {
     });
 
     if ($('[data-toggle="tooltip"]').length > 0) {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip({container: 'body'});
     }
 
     $(".js-search").focus(function () {

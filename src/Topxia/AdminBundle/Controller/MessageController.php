@@ -54,7 +54,7 @@ class MessageController extends BaseController
     
     }
 
-    private function convertConditions($conditions)
+    protected function convertConditions($conditions)
     {
         if (!empty($conditions['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);

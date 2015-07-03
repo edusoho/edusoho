@@ -60,7 +60,7 @@ class CoinController extends BaseController
         return $this->settingsRenderedPage($coinSettingsSaved);
     }
     
-    private function savePicture(Request $request,$size)
+    protected function savePicture(Request $request,$size)
     {
         $file = $request->files->get('coin_picture');
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
@@ -159,14 +159,14 @@ class CoinController extends BaseController
         )));
     }
 
-    private function updateCoursesPrice($data)
+    protected function updateCoursesPrice($data)
     {   
         foreach ($data as $key => $value) {
             $this->getCourseService()->setCoursePrice($key, 'default', $value);
         }
     }
 
-    private function updateCoursesCoinPrice($data)
+    protected function updateCoursesCoinPrice($data)
     {
         foreach ($data as $key => $value) {
             $this->getCourseService()->setCoursePrice($key, 'coin', $value);
@@ -687,7 +687,7 @@ class CoinController extends BaseController
         ));   
     }
 
-    private function convertFiltersToCondition($condition)
+    protected function convertFiltersToCondition($condition)
     {   
         $condition['time']=time()-7*3600*24;
         $condition['type']="";
@@ -780,7 +780,7 @@ class CoinController extends BaseController
         return $condition;
     }
 
-    private function filterCondition($conditions)
+    protected function filterCondition($conditions)
     {
         if  (isset($conditions['keywordType'])) {
           if ($conditions['keywordType'] == 'userName'){

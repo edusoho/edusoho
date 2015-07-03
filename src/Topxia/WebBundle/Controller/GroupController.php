@@ -15,7 +15,6 @@ class GroupController extends BaseController
 {
     public function indexAction() 
     {   
-        $mycreatedGroup = array();
         $myJoinGroup = array();
 
         $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 8);
@@ -377,7 +376,6 @@ class GroupController extends BaseController
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
-        $members=$this->getUserService()->findUsersByIds($memberIds);
         return $this->render("TopxiaWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -404,20 +402,18 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info','该小组已被关闭');
         }
 
-        $user=$this->getCurrentUser();
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getGroupService()->searchMembersCount(array('groupId'=>$id,'role'=>'member')),
             30
         );
 
-        $Members=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
+        $members=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
             array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
-        $memberIds = ArrayToolkit::column($Members, 'userId');
+        $memberIds = ArrayToolkit::column($members, 'userId');
 
         $users=$this->getUserService()->findUsersByIds($memberIds);
         $owner=$this->getUserService()->getUser($group['ownerId']);
@@ -433,7 +429,7 @@ class GroupController extends BaseController
         return $this->render("TopxiaWebBundle:Group:groupmember.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'groupmember_info'=>$Members,
+            'groupmember_info'=>$members,
             'owner_info'=>$owner,
             'paginator'=>$paginator,
             'members'=>$users,
@@ -442,29 +438,37 @@ class GroupController extends BaseController
         ));
     }
 
-    private function checkManagePermission($id)
+    protected function checkManagePermission($id)
     {   
         $user=$this->getCurrentUser();
 
-        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
-        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
-        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+            return true;
+        }
+        if($this->getGroupService()->isOwner($id, $user['id'])){
+            return true;
+        }
+        if($this->getGroupService()->isAdmin($id, $user['id'])){
+            return true;
+        }
         return false;
     }
 
-    private function checkOwnerPermission($id)
+    protected function checkOwnerPermission($id)
     {   
         $user=$this->getCurrentUser();
 
-        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
-        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+            return true;
+        }
+        if($this->getGroupService()->isOwner($id, $user['id'])){
+            return true;
+        }
         return false;
     }
 
     public function deleteMembersAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         if(!$this->checkManagePermission($id)){
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -493,8 +497,6 @@ class GroupController extends BaseController
 
     public function setAdminAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -523,8 +525,6 @@ class GroupController extends BaseController
 
     public function removeAdminAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         if (!$this->checkOwnerPermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -554,8 +554,6 @@ class GroupController extends BaseController
 
     public function groupSetAction(Request $request,$id)
     {
-        $user=$this->getCurrentUser();
-
         $group = $this->getGroupService()->getGroup($id);
 
         if (!$this->checkManagePermission($id)) {
@@ -576,7 +574,6 @@ class GroupController extends BaseController
     {
 
         $group = $this->getGroupService()->getGroup($id);
-        $currentUser = $this->getCurrentUser();
 
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
@@ -609,36 +606,8 @@ class GroupController extends BaseController
 
     }
 
-    private function setLogo($request,$user)
-    {
-        $data = $request->files->get('form');
-        $file = $data['avatar'];
-
-        if (!FileToolkit::isImageFile($file)) {
-              return $this->createMessageResponse('info', '上传图片格式错误，请上传jpg, gif, png格式的文件。!');
-        }
-        $filenamePrefix = "user_{$user['id']}_";
-
-        $hash = substr(md5($filenamePrefix . time()), -8);
-
-        $ext = $file->getClientOriginalExtension();
-
-        $filename = $filenamePrefix . $hash . '.' . $ext;
-
-        $directory = $this->container->getParameter('topxia.upload.public_directory') . '/tmp';
-
-        $file = $file->move($directory, $filename);
-
-        $fileName = str_replace('.', '!', $file->getFilename()); 
-
-        return $filename;
-
-    }
-
     public function setGroupLogoAction(Request $request, $id)
     {
-        $user=$this->getCurrentUser();
-
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
@@ -654,9 +623,7 @@ class GroupController extends BaseController
 
     }
      public function setGroupBackgroundLogoAction(Request $request,$id)
-     {
-        $user=$this->getCurrentUser();
-        
+     {        
         $group = $this->getGroupService()->getGroup($id);
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
@@ -687,7 +654,9 @@ class GroupController extends BaseController
         $groupSetting=$this->getSettingService()->get('group', array());
 
         $time=7*24*60*60;
-        if(isset($groupSetting['threadTime_range'])) $time=$groupSetting['threadTime_range']*24*60*60;
+        if(isset($groupSetting['threadTime_range'])){
+            $time=$groupSetting['threadTime_range']*24*60*60;
+        }
         
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
@@ -704,17 +673,25 @@ class GroupController extends BaseController
         );       
     }
 
-    private function getGroupMemberRole($userId)
+    protected function getGroupMemberRole($userId)
     {
         $user = $this->getCurrentUser();
 
-        if (!$user['id']) return 0;
+        if (!$user['id']){
+            return 0;
+        }
 
-        if ($this->getGroupService()->isOwner($userId, $user['id'])) return 2;
+        if ($this->getGroupService()->isOwner($userId, $user['id'])){
+            return 2;
+        }
 
-        if ($this->getGroupService()->isAdmin($userId, $user['id'])) return 3;
+        if ($this->getGroupService()->isAdmin($userId, $user['id'])){
+            return 3;
+        }
 
-        if ($this->getGroupService()->isMember($userId, $user['id'])) return 1;
+        if ($this->getGroupService()->isMember($userId, $user['id'])){
+            return 1;
+        }
 
         return 0;
     }
@@ -750,7 +727,6 @@ class GroupController extends BaseController
 
     public function groupEditAction(Request $request,$id)
     {
-        $currentUser = $this->getCurrentUser();
         if (!$this->checkManagePermission($id)) {
             return $this->createMessageResponse('info', '您没有权限!');
         }
@@ -769,7 +745,7 @@ class GroupController extends BaseController
         )));
     }
    
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
@@ -777,17 +753,17 @@ class GroupController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-    private function getGroupService() 
+    protected function getGroupService() 
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
@@ -826,7 +802,7 @@ class GroupController extends BaseController
         }
         return $orderBys;
     }
-    private function getThreadSearchFilters($request)
+    protected function getThreadSearchFilters($request)
     {
         $filters = array();
         $filters['type'] = $request->query->get('type');
@@ -856,7 +832,7 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
     
-    private function convertFiltersToConditions($id, $filters)
+    protected function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('groupId' => $id,'num'=>10,'status'=>'open');
         switch ($filters['type']) {

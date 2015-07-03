@@ -16,7 +16,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'courseId');
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
         $currentTime = time();
         $todayTimeStart = strtotime(date("Y-m-d", $currentTime));
@@ -274,7 +274,7 @@ class ClassroomManageController extends BaseController
                 'classroomTitle' => $classroom['title'],
                 'userId'=> $user['id'],
                 'userName' => $user['nickname'],
-                'opration' => 'create');
+                'type' => 'create');
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 

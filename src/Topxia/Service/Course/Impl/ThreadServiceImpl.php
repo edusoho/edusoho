@@ -17,7 +17,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $thread['courseId'] == $courseId ? $thread : null;
 	}
 
-	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit)
+	public function findThreadsByType($courseId, $type, $sort, $start, $limit)
 	{
 		if ($sort == 'latestPosted') {
 			$orderBy = array('latestPosted', 'DESC');
@@ -74,7 +74,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
 	}
 	
-	private function filterSort($sort)
+	protected function filterSort($sort)
 	{
 		switch ($sort) {
 			case 'created':
@@ -111,7 +111,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $orderBys;
 	}
 
-	private function prepareThreadSearchConditions($conditions)
+	protected function prepareThreadSearchConditions($conditions)
 	{
 
 		if(empty($conditions['type'])) {
@@ -288,7 +288,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->waveThread($threadId, 'hitNum', +1);
 	}
 
-	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit)
+	public function findThreadPosts($courseId, $threadId, $sort, $start, $limit)
 	{
 		$thread = $this->getThread($courseId, $threadId);
 		if (empty($thread)) {
@@ -405,32 +405,32 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
 	}
 
-	private function getThreadDao()
+	protected function getThreadDao()
 	{
 		return $this->createDao('Course.ThreadDao');
 	}
 
-	private function getThreadPostDao()
+	protected function getThreadPostDao()
 	{
 		return $this->createDao('Course.ThreadPostDao');
 	}
 
-	private function getCourseService()
+	protected function getCourseService()
 	{
 		return $this->createService('Course.CourseService');
 	}
 
-	private function getUserService()
+	protected function getUserService()
     {
       	return $this->createService('User.UserService');
     }
 
-	private function getNotifiactionService()
+	protected function getNotifiactionService()
     {
       	return $this->createService('User.NotificationService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
     	return $this->createService('System.LogService');
     }

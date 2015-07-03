@@ -591,6 +591,11 @@ admin_setting_consult_upload:
     pattern:  /setting/consult-upload
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
 
+admin_setting_consult_webchat_delete:
+    pattern:  /setting/consult-webchat-delete
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:deleteWebchat }
+    methods:  [POST]
+
 admin_setting_admin_sync:
     pattern:  /setting/admin_sync
     defaults: { _controller: TopxiaAdminBundle:Setting:adminSync }
@@ -648,6 +653,10 @@ admin_logs_prod:
     pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
+admin_cloud_access:
+    pattern:  /cloud/access
+    defaults: { _controller: TopxiaAdminBundle:Cloud:access }
+
 admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
@@ -660,9 +669,29 @@ admin_cloud_detail:
     pattern:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
 
+admin_cloud_buy:
+    pattern:  /cloud/{type}/buy
+    defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
+
+admin_cloud_tlp:
+    pattern:  /cloud/tlp
+    defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
+
+admin_cloud_video:
+    pattern:  /cloud/video
+    defaults: { _controller: TopxiaAdminBundle:Cloud:video }
+
+admin_cloud_live:
+    pattern:  /cloud/live
+    defaults: { _controller: TopxiaAdminBundle:Cloud:live }
+
 admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
+
+admin_cloud_video_upgrade:
+    pattern:  /cloud/video/upgrade
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
 
 admin_customer_service:
     pattern: /customer/service

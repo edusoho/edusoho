@@ -46,7 +46,6 @@ class UtilityController extends BaseController
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
             );
         }
-
         return $this->createJsonResponse($newUsers);
     }
 
@@ -55,13 +54,10 @@ class UtilityController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $assistants = $this->getClassroomService()->findAssistants($classroomId);
         $assistantIds = ArrayToolkit::column($assistants, 'userId');
-        if(empty($classroom['teacherIds'])){
-            $classroom['teacherIds'] = array();
-        }
         if(empty($assistantIds)){
             $assistantIds = array();
         }
-        $excludeIds = array_merge($classroom['teacherIds'], $assistantIds);
+        $excludeIds = $assistantIds;
         $excludeIds[] = $classroom['headTeacherId'];
 
         return $excludeIds;

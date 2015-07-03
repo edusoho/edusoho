@@ -164,12 +164,12 @@ class HLSController extends BaseController
         return new Response($file['convertParams']['hlsKey']);
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    private function getTokenService()
+    protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
@@ -179,7 +179,7 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getVideoBeginning($level)
+    protected function getVideoBeginning($level)
     {
         $beginning = array(
             'beginningKey' => null,

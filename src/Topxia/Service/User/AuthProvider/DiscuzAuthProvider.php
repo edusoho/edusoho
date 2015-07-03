@@ -171,13 +171,13 @@ class DiscuzAuthProvider implements AuthProvider
         return 'discuz';
     }
 
-    private function initDiscuzApi()
+    protected function initDiscuzApi()
     {
         require_once __DIR__ .'/../../../../../app/config/uc_client_config.php';
         require_once __DIR__ .'/../../../../../vendor_user/uc_client/client.php';
     }
 
-    private function convertApiResult($result)
+    protected function convertApiResult($result)
     {
         if ($result > 0) {
             return array('success', '');

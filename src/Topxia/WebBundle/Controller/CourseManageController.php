@@ -81,8 +81,8 @@ class CourseManageController extends BaseController
 
 	    if($request->getMethod() == 'POST'){
             $detail = $request->request->all();
-            $detail['goals'] = (empty($detail['goals']) or !is_array($detail['goals'])) ? array() : $detail['goals'];
-            $detail['audiences'] = (empty($detail['audiences']) or !is_array($detail['audiences'])) ? array() : $detail['audiences'];
+            $detail['goals'] = (empty($detail['goals']) || !is_array($detail['goals'])) ? array() : $detail['goals'];
+            $detail['audiences'] = (empty($detail['audiences']) || !is_array($detail['audiences'])) ? array() : $detail['audiences'];
 
             $this->getCourseService()->updateCourse($id, $detail);
             $this->setFlashMessage('success', '课程详细信息已保存！');
@@ -233,7 +233,7 @@ class CourseManageController extends BaseController
         ));
     }
 
-    private function makeLevelChoices($levels)
+    protected function makeLevelChoices($levels)
     {
         $choices = array();
         foreach ($levels as $level) {
@@ -317,47 +317,47 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getLevelService()
+    protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function getWebExtension()
+    protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }
     
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    private function getNoteService()
+    protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     } 

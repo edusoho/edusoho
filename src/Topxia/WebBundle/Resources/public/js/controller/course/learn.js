@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
-        chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
+        chapterAnimate = require('../course/widget/chapter-animate');
 
     require('mediaelementplayer');
 
@@ -331,7 +331,7 @@ define(function(require, exports, module) {
                             
                             player.on('error', function(error){
                                 hasPlayerError = true;
-                                var message = '您的浏览器不能播放当前视频，请<a href="' + 'http://get.adobe.com/flashplayer/' + '" target="_blank">点击此处安装Flash播放器</a>。';
+                                var message = '您的浏览器不能播放当前视频。';
                                 Notify.danger(message, 60);
                             });
                             $("#lesson-video-content").show();
@@ -685,7 +685,7 @@ define(function(require, exports, module) {
     var DurationStorage = {
         set: function(userId,mediaId,duration) {
             var durations = Store.get("durations");
-            if(!durations){
+            if(!durations || !(durations instanceof Array)){
                 durations = new Array();
             }
 

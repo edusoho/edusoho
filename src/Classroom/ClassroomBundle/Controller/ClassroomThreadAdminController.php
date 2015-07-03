@@ -12,8 +12,8 @@ class ClassroomThreadAdminController extends BaseController
     {
         $conditions = $request->query->all();
 
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
-        }
+        // if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
+        // }
 
         $paginator = new Paginator(
             $request,

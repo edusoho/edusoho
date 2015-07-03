@@ -52,7 +52,7 @@ class NoteController extends CourseBaseController
         ));
     }
 
-    private function getNoteSearchFilters($request)
+    protected function getNoteSearchFilters($request)
     {
         $filters = array();
         
@@ -84,7 +84,7 @@ class NoteController extends CourseBaseController
         return $this->createJsonResponse($note);
     }
 
-    private function makeNotesRelated($notes, $courseIds)
+    protected function makeNotesRelated($notes, $courseIds)
     {
         $user = $this->getCurrentUser();
         $result = array();
@@ -106,7 +106,7 @@ class NoteController extends CourseBaseController
         return $result;
     }
 
-    private function convertFiltersToConditions($courseIds, $filters)
+    protected function convertFiltersToConditions($courseIds, $filters)
     {
         $conditions = array(
             'status' => 1,
@@ -132,7 +132,7 @@ class NoteController extends CourseBaseController
         return $conditions;
     }
 
-    private function convertFiltersToOrderBy($filters)
+    protected function convertFiltersToOrderBy($filters)
     {
         $orderBy = array();
         switch ($filters['sort']) {
@@ -149,12 +149,12 @@ class NoteController extends CourseBaseController
         return $orderBy;
     }
 
-    private function getClassroomService()
+    protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
-    private function getNoteService()
+    protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }

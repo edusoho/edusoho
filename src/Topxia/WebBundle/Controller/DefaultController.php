@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 use Topxia\Common\Paginator;
@@ -78,7 +79,7 @@ class DefaultController extends BaseController
             ));
     }
 
-    private function getRecentLiveCourses()
+    protected function getRecentLiveCourses()
     {
 
         $recenntLessonsCondition = array(
@@ -125,8 +126,9 @@ class DefaultController extends BaseController
             );
         }
 
-        if(isset($teacher['locked']) && $teacher['locked'] !== '0')
+        if(isset($teacher['locked']) && $teacher['locked'] !== '0'){
             $teacher = null;
+        }
 
         return $this->render('TopxiaWebBundle:Default:promoted-teacher-block.html.twig', array(
             'teacher' => $teacher,
@@ -147,7 +149,7 @@ class DefaultController extends BaseController
 
     public function topNavigationAction($siteNav = null,$isMobile= false)
     {
-        $navigations = $this->getNavigationService()->getNavigationsTreeByType('top');
+        $navigations = $this->getNavigationService()->getOpenedNavigationsTreeByType('top');
 
         return $this->render('TopxiaWebBundle:Default:top-navigation.html.twig', array(
             'navigations' => $navigations,
@@ -184,12 +186,8 @@ class DefaultController extends BaseController
         }else{
             $url = $this->generateUrl('course_show', array('id' => $courseId));
         }
-        echo "<script type=\"text/javascript\"> 
-        if (top.location !== self.location) {
-        top.location = \"{$url}\";
-        }
-        </script>";
-        exit();
+        $jumpScript = "<script type=\"text/javascript\"> if (top.location !== self.location) {top.location = \"{$url}\";}</script>";
+        return new Response($jumpScript);
     }
 
     public function CoursesCategoryAction(Request $request)
@@ -218,7 +216,7 @@ class DefaultController extends BaseController
         ));
     }
 
-    private function calculateUserLearnProgress($course, $member)
+    protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -268,7 +266,7 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getClassroomService() 
+    protected function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
