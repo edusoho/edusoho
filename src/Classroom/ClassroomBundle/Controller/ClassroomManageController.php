@@ -274,7 +274,7 @@ class ClassroomManageController extends BaseController
                 'classroomTitle' => $classroom['title'],
                 'userId'=> $user['id'],
                 'userName' => $user['nickname'],
-                'opration' => 'create');
+                'type' => 'create');
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
