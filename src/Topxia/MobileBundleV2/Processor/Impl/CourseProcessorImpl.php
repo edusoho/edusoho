@@ -419,12 +419,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
         
         $conditions = array(
-            'userId' => $user['id'],
+            'userId' => $user['id']
         );
-        
-        $total = $this->controller->getNoteService()->searchNoteCount($conditions);
-        $noteInfos = $this->controller->getNoteService()->searchNotes($conditions, 'updated', $start, $limit);
 
+        $total = $this->controller->getNoteService()->searchNoteCount($conditions);
+        $noteInfos = $this->controller->getNoteService()->searchNotes($conditions, array("updatedTime" => "DESC") , $start, $limit);
         $lessonIds = ArrayToolkit::column($noteInfos , "lessonId");
         $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
         for ($i = 0; $i < count($noteInfos); $i++) {
@@ -453,7 +452,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $lessonStatus = $this->controller->getCourseService()->getUserLearnLessonStatus($user['id'], $noteInfo['courseId'], $noteInfo['lessonId']);
         $noteContent = $this->filterSpace($this->controller->convertAbsoluteUrl($this->request, $noteInfo['content']));
         $noteInfos = array(
-            "coursesId" => null,
+            "courseId" => $noteInfo['courseId'],
             "courseTitle" => null,
             "noteLastUpdateTime" => null,
             "lessonId" => $lessonInfo['id'],
