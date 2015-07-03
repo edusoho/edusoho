@@ -634,6 +634,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		return array_map(function($lesson) use ($files) {
             		$lesson['content'] = "";
                                  if (isset($lesson["mediaId"])) {
+                                    $lesson['endTime'] = date('c', $lesson['endTime']);
+                                    $lesson['startTime'] = date('c', $lesson['startTime']);
                                     $lesson["uploadFile"] = isset($files[$lesson["mediaId"]]) ? $files[$lesson["mediaId"]] : null;
                                  }
                                  

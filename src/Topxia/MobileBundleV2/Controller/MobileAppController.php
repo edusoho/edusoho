@@ -12,7 +12,7 @@ class MobileAppController extends MobileAppBaseController
 	{
 		$userAgent = $request->headers->get("user-agent");
 		$clientType = $this->getClientType($userAgent);
-		$debug = "release";
+		$debug = "debug";
 
 		$render  = "TopxiaMobileBundleV2:ESMobile:main.index-{$debug}.html.twig";
 		if (!strpos($userAgent, "kuozhi") ) {

@@ -44,7 +44,23 @@ filter('lessonType', function() {
 	};
 	return function(lesson) {
 		if (lesson.type == "live") {
-			return "直播";
+			var returnStr = "";
+			var startTime = new Date(lesson.startTime).getTime();
+			var endTime = new Date(lesson.endTime).getTime();
+			var currentTime = new Date().getTime();
+
+			if (startTime > currentTime) {
+				returnStr = new Date(startTime).Format("MM月dd号 hh:mm");;
+			} else if (startTime <= currentTime && endTime >= currentTime) {
+				returnStr = "直播中";
+			}else if (endTime < currentTime) {
+				if (lesson.replayStatus == 'generated' ) {
+					returnStr = "回放";
+				} else {
+					returnStr = "结束";
+				}
+			}
+			return returnStr;
 		}
 		return lessonType[lesson.type];
 	}
