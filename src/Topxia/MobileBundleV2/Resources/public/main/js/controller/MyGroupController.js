@@ -1,5 +1,3 @@
-app.controller('MyGroupQuestionController', ['$scope', 'QuestionService', MyGroupQuestionController]);
-
 function MyGroupBaseController($scope, serviceCallBack) {
 
   var self = this;
@@ -27,7 +25,7 @@ function MyGroupBaseController($scope, serviceCallBack) {
     }
 }
 
-function MyGroupNoteController($scope, NoteService)
+function MyGroupNoteController($scope, NoteService, cordovaUtil, $state)
 {
       console.log("MyGroupNoteController");
       var self = this;
@@ -43,8 +41,6 @@ function MyGroupNoteController($scope, NoteService)
 
      this.loadDataList();
 }
-
-app.controller('MyGroupNoteController', ['$scope', 'NoteService', MyGroupNoteController]);
 
 function MyGroupQuestionController($scope, QuestionService)
 {
@@ -62,7 +58,6 @@ function MyGroupQuestionController($scope, QuestionService)
      this.loadDataList("question");
 }
 
-app.controller('MyGroupThreadController', ['$scope', 'QuestionService', MyGroupThreadController]);
 function MyGroupThreadController($scope, QuestionService)
 {
   console.log("MyGroupThreadController");
@@ -78,3 +73,7 @@ function MyGroupThreadController($scope, QuestionService)
 
    this.loadDataList("discussion");
 }
+
+app.controller('MyGroupQuestionController', ['$scope', 'QuestionService', MyGroupQuestionController]);
+app.controller('MyGroupNoteController', ['$scope', 'NoteService', 'cordovaUtil', '$state', MyGroupNoteController]);
+app.controller('MyGroupThreadController', ['$scope', 'QuestionService', MyGroupThreadController]);

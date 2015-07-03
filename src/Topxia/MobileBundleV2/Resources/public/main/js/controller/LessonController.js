@@ -1,6 +1,6 @@
-app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', LessonController]);
+app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'cordovaUtil', LessonController]);
 
-function LessonController($scope, $stateParams, LessonService)
+function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 {	
 	var self = this;
 
@@ -15,6 +15,11 @@ function LessonController($scope, $stateParams, LessonService)
 				return;
 			}
 			$scope.lesson = data;
+			if (data.type != "text") {
+				cordovaUtil.learnCourseLesson(data.courseId, data.id); 
+				window.history.back();
+				return;
+			}
 			$scope.lessonView = "view/lesson_" + data.type + ".html";
 		});
 	}

@@ -7,8 +7,8 @@
 
 <div class="top-header ui-question">
   <section class="ui-panel ui-panel-card ui-question-panel">
-    <h2 class="ui-arrowlink">
-        {{ note.courseTitle }}
+    <h2 class="ui-arrowlink ui-nowrap" ng-href="#/lesson/{{ note.courseId }}/{{ note.lessonId }}">
+        {{ note.lessonTitle }}
     </h2>
     <ul class="ui-list ui-list-text ui-border-t">
         <li>

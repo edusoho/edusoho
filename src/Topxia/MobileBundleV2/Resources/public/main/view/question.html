@@ -7,7 +7,7 @@
 
 <div class="top-header ui-question">
   <section class="ui-panel ui-panel-card ui-question-panel">
-    <h2 class="ui-arrowlink">
+    <h2 class="ui-arrowlink" ng-href="#/course/{{ thread.courseId }}">
         {{ thread.courseTitle }}
     </h2>
     <ul class="ui-list ui-list-text ui-border-tb">
@@ -16,7 +16,7 @@
         </li>
         <li>
             <div class="ui-avatar">
-                <img ng-src="{{ thread.user.mediumAvatar }}" />
+                <img ng-src="{{ thread.user.mediumAvatar }}" img-error="avatar" />
             </div>
             <div class="ui-list-info">
                 <h4 class="ui-nowrap">{{ thread.user.nickname }}</h4>
@@ -49,7 +49,7 @@
     <ul class="ui-list ui-list-text" ng-repeat="teacherPost in teacherPosts">
         <li>
           <div class="ui-avatar-s">
-              <img ng-src="{{ teacherPost.user.mediumAvatar}}" />
+              <img ng-src="{{ teacherPost.user.mediumAvatar}}" img-error="avatar" />
           </div>
           <div class="ui-list-info">
               <h4 class="ui-nowrap">{{ teacherPost.user.nickname }}</h4>
@@ -70,7 +70,7 @@
     <ul class="ui-list ui-list-text" ng-repeat="threadPost in threadPosts">
         <li>
           <div class="ui-avatar-s">
-              <img ng-src="{{ threadPost.user.mediumAvatar}}" />
+              <img ng-src="{{ threadPost.user.mediumAvatar}}" img-error="avatar" />
           </div>
           <div class="ui-list-info">
               <h4 class="ui-nowrap">{{ threadPost.user.nickname }}</h4>

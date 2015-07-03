@@ -22,7 +22,7 @@
 		        </div>
 		        <div class="ui-list-action lesson-time" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
 		        	{{ lesson.length }}
-		        	<label class="ui-label">{{ lesson.type | lessonType }}</label>
+		        	<label class="ui-label">{{ lesson | lessonType }}</label>
 		        </div>
 		</li>
 		<list-empty-view class="lesson-empty" data="lessons" title="暂无课时">

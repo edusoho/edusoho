@@ -1225,6 +1225,10 @@ a {
   padding-right: 0;
 }
 
+.ui-question .ui-list-info h4{
+  font-weight: bold;
+}
+
 /** ui-question **/
 
 /** ui-vip **/
