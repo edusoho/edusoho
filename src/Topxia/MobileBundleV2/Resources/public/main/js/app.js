@@ -398,7 +398,6 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 
 angular.element(document).ready(function() {
     var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
-
     if (platformUtil.native) {
       document.addEventListener("deviceready", function() {
           angular.bootstrap( document, ["app"] );

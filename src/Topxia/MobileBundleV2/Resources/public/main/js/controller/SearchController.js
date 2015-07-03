@@ -1,6 +1,6 @@
-app.controller('SearchController', ['$scope', 'ServcieUtil', SearchController]);
+app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', SearchController]);
 
-function SearchController($scope, ServcieUtil)
+function SearchController($scope, ServcieUtil, cordovaUtil)
 {
 	$scope.search = "";
 	var self = this;
@@ -12,7 +12,7 @@ function SearchController($scope, ServcieUtil)
 
 	$scope.seach = function() {
 		if ($scope.search.length == 0) {
-			window.history.back();
+			cordovaUtil.closeWebView();
 			return;
 		}
 		$scope.start = 0;

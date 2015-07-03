@@ -42,8 +42,11 @@ filter('lessonType', function() {
 		document  : "文档",
 		ppt  : "PPT"
 	};
-	return function(type) {
-		return lessonType[type];
+	return function(lesson) {
+		if (lesson.type == "live") {
+			return "直播";
+		}
+		return lessonType[lesson.type];
 	}
 }).
 filter('coverIncludePath', function() {

@@ -398,7 +398,6 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 
 angular.element(document).ready(function() {
     var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
-
     if (platformUtil.native) {
       document.addEventListener("deviceready", function() {
           angular.bootstrap( document, ["app"] );
@@ -943,8 +942,11 @@ filter('lessonType', function() {
 		document  : "文档",
 		ppt  : "PPT"
 	};
-	return function(type) {
-		return lessonType[type];
+	return function(lesson) {
+		if (lesson.type == "live") {
+			return "直播";
+		}
+		return lessonType[lesson.type];
 	}
 }).
 filter('coverIncludePath', function() {
@@ -1718,7 +1720,7 @@ factory('platformUtil', function($browser) {
 	        };
 	    })()
 	};
-
+	
 	return browser.v;
 }).
 factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUtil', 

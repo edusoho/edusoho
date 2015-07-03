@@ -196,7 +196,7 @@ factory('platformUtil', function($browser) {
 	        };
 	    })()
 	};
-
+	
 	return browser.v;
 }).
 factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUtil', 
@@ -236,6 +236,8 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		showDownLesson : function(courseId) {
 			alert("请在客户端下载课时");
+		}, closeWebView : function() {
+			window.history.back();
 		}
 	};
 

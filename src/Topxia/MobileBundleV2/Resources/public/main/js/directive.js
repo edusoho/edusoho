@@ -133,7 +133,7 @@ directive('ngImgShow', function() {
     }
   }
 }).
-directive('back', function($window, $state) {
+directive('back', function(cordovaUtil, $state) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
@@ -142,11 +142,7 @@ directive('back', function($window, $state) {
 
                   element.on("click", function(){
                     if (attributes["back"] == "go") {
-                      if (scope.platform.native) {
-                        esNativeCore.closeWebView();
-                      } else {
-                        $window.history.back();
-                      }
+                      cordovaUtil.closeWebView();
                       return;
                     }
                     if (attributes["back"] == "close" && scope.close) {
