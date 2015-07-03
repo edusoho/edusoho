@@ -51,7 +51,7 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
 
     public function deleteGoodsByThreadId($id,$type)
     {
-        $sql ="DELETE FROM {$this->table} WHERE threadId = ? and type = ? ";
+        $sql ="DELETE FROM {$this->table} WHERE threadId = ? AND type = ? ";
         return $this->getConnection()->executeUpdate($sql, array($id,$type));
     }
 
@@ -87,7 +87,7 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
         return $builder->execute()->fetchAll() ? : array();  
     }
 
-    private function createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)

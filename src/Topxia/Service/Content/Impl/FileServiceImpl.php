@@ -173,7 +173,7 @@ class FileServiceImpl extends BaseService implements FileService
         return new File($parsed['fullpath']);
     }
 
-	private function saveFile($file, $uri)
+	protected function saveFile($file, $uri)
 	{
 		$parsed = $this->parseFileUri($uri);
 		if ($parsed['access'] == 'public') {
@@ -190,7 +190,7 @@ class FileServiceImpl extends BaseService implements FileService
 		return $file->move($directory, $parsed['name']);
 	}
 
-    private function generateUri ($group, $file)
+    protected function generateUri ($group, $file)
     {
 		if ($file instanceof UploadedFile) {
 			$filename = $file->getClientOriginalName();
@@ -218,7 +218,7 @@ class FileServiceImpl extends BaseService implements FileService
     {
     	$parsed = array();
     	$parts = explode('://', $uri);
-    	if (empty($parts) or count($parts)!=2) {
+    	if (empty($parts) || count($parts)!=2) {
     		throw $this->createServiceException('解析文件URI({$uri})失败！');
     	}
     	$parsed['access'] = $parts[0];
@@ -310,22 +310,22 @@ class FileServiceImpl extends BaseService implements FileService
         return array($parsed["path"], $naturalSize, $scaledSize);
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
     	return $this->createService('System.SettingService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
 
-    private function getFileDao()
+    protected function getFileDao()
     {
         return $this->createDao('Content.FileDao');
     }
 
-	private function getGroupDao()
+	protected function getGroupDao()
 	{
         return $this->createDao('Content.FileGroupDao');
 	}

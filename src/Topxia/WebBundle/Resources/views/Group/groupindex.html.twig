@@ -6,8 +6,13 @@
 {% set groupNav = 'index' %}
 
 {% block group_main %}
+  
   <div class="panel panel-default">
     <div class="panel-body">
+      <ol class="breadcrumb">
+        <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
+        <li class="active">{{groupinfo.title}}</li>
+      </ol>
       <ul class="nav nav-tabs">
         <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
         <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>

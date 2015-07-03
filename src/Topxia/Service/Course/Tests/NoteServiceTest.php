@@ -32,8 +32,9 @@ class NoteServiceTest extends BaseTestCase
         ));
 
         $foundNote = $this->getNoteService()->getNote($note['id']);
+        $this->assertEquals($note['userId'], $foundNote['userId']);
 
-        $this->assertEquals($note['id'], $foundNote['userId']);
+
     }
 
 
@@ -280,17 +281,17 @@ class NoteServiceTest extends BaseTestCase
 
     }
 
-    private function getNoteService()
+    protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }

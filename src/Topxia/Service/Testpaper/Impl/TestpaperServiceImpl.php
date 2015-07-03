@@ -65,7 +65,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->updateTestpaper($id, $fields);
     }
 
-    private function filterTestpaperFields($fields, $mode = 'create')
+    protected function filterTestpaperFields($fields, $mode = 'create')
     {
         $filtedFields = array();
         $filtedFields['updatedUserId'] = $this->getCurrentUser()->id;
@@ -278,7 +278,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->addTestpaperResult($testpaperResult);
     }
 
-    private function completeQuestion($items, $questions)
+    protected function completeQuestion($items, $questions)
     {
         foreach ($items as $item) {
             if (!in_array($item['questionId'], ArrayToolkit::column($questions, 'id'))){
@@ -371,7 +371,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
     }
 
-    private function makeAccuracy ($items)
+    protected function makeAccuracy ($items)
     {
         $accuracyResult = array(
             'right' => 0,
@@ -498,7 +498,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperItemResultDao()->findTestResultsByTestpaperResultId($testpaperResult['id']);
     }
 
-    private function formatAnswers($answers, $items)
+    protected function formatAnswers($answers, $items)
     {
         $results = array();
         foreach ($items as $item) {
@@ -586,7 +586,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    private function sumScore ($itemResults)
+    protected function sumScore ($itemResults)
     {
         $score = 0;
         $rightItemCount = 0;
@@ -701,7 +701,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->filterTestAnswers($testpaperResult['id'], $answers);
     }
 
-    private function filterTestAnswers ($testpaperResultId, $answers)
+    protected function filterTestAnswers ($testpaperResultId, $answers)
     {
         return $this->getTestpaperItemResultDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testpaperResultId);
     }
@@ -779,7 +779,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item['parentId'] = $question['parentId'];
                 // @todo, wellming.
 
-                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
                     $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
                 } else {
                     $item['missScore'] = 0;
@@ -791,7 +791,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
                 $existItem = $existItems[$item['questionId']];
 
-                if ($item['seq'] != $existItem['seq'] or $item['score'] != $existItem['score']) {
+                if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
                     $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
@@ -915,40 +915,40 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 
 
-	private function getTestpaperDao()
+	protected function getTestpaperDao()
     {
         return $this->createDao('Testpaper.TestpaperDao');
     }
 
-    private function getTestpaperResultDao()
+    protected function getTestpaperResultDao()
     {
         return $this->createDao('Testpaper.TestpaperResultDao');
     }
 
-    private function getTestpaperItemDao(){
+    protected function getTestpaperItemDao(){
         return $this->createDao('Testpaper.TestpaperItemDao');
     }
 
-    private function getTestpaperItemResultDao(){
+    protected function getTestpaperItemResultDao(){
         return $this->createDao('Testpaper.TestpaperItemResultDao');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->createService('Question.QuestionService');
     }
 
-    private function getMemberDao ()
+    protected function getMemberDao ()
     {
         return $this->createDao('Course.CourseMemberDao');
     }
 
-    private function getStatusService()
+    protected function getStatusService()
     {
         return $this->createService('User.StatusService');
     }

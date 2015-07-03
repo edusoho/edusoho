@@ -82,6 +82,16 @@ class SiteSettingController extends BaseController
         ));
     }
 
+    public function deleteWebchatAction(Request $request)
+    {
+        $consult = $this->getSettingService()->get('consult', array());
+        if(isset($consult['webchatURI'])){
+            $consult['webchatURI'] = '';
+            $this->getSettingService()->set('consult', $consult);
+        }
+        return $this->createJsonResponse(true);
+    }
+
     public function consultUploadAction(Request $request)
     {
         $file = $request->files->get('consult');
@@ -134,7 +144,7 @@ class SiteSettingController extends BaseController
         ));
     }
 
-    private function getDefaultSet()
+    protected function getDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -153,7 +163,7 @@ class SiteSettingController extends BaseController
         return $default;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

@@ -49,7 +49,7 @@ class OperationSettingController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -79,7 +79,7 @@ class OperationSettingController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }

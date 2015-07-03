@@ -179,7 +179,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $keyPrefixs = array();
 
         foreach (array('sd', 'hd', 'shd') as $key) {
-            if (empty($file['metas2'][$key]) or empty($file['metas2'][$key]['key'])) {
+            if (empty($file['metas2'][$key]) || empty($file['metas2'][$key]['key'])) {
                 continue ;
             }
 
@@ -375,17 +375,17 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
-    private function getFileFullName($file)
+    protected function getFileFullName($file)
     {
         $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);
         $filename .= "{$file['hashId']}.{$file['ext']}";
         return $diskDirectory.$filename; 
     }
 
-    private function getVideoWatermarkImages()
+    protected function getVideoWatermarkImages()
     {
         $setting = $this->getSettingService()->get('storage',array());
-        if (empty($setting['video_embed_watermark_image']) or ($setting['video_watermark'] != 2)) {
+        if (empty($setting['video_embed_watermark_image']) || ($setting['video_watermark'] != 2)) {
             return array();
         }
 
@@ -404,7 +404,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
 
 
-    private function getFilePath($targetType,$targetId)
+    protected function getFilePath($targetType,$targetId)
     {
         $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
         $subDir = DIRECTORY_SEPARATOR.$file['targetType'].DIRECTORY_SEPARATOR;
@@ -412,15 +412,15 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $diskDirectory.$subDir;    	
     }
 
-    private function encodeMetas($metas)
+    protected function encodeMetas($metas)
     {
-        if(empty($metas) or !is_array($metas)) {
+        if(empty($metas) || !is_array($metas)) {
             $metas = array();
         }
         return json_encode($metas);
     }
 
-    private function decodeMetas($metas)
+    protected function decodeMetas($metas)
     {
         if (empty($metas)) {
             return array();
@@ -428,7 +428,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return json_decode($metas, true);
     }
 
-    private function getCloudClient()
+    protected function getCloudClient()
     {
         if(empty($this->cloudClient)) {
             $factory = new CloudClientFactory();
@@ -437,18 +437,18 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->cloudClient;
     }
 
-    private function getConvertor($name)
+    protected function getConvertor($name)
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
     }
 
-    private function getUploadFileDao()
+    protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
@@ -499,7 +499,7 @@ class HLSVideoConvertor
 
     public function saveConvertResult($file, $result)
     {
-        $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+        $items = (empty($result['items']) || !is_array($result['items'])) ? array() : $result['items'];
 
         $types = array('sd', 'hd', 'shd');
         $metas = array();
@@ -549,7 +549,7 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         return $file;
     }
 
-    private function generateKey ($length = 0 )
+    protected function generateKey ($length = 0 )
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -639,7 +639,7 @@ class PptConvertor
     {
 
         if (!empty($result['nextConvertCallbackUrl'])) {
-            $items = (empty($result['items']) or !is_array($result['items'])) ? array() : $result['items'];
+            $items = (empty($result['items']) || !is_array($result['items'])) ? array() : $result['items'];
 
             $types = array('pdf');
             $metas = array();

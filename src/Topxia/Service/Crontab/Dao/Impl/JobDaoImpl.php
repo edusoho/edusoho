@@ -64,7 +64,7 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    private function createSearchQueryBuilder($conditions)
+    protected function createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
@@ -76,7 +76,7 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $builder;
     }
 
-    private function getSerializeFields()
+    protected function getSerializeFields()
     {
         return $this->serializeFields;
     }

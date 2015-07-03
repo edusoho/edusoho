@@ -61,7 +61,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         $this->getTokenDao()->deleteToken($token['id']);
     }
 
-    private function _gcToken($token)
+    protected function _gcToken($token)
     {
         if (($token['times'] > 0) && ($token['remainedTimes'] <= 1)) {
             $this->getTokenDao()->deleteToken($token['id']);
@@ -76,7 +76,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         return ;
     }
 
-    private function _makeTokenValue($length)
+    protected function _makeTokenValue($length)
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 

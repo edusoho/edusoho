@@ -69,13 +69,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array($status));
     }
 
-    public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         if(empty($tagIds)){
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? AND ";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE parentId = 0 AND status = ? AND (";
 
         foreach ($tagIds as $key => $tagId) {
             if ($key > 0 ) {
@@ -85,7 +85,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
-        $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+        $sql .= ") ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
         
         return $this->getConnection()->fetchAll($sql, array($status));
 
@@ -150,7 +150,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($discountId));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -217,7 +217,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
     }
@@ -235,7 +235,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
          return $this->getConnection()->fetchAll($sql);
     }
 
-    private function getTablename()
+    protected function getTablename()
     {
         return self::TABLENAME;
     }

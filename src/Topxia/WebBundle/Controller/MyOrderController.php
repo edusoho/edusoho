@@ -8,11 +8,13 @@ use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class MyOrderController extends BaseController
 {
-    private function getTimeRange($fields)
+    protected function getTimeRange($fields)
     {
         if(isset($fields['startTime'])&&isset($fields['endTime'])&&$fields['startTime']!=""&&$fields['endTime']!="")
         {   
-            if($fields['startTime']>$fields['endTime']) return false;
+            if($fields['startTime']>$fields['endTime']){
+                return false;
+            }
             return array('startTime'=>strtotime($fields['startTime']),'endTime'=>(strtotime($fields['endTime'])+24*3600));
         }
 
@@ -143,14 +145,13 @@ class MyOrderController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    private function getCourseOrderService()
+    protected function getCourseOrderService()
     {
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
-
 }

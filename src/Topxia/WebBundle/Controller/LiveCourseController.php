@@ -143,13 +143,14 @@ class LiveCourseController extends BaseController
 
             $result = $client->startLive($params);
 
-            if (empty($result) or isset($result['error'])) {
+            if (empty($result) || isset($result['error'])) {
                 return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
             }
 
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
                 'url' => $result['url'],
+                'param' => isset($result['param']) ? $result['param']:null
             ));
 
         }
@@ -184,6 +185,7 @@ class LiveCourseController extends BaseController
             return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
                 'lesson' => $lesson,
                 'url' => $result['url'],
+                'param' => isset($result['param']) ? $result['param']:null
             ));
 
         }
@@ -221,7 +223,7 @@ class LiveCourseController extends BaseController
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
         $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
-        
+
         if(array_key_exists("error", $resultList)) {
             return $this->createJsonResponse($resultList);
         }
@@ -236,10 +238,11 @@ class LiveCourseController extends BaseController
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $url = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
-            'url' => $url
+            'url' => $result['url'],
+            'param' => isset($result['param']) ? $result['param']: null
         ));
     }
 
@@ -263,7 +266,7 @@ class LiveCourseController extends BaseController
     }
 
 
-    private function getRootCategory($categoryTree, $category)
+    protected function getRootCategory($categoryTree, $category)
     {
         $start = false;
         foreach (array_reverse($categoryTree) as $treeCategory) {
@@ -279,7 +282,7 @@ class LiveCourseController extends BaseController
         return null;
     }
 
-    private function getSubCategories($categoryTree, $rootCategory)
+    protected function getSubCategories($categoryTree, $rootCategory)
     {
         $categories = array();
 
@@ -303,17 +306,17 @@ class LiveCourseController extends BaseController
         return $categories;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

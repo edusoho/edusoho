@@ -1,15 +1,20 @@
 
 .es-footer {
-  background: @gray-darker;
+  .footer-link {
+    background: #2e2e2e;
+    padding: 55px 0;
+    border-bottom: 1px solid #111;
+  }
   .copyright {
+    background: @gray-darker;
     border-top: 1px solid #444;
     text-align: center;
     padding: 20px 0;
     line-height: 30px;
-    color: #bababa;
+    color: #b1b1b1;
     text-shadow: 0 1px 3px #000;
     a {
-      color: white;
+      color: #eee;
       .es-transition;
       &:hover {
         .es-transition;
@@ -17,11 +22,6 @@
       }
     }
   }
-}
-
-.footer-link {
-  padding: 55px 0;
-  border-bottom: 1px solid #111;
 }
 
 .footer-main {
@@ -32,10 +32,11 @@
     text-shadow: 0 1px 3px #000;
     @media (max-width: @screen-xs-max) {
       width: 33.33%;
+      padding: 0 5px;
     }
   }
   h3 {
-    color: #b1b1b1;
+    color: #eeeeee;
     margin-top: 0;
     margin-bottom: 40px;
   }
@@ -65,112 +66,37 @@
   }
   .footer-sns {
     margin-top: 30px;
-    .sns-weixin {
+    >a {
+      display: inline-block;
+    }
+    .icon-sns {
       position: relative;
-      .weixin-popover {
-        background: url(../img/weixin.png);
-        width: 194px;
-        height: 209px;
-        position: absolute;
-        left: -68px;
-        top: -220px;
-        .opacity(0);
-        transform: scale(0);
-        -webkit-transform: scale(0);
-        transform-origin: 50% 100%;
-        -webkit-transform-origin: 50% 100%;
-        transition: transform ease .3s,opacity ease .3s;
-        -webkit-transition: all ease .3s;
-      }
-
-      &:hover .weixin-popover{
-        display: block;
-        transform: scale(1);
-        -webkit-transform: scale(1);
-        .opacity(1);
+      &:hover {
+        .sns-popover {
+          display: block \9;
+          .es-transform(1,1);
+          .opacity(1);
+        }
       }
     }
-
-    .sns-phone {
-      position: relative;
-      .phone-popover {
-        background: url(../img/phone.png);
-        width: 194px;
-        height: 209px;
-        position: absolute;
-        left: -68px;
-        top: -220px;
-        .opacity(0);
-        transform: scale(0);
-        -webkit-transform: scale(0);
-        transform-origin: 50% 100%;
-        -webkit-transform-origin: 50% 100%;
-        transition: transform ease .3s,opacity ease .3s;
-        -webkit-transition: all ease .3s;
-      }
-
-      &:hover .phone-popover{
-        display: block;
-        transform: scale(1);
-        -webkit-transform: scale(1);
-        .opacity(1);
-      }
-    }
-
-    .sns-apple {
-      position: relative;
-      .apple-popover {
-        background: url(../img/apple.png);
-        width: 194px;
-        height: 209px;
-        position: absolute;
-        left: -68px;
-        top: -220px;
-        .opacity(0);
-        transform: scale(0);
-        -webkit-transform: scale(0);
-        transform-origin: 50% 100%;
-        -webkit-transform-origin: 50% 100%;
-        transition: transform ease .3s,opacity ease .3s;
-        -webkit-transition: all ease .3s;
-      }
-
-      &:hover .apple-popover{
-        display: block;
-        transform: scale(1);
-        -webkit-transform: scale(1);
-        .opacity(1);
-      }
-    }
-
-    .sns-android {
-      position: relative;
-      .android-popover {
-        background: url(../img/android.png);
-        width: 194px;
-        height: 209px;
-        position: absolute;
-        left: -68px;
-        top: -220px;
-        .opacity(0);
-        transform: scale(0);
-        -webkit-transform: scale(0);
-        transform-origin: 50% 100%;
-        -webkit-transform-origin: 50% 100%;
-        transition: transform ease .3s,opacity ease .3s;
-        -webkit-transition: all ease .3s;
-      }
-
-      &:hover .android-popover{
-        display: block;
-        transform: scale(1);
-        -webkit-transform: scale(1);
-        .opacity(1);
-      }
+    .sns-popover {
+      width: 194px;
+      height: 209px;
+      position: absolute;
+      left: -68px;
+      top: -209px;
+      display: none \9;
+      .opacity(0);
+      .es-transform(0,0);
+      transform-origin: 50% 100%;
+      -webkit-transform-origin: 50% 100%;
+      -moz-transform-origin: 50% 100%;
+      -o-transform-origin: 50% 100%;
+      .es-transition;
     }
 
     i {
-      display: inline-block;
+      display: block;
       width: 40px;
       height: 40px;
       line-height: 40px;

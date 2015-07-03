@@ -51,7 +51,9 @@ class MoneyCardDaoImpl extends BaseDao
 
     public function addMoneyCard ($moneyCards)
     {
-        if(empty($moneyCards)){ return array(); }
+        if(empty($moneyCards)){
+            return array();
+        }
 
         $moneyCardsForSQL = array();
         foreach ($moneyCards as $value) {
@@ -99,7 +101,7 @@ class MoneyCardDaoImpl extends BaseDao
         $this->getConnection()->executeUpdate($sql, $fields);
     }
 
-    private function createMoneyCardQueryBuilder($conditions)
+    protected function createMoneyCardQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)

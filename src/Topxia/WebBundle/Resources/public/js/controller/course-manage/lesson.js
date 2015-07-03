@@ -40,7 +40,7 @@ define(function(require, exports, module) {
                 return isContainer ? children : parent.attr('id');
             },
             isValidTarget:function (item, container) {
-                if(item.has('li').length){ 
+                if(item.siblings('li').length){ 
                     return true;
                 }else{
                     return false;
