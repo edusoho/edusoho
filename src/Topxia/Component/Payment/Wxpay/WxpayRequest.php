@@ -2,21 +2,39 @@
 namespace Topxia\Component\Payment\Wxpay;
 
 use Topxia\Component\Payment\Request;
+use Symfony\Component\DependencyInjection\SimpleXMLElement;
+use Topxia\Service\Common\ServiceKernel;
 
 class WxpayRequest extends Request {
 
-    protected $url = 'https://mapi.alipay.com/gateway.do';
+    protected $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
 
     public function form()
     {
-        $form = array();
+        $params = array();
         $form['action'] = $this->url . '?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
         return $form;
     }
 
-    public function signParams($params) {
+    public function unifiedOrder()
+    {
+        $params = $this->convertParams($this->params);
+        $xml = $this->toXml($params);
+
+        $response = $this->postRequest($this->url,$xml);
+
+        return $response;
+    }
+
+    public function fromXml($xml)
+    {
+        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
+        return $array;
+    }
+    public function signParams($params) 
+    {
         unset($params['sign_type']);
         unset($params['sign']);
 
@@ -30,60 +48,87 @@ class WxpayRequest extends Request {
             $sign .= $key . '=' . $value . '&';
         }
         $sign = substr($sign, 0, - 1);
-        $sign .=$this->options['secret'];
+        $sign .='&key=' . $this->options['secret'];
 
         return md5($sign);
     }
 
     protected function convertParams($params)
     {
+
         $converted = array();
 
-        if ($this->getPaymentType() == 'dualfun') {
-            $converted['service'] = 'trade_create_by_buyer';
-        } elseif ($this->getPaymentType() == 'escow') {
-            $converted['service'] = 'create_partner_trade_by_buyer';
-        } else {
-            $converted['service'] = 'create_direct_pay_by_user';
-        }
-
-        $converted['partner'] = $this->options['key'];
-        $converted['payment_type'] = 1;
-        $converted['_input_charset'] = 'utf-8';
-        $converted['sign_type'] = 'MD5';
+        $converted['appid'] = $this->options['key'];
+        $converted['attach'] = '支付';
+        $converted['body'] = $this->filterText($params['title']);
+        $settings = $this->getSettingService()->get('payment');
+        $converted['mch_id'] = $settings["wxpay_account"];
+        $converted['nonce_str'] = $this->getNonceStr();
+        $converted['notify_url'] = $params['notifyUrl'];
         $converted['out_trade_no'] = $params['orderSn'];
-        $converted['subject'] = $this->filterText($params['title']);
-        $converted['seller_id'] = $this->options['key'];
-
-        if (in_array($this->getPaymentType(), array('dualfun', 'escow'))) {
-            $converted['price'] = $params['amount'];
-            $converted['quantity'] = 1;
-            $converted['logistics_type'] = 'POST';
-            $converted['logistics_fee'] = '0.00';
-            $converted['logistics_payment'] = 'BUYER_PAY';
-        } else {
-            $converted['total_fee'] = $params['amount'];
-        }
-
-        if (!empty($params['notifyUrl'])) {
-            $converted['notify_url'] = $params['notifyUrl'];
-        }
-
-        if (!empty($params['returnUrl'])) {
-            $converted['return_url'] = $params['returnUrl'];
-        }
-
-        if (!empty($params['showUrl'])) {
-            $converted['show_url'] = $params['showUrl'];
-        }
-
-        if (!empty($params['summary'])) {
-            $converted['body'] = $this->filterText($params['summary']);
-        }
-
-        $converted['sign'] = $this->signParams($converted);
+        $converted['spbill_create_ip'] = $this->get_client_ip();
+        $converted['total_fee'] = (int)($params['amount'] * 100);
+        $converted['trade_type'] = 'NATIVE';
+        $converted['product_id'] = $params['orderSn'];
+        $converted['sign'] = strtoupper($this->signParams($converted));
 
         return $converted;
+    }
+
+    private function toXml($array, $xml = false){ 
+        $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
+ 
+        foreach($array as $k=>$v) {
+            $simxml->addChild($k,$v);
+        }
+     
+        return $simxml->saveXML();
+    }
+
+    private function getNonceStr($length = 32) 
+    {
+        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";  
+        $str ="";
+        for ( $i = 0; $i < $length; $i++ )  {  
+            $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);  
+        } 
+        return $str;
+    }
+    private function get_client_ip()
+    {
+        if ($_SERVER['REMOTE_ADDR']) {
+            $cip = $_SERVER['REMOTE_ADDR'];
+        } elseif (getenv("REMOTE_ADDR")) {
+            $cip = getenv("REMOTE_ADDR");
+        } elseif (getenv("HTTP_CLIENT_IP")) {
+            $cip = getenv("HTTP_CLIENT_IP");
+        } else {
+            $cip = "unknown";
+    }
+            return $cip;
+    }
+
+    private function postRequest($url, $params)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
     }
 
     protected function filterText($text)
@@ -96,4 +141,18 @@ class WxpayRequest extends Request {
         return empty($this->options['type']) ? 'direct' : $this->options['type'];
     }
 
+    protected function setting($name, $default = null)
+    {
+        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

@@ -22,7 +22,11 @@
           
           <form method="post" action="{{path('pay_center_pay')}}">
             <input type="hidden" name="orderId" value="{{order.id}}"/>
-            <input type="hidden" name="payment" value="alipay">
+            {% for payment,options in payments %}
+              {% if loop.index == 1 %}
+                <input type="hidden" name="payment" value={{payment}}>
+              {% endif %}
+            {% endfor %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             <div class="row">
               
@@ -30,7 +34,7 @@
                 <div class="col-md-7">
                   <div class="pay-type-lable">支付方式</div>
                   {% for payment, options in payments %}
-                  <div class="check" style="float:left;margin-left:15px;"id = {{payment}}>
+                  <div class="check" style="float:left;margin-left:15px;"id={{payment}}>
                     {% set picture = 'assets/img/order/'~payment~'.gif' %}
                     <img src="{{ asset(picture) }}" width="100px"/>
                     <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>

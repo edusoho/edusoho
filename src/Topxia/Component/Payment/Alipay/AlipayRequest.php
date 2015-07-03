@@ -82,7 +82,6 @@ class AlipayRequest extends Request {
         }
 
         $converted['sign'] = $this->signParams($converted);
-
         return $converted;
     }
 

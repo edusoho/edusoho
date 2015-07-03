@@ -96,7 +96,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	private function getPaymentOptions($payment)
     {
         $settings = $this->getSettingService()->get('payment');
-
         if (empty($settings)) {
             throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }
@@ -108,7 +107,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         if (empty($settings[$payment. '_enabled'])) {
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
-
         if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }

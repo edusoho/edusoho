@@ -10,13 +10,14 @@ class WxpayResponse extends Response
     
     public function getPayData()
     {
-        $error = $this->hasError();
+/*        $error = $this->hasError();
         if ($error) {
-            throw new \RuntimeException(sprintf('支付宝支付校验失败(%s)。', $error));
-        }
+            throw new \RuntimeException(sprintf('微信支付校验失败(%s)。', $error));
+        }*/
 
         $params = $this->params;
-
+        var_dump($params);
+        exit();
         if ($params['trade_status'] == 'WAIT_SELLER_SEND_GOODS') {
 
             $trade_no = $params['trade_no'];

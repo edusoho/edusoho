@@ -8,6 +8,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
+
 class PayCenterController extends BaseController
 {
 	public function showAction(Request $request)
@@ -89,8 +90,8 @@ class PayCenterController extends BaseController
 		if(!array_key_exists("orderId", $fields)) {
 			return $this->createMessageResponse('error', '缺少订单，支付失败');
 		}
-		$order = $this->getOrderService()->getOrder($fields["orderId"]);
         $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields["payment"]));
+        $order = $this->getOrderService()->getOrder($fields["orderId"]);
 
 		if($user["id"] != $order["userId"]) {
 			return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -150,7 +151,6 @@ class PayCenterController extends BaseController
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
         $response = $this->createPaymentResponse($name, $request->request->all());
-
         $payData = $response->getPayData();
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
@@ -213,12 +213,33 @@ class PayCenterController extends BaseController
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
-        
-        return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-            'form' => $paymentRequest->form(),
-            'order' => $order,
-        ));
+        $formRequest = $paymentRequest->form();
+        $params = $formRequest['params'];
+        $payment = $request->request->get('payment');
+        if ($payment == 'alipay') {
+            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+                'form' => $paymentRequest->form(),
+                'order' => $order,
+            ));
+        }
+        elseif ($payment == 'wxpay') {
+            $result = $paymentRequest->unifiedOrder();
+            if(!$result){
+                throw new \RuntimeException("xml数据异常！");
+            }
+            $arrayReturn = $paymentRequest->fromXml($result);
+            if($arrayReturn['return_code'] == 'SUCCESS'){
+                $url = $arrayReturn['code_url'];
+                return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
+                    'url' => $url,
+                ));      
+            }
+            else{
+                throw new \RuntimeException($arrayReturn['return_msg']);
+            }
+        }
     }
+
 
     public function resultNoticeAction(Request $request)
     {
@@ -229,7 +250,6 @@ class PayCenterController extends BaseController
     {   
         $options = $this->getPaymentOptions($order['payment']);
         $request = Payment::createRequest($order['payment'], $options);
-
         $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
             'title' => $order['title'],
@@ -243,11 +263,9 @@ class PayCenterController extends BaseController
     private function getPaymentOptions($payment)
     {
         $settings = $this->setting('payment');
-
         if (empty($settings)) {
             throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }
-
         if (empty($settings['enabled'])) {
             throw new \RuntimeException("支付模块未开启，请先开启。");
         }
@@ -255,7 +273,6 @@ class PayCenterController extends BaseController
         if (empty($settings[$payment. '_enabled'])) {
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
-
         if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
@@ -263,7 +280,7 @@ class PayCenterController extends BaseController
         $options = array(
             'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
+            //'type' => $settings["{$payment}_type"]
         );
 
         return $options;
