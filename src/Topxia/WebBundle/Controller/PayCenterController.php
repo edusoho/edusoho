@@ -7,6 +7,8 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Symfony\Component\DependencyInjection\SimpleXMLElement;
+
 
 
 class PayCenterController extends BaseController
@@ -81,6 +83,7 @@ class PayCenterController extends BaseController
 
 	public function payAction(Request $request)
 	{
+        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
 		$fields = $request->request->all();
 		$user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -150,7 +153,14 @@ class PayCenterController extends BaseController
     public function payNotifyAction(Request $request, $name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        $response = $this->createPaymentResponse($name, $request->request->all());
+        if ($name == 'alipay') {
+            $response = $this->createPaymentResponse($name, $request->request->all());
+        }
+        elseif ($name == 'wxpay') {
+            $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
+            $returnArray = $this->fromXml($returnXml);
+            $response = $this->createPaymentResponse($name, $returnArray);
+        }
         $payData = $response->getPayData();
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
@@ -295,6 +305,12 @@ class PayCenterController extends BaseController
         return $response->setParams($params);
     }
 
+    public function fromXml($xml)
+    {
+        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
+        return $array;
+    }
+
 	protected function getEnabledPayments()
     {
         $enableds = array();
@@ -309,7 +325,7 @@ class PayCenterController extends BaseController
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(
-                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
+                    'type' => empty($setting[$payName . 'Z']) ? '' : $setting[$payName . '_type'],
                 );
             }
         }
