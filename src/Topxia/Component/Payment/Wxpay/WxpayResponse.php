@@ -18,7 +18,7 @@ class WxpayResponse extends Response
         } else {
             $data['status'] = 'unknown';
         }
-        $data['amount'] = ((float) $params['total_fee']) / 100;
+        $data['amount'] = $params['total_fee'] / 100;
 
         if (!empty($params['time_end'])) {
             $data['paidTime'] = strtotime($params['time_end']);
