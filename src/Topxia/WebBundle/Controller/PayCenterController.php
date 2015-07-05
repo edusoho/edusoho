@@ -166,6 +166,11 @@ class PayCenterController extends BaseController
         }
 
         if ($payData['status'] == "success") {
+            $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+            fwrite($myfile, $txt);
+            $txt = "test1!!!!!";
+            fwrite($myfile, $txt);
+            fclose($myfile);
             list($success, $order) = $this->getPayCenterService()->pay($payData);
             $processor = OrderProcessorFactory::create($order["targetType"]);
             
