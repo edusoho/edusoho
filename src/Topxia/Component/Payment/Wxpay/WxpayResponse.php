@@ -25,14 +25,6 @@ class WxpayResponse extends Response
         } else {
             $data['paidTime'] = time();
         }
-        $myfile = fopen("mytestfile0.txt","w");
-        $txt = implode($data);
-        fwrite($myfile, $txt);
-        $txt = "test0!!!!!";
-        fwrite($myfile, $txt);
-        fclose($myfile);
-
-        $data['raw'] = $params;
         return $data;
     }
 
