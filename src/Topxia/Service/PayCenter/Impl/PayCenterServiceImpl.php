@@ -35,6 +35,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			}
 
 			if($order["status"] == "created"){
+				$outflow = $this->proccessCashFlow($order);
 				if($outflow) {
 					$this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
 					list($success, $order) = $this->processOrder($payData, false);
