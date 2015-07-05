@@ -167,7 +167,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "success") {
             $myfile = fopen("mytestfile1.txt","w");
-            $txt = implode($payData );
+            $txt = implode($payData);
             fwrite($myfile, $txt);
             $txt = "test1!!!!!";
             fwrite($myfile, $txt);
