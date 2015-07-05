@@ -158,7 +158,7 @@ class PayCenterController extends BaseController
         elseif ($name == 'wxpay') {
             $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
             $returnArray = $this->fromXml($returnXml);
-            $myfile = fopen("mytestfile1","w");
+            $myfile = fopen("mytestfile1.txt","w");
             $txt = "test0!!!!!!!";
             fwrite($myfile, $txt);
             $txt = $returnXml;
@@ -172,7 +172,7 @@ class PayCenterController extends BaseController
         }
 
         if ($payData['status'] == "success") {
-            $myfile = fopen("mytestfile1","w");
+            $myfile = fopen("mytestfile1.txt","w");
             $txt = $payData['status'].$payData['amount'].$payData['targetType'];
             fwrite($myfile, $txt);
             $txt = "test1!!!!!";

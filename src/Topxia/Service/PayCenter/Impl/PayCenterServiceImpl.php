@@ -20,7 +20,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	public function pay($payData)
 	{
-		$myfile = fopen("mytestfile1","w");
+		$myfile = fopen("mytestfile1.txt","w");
         $txt = $payData['status'].$payData['amount'].$payData['targetType'];
         fwrite($myfile, $txt);
         $txt = "test2!!!!!";
@@ -71,7 +71,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	public function processOrder($payData, $lock=true)
 	{	
 		$connection = ServiceKernel::instance()->getConnection();
-		$myfile = fopen("mytestfile2","w");
+		$myfile = fopen("mytestfile2.txt","w");
         $txt = $payData['status'].$payData['amount'].$payData['targetType'];
         fwrite($myfile, $txt);
         fclose($myfile);
