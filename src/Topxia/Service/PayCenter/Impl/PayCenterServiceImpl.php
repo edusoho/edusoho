@@ -27,7 +27,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
-			
+			$myfile = fopen("mytestfile1","w");
+	        $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+	        fwrite($myfile, $txt);
+	        fclose($myfile);
 			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
 
 			if($order["status"] == "paid"){
@@ -37,7 +40,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 			if($order["status"] == "created"){
 				$outflow = $this->proccessCashFlow($order);
-
+				$myfile = fopen("mytestfile1","w");
+	        	$txt = 'test~~~!!!!!!!!!'. $outflow['sn'];
+	        	fwrite($myfile, $txt);
+	        	fclose($myfile);
 				if($outflow) {
 					$this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
 					list($success, $order) = $this->processOrder($payData, false);
@@ -63,7 +69,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	public function processOrder($payData, $lock=true)
 	{	
 		$connection = ServiceKernel::instance()->getConnection();
-		 $myfile = fopen("mytestfile1","w");
+		$myfile = fopen("mytestfile2","w");
         $txt = $payData['status'].$payData['amount'].$payData['targetType'];
         fwrite($myfile, $txt);
         fclose($myfile);

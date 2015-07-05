@@ -83,7 +83,6 @@ class PayCenterController extends BaseController
 
 	public function payAction(Request $request)
 	{
-        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
 		$fields = $request->request->all();
 		$user = $this->getCurrentUser();
         if (!$user->isLogin()) {
