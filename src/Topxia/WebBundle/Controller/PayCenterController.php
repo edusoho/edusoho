@@ -167,7 +167,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "success") {
             $myfile = fopen("mytestfile1.txt","w");
-            $txt = implode($payData);
+            $txt = implode($payData );
             fwrite($myfile, $txt);
             $txt = "test1!!!!!";
             fwrite($myfile, $txt);
@@ -242,7 +242,7 @@ class PayCenterController extends BaseController
             if(!$returnXml){
                 throw new \RuntimeException("xml数据异常！");
             }
-            $returnArray = $paymentRequest->fromXml($result);
+            $returnArray = $paymentRequest->fromXml($returnXml);
             if($returnArray['return_code'] == 'SUCCESS'){
                 $url = $returnArray['code_url'];
                 return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
