@@ -158,12 +158,6 @@ class PayCenterController extends BaseController
         elseif ($name == 'wxpay') {
             $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
             $returnArray = $this->fromXml($returnXml);
-            $myfile = fopen("mytestfile0.txt","w");
-            $txt = "test0!!!!!!!";
-            fwrite($myfile, $txt);
-            $txt = $returnXml;
-            fwrite($myfile, $txt);
-            fclose($myfile);
             $response = $this->createPaymentResponse($name, $returnArray);
         }
         $payData = $response->getPayData();
@@ -173,7 +167,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "success") {
             $myfile = fopen("mytestfile1.txt","w");
-            $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+            $txt = implode($payData);
             fwrite($myfile, $txt);
             $txt = "test1!!!!!";
             fwrite($myfile, $txt);
@@ -244,19 +238,19 @@ class PayCenterController extends BaseController
             ));
         }
         elseif ($payment == 'wxpay') {
-            $result = $paymentRequest->unifiedOrder();
-            if(!$result){
+            $returnXml = $paymentRequest->unifiedOrder();
+            if(!$returnXml){
                 throw new \RuntimeException("xml数据异常！");
             }
-            $arrayReturn = $paymentRequest->fromXml($result);
-            if($arrayReturn['return_code'] == 'SUCCESS'){
-                $url = $arrayReturn['code_url'];
+            $returnArray = $paymentRequest->fromXml($result);
+            if($returnArray['return_code'] == 'SUCCESS'){
+                $url = $returnArray['code_url'];
                 return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
                     'url' => $url,
                 ));      
             }
             else{
-                throw new \RuntimeException($arrayReturn['return_msg']);
+                throw new \RuntimeException($returnArray['return_msg']);
             }
         }
     }
