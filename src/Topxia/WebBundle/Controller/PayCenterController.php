@@ -159,8 +159,9 @@ class PayCenterController extends BaseController
             $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
             $returnArray = $this->fromXml($returnXml);
             $myfile = fopen("mytestfile1","w");
-            $txt = $returnXml.$returnArray;
+            $txt = "test0!!!!!!!";
             fwrite($myfile, $txt);
+            $txt = $returnXml;
             fwrite($myfile, $txt);
             fclose($myfile);
             $response = $this->createPaymentResponse($name, $returnArray);
