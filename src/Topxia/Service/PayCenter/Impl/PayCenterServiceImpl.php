@@ -20,7 +20,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	public function pay($payData)
 	{
-		$myfile = fopen("mytestfile1.txt","w");
+		$myfile = fopen("mytestfile2.txt","w");
         $txt = $payData['status'].$payData['amount'].$payData['targetType'];
         fwrite($myfile, $txt);
         $txt = "test2!!!!!";
@@ -42,7 +42,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 			if($order["status"] == "created"){
 				$outflow = $this->proccessCashFlow($order);
-				$myfile = fopen("mytestfile1","w");
+				$myfile = fopen("mytestfile3","w");
 	        	$txt = 'test3~~~!!!!!!!!!'. $outflow['sn'];
 	        	fwrite($myfile, $txt);
 	        	fclose($myfile);
