@@ -18,8 +18,14 @@ class WxpayResponse extends Response
         } else {
             $data['status'] = 'unknown';
         }
-        $data['amount'] = $params['total_fee'] / 100;
+        $data['amount'] = ((float) $params['total_fee']) / 100;
 
+        $myfile = fopen("mytestfile0.txt","w");
+        $txt = implode($data);
+        fwrite($myfile, $txt);
+        $txt = "test0!!!!!";
+        fwrite($myfile, $txt);
+        fclose($myfile);
         if (!empty($params['time_end'])) {
             $data['paidTime'] = strtotime($params['time_end']);
         } else {
@@ -27,12 +33,6 @@ class WxpayResponse extends Response
         }
 
         $data['raw'] = $params;
-        $myfile = fopen("mytestfile0.txt","w");
-        $txt = implode($data);
-        fwrite($myfile, $txt);
-        $txt = "test0!!!!!";
-        fwrite($myfile, $txt);
-        fclose($myfile);
         return $data;
     }
 
