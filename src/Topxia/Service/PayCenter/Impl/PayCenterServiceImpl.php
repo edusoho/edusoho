@@ -20,6 +20,12 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	public function pay($payData)
 	{
+		$myfile = fopen("mytestfile1","w");
+        $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+        fwrite($myfile, $txt);
+        $txt = 'test2!!@@!!@@'
+       	fwrite($myfile, $txt);
+        fclose($myfile);
 		if ($payData['status'] != 'success') {
 			return array(false, array());
 		}
@@ -27,10 +33,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
-			$myfile = fopen("mytestfile1","w");
-	        $txt = $payData['status'].$payData['amount'].$payData['targetType'];
-	        fwrite($myfile, $txt);
-	        fclose($myfile);
 			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
 
 			if($order["status"] == "paid"){
