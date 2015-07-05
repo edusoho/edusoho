@@ -7,12 +7,13 @@ use Topxia\Service\Common\ServiceKernel;
 
 class WxpayRequest extends Request {
 
-    protected $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+    protected $unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+    protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
 
     public function form()
     {
         $params = array();
-        $form['action'] = $this->url . '?_input_charset=utf-8';
+        $form['action'] = $this->unifiedOrderUrl . '?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
         return $form;
@@ -22,9 +23,23 @@ class WxpayRequest extends Request {
     {
         $params = $this->convertParams($this->params);
         $xml = $this->toXml($params);
+        $response = $this->postRequest($this->unifiedOrderUrl,$xml);
+        return $response;
+    }
 
-        $response = $this->postRequest($this->url,$xml);
+    public function orderQuery()
+    {
+        $params = $this->params;
+        $converted = array();
+        $converted['appid'] = $this->options['key'];
+        $settings = $this->getSettingService()->get('payment');
+        $converted['mch_id'] = $settings["wxpay_account"];
+        $converted['nonce_str'] = $this->getNonceStr();
+        $converted['out_trade_no'] = $params['orderSn'];
+        $converted['sign'] = strtoupper($this->signParams($converted));
 
+        $xml = $this->toXml($converted);
+        $response = $this->postRequest($this->orderQueryUrl,$xml);
         return $response;
     }
 

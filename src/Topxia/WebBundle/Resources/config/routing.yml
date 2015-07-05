@@ -1611,6 +1611,14 @@ pay_result_notice:
     pattern: /pay/result/notice
     defaults: { _controller: TopxiaWebBundle:PayCenter:resultNotice }
 
+wxpay_roll:
+    pattern: /pay/wxpay/roll
+    defaults: {_controller: TopxiaWebBundle:PayCenter:wxpayRoll }
+
+wxpay_order_query:
+    pattern: /pay/wxpay/orderquery
+    defaults: {_controller: TopxiaWebBundle:PayCenter:orderQuery }
+
 order_show:
     pattern:  /order/show
     defaults: { _controller: TopxiaWebBundle:Order:show }

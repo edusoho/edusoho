@@ -241,7 +241,8 @@ class PayCenterController extends BaseController
                 $url = $returnArray['code_url'];
                 return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
                     'url' => $url,
-                ));      
+                    'orderId' => $order['id'],
+                ));
             }
             else{
                 throw new \RuntimeException($returnArray['return_msg']);
@@ -249,6 +250,51 @@ class PayCenterController extends BaseController
         }
     }
 
+    public function wxpayRollAction(Request $request)
+    {
+        $orderId = $request->query->get('orderId');
+        $order = $this->getOrderService()->getOrder($orderId);
+        if ($order['status'] == 'paid') {
+            return $this->createJsonResponse(true);
+        }
+        else{
+            return $this->createJsonResponse(false);
+        }
+    }
+
+    public function orderQueryAction(Request $request)
+    {
+        $orderId = $request->query->get('orderId');
+        $order = $this->getOrderService()->getOrder($orderId);
+        $paymentRequest = $this->createPaymentRequest($order, array(
+            'returnUrl' => '',
+            'notifyUrl' => '',
+            'showUrl' => '',
+        ));
+        $returnXml = $paymentRequest->orderQuery();
+        $returnArray = $this->fromXml($returnXml);
+        if ($returnArray['trade_state'] == 'SUCCESS') {
+            $payData =array();
+            $payData['status'] = 'success';
+            $payData['payment'] = 'wxpay';
+            $payData['amount'] = $order['amount'];
+            $payData['paidTime'] = time();
+            $payData['sn'] = $returnArray['out_trade_no'];
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
+            $processor = OrderProcessorFactory::create($order["targetType"]);
+            
+            if($success){
+                return $this->createJsonResponse(true);
+            }
+            else{
+                return $this->createJsonResponse(false);
+            }
+        }
+        else{
+            return $this->createJsonResponse(false);
+        }
+
+    }
 
     public function resultNoticeAction(Request $request)
     {
@@ -304,7 +350,7 @@ class PayCenterController extends BaseController
         return $response->setParams($params);
     }
 
-    public function fromXml($xml)
+    private function fromXml($xml)
     {
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
         return $array;

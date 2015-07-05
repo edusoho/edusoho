@@ -1,13 +1,13 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}微信支付 - {{ parent() }}{% endblock %}
-
+{% set script_controller = 'pay/wxpay-roll' %}
 {% block content %}
 
 <div id="page-message-container" class="page-message-container">
   <div class="page-message-panel">
     <div class="page-message-body">
-      <img src="{{ path('common_qrcode',{text:url}) }}">
+      <img class = 'img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url = "{{ path('wxpay_roll',{orderId:orderId}) }}" data-check = "{{ path('wxpay_order_query',{orderId:orderId})}}" data-goto = "{{path('pay_success_show',{id:orderId})}}">
 		</div>
 	</div>
   </div>
