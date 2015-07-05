@@ -964,6 +964,9 @@ class WebExtension extends \Twig_Extension
                     if ($order['amount'] == 0 ){
                         $default = "无";
                     }
+                    elseif ($order['payment'] == 'wxpay') {
+                        $default = "微信支付";
+                    }
                     else{
                         $default = "支付宝";
                     }
