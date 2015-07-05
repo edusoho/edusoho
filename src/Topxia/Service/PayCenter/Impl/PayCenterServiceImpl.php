@@ -21,7 +21,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	public function pay($payData)
 	{
 		$myfile = fopen("mytestfile2.txt","w");
-        $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+        $txt = implode($payData);
         fwrite($myfile, $txt);
         $txt = "test2!!!!!";
        	fwrite($myfile, $txt);
