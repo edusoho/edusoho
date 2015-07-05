@@ -8,12 +8,6 @@ class WxpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        $myfile = fopen("mytestfile0.txt","w");
-        $txt = implode($params);
-        fwrite($myfile, $txt);
-        $txt = "test0!!!!!";
-        fwrite($myfile, $txt);
-        fclose($myfile);
         $data = array();
         $data['payment'] = 'wxpay';
         $data['sn'] = $params['out_trade_no'];
@@ -33,7 +27,12 @@ class WxpayResponse extends Response
         }
 
         $data['raw'] = $params;
-
+        $myfile = fopen("mytestfile0.txt","w");
+        $txt = implode($data);
+        fwrite($myfile, $txt);
+        $txt = "test0!!!!!";
+        fwrite($myfile, $txt);
+        fclose($myfile);
         return $data;
     }
 
