@@ -33,6 +33,7 @@ class WxpayRequest extends Request {
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
         return $array;
     }
+    
     public function signParams($params) 
     {
         unset($params['sign_type']);
@@ -67,7 +68,7 @@ class WxpayRequest extends Request {
         $converted['notify_url'] = $params['notifyUrl'];
         $converted['out_trade_no'] = $params['orderSn'];
         $converted['spbill_create_ip'] = $this->get_client_ip();
-        $converted['total_fee'] = (int)($params['amount'] * 100);
+        $converted['total_fee'] = intval($params['amount'] * 100);
         $converted['trade_type'] = 'NATIVE';
         $converted['product_id'] = $params['orderSn'];
         $converted['sign'] = strtoupper($this->signParams($converted));
