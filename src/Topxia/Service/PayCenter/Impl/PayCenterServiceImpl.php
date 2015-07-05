@@ -20,12 +20,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	public function pay($payData)
 	{
-		$myfile = fopen("mytestfile2.txt","w");
-        $txt = implode($payData);
-        fwrite($myfile, $txt);
-        $txt = "test2!!!!!";
-       	fwrite($myfile, $txt);
-        fclose($myfile);
 		if ($payData['status'] != 'success') {
 			return array(false, array());
 		}
@@ -41,11 +35,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			}
 
 			if($order["status"] == "created"){
-				$outflow = $this->proccessCashFlow($order);
-				$myfile = fopen("mytestfile3","w");
-	        	$txt = 'test3~~~!!!!!!!!!'. $outflow['sn'];
-	        	fwrite($myfile, $txt);
-	        	fclose($myfile);
 				if($outflow) {
 					$this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
 					list($success, $order) = $this->processOrder($payData, false);
@@ -72,7 +61,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	{	
 		$connection = ServiceKernel::instance()->getConnection();
 		$myfile = fopen("mytestfile4.txt","w");
-        $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+        $txt = implode($payData);
         fwrite($myfile, $txt);
         fclose($myfile);
 		try {
