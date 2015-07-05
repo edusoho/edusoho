@@ -63,6 +63,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	public function processOrder($payData, $lock=true)
 	{	
 		$connection = ServiceKernel::instance()->getConnection();
+		 $myfile = fopen("mytestfile1","w");
+        $txt = $payData['status'].$payData['amount'].$payData['targetType'];
+        fwrite($myfile, $txt);
+        fclose($myfile);
 		try {
 			if($lock){
 				$connection->beginTransaction();

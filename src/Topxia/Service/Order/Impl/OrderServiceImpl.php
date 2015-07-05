@@ -94,7 +94,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (empty($order)) {
             throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
         }
-        $myfile = fopen("mytestfile","w");
+        $myfile = fopen("mytestfile2","w");
         $txt = $payData['status'].$payData['amount'].$payData['targetType'];
         fwrite($myfile, $txt);
         fclose($myfile);
