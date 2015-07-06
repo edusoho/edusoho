@@ -309,7 +309,7 @@ a.link-muted {
   padding: 2px 10px 0 0;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  /*background: url(../img/course/course-item-icons.png) 89px -150px no-repeat;*/
+  /*background: url(/bundles/topxiaweb/course/course-item-icons.png) 89px -150px no-repeat;*/
 }
 
 .lt-ie8 .course-item-list .item {
@@ -360,7 +360,7 @@ a.link-muted {
 .course-item-list .chapter-item .pie,
 .course-item-list .lesson-item .pie {
   display: inline-block;
-    background: url(../img/course/course-item-icons.png) 0 0 no-repeat;
+    background: url(/bundles/topxiaweb/course/course-item-icons.png) 0 0 no-repeat;
     text-align: center;
 }
 
@@ -598,7 +598,7 @@ a.link-muted {
 }
 
 .course-item-list-multi .item-object .item-free {
-  background: url(../img/course/course-item-free.png) 0 0 no-repeat;
+  background: url(/bundles/topxiaweb/course/course-item-free.png) 0 0 no-repeat;
   position: absolute;
   top: 0;
   left: 0;
@@ -2951,7 +2951,7 @@ a.link-muted {
 
 
 .loading-background  {
-  background: #fff url(../img/loader.gif) no-repeat center center;
+  background: #fff url(/bundles/topxiaweb/loader.gif) no-repeat center center;
 }
 
 .slide-player-watermark {
