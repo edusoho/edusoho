@@ -4,6 +4,7 @@
 @import "mixins/color.less";
 @import "mixins/scale.less";
 @import "mixins/loader-inner.less";
+@import "mixins/input.less";
 
 .form-control-lg {
   height: 38px;
@@ -46,6 +47,13 @@
 .text-default {
   text-align: center;
   color: @gray-light;
+}
+
+// 用于空数据
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 20px 0;
 }
 
 .link-dark {

@@ -1194,15 +1194,6 @@
 .homepage .hot-group p {
   margin-bottom: 10px;
 }
-.panel-lg .panel-heading {
-  padding: 15px 20px;
-}
-.panel-lg h1 {
-  margin: 0px 0;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 1.5;
-}
 .btn-muted {
   color: #999999;
 }
@@ -1302,6 +1293,21 @@
   height: 20px;
   vertical-align: middle;
   opacity: 0.8;
+}
+.page {
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  font-size: 13px;
+}
+.tags {
+  line-height: 30px;
+}
+.tags a {
+  font-size: 12px;
 }
 @keyframes fadeInLeft {
   0% {
@@ -1561,6 +1567,26 @@
   -webkit-animation: loader-scale 0.75s 0.36s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
   animation: loader-scale 0.75s 0.36s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
 }
+.width-input {
+  display: inline-block !important;
+  margin-right: 6px;
+  width: 150px;
+}
+.width-input-mini {
+  width: 50px;
+}
+.width-input-small {
+  width: 100px;
+}
+.width-input-large {
+  width: 200px;
+}
+.width-input-xlarge {
+  width: 300px;
+}
+.width-full {
+  width: 100%;
+}
 .form-control-lg {
   height: 38px;
   padding: 6px 12px;
@@ -1593,6 +1619,11 @@
 .text-default {
   text-align: center;
   color: #e0e0e0;
+}
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 20px 0;
 }
 .link-dark {
   color: #212121;
@@ -1970,6 +2001,20 @@ Pagination Styles
 }
 .memberzone {
   min-height: 450px;
+}
+.bootstrap-notify-bar {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  right: 0;
+  border-radius: 0;
+  text-align: center;
+  z-index: 2000;
+  padding: 10px;
+  margin: 0;
+}
+.bootstrap-notify-bar .close {
+  margin-left: 10px;
 }
 .navbar {
   margin-bottom: 0;
@@ -3444,6 +3489,24 @@ a:focus {
 .lt-ie9 .panel {
   border: 1px solid #e0e0e0;
 }
+.panel-lg .panel-heading {
+  padding: 15px 20px;
+}
+.panel-lg h1 {
+  margin: 0px 0;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+.panel-col {
+  min-height: 400px;
+}
+.panel-col .panel-heading {
+  background: transparent;
+  font-weight: bold;
+  color: #393d4d;
+  padding: 20px 20px;
+}
 .panel-default {
   padding: 0 15px;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -3680,6 +3743,24 @@ a:focus {
 .pagination > li > span:hover {
   color: #bdbdbd;
   border-color: #bdbdbd;
+}
+.media-list .media {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+.media-list .media:last-child {
+  border-bottom: none;
+}
+.media-list .media-body .bullet {
+  padding: 0 3px;
+  font-size: 75%;
+  color: #ccc;
+  line-height: 1.4;
+}
+.media .media-object-small img {
+  width: 48px;
+  height: 48px;
+  border-radius: 3px;
 }
 .media-default .media-body > .title {
   margin-bottom: 10px;
@@ -3953,6 +4034,9 @@ a:focus {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.lt-ie9 .breadcrumb li {
+  padding-left: 5px;
+}
 textarea.form-control-o {
   background-color: #f5f5f5;
   border: none;
@@ -4096,6 +4180,14 @@ textarea.form-control-o {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+}
+.btn-fat {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.btn-fat-small {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .btn-link:hover,
 .btn-link:focus {
@@ -4579,6 +4671,30 @@ textarea.form-control-o {
   padding-top: 20px;
   border-top: 1px solid #e0e0e0;
 }
+.control-text {
+  display: inline-block;
+  min-height: 34px;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 20px;
+  vertical-align: middle;
+}
+.radios,
+.checkboxs {
+  padding-top: 5px;
+  vertical-align: middle;
+}
+.radios label,
+.checkboxs label {
+  font-weight: normal;
+  padding: 0 20px 0 0px;
+}
+textarea {
+  resize: none;
+}
+.control-label span.required {
+  color: #f60;
+}
 .form-horizontal .form-group {
   margin-bottom: 30px;
 }
@@ -4975,6 +5091,23 @@ textarea.form-control-o {
 .popover .popover-content > a {
   display: inline-block;
   color: #0093e8;
+}
+.modal-title {
+  word-break: break-all;
+}
+.modal-body {
+  word-wrap: break-word;
+  overflow: hidden;
+}
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+}
+.modal-backdrop {
+  background-color: rgba(104, 96, 96, 0.55);
+}
+.nav-mini > li > a {
+  padding: 1px 10px;
 }
 .es-poster {
   position: relative;
