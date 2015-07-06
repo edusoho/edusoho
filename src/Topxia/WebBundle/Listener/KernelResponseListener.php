@@ -32,7 +32,7 @@ class KernelResponseListener
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }
-            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob'));
+            $url = $this->container->get('router')->generate($route,array('type' => 'weixinmob','_target_path' => $request->getPathInfo()));
             $response = new RedirectResponse($url);
             $event->setResponse($response);
             return ;
