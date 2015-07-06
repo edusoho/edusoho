@@ -26,8 +26,7 @@ define(function(require, exports, module) {
                     element: '#lesson-video-player',
                     fingerprint: videoPlayerDiv.data('fingerprint'),
                     watermark: videoPlayerDiv.data('watermark'),
-                    url: videoPlayerDiv.data('hlsUrl'),
-                    dynamicSource: videoPlayerDiv.data('changeResUrl')
+                    url: videoPlayerDiv.data('hlsUrl')
                 });
 
                 $('#modal').one('hidden.bs.modal', function () {

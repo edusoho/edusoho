@@ -291,6 +291,31 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($json);
     }
 
+    public function playlistAction(Request $request, $courseId, $lessonId)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (!empty($file) && $file['storage'] == 'cloud') {
+
+            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
+
+            $url = $this->generateUrl('hls_playlist', array(
+                'id' => $file['id'],
+                'token' => $token['token'],
+                'line' => $request->query->get('line'),
+                'level' => $request->query->get('level')
+            ), true);
+
+            return $this->redirect($url);
+        }
+    } 
+
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);

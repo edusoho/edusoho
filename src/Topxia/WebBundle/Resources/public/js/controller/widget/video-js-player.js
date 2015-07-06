@@ -51,13 +51,15 @@ define(function(require, exports, module) {
                 });
 
                 player.ready(function() {
+                    var resArray = [];
                     $.each(playlist, function(i, source) {
+                        resArray.push(source.name);
                     	player.options().sources.push({'type': 'video/mp4', 'src': source.src, 'data-res': source.name, 'data-level': source.level});
                     });
 
                     player.resolutionSelector({
-                    	default_res : "SHD,HD,SD",
-                    	dynamic_source : self.get('dynamicSource')
+                    	default_res : resArray.join(","),
+                    	dynamic_source : self.get('url')
                     });
 
                 });
@@ -68,6 +70,7 @@ define(function(require, exports, module) {
 
                 player.on('loadedmetadata', function(){
                 	self.trigger("beforePlay", player);
+                    player.player();
                 });
 
                 player.on("timeupdate", function(){

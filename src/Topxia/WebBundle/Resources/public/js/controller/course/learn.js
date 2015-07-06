@@ -282,8 +282,7 @@ define(function(require, exports, module) {
                         element: '#video-player',
                         fingerprint: lessonVideoDiv.data('fingerprint'),
                         watermark: lessonVideoDiv.data('watermark'),
-                        url: lesson.mediaHLSUri,
-                        dynamicSource: '../../hls/'+lesson.mediaId+'/change_res'
+                        url: that.get('courseUri') + '/lesson/' + lesson.id + '/playlist'
                     });
 
                     esCloudPlayer.on('beforePlay', function(player){
