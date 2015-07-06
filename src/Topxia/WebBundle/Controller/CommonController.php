@@ -13,6 +13,7 @@ class CommonController extends BaseController
     public function qrcodeAction(Request $request)
     {
         $text = $request->get('text');
+        
         $qrCode = new QrCode();
         $qrCode->setText($text);
         $qrCode->setSize(250);
