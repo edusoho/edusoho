@@ -464,6 +464,10 @@ service('OrderService', ['httpService', function(httpService) {
 		httpService.simpleGet("/mapi_v2/Order/payCourse", arguments);
 	}
 
+	this.payVip = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Order/payVip", arguments);
+	}
+
 	this.getPayOrder = function() {
 		httpService.simpleGet('/mapi_v2/Order/getPayOrder', arguments);
 	}
@@ -944,7 +948,23 @@ filter('lessonType', function() {
 	};
 	return function(lesson) {
 		if (lesson.type == "live") {
-			return "直播";
+			var returnStr = "";
+			var startTime = new Date(lesson.startTime).getTime();
+			var endTime = new Date(lesson.endTime).getTime();
+			var currentTime = new Date().getTime();
+
+			if (startTime > currentTime) {
+				returnStr = new Date(startTime).Format("MM月dd号 hh:mm");;
+			} else if (startTime <= currentTime && endTime >= currentTime) {
+				returnStr = "直播中";
+			}else if (endTime < currentTime) {
+				if (lesson.replayStatus == 'generated' ) {
+					returnStr = "回放";
+				} else {
+					returnStr = "结束";
+				}
+			}
+			return returnStr;
 		}
 		return lessonType[lesson.type];
 	}
@@ -1212,7 +1232,7 @@ directive('ngImgShow', function() {
     }
   }
 }).
-directive('back', function($window, $state) {
+directive('back', function(cordovaUtil, $state) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
@@ -1221,11 +1241,7 @@ directive('back', function($window, $state) {
 
                   element.on("click", function(){
                     if (attributes["back"] == "go") {
-                      if (scope.platform.native) {
-                        esNativeCore.closeWebView();
-                      } else {
-                        $window.history.back();
-                      }
+                      cordovaUtil.closeWebView();
                       return;
                     }
                     if (attributes["back"] == "close" && scope.close) {
@@ -1599,12 +1615,14 @@ factory('VipUtil', function() {
 
 	var payByYear = {
 		title : "按年支付",
-		type : 20
+		type : 20,
+		name : "year"
 	};
 
 	var payByMonth  ={
 		title : "按月支付",
-		type : 30
+		type : 30,
+		name : "month"
 	};
 
 	return {
@@ -1760,6 +1778,8 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		showDownLesson : function(courseId) {
 			alert("请在客户端下载课时");
+		}, closeWebView : function() {
+			window.history.back();
 		}
 	};
 
@@ -2291,9 +2311,9 @@ function FoundClassRoomController($scope, ClassRoomService, SchoolService)
   		$scope.classRooms = data.data;
   	});
 };
-app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', LessonController]);
+app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'cordovaUtil', LessonController]);
 
-function LessonController($scope, $stateParams, LessonService)
+function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 {	
 	var self = this;
 
@@ -2308,6 +2328,11 @@ function LessonController($scope, $stateParams, LessonService)
 				return;
 			}
 			$scope.lesson = data;
+			if (data.type != "text") {
+				cordovaUtil.learnCourseLesson(data.courseId, data.id); 
+				window.history.back();
+				return;
+			}
 			$scope.lessonView = "view/lesson_" + data.type + ".html";
 		});
 	}
@@ -2484,8 +2509,6 @@ function MyFavoriteLiveController($scope, CourseService, CourseUtil)
 
       this.loadLiveCourses();
 };
-app.controller('MyGroupQuestionController', ['$scope', 'QuestionService', MyGroupQuestionController]);
-
 function MyGroupBaseController($scope, serviceCallBack) {
 
   var self = this;
@@ -2513,7 +2536,7 @@ function MyGroupBaseController($scope, serviceCallBack) {
     }
 }
 
-function MyGroupNoteController($scope, NoteService)
+function MyGroupNoteController($scope, NoteService, cordovaUtil, $state)
 {
       console.log("MyGroupNoteController");
       var self = this;
@@ -2529,8 +2552,6 @@ function MyGroupNoteController($scope, NoteService)
 
      this.loadDataList();
 }
-
-app.controller('MyGroupNoteController', ['$scope', 'NoteService', MyGroupNoteController]);
 
 function MyGroupQuestionController($scope, QuestionService)
 {
@@ -2548,7 +2569,6 @@ function MyGroupQuestionController($scope, QuestionService)
      this.loadDataList("question");
 }
 
-app.controller('MyGroupThreadController', ['$scope', 'QuestionService', MyGroupThreadController]);
 function MyGroupThreadController($scope, QuestionService)
 {
   console.log("MyGroupThreadController");
@@ -2563,7 +2583,11 @@ function MyGroupThreadController($scope, QuestionService)
     };
 
    this.loadDataList("discussion");
-};
+}
+
+app.controller('MyGroupQuestionController', ['$scope', 'QuestionService', MyGroupQuestionController]);
+app.controller('MyGroupNoteController', ['$scope', 'NoteService', 'cordovaUtil', '$state', MyGroupNoteController]);
+app.controller('MyGroupThreadController', ['$scope', 'QuestionService', MyGroupThreadController]);;
 app.controller('MyLearnController', ['$scope', 'CourseService', MyLearnController]);
 
 function MyLearnController($scope, CourseService)
@@ -2628,11 +2652,29 @@ function MyLearnController($scope, CourseService)
 app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', CoursePayController]);
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
 app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
-app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', VipPayController]);
+app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', VipPayController]);
 
-
-function VipPayController($scope, $stateParams, SchoolService, VipUtil)
+function BasePayController()
 {
+	this.showPayResultDlg = function() {
+		var dia = $.dialog({
+		        title : '确认支付' ,
+		        content : '是否支付完成?' ,
+		        button : [ "确认" ,"取消" ]
+		});
+
+		dia.on("dialog:action",function(e){
+		        if (e.index == 0) {
+		        	window.history.back();
+		        }
+		});
+	}
+}
+
+function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderService, cordovaUtil)
+{
+	var self = this;
+	this.__proto__ = new BasePayController();
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
 		levelId : $stateParams.levelId,
@@ -2681,7 +2723,21 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil)
 			$scope.sumTotalPirce();
 		  	$scope.isShowPayMode = false;
 		  }
-	}	
+	}
+
+	$scope.payVip = function() {
+		OrderService.payVip({
+			targetId : $stateParams.levelId,
+			token : $scope.token,
+			duration : $scope.selectedNum,
+			unitType : $scope.selectedPayMode.name
+		}, function(data) {
+			if (data.status == "ok" && data.payUrl != "") {
+				cordovaUtil.payCourse("支付会员", data.payUrl);
+				self.showPayResultDlg();
+			}
+		});
+	}
 
 }
 
@@ -2720,8 +2776,10 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 }
 
 function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordovaUtil)
-{
+{	
 	var self = this;
+	this.__proto__ = new BasePayController();
+	
 	ServcieUtil.getService("OrderService").getPayOrder({
 		courseId : $stateParams.courseId,
 		token : $scope.token
@@ -2750,6 +2808,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
 				cordovaUtil.payCourse("支付课程", data.payUrl);
+				self.showPayResultDlg();
 			}
 		});
 	}
@@ -2934,9 +2993,9 @@ function RegistController($scope, $http, UserService, $state)
 		});
 	}
 };
-app.controller('SearchController', ['$scope', 'ServcieUtil', SearchController]);
+app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', SearchController]);
 
-function SearchController($scope, ServcieUtil)
+function SearchController($scope, ServcieUtil, cordovaUtil)
 {
 	$scope.search = "";
 	var self = this;
@@ -2948,7 +3007,7 @@ function SearchController($scope, ServcieUtil)
 
 	$scope.seach = function() {
 		if ($scope.search.length == 0) {
-			window.history.back();
+			cordovaUtil.closeWebView();
 			return;
 		}
 		$scope.start = 0;

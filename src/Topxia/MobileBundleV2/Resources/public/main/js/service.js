@@ -54,6 +54,10 @@ service('OrderService', ['httpService', function(httpService) {
 		httpService.simpleGet("/mapi_v2/Order/payCourse", arguments);
 	}
 
+	this.payVip = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Order/payVip", arguments);
+	}
+
 	this.getPayOrder = function() {
 		httpService.simpleGet('/mapi_v2/Order/getPayOrder', arguments);
 	}

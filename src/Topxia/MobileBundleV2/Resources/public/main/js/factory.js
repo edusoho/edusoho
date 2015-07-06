@@ -75,12 +75,14 @@ factory('VipUtil', function() {
 
 	var payByYear = {
 		title : "按年支付",
-		type : 20
+		type : 20,
+		name : "year"
 	};
 
 	var payByMonth  ={
 		title : "按月支付",
-		type : 30
+		type : 30,
+		name : "month"
 	};
 
 	return {

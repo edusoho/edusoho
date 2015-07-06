@@ -1558,7 +1558,12 @@ a {
 }
 
 .ui-pop-content .ui-btn:before, .ui-pop .ui-btn-s:before {
-  margin-right: 8px;
+  margin-right: 16px;
+}
+
+.ui-pop-content .ui-btn, .ui-pop .ui-btn-s {
+  height: 42px ! important;
+  line-height: 42px ! important;
 }
 
 .ui-pop .ui-pop-content {
@@ -1568,7 +1573,7 @@ a {
   top: 45px;
   border: 1px solid #c7c7c7;
   border-radius: 5px;
-  width: 96px;
+  width: 120px;
   background: #fff;
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
 }

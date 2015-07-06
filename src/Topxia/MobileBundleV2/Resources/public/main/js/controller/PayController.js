@@ -1,11 +1,29 @@
 app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', CoursePayController]);
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
 app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
-app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', VipPayController]);
+app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', VipPayController]);
 
-
-function VipPayController($scope, $stateParams, SchoolService, VipUtil)
+function BasePayController()
 {
+	this.showPayResultDlg = function() {
+		var dia = $.dialog({
+		        title : '确认支付' ,
+		        content : '是否支付完成?' ,
+		        button : [ "确认" ,"取消" ]
+		});
+
+		dia.on("dialog:action",function(e){
+		        if (e.index == 0) {
+		        	window.history.back();
+		        }
+		});
+	}
+}
+
+function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderService, cordovaUtil)
+{
+	var self = this;
+	this.__proto__ = new BasePayController();
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
 		levelId : $stateParams.levelId,
@@ -54,7 +72,21 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil)
 			$scope.sumTotalPirce();
 		  	$scope.isShowPayMode = false;
 		  }
-	}	
+	}
+
+	$scope.payVip = function() {
+		OrderService.payVip({
+			targetId : $stateParams.levelId,
+			token : $scope.token,
+			duration : $scope.selectedNum,
+			unitType : $scope.selectedPayMode.name
+		}, function(data) {
+			if (data.status == "ok" && data.payUrl != "") {
+				cordovaUtil.payCourse("支付会员", data.payUrl);
+				self.showPayResultDlg();
+			}
+		});
+	}
 
 }
 
@@ -93,8 +125,10 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 }
 
 function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordovaUtil)
-{
+{	
 	var self = this;
+	this.__proto__ = new BasePayController();
+	
 	ServcieUtil.getService("OrderService").getPayOrder({
 		courseId : $stateParams.courseId,
 		token : $scope.token
@@ -123,6 +157,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
 				cordovaUtil.payCourse("支付课程", data.payUrl);
+				self.showPayResultDlg();
 			}
 		});
 	}
