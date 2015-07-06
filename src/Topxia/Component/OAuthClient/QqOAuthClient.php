@@ -14,6 +14,7 @@ class QqOAuthClient extends AbstractOAuthClient
         $params['client_id'] = $this->config['key'];
         $params['response_type'] = 'code';
         $params['redirect_uri'] = $callbackUrl;
+        $params['status'] = 'pro';
         return self::AUTHORIZE_URL . http_build_query($params);
     }
 
