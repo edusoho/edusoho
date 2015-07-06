@@ -7,22 +7,77 @@
 <button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">添加字段</button>
 {% endblock %}
 {% block main %}
+<form action="" class="form-horizontal">
+  <fieldset>
+    <legend>用户信息设置</legend>
+    <table class="table table-striped table-hover" id="course-table">
+      <thead>
+      <tr>
+        <th>字段名称</th>
+        <th>类型</th>
+        <th>是否显示</th>
+        <!-- <th>显示序号</th> -->
+        <!-- <th>创建时间</th> -->
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
+      </tbody>
+    </table>
+  </fieldset>
+  
+  <div id="show-list">
+    <div class="mbm">
+      购买课程活班级时需要填写个人资料：
+      <label><input type="radio" name="" value=""> 开启</label>
+      <label><input type="radio" name="" value=""> 关闭</label>
+    </div>
+    <div class="mbl">
+      <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
+      <button type="button" class="btn btn-default btn-xs">手机号码</button>
+      <button type="button" class="btn btn-default btn-xs">手机号码</button>
+      <button type="button" class="btn btn-default btn-xs">邮箱或者手机</button>
+      <button type="button" class="btn btn-default btn-xs">密码</button>
+      <button type="button" class="btn btn-default btn-xs">昵称</button>
+      <button type="button" class="btn btn-default btn-xs">姓名</button>
+      <button type="button" class="btn btn-default btn-xs">身份证号码</button>
+      <button type="button" class="btn btn-default btn-xs">职业</button>
+      <button type="button" class="btn btn-default btn-xs">性别</button>
+      <button type="button" class="btn btn-default btn-xs">公司</button>
+        
+      <div class="pull-right "><a href="javascript:" id="show-list-btn">编辑 <span class="
+      glyphicon glyphicon-chevron-down"></span></a></div>
+    </div>
+  </div>
 
-  <table class="table table-striped table-hover" id="course-table">
-    <thead>
-    <tr>
-      <th>字段名称</th>
-      <th>类型</th>
-      <th>是否显示</th>
-      <th>显示序号</th>
-      <th>创建时间</th>
-      <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-      {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
-    </tbody>
-  </table>
+  <fieldset>
+    <legend>其它设置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>头像设置提醒</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner').avatar_alert|default('none')) }}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>用户修改昵称</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>  
+    </div>
+  </div>
+</form>
 
 {{ web_macro.flash_messages() }}
 {% include 'TopxiaAdminBundle:System:user-fields.modal.html.twig' %}
