@@ -8,21 +8,21 @@
 {% endblock %}
 {% block main %}
 
-	<table class="table table-striped table-hover" id="course-table">
-		<thead>
-		<tr>
-			<th>字段名称</th>
-			<th>类型</th>
-			<th>是否显示</th>
-			<th>显示序号</th>
-			<th>创建时间</th>
-			<th>操作</th>
-		</tr>
-		</thead>
-		<tbody>
-			{% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
-		</tbody>
-	</table>
+  <table class="table table-striped table-hover" id="course-table">
+    <thead>
+    <tr>
+      <th>字段名称</th>
+      <th>类型</th>
+      <th>是否显示</th>
+      <th>显示序号</th>
+      <th>创建时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
+    </tbody>
+  </table>
 
 {{ web_macro.flash_messages() }}
 {% include 'TopxiaAdminBundle:System:user-fields.modal.html.twig' %}
