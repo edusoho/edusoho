@@ -27,17 +27,12 @@ define(function(require, exports, module) {
 
             }
         });
-        validator.addItem({
-            element: '[name="emailOrMobile"]',
-            required: true, 
-            rule: 'email_or_mobile email_or_mobile_remote'
-        });
 
-        // validator.addItem({
-        //     element: '[name="mobile"]',
-        //     required: true, 
-        //     rule: 'email_or_mobile email_or_mobile_remote'
-        // });
+        validator.addItem({
+            element: '[name="mobile"]',
+            required: true, 
+            rule: 'mobile email_or_mobile_remote'
+        });
 
         validator.addItem({
             element: '[name="nickname"]',
