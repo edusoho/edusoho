@@ -1303,11 +1303,22 @@
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   font-size: 13px;
 }
+.rmb {
+  color: #f40;
+  font-weight: bold;
+  font-style: normal;
+}
 .tags {
   line-height: 30px;
 }
 .tags a {
   font-size: 12px;
+}
+.comment-list .comment .comment-delete-btn {
+  visibility: hidden;
+}
+.comment-list .comment-operated:hover .comment-delete-btn {
+  visibility: visible;
 }
 @keyframes fadeInLeft {
   0% {

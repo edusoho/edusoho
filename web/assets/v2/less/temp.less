@@ -140,10 +140,25 @@
   font-size: 13px;
 }
 
+.rmb {
+  color: #f40;
+  font-weight: bold;
+  font-style: normal;
+}
+
 // 即将删除
 .tags {
   line-height: 30px;
   a {
     font-size: 12px;
+  }
+}
+
+.comment-list {
+  .comment .comment-delete-btn {
+    visibility: hidden;
+  }
+  .comment-operated:hover .comment-delete-btn {
+    visibility: visible;
   }
 }
