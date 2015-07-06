@@ -303,7 +303,7 @@ admin_setting_user_center:
     name: 用户中心
     parent: admin_setting_user
 admin_setting_user_fields:
-    name: 字段自定义
+    name: 用户信息设置
     parent: admin_setting_user
 admin_user_avatar:
     name: 默认头像
