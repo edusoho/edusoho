@@ -120,6 +120,16 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
+    public function findMessagesByUserIdAndlastMaxId($userId, $lastMaxId)
+    {
+        $api = $this->getCloudApi();
+        $result = $api->get(
+            sprintf('/tui/message/%s/list', $userId),
+            array('lastMaxId' => $lastMaxId, 'limit' => 50)
+        );
+        return $result;
+    }
+
     public function getLiveCourseStatus()
     {
         $api = $this->getCloudApi();

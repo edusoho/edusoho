@@ -17,6 +17,8 @@ interface EduCloudService
 
 	public function getBills($type, $page, $limit);
 
+    public function findMessagesByUserIdAndlastMaxId($userId, $lastMaxId);
+
     public function getCloudSmsKey($key);
 
     public function getLiveCourseStatus();

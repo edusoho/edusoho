@@ -114,7 +114,8 @@ $api->get('/announcements', function (Request $request) {
 });
 
 /*
-## 获取
+## 获取web端网校第三方登陆设置
+
     GET /mobileschools/bind_info
 
 ** 响应 **
