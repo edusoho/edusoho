@@ -4,6 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
@@ -169,6 +170,74 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $order;
     }
 
+    public function payVip()
+    {
+         $targetId = $this->getParam("targetId");
+
+         if (empty($targetId)) {
+            return $this->createErrorResponse('error', '创建订单数据失败!');
+         }
+
+         $token = $this->controller->getUserToken($this->request);
+         $user = $this->controller->getUser();
+         if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '用户未登录，加入学习失败！');
+         }
+         $payVip = $this->controller->getLevel($targetId);
+         if (!$payVip) {
+            return $this->createErrorResponse('error', '购买的vip类型不存在!');
+         }
+         $fields = $this->request->query->all();
+         $vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
+         if ($vip) {
+            if ($payVip["seq"] > $vip["seq"]) {
+                $fields["buyType"] = "upgrade";
+            } else {
+                return $this->createErrorResponse('error', '会员类型不能降级付费!');
+            }
+            $fields["buyType"] = "renew";
+         } else {
+            $fields["buyType"] = "new";
+         }
+
+         $fields["targetType"] = "vip";
+         $targetType = "vip";
+         $priceType = "RMB";
+         $coinSetting = $this->controller->setting("coin");
+         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+         if ($coinEnabled && isset($coinSetting["price_type"])) {
+             $priceType = $coinSetting["price_type"];
+         }
+         $cashRate = 1;
+         if ($coinEnabled && isset($coinSetting["cash_rate"])) {
+             $cashRate = $coinSetting["cash_rate"];
+         }
+
+          $processor = OrderProcessorFactory::create($targetType);
+          list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+          
+          $fields["totalPrice"] = $totalPrice;
+          $orderFileds = array(
+                'priceType' => "RMB",
+                'totalPrice' => $totalPrice,
+                'amount' => $amount,
+                'coinAmount' => 0,
+                'coinRate' => $cashRate,
+                'userId' => $user["id"],
+                'payment' => 'alipay',
+                'targetId' => $targetId,
+                'coupon' => empty($coupon) ? '' : $coupon,
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+           );
+           $order = $processor->createOrder($orderFileds, $fields);
+           
+           if ($order['status'] == 'paid') {
+            return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
+           }
+
+           return $this->payByAlipay($order, $token["token"]);
+    }
+
     /**
     * payType iap, online
     */
@@ -211,7 +280,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
         }
 
-        return $this->payCourseByAlipay($order, $token["token"]);
+        return $this->payByAlipay($order, $token["token"]);
     }
 
     private function payCourseByIAP($order, $userId)
@@ -278,7 +347,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return array($success, $order);
     }
 
-    private function payCourseByAlipay($order, $token)
+    private function payByAlipay($order, $token)
     {
         $result = array('status' => 'error', 'message' => '', 'paid' => false, 'payUrl' => '');
         $payment = $this->controller->setting('payment', array());

@@ -26,6 +26,7 @@ class MobileAlipayController extends MobileBaseController
         $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
         $verify_result = $alipayNotify->verifyNotify();
 
+        $status = "fail";
         if($verify_result) {
             //验证成功
             try {
@@ -36,10 +37,10 @@ class MobileAlipayController extends MobileBaseController
         }
         else {
             //验证失败
-            $result["status"] = "fail";
+            $status= "fail";
             $this->getLogService()->info('notify', 'check_fail', "paynotify action");
         }
-        return new Response("success");
+        return new Response($status);
     }
 
     public function payMerchantAction(Request $request)
@@ -57,12 +58,12 @@ class MobileAlipayController extends MobileBaseController
     //支付校验
     protected function doPayNotify(Request $request, $name)
     {
+        $requestParams = array();
         if ($request->getMethod() == "GET") {
             $requestParams = $request->query->all();
             $order = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
             $requestParams['total_fee'] = $order['amount'];
         } else {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知");
             $doc = simplexml_load_string($_POST['notify_data']);
             $doc = (array)$doc;
             
@@ -79,8 +80,9 @@ class MobileAlipayController extends MobileBaseController
             }
         }
 
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $requestParams);
         $payData = $this->createPaymentResponse($requestParams);
-        
+
         try {
             list($success, $order) = $this->getPayCenterService()->pay($payData);
             return "success";

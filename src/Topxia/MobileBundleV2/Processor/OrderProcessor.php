@@ -14,4 +14,6 @@ interface OrderProcessor
 	public function buyCoin();
 
 	public function getPayOrder();
+
+	public function payVip();
 }
