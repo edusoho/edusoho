@@ -6,13 +6,12 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-
         $("#course-table tbody").sortable({
             containerSelector: 'table',
             itemPath: '> tbody',
             draggedClass: "dragged",
             itemSelector: 'tr',
-            placeholder: '<tr class="placeholder"/>'  
+            placeholder: '<tr class="placeholder"/>' 
         });
 
     	var $form = $('#field-form');

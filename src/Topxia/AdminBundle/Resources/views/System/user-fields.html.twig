@@ -9,31 +9,27 @@
 {% block main %}
 
 <form action="" class="form-horizontal">
-  <fieldset>
-    <legend>用户信息设置</legend>
-    <table class="table table-striped table-hover table-bordered" id="course-table">
-      <thead>
-      <tr>
-        <th>字段名称</th>
-        <th>类型</th>
-        <th>是否显示</th>
-        <!-- <th>显示序号</th> -->
-        <!-- <th>创建时间</th> -->
-        <th>操作</th>
-      </tr>
-      </thead>
-      <tbody>
-        {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
-      </tbody>
-    </table>
-  </fieldset>
-  <fieldset>
-    <legend>个人资料设置</legend>
-  </fieldset>
+  <table class="table table-striped table-hover" id="course-table">
+    <thead>
+    <tr>
+      <th>字段名称</th>
+      <th>类型</th>
+      <th>是否显示</th>
+      <!-- <th>显示序号</th> -->
+      <!-- <th>创建时间</th> -->
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
+    </tbody>
+  </table>
   <div class="mbm">
     购买课程活班级时需要填写个人资料：
-    <label><input type="radio" name="" value=""> 开启</label>
-    <label><input type="radio" name="" value=""> 关闭</label>
+    <span class="radios">
+      <label><input type="radio" name="" value=""> 开启</label>
+      <label><input type="radio" name="" value=""> 关闭</label>
+    </span>
   </div>
   
   <div id="show-list">
