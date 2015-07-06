@@ -227,7 +227,7 @@ class ThreadServiceTest extends BaseTestCase
     }
      /**
      * 回复话题
-     **/
+     **////
     public function testGetPost()
     {
       $user = $this->getCurrentUser();
