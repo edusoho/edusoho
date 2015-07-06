@@ -15,8 +15,8 @@ define(function(require, exports, module){
 
 		function order_query () {
 			$.get($img.data('check'), function(response) {
-				if (response) {
-					//window.location.href = $img.data('goto');
+			if (response) {
+					window.location.href = $img.data('goto');
 				};
 			});
 		}

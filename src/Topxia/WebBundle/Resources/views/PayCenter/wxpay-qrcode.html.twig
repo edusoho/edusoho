@@ -6,9 +6,16 @@
 
 <div id="page-message-container" class="page-message-container">
   <div class="page-message-panel">
+  	<div class="page-message-heading">
+      <h3 class="page-message-title">微信支付</h3>
+    </div>
     <div class="page-message-body">
-      <img class = 'img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url = "{{ path('wxpay_roll',{orderId:orderId}) }}" data-check = "{{ path('wxpay_order_query',{orderId:orderId})}}" data-goto = "{{path('pay_success_show',{id:orderId})}}">
-		</div>
+      <img class = 'img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url="{{ path('wxpay_roll',{orderId:orderId}) }}" data-check="{{ path('wxpay_order_query',{orderId:orderId}) }}" data-goto="{{ path('pay_success_show',{id:orderId}) }}">
+      <div class="pw-box-ft">
+        <p>请使用微信扫一扫</p>
+        <p>扫描二维码支付</p>
+      </div>
+      <img  src="{{ asset('assets/img/default/phone-bg.png') }}">
 	</div>
   </div>
 </div>

@@ -332,12 +332,19 @@ class PayCenterController extends BaseController
         if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
-
-        $options = array(
-            'key' => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-            //'type' => $settings["{$payment}_type"]
-        );
+        if ($payment == 'alipay') {
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'type' => $settings["{$payment}_type"]
+            );
+        }
+        elseif ($payment == 'wxpay') {
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"]
+            );
+        }
 
         return $options;
     }
