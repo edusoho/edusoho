@@ -82,6 +82,15 @@ class CourseOrderController extends OrderController
             ));
         }
 
+        //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
             'payments' => $this->getEnabledPayments(),
@@ -94,6 +103,7 @@ class CourseOrderController extends OrderController
             'userFields'=>$userFields,
             'account'=>$account,
             'amount'=>$amount,
+            'vipStatus'=>$vipStatus
         ));
     }
 
@@ -133,11 +143,20 @@ class CourseOrderController extends OrderController
 
         $coinSetting = $this->setting("coin");
 
+        //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
         if((isset($coinSetting["coin_enabled"]) 
         && $coinSetting["coin_enabled"]==1
         && isset($coinSetting["price_type"])
         && $coinSetting["price_type"]=="Coin"
-        && $course['coinPrice']==0) || $course['price'] == 0) {
+        && $course['coinPrice']==0) || $course['price'] == 0 || $vipStatus == 'ok') {
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
             $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
@@ -386,5 +405,10 @@ class CourseOrderController extends OrderController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }
