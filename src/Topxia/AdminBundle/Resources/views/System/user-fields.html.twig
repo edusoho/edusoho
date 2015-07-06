@@ -7,10 +7,11 @@
 <button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">添加字段</button>
 {% endblock %}
 {% block main %}
+
 <form action="" class="form-horizontal">
   <fieldset>
     <legend>用户信息设置</legend>
-    <table class="table table-striped table-hover" id="course-table">
+    <table class="table table-striped table-hover table-bordered" id="course-table">
       <thead>
       <tr>
         <th>字段名称</th>
@@ -26,13 +27,16 @@
       </tbody>
     </table>
   </fieldset>
+  <fieldset>
+    <legend>个人资料设置</legend>
+  </fieldset>
+  <div class="mbm">
+    购买课程活班级时需要填写个人资料：
+    <label><input type="radio" name="" value=""> 开启</label>
+    <label><input type="radio" name="" value=""> 关闭</label>
+  </div>
   
   <div id="show-list">
-    <div class="mbm">
-      购买课程活班级时需要填写个人资料：
-      <label><input type="radio" name="" value=""> 开启</label>
-      <label><input type="radio" name="" value=""> 关闭</label>
-    </div>
     <div class="mbl">
       <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
       <button type="button" class="btn btn-default btn-xs">手机号码</button>
@@ -49,6 +53,51 @@
       <div class="pull-right "><a href="javascript:" id="show-list-btn">编辑 <span class="
       glyphicon glyphicon-chevron-down"></span></a></div>
     </div>
+  </div>
+  <div class="controls" id="show-register-list" style="display:none">
+    <div class="form-group">
+      <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted"> (系统必需，不可取消)</span>
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" name="registerSort[]" value="truename"></input><input type="hidden"  name="registerFieldNameArray[]" value="truename"></input> 姓名
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted"> (带格式校检)</span>
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" name="registerSort[]" value="gender"></input><input type="hidden"  name="registerFieldNameArray[]" value="gender"></input> 性别
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" name="registerSort[]" value="job"></input><input type="hidden"  name="registerFieldNameArray[]" value="job"></input> 职业
+        </li>
+        <li class="list-group-item clearfix" data-role="item" >
+          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
+          &nbsp;<input type="checkbox" name="registerSort[]" value="company"></input><input type="hidden"  name="registerFieldNameArray[]" value="company"></input> 公司
+        </li>
+      </ul>
+      <div class="help-block col-md-12">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</div>
+    </div>
+    <div class="mbl" style="text-align:center;"><a href="javascript:" id="hide-list-btn">收起 <span class="
+    glyphicon glyphicon-chevron-up"></span></a></div>
   </div>
 
   <fieldset>

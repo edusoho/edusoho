@@ -1,6 +1,6 @@
 {% for field in fields %}
   <tr id="field-tr-{{ field.id }}">
-    <td>{{field.title}}</td>
+    <td><span class="glyphicon glyphicon-resize-vertical"></span>{{field.title}}</td>
     <td>{{field.fieldName}}</td>
     <td>{% if field.enabled %}是{% else %}否{% endif %}</td>
     <!-- <td>{{field.seq}}</td> -->

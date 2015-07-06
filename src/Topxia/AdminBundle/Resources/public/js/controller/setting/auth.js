@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
   var Validator = require('bootstrap.validator');
-  require('jquery.sortable');
   require('ckeditor');
   require('common/validator-rules').inject(Validator);
   var Notify = require('common/bootstrap-notify');
+  require('/bundles/topxiaadmin/js/controller/system/common');
   exports.run = function() {
 
     // group: 'default'
@@ -13,21 +13,6 @@ define(function(require, exports, module) {
       filebrowserImageUploadUrl: $('#user_terms_body').data('imageUploadUrl')
     });
 
-    $(".register-list").sortable({
-      'distance': 20
-    });
-
-    $("#show-register-list").hide();
-
-    $("#hide-list-btn").on("click", function() {
-      $("#show-register-list").hide();
-      $("#show-list").show();
-    });
-
-    $("#show-list-btn").on("click", function() {
-      $("#show-register-list").show();
-      $("#show-list").hide();
-    });
 
     $("input[name=register_protective]").change(function() {
 
