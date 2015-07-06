@@ -113,40 +113,4 @@ $api->get('/announcements', function (Request $request) {
     );
 });
 
-/*
-## 获取web端网校第三方登陆设置
-
-    GET /mobileschools/bind_info
-
-** 响应 **
-
-```
-{
-    'qq': '{qq-data}',
-    'weibo': {weibo-data}
-}
-```
-*/
-
-$api->get('/bind_info', function (Request $request) {
-    $bindInfo = ServiceKernel::instance()->createService('System.SettingService')->get('login_bind');
-    $weiboInfo= array(
-        'enabled' => $bindInfo['weibo_enabled'],
-        'key' => $bindInfo['weibo_key'],
-        'secret' => $bindInfo['weibo_secret'],
-        'set_fill_account' => $bindInfo['weibo_set_fill_account']
-    );
-
-    $qqInfo= array(
-        'enabled' => $bindInfo['qq_enabled'],
-        'key' => $bindInfo['qq_key'],
-        'secret' => $bindInfo['qq_secret'],
-        'set_fill_account' => $bindInfo['qq_set_fill_account']
-    );
-    return array(
-        'weibo' => $weiboInfo,
-        'qq' => $qqInfo
-    );
-});
-
 return $api;
