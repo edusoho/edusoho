@@ -48,6 +48,18 @@ class MyOrderController extends BaseController
             case 'threeMonths': 
                 $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
                 break;  
+        }
+
+        switch ($request->get('payWays')) { 
+            case 'alipay': 
+                $conditions['payment'] = 'alipay'; 
+                break; 
+            case 'wxpay': 
+                $conditions['payment'] = 'wxpay';
+                break;
+            case 'none':
+                $conditions['payment'] = 'none';
+                break; 
         } 
 
         $paginator = new Paginator(
