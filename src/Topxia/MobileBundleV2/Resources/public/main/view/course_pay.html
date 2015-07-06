@@ -47,7 +47,7 @@
 		<li class="ui-border-t ui-list-divider">
 			优惠信息
 		</li>
-	    	<li class="ui-border-t">
+	    	<li class="ui-border-t" ng-click="selectCoupon()">
 	        <h4 class="ui-nowrap">
 	            	优惠<span class="pay-price">{{ coupon.decreaseAmount }}</span>
 	        </h4>
@@ -63,4 +63,34 @@
                 去支付
            </button>
 	</div>
+</div>
+<div class="ui-dialog ui-coupon full">
+    <div class="ui-dialog-bg">
+        <div class="ui-dialog-bgcontent"></div>
+    </div>
+    <div class="ui-dialog-cnt">
+    	<div class="ui-bar" ui-bar>
+	    <div class="ui-bar-bg">
+	      <button class="ui-btn btn-outline iconfont icon-fanhui" back="close"></button>
+	      <h3 class="title">优惠码</h3>
+	      <button class="ui-btn bar-tool btn-outline small" ng-click="checkCoupon()" >确认</button>
+	    </div>
+	</div>
+        	<div class="ui-form ui-border-t">
+	        <div class="ui-form-item ui-border-b ui-list-divider">
+	            填写优惠信息
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label>
+	                优惠码
+	            </label>
+	            <input type="text" placeholder="优惠码" ng-model="formData.code">
+	            <a class="ui-icon-close" ng-show="formData.code.length > 0" ng-click="formData.code = '' ">
+	            </a>
+	        </div>
+	        <div class="ui-form-item ui-list-divider item-error">
+	        	{{ formData.error }}
+	        </div>
+	</div>
+    </div>
 </div>

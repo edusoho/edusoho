@@ -85,6 +85,124 @@ function CourseDetailController($scope, $stateParams, CourseService)
     });
 }
 
+app.controller('CourseToolController', ['$scope', '$stateParams', 'OrderService', 'CourseService', 'cordovaUtil', '$state', CourseToolController]);
+function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)
+{
+    var self = this;
+    this.payCourse = function() {
+      OrderService.payCourse({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        if (data.paid == true) {
+          window.location.reload();
+        } else {
+          $scope.toast("加入学习失败!");
+        }
+      }, function(error) {
+        console.log(error);
+      });
+    }
+
+    $scope.vipLeand = function() {
+      if ($scope.user == null) {
+        cordovaUtil.openWebView(app.rootPath + "#/login/course");
+        return;
+      }
+      CourseService.vipLearn({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data){
+        if (data.meta.code == 200) {
+          window.location.reload();
+        } else {
+          $scope.toast(data.meta.message);
+        }
+      }, function(error) {
+        console.log(error);
+      });
+    }
+
+    $scope.joinCourse = function() {
+      if ($scope.user == null) {
+        cordovaUtil.openWebView(app.rootPath + "#/login/course");
+        return;
+      }
+      if ($scope.course.price <= 0) {
+        self.payCourse();
+      } else {
+        $state.go("coursePay", { courseId : $scope.course.id });
+      }
+      
+    }
+
+    $scope.favoriteCourse = function() {
+      if ($scope.user == null) {
+        cordovaUtil.openWebView(app.rootPath + "#/login/course");
+        return;
+      }
+      var params = {
+          courseId : $stateParams.courseId,
+          token : $scope.token
+      };
+
+      if ($scope.isFavorited) {
+        CourseService.unFavoriteCourse(params, function(data) {
+          if (data == true) {
+            $scope.isFavorited = false;
+          }
+        });
+      } else {
+        CourseService.favoriteCourse(params, function(data) {
+          if (data == true) {
+            $scope.isFavorited = true;
+          }
+        });
+      }
+    }
+
+    $scope.shardCourse = function() {
+      cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
+    }
+}
+
+app.controller('CourseLessonController', ['$scope', '$stateParams', 'ServcieUtil', '$state', CourseLessonController]);
+function CourseLessonController($scope, $stateParams, ServcieUtil, $state)
+{
+  var LessonService = ServcieUtil.getService("LessonService");
+  this.loadLessons = function() {
+      LessonService.getCourseLessons({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        $scope.$apply(function() {
+          $scope.lessons = data.lessons;
+          $scope.learnStatuses = data.learnStatuses;
+
+          for( index in data.learnStatuses ) {
+            $scope.lastLearnStatusIndex = index;
+          }
+        });
+      });
+    }
+
+    $scope.learnLesson = function(lesson) {
+      if (! $scope.member && 1 != lesson.free) {
+        alert("请先加入学习");
+        return;
+      }
+
+      if ("text" == lesson.type) {
+        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
+        return;
+      }
+
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
+    }
+
+    this.loadLessons();
+}
+
 function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, cordovaUtil)
 {
     $scope.showLoad();
@@ -107,27 +225,13 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
         var progress = data.course.lessonNum == 0 ? 0 : data.member.learnedNum / data.course.lessonNum;
         $scope.learnProgress = (progress * 100) + "%" ;
       }
-      $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
-      $scope.hideLoad();
-      $scope.loadLessons();
-      $scope.loadReviews();
-    });
 
-    $scope.loadLessons = function() {
-      LessonService.getCourseLessons({
-        courseId : $stateParams.courseId,
-        token : $scope.token
-      }, function(data) {
-        $scope.$apply(function() {
-          $scope.lessons = data.lessons;
-          $scope.learnStatuses = data.learnStatuses;
-
-          for( index in data.learnStatuses ) {
-            $scope.lastLearnStatusIndex = index;
-          }
-        });
+      $scope.$apply(function() {
+        $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
       });
-    }
+      
+      $scope.hideLoad();
+    });
 
     $scope.loadReviews = function(){
       CourseService.getReviews({
@@ -137,91 +241,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
       }, function(data) {
         $scope.reviews = data.data;
       });
-    }
-
-    $scope.favoriteCourse = function() {
-      if ($scope.user == null) {
-        $state.go("login", { goto : "/course/" + $stateParams.courseId });
-        return;
-      }
-      var params = {
-          courseId : $stateParams.courseId,
-          token : $scope.token
-      };
-
-      if ($scope.isFavorited) {
-        CourseService.unFavoriteCourse(params, function(data) {
-          if (data == true) {
-            $scope.$apply(function() {
-              $scope.isFavorited = false;
-            });
-          }
-        });
-      } else {
-        CourseService.favoriteCourse(params, function(data) {
-          if (data == true) {
-            $scope.$apply(function() {
-              $scope.isFavorited = true;
-            });
-          }
-        });
-      }
-    }
-
-    var self = this;
-    this.payCourse = function() {
-      ServcieUtil.getService("OrderService").payCourse({
-        courseId : $stateParams.courseId,
-        token : $scope.token
-      }, function(data) {
-        if (data.paid == true) {
-          window.location.reload();
-        } else {
-          $scope.toast("加入学习失败!");
-        }
-      }, function(error) {
-        console.log(error);
-      });
-    }
-
-    $scope.vipLeand = function() {
-      if ($scope.user == null) {
-        $state.go("login", { goto : "/course/" + $stateParams.courseId });
-        return;
-      }
-      CourseService.vipLearn({
-        courseId : $stateParams.courseId,
-        token : $scope.token
-      }, function(data){
-        if (data.meta.code == 200) {
-          window.location.reload();
-        } else {
-          $scope.toast(data.meta.message);
-        }
-      }, function(error) {
-        console.log(error);
-      });
-    }
-
-    $scope.joinCourse = function() {
-      if ($scope.user == null) {
-        $state.go("login", { goto : "/course/" + $stateParams.courseId });
-        return;
-      }
-      if ($scope.course.price <= 0) {
-        self.payCourse();
-      } else {
-        $state.go("coursePay", { courseId : $scope.course.id });
-      }
-      
-    }
-
-    $scope.shardCourse = function() {
-      cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
-    }
-
-    $scope.showDownLesson = function() {
-      cordovaUtil.showDownLesson($scope.course.id);
     }
 
     $scope.exitLearnCourse = function() {
@@ -239,21 +258,11 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
       });
     }
 
+    $scope.showDownLesson = function() {
+      cordovaUtil.showDownLesson($scope.course.id);
+    }
+
     $scope.$parent.$on("refresh", function(event, data) {
       window.location.reload();
     });
-
-    $scope.learnLesson = function(lesson) {
-      if (! $scope.member && 1 != lesson.free) {
-        alert("请先加入学习");
-        return;
-      }
-
-      if ("text" == lesson.type) {
-        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
-        return;
-      }
-
-      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
-    }
 }

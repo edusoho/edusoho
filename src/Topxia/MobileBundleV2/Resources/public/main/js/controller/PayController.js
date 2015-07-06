@@ -145,6 +145,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 	});
 
 	$scope.selectCoupon = function() {
+		$scope.formData = { code : "", error : '' };
 		self.dialog = $(".ui-dialog");
 		self.dialog.dialog("show");
 	}
@@ -162,9 +163,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 		});
 	}
 
-	$scope.formData = { code : "" };
 	$scope.checkCoupon = function() {
-		$scope.formData.error = "";
 		$scope.showLoad();
 		ServcieUtil.getService("CouponService").checkCoupon({
 			courseId : $stateParams.courseId,
@@ -172,11 +171,13 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 			code : $scope.formData.code
 		}, function(data) {
 			$scope.hideLoad();
-			if (data.meta.code != 200) {
-				$scope.formData.error = data.meta.message;
+			if (data.error) {
+				$scope.$apply(function() {
+					$scope.formData.error = data.error.message;
+				});
 				return;
 			}
-			$scope.$emit("coupon", { coupon : data.data });
+			$scope.$emit("coupon", { coupon : data });
 			$scope.close();
 
 		}, function(data) {

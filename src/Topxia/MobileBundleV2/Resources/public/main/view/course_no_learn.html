@@ -31,11 +31,11 @@
     <div class="ui-tab tab-top" ui-tab>
 	    <ul class="ui-tab-nav ui-border-tb">
 	        <li><span class="line">课程课时</span></li>
-	        <li><span>课程详情</span></li>
+	        <li><span>课时详情</span></li>
 	    </ul>
 	    <ul class="ui-tab-content tab-display">
 	        <li>
-	            <ul class="ui-list ui-list-lesson ui-border-b">  
+	            <ul class="ui-list ui-list-lesson ui-border-b" ng-controller="CourseLessonController">  
 			  <li ng-class="lesson.type" ng-repeat="lesson in lessons" ng-click="learnLesson(lesson)">
 			  	  <div class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
 			            <i class="iconfont icon-jikediancanicon11"></i>
@@ -93,7 +93,7 @@
 			    </div>
 			</section>
 
-			<section class="ui-panel ui-panel-card ui-border-t">
+			<section class="ui-panel ui-panel-card ui-border-t" ng-init="loadReviews()">
 			    <h2 class="title-body">
 			    	<span class="title">课程评价 ({{ reviews.length }})</span>
 
@@ -129,7 +129,7 @@
 
 </div>
 
-<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);">
+<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="CourseToolController">
 		<button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
 	    	</button>
 	    	<button ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="ui-btn btn-outline btn-col-15 iconfont icon-shoucang1">
@@ -138,7 +138,7 @@
 	    	<button class="ui-btn btn-green" ng-class="course.vipLevelId <= 0 ? 'btn-col-60' : 'btn-col-25' " ng-click="joinCourse()">
 	  		立即加入
        		</button>
-	       	<button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="joinCourse()" ng-if="course.vipLevelId > 0 ">
+	       	<button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="vipLeand()" ng-if="course.vipLevelId > 0 ">
 		  		{{ vipLevels[course.vipLevelId - 1].name }}会员免费学
 	       	</button>
 </div>

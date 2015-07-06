@@ -1,6 +1,6 @@
-app.controller('LoginController', ['$scope', 'UserService', '$state', '$stateParams', '$window', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$state', '$stateParams', 'platformUtil', LoginController]);
 
-function LoginController($scope, UserService, $state, $stateParams, $window)
+function LoginController($scope, UserService, $state, $stateParams, platformUtil)
 {	
 	console.log("LoginController");
 
@@ -26,11 +26,13 @@ function LoginController($scope, UserService, $state, $stateParams, $window)
 				return;
 			}
 
+			if (platformUtil.native) {
+				esNativeCore.closeWebView();
+				return;
+			}
+
 			if ($stateParams.goto) {
-				$window.history.back();
-				setTimeout(function() {
-				         $scope.$emit("refresh", {});
-				}, 10);
+				window.history.back();
 			} else {
 				$scope.jumpToMain();
 			}

@@ -238,7 +238,8 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		showDownLesson : function(courseId) {
 			alert("请在客户端下载课时");
-		}, closeWebView : function() {
+		}, 
+		closeWebView : function() {
 			window.history.back();
 		}
 	};

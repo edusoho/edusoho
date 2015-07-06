@@ -1049,17 +1049,25 @@ a {
   right: 0;
 }
 
-.ui-course-pay .error {
-  color: #F5780F;
-  font-size: 12px;
-}
-
 .ui-course-pay .ui-paycard .ui-list-info {
   padding-right: 0;
 }
 
 .ui-course-pay .ui-paycard .ui-list-info h4{
   height: 40px;
+}
+
+.ui-coupon {
+}
+
+.ui-coupon .item-error {
+  color: #F5780F ! important;
+  font-size: 12px;
+}
+
+.ui-coupon .ui-dialog-cnt {
+  background: #f0f0f0;
+  height: 100%;
 }
 
 /* ui-course-notice */
