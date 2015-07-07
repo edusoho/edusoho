@@ -735,12 +735,53 @@ class CourseServiceTest extends BaseTestCase
 
     public function testWaveCourse()
     {
-
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test title'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->waveCourse($createCourse['id'],'hitNum',+1);
+        $result = $this->getCourseService()->getCourse($createCourse['id']);
+        $this->assertEquals(1,$result['hitNum']);
     }
 
+     /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
     public function testCancelRecommendCourse()
     {
-
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test title'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $result = $this->getCourseService()->recommendCourse($user['id'],$createCourse['id']);
+        $this->assertEquals('test title',$result['title']);
+        $changeResult = $this->getCourseService()->cancelRecommendCourse($user['id']);
+        $this->assertEmpty($changeResult);
+        $this->assertEquals($createCourse['recommended'],0);
+        $this->assertEquals($createCourse['recommendedTime'],0);
+        $this->assertEquals($createCourse['recommendedSeq'],0);
     }
 
     public function testAnalysisCourseDataByTime()
