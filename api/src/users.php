@@ -171,8 +171,10 @@ $api->post('/login', function (Request $request) {
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| type | string | 是 | 第三方类型,值有qq,weibo,renren |
-| code | string | 是 | 第三方授权根据appId获取的code |
+| type | string | 是 | 第三方类型,值有qq,weibo,weixin,renren |
+| id | string | 是 | 第三方处的用户id |
+| name | string | 是 | 第三方处的用户昵称 |
+| avatar | string | 是 | 第三方处的用户头像 |
 
 
 ** 响应 **
@@ -189,14 +191,14 @@ $api->post('/login', function (Request $request) {
 */
 $api->post('/bind_login', function (Request $request) {
     $type = $request->request->get('type');
-    $code = $request->request->get('code');
-    if (empty($code) || empty($type)) {
-        throw new \Exception('parameter error');
+    $id = $request->request->get('id');
+    $name = $request->request->get('name');
+    $avatar = $request->request->get('avatar','');
+
+    if (empty($type)) {
+        throw new \Exception('type parameter error');
     }
     
-    $site = ServiceKernel::instance()->createService('System.SettingService')->get('site');
-    $url = $site['url'].'/login/bind/'.$type.'/callback?code='.$code;
-
     $settings = ServiceKernel::instance()->createService('System.SettingService')->get('login_bind');
 
     if (empty($settings)) {
@@ -214,15 +216,15 @@ $api->post('/bind_login', function (Request $request) {
     $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
     $client = OAuthClientFactory::create($type, $config);
 
-    $token = $client->getAccessToken(
-        $code,
-        $url
-    );
-    $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByToken($token['access_token']);
+    $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByTypeAndFromId($type,$id);
     if (empty($userBind)) {
-        $oauthUser = $client->getUserInfo($token);
-        $oauthUser['createdIp'] = $request->getClientIp();
-        
+        $oauthUser = array(
+            'id' => $id,
+            'name' => $name,
+            'avatar' => $avatar,
+            'createdIp' => $request->getClientIp()
+        );
+        $token = array('userId' => $id);
         if (empty($oauthUser['id'])) {
             throw new \RuntimeException("获取用户信息失败，请重试。");
         }
