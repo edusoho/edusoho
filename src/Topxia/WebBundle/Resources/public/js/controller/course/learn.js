@@ -270,13 +270,20 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
+                    var lessonVideoDiv = $('#lesson-video-content');
+
+                    if(window.__EsCloudPlayer){
+                        window.__EsCloudPlayer.dispose();
+                    }
+
                     var html = [];
                     html.push('<video id="video-player" class="video-js vjs-default-skin" width="100%" height="100%">');
                     html.push('</video>');
-                    var lessonVideoDiv = $('#lesson-video-content');
                     lessonVideoDiv.addClass("ballon-video-player");
                     lessonVideoDiv.html(html.join('\n'));
                     lessonVideoDiv.show();
+                    
+
 
                     var esCloudPlayer = new EsCloudPlayer({
                         element: '#video-player',

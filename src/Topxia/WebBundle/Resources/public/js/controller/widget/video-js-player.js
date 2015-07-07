@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     require("video-player");
+    var Cookie = require('cookie');
 
     var VideoPlayer = Widget.extend({
     	attrs: {
@@ -56,16 +57,20 @@ define(function(require, exports, module) {
                         resArray.push(source.name);
                     	player.options().sources.push({'type': 'video/mp4', 'src': source.src, 'data-res': source.name, 'data-level': source.level});
                     });
-
+                    var currentRes = Cookie.get("currentRes");
+                    if(currentRes == undefined){
+                        currentRes = resArray.join(",");
+                    }
                     player.resolutionSelector({
-                    	default_res : resArray.join(","),
+                    	default_res : currentRes,
                     	dynamic_source : self.get('url')
                     });
 
                 });
 
-                player.on( 'changeRes', function() {
-                    console.log( 'Current Res is: ' + player.getCurrentRes() );
+                player.on('changeRes', function() {
+                    console.log(player.getCurrentRes());
+                    Cookie.set("currentRes", player.getCurrentRes());
                 });
 
                 player.on('loadedmetadata', function(){
@@ -82,6 +87,8 @@ define(function(require, exports, module) {
                 });
 
                 self.set('player', player);
+
+                window.__EsCloudPlayer = player;
 
             }, 'json');
 
