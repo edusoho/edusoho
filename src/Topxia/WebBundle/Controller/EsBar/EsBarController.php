@@ -55,15 +55,25 @@ class EsBarController extends BaseController{
     public function studyPlanLessonAction(Request $request,$classroomId)
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses,'id');
+        $user = $this->getCurrentUser();
+        $learnedConditions = array(
+            'userId' => $user->id,
+            'status' => 'finished',
+            'courseIds' => $courseIds
+        );
+        $sort = array( 'finishedTime','ASC');
+        $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,1000),'lessonId');
 
-        $conditions = array(
+        $notLearnedConditions = array(
             'status' => 'published',
-            'courseIds' => ArrayToolkit::column($courses,'id'),
+            'courseIds' => $courseIds,
+            'notLearnedIds' => $learnedIds
         );
         $sort = array(
             'createdTime','DESC'
         );
-        $lessons = $this->getCourseService()->searchLessons($conditions,$sort,0,5);
+        $lessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
 
         return $this->render("TopxiaWebBundle:EsBar:study-plan-lesson.html.twig", array(
             'lessons' => $lessons
