@@ -394,8 +394,8 @@ define(function(require, exports, module) {
 
                         function generateHtml() {
                             var nowDate = lesson.nowDate;
-                            var startLeftSeconds = parseInt((startTime*1000 - nowDate) / 1000);
-                            var endLeftSeconds = parseInt((endTime*1000 - nowDate) / 1000);
+                            var startLeftSeconds = parseInt(startTime - nowDate);
+                            var endLeftSeconds = parseInt(endTime - nowDate);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
                             var modulo = startLeftSeconds % (60 * 60 * 24);
                             var hours = Math.floor(modulo / (60 * 60));

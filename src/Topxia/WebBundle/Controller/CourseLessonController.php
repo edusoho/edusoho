@@ -173,7 +173,7 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider'] = $lesson["liveProvider"];
-        $json['nowDate'] = time()*1000;
+        $json['nowDate'] = time();
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if (!empty($app)) {
