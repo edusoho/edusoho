@@ -419,8 +419,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (!SimpleValidator::password($password)) {
                 return $this->createErrorResponse('password_invalid', '密码格式不正确');
             }
+            $registTypeName = $auth['register_mode'] == "email" ? "email" : "emailOrMobile";
             $user = $this->controller->getAuthService()->register(array(
-                'emailOrMobile' => $email,
+                $registTypeName => $email,
                 'nickname' => $nickname,
                 'password' => $password
             ));
