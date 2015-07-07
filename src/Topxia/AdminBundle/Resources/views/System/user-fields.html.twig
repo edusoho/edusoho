@@ -8,7 +8,7 @@
 {% endblock %}
 {% block main %}
 
-<form action="" class="form-horizontal">
+<form action="" class="form-horizontal" method="post">
   <table class="table table-striped table-hover" id="course-table">
     <thead>
     <tr>
@@ -122,6 +122,8 @@
       <button type="submit" class="btn btn-primary">提交</button>  
     </div>
   </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
 </form>
 
 {{ web_macro.flash_messages() }}
