@@ -237,7 +237,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return array();
         }
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
-        var_dump($userProfile);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
         return $this->controller->filterUser($user);
