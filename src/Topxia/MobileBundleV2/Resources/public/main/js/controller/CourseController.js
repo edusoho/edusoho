@@ -162,7 +162,11 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     }
 
     $scope.shardCourse = function() {
-      cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
+      var about = $scope.course.about;
+      if (about.length > 20) {
+        about = about.substring(0, 20);
+      }
+      cordovaUtil.share(app.host + "/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture);
     }
 }
 

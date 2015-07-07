@@ -142,7 +142,7 @@ directive('back', function(cordovaUtil, $state) {
 
                   element.on("click", function(){
                     if (attributes["back"] == "go") {
-                      cordovaUtil.closeWebView();
+                      cordovaUtil.backWebView();
                       return;
                     }
                     if (attributes["back"] == "close" && scope.close) {

@@ -552,8 +552,8 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				if (data.data) {
-					applicationProvider.setUser(data.data.user, data.data.token);
+				if (data) {
+					applicationProvider.setUser(data.user, data.token);
 				}
 			},
 			error : function(data) {
@@ -1241,7 +1241,7 @@ directive('back', function(cordovaUtil, $state) {
 
                   element.on("click", function(){
                     if (attributes["back"] == "go") {
-                      cordovaUtil.closeWebView();
+                      cordovaUtil.backWebView();
                       return;
                     }
                     if (attributes["back"] == "close" && scope.close) {
@@ -1781,6 +1781,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		}, 
 		closeWebView : function() {
 			window.history.back();
+		},
+		backWebView : function() {
+			window.history.back();
 		}
 	};
 
@@ -2035,7 +2038,11 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     }
 
     $scope.shardCourse = function() {
-      cordovaUtil.share("", "课程", "关于", $scope.course.largePicture);
+      var about = $scope.course.about;
+      if (about.length > 20) {
+        about = about.substring(0, 20);
+      }
+      cordovaUtil.share(app.host + "/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture);
     }
 }
 
@@ -2916,9 +2923,9 @@ function NoteController($scope, NoteService, $stateParams)
 
 	self.loadNote();
 };
-app.controller('RegistController', ['$scope', '$http', 'UserService', '$state', RegistController]);
+app.controller('RegistController', ['$scope', 'platformUtil', 'UserService', '$state', RegistController]);
 
-function RegistController($scope, $http, UserService, $state)
+function RegistController($scope, platformUtil, UserService, $state)
 {
 	console.log("RegistController");
 
@@ -2928,7 +2935,27 @@ function RegistController($scope, $http, UserService, $state)
 		password: null
 	};
 
-	$scope.jumpToMain = function() {
+	var self = this;
+
+	this.registHandler = function(params) {
+		$scope.showLoad();
+		UserService.regist(params, function(data) {
+			$scope.hideLoad();
+			if (data.error) {
+				$scope.toast(data.error.message);
+				return;
+			}
+			if (platformUtil.native) {
+				esNativeCore.closeWebView();
+				return;
+			}
+			self.jumpToMain();
+		}, function(error) {
+			$scope.toast("注册失败");
+		});
+	}
+
+	this.jumpToMain = function() {
 		$state.go("slideView.mainTab");
 	}
 
@@ -2963,22 +2990,10 @@ function RegistController($scope, $http, UserService, $state)
 			alert("验证码不正确!");
 			return;
 		}
-
-		$scope.showLoad();
-		UserService.regist({
+		self.registHandler({
 			phone : user.phone,
 			smsCode : user.code,
 			password : user.password,
-		}, function(data) {
-			console.log(data);
-			if (data.meta.code == 500) {
-				$scope.toast(data.meta.message);
-				return;
-			}
-			$scope.hideLoad();
-			$scope.jumpToMain();
-		}, function(error) {
-			$scope.toast("注册失败");
 		});
 	}
 
@@ -2991,20 +3006,9 @@ function RegistController($scope, $http, UserService, $state)
 			alert("密码格式不正确!");
 			return;
 		}
-
-		$scope.showLoad();
-		UserService.regist({
+		self.registHandler({
 			email : user.email,
 			password : user.password,
-		}, function(data) {
-			if (data.meta.code == 500) {
-				$scope.toast(data.meta.message);
-				return;
-			}
-			$scope.hideLoad();
-			$scope.jumpToMain();
-		}, function(error) {
-			$scope.toast("注册失败");
 		});
 	}
 };

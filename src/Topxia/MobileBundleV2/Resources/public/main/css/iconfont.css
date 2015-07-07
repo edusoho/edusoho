@@ -60,7 +60,7 @@
 .icon-yuyin:before { content: "\e60e"; }
 .icon-tianjia:before { content: "\e60d"; }
 .icon-biaoqing:before { content: "\e610"; }
-.icon-fanhui:before { content: "\f006b"; }
+.icon-fanhui-old:before { content: "\f006b"; }
 .icon-ClassStudentIcon:before { content: "\e603"; }
 .icon-jian:before { content: "\e620"; }
 .icon-xiazaiwancheng:before { content: "\e61e"; }
@@ -78,7 +78,7 @@
 .icon-modecomment:before { content: "\e723"; }
 .icon-gonggao:before { content: "\e60a"; }
 .icon-favor:before { content: "\e64c"; }
-.icon-back:before { content: "\e679"; }
+.icon-fanhui:before { content: "\e679"; }
 .icon-heart:before { content: "\e639"; }
 .icon-heart-outline:before { content: "\e638"; }
 .icon-iconfontxiaoyou:before { content: "\e629"; }

@@ -241,6 +241,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		}, 
 		closeWebView : function() {
 			window.history.back();
+		},
+		backWebView : function() {
+			window.history.back();
 		}
 	};
 
