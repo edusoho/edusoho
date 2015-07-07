@@ -199,22 +199,22 @@ $api->post('/bind_login', function (Request $request) {
         throw new \Exception('type parameter error');
     }
     
-    $settings = ServiceKernel::instance()->createService('System.SettingService')->get('login_bind');
+    // $settings = ServiceKernel::instance()->createService('System.SettingService')->get('login_bind');
 
-    if (empty($settings)) {
-        throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
-    }
+    // if (empty($settings)) {
+    //     throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
+    // }
 
-    if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
-        throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
-    }
+    // if (empty($settings) || !isset($settings[$type.'_enabled']) || empty($settings[$type.'_key']) || empty($settings[$type.'_secret'])) {
+    //     throw new \RuntimeException("第三方登录({$type})系统参数尚未配置，请先配置。");
+    // }
 
-    if (!$settings[$type.'_enabled']) {
-        throw new \RuntimeException("第三方登录({$type})未开启");
-    }
+    // if (!$settings[$type.'_enabled']) {
+    //     throw new \RuntimeException("第三方登录({$type})未开启");
+    // }
 
-    $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
-    $client = OAuthClientFactory::create($type, $config);
+    // $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+    // $client = OAuthClientFactory::create($type, $config);
 
     $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByTypeAndFromId($type,$id);
     if (empty($userBind)) {
@@ -237,6 +237,7 @@ $api->post('/bind_login', function (Request $request) {
         if (empty($user)) {
             throw new \RuntimeException("登录失败，请重试！");
         }
+        $user = $userUtil->fillUserAttr($user['id'], $oauthUser);
     } else {
         $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userBind['toId']);
     }

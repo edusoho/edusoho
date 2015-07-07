@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Util;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\File\File;
 
 class UserUtil
 {
@@ -61,16 +62,17 @@ class UserUtil
 
     public function fillUserAttr($userId, $userInfo)
     {
+        $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
         if (!empty($userInfo['avatar'])) {
             $curl = curl_init($userInfo['avatar']);
             
             $smallName = date("Ymdhis")."_small.jpg";
             $mediumName = date("Ymdhis")."_medium.jpg";
             $largeName = date("Ymdhis")."_large.jpg";
+
             $smallPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $smallName;
             $mediumPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $mediumName;
             $largePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $largeName;
-            
             curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
             $imageData = curl_exec($curl);
@@ -102,15 +104,8 @@ class UserUtil
                 'type' => 'small',
                 'id' => $file['id']
             );
-            ServiceKernel::instance()->createService('User.UserService')->->changeAvatar($userId, $fields);
+            $user = ServiceKernel::instance()->createService('User.UserService')->changeAvatar($userId, $fields);
         }
-
-        // $this->getUserService()->updateUserProfile(
-        //     $userId,
-        //     array(
-        //         'title' => empty($userInfo['title']) ? '暂无头衔':$userInfo['title'],
-        //         'about' => empty($userInfo['about']) ? '暂无自我介绍':$userInfo['about']
-        //     )
-        // );
+        return $user;
     }
 }
