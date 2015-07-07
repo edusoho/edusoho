@@ -1,0 +1,277 @@
+<!-- 侧边栏快捷操作 -->
+{% block es_bar %}
+  <div class="es-bar visible-lg">
+    <div class="es-bar-menu">
+      <ul class="bar-menu-top">
+        <li data-id="#bar-user-center" class="bar-user">
+          <a href="javascript:;">学<br>习<br>中<br>心<span class="dot"></span></a>
+        </li>
+        <li data-id="#bar-course-list" data-toggle="tooltip" data-placement="left" title="我的课程/班级"><a href="javascript:;" ><i class="es-icon es-icon-book"></i></a></li>
+        <li data-id="#bar-history" data-toggle="tooltip" data-placement="left" title="学习历史"><a href="javascript:;"><i class="es-icon es-icon-accesstime"></i></a></li>
+        <li data-id="#bar-homework" data-toggle="tooltip" data-placement="left" title="考试/作业"><a href="javascript:;"><i class="es-icon es-icon-edit"></i></a></li>
+        <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知"><a href="javascript:;"><i class="es-icon es-icon-notifications"></i></a></li>
+      </ul>
+      <ul class="bar-menu-sns">
+        <li class="popover-btn bar-qq-btn" data-container=".bar-qq-btn" data-title="QQ客服及QQ群" data-content-element="#bar-qq-content">
+          <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
+        </li>
+        <li class="popover-btn bar-phone-btn" data-container=".bar-phone-btn" data-title="电话客服" data-content-element="#bar-phone-content">
+          <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
+        </li>
+        <li class="popover-btn bar-weixin-btn" data-container=".bar-weixin-btn" data-title="微信公众号" data-content-element="#bar-weixin-content">
+          <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
+        </li>
+        <li data-toggle="tooltip" data-placement="left" title="手机端">
+          <a href="http://demo.edusoho.com/mobile" target="_blank"><i class="es-icon es-icon-phone1"></i></a>
+        </li>
+        <li class="go-top" data-toggle="tooltip" data-placement="left" title="回到顶端"><a href="javascript:;"><i class="es-icon es-icon-keyboardarrowup"></i>TOP</a></li>
+      </ul>
+    </div>
+    {% if app.user and app.user.isLogin() %}
+      <!-- 通知 -->
+      <div class="es-bar-main" id="bar-message">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        通知
+      </div>
+      <div class="bar-main-wrap">
+        <div class="bar-main-body">
+          <ul class="bar-message">
+            <li><i class="dot"></i><a href="" class="link-light">第一条系统通知第一条系统通知第一条系统通知</a></li>
+            <li><i class="dot"></i><a href="" class="link-light">第一条系统通知</a></li>
+            <li><a href="" class="link-light">第一条系统通知</a></li>
+            <li><a href="" class="link-light">第一条系统通知</a></li>
+            <li><a href="" class="link-light">第一条系统通知</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+      <!-- 考试/作业 -->
+      <div class="es-bar-main" id="bar-homework">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        考试/作业
+      </div>
+      <div class="bar-main-body">
+        <div class="btn-action">
+          <a href="" class="btn btn-primary active">已提交</a>
+          <a href="" class="btn btn-primary"><span>已批阅<i class="dot-md"></i></span></a>
+        </div>
+        <ul class="bar-homework">
+          <li><span>作</span><a href="" class="link-light">作业作业作业作业作业作业作业</a></li>
+          <li><span>练</span><a href="" class="link-light">练习练习练习练习练习练习练习</a></li>
+          <li><span>作</span><a href="" class="link-light">作业作业作业作业作业作业作业</a></li>
+          <li><span>练</span><a href="" class="link-light">练习练习练习练习练习练习练习练习</a></li>
+        </ul>
+      </div>
+    </div>
+
+      <!-- 课程/班级 -->
+      <div class="es-bar-main" id="bar-course-list">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        课程/班级
+      </div>
+      <div class="bar-main-body">
+        <div class="btn-action">
+          <a href="" class="btn btn-primary active">课程</a>
+          <a href="" class="btn btn-primary">班级</a>
+        </div>
+        <!-- 课程 -->
+        <div class="course-list">
+          <div class="course-item">
+            <div class="course-img">
+              <a href="show.php?page=Course/course-detail.html.twig">
+                <img class="transform img-responsive" src="assets/dev/img/course_1.jpg">
+              </a>
+            </div>
+            <div class="progress progress-sm">
+              <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
+              </div>
+            </div>
+            <div class="course-info">
+              <div class="title">
+                <a href="show.php?page=Course/course-detail.html.twig">
+                  Android UiAutomator UiScrollable API 详细介绍
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="course-item">
+            <div class="course-img">
+              <a href="show.php?page=Course/course-detail.html.twig">
+                <img class="transform img-responsive" src="assets/dev/img/course_1.jpg">
+              </a>
+            </div>
+            <div class="course-info">
+              <div class="title">
+                <a href="show.php?page=Course/course-detail.html.twig">
+                  Android UiAutomator UiScrollable API 详细介绍
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 班级 -->
+        <div class="recommend-class-list">
+          <div class="class-item">
+            <a href="">
+              <img class="img-responsive" src="assets/dev/img/class_1.jpg" alt="">
+              <h3>淘宝运营课程高级班</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+          <div class="class-item">
+            <a href="">
+              <img class="img-responsive" src="assets/dev/img/class_1.jpg" alt="">
+              <h3>淘宝运营课程高级班</h3>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- 学习中心 -->
+      <div class="es-bar-main" id="bar-user-center">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light" ><i class="es-icon es-icon-arrowforward"></i></a>
+        学习中心
+      </div>
+      <div class="bar-main-body">
+        <div class="bar-user-center">
+          <a href="{{ path('user_show',{id:app.user.id}) }}" ><img class="avatar-md" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}"></a>
+          <p>{{ app.user.nickname }}</p>
+        </div>
+
+        <div class="text-line gray small">
+          <h5><span>预告板</span></h5>
+          <div class="line"></div>
+        </div>
+
+        {{ render(controller('TopxiaWebBundle:EsBar/EsBar:liveNotify',{userId:app.user.id} )) }}
+
+        <div class="text-line gray small">
+          <h5><span>今日学习任务</span></h5>
+          <div class="line"></div>
+        </div>
+        <div class="bar-task">
+          <div class="bar-task-header">
+            设计入门班级(5/12)
+          </div>
+          <ul class="bar-time-line">
+            <li class="active"><span class="icon"><i class="es-icon es-icon-done"></i></span><a class="link-light" href="">学习设计第一课时</a></li>
+            <li class="last"><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
+            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
+            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
+          </ul>
+        </div>
+        <div class="bar-task">
+          <div class="bar-task-header">
+            设计入门班级(5/12)
+          </div>
+          <ul class="bar-time-line">
+            <li class="active"><span class="icon"><i class="es-icon es-icon-done"></i></span><a class="link-light" href="">学习设计第一课时</a></li>
+            <li class="last"><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
+            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
+            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+      <!-- 学习历史 -->
+      <div class="es-bar-main" id="bar-history">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        学习历史
+      </div>
+      <div class="bar-main-body">
+        <div class="bar-history">
+          <span class="date">今天</span>
+          <ul class="list-unstyled">
+            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
+            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
+          </ul>
+        </div>
+        <div class="bar-history">
+          <span class="date">昨天</span>
+          <ul class="list-unstyled">
+            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
+            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
+          </ul>
+        </div>
+        <div class="bar-history">
+          <span class="date">昨天</span>
+          <ul class="list-unstyled">
+            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
+            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+      <div class="bar-popover-content" style="display:none;">
+      <div id="bar-qq-content">
+        <div class="row mtm">
+          <div class="col-xs-6 mbm">
+            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
+          </div>
+          <div class="col-xs-6 mbm">
+            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
+          </div>
+          <div class="col-xs-6 mbm">
+            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
+          </div>
+          <div class="col-xs-6 mbm">
+            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
+          </div>
+          <div class="col-xs-6 mbm">
+            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
+          </div>
+          <div class="col-xs-6 mbm">
+            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-xs-6 mbm">
+            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
+            <p>280645300</p>
+          </div>
+          <div class="col-xs-6 mbm">
+            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
+            <p>280645300</p>
+          </div>
+          <div class="col-xs-6 mbm">
+            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
+            <p>280645300</p>
+          </div>
+          <div class="col-xs-6 mbm">
+            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
+            <p>280645300</p>
+          </div>
+        </div>
+      </div>
+      <div id="bar-phone-content">
+        <p class="mtl"><i class="es-icon es-icon-notificationson mrm"></i>工作时间： 9:00-18:00</p>
+        <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>总部电话： 0571-8681-9929</p>
+        <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>北京分公司： 18814881999</p>
+        <p class="mtl"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:sales@edusoho.cn">sales@edusoho.cn</a></p>
+      </div>
+      <div id="bar-weixin-content">
+        <img class="img-responsive" src="assets/dev/img/webchat.jpg" alt="">
+      </div>
+    </div>
+    {% else %}
+      <div class="bar-main-body">
+        <a>登陆</a>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+  {% block modal %}
+    <div id="modal" class="modal"></div>
+  {% endblock %}
