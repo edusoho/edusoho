@@ -170,7 +170,7 @@ class RegisterController extends BaseController
                 return true;
              }
         }elseif(isset($registration['mobile']) && !empty($registration['mobile'])){
-            if( SimpleValidator::mobile($registration['emailOrMobile'])){
+            if( SimpleValidator::mobile($registration['mobile'])){
                 return true;
              }
         }
