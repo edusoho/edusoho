@@ -19,12 +19,23 @@
 @import "temp/latest-review-list.less"; //学员评价
 @import "temp/homepage-feature.less"; //轮播
 @import "temp/category-nav.less"; //仅用于default-b
+@import "temp/promoted-teacher.less"; //名师风采仅用于雅致主题
+@import "temp/friendcard.less"; //用户关注
+@import "temp/footer.less"; //页脚、仅用于default、default-b
+@import "temp/message.less"; //私信
+@import "temp/vip.less"; //会员，用于老的主题
+
+
 
 
 
 
 
 // bootstrap-extends
+
+a.link-muted {
+  color: #9AB2CF;
+}
 
 .btn-muted {
   color: #999999;
@@ -76,6 +87,21 @@
 
 .lesson-dashboard .back-course-btn {
   left: -5px;
+}
+
+// 动态，用于老的主题
+.status-side ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.status-side li {
+  overflow: hidden;
+}
+
+.status-side li img {
+  width: 50px;
+  height: 50px;
 }
 
 // 个人中心头部
@@ -198,6 +224,33 @@
 
 .origin-price {
   font-size: 12px;
+}
+
+.article-list .media-object {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.nav .qiandai{
+  line-height: 1px;
+  height:54px;
+}
+.nav-course-buy-btn{
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+.question-num {
+  display:inline-block;
+  width: 25px;
+}
+
+.panel.testpaper-question-block .testpaper-question{
+  position: relative;
+
+}
+.panel.testpaper-question-block .panel-body{
+  position:relative;
+  z-index:1;
 }
 
 // 小组
