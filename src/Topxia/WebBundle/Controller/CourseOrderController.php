@@ -149,6 +149,9 @@ class CourseOrderController extends OrderController
             $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
             if ($courseVip) {
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+                if($vipStatus == 'ok') {
+                    $formData['becomeUseMember'] = true;
+                }
             }
         }
 
@@ -162,6 +165,7 @@ class CourseOrderController extends OrderController
             $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
             $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
+
             $order = $this->getCourseOrderService()->createOrder($formData);
 
             if ($order['status'] == 'paid') {

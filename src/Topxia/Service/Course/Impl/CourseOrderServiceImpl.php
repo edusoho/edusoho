@@ -88,9 +88,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 throw $this->createServiceException('创建课程订单失败！');
             }
 
-            $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
             // 免费课程或VIP用户，就直接将订单置为已购买
-            if ((intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon']))||$vipStatus=='ok') {
+            if ((intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon']))||!empty($info["becomeUseMember"])) {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
                     'sn' => $order['sn'],
                     'status' => 'success', 
