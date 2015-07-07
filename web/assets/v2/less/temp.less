@@ -9,6 +9,8 @@
 @import "temp/float-consult.less"; //在线客服
 @import "temp/order.less";      //订单
 @import "temp/homepage.less";   //首页
+@import "temp/notification.less"; //私信
+
 
 // bootstrap-extends
 
@@ -161,4 +163,95 @@
   .comment-operated:hover .comment-delete-btn {
     visibility: visible;
   }
+}
+
+.lesson-manage-panel .panel-heading.sticky {
+  margin: 0;
+  background: #fff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+
+.text-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  li {
+    border-bottom: 1px solid #e3e3e3;
+    padding: 8px 0;
+  }
+}
+
+.money {
+  color: #f40;
+  font-size: 22px;
+}
+
+.avatar-small {
+  width: 50px;
+  height: 50px;
+}
+
+.avatar-medium {
+  width: 120px;
+  height: 120px;
+}
+
+// 小组
+.user-simple-list .media-body {
+  vertical-align: middle;
+  line-height: 48px;
+}
+
+.user-avatar-link img {
+  width: 48px;
+  height: 48px;
+}
+
+.user-grids {
+  letter-spacing:-4px;
+  zoom:1;
+  margin: 0;
+  padding: 0;
+}
+
+.user-grids li {
+  list-style: none;
+  text-align: center;
+  display: inline-block;
+  letter-spacing:0;
+  width: 23%;
+  margin: 8px 1%;
+  font-size: 12px;
+  vertical-align:top;
+  height: 80px;
+  overflow: hidden;
+}
+
+.user-grids li p {
+  margin-bottom: 0;
+  word-wrap: break-word;
+  word-break: normal;
+}
+
+.user-grids .user-avatar-link {
+  margin-bottom: 5px;
+}
+
+.user-grids .user-link {
+  display: block;
+  width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+// 待换地方
+.container .vjs-default-skin .vjs-big-play-button {
+  top: 50%;
+  left: 50%;
+  margin-top: -40px;
+  margin-left: -50px;
+  width: 100px;
+  height: 80px;
 }
