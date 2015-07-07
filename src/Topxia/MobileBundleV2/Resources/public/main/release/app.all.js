@@ -552,7 +552,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				if (data) {
+				if (data && !data.error) {
 					applicationProvider.setUser(data.user, data.token);
 				}
 			},
@@ -567,7 +567,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
-				if (data) {
+				if (data && !data.error) {
 					applicationProvider.setUser(data.user, data.token);
 				}
 			},

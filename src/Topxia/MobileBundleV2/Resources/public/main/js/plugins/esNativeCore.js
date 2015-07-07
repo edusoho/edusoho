@@ -50,6 +50,9 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         },
         backWebView : function() {
             exec(null, null, "ESNativeCore", "backWebView", []);
+        },
+        openPlatformLogin : function(type) {
+            exec(null, null, "ESNativeCore", "openPlatformLogin", [type]);
         }
     };
 });
