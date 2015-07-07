@@ -168,7 +168,6 @@ define(function(require, exports, module) {
         $modal.on('click','.js-buy-btn', function(){
 			$.get($(this).data('url'), function(html) {
 				$modal.html(html);
-				$('#join-course-btn').click();
 			});
 		});
 
