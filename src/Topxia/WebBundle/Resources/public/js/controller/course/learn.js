@@ -393,7 +393,7 @@ define(function(require, exports, module) {
                         }
 
                         function generateHtml() {
-                            var nowDate = new Date();
+                            var nowDate = lesson.nowDate;
                             var startLeftSeconds = parseInt((startTime*1000 - nowDate) / 1000);
                             var endLeftSeconds = parseInt((endTime*1000 - nowDate) / 1000);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
