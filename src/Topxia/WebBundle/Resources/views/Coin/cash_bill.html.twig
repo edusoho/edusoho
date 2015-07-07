@@ -59,7 +59,11 @@
             <td>
               <span class="text-sm">
                 {% if cash.type =="inflow" %}
-                  支付宝 
+                  {% if orders[cash.orderSn]['payment'] == 'wxpay'%}
+                    微信支付
+                  {% else %}
+                    支付宝
+                  {% endif %}
                 {% else %}
                   网校支付
                 {% endif %}
