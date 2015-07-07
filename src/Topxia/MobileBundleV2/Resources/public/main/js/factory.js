@@ -244,6 +244,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		backWebView : function() {
 			window.history.back();
+		},
+		openPlatformLogin : function(type) {
+			alert("请在客户端内登录!");
 		}
 	};
 

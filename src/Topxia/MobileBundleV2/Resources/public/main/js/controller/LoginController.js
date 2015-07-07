@@ -1,6 +1,6 @@
-app.controller('LoginController', ['$scope', 'UserService', '$state', '$stateParams', 'platformUtil', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', LoginController]);
 
-function LoginController($scope, UserService, $state, $stateParams, platformUtil)
+function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil)
 {	
 	console.log("LoginController");
 
@@ -38,5 +38,9 @@ function LoginController($scope, UserService, $state, $stateParams, platformUtil
 			}
 			
     		});
+    	}
+
+    	$scope.loginWithOpen = function(type) {
+    		cordovaUtil.openPlatformLogin(type);
     	}
 }

@@ -1784,6 +1784,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		backWebView : function() {
 			window.history.back();
+		},
+		openPlatformLogin : function(type) {
+			alert("请在客户端内登录!");
 		}
 	};
 
@@ -2358,9 +2361,9 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 
 	this.loadLesson();
 };
-app.controller('LoginController', ['$scope', 'UserService', '$state', '$stateParams', 'platformUtil', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', LoginController]);
 
-function LoginController($scope, UserService, $state, $stateParams, platformUtil)
+function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil)
 {	
 	console.log("LoginController");
 
@@ -2398,6 +2401,10 @@ function LoginController($scope, UserService, $state, $stateParams, platformUtil
 			}
 			
     		});
+    	}
+
+    	$scope.loginWithOpen = function(type) {
+    		cordovaUtil.openPlatformLogin(type);
     	}
 };
 function MainTabController($scope, sideDelegate, $state)
