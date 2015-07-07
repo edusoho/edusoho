@@ -13,7 +13,7 @@
       {{ web_macro.flash_messages() }}
        <ul class="media-list">
           {% for type, client in clients %} 
-          {% if settings[type ~ '_enabled']|default(false) %}
+          {% if settings[type ~ '_enabled']|default(false) and type != 'weixinmob' %}
             <li class="media">
               {% if client.large_icon_img|default(null) %}
                 <img src="{{ asset(client.large_icon_img) }}" class=" media-object pull-left">
