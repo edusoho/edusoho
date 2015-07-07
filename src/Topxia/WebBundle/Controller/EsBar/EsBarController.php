@@ -32,6 +32,49 @@ class EsBarController extends BaseController{
         ));
     }
 
+    public function studyPlanClassroomAction(Request $request,$userId)
+    {
+        $memberConditions = array(
+            'userId' => $userId,
+            'locked' => 0,
+        );
+        $sort = array('createdTime','DESC');
+        $classrooms = array();
+        $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
+        if(!empty($classroomIds)){
+            $classroomConditions = array(
+                'classroomIds' => $classroomIds
+            );
+            $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,5);
+        }
+        return $this->render("TopxiaWebBundle:EsBar:study-plan-classroom.html.twig", array(
+            'classrooms' => $classrooms
+        ));
+    }
+
+    public function studyPlanLessonAction(Request $request,$classroomId)
+    {
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+
+        $conditions = array(
+            'status' => 'published',
+            'courseIds' => ArrayToolkit::column($courses,'id'),
+        );
+        $sort = array(
+            'createdTime','DESC'
+        );
+        $lessons = $this->getCourseService()->searchLessons($conditions,$sort,0,5);
+
+        return $this->render("TopxiaWebBundle:EsBar:study-plan-lesson.html.twig", array(
+            'lessons' => $lessons
+        ));
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

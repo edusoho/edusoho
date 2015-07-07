@@ -27,7 +27,7 @@
         <li class="go-top" data-toggle="tooltip" data-placement="left" title="回到顶端"><a href="javascript:;"><i class="es-icon es-icon-keyboardarrowup"></i>TOP</a></li>
       </ul>
     </div>
-    {% if app.user and app.user.isLogin() %}
+
       <!-- 通知 -->
       <div class="es-bar-main" id="bar-message">
       <div class="bar-main-header">
@@ -156,28 +156,9 @@
           <h5><span>今日学习任务</span></h5>
           <div class="line"></div>
         </div>
-        <div class="bar-task">
-          <div class="bar-task-header">
-            设计入门班级(5/12)
-          </div>
-          <ul class="bar-time-line">
-            <li class="active"><span class="icon"><i class="es-icon es-icon-done"></i></span><a class="link-light" href="">学习设计第一课时</a></li>
-            <li class="last"><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
-            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
-            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
-          </ul>
-        </div>
-        <div class="bar-task">
-          <div class="bar-task-header">
-            设计入门班级(5/12)
-          </div>
-          <ul class="bar-time-line">
-            <li class="active"><span class="icon"><i class="es-icon es-icon-done"></i></span><a class="link-light" href="">学习设计第一课时</a></li>
-            <li class="last"><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
-            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
-            <li><span class="icon"></span><a class="link-light" href="">学习设计第一课时</a></li>
-          </ul>
-        </div>
+
+        {{ render(controller('TopxiaWebBundle:EsBar/EsBar:studyPlanClassroom',{userId:app.user.id} )) }}
+
       </div>
     </div>
 
@@ -264,11 +245,7 @@
         <img class="img-responsive" src="assets/dev/img/webchat.jpg" alt="">
       </div>
     </div>
-    {% else %}
-      <div class="bar-main-body">
-        <a>登陆</a>
-      </div>
-    {% endif %}
+
   </div>
 {% endblock %}
 
