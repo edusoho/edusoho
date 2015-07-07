@@ -238,8 +238,4 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return $this->createService('User.NotificationService');
     }
 
-    protected function getVipService()
-    {
-        return $this->createService('Vip:Vip.VipService');
-    }
 }
