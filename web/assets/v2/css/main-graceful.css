@@ -3781,6 +3781,10 @@ a:focus {
   color: #ccc;
   line-height: 1.4;
 }
+.media-list .empty-item {
+  text-align: center;
+  color: #999;
+}
 .media .media-object-small img {
   width: 48px;
   height: 48px;
