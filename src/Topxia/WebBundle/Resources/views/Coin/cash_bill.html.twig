@@ -61,7 +61,7 @@
                 {% if cash.type =="inflow" %}
                   {% if orders[cash.orderSn]['payment'] == 'wxpay'%}
                     微信支付
-                  {% else %}
+                  {% elseif orders[cash.orderSn]['payment'] == 'alipay' %}
                     支付宝
                   {% endif %}
                 {% else %}

@@ -667,7 +667,13 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+        $orders = array();
+        foreach ($cashes as $key => $value) {
+            if ($value['type'] == 'inflow') {
+                $orders[] = $this->getOrderService()->getOrderBySn($value['orderSn']);
+            }
+        }
+        $orders = ArrayToolkit::index($orders, 'sn');
         $userIds=ArrayToolkit::column($cashes,"userId");
         $users=$this->getUserService()->findUsersByIds($userIds);
 
@@ -682,7 +688,8 @@ class CoinController extends BaseController
             'paginator' => $paginator,
             'users'=>$users,
             'amountInflow' => $amountInflow?:0,
-            'amountOutflow' => $amountOutflow?:0            
+            'amountOutflow' => $amountOutflow?:0,
+            'orders' => $orders,     
           
         ));   
     }
@@ -859,5 +866,10 @@ class CoinController extends BaseController
     protected function getLogService() 
     {
         return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }
