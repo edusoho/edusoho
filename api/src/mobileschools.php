@@ -112,4 +112,5 @@ $api->get('/announcements', function (Request $request) {
         'total' => $count
     );
 });
+
 return $api;

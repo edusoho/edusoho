@@ -120,6 +120,16 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
+    public function findMessagesByUserIdAndlastMaxId($userId, $lastMaxId)
+    {
+        $api = $this->getCloudApi();
+        $result = $api->get(
+            sprintf('/tui/message/%s/list', $userId),
+            array('lastMaxId' => $lastMaxId, 'limit' => 50)
+        );
+        return $result;
+    }
+
     public function getLiveCourseStatus()
     {
         $api = $this->getCloudApi();
@@ -145,5 +155,19 @@ class EduCloudServiceImpl extends BaseService
             'name' => '',
             'mobile' => ''
         ));
-    }   
+    }
+
+    public function sendMessage($message)
+    {
+        $api = $this->getCloudApi();
+        $user = $this->getCurrentUser();
+        return $api->post(
+            sprintf('/tui/message/%s/friend/%s/send', $message['fromId'], $message['toId']),
+            array(
+                'type' => $message['type'],
+                'title' => '来自'.$user['nickname'].'的私信',
+                'content' => $message['content'],
+                'custom' => ''
+        ));
+    }
 }

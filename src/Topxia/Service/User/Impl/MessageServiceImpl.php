@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\MessageService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class MessageServiceImpl extends BaseService implements MessageService
 {   
@@ -17,16 +18,18 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getMessageDao()->searchMessages($conditions, $sort, $start, $limit);
     }
     
-    public function sendMessage($fromId, $toId, $content)
+    public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
     {   
         if($fromId == $toId){
             throw $this->createServiceException("抱歉,不允许给自己发送私信!"); 
         }
 
-        $message = $this->addMessage($fromId, $toId, $content);
-        $this->prepareConversationAndRelationForSender($message, $toId, $fromId);
-        $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId);
+        $createdTime = empty($createdTime) ? time() : $createdTime;
+        $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
+        $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
+        $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
         $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
+        $this->getDispatcher()->dispatch('message.service.send', new ServiceEvent($message));
         return $message;
     }
 
@@ -136,19 +139,37 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getConversationDao()->getConversationByFromIdAndToId($fromId, $toId);
     }
 
-    protected function addMessage($fromId, $toId, $content)
+    public function pullMessagesFromApi()
+    {
+        $user = $this->getCurrentUser();
+        $messageSetting = $this->getSettingService()->get('message');
+        if (empty($messageSetting)) {
+            $messageSetting = array('lastMaxId' => 0);
+            $this->getSettingService()->set('message', $messageSetting);
+        }
+        $messages = $this->getEduCloudService()->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
+        $lastMaxId = 0;
+        foreach ($messages as $message) {
+            $messageSetting['lastMaxId'] = $message['id'];
+            $this->sendMessage($message['userId'], $user['id'], $message['context'], $message['type'], $message['createdTime']);
+        }
+        $this->getSettingService()->set('message', $messageSetting);
+    }
+
+    protected function addMessage($fromId, $toId, $content, $type, $createdTime)
     {
         $message = array(
             'fromId' => $fromId,
             'toId' => $toId,
+            'type' => $type,
             'content' => $this->purifyHtml($content),
-            'createdTime' => time(),
+            'createdTime' => $createdTime,
         );
         return $this->getMessageDao()->addMessage($message);
     }
 
 
-    protected function prepareConversationAndRelationForSender($message, $toId, $fromId)
+    protected function prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime)
     {
         $conversation = $this->getConversationDao()->getConversationByFromIdAndToId($toId, $fromId);
         if ($conversation) {
@@ -157,6 +178,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
                 'latestMessageTime' => $message['createdTime'],
+                'latestMessageType' => $message['type']
             ));
         } else {
             $conversation = array(
@@ -166,8 +188,9 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
                 'latestMessageTime' => $message['createdTime'],
+                'latestMessageType' => $message['type'],
                 'unreadNum' => 0,
-                'createdTime' => time(),
+                'createdTime' => $createdTime,
             );
             $conversation = $this->getConversationDao()->addConversation($conversation);
         }
@@ -181,7 +204,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     }
 
-    protected function prepareConversationAndRelationForReceiver($message, $fromId, $toId)
+    protected function prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime)
     {
         $conversation = $this->getConversationDao()->getConversationByFromIdAndToId($fromId, $toId);
         if ($conversation) {
@@ -201,7 +224,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'latestMessageContent' => $message['content'],
                 'latestMessageTime' => $message['createdTime'],
                 'unreadNum' => 1,
-                'createdTime' => time(),
+                'createdTime' => $createdTime,
             );
         $conversation = $this->getConversationDao()->addConversation($conversation);
         }
@@ -267,6 +290,16 @@ class MessageServiceImpl extends BaseService implements MessageService
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getEduCloudService()
+    {
+        return $this->createService('EduCloud.EduCloudService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
 

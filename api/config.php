@@ -2,6 +2,6 @@
 
 use Symfony\Component\Yaml\Yaml;
 
-$config = Yaml::parse(file_get_contents(__DIR__ . '/../app/config/parameters.yml'));
-
-return $config['parameters'];
+$parameters = Yaml::parse(file_get_contents(__DIR__ . '/../app/config/parameters.yml'));
+$parameters['parameters']['topxia.upload.public_directory'] = __DIR__ .'/../web/files';
+return $parameters['parameters'];

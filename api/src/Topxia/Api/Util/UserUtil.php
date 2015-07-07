@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Util;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\File\File;
 
 class UserUtil
 {
@@ -55,6 +56,56 @@ class UserUtil
         }
 
         $user = ServiceKernel::instance()->createService('User.AuthService')->register($registration, $type);
+        return $user;
+    }
+
+
+    public function fillUserAttr($userId, $userInfo)
+    {
+        $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
+        if (!empty($userInfo['avatar'])) {
+            $curl = curl_init($userInfo['avatar']);
+            
+            $smallName = date("Ymdhis")."_small.jpg";
+            $mediumName = date("Ymdhis")."_medium.jpg";
+            $largeName = date("Ymdhis")."_large.jpg";
+
+            $smallPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $smallName;
+            $mediumPath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $mediumName;
+            $largePath = ServiceKernel::instance()->getParameter('topxia.upload.public_directory') . '/tmp/' . $largeName;
+            curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+            $imageData = curl_exec($curl);
+            curl_close($curl);
+            $tp = @fopen($smallPath, 'a');
+            fwrite($tp, $imageData);
+            fclose($tp);
+            $tp = @fopen($mediumPath, 'a');
+            fwrite($tp, $imageData);
+            fclose($tp);
+            $tp = @fopen($largePath, 'a');
+            fwrite($tp, $imageData);
+            fclose($tp);
+
+            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($smallPath));
+            $fields[] = array(
+                'type' => 'large',
+                'id' => $file['id']
+            );
+            
+            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($mediumPath));
+            $fields[] = array(
+                'type' => 'medium',
+                'id' => $file['id']
+            );
+
+            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($largePath));
+            $fields[] = array(
+                'type' => 'small',
+                'id' => $file['id']
+            );
+            $user = ServiceKernel::instance()->createService('User.UserService')->changeAvatar($userId, $fields);
+        }
         return $user;
     }
 }
