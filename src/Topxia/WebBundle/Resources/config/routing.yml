@@ -6,10 +6,6 @@ homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
 
-weixin_browser:
-    pattern: /weixin/check
-    defaults: { _controller: TopxiaWebBundle:Default:weixinCheck }
-
 live_jump:
     pattern: /live/jump
     defaults: { _controller: TopxiaWebBundle:Default:jump }
