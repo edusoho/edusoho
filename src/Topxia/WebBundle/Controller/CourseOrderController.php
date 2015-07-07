@@ -411,4 +411,8 @@ class CourseOrderController extends OrderController
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
 }
