@@ -4,6 +4,7 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\MessageService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class MessageServiceImpl extends BaseService implements MessageService
 {   
@@ -28,6 +29,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
         $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
+        $this->getDispatcher()->dispatch('message.service.send', new ServiceEvent($message));
         return $message;
     }
 

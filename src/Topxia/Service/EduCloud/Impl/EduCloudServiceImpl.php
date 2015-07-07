@@ -155,5 +155,19 @@ class EduCloudServiceImpl extends BaseService
             'name' => '',
             'mobile' => ''
         ));
-    }   
+    }
+
+    public function sendMessage($message)
+    {
+        $api = $this->getCloudApi();
+        $user = $this->getCurrentUser();
+        return $api->post(
+            sprintf('/tui/message/%s/friend/%s/send', $message['fromId'], $message['toId']),
+            array(
+                'type' => $message['type'],
+                'title' => '来自'.$user['nickname'].'的私信',
+                'content' => $message['content'],
+                'custom' => ''
+        ));
+    }
 }

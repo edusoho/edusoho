@@ -24,4 +24,6 @@ interface EduCloudService
     public function getLiveCourseStatus();
 
     public function addStudent($user);
+
+    public function sendMessage($user);
 }
