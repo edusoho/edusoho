@@ -5,6 +5,9 @@
 @import "mixins/scale.less";
 @import "mixins/loader-inner.less";
 @import "mixins/input.less";
+@import "mixins/spacing.less";     //间距
+@import "mixins/text.less";        //文字
+
 
 .form-control-lg {
   height: 38px;
@@ -103,6 +106,7 @@ a.transition {
   .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
 }
 
+.ellipsis,
 .text-overflow {
   display: block;
   overflow: hidden;
@@ -110,6 +114,7 @@ a.transition {
   white-space: nowrap;
   word-wrap: normal;
 }
+
 
 .opacity(@opacity) {
   opacity: @opacity;
