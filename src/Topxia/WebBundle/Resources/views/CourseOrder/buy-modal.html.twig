@@ -27,7 +27,7 @@
       <div class="col-md-3 control-label">价格</div>
       <div class="col-md-9 controls money-text">
       	<span class="control-text">
-          {% if vipStatus %}
+          {% if vipStatus == 'ok' %}
             会员免费
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
