@@ -26,6 +26,7 @@
   -webkit-animation: fa-spin 2s infinite linear;
   animation: fa-spin 2s infinite linear;
 }
+
 .icon-weixin:before { content: "\e63d"; }
 .icon-qq:before { content: "\e63e"; }
 .icon-icon:before { content: "\e650"; }
@@ -59,7 +60,7 @@
 .icon-yuyin:before { content: "\e60e"; }
 .icon-tianjia:before { content: "\e60d"; }
 .icon-biaoqing:before { content: "\e610"; }
-.icon-fanhui:before { content: "\e679"; }
+.icon-fanhui:before { content: "\f006b"; }
 .icon-ClassStudentIcon:before { content: "\e603"; }
 .icon-jian:before { content: "\e620"; }
 .icon-xiazaiwancheng:before { content: "\e61e"; }
@@ -73,9 +74,15 @@
 .icon-jia:before { content: "\e61f"; }
 .icon-shape:before { content: "\e627"; }
 .icon-switchoff:before { content: "\e628"; }
-.icon-jikediancanicon11:before { content: "\e779"; }
 .icon-visibility:before { content: "\e707"; }
 .icon-modecomment:before { content: "\e723"; }
 .icon-gonggao:before { content: "\e60a"; }
 .icon-favor:before { content: "\e64c"; }
 .icon-back:before { content: "\e679"; }
+.icon-heart:before { content: "\e639"; }
+.icon-heart-outline:before { content: "\e638"; }
+.icon-iconfontxiaoyou:before { content: "\e629"; }
+.icon-iconfontround:before { content: "\e62d"; }
+.icon-zantingxiazai:before { content: "\e61b"; }
+.icon-dengdaixiazai:before { content: "\e61c"; }
+.icon-xiazaizhong:before { content: "\e61a"; }

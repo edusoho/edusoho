@@ -170,11 +170,13 @@ app.controller('CourseLessonController', ['$scope', '$stateParams', 'ServcieUtil
 function CourseLessonController($scope, $stateParams, ServcieUtil, $state)
 {
   var LessonService = ServcieUtil.getService("LessonService");
+  $scope.loading = true;
   this.loadLessons = function() {
       LessonService.getCourseLessons({
         courseId : $stateParams.courseId,
         token : $scope.token
       }, function(data) {
+        $scope.loading = false;
         $scope.$apply(function() {
           $scope.lessons = data.lessons;
           $scope.learnStatuses = data.learnStatuses;
