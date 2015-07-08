@@ -52,17 +52,17 @@ filter('lessonType', function() {
 			if (startTime > currentTime) {
 				returnStr = new Date(startTime).Format("MM月dd号 hh:mm");;
 			} else if (startTime <= currentTime && endTime >= currentTime) {
-				returnStr = "直播中";
+				returnStr = "<div class='ui-label' >直播中</div>";
 			}else if (endTime < currentTime) {
 				if (lesson.replayStatus == 'generated' ) {
-					returnStr = "回放";
+					returnStr = "<div class='ui-label gray' >回放</div>";
 				} else {
-					returnStr = "结束";
+					returnStr = "<div class='ui-label gray' >结束</div>";
 				}
 			}
 			return returnStr;
 		}
-		return lessonType[lesson.type];
+		return "<div class='ui-label' >" + lessonType[lesson.type] + "</div>";
 	}
 }).
 filter('coverIncludePath', function() {

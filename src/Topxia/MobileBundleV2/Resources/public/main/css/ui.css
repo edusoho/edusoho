@@ -1495,10 +1495,15 @@ a {
   line-height: 13px;
   display: inline-block;
   position: relative;
-  padding: 0 1px;
+  padding: 1px;
   color: #37b97d;
   border: 1px solid #37b97d;
   border-radius: 2px;
+}
+
+.ui-label.gray {
+  color: #aaa;
+  border: 1px solid #aaa;
 }
 /** ui-label **/
 

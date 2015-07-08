@@ -956,17 +956,17 @@ filter('lessonType', function() {
 			if (startTime > currentTime) {
 				returnStr = new Date(startTime).Format("MM月dd号 hh:mm");;
 			} else if (startTime <= currentTime && endTime >= currentTime) {
-				returnStr = "直播中";
+				returnStr = "<div class='ui-label' >直播中</div>";
 			}else if (endTime < currentTime) {
 				if (lesson.replayStatus == 'generated' ) {
-					returnStr = "回放";
+					returnStr = "<div class='ui-label gray' >回放</div>";
 				} else {
-					returnStr = "结束";
+					returnStr = "<div class='ui-label gray' >结束</div>";
 				}
 			}
 			return returnStr;
 		}
-		return lessonType[lesson.type];
+		return "<div class='ui-label' >" + lessonType[lesson.type] + "</div>";
 	}
 }).
 filter('coverIncludePath', function() {
@@ -2049,51 +2049,10 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     }
 }
 
-app.controller('CourseLessonController', ['$scope', '$stateParams', 'ServcieUtil', '$state', CourseLessonController]);
-function CourseLessonController($scope, $stateParams, ServcieUtil, $state)
-{
-  var LessonService = ServcieUtil.getService("LessonService");
-  $scope.loading = true;
-  this.loadLessons = function() {
-      LessonService.getCourseLessons({
-        courseId : $stateParams.courseId,
-        token : $scope.token
-      }, function(data) {
-        $scope.loading = false;
-        $scope.$apply(function() {
-          $scope.lessons = data.lessons;
-          $scope.learnStatuses = data.learnStatuses;
-
-          for( index in data.learnStatuses ) {
-            $scope.lastLearnStatusIndex = index;
-          }
-        });
-      });
-    }
-
-    $scope.learnLesson = function(lesson) {
-      if (! $scope.member && 1 != lesson.free) {
-        alert("请先加入学习");
-        return;
-      }
-
-      if ("text" == lesson.type) {
-        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
-        return;
-      }
-
-      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
-    }
-
-    this.loadLessons();
-}
-
 function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, cordovaUtil)
 {
     $scope.showLoad();
-
     var CourseService = ServcieUtil.getService("CourseService");
-    var LessonService = ServcieUtil.getService("LessonService");
 
     CourseService.getCourse({
       courseId : $stateParams.courseId,
@@ -2360,6 +2319,45 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 	}
 
 	this.loadLesson();
+}
+
+app.controller('CourseLessonController', ['$scope', '$stateParams', 'ServcieUtil', '$state', 'cordovaUtil', CourseLessonController]);
+function CourseLessonController($scope, $stateParams, ServcieUtil, $state, cordovaUtil)
+{
+  var LessonService = ServcieUtil.getService("LessonService");
+  $scope.loading = true;
+  this.loadLessons = function() {
+      LessonService.getCourseLessons({
+        courseId : $stateParams.courseId,
+        token : $scope.token
+      }, function(data) {
+        $scope.loading = false;
+        $scope.$apply(function() {
+          $scope.lessons = data.lessons;
+          $scope.learnStatuses = data.learnStatuses;
+
+          for( index in data.learnStatuses ) {
+            $scope.lastLearnStatusIndex = index;
+          }
+        });
+      });
+    }
+
+    $scope.learnLesson = function(lesson) {
+      if (! $scope.member && 1 != lesson.free) {
+        alert("请先加入学习");
+        return;
+      }
+
+      if ("text" == lesson.type) {
+        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
+        return;
+      }
+
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
+    }
+
+    this.loadLessons();
 };
 app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', LoginController]);
 

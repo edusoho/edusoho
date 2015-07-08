@@ -170,51 +170,10 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     }
 }
 
-app.controller('CourseLessonController', ['$scope', '$stateParams', 'ServcieUtil', '$state', CourseLessonController]);
-function CourseLessonController($scope, $stateParams, ServcieUtil, $state)
-{
-  var LessonService = ServcieUtil.getService("LessonService");
-  $scope.loading = true;
-  this.loadLessons = function() {
-      LessonService.getCourseLessons({
-        courseId : $stateParams.courseId,
-        token : $scope.token
-      }, function(data) {
-        $scope.loading = false;
-        $scope.$apply(function() {
-          $scope.lessons = data.lessons;
-          $scope.learnStatuses = data.learnStatuses;
-
-          for( index in data.learnStatuses ) {
-            $scope.lastLearnStatusIndex = index;
-          }
-        });
-      });
-    }
-
-    $scope.learnLesson = function(lesson) {
-      if (! $scope.member && 1 != lesson.free) {
-        alert("请先加入学习");
-        return;
-      }
-
-      if ("text" == lesson.type) {
-        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
-        return;
-      }
-
-      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
-    }
-
-    this.loadLessons();
-}
-
 function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, cordovaUtil)
 {
     $scope.showLoad();
-
     var CourseService = ServcieUtil.getService("CourseService");
-    var LessonService = ServcieUtil.getService("LessonService");
 
     CourseService.getCourse({
       courseId : $stateParams.courseId,

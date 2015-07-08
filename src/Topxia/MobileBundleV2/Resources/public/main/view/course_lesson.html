@@ -8,7 +8,7 @@
             </div>
             <div class="ui-list-action lesson-time" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
               {{ lesson.length }}
-              <!-- <label class="ui-label">{{ lesson | lessonType }}</label> -->
+              <span ng-if="lesson.type == 'live' " ng-bind-html="lesson | lessonType"></span>
             </div>
     </li>
     <list-empty-view class="lesson-empty" data="lessons" title="暂无课时">
