@@ -8,93 +8,108 @@
 {% endblock %}
 {% block main %}
 
+
 <form action="" class="form-horizontal" method="post">
-  <table class="table table-striped table-hover" id="course-table">
-    <thead>
-    <tr>
-      <th>字段名称</th>
-      <th>类型</th>
-      <th>是否显示</th>
-      <!-- <th>显示序号</th> -->
-      <!-- <th>创建时间</th> -->
-      <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-      {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
-    </tbody>
-  </table>
-  <div class="mbm">
-    购买课程活班级时需要填写个人资料：
-    <span class="radios">
-      <label><input type="radio" name="" value=""> 开启</label>
-      <label><input type="radio" name="" value=""> 关闭</label>
-    </span>
-  </div>
+  <fieldset>
+    <legend>自定义字段设置</legend>
+    <table class="table table-striped table-hover" id="course-table">
+      <thead>
+      <tr>
+        <th>字段名称</th>
+        <th>类型</th>
+        <th>是否显示</th>
+        <th>显示序号</th>
+        <!-- <th>创建时间</th> -->
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
+      </tbody>
+    </table>
+  </fieldset>
   
-  <div id="show-list">
-    <div class="mbl">
-      <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
-      <button type="button" class="btn btn-default btn-xs">手机号码</button>
-      <button type="button" class="btn btn-default btn-xs">手机号码</button>
-      <button type="button" class="btn btn-default btn-xs">邮箱或者手机</button>
-      <button type="button" class="btn btn-default btn-xs">密码</button>
-      <button type="button" class="btn btn-default btn-xs">昵称</button>
-      <button type="button" class="btn btn-default btn-xs">姓名</button>
-      <button type="button" class="btn btn-default btn-xs">身份证号码</button>
-      <button type="button" class="btn btn-default btn-xs">职业</button>
-      <button type="button" class="btn btn-default btn-xs">性别</button>
-      <button type="button" class="btn btn-default btn-xs">公司</button>
-        
-      <div class="pull-right "><a href="javascript:" id="show-list-btn">编辑 <span class="
-      glyphicon glyphicon-chevron-down"></span></a></div>
-    </div>
-  </div>
-  <div class="controls" id="show-register-list" style="display:none">
+  
+  <fieldset>
+    <legend>个人资料设置</legend>
     <div class="form-group">
-      <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted"> (系统必需，不可取消)</span>
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" name="registerSort[]" value="truename"></input><input type="hidden"  name="registerFieldNameArray[]" value="truename"></input> 姓名
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted"> (带格式校检)</span>
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" name="registerSort[]" value="gender"></input><input type="hidden"  name="registerFieldNameArray[]" value="gender"></input> 性别
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" name="registerSort[]" value="job"></input><input type="hidden"  name="registerFieldNameArray[]" value="job"></input> 职业
-        </li>
-        <li class="list-group-item clearfix" data-role="item" >
-          <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-          &nbsp;<input type="checkbox" name="registerSort[]" value="company"></input><input type="hidden"  name="registerFieldNameArray[]" value="company"></input> 公司
-        </li>
-      </ul>
-      <div class="help-block col-md-12">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</div>
+      <div class="col-md-3 control-label">
+        <label >购买课程或班级时填写个人资料</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo) }}
+        <p class="help-block">开启后，{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}购买课程或班级时，需填写个人资料</p>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3" id="show-list">
+        <div class="pull-left">
+          {% for sort in courseSetting.userinfoFields%}
+            {% set userCustomField = userFields[sort]|default(null) %}
+            <button type="button" class="btn btn-default btn-xs">
+              {% if userCustomField %}{{ userCustomField.title }}{% else %}
+                {{ dict_text('userInfoFields', sort) }}{% endif %}
+            </button>
+          {% endfor %}
+        </div>
+          
+        <div class="pull-right ">
+          <a href="javascript:" id="show-list-btn">编辑 
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-2" id="show-register-list" style="display:none">
+        <div class="form-group">
+          <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
+            {% set checkedFieldsKeys = courseSetting.userinfoFields|default([]) %}
+
+            {% if courseSetting.userinfoFieldNameArray %}
+              {% for field in courseSetting.userinfoFieldNameArray %}
+                {% set userCustomField = userFields[field]|default(null) %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="userinfoFields[]" value="{{ field }}" {% if field in checkedFieldsKeys %}checked=true{% endif %} />
+                  <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ field }}" /> 
+                  {% if userCustomField %}{{ userCustomField.title }}{% else %}{{ dict_text('userInfoFields', field) }}{% endif %}
+                </li>
+              {% endfor %}
+            {% else %}
+                
+              {% set userInfoFields = dict('userInfoFields') %}
+              {% for key,field in userInfoFields %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="userinfoFields[]" value="{{ key }}" {% if key in checkedFieldsKeys %}checked=true{% endif %} />
+                  <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ key }}" /> 
+                  {{ field }}
+                </li>
+              {% endfor %}
+
+              {% if  userFields %}
+                {% for field in userFields %}
+                  <li class="list-group-item clearfix" data-role="item" >
+                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                    <input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}" />
+                    <input type="hidden"  name="userinfoFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+                  </li>
+                {% endfor %}
+              {% endif %}
+
+            {% endif %}
+          </ul>
+
+          <div class="help-block col-md-12">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</div>
+        </div>
+        <div class="mbl" style="text-align:center;">
+          <a href="javascript:" id="hide-list-btn">收起 
+            <span class="glyphicon glyphicon-chevron-up"></span>
+          </a>
+        </div>
+      </div>
+
     </div>
-    <div class="mbl" style="text-align:center;"><a href="javascript:" id="hide-list-btn">收起 <span class="
-    glyphicon glyphicon-chevron-up"></span></a></div>
-  </div>
+  </fieldset>
 
   <fieldset>
     <legend>其它设置</legend>
@@ -103,7 +118,7 @@
         <label>头像设置提醒</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner').avatar_alert|default('none')) }}
+        {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner.avatar_alert')|default('none')) }}
       </div>
     </div>
     <div class="form-group">
@@ -111,7 +126,7 @@
         <label>用户修改昵称</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
+        {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner.nickname_enabled')|default(0)) }}
       </div>
     </div>
   </fieldset>
@@ -125,6 +140,7 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
 </form>
+
 
 {{ web_macro.flash_messages() }}
 {% include 'TopxiaAdminBundle:System:user-fields.modal.html.twig' %}

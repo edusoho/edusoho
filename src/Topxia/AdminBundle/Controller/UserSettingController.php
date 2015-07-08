@@ -66,16 +66,11 @@ class UserSettingController extends BaseController
                 'defaultAvatar','user_name'
             ));
 
-            $setting['nickname_enabled'] = $defaultSetting['nickname_enabled'];
-            $setting['avatar_alert'] = $defaultSetting['avatar_alert'];
-
             $default = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default,$defaultSettings,$courseDefaultSetting,$userDefaultSetting);
 
             $this->getSettingService()->set('user_default', $userDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
-
-            $this->getSettingService()->set('user_partner', $setting);
 
             if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
                 $firstSettingTime = $auth['setting_time'];
@@ -96,73 +91,6 @@ class UserSettingController extends BaseController
                 $auth['captcha_enabled'] = 1;
             }
 
-            if($auth["register_mode"] == "email_or_mobile" ) {
-                foreach ($auth['registerSort'] as $key => $value) {
-                    if($value == "email" || $value == "mobile") {
-                        unset($auth['registerSort'][$key]);
-                    }
-                }
-                if(!in_array('emailOrMobile', $auth['registerSort'])) {
-                    array_unshift($auth['registerSort'], 'emailOrMobile');
-                }
-
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "email" || $value == "mobile") {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-                }
-                if(!in_array('emailOrMobile', $auth['registerFieldNameArray'])) {
-                    array_unshift($auth['registerFieldNameArray'], 'emailOrMobile');
-                }
-            }
-
-            if($auth["register_mode"] == "mobile") {
-                foreach ($auth['registerSort'] as $key => $value) {
-                    if($value == "emailOrMobile" || $value == "email") {
-                        unset($auth['registerSort'][$key]);
-                    }
-                }
-                if(!in_array('mobile', $auth['registerSort'])) {
-                    array_unshift($auth['registerSort'], 'mobile');
-                }
-
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "emailOrMobile" || $value == "email") {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-                }
-                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
-                    array_unshift($auth['registerFieldNameArray'], 'mobile');
-                }
-                if(!in_array('email', $auth['registerFieldNameArray'])) {
-                    $auth['registerFieldNameArray'][] =  'email';
-                }
-            }
-
-
-            if($auth["register_mode"] == "email") {
-                foreach ($auth['registerSort'] as $key => $value) {
-                    if($value == "emailOrMobile" || $value == "mobile") {
-                        unset($auth['registerSort'][$key]);
-                    }
-                }
-                if(!in_array('email', $auth['registerSort'])) {
-                    array_unshift($auth['registerSort'], 'email');
-                }
-
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "emailOrMobile" || $value == "mobile") {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-                }
-                if(!in_array('email', $auth['registerFieldNameArray'])) {
-                    array_unshift($auth['registerFieldNameArray'], 'email');
-                }
-                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
-                    $auth['registerFieldNameArray'][] = 'mobile';
-                }
-            }
-
             $this->getSettingService()->set('auth', $auth);
             
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
@@ -170,57 +98,6 @@ class UserSettingController extends BaseController
         }
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-
-        if ($auth['registerFieldNameArray']) {
-            
-            if($auth["register_mode"] == "email_or_mobile") {
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "email" || $value == "mobile") {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-                }
-                if(!in_array('emailOrMobile', $auth['registerFieldNameArray'])) {
-                    array_unshift($auth['registerFieldNameArray'], 'emailOrMobile');
-                }
-            }
-
-            if($auth["register_mode"] == "mobile") {
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "emailOrMobile" || $value == "email") {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-                }
-                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
-                    array_unshift($auth['registerFieldNameArray'], 'mobile');
-                }
-                if(!in_array('email', $auth['registerFieldNameArray'])) {
-                    $auth['registerFieldNameArray'][] =  'email';
-                }
-            }
-
-
-            if($auth["register_mode"] == "email") {
-
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if($value == "emailOrMobile" || $value == "mobile") {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-                }
-                if(!in_array('email', $auth['registerFieldNameArray'])) {
-                    array_unshift($auth['registerFieldNameArray'], 'email');
-                }
-                if(!in_array('mobile', $auth['registerFieldNameArray'])) {
-                    $auth['registerFieldNameArray'][] = 'mobile';
-                }
-            }
-
-            foreach ($userFields as $key => $fieldValue) {
-                if (!in_array($fieldValue['fieldName'], $auth['registerFieldNameArray'])) {
-                    $auth['registerFieldNameArray'][] = $fieldValue['fieldName'];
-                }
-            }
-
-        }
 
         return $this->render('TopxiaAdminBundle:System:auth.html.twig', array(
             'auth' => $auth,
@@ -355,7 +232,7 @@ class UserSettingController extends BaseController
         ));
     }
 
-    public function userFieldsAction()
+    public function userFieldsAction(Request $request)
     {
 
         $textCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'textField'));
@@ -388,6 +265,29 @@ class UserSettingController extends BaseController
 
         }
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $auth = $this->getSettingService()->get('auth', array());
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = ArrayToolkit::index($userFields,'fieldName');
+            
+        if ($request->getMethod() == 'POST') {
+            
+            $courseUpdateSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
+            $courseUpdateSetting['userinfoFields'] = $request->request->get('userinfoFields');
+            $courseUpdateSetting['userinfoFieldNameArray'] = $request->request->get('userinfoFieldNameArray');
+
+            $courseSetting = array_merge($courseSetting,$courseUpdateSetting);
+            $this->getSettingService()->set('course',$courseSetting);
+
+            $authSetting['avatar_alert'] = $request->request->get('avatar_alert');
+            $authSetting['nickname_enabled'] = $request->request->get('nickname_enabled');
+            
+            $this->getSettingService()->set('user_partner', $authSetting);
+
+            $this->getLogService()->info('system', 'update_settings', "更新用户信息设置", $auth);
+            $this->setFlashMessage('success', '用户信息设置已保存！');
+        }
+
         return $this->render('TopxiaAdminBundle:System:user-fields.html.twig', array(
             'textCount' => $textCount,
             'intCount' => $intCount,
@@ -395,6 +295,8 @@ class UserSettingController extends BaseController
             'dateCount' => $dateCount,
             'varcharCount' => $varcharCount,
             'fields' => $fields,
+            'courseSetting' => $courseSetting,
+            'userFields' => $userFields,
         ));
     }
 

@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 
     });
     
-    var old_selected_value = $("input[name='register_mode']:checked").val();
+    /*var old_selected_value = $("input[name='register_mode']:checked").val();
     $('input[name=register_mode]:radio').change(function(){
       var selected_value = $("input[name='register_mode']:checked").val();
 
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
            Notify.danger("请先开启云短信功能！");
         }
       }
-    })
+    })*/
   
 
     var validator = new Validator({
@@ -47,6 +47,33 @@ define(function(require, exports, module) {
       element: '[name="user_name"]',
       required: true
     });
+
+    $('.model').on('click',function(){
+
+        var old_modle_value = $('.model.btn-primary').data('modle');
+        $('.model').removeClass("btn-primary");
+        $(this).addClass("btn-primary");
+        var modle = $(this).data('modle');
+        $('[name="register_mode"]').val(modle);
+
+        if (modle == 'mobile' || modle == 'email_or_mobile') {
+            if ($('input[name=_cloud_sms]').val() !=1) {
+                $('.model').removeClass("btn-primary");
+                $('[data-modle="'+old_modle_value+'"]').addClass("btn-primary");
+                modle = old_modle_value;
+
+                Notify.danger("请先开启云短信功能！");
+            }
+        }
+
+        if (modle == 'email' || modle == 'email_or_mobile') {
+            $('.email-content').show();
+        } else {
+            $('.email-content').hide();
+        }
+
+    });
+
 
   };
 

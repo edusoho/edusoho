@@ -288,7 +288,18 @@ classroomRoles:
     assistantStudent: 助教
 
 searchCourseType:
-    'all': 全部课程
-    'vip': 会员课程
-    'free': 免费课程
-    'live': 直播课程
+    all: 全部课程
+    vip: 会员课程
+    free: 免费课程
+    live: 直播课程
+
+userInfoFields:
+    truename: 真实姓名
+    mobile: 手机号码
+    qq: QQ
+    company: 所在公司
+    idcard: 身份证号码
+    gender: 性别
+    job: 职业
+    weibo: 微博
+    weixin: 微信

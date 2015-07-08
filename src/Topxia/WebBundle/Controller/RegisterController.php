@@ -105,13 +105,14 @@ class RegisterController extends BaseController
            }
         }
 
-        if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
+        $auth['registerSort'] = array();
+        /*if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
             && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
             && !in_array('mobile', $auth['registerSort']) 
             && $this->setting('auth.register_mode') != 'email_or_mobile'
             && $this->setting('auth.register_mode') != 'mobile') {
             $auth['registerSort'][] = "mobile";
-        }
+        }*/
 
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isRegisterEnabled' => $registerEnable,
@@ -370,6 +371,7 @@ class RegisterController extends BaseController
     {
         $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+        
         return $this->validateResult($result, $message);
     }
 
