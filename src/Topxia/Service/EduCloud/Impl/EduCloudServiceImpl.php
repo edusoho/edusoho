@@ -170,4 +170,15 @@ class EduCloudServiceImpl extends BaseService
                 'custom' => ''
         ));
     }
+
+    public function sendAnnouncement($announcement)
+    {
+        $api = $this->getCloudApi();
+        $user = $this->getCurrentUser();
+        return $api->post('/tui/message/bulletin/send',array(
+            'esBulletinId' => $announcement['id'],
+            'title' => '网校公告',
+            'content' => $announcement['content']
+        ));
+    }
 }

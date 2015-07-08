@@ -26,4 +26,6 @@ interface EduCloudService
     public function addStudent($user);
 
     public function sendMessage($user);
+
+    public function sendAnnouncement($announcement);
 }
