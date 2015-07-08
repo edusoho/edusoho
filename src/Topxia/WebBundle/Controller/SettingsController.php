@@ -746,7 +746,7 @@ class SettingsController extends BaseController
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
 		foreach($userBinds as $userBind) {
 			if ($userBind['type'] == 'weixinmob') {
-				$userBind['type'] == 'weixinweb'
+				$userBind['type'] = 'weixinweb';
 			}
 			$clients[$userBind['type']]['status'] = 'bind';
 		}
