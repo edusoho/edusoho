@@ -87,8 +87,6 @@ define(function(require, exports, module) {
 
                 self.set('player', player);
 
-                window.__EsCloudPlayer = player;
-
             }, 'json');
 
         },
