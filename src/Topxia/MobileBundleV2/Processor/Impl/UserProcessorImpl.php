@@ -282,7 +282,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
         }
 
-        if ($auth['register_mode'] == 'Mobile') {
+        if ($auth['register_mode'] == 'mobile') {
             return $this->createErrorResponse('register_error', '移动端暂不支持手机注册，敬请期待!');
         }
         
