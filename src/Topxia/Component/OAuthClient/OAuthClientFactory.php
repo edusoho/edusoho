@@ -83,7 +83,7 @@ class OAuthClientFactory
                 'large_icon_img' => '',
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Secret',
-                'apply_url' => 'http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html'
+                'apply_url' => 'https://mp.weixin.qq.com/cgi-bin/readtemplate?t=register/step1_tmpl&lang=zh_CN'
             ),
         );
 
