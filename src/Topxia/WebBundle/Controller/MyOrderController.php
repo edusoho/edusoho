@@ -49,19 +49,7 @@ class MyOrderController extends BaseController
                 $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
                 break;  
         }
-
-        switch ($request->get('payWays')) { 
-            case 'alipay': 
-                $conditions['payment'] = 'alipay'; 
-                break; 
-            case 'wxpay': 
-                $conditions['payment'] = 'wxpay';
-                break;
-            case 'none':
-                $conditions['payment'] = 'none';
-                break; 
-        } 
-
+        $conditions['payment'] = $request->get('payWays');
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),

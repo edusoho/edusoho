@@ -59,11 +59,7 @@
             <td>
               <span class="text-sm">
                 {% if cash.type =="inflow" %}
-                  {% if orders[cash.orderSn]['payment'] == 'wxpay' %}
-                    微信支付
-                  {% elseif orders[cash.orderSn]['payment'] == 'alipay' %}
-                    支付宝
-                  {% endif %}
+                  {{ dict_text('payment', orders[cash.orderSn]['payment']) }}
                 {% else %}
                   网校支付
                 {% endif %}

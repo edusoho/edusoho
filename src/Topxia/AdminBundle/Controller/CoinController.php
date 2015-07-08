@@ -668,12 +668,12 @@ class CoinController extends BaseController
             $paginator->getPerPageCount()
         );
         $orders = array();
-        foreach ($cashes as $key => $value) {
-            if ($value['type'] == 'inflow') {
-                $orders[] = $this->getOrderService()->getOrderBySn($value['orderSn']);
-            }
+        $typeCashes = ArrayToolkit::group($cashes,'type');
+        if (!empty($typeCashes['inflow'])) {
+            $sns = ArrayToolkit::column($typeCashes['inflow'],'orderSn');
+            $orders = $this->getOrderService()->findOrdersBySns($sns);
+            $orders = ArrayToolkit::index($orders, 'sn');
         }
-        $orders = ArrayToolkit::index($orders, 'sn');
         $userIds=ArrayToolkit::column($cashes,"userId");
         $users=$this->getUserService()->findUsersByIds($userIds);
 
