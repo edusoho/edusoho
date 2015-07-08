@@ -102,7 +102,7 @@
       {% if user.verifiedMobile %}
         {{user.verifiedMobile|default('')}}<span class="text-success">( {{'已绑定'|trans}})</span> 
       {% else %}
-        {{ profile.mobile|default(' {{'暂无'|trans}}') }}
+        {{ profile.mobile|default('暂无'|trans) }}
       {% endif %}
     </td>
   </tr>

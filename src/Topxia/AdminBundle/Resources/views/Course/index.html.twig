@@ -39,7 +39,7 @@
       <th width="30%">{{'名称'|trans}}</th>
       <th width=""> {{'连载状态'|trans}}</th>
       {% if filter == 'classroom' %}
-      <th>{{'所在'|trans}}{{setting("classroom.name")|default("班级"|trans)}}</th>
+      <th>{{'所在'|trans}}{{setting("classroom.name")|default('班级'|trans)}}</th>
       {% else %}
       <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'数'|trans}}</th>
       <th>{{'收入(元)'|trans}}</th>
