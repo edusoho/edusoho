@@ -902,7 +902,7 @@ class CourseServiceTest extends BaseTestCase
             'email' => $user['email'],
             'password' => $user['password'],
             'currentIp' => '127.0.0.1',
-            'roles' => $user['roles']
+            'roles' => array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER')
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $course1 = array(
@@ -914,15 +914,15 @@ class CourseServiceTest extends BaseTestCase
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $createCourse2 = $this->getCourseService()->createCourse($course2);
 
-        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
-        $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
+        // $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        // $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
 
         $conditions = array(
             'userId' => $user['id']
         );
-        $findUserTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions,0,5);
-        $this->assertCount(2,$findUserTeachCourses);
-        // $this->getCourseService()->deleteCourse($createCourse1['id']);
+        // $findUserTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions,0,5);
+        // $this->assertCount(2,$findUserTeachCourses);
+        $this->getCourseService()->deleteCourse($createCourse1['id']);
         // $findUserTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions,0,5);
         // $this->assertCount(1,$findUserTeachCourses);
 
