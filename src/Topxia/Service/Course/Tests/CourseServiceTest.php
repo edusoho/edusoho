@@ -227,14 +227,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user = $this->createUser(); 
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'email' => $user['email'],
-            'password' => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles' => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course = array(
@@ -245,13 +238,7 @@ class CourseServiceTest extends BaseTestCase
         $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'email' => $user['email'],
-            'password' => $user['password'],
-            'currentIp' => '127.0.0.1',
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $addCourse = $this->getCourseService()->becomeStudent($createCourse['id'],$user['id']);
         $return = $this->getCourseService()->tryLearnCourse($createCourse['id']);
@@ -263,14 +250,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user = $this->createUser(); 
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'email' => $user['email'],
-            'password' => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles' => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course1 = array(
@@ -286,13 +266,7 @@ class CourseServiceTest extends BaseTestCase
         $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'email' => $user['email'],
-            'password' => $user['password'],
-            'currentIp' => '127.0.0.1',
-        ));
+        $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'],$user['id']);
@@ -309,14 +283,7 @@ class CourseServiceTest extends BaseTestCase
     {
         $user = $this->createUser(); 
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'email' => $user['email'],
-            'password' => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles' => $user['roles']
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course1 = array(
@@ -896,14 +863,7 @@ class CourseServiceTest extends BaseTestCase
         
         $user = $this->createUser(); 
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => $user['id'],
-            'nickname' => $user['nickname'],
-            'email' => $user['email'],
-            'password' => $user['password'],
-            'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER')
-        ));
+        $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $course1 = array(
             'title' => 'test course 1'
@@ -972,6 +932,23 @@ class CourseServiceTest extends BaseTestCase
 
     public function testGetCourseLesson()
     {
+        $course = array(
+            'title' => 'online test course1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $createLesson1 = $this->getCourseService()->createLesson($lesson);
+        $createLesson2 = $this->getCourseService()->createLesson($lesson);
+
+
+
 
     }
 
@@ -1907,20 +1884,23 @@ class CourseServiceTest extends BaseTestCase
         $user['email'] = "user@user.com";
         $user['nickname'] = "user";
         $user['password'] = "user";
+        $user =  $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
+        return $user;
 
-        return $this->getUserService()->register($user);
     }
 
     private function createNormalUser()
     {
         $user = array();
         $user['email'] = "normal@user.com";
-        $user['nickname'] = "normalUser";
+        $user['nickname'] = "normal";
         $user['password'] = "user";
+        $user =  $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
         $user['roles'] = array('ROLE_USER');
-
-        return $this->getUserService()->register($user);
+        return $user;
     }
     
     protected function getUserService()
