@@ -653,7 +653,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function findMembersByThreadIdAndUserIds($threadId, $userIds)
     {
-        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId, $userIds), 'userId');
+        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadIdAndUserIds($threadId, $userIds), 'userId');
     }
 
     public function getMemberByThreadIdAndUserId($threadId, $userId)
