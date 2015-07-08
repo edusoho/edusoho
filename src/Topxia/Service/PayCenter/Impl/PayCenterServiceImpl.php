@@ -27,6 +27,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
+
 			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
 
 			if($order["status"] == "paid"){
@@ -36,6 +37,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 			if($order["status"] == "created"){
 				$outflow = $this->proccessCashFlow($order);
+
 				if($outflow) {
 					$this->getOrderService()->updateOrderCashSn($order["id"], $outflow["sn"]);
 					list($success, $order) = $this->processOrder($payData, false);
@@ -61,7 +63,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	public function processOrder($payData, $lock=true)
 	{	
 		$connection = ServiceKernel::instance()->getConnection();
-		
 		try {
 			if($lock){
 				$connection->beginTransaction();
@@ -95,6 +96,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	protected function getPaymentOptions($payment)
     {
         $settings = $this->getSettingService()->get('payment');
+        
         if (empty($settings)) {
             throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }

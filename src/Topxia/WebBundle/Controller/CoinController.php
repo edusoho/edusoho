@@ -143,7 +143,13 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+        $orders = array();
+        $typeCashes = ArrayToolkit::group($cashes,'type');
+        if (!empty($typeCashes['inflow'])) {
+            $sns = ArrayToolkit::column($typeCashes['inflow'],'orderSn');
+            $orders = $this->getOrderService()->findOrdersBySns($sns);
+            $orders = ArrayToolkit::index($orders, 'sn');
+        }
         $conditions['type']  = 'inflow';      
         $amountInflow = $this->getCashService()->analysisAmount($conditions);
 
@@ -154,7 +160,8 @@ class CoinController extends BaseController
             'cashes' => $cashes,
             'paginator' => $paginator,
             'amountInflow' => $amountInflow?:0,
-            'amountOutflow' => $amountOutflow?:0            
+            'amountOutflow' => $amountOutflow?:0,
+            'orders' => $orders,          
           
         ));   
     }

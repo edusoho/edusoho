@@ -20,6 +20,12 @@
         {{ select_options(options, request.get('lastHowManyMonths')) }}
       </select>
     </div>
+    <div class="form-group">
+      <select class="form-control" name="payWays"  onchange="submit();" >
+        {% set options = {'alipay':'支付宝','wxpay':'微信支付','none':'其他支付','':'支付方式'} %}
+        {{ select_options(options, request.get('payWays')) }}
+      </select>
+    </div>
 
     {#<button class="btn btn-primary" >搜索</button>#}
 

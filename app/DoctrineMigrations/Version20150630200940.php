@@ -16,7 +16,6 @@ class Version20150630200940 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `user_bind` ADD `isBind` BOOLEAN NULL DEFAULT FALSE;");
         $this->addSql("ALTER TABLE  `orders` CHANGE  `payment`  `payment` ENUM(  'none', 'alipay', 'tenpay', 'coin', 'wxpay' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
 
     }

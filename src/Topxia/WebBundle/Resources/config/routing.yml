@@ -6,10 +6,6 @@ homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
 
-weixin_browser:
-    pattern: /weixin/check
-    defaults: { _controller: TopxiaWebBundle:Default:weixinCheck }
-
 live_jump:
     pattern: /live/jump
     defaults: { _controller: TopxiaWebBundle:Default:jump }
@@ -1614,10 +1610,6 @@ pay_result_notice:
 wxpay_roll:
     pattern: /pay/wxpay/roll
     defaults: {_controller: TopxiaWebBundle:PayCenter:wxpayRoll }
-
-wxpay_order_query:
-    pattern: /pay/wxpay/orderquery
-    defaults: {_controller: TopxiaWebBundle:PayCenter:orderQuery }
 
 order_show:
     pattern:  /order/show

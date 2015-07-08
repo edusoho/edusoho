@@ -103,27 +103,13 @@
       <div class="col-md-3 control-label">
         <label>接口状态</label>
       </div>
-      <div class="controls col-md-8 radios">
+      <div class="controls col-md-3 radios">
         {{ radios('wxpay_enabled', {1:'开启', 0:'关闭'}, payment.wxpay_enabled) }}
       </div>
-    </div>
-
-{#    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="alipay_key">接口类型</label>
+      <div class="controls col-md-4 radios">
+        <a href="http://kf.qq.com/faq/120911VrYVrA140228V7JbEj.html">简单申请介绍</a>
       </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('wxpay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.wxpay_type)}}
-          <div class="help-block">
-            支付宝规定，“立即到账接口”只能以企业名义申请，个人用户只能申请“担保交易接口”。
-            <a href="http://www.edusoho.com/intro/96#payment" target="_blank">如何申请？</a>
-            <br>
-            "立即到账接口"如需在移动客户端使用，还需开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2013080604609688" target="blank">手机网站支付</a>
-            <br>
-            “标准双接口”在2014-12-29日已被支付宝下线，此时间前申请成功的用户还可以在签约期内使用，建议签约担保交易以免过期后影响正常支付。
-          </div>
-      </div> 
-    </div>#}
+    </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
@@ -136,7 +122,7 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="wxpay_key">Key</label>
+        <label for="wxpay_key">商户平台Key</label>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
@@ -149,17 +135,6 @@
       </div>
       <div class="controls col-md-8">
         <input type="text" id="wxpay_account" name="wxpay_account" class="form-control" value="{{payment.wxpay_account}}">
-        <div class="help-block">如需开启移动客户端支付，需填写支付宝账户。</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>启用微信支付交易关闭接口</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('close_trade_enabled', {1:'是', 0:'否'}, payment.close_trade_enabled|default(0)) }}
-        <div class="help-block">该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。</div>
       </div>
     </div>
 

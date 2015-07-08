@@ -258,8 +258,29 @@ class PayCenterController extends BaseController
             return $this->createJsonResponse(true);
         }
         else{
-            return $this->createJsonResponse(false);
+            $paymentRequest = $this->createPaymentRequest($order, array(
+            'returnUrl' => '',
+            'notifyUrl' => '',
+            'showUrl' => '',
+            ));
+            $returnXml = $paymentRequest->orderQuery();
+            $returnArray = $this->fromXml($returnXml);
+            if ($returnArray['trade_state'] == 'SUCCESS') {
+                $payData =array();
+                $payData['status'] = 'success';
+                $payData['payment'] = 'wxpay';
+                $payData['amount'] = $order['amount'];
+                $payData['paidTime'] = time();
+                $payData['sn'] = $returnArray['out_trade_no'];
+                list($success, $order) = $this->getPayCenterService()->pay($payData);
+                $processor = OrderProcessorFactory::create($order["targetType"]);
+                
+                if ($success){
+                    return $this->createJsonResponse(true);
+                }
+            }
         }
+        return $this->createJsonResponse(false);
     }
 
     public function orderQueryAction(Request $request)
@@ -332,12 +353,19 @@ class PayCenterController extends BaseController
         if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
-
-        $options = array(
-            'key' => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-            //'type' => $settings["{$payment}_type"]
-        );
+        if ($payment == 'alipay') {
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'type' => $settings["{$payment}_type"]
+            );
+        }
+        elseif ($payment == 'wxpay') {
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"]
+            );
+        }
 
         return $options;
     }
@@ -370,7 +398,7 @@ class PayCenterController extends BaseController
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(
-                    'type' => empty($setting[$payName . 'Z']) ? '' : $setting[$payName . '_type'],
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
                 );
             }
         }

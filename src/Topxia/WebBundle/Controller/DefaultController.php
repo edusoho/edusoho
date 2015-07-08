@@ -215,17 +215,6 @@ class DefaultController extends BaseController
             'courses' => $courses
         ));
     }
-    public function weixinCheckAction(Request $request)
-    {
-        $toId = $this->getCurrentUser()->id;
-        $bind = $this->getUserService()->getBindByToIdAndType('weixinmob',$toId);
-        if ($bind['isBind']) {
-            return $this->createJsonResponse(true);
-        }
-        else{
-            return $this->createJsonResponse(false);
-        }
-    }
 
     protected function calculateUserLearnProgress($course, $member)
     {

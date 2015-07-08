@@ -65,6 +65,7 @@ refundStatus:html:
 
 payment:
     alipay: 支付宝
+    wxpay: 微信支付
 
 moneyRecordType:
     income: 充值
