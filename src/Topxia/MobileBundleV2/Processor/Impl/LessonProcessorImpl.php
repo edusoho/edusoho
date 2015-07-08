@@ -471,7 +471,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                         if ($key) {
                             $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                            $lesson['mediaUri'] = empty($url) ? "" : $url['url'];
+                            $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
                         } else {
                             $lesson['mediaUri'] = '';
                         }
