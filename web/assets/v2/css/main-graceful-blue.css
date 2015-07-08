@@ -6848,6 +6848,9 @@ textarea {
 .table-striped .sort-handle:hover {
   color: #999;
 }
+.es-qrcode i {
+  font-size: 24px;
+}
 .es-poster {
   position: relative;
   background: #fff;

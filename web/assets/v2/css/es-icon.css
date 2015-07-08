@@ -15,6 +15,7 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.es-icon-qrcode:before { content: "\e615"; }
 .es-icon-videocam:before { content: "\e678"; }
 .es-icon-anonymous-iconfont:before { content: "\e666"; }
 .es-icon-wenhao:before { content: "\e671"; }
@@ -146,5 +147,5 @@
 .es-icon-videoplay:before { content: "\e677"; }
 .es-icon-chatcircle:before { content: "\e682"; }
 .es-icon-locationcircle:before { content: "\e683"; }
-.es-icon-qacircle:before { content: "\e684"; }
 .es-icon-warning:before { content: "\e685"; }
+.es-icon-localplay:before { content: "\e684"; }

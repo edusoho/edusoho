@@ -64,6 +64,13 @@
 {% endblock %}
 
 {% block footer %}
+  <span class="es-qrcode bottom mrl">
+    <i class="es-icon es-icon-qrcode"></i>
+    <span class="qrcode-popover">
+      <img src="{{asset('assets/v2/img/qrcode.jpg')}}" alt="">
+      扫二维码继续学习
+    </span>
+  </span>
   {% if lesson.status == 'published' %}
     {% if course.price=='0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
