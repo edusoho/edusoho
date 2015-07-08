@@ -47,7 +47,7 @@ class EsBarController extends BaseController{
                 'classroomIds' => $classroomIds
             );
             $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,5);
-            foreach ($classrooms as $key => $classroom){
+            foreach ($classrooms as $key => &$classroom){
                 $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
                 $courseIds = ArrayToolkit::column($courses,'id');
                 $user = $this->getCurrentUser();
@@ -65,7 +65,7 @@ class EsBarController extends BaseController{
                     'notLearnedIds' => $learnedIds
                 );
                 $sort = array(
-                    'createdTime','DESC'
+                    'createdTime','ASC'
                 );
                 $lessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
                 if(empty($lessons))
@@ -73,6 +73,9 @@ class EsBarController extends BaseController{
                     unset($classrooms[$key]);
                 }else{
                     $classroomLessons[$classroom['id']] = $lessons;
+                    $classroom['learnedNum'] = count($learnedIds);
+                    $classroom['notLearnedNum'] = count($lessons);
+
                 }
 
             }
@@ -81,6 +84,55 @@ class EsBarController extends BaseController{
             'classrooms' => $classrooms,
             'classroomLessons' => $classroomLessons
         ));
+    }
+
+    public function myCourseOrClassroomAction(Request $request,$type)
+    {
+        $user = $this->getCurrentUser();
+        switch($type){
+            case 'classroom':
+                $memberConditions = array(
+                    'userId' => $user->id,
+                    'locked' => 0,
+                );
+                $sort = array('createdTime','DESC');
+                $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
+                $classroomConditions = array(
+                    'classroomIds' => $classroomIds
+                );
+                $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
+
+                return $this->render("TopxiaWebBundle:EsBar:my-course-classroom.html.twig", array(
+                    'classrooms' => $classrooms,
+                    'type' => $type
+                ));
+                break;
+            case 'course':
+                $conditions = array(
+                    'userId' => $user->id
+                );
+                $sort = array('createdTime','DESC');
+                $courseIds = ArrayToolkit::column($this->getCourseService()->searchMembers($conditions,$sort,0,100),'courseId');
+                $courseConditions = array(
+                    'courseIds' => $courseIds
+                );
+                $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,100);
+                foreach($courses as &$course) {
+                    $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+                    if( $course['lessonNum'] != 0) {
+                        $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
+                    }else{
+                        $course['percent'] = 0;
+                    }
+                }
+                return $this->render("TopxiaWebBundle:EsBar:my-course-classroom.html.twig", array(
+                    'courses' => $courses,
+                    'type' => $type
+                ));
+                break;
+            default:
+                break;
+        }
     }
 
     protected function getClassroomService()

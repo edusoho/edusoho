@@ -75,64 +75,14 @@
       </div>
       <div class="bar-main-body">
         <div class="btn-action">
-          <a href="" class="btn btn-primary active">课程</a>
-          <a href="" class="btn btn-primary">班级</a>
+          <a href="javascript:;" data-url="{{ path('esbar_my_course_or_classroom',{type:'course'}) }}" class="btn btn-primary active" id="bar-course-btn">课程</a>
+          <a href="javascript:;" data-url="{{ path('esbar_my_course_or_classroom',{type:'classroom'}) }}" class="btn btn-primary" id="bar-classroom-btn">班级</a>
         </div>
-        <!-- 课程 -->
-        <div class="course-list">
-          <div class="course-item">
-            <div class="course-img">
-              <a href="show.php?page=Course/course-detail.html.twig">
-                <img class="transform img-responsive" src="assets/dev/img/course_1.jpg">
-              </a>
-            </div>
-            <div class="progress progress-sm">
-              <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
-              </div>
-            </div>
-            <div class="course-info">
-              <div class="title">
-                <a href="show.php?page=Course/course-detail.html.twig">
-                  Android UiAutomator UiScrollable API 详细介绍
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="course-item">
-            <div class="course-img">
-              <a href="show.php?page=Course/course-detail.html.twig">
-                <img class="transform img-responsive" src="assets/dev/img/course_1.jpg">
-              </a>
-            </div>
-            <div class="course-info">
-              <div class="title">
-                <a href="show.php?page=Course/course-detail.html.twig">
-                  Android UiAutomator UiScrollable API 详细介绍
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 班级 -->
-        <div class="recommend-class-list">
-          <div class="class-item">
-            <a href="">
-              <img class="img-responsive" src="assets/dev/img/class_1.jpg" alt="">
-              <h3>淘宝运营课程高级班</h3>
-              <div class="image-overlay"></div>
-            </a>
-          </div>
-          <div class="class-item">
-            <a href="">
-              <img class="img-responsive" src="assets/dev/img/class_1.jpg" alt="">
-              <h3>淘宝运营课程高级班</h3>
-              <div class="image-overlay"></div>
-            </a>
-          </div>
+        <div id="bar-my-list">
+
         </div>
       </div>
-    </div>
-
+      </div>
       <!-- 学习中心 -->
       <div class="es-bar-main" id="bar-user-center">
       <div class="bar-main-header">

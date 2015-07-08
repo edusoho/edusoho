@@ -3,7 +3,9 @@
     <div class="bar-task">
       <div class="bar-task-header">
         {{ classroom.title }}
+        {{ classroom.learnedNum ~ '/' ~ classroom.notLearnedNum }}
       </div>
+
       <ul class="bar-time-line">
         {% if classroomLessons[classroom.id] %}
           {% for lesson in classroomLessons[classroom.id] %}
@@ -14,6 +16,6 @@
     </div>
   {% endfor %}
 {% else %}
-  <span class=""></span>未开始学习任何课程或班级。<a href="{{ path('course_explore') }}">去逛逛>></a>
+  <span class=""></span>暂未发现还有未学习课时。<a href="{{ path('course_explore') }}">去逛逛>></a>
 
 {% endif %}
