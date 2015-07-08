@@ -684,7 +684,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testChangeCoursePicture()
     {
-        //can not test
+        //暂时等待
     }
 
      /**
@@ -786,32 +786,104 @@ class CourseServiceTest extends BaseTestCase
 
     public function testAnalysisCourseDataByTime()
     {
+        $course = array(
+            'title' => 'test 1'
+        );
 
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $startTime = strtotime(date("Y-m-d",time()- 24*3600));
+        $endTime = strtotime(date("Y-m-d",time()+ 24*3600));
+        $result = $this->getCourseService()->analysisCourseDataByTime($startTime,$endTime);
+        // print_r($result);
+        $this->assertEquals('1',$result[0]['count']);
     }
 
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
 
+        $course1 = array(
+            'title' => 'test course 1'
+        );
+        $course2 = array(
+            'title' => 'test course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
+        $lesson1 = array(
+            'courseId' => $createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $lesson2 = array(
+            'courseId' => $createCourse2['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $createdLesson1 = $this->getCourseService()->createLesson($lesson1);
+        $createdLesson2 = $this->getCourseService()->createLesson($lesson2);
+
+
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+        ));
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $addCourse1 = $this->getCourseService()->becomeStudent($createCourse1['id'],$user['id']);
+        $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'],$user['id']);
+        $tryLearn1 = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
+        $tryLearn2 = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
+        $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'],$user['id']);
     }
 
     public function testUploadCourseFile()
     {
-
+        //暂时等待
     }
 
     public function testSetCoursePrice()
     {
-
+        $course = array(
+            'title' => 'test course'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $setPrice = $this->getCourseService()->setCoursePrice($createCourse['id'],'default',100);
+        // print_r($setPrice);
+        $this->assertEquals(100,$setPrice['originPrice']);
     }
 
     public function testSetCoursesPriceWithDiscount()
     {
-
+        //需要插件支持
     }
 
     public function testRevertCoursesPriceWithDiscount()
     {
-
+        //需要插件支持
     }
 
     //=============== Course API Test [end] ================
@@ -821,6 +893,39 @@ class CourseServiceTest extends BaseTestCase
 
     public function testDeleteCourse()
     {
+        
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test course 1'
+        );
+        $course2 = array(
+            'title' => 'test course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
+
+        $conditions = array(
+            'userId' => $user['id']
+        );
+        $findUserTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions,0,5);
+        $this->assertCount(2,$findUserTeachCourses);
+        // $this->getCourseService()->deleteCourse($createCourse1['id']);
+        // $findUserTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions,0,5);
+        // $this->assertCount(1,$findUserTeachCourses);
+
 
     }
 
@@ -1026,6 +1131,17 @@ class CourseServiceTest extends BaseTestCase
 
     public function testStartLearnLesson()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles']
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $course = $this->getCourseService()->createCourse(array(
             'title' => 'online test course 1',
         ));
