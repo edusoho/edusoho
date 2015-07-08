@@ -216,7 +216,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		openWebView : function(url) {
 			window.location.href = url;
 		},
-		payCourse : function(title, url) {
+		pay : function(title, url) {
 			alert("请在客户端内支付!");
 		},
 		getUserToken : function($q) {

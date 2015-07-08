@@ -1097,38 +1097,14 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 		return app.viewFloder  + "img/avatar.png";
 	}
 }]);;
-app.directive('onContentLoaded', function ($parse) {
+app.directive('onElementReadey', function ($parse, $timeout) {
     return {
         restrict: 'A',
-        compile: function(tElem, tAttrs) {
-
-            function bindImgClick(imgs) {
-              var imageArray = new Array();
-              for (var i = 0; i < imgs.length; i++) {
-                var img = imgs[i];
-                img.alt = i;
-                imageArray.push(img.src);
-                img.addEventListener('click',
-                function() {
-                  esNativeCore.showImages(this.alt,imageArray);
-                })
-              }
-            }
-
-            return { 
-                post: function postLink(scope, element, attributes) { 
-
-                  var ngBindHtmlGetter = $parse(tAttrs.onContentLoaded);
-                  var ngBindHtmlWatch = $parse(tAttrs.onContentLoaded, function getStringValue(value) {
-                    return (value || '').toString();
-                  });
-                    scope.$watch(ngBindHtmlWatch, function() {
-                        element.html(ngBindHtmlGetter(scope));
-                        bindImgClick(element.find("img"));
-                    });
-                }  
-            };
-        } 
+        link : function(scope, element, attrs) {
+          $timeout(function() {
+            $parse(attrs.onElementReadey)(scope);
+           }, 100);
+        }
     };
 }).
 directive('uiTab', function() {
@@ -1756,7 +1732,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		openWebView : function(url) {
 			window.location.href = url;
 		},
-		payCourse : function(title, url) {
+		pay : function(title, url) {
 			alert("请在客户端内支付!");
 		},
 		getUserToken : function($q) {
@@ -2759,7 +2735,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 			unitType : $scope.selectedPayMode.name
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				cordovaUtil.payCourse("支付会员", data.payUrl);
+				cordovaUtil.pay("支付会员", data.payUrl);
 				self.showPayResultDlg();
 			}
 		});
@@ -2834,7 +2810,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
         			token : $scope.token
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				cordovaUtil.payCourse("支付课程", data.payUrl);
+				cordovaUtil.pay("支付课程", data.payUrl);
 				self.showPayResultDlg();
 			}
 		});
@@ -3017,30 +2993,41 @@ function RegistController($scope, platformUtil, UserService, $state)
 		});
 	}
 };
-app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', SearchController]);
+app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', '$timeout', SearchController]);
 
-function SearchController($scope, ServcieUtil, cordovaUtil)
+function SearchController($scope, ServcieUtil, cordovaUtil, $timeout)
 {
 	$scope.search = "";
 	var self = this;
 	var CourseService = ServcieUtil.getService("CourseService");
-	$scope.showSearch = function() {
+	$scope.focusSearchInput = function() {
 		$('.ui-searchbar-wrap').addClass('focus');
         		$('.ui-searchbar-input input').focus();
-	}
+        		esNativeCore.showKeyInput();
+	};
+
+	$scope.inputKeyPress = function($event) {
+		if ($event.keyCode == 13 && $scope.search.length > 0) {
+			self.search();
+		}
+	};
 
 	$scope.seach = function() {
 		if ($scope.search.length == 0) {
 			cordovaUtil.closeWebView();
 			return;
 		}
-		$scope.start = 0;
-		$scope.searchDatas = undefined;
-		self.loadSearchData();
-	}
+		self.search();
+	};
 
 	$scope.canLoad = false;
     	$scope.start = $scope.start || 0;
+
+    	this.search = function() {
+    		$scope.start = 0;
+		$scope.searchDatas = undefined;
+		self.loadSearchData();
+    	};
 
 	this.loadSearchData = function() {
              $scope.showLoad();
@@ -3061,16 +3048,16 @@ function SearchController($scope, ServcieUtil, cordovaUtil)
                         $scope.start += data.limit;
                         $scope.$apply();
               });
+      	};
 
-              $scope.loadMore = function(){
+      	$scope.loadMore = function(){
 	            if (! $scope.canLoad) {
 	              return;
 	            }
 	           setTimeout(function() {
 	              self.loadSearchData();
 	           }, 200); 
-	  };
-      }
+	};
 };
 app.controller('SettingController', ['$scope', 'UserService', '$state', SettingController]);
 

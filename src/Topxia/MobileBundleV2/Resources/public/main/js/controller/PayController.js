@@ -82,7 +82,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 			unitType : $scope.selectedPayMode.name
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				cordovaUtil.payCourse("支付会员", data.payUrl);
+				cordovaUtil.pay("支付会员", data.payUrl);
 				self.showPayResultDlg();
 			}
 		});
@@ -157,7 +157,7 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
         			token : $scope.token
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
-				cordovaUtil.payCourse("支付课程", data.payUrl);
+				cordovaUtil.pay("支付课程", data.payUrl);
 				self.showPayResultDlg();
 			}
 		});

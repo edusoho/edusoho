@@ -1,27 +1,38 @@
-app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', SearchController]);
+app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', '$timeout', SearchController]);
 
-function SearchController($scope, ServcieUtil, cordovaUtil)
+function SearchController($scope, ServcieUtil, cordovaUtil, $timeout)
 {
 	$scope.search = "";
 	var self = this;
 	var CourseService = ServcieUtil.getService("CourseService");
-	$scope.showSearch = function() {
+	$scope.focusSearchInput = function() {
 		$('.ui-searchbar-wrap').addClass('focus');
         		$('.ui-searchbar-input input').focus();
-	}
+        		esNativeCore.showKeyInput();
+	};
+
+	$scope.inputKeyPress = function($event) {
+		if ($event.keyCode == 13 && $scope.search.length > 0) {
+			self.search();
+		}
+	};
 
 	$scope.seach = function() {
 		if ($scope.search.length == 0) {
 			cordovaUtil.closeWebView();
 			return;
 		}
-		$scope.start = 0;
-		$scope.searchDatas = undefined;
-		self.loadSearchData();
-	}
+		self.search();
+	};
 
 	$scope.canLoad = false;
     	$scope.start = $scope.start || 0;
+
+    	this.search = function() {
+    		$scope.start = 0;
+		$scope.searchDatas = undefined;
+		self.loadSearchData();
+    	};
 
 	this.loadSearchData = function() {
              $scope.showLoad();
@@ -42,14 +53,14 @@ function SearchController($scope, ServcieUtil, cordovaUtil)
                         $scope.start += data.limit;
                         $scope.$apply();
               });
+      	};
 
-              $scope.loadMore = function(){
+      	$scope.loadMore = function(){
 	            if (! $scope.canLoad) {
 	              return;
 	            }
 	           setTimeout(function() {
 	              self.loadSearchData();
 	           }, 200); 
-	  };
-      }
+	};
 }
