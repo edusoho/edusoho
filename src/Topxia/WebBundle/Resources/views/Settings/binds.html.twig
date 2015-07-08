@@ -25,7 +25,7 @@
                   <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">绑定</a>
                 {% endif %}
 
-                <div>{{ client.name }}</div>
+                <div>{% if type == 'weixinweb'%}微信登录{% else %}{{ client.name }}{% endif %}</div>
                 {% if client.status|default(null) == 'bind' %}
                   <div class="text-success">已绑定</div>
                 {% else %}

@@ -8,7 +8,7 @@
       {% elseif client.icon_img|default(null) %}
         <img src="{{ asset(client.icon_img) }}" class="social-img">
       {% endif %}
-      {% if displayName %} {{ client.name }} {% endif %}
+      {% if displayName %} {% if type == 'weixinweb'%}微信登录{% else %}{{ client.name }} {% endif %}{% endif %}
     </a>
   {% endif %}
 {% endfor %}
