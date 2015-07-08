@@ -398,7 +398,7 @@ class PayCenterController extends BaseController
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(
-                    'type' => empty($setting[$payName . 'Z']) ? '' : $setting[$payName . '_type'],
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
                 );
             }
         }

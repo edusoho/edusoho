@@ -35,11 +35,6 @@ class UserServiceImpl extends BaseService implements UserService
        return $this->getProfileDao()->getProfile($id);
     }
 
-    public function getBindByToIdAndType($type,$toId)
-    {
-        return $this->getUserBindDao()->getBindByToIdAndType($type,$toId);
-    }
-
     public function getUserByNickname($nickname)
     {
         $user = $this->getUserDao()->findUserByNickname($nickname);
@@ -705,6 +700,9 @@ class UserServiceImpl extends BaseService implements UserService
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，解除第三方绑定失败。");
         }
+        if ($type == 'weixinmob' || $type == 'weixinweb') {
+            $type = 'weixin';
+        }
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
         if($bind){
           $bind = $this->getUserBindDao()->deleteBind($bind['id']);
@@ -714,6 +712,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserBindByTypeAndFromId($type, $fromId)
     {
+        if ($type == 'weixinmob' || $type == 'weixinweb') {
+            $type = 'weixin';
+        }
         return $this->getUserBindDao()->getBindByTypeAndFromId($type, $fromId);
     }
 
@@ -730,7 +731,9 @@ class UserServiceImpl extends BaseService implements UserService
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
-
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $tyep = 'weixin';
+        }
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
     }
 
@@ -746,6 +749,9 @@ class UserServiceImpl extends BaseService implements UserService
 
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
+        }
+        if ($type == 'weixinmob' || $type == 'weixinweb') {
+            $type = 'weixin';
         }
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,

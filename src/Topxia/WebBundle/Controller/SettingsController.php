@@ -745,7 +745,7 @@ class SettingsController extends BaseController
 		$clients = OAuthClientFactory::clients();
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
 		foreach($userBinds as $userBind) {
-			if ($userBind['type'] == 'weixinmob') {
+			if ($userBind['type'] == 'weixin') {
 				$userBind['type'] = 'weixinweb';
 			}
 			$clients[$userBind['type']]['status'] = 'bind';
@@ -760,9 +760,6 @@ class SettingsController extends BaseController
 		$user = $this->getCurrentUser();
 		$this->checkBindsName($type);
 		$userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
-		if ($type == 'weixinweb' && empty($userBinds)) {
-			$userBinds = $this->getUserService()->unBindUserByTypeAndToId('weixinmob', $user->id);
-		}
 		return $this->redirect($this->generateUrl('settings_binds'));
 	}
 

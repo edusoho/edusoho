@@ -24,12 +24,7 @@ class LoginBindController extends BaseController
         $code = $request->query->get('code');
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
-        if ($type == 'weixinweb' || $type == 'weixinmob') {
-            $bind = $this->getUserService()->getUserBindByTypeAndFromId('weixinweb', $token['userId']);
-            if(!$bind){
-                $bind = $this->getUserService()->getUserBindByTypeAndFromId('weixinmob', $token['userId']);
-            }
-        }
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
         if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
@@ -172,7 +167,6 @@ class LoginBindController extends BaseController
     protected function generateUser($type, $token, $oauthUser,$setData)
     {
         $registration = array();
-
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
@@ -251,6 +245,7 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $olduser = $this->getCurrentUser();
+        $type = 'weixin';
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
         $data = $request->request->all();
         $user = $this->getUserService()->getUserByEmail($data['email']);
