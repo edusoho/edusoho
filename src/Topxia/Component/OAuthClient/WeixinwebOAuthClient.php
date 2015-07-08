@@ -40,7 +40,6 @@ class WeixinwebOAuthClient extends AbstractOAuthClient
 
     public function getUserInfo($token)
     {   
-        $params = array('access_token' => $token['access_token']);
         $params = array(
             'openid' => $token['openid'] , 
             'access_token' => $token['access_token']);
