@@ -759,10 +759,10 @@ class SettingsController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		$this->checkBindsName($type);
-		if ($type == 'weixinweb') {
+		$userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
+		if ($type == 'weixinweb' && empty($userBinds)) {
 			$userBinds = $this->getUserService()->unBindUserByTypeAndToId('weixinmob', $user->id);
 		}
-		$userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
 		return $this->redirect($this->generateUrl('settings_binds'));
 	}
 
