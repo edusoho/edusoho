@@ -183,14 +183,15 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
          if (!$user->isLogin()) {
             return $this->createErrorResponse('not_login', '用户未登录，加入学习失败！');
          }
-         $payVip = $this->controller->getLevel($targetId);
+         $payVip = $this->controller->getLevelService()->getLevel($targetId);
          if (!$payVip) {
             return $this->createErrorResponse('error', '购买的vip类型不存在!');
          }
          $fields = $this->request->query->all();
          $vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
          if ($vip) {
-            if ($payVip["seq"] > $vip["seq"]) {
+            $currentVipLevel = $this->controller->getLevelService()->getLevel($vip["levelId"]);
+            if ($payVip["seq"] > $currentVipLevel["seq"]) {
                 $fields["buyType"] = "upgrade";
             } else {
                 return $this->createErrorResponse('error', '会员类型不能降级付费!');
