@@ -67,15 +67,23 @@ class EsBarController extends BaseController{
                 $sort = array(
                     'createdTime','ASC'
                 );
-                $lessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
-                if(empty($lessons))
+                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+                $allLessonConditions = array(
+                    'status' => 'published',
+                    'courseIds' => $courseIds,
+                    'notLearnedIds' => $learnedIds
+                );
+                $sort = array(
+                    'createdTime','ASC'
+                );
+                $allLessons = $this->getCourseService()->searchLessons($allLessonConditions,$sort,0,1000    );
+                if(empty($notLearnedLessons))
                 {
                     unset($classrooms[$key]);
                 }else{
-                    $classroomLessons[$classroom['id']] = $lessons;
-                    $classroom['learnedNum'] = count($learnedIds);
-                    $classroom['notLearnedNum'] = count($lessons);
-
+                    $classroomLessons[$classroom['id']] = $notLearnedLessons;
+                    $classroom['learnedLessonNum'] = count($learnedIds);
+                    $classroom['allLessonNum'] = count($allLessons);
                 }
 
             }
@@ -131,8 +139,14 @@ class EsBarController extends BaseController{
                 ));
                 break;
             default:
+                throw $this->createNotFoundException('类型不确定,类型为班级或课程');
                 break;
         }
+    }
+
+    public function studyHistoryAction(Request $request)
+    {
+
     }
 
     protected function getClassroomService()
