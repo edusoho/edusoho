@@ -1,6 +1,6 @@
-app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', '$state', LoginController]);
 
-function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil)
+function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil, $state)
 {	
 	console.log("LoginController");
 

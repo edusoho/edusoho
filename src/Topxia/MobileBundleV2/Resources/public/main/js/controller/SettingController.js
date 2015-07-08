@@ -5,9 +5,7 @@ function SettingController($scope, UserService, $state)
 	$scope.isShowLogoutBtn = $scope.user ? true : false;
 	$scope.logout = function() {
 		$scope.showLoad();
-		UserService.logout({
-			token : $scope
-		}, function(data) {
+		UserService.logout( {}, function(data) {
 			$scope.hideLoad();
 			$state.go("slideView.mainTab");
 		});

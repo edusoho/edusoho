@@ -92,7 +92,6 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 
 	this.follow = function() {
 		UserService.follow({
-			token : $scope.token,
 			toId : $stateParams.userId
 		}, function(data) {
 			if (data && data.toId == $stateParams.userId) {
@@ -103,7 +102,6 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 
 	this.unfollow = function() {
 		UserService.unfollow({
-			token : $scope.token,
 			toId : $stateParams.userId
 		}, function(data) {
 			if (data) {

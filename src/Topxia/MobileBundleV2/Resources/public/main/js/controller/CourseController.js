@@ -58,8 +58,7 @@ function CourseSettingController($scope, $stateParams, CourseService, $window)
   $scope.exitLearnCourse = function() {
     $scope.showLoad();
     CourseService.unLearnCourse({
-      courseId : $stateParams.courseId,
-      token : $scope.token
+      courseId : $stateParams.courseId
     }, function(data) {
       $scope.hideLoad();
       if (! data.error) {
@@ -78,8 +77,7 @@ function CourseSettingController($scope, $stateParams, CourseService, $window)
 function CourseDetailController($scope, $stateParams, CourseService)
 {
   CourseService.getCourse({
-      courseId : $stateParams.courseId,
-      token : $scope.token
+      courseId : $stateParams.courseId
     }, function(data) {
       $scope.course = data.course;
     });
@@ -91,8 +89,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     var self = this;
     this.payCourse = function() {
       OrderService.payCourse({
-        courseId : $stateParams.courseId,
-        token : $scope.token
+        courseId : $stateParams.courseId
       }, function(data) {
         if (data.paid == true) {
           window.location.reload();
@@ -110,13 +107,12 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         return;
       }
       CourseService.vipLearn({
-        courseId : $stateParams.courseId,
-        token : $scope.token
+        courseId : $stateParams.courseId
       }, function(data){
-        if (data.meta.code == 200) {
+        if (! data.error) {
           window.location.reload();
         } else {
-          $scope.toast(data.meta.message);
+          $scope.toast(data.error.message);
         }
       }, function(error) {
         console.log(error);
@@ -142,8 +138,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         return;
       }
       var params = {
-          courseId : $stateParams.courseId,
-          token : $scope.token
+          courseId : $stateParams.courseId
       };
 
       if ($scope.isFavorited) {
@@ -176,8 +171,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
     var CourseService = ServcieUtil.getService("CourseService");
 
     CourseService.getCourse({
-      courseId : $stateParams.courseId,
-      token : $scope.token
+      courseId : $stateParams.courseId
     }, function(data) {
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
@@ -201,7 +195,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
     $scope.loadReviews = function(){
       CourseService.getReviews({
         courseId : $stateParams.courseId,
-        token : $scope.token,
         limit : 1
       }, function(data) {
         $scope.reviews = data.data;

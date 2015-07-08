@@ -22,8 +22,7 @@ function MyLearnController($scope, CourseService)
   	self.loadDataList = function(content, serviceCallback) {
   		serviceCallback({
   			limit : 10,
-			start: content.start,
-			token : $scope.token
+			start: content.start
   		}, function(data) {
 
   			if (!data || data.data.length == 0) {

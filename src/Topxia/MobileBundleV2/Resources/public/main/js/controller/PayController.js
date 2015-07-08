@@ -26,8 +26,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 	this.__proto__ = new BasePayController();
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
-		levelId : $stateParams.levelId,
-		token : $scope.token
+		levelId : $stateParams.levelId
 	}, function(data) {
 		$scope.hideLoad();
 		$scope.data = data;

@@ -12,7 +12,6 @@ app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
 app.config(['$httpProvider', function($httpProvider) {
 
-    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
     // Override $http service's default transformRequest

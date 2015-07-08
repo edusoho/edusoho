@@ -7,8 +7,7 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 	self.loadLesson = function() {
 		LessonService.getLesson({
 			courseId : $stateParams.courseId,
-			lessonId : $stateParams.lessonId,
-			token : $scope.token
+			lessonId : $stateParams.lessonId
 		},function(data) {
 			if (data.error) {
 				$scope.toast(data.error.message);

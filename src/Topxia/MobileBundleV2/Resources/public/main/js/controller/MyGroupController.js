@@ -10,8 +10,7 @@ function MyGroupBaseController($scope, serviceCallBack) {
       serviceCallBack({
         limit : self.limit,
         start: $scope.start,
-        type : type,
-        token : $scope.token
+        type : type
       }, function(data) {
         
         var length  = data ? data.data.length : 0;

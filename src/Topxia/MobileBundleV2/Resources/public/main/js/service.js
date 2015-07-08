@@ -432,10 +432,12 @@ service('SchoolService', ['httpService', function(httpService) {
 service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 	
 	var self = this;
+
 	this.getOptions = function(url, params, callback, errorCallback) {
 		return {
 			method : "get",
 			url : app.host + url,
+			headers : { "token" : $rootScope.token },
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
@@ -468,6 +470,8 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 
 	this.get = function(options) {
 		options.method  = "get";
+		options.headers = { "token" : $rootScope.token };
+
 		var http = $http(options).success(options.success);
 
 		if (options.error) {
@@ -481,8 +485,9 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 
 	this.post = function(options) {
 		options.method  = "post";
-		var http = $http(options).success(options.success);
+		options.headers = { "token" : $rootScope.token };
 
+		var http = $http(options).success(options.success);
 		if (options.error) {
 			http.error(options.error);
 		} else {

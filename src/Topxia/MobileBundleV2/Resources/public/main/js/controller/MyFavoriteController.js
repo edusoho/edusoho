@@ -13,8 +13,7 @@ function MyFavoriteBaseController($scope, CourseService, CourseUtil)
         content.url,
         {
           limit : 100,
-        start: content.start,
-        token : $scope.token
+        start: content.start
       }, function(data) {
             $scope.hideLoad();
             if (!data || data.data.length == 0) {

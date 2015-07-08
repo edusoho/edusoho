@@ -12,7 +12,6 @@ app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
 app.config(['$httpProvider', function($httpProvider) {
 
-    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
     // Override $http service's default transformRequest
@@ -842,10 +841,12 @@ service('SchoolService', ['httpService', function(httpService) {
 service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 	
 	var self = this;
+
 	this.getOptions = function(url, params, callback, errorCallback) {
 		return {
 			method : "get",
 			url : app.host + url,
+			headers : { "token" : $rootScope.token },
 			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
@@ -878,6 +879,8 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 
 	this.get = function(options) {
 		options.method  = "get";
+		options.headers = { "token" : $rootScope.token };
+
 		var http = $http(options).success(options.success);
 
 		if (options.error) {
@@ -891,8 +894,9 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 
 	this.post = function(options) {
 		options.method  = "post";
-		var http = $http(options).success(options.success);
+		options.headers = { "token" : $rootScope.token };
 
+		var http = $http(options).success(options.success);
 		if (options.error) {
 			http.error(options.error);
 		} else {
@@ -1913,8 +1917,7 @@ function CourseSettingController($scope, $stateParams, CourseService, $window)
   $scope.exitLearnCourse = function() {
     $scope.showLoad();
     CourseService.unLearnCourse({
-      courseId : $stateParams.courseId,
-      token : $scope.token
+      courseId : $stateParams.courseId
     }, function(data) {
       $scope.hideLoad();
       if (! data.error) {
@@ -1933,8 +1936,7 @@ function CourseSettingController($scope, $stateParams, CourseService, $window)
 function CourseDetailController($scope, $stateParams, CourseService)
 {
   CourseService.getCourse({
-      courseId : $stateParams.courseId,
-      token : $scope.token
+      courseId : $stateParams.courseId
     }, function(data) {
       $scope.course = data.course;
     });
@@ -1946,8 +1948,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     var self = this;
     this.payCourse = function() {
       OrderService.payCourse({
-        courseId : $stateParams.courseId,
-        token : $scope.token
+        courseId : $stateParams.courseId
       }, function(data) {
         if (data.paid == true) {
           window.location.reload();
@@ -1965,13 +1966,12 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         return;
       }
       CourseService.vipLearn({
-        courseId : $stateParams.courseId,
-        token : $scope.token
+        courseId : $stateParams.courseId
       }, function(data){
-        if (data.meta.code == 200) {
+        if (! data.error) {
           window.location.reload();
         } else {
-          $scope.toast(data.meta.message);
+          $scope.toast(data.error.message);
         }
       }, function(error) {
         console.log(error);
@@ -1997,8 +1997,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         return;
       }
       var params = {
-          courseId : $stateParams.courseId,
-          token : $scope.token
+          courseId : $stateParams.courseId
       };
 
       if ($scope.isFavorited) {
@@ -2031,8 +2030,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
     var CourseService = ServcieUtil.getService("CourseService");
 
     CourseService.getCourse({
-      courseId : $stateParams.courseId,
-      token : $scope.token
+      courseId : $stateParams.courseId
     }, function(data) {
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
@@ -2056,7 +2054,6 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
     $scope.loadReviews = function(){
       CourseService.getReviews({
         courseId : $stateParams.courseId,
-        token : $scope.token,
         limit : 1
       }, function(data) {
         $scope.reviews = data.data;
@@ -2277,8 +2274,7 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 	self.loadLesson = function() {
 		LessonService.getLesson({
 			courseId : $stateParams.courseId,
-			lessonId : $stateParams.lessonId,
-			token : $scope.token
+			lessonId : $stateParams.lessonId
 		},function(data) {
 			if (data.error) {
 				$scope.toast(data.error.message);
@@ -2335,9 +2331,9 @@ function CourseLessonController($scope, $stateParams, ServcieUtil, $state, cordo
 
     this.loadLessons();
 };
-app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', LoginController]);
+app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', '$state', LoginController]);
 
-function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil)
+function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil, $state)
 {	
 	console.log("LoginController");
 
@@ -2466,8 +2462,7 @@ function MyFavoriteBaseController($scope, CourseService, CourseUtil)
         content.url,
         {
           limit : 100,
-        start: content.start,
-        token : $scope.token
+        start: content.start
       }, function(data) {
             $scope.hideLoad();
             if (!data || data.data.length == 0) {
@@ -2523,8 +2518,7 @@ function MyGroupBaseController($scope, serviceCallBack) {
       serviceCallBack({
         limit : self.limit,
         start: $scope.start,
-        type : type,
-        token : $scope.token
+        type : type
       }, function(data) {
         
         var length  = data ? data.data.length : 0;
@@ -2614,8 +2608,7 @@ function MyLearnController($scope, CourseService)
   	self.loadDataList = function(content, serviceCallback) {
   		serviceCallback({
   			limit : 10,
-			start: content.start,
-			token : $scope.token
+			start: content.start
   		}, function(data) {
 
   			if (!data || data.data.length == 0) {
@@ -2679,8 +2672,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 	this.__proto__ = new BasePayController();
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
-		levelId : $stateParams.levelId,
-		token : $scope.token
+		levelId : $stateParams.levelId
 	}, function(data) {
 		$scope.hideLoad();
 		$scope.data = data;
@@ -2854,8 +2846,7 @@ function QuestionController($scope, QuestionService, $stateParams)
 		$scope.showLoad();
 		QuestionService.getThread({
 			courseId: $stateParams.courseId,
-			threadId : $stateParams.threadId,
-			token : $scope.token
+			threadId : $stateParams.threadId
 		}, function(data) {
 			$scope.thread = data;
 			$scope.hideLoad();
@@ -2868,8 +2859,7 @@ function QuestionController($scope, QuestionService, $stateParams)
 	this.loadTeacherPost = function() {
 		QuestionService.getThreadTeacherPost({
 			courseId: $stateParams.courseId,
-			threadId : $stateParams.threadId,
-			token : $scope.token
+			threadId : $stateParams.threadId
 		}, function(data) {
 			$scope.teacherPosts = data;
 		});
@@ -2878,8 +2868,7 @@ function QuestionController($scope, QuestionService, $stateParams)
 	this.loadTheadPost = function() {
 		QuestionService.getThreadPost({
 			courseId: $stateParams.courseId,
-			threadId : $stateParams.threadId,
-			token : $scope.token
+			threadId : $stateParams.threadId
 		}, function(data) {
 			$scope.threadPosts = data.data;
 		});
@@ -2894,8 +2883,7 @@ function NoteController($scope, NoteService, $stateParams)
 	this.loadNote = function() {
 		$scope.showLoad();
 		NoteService.getNote({
-			noteId: $stateParams.noteId,
-			token : $scope.token
+			noteId: $stateParams.noteId
 		}, function(data) {
 			$scope.note = data;
 			$scope.hideLoad();
@@ -3066,9 +3054,7 @@ function SettingController($scope, UserService, $state)
 	$scope.isShowLogoutBtn = $scope.user ? true : false;
 	$scope.logout = function() {
 		$scope.showLoad();
-		UserService.logout({
-			token : $scope
-		}, function(data) {
+		UserService.logout( {}, function(data) {
 			$scope.hideLoad();
 			$state.go("slideView.mainTab");
 		});
@@ -3168,7 +3154,6 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 
 	this.follow = function() {
 		UserService.follow({
-			token : $scope.token,
 			toId : $stateParams.userId
 		}, function(data) {
 			if (data && data.toId == $stateParams.userId) {
@@ -3179,7 +3164,6 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 
 	this.unfollow = function() {
 		UserService.unfollow({
-			token : $scope.token,
 			toId : $stateParams.userId
 		}, function(data) {
 			if (data) {

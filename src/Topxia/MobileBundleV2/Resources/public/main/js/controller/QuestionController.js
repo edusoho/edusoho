@@ -8,8 +8,7 @@ function QuestionController($scope, QuestionService, $stateParams)
 		$scope.showLoad();
 		QuestionService.getThread({
 			courseId: $stateParams.courseId,
-			threadId : $stateParams.threadId,
-			token : $scope.token
+			threadId : $stateParams.threadId
 		}, function(data) {
 			$scope.thread = data;
 			$scope.hideLoad();
@@ -22,8 +21,7 @@ function QuestionController($scope, QuestionService, $stateParams)
 	this.loadTeacherPost = function() {
 		QuestionService.getThreadTeacherPost({
 			courseId: $stateParams.courseId,
-			threadId : $stateParams.threadId,
-			token : $scope.token
+			threadId : $stateParams.threadId
 		}, function(data) {
 			$scope.teacherPosts = data;
 		});
@@ -32,8 +30,7 @@ function QuestionController($scope, QuestionService, $stateParams)
 	this.loadTheadPost = function() {
 		QuestionService.getThreadPost({
 			courseId: $stateParams.courseId,
-			threadId : $stateParams.threadId,
-			token : $scope.token
+			threadId : $stateParams.threadId
 		}, function(data) {
 			$scope.threadPosts = data.data;
 		});
@@ -48,8 +45,7 @@ function NoteController($scope, NoteService, $stateParams)
 	this.loadNote = function() {
 		$scope.showLoad();
 		NoteService.getNote({
-			noteId: $stateParams.noteId,
-			token : $scope.token
+			noteId: $stateParams.noteId
 		}, function(data) {
 			$scope.note = data;
 			$scope.hideLoad();
