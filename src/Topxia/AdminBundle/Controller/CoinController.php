@@ -656,7 +656,7 @@ class CoinController extends BaseController
         } 
         
         $paginator = new Paginator(
-            $request,
+            $request,s
             $this->getCashService()->searchFlowsCount($conditions),
             20
         );
