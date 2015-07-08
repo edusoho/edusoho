@@ -69,7 +69,6 @@ define(function(require, exports, module) {
                 });
 
                 player.on('changeRes', function() {
-                    console.log(player.getCurrentRes());
                     Cookie.set("currentRes", player.getCurrentRes());
                 });
 
@@ -92,6 +91,10 @@ define(function(require, exports, module) {
 
             }, 'json');
 
+        },
+
+        paused: function() {
+            return this.get("player").paused();
         },
 
         destroy: function() {

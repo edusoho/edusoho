@@ -174,10 +174,9 @@ define(function(require, exports, module) {
                 type = "AudioPlayer";
             }
 
-            if (this.get('mediaPlayer')) {
-                player = this.get('mediaPlayer');
-                player = document.getElementById(player.get("playerId"));
-                type = "MediaPlayer";
+            if (this.get('esCloudPlayer')) {
+                player = this.get('esCloudPlayer');
+                type = "EsCloudPlayer";
             }
 
             if (this._counter && this._counter.timerId) {
@@ -207,9 +206,9 @@ define(function(require, exports, module) {
                 this.set('audioPlayer', null);
             }
 
-            if (this.get('mediaPlayer')) {
-                this.get('mediaPlayer').dispose();
-                this.set('mediaPlayer', null);
+            if (this.get('esCloudPlayer')) {
+                this.get('esCloudPlayer').destroy();
+                this.set('esCloudPlayer', null);
             }
 
             swfobject.removeSWF('lesson-swf-player');
@@ -220,7 +219,6 @@ define(function(require, exports, module) {
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-
 
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
@@ -270,20 +268,14 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
+
                     var lessonVideoDiv = $('#lesson-video-content');
-
-                    if(window.__EsCloudPlayer){
-                        window.__EsCloudPlayer.dispose();
-                    }
-
                     var html = [];
                     html.push('<video id="video-player" class="video-js vjs-default-skin" width="100%" height="100%">');
                     html.push('</video>');
                     lessonVideoDiv.addClass("ballon-video-player");
                     lessonVideoDiv.html(html.join('\n'));
                     lessonVideoDiv.show();
-                    
-
 
                     var esCloudPlayer = new EsCloudPlayer({
                         element: '#video-player',
@@ -319,6 +311,8 @@ define(function(require, exports, module) {
 
                         that._onFinishLearnLesson();
                     });
+
+                    that.set('esCloudPlayer', esCloudPlayer);
 
                 } else {
                     if (lesson.type == 'video') {
@@ -787,9 +781,8 @@ define(function(require, exports, module) {
             if(!learningCounter){
                 learningCounter = 0;
             }
-
             var paused = this.player && this.type && (
-                (this.type == "MediaPlayer" && typeof(this.player.getPlaying) == "function" && !this.player.getPlaying())
+                (this.type == "EsCloudPlayer" && this.player.paused())
                 || (this.type == "AudioPlayer" && this.player.media.paused)
                 || (this.type == "VideoPlayer" && this.player.paused()));
 
@@ -803,7 +796,7 @@ define(function(require, exports, module) {
                 learningCounter++;
             }
 
-            if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
+            if (this.watchLimit && this.type == 'EsCloudPlayer' && !this.watched && learningCounter >= 1) {
                 this.watched = true;
                 var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
                 $.post(url, function(result) {
