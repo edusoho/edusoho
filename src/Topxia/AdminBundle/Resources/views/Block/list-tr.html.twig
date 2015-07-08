@@ -3,7 +3,7 @@
     <td>
         {{ block.title }}
         <br>
-        <span class="text-muted text-sm">编码：{{ block.code }}</span>
+        <span class="text-muted text-sm">{{'编码：'|trans}}{{ block.code }}</span>
     </td>
     <td>
         {{ admin_macro.user_link(latestUpdateUser|default(null)) }}
@@ -12,17 +12,17 @@
     </td>
     <td>
         {% if block.mode == 'html' %}
-            <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">编辑html</button>
+            <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {block:block.id}) }}" data-toggle="modal" data-target="#modal">{{'编辑html'|trans}}</button>
         {% endif %}
 
         {% if block.mode == 'template' %}
-            <a class="btn btn-sm btn-primary update-btn" href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">编辑内容</a>
+            <a class="btn btn-sm btn-primary update-btn" href="{{ path('admin_block_visual_edit', {blockId:block.id}) }}">{{'编辑内容'|trans}}</a>
         {% endif %}
 
         {% if setting('developer.debug') %}
         
-        <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal" >设置</button>
-        <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">删除</button>
+        <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_block_edit', {block:block.id}) }}" data-toggle="modal" data-target="#modal" >{{'设置'|trans}}</button>
+        <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_block_delete', {id:block.id}) }}" data-target="{{ block.id }}">{{'删除'|trans}}</button>
         {% endif %}
     </td>
 </tr>

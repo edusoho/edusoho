@@ -83,7 +83,7 @@
         <li class="divider"></li>
 
         {% if course.status == 'published' %}
-          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员')|trans}}"><span class="glyphicon glyphicon-ban-circle"></span>  {{'关闭课程'|trans}}</a></li>
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员'|trans)}}"><span class="glyphicon glyphicon-ban-circle"></span>  {{'关闭课程'|trans}}</a></li>
         {% endif %}
 
         {% if course.status != 'published' %}
@@ -94,7 +94,7 @@
         <li class="divider"></li>
 
         <li><a class="delete-course" href="javascript:" data-url="{{ path('admin_course_delete', {id:course.id, filter:filter}) }}"
-        data-chapter="{{default.chapter_name|default('章')|trans}}" data-part="{{default.part_name|default('节')|trans}}" data-user="{{default.user_name|default('学员')|trans}}"><span class="glyphicon glyphicon-trash"></span>  {{'删除课程'|trans}}</a></li>
+        data-chapter="{{default.chapter_name|default('章'|trans)}}" data-part="{{default.part_name|default('节'|trans)}}" data-user="{{default.user_name|default('学员'|trans)}}"><span class="glyphicon glyphicon-trash"></span>  {{'删除课程'|trans}}</a></li>
         {% endif %}
       </ul>
     </div>
