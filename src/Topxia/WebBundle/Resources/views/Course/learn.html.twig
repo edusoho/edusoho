@@ -15,8 +15,9 @@
 
 {% block header %}{% endblock %}
 {% block footer %}{% endblock %}
+{% block es_bar %}{% endblock %}
+{% block full_content %}
 
-{% block full_content %}       
   <div class="lesson-dashboard" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-course-uri="{{ path('course_show', {id:course.id}) }}"
@@ -153,3 +154,4 @@
   </div><!-- /.modal -->
 
 {% endblock %}
+

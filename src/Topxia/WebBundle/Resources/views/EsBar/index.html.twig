@@ -1,5 +1,5 @@
 <!-- 侧边栏快捷操作 -->
-{% block es_bar %}
+
   <div class="es-bar visible-lg">
     <div class="es-bar-menu">
       <ul class="bar-menu-top">
@@ -153,11 +153,11 @@
         {{ render(controller('TopxiaWebBundle:EsBar/EsBar:liveNotify',{userId:app.user.id} )) }}
 
         <div class="text-line gray small">
-          <h5><span>今日学习任务</span></h5>
+          <h5><span>学习任务</span></h5>
           <div class="line"></div>
         </div>
 
-        {{ render(controller('TopxiaWebBundle:EsBar/EsBar:studyPlanClassroom',{userId:app.user.id} )) }}
+        {{ render(controller('TopxiaWebBundle:EsBar/EsBar:studyPlan',{userId:app.user.id} )) }}
 
       </div>
     </div>
@@ -247,7 +247,7 @@
     </div>
 
   </div>
-{% endblock %}
+
 
   {% block modal %}
     <div id="modal" class="modal"></div>

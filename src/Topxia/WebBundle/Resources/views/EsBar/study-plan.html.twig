@@ -1,0 +1,19 @@
+{% if classrooms %}
+  {% for classroom in classrooms %}
+    <div class="bar-task">
+      <div class="bar-task-header">
+        {{ classroom.title }}
+      </div>
+      <ul class="bar-time-line">
+        {% if classroomLessons[classroom.id] %}
+          {% for lesson in classroomLessons[classroom.id] %}
+            <li class="last"><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% endfor %}
+{% else %}
+  <span class=""></span>未开始学习任何课程或班级。<a href="{{ path('course_explore') }}">去逛逛>></a>
+
+{% endif %}

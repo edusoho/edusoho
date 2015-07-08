@@ -32,7 +32,7 @@ class EsBarController extends BaseController{
         ));
     }
 
-    public function studyPlanClassroomAction(Request $request,$userId)
+    public function studyPlanAction(Request $request,$userId)
     {
         $memberConditions = array(
             'userId' => $userId,
@@ -41,42 +41,45 @@ class EsBarController extends BaseController{
         $sort = array('createdTime','DESC');
         $classrooms = array();
         $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
+        $classroomLessons = array();
         if(!empty($classroomIds)){
             $classroomConditions = array(
                 'classroomIds' => $classroomIds
             );
             $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,5);
+            foreach ($classrooms as $key => $classroom){
+                $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+                $courseIds = ArrayToolkit::column($courses,'id');
+                $user = $this->getCurrentUser();
+                $learnedConditions = array(
+                    'userId' => $user->id,
+                    'status' => 'finished',
+                    'courseIds' => $courseIds
+                );
+                $sort = array( 'finishedTime','ASC');
+                $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,1000),'lessonId');
+
+                $notLearnedConditions = array(
+                    'status' => 'published',
+                    'courseIds' => $courseIds,
+                    'notLearnedIds' => $learnedIds
+                );
+                $sort = array(
+                    'createdTime','DESC'
+                );
+                $lessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+                if(empty($lessons))
+                {
+                    unset($classrooms[$key]);
+                }else{
+                    $classroomLessons[$classroom['id']] = $lessons;
+                }
+
+            }
         }
-        return $this->render("TopxiaWebBundle:EsBar:study-plan-classroom.html.twig", array(
-            'classrooms' => $classrooms
-        ));
-    }
-
-    public function studyPlanLessonAction(Request $request,$classroomId)
-    {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds = ArrayToolkit::column($courses,'id');
-        $user = $this->getCurrentUser();
-        $learnedConditions = array(
-            'userId' => $user->id,
-            'status' => 'finished',
-            'courseIds' => $courseIds
-        );
-        $sort = array( 'finishedTime','ASC');
-        $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,1000),'lessonId');
-
-        $notLearnedConditions = array(
-            'status' => 'published',
-            'courseIds' => $courseIds,
-            'notLearnedIds' => $learnedIds
-        );
-        $sort = array(
-            'createdTime','DESC'
-        );
-        $lessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
-
-        return $this->render("TopxiaWebBundle:EsBar:study-plan-lesson.html.twig", array(
-            'lessons' => $lessons
+        return $this->render("TopxiaWebBundle:EsBar:study-plan.html.twig", array(
+            'classrooms' => $classrooms,
+            'classroomLessons' => $classroomLessons
         ));
     }
 

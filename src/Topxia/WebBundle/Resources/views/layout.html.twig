@@ -60,7 +60,9 @@
     {% block bottom %}{% endblock %}
   </div>
   {% if app.user and app.user.isLogin() %}
-    {% include 'TopxiaWebBundle:EsBar:layout.html.twig' %}
+    {% block es_bar %}
+      {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
+    {% endblock %}
   {% endif %}
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
   <div id="modal" class="modal"></div>

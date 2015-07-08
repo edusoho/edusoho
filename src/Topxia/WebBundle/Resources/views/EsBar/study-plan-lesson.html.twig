@@ -1,5 +1,0 @@
-{% if lessons %}
-  {% for lesson in lessons %}
-    <li class="last"><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
-  {% endfor %}
-{% endif %}
