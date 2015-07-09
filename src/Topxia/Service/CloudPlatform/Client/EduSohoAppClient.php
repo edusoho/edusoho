@@ -29,6 +29,18 @@ class EduSohoAppClient implements AppClient
         $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
 
+    public function getTokenLoginUrl($routingName, $params)
+    {
+        $loginToken = $this->getLoginToken();
+        
+        $url = $this->appUrl.'/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        if(!empty($params)){
+            $url .= '&param='.urldecode(json_encode($params));
+        }
+
+        return $url;
+    }
+
     public function getApps()
     {
         $args = array();
