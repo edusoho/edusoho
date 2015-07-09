@@ -75,10 +75,18 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_video_upgrade');
     }
 
+    public function videoRenewAction(Request $request)
+    {
+        return $this->redirectUrl('edu_cloud_video_renew');
+    }
+
     protected function redirectUrl($routingName, $params = array())
     {
         $loginToken = $this->getAppService()->getLoginToken();
-        $url = 'http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        $developer = $this->getSettingService()->get('developer', array());
+
+        $appUrl = str_replace('app_api', '', $developer['app_api_url']);
+        $url = $appUrl.'token_login?token='.$loginToken["token"].'&goto='.$routingName;
         if(!empty($params)){
             $url .= '&param='.urldecode(json_encode($params));
         }
@@ -88,5 +96,10 @@ class CloudController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

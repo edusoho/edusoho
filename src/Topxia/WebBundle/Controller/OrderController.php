@@ -156,6 +156,8 @@ class OrderController extends BaseController
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
             );
 
+            
+            
             $order = $processor->createOrder($orderFileds, $fields);
 
             if($order["status"] == "paid") {

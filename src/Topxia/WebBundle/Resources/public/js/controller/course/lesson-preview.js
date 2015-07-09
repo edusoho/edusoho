@@ -165,10 +165,9 @@ define(function(require, exports, module) {
         }
 
 		$modal = $('#modal');
-        $modal.on('click','.js-buy-btn', function(){
+        $modal.on('click','.btn-high', function(){
 			$.get($(this).data('url'), function(html) {
 				$modal.html(html);
-				$('#join-course-btn').click();
 			});
 		});
 

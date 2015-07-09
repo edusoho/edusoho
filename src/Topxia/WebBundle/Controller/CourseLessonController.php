@@ -25,7 +25,7 @@ class CourseLessonController extends BaseController
         $coinSetting = $this->getSettingService()->get('coin');
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
 
-        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0) {
+        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0 && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
             if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
                 || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
                 
@@ -119,12 +119,22 @@ class CourseLessonController extends BaseController
             }
         }
 
+         //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
             'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
             'hlsUrl' => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
+            'vipStatus' => $vipStatus
         ));
     }
 
@@ -173,6 +183,7 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider'] = $lesson["liveProvider"];
+        $json['nowDate'] = time();
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if (!empty($app)) {
@@ -701,5 +712,15 @@ class CourseLessonController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    } 
+    
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

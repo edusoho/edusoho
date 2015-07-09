@@ -35,21 +35,21 @@
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="liveAnswer" {% if 'liveAnswer' in classroom.service %}checked='checked'{% endif %}> 一对一在线答疑</label>
               <p class="help-block">提供专属的一对一在线答疑，快速答疑解惑。
-</p>
+              </p>
             </div>
             <label class="col-md-2 control-label">
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %}checked='checked'{% endif %}> {{setting("classroom.name")|default("班级")}}活动</label>
               <p class="help-block">不定期组织各种线上或线下的{{setting("classroom.name")|default("班级")}}活动，让学习更加生动有趣，同学关系更为紧密。
-</p>
+              </p>
             </div>
             <label class="col-md-2 control-label">
             </label>
             <div class="col-md-10 controls checkboxs">
               <label><input type="checkbox" name="service[]" value="workAdvise" {% if 'workAdvise' in classroom.service %}checked='checked'{% endif %}> 就业指导</label>
               <p class="help-block">完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导。
-</p>
+              </p>
             </div>
 
           <div class="form-group">
@@ -58,8 +58,8 @@
               <button type="submit" class="btn btn-fat btn-primary">保存</button>
             </div>
           </div>
+        </div>  
     </form>
   </div>
 </div>
-
 {% endblock %}
