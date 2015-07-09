@@ -245,7 +245,6 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $olduser = $this->getCurrentUser();
-        $type = 'weixin';
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
         $data = $request->request->all();
         $user = $this->getUserService()->getUserByEmail($data['email']);
