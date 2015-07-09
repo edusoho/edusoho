@@ -15,6 +15,7 @@ class UserEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'user.service.registered' => 'onUserRegistered',
+            'user.service.follow' => 'onUserFollowed'
         );
     }
 
@@ -24,8 +25,32 @@ class UserEventSubscriber implements EventSubscriberInterface
         $this->getEduCloudService()->addStudent($user);
     }
 
+    public function onUserFollowed(ServiceEvent $event)
+    {
+        $friend = $event->getSubject();
+        $user = $this->getUserService()->getUser($friend['fromId']);
+        $message = array(
+            'fromId' => $friend['fromId'],
+            'toId' => $friend['toId'],
+            'type' => 'text',
+            'title' => '好友添加',
+            'content' => $user['nickname'].'添加你为好友',
+            'custom' => json_encode(array(
+                'id' => $friend['fromId'],
+                'typeBusiness' => 'friendVerify'
+            ))
+        );
+        $this->getEduCloudService()->sendMessage($message);
+    }
+
+
     private function getEduCloudService()
     {
         return ServiceKernel::instance()->createService('EduCloud.EduCloudService');
+    }
+
+    private function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

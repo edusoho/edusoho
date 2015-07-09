@@ -125,7 +125,7 @@ class EduCloudServiceImpl extends BaseService
         $api = $this->getCloudApi();
         $result = $api->get(
             sprintf('/tui/message/%s/list', $userId),
-            array('lastMaxId' => $lastMaxId, 'limit' => 50)
+            array('lastMaxId' => $lastMaxId, 'limit' => 20)
         );
         return $result;
     }
@@ -160,14 +160,13 @@ class EduCloudServiceImpl extends BaseService
     public function sendMessage($message)
     {
         $api = $this->getCloudApi();
-        $user = $this->getCurrentUser();
         return $api->post(
             sprintf('/tui/message/%s/friend/%s/send', $message['fromId'], $message['toId']),
             array(
                 'type' => $message['type'],
-                'title' => '来自'.$user['nickname'].'的私信',
+                'title' => $message['title'],
                 'content' => $message['content'],
-                'custom' => ''
+                'custom' => $message['custom']
         ));
     }
 

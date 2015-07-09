@@ -85,4 +85,5 @@ $app->mount('/api/announcements', include __DIR__ . '/src/announcements.php' );
 $app->mount('/api/coursethreads', include __DIR__ . '/src/coursethreads.php' );
 $app->mount('/api/mobileschools', include __DIR__ . '/src/mobileschools.php' );
 $app->mount('/api/blacklists', include __DIR__ . '/src/blacklists.php' );
+$app->mount('/api/files', include __DIR__ . '/src/files.php' );
 $app->run();
