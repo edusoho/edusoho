@@ -952,12 +952,20 @@ class WebExtension extends \Twig_Extension
                     $default = "无";
                 }
                 else{
+                    if ($order['amount'] > 0 ){
+                        if($order['payment'] == 'wxpay') {
+                            $default = "微信支付";
+                        }
+                        else{
+                            $default = "支付宝";
+                        }
+                    }
                     $default = "余额支付";
                 }
         }
 
         if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
-                if ($order['coinAmount'] > 0) {
+                if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
                     $default = "余额支付";
                 }
                 else{
