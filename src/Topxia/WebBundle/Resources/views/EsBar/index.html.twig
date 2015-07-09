@@ -31,17 +31,13 @@
       <!-- 通知 -->
       <div class="es-bar-main" id="bar-message">
       <div class="bar-main-header">
-        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light" id="bar-message-btn" data-url="{{ path('esbar_my_notify') }}"><i class="es-icon es-icon-arrowforward"></i></a>
         通知
       </div>
       <div class="bar-main-wrap">
         <div class="bar-main-body">
           <ul class="bar-message">
-            <li><i class="dot"></i><a href="" class="link-light">第一条系统通知第一条系统通知第一条系统通知</a></li>
-            <li><i class="dot"></i><a href="" class="link-light">第一条系统通知</a></li>
-            <li><a href="" class="link-light">第一条系统通知</a></li>
-            <li><a href="" class="link-light">第一条系统通知</a></li>
-            <li><a href="" class="link-light">第一条系统通知</a></li>
+
           </ul>
         </div>
       </div>
@@ -50,19 +46,16 @@
       <!-- 考试/作业 -->
       <div class="es-bar-main" id="bar-homework">
       <div class="bar-main-header">
-        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light" id="bar-practice-btn" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}"><i class="es-icon es-icon-arrowforward"></i></a>
         考试/作业
       </div>
       <div class="bar-main-body">
         <div class="btn-action">
-          <a href="" class="btn btn-primary active">已提交</a>
-          <a href="" class="btn btn-primary"><span>已批阅<i class="dot-md"></i></span></a>
+          <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}" class="btn btn-primary active" id="bar-practice-review">已提交</a>
+          <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'finished'}) }}" class="btn btn-primary" id="bar-practice-finish"><span>已批阅<i class="dot-md"></i></span></a>
         </div>
         <ul class="bar-homework">
-          <li><span>作</span><a href="" class="link-light">作业作业作业作业作业作业作业</a></li>
-          <li><span>练</span><a href="" class="link-light">练习练习练习练习练习练习练习</a></li>
-          <li><span>作</span><a href="" class="link-light">作业作业作业作业作业作业作业</a></li>
-          <li><span>练</span><a href="" class="link-light">练习练习练习练习练习练习练习练习</a></li>
+
         </ul>
       </div>
     </div>
@@ -78,7 +71,7 @@
           <a href="javascript:;" data-url="{{ path('esbar_my_course_or_classroom',{type:'course'}) }}" class="btn btn-primary active" id="bar-course-btn">课程</a>
           <a href="javascript:;" data-url="{{ path('esbar_my_course_or_classroom',{type:'classroom'}) }}" class="btn btn-primary" id="bar-classroom-btn">班级</a>
         </div>
-        <div id="bar-my-list">
+        <div id="bar-my-course">
 
         </div>
       </div>

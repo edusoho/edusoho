@@ -1744,3 +1744,11 @@ course_note_cancel_like:
 esbar_my_course_or_classroom:
     pattern:  /esbar/my/course_or_classroom/{type}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:myCourseOrClassroom }
+
+esbar_my_notify:
+    pattern:  /esbar/my/notify
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:notify }
+
+esbar_my_practice:
+    pattern:  /esbar/my/practice/{status}
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }

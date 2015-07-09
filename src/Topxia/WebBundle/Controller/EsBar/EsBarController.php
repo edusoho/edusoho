@@ -149,6 +149,57 @@ class EsBarController extends BaseController{
 
     }
 
+    public function notifyAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $notifications = $this->getNotificationService()->findUserNotifications(
+            $user->id,
+            0,
+            100
+        );
+        $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
+        return $this->render('TopxiaWebBundle:EsBar:notify.html.twig', array(
+            'notifications' => $notifications
+        ));
+    }
+
+    public function practiceAction(Request $request,$status)
+    {
+        $user = $this->getCurrentUser();
+        $homeworks = array();
+        $testPaperResults = array();
+        if($this->isPluginInstalled('Homework')){
+            $conditions = array(
+                'status' => $status,
+                'userId' => $user->id
+            );
+            $homeworkResults = $this->getHomeworkService()->searchResults(
+                $conditions,
+                array('usedTime', 'DESC'),
+                1,
+                100
+            );
+            $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
+            $homeworks = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
+        }
+
+        $testPaperConditions = array(
+            'status' => $status,
+            'userId' => $user->id
+        );
+
+        $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $testPaperConditions,
+            array('usedTime', 'DESC'),
+            1,
+            100
+        );
+        return $this->render('TopxiaWebBundle:EsBar:practice.html.twig', array(
+            'testPaperResults' => $testPaperResults,
+            'homeworks' => $homeworks
+        ));
+    }
+
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
@@ -158,4 +209,20 @@ class EsBarController extends BaseController{
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
 }

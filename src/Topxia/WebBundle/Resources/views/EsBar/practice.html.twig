@@ -1,0 +1,11 @@
+{% if testPaperResults %}
+  {% for testPaperResult in testPaperResults %}
+    <li><span>考</span><a href="" class="link-light">{{ testPaperResult.paperName }}</a></li>
+  {% endfor %}
+{% endif %}
+
+{% if homeworks %}
+  {% for homework in homeworks %}
+    <li><span>作</span><a href="" class="link-light">{{ homework.title }}</a></li>
+  {% endfor %}
+{% endif %}

@@ -1,0 +1,5 @@
+{% if notifications %}
+  {% for notification in notifications %}
+    {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
+  {% endfor %}
+{% endif %}

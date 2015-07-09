@@ -37,12 +37,7 @@ define(function(require, exports, module) {
             $this.siblings(".active").removeClass('active').end().addClass('active').parents(".es-bar").animate({
                 right: '0'
             },300);
-            if($this.data('id') == '#bar-course-list'){
-                var url = $("#bar-course-btn").data('url');
-                $.get(url,function(html){
-                    $("#bar-my-list").html(html);
-                })
-            }
+            clickBar($this);
             $($this.data('id')).siblings(".es-bar-main.active").removeClass('active').end().addClass('active');
         }else {
             $this.removeClass('active').parents(".es-bar").animate({
@@ -52,6 +47,30 @@ define(function(require, exports, module) {
         
     });
 
+    function clickBar($this){
+        switch ($this.data('id')){
+            case '#bar-course-list':
+                var url = $("#bar-course-btn").data('url');
+                $.get(url,function(html){
+                    $("#bar-my-course").html(html);
+                })
+                break;
+            case '#bar-message':
+                var url = $("#bar-message-btn").data('url');
+                $.get(url,function(html){
+                    $(".bar-message").html(html);
+                })
+                break;
+            case '#bar-homework':
+                var url = $("#bar-practice-review").data('url');
+                $.get(url,function(html){
+                    $(".bar-homework").html(html);
+                })
+                break;
+            default :
+                break;
+        }
+    }
 
     // 回到顶端
     var goTop = function() {
@@ -62,18 +81,37 @@ define(function(require, exports, module) {
         });
     }();
 
+    $("#bar-practice-review").on('click',function(){
+        var url = $("#bar-practice-review").data('url');
+        $.get(url,function(html){
+            $(".bar-homework").html(html);
+        })
+        $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
+    });
+
+    $("#bar-practice-finish").on('click',function(){
+        var url = $("#bar-practice-finish").data('url');
+        $.get(url,function(html){
+            $(".bar-homework").html(html);
+        })
+        $("#bar-practice-finish").siblings(".active").removeClass('active').end().addClass('active')
+    });
+
     $("#bar-course-btn").on('click',function(){
         var url = $("#bar-course-btn").data('url');
         $.get(url,function(html){
-            $("#bar-my-list").html(html);
+            $("#bar-my-course").html(html);
         })
+        $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
     });
 
     $("#bar-classroom-btn").on('click',function(){
         var url = $("#bar-classroom-btn").data('url');
+
         $.get(url,function(html){
-            $("#bar-my-list").html(html);
+            $("#bar-my-course").html(html);
         })
+        $("#bar-classroom-btn").siblings(".active").removeClass('active').end().addClass('active')
     });
 
 });
