@@ -84,7 +84,9 @@ class CloudController extends BaseController
     {
         $loginToken = $this->getAppService()->getLoginToken();
         $developer = $this->getSettingService()->get('developer', array());
-        $url = $developer['app_api_url'].'/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+
+        $appUrl = str_replace('app_api', '', $developer['app_api_url']);
+        $url = $appUrl.'token_login?token='.$loginToken["token"].'&goto='.$routingName;
         if(!empty($params)){
             $url .= '&param='.urldecode(json_encode($params));
         }
