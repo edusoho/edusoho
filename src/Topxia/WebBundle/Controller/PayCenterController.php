@@ -151,6 +151,7 @@ class PayCenterController extends BaseController
 
     public function payNotifyAction(Request $request, $name)
     {
+        file_put_contents('/var/www/try4.edusoho.cn/a.txt', $name, FILE_APPEND);
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
         if ($name == 'alipay') {
             $response = $this->createPaymentResponse($name, $request->request->all());
