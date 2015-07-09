@@ -5,11 +5,26 @@
 {% endif %}
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
   {% if item.status == 'published' %}
-  <a {% if member %}href="{{ lessonUrl }}"{% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}>
-    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-    <span class="title">课时{{ item.number }}：{{ item.title }}</span>
-    {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
-  </a>
+    {% 
+    if ( app.user and app.user.isLogin() and setting('course.buy_fill_userinfo') == 0)
+    and 
+    (
+      (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.coinPrice == 0) 
+      or (setting('coin.price_type') == 'RMB' and course.price == 0)
+    ) 
+    %}
+        <a href="{{ lessonUrl }}" >
+          {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+          <span class="title">课时{{ item.number }}：{{ item.title }}</span>
+          {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+        </a>
+    {% else %}
+      <a {% if member %}href="{{ lessonUrl }}"{% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}>
+        {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+        <span class="title">课时{{ item.number }}：{{ item.title }}</span>
+        {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+      </a>
+    {% endif %}
   {% else %}
     {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
     <span class="title">课时{{ item.number }}：{{ item.title }}</span>
