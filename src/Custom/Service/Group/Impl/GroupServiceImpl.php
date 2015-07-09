@@ -40,7 +40,7 @@ class GroupServiceImpl extends BaseService implements GroupService
 	}
 
 
-    private function getLogService() 
+    protected function getLogService() 
     {
         return $this->createService('System.LogService');
     }

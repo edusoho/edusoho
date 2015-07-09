@@ -28,7 +28,7 @@
                     {{ review.content|plain_text(50) }}
                   </p>
                   <a href="{{ path('course_show', {id:course.id}) }}" class="course-title">{{ course.title }}</a>
-                  <span class="pull-right comment-time">{{ course.createdTime|date('Y-m-d H:i') }}</span>
+                  <span class="pull-right comment-time">{{ author.createdTime|date('Y-m-d H:i') }}</span>
                 </div>
               </div>
             </li>
