@@ -729,7 +729,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
         if ($type == 'weixinweb' || $type == 'weixinmob') {
-            $tyep = 'weixin';
+            $type = 'weixin';
         }
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
     }
