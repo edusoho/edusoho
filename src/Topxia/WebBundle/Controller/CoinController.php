@@ -445,6 +445,12 @@ class CoinController extends BaseController
         return $options;
     }
 
+    private function fromXml($xml)
+    {
+        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
+        return $array;
+    }
+
     protected function getEnabledPayments()
     {
         $enableds = array();
