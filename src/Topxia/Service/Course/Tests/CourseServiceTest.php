@@ -1130,12 +1130,66 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdateLesson()
     {
-
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test course 1'
+        );
+        
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $createLesson = $this->getCourseService()->createLesson($lesson);
+        $this->assertEquals($createLesson['summary'],'');
+        $newLesson = array(
+            'chapterId' => 0,
+            'summary' => 'addSummary'
+        );
+        $result = $this->getCourseService()->updateLesson($createCourse['id'],$createLesson['id'],$newLesson);
+        $this->assertEquals($result['summary'],'addSummary');
     }
 
     public function testUpdateCourseDraft()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test course 1'
+        );
         
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $createLesson = $this->getCourseService()->createLesson($lesson);
+        $draft = array(
+            'userId' => $user['id'],
+            'title' => $course['title'],
+            'courseId' => $createCourse['id'],
+            'lessonId' => $createLesson['id']
+        );
+        $this->getCourseService()->createCourseDraft($draft);
+        $newDraft = array(
+            'title' => 'newDraft'
+        );
+        $this->getCourseService()->updateCourseDraft($createCourse['id'],$createLesson['id'],$user['id'],$newDraft);
+        $result = $this->getCourseService()->getCourseDraft($createCourse['id']);
+        $this->assertEquals($result['title'],'newDraft');
     }
 
     public function testDeleteLesson()
