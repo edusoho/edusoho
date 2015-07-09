@@ -21,6 +21,21 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $coinSetting = $this->getSettingService()->get('coin');
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+
+        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0) {
+            if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+                || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
+                
+                $data = array("price" => 0, "remark"=>'');
+                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $courseId, $data);
+
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $courseId)).'#lesson/'.$lessonId);
+            }
+        }
+
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -104,12 +119,22 @@ class CourseLessonController extends BaseController
             }
         }
 
+         //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
             'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
             'hlsUrl' => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
+            'vipStatus' => $vipStatus
         ));
     }
 
@@ -158,6 +183,7 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider'] = $lesson["liveProvider"];
+        $json['nowDate'] = time();
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if (!empty($app)) {
@@ -629,7 +655,7 @@ class CourseLessonController extends BaseController
             'learnStatuses' => $learnStatuses,
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds,
+            'exercisesLessonIds' => $exercisesLessonIds
         ));
     }
 
@@ -667,5 +693,25 @@ class CourseLessonController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    } 
+    
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

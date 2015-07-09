@@ -154,5 +154,4 @@ class MyOrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }
-
 }
