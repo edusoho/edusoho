@@ -155,15 +155,15 @@ class CourseController extends BaseController
         );
 
         $childCourseIds = ArrayToolkit::column($childCourses, 'id');
-        $classroom_courses = $this->getClassroomService()->findCoursesByCoursesIds($childCourseIds);
-        $classroom_courses = ArrayToolkit::index($classroom_courses, 'courseId');
+        $classroomCourses = $this->getClassroomService()->findCoursesByCoursesIds($childCourseIds);
+        $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseId');
         $goupCourses = ArrayToolkit::group($childCourses, 'parentId');
         $mapping = array();
         $classroomIds =  array();
         foreach ($goupCourses as $parentId => $courses) {
             foreach ($courses as $key => $course) {
-                if (!empty($classroom_courses[$course['id']])) {
-                    $classroomId = $classroom_courses[$course['id']]['classroomId'];
+                if (!empty($classroomCourses[$course['id']])) {
+                    $classroomId = $classroomCourses[$course['id']]['classroomId'];
                     $mapping[$parentId][] = $classroomId;
                     $classroomIds[] = $classroomId;
                 }

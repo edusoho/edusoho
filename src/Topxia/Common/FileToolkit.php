@@ -12,40 +12,40 @@ use Imagine\Image\Point;
 class FileToolkit
 {
 
-    public static function mungeFilename($filename, $extensions)
+    public static function mungeFilename($fileName, $extensions)
     {
-        $original = $filename;
+        $original = $fileName;
 
         // Remove any null bytes. See http://php.net/manual/en/security.filesystem.nullbytes.php
-        $filename = str_replace(chr(0), '', $filename);
+        $fileName = str_replace(chr(0), '', $fileName);
 
         $whitelist = array_unique(explode(' ', trim($extensions)));
 
         // Split the filename up by periods. The first part becomes the basename
         // the last part the final extension.
-        $filename_parts = explode('.', $filename);
-        $new_filename = array_shift($filename_parts); // Remove file basename.
-        $final_extension = array_pop($filename_parts); // Remove final extension.
+        $fileNameParts = explode('.', $fileName);
+        $newFilename = array_shift($fileNameParts); // Remove file basename.
+        $finalExtension = array_pop($fileNameParts); // Remove final extension.
 
         // Loop through the middle parts of the name and add an underscore to the
         // end of each section that could be a file extension but isn't in the list
         // of allowed extensions.
-        foreach ($filename_parts as $filename_part) {
-            $new_filename .= '.' . $filename_part;
-            if (!in_array($filename_part, $whitelist) && preg_match("/^[a-zA-Z]{2,5}\d?$/", $filename_part)) {
-                $new_filename .= '_';
+        foreach ($fileNameParts as $fileNamePart) {
+            $newFilename .= '.' . $fileNamePart;
+            if (!in_array($fileNamePart, $whitelist) && preg_match("/^[a-zA-Z]{2,5}\d?$/", $fileNamePart)) {
+                $newFilename .= '_';
             }
         }
 
-        $filename = $new_filename . '.' . $final_extension;
+        $fileName = $newFilename . '.' . $finalExtension;
 
-        return $filename;
+        return $filenName;
     }
 
     public static function validateFileExtension(File $file, $extensions = array())
     {
         if (empty($extensions)) {
-            $extensions = self::getSecureFileExtensions();
+            $extensions = static::getSecureFileExtensions();
         }
 
         if ($file instanceof UploadedFile) {
@@ -64,13 +64,13 @@ class FileToolkit
 
     public static function isImageFile(File $file) 
     {
-        $ext = self::getFileExtension($file);
-        return in_array(strtolower($ext), explode(' ', self::getImageExtensions()));
+        $ext = static::getFileExtension($file);
+        return in_array(strtolower($ext), explode(' ', static::getImageExtensions()));
     }
 
     public static function isIcoFile(File $file)
     {
-        $ext = strtolower(self::getFileExtension($file));
+        $ext = strtolower(static::getFileExtension($file));
         return $ext == 'ico' ? true : false;
     }
 
@@ -973,12 +973,12 @@ class FileToolkit
         if(!empty($options["imgs"]) && count($options["imgs"])>0) {
             foreach ($options["imgs"] as $key => $value) {
                 $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
-                $image = self::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
+                $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
                 $filePaths[$key] = $savedFilePath;
             }
         } else {
             $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}.{$pathinfo['extension']}";
-            $image = self::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h']);
+            $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h']);
             $filePaths[] = $savedFilePath;
         }
 

@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class BuildPackageCommand extends BaseCommand
 {
-    private $fileSystem;
+    // private $fileSystem;
 
     protected function configure()
     {
@@ -18,7 +18,7 @@ class BuildPackageCommand extends BaseCommand
             ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('version', InputArgument::REQUIRED, 'which version to update')
             ->addArgument('diff_file', InputArgument::REQUIRED, 'Where is Diff file of both versions');
-        ;
+        
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -27,22 +27,22 @@ class BuildPackageCommand extends BaseCommand
 
         $name = $input->getArgument('name');
         $version = $input->getArgument('version');
-        $diff_file = $input->getArgument('diff_file');
+        $diffFile = $input->getArgument('diff_file');
 
         $this->filesystem = new Filesystem();
         
         $packageDirectory = $this->createDirectory($name, $version);
 
-        $this->generateFiles($diff_file, $packageDirectory, $output);
+        $this->generateFiles($diffFile, $packageDirectory, $output);
 
         $this->copyUpgradeScript($packageDirectory, $version, $output);
 
         $output->writeln('<question>编制升级包完毕</question>');
     }
 
-    private function generateFiles($diff_file, $packageDirectory, $output)
+    private function generateFiles($diffFile, $packageDirectory, $output)
     {
-        $file = @fopen($diff_file, "r") ;  
+        $file = @fopen($diffFile, "r") ;  
         while (!feof($file))
         {
             $line = fgets($file);

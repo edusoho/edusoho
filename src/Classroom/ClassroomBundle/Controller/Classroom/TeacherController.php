@@ -21,7 +21,7 @@ class TeacherController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
-        $Myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
+        $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -37,7 +37,7 @@ class TeacherController extends BaseController
             'profiles' => $profiles,
             'member' => $member,
             'members' => $members,
-            'Myfollowings' => $Myfollowings,
+            'Myfollowings' => $myfollowings,
         ));
     }
     public function catchIdsAction(Request $request,$classroomId)
