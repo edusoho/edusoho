@@ -579,7 +579,7 @@
                 "type": "img",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/qr-es.jpg",
+                        "src": "\/assets\/img\/default\/weixin.png",
                         "alt": "微信公众号"
                     } 
                 ]
@@ -591,7 +591,7 @@
                 "type": "img",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/qr-apple.jpg",
+                        "src": "\/assets\/img\/default\/apple.png",
                         "alt": "网校的iOS版APP"
                     } 
                 ]
@@ -603,7 +603,7 @@
                 "type": "img",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/qr-apple.jpg",
+                        "src": "\/assets\/img\/default\/android.png",
                         "alt": "网校的Android版APP"
                     }
                 ]
