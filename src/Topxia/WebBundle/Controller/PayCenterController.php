@@ -167,8 +167,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "success") {
             list($success, $order) = $this->getPayCenterService()->pay($payData);
-            $processor = OrderProcessorFactory::create($order["targetType"]);
-            
+  
             if($success){
                 return new Response('success');
             }
