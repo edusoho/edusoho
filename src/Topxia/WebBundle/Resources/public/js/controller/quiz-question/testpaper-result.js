@@ -1,8 +1,10 @@
 define(function(require, exports, module) {
     exports.run = function() {
-        if (window.history && window.history.pushState) {
-            $(window).on('popstate', function () {
-                var hashLocation = location.hash;
+
+        window.addEventListener('load', function() {
+          setTimeout(function() {
+            window.addEventListener('popstate', function() {
+              var hashLocation = location.hash;
                 var hashSplit = hashLocation.split("#!/");
                 var hashName = hashSplit[1];
                 if (hashName !== '') {
@@ -12,7 +14,8 @@ define(function(require, exports, module) {
                     }
                 }
             });
-        window.history.pushState('forward', null, './result');
-        }
+          }, 0);
+          window.history.pushState('forward', null, './result');
+        });
     };
 });
