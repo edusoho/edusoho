@@ -87,7 +87,6 @@ class CoinController extends BaseController
 
         // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        
         return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,
@@ -143,13 +142,6 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $orders = array();
-        $typeCashes = ArrayToolkit::group($cashes,'type');
-        if (!empty($typeCashes['inflow'])) {
-            $sns = ArrayToolkit::column($typeCashes['inflow'],'orderSn');
-            $orders = $this->getOrderService()->findOrdersBySns($sns);
-            $orders = ArrayToolkit::index($orders, 'sn');
-        }
         $conditions['type']  = 'inflow';      
         $amountInflow = $this->getCashService()->analysisAmount($conditions);
 
@@ -160,8 +152,7 @@ class CoinController extends BaseController
             'cashes' => $cashes,
             'paginator' => $paginator,
             'amountInflow' => $amountInflow?:0,
-            'amountOutflow' => $amountOutflow?:0,
-            'orders' => $orders,          
+            'amountOutflow' => $amountOutflow?:0         
           
         ));   
     }
