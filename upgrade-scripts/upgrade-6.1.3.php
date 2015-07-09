@@ -39,15 +39,15 @@ use Topxia\Common\BlockToolkit;
 
         $block = $this->getBlockService()->getBlockByCode("jianmo:home_top_banner");
         $content=BlockToolkit::render($block, $kernel->getContainer());
-        $blockService->updateContent($block['id'], $content);
+        $this->getBlockService()->updateContent($block['id'], $content);
 
         $block = $this->getBlockService()->getBlockByCode("jianmo:middle_banner");
         $content=BlockToolkit::render($block, $kernel->getContainer());
-        $blockService->updateContent($block['id'], $content);
+        $this->getBlockService()->updateContent($block['id'], $content);
 
         $block = $this->getBlockService()->getBlockByCode("jianmo:bottom_info");
         $content=BlockToolkit::render($block, $kernel->getContainer());
-        $blockService->updateContent($block['id'], $content);
+        $this->getBlockService()->updateContent($block['id'], $content);
 
      }
 
