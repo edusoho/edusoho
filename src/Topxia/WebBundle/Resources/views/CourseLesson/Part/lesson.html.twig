@@ -12,6 +12,7 @@
       (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.coinPrice == 0) 
       or (setting('coin.price_type') == 'RMB' and course.price == 0)
     ) 
+    and ( not course.approval or (course.approval and app.user.approvalStatus == 'approved'))
     %}
         <a href="{{ lessonUrl }}" >
           {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
