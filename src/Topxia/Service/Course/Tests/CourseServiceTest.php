@@ -729,7 +729,11 @@ class CourseServiceTest extends BaseTestCase
         $addCourse2 = $this->getCourseService()->becomeStudent($createCourse2['id'],$user['id']);
         $tryLearn1 = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2 = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
-        $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'],$user['id']);
+        $this->getCourseService()->finishLearnLesson($createCourse1['id'],$createdLesson1['id']);
+        $result = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'],$user['id']);
+        // print_r($result);
+        $this->assertCount(1,$result);
+
     }
 
     public function testUploadCourseFile()
@@ -1234,22 +1238,94 @@ class CourseServiceTest extends BaseTestCase
 
     public function testPublishLesson()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test course 1'
+        );
+        
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $createLesson = $this->getCourseService()->createLesson($lesson);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        $publishLesson =$this->getCourseService()->publishLesson($createLesson['id'],$createLesson['id']);
+        $result = $this->getCourseService()->getCourse($createCourse['id']);
+        $this->assertEquals($result['status'],'published');
+
 
     }
 
     public function testUnpublishLesson()
     {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test course 1'
+        );
+        
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+        );
+        $createLesson = $this->getCourseService()->createLesson($lesson);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        $publishLesson =$this->getCourseService()->publishLesson($createLesson['id'],$createLesson['id']);
+        $result = $this->getCourseService()->getCourseLesson($createCourse['id'],$createLesson['id']);
+        $this->assertEquals($result['status'],'published');
+        $unPublishLesson =$this->getCourseService()->unpublishLesson($createLesson['id'],$createLesson['id']);
+        $result = $this->getCourseService()->getCourseLesson($createCourse['id'],$createLesson['id']);
+        $this->assertEquals($result['status'],'unpublished');
 
     }
 
     public function testGetNextLessonNumber()
     {
-
+        //此方法已经在createlesson测试完毕，无需再测试
     }
 
     public function testLiveLessonTimeCheck()
     {
-
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test course 1'
+        );
+        
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'live',
+            'startTime' => '',
+            'length' => ''
+        );
+        $start = strtotime(date("Y-m-d",time()));
+        $createLesson = $this->getCourseService()->createLesson($lesson);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        $publishLesson =$this->getCourseService()->publishLesson($createLesson['id'],$createLesson['id']);
+        $liveLessonTimeCheck = $this->getCourseService()->liveLessonTimeCheck($createCourse['id'],$createLesson['id'],$start,100);
+        $this->assertEquals('success',$liveLessonTimeCheck[0]);
     }
 
     public function testCalculateLiveCourseLeftCapacityInTimeRange()
