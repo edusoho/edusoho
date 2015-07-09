@@ -64,7 +64,7 @@
 {% endblock %}
 
 {% block footer %}
-  {# {% if lesson.status == 'published' %}
+   {% if lesson.status == 'published' %}
     {% if course.price=='0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
         {% if setting("course.buy_fill_userinfo")|default(false) %}
@@ -101,6 +101,6 @@
         {% endif %}
       </a>
     {% endif %}
-  {% endif %} #}
-  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %}
+  {% endif %} 
+ {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
 {% endblock %}
