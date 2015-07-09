@@ -1324,18 +1324,47 @@ class CourseServiceTest extends BaseTestCase
         $createLesson = $this->getCourseService()->createLesson($lesson);
         $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
         $publishLesson =$this->getCourseService()->publishLesson($createLesson['id'],$createLesson['id']);
+        $liveLessonTimeCheck = $this->getCourseService()->liveLessonTimeCheck($createCourse['id'],$createLesson['id'],$start,10000);
+        $this->assertEquals('error_timeout',$liveLessonTimeCheck[0]);
         $liveLessonTimeCheck = $this->getCourseService()->liveLessonTimeCheck($createCourse['id'],$createLesson['id'],$start,100);
         $this->assertEquals('success',$liveLessonTimeCheck[0]);
     }
 
     public function testCalculateLiveCourseLeftCapacityInTimeRange()
     {
-
+        //waiting ti know
     }
 
     public function testCanLearnLesson()
     {
-
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'test course 1'
+        );
+        
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $lesson = array(
+            'courseId' => $createCourse['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test'+rand(),
+            'summary' => '',
+            'type' => 'text',
+            'startTime' => '',
+            'length' => ''
+        );
+        $createLesson = $this->getCourseService()->createLesson($lesson);
+        $this->getCourseService()->publishCourse($createCourse['id']);
+        $user = $this->createNormalUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getCourseService()->becomeStudent($createCourse['id'],$user['id']);
+        $result = $this->getCourseService()->canLearnLesson($createCourse['id'],$createLesson['id']);
+        $this->assertEquals('yes',$result['status']);
     }
 
     public function testStartLearnLesson()
