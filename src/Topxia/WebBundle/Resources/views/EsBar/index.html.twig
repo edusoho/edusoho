@@ -7,7 +7,7 @@
           <a href="javascript:;">学<br>习<br>中<br>心<span class="dot"></span></a>
         </li>
         <li data-id="#bar-course-list" data-toggle="tooltip" data-placement="left" title="我的课程/班级"><a href="javascript:;" ><i class="es-icon es-icon-book"></i></a></li>
-        <li data-id="#bar-history" data-toggle="tooltip" data-placement="left" title="学习历史"><a href="javascript:;"><i class="es-icon es-icon-accesstime"></i></a></li>
+        {#<li data-id="#bar-history" data-toggle="tooltip" data-placement="left" title="学习历史"><a href="javascript:;"><i class="es-icon es-icon-accesstime"></i></a></li>#}
         <li data-id="#bar-homework" data-toggle="tooltip" data-placement="left" title="考试/作业"><a href="javascript:;"><i class="es-icon es-icon-edit"></i></a></li>
         <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知"><a href="javascript:;"><i class="es-icon es-icon-notifications"></i></a></li>
       </ul>
@@ -36,9 +36,9 @@
       </div>
       <div class="bar-main-wrap">
         <div class="bar-main-body">
-          <ul class="bar-message">
+          <div class="bar-message">
 
-          </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -106,35 +106,15 @@
     </div>
 
       <!-- 学习历史 -->
-      <div class="es-bar-main" id="bar-history">
+    {#<div class="es-bar-main" id="bar-history">
       <div class="bar-main-header">
-        <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light" data-url="{{ path('esbar_my_history') }}" id="bar-my-history"><i class="es-icon es-icon-arrowforward"></i></a>
         学习历史
       </div>
-      <div class="bar-main-body">
-        <div class="bar-history">
-          <span class="date">今天</span>
-          <ul class="list-unstyled">
-            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
-            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
-          </ul>
-        </div>
-        <div class="bar-history">
-          <span class="date">昨天</span>
-          <ul class="list-unstyled">
-            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
-            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
-          </ul>
-        </div>
-        <div class="bar-history">
-          <span class="date">昨天</span>
-          <ul class="list-unstyled">
-            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
-            <li><span class="icon"></span>开始学习<a href="">xxxxxx课时</a></li>
-          </ul>
-        </div>
+      <div class="bar-main-body" id="bar-history-list">
+
       </div>
-    </div>
+    </div>#}
 
       <div class="bar-popover-content" style="display:none;">
       <div id="bar-qq-content">

@@ -1,0 +1,20 @@
+{% if histories %}
+  {% for  key , history in histories %}
+    <div class="bar-history">
+    <span class="date">{{ key|date('m-d') }}</span>
+    {% for key,behavior in history %}
+      <ul class="list-unstyled">
+      {% if key == 'lesson' %}
+          {% for lesson in behavior %}
+          <li><span class="icon"></span>{% if lesson.status == 'finished' %}完成{% else %}开始学习{% endif %}<a href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.lessonTitle }}</a></li>
+          {% endfor %}
+      {% elseif key == 'testPaperResult' %}
+        {% for testPaperResult in behavior %}
+          <li><span class="icon"></span>{% if testPaperResult.status == 'finished' %}老师批阅了{% else %}完成了{% endif %}<a href="">{{ testPaperResult.paperName }}试卷</a></li>
+        {% endfor %}
+      {% endif %}
+      </ul>
+    {% endfor %}
+    </div>
+  {% endfor %}
+{% endif %}

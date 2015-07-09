@@ -1752,3 +1752,7 @@ esbar_my_notify:
 esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+#esbar_my_history:
+#    pattern:  /esbar/my/history
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}

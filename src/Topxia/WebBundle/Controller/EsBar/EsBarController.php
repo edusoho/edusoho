@@ -34,6 +34,7 @@ class EsBarController extends BaseController{
 
     public function studyPlanAction(Request $request,$userId)
     {
+        $user = $this->getCurrentUser();
         $memberConditions = array(
             'userId' => $userId,
             'locked' => 0,
@@ -41,7 +42,6 @@ class EsBarController extends BaseController{
         $sort = array('createdTime','DESC');
         $classrooms = array();
         $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
-        $classroomLessons = array();
         if(!empty($classroomIds)){
             $classroomConditions = array(
                 'classroomIds' => $classroomIds
@@ -50,7 +50,6 @@ class EsBarController extends BaseController{
             foreach ($classrooms as $key => &$classroom){
                 $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
                 $courseIds = ArrayToolkit::column($courses,'id');
-                $user = $this->getCurrentUser();
                 $learnedConditions = array(
                     'userId' => $user->id,
                     'status' => 'finished',
@@ -70,8 +69,7 @@ class EsBarController extends BaseController{
                 $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
                 $allLessonConditions = array(
                     'status' => 'published',
-                    'courseIds' => $courseIds,
-                    'notLearnedIds' => $learnedIds
+                    'courseIds' => $courseIds
                 );
                 $sort = array(
                     'createdTime','ASC'
@@ -81,16 +79,63 @@ class EsBarController extends BaseController{
                 {
                     unset($classrooms[$key]);
                 }else{
-                    $classroomLessons[$classroom['id']] = $notLearnedLessons;
+                    $classroom['lessons'] = $notLearnedLessons;
                     $classroom['learnedLessonNum'] = count($learnedIds);
                     $classroom['allLessonNum'] = count($allLessons);
                 }
 
             }
         }
+        $courseMemConditions = array(
+            'userId' => $user->id,
+            'locked' => 0,
+            'classroomId' => 0
+        );
+
+        $courseIds =  ArrayToolkit::column($this->getCourseService()->searchMembers($courseMemConditions,array('createdTime','DESC'),0,5),'id');
+        if(!empty($courseIds)){
+            $courseConditions = array('courseIds' => $courseIds);
+            $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,5);
+            foreach ($courses as $key => &$course){
+                $learnedConditions = array(
+                    'userId' => $user->id,
+                    'status' => 'finished',
+                    'courseId' => $course['id']
+                );
+                $sort = array( 'finishedTime','ASC');
+                $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,1000),'lessonId');
+
+                $notLearnedConditions = array(
+                    'status' => 'published',
+                    'courseId' => $course['id'],
+                    'notLearnedIds' => $learnedIds
+                );
+                $sort = array(
+                    'createdTime','ASC'
+                );
+                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+                $allLessonConditions = array(
+                    'status' => 'published',
+                    'courseId' => $course['id'],
+                );
+                $sort = array(
+                    'createdTime','ASC'
+                );
+                $allLessons = $this->getCourseService()->searchLessons($allLessonConditions,$sort,0,1000);
+                if(empty($notLearnedLessons))
+                {
+                    unset($courses[$key]);
+                }else{
+                    $course['lessons'] = $notLearnedLessons;
+                    $course['learnedLessonNum'] = count($learnedIds);
+                    $course['allLessonNum'] = count($allLessons);
+                }
+
+            }
+        }
         return $this->render("TopxiaWebBundle:EsBar:study-plan.html.twig", array(
             'classrooms' => $classrooms,
-            'classroomLessons' => $classroomLessons
+            'courses' => $courses
         ));
     }
 
@@ -144,10 +189,40 @@ class EsBarController extends BaseController{
         }
     }
 
-    public function studyHistoryAction(Request $request)
+    /*public function historyAction(Request $request)
     {
-
-    }
+        $user = $this->getCurrentUser();
+        $learnsConditions = array(
+            'userId' => $user->id,
+        );
+        $sort = array( 'startTime','DESC');
+        $lessonLearns = $this->getCourseService()->searchLearns($learnsConditions,$sort,0,1000);
+        $homeworkResults = array();
+        if($this->isPluginInstalled('Homework')){
+            $conditions = array(
+                'userId' => $user->id
+            );
+            $homeworkResults = $this->getHomeworkService()->searchResults(
+                $conditions,
+                array('usedTime', 'DESC'),
+                1,
+                1000
+            );
+        }
+        $testPaperConditions = array(
+            'userId' => $user->id
+        );
+        $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $testPaperConditions,
+            array('endTime', 'DESC'),
+            1,
+            1000
+        );
+        $histories = $this->getHistoryByTime($lessonLearns,$homeworkResults,$testPaperResults);
+        return $this->render('TopxiaWebBundle:EsBar:history.html.twig', array(
+            'histories' => $histories
+        ));
+    }*/
 
     public function notifyAction(Request $request)
     {
@@ -199,6 +274,33 @@ class EsBarController extends BaseController{
             'homeworks' => $homeworks
         ));
     }
+
+    /*private function getHistoryByTime($lessonLearns,$homeworks,$testPaperResults)
+    {
+        $history = array();
+        if(!empty($lessonLearns)){
+            foreach ($lessonLearns as &$lessonLearn){
+                $lesson = $this->getCourseService()->getCourseLesson($lessonLearn['courseId'],$lessonLearn['lessonId']);
+                $lessonLearn['lessonTitle'] = $lesson['title'];
+                $data = $lessonLearn['status'] == 'finished' ? $lessonLearn['finishedTime'] : $lessonLearn['startTime'];
+                $history[ date('Y/m/d',$lessonLearn['startTime']) ]['lesson'][] = $lessonLearn;
+            }
+        }
+        if(!empty($homeworks)){
+            foreach ($homeworks as &$homework){
+                $lesson = $this->getCourseService()->getCourseLesson($lessonLearn['courseId'],$lessonLearn['lessonId']);
+                $lessonLearn['lessonTitle'] = $lesson['title'];
+                $history[ date('Y/m/d',$lessonLearn['startTime']) ]['lesson'][] = $lessonLearn;
+            }
+        }
+        if(!empty($testPaperResults)){
+            foreach ($testPaperResults as &$testPaperResult){
+                $data = $testPaperResult['status'] == 'finished' ? $testPaperResult['checkedTime'] : $testPaperResult['endTime'];
+                $history[ date('Y/m/d',$data) ]['testPaperResult'][] = $testPaperResult;
+            }
+        }
+        return $history;
+    }*/
 
     protected function getClassroomService()
     {

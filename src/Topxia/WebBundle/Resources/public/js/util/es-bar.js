@@ -54,6 +54,13 @@ define(function(require, exports, module) {
                 $.get(url,function(html){
                     $("#bar-my-course").html(html);
                 })
+                $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
+                break;
+            case '#bar-history':
+                var url = $("#bar-my-history").data('url');
+                $.get(url,function(html){
+                    $("#bar-history-list").html(html);
+                })
                 break;
             case '#bar-message':
                 var url = $("#bar-message-btn").data('url');
@@ -66,6 +73,7 @@ define(function(require, exports, module) {
                 $.get(url,function(html){
                     $(".bar-homework").html(html);
                 })
+                $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
                 break;
             default :
                 break;
