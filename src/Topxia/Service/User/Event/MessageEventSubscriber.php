@@ -21,12 +21,22 @@ class MessageEventSubscriber implements EventSubscriberInterface
     public function onMessageSended(ServiceEvent $event)
     {
         $message = $event->getSubject();
-        
+        $user = $this->getUserService()->getUser($message['fromId']);
+        $message['title'] = '来自'.$user['nickname'].'的私信';
+        $message['custom'] = json_encode(array(
+            'id' => $message['fromId'],
+            'typeBusiness' => 'message'
+        ));
         $this->getEduCloudService()->sendMessage($message);
     }
 
     private function getEduCloudService()
     {
         return ServiceKernel::instance()->createService('EduCloud.EduCloudService');
+    }
+
+    private function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

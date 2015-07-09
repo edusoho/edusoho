@@ -1030,10 +1030,15 @@ class UserServiceImpl extends BaseService implements UserService
         if(!empty($friend)) {
             throw $this->createServiceException('不允许重复关注!');
         }
-        return $this->getFriendDao()->addFriend(array(
+
+        $friend = $this->getFriendDao()->addFriend(array(
             "fromId"=>$fromId,
             "toId"=>$toId,
-            "createdTime"=>time()));
+            "createdTime"=>time()
+        ));
+
+        $this->getDispatcher()->dispatch('user.service.follow', new ServiceEvent($friend));
+        return $friend;
     }
 
     public function unFollow($fromId, $toId)
