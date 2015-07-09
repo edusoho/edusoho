@@ -158,7 +158,6 @@ class PayCenterController extends BaseController
         elseif ($name == 'wxpay') {
             $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
             $returnArray = $this->fromXml($returnXml);
-            $response = $this->createPaymentResponse($name, $returnArray);
         }
         $payData = $response->getPayData();
         if ($payData['status'] == "waitBuyerConfirmGoods") {
@@ -167,7 +166,8 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "success") {
             list($success, $order) = $this->getPayCenterService()->pay($payData);
-  
+            $processor = OrderProcessorFactory::create($order["targetType"]);
+
             if($success){
                 return new Response('success');
             }
