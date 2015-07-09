@@ -19,14 +19,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function getFile($id)
     {
        $file = $this->getUploadFileDao()->getFile($id);
-       if(empty($file)) return null;
+       if(empty($file)){
+        return null;
+       }
        return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
     public function getFileByHashId($hashId)
     {
        $file = $this->getUploadFileDao()->getFileByHashId($hashId);
-       if(empty($file)) return null;
+       if(empty($file)){
+        return null;
+       }
        return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
@@ -456,7 +460,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->getUploadFileDao()->updateFileUsedCount($fileIds, -1);
     }
 
-    private function generateKey ($length = 0 )
+    protected function generateKey ($length = 0 )
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -468,26 +472,26 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $key;
     }
 
-    private function getFileImplementorByFile($file)
+    protected function getFileImplementorByFile($file)
     {
         return $this->getFileImplementor($file['storage']);
     }
 
-    private function getUploadFileDao()
+    protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
     }
     
-    private function getUploadFileShareDao(){
+    protected function getUploadFileShareDao(){
     	return $this->createDao('File.UploadFileShareDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getFileImplementor($key)
+    protected function getFileImplementor($key)
     {
         if (!array_key_exists($key, self::$implementor)) {
             throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
@@ -495,7 +499,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createService(self::$implementor[$key]);
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

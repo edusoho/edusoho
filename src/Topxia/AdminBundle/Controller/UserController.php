@@ -71,6 +71,13 @@ class UserController extends BaseController
         return $this->validateResult($result, $message);
     }
 
+    public function mobileCheckAction(Request $request){
+        $mobile = $request->query->get('value');
+        $mobile = str_replace('!', '.', $mobile);
+        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+        return $this->validateResult($result, $message);
+    }
+
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
@@ -85,7 +92,7 @@ class UserController extends BaseController
         return $this->validateResult($result, $message);
     }
 
-    private function validateResult($result, $message){
+    protected function validateResult($result, $message){
         if ($result == 'success') {
            $response = array('success' => true, 'message' => '');
         } else {
@@ -114,12 +121,15 @@ class UserController extends BaseController
         return $this->render($this->getCreateUserModal());
     }
 
-    private function getRegisterData($formData, $clientIp){
+    protected function getRegisterData($formData, $clientIp){
         if(isset($formData['email'])){
             $userData['email'] = $formData['email'];
         }
         if(isset($formData['emailOrMobile'])){
             $userData['emailOrMobile'] = $formData['emailOrMobile'];
+        }
+        if(isset($formData['mobile'])){
+            $userData['mobile'] = $formData['mobile'];
         }
         $userData['nickname'] = $formData['nickname'];
         $userData['password'] = $formData['password'];
@@ -127,10 +137,12 @@ class UserController extends BaseController
         return $userData;
     }
 
-    private function getCreateUserModal(){
+    protected function getCreateUserModal(){
         $auth = $this->getSettingService()->get('auth');
         if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
             return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
+        }elseif (isset($auth['register_mode']) && $auth['register_mode'] =='mobile') {
+            return 'TopxiaAdminBundle:User:create-by-mobile-modal.html.twig';
         }else{
             return 'TopxiaAdminBundle:User:create-modal.html.twig';
         }
@@ -248,15 +260,25 @@ class UserController extends BaseController
         ));
     }
 
-    private function getFields()
+    protected function getFields()
     {
         $fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         for($i=0;$i<count($fields);$i++){
-            if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
-            if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
-            if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
-            if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
-            if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
+            if(strstr($fields[$i]['fieldName'], "textField")){
+                $fields[$i]['type']="text";
+            }
+            if(strstr($fields[$i]['fieldName'], "varcharField")){
+                $fields[$i]['type']="varchar";
+            }
+            if(strstr($fields[$i]['fieldName'], "intField")){
+                $fields[$i]['type']="int";
+            }
+            if(strstr($fields[$i]['fieldName'], "floatField")){
+                $fields[$i]['type']="float";
+            }
+            if(strstr($fields[$i]['fieldName'], "dateField")){
+                $fields[$i]['type']="date";
+            }
         }
 
         return $fields;
@@ -440,7 +462,7 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }

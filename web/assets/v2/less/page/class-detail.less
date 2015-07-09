@@ -1,6 +1,6 @@
 // 班级头部
 .class-header {
-  background: url("../img/class_bg.jpg");
+  background: url("@{img-src}class_bg.jpg");
   background-size: 100% 100%;
   background-attachment: fixed;
   padding: 30px 0 40px 0;
@@ -147,7 +147,7 @@
     color: #fff;
     font-size: 12px;
     overflow: hidden;
-    background: url("../img/price_bg.png");
+    background: url("@{img-src}price_bg.png");
     span {
       font-size: 22px;
     }
@@ -662,6 +662,10 @@
 }
 
 .topic-detail {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
   .topic-header {
     position: relative;
     margin-bottom: 30px;

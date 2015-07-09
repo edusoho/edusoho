@@ -1,9 +1,9 @@
 @font-face {font-family: 'webfont';
-  src: url('fonts/webfont.eot'); /* IE9*/
-  src: url('fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('fonts/webfont.woff') format('woff'), /* chrome、firefox */
-  url('fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('fonts/webfont.svg#webfont') format('svg'); /* iOS 4.1- */
+  src: url('/assets/v2/css/fonts/webfont.eot'); /* IE9*/
+  src: url('/assets/v2/css/fonts/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('/assets/v2/css/fonts/webfont.woff') format('woff'), /* chrome、firefox */
+  url('/assets/v2/css/fonts/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('/assets/v2/css/fonts/webfont.svg#webfont') format('svg'); /* iOS 4.1- */
 }
 
 // 思源极细字体
@@ -16,17 +16,13 @@
 }
 
 body { 
+  background: #eeeff0;
   word-wrap: break-word;
 }
 
 html.html-nav-active {
   position: relative;
   overflow: hidden;
-  // overflow-y: auto;
-  body {
-    // position: fixed;
-    overflow: hidden;
-  }
 }
 
 .es-wrap {
@@ -44,9 +40,11 @@ html.html-nav-active {
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
+  bottom: 0;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.2);
+  -ms-touch-action: none;
+  touch-action: none;
 }
 
 .tooltip {
@@ -76,8 +74,8 @@ a:focus {
   color: @brand-primary;
   .swiper-container {
     position: relative;
-    height: 28px;
-    line-height: 28px;
+    height: 38px;
+    line-height: 38px;
     overflow: hidden;
   }
   .swiper-wrapper {
@@ -90,7 +88,7 @@ a:focus {
   .close {
     float: none;
     position: absolute;
-    top: 2px;
+    top: 5px;
     right: 0;
     width: 30px;
   }

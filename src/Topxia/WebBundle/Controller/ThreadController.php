@@ -10,8 +10,6 @@ class ThreadController extends BaseController
 
     public function listAction(Request $request, $target, $filters)
     {
-        $user = $this->getCurrentUser();
-
         $conditions = $this->convertFiltersToConditions($target['id'], $filters);
 
         $paginator = new Paginator(
@@ -143,8 +141,6 @@ class ThreadController extends BaseController
             }
 
             $thread = $this->getThreadService()->updateThread($thread['id'], $data);
-            $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
-            $threadUrl = $this->generateUrl("{$target['type']}_thread_show", array("{$target['type']}Id" => $target['id'], 'threadId' => $thread['id']), true);
                $message = array(
                 'title' => $thread['title'],
                 'targetType' => $target['type'],
@@ -175,7 +171,6 @@ class ThreadController extends BaseController
         $this->getThreadService()->deleteThread($threadId);
 
         $user = $this->getCurrentUser();
-        $userUrl = $this->generateUrl('user_show', array('id' => $user['id']), true);
         if ($thread['userId'] != $user['id']) {
             $message = array(
                 'title' => $thread['title'],
@@ -191,7 +186,6 @@ class ThreadController extends BaseController
 
     public function setStickyAction(Request $request, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->setThreadSticky($threadId);
 
         return $this->createJsonResponse(true);
@@ -199,7 +193,6 @@ class ThreadController extends BaseController
 
     public function cancelStickyAction(Request $request, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->cancelThreadSticky($threadId);
 
         return $this->createJsonResponse(true);
@@ -207,7 +200,6 @@ class ThreadController extends BaseController
 
     public function setNiceAction(Request $request, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->setThreadNice($threadId);
 
         return $this->createJsonResponse(true);
@@ -215,7 +207,6 @@ class ThreadController extends BaseController
 
     public function cancelNiceAction(Request $request, $threadId)
     {
-        $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->cancelThreadNice($threadId);
 
         return $this->createJsonResponse(true);
@@ -343,7 +334,7 @@ class ThreadController extends BaseController
         return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 
-    private function convertFiltersToConditions($id, $filters)
+    protected function convertFiltersToConditions($id, $filters)
     {
         $conditions = array('targetId' => $id);
         switch ($filters['type']) {
@@ -363,7 +354,7 @@ class ThreadController extends BaseController
     /**
      * This function is from Cakephp TextHelper Class
      */
-    private function autoParagraph($text)
+    protected function autoParagraph($text)
     {
         if (trim($text) !== '') {
             $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
@@ -379,7 +370,7 @@ class ThreadController extends BaseController
         return $text;
     }
 
-    private function getNotifiactionService()
+    protected function getNotifiactionService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

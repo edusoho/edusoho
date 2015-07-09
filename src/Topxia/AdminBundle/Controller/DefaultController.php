@@ -125,8 +125,10 @@ class DefaultController extends BaseController
 
         $unInstallAppCount=count($appsAll)-count($installedApps);
 
-        $app_count=count($apps);
-        if(isset($apps['error'])) $error="error";
+        $appCount=count($apps);
+        if(isset($apps['error'])){
+            $error="error";
+        }
 
         $mainAppUpgrade = null;
         foreach ($apps as $key => $value) {
@@ -141,7 +143,7 @@ class DefaultController extends BaseController
             "apps"=>$apps,
             "error"=>$error,
             "mainAppUpgrade"=>$mainAppUpgrade,
-            "app_count"=>$app_count,
+            "app_count"=>$appCount,
             "unInstallAppCount"=>$unInstallAppCount,
             "liveCourseStatus" => $liveCourseStatus
         ));
@@ -396,12 +398,12 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }

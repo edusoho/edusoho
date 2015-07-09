@@ -21,6 +21,21 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $coinSetting = $this->getSettingService()->get('coin');
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+
+        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0) {
+            if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+                || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
+                
+                $data = array("price" => 0, "remark"=>'');
+                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $courseId, $data);
+
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $courseId)).'#lesson/'.$lessonId);
+            }
+        }
+
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -539,7 +554,15 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function createLocalMediaResponse(Request $request, $file, $isDownload = false)
+    public function watchNumAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        $result = $this->getCourseService()->waveWatchNum($user['id'], $lessonId, 1);
+
+        return $this->createJsonResponse($result);
+    }
+
+    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
@@ -561,7 +584,7 @@ class CourseLessonController extends BaseController
         return $response;
     }
 
-    private function isMobile()
+    protected function isMobile()
     {
         // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
@@ -634,33 +657,33 @@ class CourseLessonController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTokenService()
+    protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     //Homework plugins(contains Exercise)
-    private function getHomeworkService()
+    protected function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 
-    private function getExerciseService()
+    protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }
@@ -668,5 +691,15 @@ class CourseLessonController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

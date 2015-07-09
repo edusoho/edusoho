@@ -115,7 +115,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetType'])) {
             $builder=$this->createDynamicQueryBuilder($conditions)

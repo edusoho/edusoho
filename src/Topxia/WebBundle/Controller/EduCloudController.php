@@ -137,7 +137,7 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('error'=>'accessKey error!'));
     }
 
-    private function generateSmsCode($length = 6)
+    protected function generateSmsCode($length = 6)
     {
         $code = rand(0, 9);
         for ($i = 1; $i < $length; $i++) {
@@ -146,12 +146,12 @@ class EduCloudController extends BaseController
         return $code;
     }
 
-    private function checkPhoneNum($num)
+    protected function checkPhoneNum($num)
     {
         return preg_match("/^1\d{10}$/", $num);
     }
 
-    private function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
+    protected function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
     {
         if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
             return false;
@@ -159,7 +159,7 @@ class EduCloudController extends BaseController
         return true;
     }
 
-    private function checkSmsType($smsType, $user)
+    protected function checkSmsType($smsType, $user)
     {
         if (!in_array($smsType, array('sms_bind','sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
             throw new \RuntimeException('不存在的sms Type');
@@ -174,7 +174,7 @@ class EduCloudController extends BaseController
         }
     }
 
-    private function getCloudSmsKey($key)
+    protected function getCloudSmsKey($key)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         if (isset($setting[$key])){

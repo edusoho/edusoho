@@ -285,17 +285,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
-    private function getQuestionDao()
+    protected function getQuestionDao()
     {
         return $this->createDao('Question.QuestionDao');
     }
 
-    private function getCategoryDao()
+    protected function getCategoryDao()
     {
         return $this->createDao('Question.CategoryDao');
     }
 
-    private function getQuestionFavoriteDao()
+    protected function getQuestionFavoriteDao()
     {
         return $this->createDao('Question.QuestionFavoriteDao');
     }

@@ -201,7 +201,7 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
-    private function getTestpaperWithException($course, $testpaperId)
+    protected function getTestpaperWithException($course, $testpaperId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper)) {
@@ -392,7 +392,7 @@ class CourseTestpaperManageController extends BaseController
 
 
 
-    private function getQuestionRanges($course, $includeCourse = false)
+    protected function getQuestionRanges($course, $includeCourse = false)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $ranges = array();
@@ -411,17 +411,17 @@ class CourseTestpaperManageController extends BaseController
         return $ranges;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }

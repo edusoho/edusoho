@@ -298,13 +298,14 @@ class WebExtension extends \Twig_Extension
         return $maker->make($group, $type, $duration);
     }
 
-    public function getConvertIP($IP)
+    public function getConvertIP($ip)
     {
         
-        if(!empty($IP)){
-                $location = ConvertIpToolkit::convertIp($IP);
-            if ($location === 'INNA') 
+        if(!empty($ip)){
+                $location = ConvertIpToolkit::convertIp($ip);
+            if ($location === 'INNA'){
                 return '未知区域';
+            } 
             return $location;
         }
         return '';
@@ -544,9 +545,7 @@ class WebExtension extends \Twig_Extension
             }
 
             return $url;
-        } else {
-
-        }
+        }   
     }
 
     public function getDefaultPath($category, $uri="", $size = '', $absolute = false)
@@ -784,7 +783,9 @@ class WebExtension extends \Twig_Extension
     {
         $fileName=explode(".", $fileName);
         
-        if($string) $name=strtolower($fileName[count($fileName)-1]).$string;
+        if($string){
+            $name=strtolower($fileName[count($fileName)-1]).$string;
+        }
 
         return $name;
     }
@@ -805,11 +806,14 @@ class WebExtension extends \Twig_Extension
 
             $value=" ".$value;
             sscanf($value,"%[^[][hide=reply]%[^$$]",$replyContent,$replyHideContent);
-            if($replyHideContent)
+            if($replyHideContent){
                 return true;
+            }
         }
 
-        if($need) return true;
+        if($need){
+            return true;
+        }
 
         return false;
     }
@@ -1048,32 +1052,32 @@ class WebExtension extends \Twig_Extension
 
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 
     { 
-        $both_ends = $ltrim && $rtrim; 
+        $bothEnds = $ltrim && $rtrim; 
 
-        $char_class_inner = preg_replace( 
+        $charClassInner = preg_replace( 
             array( '/[\^\-\]\\\]/S', '/\\\{4}/S' ), 
             array( '\\\\\\0', '\\' ), 
             $charlist 
         ); 
 
-        $work_horse = '[' . $char_class_inner . ']+'; 
-        $ltrim && $left_pattern = '^' . $work_horse; 
-        $rtrim && $right_pattern = $work_horse . '$'; 
+        $workHorse = '[' . $charClassInner . ']+'; 
+        $ltrim && $leftPattern = '^' . $workHorse; 
+        $rtrim && $rightPattern = $workHorse . '$'; 
 
-        if($both_ends) 
+        if($bothEnds) 
         { 
-            $pattern_middle = $left_pattern . '|' . $right_pattern; 
+            $patternMiddle = $leftPattern . '|' . $rightPattern; 
         } 
         elseif($ltrim) 
         { 
-            $pattern_middle = $left_pattern; 
+            $patternMiddle = $leftPattern; 
         } 
         else 
         { 
-            $pattern_middle = $right_pattern; 
+            $patternMiddle = $rightPattern; 
         } 
 
-        return preg_replace("/$pattern_middle/usSD", '', $string); 
+        return preg_replace("/$patternMiddle/usSD", '', $string); 
     } 
 
 }

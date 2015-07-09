@@ -15,14 +15,16 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$conditions = $request->query->all();
+		
 		$conditions['code'] = $category;
-
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
+        unset($conditions['code']);
+
 		if(!isset($conditions['fliter'])){
 			$conditions['fliter'] ='all';
 		} elseif ($conditions['fliter'] == 'free') {
@@ -38,20 +40,21 @@ class CourseController extends CourseBaseController
 			} else {
 				$conditions['coinPrice'] = '0.00';
 			}
-		}
-		elseif ($conditions['fliter'] == 'live'){
+		} elseif ($conditions['fliter'] == 'live'){
 			$conditions['type'] = 'live';
 		}
 		$fliter = $conditions['fliter'];
 		unset($conditions['fliter']);
-		if(!isset($conditions['orderBy'])){
-			$conditions['orderBy'] = 'latest';
-		}
 
-		$conditions['recommended'] = ($conditions['orderBy'] == 'recommendedSeq') ? 1 : null;
-		unset($conditions['code']);
-		$orderBy = $conditions['orderBy'];
+		$courseSetting = $this->getSettingService()->get('course', array());
+		if (!isset($courseSetting['explore_default_orderBy'])) {
+			$courseSetting['explore_default_orderBy'] = 'latest';
+		}
+		$orderBy = $courseSetting['explore_default_orderBy'];
+		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
 		unset($conditions['orderBy']);
+		
+		$conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
 
 		$conditions['parentId'] = 0;
 		$conditions['status'] = 'published';
@@ -230,7 +233,20 @@ class CourseController extends CourseBaseController
 
 	}
 
-	private function calculateUserLearnProgress($course, $member)
+	public function keywordsAction($course)
+	{
+		$category = $this->getCategoryService()->getCategory($course['categoryId']);
+    	$tags = $this->getTagService()->findTagsByIds($course['tags']);
+
+    	return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
+			'category' => $category,
+			'tags' => $tags,
+			'course' => $course
+		));
+	}
+
+
+	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
 			return array('percent' => '0%', 'number' => 0, 'total' => 0);
@@ -648,7 +664,7 @@ class CourseController extends CourseBaseController
 		));
 	}
 
-	private function getClassroomCourseIds($request,$courseIds)
+	protected function getClassroomCourseIds($request,$courseIds)
 	{	
 		$unEnabledCourseIds=array();
 		if($request->query->get('type') !="classroom"){
@@ -710,7 +726,7 @@ class CourseController extends CourseBaseController
 	public function relatedCoursesBlockAction($course)
 	{   
 
-		$courses = $this->getCourseService()->findCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
+		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
 		
 		return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
 			'courses' => $courses,
