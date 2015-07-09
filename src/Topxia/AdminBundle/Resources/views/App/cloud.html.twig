@@ -8,12 +8,12 @@
       <ul class="nav nav-tabs mbl">
 
         <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
-          <a href="{{ url('admin_my_cloud') }}">产品简介
+          <a href="{{ url('admin_my_cloud') }}">{{'产品简介'|trans}}
           </a>
         </li>
 
         <li class="{% if submenu == 'service-information' %}active{% endif %}">
-          <a href="{{ url('admin_my_cloud_overview') }}">服务概况
+          <a href="{{ url('admin_my_cloud_overview') }}">{{'服务概况'|trans}}
           </a>
         </li>
 
@@ -40,7 +40,7 @@
             <div class="carousel-inner" role="listbox">
               <div class="item active">
                 <img class="img-responsive" src="{{ default_path('banner.jpg') }}">
-                <a href="{{ path('admin_cloud_access') }}" class="btn btn-warning" target="_blank">接入教育云<span
+                <a href="{{ path('admin_cloud_access') }}" class="btn btn-warning" target="_blank">{{'接入教育云'|trans}}<span
                   class="glyphicon glyphicon-circle-arrow-right"></span></a>
               </div>
             </div>
@@ -49,12 +49,12 @@
         </div>
         <div class="row es-row">
           <div class="col-md-4">
-            <h3 class="es-ad-title">视频安全，四重保护一步到位</h3>
+            <h3 class="es-ad-title">{{'视频安全，四重保护一步到位'|trans}}</h3>
 
             <div class="es-ad-info">
-                <p>自主研发TLP2.0技术</p>
+                <p>{{'自主研发TLP2.0技术'|trans}}</p>
 
-                <p>上万家机构使用安全零事故</p>
+                <p>{{'上万家机构使用安全零事故'|trans}}</p>
             </div>
             <div class="media">
               <div class="pull-left">
@@ -63,19 +63,19 @@
                 </a>
               </div>
               <div class="media-body">
-                  <h4 class="media-heading">认识教育云</h4>
-                  <a href="http://www.edusoho.com/videos/cloud.mp4" target="_blank">什么是教育云</a>
+                  <h4 class="media-heading">{{'认识教育云'|trans}}</h4>
+                  <a href="http://www.edusoho.com/videos/cloud.mp4" target="_blank">{{'什么是教育云'|trans}}</a>
               </div>
             </div>
           </div>
 
           <div class="col-md-4">
-            <h3 class="es-ad-title">万人直播，电视、移动端全面覆盖</h3>
+            <h3 class="es-ad-title">{{'万人直播，电视、移动端全面覆盖'|trans}}</h3>
 
             <div class="es-ad-info">
-                <p>500+加速节点 更流畅</p>
+                <p>{{'500+加速节点 更流畅'|trans}}</p>
 
-                <p>淘宝大学、新东方在线等大型客户共同选择</p>
+                <p>{{'淘宝大学、新东方在线等大型客户共同选择'|trans}}</p>
             </div>
             <div class="media">
               <div class="pull-left">
@@ -84,18 +84,18 @@
                 </a>
               </div>
               <div class="media-body">
-                <h4 class="media-heading"><a href="http://open.edusoho.com/article" target="_blank">最新资讯</a></h4>
+                <h4 class="media-heading"><a href="http://open.edusoho.com/article" target="_blank">{{'最新资讯'|trans}}</a></h4>
                 <a href="{{articles[0]['articleUrl']}}" target="_blank">{{articles[0]['title']}}</a>
               </div>
             </div>
           </div>
 
           <div class="col-md-4">
-            <h3 class="es-ad-title">一次接入，云短信随心选择</h3>
+            <h3 class="es-ad-title">{{'一次接入，云短信随心选择'|trans}}</h3>
 
             <div class="es-ad-info">
-              <p>及时发送通知，实用便捷 </p> 
-              <p>获得精准信息，实现高效营销</p>
+              <p>{{'及时发送通知，实用便捷'|trans}} </p> 
+              <p>{{'获得精准信息，实现高效营销'|trans}}</p>
 
             </div>
             <div class="media">
@@ -105,8 +105,8 @@
                 </a>
               </div>
               <div class="media-body">
-                <h4 class="media-heading"><span>3分钟接入教育云</span></h4>
-                <span style="color:#f8ae64;">即将上线</span>
+                <h4 class="media-heading"><span>{{'3分钟接入教育云'|trans}}</span></h4>
+                <span style="color:#f8ae64;">{{'即将上线'|trans}}</span>
               </div>
             </div>
           </div>
