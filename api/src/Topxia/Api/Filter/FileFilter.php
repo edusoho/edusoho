@@ -15,8 +15,8 @@ class FileFilter implements Filter
         $fileService = ServiceKernel::instance()->createService('Content.FileService');
         $userService = ServiceKernel::instance()->createService('User.UserService');
         $data['createdTime'] = date('c', $data['createdTime']);
-        $smallAvatar = empty($data['uri']) ? '' : $fileService->parseFileUri($data['uri']);
-        $data['uri'] = empty($uri) ? '' : 'files/'.$smallAvatar['uri'];
+        $uri = empty($data['uri']) ? '' : $fileService->parseFileUri($data['uri']);
+        $data['uri'] = empty($uri) ? '' : 'files/'.$uri['path'];
         
         return $data;
     }
