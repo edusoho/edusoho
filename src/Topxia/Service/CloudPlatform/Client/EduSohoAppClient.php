@@ -33,7 +33,7 @@ class EduSohoAppClient implements AppClient
     {
         $loginToken = $this->getLoginToken();
         
-        $url = $this->apiUrl.'/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        $url = str_replace('app_api','',$this->apiUrl).'token_login?token='.$loginToken["token"].'&goto='.$routingName;
         if(!empty($params)){
             $url .= '&param='.urldecode(json_encode($params));
         }
