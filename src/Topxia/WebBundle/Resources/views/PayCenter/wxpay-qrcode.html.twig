@@ -4,22 +4,6 @@
 {% set script_controller = 'pay/wxpay-roll' %}
 {% block content %}
 
-  <div id="page-message-container" class="page-message-container">
-    <div class="page-message-panel">
-    	<div class="page-message-heading">
-        <h3 class="page-message-title">微信支付</h3>
-      </div>
-      <div class="page-message-body">
-        <img class = 'img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url="{{ path('wxpay_roll',{orderId:orderId}) }}" data-goto="{{ path('pay_success_show',{id:orderId}) }}">
-        <div class="pw-box-ft">
-          <p>请使用微信扫一扫</p>
-          <p>扫描二维码支付</p>
-        </div>
-        <img  src="{{ asset('assets/img/default/phone-bg.png') }}">
-  	 </div>
-    </div>
-  </div>
-
   <div class="panel panel-default panel-qrcode">
     <div class="panel-heading">
       <h2 class="panel-title">微信支付</h2>
@@ -31,7 +15,7 @@
       </div>
       <div class="pay-qrcode-body clearfix">
         <div class="qrcode-img">
-          <img class="img-responsive" src="{{asset('assets/v2/img/weixin.png')}}" alt="">
+          <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:url}) }}"  data-url="{{ path('wxpay_roll',{orderId:order['id']}) }}" data-goto="{{ path('pay_success_show',{id:order['id']}) }}">
           <div class="text-qrcode hidden-xs">
             请使用微信扫一扫<br>扫描二维码支付
           </div>
@@ -44,8 +28,8 @@
         </div>
       </div>
       <div class="pay-qrcode-footer">
-        <a href="" class="mrl"><i class="es-icon es-icon-arrowback mrs"></i>选择其他支付方式</a> 
-        应付金额：<span class="pay-rmb">¥255.00</span>
+        <a href="{{ path('pay_center_show',{sn:order['sn']}) }}" class="mrl"><i class="es-icon es-icon-arrowback mrs"></i>选择其他支付方式</a> 
+        应付金额：<span class="pay-rmb">¥{{order['amount']}}</span>
       </div>
     </div>
   </div>

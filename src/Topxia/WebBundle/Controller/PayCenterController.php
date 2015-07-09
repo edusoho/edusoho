@@ -240,7 +240,7 @@ class PayCenterController extends BaseController
                 $url = $returnArray['code_url'];
                 return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
                     'url' => $url,
-                    'orderId' => $order['id'],
+                    'order' => $order,
                 ));
             }
             else{
