@@ -24,7 +24,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getCustomUserDao()->searchUserCount($conditions);
     }
 	
-    private function getUserDao()
+    protected function getUserDao()
     {
         return $this->createDao('User.UserDao');
     }
