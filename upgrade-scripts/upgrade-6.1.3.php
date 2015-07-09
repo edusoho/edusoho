@@ -79,9 +79,14 @@ use Topxia\Common\BlockToolkit;
         return empty($result) ? false : true;
     }
 
-     private function getBlockService()
+     protected function getBlockService()
      {
          return ServiceKernel::instance()->createService('Content.BlockService');
+     }
+
+     private function getSettingService()
+     {
+         return ServiceKernel::instance()->createService('System.SettingService');
      }
  }
 
