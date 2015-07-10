@@ -1741,9 +1741,9 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
-esbar_my_course_or_classroom:
-    pattern:  /esbar/my/course_or_classroom/{type}
-    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:myCourseOrClassroom }
+esbar_my_learn:
+    pattern:  /esbar/my/learn/{type}
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:learn }
 
 esbar_my_notify:
     pattern:  /esbar/my/notify

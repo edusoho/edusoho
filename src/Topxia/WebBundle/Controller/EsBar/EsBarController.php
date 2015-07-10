@@ -41,6 +41,7 @@ class EsBarController extends BaseController{
         );
         $sort = array('createdTime','DESC');
         $classrooms = array();
+        $courses = array();
         $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
         if(!empty($classroomIds)){
             $classroomConditions = array(
@@ -91,11 +92,11 @@ class EsBarController extends BaseController{
             'locked' => 0,
             'classroomId' => 0
         );
-
-        $courseIds =  ArrayToolkit::column($this->getCourseService()->searchMembers($courseMemConditions,array('createdTime','DESC'),0,5),'id');
+        $courseIds =  ArrayToolkit::column($this->getCourseService()->searchMembers($courseMemConditions,array('createdTime','DESC'),0,5),'courseId');
         if(!empty($courseIds)){
             $courseConditions = array('courseIds' => $courseIds);
             $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,5);
+
             foreach ($courses as $key => &$course){
                 $learnedConditions = array(
                     'userId' => $user->id,
@@ -130,7 +131,6 @@ class EsBarController extends BaseController{
                     $course['learnedLessonNum'] = count($learnedIds);
                     $course['allLessonNum'] = count($allLessons);
                 }
-
             }
         }
         return $this->render("TopxiaWebBundle:EsBar:study-plan.html.twig", array(
@@ -139,7 +139,7 @@ class EsBarController extends BaseController{
         ));
     }
 
-    public function myCourseOrClassroomAction(Request $request,$type)
+    public function learnAction(Request $request,$type)
     {
         $user = $this->getCurrentUser();
         switch($type){
@@ -155,7 +155,7 @@ class EsBarController extends BaseController{
                 );
                 $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
 
-                return $this->render("TopxiaWebBundle:EsBar:my-course-classroom.html.twig", array(
+                return $this->render("TopxiaWebBundle:EsBar:my-learn.html.twig", array(
                     'classrooms' => $classrooms,
                     'type' => $type
                 ));
@@ -178,7 +178,7 @@ class EsBarController extends BaseController{
                         $course['percent'] = 0;
                     }
                 }
-                return $this->render("TopxiaWebBundle:EsBar:my-course-classroom.html.twig", array(
+                return $this->render("TopxiaWebBundle:EsBar:my-learn.html.twig", array(
                     'courses' => $courses,
                     'type' => $type
                 ));
@@ -205,7 +205,7 @@ class EsBarController extends BaseController{
             $homeworkResults = $this->getHomeworkService()->searchResults(
                 $conditions,
                 array('usedTime', 'DESC'),
-                1,
+                0,
                 1000
             );
         }
@@ -215,7 +215,7 @@ class EsBarController extends BaseController{
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
             $testPaperConditions,
             array('endTime', 'DESC'),
-            1,
+            0,
             1000
         );
         $histories = $this->getHistoryByTime($lessonLearns,$homeworkResults,$testPaperResults);
@@ -241,8 +241,10 @@ class EsBarController extends BaseController{
     public function practiceAction(Request $request,$status)
     {
         $user = $this->getCurrentUser();
-        $homeworks = array();
+        $homeworkResults = array();
         $testPaperResults = array();
+        $courses = array();
+        $lessons = array();
         if($this->isPluginInstalled('Homework')){
             $conditions = array(
                 'status' => $status,
@@ -250,13 +252,17 @@ class EsBarController extends BaseController{
             );
             $homeworkResults = $this->getHomeworkService()->searchResults(
                 $conditions,
-                array('usedTime', 'DESC'),
-                1,
-                100
+                array('createdTime', 'DESC'),
+                0,
+                1000
             );
+            $homeworkCourseIds = ArrayToolkit::column($homeworkResults, 'courseId');
             $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
-            $homeworks = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
+            $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
+            $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
         }
+
+
 
         $testPaperConditions = array(
             'status' => $status,
@@ -266,12 +272,15 @@ class EsBarController extends BaseController{
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
             $testPaperConditions,
             array('usedTime', 'DESC'),
-            1,
+            0,
             100
         );
+
         return $this->render('TopxiaWebBundle:EsBar:practice.html.twig', array(
             'testPaperResults' => $testPaperResults,
-            'homeworks' => $homeworks
+            'courses' => $courses,
+            'lessons' => $lessons,
+            'homeworkResults' => $homeworkResults
         ));
     }
 

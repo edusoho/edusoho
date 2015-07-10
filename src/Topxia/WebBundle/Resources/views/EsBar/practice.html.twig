@@ -1,11 +1,14 @@
 {% if testPaperResults %}
   {% for testPaperResult in testPaperResults %}
-    <li><span>考</span><a href="" class="link-light">{{ testPaperResult.paperName }}</a></li>
+    <li><span>考</span><a href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-light">{{ testPaperResult.paperName }}</a></li>
   {% endfor %}
 {% endif %}
 
-{% if homeworks %}
-  {% for homework in homeworks %}
-    <li><span>作</span><a href="" class="link-light">{{ homework.title }}</a></li>
+{% if homeworkResults %}
+  {% for homeworkResult in homeworkResults %}
+    {% set lesson = lessons[homeworkResult.lessonId] %}
+    {% set course = courses[homeworkResult.courseId] %}
+    {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
+      <li><span>作</span><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a href="{{ lessonUrl }}" class="link-light">第 {{ lesson.number }}课时</a></li>
   {% endfor %}
 {% endif %}

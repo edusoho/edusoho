@@ -12,15 +12,29 @@
         <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知"><a href="javascript:;"><i class="es-icon es-icon-notifications"></i></a></li>
       </ul>
       <ul class="bar-menu-sns">
-        <li class="popover-btn bar-qq-btn" data-container=".bar-qq-btn" data-title="QQ客服及QQ群" data-content-element="#bar-qq-content">
-          <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
-        </li>
-        <li class="popover-btn bar-phone-btn" data-container=".bar-phone-btn" data-title="电话客服" data-content-element="#bar-phone-content">
-          <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
-        </li>
-        <li class="popover-btn bar-weixin-btn" data-container=".bar-weixin-btn" data-title="微信公众号" data-content-element="#bar-weixin-content">
-          <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
-        </li>
+        {% if setting('consult.enabled', 0) and (consultDisplay|default(false)) %}
+          {% set consult = setting('consult') %}
+          {% set break = 0 %}
+          {% for qq in consult.qq if qq.name is not empty or consult.qqgroup[0].name is not empty and break == 0 %}
+            <li class="popover-btn bar-qq-btn" data-container=".bar-qq-btn" data-title="QQ客服及QQ群" data-content-element="#bar-qq-content">
+              <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
+            </li>
+            {% set break = 1 %}
+          {% endfor %}
+          {% set break = 0 %}
+          {% for phone in consult.phone if phone.name is not empty or consult.worktime is not empty or consult.email is not empty  and break == 0 %}
+            <li class="popover-btn bar-phone-btn" data-container=".bar-phone-btn" data-title="电话客服" data-content-element="#bar-phone-content">
+              <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
+            </li>
+            {% set break = 1 %}
+          {% endfor %}
+
+          {% if consult.webchatURI is not empty %}
+          <li class="popover-btn bar-weixin-btn" data-container=".bar-weixin-btn" data-title="微信公众号" data-content-element="#bar-weixin-content">
+            <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
+          </li>
+          {% endif %}
+        {% endif %}
         <li data-toggle="tooltip" data-placement="left" title="手机端">
           <a href="http://demo.edusoho.com/mobile" target="_blank"><i class="es-icon es-icon-phone1"></i></a>
         </li>
@@ -68,8 +82,8 @@
       </div>
       <div class="bar-main-body">
         <div class="btn-action">
-          <a href="javascript:;" data-url="{{ path('esbar_my_course_or_classroom',{type:'course'}) }}" class="btn btn-primary active" id="bar-course-btn">课程</a>
-          <a href="javascript:;" data-url="{{ path('esbar_my_course_or_classroom',{type:'classroom'}) }}" class="btn btn-primary" id="bar-classroom-btn">班级</a>
+          <a href="javascript:;" data-url="{{ path('esbar_my_learn',{type:'course'}) }}" class="btn btn-primary active" id="bar-course-btn">课程</a>
+          <a href="javascript:;" data-url="{{ path('esbar_my_learn',{type:'classroom'}) }}" class="btn btn-primary" id="bar-classroom-btn">班级</a>
         </div>
         <div id="bar-my-course">
 
@@ -115,59 +129,47 @@
 
       </div>
     </div>#}
+    {% if setting('consult.enabled', 0) and (consultDisplay|default(false)) %}
 
       <div class="bar-popover-content" style="display:none;">
       <div id="bar-qq-content">
         <div class="row mtm">
-          <div class="col-xs-6 mbm">
-            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
-          </div>
-          <div class="col-xs-6 mbm">
-            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
-          </div>
-          <div class="col-xs-6 mbm">
-            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
-          </div>
-          <div class="col-xs-6 mbm">
-            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
-          </div>
-          <div class="col-xs-6 mbm">
-            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
-          </div>
-          <div class="col-xs-6 mbm">
-            <a class="link-light" href=""><img class="mrs" src="assets/img/bar_qq.png" alt="">陶老师</a>
-          </div>
+          {% for qq in consult.qq if qq.name is not empty %}
+            <div class="col-xs-6 mbm">
+              <a class="link-light" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="http://wpa.qq.com/pa?p=2:{{ qq.number }}:52" alt="" title="点击这里给我发消息" alt="">
+                {{ qq.name }}
+              </a>
+            </div>
+          {% endfor %}
         </div>
         <hr>
         <div class="row">
-          <div class="col-xs-6 mbm">
-            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
-            <p>280645300</p>
-          </div>
-          <div class="col-xs-6 mbm">
-            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
-            <p>280645300</p>
-          </div>
-          <div class="col-xs-6 mbm">
-            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
-            <p>280645300</p>
-          </div>
-          <div class="col-xs-6 mbm">
-            <p><img class="mrs" src="assets/img/bar_qq_group.png" alt="">官方一群</p>
-            <p>280645300</p>
-          </div>
+          {% for qqgroup in consult.qqgroup if qqgroup.name is not empty %}
+            <div class="col-xs-6 mbm">
+              <p>{{qqgroup.name}} </p>
+              <p>{{qqgroup.number}}</p>
+            </div>
+          {% endfor %}
         </div>
       </div>
       <div id="bar-phone-content">
-        <p class="mtl"><i class="es-icon es-icon-notificationson mrm"></i>工作时间： 9:00-18:00</p>
-        <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>总部电话： 0571-8681-9929</p>
-        <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>北京分公司： 18814881999</p>
-        <p class="mtl"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:sales@edusoho.cn">sales@edusoho.cn</a></p>
+        {% if consult.worktime is not empty %}
+          <p class="mtl"><i class="es-icon es-icon-notificationson mrm"></i>工作时间： {{ consult.worktime }}</p>
+        {% endif %}
+        {% for phone in consult.phone if phone.name is not empty %}
+          <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}： {{ phone.number }}</p>
+        {% endfor %}
+        {% if consult.email is not empty %}
+          <p class="mtl"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
+        {% endif %}
       </div>
-      <div id="bar-weixin-content">
-        <img class="img-responsive" src="assets/dev/img/webchat.jpg" alt="">
-      </div>
+      {% if consult.webchatURI is not empty %}
+        <div id="bar-weixin-content">
+          <img class="img-responsive" src="{{ asset(consult.webchatURI) }}" alt="">
+        </div>
+      {% endif %}
     </div>
+    {% endif %}
 
   </div>
 
