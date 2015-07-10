@@ -6,4 +6,8 @@ interface ClassRoomProcessor
 	public function getClassRooms();
 
 	public function myClassRooms();
+
+	public function getClassRoom();
+
+	public function getClassRoomCourses();
 }

@@ -15,6 +15,74 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+	public function getClassRoom()
+	{
+		$id = $this->getParam("id");
+		$classroom = $this->getClassroomService()->getClassroom($id);
+
+        		$user = $this->controller->getUserByToken($this->request);
+       		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
+        		}
+        		$member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+		
+		return $this->filterClassRoom($classroom);
+	}
+
+	private function filterClassRoom($classroom)
+	{
+		if (empty($classroom)) {
+	            	return null;
+	        	}
+
+	        	$classrooms = $this->filterClassRooms(array($classroom));
+
+	        	return current($classrooms);
+	}
+
+	public function filterClassRooms($classrooms)
+	{
+		if (empty($classrooms)) {
+			return array();
+		}
+		$container = $this->getContainer();
+		return array_map(function($classroom) use ($container) {
+
+			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
+            		$classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
+            		$classroom['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
+			$classroom['createdTime'] = date("c", $classroom['createdTime']);
+
+			return $classroom;
+		}, $classrooms);
+	}
+
+	public function getClassRoomCourses()
+	{
+		$classroomId = $this->getParam("id");
+		$user = $this->controller->getUserByToken($this->request);
+       		if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
+        		}
+		$classroom = $this->getClassroomService()->getClassroom($classroomId);
+		if (empty($classroom)) {
+            		return $this->createErrorResponse('error', "没有找到该班级");
+        		}
+
+        		$courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        		$courseMembers = array();
+        		foreach ($courses as $key => $course) {
+	           	$courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
+	        	}
+
+	        	$member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+	        	if ($member && $member["locked"]) {
+	        		return $this->createErrorResponse('error', "会员被锁定，不能继续学习，请联系网校管理员!");
+	        	}
+
+	        	return $this->controller->filterCourses($courses);
+	}
+
 	public function myClassRooms()
 	{	
 		$start  = (int) $this->getParam("start", 0);
