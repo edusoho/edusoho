@@ -227,6 +227,7 @@ class MobileBaseController extends BaseController
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
             $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
             $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['createdTime'] = date("c", $course['createdTime']);
 
             $course['teachers'] = array();
             foreach ($course['teacherIds'] as $teacherId) {
