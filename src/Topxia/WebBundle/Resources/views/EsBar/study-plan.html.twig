@@ -9,7 +9,12 @@
       <ul class="bar-time-line">
         {% if classroom['lessons'] %}
           {% for lesson in classroom['lessons'] %}
-            <li class="last"><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+            {% set status = lesson.isLearned %}
+            {% if status %}
+              <li class="last"><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+            {% else %}
+              <li><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+            {% endif %}
           {% endfor %}
         {% endif %}
       </ul>
@@ -25,7 +30,12 @@
       <ul class="bar-time-line">
         {% if course['lessons'] %}
           {% for lesson in course['lessons'] %}
-            <li class="last"><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+            {% set status = lesson.isLearned %}
+            {% if status %}
+              <li class="last"><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+            {% else %}
+              <li><span class="icon"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}">{{ lesson.title }}</a></li>
+            {% endif %}
           {% endfor %}
         {% endif %}
       </ul>

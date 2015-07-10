@@ -68,6 +68,8 @@ class EsBarController extends BaseController{
                     'createdTime','ASC'
                 );
                 $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+
+                //var_dump($notLearnedLessonsIds);
                 $allLessonConditions = array(
                     'status' => 'published',
                     'courseIds' => $courseIds
@@ -80,6 +82,9 @@ class EsBarController extends BaseController{
                 {
                     unset($classrooms[$key]);
                 }else{
+                    foreach($notLearnedLessons as &$notLearnedLesson) {
+                        $notLearnedLesson['isLearned'] = $this->getCourseService()->getUserLearnLessonStatus($user->id, $notLearnedLesson['courseId'], $notLearnedLesson['id']);
+                    }
                     $classroom['lessons'] = $notLearnedLessons;
                     $classroom['learnedLessonNum'] = count($learnedIds);
                     $classroom['allLessonNum'] = count($allLessons);
@@ -115,6 +120,7 @@ class EsBarController extends BaseController{
                     'createdTime','ASC'
                 );
                 $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+
                 $allLessonConditions = array(
                     'status' => 'published',
                     'courseId' => $course['id'],
@@ -123,16 +129,30 @@ class EsBarController extends BaseController{
                     'createdTime','ASC'
                 );
                 $allLessons = $this->getCourseService()->searchLessons($allLessonConditions,$sort,0,1000);
-                if(empty($notLearnedLessons))
-                {
+                if(empty($notLearnedLessons)){
                     unset($courses[$key]);
                 }else{
+                    $notLearnedLessonsIds = ArrayToolkit::column($notLearnedLessons,'id');
+                    $notLearneds = $this->getCourseService()->searchLearns(
+                        array(
+                            'userId' => $user->id,
+                            'lessonIds' => $notLearnedLessonsIds
+                        ),
+                        array('startTime','ASC'),
+                        0,
+                        5
+                    );
+                    foreach($notLearnedLessons as &$notLearnedLesson) {
+                        $notLearnedLesson['isLearned'] = $this->getCourseService()->getUserLearnLessonStatus($user->id, $notLearnedLesson['courseId'], $notLearnedLesson['id']);
+                    }
+                    //var_dump($notLearnedLessons);
                     $course['lessons'] = $notLearnedLessons;
                     $course['learnedLessonNum'] = count($learnedIds);
                     $course['allLessonNum'] = count($allLessons);
                 }
             }
         }
+
         return $this->render("TopxiaWebBundle:EsBar:study-plan.html.twig", array(
             'classrooms' => $classrooms,
             'courses' => $courses
