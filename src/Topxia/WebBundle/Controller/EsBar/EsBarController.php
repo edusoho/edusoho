@@ -67,7 +67,7 @@ class EsBarController extends BaseController{
                 $sort = array(
                     'createdTime','ASC'
                 );
-                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,4);
 
                 //var_dump($notLearnedLessonsIds);
                 $allLessonConditions = array(
@@ -119,7 +119,7 @@ class EsBarController extends BaseController{
                 $sort = array(
                     'createdTime','ASC'
                 );
-                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,5);
+                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,4);
 
                 $allLessonConditions = array(
                     'status' => 'published',
@@ -132,16 +132,6 @@ class EsBarController extends BaseController{
                 if(empty($notLearnedLessons)){
                     unset($courses[$key]);
                 }else{
-                    $notLearnedLessonsIds = ArrayToolkit::column($notLearnedLessons,'id');
-                    $notLearneds = $this->getCourseService()->searchLearns(
-                        array(
-                            'userId' => $user->id,
-                            'lessonIds' => $notLearnedLessonsIds
-                        ),
-                        array('startTime','ASC'),
-                        0,
-                        5
-                    );
                     foreach($notLearnedLessons as &$notLearnedLesson) {
                         $notLearnedLesson['isLearned'] = $this->getCourseService()->getUserLearnLessonStatus($user->id, $notLearnedLesson['courseId'], $notLearnedLesson['id']);
                     }
