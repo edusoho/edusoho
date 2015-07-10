@@ -470,7 +470,7 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 		}
 	}
 
-	this.simplePost = function() {
+	this.simplePost = function(url) {
 		params  = arguments[1][0];
 		callback = arguments[1][1];
 		errorCallback = arguments[1][2];
