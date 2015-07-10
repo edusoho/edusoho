@@ -1,0 +1,66 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}添加新用户{% endblock %}
+{% block body %}
+
+<form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create')}}">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label ">
+      <label for="mobile">手机号码</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="mobile" data-url="{{path('admin_user_create_mobile_check')}}" name="mobile" class="form-control" placeholder='手机号码'>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="nickname">用户名</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="nickname" name="nickname" data-url="{{path('admin_user_create_nickname_check')}}" class="form-control" placeholder='不填将自动生成'>
+    </div>
+  </div>
+
+   <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="password">密码</label>
+    </div>
+      <div class="col-md-7 controls">
+        <input type="password" id="password" name="password" class="form-control">
+      <p class="help-block">5-20位英文、数字、符号，区分大小写</p>
+    </div>
+  </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+      <label for="confirmPassword">确认密码</label>
+    </div>
+      <div class="col-md-7 controls">
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+        <p class="help-block">再输入一次密码</p>
+      </div>
+    </div>
+
+<div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="roles">用户权限</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> 教师  
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="user-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-create-form">提交</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('user/create-modal-onlymobile')</script>
+{% endblock %}

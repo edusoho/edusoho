@@ -4,6 +4,10 @@
 @import "mixins/color.less";
 @import "mixins/scale.less";
 @import "mixins/loader-inner.less";
+@import "mixins/input.less";
+@import "mixins/spacing.less";     //间距
+@import "mixins/text.less";        //文字
+
 
 .form-control-lg {
   height: 38px;
@@ -13,6 +17,14 @@
 .p-lg {
   line-height: 30px;
   margin-bottom: 30px;
+}
+
+// 富文本
+.editor-text {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .ml10 {
@@ -46,6 +58,13 @@
 .text-default {
   text-align: center;
   color: @gray-light;
+}
+
+// 用于空数据
+.empty {
+  text-align: center;
+  color: #999;
+  padding: 20px 0;
 }
 
 .link-dark {
@@ -95,6 +114,7 @@ a.transition {
   .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
 }
 
+.ellipsis,
 .text-overflow {
   display: block;
   overflow: hidden;
@@ -102,6 +122,7 @@ a.transition {
   white-space: nowrap;
   word-wrap: normal;
 }
+
 
 .opacity(@opacity) {
   opacity: @opacity;

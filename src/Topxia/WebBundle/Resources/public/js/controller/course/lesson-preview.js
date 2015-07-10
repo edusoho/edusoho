@@ -166,7 +166,7 @@ define(function(require, exports, module) {
 
 		$modal = $('#modal');
         $modal.on('click','.js-buy-btn', function(){
-			$.get($(this).data('url'), function(html) {
+			$.post($(this).data('url'), function(html) {
 				$modal.html(html);
 			});
 		});
