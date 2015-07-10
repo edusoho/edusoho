@@ -59,7 +59,7 @@
             <td>
               <span class="text-sm">
                 {% if cash.type =="inflow" %}
-                  {{ dict_text('payment', orders[cash.orderSn]['payment']) }}
+                  {{ dict_text('payment', cash.payment) }}
                 {% else %}
                   网校支付
                 {% endif %}
