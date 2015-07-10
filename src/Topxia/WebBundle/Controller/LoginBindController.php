@@ -171,7 +171,7 @@ class LoginBindController extends BaseController
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
-        if (!SimpleValidator::nickname($registration['nickname'])) {
+        if (!SimpleValidator::nickname($oauthUser['name'])) {
             
             $oauthUser['name'] = '';
         }
