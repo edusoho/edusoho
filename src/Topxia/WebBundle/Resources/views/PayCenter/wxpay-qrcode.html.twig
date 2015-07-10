@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="pay-qrcode-footer">
-        <a href="{{ path('pay_center_show',{sn:order['sn']}) }}" class="mrl"><i class="es-icon es-icon-arrowback mrs"></i>选择其他支付方式</a> 
+        <a href="{% if order.targetType |default(null) %} {{ path('pay_center_show',{sn:order['sn']}) }} {% else %}{{ path('my_coin_buy') }} {% endif %} " class="mrl"><i class="es-icon es-icon-arrowback mrs"></i>选择其他支付方式</a> 
         应付金额：<span class="pay-rmb">¥{{order['amount']}}</span>
       </div>
     </div>
