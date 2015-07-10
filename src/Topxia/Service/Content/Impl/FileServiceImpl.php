@@ -59,11 +59,11 @@ class FileServiceImpl extends BaseService implements FileService
 
 	public function uploadFile($group, File $file, $target = null)
 	{
-		$errors = FileToolkit::validateFileExtension($file);
-		if ($errors) {
-			@unlink($file->getRealPath());
-			throw $this->createServiceException("该文件格式，不允许上传。");
-		}
+		// $errors = FileToolkit::validateFileExtension($file);
+		// if ($errors) {
+		// 	@unlink($file->getRealPath());
+		// 	throw $this->createServiceException("该文件格式，不允许上传。");
+		// }
 		$group = $this->getGroupDao()->findGroupByCode($group);
 		$user = $this->getCurrentUser();
 		if (!$user->isLogin()) {
