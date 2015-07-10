@@ -53,7 +53,7 @@
             {{users[order.userId].nickname}}</a>
           </td>
           <td>
-            支付宝
+            {{dict_text('payment',order.payment)}}
             <br>
             <span class="text-muted text-sm">{% if order.paidTime %}{{order.paidTime|date('Y-m-d H:i:s')}}{% else %}-{% endif %}</span>
           </td>
