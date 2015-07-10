@@ -1,4 +1,3 @@
-app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', CoursePayController]);
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
 app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
 app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', VipPayController]);
@@ -24,6 +23,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 {
 	var self = this;
 	this.__proto__ = new BasePayController();
+
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
 		levelId : $stateParams.levelId
@@ -123,18 +123,16 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 	}
 }
 
-function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordovaUtil)
+app.controller('CoursePayController', ['$scope', '$stateParams', 'OrderService', 'AppUtil', 'cordovaUtil', CoursePayController]);
+function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordovaUtil)
 {	
 	var self = this;
 	this.__proto__ = new BasePayController();
-	
-	ServcieUtil.getService("OrderService").getPayOrder({
-		courseId : $stateParams.courseId,
-		token : $scope.token
+
+	OrderService.getPayOrder({
+		courseId : $stateParams.courseId
 	}, function(data) {
-		$scope.$apply(function() {
-			$scope.data = data;
-		});
+		$scope.data = data;
 	});
 
 	$scope.$parent.$on("coupon", function(event, data) {
@@ -150,10 +148,8 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 	}
 
 	$scope.pay = function() {
-		var CourseService = ServcieUtil.getService("CourseService");
-		ServcieUtil.getService("OrderService").payCourse({
-			courseId : $stateParams.courseId,
-        			token : $scope.token
+		OrderServicepayCourse({
+			courseId : $stateParams.courseId
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
 				cordovaUtil.pay("支付课程", data.payUrl);

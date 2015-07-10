@@ -1,4 +1,4 @@
-app.controller('CourseController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', '$state', 'cordovaUtil', CourseController]);
+app.controller('CourseController', ['$scope', '$stateParams', 'CourseService', 'AppUtil', '$state', 'cordovaUtil', CourseController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
 app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$window', CourseSettingController]);
 
@@ -165,10 +165,9 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     }
 }
 
-function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, cordovaUtil)
+function CourseController($scope, $stateParams, CourseService, AppUtil, $state, cordovaUtil)
 {
     $scope.showLoad();
-    var CourseService = ServcieUtil.getService("CourseService");
 
     CourseService.getCourse({
       courseId : $stateParams.courseId
@@ -185,10 +184,7 @@ function CourseController($scope, $stateParams, ServcieUtil, AppUtil, $state, co
         $scope.learnProgress = (progress * 100) + "%" ;
       }
 
-      $scope.$apply(function() {
-        $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
-      });
-      
+      $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
       $scope.hideLoad();
     });
 

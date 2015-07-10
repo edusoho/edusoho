@@ -12,10 +12,11 @@ app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
 app.config(['$httpProvider', function($httpProvider) {
 
+    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
     // Override $http service's default transformRequest
     $httpProvider.defaults.transformRequest = [function(data) {
+
         /**
          * The workhorse; converts an object to x-www-form-urlencoded serialization.
          * @param {Object} obj
@@ -396,7 +397,7 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 }]);
 
 angular.element(document).ready(function() {
-    var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
+    var platformUtil = angular.injector(["AppService", "ng"]).get("platformUtil");
     if (platformUtil.native) {
       document.addEventListener("deviceready", function() {
           angular.bootstrap( document, ["app"] );
