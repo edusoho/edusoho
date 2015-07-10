@@ -39,7 +39,7 @@
     <button 
       class="btn_addPic uploadBtn btn btn-default btn-lg">
       <span>
-          <i class="glyphicon glyphicon-plus ">
+          <i class="glyphicon glyphicon-plus">
           添加待上传文件
           </i>
       </span>
@@ -83,12 +83,11 @@
     {% if storageSetting.upload_mode == 'cloud' %}
     <div class="quality-switcher">
       <div class="quality-switcher-bar">
-        视频转码类型<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
-      </div>
+      </div>        视频转码类型<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+
       <div class="quality-switcher-control">
         <div class="video-quality radios">
-          画质：
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+          画质： {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
         </div>
 
         <div class="audio-quality radios">

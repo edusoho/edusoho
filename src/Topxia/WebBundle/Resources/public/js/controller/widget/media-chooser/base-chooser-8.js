@@ -54,7 +54,9 @@ define(function(require, exports, module) {
         close: function() {
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
-            this.get('uploaderProgressbar').reset().hide();
+            if (this.get('uploaderProgressbar')) {
+                this.get('uploaderProgressbar').reset().hide();
+            }
             return this;
         },
 
@@ -64,6 +66,9 @@ define(function(require, exports, module) {
         },
 
         isUploading: function() {
+            if (!this.get('uploaderProgressbar')) {
+                return false;
+            }
             return this.get('uploaderProgressbar').isProgressing();
         },
 
@@ -89,7 +94,11 @@ define(function(require, exports, module) {
             var self = this;
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
-                    self.get('uploaderProgressbar').reset().hide();
+                    if (self.get('uploaderProgressbar')) {
+                        self.get('uploaderProgressbar').reset().hide();
+
+                    }
+                    
                 }
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
@@ -126,7 +135,7 @@ define(function(require, exports, module) {
             });
         },
 
-        _initUploadPane: function(){
+        _initUploadPane: function() {
             var self = this;
             var uploadPanel = new UploadPanel({
                 element: this.element,
@@ -142,7 +151,9 @@ define(function(require, exports, module) {
             this.set("uploaderProgressbar", uploadPanel.get("uploaderProgressbar"));
         },
         destroy: function(){
-            this.get("uploadPanel").destroy();
+            if (this.get("uploadPanel")) {
+                this.get("uploadPanel").destroy();
+            }
         }
 
     });

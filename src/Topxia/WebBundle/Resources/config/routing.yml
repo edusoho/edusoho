@@ -124,6 +124,21 @@ file_img_crop:
     defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
+uploader_init:
+    pattern:  /uploader/init
+    defaults: { _controller: TopxiaWebBundle:Uploader:init }
+    methods: [POST]
+
+uploader_finished:
+    pattern:  /uploader/finished
+    defaults: { _controller: TopxiaWebBundle:Uploader:finished }
+    methods: [POST]
+
+
+uploader_echo:
+    pattern:  /uploader/echo
+    defaults: { _controller: TopxiaWebBundle:Uploader:echo }
+
 uploadfile_upload:
     pattern:  /uploadfile/upload
     defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
