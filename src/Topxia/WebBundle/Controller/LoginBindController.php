@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Common\SimpleValidator;
 
 class LoginBindController extends BaseController
 {
@@ -170,7 +171,10 @@ class LoginBindController extends BaseController
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
-
+        if (!SimpleValidator::nickname($registration['nickname'])) {
+            
+            $oauthUser['name'] = '';
+        }
         if (empty($oauthUser['name'])) {
             $oauthUser['name'] = "{$type}" . substr($randString, 9, 3);
         }
