@@ -175,11 +175,12 @@ class LoginBindController extends BaseController
             
             $oauthUser['name'] = '';
         }
+        $tempType = $type;
         if (empty($oauthUser['name'])) {
             if ($type == 'weixinmob' || $type == 'weixinweb') {
-                $type = 'weixin';
+                $tempType = 'weixin';
             }
-            $oauthUser['name'] = "{$type}" . substr($randString, 9, 3);
+            $oauthUser['name'] = "{$tempType}" . substr($randString, 9, 3);
         }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
