@@ -51,15 +51,15 @@ service('LessonService', ['httpService', function(httpService) {
 service('OrderService', ['httpService', function(httpService) {
 
 	this.payCourse = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/Order/payCourse", arguments);
+		httpService.simplePost("/mapi_v2/Order/payCourse", arguments);
 	}
 
 	this.payVip = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/Order/payVip", arguments);
+		httpService.simplePost("/mapi_v2/Order/payVip", arguments);
 	}
 
 	this.getPayOrder = function() {
-		httpService.simpleGet('/mapi_v2/Order/getPayOrder', arguments);
+		httpService.simplePost('/mapi_v2/Order/getPayOrder', arguments);
 	}
 }]).
 service('NoteService', ['httpService', function(httpService) {
@@ -83,17 +83,17 @@ service('NoteService', ['httpService', function(httpService) {
 service('CouponService', ['httpService', function(httpService) {
 
 	this.checkCoupon = function() {
-		httpService.simpleGet('/mapi_v2/Course/coupon', arguments);
+		httpService.simplePost('/mapi_v2/Course/coupon', arguments);
 	}
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
 
 	this.follow = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/User/follow", arguments);
+		httpService.simplePost("/mapi_v2/User/follow", arguments);
 	};
 
 	this.unfollow = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/User/unfollow", arguments);
+		httpService.simplePost("/mapi_v2/User/unfollow", arguments);
 	};
 
 	this.searchUserIsFollowed = function(params, callback) {
@@ -115,7 +115,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 	this.smsSend = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/smsSend',
-			params : params,
+			data : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 			},
@@ -139,7 +139,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 	this.regist = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/regist',
-			params : params,
+			data : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 				if (data && !data.error) {
@@ -154,7 +154,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 	this.login = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/login',
-			params : params,
+			data : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 				if (data && !data.error) {
@@ -169,7 +169,7 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 	this.logout = function(params, callback) {
 		httpService.post({
 			url : app.host + '/mapi_v2/User/logout',
-			params : params,
+			data : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 				applicationProvider.clearUser();
@@ -274,11 +274,11 @@ service('CourseService', ['httpService', function(httpService) {
 	}
 
 	this.favoriteCourse = function(params, callback) {
-		httpService.simpleGet('/mapi_v2/Course/favoriteCourse', arguments);
+		httpService.simplePost('/mapi_v2/Course/favoriteCourse', arguments);
 	}
 
 	this.unFavoriteCourse = function(params, callback) {
-		httpService.simpleGet('/mapi_v2/Course/unFavoriteCourse', arguments);
+		httpService.simplePost('/mapi_v2/Course/unFavoriteCourse', arguments);
 	}
 
 	this.getCourseReviewInfo = function(params, callback) {
@@ -433,12 +433,11 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 	
 	var self = this;
 
-	this.getOptions = function(url, params, callback, errorCallback) {
-		return {
-			method : "get",
+	this.getOptions = function(method, url, params, callback, errorCallback) {
+		var options = {
+			method : method,
 			url : app.host + url,
 			headers : { "token" : $rootScope.token },
-			params : params,
 			success : function(data, status, headers, config) {
 				callback(data);
 			},
@@ -447,15 +446,19 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 					errorCallback(data);
 				} 
 			}
-		};
-	}
+		}
 
-	this.simpleGet = function(url) {
-		params  = arguments[1][0];
-		callback = arguments[1][1];
-		errorCallback = arguments[1][2];
+		if (method == "get") {
+			options["params"] = params;
+		} else if (method == "post") {
+			options["data"] = params;
+		}
 
-		var options = self.getOptions(url, params, callback, errorCallback);
+		return options;
+	};
+
+	this.simpleRequest = function(method, url, params, callback, errorCallback) {
+		var options = self.getOptions(method, url, params, callback, errorCallback);
 		var http = $http(options).success(options.success);
 
 		if (options.error) {
@@ -465,8 +468,23 @@ service('httpService', ['$http', '$rootScope', function($http, $rootScope) {
 				console.log(data);
 			});
 		}
-
 	}
+
+	this.simplePost = function() {
+		params  = arguments[1][0];
+		callback = arguments[1][1];
+		errorCallback = arguments[1][2];
+
+		self.simpleRequest("post", url, params, callback, errorCallback);
+	};
+
+	this.simpleGet = function(url) {
+		params  = arguments[1][0];
+		callback = arguments[1][1];
+		errorCallback = arguments[1][2];
+
+		self.simpleRequest("get", url, params, callback, errorCallback);
+	};
 
 	this.get = function(options) {
 		options.method  = "get";
