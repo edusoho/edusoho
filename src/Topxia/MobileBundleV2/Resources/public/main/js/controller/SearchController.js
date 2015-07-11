@@ -1,10 +1,10 @@
-app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', '$timeout', SearchController]);
+app.controller('SearchController', ['$scope', 'CourseService', 'cordovaUtil', '$timeout', SearchController]);
 
-function SearchController($scope, ServcieUtil, cordovaUtil, $timeout)
+function SearchController($scope, CourseService, cordovaUtil, $timeout)
 {
 	$scope.search = "";
 	var self = this;
-	var CourseService = ServcieUtil.getService("CourseService");
+	
 	$scope.focusSearchInput = function() {
 		$('.ui-searchbar-wrap').addClass('focus');
         		$('.ui-searchbar-input input').focus();

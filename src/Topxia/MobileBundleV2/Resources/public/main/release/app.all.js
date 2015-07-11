@@ -12,10 +12,11 @@ app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
 app.config(['$httpProvider', function($httpProvider) {
 
+    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
     // Override $http service's default transformRequest
     $httpProvider.defaults.transformRequest = [function(data) {
+
         /**
          * The workhorse; converts an object to x-www-form-urlencoded serialization.
          * @param {Object} obj
@@ -396,7 +397,7 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 }]);
 
 angular.element(document).ready(function() {
-    var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
+    var platformUtil = angular.injector(["AppService", "ng"]).get("platformUtil");
     if (platformUtil.native) {
       document.addEventListener("deviceready", function() {
           angular.bootstrap( document, ["app"] );
@@ -583,7 +584,7 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		}
 	};
 }]).
-factory('platformUtil', function($browser) {
+factory('platformUtil', function() {
 	var browser = {
 	    v: (function(){
 	        var u = navigator.userAgent, p = navigator.platform;
@@ -1103,10 +1104,9 @@ service('SchoolService', ['httpService', function(httpService) {
 		});
 	}
 }]).
-service('httpService', ['$http', '$rootScope', 'platformUtil', function($http, $rootScope, platformUtil) {
+service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($http, $rootScope, platformUtil, $q) {
 	
 	var self = this;
-
 	this.getOptions = function(method, url, params, callback, errorCallback) {
 		var options = {
 			method : method,
@@ -1150,7 +1150,7 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', function($http, $
 		errorCallback = arguments[1][2];
 
 		if (platformUtil.native) {
-			esNativeCore.post(url,  { "token" : $rootScope.token } , params );
+			esNativeCore.post($q, app.host + url,  { "token" : $rootScope.token } , params );
 		} else {
 			self.simpleRequest("post", url, params, callback, errorCallback);
 		}
@@ -1196,7 +1196,7 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', function($http, $
 		};
 
 		if (platformUtil.native) {
-			esNativeCore.post(options.url, options.headers, options.data);
+			esNativeCore.post($q, options.url, options.headers, options.data);
 		} else {
 			angularPost(options);
 		}
@@ -2694,6 +2694,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 {
 	var self = this;
 	this.__proto__ = new BasePayController();
+
 	$scope.showLoad();
 	SchoolService.getVipPayInfo({
 		levelId : $stateParams.levelId
@@ -2793,19 +2794,16 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 	}
 }
 
-app.controller('CoursePayController', ['$scope', '$stateParams', 'ServcieUtil', 'AppUtil', 'cordovaUtil', CoursePayController]);
-function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordovaUtil)
+app.controller('CoursePayController', ['$scope', '$stateParams', 'OrderService', 'AppUtil', 'cordovaUtil', CoursePayController]);
+function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordovaUtil)
 {	
 	var self = this;
 	this.__proto__ = new BasePayController();
-	
-	ServcieUtil.getService("OrderService").getPayOrder({
-		courseId : $stateParams.courseId,
-		token : $scope.token
+
+	OrderService.getPayOrder({
+		courseId : $stateParams.courseId
 	}, function(data) {
-		$scope.$apply(function() {
-			$scope.data = data;
-		});
+		$scope.data = data;
 	});
 
 	$scope.$parent.$on("coupon", function(event, data) {
@@ -2821,10 +2819,8 @@ function CoursePayController($scope, $stateParams, ServcieUtil, AppUtil, cordova
 	}
 
 	$scope.pay = function() {
-		var CourseService = ServcieUtil.getService("CourseService");
-		ServcieUtil.getService("OrderService").payCourse({
-			courseId : $stateParams.courseId,
-        			token : $scope.token
+		OrderServicepayCourse({
+			courseId : $stateParams.courseId
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
 				cordovaUtil.pay("支付课程", data.payUrl);

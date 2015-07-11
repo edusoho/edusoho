@@ -57,9 +57,10 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         showKeyInput : function() {
             exec(null, null, "ESNativeCore", "showKeyInput", []);
         },
-        post : function(url, headers, params) {
+        post : function($q, url, headers, params) {
             var deferred = $q.defer(); 
             exec(function(data) {
+                console.log(data);
                 deferred.resolve(data);
             }, null, "ESNativeCore", "post", [ url, headers, params ]);
 
