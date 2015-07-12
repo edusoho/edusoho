@@ -60,9 +60,10 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         post : function($q, url, headers, params) {
             var deferred = $q.defer(); 
             exec(function(data) {
-                console.log(data);
                 deferred.resolve(data);
-            }, null, "ESNativeCore", "post", [ url, headers, params ]);
+            }, function(error) {
+                deferred.reject(error);
+            }, "ESNativeCore", "post", [ url, headers, params ]);
 
             return deferred.promise;
         }

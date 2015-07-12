@@ -10,6 +10,9 @@ var app = angular.module('app', [
 
 app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
+app.config(['appRouterProvider', function(appRouterProvider) {
+
+}]);
 app.config(['$httpProvider', function($httpProvider) {
 
     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -60,291 +63,12 @@ app.config(['$httpProvider', function($httpProvider) {
     }];
 }]);
 
-app.config([ '$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider)
+app.config([ 'appRouterProvider', '$urlRouterProvider', function(appRouterProvider, $urlRouterProvider)
 {
   $urlRouterProvider.when("/", "/index").
   otherwise('/');
 
-  $stateProvider.
-            state("slideView",{
-                abstract: true,
-                views : {
-                    "rootView" : {
-                        templateUrl : app.viewFloder  + 'view/main.html',
-                        controller : AppInitController
-                    }
-                }
-            }).
-          state("slideView.mainTab",{
-            url : "/index",
-            views : {
-              "menuContent" : {
-                templateUrl : app.viewFloder  + 'view/main_content.html',
-                controller : FoundTabController
-              }
-            }
-          });
-
-            $stateProvider.state('courseList', {
-              url: "/courselist/:categoryId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course_list.html",
-                  controller: CourseListController
-                }
-              }
-            }).state('courseList.type', {
-              url: "/type",
-              views: {
-                'courselist-content': {
-                  templateUrl: app.viewFloder  + "view/courselist_type.html"
-                }
-              }
-            }).state('courseList.sort', {
-              url: "/sort",
-              views: {
-                'courselist-content': {
-                  templateUrl: app.viewFloder  + "view/courselist_sort.html"
-                }
-              }
-            });
-
-            $stateProvider.state('login', {
-              url: "/login/:goto",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/login.html",
-                  controller: LoginController
-                }
-              }
-            }).state('regist', {
-              url: "/regist",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/regist.html",
-                  controller: RegistController
-                }
-              }
-            });
-
-            $stateProvider.state('myinfo', {
-              url: "/myinfo/:userId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/myinfo.html",
-                  controller: MyInfoController
-                }
-              }
-            });
-
-            $stateProvider.state('mylearn', {
-              url: "/mylearn",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/mylearn.html",
-                  controller : MyLearnController
-                }
-              }
-            });
-
-            $stateProvider.state('myfavorite', {
-              url: "/myfavorite",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/myfavorite.html"
-                }
-              }
-            })
-
-            $stateProvider.state('mygroup', {
-              url: "/mygroup",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/mygroup.html"
-                }
-              }
-            }).state('mygroup.question', {
-              url: "/question",
-              views: {
-                'mygroup-question': {
-                  templateUrl: app.viewFloder  + "view/mygroup_question.html",
-                  controller : MyGroupQuestionController
-                }
-              }
-            }).state('mygroup.note', {
-              url: "/note",
-              views: {
-                'mygroup-note': {
-                  templateUrl: app.viewFloder  + "view/mygroup_note.html",
-                  controller : MyGroupNoteController
-                }
-              }
-            }).state('mygroup.thread', {
-              url: "/thread",
-              views: {
-                'mygroup-thread': {
-                  templateUrl: app.viewFloder  + "view/mygroup_thread.html",
-                  controller : MyGroupQuestionController
-                }
-              }
-            });
-
-            $stateProvider.state('setting', {
-              url: "/setting",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/setting.html",
-                  controller : SettingController
-                }
-              }
-            });
-            $stateProvider.state('question', {
-              url: "/question/:courseId/:threadId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/question.html",
-                  controller : QuestionController
-                }
-              }
-            });
-
-            $stateProvider.state('note', {
-              url: "/note/:noteId/",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/note.html",
-                  controller : NoteController
-                }
-              }
-            });
-
-            $stateProvider.state('course', {
-              url: "/course/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course.html",
-                  controller : CourseController
-                }
-              }
-            });
-
-            $stateProvider.state('courseDetail', {
-              url: "/coursedetail/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course_detail.html",
-                  controller : CourseDetailController
-                }
-              }
-            });
-
-            $stateProvider.state('teacherlist', {
-              url: "/teacherlist/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/teacher_list.html",
-                  controller : TeacherListController
-                }
-              }
-            });
-
-            $stateProvider.state('coursePay', {
-              url: "/coursepay/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course_pay.html",
-                  controller : CoursePayController
-                }
-              }
-            });
-
-            $stateProvider.state('courseCoupon', {
-              url: "/coursecoupon/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/coupon.html",
-                  controller : CourseCouponController
-                }
-              }
-            });
-
-            $stateProvider.state('viplist', {
-              url: "/viplist",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/vip_list.html",
-                  controller : VipListController
-                }
-              }
-            });
-
-            $stateProvider.state('courseSetting', {
-              url: "/coursesetting/:courseId/:isLearn",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course_setting.html",
-                  controller : CourseSettingController
-                }
-              }
-            });
-            $stateProvider.state('vipPay', {
-              url: "/vippay/:levelId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/vip_pay.html",
-                  controller : VipPayController
-                }
-              }
-            });
-
-            $stateProvider.state('courseNotice', {
-              url: "/coursenotice/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course_notice.html",
-                  controller : CourseNoticeController
-                }
-              }
-            });
-
-            $stateProvider.state('courseReview', {
-              url: "/coursereview/:courseId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/course_review.html",
-                  controller : CourseReviewController
-                }
-              }
-            });
-
-            $stateProvider.state('userInfo', {
-              url: "/userinfo/:userId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/user_info.html",
-                  controller : UserInfoController
-                }
-              }
-            });
-
-            $stateProvider.state('lesson', {
-              url: "/lesson/:courseId/:lessonId",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/lesson.html",
-                  controller : LessonController
-                }
-              }
-            });
-            $stateProvider.state('search', {
-              url: "/search",
-              views: {
-                'rootView': {
-                  templateUrl: app.viewFloder  + "view/search.html",
-                  controller : SearchController
-                }
-              }
-            });
+  appRouterProvider.init();
 }]);
 
 app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
@@ -388,16 +112,14 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 
   app.host = window.location.origin;
   app.rootPath = window.location.origin + window.location.pathname;
-  
   $rootScope.stateParams = {};
-  angular.$client = {};
 
   applicationProvider.init(app.host);
   FastClick.attach(document.body);
 }]);
 
 angular.element(document).ready(function() {
-    var platformUtil = angular.injector(["AppService", "ng"]).get("platformUtil");
+    var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
     if (platformUtil.native) {
       document.addEventListener("deviceready", function() {
           angular.bootstrap( document, ["app"] );
@@ -1196,7 +918,12 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		};
 
 		if (platformUtil.native) {
-			esNativeCore.post($q, options.url, options.headers, options.data);
+			esNativeCore.post($q, options.url, options.headers, options.data)
+			.then(function(data) {
+				options.success(angular.fromJson(data));
+			}, function(error) {
+				options.error(angular.fromJson(error));
+			});
 		} else {
 			angularPost(options);
 		}
@@ -1814,7 +1541,7 @@ directive('categoryTree', function () {
         }
     };
 });;
-var appProvider= angular.module('AppProvider', []);
+var appProvider = angular.module('AppProvider', []);
 appProvider.provider('applicationProvider', function() {
 
 	var self = this;
@@ -1859,6 +1586,261 @@ appProvider.provider('applicationProvider', function() {
 		}
 	    	return application;
 	  }
+});
+
+appProvider.provider('appRouter', function($stateProvider) {
+
+	this.init = function() {
+		$stateProvider.state("slideView",{
+	                abstract: true,
+	                views : {
+	                    "rootView" : {
+	                        templateUrl : app.viewFloder  + 'view/main.html',
+	                        controller : AppInitController
+	                    }
+	                }
+	            }).state("slideView.mainTab",{
+	            	url : "/index",
+	            	views : {
+	              		"menuContent" : {
+	                		templateUrl : app.viewFloder  + 'view/main_content.html',
+	                		controller : FoundTabController
+	              	}
+	           }
+	           });
+
+	            $stateProvider.state('courseList', {
+	              url: "/courselist/:categoryId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course_list.html",
+	                  controller: CourseListController
+	                }
+	              }
+	            }).state('courseList.type', {
+	              url: "/type",
+	              views: {
+	                'courselist-content': {
+	                  templateUrl: app.viewFloder  + "view/courselist_type.html"
+	                }
+	              }
+	            }).state('courseList.sort', {
+	              url: "/sort",
+	              views: {
+	                'courselist-content': {
+	                  templateUrl: app.viewFloder  + "view/courselist_sort.html"
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('login', {
+	              url: "/login/:goto",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/login.html",
+	                  controller: LoginController
+	                }
+	              }
+	            }).state('regist', {
+	              url: "/regist",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/regist.html",
+	                  controller: RegistController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('myinfo', {
+	              url: "/myinfo/:userId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/myinfo.html",
+	                  controller: MyInfoController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('mylearn', {
+	              url: "/mylearn",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/mylearn.html",
+	                  controller : MyLearnController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('myfavorite', {
+	              url: "/myfavorite",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/myfavorite.html"
+	                }
+	              }
+	            })
+
+	            $stateProvider.state('setting', {
+	              url: "/setting",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/setting.html",
+	                  controller : SettingController
+	                }
+	              }
+	            });
+	            $stateProvider.state('question', {
+	              url: "/question/:courseId/:threadId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/question.html",
+	                  controller : QuestionController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('note', {
+	              url: "/note/:noteId/",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/note.html",
+	                  controller : NoteController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('course', {
+	              url: "/course/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course.html",
+	                  controller : CourseController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('courseDetail', {
+	              url: "/coursedetail/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course_detail.html",
+	                  controller : CourseDetailController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('teacherlist', {
+	              url: "/teacherlist/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/teacher_list.html",
+	                  controller : TeacherListController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('coursePay', {
+	              url: "/coursepay/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course_pay.html",
+	                  controller : CoursePayController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('courseCoupon', {
+	              url: "/coursecoupon/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/coupon.html",
+	                  controller : CourseCouponController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('viplist', {
+	              url: "/viplist",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/vip_list.html",
+	                  controller : VipListController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('courseSetting', {
+	              url: "/coursesetting/:courseId/:isLearn",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course_setting.html",
+	                  controller : CourseSettingController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('vipPay', {
+	              url: "/vippay/:levelId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/vip_pay.html",
+	                  controller : VipPayController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('courseNotice', {
+	              url: "/coursenotice/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course_notice.html",
+	                  controller : CourseNoticeController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('courseReview', {
+	              url: "/coursereview/:courseId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/course_review.html",
+	                  controller : CourseReviewController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('userInfo', {
+	              url: "/userinfo/:userId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/user_info.html",
+	                  controller : UserInfoController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('lesson', {
+	              url: "/lesson/:courseId/:lessonId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/lesson.html",
+	                  controller : LessonController
+	                }
+	              }
+	            });
+	            $stateProvider.state('search', {
+	              url: "/search",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/search.html",
+	                  controller : SearchController
+	                }
+	              }
+	            });
+	}
+	this.$get = function() {
+		return {};
+	}
 });;
 app.controller('AppInitController', ['$scope', '$state', 'sideDelegate', 'SchoolService', AppInitController]);
 
@@ -3002,13 +2984,13 @@ function RegistController($scope, platformUtil, UserService, $state)
 		});
 	}
 };
-app.controller('SearchController', ['$scope', 'ServcieUtil', 'cordovaUtil', '$timeout', SearchController]);
+app.controller('SearchController', ['$scope', 'CourseService', 'cordovaUtil', '$timeout', SearchController]);
 
-function SearchController($scope, ServcieUtil, cordovaUtil, $timeout)
+function SearchController($scope, CourseService, cordovaUtil, $timeout)
 {
 	$scope.search = "";
 	var self = this;
-	var CourseService = ServcieUtil.getService("CourseService");
+	
 	$scope.focusSearchInput = function() {
 		$('.ui-searchbar-wrap').addClass('focus');
         		$('.ui-searchbar-input input').focus();

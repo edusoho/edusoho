@@ -112,9 +112,7 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 
   app.host = window.location.origin;
   app.rootPath = window.location.origin + window.location.pathname;
-  
   $rootScope.stateParams = {};
-  angular.$client = {};
 
   applicationProvider.init(app.host);
   FastClick.attach(document.body);

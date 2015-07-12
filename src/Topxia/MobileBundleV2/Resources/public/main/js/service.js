@@ -521,7 +521,12 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		};
 
 		if (platformUtil.native) {
-			esNativeCore.post($q, options.url, options.headers, options.data);
+			esNativeCore.post($q, options.url, options.headers, options.data)
+			.then(function(data) {
+				options.success(angular.fromJson(data));
+			}, function(error) {
+				options.error(angular.fromJson(error));
+			});
 		} else {
 			angularPost(options);
 		}
