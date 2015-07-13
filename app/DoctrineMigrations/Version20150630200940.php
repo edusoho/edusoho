@@ -17,6 +17,8 @@ class Version20150630200940 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE  `orders` CHANGE  `payment`  `payment` ENUM(  'none', 'alipay', 'tenpay', 'coin', 'wxpay' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+        $this->addSql("ALTER TABLE  `cash_orders` CHANGE  `payment`  `payment` ENUM(  'none', 'alipay', 'wxpay' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+        $this->addSql("ALTER TABLE  `cash_flow` ADD `payment` ENUM( 'alipay', 'wxpay' ) AFTER `category`");
 
     }
 
