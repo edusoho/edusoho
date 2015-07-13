@@ -104,29 +104,10 @@ class LiveCourseController extends BaseController
         ));
     }
 
-    public function entryAction(Request $request,$courseId, $lessonId)
+    public function getClassroomUrlAction(Request $request,$courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        if (empty($lesson)) {
-            return $this->createMessageResponse('info', '课时不存在！');
-        }
-
-        if (empty($lesson['mediaId'])) {
-            return $this->createMessageResponse('info', '直播教室不存在！');
-        }
-
-        if ($lesson['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', '直播还没开始!');
-        }
-
-        if ($lesson['endTime'] < time()) {
-            return $this->createMessageResponse('info', '直播已结束!');
-        }
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
@@ -144,11 +125,10 @@ class LiveCourseController extends BaseController
             $result = $client->startLive($params);
 
             if (empty($result) || isset($result['error'])) {
-                return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
+                return $this->createAccessDeniedException('进入直播教室失败，请重试！');
             }
 
-            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-                'lesson' => $lesson,
+            return $this->createJsonResponse(array(
                 'url' => $result['url'],
                 'param' => isset($result['param']) ? $result['param']:null
             ));
@@ -179,11 +159,10 @@ class LiveCourseController extends BaseController
             $result = $client->entryLive($params);
 
             if(isset($result["error"]) && $result["error"]){
-                return $this->createMessageResponse('error', $result["errorMsg"]);
+                return $this->createAccessDeniedException($result["errorMsg"]);
             }
 
-            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-                'lesson' => $lesson,
+            return $this->createJsonResponse(array(
                 'url' => $result['url'],
                 'param' => isset($result['param']) ? $result['param']:null
             ));
@@ -191,6 +170,37 @@ class LiveCourseController extends BaseController
         }
 
         return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+    }
+
+    public function entryAction(Request $request,$courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', '课时不存在！');
+        }
+
+        if (empty($lesson['mediaId'])) {
+            return $this->createMessageResponse('info', '直播教室不存在！');
+        }
+
+        if ($lesson['startTime'] - time() > 7200) {
+            return $this->createMessageResponse('info', '直播还没开始!');
+        }
+
+        if ($lesson['endTime'] < time()) {
+            return $this->createMessageResponse('info', '直播已结束!');
+        }
+
+        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+            'courseId' => $courseId, 
+            'lessonId' => $lessonId,
+            'lesson' => $lesson
+        ));
     }
 
     public function verifyAction(Request $request)
