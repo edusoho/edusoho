@@ -11996,6 +11996,10 @@ videojs.plugin('fingerprint', function(options) {
         running = false;
     });
 
+    player.on('dispose', function() {
+        running = false;
+    });
+
     hideFingerprint();
 });
 });

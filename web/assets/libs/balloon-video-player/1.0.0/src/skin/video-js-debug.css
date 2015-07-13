@@ -1137,7 +1137,7 @@ are just basic styles to make it look ok with plain text.
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-control:before {
   color: #a8a8a8;
-  font-size: 2em;
+  font-size: 20px;
   line-height: 54px;
   text-shadow: none;
   -webkit-transition: all .3s ease;
@@ -1431,4 +1431,7 @@ are just basic styles to make it look ok with plain text.
 }
 .ballon-video-player .vjs-res-button .vjs-control-text:hover {
   color: #fff;
+}
+.lt-ie9 .ballon-video-player .vjs-default-skin.vjs-user-inactive.vjs-playing .vjs-control-bar :before {
+  content: "" !important;
 }
