@@ -319,7 +319,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function parseRegistration($registration)
     {
-        $mode = $this->getRegisterMode($registration);
+        $mode = $this->getRegisterMode();
         if($mode =='email_or_mobile'){
             if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
                 if (SimpleValidator::email($registration['emailOrMobile'])) {

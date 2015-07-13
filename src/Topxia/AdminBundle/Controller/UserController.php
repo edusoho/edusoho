@@ -97,8 +97,7 @@ class UserController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $formData['source'] = 'import';
-
+            
             $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
             $this->get('session')->set('registed_email', $user['email']);
 
@@ -125,6 +124,8 @@ class UserController extends BaseController
         $userData['nickname'] = $formData['nickname'];
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
+        $userData['source'] = 'import';
+        
         return $userData;
     }
 
