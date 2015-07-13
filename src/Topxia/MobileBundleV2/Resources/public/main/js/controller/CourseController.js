@@ -92,9 +92,14 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         courseId : $stateParams.courseId
       }, function(data) {
         if (data.paid == true) {
+          console.log("reload");
           window.location.reload();
         } else {
-          $scope.toast("加入学习失败!");
+          var error = "加入学习失败";
+          if (data.error) {
+            error = data.error.message;
+          } 
+          $scope.toast(error);
         }
       }, function(error) {
         console.log(error);

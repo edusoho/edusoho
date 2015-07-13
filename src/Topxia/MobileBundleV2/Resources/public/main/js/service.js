@@ -469,13 +469,29 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		}
 	}
 
+	this.nativePost = function(options) {
+		esNativeCore.post($q, options.url,  options.headers , options.data )
+		.then(function(data) {
+			options.success(angular.fromJson(data));
+		}, function(error) {
+			options.error(angular.fromJson(error));
+		});
+	};
+
 	this.simplePost = function(url) {
 		params  = arguments[1][0];
 		callback = arguments[1][1];
 		errorCallback = arguments[1][2];
 
 		if (platformUtil.native) {
-			esNativeCore.post($q, app.host + url,  { "token" : $rootScope.token } , params );
+			var options = {
+				url : app.host + url,
+				headers : { "token" : $rootScope.token },
+				data : params,
+				success : callback,
+				error : errorCallback
+			}
+			self.nativePost(options);
 		} else {
 			self.simpleRequest("post", url, params, callback, errorCallback);
 		}
@@ -521,12 +537,7 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		};
 
 		if (platformUtil.native) {
-			esNativeCore.post($q, options.url, options.headers, options.data)
-			.then(function(data) {
-				options.success(angular.fromJson(data));
-			}, function(error) {
-				options.error(angular.fromJson(error));
-			});
+			self.nativePost(options);
 		} else {
 			angularPost(options);
 		}
