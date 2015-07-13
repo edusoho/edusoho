@@ -47,6 +47,8 @@ define(function(require, exports, module) {
             validator.query('[name=startTime]').execute();
         });
 
+        $('[name=startTime]').datetimepicker('setStartDate', now);
+
         $('[name=startTime]').datetimepicker().on('changeDate',function(){
             $('[name=endTime]').datetimepicker('setStartDate',$('[name=startTime]').val().substring(0,16));
         });
