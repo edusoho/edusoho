@@ -47,7 +47,9 @@ define(function(require, exports, module) {
             validator.query('[name=startTime]').execute();
         });
 
-        $('[name=startTime]').datetimepicker('setStartDate', now);
+        $('[name=startTime]').datetimepicker().on('changeDate',function(){
+            $('[name=endTime]').datetimepicker('setStartDate',$('[name=startTime]').val().substring(0,16));
+        });
 
         $("[name=endTime]").datetimepicker({
             language: 'zh-CN',
@@ -57,6 +59,10 @@ define(function(require, exports, module) {
         });
 
         $('[name=endTime]').datetimepicker('setStartDate', now);
+
+        $('[name=endTime]').datetimepicker().on('changeDate',function(){
+            $('[name=startTime]').datetimepicker('setEndDate',$('[name=endTime]').val().substring(0,16));
+        });
 
         // group: 'course'
         var editor = CKEDITOR.replace('announcement-content-field', {

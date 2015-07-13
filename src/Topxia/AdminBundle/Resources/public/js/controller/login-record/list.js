@@ -8,12 +8,12 @@ define(function(require, exports, module) {
 
 		$("#startDate").datetimepicker().on('changeDate',function(){
 
-            $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,10));
+            $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
         });
 
         $("#endDate").datetimepicker().on('changeDate',function(){
 
-            $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,10));
+            $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
         });
 
     };
