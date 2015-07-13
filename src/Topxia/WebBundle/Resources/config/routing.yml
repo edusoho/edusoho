@@ -226,6 +226,10 @@ live_course_lesson_replay_entry:
     pattern: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
     defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
 
+live_capacity:
+    pattern: /live_capacity/{id}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:liveCapacity }
+
 course_explore:
     pattern:  /course/explore/{category}
     defaults: { _controller: TopxiaWebBundle:Course:explore, category:'' }

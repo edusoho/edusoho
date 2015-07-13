@@ -10,6 +10,17 @@ use Topxia\Service\Util\LiveClientFactory;
 
 class LiveCourseController extends BaseController
 {
+    public function liveCapacityAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $client = LiveClientFactory::createClient();
+        $liveCapacity = $client->getCapacity();
+
+        return $this->createJsonResponse($liveCapacity);
+
+    }
+
 	public function exploreAction(Request $request)
 	{
         if (!$this->setting('course.live_course_enabled')) {
