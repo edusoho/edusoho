@@ -392,8 +392,10 @@ define(function(require, exports, module) {
                             clearInterval(iID);
                         }
 
+                        var intervalSecond = 0;
+
                         function generateHtml() {
-                            var nowDate = lesson.nowDate;
+                            var nowDate = lesson.nowDate + intervalSecond;
                             var startLeftSeconds = parseInt(startTime - nowDate);
                             var endLeftSeconds = parseInt(endTime - nowDate);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
@@ -472,7 +474,7 @@ define(function(require, exports, module) {
 
                             $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
 
-
+                            intervalSecond++;
                         }
 
                         generateHtml();
