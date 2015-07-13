@@ -5,7 +5,16 @@ define(function(require, exports, module) {
 	require("$");
 
     exports.run = function() {
-		$("#startDate, #endDate").datetimepicker();		
+
+		$("#startDate").datetimepicker().on('changeDate',function(){
+
+            $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,10));
+        });
+
+        $("#endDate").datetimepicker().on('changeDate',function(){
+
+            $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,10));
+        });
 
     };
 
