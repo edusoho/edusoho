@@ -35,6 +35,7 @@ class WebExtension extends \Twig_Extension
             'plain_text' => new \Twig_Filter_Method($this, 'plainTextFilter', array('is_safe' => array('html'))),
             'sub_text' => new \Twig_Filter_Method($this, 'subTextFilter', array('is_safe' => array('html'))),
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
+            'duration_text'  => new \Twig_Filter_Method($this, 'durationTextFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
             'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
@@ -446,6 +447,16 @@ class WebExtension extends \Twig_Extension
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
         return sprintf('%02d', $minutes) . ':' . sprintf('%02d', $seconds);
+    }
+
+    public function durationTextFilter($value)
+    {
+        $minutes = intval($value / 60);
+        $seconds = $value - $minutes * 60;
+        if ($minutes === 0) {
+            return $seconds . '秒';
+        }
+        return "{$minutes}分钟{$seconds}秒";
     }
 
     public function timeRangeFilter($start, $end)
