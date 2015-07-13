@@ -859,9 +859,4 @@ class CoinController extends BaseController
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-
-    protected function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order.OrderService');
-    }
 }
