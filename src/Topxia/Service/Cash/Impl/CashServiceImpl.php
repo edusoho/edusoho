@@ -151,7 +151,7 @@ class CashServiceImpl extends BaseService implements CashService
         }
 
         $amount = $outflow["amount"] * $coinRate;
-
+        $rmbInFlow = $this->getFlowDao()->getFlowBySn($outflow['parentSn']);
         $inflow = array(
             'userId' => $outflow["userId"],
             'amount' => $amount,
@@ -159,7 +159,8 @@ class CashServiceImpl extends BaseService implements CashService
             'orderSn' => $outflow['orderSn'],
             'category' => 'change',
             'note' => '',
-            'parentSn' => $outflow['sn']
+            'parentSn' => $outflow['sn'],
+            'payment' => $rmbInFlow['payment']
         );
 
         $inflow["cashType"] = "Coin";

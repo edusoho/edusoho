@@ -25,6 +25,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function findOrdersBySns(array $sns)
+    {
+        $orders = $this->getOrderDao()->findOrdersBySns($sns);
+        return ArrayToolkit::index($orders, 'id');
+    }
+
     public function createOrder($order)
     {
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
@@ -94,7 +100,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (empty($order)) {
             throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
         }
-
+        
         if ($payData['status'] == 'success') {
             // 避免浮点数比较大小可能带来的问题，转成整数再比较。
             if (intval($payData['amount']*100) !== intval($order['amount']*100)) {

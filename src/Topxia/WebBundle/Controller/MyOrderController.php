@@ -48,8 +48,8 @@ class MyOrderController extends BaseController
             case 'threeMonths': 
                 $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
                 break;  
-        } 
-
+        }
+        $conditions['payment'] = $request->get('payWays');
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),

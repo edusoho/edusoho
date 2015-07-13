@@ -745,6 +745,9 @@ class SettingsController extends BaseController
 		$clients = OAuthClientFactory::clients();
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
 		foreach($userBinds as $userBind) {
+			if ($userBind['type'] == 'weixin') {
+				$userBind['type'] = 'weixinweb';
+			}
 			$clients[$userBind['type']]['status'] = 'bind';
 		}
 		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array(
