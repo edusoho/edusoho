@@ -103,9 +103,8 @@ class MobileBaseController extends BaseController
 
     public function getToken($request)
     {
-        if ($request->getMethod() == "POST") {
-            $token = $request->headers->get('token', '');
-        } else {
+        $token = $request->headers->get('token', '');
+        if (empty($token) && $request->getMethod() == "GET") {
             $token = $request->query->get('token', '');
         }
 
