@@ -39,7 +39,7 @@ class FileToolkit
 
         $fileName = $newFilename . '.' . $finalExtension;
 
-        return $filenName;
+        return $fileName;
     }
 
     public static function validateFileExtension(File $file, $extensions = array())

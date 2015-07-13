@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class BuildPackageCommand extends BaseCommand
 {
-    // private $fileSystem;
+    private $fileSystem;
 
     protected function configure()
     {

@@ -14,7 +14,7 @@ class PartnerDiscuzController extends BaseController
 
         $this->initUcenter();
 
-        // $_DCACHE = $get = $post = array();
+        $_DCACHE = $get = $post = array();
         $code = @$_GET['code'];
         parse_str(uc_authcode($code, 'DECODE', UC_KEY), $get);
         if(MAGIC_QUOTES_GPC) {
@@ -52,7 +52,7 @@ class PartnerDiscuzController extends BaseController
 
     protected function doDeleteuser($request, $get, $post)
     {
-        // $uids = $get['ids'];
+        $uids = $get['ids'];
         !API_DELETEUSER && exit(API_RETURN_FORBIDDEN);
 
         return API_RETURN_SUCCEED;
@@ -167,7 +167,7 @@ class PartnerDiscuzController extends BaseController
         if(!API_UPDATEAPPS) {
             return API_RETURN_FORBIDDEN;
         }
-        // $UC_API = $post['UC_API'];
+        $UC_API = $post['UC_API'];
 
         //note 写 app 缓存文件
         $content = "<?php\r\n";
@@ -175,7 +175,7 @@ class PartnerDiscuzController extends BaseController
         $this->writeCacheFile('apps.php', $content);
 
 
-         // $clientDirectory = $this->container->getParameter('kernel.root_dir') . '/config/';
+        $clientDirectory = $this->container->getParameter('kernel.root_dir') . '/config/';
 
         //note 写配置文件
 
