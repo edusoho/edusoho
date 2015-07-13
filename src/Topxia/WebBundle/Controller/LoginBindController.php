@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Common\SimpleValidator;
 
 class LoginBindController extends BaseController
 {
@@ -191,6 +192,7 @@ class LoginBindController extends BaseController
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
+        $registration['source'] = $type;
 
         if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
             $registration['emailOrMobile'] = $registration['email'];
@@ -207,9 +209,18 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $data = $request->request->all();
-        $user = $this->getUserService()->getUserByEmail($data['email']);
+
+        $message = 'Email地址或手机号码输入错误';
+        if(SimpleValidator::email($data['emailOrMobile'])){
+           $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+           $message = '该Email地址尚未注册';
+        }else if(SimpleValidator::mobile($data['emailOrMobile'])){
+           $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+           $message = '该手机号码地址尚未注册';
+        }
+
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+            $response = array('success' => false, 'message' => $message);
         } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => '密码不正确，请重试！');
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
