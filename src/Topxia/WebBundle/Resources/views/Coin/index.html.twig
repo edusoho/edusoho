@@ -95,16 +95,18 @@
 
               <td>
                 <span class="text-sm">
-                  {% if cash.cashType == "RMB" %}
-                  支付宝支付
-                  {% elseif cash.cashType == "Coin" and cash.category == "inflow" %}
+                  {% if cash.cashType == "Coin" and cash.category == "inflow" %}
                   学习卡充值
                   {% elseif cash.cashType == "Coin" and cash.category == "change" %}
-                  支付宝支付
+                    {% if cash.payment == 'wxpay' %}
+                    微信支付
+                    {% elseif cash.payment == 'alipay' %}
+                    支付宝支付
+                    {% endif %}
                   {% elseif cash.category == "moneyCardRecharge" %}
                   学习卡
                   {% else %}
-                  余额支付                
+                  余额支付             
                   {% endif %}
                 </span>
               </td>

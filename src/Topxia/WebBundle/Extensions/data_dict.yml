@@ -201,7 +201,6 @@ userType:
     weibo: 微博登录
     renren: 人人连接
     qq: QQ登录
-    douban: 豆瓣连接
     weixin: 微信登录
 
 userKeyWordTypes:

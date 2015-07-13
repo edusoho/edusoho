@@ -176,7 +176,7 @@ class PayCenterController extends BaseController
 
         if($payData['status'] == "closed") {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->cancelOrder($order["id"], '支付宝交易订单已关闭', $payData);
+            $this->getOrderService()->cancelOrder($order["id"], '{$name}交易订单已关闭', $payData);
             return new Response('success');
         }
 
@@ -252,8 +252,7 @@ class PayCenterController extends BaseController
 
     public function wxpayRollAction(Request $request)
     {
-        $orderId = $request->query->get('orderId');
-        $order = $this->getOrderService()->getOrder($orderId);
+        $order = $request->query->get('order');
         if ($order['status'] == 'paid') {
             return $this->createJsonResponse(true);
         }
@@ -272,9 +271,14 @@ class PayCenterController extends BaseController
                 $payData['amount'] = $order['amount'];
                 $payData['paidTime'] = time();
                 $payData['sn'] = $returnArray['out_trade_no'];
-                list($success, $order) = $this->getPayCenterService()->pay($payData);
-                $processor = OrderProcessorFactory::create($order["targetType"]);
-                
+                if (isset($order['targetType'])) {
+                    list($success, $order) = $this->getPayCenterService()->pay($payData);
+                }
+                else {
+                    list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
+
+                }
+
                 if ($success){
                     return $this->createJsonResponse(true);
                 }
@@ -421,5 +425,8 @@ class PayCenterController extends BaseController
         return $this->getServiceKernel()->createService('PayCenter.PayCenterService');
     }
 
-
+    protected function getCashOrdersService(){
+      
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
 }

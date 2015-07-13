@@ -153,7 +153,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'name' => '入账',
             'orderSn' => $order['sn'],
             'category' => 'inflow',
-            'note' => ''
+            'note' => '',
+            'payment' => $order['payment']
 		);
 		$inflow = $this->getCashService()->inflowByRmb($inflow);
 
@@ -191,7 +192,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'name' => '入账',
             'orderSn' => $order['sn'],
             'category' => 'inflow',
-            'note' => ''
+            'note' => '',
+            'payment' => $order['payment']
 		);
 
 		$rmbInFlow = $this->getCashService()->inflowByRmb($inflow);
