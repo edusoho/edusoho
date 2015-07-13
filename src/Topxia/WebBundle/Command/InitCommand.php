@@ -415,6 +415,9 @@ EOD;
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/jianmo/block.json';
+        BlockToolkit::init($json, $this->getContainer());
+
     }
 
 	private function initServiceKernel()
