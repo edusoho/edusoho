@@ -77,18 +77,12 @@
   background: @gray-lighter;
   z-index: 2;
   .bar-user {
-    position: relative;
     padding: 10px 0;
     border-top: 1px solid @gray-light;
     border-bottom: 1px solid @gray-light;
     // .avatar-xs {
     //   border: 1px solid #fff;
     // }
-    .dot {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
     &.active,
     &:hover {
       .badge {
@@ -96,6 +90,14 @@
         color: @brand-primary;
         .es-transition;
       } 
+    }
+  }
+  >li {
+    position: relative;
+    .dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
     }
   }
 }
@@ -248,34 +250,17 @@
         height: 100%;
         background-color: @gray-light;
       }
-      &.active,
-      &.last {
-        .icon {
-          border-color: @brand-primary; 
-        }
-        &:before {
-          background-color: @brand-primary;
-        }
-      }
-      &.active {
-        .icon {
-          background-color: @brand-primary;
-        }
-      }
-      .icon {
+      .es-icon {
         position: absolute;
         top: 28px;
         left: 1px;
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        line-height: 16px;
+        font-size: 20px;
+        line-height: 20px;
         text-align: center;
-        color: #fff;
-        .border-radius(50%);
-        background-color: @gray-lighter;
-        border: 2px solid @gray-light;
         z-index: 1;
+        color: @gray-light;
+        background-color: #fafafa;
       }
     }
   }

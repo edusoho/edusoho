@@ -9,7 +9,12 @@
         <li data-id="#bar-course-list" data-toggle="tooltip" data-placement="left" title="我的课程/班级"><a href="javascript:;" ><i class="es-icon es-icon-book"></i></a></li>
         {#<li data-id="#bar-history" data-toggle="tooltip" data-placement="left" title="学习历史"><a href="javascript:;"><i class="es-icon es-icon-accesstime"></i></a></li>#}
         <li data-id="#bar-homework" data-toggle="tooltip" data-placement="left" title="考试/作业"><a href="javascript:;"><i class="es-icon es-icon-edit"></i></a></li>
-        <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知"><a href="javascript:;"><i class="es-icon es-icon-notifications"></i></a></li>
+        <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知">
+          <a href="javascript:;">
+            <i class="es-icon es-icon-notifications"></i>
+            <span class="dot"></span>
+          </a>
+        </li>
       </ul>
       <ul class="bar-menu-sns">
         {% if setting('consult.enabled', 0) and (consultDisplay|default(false)) %}
@@ -43,7 +48,7 @@
     </div>
 
       <!-- 通知 -->
-      <div class="es-bar-main" id="bar-message">
+    <div class="es-bar-main" id="bar-message">
       <div class="bar-main-header">
         <a href="javascript:;" class="js-bar-shrink pull-left link-light" id="bar-message-btn" data-url="{{ path('esbar_my_notify') }}"><i class="es-icon es-icon-arrowforward"></i></a>
         通知
@@ -57,8 +62,8 @@
       </div>
     </div>
 
-      <!-- 考试/作业 -->
-      <div class="es-bar-main" id="bar-homework">
+    <!-- 考试/作业 -->
+    <div class="es-bar-main" id="bar-homework">
       <div class="bar-main-header">
         <a href="javascript:;" class="js-bar-shrink pull-left link-light" id="bar-practice-btn" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}"><i class="es-icon es-icon-arrowforward"></i></a>
         考试/作业
@@ -74,8 +79,8 @@
       </div>
     </div>
 
-      <!-- 课程/班级 -->
-      <div class="es-bar-main" id="bar-course-list">
+    <!-- 课程/班级 -->
+    <div class="es-bar-main" id="bar-course-list">
       <div class="bar-main-header">
         <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
         课程/班级
@@ -89,9 +94,10 @@
 
         </div>
       </div>
-      </div>
-      <!-- 学习中心 -->
-      <div class="es-bar-main" id="bar-user-center">
+    </div>
+    
+    <!-- 学习中心 -->
+    <div class="es-bar-main" id="bar-user-center">
       <div class="bar-main-header">
         <a href="javascript:;" class="js-bar-shrink pull-left link-light" ><i class="es-icon es-icon-arrowforward"></i></a>
         学习中心
