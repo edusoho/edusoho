@@ -82,6 +82,26 @@ class SiteSettingController extends BaseController
         ));
     }
 
+    public function esBarSettingAction(Request $request)
+    {
+        $esBar = $this->getSettingService()->get('esBar', array());
+
+        $default = array(
+            'enabled'=> 0
+        );
+
+        $esBar = array_merge($default,$esBar);
+
+        if($request->getMethod() == 'POST'){
+            $esBar = $request->request->all();
+            $this->getSettingService()->set('esBar', $esBar);
+
+        }
+        return $this->render('TopxiaAdminBundle:System:esbar-setting.html.twig',array(
+            'esBar' => $esBar
+        ));
+    }
+
     public function deleteWebchatAction(Request $request)
     {
         $consult = $this->getSettingService()->get('consult', array());

@@ -51,6 +51,9 @@ class EsBarController extends BaseController{
             foreach ($classrooms as $key => &$classroom){
                 $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
                 $courseIds = ArrayToolkit::column($courses,'id');
+                /**
+                 * 找出学过的课时
+                 */
                 $learnedConditions = array(
                     'userId' => $user->id,
                     'status' => 'finished',
@@ -58,7 +61,9 @@ class EsBarController extends BaseController{
                 );
                 $sort = array( 'finishedTime','ASC');
                 $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,1000),'lessonId');
-
+                /**
+                 * 找出未学过的课时
+                 */
                 $notLearnedConditions = array(
                     'status' => 'published',
                     'courseIds' => $courseIds,
@@ -103,6 +108,9 @@ class EsBarController extends BaseController{
             $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,5);
 
             foreach ($courses as $key => &$course){
+                /**
+                 * 找出学过的课时
+                 */
                 $learnedConditions = array(
                     'userId' => $user->id,
                     'status' => 'finished',
@@ -110,7 +118,9 @@ class EsBarController extends BaseController{
                 );
                 $sort = array( 'finishedTime','ASC');
                 $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,1000),'lessonId');
-
+                /**
+                 * 找出未学过的课时
+                 */
                 $notLearnedConditions = array(
                     'status' => 'published',
                     'courseId' => $course['id'],
@@ -135,7 +145,6 @@ class EsBarController extends BaseController{
                     foreach($notLearnedLessons as &$notLearnedLesson) {
                         $notLearnedLesson['isLearned'] = $this->getCourseService()->getUserLearnLessonStatus($user->id, $notLearnedLesson['courseId'], $notLearnedLesson['id']);
                     }
-                    //var_dump($notLearnedLessons);
                     $course['lessons'] = $notLearnedLessons;
                     $course['learnedLessonNum'] = count($learnedIds);
                     $course['allLessonNum'] = count($allLessons);
