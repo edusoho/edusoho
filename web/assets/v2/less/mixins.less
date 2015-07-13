@@ -24,6 +24,13 @@
   img {
     max-width: 100%;
     height: auto;
+    width: 100% \9;
+    @-moz-document url-prefix() {
+      width: 100%;
+    }
+    @media all and (min-width:0) {
+      width: 100%;
+    }
   }
 }
 
