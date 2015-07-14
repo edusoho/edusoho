@@ -38,7 +38,7 @@ class HLSController extends BaseController
             }
         }
 
-        return new Response($url, 200);
+        return return $this->redirect($url);
     }
 
     public function playlistAction(Request $request, $id, $token)
