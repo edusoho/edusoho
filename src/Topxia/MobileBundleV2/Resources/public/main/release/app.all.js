@@ -278,10 +278,6 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		  			type : "normal"
 		  		},
 		  		{
-		  			name : "班级",
-		  			type : "classroom"
-		  		},
-		  		{
 		  			name : "直播",
 		  			type : "live"
 		  		}
@@ -452,7 +448,7 @@ service('OrderService', ['httpService', function(httpService) {
 	}
 
 	this.payVip = function(params, callback) {
-		httpService.simplePost("/mapi_v2/Order/payVip", arguments);
+		httpService.simpleGet("/mapi_v2/Order/payVip", arguments);
 	}
 
 	this.getPayOrder = function() {
@@ -2745,13 +2741,14 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 	$scope.payVip = function() {
 		OrderService.payVip({
 			targetId : $stateParams.levelId,
-			token : $scope.token,
 			duration : $scope.selectedNum,
 			unitType : $scope.selectedPayMode.name
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
 				cordovaUtil.pay("支付会员", data.payUrl);
 				self.showPayResultDlg();
+			} else if (data.error) {
+				$scope.toast(data.error.message);
 			}
 		});
 	}
@@ -2760,11 +2757,35 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 
 function VipListController($scope, $stateParams, SchoolService)
 {
+	var user = null;
 	SchoolService.getSchoolVipList({
 		userId : $scope.user.id
 	}, function(data) {
 		$scope.data = data;
+		user = data.user;
 	});
+
+	$scope.getVipName = function() {
+		if (!$scope.data) {
+			return "";
+		}
+
+		if (!user || !user.vip) {
+			return "暂时还不是会员";
+		}
+		var levelId = user.vip.levelId;
+		var vips = $scope.data.vips;
+		if (levelId <= 0) {
+			return "暂时还不是会员";
+		}
+		for (var i = 0; i < vips.length; i++) {
+			if (levelId == vips[i].id) {
+				return vips[i].name;
+			}
+		};
+
+		return "暂时还不是会员";
+	}
 }
 
 function CourseCouponController($scope, CouponService, $stateParams, $window)
@@ -2817,7 +2838,7 @@ function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordov
 	}
 
 	$scope.pay = function() {
-		OrderServicepayCourse({
+		OrderService.payCourse({
 			courseId : $stateParams.courseId
 		}, function(data) {
 			if (data.status == "ok" && data.payUrl != "") {
