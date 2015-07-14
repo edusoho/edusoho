@@ -3,6 +3,7 @@ namespace Topxia\Service\Crontab\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Crontab\CrontabService;
+use Symfony\Component\Yaml\Yaml;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
@@ -35,7 +36,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         try {
             // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
-            $this->getSettingService()->set('crontab_next_executed_time', 0);
+            $this->getNextExcutedTime();
 
             $this->getJobDao()->getConnection()->beginTransaction();
             
@@ -97,6 +98,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
     public function scheduleJobs()
     {
+        $this->getNextExcutedTime();
         $conditions = array(
             'executing' => 0,
             'nextExcutedTime' => time(),
@@ -122,6 +124,24 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         } else {
             $this->getSettingService()->set('crontab_next_executed_time', $job[0]['nextExcutedTime']);
         }
+    }
+
+    public function getNextExcutedTime()
+    {
+        $filePath = $this->getKernel()->getParameter('kernel.root_dir').'/data/crontab_config.yml';
+        if (!file_exists($filePath)) {
+            $yaml = new Yaml();
+            $content = $yaml->dump(array('crontab_next_executed_time' => 0));
+            $fh = fopen($filePath,"w");
+            fwrite($fh,$content);
+            fclose($fh);
+        }
+        
+        
+    }
+
+    public function setNextExcutedTime($nextExcutedTime)
+    {
 
     }
 
