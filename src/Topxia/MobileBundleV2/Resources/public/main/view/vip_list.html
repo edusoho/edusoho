@@ -13,7 +13,7 @@
 	        </div>
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap">{{ data.user.nickname }}</h4>
-	            <p class="ui-nowrap">{{ data.user.vip ? data.vips[data.user.vip.levelId].name : "暂时还不是会员" }}</p>
+	            <p class="ui-nowrap" ng-bind="getVipName()"></p>
 	        </div>
 	    </li>
 	    <li class="vip-price-line">

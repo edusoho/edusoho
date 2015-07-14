@@ -146,10 +146,6 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		  			type : "normal"
 		  		},
 		  		{
-		  			name : "班级",
-		  			type : "classroom"
-		  		},
-		  		{
 		  			name : "直播",
 		  			type : "live"
 		  		}

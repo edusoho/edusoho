@@ -68,6 +68,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
             $level["picture"] = sprintf("/assets/img/default/vip_%d.png", $level["id"]);
             return $level;
         }, $levels);
+        
         $user = $this->controller->getUserService()->getUser($userId);
         return array(
                 'user' => $this->controller->filterUser($user),

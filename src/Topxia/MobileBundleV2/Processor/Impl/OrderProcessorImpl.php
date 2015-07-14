@@ -278,7 +278,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
          if ($coinEnabled && isset($coinSetting["cash_rate"])) {
              $cashRate = $coinSetting["cash_rate"];
          }
-
+          if(! isset($fields["couponCode"])){
+                $fields["couponCode"] = "";
+          }
           $processor = OrderProcessorFactory::create($targetType);
           list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
           

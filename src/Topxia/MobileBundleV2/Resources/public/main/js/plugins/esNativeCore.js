@@ -36,7 +36,7 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         share : function(url, title, about, pic){
             exec(null, null, "ESNativeCore", "share", [url, title, about, pic]);
         },
-        payCourse : function(title, url){
+        pay : function(title, url){
             exec(null, null, "ESNativeCore", "pay", [title, url]);
         },
         learnCourseLesson : function(courseId, lessonId){
