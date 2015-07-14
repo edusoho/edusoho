@@ -64,7 +64,7 @@
           <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
             {% set checkedFieldsKeys = courseSetting.userinfoFields|default([]) %}
 
-            {% if courseSetting.userinfoFieldNameArray %}
+            {% if courseSetting.userinfoFieldNameArray|default(null) %}
               {% for field in courseSetting.userinfoFieldNameArray %}
                 {% set userCustomField = userFields[field]|default(null) %}
                 <li class="list-group-item clearfix" data-role="item" >
