@@ -12,9 +12,8 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 class HLSController extends BaseController
 {
 
-    public function playlistAction(Request $request, $id, $token)
+    public function playlistAction(Request $request, $id, $token, $levelParam)
     {
-        $levelParam = $request->query->get('level', null);
 
         if(!empty($levelParam) && !in_array($levelParam, array('HD','SHD','SD'))){
             throw $this->createNotFoundException();
@@ -47,10 +46,10 @@ class HLSController extends BaseController
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 2, 'duration' => 3600));
-
-            if(!empty($levelParam) && strtolower($levelParam) != $level) {
-                $this->getTokenService()->verifyToken('hls.stream', $token["token"]);
+            if(empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
+                $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 5, 'duration' => 3600));
+            } else {
+                $token['token'] = $this->getTokenService()->makeFakeTokenString();
             }
 
             $params = array(
@@ -73,7 +72,6 @@ class HLSController extends BaseController
             'video' => $file['convertParams']['videoQuality'],
             'audio' => $file['convertParams']['audioQuality'],
         );
-
         $api = CloudAPIFactory::create();
 
         $playlist = $api->get('/hls/playlist/json', array( 'streams' => $streams, 'qualities' => $qualities));
