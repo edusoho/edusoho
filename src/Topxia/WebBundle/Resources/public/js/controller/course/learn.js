@@ -276,7 +276,7 @@ define(function(require, exports, module) {
                     lessonVideoDiv.addClass("ballon-video-player");
                     lessonVideoDiv.html(html.join('\n'));
                     lessonVideoDiv.show();
-alert(111);
+
                     var esCloudPlayer = new EsCloudPlayer({
                         element: '#video-player',
                         fingerprint: lessonVideoDiv.data('fingerprint'),
