@@ -8,7 +8,7 @@
     <div class="panel-heading" style="font-weight:normal;">
       {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
       {# 账户余额: #}
-      <span class="label label-default">账户余额</span>
+      <span class="label label-primary label-md">账户余额</span>
       {% if setting('coin.coin_content') %}
         <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
       {% endif %}
