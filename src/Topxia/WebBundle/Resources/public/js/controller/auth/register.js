@@ -42,6 +42,7 @@ define(function(require, exports, module) {
             element: $form,
             onFormValidated: function(error, results, $form) {
                 if (error) {
+                    $('.js-sms-send').addClass('disabled');
                     return false;
                 }
                 $('#register-btn').button('submiting').addClass('disabled');

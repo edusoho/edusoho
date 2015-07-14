@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             autoSubmit: true,
             onFormValidated: function(error){
                 if (error) {
+                    $('.js-sms-send').addClass('disabled');
                     return false;
                 }
                 $('#submit-btn').button('submiting').addClass('disabled');

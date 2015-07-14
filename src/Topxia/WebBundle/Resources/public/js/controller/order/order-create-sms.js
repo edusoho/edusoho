@@ -14,12 +14,34 @@ define(function(require, exports, module) {
 	            autoSubmit: true,
 	            onFormValidated: function(error){
 	                if (error) {
+	                	$('.js-sms-send').addClass('disabled');
 	                    return false;
 	                }
 	            }
 	        });
 
-    		
+    		if ($("#getcode_num").length > 0){
+            
+                $("#getcode_num").click(function(){ 
+                    $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                }); 
+
+                smsValidator.addItem({
+                    element: '[name="captcha_num"]',
+                    required: true,
+                    rule: 'alphanumeric remote',
+                    errormessageRequired: '请输入验证码',
+                    onItemValidated: function(error, message, eleme) {
+                        if (message == "验证码错误"){
+                            $('.js-sms-send').addClass('disabled');
+                            $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                        } else {
+                            $('.js-sms-send').removeClass('disabled');
+                        }
+                    }                
+                });
+            };
+
 	        if($('input[name="sms_code_modal"]').length>0){
 	            smsValidator.addItem({
 	                element: '[name="sms_code_modal"]',

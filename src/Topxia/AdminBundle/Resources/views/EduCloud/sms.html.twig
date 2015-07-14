@@ -172,14 +172,14 @@
 							    	> <span>手机绑定功能已开启</span>
 							    </label>
 							    <br>	
-								<label>
+								{# <label>
 							    	<input name="sms_registration" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
 							    		checked
 							    	{% endif %}
 							    	> <span>新用户注册时</span>
 							    </label>
-							    <br>		      			 
+							    <br> #}		      			 
 							    <label>
 							    	<input name="sms_user_pay" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
@@ -188,21 +188,21 @@
 							    	> 使用账户余额支付时
 							    </label>
 							    <br>
-							    <label>
+							    {# <label>
 							    	<input name="sms_forget_pay_password" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_forget_pay_password')|default('')) == 'on' %}
 							    		checked
 							    	{% endif %}
 							    	> 忘记支付密码时
-							    </label>
-							    <br>
+							    </label> #}
+							    {# <br>
 							    <label>
 							    	<input name="sms_forget_password" type="checkbox"
 							    	{% if (setting('cloud_sms.sms_forget_password')|default('')) == 'on' %}
 							    		checked
 							    	{% endif %}
 							    	> <span>忘记登录密码时</span>
-							    </label>
+							    </label> #}
 			      			</div>
 			    		</div>
 		    		</div>

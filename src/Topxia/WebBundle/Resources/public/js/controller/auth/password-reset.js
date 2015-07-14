@@ -3,19 +3,7 @@ define(function(require, exports, module) {
     var SmsSender = require('../widget/sms-sender');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        var validator = new Validator({
-            element: '#password-reset-form',
-            onFormValidated: function(err, results, form) {
-                if (err == false) {
-                    $('#password-reset-form').find("[type=submit]").button('loading');
-                }else{
-                    $('#alertxx').hide();                    
-                };
 
-            }
-        });
-        
-        
         var smsSender;
         
         var makeValidator = function(type) {
@@ -50,6 +38,7 @@ define(function(require, exports, module) {
                         if (err == false) {
                             $('#password-reset-by-monile-form').find("[type=submit]").button('loading');
                         }else{
+                            $('.js-sms-send').addClass('disabled');
                             $('#alertxx').hide();                    
                         };
 
