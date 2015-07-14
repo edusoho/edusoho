@@ -43,10 +43,13 @@ define(function(require, exports, module) {
       element: '#auth-form'
     });
 
-    validator.addItem({
-      element: '[name="user_name"]',
-      required: true
-    });
+    if ($('input[name="user_name"]').length > 0) {
+        validator.addItem({
+            element: '[name="user_name"]',
+            required: true
+        });
+    }
+    
 
     $('.model').on('click',function(){
 

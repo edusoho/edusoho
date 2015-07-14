@@ -203,25 +203,24 @@
   </fieldset>
 
 
- <fieldset>
-    <legend>名称设置</legend>
+  {% if setting('magic.username_setting')|default(false) %}
+    <fieldset>
+      <legend>名称设置</legend>
+      <div class="row form-group">
+          <div class="col-md-2 col-md-offset-2 control-label">
+              <label for="user_name">用户名称</label>
+          </div>
+          <div class="controls col-md-4">
+            <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
+          </div>
+      </div>
 
-    <div class="row form-group">
-        <div class="col-md-2 col-md-offset-2 control-label">
-            <label for="user_name">用户名称</label>
-        </div>
-        <div class="controls col-md-4">
-          <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
-        </div>
-    </div>
-
-  <div class="alert alert-info deduction text-center">
-  <p><strong> 
-  注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
-  </strong></p>
-  </div>
-
-  </fieldset> 
+      <div class="alert alert-info deduction text-center">
+        <p><strong> 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+        </strong></p>
+      </div>
+    </fieldset> 
+  {% endif %}
   
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
