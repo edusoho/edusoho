@@ -1,3 +1,31 @@
+.media-list {
+  .media {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  .media-body .bullet {
+    padding: 0 3px;
+    font-size: 75%;
+    color: #ccc;
+    line-height: 1.4;
+  }
+  .empty-item {
+    text-align: center;
+    color: #999;
+  }
+}
+
+// 即将弃用
+.media .media-object-small img {
+  width: 48px;
+  height: 48px;
+  border-radius: 3px;
+}
+
+
 // 默认
 .media-default {
   .media-body {
@@ -139,9 +167,9 @@
       margin-left: 5px;
     }
   }
-  p {
-    padding-right: 30px;
-  }
+  // p {
+  //   padding-right: 30px;
+  // }
   .comment-sns {
     i {
       margin-right: 5px;
