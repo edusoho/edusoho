@@ -1015,6 +1015,10 @@ password_reset_update:
     pattern:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+password_reset_check_mobile:
+    pattern:  /password/reset/check/mobile
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
+
 browser_upgrade:
     pattern:  /browser/upgrade
     defaults: { _controller: TopxiaWebBundle:Browser:upgrade }

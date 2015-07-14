@@ -7,7 +7,7 @@ define(function(require, exports, module) {
             element: '#password-reset-form',
             onFormValidated: function(err, results, form) {
                 if (err == false) {
-            $('#password-reset-form').find("[type=submit]").button('loading');
+                    $('#password-reset-form').find("[type=submit]").button('loading');
                 }else{
                     $('#alertxx').hide();                    
                 };
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="mobile"]',
                     required: true,
-                    rule: 'phone'            
+                    rule: 'phone email_or_mobile_remote'            
                 });
 
                 validator.addItem({
@@ -70,11 +70,35 @@ define(function(require, exports, module) {
                     display: '短信验证码'           
                 });
 
+                if ($("#getcode_num").length > 0){
+                    
+                    $("#getcode_num").click(function(){ 
+                        $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                    }); 
+
+                    validator.addItem({
+                        element: '[name="captcha_num"]',
+                        required: true,
+                        rule: 'alphanumeric remote',
+                        onItemValidated: function(error, message, eleme) {
+                            if (message == "验证码错误"){
+                                $('.js-sms-send').addClass('disabled');
+                                $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                            } else {
+                                $('.js-sms-send').removeClass('disabled');
+                            }
+                        }                
+                    });
+                };
+
                 if (('undefined' != typeof smsSender)&&("undefined" != typeof smsSender.destroy)){
                     smsSender.destroy();
                 }
             }
         }
+
+        
+
 
         makeValidator('email');
         $('.js-find-by-email').mouseover(function () {
