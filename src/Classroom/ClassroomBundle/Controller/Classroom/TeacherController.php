@@ -10,10 +10,11 @@ class TeacherController extends BaseController
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $headTheader = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
-        $assisants = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'assistant', 0, PHP_INT_MAX);
+        $headTeacher = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
+        $assistants = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'assistant', 0, PHP_INT_MAX);
+        $studentAssistants = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'studentAssistant', 0, PHP_INT_MAX);
         $members = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
-        $members = array_merge($headTheader, $members, $assisants);
+        $members = array_merge($headTeacher, $members, $assistants,$studentAssistants);
         $members = ArrayToolkit::index($members, 'userId');
         $teacherIds = ArrayToolkit::column($members, 'userId');
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
@@ -21,7 +22,7 @@ class TeacherController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
-        $Myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
+        $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -37,7 +38,7 @@ class TeacherController extends BaseController
             'profiles' => $profiles,
             'member' => $member,
             'members' => $members,
-            'Myfollowings' => $Myfollowings,
+            'Myfollowings' => $myfollowings,
         ));
     }
     public function catchIdsAction(Request $request,$classroomId)

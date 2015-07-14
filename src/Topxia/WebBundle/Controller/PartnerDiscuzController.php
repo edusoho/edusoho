@@ -28,7 +28,7 @@ class PartnerDiscuzController extends BaseController
         if(empty($get)) {
             return new Response('Invalid Request');
         }
-        $action = $get['action'];
+        // $action = $get['action'];
 
         $this->requireClientFile('lib/xml.class.php');
 
