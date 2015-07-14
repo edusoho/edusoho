@@ -34,8 +34,29 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="mobile"]',
             required: true,
-            rule: 'phone'            
+            rule: 'phone email_or_mobile_remote'            
         });
+
+        if ($("#getcode_num").length > 0){
+            
+            $("#getcode_num").click(function(){ 
+                $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+            }); 
+
+            validator.addItem({
+                element: '[name="captcha_num"]',
+                required: true,
+                rule: 'alphanumeric remote',
+                onItemValidated: function(error, message, eleme) {
+                    if (message == "验证码错误"){
+                        $('.js-sms-send').addClass('disabled');
+                        $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                    } else {
+                        $('.js-sms-send').removeClass('disabled');
+                    }
+                }                
+            });
+        };
 
         if($('input[name="sms_code"]').length>0){
             validator.addItem({
