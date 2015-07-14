@@ -43,7 +43,7 @@
 
       <div class="controls col-md-8 col-md-offset-3" id="show-list">
         <div class="pull-left">
-          {% for sort in courseSetting.userinfoFields%}
+          {% for sort in courseSetting.userinfoFields|default([]) %}
             {% set userCustomField = userFields[sort]|default(null) %}
             <button type="button" class="btn btn-default btn-xs">
               {% if userCustomField %}{{ userCustomField.title }}{% else %}
