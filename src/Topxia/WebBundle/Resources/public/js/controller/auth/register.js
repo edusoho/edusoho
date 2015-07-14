@@ -15,10 +15,12 @@ define(function(require, exports, module) {
             var isMobile = reg_mobile.test(emailOrMobile);
             if(isMobile){
                 $(".email_mobile_msg").removeClass('hidden');
-                $('.captcha_div').addClass('hidden');
+                $('.captcha_div').removeClass('hidden');
             }else {
                 $(".email_mobile_msg").addClass('hidden');
-                $(".captcha_div").removeClass('hidden');
+                if($('input[name="captcha_enabled"]').val() == 0) {
+                    $('.captcha_div').addClass('hidden');
+                }
             }
             if (isEmail || isMobile) {
                 result = true;
@@ -59,7 +61,10 @@ define(function(require, exports, module) {
                 rule: 'alphanumeric remote',
                 onItemValidated: function(error, message, eleme) {
                     if (message == "验证码错误"){
+                        $('.js-sms-send').addClass('disabled');
                         $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                    } else {
+                        $('.js-sms-send').removeClass('disabled');
                     }
                 }                
             });
@@ -110,9 +115,9 @@ define(function(require, exports, module) {
         });
 
   
-        if ($('input[name="sms_code"]').length > 0) {
+        if ($('input[name="em_sms_code"]').length > 0) {
             validator.addItem({
-                element: '[name="sms_code"]',
+                element: '[name="em_sms_code"]',
                 required: true,
                 triggerType: 'submit',
                 rule: 'integer fixedLength{len:6} remote',
