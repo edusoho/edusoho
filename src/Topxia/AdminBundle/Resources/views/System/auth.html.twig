@@ -19,7 +19,7 @@
   </div>
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>用户修改昵称</label>
+      <label>用户修改用户名</label>
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
@@ -151,7 +151,7 @@
           {% verbatim %}
           <div>变量说明：</div>
           <ul>
-            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{nickname}} 为接收方用户名</li>
             <li>{{sitename}} 为网站名称</li>
             <li>{{siteurl}} 为网站的地址</li>
             <li>{{verifyurl}} 为邮箱验证地址</li>
@@ -185,7 +185,7 @@
             <button type="button" class="btn btn-default btn-xs">密码</button>
             {% endif %}
             {% if sort=='nickname' %}
-            <button type="button" class="btn btn-default btn-xs">昵称</button>
+            <button type="button" class="btn btn-default btn-xs">用户名</button>
             {% endif %}
             {% if sort=='truename' %}
             <button type="button" class="btn btn-default btn-xs">姓名</button>
@@ -243,7 +243,7 @@
                {% if sort=='nickname' %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %} {% if sort == "nickname" %} checked =true {% endif %} {% endfor %} name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"></span>
+                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %} {% if sort == "nickname" %} checked =true {% endif %} {% endfor %} name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 用户名<span class="text-muted"></span>
                 </li>
                {% endif %}
                {% if sort=='password' %}
@@ -306,7 +306,7 @@
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
+              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 用户名<span class="text-muted"> (系统必需，不可取消)</span>
             </li>
             <li class="list-group-item clearfix" data-role="item" >
               <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
@@ -382,7 +382,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
-        <div class="help-block">通常为这个网站的管理员，请输入用户昵称。</div>
+        <div class="help-block">通常为这个网站的管理员，请输入用户用户名。</div>
       </div>
     </div>
 
@@ -406,7 +406,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
           <div>注意： 私信长度不能超过1000个字符</div>
           <div>变量说明：</div>
           <ul>
-            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{nickname}} 为接收方用户用户名</li>
             <li>{{sitename}} 为网站名称</li>
             <li>{{siteurl}} 为网站的地址</li>
           </ul>
