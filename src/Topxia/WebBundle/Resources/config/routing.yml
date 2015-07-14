@@ -177,6 +177,10 @@ hls_change_res:
     pattern: /hls/{id}/change_res
     defaults: { _controller: TopxiaWebBundle:HLS:changeRes}
 
+hls_get_str:
+    pattern: /hls/hls_get_str
+    defaults: {_controller: TopxiaWebBundle:HLS:getStr}
+
 editor_upload:
     pattern:  /editor/upload
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
