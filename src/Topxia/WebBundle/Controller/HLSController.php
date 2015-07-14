@@ -11,35 +11,6 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class HLSController extends BaseController
 {
-    public function getStrAction(Request $request)
-    {
-        $array = array(
-            array(
-              'level' => 'hls-sd',
-              'src' => 'http://drools3.qiniudn.com/20140810025415/sa0xxqdbc6scg04s89h9hiui/69202eb0d1205f66_sd.m3u8?' . time(),
-              'name' => 'SD'
-            ),
-            array(
-              'level' => 'hls-hd',
-              'src' => 'http://drools3.qiniudn.com/20140810025415/sa0xxqdbc6scg04s89h9hiui/69202eb0d1205f66_md.m3u8?' . time(),
-              'name' => 'HD'
-            ),
-            array(
-              'level' => 'hls-shd',
-              'src' => 'http://drools3.qiniudn.com/20140810025415/sa0xxqdbc6scg04s89h9hiui/69202eb0d1205f66_hd.m3u8?' . time(),
-              'name' => 'SHD'
-            ) 
-        );
-
-        $levelName = $request->query->get('level');
-        foreach ($array as $key => $value) {
-            if($value["level"] == 'hls-'.$levelName) {
-                $url = $value["src"];
-            }
-        }
-
-        return $this->redirect($url);
-    }
 
     public function playlistAction(Request $request, $id, $token)
     {
@@ -76,7 +47,7 @@ class HLSController extends BaseController
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 1, 'duration' => 3600));
+            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 2, 'duration' => 3600));
 
             if(!empty($levelParam) && strtolower($levelParam) != $level) {
                 $this->getTokenService()->verifyToken('hls.stream', $token["token"]);
