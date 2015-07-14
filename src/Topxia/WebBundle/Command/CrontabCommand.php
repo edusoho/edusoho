@@ -14,18 +14,15 @@ use Topxia\Common\BlockToolkit;
 class CrontabCommand extends BaseCommand
 {
 
-	protected function configure()
-	{
-		$this->setName ( 'topxia:crontab' );
-	}
+    protected function configure()
+    {
+        $this->setName ( 'topxia:crontab' );
+    }
 
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
-		$output->writeln('<info>开始初始化系统</info>');
-		
-		$output->writeln('<info>初始化系统完毕</info>');
-	}
-
-	
-
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln('<info>开始初始化系统</info>');
+        
+        $output->writeln('<info>初始化系统完毕</info>');
+    }
 }
