@@ -10,28 +10,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Controller\BaseController;
 
 class EsBarController extends BaseController{
-    public function liveNotifyAction(Request $request,$userId)
-    {
-        $filters['type'] = 'live';
-        $liveCourses = $this->getCourseService()->findUserLeaningCourses($userId,0,100,$filters);
-        $liveLessons = array();
-        if(!empty($liveCourses)){
-            $conditions = array(
-                'status' => 'published',
-                'courseIds' => ArrayToolkit::column($liveCourses,'id'),
-                'type' => 'live',
-                'startTimeGreaterThan' => time()
-            );
-            $sort = array(
-                'startTime','ASC'
-            );
-            $liveLessons = $this->getCourseService()->searchLessons($conditions,$sort,0,2);
-        }
-        return $this->render("TopxiaWebBundle:EsBar:live-notify.html.twig", array(
-            'liveLessons' => $liveLessons,
-        ));
-    }
-
     public function studyPlanAction(Request $request,$userId)
     {
         $user = $this->getCurrentUser();
