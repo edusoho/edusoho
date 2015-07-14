@@ -850,8 +850,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('runtime_error', $e->getMessage());
         }
 
-        return $this->createMetaAndData(
-            array(), 200, "ok");
+        return true;
     }
     
     public function coupon()
@@ -947,6 +946,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
         
+        if(empty($member)) {
+            $member = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
+            if(isset($member["id"])) {
+                $course['studentNum'] ++ ;
+            }
+            if (empty($member)) {
+                $member = null;
+            }
+        }
+
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
         $vipLevels     = array();
         if ($this->controller->setting('vip.enabled')) {
@@ -1005,7 +1014,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $categoryId               = (int) $this->getParam("categoryId", 0);
         $conditions               = array();
-        var_dump($categoryId != 0);
+
         if($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
         }
@@ -1343,7 +1352,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $liveCourses = $this->controller->getCourseService()->searchCourses($condition, 'lastest',$start, $limit);
 
         $liveCourses = array_map(function($liveCourse){
-            $liveCourse['createdTime'] = Date('c',$liveCourse['createdTime']);
             return $liveCourse;
         },$liveCourses);
 

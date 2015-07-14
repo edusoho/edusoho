@@ -1,9 +1,11 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;
-use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 {
@@ -15,18 +17,132 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+	public function exitClassRoom($classRoomId, $user)
+    	{
+        		$member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
+
+        		if (empty($member)) {
+            		throw $this->createErrorResponse('error', '您不是班级的学员。');
+        		}
+
+        		if (!in_array($member["role"], array("auditor", "student"))) {
+        			return $this->createErrorResponse('error', "您不是班级的学员。");
+        		}
+
+        		if (!empty($member['orderId'])) {
+            		return $this->createErrorResponse('error', "有关联的订单，不能直接退出学习。");
+        		}
+
+        		try {
+        			$this->getClassroomService()->exitClassroom($classRoomId, $user["id"]);
+        		} catch (\Exception $e) {
+        			return $this->createErrorResponse('error', $e->getMessage());
+        		}
+        		
+        		return true;
+    	}
+
+	public function unLearn()
+	{	
+		$classRoomId = $this->getParam("classRoomId");
+		$targetType = $this->getParam("targetType");
+
+	        if(!in_array($targetType, array("course", "classroom"))) {
+	            throw $this->createErrorResponse('error', '退出学习失败');
+	        }
+	        $processor = OrderRefundProcessorFactory::create($targetType);
+
+	        $target = $processor->getTarget($classRoomId);
+	        $user = $this->controller->getUserByToken($this->request);
+	        if (!$user->isLogin()) {
+            	return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
+        	        }
+
+	        $member = $processor->getTargetMember($classRoomId, $user["id"]);
+	        if (empty($member) || empty($member['orderId'])) {
+	            return $this->exitClassRoom($classRoomId, $user);
+	        }
+
+	        $order = $this->getOrderService()->getOrder($member['orderId']);
+	        if (empty($order)) {
+	            return $this->createErrorResponse('error', '您尚未购买，不能退学。');
+	        }
+
+	        $data = $this->request->request->all();
+            	$reason = empty($data['reason']) ? array() : $data['reason'];
+            	$amount = empty($data['applyRefund']) ? 0 : null;
+
+            	try {
+            		if(isset($data["applyRefund"]) && $data["applyRefund"] ){
+                			$refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+	            	} else {
+	                		$processor->removeStudent($order['targetId'], $user['id']);
+	            	}
+            	} catch(\Exception $e) {
+            		return $this->createErrorResponse('error', $e->getMessage());
+            	}
+
+            	return true;
+	}
+
+	public function learnByVip()
+	{
+		$classRoomId = $this->getParam("classRoomId");
+		if (!$this->controller->setting('vip.enabled')) {
+	            	return $this->createErrorResponse('not_login', "网校未开启会员体系");
+	        	}
+
+	        	$user = $this->controller->getUserByToken($this->request);
+	        	if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
+        		}
+        		try {
+        			$this->getClassroomService()->becomeStudent($classRoomId, $user['id'], array('becomeUseMember' => true));
+        		} catch (\Exception $e) {
+        			return $this->createErrorResponse('error', $e->getMessage());
+        		}
+	        	
+	        	return true;
+	}
+
+	public function getClassRoomMember()
+	{
+		$classRoomId = $this->getParam("classRoomId");
+	        	$user  = $this->controller->getUserByToken($this->request);
+	        	if (!$user->isLogin()) {
+            		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
+        		}
+	        	if (empty($classRoomId)) {
+	        	    return null;
+	        	}
+	        	$member = $user ? $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]) : null;
+	        	if ($member && $member['locked']) {
+	         	   return null;
+	       	}
+
+	        	return empty($member) ? new Response("null") : $member;
+	}
+
 	public function getClassRoom()
 	{
 		$id = $this->getParam("id");
 		$classroom = $this->getClassroomService()->getClassroom($id);
 
         		$user = $this->controller->getUserByToken($this->request);
-       		if (!$user->isLogin()) {
-            		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
-        		}
-        		$member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-		
-		return $this->filterClassRoom($classroom);
+        		$userId = empty($user) ? 0 : $user["id"];
+        		$member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
+		$vipLevels = array();
+	        	if ($this->controller->setting('vip.enabled')) {
+	            	$vipLevels = $this->controller->getLevelService()->searchLevels(array(
+	                		'enabled' => 1
+	            	), 0, 100);
+	        	}
+		return array(
+			"classRoom" => $this->filterClassRoom($classroom),
+			"member" => $member,
+			"vip" => null,
+			"vipLevels" => $vipLevels
+			);
 	}
 
 	private function filterClassRoom($classroom)
@@ -45,25 +161,24 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		if (empty($classrooms)) {
 			return array();
 		}
+
+		$self = $this->controller;
 		$container = $this->getContainer();
-		return array_map(function($classroom) use ($container) {
+		return array_map(function($classroom) use ($self, $container) {
 
 			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
             		$classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
             		$classroom['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
 			$classroom['createdTime'] = date("c", $classroom['createdTime']);
-
+			$classroom['about'] = $self->convertAbsoluteUrl($container->get('request'), $classroom['about']);
 			return $classroom;
 		}, $classrooms);
 	}
 
 	public function getClassRoomCourses()
 	{
-		$classroomId = $this->getParam("id");
+		$classroomId = $this->getParam("classRoomId");
 		$user = $this->controller->getUserByToken($this->request);
-       		if (!$user->isLogin()) {
-            		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
-        		}
 		$classroom = $this->getClassroomService()->getClassroom($classroomId);
 		if (empty($classroom)) {
             		return $this->createErrorResponse('error', "没有找到该班级");
@@ -75,11 +190,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	           	$courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
 	        	}
 
-	        	$member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-	        	if ($member && $member["locked"]) {
-	        		return $this->createErrorResponse('error', "会员被锁定，不能继续学习，请联系网校管理员!");
-	        	}
-
 	        	return $this->controller->filterCourses($courses);
 	}
 
@@ -89,7 +199,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         		$limit  = (int) $this->getParam("limit", 10);
 
 		$user = $this->controller->getUserByToken($this->request);
-       		 if (!$user->isLogin()) {
+       		if (!$user->isLogin()) {
             		return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
         		}
 	        $progresses = array();
@@ -208,7 +318,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	            "start" => $start,
 	            "limit" => $limit,
 	            "total" => $total,
-	            "data" => $classrooms
+	            "data" => $this->filterClassRooms($classrooms)
 	        );
 	}
 

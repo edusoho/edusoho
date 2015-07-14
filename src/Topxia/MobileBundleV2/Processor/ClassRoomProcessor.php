@@ -10,4 +10,10 @@ interface ClassRoomProcessor
 	public function getClassRoom();
 
 	public function getClassRoomCourses();
+
+	public function getClassRoomMember();
+
+	public function learnByVip();
+
+	public function unLearn();
 }
