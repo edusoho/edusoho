@@ -24,13 +24,16 @@
   img {
     max-width: 100%;
     height: auto;
-    width: 100% \9;
-    @-moz-document url-prefix() {
-      width: 100%;
-    }
-    @media all and (min-width:0) {
-      width: 100%;
-    }
+  }
+}
+// table-cell引起的兼容问题
+.media-body .editor-text img {
+  width: 100% \9;
+  @-moz-document url-prefix() {
+    width: 100%;
+  }
+  @media all and (min-width:0) {
+    width: 100%;
   }
 }
 
