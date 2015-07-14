@@ -43,7 +43,7 @@ define(function(require, exports, module) {
                 }
 
                 var player = videojs(elementId, {
-					techOrder: ["flash", "html5"],
+					techOrder: ["html5"],
 					controls: true,
 					autoplay: true,
 					preload: 'none',
