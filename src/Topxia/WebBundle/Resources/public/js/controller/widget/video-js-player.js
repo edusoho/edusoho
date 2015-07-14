@@ -17,6 +17,13 @@ define(function(require, exports, module) {
         setup: function() {
         	var elementId = this.element.attr("id");
         	var self = this;
+
+            videojs.options.flash.flashVars = {
+                hls_debug: false,
+                hls_debug2: false,
+                hls_seekmode: "ACCURATE"
+            };
+
         	$.get(self.get('url'), function(playlist) {
 
         		var plugins = {};
