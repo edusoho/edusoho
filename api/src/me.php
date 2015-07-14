@@ -252,4 +252,53 @@ $api->get('/friends', function (Request $request) {
         'total' => $count
     );
 });
+
+/*
+## 获取当前用户通知
+    GET /me/notifications
+
+[支持分页](global-parameter.md)
+
+** 参数 **
+
+| 名称  | 类型  | 必需   | 说明 |
+| ---- | ----- | ----- | ---- |
+| type | string | 否 | 类型,未传则取全部类型 |
+
+`type`的值有：
+
+  * user-follow : 关注好友
+
+** 响应 **
+
+```
+{
+    "data": "{friend-list}"
+    "total": "{totalCount}"
+}
+```
+
+*/
+
+$api->get('/notifications', function (Request $request) {
+    $user = getCurrentUser();
+    $start = $request->query->get('start', 0);
+    $limit = $request->query->get('limit', 10);
+    $type = $request->query->get('type', '');
+    $conditions['userId'] = $user['id'];
+    if (!empty($type)) {
+        $conditions['type'] = $type;
+    }
+    $notifications = ServiceKernel::instance()->createService('User.NotificationService')->searchNotifications(
+        $conditions, 
+        array('createdTime','DESC'), 
+        $start, 
+        $limit
+    );
+    $count = ServiceKernel::instance()->createService('User.NotificationService')->searchNotificationCount($conditions);
+    return array(
+        'data' => filters($notifications, 'notification'),
+        'total' => $count
+    );
+});
 return $api;

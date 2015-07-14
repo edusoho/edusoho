@@ -36,8 +36,9 @@ class UserEventSubscriber implements EventSubscriberInterface
             'title' => '好友添加',
             'content' => $user['nickname'].'添加你为好友',
             'custom' => json_encode(array(
-                'id' => $friend['fromId'],
-                'typeBusiness' => 'friendVerify'
+                'fromId' => $friend['fromId'],
+                'nickname' => $user['nickname'],
+                'typeBusiness' => 'verified'
             ))
         );
         $this->getEduCloudService()->sendMessage($message);
