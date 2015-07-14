@@ -149,6 +149,9 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
         $messages = $this->getEduCloudService()->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
         $lastMaxId = 0;
+        if (isset($messages['error'])) {
+            throw $this->createServiceException('获取远程私信错误');
+        }
         foreach ($messages as $message) {
             $messageSetting['lastMaxId'] = $message['id'];
             $this->sendMessage($message['userId'], $user['id'], $message['context'], $message['type'], $message['createdTime']);
