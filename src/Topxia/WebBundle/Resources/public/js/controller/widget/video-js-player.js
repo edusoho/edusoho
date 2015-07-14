@@ -74,7 +74,7 @@ define(function(require, exports, module) {
 
                 player.on('loadedmetadata', function(){
                 	self.trigger("beforePlay", player);
-                    player.player();
+                    //player.player();
                 });
 
                 player.on("timeupdate", function(){
