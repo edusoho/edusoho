@@ -864,17 +864,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $result["data"] = null;
         if (empty($couponInfo)) {
-            $result['meta'] = $this->createMeta(500, "优惠码错误");
+            return $this->createErrorResponse('error', "优惠码错误");
             return $result;
         } 
 
         if ($couponInfo["useable"] == "no") {
-            $result['meta'] = $this->createMeta(500, "优惠码错误");
+            return $this->createErrorResponse('error', "优惠码错误");
             return $result;
         }
-        $result['meta'] = $this->createMeta(200, "ok");
-        $result["data"] = $couponInfo;
-        return $result;
+
+        return $couponInfo;
     }
     
     public function unLearnCourse()
