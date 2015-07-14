@@ -226,11 +226,6 @@ class UserController extends BaseController
 
         $this->getUserService()->unFollow($user['id'], $id);
 
-        $message = array('userId' => $user['id'],
-                'userName' => $user['nickname'],
-                'opration' => 'unfollow');
-        $this->getNotificationService()->notify($id, 'user-follow', $message);
-
         return $this->createJsonResponse(true);
     }
 
@@ -241,11 +236,6 @@ class UserController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $this->getUserService()->follow($user['id'], $id);
-
-        $message = array('userId' => $user['id'],
-                'userName' => $user['nickname'],
-                'opration' => 'follow');
-        $this->getNotificationService()->notify($id, 'user-follow', $message);
 
         return $this->createJsonResponse(true);
     }

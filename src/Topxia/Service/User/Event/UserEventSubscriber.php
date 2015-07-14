@@ -15,7 +15,8 @@ class UserEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'user.service.registered' => 'onUserRegistered',
-            'user.service.follow' => 'onUserFollowed'
+            'user.service.follow' => 'onUserFollowed',
+            'user.service.unfollow' => 'onUserUnfollowed'
         );
     }
 
@@ -29,6 +30,14 @@ class UserEventSubscriber implements EventSubscriberInterface
     {
         $friend = $event->getSubject();
         $user = $this->getUserService()->getUser($friend['fromId']);
+
+        $message = array(
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'opration' => 'follow'
+        );
+        $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
+
         $message = array(
             'fromId' => $friend['fromId'],
             'toId' => $friend['toId'],
@@ -44,6 +53,18 @@ class UserEventSubscriber implements EventSubscriberInterface
         $this->getEduCloudService()->sendMessage($message);
     }
 
+    public function onUserUnfollowed(ServiceEvent $event)
+    {
+        $friend = $event->getSubject();
+        $user = $this->getUserService()->getUser($friend['fromId']);
+
+        $message = array(
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'opration' => 'unfollow'
+        );
+        $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
+    }
 
     private function getEduCloudService()
     {
@@ -53,5 +74,10 @@ class UserEventSubscriber implements EventSubscriberInterface
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User.NotificationService');
     }
 }
