@@ -26,7 +26,7 @@ $connection = DriverManager::getConnection(array(
     'password' => $config['database_password'],   
     'host' => $config['database_host'],
     'driver' => $config['database_driver'],
-    'charset' => $config['database_charset'],
+    // 'charset' => $config['database_charset'],
 ));
 
 // var_dump($config);
