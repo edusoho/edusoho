@@ -29,10 +29,7 @@
 // table-cell引起的兼容问题
 .media-body .editor-text img {
   width: 100% \9;
-  @-moz-document url-prefix() {
-    width: 100%;
-  }
-  @media all and (min-width:0) {
+  @media screen and (min--moz-device-pixel-ratio:0) {
     width: 100%;
   }
 }
