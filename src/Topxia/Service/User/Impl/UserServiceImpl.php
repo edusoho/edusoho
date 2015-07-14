@@ -1052,7 +1052,9 @@ class UserServiceImpl extends BaseService implements UserService
         if(empty($friend)) {
             throw $this->createServiceException('不存在此关注关系，取消关注失败！');
         }
-        return $this->getFriendDao()->deleteFriend($friend['id']);
+        $result = $this->getFriendDao()->deleteFriend($friend['id']);
+        $this->getDispatcher()->dispatch('user.service.unfollow', new ServiceEvent($friend));
+        return $result;
     }
 
     public function hasAdminRoles($userId)
