@@ -52,7 +52,7 @@ define(function(require, exports, module) {
                 var player = videojs(elementId, {
 					techOrder: ["flash", "html5"],
 					controls: true,
-					autoplay: false,
+					autoplay: true,
 					preload: 'none',
 					language: 'zh-CN',
 					plugins: plugins,
@@ -81,7 +81,7 @@ define(function(require, exports, module) {
 
                 player.on('loadedmetadata', function(){
                 	self.trigger("beforePlay", player);
-                    //player.player();
+                    player.player();
                 });
 
                 player.on("timeupdate", function(){

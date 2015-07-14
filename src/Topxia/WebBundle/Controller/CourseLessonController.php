@@ -305,11 +305,15 @@ class CourseLessonController extends BaseController
 
     public function playlistAction(Request $request, $courseId, $lessonId)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        
+        $isPreview = $request->query->get('isPreview', 0);
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
             throw $this->createNotFoundException();
+        }
+
+        if(!($isPreview && $lesson["free"])) {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         }
 
         $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -323,7 +327,7 @@ class CourseLessonController extends BaseController
                 'levelParam' => $request->query->get('level')
             ));
         }
-    } 
+    }
 
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
