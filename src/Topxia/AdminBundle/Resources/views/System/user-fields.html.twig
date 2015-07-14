@@ -37,7 +37,7 @@
         <label >购买课程或班级时填写个人资料</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo) }}
+        {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo|default(0)) }}
         <p class="help-block">开启后，{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}购买课程或班级时，需填写个人资料</p>
       </div>
 
