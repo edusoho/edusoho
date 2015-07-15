@@ -25,6 +25,7 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $registration = $request->request->all();
+            $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
