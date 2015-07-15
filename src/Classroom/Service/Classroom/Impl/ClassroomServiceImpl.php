@@ -9,32 +9,32 @@ use Topxia\Service\Common\ServiceEvent;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
-    public function getClassroom($id)
+    public function getClassroom($id)//
     {
         $classroom = $this->getClassroomDao()->getClassroom($id);
 
         return $classroom;
     }
 
-    public function searchClassrooms($conditions, $orderBy, $start, $limit)
+    public function searchClassrooms($conditions, $orderBy, $start, $limit)//
     {
         return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchClassroomsCount($conditions)
+    public function searchClassroomsCount($conditions)//
     {
         $count = $this->getClassroomDao()->searchClassroomsCount($conditions);
 
         return $count;
     }
 
-    public function findClassroomIdsByCourseId($courseId)
+    public function findClassroomIdsByCourseId($courseId)//
     {
         $results = $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
         return ArrayToolkit::column($results, 'classroomId');
     }
 
-    public function findClassroomsByCourseId($courseId)
+    public function findClassroomsByCourseId($courseId)//
     {
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
         return $this->findClassroomsByIds($classroomIds);
