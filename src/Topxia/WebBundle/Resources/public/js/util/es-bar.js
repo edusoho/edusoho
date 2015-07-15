@@ -32,6 +32,10 @@ define(function(require, exports, module) {
 
 
     $(".es-bar .bar-menu-top li").click(function(){
+        if($("#notLogin").length>0){
+            isNotLogin();
+            return;
+        }
         var $this = $(this);
         if(!$this.hasClass('active')) {
             $this.siblings(".active").removeClass('active').end().addClass('active').parents(".es-bar").animate({
@@ -46,6 +50,15 @@ define(function(require, exports, module) {
         }
         
     });
+
+    function isNotLogin(){
+        $('.modal').modal('hide');
+
+        $("#login-modal").modal('show');
+        $.get($('#login-modal').data('url'), function(html){
+            $("#login-modal").html(html);
+        });
+    }
 
     function clickBar($this){
         switch ($this.data('id')){

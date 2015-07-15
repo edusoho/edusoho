@@ -59,7 +59,7 @@
 
     {% block bottom %}{% endblock %}
   </div>
-  {% if app.user and app.user.isLogin() and setting('esBar.enabled', 0) %}
+  {% if setting('esBar.enabled', 0) %}
     {% block es_bar %}
       {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
     {% endblock %}
