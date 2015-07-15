@@ -1097,6 +1097,11 @@ are just basic styles to make it look ok with plain text.
   height: 8px;
   top: -8px;
 }
+@media (max-width: 767px) {
+  .ballon-video-player .video-js.vjs-default-skin .vjs-progress-control {
+    width: auto !important;
+  }
+}
 .ballon-video-player .video-js.vjs-default-skin .vjs-play-progress {
   background-color: #24d18c;
   background-image: none;
