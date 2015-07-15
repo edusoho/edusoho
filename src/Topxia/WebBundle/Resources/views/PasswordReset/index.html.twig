@@ -14,10 +14,12 @@
             <a style="cursor: pointer;">邮箱地址
             </a>
           </li>
-          <li class="js-find-by-mobile">
-            <a style="cursor: pointer;">手机号码
-            </a>
-          </li>
+          {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
+            <li class="js-find-by-mobile">
+              <a style="cursor: pointer;">手机号码
+              </a>
+            </li>
+          {% endif %}
         </ul>
 
       {% if error %} <div id="alertxx" class="alert alert-danger">{{ error }}</div> {% endif %}
