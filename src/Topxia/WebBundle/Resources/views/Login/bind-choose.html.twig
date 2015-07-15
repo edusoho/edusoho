@@ -78,15 +78,15 @@
 
           <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
 
-        {% if setting('auth.register_mode') == 'email' %}
+        {% if setting('auth.register_mode') == 'email_or_mobile' and setting('cloud_sms.sms_enabled') %}
           <div class="form-group">
-            <label class="control-label" for="bind-email-field">Email地址</label>
+            <label class="control-label" for="bind-email-field">Email / 手机</label>
             <div class="controls">
               <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
-              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
+              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
             </div>
           </div>
-        {% elseif setting('auth.register_mode') == 'mobile' %}
+        {% elseif setting('auth.register_mode') == 'mobile' and setting('cloud_sms.sms_enabled') %}
           <div class="form-group">
             <label class="control-label" for="bind-email-field">手机号码</label>
             <div class="controls">
@@ -96,10 +96,10 @@
           </div>
         {% else %}
           <div class="form-group">
-            <label class="control-label" for="bind-email-field">Email / 手机</label>
+            <label class="control-label" for="bind-email-field">Email地址</label>
             <div class="controls">
               <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
-              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
+              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
             </div>
           </div>
         {% endif %}
