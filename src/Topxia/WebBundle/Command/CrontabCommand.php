@@ -21,10 +21,10 @@ class CrontabCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>开始初始化系统</info>');
+        $output->writeln('<info>开始执行定时任务</info>');
         $this->initServiceKernel();
         $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
-        $output->writeln('<info>初始化系统完毕</info>');
+        $output->writeln('<info>定时任务执行完毕</info>');
     }
 
     protected function initServiceKernel()
