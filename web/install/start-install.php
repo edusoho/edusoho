@@ -669,7 +669,7 @@ EOD;
 
     public function initThemes()
     {
-        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
+        $this->getSettingService()->set('theme', array('uri' => 'mooc'));
     }
 
     public function initBlocks()
@@ -678,9 +678,7 @@ EOD;
 
         $metaFiles = array(
             'system' => "{$themeDir}/block.json",
-            'default' => "{$themeDir}/default/block.json",
-            'autumn' => "{$themeDir}/autumn/block.json",
-            'jianmo' => "{$themeDir}/jianmo/block.json"
+            'mooc' => "{$themeDir}/mooc/block.json"
         );
 
         foreach ($metaFiles as $category => $file) {

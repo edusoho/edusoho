@@ -304,10 +304,9 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/assets", "{$this->distDirectory}/web/assets");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/customize", "{$this->distDirectory}/web/customize");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/install", "{$this->distDirectory}/web/install");
-		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/autumn", "{$this->distDirectory}/web/themes/autumn");
-		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
-		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/jianmo", "{$this->distDirectory}/web/themes/jianmo");
-		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
+
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/mooc", "{$this->distDirectory}/web/themes/mooc");
+
 		$this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
 
 		$this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
@@ -356,10 +355,7 @@ class BuildCommand extends BaseCommand
         $themeDir = realpath(__DIR__ . '/../../../../web/themes/');
 
         $html =  $this->generateBlcokContent("{$themeDir}/block.json");
-        $this->generateBlcokContent("{$themeDir}/default/block.json");
-        $this->generateBlcokContent("{$themeDir}/autumn/block.json");
-        $this->generateBlcokContent("{$themeDir}/jianmo/block.json");
-
+        $this->generateBlcokContent("{$themeDir}/mooc/block.json");
 	}
 
 	private function generateBlcokContent($metaFilePath)

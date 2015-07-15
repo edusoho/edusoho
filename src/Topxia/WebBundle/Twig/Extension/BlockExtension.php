@@ -29,11 +29,13 @@ class BlockExtension extends \Twig_Extension
     public function showBlock($code)
     {
         $block = ServiceKernel::instance()->createService('Content.BlockService')->getBlockByCode($code);
+
         if (empty($block)) {
             return '';
         }
 
         $env = $this->container->getParameter('kernel.environment');
+
         if ($env == 'prod') {
             return $block['content'];
         }
