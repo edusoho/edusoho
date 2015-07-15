@@ -3,7 +3,15 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     require('webuploader');
     require('jquery.sortable');
+    require('colorpicker');
     exports.run = function() {
+        $('.colorpicker-input').colorpicker();
+        $('#btn-tabs .btn').click(function(){
+            $(this).removeClass('btn-default').addClass('btn-primary')
+                            .siblings('.btn-primary').removeClass('btn-primary').addClass('btn-default');
+        })
+        
+
         var editForm = Widget.extend({
             uploaders: [],
             events: {
