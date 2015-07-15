@@ -80,6 +80,7 @@ define(function(require, exports, module) {
         }
 
         if ($('input[name="verifiedMobile"]').length > 0) {
+            $('.email_mobile_msg').removeClass('hidden');
             validator.addItem({
                 element: '[name="verifiedMobile"]',
                 required: true,
@@ -143,10 +144,11 @@ define(function(require, exports, module) {
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_registration',
-                dataTo : $('[name="mobile"]').val() == null? 'emailOrMobile' : 'mobile',
+                dataTo : $('[name="verifiedMobile"]').val() == null? 'emailOrMobile' : 'verifiedMobile',
                 preSmsSend: function(){
                     var couldSender = true;
-                    var $mobile_target =  validator.query('[name="mobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="mobile"]');
+                    var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
+                    
                     $mobile_target.execute(function(error, results, element) {
                         if (error) {
                             couldSender = false;
