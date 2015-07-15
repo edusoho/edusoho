@@ -21,6 +21,26 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $this->requestReceiptData($user["id"], $amount, $receipt, false);
     }
 
+    public function checkCoupon()
+    {
+        $code = $this->getParam('code');
+        $type = $this->getParam('targetType');
+        $id = $this->getParam('targetId');
+        if (!in_array($type, array('course', 'vip', 'classroom'))) {
+            return $this->createErrorResponse('error', "优惠码不支持的购买项目。");
+        }
+
+        $price = $this->getParam('amount');
+
+        try {
+            $couponInfo = $this->getCouponService()->checkCouponUseable($code, $type, $id, $price);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+        
+        return $couponInfo;
+    }
+
     public function getPayOrder()
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -195,7 +215,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $cashRate = $coinSetting["cash_rate"];
         }
 
-        $fields = $this->request->query->all();
+        $fields = $this->request->request->all();
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
@@ -204,7 +224,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             } 
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
-
+            $amount = (string) ((float) $amount);
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
                 $coupon = $fields["couponCode"];
                 $couponDiscount = $couponResult["decreaseAmount"];
@@ -224,7 +244,16 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
-
+            if ($order["amount"] == 0) {
+                $payData = array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time()
+                );
+                list($success, $order) = $this->getPayCenterService()->processOrder($payData);
+            }
+            
             if($order["status"] == "paid") {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             }

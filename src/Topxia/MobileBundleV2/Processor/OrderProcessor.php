@@ -18,4 +18,6 @@ interface OrderProcessor
 	public function payVip();
 
 	public function payClassRoom();
+
+	public function checkCoupon();
 }
