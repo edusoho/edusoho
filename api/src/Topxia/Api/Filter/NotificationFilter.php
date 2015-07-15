@@ -11,7 +11,7 @@ class NotificationFilter implements Filter
         $userService = ServiceKernel::instance()->createService('User.UserService');
         $fileService = ServiceKernel::instance()->createService('Content.FileService');
         unset($data['isRead']);
-        $user = $userService->getUser($data['userId']);
+        $user = $userService->getUser($data['content']['userId']);
         $avatar = empty($user['largeAvatar']) ? '' : $fileService->parseFileUri($user['largeAvatar']);
         $data['content']['avatar'] = empty($avatar) ? '' : 'files/'.$avatar['path'];
         $data['createdTime'] = date('c', $data['createdTime']);
