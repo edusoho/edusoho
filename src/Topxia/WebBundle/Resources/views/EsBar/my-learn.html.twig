@@ -3,8 +3,8 @@
 {% if type == 'course' %}
   {% if courses %}
     <!-- 课程 -->
-    {% for course in courses %}
-      <div class="course-list">
+    <div class="course-list">
+      {% for course in courses %}
         <div class="course-item">
           <div class="course-img">
             <a href="{{ path('course_show', {id:course.id}) }}">
@@ -23,8 +23,8 @@
             </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   {% endif %}
 {% elseif type == 'classroom' %}
   {% if classrooms %}
