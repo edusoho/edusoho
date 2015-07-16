@@ -26,7 +26,7 @@
   {% if app.debug %}
     <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockId:block.id}) }}" target="_blank">查看JSON配置</a>
   {% endif %}
-
+  {% if block.code != 'jianmo:home_top_banner' %}
   <!-- <div class="col-md-6"> -->
   <div>
     <h4>{{ block.title }}</h4>
@@ -40,90 +40,14 @@
   </div>
 
   <br><br><br><br><br><br>
-  
+  {% else %}
   <!-- 以下是新版的样式 -->
   <h4>{{ block.title }}</h4>
   <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
-    <div class="btn-tabs" id="btn-tabs">
-      <a class="btn btn-primary" href="#poster1" data-toggle="tab">海报1</a>
-      <a class="btn btn-default" href="#poster2" data-toggle="tab">海报2</a>
-      <a class="btn btn-default" href="" data-toggle="tab">海报3</a>
-      <a class="btn btn-default" href="" data-toggle="tab">海报4</a>
-    </div>
-    <div class="well">
-      <div class="form-group">
-        <label class="col-sm-2 control-label">海报布局</label>
-        <label class="checkbox-inline">
-          <input type="radio" id="" value="option1"> 平铺居中
-        </label>
-        <label class="checkbox-inline">
-          <input type="radio" id="" value="option2"> 限宽居中
-        </label>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">编辑模式</label>
-        <label class="checkbox-inline">
-          <input type="radio" id="" value="option1"> 图片模式
-        </label>
-        <label class="checkbox-inline">
-          <input type="radio" id="" value="option2"> HTML模式
-        </label>
-      </div>
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="poster1">
-          <div class="edit-mode-img">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                选择图片
-              </label>
-              <div class="col-sm-10">
-                <label class="control-label mrl">在线教育活动.jpg</label>
-                <a class="btn btn-default btn-sm img-upload" href="">上传</a>
-                <img class="img-responsive mtl" src="{{asset('assets/v2/img/poster_computer_content.jpg')}}" alt="">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                背景色填充
-              </label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control colorpicker-input width-input-small"  placeholder="#fff">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">
-                海报链接地址
-              </label>
-              <div class="col-sm-10">
-                <input type="" class="form-control width-input-large" placeholder="http://www.edusoho.com">
-              </div>
-            </div>
-          </div>
-          <div class="edit-mode-html" style="display:none;">
-            <textarea class="form-control mbl" id="" rows="10" name="content" data-role="editor-field"></textarea>
-            <form id="block-image-upload-form" action="/file/upload?group=default" method="post" enctype="multipart/form-data">
-              <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;">
-              <input type="hidden" name="token" value="MXxibG9ja3xpbWFnZXwxNDM2OTU4OTg4fDUwNjk4ZmU2NzE2YWY0MTEwNGQ0NmY4NjNkYTFmMTRi">
-              <button class="btn btn-default btn-sm">上传图片</button>
-              <input type="hidden" name="_csrf_token" value="087c686ff4cb1828d88652ee1387f1c2a8608ead">
-            </form>
-          </div>
-        </div>
-        <div role="tabpanel" class="tab-pane " id="poster2">
-          1234
-        </div>
-      </div>
-      <div class="text-center mtl">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary mrm" data-toggle="block-edit-form" data-target="#block-edit-form">保存设置</button>
-
-        <button id="block-close-btn" data-submiting-text="" type="" class="btn btn-danger mlm">取消更改</button>
-      </div>
-    </div>
-    
+    {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
   </form>
   <!-- 以上是新版的样式 -->
-  
+  {% endif %}
   <!-- <div class="col-md-4">
     {% include 'TopxiaAdminBundle:Block:affix-nav.html.twig' %}
   </div> -->

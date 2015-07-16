@@ -31,6 +31,7 @@ define(function(require, exports, module) {
             },
             _initForm: function() {
                 $form = this.element;
+
                 $form.data('serialize', $form.serialize()); 
                 $(window).on('beforeunload',function(){
                     if ($form.serialize() != $form.data('serialize')) {
@@ -143,17 +144,18 @@ define(function(require, exports, module) {
                     });
 
                     uploader.on( 'fileQueued', function( file ) {
-                       Notify.info('正在上传，请稍等！', 0);
-                       uploader.upload();
+                        Notify.info('正在上传，请稍等！', 0);
+                        uploader.upload();
                     });
 
                     uploader.on( 'uploadSuccess', function( file, response ) {
-                       self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
-                       Notify.success('上传成功！', 1);
+                        self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
+                        self.closest('.form-group').find('.mrl').html(response.url);
+                        Notify.success('上传成功！', 1);
                    });
 
                     uploader.on( 'uploadError', function( file, response ) {
-                       Notify.danger('上传失败，请重试！');
+                        Notify.danger('上传失败，请重试！');
                     });
                     
                     var id =$(this).attr('id');

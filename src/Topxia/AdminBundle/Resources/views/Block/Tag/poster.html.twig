@@ -1,0 +1,63 @@
+{% set first = 1 %}
+{% for dataId,data in  block.data[code]|default(null)  %}
+  <div role="tabpanel" class="tab-pane {% if first == 1 %}active{% endif %}" id="poster-{{ dataId }}">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">海报布局</label>
+      <label class="checkbox-inline">
+        <input type="radio" id="" value=""> 平铺居中
+      </label>
+      <label class="checkbox-inline">
+        <input type="radio" id="" value=""> 限宽居中
+      </label>
+      <input type="hidden" name="data[{{ code }}][{{ dataId }}][layout]" value="tile">
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">编辑模式</label>
+      <label class="checkbox-inline">
+        <input type="radio" id="" value="option1"> 图片模式
+      </label>
+      <label class="checkbox-inline">
+        <input type="radio" id="" value="option2"> HTML模式
+      </label>
+    </div>
+    <div class="edit-mode-img">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          选择图片
+        </label>
+        <div class="col-sm-10">
+          <label class="control-label mrl">{{ data.src }}</label>
+          <a class="btn btn-default btn-sm img-upload" id="item-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">上传</a>
+          <input class="form-control" type="hidden" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+          <img class="img-responsive mtl" src="{{asset(data.src)}}" alt="">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          背景色填充
+        </label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control colorpicker-input width-input-small" name="data[{{ code }}][{{ dataId }}][background]" id="data[{{ code }}][{{ dataId }}][background]" placeholder="{{ data.background }}" value="{{ data.background }}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">
+          海报链接地址
+        </label>
+        <div class="col-sm-10">
+          <input type="" class="form-control width-input-large" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]"  placeholder="{{ data.href }}" value="{{ data.href }}">
+        </div>
+      </div>
+    </div>
+    <div class="edit-mode-html" style="display:none;">
+      <textarea class="form-control mbl" id="data[{{ code }}][{{ dataId }}][html]" rows="10" name="data[{{ code }}][{{ dataId }}][html]" data-role="editor-field" value="{{ data.html }}"></textarea>
+      {#<form id="block-image-upload-form" action="/file/upload?group=default" method="post" enctype="multipart/form-data">
+        <input class="btn btn-default btn-sm" type="file" name="file" value="上传" style="display:inline-block;">
+        <input type="hidden" name="token" value="MXxibG9ja3xpbWFnZXwxNDM2OTU4OTg4fDUwNjk4ZmU2NzE2YWY0MTEwNGQ0NmY4NjNkYTFmMTRi">
+        <button class="btn btn-default btn-sm">上传图片</button>
+        <input type="hidden" name="_csrf_token" value="087c686ff4cb1828d88652ee1387f1c2a8608ead">
+      </form>#}
+    </div>
+  </div>
+  {% set first = 0 %}
+{% endfor %}
