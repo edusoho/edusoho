@@ -46,7 +46,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 	public function findSessionsBySessionTime($sessionTime, $limit)
 	{
 		$sql = "SELECT * FROM {$this->table} WHERE `session_time` < ? LIMIT {$limit};";
-		return $this->getConnection()->fetchAll($sql, array($sessionTime)) ? : null;
+		return $this->getConnection()->fetchAll($sql, array($sessionTime));
 	}
 
 	public function deleteSessionsByIds($ids)
@@ -55,7 +55,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
             return 0;
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-		$sql = "DELETE FROM {$this->table} WHERE `id` in ( {$marks} ) LIMIT {$limit};";
+		$sql = "DELETE FROM {$this->table} WHERE `session_id` in ( {$marks} ) LIMIT {$limit};";
 
 		return $this->getConnection()->executeUpdate($sql, $ids);
 	}
