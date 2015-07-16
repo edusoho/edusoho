@@ -4,6 +4,7 @@ namespace Topxia\Service\System\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\System\SessionService;
+use Topxia\Common\ArrayToolkit;
 
 class SessionServiceImpl extends BaseService implements SessionService
 {
@@ -22,11 +23,11 @@ class SessionServiceImpl extends BaseService implements SessionService
     	return $this->getSessionDao()->deleteSessionByUserId($userId);
 	}
 
-    public function deleteInvalidSession($retentionTime)
+    public function deleteInvalidSession($sessionTime, $limit)
     {
-        
-        
-        return $this->getSessionDao()->deleteInvalidSession($retentionTime);
+        $sessions = $this->getSessionDao()->findSessionsBySessionTime($sessionTime, $limit);
+        $ids = ArrayToolKit::column($sessions,"id");
+        return $this->getSessionDao()->deleteSessionsByIds($ids);
     }
 
 	protected function getSessionDao()
