@@ -149,6 +149,17 @@ class CloudController extends BaseController
         return $this->createJsonResponse($watermark);
     }
 
+    protected function parsePattern($pattern, $user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+
+        $values = array_merge($user, $profile);
+        $values = array_filter($values, function($value){
+            return !is_array($value);
+        });
+        return $this->get('topxia.twig.web_extension')->simpleTemplateFilter($pattern, $values);
+    }
+
     protected function checkSign($server, $sign, $secretKey)
     {
         return md5($server . $secretKey) == $sign;
