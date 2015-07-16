@@ -4,18 +4,17 @@ namespace Topxia\Service\User\Job;
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
 
-class DeleteSessionJob implements Job
+class DeleteExpiredTokenJob implements Job
 {
     public function execute($params)
     {
-      $retentionTime = time()-7200;
-      $limit = 1000;
-      $number = $this->getSessionService()->deleteInvalidSession($retentionTime);
+        $limit = 10000;
+        $number = $this->getTokenService()->deleteExpiredTokens($limit);
     }
 
-    protected function getSessionService()
+    protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('System.SessionService');
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getServiceKernel()
