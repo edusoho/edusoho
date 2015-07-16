@@ -55,7 +55,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
             return 0;
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-		$sql = "DELETE FROM {$this->table} WHERE `session_id` in ( {$marks} ) LIMIT {$limit};";
+		$sql = "DELETE FROM {$this->table} WHERE `session_id` in ( {$marks} );";
 
 		return $this->getConnection()->executeUpdate($sql, $ids);
 	}
