@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
 	require('mediaelementplayer');
 
-	var EsCloudPlayer = require('../widget/video-js-player');
+    var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -15,23 +15,28 @@ define(function(require, exports, module) {
 
 			if ($("#lesson-preview-video-player").data('hlsUrl')) {
 
-                var html = [];
-                html.push('<video id="lesson-video-player" class="video-js vjs-default-skin" width="100%" height="360px">');
-                html.push('</video>');
-                var videoPlayerDiv = $("#lesson-preview-video-player");
-                videoPlayerDiv.addClass("ballon-video-player");
-                videoPlayerDiv.html(html.join('\n'));
-
-                var esCloudPlayer = new EsCloudPlayer({
-                    element: '#lesson-video-player',
-                    fingerprint: videoPlayerDiv.data('fingerprint'),
-                    watermark: videoPlayerDiv.data('watermark'),
-                    url: videoPlayerDiv.data('hlsUrl'),
-                    dynamicSource: videoPlayerDiv.data('changeResUrl')
+                $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
+                   
+                var mediaPlayer = new MediaPlayer({
+                   element: '#lesson-preview-video-player',
+                   playerId: 'lesson-video-player',
+                   height: '360px'
                 });
+                
+                var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
+                if ($("#lesson-preview-video-player").data('timelimit')) {
+                    $("#lesson-preview-video-player").append($('.js-buy-text').html());
+
+                    mediaPlayer.on('ended', function() {
+                        $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
+                    });
+                }
+
+                mediaPlayer.setSrc($hlsUrl, 'video');
+                mediaPlayer.play();
 
                 $('#modal').one('hidden.bs.modal', function () {
-                    esCloudPlayer.destroy();
+                    mediaPlayer.dispose();
                 });
 
 			} else {

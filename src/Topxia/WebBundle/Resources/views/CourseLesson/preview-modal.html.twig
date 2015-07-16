@@ -5,7 +5,6 @@
 {% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
-  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
 
 	{% if lesson.status == 'published' %}
 
@@ -20,12 +19,11 @@
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ finger_print() }}"
+            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
           {% endif %}
           {% if not lesson.free %}
             data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
           {% endif %}
-            data-change-res-url = "{{ path('hls_change_res',{id:lesson.mediaId}) }}"
         >
         </div>
         <div class="js-time-limit-dev hidden">

@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var EsCloudPlayer = require("../widget/video-js-player");
+    var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -270,41 +270,29 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-                    var html = [];
-                    html.push('<video id="video-player" class="video-js vjs-default-skin" width="100%" height="100%">');
-                    html.push('</video>');
-                    var lessonVideoDiv = $('#lesson-video-content');
-                    lessonVideoDiv.addClass("ballon-video-player");
-                    lessonVideoDiv.html(html.join('\n'));
-                    lessonVideoDiv.show();
+                    $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
+                    $("#lesson-video-content").show();
 
-                    var esCloudPlayer = new EsCloudPlayer({
-                        element: '#video-player',
-                        fingerprint: lessonVideoDiv.data('fingerprint'),
-                        watermark: lessonVideoDiv.data('watermark'),
-                        url: lesson.mediaHLSUri,
-                        dynamicSource: '../../hls/'+lesson.mediaId+'/change_res'
+                    var mediaPlayer = new MediaPlayer({
+                        element: '#lesson-video-content',
+                        playerId: 'lesson-video-player'
                     });
 
-                    esCloudPlayer.on('beforePlay', function(player){
+                    mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
-                        var currentTime = DurationStorage.get(userId, lesson.mediaId);
-                        if(currentTime < 0) {
-                            currentTime = 0;
-                        }
-                        currentTime = currentTime/10;
-                        player.currentTime(currentTime*10);
-                    });
-
-                    esCloudPlayer.on("timeupdate", function(player){
-                        var currentTime = player.currentTime();
-                        var userId = $('#lesson-video-content').data("userId");
-                        if(parseInt(currentTime) != parseInt(player.duration())){
-                            DurationStorage.set(userId, lesson.mediaId, currentTime);
+                        if(parseInt(data.currentTime) != parseInt(data.duration)){
+                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
                         }
                     });
 
-                    esCloudPlayer.on('ended', function(player) {
+                    mediaPlayer.on("ready", function(playerId, data){
+                        var player = document.getElementById(playerId);
+                        var userId = $('#lesson-video-content').data("userId");
+                        player.seek(DurationStorage.get(userId, lesson.mediaId));
+                    });
+
+                    mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
+                    mediaPlayer.on('ended', function() {
                         var userId = $('#lesson-video-content').data("userId");
                         DurationStorage.del(userId, lesson.mediaId);
                         if (that._counter) {
@@ -313,6 +301,9 @@ define(function(require, exports, module) {
 
                         that._onFinishLearnLesson();
                     });
+
+                    mediaPlayer.play();
+                    that.set('mediaPlayer', mediaPlayer);
 
                 } else {
                     if (lesson.type == 'video') {
