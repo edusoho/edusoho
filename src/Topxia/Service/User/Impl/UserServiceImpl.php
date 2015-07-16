@@ -108,11 +108,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，设置帐号失败！');
         }
         if (!SimpleValidator::nickname($nickname)) {
-            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
+            throw $this->createServiceException('用户用户名格式不正确，设置帐号失败！');
         }
         $existUser = $this->getUserDao()->findUserByNickname($nickname);
         if ($existUser && $existUser['id'] != $userId) {
-            throw $this->createServiceException('昵称已存在！');
+            throw $this->createServiceException('用户名已存在！');
         }
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
@@ -378,7 +378,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
-            throw $this->createServiceException('昵称已存在');
+            throw $this->createServiceException('用户名已存在');
         }
 
         if (!SimpleValidator::email($registration['email'])) {
