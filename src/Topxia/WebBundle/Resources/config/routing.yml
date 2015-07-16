@@ -209,9 +209,9 @@ live_classroom_url:
     pattern:  /course/{courseId}/lesson/{lessonId}/get_classroom_url
     defaults: { _controller: TopxiaWebBundle:LiveCourse:getClassroomUrl }
 
-live_course_replay:
-    pattern: /live/replay/course/{courseId}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:replay }
+live_classroom_replay_url:
+    pattern: /course/{courseId}/lesson/{lessonId}/get_replay_url
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
 
 live_course_list:
     pattern:  /live/list/{category}

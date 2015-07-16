@@ -210,7 +210,11 @@ class LiveCourseController extends BaseController
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'courseId' => $courseId, 
             'lessonId' => $lessonId,
-            'lesson' => $lesson
+            'lesson' => $lesson,
+            'url' => $this->generateUrl('live_classroom_url',array(
+                'courseId' => $courseId, 
+                'lessonId' => $lessonId
+            ))
         ));
     }
 
@@ -231,18 +235,10 @@ class LiveCourseController extends BaseController
         return md5($string . $secret);
     }
 
-    public function replayAction(Request $request,$courseId,$lessonId)
-    {
-        return $this->forward('TopxiaWebBundle:LiveCourse:play', 
-            array(
-                'courseId'=>$courseId,
-                'lessonId'=>$lessonId
-            )
-        );
-    }
-
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
         $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
 
         if(array_key_exists("error", $resultList)) {
@@ -258,12 +254,28 @@ class LiveCourseController extends BaseController
 
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
+            'url' => $this->generateUrl('live_classroom_replay_url',array(
+                'courseId' => $courseId, 
+                'lessonId' => $lessonId,
+                'courseLessonReplayId' => $courseLessonReplayId
+            ))
+        ));
+    }
+
+    public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+
+        return $this->createJsonResponse(array(
             'url' => $result['url'],
-            'param' => isset($result['param']) ? $result['param']: null
+            'param' => isset($result['param']) ? $result['param']:null
         ));
     }
 
