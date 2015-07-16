@@ -29,8 +29,16 @@ class CommonController extends BaseController
 
     public function crontabAction(Request $request)
     {
-        $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
+        $setting = $this->getSettingService()->get('magic', array());
+        $setting = json_encode($setting);
+        if (!empty($setting['web_crontab'])) {
+            $this->getServiceKernel()->createService('Crontab.CrontabService')->scheduleJobs();
+        }
         return $this->createJsonResponse(true);
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

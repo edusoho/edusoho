@@ -97,6 +97,7 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
+            'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
         );
     }
 
@@ -1016,6 +1017,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return $dict[$key];
+    }
+
+    public function getNextExecutedTime()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService')->getNextExcutedTime();
     }
 
     public function getUploadMaxFilesize($formated = true)
