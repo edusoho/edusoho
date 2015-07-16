@@ -394,7 +394,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return (empty($member) || $member['role'] != 'student') ? false : true;
     }
 
-    public function isClassroomAssistant($classroomId, $userId)
+    public function isClassroomAssistent($classroomId, $userId)
     {
         $member = $this->getClassroomMember($classroomId, $userId);
 

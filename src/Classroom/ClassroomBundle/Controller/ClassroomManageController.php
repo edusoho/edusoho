@@ -314,8 +314,8 @@ class ClassroomManageController extends BaseController
                 $response = array('success' => false, 'message' => '该用户是本班级的班主任，不能添加');
             }
 
-            $isClassroomAssistant = $this->getClassroomService()->isClassroomAssistant($id, $user['id']);
-            if ($isClassroomAssistant) {
+            $isClassroomAssistent = $this->getClassroomService()->isClassroomAssistent($id, $user['id']);
+            if ($isClassroomAssistent) {
                 $response = array('success' => false, 'message' => '该用户是本班级的助教，不能添加');
             }
         }

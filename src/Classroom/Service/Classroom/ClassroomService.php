@@ -88,7 +88,7 @@ interface ClassroomService
 
     public function isClassroomAuditor($classroomId, $studentId);
 
-    public function isClassroomAssistant($classroomId, $userId);
+    public function isClassroomAssistent($classroomId, $userId);
 
     public function isClassroomHeadTeacher($classroomId, $userId);
 
