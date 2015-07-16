@@ -124,7 +124,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         return $this->getClassroomDao()->findClassroomByTitle($title);
     }
-    public function findClassroomsByLikeTitle($title)//
+    public function findClassroomsByLikeTitle($title)
     {
         return $this->getClassroomDao()->findClassroomsByLikeTitle($title);
     }
@@ -132,7 +132,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * 要过滤要更新的字段
      */
-    public function updateClassroom($id, $fields)//
+    public function updateClassroom($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service'));
 
@@ -145,12 +145,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
-    public function waveClassroom($id, $field, $diff)//
+    public function waveClassroom($id, $field, $diff)
     {
         return $this->getClassroomDao()->waveClassroom($id, $field, $diff);
     }
 
-    private function deleteAllCoursesInClass($id)//
+    private function deleteAllCoursesInClass($id)
     {
         $courses = $this->findCoursesByClassroomId($id);
         $courseIds = ArrayToolkit::column($courses, 'id');
@@ -158,7 +158,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->deleteClassroomCourses($id, $courseIds);
     }
 
-    public function deleteClassroom($id)//
+    public function deleteClassroom($id)
     {
         $classroom = $this->getClassroom($id);
 
@@ -182,7 +182,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * @todo 能否简化业务逻辑？
      */
-    public function updateClassroomTeachers($id)//
+    public function updateClassroomTeachers($id)
     {
         $courses = $this->findActiveCoursesByClassroomId($id);
 
@@ -242,21 +242,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->updateClassroom($id, array('teacherIds' => $teacherIds));
     }
 
-    public function publishClassroom($id)//
+    public function publishClassroom($id)
     {
         $this->tryManageClassroom($id);
 
         $this->updateClassroom($id, array("status" => "published"));
     }
 
-    public function closeClassroom($id)//
+    public function closeClassroom($id)
     {
         $this->tryManageClassroom($id);
 
         $this->updateClassroom($id, array("status" => "closed"));
     }
 
-    public function changePicture($id, $data)//
+    public function changePicture($id, $data)
     {
         $classroom = $this->getClassroomDao()->getClassroom($id);
         if (empty($classroom)) {
@@ -282,7 +282,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->updateClassroom($id, $fields);
     }
 
-    private function deleteNotUsedPictures($classroom)//
+    private function deleteNotUsedPictures($classroom)
     {
         $oldPictures = array(
             'smallPicture' => $classroom['smallPicture'] ? $classroom['smallPicture'] : null,
@@ -298,14 +298,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }, $oldPictures);
     }
 
-    public function isCourseInClassroom($courseId, $classroomId)//
+    public function isCourseInClassroom($courseId, $classroomId)
     {
         $classroomCourse = $this->getClassroomCourseDao()->getCourseByClassroomIdAndCourseId($classroomId, $courseId);
 
         return empty($classroomCourse) ? false : true;
     }
 
-    public function setClassroomCourses($classroomId, array $courseIds)//
+    public function setClassroomCourses($classroomId, array $courseIds)
     {
         $courses = $this->findCoursesByClassroomId($classroomId);
         $existCourseIds = ArrayToolkit::column($courses, 'id');
@@ -317,38 +317,38 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    public function deleteClassroomCourses($classroomId, array $courseIds)//
+    public function deleteClassroomCourses($classroomId, array $courseIds)
     {
         foreach ($courseIds as $key => $value) {
             $this->getClassroomCourseDao()->deleteCourseByClassroomIdAndCourseId($classroomId, $value);
         }
     }
 
-    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)//
+    public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
     {
         return ArrayToolkit::index($this->getClassroomMemberDao()->findMembersByUserIdAndClassroomIds($userId, $classroomIds), 'classroomId');
     }
 
-    public function findClassroomsByIds(array $ids)//
+    public function findClassroomsByIds(array $ids)
     {
         return ArrayToolkit::index($this->getClassroomDao()->findClassroomsByIds($ids), 'id');
     }
 
-    public function searchMemberCount($conditions)//
+    public function searchMemberCount($conditions)
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomMemberDao()->searchMemberCount($conditions);
     }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)//
+    public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
 
         return $this->getClassroomMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
     }
 
-    public function getClassroomMember($classroomId, $userId)//
+    public function getClassroomMember($classroomId, $userId)
     {
         return $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
     }
