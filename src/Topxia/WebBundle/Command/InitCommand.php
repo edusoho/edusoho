@@ -424,7 +424,8 @@ EOD;
     public function initCrontabJob($output){
         $output->write('  初始化CrontabJob');
         $connection = $this->getConnection();
-        $connection->exec("DELETE from `crontab_job`;");        
+        $connection->exec("DELETE from `crontab_job`;");  
+        $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '".time()."', '0', '0', '0');");      
         $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteExpiredTokenJob','everyhour',0,'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob','',0,".time().",0,0,0) ;");
         $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob','',0,".time().",0,0,0) ;");
         $output->writeln(' ...<info>成功</info>');
