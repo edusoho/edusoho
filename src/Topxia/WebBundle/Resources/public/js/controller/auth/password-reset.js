@@ -38,7 +38,6 @@ define(function(require, exports, module) {
                         if (err == false) {
                             $('#password-reset-by-monile-form').find("[type=submit]").button('loading');
                         }else{
-                            $('.js-sms-send').addClass('disabled');
                             $('#alertxx').hide();                    
                         };
 
@@ -58,27 +57,6 @@ define(function(require, exports, module) {
                     rule: 'integer fixedLength{len:6} remote',
                     display: '短信验证码'           
                 });
-
-                if ($("#getcode_num").length > 0){
-                    
-                    $("#getcode_num").click(function(){ 
-                        $(this).attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                    }); 
-
-                    validator.addItem({
-                        element: '[name="captcha_num"]',
-                        required: true,
-                        rule: 'alphanumeric remote',
-                        onItemValidated: function(error, message, eleme) {
-                            if (message == "验证码错误"){
-                                $('.js-sms-send').addClass('disabled');
-                                $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                            } else {
-                                $('.js-sms-send').removeClass('disabled');
-                            }
-                        }                
-                    });
-                };
 
                 if (('undefined' != typeof smsSender)&&("undefined" != typeof smsSender.destroy)){
                     smsSender.destroy();

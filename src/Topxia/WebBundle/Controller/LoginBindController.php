@@ -216,7 +216,7 @@ class LoginBindController extends BaseController
            $message = '该Email地址尚未注册';
         }else if(SimpleValidator::mobile($data['emailOrMobile'])){
            $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
-           $message = '该手机号码地址尚未注册';
+           $message = '该手机号码尚未注册';
         }
 
         if (empty($user)) {
