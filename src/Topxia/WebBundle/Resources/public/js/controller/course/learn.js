@@ -393,9 +393,9 @@ define(function(require, exports, module) {
                         }
 
                         function generateHtml() {
-                            var nowDate = new Date();
-                            var startLeftSeconds = parseInt((startTime*1000 - nowDate) / 1000);
-                            var endLeftSeconds = parseInt((endTime*1000 - nowDate) / 1000);
+                            var nowDate = lesson.nowDate;
+                            var startLeftSeconds = parseInt(startTime - nowDate);
+                            var endLeftSeconds = parseInt(endTime - nowDate);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
                             var modulo = startLeftSeconds % (60 * 60 * 24);
                             var hours = Math.floor(modulo / (60 * 60));
@@ -779,24 +779,16 @@ define(function(require, exports, module) {
             var posted = false;
             if(learningCounter >= this.interval || (learningCounter>0 && paused)){
                 var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
-                $.post(url);
-                posted = true;
-                learningCounter = 0;
-            } else if(!paused){
-                learningCounter++;
-            }
-
-            if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
-                this.watched = true;
-                var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
-                $.post(url, function(result) {
-                    if (result.status == 'ok') {
-                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
-                    } else if (result.status == 'error') {
+                var self = this;
+                $.post(url, function(response) {
+                    if (self.watchLimit && response.watchLimited && self.type == 'MediaPlayer') {
                         window.location.reload();
                     }
-
                 }, 'json');
+                posted = true;
+                learningCounter = 0;
+            } else if(!paused) {
+                learningCounter++;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);

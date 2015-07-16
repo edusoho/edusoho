@@ -12,6 +12,9 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
 	public function closeTrade($order)
 	{
+		if(!in_array($order['payment'], array('alipay'))) {
+			return array();
+		}
         $options = $this->getPaymentOptions($order['payment']);
         $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
         $closeTradeRequest->setParams($order);
