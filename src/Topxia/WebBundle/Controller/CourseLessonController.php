@@ -24,8 +24,9 @@ class CourseLessonController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
         $coinSetting = $this->getSettingService()->get('coin');
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-
-        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0 && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
+        
+        $userInfoEnable = isset($coinSetting['buy_fill_userinfo']) && $coinSetting['buy_fill_userinfo'] == 1;
+        if ($user->isLogin() && !$userInfoEnable && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
             if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
                 || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
                 
