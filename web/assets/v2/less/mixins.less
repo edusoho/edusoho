@@ -1,12 +1,12 @@
-@import "mixins/fadeinleft.less";
-@import "mixins/fadeinup.less";
-@import "mixins/fadeinright.less";
-@import "mixins/color.less";
-@import "mixins/scale.less";
-@import "mixins/loader-inner.less";
-@import "mixins/input.less";
-@import "mixins/spacing.less";     //间距
-@import "mixins/text.less";        //文字
+@import "mixins/fadeinleft.less";           //css3效果
+@import "mixins/fadeinup.less";             //css3效果
+@import "mixins/fadeinright.less";          //css3效果
+@import "mixins/scale.less";                //css3效果
+@import "mixins/loader-inner.less";         //css3效果
+@import "mixins/color.less";                //颜色
+@import "mixins/input.less";                //输入框
+@import "mixins/spacing.less";              //间距
+@import "mixins/text.less";                 //文字
 
 
 .form-control-lg {
@@ -19,46 +19,29 @@
   margin-bottom: 30px;
 }
 
-// 富文本
+// 富文本编辑器样式统一处理
 .editor-text {
   img {
     max-width: 100%;
     height: auto;
   }
 }
-
-.ml10 {
-  margin-left: 10px;
-}
-
-.ml25 {
-  margin-left: 25px;
-}
-
-.mr25 {
-  margin-right: 25px;
-}
-
-.mr5 {
-  margin-right: 5px;
-}
-
-.mr10 {
-  margin-right: 10px;
-}
-
-.mb40 {
-  margin-bottom: 40px;
+// table-cell引起的兼容问题
+.media-body .editor-text img {
+  width: 100% \9;
+  @media screen and (min--moz-device-pixel-ratio:0) {
+    width: 100%;
+  }
 }
 
 .inline-block {
   display: inline-block;
 }
 
-.text-default {
-  text-align: center;
-  color: @gray-light;
-}
+// .text-default {
+//   text-align: center;
+//   color: @gray-light;
+// }
 
 // 用于空数据
 .empty {
@@ -67,6 +50,7 @@
   padding: 20px 0;
 }
 
+// 字体颜色变化，一般用于a标签
 .link-dark {
   color: @gray-darker;
   .es-transition;
@@ -75,7 +59,6 @@
     .es-transition;
   }
 }
-
 .link-light {
   color: @gray-dark;
   .es-transition;
@@ -84,7 +67,6 @@
     .es-transition;
   }
 }
-
 .link-white {
   color: #fff;
   .es-transition;
@@ -94,6 +76,7 @@
   }
 }
 
+// 动画效果
 a.transition {
   .es-transition;
   &:hover {
@@ -101,6 +84,7 @@ a.transition {
   }
 }
 
+// 元素下划线
 .underline {
   text-decoration: underline;
   &:hover {
@@ -108,12 +92,8 @@ a.transition {
   }
 }
 
-.es-border {
-  border: 1px solid @gray-light;
-  .border-radius;
-  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-}
 
+// 字符串截取 推荐用text-overflow
 .ellipsis,
 .text-overflow {
   display: block;
@@ -123,7 +103,7 @@ a.transition {
   word-wrap: normal;
 }
 
-
+// 透明度兼容
 .opacity(@opacity) {
   opacity: @opacity;
   // IE8 filter
@@ -131,12 +111,14 @@ a.transition {
   filter: ~"alpha(opacity=@{opacity-ie})";
 }
 
+// 图片响应式
 .img-responsive(@display: block) {
   display: @display;
   max-width: 100%;
   height: auto;
 }
 
+// css3样式简写
 .es-transform(@x:1.1 , @y:1.1) {
   -webkit-transform: scale(@x, @y);
      -moz-transform: scale(@x, @y);
