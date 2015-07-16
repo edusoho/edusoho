@@ -2,11 +2,12 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\System;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class MobileAppController extends MobileAppBaseController
+class MobileAppController extends MobileBaseController
 {
 	public function indexAction(Request $request)
 	{
@@ -27,21 +28,25 @@ class MobileAppController extends MobileAppBaseController
 		$userAgent = $request->headers->get("user-agent");
 		$clientType = $this->getClientType($userAgent);
 
-        		$main = array();
-        		$appDir = dirname(__DIR__);
-        		$versionFile = $appDir . "/Resources/public/main/version.json";
-        		if (file_exists($versionFile)) {
-        			$main = json_decode(file_get_contents($versionFile));
-        		}
+		$versionStr = $this->sendRequest("GET", "http://www.edusoho.com/version/edusoho-html5-main", array());
+		if (empty($versionStr)) {
+			return $this->createJson($request, array());
+		}
 
-        		$host = $request->getSchemeAndHttpHost();
-        		$main->resource = $host . "/bundles/topxiamobilebundlev2/main/release/{$clientType}.zip";
+		$main = (Array) json_decode($versionStr);
+		$supportVersion = $main["support_version"];
+		if (strnatcasecmp(System::VERSION, $supportVersion) < 0) {
+			return $this->createJson($request, array());
+		}
+        		$main["resource"] = $main[$clientType . "Url"];
+        		unset($main["AndroidUrl"]);
+        		unset($main["iOSUrl"]);
 	        	return $this->createJson($request, $main);
 	}
 
 	private function getClientType($userAgent)
 	{
-		$clientType = "pc";
+		$clientType = "Android";
         		if (strpos($userAgent, "iPhone") || strpos($userAgent, "iPad")) {
             		$clientType = "iOS";
         		} else if (strpos($userAgent, "Android")) {

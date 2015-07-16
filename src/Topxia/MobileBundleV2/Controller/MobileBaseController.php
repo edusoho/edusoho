@@ -368,7 +368,6 @@ class MobileBaseController extends BaseController
             $tempLiveLessons = $this->getCourseService()->getCourseLessons($tempCourseIds[$tempCourseIdIndex]);
             if(isset($tempLiveLessons)){
                 $tempLessons[$tempCourseIds[$tempCourseIdIndex]] = $tempLiveLessons;
-                // unset($tempLiveLessons);
             }
         }
 
@@ -377,13 +376,9 @@ class MobileBaseController extends BaseController
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
-        // $emptyLessonCourseId = array();
-        // $tempCoursesIndex = 0;
 
         foreach($tempLessons as $key => $tempLesson){
             if(!sizeof($tempLesson)){
-                // $emptyLessonCourseId[$key] = $tempCoursesIndex;
-                // $tempCoursesIndex++;
                 continue;
             }
             if($nowTime <= $tempLesson[0]["endTime"]){
@@ -404,7 +399,6 @@ class MobileBaseController extends BaseController
                 $liveLessons[$key] = $tempLiveLesson;
                 unset($tempLiveLesson);
             }
-            // $tempCoursesIndex++;
         }
 
         foreach($tempCourses as $key => $value){
@@ -419,12 +413,6 @@ class MobileBaseController extends BaseController
             }
         }
 
-        // foreach($tempCourses as $key => $value){
-        //     if(isset($emptyLessonCourseId[$key])){
-        //         array_splice($tempCourses, $emptyLessonCourseId[$key], 1);
-        //     }
-        // }
-
         return $tempCourses;
     }
 
@@ -434,6 +422,35 @@ class MobileBaseController extends BaseController
         $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
 
         return $resultLiveCourses;
+    }
+
+    protected function sendRequest($method, $url, $params = array())
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_USERAGENT, "mobile request");
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 20);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+
+        if (strtoupper($method) == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, 1);
+            $params = http_build_query($params);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        } else {
+            if (!empty($params)) {
+                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+            }
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url );
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
     }
 
     /**
