@@ -12,14 +12,14 @@
     </ul>
     <ul class="ui-tab-content tab-display ui-course-learn">
         <li>
-            <div class="ui-scroller" ui-scroll data="course.data" on-infinite="loadMore()">
+            <div class="ui-scroller course-card" ui-scroll data="course.data" on-infinite="loadMore('course')">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in course.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
                           <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
                       <div class="ui-list-info">
-                          <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
+                          <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
                           <p>
                             <span>
                                 上次学习时间:{{ course.startTime | coverLearnTime }}
@@ -43,14 +43,14 @@
 
         </li>
         <li>
-            <div class="ui-scroller" ui-scroll data="live.data" on-infinite="loadMore()">
+            <div class="ui-scroller course-card" ui-scroll data="live.data" on-infinite="loadMore('live')">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in live.data" ui-sref="course({ courseId : course.id })">
                       <div class="ui-list-img">
                           <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
                       <div class="ui-list-info">
-                          <h4 class="ui-nowrap ui-list-title">{{ course.title }}</h4>
+                          <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
                           <p>
                             <span>
                                 上次学习时间:{{ course.startTime | coverLearnTime }}

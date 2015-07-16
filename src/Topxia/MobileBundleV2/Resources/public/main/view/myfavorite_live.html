@@ -1,5 +1,5 @@
 <div class="ui-scroller course-card" ng-controller="MyFavoriteLiveController">
-  <ul class="ui-list ui-border-tb">
+  <ul class="ui-list">
       <li class="ui-border-t ui-list-avatar" ng-repeat="course in data.live.data" ui-sref="course({ courseId : course.id })">
           <div class="ui-list-img">
               <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>

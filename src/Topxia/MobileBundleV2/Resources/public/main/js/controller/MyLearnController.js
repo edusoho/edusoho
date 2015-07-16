@@ -33,6 +33,9 @@ function MyLearnController($scope, CourseService)
 	    		content.data = content.data.concat(data.data);
 	    		content.start += data.limit;
 
+	    		if (data.limit > data.data.length) {
+	    			content.canLoad = false;
+	    		}
 	    		if (data.total && content.start >= data.total) {
 	    			content.canLoad = false;
 	    		}
@@ -44,7 +47,14 @@ function MyLearnController($scope, CourseService)
   	};
 
   	$scope.loadMore = function(type){
-  		$scope.loadDataList(type);
+  		switch (type) {
+  			case "course": 
+  				self.loadDataList(self.content.course, CourseService.getLearningCourse);
+  				break;
+  			case "live": 
+  				self.loadDataList(self.content.live, CourseService.getLiveCourses);
+  				break;
+  		}
   	};
 
   	$scope.loadCourses = function() {

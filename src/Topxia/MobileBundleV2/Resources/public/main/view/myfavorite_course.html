@@ -1,10 +1,10 @@
 <div class="ui-scroller course-card" ng-controller="MyFavoriteCourseController">
-  <ul class="ui-list ui-border-tb">
-      <li class="ui-list-avatar" ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
+  <ul class="ui-list">
+      <li class="ui-list-avatar ui-border-t " ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
           <div class="ui-list-img">
               <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
           </div>
-          <div class="ui-list-info ui-border-t">
+          <div class="ui-list-info">
               <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
               <p class="bottom price-body">
                 <span class="origin-price">
