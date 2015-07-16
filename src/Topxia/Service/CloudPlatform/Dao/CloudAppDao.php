@@ -14,9 +14,9 @@ interface CloudAppDao
 
     public function findAppCount();
 
-    public function addApp($App);
+    public function addApp($app);
 
-    public function updateApp($id,$App);
+    public function updateApp($id,$app);
 
     public function deleteApp($id);
 }

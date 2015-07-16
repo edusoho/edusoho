@@ -67,7 +67,8 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                         'name' => '入账',
                         'orderSn' => $order['sn'],
                         'category' => 'outflow',
-                        'note' => ''
+                        'note' => '',
+                        'payment' => $order['payment']
                     );
 
                     $rmbInFlow = $this->getCashService()->inflowByRmb($inFlow);
