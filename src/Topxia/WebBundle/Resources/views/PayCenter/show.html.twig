@@ -33,7 +33,7 @@
               <div class="pay-type-lable">支付方式</div>
               {% for payment, options in payments %}
               <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
-                {% set picture = 'assets/img/order/'~payment~'.gif' %}
+                {% set picture = 'assets/img/order/'~payment~'.png' %}
                 <img src="{{ asset(picture) }}" width="100px"/>
                 <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
               </div>
