@@ -24,6 +24,7 @@
 
         <a class="btn btn-fat btn-primary" id="upload-picture-btn" 
         data-url="{{path('classroom_manage_picture_crop', {id: classroom.id})}}"
+        data-goto-url="{{path('classroom_manage_set_picture',{id: classroom.id})}}"
         >保存</a>
         <a href="javascript:;" class="go-back btn btn-link">重新选择图片</a>
       </div>
