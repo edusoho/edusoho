@@ -532,8 +532,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function cancelPostAdopted($postId)
     {
+<<<<<<< Updated upstream
         $post = $this->getThreadPostDao()->getPost($postId);
 
+=======
+        $post = $this->getThreadPostDao()->getPost($postId);;
+>>>>>>> Stashed changes
         if (empty($post)) {
             throw $this->createServiceException(sprintf('话题回复(ID: %s)不存在。', $post['id']));
         }
