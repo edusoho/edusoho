@@ -35,18 +35,11 @@ class CourseManageController extends BaseController
         }
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
-        if ($course['type'] == 'live') {
-            $client = LiveClientFactory::createClient();
-            $liveCapacity = $client->getCapacity();
-        } else {
-            $liveCapacity = null;
-        }
         $default = $this->getSettingService()->get('default', array());
+
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
-            'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
-            'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code'],
             'default'=> $default
 		));
 	}

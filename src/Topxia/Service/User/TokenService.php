@@ -34,4 +34,6 @@ interface TokenService
      * @param  [type] $value 要摧毁的Token的值
      */
     public function destoryToken($value);
+
+    public function deleteExpiredTokens($limit);
 }

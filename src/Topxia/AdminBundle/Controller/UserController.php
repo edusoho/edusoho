@@ -27,7 +27,8 @@ class UserController extends BaseController
         $conditions = array(
             'roles'=>'',
             'keywordType'=>'',
-            'keyword'=>''
+            'keyword'=>'',
+            'keywordUserType'=>''
         );
 
         if(empty($fields)){

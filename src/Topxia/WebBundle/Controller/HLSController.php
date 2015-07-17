@@ -14,6 +14,7 @@ class HLSController extends BaseController
 
     public function playlistAction(Request $request, $id, $token)
     {
+
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
@@ -75,6 +76,7 @@ class HLSController extends BaseController
             'Content-Type' => 'application/vnd.apple.mpegurl',
             'Content-Disposition' => 'inline; filename="playlist.m3u8"',
         ));
+
     }
 
     public function streamAction(Request $request, $id, $level, $token)
