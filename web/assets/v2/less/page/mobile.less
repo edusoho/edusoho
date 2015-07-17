@@ -120,6 +120,8 @@
     min-height: 200px;
     background: #fff;
     padding: 150px 0 200px 0;
+    opacity: 0;
+    transform: translateY(80px);
     @media(max-width: @screen-md-max) {
       padding: 100px 0 120px 0;
     }
@@ -127,7 +129,6 @@
       padding: 50px 0;
     }
     &.active {
-      opacity:0;
       .animation(fadeInUp 1s ease both);
     }
     .container {
@@ -207,6 +208,8 @@
     padding-top: 100px;
     min-height: 200px;
     background: @background-color url('@{img-src}mobile/mobile_bg2.jpg') bottom center no-repeat;
+    opacity: 0;
+    transform: translateY(80px);
     @media(max-width: @screen-md-max) {
       padding-top: 50px;
     }
