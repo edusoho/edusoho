@@ -1,15 +1,17 @@
 <section class="es-poster swiper-container">
   <div class="swiper-wrapper">
     {% for poster in posters %}
-      {% if poster.html is empty and poster.status == 1%}
-        <div class="swiper-slide" style="background: {{poster.background}};">
-          <div {% if poster.layout == 'limitWide' %}class="container"{% endif %}>
-            <a href="{{ poster.href|default('') }}" target="_blank" ><img class="img-responsive" src="{{ poster.src|default('') }}">
-            </a>
+      {% if poster.status == 1 %}
+        {% if poster.html is empty %}
+          <div class="swiper-slide" style="background: {{poster.background}};">
+            <div {% if poster.layout == 'limitWide' %}class="container"{% endif %}>
+              <a href="{{ poster.href|default('') }}" target="_blank" ><img class="img-responsive" src="{{ poster.src|default('') }}">
+              </a>
+            </div>
           </div>
-        </div>
-      {% else %}
-          {{ poster.html|raw }}
+        {% else %}
+            {{ poster.html|raw }}
+        {% endif %}
       {% endif %}
     {% endfor %}
   </div>
