@@ -3,11 +3,47 @@ define(function (require, exports, module) {
     bindCardEvent('.js-card-content');
     $(".js-user-card").on("mouseenter", function () {
 
+
         var _this = $(this);
         var userId = _this.data('userId');
         var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
 
         var timer = setTimeout(function(){
+
+            function callback(html) {
+                    
+                _this.popover('destroy');
+
+                if ($('#user-card-' + userId).length == 0) {
+                    if ($('body').find('#user-card-store').length > 0 ) {
+                        $('#user-card-store').append(html);
+                    } else {
+                        $('body').append('<div id="user-card-store" class="hidden"></div>');
+                        $('#user-card-store').append(html);
+                    }
+                }
+
+                _this.popover({
+                    trigger: 'manual',
+                    placement: 'auto top',
+                    html: 'true',
+                    content: function(){
+                        return html;
+                    },
+                    template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
+                    container: 'body',
+                    animation: true
+                });
+
+                _this.popover("show");
+
+                _this.data('popover', true);
+            
+                $(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+                
+            };
 
             if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
                 
@@ -29,59 +65,26 @@ define(function (require, exports, module) {
 
                 };
 
-                function callback(html) {
-
-                    _this.popover('destroy');
-
-                    if ($('#user-card-' + userId).length == 0) {
-                        if ($('body').find('#user-card-store').length > 0 ) {
-                            $('#user-card-store').append(html);
-                        } else {
-                            $('body').append('<div id="user-card-store" class="hidden"></div>');
-                            $('#user-card-store').append(html);
-                        }
-                    }
-
-                    _this.popover({
-                        trigger: 'manual',
-                        placement: 'auto top',
-                        html: 'true',
-                        content: function(){
-                            return html;
-                        },
-                        template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
-                        container: 'body',
-                        animation: true
-                    });
-
-                    _this.popover("show");
-
-                    _this.data('popover', true);
-                
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                };
-
                 $.ajax ({
                     type:"GET",
                     url: _this.data('cardUrl'),
                     dataType: "html",
                     beforeSend: beforeSend,
                     success: callback
-
                 });
 
             } else {
-                _this.popover("show");
+                var html = $('#user-card-' + userId).clone();
+                callback(html);
+                // _this.popover("show");
             }
            
             bindMsgBtn($('.es-card'), _this);
 
+
         },300);
 
         _this.data('timerId', timer);
-
 
     }).on("mouseleave", function () {
  
@@ -91,7 +94,7 @@ define(function (require, exports, module) {
    
             if (!$(".popover:hover").length) {
    
-                _this.popover("hide")
+                _this.popover("hide");
    
            }
    
