@@ -365,15 +365,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return null;
     }
 
-<<<<<<< HEAD
     private function checkSmsType($smsType, $user)
     {
         if (!in_array($smsType, array('sms_bind','sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
             throw new \RuntimeException('不存在的sms Type');
-=======
-        if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse('nickname_invalid', '用户名格式不正确');
->>>>>>> feature/restful-api
         }
 
         if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
@@ -385,7 +380,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
     }
 
-<<<<<<< HEAD
     public function regist()
     {
         $email = $this->getParam('email');
@@ -399,10 +393,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $auth = $this->getSettingService()->get('auth', array());
         if (isset($auth['register_mode']) && $auth['register_mode'] == 'closed') {
             return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');;
-=======
-        if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse('nickname_exist', '该用户名已被注册');
->>>>>>> feature/restful-api
         }
 
         if (!$nickname) {
