@@ -307,11 +307,14 @@ a {
   padding: 0;
 }
 
+.ui-bar .ui-btn {
+  font-size: 18px;
+}
+
 .ui-bar .bar-tool.ui-btn {
   height: 36px;
   line-height: 36px;
   width: 36px;
-  font-size: 18px;
 }
 
 .ui-bar .bar-tool .ui-btn {

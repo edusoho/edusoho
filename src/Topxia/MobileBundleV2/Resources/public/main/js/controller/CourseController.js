@@ -177,6 +177,18 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
     CourseService.getCourse({
       courseId : $stateParams.courseId
     }, function(data) {
+      if (data && data.error) {
+        var dia = $.dialog({
+                title : '课程预览' ,
+                content : data.error.message,
+                button : [ "确认" ]
+        });
+
+        dia.on("dialog:action",function(e){
+                cordovaUtil.closeWebView();
+        });
+        return;
+      }
       $scope.ratingArray = AppUtil.createArray(5);
       $scope.vipLevels = data.vipLevels;
       $scope.course = data.course;

@@ -1,6 +1,6 @@
 <div class="ui-scroller course-card" ng-controller="MyFavoriteCourseController">
   <ul class="ui-list">
-      <li class="ui-list-avatar ui-border-t " ng-repeat="course in data.course.data" ui-sref="course({ courseId : course.id })">
+      <li class="ui-list-avatar ui-border-t " ng-repeat="course in data.course.data" ng-href="#/course/{{ course.id  }}">
           <div class="ui-list-img">
               <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
           </div>

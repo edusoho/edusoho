@@ -14,7 +14,7 @@
         <li>
             <div class="ui-scroller course-card" ui-scroll data="course.data" on-infinite="loadMore('course')">
               <ul class="ui-list ui-border-tb">
-                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in course.data" ui-sref="course({ courseId : course.id })">
+                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in course.data" ng-href="#/course/{{ course.id  }}">
                       <div class="ui-list-img">
                           <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
@@ -45,7 +45,7 @@
         <li>
             <div class="ui-scroller course-card" ui-scroll data="live.data" on-infinite="loadMore('live')">
               <ul class="ui-list ui-border-tb">
-                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in live.data" ui-sref="course({ courseId : course.id })">
+                  <li class="ui-border-t ui-list-avatar" ng-repeat="course in live.data" ng-href="#/course/{{ course.id  }}">
                       <div class="ui-list-img">
                           <img ng-src="{{ course.middlePicture | coverPic }}" img-error="course"/>
                       </div>
