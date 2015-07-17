@@ -755,14 +755,14 @@ EOD;
             'createdTime'=>time()
         ));
 
-        $this->getCrontabService()->createJob(array(
-            'name'=>'DeleteSessionJob', 
-            'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
-            'jobParams'=>'',
-            'nextExcutedTime'=>time(),
-            'createdTime'=>time()
-        ));
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteSessionJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobParams'=>'',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
 
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
