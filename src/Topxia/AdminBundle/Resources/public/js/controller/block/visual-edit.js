@@ -151,6 +151,7 @@ define(function(require, exports, module) {
                     uploader.on( 'uploadSuccess', function( file, response ) {
                         self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
                         self.closest('.form-group').find('.mrl').html(response.url);
+                        self.closest('.form-group').find(".mtl").attr("src",response.url);
                         Notify.success('上传成功！', 1);
                    });
 
