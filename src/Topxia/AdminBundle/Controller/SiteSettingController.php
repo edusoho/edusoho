@@ -57,7 +57,7 @@ class SiteSettingController extends BaseController
                 array('name' => '', 'number' => ''),
             ),
             'qqgroup' => array(
-                array('name' => '', 'number' => ''),
+                array('name' => '', 'number' => '' , 'idKey' => ''),
             ),
             'phone' => array(
                 array('name' => '', 'number' => ''),
@@ -70,6 +70,7 @@ class SiteSettingController extends BaseController
         $consult = array_merge($default, $consult);
         if ($request->getMethod() == 'POST') {
             $consult = $request->request->all();
+
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);

@@ -186,8 +186,11 @@
         <div class="row">
           {% for qqgroup in consult.qqgroup if qqgroup.name is not empty %}
             <div class="col-xs-6 mbm">
-              <p>{{qqgroup.name}} </p>
-              <p>{{qqgroup.number}}</p>
+              <p>{{ qqgroup.name }}</p>
+              <a class="link-light" target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey={{ qqgroup.idKey }}">
+                {{qqgroup.number}}
+              </a>
+              <p></p>
             </div>
           {% endfor %}
         </div>
