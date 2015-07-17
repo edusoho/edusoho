@@ -72,13 +72,13 @@
     <div id="consult-qqgroup">
       {% for qqgroup in consult.qqgroup %}
       <div class="row form-group has-feedback">
-        <div class="controls col-md-3 col-md-offset-3">
+        <div class="controls col-md-2 col-md-offset-3">
           <input type="text" name="qqgroup[{{loop.index0}}][name]" class="form-control" value="{{qqgroup.name }}" placeholder="QQ群名称">
         </div>
-        <div class="controls col-md-3">
+        <div class="controls col-md-2">
           <input type="text" name="qqgroup[{{loop.index0}}][number]" class="form-control" value="{{qqgroup.number}}" placeholder="QQ群号">
         </div>
-        <div class="controls col-md-3">
+        <div class="controls col-md-4">
           <input type="text" name="qqgroup[{{loop.index0}}][idKey]" class="form-control" value="{{qqgroup.idKey|default('')}}" placeholder="QQ群idKey">
           {% if loop.index0 > 0 %}
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
