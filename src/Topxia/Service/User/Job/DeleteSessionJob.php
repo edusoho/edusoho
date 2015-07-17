@@ -9,7 +9,7 @@ class DeleteSessionJob implements Job
     public function execute($params)
     {
       $retentionTime = time()-7200;
-      $limit = 100;
+      $limit = 500;
       $number = $this->getSessionService()->deleteInvalidSession($retentionTime, $limit);
     }
 
