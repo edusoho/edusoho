@@ -8,8 +8,8 @@ define(function(require, exports, module) {
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
         chapterAnimate = require('../course/widget/chapter-animate');
-
-    require('mediaelementplayer');
+        
+        require('mediaelementplayer');
 
 
 
@@ -277,17 +277,20 @@ define(function(require, exports, module) {
                         element: '#lesson-video-content',
                         playerId: 'lesson-video-player'
                     });
+
                     mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
                         if(parseInt(data.currentTime) != parseInt(data.duration)){
                             DurationStorage.set(userId, lesson.mediaId, data.currentTime);
                         }
                     });
+
                     mediaPlayer.on("ready", function(playerId, data){
                         var player = document.getElementById(playerId);
                         var userId = $('#lesson-video-content').data("userId");
                         player.seek(DurationStorage.get(userId, lesson.mediaId));
                     });
+
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
                         var userId = $('#lesson-video-content').data("userId");
@@ -300,7 +303,6 @@ define(function(require, exports, module) {
                     });
 
                     mediaPlayer.play();
-
                     that.set('mediaPlayer', mediaPlayer);
 
                 } else {
@@ -392,8 +394,10 @@ define(function(require, exports, module) {
                             clearInterval(iID);
                         }
 
+                        var intervalSecond = 0;
+
                         function generateHtml() {
-                            var nowDate = lesson.nowDate;
+                            var nowDate = lesson.nowDate + intervalSecond;
                             var startLeftSeconds = parseInt(startTime - nowDate);
                             var endLeftSeconds = parseInt(endTime - nowDate);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
@@ -472,7 +476,7 @@ define(function(require, exports, module) {
 
                             $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
 
-
+                            intervalSecond++;
                         }
 
                         generateHtml();

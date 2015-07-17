@@ -5,6 +5,7 @@
 {% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
+
 	{% if lesson.status == 'published' %}
 
 	  {% if lesson.mediaSource == 'iframe' %}
@@ -12,7 +13,8 @@
       </div>
 		{% elseif lesson.type == 'video' %}
 			{% if lesson.mediaSource == 'self' %}
-				<div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
+				<div id="lesson-preview-video-player" 
+        data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
