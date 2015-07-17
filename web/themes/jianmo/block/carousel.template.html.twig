@@ -1,7 +1,7 @@
 <section class="es-poster swiper-container">
   <div class="swiper-wrapper">
     {% for poster in posters %}
-      {% if poster.html is empty%}
+      {% if poster.html is empty and poster.status == 1%}
         <div class="swiper-slide" style="background: {{poster.background}};">
           <div {% if poster.layout == 'limitWide' %}class="container"{% endif %}>
             <a href="{{ poster.href|default('') }}" target="_blank" ><img class="img-responsive" src="{{ poster.src|default('') }}">
