@@ -264,4 +264,9 @@ define(function(require, exports, module) {
         //var layoutName = "#" + $(this).val();
         //$(layoutName).val('limitWide');
     })
+
+    $(".status-input").on('click', function () {
+        $(this).parent().siblings().find('.status-input').removeAttr('checked');
+        $(this).parent().siblings('.status-value').val($(this).val());
+    })
 });
