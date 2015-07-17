@@ -423,11 +423,35 @@ EOD;
 
     public function initCrontabJob($output){
         $output->write('  初始化CrontabJob');
-        $connection = $this->getConnection();
-        $connection->exec("DELETE from `crontab_job`;");  
-        $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', '0', '".time()."', '0', '0', '0');");      
-        $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteExpiredTokenJob','everyhour',0,'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob','',0,".time().",0,0,0) ;");
-        $connection->exec("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob','',0,".time().",0,0,0) ;");
+        $this->getCrontabService()->createJob(array(
+            'name'=>'CancelOrderJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        $this->getCrontabService()->createJob(array(
+            'name'=>'DeleteExpiredTokenJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        $this->getCrontabService()->createJob(array(
+            'name'=>'DeleteSessionJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+        
+        $this->getSettingService()->set("crontab_next_executed_time", time());
+
         $output->writeln(' ...<info>成功</info>');
     }
 
@@ -472,8 +496,8 @@ EOD;
 		return $this->getServiceKernel()->createService('User.UserService');
 	}
 
-    protected function getConnection()
+    protected function getCrontabService()
     {
-        return $this->getServiceKernel()->getConnection();
+        return $this->getServiceKernel()->createService('Crontab.CrontabService');
     }
 }
