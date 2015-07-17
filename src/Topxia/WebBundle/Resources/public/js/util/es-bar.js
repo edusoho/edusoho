@@ -20,6 +20,7 @@ define(function(require, exports, module) {
         $this.parents(".es-bar-main.active").removeClass('active').end().parents(".es-bar").animate({
             right: '-230px'
         },300);
+        $(".bar-menu-top li.active").removeClass('active');
     });
     
     $("body").on('click', '.es-wrap', function() {
