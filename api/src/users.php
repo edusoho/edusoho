@@ -243,8 +243,8 @@ $api->post('/bind_login', function (Request $request) {
     } else {
         $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userBind['toId']);
         $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login',$user['id']);
-        setCurrentUser($token);
     }
+    setCurrentUser($token);
 
     return array(
         'user' => filter($user, 'user'),
