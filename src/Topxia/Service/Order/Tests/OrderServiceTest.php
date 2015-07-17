@@ -394,7 +394,7 @@ class OrderServiceTest extends BaseTestCase
 			'title' => 'course 1'
 		);
 		$createCourse = $this->getCourseService()->createCourse($course);
-		// $this->
+		$this->
 		$user = $this->createNormalUser();
 		$currentUser = new CurrentUser();
         $currentUser->fromArray($user);
