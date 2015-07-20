@@ -498,7 +498,140 @@ class OrderServiceTest extends BaseTestCase
         	'couponCode' => $findCouponsByBatchId[1]['code']
         );
         $this->getOrderService()->createOrder($testOrder2);
+        //如果在测试的时候此方法出错，可以优先排查是否安装了优惠吗插件依赖！！
 	}
+
+    public function testSearchOrders()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1   ,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 0.00, 
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'none'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 0.00, 
+            'targetType' => 'course', 
+            'targetId' => $createCourse2['id'], 
+            'payment' => 'none'
+        );
+        $this->getOrderService()->createOrder($order1);
+        $this->getOrderService()->createOrder($order2);
+        $conditions = array("userId"=>$user['id'],"amount"=>0.00);
+        $result = $this->getOrderService()->searchOrders($conditions,"early",0,5);
+        $this->assertCount(2,$result);
+        $result = $this->getOrderService()->searchOrders($conditions,'latest',0,5);
+        $this->assertCount(2,$result);
+        $result = $this->getOrderService()->searchOrders($conditions,'others',0,5);
+        $this->assertCount(2,$result);
+
+    }
+
+    public function testSearchBill()
+    {
+        //等待写
+    }
+
+    public function testCountUserBillNum()
+    {
+        //bill待研究
+    }
+
+    public function testSumOrderAmounts()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1   ,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => '100', 
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'none'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => '100', 
+            'targetType' => 'course', 
+            'targetId' => $createCourse2['id'], 
+            'payment' => 'none'
+        );
+        $this->getOrderService()->createOrder($order1);
+        $this->getOrderService()->createOrder($order2);
+        $courseId = array(
+            $createCourse1['id'],
+            $createCourse2['id']
+        );
+        $startTime = strtotime(date("Y-m-d",time()- 24*3600));
+        $endTime = strtotime(date("Y-m-d",time()+ 24*3600));
+        $result = $this->getOrderService()->sumOrderAmounts($startTime,$endTime,$courseId);
+        print_r($result);
+        $this->assertCount(2,$result);
+
+    }
 
 	//=================私有或者受保护的方法，用来调用命名空间外的对象[start]==============
 	protected function getUserService()
