@@ -1,0 +1,81 @@
+
+.teacher-list {
+  margin-bottom: 50px;
+  .row {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .col-md-6 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .teacher-item {
+    padding: 10px 30px 20px 10px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    @media (max-width: @screen-xs-max) { 
+      padding: 20px;
+    }
+    .teacher-avatar {
+      float: left;
+      margin-right: 10px;
+      @media (max-width: @screen-xs-max) { 
+        float: none;
+      }
+      a {
+        display: block;
+        width: 200px;
+        height: 200px;
+        padding: 6px;
+        margin: 0 auto;
+        border-radius: 50%;
+        border: 1px solid #e5e5e5;
+        @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+          width: 180px;
+          height: 180px;
+        }
+        @media (max-width: @screen-xs-max) { 
+          width: 180px;
+          height: 180px;
+        }
+      }
+      img {
+        margin: 0 auto;
+        border-radius: 50%;
+        width: 100%;
+      }
+    }
+    .teacher-info {
+      padding-top: 30px;
+    }
+    .teacher-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .teacher-position {
+      margin-bottom: 25px;
+      color: #878787;
+      @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+
+.show-more {
+  margin-bottom: 50px;
+  background-color: #fff;
+  text-align: center;
+  a {
+    display: block;
+    padding: 20px;
+    font-size: 16px;
+    color: @color-primary;
+    @media (max-width: @screen-sm-max) {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+}
+

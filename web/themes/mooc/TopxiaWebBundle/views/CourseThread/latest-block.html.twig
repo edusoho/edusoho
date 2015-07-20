@@ -1,0 +1,14 @@
+{% if threads %}
+<div class="es-panel comment-column">
+  <div class="panel-heading clearfix">最新评论
+    <span class="comment-icon"></span>
+  </div>
+  <div class="panel-body">
+    <ul>
+      {% for thread in threads %}
+        <li class="clearfix">{{ thread.title|plain_text(15) }}<span class="comment-date">{{ thread.createdTime|date('Y-m-d') }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
