@@ -1531,8 +1531,9 @@ function findCordovaPath() {
     var term = 'cordova.js';
     for (var n = scripts.length-1; n>-1; n--) {
         var src = scripts[n].src;
-        if (src.indexOf(term) == (src.length - term.length)) {
-            path = src.substring(0, src.length - term.length);
+        var pos = src.indexOf(term);
+        if (pos > 0) {
+            path = src.substring(0, pos);
             break;
         }
     }

@@ -77,7 +77,7 @@ filter('formatPrice', ['$rootScope', function($rootScope){
 			price = parseFloat(price);
 			return parseFloat(price) <= 0 ? "免费" : "¥" + price.toFixed(2);
 		}
-		return "";
+		return price;
 	}
 }]).
 filter('coverLearnProsser', ['$rootScope', function($rootScope){

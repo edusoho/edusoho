@@ -93,6 +93,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 function VipListController($scope, $stateParams, SchoolService)
 {
 	var user = null;
+	
 	SchoolService.getSchoolVipList({
 		userId : $scope.user.id
 	}, function(data) {
@@ -148,8 +149,8 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 	}
 }
 
-app.controller('CoursePayController', ['$scope', '$stateParams', 'OrderService', 'AppUtil', 'cordovaUtil', CoursePayController]);
-function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordovaUtil)
+app.controller('CoursePayController', ['$scope', '$stateParams', 'OrderService', 'CouponService', 'AppUtil', 'cordovaUtil', CoursePayController]);
+function CoursePayController($scope, $stateParams, OrderService, CouponService, AppUtil, cordovaUtil)
 {	
 	var self = this;
 	this.__proto__ = new BasePayController();
@@ -161,9 +162,7 @@ function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordov
 	});
 
 	$scope.$parent.$on("coupon", function(event, data) {
-		$scope.$apply(function() {
-			$scope.coupon = data.coupon;
-		});
+		$scope.coupon = data.coupon;
 	});
 
 	$scope.selectCoupon = function() {
@@ -173,10 +172,24 @@ function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordov
 	}
 
 	$scope.pay = function() {
-		OrderService.payCourse({
-			courseId : $stateParams.courseId
+		var amout = $scope.data.course.price;
+		if ($scope.coupon) {
+			amout = Math.max(amout - $scope.coupon.decreaseAmount, 0);
+		}
+		OrderService.createOrder({
+			amout : amout,
+			couponCode : $scope.formData ? $scope.formData.code : "",
+			targetType : "course",
+			targetId : $stateParams.courseId
 		}, function(data) {
-			if (data.status == "ok" && data.payUrl != "") {
+			if (data.status != "ok") {
+				$scope.toast(data.message);
+				return;
+			}
+
+			if (data.paid == true) {
+				window.history.back();
+			} else if (data.payUrl != "") {
 				cordovaUtil.pay("支付课程", data.payUrl);
 				self.showPayResultDlg();
 			}
@@ -184,17 +197,20 @@ function CoursePayController($scope, $stateParams, OrderService, AppUtil, cordov
 	}
 
 	$scope.checkCoupon = function() {
+		if ($scope.formData.code.length <= 0) {
+			alert("请输入优惠码");
+			return;
+		}
+
 		$scope.showLoad();
-		ServcieUtil.getService("CouponService").checkCoupon({
+		CouponService.checkCoupon({
 			courseId : $stateParams.courseId,
 			type : "course",
 			code : $scope.formData.code
 		}, function(data) {
 			$scope.hideLoad();
 			if (data.error) {
-				$scope.$apply(function() {
-					$scope.formData.error = data.error.message;
-				});
+				$scope.formData.error = data.error.message;
 				return;
 			}
 			$scope.$emit("coupon", { coupon : data });

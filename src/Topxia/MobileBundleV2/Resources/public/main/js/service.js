@@ -50,8 +50,8 @@ service('LessonService', ['httpService', function(httpService) {
 }]).
 service('OrderService', ['httpService', function(httpService) {
 
-	this.payCourse = function(params, callback) {
-		httpService.simplePost("/mapi_v2/Order/payCourse", arguments);
+	this.createOrder = function(params, callback) {
+		httpService.simplePost("/mapi_v2/Order/createOrder", arguments);
 	}
 
 	this.payVip = function(params, callback) {
@@ -472,8 +472,10 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 	this.nativePost = function(options) {
 		esNativeCore.post($q, options.url,  options.headers , options.data )
 		.then(function(data) {
+			console.log(data);
 			options.success(angular.fromJson(data));
 		}, function(error) {
+			console.log(error);
 			options.error(angular.fromJson(error));
 		});
 	};

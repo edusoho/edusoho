@@ -66,6 +66,14 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             }, "ESNativeCore", "post", [ url, headers, params ]);
 
             return deferred.promise;
-        }
+        },
+        startAppView : function(name, data) {
+
+            var type = arguments[2];
+            if(!arguments[2]) {
+                type = "Activity";
+            }
+            exec(null, null, "ESNativeCore", "startAppView", [ name, data, type ]);
+        },
     };
 });
