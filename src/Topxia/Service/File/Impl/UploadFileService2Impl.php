@@ -14,37 +14,35 @@ use Topxia\Service\Common\ServiceKernel;
 class UploadFileService2Impl extends BaseService implements UploadFileService2
 {
 	static $implementor = array(
-        'local'=>'File.LocalFileImplementor',
-        'cloud' => 'File.CloudFileImplementor',
+        'local'=>'File.LocalFileImplementor2',
+        'cloud' => 'File.CloudFileImplementor2',
     );
 
     public function initUpload($params)
     {
     	$user = $this->getCurrentUser();
+        if (empty($user)) {
+            throw $this->createServiceException("用户未登录，上传初始化失败！");
+        }
 
-    	$uploadfile = array();
-    	$uploadfile['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
-    	$uploadfile['size'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
-    	$uploadfile['status'] = 'uploading';
-    	$uploadfile['targetId'] = $params['targetId'];
-    	$uploadfile['targetType'] = $params['targetType'];
+        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType'))) {
+            throw $this->createServiceException("参数缺失，上传初始化失败！");
+        }
 
-    	$uploadfile['hashId'] = uniqid('tmp_');
-    	$uploadfile['etag'] = empty($params['fileHash']) ? '' : $params['fileHash'];
-    	$uploadfile['convertHash'] = uniqid('tmp_');
-    	$uploadfile['storage'] = 'cloud';
+        $setting = $this->getSettingService()->get('storage');
+        $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
-    	$uploadfile['updatedUserId'] = $user['id'];
-    	$uploadfile['updatedTime'] = time();
+        $implementor = $this->getFileImplementorByStorage($params['storage']);
 
-    	$uploadfile['createdUserId'] = $user['id'];
-    	$uploadfile['createdTime'] = time();
+        $file = $this->getUploadFileDao()->addFile($implementor->prepareUpload($params));
 
-    	$uploadfile = $this->getUploadFileDao()->addFile($uploadfile);
+        $file['bucket'] = $params['bucket'];
 
-    	$uploadfile = $this->getUploadFileDao()->updateFile($uploadfile['id'], array('globalId' => $uploadfile['id']));
+        $params = $implementor->initUpload($file);
 
-    	return $uploadfile;
+        $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $params['globalId']));
+
+        return $params;
     }
 
     public function finishedUpload($fileId)
@@ -89,7 +87,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     protected function getFileImplementorByStorage($storage)
     {
-        return $this->getFileImplementor($storage);
+        return $this->createFileImplementor($storage);
     }
 
     protected function createFileImplementor($key)
@@ -98,6 +96,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
         }
         return $this->createService(self::$implementor[$key]);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
     protected function getUploadFileDao()

@@ -49,6 +49,7 @@ seajs.config({
         'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
         'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
         'webuploader2': 'webuploader/0.1.5/webuploader',
+        'filesize': 'filesize/3.1.2/index',
         'screenfull': 'screenfull/2.0.0/screenfull',
         'ckeditor': 'ckeditor/4.6.7/ckeditor',
         'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
