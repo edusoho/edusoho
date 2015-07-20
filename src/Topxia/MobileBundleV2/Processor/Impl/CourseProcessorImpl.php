@@ -864,12 +864,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         $result["data"] = null;
         if (empty($couponInfo)) {
-            return $this->createErrorResponse('error', "优惠码错误");
+            return $this->createErrorResponse('error', "优惠码不存在!");
             return $result;
         } 
 
         if ($couponInfo["useable"] == "no") {
-            return $this->createErrorResponse('error', "优惠码错误");
+            return $this->createErrorResponse('error', "优惠码已使用!");
             return $result;
         }
 

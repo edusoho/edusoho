@@ -209,25 +209,9 @@ class BaseProcessor {
     }
 
     protected function previewAsMember($member, $courseId, $user) {
+
         if (empty($member)) {
             return null;
-        }
-
-        if ($this->controller->get('security.context')->isGranted('ROLE_ADMIN')) {
-            return array(
-                'id' => 0,
-                'courseId' => $courseId,
-                'userId' => $user['id'],
-                'levelId' => 0,
-                'learnedNum' => 0,
-                'isLearned' => 0,
-                'seq' => 0,
-                'isVisible' => 0,
-                'role' => 'teacher',
-                'locked' => 0,
-                'createdTime' => time() ,
-                'deadline' => 0
-            );
         }
     
         $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
