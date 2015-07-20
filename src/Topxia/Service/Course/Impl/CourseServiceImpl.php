@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SynchroData;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolKit;
 use Topxia\Service\Common\ServiceEvent;
@@ -398,8 +399,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = CourseSerialize::serialize($fields);
 
 		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
-
+		if ($updatedCourse) {
+			SynchroData::synchroCourse($id);
+		}
 		return CourseSerialize::unserialize($updatedCourse);
+	}
+
+	public function updateCourseByParentIdAndFields($parentId, $fields)
+	{
+		$fields = CourseSerialize::serialize($fields);
+		return $this->getCourseDao()->updateCourseByParentIdAndFields($parentId, $fields);
 	}
 
 	public function updateCourseCounter($id, $counter)

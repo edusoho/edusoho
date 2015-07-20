@@ -26,6 +26,8 @@ interface CourseDao
 
     public function updateCourse($id, $fields);
 
+    public function updateCourseByParentIdAndFields($parentId, $fields);
+
     public function deleteCourse($id);
     
     public function waveCourse($id,$field,$diff);
