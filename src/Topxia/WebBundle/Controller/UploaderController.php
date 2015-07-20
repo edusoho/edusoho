@@ -32,8 +32,8 @@ class UploaderController extends BaseController
 
     public function finishedAction(Request $request)
     {
-        $fileId = $request->request->get('fileId');
-        $this->getUploadFileService()->finishedUpload($fileId);
+        $params = $request->request->all();
+        $this->getUploadFileService()->finishedUpload($params);
         return $this->createJsonResponse(true);
     }
 

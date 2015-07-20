@@ -21,6 +21,12 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAssoc($sql, array($hash)) ? : null;
     }
 
+    public function getFileByGlobalId($globalId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE globalId = ?";
+        return $this->getConnection()->fetchAssoc($sql, array($globalId)) ? : null;
+    }
+
     public function getFileByConvertHash($hash)
     {
         $sql = "SELECT * FROM {$this->table} WHERE convertHash = ?";

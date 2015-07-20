@@ -77,17 +77,17 @@ define(function(require, exports, module) {
     		    $li.find('.file-status').html('已上传');
     		    $li.find('.file-progress-bar').css('width', '0%');
 
-    		    $.ajax(startUrl, {
-    		    	type: 'POST',
-    		    	data: {fileId:file.gid},
-    		    	dataType: 'json',
-    		    	headers: {
-    		    		'Upload-Token': response.postData.token
-    		    	},
-    		    	success: function() {
-    		    		console.log('finished');
-    		    	}
-    		    });
+    		    // $.ajax(startUrl, {
+    		    // 	type: 'POST',
+    		    // 	data: {fileId:file.gid},
+    		    // 	dataType: 'json',
+    		    // 	headers: {
+    		    // 		'Upload-Token': response.postData.token
+    		    // 	},
+    		    // 	success: function() {
+    		    // 		console.log('finished');
+    		    // 	}
+    		    // });
 
     		});
 
@@ -186,17 +186,21 @@ define(function(require, exports, module) {
     		        store.remove('file_' + file.hash);
     		        var deferred = WebUploader.Deferred();
 
-    		        $.ajax(self.get('uploadUrl') + '/chunks/finish', {
+    		        var xhr = $.ajax(self.get('uploadUrl') + '/chunks/finish', {
     		        	type: 'POST',
     		        	data: {file_gid:file.gid},
     		        	dataType: 'json',
     		        	headers: {
     		        		'Upload-Token': self.get('uploadToken')
-    		        	},
-    		        	success: function() {
-    		        		deferred.resolve();
     		        	}
     		        });
+
+                    xhr.done(function( data, textStatus, xhr ) {
+                        console.log('finish command:', data);
+                        $.post(self.get('finishUrl'), data, function() {
+                            deferred.resolve();
+                        });
+                    });
 
     		        return deferred.promise();
     		    }

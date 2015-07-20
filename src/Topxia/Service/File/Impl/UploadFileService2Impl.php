@@ -45,9 +45,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $params;
     }
 
-    public function finishedUpload($fileId)
+    public function finishedUpload($params)
     {
-    	$file = $this->getUploadFileDao()->updateFile($fileId, array('status' => 'ok'));
+        $file = $this->getUploadFileDao()->getFileByGlobalId($params['globalId']);
+        if (empty($file['globalId'])) {
+            throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
+        }
+
+    	$file = $this->getUploadFileDao()->updateFile($file['id'], array('status' => 'ok'));
 
         // $api = new CloudAPI(array(
         //     'accessKey' => '111',
