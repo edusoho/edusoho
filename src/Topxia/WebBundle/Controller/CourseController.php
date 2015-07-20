@@ -17,8 +17,14 @@ class CourseController extends CourseBaseController
 		$conditions = $request->query->all();
 		
 		$conditions['code'] = $category;
+
+		$currentCat = array();
+
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+
+            $currentCat = $categoryArray;
+
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
@@ -79,6 +85,7 @@ class CourseController extends CourseBaseController
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
+			'currentCat' => $currentCat,
 			'fliter' => $fliter,
 			'orderBy' => $orderBy,
 			'paginator' => $paginator,
