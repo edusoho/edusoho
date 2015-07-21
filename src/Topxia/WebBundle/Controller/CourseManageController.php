@@ -228,9 +228,43 @@ class CourseManageController extends BaseController
 
     public function orderAction(Request $request, $id)
     {
+        $conditions = $request->query->all();
+        $type = 'course';
+        $conditions['targetType'] = $type;
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+        $conditions['targetId'] = $id;
         $course = $this->getCourseService()->tryManageCourse($id);
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount($conditions),
+            10
+        );
+
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+
+        foreach ($orders as $index => $expiredOrderToBeUpdated ){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+               $orders[$index]['status'] = 'cancelled';
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseManage:course-order.html.twig', array(
             'course' =>$course,
+            'request' =>$request,
+            'orders' => $orders,
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
@@ -367,10 +401,14 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
     protected function getDiscountService()
     {
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }
 
-
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
 }
