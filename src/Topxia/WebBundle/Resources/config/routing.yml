@@ -554,6 +554,10 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
+course_manage_order:
+    pattern:  /course/{id}/manage/order
+    defaults: { _controller: TopxiaWebBundle:CourseManage:order }
+
 course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }

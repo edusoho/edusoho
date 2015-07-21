@@ -226,6 +226,14 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function orderAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseManage:course-order.html.twig', array(
+            'course' =>$course,
+        ));
+    }
+
     protected function makeLevelChoices($levels)
     {
         $choices = array();
