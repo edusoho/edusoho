@@ -117,7 +117,7 @@
 
         {# 最新直播 #}
         {% if setting('course.live_course_enabled') %}
-          {% set recentLiveCourses = data('RecentLiveCourses', {count:3}) %}
+          {#{% set recentLiveCourses = data('RecentLiveCourses', {count:3}) %}#}
           {% if recentLiveCourses %}
             <div class="es-box">
               <div class="es-box-heading">
@@ -125,7 +125,8 @@
                 <h2>最新直播</h2>
               </div>
               <div class="es-box-body">
-                {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
+                {#{{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}#}
+                {{ _self.course_grids(recentLiveCourses)}}
               </div>
             </div>
           {% endif %}

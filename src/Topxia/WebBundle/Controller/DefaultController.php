@@ -32,7 +32,6 @@ class DefaultController extends BaseController
         } else {
             $recentLiveCourses = array();
         }
-
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
@@ -111,8 +110,13 @@ class DefaultController extends BaseController
 
             $recentCourses[] = $course;
         }
-
-        return $recentCourses;
+        $liveCourses = array();
+        foreach ($recentCourses as $key => $value) {
+              if($value['parentId'] == 0){
+                  $liveCourses[] = $value;
+              }
+        }
+        return  $liveCourses;
     }
 
     public function promotedTeacherBlockAction()
