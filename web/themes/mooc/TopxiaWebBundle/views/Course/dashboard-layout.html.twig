@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{# {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
@@ -8,7 +8,7 @@
 
 {% block content %}
   {# 头部信息 #}
-  {{ render(controller('TopxiaWebBundle:Course:header', {course:course})) }}
+ {#  {{ render(controller('TopxiaWebBundle:Course:header', {course:course})) }}
 
 <div class="course-about clearfix">
   <div class="course-about-main">
@@ -22,11 +22,11 @@
   </div>
   <div class="course-about-sidebar">
        {# 课程公告 #}
-    {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+   {#  {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
 
     {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}
 
   </div>
 </div>
-
-{% endblock %}
+ #}
+{% endblock % #}} #}
