@@ -1,0 +1,54 @@
+{% set learnStatuses = learnStatuses|default([]) %}
+{% set experience = experience|default(false) %}
+
+<div class="course-outline">
+  {% set class = class|default('') %}
+  <ul>
+    {% for id, item in items %}
+      {% if 'chapter' in id %}
+        {% if item.type == 'unit' %}
+          <li class="section">
+            第 {{ item.number }} 节
+           {{ item.title }}
+          </li>
+        {% else %}
+          <li class="chapter clearfix">
+            <i class="icon-node"></i>
+            <span>第{{item.number}}章 {{ item.title }}</span>
+            <i class="icon icon-minus"></i>
+          </li>
+        {% endif %}
+      {% elseif 'lesson' in id %}
+        {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+        <li class="period lesson-item " data-id="{{ item.id }}" data-num="{{loop.index}}">
+          {% if item.status == 'published' %}       
+            <a href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}">
+              <div class="period-title">
+                <i class="icon-progress 
+                  {% if learnStatuses[item.id]|default(null) == 'learning' %}
+                    progress-50 
+                  {% elseif learnStatuses[item.id]|default(null) == 'finished'%}
+                  {% else %}
+                    progress-0
+                  {% endif %} ">
+                </i>
+                <span>第{{item.number}}课时 {{ item.title }}{% if item.type == 'video' %}(
+                  {{item.length|duration}}){% endif %}
+                </span>
+                <i class="video-btn {% if item.type == 'ppt' %} ppt {% elseif item.type == 'text' %} word {% elseif item.type == 'audio'%} audio {% endif %}"></i>
+              </div>
+            </a>
+          {% else %}
+            <div class="period-title">
+              <i class="icon-progress"></i>
+              <span>第{{item.number}}课时(未发布) {{ item.title }}{% if item.type == 'video' %}(
+                {{item.length|duration}}){% endif %}
+              </span>
+              {# <span class="pull-right status">未发布</span> #}
+            </div>
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

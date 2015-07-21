@@ -1,0 +1,10 @@
+<div class="course-nav  clearfix">
+  <ul class="nav">
+    {% block course_dashboard_nav %}
+    <li class="{% if nav == 'lesson' %}active{% endif %}"><a href="{{ path('course_show', {id:course.id}) }}">课程介绍</a></li>
+    <li class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
+    <li class="{% if nav == 'material' %}active{% endif %}"><a href="{{ path('course_materials', {id:course.id}) }}">资料区</a></li>
+    <li class="{% if nav == 'info' %}active{% endif %}" ><a  href="{{ path('course_info', {id:course.id}) }}">课程信息</a></li>
+      {% endblock %}
+  </ul>
+</div>

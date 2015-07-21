@@ -1,0 +1,156 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
+
+{%- block keywords -%}
+  {% if category %}{{ category.name }}{% endif %}
+  {% for tag in tags %}{{ tag.name }}{% endfor %}
+  {{ course.title }} {{ setting('site.name') }}
+{%- endblock -%}
+{% block description %}{{ course.about|plain_text(150) }}{% endblock %}
+
+
+{% block content %}
+  <div class="course-detail-header clearfix">
+    <div class="course-header-img">
+      <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"></a>
+    </div>
+    <div class="course-hader-info">
+      <div class="title clearfix">
+        <span><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></span>
+        {% if is_granted('ROLE_ADMIN') %}
+          <a class="tooltop pull-right" href="{{ path('course_manage', {id:course.id}) }}" data-role="tooltip" title="课程管理" data-placement="top">
+          <i class="icon icon-setting"></i>
+          </a>
+        {% endif %}
+      </div>
+      <div class="content">
+        {{course.subtitle}}
+      </div>
+      <div class="score">评分：<span class="stars-{{ (course.rating)|number_format }}"></span> <span>{{ course.rating|number_format(1) }}</span>分（{{ course.ratingNum }}人评价）</div>
+      <div class="student-num hidden-sm">
+        {% if course.showStudentNumType == 'opened' %}
+          学员数: <span>{{ course.studentNum }}</span>人
+        {% endif %}
+        {% if not course.expiryDay == 0 %}
+          <span class="stat-divider">|</span> 有效期: <span>{{ course.expiryDay }}</span>天
+        {% endif %}
+      </div>
+      <div class="study clearfix">
+        <a class="btn btn-study" {% if setting("course.buy_fill_userinfo")|default(false) %}
+            href="#modal" 
+            data-toggle="modal" 
+            data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+            {% else %}
+            href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+            {% endif %}>
+          加入课程
+        </a>
+        <div class="sns clearfix" id="es-sns">
+          <span class="collect">
+            <a class="tooltop" id="favorite-btn" href="javascript:;" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="收藏课程" data-placement="top">
+              <span class="collect-icon"></span>
+            </a>
+          </span>
+          
+          <span class="collect active">
+            <a class="tooltop" id="unfavorite-btn" href="javascript:;" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="已收藏" data-placement="top">
+              <span class="collect-icon"></span>
+            </a>
+          </span>
+
+          <span class="es-share dropdown tooltop" data-bdText="{{setting('default.groupShareContent')}}" data-role="tooltip" title="分享到" data-placement="top">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="course-about clearfix">
+    <div class="course-about-main">
+      <div class="course-detail">
+        <div class="course-nav affix-top clearfix" id="course-nav">
+          <ul class="nav">
+            <li class="active"><a href="#course-about-pane" data-anchor="#course-about-pane">课程介绍</a></li>
+            {% if course.goals %}
+              <li><a href="#course-goal-pane" data-anchor="#course-goal-pane">课程目标</a></li>{# 课程目标 #}
+            {% endif %}
+            {% if course.audiences %}
+              <li><a href="#course-audience-pane" data-anchor="#course-audience-pane">适合人群</a></li>
+            {% endif %}
+            <li><a href="#course-list-pane" data-anchor="#course-list-pane">课程列表</a></li>
+            {% if courseReviews %}
+              <li><a href="#course-review-pane" data-anchor="#course-review-pane">学员心声(<span>{{ course.ratingNum }}</span>)</a></li>
+            {% endif %}
+          </ul>
+          <a class="btn-join hidden-sm hidden-xs" {% if setting("course.buy_fill_userinfo")|default(false) %}
+            href="#modal" 
+            data-toggle="modal" 
+            data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+            {% else %}
+            href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+            {% endif %} >加入课程<span class="icon-join"></span></a>
+        </div>
+        <div class="course-column" id="course-about-pane">
+          <div class="title">课程介绍</div>
+          <div class="content">
+            {% if course.about %}
+              {{ course.about|raw }}
+            {% else %}
+              <span class="text-muted">还没有课程介绍...</span>
+            {% endif %}
+          </div>
+        </div>
+        {% if course.goals %}
+          <div class="course-column" id="course-goal-pane">
+            <div class="title">课程目标</div>
+            {% for goal in course.goals  %}
+            <div class="content">
+              {{ goal }}
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if course.audiences %}
+          <div class="course-column" id="course-audience-pane">
+            <div class="title">适合人群</div>
+            {% for audience in course.audiences %}
+            <div class="content">
+              {{ audience }}
+            </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {# 课时列表 #}
+        {% include 'TopxiaWebBundle:CourseLesson:item-list-multi.html.twig' with {experience: true} %}
+
+        {# 最新评价 #}
+        {% if courseReviews %}
+          {{ render(controller('TopxiaWebBundle:CourseReview:list',{id:course.id,previewAs:previewAs})) }}
+        {% endif %}
+      
+      </div>
+    </div>
+    <div class="course-about-sidebar">
+      <div class="es-panel teacher-column">
+        <div class="panel-heading clearfix">任课老师<span class="teacher-icon"></span></div>
+        <div class="panel-body">
+          <ul>
+             {{ render(controller('TopxiaWebBundle:Course:teachersBlock',{course:course})) }}
+          </ul>
+        </div>
+      </div>
+
+      {# 课程公告 #}
+      {{ render(controller('TopxiaWebBundle:CourseAnnouncement:block',{course:course})) }}
+    
+      {# 最新评论 #}
+      {{ render(controller('TopxiaWebBundle:CourseThread:latestBlock',{course:course})) }}
+
+      {# 最新学院 #}
+      {{ render(controller('TopxiaWebBundle:Course:latestMembersBlock',{course:course})) }}
+
+    </div>
+  </div>
+                
+{% endblock %}

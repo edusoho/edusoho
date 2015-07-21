@@ -17,8 +17,14 @@ class CourseController extends CourseBaseController
 		$conditions = $request->query->all();
 		
 		$conditions['code'] = $category;
+
+		$currentCat = array();
+
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+
+            $currentCat = $categoryArray;
+
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
@@ -79,6 +85,7 @@ class CourseController extends CourseBaseController
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
+			'currentCat' => $currentCat,
 			'fliter' => $fliter,
 			'orderBy' => $orderBy,
 			'paginator' => $paginator,
@@ -447,9 +454,19 @@ class CourseController extends CourseBaseController
 			$this->createAccessDeniedException();
 		}
 
-		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
+		$learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
-		return $this->createJsonResponse(true);
+		$isLimit = $this->setting('magic.lesson_watch_limit');
+		if ($isLimit) {
+			$lesson = $this->getCourseService()->getLesson($lessonId);
+			$course = $this->getCourseService()->getCourse($lesson['courseId']);
+			$watchLimitTime = $course['watchLimit'] * $lesson['length'];
+			if ($lesson['type'] == 'video' && $learn['watchTime'] >= $watchLimitTime) {
+				$learn['watchLimited'] = true;
+			}
+		}
+
+		return $this->createJsonResponse($learn);
 	}
 
 	public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)

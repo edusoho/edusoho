@@ -1,0 +1,20 @@
+<div class="col-md-4 col-sm-6">
+  <div class="course-item">
+    <div class="course-img">
+      <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" /></a>
+    </div>
+    <div class="course-caption">
+      <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
+      <div class="metas clearfix">
+        {% set teacher = course.teachers|first|default(null) %}
+        {% if teacher %}
+        <span class="teacher-name">{{ teacher.nickname }}</span>
+        {% endif %}
+        <span class="course-period">{{ course.lessonNum }}课时</span>
+        {% if course.showStudentNumType == 'opened' %}
+        <span class="student-mun">{{ course.studentNum }}人报名</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
