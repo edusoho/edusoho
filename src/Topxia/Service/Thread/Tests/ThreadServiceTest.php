@@ -352,7 +352,7 @@ class ThreadServiceTest extends BaseTestCase
      **////
     public function testGetPost()
     {
-                $user = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -520,7 +520,7 @@ class ThreadServiceTest extends BaseTestCase
     }
     public function testDeletePost()
     {
-                $user = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -543,7 +543,7 @@ class ThreadServiceTest extends BaseTestCase
     }
     public function testSearchPostsCount()
     {
-                $user = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
