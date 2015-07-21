@@ -95,7 +95,7 @@ class DefaultController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
 
-        $recentCourses = array();
+         $liveCourses = array();
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
             if ($course['status'] != 'published') {
@@ -103,18 +103,12 @@ class DefaultController extends BaseController
             }
             $course['lesson'] = $lesson;
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-            if (count($recentCourses) >= 8) {
+            if($course['parentId'] == 0){
+                $liveCourses[] = $course;
+             }
+            if (count($liveCourses) >= 8) {
                 break;
             }
-
-            $recentCourses[] = $course;
-        }
-        $liveCourses = array();
-        foreach ($recentCourses as $key => $value) {
-              if($value['parentId'] == 0){
-                  $liveCourses[] = $value;
-              }
         }
         return  $liveCourses;
     }
