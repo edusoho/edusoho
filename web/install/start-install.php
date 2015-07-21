@@ -287,7 +287,7 @@ function _create_database($config, $replace)
             return "创建数据库表结构失败，请删除数据库后重试！";
         }
 
-        if(!empty($config["database_replace"]) && $config["database_replace"]) {
+        if(!empty($config["database_init"]) && $config["database_init"]==1) {
             init_data($pdo,$config);
         }
 
