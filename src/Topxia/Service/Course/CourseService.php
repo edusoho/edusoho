@@ -21,6 +21,8 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+
+	public function findCoursesByParentId($parentId);
 	
 	public function findCoursesByCourseIds(array $ids, $start, $limit);
 

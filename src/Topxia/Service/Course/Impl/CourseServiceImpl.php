@@ -32,6 +32,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
+	public function findCoursesByParentId($parentId)
+	{
+		$courses = $this->getCourseDao()->findCoursesByParentId($parentId);
+		return ArrayToolkit::column($courses, 'id');
+	}
+
 	public function findCoursesByCourseIds(array $ids, $start, $limit)
 	{
 		$courses = CourseSerialize::unserializes(
@@ -399,9 +405,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = CourseSerialize::serialize($fields);
 
 		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
-		if ($updatedCourse) {
-			SynchroData::synchroCourse($id);
-		}
+		$this->dispatchEvent("course.update",$updatedCourse['id']);
+		
 		return CourseSerialize::unserialize($updatedCourse);
 	}
 
@@ -479,7 +484,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
         
-        return $this->getCourseDao()->updateCourse($courseId, $fields);
+        $update_picture = $this->getCourseDao()->updateCourse($courseId, $fields);
+    	
+    	$this->dispatchEvent("course.update",$courseId);
+
+    	return $update_picture;
     }
 
     protected function deleteNotUsedPictures($course)

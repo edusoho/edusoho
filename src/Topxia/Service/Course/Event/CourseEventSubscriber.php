@@ -12,6 +12,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            'course.lesson.create'=> 'onLessonCreate',
             'course.lesson_start' => 'onLessonStart',
             'course.lesson_finish' => 'onLessonFinish',
             'course.join' => 'onCourseJoin',
@@ -21,7 +22,24 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.note.delete' => 'onCourseNoteDelete',
             'course.note.liked' => 'onCourseNoteLike',
             'course.note.cancelLike' => 'onCourseNoteCancelLike',
+            'course.update' => 'onCourseUpdate'
         );
+    }
+
+    public function onLessonCreate(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $courseIds = $this->getCourseService()->findCoursesByParentId($lesson['courseId']);
+        if (!empty($courseIds)){
+            $courseLesson = $this->getCourseService()->getCourseLesson($lesson['courseId'],$lesson['lessonId']);
+            unset($courseLesson['id'],$courseLesson['courseId'],$courseLesson['createdTime']);
+            foreach ($courseIds as $value)
+            {
+                $courseLesson['createdTime'] = time();
+                $courseLesson['courseId'] = $value;
+                $createLesson = $this->getCourseService()->createLesson($courseLesson);
+            }
+        }
     }
 
     public function onLessonStart(ServiceEvent $event)
@@ -152,6 +170,15 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $note = $event->getSubject();
         $this->getNoteService()->count($note['id'], 'likeNum', -1);
+    }
+
+    public function onCourseUpdate(ServiceEvent $event)
+    {   
+        $parentId = $event->getSubject();
+        $fields = $this->getCourseService()->getCourse($parentId);
+        unset($fields['id'],$fields['parentId']);
+        $this->getCourseService()->updateCourseByParentIdAndFields($parentId,$fields);
+
     }
 
     protected function simplifyCousrse($course)

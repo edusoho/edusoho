@@ -36,6 +36,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByParentId($parentId)
+    {
+        if(empty($parentId)){
+            return array();
+        }
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? ";
+        return $this->getConnection()->fetchAll($sql, array($parentId));
+    }
+
     public function findCoursesByCourseIds(array $ids, $start, $limit)
     {
         if(empty($ids)){
