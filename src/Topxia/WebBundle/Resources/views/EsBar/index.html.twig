@@ -2,7 +2,7 @@
 
 
   <div class="es-bar hidden-xs">
-    
+
     <!-- 左侧列表 -->
     {% include 'TopxiaWebBundle:EsBar:left-list.html.twig' %}
 
@@ -109,6 +109,7 @@
         </div>
       </div>#}
     {% endif %}
+    {% set consult = setting('consult') %}
     {% if setting('consult.enabled', 0)  %}
       <div class="bar-popover-content" style="display:none;">
       <div id="bar-qq-content">
