@@ -1741,3 +1741,10 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
+common_learn_qrcode:
+    pattern: /qrcode/generate
+    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
+
+common_explain_qrcode:
+    pattern: /qrcode/explain/{token}
+    defaults: {_controller: TopxiaWebBundle:Common:explainLearnCode}
