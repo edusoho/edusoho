@@ -58,9 +58,12 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
             if ($course['status'] != 'published') {
                 continue;
             }
+            if($course['parentId'] != 0){
+                continue;   
+            }
             $course['lesson'] = $lesson;
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
-
+            
             if (count($recentCourses) >= 8) {
                 break;
             }
