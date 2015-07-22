@@ -145,7 +145,7 @@ class HLSController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-        if (empty($token)) {
+        if (empty($token) || !$this->getCurrentUser()->isLogin()) {
             return new Response($fakeKey);
         }
 
