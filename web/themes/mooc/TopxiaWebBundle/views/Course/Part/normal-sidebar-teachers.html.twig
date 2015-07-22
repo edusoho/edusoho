@@ -1,0 +1,15 @@
+{% for teacher in teachers %}
+{% set user = data('UserandProfiles',{userId:teacher.id})%}  
+ <li>
+    <div class="teacher-top clearfix">
+      <div class="avatar">
+        <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}"></a>
+      </div>
+      <div class="teacher-name"><a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a></div>
+      <div class="teacher-position">{{ teacher.title }}</div>
+    </div>
+    <div class="teacher-about">
+      {{ user['profiles']['about'] | raw }}
+    </div>
+  </li>
+{% endfor %}  

@@ -69,8 +69,8 @@
     </section>
   {% endif %}
 
-  {% set recommendTeachers = data('RecommendTeachers',{ count:3 }) %}
-  {% if recommendTeachers %} 
+  {% set teachers = data('RecommendTeachers',{'count':3}) %}
+  {% if teachers %}
     <section class="es-section section-gray">
       <div class="container">
         <div class="section-header clearfix">
@@ -79,8 +79,10 @@
         </div>
         <div class="section-bodyer">
           <div class="home-teacher-list row">
-            {% for teacher in recommendTeachers %}
-              {% include 'TopxiaWebBundle:Default:teacher-item.html.twig' with {teacher:teacher} %}
+            {% for teacher in teachers %}
+              <div class="teacher-item col-md-4 col-sm-4">
+                {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
+              </div>
             {% endfor %}
           </div>
         </div>

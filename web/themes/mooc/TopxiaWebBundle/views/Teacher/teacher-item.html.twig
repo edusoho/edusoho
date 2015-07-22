@@ -1,7 +1,6 @@
-<div class="teacher-item col-md-4 col-sm-4">
   <div class="teacher-img">
     <a href="{{ path('user_show', {id:teacher.id}) }}">
-      {{ lazy_img(filepath(course.largeAvatar, 'course.png'), 'img-responsive', '') }}
+      <img class="img-responsive" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
       {# {% if teacher.about %} #}
         <div class="mask">
           <div class="teacher-about">
@@ -21,4 +20,3 @@
       <span class="text-muted">请设置头衔</span>
     {% endif %}
   </div>
-</div> 

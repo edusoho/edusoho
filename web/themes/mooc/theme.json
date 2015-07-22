@@ -1,9 +1,9 @@
 {
     "code": "mooc",
-    "name": "mooc主题",
+    "name": "慕课",
     "author": "EduSoho官方",
-    "version": "1.1",
-    "supprot_version": "4.8.0",
-    "date": "2014-12-05",
+    "version": "1.0.0",
+    "supprot_version": "6.0.0+",
+    "date": "2015-6-1",
     "thumb": "img/theme.jpg"
 }

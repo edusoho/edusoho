@@ -44,6 +44,7 @@
 .course-detail-header-join {
   // margin-bottom: 18px;
   background-color: #fff;
+
   // overflow: hidden;
   @media (min-width: @screen-lg-min) {
     height: 142px;
@@ -169,6 +170,7 @@
 .course-detail-header {
   margin-bottom: 18px;
   background-color: #fff;
+
   @media (min-width: @screen-lg-min) {
     height: 270px;
   }
@@ -203,9 +205,29 @@
     }
     @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
       width: 55%;
-    }
+          }
     @media (max-width: @screen-xs-max) {
       width: 100%;
+      height: 180px;
+
+    }
+     .pull-rights{
+      position: absolute;
+      bottom: 0;
+      right: 15px;
+     @media (max-width: @screen-lg-min) {
+        bottom: 22px;
+      }
+      @media (max-width: @screen-sm-max) {
+        right: auto;
+        left: 349px;
+        bottom: 8px;
+      }
+       @media (max-width: @screen-xs-max) {
+        right: auto;
+        left: 30px;
+        bottom: 8px;
+      }
     }
     .title {
       margin: 0 0 20px 0;
@@ -234,12 +256,12 @@
       }
     }
     .content {
-      margin-bottom: 25px;
+      margin-bottom: 4px;
       color: #999;
       height: 40px;
       overflow: hidden;
       @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-        margin-bottom: 15px;
+     
       }
       @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
         margin-bottom: 10px;
@@ -250,21 +272,27 @@
     }
   }
   .score {
-    margin-bottom: 10px;
-    span {
-      color: @color-assist;
-    }
-  }
-  .student-num {
     margin-bottom: 15px;
     span {
       color: @color-assist;
     }
   }
+
+  .student-num {
+    margin-bottom: 15px;
+    span {
+      font-size: 16px;
+      color: @color-assist;
+    }
+    p{
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+  }
   .study {
     .btn-study {
       float: left;
-      background-color: #24d18c;
+     background-color: #24d18c;
       color: #fff;
       font-size: 16px;
       padding: 10px 70px;
@@ -280,11 +308,33 @@
         padding: 5px 30px;
       }
     }
+    .gray{
+      background-color: @gray;
+      padding: 10px 45px;
+      &:hover{
+        background-color: @gray;
+        cursor: default;
+      }
+    }
+    .little-gray{
+      padding: 10px 78px;
+      background-color: @little-gray;
+      &:hover{
+        background-color: @little-gray;
+        cursor: default;
+      }
+    }
+
     .sns {
-      float: right;
-      margin-top: 10px;
-      @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-        margin-top: 6px;
+      position: relative;
+      top: -228px;
+      right: -70px;
+      @media (max-width: @screen-lg-min) {
+       top: -172px;
+      }
+      @media (max-width: @screen-sm-max) {
+        top: 6px;
+        right: -9px;
       }
       .es-share {
         float: left;
@@ -614,6 +664,49 @@
         margin-bottom: 10px;
         font-size: 16px;
       }
+    }
+  }
+  &.open-class{
+    .panel-body{
+      padding: 0;
+    }
+    ul{
+      padding-top: 15px;
+       border-bottom: 1px dashed @little-gray;
+     
+    }
+    li{
+      display: inline-block;
+      width: 59%;
+      margin-bottom: 15px;
+     
+     
+    }
+    .first{
+      width: 39%;
+      text-align: center;
+      font-size: 13px;
+      color: #ff854a;
+     border-right: 1px solid @little-gray;
+      span{
+        font-size: 24px;
+      }
+
+    }
+    .last{
+      font-size: 12px;
+      padding-left: 6px;
+      color: @font-color;
+    }
+    .red{
+      color:#e74c3c;
+      font-size: 16px;
+      height: 36px;
+      line-height: 60px;
+      text-align: center;
+    }
+    .gray{
+      color: @gray;
     }
   }
 }
