@@ -1,0 +1,8 @@
+<li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知">
+  <a href="javascript:;">
+    <i class="es-icon es-icon-notifications"></i>
+    {% if app.user.newNotificationNum > 0 %}
+      <span class="dot"></span>
+    {% endif %}
+  </a>
+</li>

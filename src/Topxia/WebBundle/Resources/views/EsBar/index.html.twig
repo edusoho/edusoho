@@ -1,71 +1,10 @@
 <!-- 侧边栏快捷操作 -->
 
+
   <div class="es-bar hidden-xs">
-    <div class="es-bar-menu">
-      <ul class="bar-menu-top">
-        {% if app.user and app.user.isLogin() %}
-          {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id}) %}
-          <li data-id="#bar-user-center" class="bar-user">
-            <a href="javascript:;">学<br>习<br>中<br>心
-              {% if recentLiveLessons %}
-                <span class="dot"></span>
-              {% endif %}
-            </a>
-          </li>
-          <li data-id="#bar-course-list" data-toggle="tooltip" data-placement="left" title="我的课程/班级"><a href="javascript:;" ><i class="es-icon es-icon-book"></i></a></li>
-          {#<li data-id="#bar-history" data-toggle="tooltip" data-placement="left" title="学习历史"><a href="javascript:;"><i class="es-icon es-icon-accesstime"></i></a></li>#}
-          <li data-id="#bar-homework" data-toggle="tooltip" data-placement="left" title="考试/作业"><a href="javascript:;"><i class="es-icon es-icon-edit"></i></a></li>
-          <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知">
-            <a href="javascript:;">
-              <i class="es-icon es-icon-notifications"></i>
-              {% if app.user.newNotificationNum > 0 %}
-              <span class="dot"></span>
-              {% endif %}
-            </a>
-          </li>
-        {% else %}
-          <li data-id="#bar-user-center" class="bar-user">
-            <a href="javascript:;">学<br>习<br>中<br>心
-            </a>
-          </li>
-          <li data-id="#bar-course-list" data-toggle="tooltip" data-placement="left" title="我的课程/班级"><a href="javascript:;" ><i class="es-icon es-icon-book"></i></a></li>
-          {#<li data-id="#bar-history" data-toggle="tooltip" data-placement="left" title="学习历史"><a href="javascript:isNotLogin();"><i class="es-icon es-icon-accesstime"></i></a></li>#}
-          <li data-id="#bar-homework" data-toggle="tooltip" data-placement="left" title="考试/作业"><a href="javascript:;"><i class="es-icon es-icon-edit"></i></a></li>
-          <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知">
-            <a href="javascript:;">
-              <i class="es-icon es-icon-notifications"></i>
-            </a>
-          </li>
-          <input type="hidden" id="notLogin" />
-        {% endif %}
+    <!-- 左侧列表 -->
+    {% include 'TopxiaWebBundle:EsBar:left-list.html.twig' %}
 
-      </ul>
-      <ul class="bar-menu-sns">
-        {% if setting('consult.enabled', 0)  %}
-          {% set consult = setting('consult') %}
-          {% if consult.qq[0].name is not empty or consult.qqgroup[0].name is not empty %}
-            <li class="popover-btn bar-qq-btn" data-container=".bar-qq-btn" data-title="QQ客服及QQ群" data-content-element="#bar-qq-content">
-              <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
-            </li>
-          {% endif %}
-          {% if consult.phone[0].name is not empty or consult.worktime is not empty or consult.email is not empty  %}
-            <li class="popover-btn bar-phone-btn" data-container=".bar-phone-btn" data-title="电话客服" data-content-element="#bar-phone-content">
-              <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
-            </li>
-          {% endif %}
-
-          {% if consult.webchatURI is not empty %}
-            <li class="popover-btn bar-weixin-btn" data-container=".bar-weixin-btn" data-title="微信公众号" data-content-element="#bar-weixin-content">
-              <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
-            </li>
-          {% endif %}
-        {% endif %}
-        <li data-toggle="tooltip" data-placement="left" title="手机端">
-          <a href="http://demo.edusoho.com/mobile" target="_blank"><i class="es-icon es-icon-phone1"></i></a>
-        </li>
-        <li class="go-top" data-toggle="tooltip" data-placement="left" title="回到顶端"><a href="javascript:;"><i class="es-icon es-icon-keyboardarrowup"></i>TOP</a></li>
-      </ul>
-    </div>
     {% if app.user and app.user.isLogin() %}
       <!-- 通知 -->
       <div class="es-bar-main" id="bar-message">
@@ -134,6 +73,7 @@
           </div>
 
           <ul class="bar-preview">
+            {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id}) %}
             {% if recentLiveLessons %}
               {% for recentLiveLesson in recentLiveLessons %}
                 <li>
