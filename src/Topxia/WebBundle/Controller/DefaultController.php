@@ -101,11 +101,11 @@ class DefaultController extends BaseController
             if ($course['status'] != 'published') {
                 continue;
             }
-            $course['lesson'] = $lesson;
-            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
             if($course['parentId'] != 0){
                 continue;   
             }
+            $course['lesson'] = $lesson;
+            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
             if (count($liveCourses) >= 8) {
                 break;
             }
