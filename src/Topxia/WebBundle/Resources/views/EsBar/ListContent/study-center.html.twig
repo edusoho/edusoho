@@ -1,0 +1,19 @@
+<div class="es-bar-main" id="bar-user-center">
+  <div class="bar-main-header">
+    <a href="javascript:;" class="js-bar-shrink pull-left link-light" ><i class="es-icon es-icon-arrowforward"></i></a>
+    学习中心
+  </div>
+  <div class="bar-main-body">
+    <!-- 用户 -->
+    {% include 'TopxiaWebBundle:EsBar:ListContent/StudyCenter/user.html.twig' %}
+
+
+    <!-- 直播预告 -->
+    {% include 'TopxiaWebBundle:EsBar:ListContent/StudyCenter/live.html.twig' %}
+
+    <!-- 学习任务 -->
+    {{ render(controller('TopxiaWebBundle:EsBar/EsBar:studyPlan' )) }}
+
+
+  </div>
+</div>
