@@ -4,6 +4,10 @@ define(function(require, exports, module) {
 
     $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
 
+    if ($('.es-bar [data-toggle="tooltip"]').length > 0) {
+        $('.es-bar [data-toggle="tooltip"]').tooltip({container: '.es-bar'});
+    }
+
     // popover
     $(".es-bar .bar-menu-sns li.popover-btn").popover({
         placement: 'left',

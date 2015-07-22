@@ -17,9 +17,11 @@
           <li data-id="#bar-homework" data-toggle="tooltip" data-placement="left" title="考试/作业"><a href="javascript:;"><i class="es-icon es-icon-edit"></i></a></li>
           <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="通知">
             <a href="javascript:;">
-              <i class="es-icon es-icon-notifications"></i>
               {% if app.user.newNotificationNum > 0 %}
-              <span class="dot"></span>
+                <i class="es-icon es-icon-notificationson"></i>
+                <span class="dot"></span>
+              {% else %}
+                <i class="es-icon es-icon-notifications"></i>
               {% endif %}
             </a>
           </li>
@@ -45,18 +47,18 @@
           {% set consult = setting('consult') %}
           {% if consult.qq[0].name is not empty or consult.qqgroup[0].name is not empty %}
             <li class="popover-btn bar-qq-btn" data-container=".bar-qq-btn" data-title="QQ客服及QQ群" data-content-element="#bar-qq-content">
-              <a href="javascript:;"><i class="es-icon es-icon-qq"></i></a>
+              <a><i class="es-icon es-icon-qq"></i></a>
             </li>
           {% endif %}
           {% if consult.phone[0].name is not empty or consult.worktime is not empty or consult.email is not empty  %}
             <li class="popover-btn bar-phone-btn" data-container=".bar-phone-btn" data-title="电话客服" data-content-element="#bar-phone-content">
-              <a href="javascript:;"><i class="es-icon es-icon-phone"></i></a>
+              <a><i class="es-icon es-icon-phone"></i></a>
             </li>
           {% endif %}
 
           {% if consult.webchatURI is not empty %}
             <li class="popover-btn bar-weixin-btn" data-container=".bar-weixin-btn" data-title="微信公众号" data-content-element="#bar-weixin-content">
-              <a href="javascript:;"><i class="es-icon es-icon-weixin"></i></a>
+              <a><i class="es-icon es-icon-weixin"></i></a>
             </li>
           {% endif %}
         {% endif %}
@@ -89,7 +91,7 @@
           考试/作业
         </div>
         <div class="bar-main-body">
-          <div class="btn-action">
+          <div class="btn-group btn-group-justified btn-action">
             <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}" class="btn btn-primary active" id="bar-practice-review">已提交</a>
             <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'finished'}) }}" class="btn btn-primary" id="bar-practice-finish"><span>已批阅</span></a>
           </div>
@@ -102,17 +104,15 @@
       <!-- 课程/班级 -->
       <div class="es-bar-main" id="bar-course-list">
         <div class="bar-main-header">
-          <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+          <a href="javascript:;" class="js-bar-shrink link-light"><i class="es-icon es-icon-arrowforward"></i></a>
           课程/班级
         </div>
         <div class="bar-main-body">
-          <div class="btn-action">
+          <div class="btn-group btn-group-justified btn-action">
             <a href="javascript:;" data-url="{{ path('esbar_my_learn',{type:'course'}) }}" class="btn btn-primary active" id="bar-course-btn">课程</a>
             <a href="javascript:;" data-url="{{ path('esbar_my_learn',{type:'classroom'}) }}" class="btn btn-primary" id="bar-classroom-btn">班级</a>
           </div>
-          <div id="bar-my-course">
-
-          </div>
+          <div id="bar-my-course"></div>
         </div>
       </div>
 
@@ -143,7 +143,7 @@
               {% endfor %}
             {% else %}
               <li>
-                <p class="text-overflow"><i class="es-icon es-icon-calendar"></i>暂无直播课</p>
+                <p class="empty">暂无直播课</p>
               </li>
             {% endif %}
           </ul>
@@ -197,7 +197,7 @@
       </div>
       <div id="bar-phone-content">
         {% if consult.worktime is not empty %}
-          <p class="mtl"><i class="es-icon es-icon-notificationson mrm"></i>工作时间： {{ consult.worktime }}</p>
+          <p class="mtl"><i class="es-icon es-icon-accesstime mrm"></i>工作时间： {{ consult.worktime }}</p>
         {% endif %}
         {% for phone in consult.phone if phone.name is not empty %}
           <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}： {{ phone.number }}</p>
@@ -215,8 +215,3 @@
     {% endif %}
 
   </div>
-
-
-  {% block modal %}
-    <div id="modal" class="modal"></div>
-  {% endblock %}
