@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     require("jquery.bootstrap-datetimepicker");
     var SmsSender = require('../widget/sms-sender');
+    //var CaptchaModal = require('./captcha-mobile-modal.js');
 
     Validator.addRule(
         'email_or_mobile_check',
@@ -15,12 +16,12 @@ define(function(require, exports, module) {
             var isMobile = reg_mobile.test(emailOrMobile);
             if(isMobile){
                 $(".email_mobile_msg").removeClass('hidden');
-                $('.captcha_div').removeClass('hidden');
+                $('.captcha_div').addClass('hidden');
+                $('.js-sms-send').removeClass('disabled');
             }else {
                 $(".email_mobile_msg").addClass('hidden');
-                if($('input[name="captcha_enabled"]').val() == 0) {
-                    $('.captcha_div').addClass('hidden');
-                }
+                $('.js-sms-send').addClass('disabled');
+                $('.captcha_div').removeClass('hidden');
             }
             if (isEmail || isMobile) {
                 result = true;
@@ -38,11 +39,11 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         var $form = $('#register-form');
+        var captchaStatus = false;
         var validator = new Validator({
             element: $form,
             onFormValidated: function(error, results, $form) {
                 if (error) {
-                    $('.js-sms-send').addClass('disabled');
                     return false;
                 }
                 $('#register-btn').button('submiting').addClass('disabled');
@@ -62,10 +63,7 @@ define(function(require, exports, module) {
                 rule: 'alphanumeric remote',
                 onItemValidated: function(error, message, eleme) {
                     if (message == "验证码错误"){
-                        $('.js-sms-send').addClass('disabled');
                         $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
-                    } else {
-                        $('.js-sms-send').removeClass('disabled');
                     }
                 }                
             });
@@ -75,7 +73,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="email"]',
                 required: true,
-                rule: 'email_or_mobile_check email_remote'
+                rule: 'email email_remote'
             });
         }
 
@@ -84,7 +82,15 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="verifiedMobile"]',
                 required: true,
-                rule: 'email_or_mobile_check email_or_mobile_remote'
+                rule: 'phone email_or_mobile_remote',
+                onItemValidated: function(error, message, eleme) {
+                    if (error) {
+                        $('.js-sms-send').addClass('disabled');
+                        return;
+                    } else {
+                        $('.js-sms-send').removeClass('disabled');
+                    }
+                }
             });
         }
         
@@ -92,12 +98,20 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="emailOrMobile"]',
                 required: true,
-                rule: 'email_or_mobile_check email_or_mobile_remote'
+                rule: 'email_or_mobile_check email_or_mobile_remote',
+                onItemValidated: function(error, message, eleme) {
+                    if (error) {
+                        $('.js-sms-send').addClass('disabled');
+                        return;
+                    } else {
+                        $('.js-sms-send').removeClass('disabled');
+                    }
+                }
             })
         }
         
         validator.addItem({
-            element: '[name="nickname"]',
+            element: '[name="nickname"]', 
             required: true,
             rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
         });
@@ -125,10 +139,20 @@ define(function(require, exports, module) {
                 rule: 'integer fixedLength{len:6} remote',
                 display: '短信验证码'           
             });
+
+            $form.on('click','.js-sms-send',function(e){
+                var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
+                    
+                $mobile_target.execute(function(error, results, element) {
+                    if (error) { 
+                        return;
+                    }
+                });
+            })
         }
 
 
-        $("#register_emailOrMobile").blur(function(){
+        /*$("#register_emailOrMobile").blur(function(){
             var emailOrMobile  = $("#register_emailOrMobile").val();
             emSmsCodeValidate(emailOrMobile);
         });
@@ -136,17 +160,19 @@ define(function(require, exports, module) {
         $("#register_mobile").blur(function(){
             var mobile  = $("#register_mobile").val();
             emSmsCodeValidate(mobile);
-        });
+        });*/
 
 
-        if ($('.js-sms-send').length > 0 ) {
+        /*if ($('.js-sms-send').length > 0 ) {
             var smsSender = new SmsSender({
                 element: '.js-sms-send',
+
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_registration',
                 dataTo : $('[name="verifiedMobile"]').val() == null? 'emailOrMobile' : 'verifiedMobile',
                 preSmsSend: function(){
                     var couldSender = true;
+                    console.log(captchaStatus);
                     var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
                     
                     $mobile_target.execute(function(error, results, element) {
@@ -178,7 +204,7 @@ define(function(require, exports, module) {
             }else{
                 validator.removeItem('[name="em_sms_code"]');
             }
-        }
+        }*/
 
 
     };

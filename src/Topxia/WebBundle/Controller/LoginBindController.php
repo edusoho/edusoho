@@ -113,6 +113,12 @@ class LoginBindController extends BaseController
     public function newSetAction(Request $request, $type)
     {
         $setData = $request->request->all();
+        if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
+           $setData['email'] = $setData['set_bind_emailOrMobile'];
+        }else if(SimpleValidator::mobile($setData['set_bind_emailOrMobile'])){
+           $setData['mobile'] = $setData['set_bind_emailOrMobile'];
+        }
+        unset($setData['set_bind_emailOrMobile']);
 
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
@@ -169,6 +175,7 @@ class LoginBindController extends BaseController
         if (!empty($setData['nickname']) && !empty($setData['email'])) {
             $registration['nickname'] = $setData['nickname'];
             $registration['email'] = $setData['email'];
+            $registration['emailOrMobile'] = $setData['email'];
         } else {
             $nicknames = array();
             $nicknames[] = $oauthUser['name'];
@@ -194,10 +201,15 @@ class LoginBindController extends BaseController
         $registration['createdIp'] = $oauthUser['createdIp'];
         $registration['source'] = $type;
 
-        if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
+        if (isset($setData['mobile']) && !empty($setData['mobile'])) {
+            $registration['mobile'] = $setData['mobile'];
+            $registration['emailOrMobile'] = $setData['mobile'];
+        }
+
+        /*if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
             $registration['emailOrMobile'] = $registration['email'];
             unset($registration['email']);
-        }
+        }*/
 
         $user = $this->getAuthService()->register($registration, $type);
         return $user;

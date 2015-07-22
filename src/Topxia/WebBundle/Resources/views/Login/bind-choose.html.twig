@@ -26,7 +26,7 @@
 
       {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
 
-       <form id="set-bind-exist-form" class="form-vertical" method="post" >
+       <form id="set-bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" >
           <div class="form-group">
             <label class="control-label" for="set-bind-nickname-field">昵称</label>
             <div class="controls">
@@ -35,15 +35,52 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="control-label" for="set-bind-email-field">邮箱地址</label>
-            <div class="controls">
-              <input id="set-bind-email-field" class="form-control" type="text" name="email" data-url="{{path('register_email_check')}}">
-               {# <p class="help-block">如空缺，补充一个</p> #}
+          {% if setting('auth.register_mode') == 'email' %}
+            <div class="form-group">
+              <label class="control-label" for="set_bind_email">邮箱地址</label>
+              <div class="controls">
+                <input id="set_bind_email" class="form-control" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+                 {# <p class="help-block">如空缺，补充一个</p> #}
+              </div>
             </div>
-          </div>
+          {% elseif setting('auth.register_mode') == 'mobile' %}
+            <div class="form-group">
+              <label class="control-label" for="set_bind_mobile">手机号码</label>
+              <div class="controls">
+                <input type="text" id="set_bind_mobile" name="set_bind_emailOrMobile" class="form-control" data-url="{{path('register_mobile_check')}}">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% else %}
+            <div class="form-group mb40">
+              <label class="control-label" for="set_bind_emailOrMobile">手机/邮箱</label>
+              <div class="controls">
+                <input type="text" id="set_bind_emailOrMobile" name="set_bind_emailOrMobile" class="form-control" data-url="{{path('register_email_or_mobile_check')}}">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
+            <div class="form-group mb40 {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
+              <label class="control-label required" for="em_sms_code">短信验证码</label>
+              <div class="controls row" >
+                <div class = "col-md-8" >
+                  <input type="text" class="form-control" id="em_sms_code" name="em_sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                  <p class="help-block"> </p> 
+                </div>
+                <div class="col-md-4">
+                  <a href="#modal" data-toggle="modal" class="btn btn-default btn-sm js-sms-send disabled" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send') }}">
+                    <span id="js-time-left"></span>
+                    <span id="js-fetch-btn-text">获取短信验证码</span>
+                 </a>
+                </div>
+              </div>
+            </div>
 
           {% endif %}
+
+        {% endif %}
 
 
           {% if setting('auth.user_terms') == 'opened' %}
@@ -57,7 +94,7 @@
 
        {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
 
-            <button id="set-bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_newset', {type:type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg"  data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
         
         </form>
 
@@ -78,20 +115,12 @@
 
           <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
 
-        {% if setting('auth.register_mode') == 'email_or_mobile' and setting('cloud_sms.sms_enabled') %}
+        {% if (setting('auth.register_mode') == 'mobile' or setting('auth.register_mode') == 'email_or_mobile') and setting('cloud_sms.sms_enabled') %}
           <div class="form-group">
             <label class="control-label" for="bind-email-field">Email / 手机</label>
             <div class="controls">
               <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
               <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
-            </div>
-          </div>
-        {% elseif setting('auth.register_mode') == 'mobile' and setting('cloud_sms.sms_enabled') %}
-          <div class="form-group">
-            <label class="control-label" for="bind-email-field">手机号码</label>
-            <div class="controls">
-              <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
-              <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的手机号码</p>
             </div>
           </div>
         {% else %}

@@ -47,7 +47,15 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="mobile"]',
                     required: true,
-                    rule: 'phone email_or_mobile_remote'            
+                    rule: 'phone email_or_mobile_remote',
+                    onItemValidated: function(error, message, eleme) {
+                        if (error) {
+                            $('.js-sms-send').addClass('disabled');
+                            return;
+                        } else {
+                            $('.js-sms-send').removeClass('disabled');
+                        }
+                    }          
                 });
 
                 validator.addItem({
@@ -82,7 +90,7 @@ define(function(require, exports, module) {
             $('.js-find-by-mobile').addClass('active');
 
             makeValidator('mobile');
-            smsSender = new SmsSender({
+            /*smsSender = new SmsSender({
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_password',
@@ -101,7 +109,7 @@ define(function(require, exports, module) {
                     return couldSender;
 
                 }
-            });
+            });*/
 
             $('#password-reset-form').hide();
             $('#password-reset-by-mobile-form').show();

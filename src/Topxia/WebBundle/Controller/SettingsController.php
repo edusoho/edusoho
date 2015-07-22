@@ -416,8 +416,7 @@ class SettingsController extends BaseController
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
         $canSmsFind = ($hasVerifiedMobile) && 
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1');
 
 		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
 			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -454,7 +453,7 @@ class SettingsController extends BaseController
 	{
 		$eduCloudService = $this->getEduCloudService();
 		$scenario = "sms_forget_pay_password";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }		
 

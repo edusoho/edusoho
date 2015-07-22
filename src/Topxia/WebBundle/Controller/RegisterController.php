@@ -399,6 +399,11 @@ class RegisterController extends BaseController
         return $this->validateResult($result, $message);
     }
 
+    public function captchaModalAction()
+    {
+        return $this->render('TopxiaWebBundle:Register:captcha-modal.html.twig',array());
+    }
+
     public function captchaCheckAction(Request $request)
     {
         $captchaFilledByUser = strtolower($request->query->get('value'));       

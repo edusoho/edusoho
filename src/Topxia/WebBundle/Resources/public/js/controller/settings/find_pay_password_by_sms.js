@@ -18,7 +18,15 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="mobile"]',
                 required: true,
-                rule: 'phone'            
+                rule: 'phone',
+                onItemValidated: function(error, message, eleme) {
+                    if (error) {
+                        $('.js-sms-send').addClass('disabled');
+                        return;
+                    } else {
+                        $('.js-sms-send').removeClass('disabled');
+                    }
+                }            
             });
 
             if ($("#getcode_num").length > 0){
@@ -53,11 +61,11 @@ define(function(require, exports, module) {
                 });
             }
             
-            var smsSender = new SmsSender({
+            /*var smsSender = new SmsSender({
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_pay_password'       
-            });
+            });*/
         
     };
 
