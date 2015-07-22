@@ -1,16 +1,31 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
+    var EduWebUplader  = require('edusoho.webuploader');
     require('webuploader');
     require('jquery.sortable');
     require('colorpicker');
     exports.run = function() {
+
+        $('.img-mode-upload').each(function(){
+            console.log(this)
+            var self = this
+            var uploader = new EduWebUplader({
+                element : self
+            });
+
+            uploader.on('uploadSuccess', function(file, response ) {
+                self.closest('.edit-mode-html').find('.html-mrl').html(response.url);
+                Notify.success('上传成功！', 1);
+            });
+        })
+
         $('.colorpicker-input').colorpicker();
         $('#btn-tabs .btn').click(function(){
             $(this).removeClass('btn-default').addClass('btn-primary')
                             .siblings('.btn-primary').removeClass('btn-primary').addClass('btn-default');
         })
-        
+
 
         var editForm = Widget.extend({
             uploaders: [],
@@ -150,8 +165,6 @@ define(function(require, exports, module) {
 
                     uploader.on( 'uploadSuccess', function( file, response ) {
                         self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
-                        self.closest('.form-group').find('.img-mrl').html(response.url);
-                        self.closest('.form-group').find(".img-mtl").attr("src",response.url);
                         Notify.success('上传成功！', 1);
                    });
 
@@ -163,38 +176,6 @@ define(function(require, exports, module) {
                     thiz.uploaders[id] = uploader;
                });
 
-                $element.find('.html-img-upload').each(function(){
-                    var self = $(this);
-                    var uploader = WebUploader.create({
-                        swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                        server: $(this).data('url'),
-                        pick: '#'+$(this).attr('id'),
-                        formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                        accept: {
-                            title: 'Images',
-                            extensions: 'gif,jpg,jpeg,png',
-                            mimeTypes: 'image/*'
-                        }
-                    });
-
-                    uploader.on( 'fileQueued', function( file ) {
-                        Notify.info('正在上传，请稍等！', 0);
-                        uploader.upload();
-                    });
-
-                    uploader.on( 'uploadSuccess', function( file, response ) {
-                        self.closest('.edit-mode-html').find('input[data-role=img-url]').val(response.url);
-                        self.closest('.edit-mode-html').find('.html-mrl').html(response.url);
-                        Notify.success('上传成功！', 1);
-                    });
-
-                    uploader.on( 'uploadError', function( file, response ) {
-                        Notify.danger('上传失败，请重试！');
-                    });
-
-                    var id =$(this).attr('id');
-                    thiz.uploaders[id] = uploader;
-                });
             },
             _bindCollapseEvent: function($element) {
                 $element.find('[data-role=collapse]').each(function(){
@@ -236,33 +217,44 @@ define(function(require, exports, module) {
             'element': '#block-edit-form'
         });
     };
+
     $(".imgMode").on('click',function(){
-        var isSwitch = confirm("原html模式下的代码将会删除,少侠三思啊");
-        if(isSwitch){
-            $(this).parent().parent().siblings(".edit-mode-html").css("display","none");
-            $(this).parent().parent().siblings(".edit-mode-img").removeAttr("style");
-            $(this).parent().parent().siblings().find(".mbl").html("");
-            $(this).parent().siblings().find('.htmlMode').removeAttr('checked');
-        }else{
-            $(this).removeAttr("checked");
-        }
+        $(this).parent().parent().siblings(".edit-mode-html").css("display","none");
+        $(this).parent().parent().siblings(".edit-mode-img").removeAttr("style");
+        $(this).parent().siblings().find('.htmlMode').removeAttr('checked');
+        $(this).parent().siblings('.mode-value').val("img")
+        var self = $(this).parent().parent().siblings(".edit-mode-img").find('.img-mode-upload');
+        var uploader = new EduWebUplader({
+            element : self
+        });
+
+        uploader.on('uploadSuccess', function(file, response ) {
+            self.closest('.form-group').find('.img-mrl').html(response.url);
+            self.closest('.form-group').find(".img-mtl").attr("src",response.url);
+            Notify.success('上传成功！', 1);
+        });
     });
     
     $(".htmlMode").on('click', function () {
         $(this).parent().parent().siblings(".edit-mode-img").css("display","none");
         $(this).parent().parent().siblings(".edit-mode-html").removeAttr("style");
-        /*$(".edit-mode-img").css("display","none");
-        $(".edit-mode-html").removeAttr("style");*/
         $(this).parent().siblings().find('.imgMode').removeAttr('checked');
+        $(this).parent().siblings('.mode-value').val("html");
+        var self = $(this).parent().parent().siblings(".edit-mode-html").find('.html-mode-upload');
+        var uploader = new EduWebUplader({
+            element : self
+        });
+
+        uploader.on('uploadSuccess', function(file, response ) {
+            self.closest('.edit-mode-html').find('.html-mrl').html(response.url);
+            Notify.success('上传成功！', 1);
+        });
+
     })
     
     $(".layout-input").on('click', function () {
-        //console.log($(this).parent().siblings().find('.tile'));
         $(this).parent().siblings().find('.layout-input').removeAttr('checked');
-        //$(".tile").removeAttr('checked');
         $(this).parent().siblings('.layout-value').val($(this).val());
-        //var layoutName = "#" + $(this).val();
-        //$(layoutName).val('limitWide');
     })
 
     $(".status-input").on('click', function () {

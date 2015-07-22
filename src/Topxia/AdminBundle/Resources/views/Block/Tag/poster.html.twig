@@ -24,20 +24,21 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">编辑模式</label>
       <label class="checkbox-inline">
-        <input class="imgMode" type="radio" id="imgMode" value="option1" {% if data.html is empty %}checked="checked"{% endif %}> 图片模式
+        <input class="imgMode" type="radio" id="imgMode" value="option1" {% if data.mode == 'img' %}checked="checked"{% endif %}> 图片模式
       </label>
       <label class="checkbox-inline">
-        <input class="htmlMode" type="radio" id="htmlMode" value="option2" {% if data.html %}checked="checked"{% endif %}> HTML模式
+        <input class="htmlMode" type="radio" id="htmlMode" value="option2" {% if data.mode == 'html' %}checked="checked"{% endif %}> HTML模式
       </label>
+      <input type="hidden" name="data[{{ code }}][{{ dataId }}][mode]" class="mode-value" value="{{ data.mode }}">
     </div>
-    <div class="edit-mode-img" {% if data.html %}style="display: none;"{% endif %}>
+    <div class="edit-mode-img" {% if data.mode == 'html' %}style="display: none;"{% endif %}>
       <div class="form-group">
         <label class="col-sm-2 control-label">
           选择图片
         </label>
         <div class="col-sm-10">
           <label class="control-label img-mrl">{{ data.src }}</label>
-          <a class="btn btn-default btn-sm img-upload" id="img-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">上传</a>
+          <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}" data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
           <input class="form-control" type="hidden" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
           <img class="img-responsive img-mtl" src="{{asset(data.src)}}" alt="">
         </div>
@@ -59,10 +60,10 @@
         </div>
       </div>
     </div>
-    <div class="edit-mode-html" {% if data.html is empty %}style="display: none;"{% endif %}>
+    <div class="edit-mode-html" {% if data.mode == 'img' %}style="display: none;"{% endif %}>
       <textarea class="form-control mbl" id="data[{{ code }}][{{ dataId }}][html]" rows="10" name="data[{{ code }}][{{ dataId }}][html]" data-role="editor-field">{{ data.html }}</textarea>
       <label class="control-label html-mrl">{{ data.src }}</label>
-      <a class="btn btn-default btn-sm html-img-upload" id="html-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">上传</a>
+      <a class="btn btn-default btn-sm html-mode-upload" id="html-{{ code }}-uploadId-{{ dataId }}"  data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
     </div>
   </div>
   {% set first = 0 %}

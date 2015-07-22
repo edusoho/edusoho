@@ -18,7 +18,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg_2.jpg",
@@ -27,7 +28,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "<div class=\"swiper-slide\" style=\"background: #3F3F3F;\"><div class=\"container\"><a href=\"http:\/\/www.edusoho.com\" target=\"_blank\" ><img class=\"img-responsive\" src=\"\/themes\/jianmo\/img\/poster_bg.jpg\"><div class=\"mask\"><div class=\"title\"><span>全新改版</span><span>简约风格</span></div><div class=\"subtitle\"><span>专注学习内容</span><span>提升用户体验</span></div><div class=\"item-mac\"><img class=\"img-responsive\" src=\"\/assets\/v2\/img\/paster_mac.png\"></div></div></a></div></div>",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "html"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg.jpg",
@@ -36,7 +38,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg.jpg",
@@ -45,7 +48,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg.jpg",
@@ -54,7 +58,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg.jpg",
@@ -63,7 +68,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg.jpg",
@@ -72,7 +78,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     },
                     {
                         "src" : "\/assets\/v2\/img\/poster_bg.jpg",
@@ -81,7 +88,8 @@
                         "background" : "#3F3F3F",
                         "href" : "#",
                         "html" : "",
-                        "status" : "1"
+                        "status" : "1",
+                        "mode" : "img"
                     }
                 ]
             }
