@@ -2,6 +2,7 @@
 
 
   <div class="es-bar hidden-xs">
+
     <!-- 左侧列表 -->
     {% include 'TopxiaWebBundle:EsBar:left-list.html.twig' %}
 
@@ -28,7 +29,7 @@
           考试/作业
         </div>
         <div class="bar-main-body">
-          <div class="btn-action">
+          <div class="btn-group btn-group-justified btn-action">
             <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}" class="btn btn-primary active" id="bar-practice-review">已提交</a>
             <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'finished'}) }}" class="btn btn-primary" id="bar-practice-finish"><span>已批阅</span></a>
           </div>
@@ -41,17 +42,15 @@
       <!-- 课程/班级 -->
       <div class="es-bar-main" id="bar-course-list">
         <div class="bar-main-header">
-          <a href="javascript:;" class="js-bar-shrink pull-left link-light"><i class="es-icon es-icon-arrowforward"></i></a>
+          <a href="javascript:;" class="js-bar-shrink link-light"><i class="es-icon es-icon-arrowforward"></i></a>
           课程/班级
         </div>
         <div class="bar-main-body">
-          <div class="btn-action">
+          <div class="btn-group btn-group-justified btn-action">
             <a href="javascript:;" data-url="{{ path('esbar_my_learn',{type:'course'}) }}" class="btn btn-primary active" id="bar-course-btn">课程</a>
             <a href="javascript:;" data-url="{{ path('esbar_my_learn',{type:'classroom'}) }}" class="btn btn-primary" id="bar-classroom-btn">班级</a>
           </div>
-          <div id="bar-my-course">
-
-          </div>
+          <div id="bar-my-course"></div>
         </div>
       </div>
 
@@ -83,7 +82,7 @@
               {% endfor %}
             {% else %}
               <li>
-                <p class="text-overflow"><i class="es-icon es-icon-calendar"></i>暂无直播课</p>
+                <p class="empty">暂无直播课</p>
               </li>
             {% endif %}
           </ul>
@@ -110,6 +109,7 @@
         </div>
       </div>#}
     {% endif %}
+    {% set consult = setting('consult') %}
     {% if setting('consult.enabled', 0)  %}
       <div class="bar-popover-content" style="display:none;">
       <div id="bar-qq-content">
@@ -137,7 +137,7 @@
       </div>
       <div id="bar-phone-content">
         {% if consult.worktime is not empty %}
-          <p class="mtl"><i class="es-icon es-icon-notificationson mrm"></i>工作时间： {{ consult.worktime }}</p>
+          <p class="mtl"><i class="es-icon es-icon-accesstime mrm"></i>工作时间： {{ consult.worktime }}</p>
         {% endif %}
         {% for phone in consult.phone if phone.name is not empty %}
           <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}： {{ phone.number }}</p>
@@ -155,8 +155,3 @@
     {% endif %}
 
   </div>
-
-
-  {% block modal %}
-    <div id="modal" class="modal"></div>
-  {% endblock %}
