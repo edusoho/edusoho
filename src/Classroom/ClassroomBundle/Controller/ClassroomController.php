@@ -49,7 +49,7 @@ class ClassroomController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $classroomIds = ArrayToolkit::column($classrooms, 'id');
+        // $classroomIds = ArrayToolkit::column($classrooms, 'id');
 
         $allClassrooms = ArrayToolkit::index($classrooms, 'id');
 
@@ -630,9 +630,9 @@ class ClassroomController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
         $findLearnedCourses = array();
         foreach ($courseIds as $key => $value) {
-            $LearnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
-            if (!empty($LearnedCourses)) {
-                $findLearnedCourses[] = $LearnedCourses;
+            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
+            if (!empty($learnedCourses)) {
+                $findLearnedCourses[] = $learnedCourses;
             }
         }
 

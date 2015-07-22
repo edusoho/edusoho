@@ -1,0 +1,148 @@
+.es-mobile {
+  .mobile-first {
+    background: url("@{img-src}mobile/mobile_bg.jpg") top center;
+    .container {
+      position: relative;
+      height: 600px;
+    }
+    .img-one {
+      position: absolute;
+      bottom: -60px;
+      left: 10%;
+    }
+    .img-two {
+      position: absolute;
+      bottom: -100px;
+      left: 15%;
+      z-index: 1;
+    }
+    .mobile-content {
+      position: absolute;
+      top: 30%;
+      left: 60%;
+      color: #fff;
+    }
+    .title {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+    .subtitle {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .label-mobile {
+      background: url("@{img-src}mobile/label_mobile_bg.png") top left no-repeat;
+      width: 240px;
+      line-height: 50px;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .btn-mobile {
+      display: inline-block;
+      border: 1px solid #fff;
+      font-size: 16px;
+      padding: 20px 30px;
+      color: #fff;
+      .es-transition;
+      >i {
+        margin-left: 5px;
+      }
+      &:hover {
+        background: #fff;
+        color: #333;
+        .es-transition;
+      }
+    }
+
+  }
+  .mobile-second {
+    min-height: 200px;
+    background: #fff;
+    padding: 100px 60px; 
+    .img-one {
+      display: block;
+      margin: 75px auto;
+    }
+    .img-two {
+      display: block;
+      margin: 0 auto;
+      width: 270px;
+      height: 270px;
+    }
+    .btn-android {
+      display: inline-block;
+      background: @brand-primary;
+      color: #fff;
+      width: 320px;
+      text-align: center;
+      font-size: 28px;
+      padding: 28px 20px;
+      margin-bottom: 35px;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        background: darken(@brand-primary, 10%);
+      }
+      >i {
+        font-size: 42px;
+        margin-right: 10px;
+      }
+    } 
+    .btn-apple {
+      display: inline-block;
+      background: @brand-info;
+      color: #fff;
+      width: 320px;
+      text-align: center;
+      font-size: 28px;
+      padding: 28px 20px;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        background: darken(@brand-info, 10%);
+      }
+      >i {
+        font-size: 42px;
+        margin-right: 10px;
+      }
+    }
+  }
+  .mobile-third {
+    position: relative;
+    min-height: 200px;
+    padding: 100px 60px;
+    background: @background-color;
+    .container {
+      position: relative;
+    }
+    .qrcode {
+      position: absolute;
+      bottom: 50px;
+      left: 20%;
+    }
+    .img-one {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow: hidden;
+    }
+  }
+  .step {
+    font-size: 30px;
+    color: #313131;
+    margin-bottom: 50px;
+    .member {
+      display: inline-block;
+      width: 72px;
+      height: 72px;
+      line-height: 72px;
+      margin-right: 20px;
+      text-align: center;
+      .border-radius(50%);
+      background: @brand-primary;
+      color: #fff;
+    }
+  }
+}

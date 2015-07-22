@@ -701,6 +701,10 @@ admin_cloud_video_upgrade:
     pattern:  /cloud/video/upgrade
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
 
+admin_cloud_video_renew:
+    pattern:  /cloud/video/renew
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
+
 admin_customer_service:
     pattern: /customer/service
     defaults: { _controller: TopxiaAdminBundle:Setting:customerService }

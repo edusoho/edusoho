@@ -28,7 +28,7 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
      
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime'=>time()-14*24*60*60,
+                'createdTime'=>time()-$time,
                 'status'=>'open'
                 ),
             array(

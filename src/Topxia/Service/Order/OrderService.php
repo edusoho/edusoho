@@ -10,6 +10,8 @@ interface OrderService
 
     public function findOrdersByIds(array $ids);
 
+    public function findOrdersBySns(array $sns);
+
     public function searchOrders($conditions, $sort, $start, $limit);
     
     public function searchBill($conditions, $sort, $start, $limit);

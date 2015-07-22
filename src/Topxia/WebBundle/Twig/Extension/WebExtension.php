@@ -35,6 +35,7 @@ class WebExtension extends \Twig_Extension
             'plain_text' => new \Twig_Filter_Method($this, 'plainTextFilter', array('is_safe' => array('html'))),
             'sub_text' => new \Twig_Filter_Method($this, 'subTextFilter', array('is_safe' => array('html'))),
             'duration'  => new \Twig_Filter_Method($this, 'durationFilter'),
+            'duration_text'  => new \Twig_Filter_Method($this, 'durationTextFilter'),
             'tags_join' => new \Twig_Filter_Method($this, 'tagsJoinFilter'),
             'navigation_url' => new \Twig_Filter_Method($this, 'navigationUrlFilter'),
             'chr' => new \Twig_Filter_Method($this, 'chrFilter'),
@@ -97,7 +98,42 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
+
+            'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
         );
+    }
+
+    public function getFingerprint() 
+    {
+        $user = $this->getUserService()->getCurrentUser();
+        if(!$user->isLogin()){
+            return '';
+        }
+        
+        $user = $this->getUserService()->getUser($user["id"]);
+
+        // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
+        $pattern = $this->getSetting('magic.video_fingerprint');
+        if ($pattern) {
+            $fingerprint = $this->parsePattern($pattern, $user);
+        } else {
+            $request = $this->container->get('request');
+            $host = $request->getHttpHost();
+            $fingerprint = "{$host} {$user['nickname']}";
+        }
+
+        return $fingerprint;
+    }
+
+    protected function parsePattern($pattern, $user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+
+        $values = array_merge($user, $profile);
+        $values = array_filter($values, function($value){
+            return !is_array($value);
+        });
+        return $this->simpleTemplateFilter($pattern, $values);
     }
 
     public function subStr($text, $start, $length)
@@ -134,6 +170,11 @@ class WebExtension extends \Twig_Extension
             'startTime'=>$time,
             );
         return ServiceKernel::instance()->createService('Cash.CashService')->analysisAmount($condition);
+    }
+
+    private function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 
     public function getAccount($userId)
@@ -406,6 +447,16 @@ class WebExtension extends \Twig_Extension
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
         return sprintf('%02d', $minutes) . ':' . sprintf('%02d', $seconds);
+    }
+
+    public function durationTextFilter($value)
+    {
+        $minutes = intval($value / 60);
+        $seconds = $value - $minutes * 60;
+        if ($minutes === 0) {
+            return $seconds . '秒';
+        }
+        return "{$minutes}分钟{$seconds}秒";
     }
 
     public function timeRangeFilter($start, $end)
@@ -952,17 +1003,28 @@ class WebExtension extends \Twig_Extension
                     $default = "无";
                 }
                 else{
+                    if ($order['amount'] > 0 ){
+                        if($order['payment'] == 'wxpay') {
+                            $default = "微信支付";
+                        }
+                        else{
+                            $default = "支付宝";
+                        }
+                    }
                     $default = "余额支付";
                 }
         }
 
         if ($coinSettings['coin_enabled'] != 1 || $coinSettings['price_type'] != 'coin') {
-                if ($order['coinAmount'] > 0) {
+                if ($order['coinAmount'] > 0 && $order['amount'] == 0) {
                     $default = "余额支付";
                 }
                 else{
                     if ($order['amount'] == 0 ){
                         $default = "无";
+                    }
+                    elseif ($order['payment'] == 'wxpay') {
+                        $default = "微信支付";
                     }
                     else{
                         $default = "支付宝";
