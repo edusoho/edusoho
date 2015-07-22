@@ -10,11 +10,14 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Controller\BaseController;
 
 class EsBarController extends BaseController{
-    public function studyPlanAction(Request $request,$userId)
+    public function studyPlanAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能查看!');
+        }
         $memberConditions = array(
-            'userId' => $userId,
+            'userId' => $user->id,
             'locked' => 0,
         );
         $sort = array('createdTime','DESC');
@@ -130,60 +133,61 @@ class EsBarController extends BaseController{
             }
         }
 
-        return $this->render("TopxiaWebBundle:EsBar:study-plan.html.twig", array(
+        return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyCenter/study-mission.html.twig", array(
             'classrooms' => $classrooms,
             'courses' => $courses
         ));
     }
 
-    public function learnAction(Request $request,$type)
+    public function courseAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        switch($type){
-            case 'classroom':
-                $memberConditions = array(
-                    'userId' => $user->id,
-                    'locked' => 0,
-                );
-                $sort = array('createdTime','DESC');
-                $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
-                $classroomConditions = array(
-                    'classroomIds' => $classroomIds
-                );
-                $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
-
-                return $this->render("TopxiaWebBundle:EsBar:my-learn.html.twig", array(
-                    'classrooms' => $classrooms,
-                    'type' => $type
-                ));
-                break;
-            case 'course':
-                $conditions = array(
-                    'userId' => $user->id
-                );
-                $sort = array('createdTime','DESC');
-                $courseIds = ArrayToolkit::column($this->getCourseService()->searchMembers($conditions,$sort,0,100),'courseId');
-                $courseConditions = array(
-                    'courseIds' => $courseIds
-                );
-                $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,100);
-                foreach($courses as &$course) {
-                    $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-                    if( $course['lessonNum'] != 0) {
-                        $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
-                    }else{
-                        $course['percent'] = 0;
-                    }
-                }
-                return $this->render("TopxiaWebBundle:EsBar:my-learn.html.twig", array(
-                    'courses' => $courses,
-                    'type' => $type
-                ));
-                break;
-            default:
-                throw $this->createNotFoundException('类型不确定,类型为班级或课程');
-                break;
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
+        $conditions = array(
+            'userId' => $user->id
+        );
+        $sort = array('createdTime','DESC');
+        $courseIds = ArrayToolkit::column($this->getCourseService()->searchMembers($conditions,$sort,0,100),'courseId');
+        $courseConditions = array(
+            'courseIds' => $courseIds
+        );
+        $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,100);
+        foreach($courses as &$course) {
+            $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+            if( $course['lessonNum'] != 0) {
+                $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
+            }else{
+                $course['percent'] = 0;
+            }
+        }
+
+        return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-course.html.twig", array(
+            'courses' => $courses,
+        ));
+    }
+
+    public function classroomAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能查看!');
+        }
+        $memberConditions = array(
+            'userId' => $user->id,
+            'locked' => 0,
+        );
+        $sort = array('createdTime','DESC');
+        $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
+        $classroomConditions = array(
+            'classroomIds' => $classroomIds
+        );
+        $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
+
+        return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-classroom.html.twig", array(
+            'classrooms' => $classrooms
+        ));
     }
 
     /*public function historyAction(Request $request)
@@ -224,13 +228,16 @@ class EsBarController extends BaseController{
     public function notifyAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能查看!');
+        }
         $notifications = $this->getNotificationService()->findUserNotifications(
             $user->id,
             0,
             100
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
-        return $this->render('TopxiaWebBundle:EsBar:notify.html.twig', array(
+        return $this->render('TopxiaWebBundle:EsBar:ListContent/notification/notify.html.twig', array(
             'notifications' => $notifications
         ));
     }
@@ -238,6 +245,9 @@ class EsBarController extends BaseController{
     public function practiceAction(Request $request,$status)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能查看!');
+        }
         $homeworkResults = array();
         $testPaperResults = array();
         $courses = array();
@@ -251,7 +261,7 @@ class EsBarController extends BaseController{
                 $conditions,
                 array('createdTime', 'DESC'),
                 0,
-                1000
+                10
             );
             $homeworkCourseIds = ArrayToolkit::column($homeworkResults, 'courseId');
             $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
@@ -270,10 +280,10 @@ class EsBarController extends BaseController{
             $testPaperConditions,
             array('usedTime', 'DESC'),
             0,
-            100
+            10
         );
 
-        return $this->render('TopxiaWebBundle:EsBar:practice.html.twig', array(
+        return $this->render('TopxiaWebBundle:EsBar:ListContent/Practice/practice.html.twig', array(
             'testPaperResults' => $testPaperResults,
             'courses' => $courses,
             'lessons' => $lessons,

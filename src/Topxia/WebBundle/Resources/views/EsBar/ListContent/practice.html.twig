@@ -1,0 +1,15 @@
+<div class="es-bar-main" id="bar-homework">
+  <div class="bar-main-header">
+    <a href="javascript:;" class="js-bar-shrink pull-left link-light" id="bar-practice-btn" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}"><i class="es-icon es-icon-arrowforward"></i></a>
+    考试/作业
+  </div>
+  <div class="bar-main-body">
+    <div class="btn-group btn-group-justified btn-action">
+      <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}" class="btn btn-primary active" id="bar-practice-review">已提交</a>
+      <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'finished'}) }}" class="btn btn-primary" id="bar-practice-finish"><span>已批阅</span></a>
+    </div>
+    <ul class="bar-homework">
+
+    </ul>
+  </div>
+</div>
