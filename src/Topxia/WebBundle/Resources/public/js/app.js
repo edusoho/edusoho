@@ -162,4 +162,13 @@ define(function(require, exports, module) {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
 
+    $(".es-qrcode").click(function(){
+        if($(this).hasClass('open')) {
+            $(this).removeClass('open');
+        }else {
+            $(this).addClass('open');
+        }
+    })
+
+
 });
