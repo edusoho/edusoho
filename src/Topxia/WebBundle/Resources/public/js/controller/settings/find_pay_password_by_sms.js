@@ -8,7 +8,6 @@ define(function(require, exports, module) {
                 element: '#settings-find-pay-password-form',
                 onFormValidated: function(error){
                     if (error) {
-                        $('.js-sms-send').addClass('disabled');
                         return false;
                     }
                         $('#password-save-btn').button('submiting').addClass('disabled');
