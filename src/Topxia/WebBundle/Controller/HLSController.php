@@ -145,7 +145,9 @@ class HLSController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-        if (empty($token) || !$this->getCurrentUser()->isLogin()) {
+
+        $userAgent = $request->headers->get('User-Agent', '');
+        if ((empty($token) || !$this->getCurrentUser()->isLogin()) && stripos($userAgent, 'AppleCoreMedia') == -1) {
             return new Response($fakeKey);
         }
 
