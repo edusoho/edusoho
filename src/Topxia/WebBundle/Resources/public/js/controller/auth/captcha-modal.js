@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                 smsType = 'sms_bind';
             }
         } else {
-            $('[name="verifiedMobile"]').val() == null? 'emailOrMobile' : 'verifiedMobile';
+            dataTo = $('[name="verifiedMobile"]').val() == null? 'emailOrMobile' : 'verifiedMobile';
             smsType = 'sms_registration';
         }
 
