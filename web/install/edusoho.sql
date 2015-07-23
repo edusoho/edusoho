@@ -1431,6 +1431,7 @@ CREATE TABLE `classroom` (
   `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '100' COMMENT '推荐序号',
   `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `rating` FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '排行数值',
+  `ratingNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '投票人数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
