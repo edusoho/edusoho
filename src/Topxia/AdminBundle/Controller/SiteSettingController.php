@@ -57,7 +57,7 @@ class SiteSettingController extends BaseController
                 array('name' => '', 'number' => ''),
             ),
             'qqgroup' => array(
-                array('name' => '', 'number' => '' , 'idKey' => ''),
+                array('name' => '', 'number' => '' , 'url' => ''),
             ),
             'phone' => array(
                 array('name' => '', 'number' => ''),
