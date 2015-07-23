@@ -1,3 +1,5 @@
+{% extends 'TopxiaWebBundle:EsBar:ListContent/practice.html.twig' %}
+{% block myPractice %}
 <div class="text-line gray small">
   <h5><span>考试</span></h5>
   <div class="line"></div>
@@ -6,7 +8,7 @@
   {% set testCount = 10 %}
   {% for testPaperResult in testPaperResults %}
     {% set testCount = loop.length %}
-    <li><a href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-light">{{ testPaperResult.paperName }}</a></li>
+    <li><a target="_blank" href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-light">{{ testPaperResult.paperName }}</a></li>
   {% endfor %}
   {% if testCount >= 10 %}
     <a href="{{ path('my_quiz') }}" target="_blank">更多</a>
@@ -26,7 +28,7 @@
     {% set lesson = lessons[homeworkResult.lessonId] %}
     {% set course = courses[homeworkResult.courseId] %}
     {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
-    <li><a class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a href="{{ lessonUrl }}" class="link-light">第 {{ lesson.number }}课时</a></li>
+    <li><a target="_blank" class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a target="_blank" href="{{ lessonUrl }}" class="link-light">第 {{ lesson.number }}课时</a></li>
   {% endfor %}
   {% if homeworkCount >= 10 %}
     <a href="{{ path('my_homework_list') }}" target="_blank">更多</a>
@@ -34,3 +36,4 @@
 {% else %}
   <li class="empty">暂无作业</li>
 {% endif %}
+{% endblock %}

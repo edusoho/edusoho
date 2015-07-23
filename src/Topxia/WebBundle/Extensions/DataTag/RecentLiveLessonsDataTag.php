@@ -19,16 +19,20 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkUserId($arguments);
-
+        $userId = $arguments['userId'];
         $filters['type'] = 'live';
-        $liveCourses = $this->getCourseService()->findUserLeaningCourses($arguments['userId'],0,100,$filters);
+        $memConditions = array(
+            'userId' => $userId
+        );
+        $userCourseCount = $this->getCourseService()->searchMemberCount($memConditions);
+        $liveCourses = $this->getCourseService()->findUserLeaningCourses($userId,0,$userCourseCount,$filters);
         $recentLiveLessons = array();
         if(!empty($liveCourses)){
             $conditions = array(
                 'status' => 'published',
                 'courseIds' => ArrayToolkit::column($liveCourses,'id'),
                 'type' => 'live',
-                'startTimeGreaterThan' => time()
+                'endTimeGreaterThan' => time()
             );
             $sort = array(
                 'startTime','ASC'

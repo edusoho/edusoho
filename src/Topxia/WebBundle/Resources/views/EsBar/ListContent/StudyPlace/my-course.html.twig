@@ -1,10 +1,13 @@
+
+{% extends 'TopxiaWebBundle:EsBar:ListContent/study-place.html.twig' %}
+{% block myStudyPlace %}
 {% if courses %}
   <!-- 课程 -->
   <div class="course-list">
     {% for course in courses %}
       <div class="course-item">
         <div class="course-img">
-          <a href="{{ path('course_show', {id:course.id}) }}">
+          <a target="_blank" href="{{ path('course_show', {id:course.id}) }}">
             <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}">
           </a>
         </div>
@@ -14,7 +17,7 @@
         </div>
         <div class="course-info">
           <div class="title">
-            <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}">
+            <a target="_blank" class="link-dark" href="{{ path('course_show', {id:course.id}) }}">
               {{ course.title }}
             </a>
           </div>
@@ -23,3 +26,4 @@
     {% endfor %}
   </div>
 {% endif %}
+{% endblock %}

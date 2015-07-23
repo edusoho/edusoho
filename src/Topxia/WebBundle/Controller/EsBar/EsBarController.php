@@ -150,16 +150,19 @@ class EsBarController extends BaseController{
         );
         $sort = array('createdTime','DESC');
         $courseIds = ArrayToolkit::column($this->getCourseService()->searchMembers($conditions,$sort,0,100),'courseId');
-        $courseConditions = array(
-            'courseIds' => $courseIds
-        );
-        $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,100);
-        foreach($courses as &$course) {
-            $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-            if( $course['lessonNum'] != 0) {
-                $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
-            }else{
-                $course['percent'] = 0;
+        $courses = array();
+        if(!empty($courseIds)){
+            $courseConditions = array(
+                'courseIds' => $courseIds
+            );
+            $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,100);
+            foreach($courses as &$course) {
+                $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+                if( $course['lessonNum'] != 0) {
+                    $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
+                }else{
+                    $course['percent'] = 0;
+                }
             }
         }
 
@@ -183,8 +186,10 @@ class EsBarController extends BaseController{
         $classroomConditions = array(
             'classroomIds' => $classroomIds
         );
-        $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
-
+        $classrooms = array();
+        if(!empty($classroomIds)){
+            $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
+        }
         return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-classroom.html.twig", array(
             'classrooms' => $classrooms
         ));
