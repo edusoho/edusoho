@@ -228,7 +228,7 @@ class EsBarController extends BaseController{
         $notifications = $this->getNotificationService()->findUserNotifications(
             $user->id,
             0,
-            10
+            15
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         return $this->render('TopxiaWebBundle:EsBar:ListContent/Notification/notify.html.twig', array(
