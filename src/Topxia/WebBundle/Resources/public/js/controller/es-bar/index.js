@@ -105,6 +105,16 @@ define(function(require, exports, module) {
         }
     }
 
+    var isIE10 = /MSIE\s+10.0/i.test(navigator.userAgent)
+        && (function() {"use strict";return this === undefined;}());
+
+    var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
+
+    if (isIE10 || isIE11) {
+        console.log(1);
+        $(".es-bar").css( "margin-right",'16px');
+    }
+
     // 回到顶端
     var goTop = function() {
         $(".go-top").click(function() {
