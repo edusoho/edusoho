@@ -52,7 +52,7 @@ class HLSController extends BaseController
             );
 
             if(!empty($token['userId'])) {
-                $tokenFields['data']['userId'] = $token['userId'];
+                $tokenFields['userId'] = $token['userId'];
             }
 
             $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -134,8 +134,8 @@ class HLSController extends BaseController
             'duration' => 3600
         );
 
-        if(!empty($token['data']['userId'])) {
-            $tokenFields['data']['userId'] = $token['data']['userId'];
+        if(!empty($token['userId'])) {
+            $tokenFields['userId'] = $token['userId'];
         }
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
@@ -179,9 +179,9 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
-        if(!empty($token['data']['userId'])) {
+        if(!empty($token['userId'])) {
             if(!($this->getCurrentUser()->isLogin()
-                && $this->getCurrentUser()->getId() == $token['data']['userId'])) {
+                && $this->getCurrentUser()->getId() == $token['userId'])) {
                 return new Response($fakeKey);
             }
         }
