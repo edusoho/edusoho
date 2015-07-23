@@ -79,13 +79,13 @@ class CommonController extends BaseController
         $userId = $token['userId'];
         $user = $this->getUserService()->getUser($userId);
         $this->authenticateUser($user);
-        if (isset($route_type) && $route_type = 'course'){
+        if (isset($route_type) && $route_type = 'course' && isset($token['data']['courseId']){
             $courseId = $token['data']['courseId'];
             $gotoUrl = $this->generateUrl('course_show',array('id'=>$courseId));
-        }elseif (isset($route_type) && $route_type = 'classroom') {
+        }elseif (isset($route_type) && $route_type = 'classroom' && isset($token['data']['classroomId'])) {
             $classroomId = $token['data']['classroomId'];
             $gotoUrl = $this->generateUrl('classroom_show',array('id'=>$classroomId));
-        }elseif (isset($route_type) && $route_type = 'lesson') {
+        }elseif (isset($route_type) && $route_type = 'lesson' && isset($token['data']['courseId']) && isset($token['data']['lessonId'])) {
             $courseId = $token['data']['courseId'];
             $lessonId = $token['data']['lessonId'];
             $gotoUrl = $this->generateUrl('course_learn',array('id' => $courseId))."#lesson/".$lessonId;
