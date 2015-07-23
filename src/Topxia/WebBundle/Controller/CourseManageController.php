@@ -273,58 +273,77 @@ class CourseManageController extends BaseController
         ));
     }
 
-    // public function exportCsvAction(Request $request, $id)
-    // {
-    //     $type = 'course';
-    //     $conditions['targetType'] = $type;
-    //     if (isset($conditions['keywordType'])) {
-    //         $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
-    //     }
-    //     $conditions['targetId'] = $id;
+    public function exportCsvAction(Request $request, $id)
+    {
+        $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
+        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
 
-    //     $courseOrders = $this->getOrderService()->searchOrders(
-    //         $conditions,
-    //         'latest',
-    //         $paginator->getOffsetCount(),
-    //         $paginator->getPerPageCount()
-    //     );
+        $type = 'course';
+        $conditions['targetType'] = $type;
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+        $conditions['targetId'] = $id;
 
-    //     $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            'latest',
+            0,
+            PHP_INT_MAX
+        );
 
-    //     $str = "订单号,名称,创建时间,状态,实付(元),购买者,付款方式";
-    //     foreach ($fields as $key => $value) {
-    //         $str.=",".$value;
-    //     }
-    //     $str.="\r\n";
+        $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
 
-    //     $courseOrders = array();
-    //     foreach ($courseOrders as $courseOrder) {
-    //         $order = "";
-    //         $order .= $orders[$courseOrder['sn']]['title'].",";
-    //         $order .= date('Y-n-d H:i:s', $courseOrder['createdTime']).",";
-    //         $order .= $orders[$courseOrder['sn']]['status'].",";
-    //         $order .= $
-    //         foreach ($fields as $key => $value) {
-    //         $order.=$profiles[$courseOrder['sn']][$key] ? $profiles[$courseOrder['sn']][$key]."," : "-".",";
-    //         }
-    //         $orders[] = $order;   
-    //     };
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        foreach ($userFields as $userField) {
+            $fields[$userField['fieldName']] = $userField['title'];
+        }
+        $fields = array();
+        $userinfoFields = array_flip($userinfoFields);
+        $fields = array_intersect_key($fields, $userinfoFields);
 
-    //     $str .= implode("\r\n",$students);
-    //     $str = chr(239) . chr(187) . chr(191) . $str;
+        $studentUserIds = ArrayToolkit::column($orders, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');    
+
+        $course = $this->getCourseService()->getCourse($id);
+
+        $str = "订单号,名称,创建时间,状态,实际付款,购买者,付款方式";
+        foreach ($fields as $key => $value) {
+            $str.=",".$value;
+        }
+        $str.="\r\n";
+
+        $results = array();
+        foreach ($orders as $key => $orders) {
+            $member = "";
+            $member .= $orders['sn'].",";
+            $member .= $orders['title'].",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= $status[$orders['status']].",";
+            $member .= $orders['amount'].",";
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $payment[$orders['payment']].",";
+            $results[] = $member;
+        }
+
+        $str .= implode("\r\n",$results);
+        $str = chr(239) . chr(187) . chr(191) . $str;
         
+        $filename = sprintf("course-%s-orders-(%s).csv", $course['title'], date('Y-n-d'));
 
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
 
-    //     $filename = sprintf("course-%s-orders-(%s).csv", $course['id'], date('Y-n-d'));
-
-    //     $response = new Response();
-    //     $response->headers->set('Content-type', 'text/csv');
-    //     $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-    //     $response->headers->set('Content-length', strlen($str));
-    //     $response->setContent($str);
-
-    //     return $response;
-    // }
+        return $response;
+    }
 
     protected function makeLevelChoices($levels)
     {
@@ -468,5 +487,10 @@ class CourseManageController extends BaseController
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 }

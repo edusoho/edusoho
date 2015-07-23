@@ -558,9 +558,9 @@ course_manage_order:
     pattern:  /course/{id}/manage/order
     defaults: { _controller: TopxiaWebBundle:CourseManage:order }
 
-# course_manage_order_export_csv:
-#     pattern:  /course/{id}/manage/order/export
-#     defaults: { _controller: TopxiaWebBundle:CourseManage:exportCsv }
+course_manage_order_export_csv:
+    pattern:  /course/{id}/manage/order/export
+    defaults: { _controller: TopxiaWebBundle:CourseManage:exportCsv }
 
 course_manage_files:
     pattern:  /course/{id}/manage/files

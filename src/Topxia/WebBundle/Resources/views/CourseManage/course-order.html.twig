@@ -9,7 +9,7 @@
 
 <div class="panel panel-default panel-col course-data">
 	<div class="panel-heading">课程订单查询
-		<a class="btn btn-info btn-sm pull-right mhs" href=""><i class="glyphicon glyphicon-export"></i> 导出订单</a>
+		<a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_order_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出订单</a>
 	</div>
 	{# {{ path('course_manage_order_export_csv', {id:course.id}) }} #}
 	<div class="panel-body">
