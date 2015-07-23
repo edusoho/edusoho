@@ -56,7 +56,7 @@
           </div>
 
           {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
-            <div class="form-group mb40 captcha_div">
+            <div class="form-group mb40 captcha_div {% if setting('auth.register_mode') == 'mobile' %}hidden{% endif %}">
               <label class="control-label required" for="captcha_num">验证码</label>
               <div class="controls row" >
                 <div class = "col-md-7" >
