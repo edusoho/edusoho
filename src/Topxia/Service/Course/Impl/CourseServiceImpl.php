@@ -986,7 +986,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if ($lesson['type'] == 'live') {
 			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
 		}
-
+		
 		$lesson = $this->getLessonDao()->addLesson(
 			LessonSerialize::serialize($lesson)
 		);
@@ -1002,13 +1002,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
-
 		$this->dispatchEvent("course.lesson.create", array(
 			"courseId"=>$lesson["courseId"], 
 			"lessonId"=>$lesson["id"]
 		));
 
 		return $lesson;
+	}
+
+	public function addLesson($lesson)
+	{
+		return $this->getLessonDao()->addLesson($lesson);
 	}
 
 	public function analysisLessonDataByTime($startTime,$endTime)

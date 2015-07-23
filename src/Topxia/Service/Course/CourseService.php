@@ -126,6 +126,8 @@ interface CourseService
 
 	public function createLesson($lesson);
 
+	public function addLesson($lesson);
+
 	public function getCourseDraft($id);
 
 	public function createCourseDraft($draft);

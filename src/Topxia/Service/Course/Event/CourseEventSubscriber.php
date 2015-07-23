@@ -32,12 +32,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $courseIds = $this->getCourseService()->findCoursesByParentId($lesson['courseId']);
         if (!empty($courseIds)){
             $courseLesson = $this->getCourseService()->getCourseLesson($lesson['courseId'],$lesson['lessonId']);
-            unset($courseLesson['id'],$courseLesson['courseId'],$courseLesson['createdTime']);
+            unset($courseLesson['id'],$courseLesson['courseId']);
             foreach ($courseIds as $value)
-            {
-                $courseLesson['createdTime'] = time();
+            {   
                 $courseLesson['courseId'] = $value;
-                $createLesson = $this->getCourseService()->createLesson($courseLesson);
+                $createLesson = $this->getCourseService()->addLesson($courseLesson);
             }
         }
     }
