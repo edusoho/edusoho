@@ -232,7 +232,7 @@ class EsBarController extends BaseController{
             100
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
-        return $this->render('TopxiaWebBundle:EsBar:ListContent/notification/notify.html.twig', array(
+        return $this->render('TopxiaWebBundle:EsBar:ListContent/Notification/notify.html.twig', array(
             'notifications' => $notifications
         ));
     }
