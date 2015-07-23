@@ -315,6 +315,26 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
+	public function importAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseStudentManage:import.html.twig', array(
+            'course' => $course,
+        ));
+    }
+
+    public function excelDataImportAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['status'] != 'published') {
+            throw $this->createNotFoundException("未发布课程不能导入学员!");
+        }
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:import.step3.html.twig', array(
+            'course' => $course
+        ));
+    }
+
 	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {

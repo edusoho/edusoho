@@ -613,6 +613,15 @@ course_manage_student_check:
     pattern:  /course/{id}/manage/student_check
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
 
+course_manage_student_import:
+    pattern:  /course/{id}/manage/student/import
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:import }
+
+course_manage_student_to_base:
+    pattern:  /course/{id}/manage/student/importing
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:excelDataImport }
+    methods: [POST]
+
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
