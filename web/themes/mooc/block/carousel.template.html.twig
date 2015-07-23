@@ -1,5 +1,29 @@
-{% for index,imglink in carousel|default(null) if imglink.src|default('') %}
-  <div class="item {% if loop.index == 1 %}active{% endif %}" {% if attribute(color,index).value|default(null) %}style="background:{{ attribute(color,index).value }};"{% endif %}>
-    <a href="{{ imglink.href|default('') }}" target="{{ imglink.target }}"><img src="{{ imglink.src|default('') }}" alt="{{ imglink.alt|default('') }}"></a>
+<section class="es-poster swiper-container">
+  <div class="swiper-wrapper">
+    {% for i in 1..3 %}
+      {% set carouselground = _context['carousel' ~ i ~ 'ground']%}
+      {% set title1 = _context['carousel' ~ i ~ 'title1']%}
+      {% set title2 = _context['carousel' ~ i ~ 'title2']%}
+      {% set subtitle1 = _context['carousel' ~ i ~ 'subtitle1']%}
+      {% set subtitle2 = _context['carousel' ~ i ~ 'subtitle2']%}
+      {% set carouselbanner =  _context['carousel' ~ i ~'banner'] %}
+      {% set carouselbackground = _context['carousel' ~ i ~ 'background']%}
+      <div class="swiper-slide" style="background: {{carouselbackground[0].value}};">
+        <div class="container">
+          <a href="{{ carouselground[0].href|default('') }}" target="{{ carouselground[0].target }}" ><img class="img-responsive" src="{{ carouselground[0].src|default('') }}">
+            <div class="mask">
+              <div class="title"><span>{{ title1[0].value|default('') }}</span><span>{{ title2[0].value|default('') }}</span></div>
+              <div class="subtitle"><span>{{ subtitle1[0].value|default('') }}</span><span>{{ subtitle2[0].value|default('') }}</span></div>
+              {% if carouselbanner %}
+              <div class="item-mac">
+                <img class="img-responsive" src="{{ carouselbanner[0].src|default('') }}">
+              </div>
+              {% endif %}
+          </div>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
   </div>
-{% endfor %}
+  <div class="swiper-pager"></div>
+</section>

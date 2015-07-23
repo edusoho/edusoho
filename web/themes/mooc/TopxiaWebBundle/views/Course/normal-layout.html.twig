@@ -1,0 +1,62 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
+
+{% block keywords %}
+  {{ render(controller('TopxiaWebBundle:Course:keywords',{course: course} )) }}
+{% endblock %}
+{% block description %}{{ course.about }}{% endblock %}
+
+{% set bodyClass = '' %}
+{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}	
+
+{% block content %}	
+	{{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+	<div class="course-about clearfix">
+	  <div class="course-about-main">
+      {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
+      <div class="course-detail">
+      	{% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% block course_main %}{% endblock %}
+      </div>
+    </div>
+    <div class="course-about-sidebar">
+    	{% block course_sidebar %}
+        <div class="es-panel open-class">
+          <div class="panel-heading clearfix">第三次开课<span class="teacher-icon"></span></div>
+           <div class="panel-body">
+            <ul>
+              <li class="first gray">
+              {#   <p>距离开课</p>
+                <p><span>6</span>天</p> 
+                <p>
+                  课程已进行至
+                </p>
+                <p><span>1</span>/8周</p>#}
+                <p>
+                  本次开课
+                </p>
+                <p><span>已结束</span></p>
+              </li>
+              <li class="last">
+                <p>开课：7月29日 12：00</p>
+                <p>结束：7月29日 12：00</p>
+              </li>
+            </ul>
+            {# <p class="red">获得证书 ></p> #}
+            <p class="red gray">已结束</p>
+           </div>
+        </div>
+    		<div class="es-panel teacher-column">
+          <div class="panel-heading clearfix">任课老师<span class="teacher-icon"></span></div>
+          <div class="panel-body">
+            <ul>
+               {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
+            </ul>
+          </div>
+        </div>
+     		{{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+     	{% endblock %}	
+    </div>
+	</div>
+{% endblock %}	

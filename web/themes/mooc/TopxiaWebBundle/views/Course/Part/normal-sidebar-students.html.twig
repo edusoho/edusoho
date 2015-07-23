@@ -4,7 +4,7 @@
   <div class="panel-body">
     <ul>
       {% for  student in students %}
-      {% set user = users[student.userId] %}
+      {% set user = data('User',{userId:student.id})%}  
         <li>
           <div class="avatar"><a href="{{ path('user_show', {id:user.id}) }}"><img src="{{ filepath(user.smallAvatar, 'avatar.png') }}"></a></div>
           <div class="student-name"><a href="{{ path('user_show', {id:user.id}) }}">{{user.nickname}}</a></div>
