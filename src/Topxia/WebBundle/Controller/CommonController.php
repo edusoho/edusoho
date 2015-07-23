@@ -29,7 +29,7 @@ class CommonController extends BaseController
     }
 
     public function generateLearnQrcodeAction(Request $request)
-     {  
+    {  
         $data = $request->query->all();
         if (isset($data['type'])){
             $route_type = $data['type'];
