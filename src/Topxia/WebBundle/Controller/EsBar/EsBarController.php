@@ -292,7 +292,8 @@ class EsBarController extends BaseController{
             'testPaperResults' => $testPaperResults,
             'courses' => $courses,
             'lessons' => $lessons,
-            'homeworkResults' => $homeworkResults
+            'homeworkResults' => $homeworkResults,
+            'status' => $status
         ));
     }
 

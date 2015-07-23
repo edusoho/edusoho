@@ -6,14 +6,13 @@
 
 {% block esBarBody %}
   <div class="btn-group btn-group-justified btn-action">
-    <a href="javascript:;" data-url="{{ path('esbar_my_course') }}" class="btn btn-primary active"
+    <a href="javascript:;" data-url="{{ path('esbar_my_course') }}" class="btn btn-primary {% if esBarMenu|default('') == 'course' %}active{% endif %}"
        id="bar-course-btn">课程</a>
-    <a href="javascript:;" data-url="{{ path('esbar_my_classroom' ) }}" class="btn btn-primary"
+    <a href="javascript:;" data-url="{{ path('esbar_my_classroom' ) }}" class="btn btn-primary {% if esBarMenu|default('') == 'classroom' %}active{% endif %}"
        id="bar-classroom-btn">班级</a>
   </div>
   <div id="bar-my-course">
     {% block myStudyPlace%}
-
     {% endblock %}
   </div>
 {% endblock %}

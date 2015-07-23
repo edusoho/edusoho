@@ -72,7 +72,6 @@ define(function(require, exports, module) {
                 $.get(url,function(html){
                     $("#bar-course-list").html(html);
                 })
-                $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
                 break;
             case '#bar-history':
                 var url = $("#bar-my-history").data('url');
@@ -91,7 +90,6 @@ define(function(require, exports, module) {
                 $.get(url,function(html){
                     $("#bar-homework").html(html);
                 })
-                $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
                 break;
             default :
                 break;
@@ -112,7 +110,6 @@ define(function(require, exports, module) {
         $.get(url,function(html){
             $("#bar-homework").html(html);
         })
-        $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
     });
 
     $("#bar-homework").on('click','#bar-practice-finish',function(){
@@ -120,7 +117,6 @@ define(function(require, exports, module) {
         $.get(url,function(html){
             $("#bar-homework").html(html);
         })
-        $("#bar-practice-finish").siblings(".active").removeClass('active').end().addClass('active')
     });
 
     $("#bar-course-list").on('click','#bar-course-btn',function(){
