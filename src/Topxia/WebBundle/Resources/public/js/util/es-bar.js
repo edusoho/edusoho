@@ -69,12 +69,16 @@ define(function(require, exports, module) {
         switch ($this.data('id')){
             case '#bar-course-list':
                 var url = $("#bar-course-btn").data('url');
-                $.get(url,function(html){
-                    $("#bar-course-list").html(html);
-        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
-                    
-                })
+                
+                if(!$("#bar-course-list").data('isLoad')){
+                    $.get(url,function(html){
+                        $("#bar-course-list").html(html);
+                        $("#bar-course-list").data('isLoad', true);
+                        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
+                    })
+                }
                 $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
+
                 break;
             case '#bar-history':
                 var url = $("#bar-my-history").data('url');
@@ -87,13 +91,15 @@ define(function(require, exports, module) {
                 $.get(url,function(html){
                     $(".bar-message").html(html);
                 })
-                break;
+                break
             case '#bar-homework':
                 var url = $("#bar-practice-review").data('url');
-                $.get(url,function(html){
-                    $("#bar-homework").html(html);
-                })
-                $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
+                if(!$("#bar-homework").data('isLoad')) {
+                    $.get(url, function (html) {
+                        $("#bar-homework").html(html);
+                        $("#bar-homework").data('isLoad', true);
+                    })
+                }
                 break;
             default :
                 break;
@@ -114,7 +120,6 @@ define(function(require, exports, module) {
         $.get(url,function(html){
             $("#bar-homework").html(html);
         })
-        $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
     });
 
     $("#bar-homework").on('click','#bar-practice-finish',function(){
@@ -122,7 +127,6 @@ define(function(require, exports, module) {
         $.get(url,function(html){
             $("#bar-homework").html(html);
         })
-        $("#bar-practice-finish").siblings(".active").removeClass('active').end().addClass('active')
     });
 
     $("#bar-course-list").on('click','#bar-course-btn',function(){
