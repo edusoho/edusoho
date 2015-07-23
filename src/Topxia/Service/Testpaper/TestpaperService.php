@@ -15,6 +15,8 @@ interface TestpaperService
 
     public function searchTestpaperResultsCount($conditions);
 
+    public function searchTestpaperResults($conditions, $sort, $start, $limit);
+
     public function searchTestpapersScore($conditions);
 
     public function createTestpaper($fields);

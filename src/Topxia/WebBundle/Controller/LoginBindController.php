@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Topxia\Common\SimpleValidator;
 
 class LoginBindController extends BaseController
 {
@@ -12,7 +13,6 @@ class LoginBindController extends BaseController
         if ($request->query->has('_target_path')) {
             $request->getSession()->set('_target_path', $request->query->get('_target_path'));
         }
-
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
@@ -26,6 +26,7 @@ class LoginBindController extends BaseController
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        $request->getSession()->set('oauth_token', $token);
         if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
@@ -40,8 +41,12 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            $request->getSession()->set('oauth_token', $token);
-            return $this->redirect($this->generateUrl('login_bind_choose', array('type'  => $type)));
+            if ($type == 'weixinmob') {
+                $response = $this->autobind($request,$type);
+                $_target_path = $response['_target_path'];
+                return $this->redirect($_target_path);
+            }
+            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
 
     }
@@ -76,6 +81,11 @@ class LoginBindController extends BaseController
 
     public function newAction(Request $request, $type)
     {
+        return $this->createJsonResponse($this->autobind($request, $type));
+    }
+
+    private function autobind(Request $request,$type)
+    {
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
@@ -104,9 +114,18 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
         $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
-
+        if (!$response['_target_path']) {
+            $response['_target_path'] = $this->generateUrl('homepage');
+        }
         response:
-        return $this->createJsonResponse($response);
+        return $response;
+    }
+
+    public function weixinIndexAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
+        ));
     }
 
     public function newSetAction(Request $request, $type)
@@ -151,13 +170,19 @@ class LoginBindController extends BaseController
     protected function generateUser($type, $token, $oauthUser,$setData)
     {
         $registration = array();
-
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
-
+        if (!SimpleValidator::nickname($oauthUser['name'])) {
+            
+            $oauthUser['name'] = '';
+        }
+        $tempType = $type;
         if (empty($oauthUser['name'])) {
-            $oauthUser['name'] = "{$type}" . substr($randString, 9, 3);
+            if ($type == 'weixinmob' || $type == 'weixinweb') {
+                $tempType = 'weixin';
+            }
+            $oauthUser['name'] = "{$tempType}" . substr($randString, 9, 3);
         }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
@@ -217,6 +242,31 @@ class LoginBindController extends BaseController
         } else {
             $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
+            $this->authenticateUser($user);
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function existBindAction(Request $request)
+    {
+        $token = $request->getSession()->get('oauth_token');
+        $type = "weixinmob";
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
+        $olduser = $this->getCurrentUser();
+        $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
+        $data = $request->request->all();
+        $user = $this->getUserService()->getUserByEmail($data['email']);
+        if (empty($user)) {
+            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+        } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
+            $response = array('success' => false, 'message' => '密码不正确，请重试！');
+        } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
+            $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
+        } else {
+            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token,1);
             $this->authenticateUser($user);
         }
 

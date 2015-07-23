@@ -591,6 +591,10 @@ admin_setting_consult_setting:
     pattern:  /setting/consult-setting
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultSetting }
 
+admin_setting_es_bar:
+    pattern:  /setting/es-bar
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:esBarSetting }
+
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }

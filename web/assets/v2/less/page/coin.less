@@ -1,0 +1,73 @@
+.panel-qrcode {
+  .pay-qrcode-body {
+    border: 1px solid @gray-light;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+  }
+  .qrcode-img {
+    float: left;
+    width: 19%;
+    margin-left: 24%;
+    @media (max-width: @screen-md-max) {
+      width: 23%;
+      margin-left: 21%;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 30%;
+      margin-left: 15%;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      float: none;
+      margin-left: 0;
+    }
+    img {
+      width: 100%;
+      margin: 20px auto;
+    }
+  }
+  .qrcode-img-two {
+    float: left;
+    width: 33%;
+    @media (max-width: @screen-md-max) {
+      width: 35%;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 40%;
+    }
+    img {
+      margin: 0 auto;
+    }
+  }
+  .text-qrcode {
+    color: #fff;
+    padding: 5px 10px;
+    background: @brand-primary;
+  }
+  .pay-qrcode-footer {
+    text-align: right;
+    .pay-rmb {
+      font-size: 24px;
+      color: @brand-danger;
+    }
+  }
+}
+
+.pay-center .check {
+  border: 2px solid @gray-light;
+  display:inline-block;
+  margin-right:15px;
+  @media(max-width: @screen-xs-max) {
+    margin-right: 5px;
+    width: 120px;
+    height: 50px;
+    line-height: 50px;
+    img {
+      width: 80px;
+    }
+  }
+  &.active {
+    border: 2px solid @brand-primary;
+  }
+}

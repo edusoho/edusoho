@@ -12,6 +12,9 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
 	public function closeTrade($order)
 	{
+		if(!in_array($order['payment'], array('alipay'))) {
+			return array();
+		}
         $options = $this->getPaymentOptions($order['payment']);
         $closeTradeRequest = Payment::createCloseTradeRequest($order['payment'], $options);
         $closeTradeRequest->setParams($order);
@@ -27,7 +30,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
-			
+
 			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
 
 			if($order["status"] == "paid"){
@@ -96,7 +99,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	protected function getPaymentOptions($payment)
     {
         $settings = $this->getSettingService()->get('payment');
-
+        
         if (empty($settings)) {
             throw new \RuntimeException('支付参数尚未配置，请先配置。');
         }
@@ -153,7 +156,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'name' => '入账',
             'orderSn' => $order['sn'],
             'category' => 'inflow',
-            'note' => ''
+            'note' => '',
+            'payment' => $order['payment']
 		);
 		$inflow = $this->getCashService()->inflowByRmb($inflow);
 
@@ -191,7 +195,8 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
             'name' => '入账',
             'orderSn' => $order['sn'],
             'category' => 'inflow',
-            'note' => ''
+            'note' => '',
+            'payment' => $order['payment']
 		);
 
 		$rmbInFlow = $this->getCashService()->inflowByRmb($inflow);
