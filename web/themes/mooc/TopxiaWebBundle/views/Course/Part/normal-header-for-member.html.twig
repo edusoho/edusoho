@@ -1,0 +1,7 @@
+{% extends 'TopxiaWebBundle:Course:Part/normal-header-layout.html.twig' %}
+{% set layoutClass = 'course-detail-header-join' %}
+{% block content %}
+{{ load_script('course/common') }}
+{{ header_macro.picture(course) }}
+ {{ header_macro.info(course, member) }}
+{% endblock %}	
