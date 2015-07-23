@@ -228,7 +228,7 @@ class EsBarController extends BaseController{
         $notifications = $this->getNotificationService()->findUserNotifications(
             $user->id,
             0,
-            100
+            10
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         return $this->render('TopxiaWebBundle:EsBar:ListContent/Notification/notify.html.twig', array(
@@ -262,8 +262,6 @@ class EsBarController extends BaseController{
             $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
             $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
         }
-
-
 
         $testPaperConditions = array(
             'status' => $status,

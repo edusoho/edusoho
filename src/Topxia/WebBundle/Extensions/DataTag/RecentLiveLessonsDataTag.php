@@ -40,7 +40,7 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
             'endTimeGreaterThan' => time()
         );
 
-        if(isset($courseIds)) {
+        if(isset($courseIds) && !empty($courseIds)) {
             $conditions["courseIds"] = $courseIds;
         }
 
