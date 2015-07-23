@@ -67,11 +67,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return  $this->getLessonDao()->findMinStartTimeByCourseId($courseId);
 	}
 
-	public function getLesson($id)
-	{
-		return $this->getLessonDao()->getLesson($id);
-	}
-
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -692,12 +687,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
 		if($time<=200){
-			$learn = $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+			$this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
 				'updateTime' => time(),
 			));
 		}
-		return $learn;
 	}
 
 	public function checkWatchNum($userId, $lessonId)
@@ -710,16 +704,37 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
-		$watchLimitTime = $lesson['length'] * $course['watchLimit'];
 		if (empty($learn)) {
-			return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
+			return array('status' => 'ok', 'num' => 0, 'limit' => $course['watchLimit']);
 		}
 
-		if ($learn['watchTime'] < $watchLimitTime) {
-			return array('status' => 'ok', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
+		if ($learn['watchNum'] < $course['watchLimit']) {
+			return array('status' => 'ok', 'num' => $learn['watchNum'], 'limit' => $course['watchLimit']);
 		}
 
-		return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
+		return array('status' => 'error', 'num' => $learn['watchNum'] , 'limit' => $course['watchLimit']);
+	}
+
+	public function waveWatchNum($userId, $lessonId, $diff)
+	{
+		$lesson = $this->getLessonDao()->getLesson($lessonId);
+		$course = $this->getCourse($lesson['courseId']);
+
+		if (empty($course['watchLimit'])) {
+			return array('status' => 'ignore');
+		}
+
+		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+		if (empty($learn)) {
+			return array('status' => 'ignore');
+		}
+
+		if (($learn['watchNum'] + $diff) <= $course['watchLimit']) {
+			$this->getLessonLearnDao()->updateLearn($learn['id'], array('watchNum' => $learn['watchNum'] + $diff));
+			return array('status' => 'ok', 'num' => $learn['watchNum'] + $diff, 'limit' => $course['watchLimit']);
+		}
+
+		return array('status' => 'error', 'num' => $learn['watchNum'], 'limit' => $course['watchLimit']);
 	}
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)

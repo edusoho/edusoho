@@ -3,12 +3,11 @@
 
 {% do load_script('course/common') %}
 
-{% if member and not member.locked %}
+{% if member %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
 {% elseif course.parentId|default(false) %}
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
 {% else %}
-  
   {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
 {% endif %}
 
@@ -88,9 +87,7 @@
             <p class="activity">
               <label>活动</label>
               <span class="name">{{ course.discountObj.name }}</span>
-              <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted"
-        data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
-          ></span></span>
+              <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted" data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"></span></span>
             </p>
           {% endif %}
         {% endif %}

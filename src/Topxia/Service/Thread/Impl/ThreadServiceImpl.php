@@ -532,7 +532,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function cancelPostAdopted($postId)
     {
-        $post = $this->getThreadPostDao()->getPost($postId);
+        $post = $this->getThreadDao()->getPost($postId);
         if (empty($post)) {
             throw $this->createServiceException(sprintf('话题回复(ID: %s)不存在。', $post['id']));
         }
@@ -653,7 +653,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function findMembersByThreadIdAndUserIds($threadId, $userIds)
     {
-        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadIdAndUserIds($threadId, $userIds), 'userId');
+        return ArrayToolkit::index($this->getThreadMemberDao()->findMembersByThreadId($threadId, $userIds), 'userId');
     }
 
     public function getMemberByThreadIdAndUserId($threadId, $userId)

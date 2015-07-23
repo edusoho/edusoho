@@ -12,7 +12,7 @@
       <span class="text-muted">{{post.createdTime|smart_time}} </span>
       {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
-    <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
+    <p class="thread-post-content">{{ post.content|at(post.ats)|raw }}</p>
     <div class="comment-sns">
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>

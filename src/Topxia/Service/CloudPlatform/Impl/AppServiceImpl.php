@@ -521,10 +521,10 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->updateApp($id, array('version' => $version));
     }
 
-    public function getTokenLoginUrl($routingName, $params)
+    public function getLoginToken()
     {
         $appClient = $this->createAppClient();
-        $result = $appClient->getTokenLoginUrl($routingName, $params);
+        $result = $appClient->getLoginToken();
         return $result;
     }
 
