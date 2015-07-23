@@ -175,17 +175,15 @@ class HLSController extends BaseController
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
 
-        $userAgent = $request->headers->get('User-Agent', '');
-        if (
-                (
-                    empty($token) || (
-                    !empty($token['data']['userId']) 
-                    && $this->getCurrentUser()->isLogin()
-                    && $this->getCurrentUser()->getId() == $token['data']['userId'])
-                ) 
-                && !(stripos($userAgent, 'AppleCoreMedia') > -1)
-            ) {
+        if (empty($token)) {
             return new Response($fakeKey);
+        }
+
+        if(!empty($token['data']['userId'])) {
+            if(!($this->getCurrentUser()->isLogin()
+                && $this->getCurrentUser()->getId() == $token['data']['userId'])) {
+                return new Response($fakeKey);
+            }
         }
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
