@@ -24,8 +24,14 @@
         <div class="mbm">
           <p>
             {{ qqgroup.name }}
-            {{ qqgroup.url|raw }}
+            
+            {% if qqgroup.url %}
+              {{ qqgroup.url|raw }}
+            {% endif %}
           </p>
+          {% if not qqgroup.url %}
+            {{ qqgroup.number }}
+          {% endif %}
           <p></p>
         </div>
       {% endfor %}
