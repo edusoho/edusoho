@@ -52,11 +52,13 @@ define(function(require, exports, module) {
         });
 
         if ($('.cashPrice').length > 0) {
-            validator.addItem({
-                element: '.cashPrice',
-                required: true,
-                rule: 'float',
-                errormessageRequired: '请输入虚拟币价格'
+            $('.cashPrice').each(function(){
+                validator.addItem({
+                    element: $(this),
+                    required: true,
+                    rule: 'float',
+                    errormessageRequired: '请输入虚拟币价格'
+                });
             });
         }
 
