@@ -45,14 +45,26 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         
-        var cash_rate=$('#cash-rate').data('val');
+        var cash_rate = $('#cash-rate').data('val');
+
+        var validator = new Validator({
+            element: '#coin-model-form'
+        });
+
+        if ($('.cashPrice').length > 0) {
+            validator.addItem({
+                element: '.cashPrice',
+                required: true
+            });
+        }
+
+
 
         $('#finish').on('click',function(){
 
             if($('.rmbPrice').length>0){
 
                 if(checkPrice()){
-
                     $('#coin-model-form').submit();
                 }else{
                     $('#help-message').removeClass("hidden");
