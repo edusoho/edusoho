@@ -294,7 +294,6 @@ class CourseManageController extends BaseController
 
         $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
 
-        $fields = array();
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
