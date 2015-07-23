@@ -25,11 +25,11 @@
           <p>
             {{ qqgroup.name }}
             
-            {% if qqgroup.url %}
+            {% if qqgroup.url|default(false) %}
               {{ qqgroup.url|raw }}
             {% endif %}
           </p>
-          {% if not qqgroup.url %}
+          {% if not qqgroup.url|default(false) %}
             {{ qqgroup.number }}
           {% endif %}
           <p></p>
