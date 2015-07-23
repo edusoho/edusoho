@@ -12,7 +12,7 @@
     <a href="{{ path('my_quiz') }}" target="_blank">更多</a>
   {% endif %}
 {% else %}
-  无
+  <li class="empty">暂无考试</li>
 {% endif %}
 
 <div class="text-line gray small">
@@ -32,5 +32,5 @@
     <a href="{{ path('my_homework_list') }}" target="_blank">更多</a>
   {% endif %}
 {% else %}
-  无
+  <li class="empty">暂无作业</li>
 {% endif %}

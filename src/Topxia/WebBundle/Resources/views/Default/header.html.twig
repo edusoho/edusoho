@@ -30,7 +30,7 @@
     <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
       {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
     </ul>
-    <div class="navbar-user {% if app.user and app.user.isLogin() and setting('esBar.enabled', 0) %} navbar-user-esbar {% endif %}">
+    <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
       <ul class="nav user-nav">
         {% if app.user %}
         <li class="user-avatar-li nav-hover">
