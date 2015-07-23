@@ -28,51 +28,73 @@ class CommonController extends BaseController
         return new Response($img, 200, $headers);
     }
 
-    public function generateLearnQrcodeAction()
-     {   
+    public function generateLearnQrcodeAction(Request $request)
+     {  
+        $data = $request->query->all();
+        if (isset($data['type'])){
+            $route_type = $data['type'];
+        }else {
+            throw $this->createNotFoundException('必要参数错误，无法生成二维码');
+        }
         
-        // $originUrl = "http://www.baidu.com";
-        // $user = $this->getUserService()->getCurrentUser();
-        // if (!$user->isLogin()){
-        //     // $url = $request->get('url');
-        //     $url = $originUrl;
-        // }else {
-        //     $route_type = $request->get('page_type');
-        //     if ($route_type = 'classroom'){
-        //         $token = $this->getTokenService()->makeToken('qrcode.classroom',array('userId'=>$user['id'],'data' => 3, 'times' => 0, 'duration' => 3600));
-        //         $url = $originUrl.'/'.$token['token'];        
-        //     }elseif ($route_type = 'course') {
-        //         $token = $this->getTokenService()->makeToken('qrcode.classroom',array('userId'=>$user['id'],'data' => 3, 'times' => 0, 'duration' => 3600));
-        //         $url = $originUrl.'/'.$token['token'];
-        //     }else {
-        //         $token = $this->getTokenService()->makeToken('qrcode.classroom',array('userId'=>$user['id'],'data' => 3, 'times' => 0, 'duration' => 3600));
-        //         $url = $originUrl.'/'.$token['token'];
-        //     }
-           
-        // }
-        // $qrCode = new QrCode();
-        // $qrCode->setText($url);
-        // $qrCode->setSize(250);
-        // $qrCode->setPadding(10);
-        // $img = $qrCode->get('png');
-        // $headers = array(
-        //     'Content-Type' => 'image/png',
-        //     'Content-Disposition' => 'inline; filename="qrcode.png"'
-        // );
-        // return new Response($);
-        // $h = $this->createUser();
-        // // $useer = array();
-        // $useer = array();
-        // $useer['id'] = $h['id'];
-        // $useer['email'] = "uswdaer@usdaer.com";
-        // // $useer['nickname'] = "uswwqere";
-        // // $user['password'] = "user";
-        // $useer['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
-        // $this->authenticateUser($useer);
-        // $result = $this->getUserService()->getCurrentUser();
-        // print_r($result);
-        // return new Response("hello world");
+        $user = $this->getUserService()->getCurrentUser();
+        if (!$user->isLogin()){
+            if ($route_type = 'classroom' && isset($data['classroomId'])) {
+                $classroomId = (int)$data['classroomId'];
+                $routePath = $this->generateUrl('classroom_show',array('id'=>$classroomId));
+            }elseif ($route_type = 'course' && isset($data['courseId'])) {
+                $courseId = (int)$data['courseId'];
+                $routePath = $this->generateUrl('course_show',array('id'=>$courseId));   
+            }else {
+                throw $this->createNotFoundException('参数错误，无法找到指定二维码');
+            }
+        }else {
+            if ($route_type = 'classroom' && isset($data['classroomId'])){
+                $classroomId = (int)$data['classroomId'];
+                $token = $this->getTokenService()->makeToken('classroom',array('userId'=>$user['id'],'data' => array('classroomId'=>$classroomId), 'times' => 0, 'duration' => 3600));    
+            }elseif ($route_type = 'course' && isset($data['courseId'])) {
+                $courseId = (int)$data['courseId'];
+                $token = $this->getTokenService()->makeToken('course',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId), 'times' => 0, 'duration' => 3600));
+            }elseif ($route_type = 'lesson' && isset($data['lessonId']) && isset($data['courseId'])) {
+                $courseId = (int)$data['courseId'];
+                $lessonId = (int)$data['lessonId'];
+                $token = $this->getTokenService()->makeToken('lesson',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId,'lessonId'=>$lessonId), 'times' => 0, 'duration' => 3600));
+            }else {
+                throw $this->createNotFoundException('参数错误，无法找到指定二维码');
+            }
+            $routePath = $this->generateUrl('common_explain_qrcode',array('token'=>$token['token']));
+        }
+        $websiteName = $data['url'];
+        $url = substr($websiteName,0,strlen($websiteName)-1).$routePath.'?type='.$data['type']; 
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$url))
+        );
+        return $this->createJsonResponse($response);
+    }
 
+    public function explainLearnCodeAction(Request $request,$token)
+    {
+        $route_type = $request->get('type');
+        $token = $this->getTokenService()->verifyToken($route_type,$token);
+        $userId = $token['userId'];
+        $user = $this->getUserService()->getUser($userId);
+        $this->authenticateUser($user);
+        if (isset($route_type) && $route_type = 'course'){
+            $courseId = $token['data']['courseId'];
+            $gotoUrl = $this->generateUrl('course_show',array('id'=>$courseId));
+        }elseif (isset($route_type) && $route_type = 'classroom') {
+            $classroomId = $token['data']['classroomId'];
+            $gotoUrl = $this->generateUrl('classroom_show',array('id'=>$classroomId));
+        }elseif (isset($route_type) && $route_type = 'lesson') {
+            $courseId = $token['data']['courseId'];
+            $lessonId = $token['data']['lessonId'];
+            $gotoUrl = $this->generateUrl('course_learn',array('id' => $courseId))."#lesson/".$lessonId;
+        }else {
+            throw $this->createNotFoundException('参数错误，无法访问指定二维码');
+        }
+        // return $this->createJsonResponse($courseId);
+        return $this->redirect($gotoUrl);
+        // return new Response($route_type);
     }
 
     public function crontabAction(Request $request)

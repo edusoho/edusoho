@@ -13,7 +13,7 @@
         <div class="class-info">
           <h2 class="title">
             {{ classroom.title }}
-            <span class="es-qrcode top">
+            <span class="es-qrcode top" data-url="{{path('common_learn_qrcode',{classroomId: classroom.id,type:"classroom",url:url('homepage')})}}">
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
                 <img src="{{asset('assets/v2/img/qrcode.jpg')}}" alt="">

@@ -163,9 +163,19 @@ define(function(require, exports, module) {
     });
 
     $(".es-qrcode").click(function(){
-        if($(this).hasClass('open')) {
-            $(this).removeClass('open');
+        var $this = $(this); 
+        if($this.hasClass('open')) {
+            $this.removeClass('open');
         }else {
+            $.ajax({
+                type: "post",
+                url: $this.attr("data-url"),
+                dataType: "json",
+                success:function(data){
+                    $this.find(".qrcode-popover img").attr("src",data.img);
+                }
+            });
+            
             $(this).addClass('open');
         }
     })
