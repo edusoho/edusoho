@@ -110,7 +110,7 @@ interface CourseService
 
 	public function findLessonsByIds(array $ids);
 
-	public function findLessonsByCreatedTimeAndNotEqId($createdTime,$id);
+	public function findLessonsByParentId($parentId);
 
 	public function getCourseLesson($courseId, $lessonId);
 

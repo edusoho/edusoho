@@ -33,6 +33,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $courseIds = $this->getCourseService()->findCoursesByParentId($lesson['courseId']);
         if (!empty($courseIds)){
             $courseLesson = $this->getCourseService()->getCourseLesson($lesson['courseId'],$lesson['lessonId']);
+            $courseLesson['parentId'] = $courseLesson['id'];
             unset($courseLesson['id'],$courseLesson['courseId']);
             foreach ($courseIds as $value)
             {   
@@ -46,8 +47,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
        $lesson = $event->getSubject();
        if (isset($lesson)) {
-            $lessonIds = $this->getCourseService()->findLessonsByCreatedTimeAndNotEqId($lesson['createdTime'],$lesson['id']);
-            unset($lesson['id'],$lesson['courseId']);
+            $lessonIds = $this->getCourseService()->findLessonsByParentId($lesson['id']);
+            unset($lesson['id'],$lesson['courseId'],$lesson['parentId']);
             foreach ($lessonIds as $key => $value) {
                 $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
             }

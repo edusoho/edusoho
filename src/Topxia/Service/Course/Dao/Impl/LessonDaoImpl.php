@@ -31,10 +31,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findLessonsByCreatedTimeAndNotEqId($createdTime,$id)
+    public function findLessonsByParentId($parentId)
     {
-       $sql = "SELECT * FROM {$this->table} WHERE createdTime = ? AND id != ? ";
-       return $this->getConnection()->fetchAll($sql, array($createdTime,$id)); 
+       $sql = "SELECT * FROM {$this->table} WHERE  parentId = ? ";
+       return $this->getConnection()->fetchAll($sql, array($parentId)); 
     }
 
     public function findLessonsByTypeAndMediaId($type, $mediaId)

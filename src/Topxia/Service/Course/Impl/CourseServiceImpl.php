@@ -86,9 +86,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($lessons, 'id');
 	}
 
-	public function findLessonsByCreatedTimeAndNotEqId($createdTime,$id)
+	public function findLessonsByParentId($parentId)
 	{
-		$lessons = $this->getLessonDao()->findLessonsByCreatedTimeAndNotEqId($createdTime,$id);
+		$lessons = $this->getLessonDao()->findLessonsByParentId($parentId);
 		return ArrayToolkit::column($lessons, 'id');
 	}
 
@@ -1270,7 +1270,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时#{$lessonId}不存在");
 		}
 
-		$this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+
+		$this->dispatchEvent("course.lesson.update",$publishLesson);
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
@@ -1282,7 +1284,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("课时#{$lessonId}不存在");
 		}
 
-		$this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+		$unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+
+		$this->dispatchEvent("course.lesson.update",$unpublishLesson);
 	}
 
 	public function getNextLessonNumber($courseId)

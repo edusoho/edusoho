@@ -162,7 +162,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     {
         $lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
         $map = array();
-
         foreach ($lessons as $lesson) {
             $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId'));
             $fields['courseId'] = $newCourse['id'];
@@ -174,6 +173,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
 
+            $fields['parentId'] = $lesson['id'];
             $copiedLesson = $this->getLessonDao()->addLesson($fields);
             $map[$lesson['id']] = $copiedLesson;
             if (array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"]>0 && in_array($copiedLesson["type"], array('video', 'audio', 'ppt'))) {

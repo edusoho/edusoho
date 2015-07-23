@@ -73,7 +73,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         if (!in_array($fields['type'], $this->supportedQuestionTypes)) {
             throw $this->createServiceException('question type error！');
         }
-
         $fields = QuestionTypeFactory::create($fields['type'])->filter($fields, 'create');
 
         if ($fields['parentId'] > 0) {
@@ -91,6 +90,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $subCount = $this->getQuestionDao()->findQuestionsCountByParentId($question['parentId']);
             $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
+
+        $this->dispatchEvent("question.create",$question);
 
         return $question;
     }
