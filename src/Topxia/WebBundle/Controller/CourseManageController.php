@@ -273,7 +273,7 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function exportCsvAction(Request $request, $id)
+    public function orderExportCsvAction(Request $request, $id)
     {
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
         $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
@@ -294,41 +294,36 @@ class CourseManageController extends BaseController
 
         $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        foreach ($userFields as $userField) {
-            $fields[$userField['fieldName']] = $userField['title'];
-        }
         $fields = array();
-        $userinfoFields = array_flip($userinfoFields);
-        $fields = array_intersect_key($fields, $userinfoFields);
-
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');    
+        $users = ArrayToolkit::index($users, 'id');    
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $str = "订单号,名称,创建时间,状态,实际付款,购买者,付款方式";
-        foreach ($fields as $key => $value) {
-            $str.=",".$value;
-        }
+        $str = "订单号,名称,创建时间,状态,实际付款,购买者,支付方式,支付时间";
+
         $str.="\r\n";
 
         $results = array();
         foreach ($orders as $key => $orders) {
-            $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $orders['title'].",";
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['amount'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $payment[$orders['payment']].",";
-            $results[] = $member;
+            $column = "";
+            $column .= $orders['sn'].",";
+            $column .= $orders['title'].",";
+            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $column .= $status[$orders['status']].",";
+            $column .= $orders['amount'].",";
+            $column .= $users[$orders['userId']]['nickname'].",";
+            $column .= $payment[$orders['payment']].",";
+
+            if ($orders['paidTime'] == 0 ) {
+                $column .= "-".",";
+            }else{
+                $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            }
+
+            $results[] = $column;
         }
 
         $str .= implode("\r\n",$results);

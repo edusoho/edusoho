@@ -9,9 +9,10 @@
 
 <div class="panel panel-default panel-col course-data">
 	<div class="panel-heading">课程订单查询
+		{% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
 		<a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_order_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出订单</a>
+		{% endif %}
 	</div>
-	{# {{ path('course_manage_order_export_csv', {id:course.id}) }} #}
 	<div class="panel-body">
 		<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 			<div class="mbm">
@@ -33,7 +34,7 @@
 
 				<div class="form-group">
 					<select class="form-control" name="payment">
-						{% set options = {'alipay':'支付宝','wxpay':'微信支付','none':'其他支付','':'支付方式'} %}
+						{% set options = {'':'支付方式','alipay':'支付宝','wxpay':'微信支付','none':'其他支付'} %}
 						{{ select_options(options, request.get('payment')) }}
 					</select>
 				</div>
@@ -62,7 +63,7 @@
 					<th>状态</th>
 					<th>实付(元)</th>
 					<th>购买者</th>
-					<th>付款方式</th>
+					<th>支付方式</th>
 					<th>操作</th>
 				</tr>
     		</thead>

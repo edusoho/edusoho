@@ -560,7 +560,7 @@ course_manage_order:
 
 course_manage_order_export_csv:
     pattern:  /course/{id}/manage/order/export
-    defaults: { _controller: TopxiaWebBundle:CourseManage:exportCsv }
+    defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
 
 course_manage_files:
     pattern:  /course/{id}/manage/files
