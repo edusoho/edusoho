@@ -54,38 +54,12 @@ define(function(require, exports, module) {
         if ($('.cashPrice').length > 0) {
             validator.addItem({
                 element: '.cashPrice',
-                required: true
+                required: true,
+                rule: 'float',
+                errormessageRequired: '请输入虚拟币价格'
             });
         }
 
-
-
-        $('#finish').on('click',function(){
-
-            if($('.rmbPrice').length>0){
-
-                if(checkPrice()){
-                    $('#coin-model-form').submit();
-                }else{
-                    $('#help-message').removeClass("hidden");
-                }
-            }
-
-            if($('.cashPrice').length>0){
-
-                if(checkRmbPrice()){
-
-                    $('#coin-model-form').submit();
-                }else{
-                    $('#help-message').removeClass("hidden");
-                }
-            } 
-
-            if ($('.cashPrice').length == 0 || $('.rmbPrice').length == 0) {
-                $('#coin-model-form').submit();
-            }   
-
-        });
 
         $('#coin-model-form').on('input','.rmbPrice,.cashPrice',function(){
             

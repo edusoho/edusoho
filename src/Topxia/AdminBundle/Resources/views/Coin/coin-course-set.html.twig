@@ -56,7 +56,11 @@
                 {% if set.cash_model =="deduction" %}
                   <span id="cash{{course.id}}">{{course.originPrice * set.cash_rate }}</sapn>
                 {% else %}
-                  <input type="text" id="cash{{course.id}}" class="form-control cashPrice" style="width:40%;" value="{% if course.originCoinPrice > 0 %}{{ course.originCoinPrice }}{% else %}{% endif %}" name="course-cash[{{course.id}}]"/>
+                  <div class="form-group">
+                    <div class="controls">
+                      <input type="text" id="cash{{course.id}}" class="form-control cashPrice" style="width:40%;" value="{% if course.originCoinPrice > 0 %}{{ course.originCoinPrice }}{% else %}{% endif %}" name="course-cash[{{course.id}}]"/>
+                    </div>
+                  </div>
                 {% endif %}
               </td>
             </tr>
@@ -71,7 +75,7 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="form-group">
       <div class="col-md-12">
-        <button type="button" class="btn btn-primary pull-right" id="finish" >完成</button>
+        <button type="submit" class="btn btn-primary pull-right" id="finish" >完成</button>
         <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-link pull-right">上一步</a>
       </div>
     </div>
