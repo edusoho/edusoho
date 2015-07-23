@@ -62,11 +62,11 @@
 
     {% block bottom %}{% endblock %}
   </div>
-  {% if setting('esBar.enabled', 0) %}
-    {% block esBar %}
-      {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
-    {% endblock %}
-  {% endif %}
+  {% block esBar %}
+    {% if setting('esBar.enabled', 0) %}
+        {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
+    {% endif %}
+  {% endblock %}
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
   <div id="modal" class="modal"></div>
 {% endblock %}
