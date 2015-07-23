@@ -90,7 +90,6 @@ class CoinController extends BaseController
         $coinSettings = $this->getSettingService()->get('coin',array());
 
         if($request->getMethod()=="POST"){
-
             $set=$request->request->all();
             if($set['cash_model']=="none"){
 
@@ -105,7 +104,7 @@ class CoinController extends BaseController
 
             }
 
-            $courses=$this->getCourseService()->searchCourses(array('originPrice_GT'=>'0.00'), 'latest', 0 ,99999);
+            $courses=$this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00','parentId' => 0), 'latest', 0 ,99999);
             
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
                 'set' => $set,
