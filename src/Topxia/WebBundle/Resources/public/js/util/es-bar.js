@@ -53,7 +53,7 @@ define(function(require, exports, module) {
                 right: '-230px'
             },300);
         }
-        
+
     });
 
     function isNotLogin(){
@@ -71,6 +71,8 @@ define(function(require, exports, module) {
                 var url = $("#bar-course-btn").data('url');
                 $.get(url,function(html){
                     $("#bar-course-list").html(html);
+        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
+                    
                 })
                 $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
                 break;
