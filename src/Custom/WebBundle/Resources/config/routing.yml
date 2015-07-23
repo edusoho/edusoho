@@ -1,0 +1,3 @@
+course_show:
+    pattern:  /course/{id}
+    defaults: { _controller: CustomWebBundle:Course:show }
