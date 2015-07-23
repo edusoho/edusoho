@@ -243,6 +243,11 @@ class CourseManageController extends BaseController
             10
         );
 
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
+
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             'latest',
@@ -267,6 +272,59 @@ class CourseManageController extends BaseController
             'paginator' => $paginator,
         ));
     }
+
+    // public function exportCsvAction(Request $request, $id)
+    // {
+    //     $type = 'course';
+    //     $conditions['targetType'] = $type;
+    //     if (isset($conditions['keywordType'])) {
+    //         $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+    //     }
+    //     $conditions['targetId'] = $id;
+
+    //     $courseOrders = $this->getOrderService()->searchOrders(
+    //         $conditions,
+    //         'latest',
+    //         $paginator->getOffsetCount(),
+    //         $paginator->getPerPageCount()
+    //     );
+
+    //     $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+
+    //     $str = "订单号,名称,创建时间,状态,实付(元),购买者,付款方式";
+    //     foreach ($fields as $key => $value) {
+    //         $str.=",".$value;
+    //     }
+    //     $str.="\r\n";
+
+    //     $courseOrders = array();
+    //     foreach ($courseOrders as $courseOrder) {
+    //         $order = "";
+    //         $order .= $orders[$courseOrder['sn']]['title'].",";
+    //         $order .= date('Y-n-d H:i:s', $courseOrder['createdTime']).",";
+    //         $order .= $orders[$courseOrder['sn']]['status'].",";
+    //         $order .= $
+    //         foreach ($fields as $key => $value) {
+    //         $order.=$profiles[$courseOrder['sn']][$key] ? $profiles[$courseOrder['sn']][$key]."," : "-".",";
+    //         }
+    //         $orders[] = $order;   
+    //     };
+
+    //     $str .= implode("\r\n",$students);
+    //     $str = chr(239) . chr(187) . chr(191) . $str;
+        
+
+
+    //     $filename = sprintf("course-%s-orders-(%s).csv", $course['id'], date('Y-n-d'));
+
+    //     $response = new Response();
+    //     $response->headers->set('Content-type', 'text/csv');
+    //     $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+    //     $response->headers->set('Content-length', strlen($str));
+    //     $response->setContent($str);
+
+    //     return $response;
+    // }
 
     protected function makeLevelChoices($levels)
     {
