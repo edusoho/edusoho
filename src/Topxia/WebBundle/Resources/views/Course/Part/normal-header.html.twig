@@ -38,7 +38,7 @@
   <div class="course-info">
     <h2 class="title">
       {{ course.title }}
-      <span class="es-qrcode top" data-url="{{path('common_learn_qrcode',{courseId: course.id,type:"course",url:url('homepage')})}}">
+      <span class="es-qrcode top" data-url="{{path('common_learn_qrcode',{courseId: course.id,lessonId:previewLesson.id,type:"leson-qrcode"})}}">
         <i class="es-icon es-icon-qrcode"></i>
         <span class="qrcode-popover">
           <img src="{{asset('assets/v2/img/qrcode.jpg')}}" alt="">

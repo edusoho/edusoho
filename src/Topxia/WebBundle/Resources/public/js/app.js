@@ -169,7 +169,7 @@ define(function(require, exports, module) {
         }else {
             $.ajax({
                 type: "post",
-                url: $this.attr("data-url"),
+                url: $this.data("url"),
                 dataType: "json",
                 success:function(data){
                     $this.find(".qrcode-popover img").attr("src",data.img);

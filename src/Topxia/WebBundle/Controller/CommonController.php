@@ -39,35 +39,34 @@ class CommonController extends BaseController
         
         $user = $this->getUserService()->getCurrentUser();
         if (!$user->isLogin()){
-            if ($route_type = 'classroom' && isset($data['classroomId'])) {
+            if ($route_type == 'classroom-qrcode' && isset($data['classroomId'])) {
                 $classroomId = (int)$data['classroomId'];
-                $routePath = $this->generateUrl('classroom_show',array('id'=>$classroomId));
-            }elseif ($route_type = 'course' && isset($data['courseId'])) {
+                $routePath = $this->generateUrl('classroom_show',array('id'=>$classroomId),true);
+            }elseif ($route_type == 'course-qrcode' && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
-                $routePath = $this->generateUrl('course_show',array('id'=>$courseId));   
+                $routePath = $this->generateUrl('course_show',array('id'=>$courseId),true);   
             }else {
                 throw $this->createNotFoundException('参数错误，无法找到指定二维码');
             }
         }else {
-            if ($route_type = 'classroom' && isset($data['classroomId'])){
+            if ($route_type == 'classroom-qrcode' && isset($data['classroomId'])){
                 $classroomId = (int)$data['classroomId'];
-                $token = $this->getTokenService()->makeToken('classroom',array('userId'=>$user['id'],'data' => array('classroomId'=>$classroomId), 'times' => 0, 'duration' => 3600));    
-            }elseif ($route_type = 'course' && isset($data['courseId'])) {
+                $token = $this->getTokenService()->makeToken('classroom-qrcode',array('userId'=>$user['id'],'data' => array('classroomId'=>$classroomId), 'times' => 0, 'duration' => 3600));    
+            }elseif ($route_type == 'course-qrcode' && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
-                $token = $this->getTokenService()->makeToken('course',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId), 'times' => 0, 'duration' => 3600));
-            }elseif ($route_type = 'lesson' && isset($data['lessonId']) && isset($data['courseId'])) {
+                $token = $this->getTokenService()->makeToken('course-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId), 'times' => 0, 'duration' => 3600));
+            }elseif ($route_type == 'lesson-qrcode' && isset($data['lessonId']) && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
                 $lessonId = (int)$data['lessonId'];
-                $token = $this->getTokenService()->makeToken('lesson',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId,'lessonId'=>$lessonId), 'times' => 0, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('lesson-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId,'lessonId'=>$lessonId), 'times' => 0, 'duration' => 3600));
             }else {
                 throw $this->createNotFoundException('参数错误，无法找到指定二维码');
             }
-            $routePath = $this->generateUrl('common_explain_qrcode',array('token'=>$token['token']));
+            $routePath = $this->generateUrl('common_explain_qrcode',array('token'=>$token['token']),true);
         }
-        $websiteName = $data['url'];
-        $url = substr($websiteName,0,strlen($websiteName)-1).$routePath.'?type='.$data['type']; 
+        $url = $routePath.'?type='.$data['type']; 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode',array('text'=>$url))
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
         );
         return $this->createJsonResponse($response);
     }
@@ -76,25 +75,26 @@ class CommonController extends BaseController
     {
         $route_type = $request->get('type');
         $token = $this->getTokenService()->verifyToken($route_type,$token);
-        $userId = $token['userId'];
-        $user = $this->getUserService()->getUser($userId);
-        $this->authenticateUser($user);
-        if (isset($route_type) && $route_type = 'course' && !empty($token['data']['courseId'])){
+        $pcUserId = $token['userId'];
+        $user = $this->getUserService()->getUser($pcUserId);
+        $currentUser = $this->getUserService()->getCurrentUser();
+        if (!$currentUser->isLogin() || $currentUser['id']!==$pcUserId){
+            $this->authenticateUser($user);
+        }
+        if (isset($route_type) && $route_type == 'course-qrcode' && !empty($token['data']['courseId'])){
             $courseId = $token['data']['courseId'];
-            $gotoUrl = $this->generateUrl('course_show',array('id'=>$courseId));
-        }elseif (isset($route_type) && $route_type = 'classroom' && !empty($token['data']['classroomId'])) {
+            $gotoUrl = $this->generateUrl('course_show',array('id'=>$courseId),true);
+        }elseif (isset($route_type) && $route_type == 'classroom-qrcode' && !empty($token['data']['classroomId'])) {
             $classroomId = $token['data']['classroomId'];
-            $gotoUrl = $this->generateUrl('classroom_show',array('id'=>$classroomId));
-        }elseif (isset($route_type) && $route_type = 'lesson' && !empty($token['data']['courseId']) && !empty($token['data']['lessonId'])) {
+            $gotoUrl = $this->generateUrl('classroom_show',array('id'=>$classroomId),true);
+        }elseif (isset($route_type) && $route_type == 'lesson-qrcode' && !empty($token['data']['courseId']) && !empty($token['data']['lessonId'])) {
             $courseId = $token['data']['courseId'];
             $lessonId = $token['data']['lessonId'];
-            $gotoUrl = $this->generateUrl('course_learn',array('id' => $courseId))."#lesson/".$lessonId;
+            $gotoUrl = $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId;
         }else {
             throw $this->createNotFoundException('参数错误，无法访问指定二维码');
         }
-        // return $this->createJsonResponse($courseId);
         return $this->redirect($gotoUrl);
-        // return new Response($route_type);
     }
 
     public function crontabAction(Request $request)

@@ -64,7 +64,7 @@
 {% endblock %}
 
 {% block footer %}
-  <span class="es-qrcode bottom mrl" data-url="{{path('common_learn_qrcode',{lessonId: lesson.id,courseId: lesson.courseId,type:"lesson",url:url('homepage')})}}">
+  <span class="es-qrcode bottom mrl" data-url="{{path('common_learn_qrcode',{lessonId: lesson.id,courseId: lesson.courseId,type:"lesson-qrcode",url:url('homepage')})}}">
     <i class="es-icon es-icon-qrcode"></i>
     <span class="qrcode-popover">
       <img src="{{asset('assets/v2/img/qrcode.jpg')}}" alt="">
