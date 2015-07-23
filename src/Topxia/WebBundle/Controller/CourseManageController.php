@@ -237,16 +237,16 @@ class CourseManageController extends BaseController
         $conditions['targetId'] = $id;
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),
             10
         );
-
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
-        }
 
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
@@ -278,12 +278,19 @@ class CourseManageController extends BaseController
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
         $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
 
+        $conditions = $request->query->all();
+
         $type = 'course';
         $conditions['targetType'] = $type;
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
         $conditions['targetId'] = $id;
+
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
 
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
