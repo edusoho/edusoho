@@ -4,7 +4,7 @@
 </div>
 
 <ul class="bar-preview">
-  {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id}) %}
+  {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id, count:2 }) %}
   {% if recentLiveLessons %}
     {% for recentLiveLesson in recentLiveLessons %}
       <li>

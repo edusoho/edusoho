@@ -1,5 +1,5 @@
 {% if app.user and app.user.isLogin() %}
-  {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id}) %}
+  {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id, count:2}) %}
   <li data-id="#bar-user-center" class="bar-user">
     <a href="javascript:;">学<br>习<br>中<br>心
       {% if recentLiveLessons %}

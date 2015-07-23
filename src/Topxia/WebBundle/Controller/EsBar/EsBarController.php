@@ -1,10 +1,6 @@
 <?php
-/**
- * author: retamia
- * Time: 15-7-7 上午11:12
- * description: 
- */
 namespace Topxia\WebBundle\Controller\EsBar;
+
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Controller\BaseController;
