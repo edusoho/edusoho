@@ -19,7 +19,7 @@ define(function(require, exports, module) {
     });
 
 
-    $(".js-bar-shrink").click(function() {
+    $(".es-bar").on('click','.js-bar-shrink',function() {
         var $this = $(this);
         $this.parents(".es-bar-main.active").removeClass('active').end().parents(".es-bar").animate({
             right: '-230px'

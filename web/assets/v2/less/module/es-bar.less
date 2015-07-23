@@ -62,6 +62,7 @@
         }
       }
       >a {
+        display: block;
         // color: @gray;
         color: @gray-dark;
         .es-transition;
@@ -201,26 +202,29 @@
   }
 }
 
-.bar-homework {
-  list-style-type: none;
-  padding-left: 30px;
-  >li {
-    position: relative;
-    margin-bottom: 20px;
-    >span {
-      position: absolute;
-      left: -30px;
-      top: -2px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      background-color: @brand-primary;
-      .border-radius(4px);
-      color: #fff;
-    }
-  }
+.bar-homework li {
+  margin-bottom: 20px;
 }
+// .bar-homework {
+//   list-style-type: none;
+//   padding-left: 30px;
+//   >li {
+//     position: relative;
+//     margin-bottom: 20px;
+//     >span {
+//       position: absolute;
+//       left: -30px;
+//       top: -2px;
+//       width: 20px;
+//       height: 20px;
+//       line-height: 20px;
+//       text-align: center;
+//       background-color: @brand-primary;
+//       .border-radius(4px);
+//       color: #fff;
+//     }
+//   }
+// }
 
 .bar-user-center {
   text-align: center;

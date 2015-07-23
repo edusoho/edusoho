@@ -4,23 +4,28 @@
   <h5><span>考试</span></h5>
   <div class="line"></div>
 </div>
-{% if testPaperResults %}
-  {% set testCount = 10 %}
-  {% for testPaperResult in testPaperResults %}
-    {% set testCount = loop.length %}
-    <li><a target="_blank" href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-light">{{ testPaperResult.paperName }}</a></li>
-  {% endfor %}
-  {% if testCount >= 10 %}
-    <a href="{{ path('my_quiz') }}" target="_blank">更多</a>
+
+<ul class="list-unstyled">
+  {% if testPaperResults %}
+    {% set testCount = 10 %}
+    {% for testPaperResult in testPaperResults %}
+      {% set testCount = loop.length %}
+      <li><a target="_blank" href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-light">{{ testPaperResult.paperName }}</a></li>
+    {% endfor %}
+    {% if testCount >= 10 %}
+      <a class="link-light text-center" href="{{ path('my_quiz') }}" target="_blank">更多</a>
+    {% endif %}
+  {% else %}
+    <li class="empty">暂无考试</li>
   {% endif %}
-{% else %}
-  <li class="empty">暂无考试</li>
-{% endif %}
+</ul>
 
 <div class="text-line gray small">
   <h5><span>作业</span></h5>
   <div class="line"></div>
 </div>
+
+<ul class="list-unstyled">
 {% if homeworkResults %}
   {% set homeworkCount = 10 %}
   {% for homeworkResult in homeworkResults %}
@@ -31,9 +36,11 @@
     <li><a target="_blank" class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a target="_blank" href="{{ lessonUrl }}" class="link-light">第 {{ lesson.number }}课时</a></li>
   {% endfor %}
   {% if homeworkCount >= 10 %}
-    <a href="{{ path('my_homework_list') }}" target="_blank">更多</a>
+    <a class="link-light text-center" href="{{ path('my_homework_list') }}" target="_blank">更多</a>
   {% endif %}
 {% else %}
   <li class="empty">暂无作业</li>
 {% endif %}
+</ul>
+
 {% endblock %}
