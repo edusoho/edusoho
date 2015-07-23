@@ -3,13 +3,11 @@
   <div class="line"></div>
 </div>
 
-
-
 {% if classrooms or courses %}
   {% for classroom in classrooms %}
     <div class="bar-task">
       <div class="bar-task-header">
-        {{ classroom.title }}
+        {{ setting('classroom.name')|default("班级") }}: {{ classroom.title }}
         {{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}
       </div>
 
@@ -30,7 +28,7 @@
   {% for course in courses %}
     <div class="bar-task">
       <div class="bar-task-header">
-        {{ course.title }}
+        课程: {{ course.title }}
         {{ course.learnedLessonNum ~ '/' ~ course.allLessonNum }}
       </div>
 
