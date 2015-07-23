@@ -237,16 +237,16 @@ class CourseManageController extends BaseController
         $conditions['targetId'] = $id;
         $course = $this->getCourseService()->tryManageCourse($id);
 
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),
             10
         );
-
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
-        }
 
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
