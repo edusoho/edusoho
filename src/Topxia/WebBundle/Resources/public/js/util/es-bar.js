@@ -84,7 +84,7 @@ define(function(require, exports, module) {
                 $.get(url,function(html){
                     $(".bar-message").html(html);
                 })
-                break;
+                break
             case '#bar-homework':
                 var url = $("#bar-practice-review").data('url');
                 $.get(url,function(html){
