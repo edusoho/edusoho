@@ -92,7 +92,6 @@ class CoinController extends BaseController
         if($request->getMethod()=="POST"){
 
             $set=$request->request->all();
-
             if($set['cash_model']=="none"){
 
                 $coinSettings['cash_model']="none";
@@ -109,8 +108,8 @@ class CoinController extends BaseController
             $courses=$this->getCourseService()->searchCourses(array('originPrice_GT'=>'0.00'), 'latest', 0 ,99999);
             
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
-            'set' => $set,
-            'courses'=>$courses
+                'set' => $set,
+                'courses'=>$courses
             ));
 
         }
@@ -129,9 +128,7 @@ class CoinController extends BaseController
     public function modelSaveAction(Request $request)
     {   
         $coinSettings = $this->getSettingService()->get('coin',array());
-
         if($request->getMethod()=="POST"){
-
             $data=$request->request->all();
 
             $coinSettings['coin_enabled']=1;
@@ -155,8 +152,7 @@ class CoinController extends BaseController
         }
 
         $this->setFlashMessage('success', '虚拟币模式已保存！');
-        return $this->redirect($this->generateUrl('admin_coin_model', array(
-        )));
+        return $this->redirect($this->generateUrl('admin_coin_model'));
     }
 
     protected function updateCoursesPrice($data)
