@@ -328,6 +328,8 @@ class MobileBaseController extends BaseController
             $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
 
             unset($user['password']);
+            unset($user['payPasswordSalt']);
+            unset($user['payPassword']);
             unset($user['salt']);
             unset($user['createdIp']);
             unset($user['loginTime']);
