@@ -17,6 +17,8 @@
   <meta name="keywords" content="{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}" />
   <meta name="description" content="{% block description %}{{ setting('site.seo_description') }}{% endblock %}" />
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login" />
+  <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open" />
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
@@ -41,6 +43,7 @@
   <div class="es-wrap">
 
     {% block header %}
+      {% include 'TopxiaWebBundle::weixin-alert.html.twig'%}
       {% include 'TopxiaWebBundle::site-hint.html.twig' %}
       {% include 'TopxiaWebBundle:Default:header.html.twig' %}
     {% endblock %}
@@ -58,8 +61,12 @@
     {% endblock %}
 
     {% block bottom %}{% endblock %}
-  </div> 
-
+  </div>
+  {% block esBar %}
+    {% if setting('esBar.enabled', 0) %}
+        {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
+    {% endif %}
+  {% endblock %}
   <div id="login-modal" class="modal" data-url="/login/ajax"></div>
   <div id="modal" class="modal"></div>
 {% endblock %}

@@ -6,7 +6,7 @@ interface BlockHistoryDao
 {
     public function getBlockHistory($id);
 
-    public function addBlockHistory($BlockHistory);
+    public function addBlockHistory($blockHistory);
 
     public function deleteBlockHistory($id);
 

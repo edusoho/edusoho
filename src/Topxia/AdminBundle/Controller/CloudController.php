@@ -82,13 +82,26 @@ class CloudController extends BaseController
 
     protected function redirectUrl($routingName, $params = array())
     {
-        $loginToken = $this->getAppService()->getLoginToken();
-        $developer = $this->getSettingService()->get('developer', array());
-        $url = $developer['app_api_url'].'/token_login?token='.$loginToken["token"].'&goto='.$routingName;
-        if(!empty($params)){
-            $url .= '&param='.urldecode(json_encode($params));
-        }
+        $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);
         return $this->redirect($url);
+    }
+
+    protected function createAppClient()
+    {
+        if (!isset($this->client)) {
+            $cloud = $this->getSettingService()->get('storage', array());
+            $developer = $this->getSettingService()->get('developer', array());
+
+            $options = array(
+                'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
+                'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
+                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
+                'debug' => empty($developer['debug']) ? false : true,
+            );
+
+            $this->client = new EduSohoAppClient($options);
+        }
+        return $this->client;
     }
     
     protected function getAppService()

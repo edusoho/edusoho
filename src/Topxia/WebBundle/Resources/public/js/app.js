@@ -4,7 +4,6 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack2');
     require("placeholder");
     require('./util/card');
-    require('./util/es-bar');
     var Swiper=require('swiper');
 	var Cookie = require('cookie');
 
@@ -144,7 +143,15 @@ define(function(require, exports, module) {
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
-
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+        if($('.weixin-alert.hide'))
+            $('.weixin-alert.hide').removeClass('hide');
+    };
+    
+    $(".weixin-alert .close").click(function(){
+        Cookie.set("close_weixin_alert",'true',{path: '/'});
+    });
    
     $("li.nav-hover").mouseenter(function(event) {
         $(this).addClass("open");

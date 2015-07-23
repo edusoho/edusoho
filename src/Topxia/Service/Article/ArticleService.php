@@ -25,7 +25,7 @@ interface ArticleService
 
     public function createArticle($article);
 
-    public function updateArticle($id, $Article);
+    public function updateArticle($id, $article);
 
     public function hitArticle($id);
 

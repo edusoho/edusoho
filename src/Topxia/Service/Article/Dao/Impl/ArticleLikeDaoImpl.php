@@ -22,9 +22,9 @@ class ArticleLikeDaoImpl extends BaseDao implements ArticleLikeDao
         return $this->getConnection()->fetchAssoc($sql, array($articleId, $userId)) ?: null;
     }
 
-    public function addArticleLike($ArticleLike)
+    public function addArticleLike($articleLike)
     {
-        $affected = $this->getConnection()->insert($this->table, $ArticleLike);
+        $affected = $this->getConnection()->insert($this->table, $articleLike);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert ArticleLike error.');
         }
