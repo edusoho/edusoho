@@ -43,7 +43,7 @@
             <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
             <li class="visible-xs">
               <a href="{{ path('my') }}">
-                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}教学中心{% else %}学习中心{% endif %}
+                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}我的教学{% else %}我的学习{% endif %}
               </a>
             </li>
             <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
@@ -58,9 +58,9 @@
         <li class="hidden-xs">
           <a href="{{ path('my') }}">
             {% if 'ROLE_TEACHER' in app.user.roles %}
-              教学中心
+              我的教学
             {% else %} 
-              学习中心
+              我的学习
             {% endif %}
           </a>
         </li>
