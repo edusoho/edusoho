@@ -18,7 +18,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam("receipt-data");
         $amount = $this->getParam("amount", 0);
-        return $this->requestReceiptData($user["id"], $amount, $receipt, false);
+        return $this->requestReceiptData($user["id"], $amount, $receipt, true);
     }
 
     public function checkCoupon()
@@ -194,6 +194,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
+        $payment = $this->getParam('payment', 'alipay');
+        $fields = $this->request->request->all();
 
         if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createErrorResponse('error', '参数不正确');
@@ -215,7 +217,14 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $cashRate = $coinSetting["cash_rate"];
         }
 
-        $fields = $this->request->request->all();
+        if ($payment == "coin") {
+            $fields["coinPayAmount"] = (float) $fields['totalPrice'] * (float) $cashRate;
+        }
+
+        if ($payment == "coin" && !$coinEnabled) {
+            return $this->createErrorResponse('coin_close', '网校关闭了课程购买！');
+        }
+        
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
@@ -224,6 +233,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             } 
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+            if ($payment == "coin" && !$this->isCanPayByCoin($totalPrice, $user["id"], $cashRate)) {
+                return $this->createErrorResponse('coin_no_enough', '账户余额不足！');
+            }
             $amount = (string) ((float) $amount);
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
                 $coupon = $fields["couponCode"];
@@ -237,14 +249,15 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 'coinRate' => $cashRate,
                 'coinAmount' => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId' => $user["id"],
-                'payment' => 'alipay',
+                'payment' => empty($fields["payment"]) ? "alipay" : $fields["payment"],
                 'targetId' => $targetId,
                 'coupon' => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
-            if ($order["amount"] == 0) {
+
+            if ($order["amount"] == 0 && $order["coinAmount"] == 0) {
                 $payData = array(
                     'sn' => $order['sn'],
                     'status' => 'success', 
@@ -252,8 +265,17 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'paidTime' => time()
                 );
                 list($success, $order) = $this->getPayCenterService()->processOrder($payData);
+            } else if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+                $payData = array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time()
+                );
+                list($success, $order) = $this->getPayCenterService()->pay($payData);
+                $processor = OrderProcessorFactory::create($order["targetType"]);
             }
-            
+
             if($order["status"] == "paid") {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             }
@@ -268,6 +290,8 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
+        $payment = $this->getParam('payment', 'alipay');
+        $fields = $this->request->request->all();
 
         if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createErrorResponse('error', '参数不正确');
@@ -289,7 +313,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $cashRate = $coinSetting["cash_rate"];
         }
 
-        $fields = $this->request->request->all();
+        if ($payment == "coin" && !$coinEnabled) {
+            return $this->createErrorResponse('coin_close', '网校关闭了课程购买！');
+        }
+        
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
@@ -298,6 +325,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             } 
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
+            if ($payment == "coin" && !$this->isCanPayByCoin($totalPrice, $user["id"], $cashRate)) {
+                return $this->createErrorResponse('coin_no_enough', '账户余额不足！');
+            }
             $amount = (string) ((float) $amount);
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
                 $coupon = $fields["couponCode"];
@@ -311,14 +341,15 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 'coinRate' => $cashRate,
                 'coinAmount' => empty($fields["coinPayAmount"]) ? 0 : $fields["coinPayAmount"],
                 'userId' => $user["id"],
-                'payment' => 'alipay',
+                'payment' => empty($fields["payment"]) ? "alipay" : $fields["payment"],
                 'targetId' => $targetId,
                 'coupon' => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
             );
 
             $order = $processor->createOrder($orderFileds, $fields);
-            if ($order["amount"] == 0) {
+
+            if ($order["amount"] == 0 && $order["coinAmount"] == 0) {
                 $payData = array(
                     'sn' => $order['sn'],
                     'status' => 'success', 
@@ -326,8 +357,17 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'paidTime' => time()
                 );
                 list($success, $order) = $this->getPayCenterService()->processOrder($payData);
+            } else if ($order["amount"] == 0 && $order["coinAmount"] > 0) {
+                $payData = array(
+                    'sn' => $order['sn'],
+                    'status' => 'success', 
+                    'amount' => $order['amount'], 
+                    'paidTime' => time()
+                );
+                list($success, $order) = $this->getPayCenterService()->pay($payData);
+                $processor = OrderProcessorFactory::create($order["targetType"]);
             }
-            
+
             if($order["status"] == "paid") {
                 return array('status' => 'ok', 'paid' => true, 'message' => '', 'payUrl' => '');
             }
@@ -336,6 +376,25 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
+    }
+
+    private function isCanPayByCoin($totalPrice, $userId, $cashRate)
+    {
+        $cash = $this->getUserCoin($userId, $cashRate);
+
+        return ($cash * 100) >= ($totalPrice * 100);
+    }
+
+    private function getUserCoin($userId, $cashRate) 
+    {
+        $account = $this->getCashAccountService()->getAccountByUserId($userId, true);
+        if(empty($account)){
+            $account = $this->getCashAccountService()->createAccount($userId);
+        }
+
+        $cash = (float) $account['cash'] / (float) $cashRate;
+
+        return $cash;
     }
 
     public function payVip()

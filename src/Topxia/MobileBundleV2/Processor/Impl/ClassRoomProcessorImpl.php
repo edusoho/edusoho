@@ -137,10 +137,15 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	                		'enabled' => 1
 	            	), 0, 100);
 	        	}
+
+	        	$checkMemberLevelResult = null;
+	        	if ($this->controller->setting('vip.enabled')) {
+	            	$classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->controller->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+	        	}
 		return array(
 			"classRoom" => $this->filterClassRoom($classroom),
 			"member" => $member,
-			"vip" => null,
+			"vip" => $checkMemberLevelResult,
 			"vipLevels" => $vipLevels
 			);
 	}
