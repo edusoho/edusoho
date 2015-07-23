@@ -34,7 +34,7 @@
     {% set lesson = lessons[homeworkResult.lessonId] %}
     {% set course = courses[homeworkResult.courseId] %}
     {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
-    <li><a target="_blank" class="text-success" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title }}》</a><a target="_blank" href="{{ lessonUrl }}" class="link-light">第 {{ lesson.number }}课时</a></li>
+    <li><a target="_blank" class="text-success" href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homeworkResult.homeworkId,resultId:homeworkResult.id,userId:app.user.id}) }}">《{{ course.title }}》第 {{ lesson.number }}课时</a></li>
   {% endfor %}
   {% if homeworkCount >= 10 %}
     <li class="text-center"><a class="link-light" href="{{ path('my_homework_list') }}" target="_blank">更多</a></li>

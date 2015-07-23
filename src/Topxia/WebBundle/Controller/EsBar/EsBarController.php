@@ -27,48 +27,51 @@ class EsBarController extends BaseController{
             $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,5);
             foreach ($classrooms as $key => &$classroom){
                 $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-                $courseIds = ArrayToolkit::column($courses,'id');
-                /**
-                 * 找出学过的课时
-                 */
-                $learnedConditions = array(
-                    'userId' => $user->id,
-                    'status' => 'finished',
-                    'courseIds' => $courseIds
-                );
-                $learnedCount = $this->getCourseService()->searchLearnCount($learnedConditions);
-                $sort = array( 'finishedTime','ASC');
-                $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,$learnedCount),'lessonId');
-                /**
-                 * 找出未学过的课时
-                 */
-                $notLearnedConditions = array(
-                    'status' => 'published',
-                    'courseIds' => $courseIds,
-                    'notLearnedIds' => $learnedIds
-                );
-                $sort = array(
-                    'seq','ASC'
-                );
-                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,4);
-
-                $classroomLessonNum = 0;
-                foreach($courses as $course){   //迭代班级下课时总数
-                    $classroomLessonNum += $course['lessonNum'];
-                }
-
-                if(empty($notLearnedLessons))
-                {
-                    unset($classrooms[$key]);
-                }else{
-                    foreach($notLearnedLessons as &$notLearnedLesson) {
-                        $notLearnedLesson['isLearned'] = $this->getCourseService()->getUserLearnLessonStatus($user->id, $notLearnedLesson['courseId'], $notLearnedLesson['id']);
+                if(!empty($courses)){
+                    $courseIds = ArrayToolkit::column($courses,'id');
+                    /**
+                     * 找出学过的课时
+                     */
+                    $learnedConditions = array(
+                        'userId' => $user->id,
+                        'status' => 'finished',
+                        'courseIds' => $courseIds
+                    );
+                    $learnedCount = $this->getCourseService()->searchLearnCount($learnedConditions);
+                    $sort = array( 'finishedTime','ASC');
+                    $learnedIds = ArrayToolkit::column($this->getCourseService()->searchLearns($learnedConditions,$sort,0,$learnedCount),'lessonId');
+                    /**
+                     * 找出未学过的课时
+                     */
+                    $notLearnedConditions = array(
+                        'status' => 'published',
+                        'courseIds' => $courseIds,
+                        'notLearnedIds' => $learnedIds
+                    );
+                    $sort = array(
+                        'seq','ASC'
+                    );
+                    $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,4);
+                    $classroomLessonNum = 0;
+                    foreach($courses as $course){   //迭代班级下课时总数
+                        $classroomLessonNum += $course['lessonNum'];
                     }
-                    $classroom['lessons'] = $notLearnedLessons;
-                    $classroom['learnedLessonNum'] = $learnedCount;
-                    $classroom['allLessonNum'] = $classroomLessonNum;
-                }
 
+                    if(empty($notLearnedLessons))
+                    {
+                        unset($classrooms[$key]);
+                    }else{
+                        foreach($notLearnedLessons as &$notLearnedLesson) {
+                            $notLearnedLesson['isLearned'] = $this->getCourseService()->getUserLearnLessonStatus($user->id, $notLearnedLesson['courseId'], $notLearnedLesson['id']);
+                        }
+                        $classroom['lessons'] = $notLearnedLessons;
+                        $classroom['learnedLessonNum'] = $learnedCount;
+                        $classroom['allLessonNum'] = $classroomLessonNum;
+                    }
+
+                }else{
+                    unset($classrooms[$key]);
+                }
             }
         }
         $courseMemConditions = array(
@@ -225,7 +228,7 @@ class EsBarController extends BaseController{
         $notifications = $this->getNotificationService()->findUserNotifications(
             $user->id,
             0,
-            100
+            15
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         return $this->render('TopxiaWebBundle:EsBar:ListContent/Notification/notify.html.twig', array(
@@ -250,7 +253,7 @@ class EsBarController extends BaseController{
             );
             $homeworkResults = $this->getHomeworkService()->searchResults(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('updatedTime', 'DESC'),
                 0,
                 10
             );
@@ -260,8 +263,6 @@ class EsBarController extends BaseController{
             $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
         }
 
-
-
         $testPaperConditions = array(
             'status' => $status,
             'userId' => $user->id
@@ -269,7 +270,7 @@ class EsBarController extends BaseController{
 
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
             $testPaperConditions,
-            array('usedTime', 'DESC'),
+            array('endTime', 'DESC'),
             0,
             10
         );
