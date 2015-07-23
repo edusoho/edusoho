@@ -9,8 +9,7 @@
     {% for classroom in classrooms %}
       <div class="class-item">
         <a target="_blank" href="{{ path('classroom_show',{id:classroom.id}) }}">
-          <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}"
-               alt="{{ classroom.title }}">
+          <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
           <h3>{{ classroom.title }}</h3>
           <div class="image-overlay"></div>
         </a>

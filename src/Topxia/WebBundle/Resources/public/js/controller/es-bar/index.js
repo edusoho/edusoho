@@ -77,8 +77,6 @@ define(function(require, exports, module) {
                         $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
                     })
                 }
-                $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
-
                 break;
             case '#bar-history':
                 var url = $("#bar-my-history").data('url');
@@ -98,6 +96,7 @@ define(function(require, exports, module) {
                     $.get(url, function (html) {
                         $("#bar-homework").html(html);
                         $("#bar-homework").data('isLoad', true);
+                        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
                     })
                 }
                 break;
@@ -119,6 +118,7 @@ define(function(require, exports, module) {
         var url = $("#bar-practice-review").data('url');
         $.get(url,function(html){
             $("#bar-homework").html(html);
+            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
         })
     });
 
@@ -126,6 +126,7 @@ define(function(require, exports, module) {
         var url = $("#bar-practice-finish").data('url');
         $.get(url,function(html){
             $("#bar-homework").html(html);
+            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
         })
     });
 
@@ -133,6 +134,7 @@ define(function(require, exports, module) {
         var url = $("#bar-course-btn").data('url');
         $.get(url,function(html){
             $("#bar-course-list").html(html);
+            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
         })
     });
 
@@ -140,6 +142,7 @@ define(function(require, exports, module) {
         var url = $("#bar-classroom-btn").data('url');
         $.get(url,function(html){
             $("#bar-course-list").html(html);
+            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
         })
     });
 
