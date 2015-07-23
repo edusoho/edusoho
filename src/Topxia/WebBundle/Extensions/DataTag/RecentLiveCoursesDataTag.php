@@ -47,9 +47,8 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
             $recenntLessonsCondition,  
             array('startTime', 'ASC'),
             0,
-            $count
+            1000
         );
-
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
 
         $recentCourses = array();
@@ -64,13 +63,12 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
             $course['lesson'] = $lesson;
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
             
-            if (count($recentCourses) >= 8) {
+            if (count($recentCourses) >= $count) {
                 break;
             }
 
             $recentCourses[] = $course;
         }
-
         return $this->getCourseTeachersAndCategories($recentCourses);
     }
 
