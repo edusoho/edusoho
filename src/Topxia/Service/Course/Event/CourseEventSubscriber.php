@@ -13,6 +13,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'course.lesson.create'=> 'onLessonCreate',
+            'course.lesson.update'=> 'onLessonUpdate',
             'course.lesson_start' => 'onLessonStart',
             'course.lesson_finish' => 'onLessonFinish',
             'course.join' => 'onCourseJoin',
@@ -39,6 +40,18 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 $createLesson = $this->getCourseService()->addLesson($courseLesson);
             }
         }
+    }
+
+    public function onLessonUpdate(ServiceEvent $event)
+    {
+       $lesson = $event->getSubject();
+       if (isset($lesson)) {
+            $lessonIds = $this->getCourseService()->findLessonsByCreatedTimeAndNotEqId($lesson['createdTime'],$lesson['id']);
+            unset($lesson['id'],$lesson['courseId']);
+            foreach ($lessonIds as $key => $value) {
+                $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
+            }
+       }    
     }
 
     public function onLessonStart(ServiceEvent $event)
@@ -173,10 +186,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     public function onCourseUpdate(ServiceEvent $event)
     {   
-        $parentId = $event->getSubject();
-        $fields = $this->getCourseService()->getCourse($parentId);
-        unset($fields['id'],$fields['parentId']);
-        $this->getCourseService()->updateCourseByParentIdAndFields($parentId,$fields);
+        $course = $event->getSubject();
+        $parentId = $course['id'];
+        unset($course['id'],$course['parentId']);
+        $this->getCourseService()->updateCourseByParentIdAndFields($parentId,$course);
 
     }
 

@@ -86,6 +86,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($lessons, 'id');
 	}
 
+	public function findLessonsByCreatedTimeAndNotEqId($createdTime,$id)
+	{
+		$lessons = $this->getLessonDao()->findLessonsByCreatedTimeAndNotEqId($createdTime,$id);
+		return ArrayToolkit::column($lessons, 'id');
+	}
+
 	public function getCourse($id, $inChanging = false)
 	{
 		return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
@@ -405,14 +411,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = CourseSerialize::serialize($fields);
 
 		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
-		$this->dispatchEvent("course.update",$updatedCourse['id']);
+		$this->dispatchEvent("course.update",$updatedCourse);
 		
 		return CourseSerialize::unserialize($updatedCourse);
 	}
 
 	public function updateCourseByParentIdAndFields($parentId, $fields)
 	{
-		$fields = CourseSerialize::serialize($fields);
 		return $this->getCourseDao()->updateCourseByParentIdAndFields($parentId, $fields);
 	}
 
@@ -486,7 +491,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         
         $update_picture = $this->getCourseDao()->updateCourse($courseId, $fields);
     	
-    	$this->dispatchEvent("course.update",$courseId);
+    	$this->dispatchEvent("course.update",$update_picture);
 
     	return $update_picture;
     }
@@ -1158,8 +1163,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+		$this->dispatchEvent("course.lesson.update",$updatedLesson);
 
 		return $updatedLesson;
+	}
+
+	public function editLesson($lessonId, $fields)
+	{
+		return $this->getLessonDao()->updateLesson($lessonId, $fields);
 	}
 
 	public function deleteLesson($courseId, $lessonId)

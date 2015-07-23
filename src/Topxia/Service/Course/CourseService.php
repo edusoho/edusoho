@@ -27,7 +27,7 @@ interface CourseService
 	public function findCoursesByCourseIds(array $ids, $start, $limit);
 
 	public function findCoursesByLikeTitle($title);
-	
+
 	public function findMinStartTimeByCourseId($courseId);
 
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
@@ -40,7 +40,7 @@ interface CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime);
     	
-    	public function analysisCourseSumByTime($endTime);
+    public function analysisCourseSumByTime($endTime);
 
 	public function findUserLearnCourses($userId, $start, $limit);
 
@@ -110,6 +110,8 @@ interface CourseService
 
 	public function findLessonsByIds(array $ids);
 
+	public function findLessonsByCreatedTimeAndNotEqId($createdTime,$id);
+
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
@@ -133,6 +135,8 @@ interface CourseService
 	public function createCourseDraft($draft);
 
 	public function updateLesson($courseId, $lessonId, $fields);
+
+	public function editLesson($courseId, $lessonId, $fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
