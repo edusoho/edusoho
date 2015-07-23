@@ -106,7 +106,7 @@ class EsBarController extends BaseController{
                     'notLearnedIds' => $learnedIds
                 );
                 $sort = array(
-                    'createdTime','ASC'
+                    'seq','ASC'
                 );
                 $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions,$sort,0,4);
 
