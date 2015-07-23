@@ -69,9 +69,12 @@ define(function(require, exports, module) {
         switch ($this.data('id')){
             case '#bar-course-list':
                 var url = $("#bar-course-btn").data('url');
-                $.get(url,function(html){
-                    $("#bar-course-list").html(html);
-                })
+                if(!$("#bar-course-list").data('isLoad')){
+                    $.get(url,function(html){
+                        $("#bar-course-list").html(html);
+                        $("#bar-course-list").data('isLoad', true);
+                    })
+                }
                 break;
             case '#bar-history':
                 var url = $("#bar-my-history").data('url');
@@ -87,9 +90,12 @@ define(function(require, exports, module) {
                 break
             case '#bar-homework':
                 var url = $("#bar-practice-review").data('url');
-                $.get(url,function(html){
-                    $("#bar-homework").html(html);
-                })
+                if(!$("#bar-homework").data('isLoad')) {
+                    $.get(url, function (html) {
+                        $("#bar-homework").html(html);
+                        $("#bar-homework").data('isLoad', true);
+                    })
+                }
                 break;
             default :
                 break;
