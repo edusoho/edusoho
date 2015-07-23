@@ -226,6 +226,119 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function orderAction(Request $request, $id)
+    {
+        $conditions = $request->query->all();
+        $type = 'course';
+        $conditions['targetType'] = $type;
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+        $conditions['targetId'] = $id;
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount($conditions),
+            10
+        );
+
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
+
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+
+        foreach ($orders as $index => $expiredOrderToBeUpdated ){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+               $orders[$index]['status'] = 'cancelled';
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:CourseManage:course-order.html.twig', array(
+            'course' =>$course,
+            'request' =>$request,
+            'orders' => $orders,
+            'users' => $users,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function orderExportCsvAction(Request $request, $id)
+    {
+        $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
+        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
+
+        $type = 'course';
+        $conditions['targetType'] = $type;
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+        $conditions['targetId'] = $id;
+
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            'latest',
+            0,
+            PHP_INT_MAX
+        );
+
+        $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
+
+        $studentUserIds = ArrayToolkit::column($orders, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');    
+
+        $course = $this->getCourseService()->getCourse($id);
+
+        $str = "订单号,名称,创建时间,状态,实际付款,购买者,支付方式,支付时间";
+
+        $str.="\r\n";
+
+        $results = array();
+        foreach ($orders as $key => $orders) {
+            $column = "";
+            $column .= $orders['sn'].",";
+            $column .= $orders['title'].",";
+            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $column .= $status[$orders['status']].",";
+            $column .= $orders['amount'].",";
+            $column .= $users[$orders['userId']]['nickname'].",";
+            $column .= $payment[$orders['payment']].",";
+
+            if ($orders['paidTime'] == 0 ) {
+                $column .= "-".",";
+            }else{
+                $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            }
+
+            $results[] = $column;
+        }
+
+        $str .= implode("\r\n",$results);
+        $str = chr(239) . chr(187) . chr(191) . $str;
+        
+        $filename = sprintf("course-%s-orders-(%s).csv", $course['title'], date('Y-n-d'));
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
+
     protected function makeLevelChoices($levels)
     {
         $choices = array();
@@ -359,10 +472,19 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
     protected function getDiscountService()
     {
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }
 
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
 
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
 }
