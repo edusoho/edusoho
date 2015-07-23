@@ -9,11 +9,7 @@
     <div class="course-hader-info">
       <div class="title clearfix">
         <span><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></span>
-        {% if is_granted('ROLE_ADMIN') %}
-          <a class="tooltop pull-right" href="{{ path('course_manage', {id:course.id}) }}" data-role="tooltip" title="课程管理" data-placement="top">
-          <i class="icon icon-setting"></i>
-          </a>
-        {% endif %}
+   
       </div>
       <div class="pull-rights">
         <div class="score"><span class="stars-{{ (course.rating)|number_format }}"></span> <span>{{ course.rating|number_format(1) }}</span>分（{{ course.ratingNum }}人评价）</div>
@@ -82,4 +78,9 @@
       </div> 
       
     </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <a class="tooltop pull-right" href="{{ path('course_manage', {id:course.id}) }}" data-role="tooltip" title="课程管理" data-placement="top">
+     <i class="icon icon-setting"></i>
+    </a>
+    {% endif %}
 </div>
