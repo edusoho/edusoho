@@ -70,7 +70,7 @@ define(function(require, exports, module) {
             case '#bar-course-list':
                 var url = $("#bar-course-btn").data('url');
                 $.get(url,function(html){
-                    $("#bar-my-course").html(html);
+                    $("#bar-course-list").html(html);
                 })
                 $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
                 break;
@@ -89,7 +89,7 @@ define(function(require, exports, module) {
             case '#bar-homework':
                 var url = $("#bar-practice-review").data('url');
                 $.get(url,function(html){
-                    $(".bar-homework").html(html);
+                    $("#bar-homework").html(html);
                 })
                 $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
                 break;
@@ -107,37 +107,34 @@ define(function(require, exports, module) {
         });
     }();
 
-    $("#bar-practice-review").on('click',function(){
+    $("#bar-homework").on('click','#bar-practice-review',function(){
         var url = $("#bar-practice-review").data('url');
         $.get(url,function(html){
-            $(".bar-homework").html(html);
+            $("#bar-homework").html(html);
         })
         $("#bar-practice-review").siblings(".active").removeClass('active').end().addClass('active')
     });
 
-    $("#bar-practice-finish").on('click',function(){
+    $("#bar-homework").on('click','#bar-practice-finish',function(){
         var url = $("#bar-practice-finish").data('url');
         $.get(url,function(html){
-            $(".bar-homework").html(html);
+            $("#bar-homework").html(html);
         })
         $("#bar-practice-finish").siblings(".active").removeClass('active').end().addClass('active')
     });
 
-    $("#bar-course-btn").on('click',function(){
+    $("#bar-course-list").on('click','#bar-course-btn',function(){
         var url = $("#bar-course-btn").data('url');
         $.get(url,function(html){
-            $("#bar-my-course").html(html);
+            $("#bar-course-list").html(html);
         })
-        $("#bar-course-btn").siblings(".active").removeClass('active').end().addClass('active')
     });
 
-    $("#bar-classroom-btn").on('click',function(){
+    $("#bar-course-list").on('click','#bar-classroom-btn',function(){
         var url = $("#bar-classroom-btn").data('url');
-
         $.get(url,function(html){
-            $("#bar-my-course").html(html);
+            $("#bar-course-list").html(html);
         })
-        $("#bar-classroom-btn").siblings(".active").removeClass('active').end().addClass('active')
     });
 
 });

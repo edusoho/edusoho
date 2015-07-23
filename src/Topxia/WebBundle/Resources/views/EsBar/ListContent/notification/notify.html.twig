@@ -2,4 +2,8 @@
   {% for notification in notifications %}
     {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
   {% endfor %}
+{% else %}
+  <div>
+    <p>暂无通知</p>
+  </div>
 {% endif %}
