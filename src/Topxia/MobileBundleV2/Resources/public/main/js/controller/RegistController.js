@@ -47,7 +47,7 @@ function RegistController($scope, platformUtil, UserService, $state)
 		UserService.smsSend({
 			phoneNumber : phone
 		}, function(data) {
-			$scope.toast(data.meta.message);
+			$scope.toast(data.error.message);
 		});
 	}
 
