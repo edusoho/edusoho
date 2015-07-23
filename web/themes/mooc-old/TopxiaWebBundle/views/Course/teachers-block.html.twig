@@ -1,0 +1,18 @@
+{% for teacherId in course.teacherIds %}
+{% set user = users[teacherId] %}
+{% if profiles %}
+ {% set profile = profiles[teacherId] %}
+ <li>
+    <div class="teacher-top clearfix">
+      <div class="avatar">
+        <a href="{{ path('user_show', {id:user.id}) }}"><img src="{{ filepath(user.largeAvatar, 'avatar.png') }}"></a>
+      </div>
+      <div class="teacher-name"><a href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></div>
+      <div class="teacher-position">{{ user.title }}</div>
+    </div>
+    <div class="teacher-about">
+      {{ profile.about | raw }}
+    </div>
+  </li>
+{% endif %}
+{% endfor %}
