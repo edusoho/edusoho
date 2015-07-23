@@ -372,7 +372,7 @@ class GroupController extends BaseController
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
         $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
-            array('postNum','DESC'),0,12);
+            array('postNum','DESC'),0,15);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
