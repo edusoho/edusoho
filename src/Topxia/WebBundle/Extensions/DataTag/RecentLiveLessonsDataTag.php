@@ -32,15 +32,17 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
             $liveCourses = $this->getCourseService()->findUserLeaningCourses($userId,0,$userCourseCount,$filters);
 
             $courseIds = ArrayToolkit::column($liveCourses,'id');
+            if(empty($courseIds)){
+                return array();
+            }
         }
-
         $conditions = array(
             'status' => 'published',
             'type' => 'live',
             'endTimeGreaterThan' => time()
         );
 
-        if(isset($courseIds) && !empty($courseIds)) {
+        if(isset($courseIds)) {
             $conditions["courseIds"] = $courseIds;
         }
 
