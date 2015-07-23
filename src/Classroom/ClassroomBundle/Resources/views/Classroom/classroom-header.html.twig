@@ -1,5 +1,5 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
-
+{% do load_script('topxiawebbundle/util/qrcode') %}
 {% if member.locked|default("0") == "1" %}
 <div class="row">
   <div class="col-md-12">

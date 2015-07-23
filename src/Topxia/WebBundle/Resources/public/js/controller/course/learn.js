@@ -810,7 +810,25 @@ define(function(require, exports, module) {
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
-
+        $(".es-qrcode").click(function(){
+            var $this = $(this); 
+            var url=document.location.href.split("#");
+            var id=url[1].split("/");
+            if($this.hasClass('open')) {
+                $this.removeClass('open');
+            }else {
+                $.ajax({
+                    type: "post",
+                    url: $this.data("url")+"&lessonId="+id[1],
+                    dataType: "json",
+                    success:function(data){
+                        $this.find(".qrcode-popover img").attr("src",data.img);
+                    }
+                });
+                
+                $(this).addClass('open');
+            }
+        });
     };
 
 });
