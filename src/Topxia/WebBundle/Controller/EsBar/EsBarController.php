@@ -253,7 +253,7 @@ class EsBarController extends BaseController{
             );
             $homeworkResults = $this->getHomeworkService()->searchResults(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('updatedTime', 'DESC'),
                 0,
                 10
             );
@@ -272,7 +272,7 @@ class EsBarController extends BaseController{
 
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
             $testPaperConditions,
-            array('usedTime', 'DESC'),
+            array('endTime', 'DESC'),
             0,
             10
         );
