@@ -45,6 +45,10 @@ class CommonController extends BaseController
             }elseif ($route_type == 'course-qrcode' && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
                 $routePath = $this->generateUrl('course_show',array('id'=>$courseId),true);   
+            }elseif ($route_type == 'lesson-qrcode' && isset($data['courseId']) && isset($data['lessonId'])) {
+                $courseId = (int)$data['courseId'];
+                $lessonId = (int)$data['lessonId'];
+                $routePath = $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId;
             }else {
                 throw $this->createNotFoundException('参数错误，无法找到指定二维码');
             }
