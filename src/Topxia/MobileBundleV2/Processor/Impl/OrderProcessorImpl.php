@@ -75,9 +75,18 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             }
         }
 
+        $coinSetting = $this->controller->setting("coin");
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        $cashRate = 1;
+        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
+
         return array(
             "userProfile" => $userProfile,
             "course" => $course,
+            "coinEnabled" => $coinEnabled,
+            "coinPay" => (float)$course["price"] * (float)$cashRate,
             "isInstalledCoupon" => $this->controller->isinstalledPlugin("Coupon")
             );
     }
