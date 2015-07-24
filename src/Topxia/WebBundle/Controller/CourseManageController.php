@@ -299,7 +299,7 @@ class CourseManageController extends BaseController
             PHP_INT_MAX
         );
 
-        $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
+        $userinfoFields = array('sn','createdTime','status','targetType','amount','payment','paidTime');
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
