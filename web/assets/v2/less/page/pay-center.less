@@ -10,17 +10,7 @@
   margin-bottom: 30px;
 }
 
-.pay-center .check {
-  cursor: pointer;
-  width: 150px;
-  height: 58px;
-  position: relative;
-  text-align:center;
-  font-size: 16px;
-  line-height: 58px;
-  border: 1px solid #21a557; 
-  margin-bottom: 10px;
-}
+
 
 .pay-center .uncheck .icon {
   background: url('@{img-src}old/pay-check-status.png') no-repeat;
@@ -35,8 +25,8 @@
 
 .pay-center .check .icon {
   background: url('@{img-src}old/pay-check-status.png') no-repeat;
-  top: 0px;
-  right: 0px;
+  top: -1px;
+  right: -1px;
   width: 23px;
   height: 26px;
   background-position: 0 -4px;
@@ -57,19 +47,59 @@
   margin-left: 15px;
 }
 
+// =============新调整=====
 .pay-center .pay-amount {
-  font-size: 20px;
+  text-align: right;
+  .total-price {
+    float: inherit;
+  }
 }
 
-.pay-center .pay-amount span {
-  color: #ff6600;
+.order-detail-bg.checkout {
+  .order-detail .order-info {
+    padding-top: 30px;
+    width: auto;
+    >p {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .pay-rmb {
+      font-size: 18px;
+    }
+  } 
 }
 
-.pay-center .pay-type-lable {
-  padding-bottom: 10px
+.paystyle  {
+  .order-detail-bg {
+    padding: 50px;
+    margin-bottom: 50px;
+    @media (max-width: @screen-xs-max) {
+      padding-left: 25px; 
+    } 
+    .pay-type-lable  {
+      display: inline-block;
+      margin-right: 10%;
+      font-size: 18px;
+      @media (max-width: @screen-xs-max) {
+        display: block;
+      }
+    }
+    .check {
+      cursor: pointer;
+      margin-right: 10%;
+      position: relative;
+      text-align:center;
+      font-size: 16px;
+      line-height: 47px;
+      padding: 0 5px;
+      @media (max-width: @screen-xs-max) {
+        display: block;
+        margin: 20px auto 0 auto;
+      }
+      img {
+        width: 100%;
+      }
+    }
+  }
 }
 
-.pay-center .pay-button {
-  float: left;
-  margin-top: 15px;
-}
