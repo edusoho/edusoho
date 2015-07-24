@@ -11,6 +11,8 @@ interface QuestionService
 
     public function findQuestionsByParentId($id);
 
+    public function findQuestionsByPId($pid);
+
     public function findQuestionsByParentIds($ids);
 
     public function findQuestionsbyTypes($types, $start, $limit);
@@ -28,6 +30,8 @@ interface QuestionService
     public function searchQuestionsCount($conditions);
 
     public function createQuestion($fields);
+
+    public function addQuestion($fields);
 
     public function updateQuestion($id, $fields);
 
