@@ -240,8 +240,13 @@ class EsBarController extends BaseController{
         $courseMem = $this->getCourseService()->searchMembers($courseMemConditions,array('createdTime','DESC'),0,5);
         $courseIds =  ArrayToolkit::column($courseMem,'courseId');
         if(!empty($courseIds)){
-
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+            $courseConditions = array(
+                'courseIds' => $courseIds,
+                'parentId' => 0
+            );
+            $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 5);
+            $courses = ArrayToolkit::index($courses, 'id');
+            
             foreach ($courseMem as $member) {
                 if (empty($courses[$member['courseId']])) {
                     continue;
@@ -253,6 +258,7 @@ class EsBarController extends BaseController{
                 /**
                  * 找出学过的课时
                  */
+
                 $learnedConditions = array(
                     'userId' => $user->id,
                     'status' => 'finished',
