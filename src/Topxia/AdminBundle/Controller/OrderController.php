@@ -55,18 +55,8 @@ class OrderController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        $order = $this->getOrderService()->getOrder($id);
-        $user = $this->getUserService()->getUser($order['userId']);
-
-        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-
-        return $this->render('TopxiaAdminBundle:Order:detail-modal.html.twig', array(
-            'order' => $order,
-            'user' => $user,
-            'orderLogs' => $orderLogs,
-            'users' => $users,
+        return $this->forward('TopxiaWebBundle:Order:detail', array(
+            'id' => $id,
         ));
     }
 

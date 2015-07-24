@@ -144,7 +144,7 @@ class HLSController extends BaseController
 
         $hideBeginning = $request->query->get('hideBeginning');
         if (empty($hideBeginning)) {
-            $beginning = $this->getVideoBeginning($level);
+            $beginning = $this->getVideoBeginning($level, $token['userId']);
             if ($beginning['beginningKey']) {
                 $params = array_merge($params, $beginning);
             }
@@ -218,7 +218,7 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getVideoBeginning($level)
+    protected function getVideoBeginning($level, $userId = 0)
     {
         $beginning = array(
             'beginningKey' => null,
@@ -239,7 +239,7 @@ class HLSController extends BaseController
                 }
 
                 $beginning['beginningKey'] = $beginnings[$level]['key'];
-                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600, 'userId'=>$userId));
                 $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
                 break;
             }
