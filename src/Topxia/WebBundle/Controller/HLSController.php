@@ -125,7 +125,7 @@ class HLSController extends BaseController
         }
         
         $api = CloudAPIFactory::create();
-        
+
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
@@ -141,6 +141,7 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
+        return new Response('1234567890123456');
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
         if (empty($token)) {

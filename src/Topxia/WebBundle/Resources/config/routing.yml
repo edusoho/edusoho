@@ -134,6 +134,11 @@ uploader_finished:
     defaults: { _controller: TopxiaWebBundle:Uploader:finished }
     methods: [POST]
 
+uploader_processed:
+    pattern:  /uploader/processed
+    defaults: { _controller: TopxiaWebBundle:Uploader:processed }
+    # methods: [POST]
+
 uploader_batch_uplod:
     pattern:  /uploader/batch_upload
     defaults: { _controller: TopxiaWebBundle:Uploader:batchUpload }

@@ -46,7 +46,7 @@ class TokenServiceImpl extends BaseService implements TokenService
             $this->getTokenDao()->waveRemainedTimes($token['id'], -1);
         }
 
-        $this->_gcToken($token);
+        // $this->_gcToken($token);
 
         return $token;
     }

@@ -2,6 +2,7 @@
 namespace Topxia\Service\File\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor2;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -17,6 +18,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['targetId'] = $params['targetId'];
         $file['targetType'] = $params['targetType'];
         $file['storage'] = 'cloud';
+        $file['type'] = 'video';
+
+        // $file['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
 
         $file['updatedUserId'] = empty($params['userId']) ? 0 : $params['userId'];
         $file['updatedTime'] = time();
@@ -38,10 +42,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'bucket' => $file['bucket'],
             'fileName' => $file['filename'],
             'fileSize' => $file['size'],
+            'hashType' => $file['hashType'],
+            'hashValue' => $file['hashValue'],
             'callbackUrl' => '',
-            'processor' => '',
-            'processParams' => array(),
-            'extras' => array(),
+            'processor' => empty($file['processor']) ? '' : $file['processor'],
+            'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
+            'extras' => empty($file['extras']) ? '' : $file['extras'],
         );
 
         $api = CloudAPIFactory::create();

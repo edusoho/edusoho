@@ -25,7 +25,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             throw $this->createServiceException("用户未登录，上传初始化失败！");
         }
 
-        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType'))) {
+        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'bucket', 'hashType', 'hashValue'))) {
             throw $this->createServiceException("参数缺失，上传初始化失败！");
         }
 
@@ -37,6 +37,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $file = $this->getUploadFileDao()->addFile($implementor->prepareUpload($params));
 
         $file['bucket'] = $params['bucket'];
+        $file['hashType'] = $params['hashType'];
+        $file['hashValue'] = $params['hashValue'];
 
         $params = $implementor->initUpload($file);
 
@@ -52,37 +54,47 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
         }
 
-    	$file = $this->getUploadFileDao()->updateFile($file['id'], array('status' => 'ok'));
+    	$file = $this->getUploadFileDao()->updateFile($file['id'], array(
+            'status' => 'ok',
+            'convertStatus' => 'waiting',
+        ));
+    }
 
-        // $api = new CloudAPI(array(
-        //     'accessKey' => '111',
-        //     'secretKey' => '222',
-        //     'apiUrl' => 'http://api.pcloud.com',
-        //     'debug' => true,
-        // ));
+    public function setFileProcessed($params)
+    {
+        try {
 
-        // $logger = new Logger('CloudAPI');
-        // $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir') . '/cloud-api.log', Logger::DEBUG));
-        // $api->setLogger($logger);
+            $file = $this->getUploadFileDao()->getFileByGlobalId($params['globalId']);
 
+            $qulities = array('sd', 'hd', 'shd');
 
+            $metas = array();
 
-        // $task = array();
-        // $task['bucket'] = 'private';
-        // $task['key'] = '1.mp4';
-        // $task['processor'] = 'video';
-        // $task['directives'] = array(
-        //     'type' => 'cmccVideo',
-        // );
+            // UploadFileService2
+            // {"convertor":"HLSEncryptedVideo","segtime":10,"videoQuality":"low","audioQuality":"low"}
 
-        // $task['callbackUrl'] = '';
+            foreach ($params['data']['m3u8s'] as $index => $key) {
+                $metas[$qulities[$index]] = array(
+                    'type' => $qulities[$index],
+                    'cmd' => array('hlsKey' => '1234567890123456'),
+                    'key' => $key,
+                );
+            }
 
-        // $result = $api->post('/processes', $task);
+            $this->getUploadFileDao()->updateFile($file['id'], array(
+                'metas2' => json_encode($metas),
+                'convertStatus' => 'success',
+                'convertParams' => json_encode(array(
+                    'convertor' => 'HLSEncryptedVideo',
+                    'videoQuality' => 'low',
+                    'audioQuality' => 'low',
+                ))
+            ));
+        } catch (\Exception $e) {
+            $msg = $e->getMessage();
 
-        // var_dump($result);
-
-
-
+            file_put_contents('/tmp/error', $msg);
+        }
     }
 
     protected function getFileImplementor($file)
