@@ -232,7 +232,7 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting("course");
         if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
-            return $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
         $conditions = $request->query->all();
@@ -286,7 +286,7 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting("course");
         if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
-            return $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
