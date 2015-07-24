@@ -7,14 +7,14 @@
 
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-{% set shows = shows|default(['my']) %}
+{% set mode = mode|default(['my']) %}
   <thead>
     <tr>
       <th>名称</th>
       <th>创建时间</th>
       <th>状态</th>
       <th>实付(元)</th>
-      {% if 'admin' in shows or 'course' in shows %}
+      {% if mode in ['course', 'admin'] %}
         <th>购买者</th>
       {% endif %}
       <th>支付方式</th>
@@ -30,6 +30,8 @@
               <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
             {% elseif order.targetType == 'vip' %}
               <a href="{{ path('vip', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.targetType == 'classroom' %}
+              <a href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
             {% else %}
               <strong>{{order.title}}</strong>
             {% endif %}
@@ -39,7 +41,7 @@
           <td><span class="text-muted text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_text('orderStatus:html', order.status) }}</td>
           <td><span class="money-text">{{order.amount}}</span></td>
-          {% if 'admin' in shows or 'course' in shows %}
+          {% if mode in ['admin', 'course'] %}
             <td>
               {{ web_macro.user_link(buyer) }}
             </td>
@@ -54,10 +56,14 @@
             {% endif %}
           </td>
           <td>
-            {% if 'admin' in shows or 'course' in shows %}
-              <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('order_detail', {id:order.id}) }}">详情</a>
+            {% if 'admin' == mode  %}
+              <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">详情</a>
             {% endif %}
-            {% if 'my' in shows %}
+            {% if 'course' == mode %}
+            <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('course_order_detail', {id:order.id}) }}">详情</a>
+            {% endif %}
+
+            {% if 'my' == mode %}
               <div class="btn-group">
                 <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">详情</a> 
                 {% if order.status == 'refunding' or  order.status == 'created' %}

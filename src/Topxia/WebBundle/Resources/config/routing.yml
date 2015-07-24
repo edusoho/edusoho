@@ -307,6 +307,10 @@ course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
 
+course_order_detail:
+    pattern:  /course/order/{id}/detail
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:orderDetail }
+
 order_refund:
     pattern:  /target/{id}/order/refund
     defaults: { _controller: TopxiaWebBundle:OrderRefund:refund }
@@ -1639,10 +1643,6 @@ order_create:
     pattern:  /order/create
     defaults: { _controller: TopxiaWebBundle:Order:create }
     methods: [POST]
-
-order_detail:
-    pattern:  /order/{id}/detail
-    defaults: { _controller: TopxiaWebBundle:Order:detail }
 
 course_buy:
     pattern: /course/{id}/buy

@@ -65,7 +65,7 @@
 		</form>
 
 		<table class="table table-striped table-hover" id="order-table">
-	    	{% include 'TopxiaWebBundle:Order:order-table.html.twig' with {shows: ['course']} %}
+	    	{% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode:'course'} %}
 	  	</table>
 		{{ web_macro.paginator(paginator) }}
 	</div>
