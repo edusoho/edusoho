@@ -28,9 +28,9 @@
 
     <filter>
         <whitelist>
-            <directory>../src/Topxia/Service</directory>
+            <directory>../src/*/Service</directory>
             <exclude>
-                <directory>../src/Topxia/Service/*/Tests</directory>
+                <directory>../src/*/Service/*/Tests</directory>
             </exclude>
             <exclude>
                 <directory>../src/Component/*/Tests</directory>

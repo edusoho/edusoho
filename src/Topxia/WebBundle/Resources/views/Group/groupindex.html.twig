@@ -87,7 +87,7 @@
 {% endblock %}
 
 {% block group_side %}
-  <form action="{{path('group_search',{id:groupinfo.id})}}" method="get">
+  <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
   <div class="input-group group-search">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
