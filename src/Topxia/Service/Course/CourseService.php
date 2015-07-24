@@ -38,7 +38,7 @@ interface CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime);
     	
-    	public function analysisCourseSumByTime($endTime);
+    public function analysisCourseSumByTime($endTime);
 
 	public function findUserLearnCourses($userId, $start, $limit);
 
@@ -101,9 +101,6 @@ interface CourseService
 	/**
 	 * Lesson API
 	 */
-
-	public function getLesson($id);
-
 	public function findLessonsByIds(array $ids);
 
 	public function getCourseLesson($courseId, $lessonId);
@@ -189,6 +186,9 @@ interface CourseService
 	public function searchWatchTime($conditions);
 
 	public function checkWatchNum($userId, $lessonId);
+
+	public function waveWatchNum($userId, $lessonId, $diff);
+
 
 	/**
 	 * Chapter API

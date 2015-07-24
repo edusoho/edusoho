@@ -5,24 +5,10 @@
 
 {% set siteNav = '/' %}
 {% set bodyClass = 'indexpage' %}
-{# {% set script_controller = 'index' %} #}
+{% set script_controller = 'index' %} 
 
 {% block full_content %}
-  <div class="poster">
-
-    <div id="carousel" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators"></ol>
-      <div class="carousel-inner" role="listbox">
-        {{ block_show('mooc:home_top_banner') }}
-      </div>
-      <a class="left carousel-control hidden-xs" href="#carousel" role="button" data-slide="prev">
-        <span class="carousel-left"></span>
-      </a>
-      <a class="right carousel-control hidden-xs" href="#carousel" role="button" data-slide="next">
-        <span class="carousel-right"></span>
-      </a>
-    </div>
-  </div>
+  {{ block_show('mooc:home_top_banner') }}
 {# {% endblock %} #}
 
 {# {% block container %} #}

@@ -1,9 +1,9 @@
 {
-    "jianmo:home_top_banner":
+    "mooc:home_top_banner":
     {
-        "title": "默认主题：首页顶部.轮播图 ",
-        "category": "jianmo",
-        "templateName": "@theme/jianmo/block/carousel.template.html.twig",
+        "title": "慕课主题：首页顶部.轮播图 ",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/carousel.template.html.twig",
         "items": {
             "carousel1background":{
                 "title":"轮播图１背景颜色",
@@ -24,7 +24,7 @@
                 "type": "imglink",  
                 "default":[
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
+                        "src": "\/themes\/mooc\/img\/banner1.jpg",
                         "alt": "默认背景图１",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
@@ -83,7 +83,7 @@
                 "type": "img",  
                 "default":[
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_mac.png",
+                        "src": "\/themes\/mooc\/img\/banner1.jpg",
                         "alt": "默认轮播图1"
                     }
                 ]
@@ -107,7 +107,7 @@
                 "type": "imglink",  
                 "default":[
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
+                        "src": "\/themes\/mooc\/img\/banner2.png",
                         "alt": "默认背景图２",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
@@ -166,7 +166,7 @@
                 "type": "img",  
                 "default":[
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_mac.png",
+                        "src": "\/themes\/mooc\/img\/banner2.png",
                         "alt": "默认轮播图２"
                     }
                 ]
@@ -190,7 +190,7 @@
                 "type": "imglink",  
                 "default":[
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
+                        "src": "\/themes\/mooc\/img\/banner3.jpg",
                         "alt": "默认背景图３",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
@@ -249,18 +249,18 @@
                 "type": "img",  
                 "default":[
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_mac.png",
+                        "src": "\/themes\/mooc\/img\/banner3.jpg",
                         "alt": "默认轮播图３"
                     }
                 ]
             }
         }
     },
-    "jianmo:middle_banner":
+    "mooc:middle_banner":
     {
         "title": "默认主题：首页中部.横幅",
-        "category": "jianmo",
-        "templateName": "@theme/jianmo/block/middle_banner.template.html.twig",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/middle_banner.template.html.twig",
         "items": {
             "icon1":
             {   
@@ -369,11 +369,11 @@
             }
         }
     },
-    "jianmo:bottom_info":
+    "mooc:bottom_info":
     {
         "title": "默认主题: 首页底部.链接区域",
-        "category": "jianmo",
-        "templateName": "@theme/jianmo/block/bottom_info.template.html.twig",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/bottom_info.template.html.twig",
         "items": {
             "firstColumnText": {
                 "title": "第１列链接标题",

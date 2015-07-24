@@ -333,8 +333,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         if (!empty($fields['tags']) && !is_array($fields['tags'])) {
             $fields['tags'] = explode(",", $fields['tags']);
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
-        }else{
-            $article['tagIds'] = array();
         }
 
         if ($mode == 'add') {

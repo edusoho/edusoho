@@ -2,18 +2,98 @@
 {% import _self as header_macro %}
 {% do load_script('course/common') %}
 
-<div class="course-detail-header clearfix">
+{% if member and not member.locked %}
+  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-member.html.twig' %}
+{% elseif course.parentId|default(false) %}
+  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
+{% else %}
+  
+  {% include 'TopxiaWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+{% endif %}
+{% macro picture(course) %}
+  <div class="course-header-img">
+    <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"></a>
+  </div>
+{% endmacro %} 
+{% macro info(course, member) %}
+  {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+  <div class="course-header-info">
+    <div class="title clearfix">
+        <span><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></span>
+    </div>
+    <div class="content">{{course.subtitle}}</div>
+    <div class="metas">
+      <p class="student-num hidden-xs">
+        {% if course.showStudentNumType == 'opened' %}
+        <label for="">学员数</label><span>{{ course.studentNum }}</span>人
+        {% endif %}
+      </p> 
+      {% if not member %}
+        {% if course.expiryDay %}
+          <p class="expiry-date hidden-sm">
+            <label for="">有效期</label><span>{{ course.expiryDay }}天</span>
+          </p>
+        {% endif %}
+        <p class="discount-price">
+          {% if course.discountId == 0 %}
+            <label>价格</label>
+          {% else %}
+            <label>折后价</label>
+          {% endif %}
+          {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
+        </p>
+        {% if course.discountId > 0 %}
+          <p class="old-price hidden-sm">
+            <label>原价</label>
+            {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['originPrice']} %}
+          </p>
+          {% if course.discountObj|default(null) %}
+            <p class="activity">
+              <label>活动</label>
+              <span class="name">{{ course.discountObj.name }}</span>
+              <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted" data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"></span></span>
+            </p>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %} 
+{% macro favorite_btn(course, hasFavorited) %}
+  <li id="unfavorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="取消收藏" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
+    <a href="javascript:;" class="color-primary">
+      <p><i class="es-icon es-icon-bookmark"></i></p>
+     
+    </a>
+  </li>
+
+  <li id="favorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="收藏课程" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+    <a href="javascript:;">
+      <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
+ 
+    </a>
+  </li>
+{% endmacro %}
+
+{% macro share_btn(course) %}
+  <li>
+    <span class="es-share top">
+      <a class="dropdown-toggle" href="" data-toggle="dropdown">
+        <p><i class="es-icon es-icon-share"></i></p>
+ 
+      </a>
+      {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+    </span>
+  </li>
+{% endmacro %}
+{# <div class="course-detail-header clearfix">
     <div class="course-header-img">
       <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"></a>
     </div>
     <div class="course-hader-info">
       <div class="title clearfix">
         <span><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></span>
-        {% if is_granted('ROLE_ADMIN') %}
-          <a class="tooltop pull-right" href="{{ path('course_manage', {id:course.id}) }}" data-role="tooltip" title="课程管理" data-placement="top">
-          <i class="icon icon-setting"></i>
-          </a>
-        {% endif %}
+   
       </div>
       <div class="pull-rights">
         <div class="score"><span class="stars-{{ (course.rating)|number_format }}"></span> <span>{{ course.rating|number_format(1) }}</span>分（{{ course.ratingNum }}人评价）</div>
@@ -34,7 +114,7 @@
           <a class="btn btn-study gray">已报名,等待参加</a>
           <a class="btn btn-study little-gray">已结束</a> 
           #}
-          <div class="sns clearfix" id="es-sns">
+         {#  <div class="sns clearfix" id="es-sns">
             <span class="collect">
               <a class="tooltop" id="favorite-btn" href="javascript:;" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="收藏课程" data-placement="top">
                 <span class="collect-icon"></span>
@@ -62,7 +142,7 @@
         {% endif %}
         {% if not course.expiryDay == 0 %}
           <p class="expiry-date">有效期&nbsp;&nbsp;&nbsp;&nbsp;{{ course.expiryDay }}天</p>
-        {% endif %}
+        {% endif %} #}
         {# <p class="discount-price">
           <label>折后价&nbsp;&nbsp;&nbsp;&nbsp;</label>
           <span class="course-price-widget">
@@ -79,7 +159,12 @@
               <span class="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test</span>
               <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted" data-remaintime="">剩余 <span>00</span> 天 <span>23</span> 时 <span>24</span> 分 <span>12</span> 秒</span></span>
           </p>#}
-      </div> 
+    {#   </div> 
       
-    </div>
-</div>
+    </div> #}
+  {#   {% if is_granted('ROLE_ADMIN') %}
+    <a class="tooltop pull-right" href="{{ path('course_manage', {id:course.id}) }}" data-role="tooltip" title="课程管理" data-placement="top">
+     <i class="icon icon-setting"></i>
+    </a>
+    {% endif %} #}
+{# </div> #}

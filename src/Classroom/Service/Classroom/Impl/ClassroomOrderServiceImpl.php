@@ -130,7 +130,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $setting = $this->getSettingService()->get('refund');
             $message = ( empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
             if ($message) {
-                $classroom = $this->getClassroomService()->getClassroom($order["targetId"]);
+                $classroom = $this->getClassroomService()->getCourse($order["targetId"]);
                 $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
                 $variables = array(
                     'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
@@ -197,10 +197,5 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
     protected function getLogService()
     {
         return $this->createService('System.LogService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->createService('User.NotificationService');
     }
 }

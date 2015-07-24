@@ -25,7 +25,7 @@ class CourseLessonController extends BaseController
         $coinSetting = $this->getSettingService()->get('coin');
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
 
-        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0 && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
+        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0) {
             if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
                 || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
                 
@@ -261,8 +261,7 @@ class CourseLessonController extends BaseController
                         $user = $this->getCurrentUser();
                         $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
                         if ($watchStatus['status'] == 'error') {
-                            $wathcLimitTime = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
-                            $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
+                            $json['mediaError'] = "您的观看次数已经达到{$watchStatus['num']}次，最多只能看{$watchStatus['limit']}次。";
                         }
                     }
                 } else {
@@ -629,7 +628,7 @@ class CourseLessonController extends BaseController
         return false;
     }
 
-    public function listAction(Request $request, $courseId, $member, $previewUrl, $mode = 'full')
+    public function listAction(Request $request, $courseId, $member, $previewUrl)
     {
         $user = $this->getCurrentUser();
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
@@ -648,23 +647,15 @@ class CourseLessonController extends BaseController
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
         }
 
-        if ($this->setting('magic.lesson_watch_limit')) {
-            $lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $courseId);
-        } else {
-            $lessonLearns = array();
-        }
-
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
             'member' => $member,
             'previewUrl' => $previewUrl,
             'learnStatuses' => $learnStatuses,
-            'lessonLearns' => $lessonLearns,
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds,
-            'mode' => $mode,
+            'exercisesLessonIds' => $exercisesLessonIds
         ));
     }
 

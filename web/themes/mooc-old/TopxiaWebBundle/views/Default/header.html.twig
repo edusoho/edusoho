@@ -1,0 +1,84 @@
+  <header class="navbar">
+    <div class="container">
+      <div class="navbar-header">
+        {% if setting('site.logo') %}
+          <a class="navbar-brand" href="{{ path('homepage') }}">
+            <img src="{{ asset(setting('site.logo')) }}">
+          </a>
+        {% else %}
+          <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+        {% endif %}
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav class="collapse navbar-collapse clearfix" role="navigation">
+         <ul class="nav navbar-nav">
+        {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+         </ul>
+        <form class="navbar-form visible-lg" role="search" action="/search">
+          <div class="form-group">
+            <input type="text" class="form-control" name="q" placeholder="搜索课程">
+            <button type="submit" class="button"><span class="icon-search"></span></button>
+          </div>
+        </form>
+        {% if app.user %}
+        <div class="nav-user clearfix">
+          <div class="user">
+            <a href="{{ path('user_show', {id:app.user.id}) }}">
+              <img src="{{filepath(app.user.smallAvatar, 'avatar.png')}}" />
+              <span class="name">{{ app.user.nickname }}</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><span class="icons-user-1"></span><span>我的主页</span></a></li>
+              <li class="divider"></li>
+              <li><a href="{{ path('settings') }}"><span class="icons-user-2"></span><span>账号设置</span></a></li>
+              <li class="divider"></li>
+              {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('admin') }}"><span class="icons-user-3"></span><span>管理后台</span></a></li>
+                <li class="divider"></li>
+              {% endif  %}
+              <li><a href="{{ path('logout') }}"><span class="icons-user-4"></span><span>退出账户</span></a></li>
+            </ul>
+          </div>
+          <ul class="hidden-sm">
+            <li>
+              <a class="tooltop" href="{{ path('my') }}" data-toggle="tooltip" data-placement="bottom" title="课程">
+                <span class="icons-user-5"></span>
+              </a>
+            </li>
+      
+            <li>
+              <a class="tooltop" href="{{ path('message') }}" data-toggle="tooltip" data-placement="bottom" title="私信">
+                <span class="icons-user-6">
+                {% if app.user.newMessageNum > 0 %}
+                  <span class="message">{{ app.user.newMessageNum }}</span> 
+                {% endif %}
+                </span>
+              </a>
+            </li>
+
+            <li>
+              <a class="tooltop" href="{{ path('notification') }}" data-toggle="tooltip" data-placement="bottom" title="通知">
+                <span class="icons-user-7"> 
+                  {% if app.user.newNotificationNum > 0 %}
+                    <span class="message">{{ app.user.newNotificationNum }}</span>
+                  {% endif %}
+                </span>
+              </a>
+            </li>
+
+          </ul> 
+        </div>
+      {% else %}
+        <ul class="login-menu">
+          <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+          <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+        </ul>
+      {% endif %}
+      </nav>
+    </div>
+  </header>
