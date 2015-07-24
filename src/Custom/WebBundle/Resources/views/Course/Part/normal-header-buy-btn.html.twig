@@ -1,24 +1,40 @@
-<a class="btn btn-primary btn-lg btn-high" 
-  {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
-    href="#modal" 
-    data-toggle="modal" 
-    data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-  {% elseif userVipStatus == 'ok' %}
-    id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
-  {% else %}
-    href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-  {% endif %}
-  {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
-    disabled="disabled"
-  {% endif %}
->
-  {% if userVipStatus == 'ok' %}
-    加入学习
-  {% else %}
-    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-      {% if course.coinPrice > 0 %}购买课程{% else %}加入学习{% endif %}</a>                
+{% if course.type!='periodic' %}
+  <a class="btn btn-study"
+    {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
+      href="#modal" 
+      data-toggle="modal" 
+      data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+    {% elseif userVipStatus == 'ok' %}
+      id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
     {% else %}
-      {% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
+      href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
     {% endif %}
-  {% endif %}
-</a>
+    {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      disabled="disabled"
+    {% endif %}
+  >
+    {%set useCoin=(setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'  ? true : false)%}
+
+    {% if userVipStatus == 'ok' %}
+      加入学习
+    {% else %}
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {% if course.coinPrice > 0 %}购买课程{% else %}加入学习{% endif %}</a>                
+      {% else %}
+        {% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}</a>
+      {% endif %}
+    {% endif %}
+  </a>
+{% else %}
+    {% if "now"|date('U') > course.endTime %}
+      <a class="btn btn-study little-gray" disabled="disabled">已结束</a> 
+    {% elseif "now"|date('U') >= course.startTime %}
+      <a class="btn btn-study">加入学习</a> 
+    {% else %}
+      <a class="btn btn-study" href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}">报名参加</a> 
+    {% endif %}
+{% endif %}
+    {# {% elseif num==2%}
+            <a class="btn btn-study">继续学习</a> 
+    {% elseif  num==3%}
+            <a class="btn btn-study gray">已报名,等待参加</a> #}

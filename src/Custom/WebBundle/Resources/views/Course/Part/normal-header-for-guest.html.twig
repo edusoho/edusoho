@@ -29,7 +29,7 @@
         </li>
       {% endif %}
     </ul>
-    <div class="buy">
+    <div class="study clearfix">
       {% if source|default("") == "classroom" %}
         {{ render(controller('TopxiaWebBundle:Part/Course:classroomInfo',{courseId: course.id})) }}
       {% else %}
