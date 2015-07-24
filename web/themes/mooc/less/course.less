@@ -92,13 +92,18 @@
       padding: 15px;
     }
     .title {
+      max-width: 450px;
       margin: 0 0 10px 0;
       font-size: 20px;
       color: @title-color;
       .text-overflow;
+      @media  (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        max-width: 330px;
+      }
       @media  (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
         font-size: 16px;
-        margin: 0 0 20px 0;
+        max-width: 250px;
+        margin: 0 0 10px 0;
       }
       @media  (max-width: @screen-xs-max) {
         font-size: 16px;
@@ -144,14 +149,20 @@
       color: #fff;
       text-align: center;
       @media  (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-        padding: 31px 30px;
+        padding: 32px 20px;
+        font-size: 24px;
+
       }
       @media  (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-        padding: 22px 20px;
+       padding: 48px 5px;
+        height: 120px;
+        font-size: 22px;
       }
       @media  (max-width: @screen-xs-max) {
-        padding: 30px 5px;
-        height: 120px;
+         font-size: 14px;
+          height: 120px;
+          padding: 48px 5px;
+
       }
       &:hover {
         background-color: #13c980;
@@ -172,12 +183,43 @@
       }
     }
   }
-   .content{
-        margin-bottom: 10px;
-   }
+  .content{
+    margin-bottom: 10px;
+  }
   .metas{
     font-size: 12px;
     color: #919191;
+  }
+  .course-data{
+    padding: 0;
+    display: inline-block;
+    position: absolute;
+    right: 325px;
+    top: 12px;
+    text-align: center;
+    @media (max-width: @screen-lg-min) {
+      right: 268px;
+    }
+    @media (max-width: @screen-md-min) {
+      right: 200px;
+    }
+    @media (max-width: @screen-sm-min) {
+      top:auto;
+      bottom: 64px;
+    }
+     @media (max-width: @screen-xs-min) {
+      top:auto;
+      bottom: 64px;
+      right:108px;
+    }
+    @media (max-width:320px) {
+      right: 92px;
+    }
+    li{
+      font-size: 12px;
+      display: inline-block;
+      margin: 0 3px;
+    }
   }
 }
 

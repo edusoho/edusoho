@@ -63,14 +63,14 @@
   <li id="unfavorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="取消收藏" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
     <a href="javascript:;" class="color-primary">
       <p><i class="es-icon es-icon-bookmark"></i></p>
-      <p>已收藏</p>
+     
     </a>
   </li>
 
   <li id="favorite-btn" data-toggle="tooltip" data-placement="top" data-original-title="收藏课程" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
     <a href="javascript:;">
       <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
-      <p>收藏</p>
+ 
     </a>
   </li>
 {% endmacro %}
@@ -80,7 +80,7 @@
     <span class="es-share top">
       <a class="dropdown-toggle" href="" data-toggle="dropdown">
         <p><i class="es-icon es-icon-share"></i></p>
-        <p>分享</p>
+ 
       </a>
       {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
     </span>
