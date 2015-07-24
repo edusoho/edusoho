@@ -84,7 +84,7 @@
 
 
   <fieldset>
-    <legend>QQ群设置</legend>
+    <legend>QQ群设置<a target="_blank" href="http://qun.qq.com/join.html">获取QQ群直接加入网页代码</a></legend>
     <div id="consult-qqgroup">
       {% for qqgroup in consult.qqgroup %}
       <div class="row form-group has-feedback">
@@ -95,7 +95,7 @@
           <input type="text" name="qqgroup[{{loop.index0}}][number]" class="form-control" value="{{qqgroup.number}}" placeholder="QQ群号">
         </div>
         <div class="controls col-md-4">
-          <input type="text" name="qqgroup[{{loop.index0}}][url]" class="form-control" value="{{qqgroup.url|default('')}}" placeholder="QQ官方生成地址(选填)">
+          <input type="text" name="qqgroup[{{loop.index0}}][url]" class="form-control" value="{{qqgroup.url|default('')}}" placeholder="QQ群直接加入网页代码(选填)">
           {% if loop.index0 > 0 %}
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
           {% endif %}
