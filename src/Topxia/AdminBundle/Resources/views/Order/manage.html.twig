@@ -44,24 +44,7 @@
   </form>
       
   <table class="table table-striped table-hover" id="order-table">
-    <thead>
-      <tr>
-        <th width="50%">名称</th>
-        <th>状态</th>
-        <th>实付(元)</th>
-        <th>购买者</th>
-        <th>支付方式</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for order in orders %}
-        {% set buyer = users[order.userId]|default(null) %}
-        {% include 'TopxiaAdminBundle:Order:tr.html.twig' %}
-      {% else %}
-        <tr><td colspan="20"><div class="empty">暂无订单记录</div></td></tr>
-      {% endfor %}
-    </tbody>
+    {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {shows: ['admin']} %}
   </table>
 
   <div class="paginator">
