@@ -37,7 +37,12 @@ class EsBarController extends BaseController{
         );
         $sort = array('createdTime','DESC');
         $members = $this->getCourseService()->searchMembers($conditions,$sort,0,15);
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courseConditions = array(
+            'courseIds' => $courseIds,
+            'parentId' => 0
+        );
+        $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 5);
+        $courses = ArrayToolkit::index($courses, 'id');
         $sortedCourses = array();
         if(!empty($courses)){
             foreach ($members as $member) {
@@ -246,7 +251,7 @@ class EsBarController extends BaseController{
             );
             $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 5);
             $courses = ArrayToolkit::index($courses, 'id');
-            
+
             foreach ($courseMem as $member) {
                 if (empty($courses[$member['courseId']])) {
                     continue;
