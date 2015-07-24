@@ -3,5 +3,16 @@
 {% block content %}
 {{ load_script('course/common') }}
 {{ header_macro.picture(course) }}
+
  {{ header_macro.info(course, member) }}
+  <div class="progress progress-sm">
+    <div class="progress-bar" role="progressbar" style="width: {{ learnProgress.percent }}" data-toggle="tooltip" data-placement="right" title="{{ learnProgress.percent }}">
+    </div>
+  </div>
+
+  <div class="course-btn-join">
+    {% if nextLearnLesson %}
+      <a class="" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
+    {% endif %}
+  </div>
 {% endblock %}	

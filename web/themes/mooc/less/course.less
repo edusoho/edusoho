@@ -42,9 +42,9 @@
   }
 }
 .course-detail-header-join {
-  // margin-bottom: 18px;
+  margin-bottom: 18px;
   background-color: #fff;
-
+  position: relative;
   // overflow: hidden;
   @media (min-width: @screen-lg-min) {
     height: 142px;
@@ -54,6 +54,11 @@
   }
   @media  (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
     height: 101px;
+  }
+   >.tooltop {
+        position: absolute;
+        right: -13px;
+        top: -15px;
   }
   .course-header-img {
     float: left;
@@ -87,7 +92,7 @@
       padding: 15px;
     }
     .title {
-      margin: 0 0 30px 0;
+      margin: 0 0 10px 0;
       font-size: 20px;
       color: @title-color;
       .text-overflow;
@@ -133,7 +138,8 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: 36px 30px;
+      padding: 43px 30px;
+      font-size: 36px;
       background-color: #2fdb96;
       color: #fff;
       text-align: center;
@@ -153,6 +159,7 @@
       span {
         display: block;
       }
+
       .text-study {
         font-size: 28px;
         margin-bottom: 10px;
@@ -164,6 +171,13 @@
         }
       }
     }
+  }
+   .content{
+        margin-bottom: 10px;
+   }
+  .metas{
+    font-size: 12px;
+    color: #919191;
   }
 }
 
@@ -906,54 +920,5 @@
   }
 }
 
-.progress.es-progress {
-  margin-bottom: 18px;
-  border-radius: 0;
-  height: 10px;
-  line-height: 10px;
-  overflow: inherit;
-  background-color: #f5f5f5;
-  -webkit-box-shadow: inset 1px 0 3px 1px rgba(132,132,132,.13);
-  -moz-box-shadow: inset 1px 0 3px 1px rgba(132,132,132,.13);
-  box-shadow: inset 1px 0 3px 1px rgba(132,132,132,.13);
-  &:hover .progress-data {
-    display: block;
-  }
-  .progress-bar {
-    position: relative;
-  }
-  .progress-data {
-    position: absolute;
-    display: none;
-    bottom: 150%;
-    right: -20px;
-    background-color: @color-primary;
-    padding: 1px 10px;
-    font-size: 12px;
-    &:after {
-      top: 100%;
-      left: 50%;
-      border: solid transparent;
-      content: " ";
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-      border-color: rgba(16, 182, 124, 0);
-      border-top-color: #10b67c;
-      border-width: 3px;
-      margin-left: -3px;
-    }
-  }
-  .progress-bar-success {
-    background-color: @color-primary;
-  }
-  .progress-bar-striped {
-    background-image: -o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    -webkit-background-size: 40px 40px;
-    background-size: 40px 40px;
-  }
-}
+
 
