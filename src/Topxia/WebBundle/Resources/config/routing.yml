@@ -1158,7 +1158,7 @@ my_order_cancel:
     methods: [POST]
 
 web_user_order_detail:
-    pattern: /myorder/{id}/detail
+    pattern: /my/order/{id}/detail
     defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
 
 my_order_cancel_refund:
