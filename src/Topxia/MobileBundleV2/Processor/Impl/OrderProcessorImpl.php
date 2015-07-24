@@ -190,6 +190,19 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $order;
     }
 
+
+    private function checkUserSetPayPassword($user, $newPayPassword)
+    {
+        $hasPayPassword = strlen($user['payPassword']) > 0;
+
+        if ($hasPayPassword){
+            return;
+        }
+
+        $userPass = $user["nickname"];
+        $this->controller->getAuthService()->changePayPassword($user['id'], $userPass, $newPayPassword);
+    }
+
     public function createOrder()
     {
         $targetType = $this->getParam('targetType');
@@ -218,6 +231,11 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
 
         if ($payment == "coin") {
+            try {
+                $this->checkUserSetPayPassword($user, $fields["payPassword"]);
+            } catch(\Exception $e) {
+                return $this->createErrorResponse('error', "修改失败");
+            }
             $fields["coinPayAmount"] = (float) $fields['totalPrice'] * (float) $cashRate;
         }
 
