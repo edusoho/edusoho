@@ -77,9 +77,6 @@ class EsBarController extends BaseController{
         $members = $this->getClassroomService()->searchMembers($memberConditions,$sort,0,15);
 
         $classroomIds = ArrayToolkit::column($members,'classroomId');
-        $classroomConditions = array(
-            'classroomIds' => $classroomIds
-        );
         $classrooms = array();
         $sortedClassrooms = array();
         if(!empty($classroomIds)){
