@@ -30,7 +30,10 @@ class EsBarController extends BaseController{
             $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
         $conditions = array(
-            'userId' => $user->id
+            'userId' => $user->id,
+            'locked' => 0,
+            'classroomId' => 0,
+            'role' => 'student'
         );
         $sort = array('createdTime','DESC');
         $courseIds = ArrayToolkit::column($this->getCourseService()->searchMembers($conditions,$sort,0,100),'courseId');
@@ -64,6 +67,7 @@ class EsBarController extends BaseController{
         $memberConditions = array(
             'userId' => $user->id,
             'locked' => 0,
+            'role' => 'student'
         );
         $sort = array('createdTime','DESC');
         $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
