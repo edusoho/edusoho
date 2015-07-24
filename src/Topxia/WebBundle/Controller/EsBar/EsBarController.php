@@ -37,11 +37,12 @@ class EsBarController extends BaseController{
         );
         $sort = array('createdTime','DESC');
         $members = $this->getCourseService()->searchMembers($conditions,$sort,0,15);
+        $courseIds =  ArrayToolkit::column($members,'courseId');
         $courseConditions = array(
             'courseIds' => $courseIds,
             'parentId' => 0
         );
-        $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 5);
+        $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 15);
         $courses = ArrayToolkit::index($courses, 'id');
         $sortedCourses = array();
         if(!empty($courses)){
