@@ -36,25 +36,28 @@ class EsBarController extends BaseController{
             'role' => 'student'
         );
         $sort = array('createdTime','DESC');
-        $courseIds = ArrayToolkit::column($this->getCourseService()->searchMembers($conditions,$sort,0,100),'courseId');
-        $courses = array();
-        if(!empty($courseIds)){
-            $courseConditions = array(
-                'courseIds' => $courseIds
-            );
-            $courses = $this->getCourseService()->searchCourses($courseConditions,'hitNum',0,100);
-            foreach($courses as &$course) {
-                $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $members = $this->getCourseService()->searchMembers($conditions,$sort,0,15);
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $sortedCourses = array();
+        if(!empty($courses)){
+            foreach ($members as $member) {
+                if (empty($courses[$member['courseId']])) {
+                    continue;
+                }
+                $course = $courses[$member['courseId']];
+
                 if( $course['lessonNum'] != 0) {
                     $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
                 }else{
                     $course['percent'] = 0;
                 }
+
+                $sortedCourses[] = $course;
             }
         }
 
         return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-course.html.twig", array(
-            'courses' => $courses,
+            'courses' => $sortedCourses,
         ));
     }
 
@@ -70,16 +73,30 @@ class EsBarController extends BaseController{
             'role' => 'student'
         );
         $sort = array('createdTime','DESC');
-        $classroomIds = ArrayToolkit::column($this->getClassroomService()->searchMembers($memberConditions,$sort,0,5),'classroomId');
+
+        $members = $this->getClassroomService()->searchMembers($memberConditions,$sort,0,15);
+
+        $classroomIds = ArrayToolkit::column($members,'classroomId');
         $classroomConditions = array(
             'classroomIds' => $classroomIds
         );
         $classrooms = array();
+        $sortedClassrooms = array();
         if(!empty($classroomIds)){
-            $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions,$sort,0,100);
+            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
         }
+
+        foreach ($members as $member) {
+            if (empty($classrooms[$member['classroomId']])) {
+                continue;
+            }
+            $classroom = $classrooms[$member['classroomId']];
+
+            $sortedClassrooms[] = $classroom;
+        }
+
         return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyPlace/my-classroom.html.twig", array(
-            'classrooms' => $classrooms
+            'classrooms' => $sortedClassrooms
         ));
     }
 
