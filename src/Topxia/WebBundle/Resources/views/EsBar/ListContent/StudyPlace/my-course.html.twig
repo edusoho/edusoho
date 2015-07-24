@@ -4,7 +4,9 @@
 {% if courses %}
   <!-- 课程 -->
   <div class="course-list">
+    {% set courseCount = 15 %}
     {% for course in courses %}
+      {% set courseCount = loop.length %}
       <div class="course-item">
         <div class="course-img">
           <a target="_blank" href="{{ path('course_show', {id:course.id}) }}">
@@ -24,6 +26,9 @@
         </div>
       </div>
     {% endfor %}
+    {% if courseCount >= 15 %}
+      <p class="text-center"><a class="link-light" href="{{ path('my_courses_learning') }}" target="_blank">更多</a></p>
+    {% endif %}
   </div>
 {% endif %}
 {% endblock %}

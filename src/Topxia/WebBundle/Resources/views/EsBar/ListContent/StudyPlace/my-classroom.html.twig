@@ -6,7 +6,9 @@
 
   <!-- 班级 -->
   <div class="recommend-class-list">
+    {% set classroomCount = 15 %}
     {% for classroom in classrooms %}
+      {% set classroomCount = loop.length %}
       <div class="class-item">
         <a target="_blank" href="{{ path('classroom_show',{id:classroom.id}) }}">
           <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
@@ -15,6 +17,9 @@
         </a>
       </div>
     {% endfor %}
+    {% if classroomCount >= 15 %}
+      <p class="text-center"><a class="link-light" href="{{ path('my_classrooms') }}" target="_blank">更多</a></p>
+    {% endif %}
   </div>
 {% endif %}
 {% endblock %}

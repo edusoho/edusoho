@@ -96,7 +96,8 @@ class SiteSettingController extends BaseController
         if($request->getMethod() == 'POST'){
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
-
+            $this->getLogService()->info('system', 'update_settings', "更新侧边栏设置", $esBar);
+            $this->setFlashMessage('success', '侧边栏设置已保存！');
         }
         return $this->render('TopxiaAdminBundle:System:esbar-setting.html.twig',array(
             'esBar' => $esBar
