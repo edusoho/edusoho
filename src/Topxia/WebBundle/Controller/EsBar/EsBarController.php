@@ -13,9 +13,9 @@ class EsBarController extends BaseController{
             $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
-        $classrooms = $this->getStudyMissonClassrooms();
+        $classrooms = $this->getClassroomStudyMissions();
 
-        $courses = $this->getStudyMissonCourses();
+        $courses = $this->getCourseStudyMissions();
 
         return $this->render("TopxiaWebBundle:EsBar:ListContent/StudyCenter/study-mission.html.twig", array(
             'classrooms' => $classrooms,
@@ -230,7 +230,7 @@ class EsBarController extends BaseController{
         return $history;
     }*/
 
-    private function getStudyMissonCourses()
+    private function getCourseStudyMissions()
     {
         $user = $this->getCurrentUser();
 
@@ -302,7 +302,7 @@ class EsBarController extends BaseController{
         return $sortedCourses;
     }
 
-    private function getStudyMissonClassrooms()
+    private function getClassroomStudyMissions()
     {
         $user = $this->getCurrentUser();
 
