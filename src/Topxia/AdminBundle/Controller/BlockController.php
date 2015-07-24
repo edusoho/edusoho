@@ -10,7 +10,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\BlockToolkit;
-use Topxia\Common\StringToolkit;
 
 class BlockController extends BaseController
 {
@@ -193,7 +192,7 @@ class BlockController extends BaseController
             $item['default'] = $block['data'][$key];
         }
        
-        return new Response('<pre>' . StringToolkit::jsonPettry(json_encode($block['meta'], JSON_UNESCAPED_UNICODE)) . '</pre>');
+        return new Response('<pre>' . json_encode($block['meta'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . '</pre>');
     }
 
     public function visualHistoryAction(Request $request, $blockId)
@@ -292,6 +291,7 @@ class BlockController extends BaseController
             $block = $this->getBlockService()->getBlock($blockId);
 
             $url = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+            $url = ltrim($url, '/');
 
             $response = array(
                 'url' => $url,

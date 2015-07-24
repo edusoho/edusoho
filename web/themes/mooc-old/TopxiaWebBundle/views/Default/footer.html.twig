@@ -1,0 +1,31 @@
+ <footer class="footer">
+    <div class="container">
+      <ul class="contact clearfix">
+        <li class="clearfix"> 
+        {#   <img src="{{asset('themes/mooc/img/footer_logo.png')}}" alt=""> #}
+
+        {% if setting('site.logo') %}
+          <a href="{{ path('homepage') }}">
+            <img src="{{ asset(setting('site.logo')) }}">
+          </a>
+        {% else %}
+          <a href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+        {% endif %}
+
+        </li>
+        <li class="footer-line"></li>
+        <li class="phone clearfix">
+          <img src="{{asset('themes/mooc/img/icon_phone.png')}}" alt="">0571-8681-9929
+        </li>
+        <li class="footer-line"></li>
+        <li class="mail clearfix">
+          <img src="{{ asset('themes/mooc/img/icon_mail.png') }}"  alt="">
+          {{ setting('site.master_email')|default('support@edusoho.com') }}
+        </li>
+      </ul>
+      <div class="copyright">
+        课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有&nbsp;{{ setting('site.icp') }}
+        {{ setting('site.analytics')|raw }}
+      </div>
+    </div>
+  </footer>

@@ -34,18 +34,13 @@
       <ul class="nav user-nav">
         {% if app.user %}
         <li class="user-avatar-li nav-hover">
-          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+          <a href="{{ path('user_show', {id:app.user.id}) }}" class="dropdown-toggle">
             <img class="avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>个人主页</a></li>
             <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
-            <li class="visible-xs">
-              <a href="{{ path('my') }}">
-                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}教学中心{% else %}学习中心{% endif %}
-              </a>
-            </li>
             <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
             {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>管理后台</a></li>
             {% endif %}
@@ -87,7 +82,7 @@
         </li>
         {% else %}
         <li class="user-avatar-li nav-hover visible-xs">
-          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+          <a href="javascript:;" class="dropdown-toggle">
             <img class="avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">

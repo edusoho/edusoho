@@ -1,0 +1,36 @@
+ {% do load_script('category/nav') %}
+{% set nextCode = '' %}
+ <div class="course-screening clearfix">
+    <div class="title">学科分类:</div>
+    <div class="class-tab">
+      <div class="options clearfix">
+        <a class="{% if category == '' %}active{% endif %}" href="{{ path(path, {category:'',fliter:fliter,orderBy:orderBy}) }}">全部</a>
+           {% for cateogory in rootCategories %}
+            <a class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %} clearfix" href="{{ path(path, {category:cateogory.code,fliter:fliter,orderBy:orderBy}) }}">
+              {{ cateogory.name }}
+            </a>
+        {% endfor %}
+
+      </div>
+      {% if categories %}
+        
+          {% for l,cs in categories if cs %}
+            <div class="tab-content">
+          <div class="tab-pane active">
+            <ul class="clearfix">
+               {% for c in cs %}
+                {% if loop.index == 1 %}
+                  {% endif %}
+                  <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}">
+                    <a href="{{ path(path, {category:nextCode,fliter:fliter,orderBy:orderBy}) }}">
+                    {{ c.name }}
+                    </a>
+                  </li>
+              {% endfor %}
+            </ul> 
+          </div>
+          {% endfor %}
+        </div>
+       {% endif %}
+    </div>
+  </div>

@@ -42,8 +42,9 @@
   }
 }
 .course-detail-header-join {
-  // margin-bottom: 18px;
+  margin-bottom: 18px;
   background-color: #fff;
+  position: relative;
   // overflow: hidden;
   @media (min-width: @screen-lg-min) {
     height: 142px;
@@ -53,6 +54,11 @@
   }
   @media  (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
     height: 101px;
+  }
+   >.tooltop {
+        position: absolute;
+        right: -13px;
+        top: -15px;
   }
   .course-header-img {
     float: left;
@@ -70,7 +76,7 @@
       width: 100%;
     }
   }
-  .course-hader-info {
+  .course-header-info {
     float: left;
     width: 55%;
     padding: 15px 30px;
@@ -86,13 +92,18 @@
       padding: 15px;
     }
     .title {
-      margin: 0 0 30px 0;
+      max-width: 450px;
+      margin: 0 0 10px 0;
       font-size: 20px;
       color: @title-color;
       .text-overflow;
+      @media  (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        max-width: 330px;
+      }
       @media  (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
         font-size: 16px;
-        margin: 0 0 20px 0;
+        max-width: 250px;
+        margin: 0 0 10px 0;
       }
       @media  (max-width: @screen-xs-max) {
         font-size: 16px;
@@ -132,19 +143,26 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: 36px 30px;
+      padding: 43px 30px;
+      font-size: 36px;
       background-color: #2fdb96;
       color: #fff;
       text-align: center;
       @media  (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-        padding: 31px 30px;
+        padding: 32px 20px;
+        font-size: 24px;
+
       }
       @media  (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-        padding: 22px 20px;
+       padding: 48px 5px;
+        height: 120px;
+        font-size: 22px;
       }
       @media  (max-width: @screen-xs-max) {
-        padding: 30px 5px;
-        height: 120px;
+         font-size: 14px;
+          height: 120px;
+          padding: 48px 5px;
+
       }
       &:hover {
         background-color: #13c980;
@@ -152,6 +170,7 @@
       span {
         display: block;
       }
+
       .text-study {
         font-size: 28px;
         margin-bottom: 10px;
@@ -164,11 +183,50 @@
       }
     }
   }
+  .content{
+    margin-bottom: 10px;
+  }
+  .metas{
+    font-size: 12px;
+    color: #919191;
+  }
+  .course-data{
+    padding: 0;
+    display: inline-block;
+    position: absolute;
+    right: 325px;
+    top: 12px;
+    text-align: center;
+    @media (max-width: @screen-lg-min) {
+      right: 268px;
+    }
+    @media (max-width: @screen-md-min) {
+      right: 200px;
+    }
+    @media (max-width: @screen-sm-min) {
+      top:auto;
+      bottom: 64px;
+    }
+     @media (max-width: @screen-xs-min) {
+      top:auto;
+      bottom: 64px;
+      right:108px;
+    }
+    @media (max-width:320px) {
+      right: 92px;
+    }
+    li{
+      font-size: 12px;
+      display: inline-block;
+      margin: 0 3px;
+    }
+  }
 }
 
 .course-detail-header {
   margin-bottom: 18px;
   background-color: #fff;
+
   @media (min-width: @screen-lg-min) {
     height: 270px;
   }
@@ -194,7 +252,7 @@
       width: 100%;
     }
   }
-  .course-hader-info {
+  .course-header-info {
     float: left;
     width: 57.9%;
     padding: 15px 30px;
@@ -203,10 +261,13 @@
     }
     @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
       width: 55%;
-    }
+          }
     @media (max-width: @screen-xs-max) {
       width: 100%;
+      height: 180px;
+
     }
+   
     .title {
       margin: 0 0 20px 0;
       line-height: 35px;
@@ -214,7 +275,7 @@
       color: @title-color;
       @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
         font-size: 20px;
-        margin-bottom: 15px;
+        margin-bottom: 0;
       }
       @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
         font-size: 18px;
@@ -224,9 +285,7 @@
         font-size: 18px;
         margin-bottom: 15px;
       }
-      .tooltop {
-        height: 35px;
-      }
+    
       span {
         float: left;
         width: 80%;
@@ -234,12 +293,12 @@
       }
     }
     .content {
-      margin-bottom: 25px;
+      margin-bottom: 4px;
       color: #999;
       height: 40px;
       overflow: hidden;
       @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-        margin-bottom: 15px;
+       margin-bottom: 0;
       }
       @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
         margin-bottom: 10px;
@@ -249,22 +308,33 @@
       }
     }
   }
-  .score {
-    margin-bottom: 10px;
-    span {
-      color: @color-assist;
-    }
+  >.tooltop {
+        position: absolute;
+        right: -13px;
+        top: -15px;
   }
-  .student-num {
+  .score {
     margin-bottom: 15px;
     span {
       color: @color-assist;
     }
   }
+
+  .student-num {
+    margin-bottom: 15px;
+    span {
+      font-size: 16px;
+      color: @color-assist;
+    }
+    p{
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+  }
   .study {
     .btn-study {
       float: left;
-      background-color: #24d18c;
+     background-color: #24d18c;
       color: #fff;
       font-size: 16px;
       padding: 10px 70px;
@@ -280,11 +350,34 @@
         padding: 5px 30px;
       }
     }
+    .gray{
+      background-color: @gray;
+      padding: 10px 45px;
+      &:hover{
+        background-color: @gray;
+        cursor: default;
+      }
+    }
+    .little-gray{
+      padding: 10px 78px;
+      background-color: @little-gray;
+      &:hover{
+        background-color: @little-gray;
+        cursor: default;
+      }
+    }
+
     .sns {
-      float: right;
-      margin-top: 10px;
-      @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-        margin-top: 6px;
+      position: relative;
+      top: -228px;
+      right: -70px;
+      height: 0;
+      @media (max-width: @screen-lg-min) {
+       top: -172px;
+      }
+      @media (max-width: @screen-sm-max) {
+        top: 6px;
+        right: -9px;
       }
       .es-share {
         float: left;
@@ -316,6 +409,24 @@
       }
     }
   }
+  .pull-rights{
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+     @media (max-width: @screen-lg-min) {
+        bottom: 22px;
+      }
+      @media (max-width: @screen-sm-max) {
+        right: auto;
+        left: 349px;
+        bottom: 8px;
+      }
+       @media (max-width: @screen-xs-max) {
+        right: auto;
+        left: 30px;
+        bottom: 8px;
+      }
+    }
 }
 
 .course-about {
@@ -616,6 +727,49 @@
       }
     }
   }
+  &.open-class{
+    .panel-body{
+      padding: 0;
+    }
+    ul{
+      padding-top: 15px;
+       border-bottom: 1px dashed @little-gray;
+     
+    }
+    li{
+      display: inline-block;
+      width: 59%;
+      margin-bottom: 15px;
+     
+     
+    }
+    .first{
+      width: 39%;
+      text-align: center;
+      font-size: 13px;
+      color: #ff854a;
+     border-right: 1px solid @little-gray;
+      span{
+        font-size: 24px;
+      }
+
+    }
+    .last{
+      font-size: 12px;
+      padding-left: 6px;
+      color: @font-color;
+    }
+    .red{
+      color:#e74c3c;
+      font-size: 16px;
+      height: 36px;
+      line-height: 60px;
+      text-align: center;
+    }
+    .gray{
+      color: @gray;
+    }
+  }
 }
 
 
@@ -808,54 +962,5 @@
   }
 }
 
-.progress.es-progress {
-  margin-bottom: 18px;
-  border-radius: 0;
-  height: 10px;
-  line-height: 10px;
-  overflow: inherit;
-  background-color: #f5f5f5;
-  -webkit-box-shadow: inset 1px 0 3px 1px rgba(132,132,132,.13);
-  -moz-box-shadow: inset 1px 0 3px 1px rgba(132,132,132,.13);
-  box-shadow: inset 1px 0 3px 1px rgba(132,132,132,.13);
-  &:hover .progress-data {
-    display: block;
-  }
-  .progress-bar {
-    position: relative;
-  }
-  .progress-data {
-    position: absolute;
-    display: none;
-    bottom: 150%;
-    right: -20px;
-    background-color: @color-primary;
-    padding: 1px 10px;
-    font-size: 12px;
-    &:after {
-      top: 100%;
-      left: 50%;
-      border: solid transparent;
-      content: " ";
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-      border-color: rgba(16, 182, 124, 0);
-      border-top-color: #10b67c;
-      border-width: 3px;
-      margin-left: -3px;
-    }
-  }
-  .progress-bar-success {
-    background-color: @color-primary;
-  }
-  .progress-bar-striped {
-    background-image: -o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-    -webkit-background-size: 40px 40px;
-    background-size: 40px 40px;
-  }
-}
+
 

@@ -71,13 +71,6 @@ class UserController extends BaseController
         return $this->validateResult($result, $message);
     }
 
-    public function mobileCheckAction(Request $request){
-        $mobile = $request->query->get('value');
-        $mobile = str_replace('!', '.', $mobile);
-        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
-        return $this->validateResult($result, $message);
-    }
-
     public function nicknameCheckAction(Request $request)
     {
         $nickname = $request->query->get('value');
@@ -128,9 +121,6 @@ class UserController extends BaseController
         if(isset($formData['emailOrMobile'])){
             $userData['emailOrMobile'] = $formData['emailOrMobile'];
         }
-        if(isset($formData['mobile'])){
-            $userData['mobile'] = $formData['mobile'];
-        }
         $userData['nickname'] = $formData['nickname'];
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
@@ -141,8 +131,6 @@ class UserController extends BaseController
         $auth = $this->getSettingService()->get('auth');
         if(isset($auth['register_mode']) && $auth['register_mode'] =='email_or_mobile'){
             return 'TopxiaAdminBundle:User:create-by-mobile-or-email-modal.html.twig';
-        }elseif (isset($auth['register_mode']) && $auth['register_mode'] =='mobile') {
-            return 'TopxiaAdminBundle:User:create-by-mobile-modal.html.twig';
         }else{
             return 'TopxiaAdminBundle:User:create-modal.html.twig';
         }

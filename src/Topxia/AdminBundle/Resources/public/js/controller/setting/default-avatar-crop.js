@@ -7,8 +7,8 @@ define(function(require, exports, module) {
         var imageCrop = new ImageCrop({
             element: "#default-avatar-crop",
             group: 'system',
-            cropedWidth: 270,
-            cropedHeight: 270
+            cropedWidth: 200,
+            cropedHeight: 200
         });
 
         imageCrop.on("afterCrop", function(response){
@@ -23,7 +23,7 @@ define(function(require, exports, module) {
 
             imageCrop.crop({
                 imgs: {
-                    'avatar.png': [270, 270]
+                    'avatar.png': [200, 200]
                 }
             });
 

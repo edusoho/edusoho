@@ -70,7 +70,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
 	public function updateLearn($id, $fields)
 	{
-        $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLearn($id);
 	}
 

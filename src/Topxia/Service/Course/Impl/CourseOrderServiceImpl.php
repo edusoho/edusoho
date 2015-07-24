@@ -40,9 +40,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if (empty($course)) {
                 throw $this->createServiceException('课程不存在，操作失败。');
             }
-            if ($course['approval'] && $user['approvalStatus'] != 'approved') {
-                throw $this->createServiceException('该课程需要实名认证，你还没有实名认证，不可购买。');
-            }
 
             $order = array();
 

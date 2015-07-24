@@ -14,11 +14,9 @@
             <div class="mask">
               <div class="title"><span>{{ title1[0].value|default('') }}</span><span>{{ title2[0].value|default('') }}</span></div>
               <div class="subtitle"><span>{{ subtitle1[0].value|default('') }}</span><span>{{ subtitle2[0].value|default('') }}</span></div>
-              {% if carouselbanner %}
               <div class="item-mac">
                 <img class="img-responsive" src="{{ carouselbanner[0].src|default('') }}">
               </div>
-              {% endif %}
           </div>
           </a>
         </div>

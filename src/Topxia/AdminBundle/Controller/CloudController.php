@@ -75,42 +75,18 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_video_upgrade');
     }
 
-    public function videoRenewAction(Request $request)
-    {
-        return $this->redirectUrl('edu_cloud_video_renew');
-    }
-
     protected function redirectUrl($routingName, $params = array())
     {
-        $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);
-        return $this->redirect($url);
-    }
-
-    protected function createAppClient()
-    {
-        if (!isset($this->client)) {
-            $cloud = $this->getSettingService()->get('storage', array());
-            $developer = $this->getSettingService()->get('developer', array());
-
-            $options = array(
-                'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
-                'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
-                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
-                'debug' => empty($developer['debug']) ? false : true,
-            );
-
-            $this->client = new EduSohoAppClient($options);
+        $loginToken = $this->getAppService()->getLoginToken();
+        $url = 'http://open.edusoho.com/token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        if(!empty($params)){
+            $url .= '&param='.urldecode(json_encode($params));
         }
-        return $this->client;
+        return $this->redirect($url);
     }
     
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

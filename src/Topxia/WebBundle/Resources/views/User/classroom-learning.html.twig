@@ -5,7 +5,7 @@
   {% if classrooms %}
     <div class="class-join-header">
       <ul class="course-wide-list">
-        {% for classroom in classrooms if classroom.status|default('') != 'closed' %}
+        {% for classroom in classrooms %}
           {% set teachers = classroom['teachers']|default(null) %}
           <li class="course-item clearfix">
             <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">

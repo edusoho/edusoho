@@ -1,7 +1,9 @@
 <div class="col-md-4 col-sm-6">
   <div class="course-item">
     <div class="course-img">
-      <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" /></a>
+      <a href="{{ path('course_show', {id:course.id}) }}"> 
+       <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
+      </a>
     </div>
     <div class="course-caption">
       <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>

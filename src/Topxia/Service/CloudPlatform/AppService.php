@@ -75,6 +75,6 @@ interface AppService
 
     public function findInstallApp($code);
 
-    public function getTokenLoginUrl($routingName, $params);
+    public function getLoginToken();
 
 }

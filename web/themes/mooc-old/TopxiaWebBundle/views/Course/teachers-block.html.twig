@@ -1,7 +1,7 @@
-   {% for teacherId in course.teacherIds %}
-              {% set user = users[teacherId] %}
-              {% if profiles %}
-              {% set profile = profiles[teacherId] %}
+{% for teacherId in course.teacherIds %}
+{% set user = users[teacherId] %}
+{% if profiles %}
+ {% set profile = profiles[teacherId] %}
  <li>
     <div class="teacher-top clearfix">
       <div class="avatar">
