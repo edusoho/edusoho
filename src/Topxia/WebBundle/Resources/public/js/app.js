@@ -123,8 +123,8 @@ define(function(require, exports, module) {
         $(this).removeClass("open");
     });
 
-    if ($('[data-toggle="tooltip"]').length > 0) {
-        $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+    if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
+        $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
     }
 
     $(".js-search").focus(function () {
