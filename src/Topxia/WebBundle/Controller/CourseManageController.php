@@ -231,9 +231,8 @@ class CourseManageController extends BaseController
         $this->getCourseService()->tryManageCourse($id);
 
         $courseSetting = $this->setting("course");
-
-        if(empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1){
-            $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+        if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
+            return $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
         $conditions = $request->query->all();
@@ -286,11 +285,10 @@ class CourseManageController extends BaseController
         $this->getCourseService()->tryManageCourse($id);
 
         $courseSetting = $this->setting("course");
-
-        if(empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1){
-            $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+        if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
+            return $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
-        
+
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
         $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
 
