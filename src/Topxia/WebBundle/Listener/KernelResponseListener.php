@@ -20,6 +20,9 @@ class KernelResponseListener
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
+        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+            return ;
+        }
     	$request = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();        
         $setting = $this->getSettingService()->get('login_bind');
