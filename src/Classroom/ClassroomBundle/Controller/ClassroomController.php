@@ -564,6 +564,152 @@ class ClassroomController extends BaseController
         ));
     }
 
+    public function buyAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $previewAs = $request->query->get('previewAs');
+
+        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $this->previewAsMember($previewAs, $member, $classroom);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo['approvalStatus'] = $user['approvalStatus'];
+        
+        $account=$this->getCashAccountService()->getAccountByUserId($user['id'],true);
+        
+        if(empty($account)){
+            $this->getCashAccountService()->createAccount($user['id']);
+        }
+
+        if(isset($account['cash'])){
+            $account['cash']=intval($account['cash']);
+        }
+    
+        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        for($i=0;$i<count($userFields);$i++){
+           if(strstr($userFields[$i]['fieldName'], "textField")){
+            $userFields[$i]['type']="text";
+           }
+           if(strstr($userFields[$i]['fieldName'], "varcharField")){
+            $userFields[$i]['type']="varchar";
+           }
+           if(strstr($userFields[$i]['fieldName'], "intField")){
+            $userFields[$i]['type']="int";
+           }
+           if(strstr($userFields[$i]['fieldName'], "floatField")){
+            $userFields[$i]['type']="float";
+           }
+           if(strstr($userFields[$i]['fieldName'], "dateField")){
+            $userFields[$i]['type']="date";
+           }
+        }
+
+        //判断用户是否为VIP            
+        $vipStatus = $classroomVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            if ($classroomVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomVip['id']);
+            }
+        }
+
+        return $this->render('ClassroomBundle:Classroom:buy-modal.html.twig', array(
+            'classroom' => $classroom,
+            'payments' => $this->getEnabledPayments(),
+            'user' => $userInfo,
+            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
+            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0)?$user['verifiedMobile']:'',
+            'courseSetting' => $courseSetting,
+            'member' => $member,
+            'userFields'=>$userFields,
+            'account'=>$account,
+            'amount'=>$amount,
+            'vipStatus'=>$vipStatus
+        ));
+    }
+
+    public function modifyUserInfoAction(Request $request)
+    {
+
+        $formData = $request->request->all();
+
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
+        if (empty($classroom)) {
+            return $this->createMessageResponse('error', '班级不存在，不能购买。');
+        }
+
+        $userInfo = ArrayToolkit::parts($formData, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1','intField2','intField3','intField4','intField5',
+            'floatField1','floatField2','floatField3','floatField4','floatField5',
+            'dateField1','dateField2','dateField3','dateField4','dateField5',
+            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
+        ));
+
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        $coinSetting = $this->setting("coin");
+
+        //判断用户是否为VIP            
+        $vipStatus = $classroomVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            if ($classroomVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+                if($vipStatus == 'ok') {
+                    $formData['becomeUseMember'] = true;
+                }
+            }
+        }
+
+        if($classroom['price'] == 0 || $vipStatus == 'ok') {
+            $formData['amount'] = 0;
+            $formData['totalPrice'] = 0;
+            $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
+            $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
+            $formData['coinAmount'] = 0;
+
+            $order = $this->getClassroomOrderService()->createOrder($formData);
+
+            if ($order['status'] == 'paid') {
+                return $this->redirect($this->generateUrl('classroom_show', array('id' => $order['targetId'])));
+            }
+        }
+
+        return $this->redirect($this->generateUrl('order_show', array(
+            'targetId' => $formData['targetId'],
+            'targetType' => 'classroom'
+        )));
+        
+    }
+
     private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
@@ -742,6 +888,29 @@ class ClassroomController extends BaseController
             ));
     }
 
+    protected function getEnabledPayments()
+    {
+        $enableds = array();
+
+        $setting = $this->setting('payment', array());
+
+        if (empty($setting['enabled'])) {
+            return $enableds;
+        }
+
+        $payNames = array('alipay');
+        foreach ($payNames as $payName) {
+            if (!empty($setting[$payName . '_enabled'])) {
+                $enableds[$payName] = array(
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
+                );
+            }
+        }
+
+        return $enableds;
+    }
+
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
@@ -795,5 +964,25 @@ class ClassroomController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 }
