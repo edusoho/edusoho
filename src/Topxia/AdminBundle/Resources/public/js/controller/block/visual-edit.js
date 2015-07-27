@@ -211,16 +211,6 @@ define(function(require, exports, module) {
         var id = $(".tab").attr('href').substr(1,8);
         var imgSelf = $("#"+id).find(".img-mode-upload");
         var htmlSelf = $("#"+id).find(".html-mode-upload");
-        $(".copy-btn").each(function(){
-            var clip = new ZeroClipboard($(this));
-            var self = $(this);
-            clip.on('copy', function(event){
-                var text = self.siblings('.html-mrl').html();
-                console.log(text);
-                clip.setText(text);
-            });
-
-        });
 
         bindImgUpLoader(imgSelf);
         bindHtmlUpLoader(htmlSelf);
