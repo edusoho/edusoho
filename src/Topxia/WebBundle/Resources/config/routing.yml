@@ -554,6 +554,14 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
+course_manage_order:
+    pattern:  /course/{id}/manage/order
+    defaults: { _controller: TopxiaWebBundle:CourseManage:order }
+
+course_manage_order_export_csv:
+    pattern:  /course/{id}/manage/order/export
+    defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
+
 course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
@@ -612,6 +620,15 @@ course_manage_student_remark:
 course_manage_student_check:
     pattern:  /course/{id}/manage/student_check
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
+
+course_manage_student_import:
+    pattern:  /course/{id}/manage/student/import
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:import }
+
+course_manage_student_to_base:
+    pattern:  /course/{id}/manage/student/importing
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:excelDataImport }
+    methods: [POST]
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
@@ -1759,3 +1776,23 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
+esbar_my_classroom:
+    pattern:  /esbar/my/classroom
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
+
+esbar_my_course:
+    pattern:  /esbar/my/course
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:course }
+
+esbar_my_notify:
+    pattern:  /esbar/my/notify
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:notify }
+
+esbar_my_practice:
+    pattern:  /esbar/my/practice/{status}
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+
+#esbar_my_history:
+#    pattern:  /esbar/my/history
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
