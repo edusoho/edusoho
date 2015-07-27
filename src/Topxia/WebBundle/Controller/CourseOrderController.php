@@ -25,7 +25,7 @@ class CourseOrderController extends OrderController
 
         $remainingStudentNum = $this->getRemainStudentNum($course);
 
-        $previewAs = $request->query->get('previewAs');
+        $previewAs = $request->query->get('preview');
 
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($previewAs, $member, $course);
@@ -93,6 +93,7 @@ class CourseOrderController extends OrderController
 
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
+            'lessonId' => $request->query->get('lessonId'),
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
@@ -109,7 +110,6 @@ class CourseOrderController extends OrderController
 
     public function modifyUserInfoAction(Request $request)
     {
-
         $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
@@ -142,6 +142,19 @@ class CourseOrderController extends OrderController
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
         $coinSetting = $this->setting("coin");
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
+        if ($user->isLogin() && !$userInfoEnable && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
+            if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+                || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
+                
+                $data = array("price" => 0, "remark"=>'');
+                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
+
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
+            }
+        }
 
         //判断用户是否为VIP            
         $vipStatus = $courseVip = null;
@@ -433,5 +446,10 @@ class CourseOrderController extends OrderController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
     }
 }
