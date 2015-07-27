@@ -154,16 +154,29 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 {	
 	var self = this;
 	this.__proto__ = new BasePayController();
+	$scope.payMode = "alipay";
 
-	OrderService.getPayOrder({
-		courseId : $stateParams.courseId
-	}, function(data) {
-		$scope.data = data;
-	});
+	this.loadOrder = function() {
+		OrderService.getPayOrder({
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.data = data;
+			self.changePrice($scope.payMode);
+		});
+	};
 
 	$scope.$parent.$on("coupon", function(event, data) {
 		$scope.coupon = data.coupon;
 	});
+
+	this.changePrice = function(payMode) {
+		if (payMode == "coin") {
+			$scope.payPrice = $scope.data.coinPay;
+		} else {
+			var couponPrice = $scope.coupon ? $scope.coupon.decreaseAmount : 0;
+			$scope.payPrice = $scope.data.course.price - couponPrice;
+		}
+	}
 
 	$scope.selectCoupon = function() {
 		$scope.formData = { code : "", error : '' };
@@ -171,13 +184,23 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		self.dialog.dialog("show");
 	}
 
-	$scope.pay = function() {
-		var amout = $scope.data.course.price;
-		if ($scope.coupon) {
-			amout = Math.max(amout - $scope.coupon.decreaseAmount, 0);
+	$scope.changePayMode = function() {
+		if ($scope.payMode == "coin") {
+			$scope.payMode = "alipay";
+		} else {
+			$scope.payMode = "coin";
 		}
+
+		self.changePrice($scope.payMode);
+	}
+
+	this.payOrder = function(payPassword) {
+
+		var payment = $scope.payMode;
 		OrderService.createOrder({
-			amout : amout,
+			payment : payment,
+			payPassword : payPassword ? payPassword : "",
+			totalPrice : $scope.data.course.price,
 			couponCode : $scope.formData ? $scope.formData.code : "",
 			targetType : "course",
 			targetId : $stateParams.courseId
@@ -194,6 +217,20 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 				self.showPayResultDlg();
 			}
 		});
+	};
+
+	$scope.pay = function() {
+		if ($scope.payMode == "coin") {
+			cordovaUtil.showInput("支付提醒", "请输入支付密码", "password", function(input) {
+				if (!input || input.length == 0) {
+					alert("请输入支付密码!");
+					return;
+				}
+				self.payOrder(input);
+			});
+			return;
+		}
+		self.payOrder();
 	}
 
 	$scope.checkCoupon = function() {
@@ -225,4 +262,6 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 	$scope.close = function() {
 		self.dialog.dialog("hide");
 	}
+
+	self.loadOrder();
 }

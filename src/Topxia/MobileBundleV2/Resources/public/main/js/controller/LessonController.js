@@ -52,6 +52,10 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
         return;
       }
 
+      if ("lesson" != lesson.itemType) {
+        return;
+      }
+      
       if ("text" == lesson.type) {
         $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
         return;

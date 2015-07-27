@@ -308,7 +308,7 @@ a {
 }
 
 .ui-bar .ui-btn {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .ui-bar .bar-tool.ui-btn {
@@ -1570,6 +1570,7 @@ a {
 }
 
 .ui-pop-content .ui-btn {
+  font-size: 18px;
   width: 100% ! important;
 }
 
@@ -1594,6 +1595,37 @@ a {
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
 }
 /** ui-pop **/
+
+/* discount-label */
+
+.discount-label.rebate span{
+  background: rgb(245, 168, 27);
+}
+
+.discount-label.free span{
+  background: rgb(237, 46, 61);
+}
+
+.discount-label {
+  width: 35px ! important;
+  height: 28px ! important;
+  border-radius: 5px;
+  position: absolute;
+  top: -5px ! important;
+  left: 10px ! important;
+}
+
+.discount-label-bottom {
+  border-radius: 40%;
+  top: 10px ! important;
+}
+
+.discount-label-content {
+  font-size: 4px;
+  color: white;
+  text-align: center;
+}
+/* discount-label */
 
 /** .ui-loading, bright **/
 .ui-loading {

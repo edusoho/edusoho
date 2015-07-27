@@ -88,8 +88,13 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
 {
     var self = this;
     this.payCourse = function() {
-      OrderService.payCourse({
-        courseId : $stateParams.courseId
+      OrderService.createOrder({
+        payment : "alipay",
+        payPassword : "",
+        totalPrice : $scope.course.price,
+        couponCode : "",
+        targetType : "course",
+        targetId : $stateParams.courseId
       }, function(data) {
         if (data.paid == true) {
           console.log("reload");
@@ -105,6 +110,70 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         console.log(error);
       });
     }
+
+    this.goToPay = function() {
+      if ($scope.course.price <= 0) {
+        self.payCourse();
+      } else {
+        $state.go("coursePay", { courseId : $scope.course.id });
+      }
+    };
+
+    this.checkModifyUserInfo = function(modifyInfos) {
+      for (var i = 0; i < modifyInfos.length; i++) {
+        var modifyInfo = modifyInfos[i];
+        if (!modifyInfo["content"] || modifyInfo["content"] == 0) {
+          alert("请填写" + modifyInfo["title"]);
+          return false;
+        }
+      };
+
+      return true;
+    }
+
+    $scope.$parent.updateModifyInfo = function() {
+      var modifyInfos = $scope.$parent.modifyInfos;
+      if (!self.checkModifyUserInfo(modifyInfos)) {
+        return;
+      }
+      $scope.showLoad()
+      CourseService.updateModifyInfo({
+        targetId : $scope.course.id
+      }, function(data) {
+        $scope.hideLoad();
+        if (data.error) {
+          $scope.toast(data.error.message);
+          return;
+        }
+        if (true == data) {
+          self.goToPay();
+        }
+      });
+    };
+
+    this.getModifyUserInfo = function(success) {
+      $scope.$parent.close = function() {
+        self.dialog.dialog("hide");
+      }
+
+      CourseService.getModifyInfo({}, function(data) {
+        if(!data["buy_fill_userinfo"]) {
+          success();
+          return
+        }
+        
+        if (data["buy_fill_userinfo"]) {
+          success();
+        }
+        $scope.$parent.modifyInfos = data["modifyInfos"];
+        if (data.length > 0) {
+          self.dialog = $(".ui-dialog");
+          self.dialog.dialog("show");
+        } else {
+          success();
+        }
+      });
+    };
 
     $scope.vipLeand = function() {
       if ($scope.user == null) {
@@ -129,12 +198,10 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         cordovaUtil.openWebView(app.rootPath + "#/login/course");
         return;
       }
-      if ($scope.course.price <= 0) {
-        self.payCourse();
-      } else {
-        $state.go("coursePay", { courseId : $scope.course.id });
-      }
-      
+
+      self.getModifyUserInfo(function() {
+        self.goToPay();
+      });
     }
 
     $scope.favoriteCourse = function() {

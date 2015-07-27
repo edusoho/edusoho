@@ -261,6 +261,14 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 
+	this.updateModifyInfo = function(params, callback) {
+		httpService.simplePost("/mapi_v2/Course/updateModifyInfo", arguments);
+	}
+
+	this.getModifyInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/Course/getModifyInfo", arguments);
+	}
+	
 	this.getCourseNotices = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/Course/getCourseNotices", arguments);
 	}

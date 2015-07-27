@@ -244,6 +244,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		openPlatformLogin : function(type) {
 			alert("请在客户端内登录!");
 		},
+		showInput : function(title, content, type, successCallback) {
+			alert("该功能仅支持客户端!");
+		},
 		startAppView : function(name, data) {
 			alert("该功能仅支持客户端!");
 		}

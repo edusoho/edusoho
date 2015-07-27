@@ -53,17 +53,27 @@
 	        </h4>
 	    	</li>
 	</ul>
-
+	<ul class="ui-list ui-list-link ui-list-text ui-border-b" ng-if="data.coinEnabled">
+		<li class="ui-border-t">
+			<div class="ui-list-info">
+            			<h4>使用虚拟币</h4>
+        			</div>
+        			<label class="ui-switch">
+	            		<input type="checkbox" ng-model="payMode" ng-change="changePayMode()" ng-checked="payMode == 'coin' ">
+	        		</label>
+		</li>
+	</ul>
 	<div class="ui-btn-wrap" style="background: #f0f0f0;">
 		<div class="pay-body">
-	  		需支付:<p class="pay-price">{{ data.course.price - coupon.decreaseAmount | formatPrice }}</p>
+	  		需支付:<p class="pay-price">{{ payPrice | formatPrice }}</p>
 	  	</div>
 	    
 		<button class="ui-btn-lg btn-yellow" ng-click="pay()">
-                去支付
-           </button>
+                		去支付
+           	</button>
 	</div>
 </div>
+
 <div class="ui-dialog ui-coupon full">
     <div class="ui-dialog-bg">
         <div class="ui-dialog-bgcontent"></div>
@@ -88,6 +98,7 @@
 	            <a class="ui-icon-close" ng-show="formData.code.length > 0" ng-click="formData.code = '' ">
 	            </a>
 	        </div>
+	       
 	        <div class="ui-form-item ui-list-divider item-error">
 	        	{{ formData.error }}
 	        </div>

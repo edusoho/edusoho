@@ -67,6 +67,14 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
 
             return deferred.promise;
         },
+        showInput : function(title, content, type, successCallback) {
+            exec(function(input) {
+                if (successCallback) {
+                    successCallback(input);
+                }
+                
+            }, null, "ESNativeCore", "showInput", [ title, content, type ]);
+        },
         startAppView : function(name, data) {
 
             var type = arguments[2];
