@@ -7,40 +7,57 @@
 {% endblock %}
 {% block description %}{{ course.about }}{% endblock %}
 
-{% set bodyClass = 'course-dashboard-page' %}
-{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
+{% set bodyClass = '' %}
+{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}  
 
-{% block top_content %}
+{% block content %} 
   {{ render(controller('CustomWebBundle:Part/Course:header',{course: course, member: member})) }}
-{% endblock %}
-
-{% block content %}
-  <div class="course-detail row">
-    <div class="col-lg-9 col-md-8  course-detail-main">
-
+  <div class="course-about clearfix">
+    <div class="course-about-main">
       {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
-
-      <section class="es-section">
+      <div class="course-detail">
         {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
         {% block course_main %}{% endblock %}
-      </section>
-      {% block dashboard_relatedCoursesBlock %}
-        {% if setting('course.relatedCourses') == 1 %}
-          {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
-        {% endif %}
-      {% endblock %}
+      </div>
     </div>
-
-    <div class="col-lg-3 col-md-4  course-sidebar">
+    <div class="course-about-sidebar">
       {% block course_sidebar %}
-        {% if member|default(null) %}
-          {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
-        {% endif %}
-        {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
+        <div class="es-panel open-class">
+          <div class="panel-heading clearfix">第三次开课<span class="teacher-icon"></span></div>
+           <div class="panel-body">
+            <ul>
+              <li class="first gray">
+                {% if "now"|date('U') > course.endTime %}
+                  <p>本次开课</p>
+                  <p><span>已结束</span></p>
+                {% elseif "now"|date('U') >= course.startTime %}
+                  <p>课程已进行至</p>
+                  <p><span>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</p>
+                {% else %}
+                  <p>距离开课</p>
+                  <p><span>{{ course.startTime | remain_time }}</span></p>
+                  {#<p><span>{{ ((course.startTime-'now' | date('U'))/86400) | round(0, 'ceil') }}</span>天</p>#}
+                {% endif %}
+              </li>
+              <li class="last">
+                <p>开课：{{course.startTime | date('m月d日 H : i')}}</p>
+                <p>结束：{{course.endTime | date('m月d日 H : i')}}</p>
+              </li>
+            </ul>
+            {# <p class="red">获得证书 ></p> #}
+            <p class="red gray">已结束</p>
+           </div>
+        </div>
+        <div class="es-panel teacher-column">
+          <div class="panel-heading clearfix">任课老师<span class="teacher-icon"></span></div>
+          <div class="panel-body">
+            <ul>
+               {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
+            </ul>
+          </div>
+        </div>
         {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
-        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
-
-      {% endblock %}
+      {% endblock %}  
     </div>
   </div>
-{% endblock %}
+{% endblock %} 
