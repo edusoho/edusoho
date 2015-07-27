@@ -154,8 +154,13 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    overflow-x: hidden;
     font-size: 12px;
-    margin: 60px  10px 0 10px;
+    margin-top: 60px;
+    padding: 0 15px;
+    .ps-scrollbar-x-rail {
+      display: none !important;
+    }
   }
   .btn-action {
     margin-bottom: 20px;
@@ -197,6 +202,9 @@
     margin-top: 0;
     padding: 15px 0;
     border-bottom: 1px dashed @gray-light;
+    &:last-child {
+      border: none;
+    }
     .notification-footer {
       display: none;
     }
