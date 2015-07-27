@@ -118,6 +118,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($fields['target']);
         }
 
+        $question = $this->getQuestionDao()->updateQuestion($id, $fields);
+
+        $this->dispatchEvent("question.update",$question);
+
+        return $question;
+    }
+
+    public function editQuestion($id,$fields)
+    {
         return $this->getQuestionDao()->updateQuestion($id, $fields);
     }
 

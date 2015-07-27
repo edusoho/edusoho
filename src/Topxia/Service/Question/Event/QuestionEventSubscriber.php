@@ -11,7 +11,8 @@ class QuestionEventSubscriber implements EventSubscriberInterface
 	public static function getSubscribedEvents()
     {
         return array(
-            'question.create'=> 'onQuestionCreate'
+            'question.create' => 'onQuestionCreate',
+            'question.update' => 'onQuestionUpdate'
         );
     }
 
@@ -28,14 +29,16 @@ class QuestionEventSubscriber implements EventSubscriberInterface
 
         if($question['parentId']){
             $questionIds = $this->getQuestionService()->findQuestionsByPId($question['parentId']);
+            $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
         }
         $question['pId'] = $question['id'];
         unset($question['id']);
         if (!empty($courseIds)) {
             foreach ($courseIds as $key => $value) {
                 
-                if($questionIds){
+                if($question['parentId']){
                     $question['parentId'] = $questionIds[$key];
+                    $this->getQuestionService()->editQuestion($questionIds[$key],array('subCount'=>$parentQuestion['subCount']));
                 }
 
                 if ($num > 1) {
@@ -46,6 +49,17 @@ class QuestionEventSubscriber implements EventSubscriberInterface
                 $this->getQuestionService()->addQuestion($question);
             }
         }
+    }
+
+    public function onQuestionUpdate(ServiceEvent $event)
+    {
+        $question = $event->getSubject();
+        $questionIds = $this->getQuestionService()->findQuestionsByPId($question['id']);
+        unset($question['id'],$question['target'],$question['parentId'],$question['pId']);
+        foreach ($questionIds as $key => $value) {
+            $this->getQuestionService()->editQuestion($questionIds[$key],$question);
+        }
+
     }
 
     protected function getCourseService()

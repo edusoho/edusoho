@@ -51,8 +51,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
         $items = $this->buildTestpaper($testpaper['id'], $fields);
-
+        $this->dispatchEvent("testpaper.create",new ServiceEvent($testpaper,array('items'=>$items)));
         return array($testpaper, $items);
+    }
+
+    public function addTestpaper($fields)
+    {
+        return $this->getTestpaperDao()->addTestpaper($fields);
     }
 
     public function updateTestpaper($id, $fields)
@@ -62,7 +67,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createServiceException("Testpaper #{$id} is not found, update testpaper failure.");
         }
         $fields = $this->filterTestpaperFields($fields, 'update');
-        return $this->getTestpaperDao()->updateTestpaper($id, $fields);
+        $testpaper = $this->getTestpaperDao()->updateTestpaper($id, $fields);
+        $this->dispatchEvent("testpaper.update",$testpaper);
+        return $testpaper;
+    }
+
+    public function updateTestpaperByParentId($parentId,$fields)
+    {
+        return $this->getTestpaperDao()->updateTestpaperByParentId($parentId, $fields);
     }
 
     protected function filterTestpaperFields($fields, $mode = 'create')
@@ -118,7 +130,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = array(
             'status' => 'open'
         );
-        return $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
+        $testpaper = $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
+        $this->dispatchEvent("testpaper.update",$testpaper);
+        return $testpaper;
     }
 
     public function closeTestpaper($id)
@@ -133,18 +147,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = array(
             'status' => 'closed'
         );
-        return $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
+        $testpaper = $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
+        $this->dispatchEvent("testpaper.update",$testpaper);
+        return $testpaper;
     }
 
     public function deleteTestpaper($id)
     {
         $this->getTestpaperDao()->deleteTestpaper($id);
         $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
-    }
-
-    public function deleteTestpaperByIds(array $ids)
-    {
-
     }
 
     public function buildTestpaper($id, $options)
@@ -706,11 +717,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperItemResultDao()->findTestResultsByItemIdAndTestId(array_keys($answers), $testpaperResultId);
     }
 
-    public function reviewTestpaper($resultId, $items, $remark = null)
-    {
-
-    }
-
     public function updateTestpaperResult($id, $usedTime)
     {
         $testpaperResult = $this->getTestpaperResultDao()->getTestpaperResult($id);
@@ -727,6 +733,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
     }
 
+    public function createTestpaperItem($item)
+    {
+        return $this->getTestpaperItemDao()->addItem($item);
+    }
+
     public function getTestpaperItems($testpaperId)
     {
         return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
@@ -734,6 +745,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items)
     {
+
 
         $testpaper = $this->getTestpaper($testpaperId);
         if (empty($testpaperId)) {
@@ -773,7 +785,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $seq ++;
                 $totalScore += $item['score'] ;
             }
-
+            
             if (empty($existItems[$item['questionId']])) {
                 $item['questionType'] = $question['type'];
                 $item['parentId'] = $question['parentId'];
@@ -787,10 +799,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
+                $this->dispatchEvent("testpaper.items.create",$item);
             } else {
-
                 $existItem = $existItems[$item['questionId']];
-
                 if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
@@ -805,23 +816,28 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $types[] = $item['questionType'];
             }
         }
-
         foreach ($existItems as $existItem) {
             $this->getTestpaperItemDao()->deleteItem($existItem['id']);
         }
 
+
+
         $metas = empty($testpaper['metas']) ? array() : $testpaper['metas'];
         $metas['question_type_seq'] = $types;
 
-        $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
+        $testpaper = $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
             'itemCount' => $seq -1,
             'score' => $totalScore,
             'metas' => $metas,
         ));
 
-
+        $this->dispatchEvent("testpaper.items.update",new ServiceEvent($testpaper,array('items'=>$items)));
     }
 
+    public function updateTestpaperItemsByQuestionIdAndItem($questionId, $item)
+    {
+        return $this->getTestpaperItemDao()->updateTestpaperItemsByQuestionIdAndItem($questionId, $item);
+    }
     public function canTeacherCheck($id)
     {
         $paper = $this->getTestpaperDao()->getTestpaper($id);
@@ -857,7 +873,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function canLookTestPaper($resultId)
+    public function canLookTestpaper($resultId)
     {
         $paperResult = $this->getTestpaperResult($resultId);
         if (!$paperResult) {
@@ -899,6 +915,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
         }
         return false;
+    }
+
+    public function findTestpaperIdsByParentId($parentId)
+    {
+        return ArrayToolkit::column($this->getTestpaperDao()->findTestpaperIdsByParentId($parentId),'id');
     }
 
     public function findTeacherTestpapersByTeacherId ($teacherId)

@@ -70,6 +70,11 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         return $this->getTestpaper($id);
     }
 
+    public function updateTestpaperByParentId($parentId,$fields)
+    {
+      return $this->getConnection()->update($this->table, $fields, array('parentId'=> $parentId));  
+    }
+
     public function deleteTestpaper($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
@@ -81,9 +86,15 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
             return array(); 
         }
         $marks = str_repeat('?,', count($targets) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks})";
         $results = $this->getConnection()->fetchAll($sql, $targets) ? : array();
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
+    }
+
+    public function findTestpaperIdsByParentId($parentId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? ";
+        return $this->getConnection()->fetchAll($sql,array($parentId));
     }
 
     protected function _createSearchQueryBuilder($conditions)

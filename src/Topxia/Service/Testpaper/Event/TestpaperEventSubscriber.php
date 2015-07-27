@@ -15,6 +15,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'testpaper.finish' => 'onTestpaperFinish',
+            'testpaper.create' => 'onTestpaperCreate',
+            'testpaper.update' => 'onTestpaperUpdate',
+            'testpaper.items.create' => 'onTestpaperItemsCreate',
+            'testpaper.items.update' => 'onTestpaperItemsUpdate'
         );
     }
 
@@ -35,6 +39,66 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
                 'result' => $this->simplifyTestpaperResult($testpaperResult),
             )
         ));
+    }
+
+    public function onTestpaperCreate(ServiceEvent $event)
+    {
+        $testpaper = $event->getSubject();
+        $items = $event->getArgument('items');
+        $parentId = $testpaper['id'];
+        $courseId = explode('-',$testpaper['target'])[1];
+        $courseIds = $this->getCourseService()->findCoursesByParentId($courseId);
+        $testpaper['parentId'] = $testpaper['id'];
+
+        unset($testpaper['id']);        
+        foreach ($courseIds as  $value) {
+            $testpaper['target'] = "course-".$value;
+            $testpaperId = $this->getTestpaperService()->addTestpaper($testpaper);
+            foreach($items as $k=>$item)
+            {
+                $item['pId'] = $item['id'];
+                unset($item['id']);
+                $item['testId'] = $testpaperId['id'];
+                $this->getTestpaperService()->createTestpaperItem($item);
+            }
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($parentId);
+        $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
+        $this->getTestpaperService()->updateTestpaperByParentId($testpaper['id'],$fields);
+    }
+
+
+    public function onTestpaperUpdate(ServiceEvent $event)
+    {
+        $testpaper = $event->getSubject();
+        $parentId = $testpaper['id'];
+        unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['metas'],$testpaper['parentId']);
+        $this->getTestpaperService()->updateTestpaperByParentId($parentId,$testpaper);
+    }
+
+    public function onTestpaperItemsCreate(ServiceEvent $event)
+    {
+      $item = $event->getSubject();
+      $item['pId'] = $item['id'];
+      $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByParentId($item['testId']);
+      unset($item['id']);
+      foreach ($testpaperIds as $testpaperId) {
+        $item['testId'] = $testpaperId;
+        $this->getTestpaperService()->createTestpaperItem($item);
+      }
+    }
+
+    public function onTestpaperItemsUpdate(ServiceEvent $event)
+    {
+        $testpaper = $event->getSubject();
+        $items = $event->getArgument('items');
+
+        foreach ($items as $item) {
+            $this->getTestpaperService()->updateTestpaperItemsByQuestionIdAndItem($item['questionId'],$item);
+        }
+        $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
+        $this->getTestpaperService()->updateTestpaperByParentId($testpaper['id'],$fields);
     }
 
     protected function simplifyTestpaper($testpaper)
@@ -69,5 +133,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
     }
 }
