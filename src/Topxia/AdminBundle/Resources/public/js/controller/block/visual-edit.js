@@ -1,31 +1,20 @@
 define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
-    var EduWebUplader  = require('edusoho.webuploader');
+    var EduWebUploader  = require('edusoho.webuploader');
+    require('zeroclipboard');
     require('webuploader');
     require('jquery.sortable');
     require('colorpicker');
     exports.run = function() {
 
-        $('.img-mode-upload').each(function(){
-            console.log(this)
-            var self = this
-            var uploader = new EduWebUplader({
-                element : self
-            });
-
-            uploader.on('uploadSuccess', function(file, response ) {
-                self.closest('.edit-mode-html').find('.html-mrl').html(response.url);
-                Notify.success('上传成功！', 1);
-            });
-        })
-
+        initFirstTab();
+        bindClipboard();
         $('.colorpicker-input').colorpicker();
         $('#btn-tabs .btn').click(function(){
             $(this).removeClass('btn-default').addClass('btn-primary')
                             .siblings('.btn-primary').removeClass('btn-primary').addClass('btn-default');
         })
-
 
         var editForm = Widget.extend({
             uploaders: [],
@@ -218,21 +207,32 @@ define(function(require, exports, module) {
         });
     };
 
+    function initFirstTab(){
+        var id = $(".tab").attr('href').substr(1,8);
+        var imgSelf = $("#"+id).find(".img-mode-upload");
+        var htmlSelf = $("#"+id).find(".html-mode-upload");
+        $(".copy-btn").each(function(){
+            var clip = new ZeroClipboard($(this));
+            var self = $(this);
+            clip.on('copy', function(event){
+                var text = self.siblings('.html-mrl').html();
+                console.log(text);
+                clip.setText(text);
+            });
+
+        });
+
+        bindImgUpLoader(imgSelf);
+        bindHtmlUpLoader(htmlSelf);
+    }
+
     $(".imgMode").on('click',function(){
         $(this).parent().parent().siblings(".edit-mode-html").css("display","none");
         $(this).parent().parent().siblings(".edit-mode-img").removeAttr("style");
         $(this).parent().siblings().find('.htmlMode').removeAttr('checked');
         $(this).parent().siblings('.mode-value').val("img")
         var self = $(this).parent().parent().siblings(".edit-mode-img").find('.img-mode-upload');
-        var uploader = new EduWebUplader({
-            element : self
-        });
-
-        uploader.on('uploadSuccess', function(file, response ) {
-            self.closest('.form-group').find('.img-mrl').html(response.url);
-            self.closest('.form-group').find(".img-mtl").attr("src",response.url);
-            Notify.success('上传成功！', 1);
-        });
+        bindImgUpLoader(self);
     });
     
     $(".htmlMode").on('click', function () {
@@ -241,7 +241,41 @@ define(function(require, exports, module) {
         $(this).parent().siblings().find('.imgMode').removeAttr('checked');
         $(this).parent().siblings('.mode-value').val("html");
         var self = $(this).parent().parent().siblings(".edit-mode-html").find('.html-mode-upload');
-        var uploader = new EduWebUplader({
+        bindHtmlUpLoader(self);
+    });
+    
+    $(".layout-input").on('click', function () {
+        $(this).parent().siblings().find('.layout-input').removeAttr('checked');
+        $(this).parent().siblings('.layout-value').val($(this).val());
+    });
+
+    $(".status-input").on('click', function () {
+        $(this).parent().siblings().find('.status-input').removeAttr('checked');
+        $(this).parent().siblings('.status-value').val($(this).val());
+    });
+
+    $(".tab").on('click', function(){
+        var id = $(this).attr('href').substr(1,8);
+        var imgSelf = $("#"+id).find(".img-mode-upload");
+        var htmlSelf = $("#"+id).find(".html-mode-upload");
+        bindImgUpLoader(imgSelf);
+        bindHtmlUpLoader(htmlSelf);
+    });
+
+    function bindImgUpLoader(self){
+        var uploader = new EduWebUploader({
+            element : self
+        });
+
+        uploader.on('uploadSuccess', function(file, response ) {
+            self.closest('.form-group').find('.img-mrl').html(response.url);
+            self.closest('.form-group').find(".img-mtl").attr("src",response.url);
+            Notify.success('上传成功！', 1);
+        });
+    }
+
+    function bindHtmlUpLoader(self){
+        var uploader = new EduWebUploader({
             element : self
         });
 
@@ -249,16 +283,20 @@ define(function(require, exports, module) {
             self.closest('.edit-mode-html').find('.html-mrl').html(response.url);
             Notify.success('上传成功！', 1);
         });
+    }
 
-    })
-    
-    $(".layout-input").on('click', function () {
-        $(this).parent().siblings().find('.layout-input').removeAttr('checked');
-        $(this).parent().siblings('.layout-value').val($(this).val());
-    })
+    function bindClipboard(){
+        $(".copy-btn").each(function(){
+            var clip = new ZeroClipboard($(this));
+            var self = $(this);
+            clip.on('copy', function(event){
+                var text = self.siblings('.html-mrl').html();
+                clip.setText(text);
+                alert("复制成功");
+            });
 
-    $(".status-input").on('click', function () {
-        $(this).parent().siblings().find('.status-input').removeAttr('checked');
-        $(this).parent().siblings('.status-value').val($(this).val());
-    })
+        });
+    }
+
+
 });

@@ -28,26 +28,27 @@
   {% endif %}
   {% if block.code != 'jianmo:home_top_banner' %}
   <!-- <div class="col-md-6"> -->
-  <div>
+    <div>
+      <h4>{{ block.title }}</h4>
+      <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+        {{ web_macro.flash_messages() }}
+        {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+        <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
+      </form>
+    </div>
+
+  {% else %}
+    <!-- 以下是简墨新版的样式 -->
     <h4>{{ block.title }}</h4>
     <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
       {{ web_macro.flash_messages() }}
       {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    
-      <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
     </form>
-  </div>
-
-  <br><br><br><br><br><br>
-  {% else %}
-  <!-- 以下是新版的样式 -->
-  <h4>{{ block.title }}</h4>
-  <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
-    {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
-  </form>
-  <!-- 以上是新版的样式 -->
+    <!-- 以上是新版的样式 -->
   {% endif %}
+
   <!-- <div class="col-md-4">
     {% include 'TopxiaAdminBundle:Block:affix-nav.html.twig' %}
   </div> -->

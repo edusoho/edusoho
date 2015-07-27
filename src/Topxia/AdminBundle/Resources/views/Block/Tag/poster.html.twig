@@ -62,8 +62,9 @@
     </div>
     <div class="edit-mode-html" {% if data.mode == 'img' %}style="display: none;"{% endif %}>
       <textarea class="form-control mbl" id="data[{{ code }}][{{ dataId }}][html]" rows="10" name="data[{{ code }}][{{ dataId }}][html]" data-role="editor-field">{{ data.html }}</textarea>
-      <label class="control-label html-mrl">{{ data.src }}</label>
+      <label class="control-label html-mrl" >{{ data.src }}</label>
       <a class="btn btn-default btn-sm html-mode-upload" id="html-{{ code }}-uploadId-{{ dataId }}"  data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
+      <button type="button" class="btn btn-default copy-btn" id="copy-{{ code }}-{{ dataId }}" >点击复制图片链接</button>
     </div>
   </div>
   {% set first = 0 %}

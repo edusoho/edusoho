@@ -1,9 +1,9 @@
 {% set first = 1 %}
 {% for dataId,data in  block.data[code]|default(null) %}
   {% if first == 1 %}
-    <a class="btn btn-primary" href="#poster-{{ dataId }}" data-toggle="tab">{{ data.alt }}</a>
+    <a class="btn btn-primary tab" href="#poster-{{ dataId }}" data-toggle="tab">{{ data.alt }}</a>
   {% else %}
-    <a class="btn btn-default" href="#poster-{{ dataId }}" data-toggle="tab">{{ data.alt }}</a>
+    <a class="btn btn-default tab" href="#poster-{{ dataId }}" data-toggle="tab">{{ data.alt }}</a>
   {% endif %}
   {% set first = 0 %}
   <input type="hidden" name="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt }}">
