@@ -380,7 +380,7 @@ class MobileBaseController extends BaseController
         $tempLessonIndex;
 
         foreach($tempLessons as $key => $tempLesson){
-            if(!sizeof($tempLesson)){
+            if(!empty($tempLesson)){
                 continue;
             }
             if($nowTime <= $tempLesson[0]["endTime"]){
