@@ -30,4 +30,6 @@ interface LessonProcessor
 	public function getVideoMediaUrl();
 
 	public function getCourseDownLessons();
+
+	public function getLocalVideo();
 }
