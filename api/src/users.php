@@ -83,7 +83,7 @@ $api->get('/', function (Request $request) {
     
     $mobileList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($mobileProfiles,'id'));
     $qqList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($qqProfiles,'id'));
-    $nicknameList = ServiceKernel::instance()->createService('User.UserService')->searchUsers(array('nickname' => $field), array('createdTime','DESC'), 0, 5);
+    $nicknameList = ServiceKernel::instance()->createService('User.UserService')->searchUsers(array('nickname' => $field), array('LENGTH(nickname)','ASC'), 0, 5);
     return array(
         'mobile' => filters($mobileList,'user'),
         'qq' => filters($qqList,'user'),
