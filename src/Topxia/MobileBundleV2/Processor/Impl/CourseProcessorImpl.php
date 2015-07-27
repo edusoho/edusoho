@@ -1363,8 +1363,119 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $result;
     }
 
+    public function getModifyInfo()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $userinfoFields = array();
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+        foreach ($courseSetting["userinfoFields"] as $key) {
+            $field = array();
+            switch ($key) {
+                case 'truename':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"真实姓名"
+                        );
+                    break;
+                case 'mobile':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"手机"
+                        );
+                    break;
+                case 'qq':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"QQ"
+                        );
+                    break;
+                case 'job':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"职业"
+                        );
+                    break;
+                case 'gender':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"性别"
+                        );
+                    break;
+                case 'idcard':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"身份证"
+                        );
+                    break;
+                case 'weibo':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"微博"
+                        );
+                    break;
+                case 'weixin':
+                    $field = array(
+                        "name"=>$key,
+                        "title"=>"微信"
+                        );
+                    break;
+            }
+            $field["content"] = $userInfo[$key];
+            $userinfoFields[] = $field;
+        }
+        return array(
+            "buy_fill_userinfo"=>$courseSetting["buy_fill_userinfo"] ? true : false,
+            "modifyInfos"=>$userinfoFields
+        );
+    }
+
+    public function updateModifyInfo()
+    {
+        $fields = $this->request->request->all();
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $course = $this->getCourseService()->getCourse($fields['targetId']);
+        if (empty($course)) {
+            return $this->createErrorResponse('error', '课程不存在，不能购买。');
+        }
+
+        $userInfo = ArrayToolkit::parts($fields, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1','intField2','intField3','intField4','intField5',
+            'floatField1','floatField2','floatField3','floatField4','floatField5',
+            'dateField1','dateField2','dateField3','dateField4','dateField5',
+            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
+        ));
+
+        try {
+            $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+        
+        return true;
+    }
+
     protected function getDiscountService() 
     {
         return $this->controller->getService('Discount:Discount.DiscountService');
-    } 
+    }
 }

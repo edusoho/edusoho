@@ -146,4 +146,8 @@ interface CourseProcessor
 
 	public function getAllLiveCourses();
 
+	public function getModifyInfo();
+
+	public function updateModifyInfo();
+
 }

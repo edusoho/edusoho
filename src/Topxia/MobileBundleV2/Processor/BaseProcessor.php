@@ -198,6 +198,11 @@ class BaseProcessor {
         return $this->controller->getService('System.LogService');
     }
 
+    protected function getUserFieldService()
+    {
+        return $this->controller->getService('User.UserFieldService');
+    }
+
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(
