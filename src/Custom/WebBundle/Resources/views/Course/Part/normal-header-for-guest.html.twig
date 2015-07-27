@@ -28,16 +28,15 @@
             disabled="disabled"
         {% endif %}
       >
-      {% if userVipStatus == 'ok' %}
-        {% if courseFinished %}
-          已结束
-        {% elseif "now"|date('U') >= course.startTime %}
-          加入学习
-        {% else %}
-          报名参加
-        {% endif %}
+      {% if courseFinished %}
+        已结束
       {% else %}
-        {{ (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0) ?  "购买课程" : "加入学习"  }}
+        {% if (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0) %}
+          {{ userVipStatus=='ok' ? ("now"|date('U') >= course.startTime ? "加入学习" : " 报名参加") : "购买课程" }}
+          }
+        {% else %}
+          {{ "now"|date('U') >= course.startTime ? "加入学习" : " 报名参加" }}
+        {% endif %}
       {% endif %}
     </a>
       {#多重情况
