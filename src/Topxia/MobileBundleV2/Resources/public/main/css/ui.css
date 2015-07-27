@@ -1621,7 +1621,7 @@ a {
 }
 
 .discount-label-content {
-  font-size: 4px;
+  font-size: 0.75rem;
   color: white;
   text-align: center;
 }

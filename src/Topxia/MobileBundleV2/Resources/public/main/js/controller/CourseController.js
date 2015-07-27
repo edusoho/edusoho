@@ -157,16 +157,14 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
       }
 
       CourseService.getModifyInfo({}, function(data) {
-        if(!data["buy_fill_userinfo"]) {
+
+        if(true != data["buy_fill_userinfo"]) {
           success();
           return
         }
-        
-        if (data["buy_fill_userinfo"]) {
-          success();
-        }
+
         $scope.$parent.modifyInfos = data["modifyInfos"];
-        if (data.length > 0) {
+        if (data["modifyInfos"].length > 0) {
           self.dialog = $(".ui-dialog");
           self.dialog.dialog("show");
         } else {

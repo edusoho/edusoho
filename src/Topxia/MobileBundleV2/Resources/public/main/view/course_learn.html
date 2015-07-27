@@ -1,17 +1,17 @@
 <div class="ui-course top-header">
-  	<div class="course-head-body">
-      	<div class="course-head">
-		    <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course" />
-		    <p class="mask">
-		      <a class="learned">
+    <div class="course-head-body">
+        <div class="course-head">
+            <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course" />
+            <p class="mask">
+                <a class="learned">
 		      	已完成{{ learnProgress }}
 		      </a>
-		    </p>
-		    <div class="course-progress">
-		      <span ng-style="{ width : learnProgress }" ></span>
-		    </div>
-		</div>
-	</div>
-	<div ng-include="  'view/course_lesson.html' | coverIncludePath ">
-	</div>
+            </p>
+            <div class="course-progress">
+                <span ng-style="{ width : learnProgress }"></span>
+            </div>
+        </div>
+    </div>
+    <div ng-include="  'view/course_lesson.html' | coverIncludePath ">
+    </div>
 </div>
