@@ -29,14 +29,21 @@
   </div>
 
   <div class="course-btn-join">
-    {% if "now"|date('U') < course.startTime %}
-        <a class="btn btn-study gray" disabled='disabled'>已报名,等待参加</a>
-    {% elseif "now"|date('U') <= course.endTime %}
+    {% if 'periodic'==course.type %}
+      {% if "now"|date('U') < course.startTime %}
+          <a class="btn btn-study gray" disabled='disabled'>已报名,等待参加</a>
+      {% elseif "now"|date('U') <= course.endTime %}
+        {% if nextLearnLesson %}
+          <a class="" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
+        {% endif %}
+      {% else %}
+          <a class="btn btn-study little-gray" disabled='disabled'>已结束</a> 
+      {% endif %}
+    {% else %}
       {% if nextLearnLesson %}
         <a class="" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
       {% endif %}
-    {% else %}
-        <a class="btn btn-study little-gray" disabled='disabled'>已结束</a> 
     {% endif %}
   </div>
 {% endblock %}	
+

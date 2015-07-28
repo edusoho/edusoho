@@ -45,8 +45,10 @@
                   <p>结束：{{course.endTime | date('m月d日 H : i')}}</p>
                 </li>
               </ul>
-              {# <p class="red">获得证书 ></p> #}
-{#               <p class="red gray"><i class="iconfont icon-xunzhang"></i>已结束</p> #}
+              {% if course.certi %}
+                {# <p class="red gray">获得证书 ></p> #}
+                <p class="red"><i class="iconfont icon-xunzhang"></i></p>
+              {% endif %}
              </div>
           </div>
         {% endif %}

@@ -19,6 +19,7 @@ class Version20150724113040 extends AbstractMigration
         $this->addSql("ALTER TABLE `course` ADD `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间';");
         $this->addSql("ALTER TABLE `course` ADD `rootId` int(10) unsigned DEFAULT '0' COMMENT '根课程ID';");
         $this->addSql("ALTER TABLE `course` ADD `periods` int unsigned NOT NULL DEFAULT '1' COMMENT '周期课程的期数';");
+        $this->addSql("ALTER TABLE `course` ADD `certi` TINYINT unsigned NOT NULL DEFAULT  '0' COMMENT '是否发证';");
     }
 
     /**
@@ -30,5 +31,6 @@ class Version20150724113040 extends AbstractMigration
         $this->addSql("ALTER TABLE `course` DROP `endTime`;");
         $this->addSql("ALTER TABLE `course` DROP `rootId`;");
         $this->addSql("ALTER TABLE `course` DROP `periods`;");
+        $this->addSql("ALTER TABLE `course` DROP `certi`;");
     }
 }
