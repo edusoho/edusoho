@@ -139,7 +139,7 @@ define(function(require, exports, module) {
                 $("body,html").animate({
                     scrollTop: $("#"+id).offset().top
                 }, 300), !1
-                
+
                $pageBtn.closest('.thread-subpost-container .thread-subpost-content').html(result);
             });
             
