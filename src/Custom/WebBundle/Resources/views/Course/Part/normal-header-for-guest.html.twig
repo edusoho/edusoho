@@ -1,7 +1,6 @@
 {% extends 'CustomWebBundle:Course:Part/normal-header-layout.html.twig' %}
 
 {% set layoutClass = 'course-detail-header' %}
-{% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
 
 {% block content %}
   {{ header_macro.picture(course) }}
@@ -16,27 +15,32 @@
         <span>( {{ course.ratingNum }}人 )</span>
       </div>
     <div class="study clearfix">
-      <a class="btn btn-study {{ courseFinished ? 'little-gray' : ''}}" 
-        {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
-            href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}" 
-        {% elseif userVipStatus == 'ok' %}
-            id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}" 
+      {% if course.type=='periodic' %}
+        {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
+        <a class="btn btn-study {{ courseFinished ? 'little-gray' : ''}}" 
+          {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
+              href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}" 
+          {% elseif userVipStatus == 'ok' %}
+              id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}" 
+          {% else %}
+              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+          {% endif %}
+          {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum)  or courseFinished%}
+              disabled="disabled"
+          {% endif %}
+        >
+        {% if courseFinished %}
+          已结束
         {% else %}
-            href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+          {% if (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0) %}
+            {{ userVipStatus=='ok' ? ("now"|date('U') >= course.startTime ? "加入学习" : " 报名参加") : "购买课程" }}
+            }
+          {% else %}
+            {{ "now"|date('U') >= course.startTime ? "加入学习" : " 报名参加" }}
+          {% endif %}
         {% endif %}
-        {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum)  or courseFinished%}
-            disabled="disabled"
-        {% endif %}
-      >
-      {% if courseFinished %}
-        已结束
       {% else %}
-        {% if (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0) %}
-          {{ userVipStatus=='ok' ? ("now"|date('U') >= course.startTime ? "加入学习" : " 报名参加") : "购买课程" }}
-          }
-        {% else %}
-          {{ "now"|date('U') >= course.startTime ? "加入学习" : " 报名参加" }}
-        {% endif %}
+
       {% endif %}
     </a>
       {#多重情况
