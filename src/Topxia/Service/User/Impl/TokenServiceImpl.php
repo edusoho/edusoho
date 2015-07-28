@@ -19,6 +19,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
         $token['createdTime'] = time();
 
+        $this->gcExpiredToken();
         return $this->getTokenDao()->addToken($token);
     }
 
@@ -73,6 +74,12 @@ class TokenServiceImpl extends BaseService implements TokenService
             return ;
         }
 
+        return ;
+    }
+
+    protected function gcExpiredToken()
+    {
+        $this->getTokenDao()->deleteExpiredToken();
         return ;
     }
 
