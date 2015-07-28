@@ -1,6 +1,9 @@
 .es-qrcode {
   position: relative;
   text-align: center;
+  @media(max-width:@screen-xs-max) {
+    display: none;
+  }
   >i {
     font-size: 24px;
     color: @gray;

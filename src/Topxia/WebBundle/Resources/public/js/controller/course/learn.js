@@ -823,10 +823,9 @@ define(function(require, exports, module) {
                     dataType: "json",
                     success:function(data){
                         $this.find(".qrcode-popover img").attr("src",data.img);
+                        $(this).addClass('open');
                     }
                 });
-                
-                $(this).addClass('open');
             }
         });
     };
