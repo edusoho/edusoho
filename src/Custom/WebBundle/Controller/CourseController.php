@@ -23,7 +23,7 @@ class CourseController extends BaseCourseController
 	$this->getCourseService()->hitCourse($id);
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
-	return $this->render(($course['type']=='periodic') ? "CustomWebBundle:Course:{$course['type']}-show.html.twig" : "TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
+	return $this->render("CustomWebBundle:Course:{$course['type']}-show.html.twig", array(
 		'course' => $course,
 		'member' => $member,
 		'items' => $items,

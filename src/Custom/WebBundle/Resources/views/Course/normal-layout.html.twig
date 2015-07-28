@@ -22,33 +22,35 @@
     </div>
     <div class="course-about-sidebar">
       {% block course_sidebar %}
-        <div class="es-panel open-class">
-          <div class="panel-heading clearfix">第三次开课<span class="teacher-icon"></span></div>
-           <div class="panel-body">
-            <ul>
-              <li class="first gray">
-                {% if "now"|date('U') > course.endTime %}
-                  <p>本次开课</p>
-                  <p><span>已结束</span></p>
-                {% elseif "now"|date('U') >= course.startTime %}
-                  <p>课程已进行至</p>
-                  <p><span>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</p>
-                {% else %}
-                  <p>距离开课</p>
-                  <p><span>{{ course.startTime | remain_time }}</span></p>
-                  {#<p><span>{{ ((course.startTime-'now' | date('U'))/86400) | round(0, 'ceil') }}</span>天</p>#}
-                {% endif %}
-              </li>
-              <li class="last">
-                <p>开课：{{course.startTime | date('m月d日 H : i')}}</p>
-                <p>结束：{{course.endTime | date('m月d日 H : i')}}</p>
-              </li>
-            </ul>
-            {# <p class="red">获得证书 ></p> #}
-            <p class="red gray">已结束</p>
-           </div>
-        </div>
-        <div class="es-panel teacher-column">
+        {% if course.type=='periodic' %}
+          <div class="es-panel open-class">
+            <div class="panel-heading clearfix">第{{ course.periods | num2chinese }}次开课<i class="iconfont icon-xiala"></i></div>
+             <div class="panel-body">
+              <ul>
+                <li class="first gray">
+                  {% if "now"|date('U') > course.endTime %}
+                    <p>本次开课</p>
+                    <p><span>已结束</span></p>
+                  {% elseif "now"|date('U') >= course.startTime %}
+                    <p>课程已进行至</p>
+                    <p><span>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</p>
+                  {% else %}
+                    <p>距离开课</p>
+                    <p><span>{{ course.startTime | remain_time }}</span></p>
+                    {#<p><span>{{ ((course.startTime-'now' | date('U'))/86400) | round(0, 'ceil') }}</span>天</p>#}
+                  {% endif %}
+                </li>
+                <li class="last">
+                  <p>开课：{{course.startTime | date('m月d日 H : i')}}</p>
+                  <p>结束：{{course.endTime | date('m月d日 H : i')}}</p>
+                </li>
+              </ul>
+              {# <p class="red">获得证书 ></p> #}
+{#               <p class="red gray"><i class="iconfont icon-xunzhang"></i>已结束</p> #}
+             </div>
+          </div>
+        {% endif %}
+    		<div class="es-panel teacher-column">
           <div class="panel-heading clearfix">任课老师<span class="teacher-icon"></span></div>
           <div class="panel-body">
             <ul>
@@ -56,8 +58,8 @@
             </ul>
           </div>
         </div>
-        {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
-      {% endblock %}  
+     		{{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+     	{% endblock %}	
     </div>
   </div>
 {% endblock %} 

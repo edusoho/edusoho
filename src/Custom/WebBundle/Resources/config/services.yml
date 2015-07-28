@@ -8,3 +8,9 @@ services:
 #    custom_web.example:
 #        class: %custom_web.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+    custom.twig.web_extension:
+        class: Custom\WebBundle\Twig\Extension\WebExtension
+        arguments:    [@service_container]
+        tags:
+            - { name: twig.extension }
