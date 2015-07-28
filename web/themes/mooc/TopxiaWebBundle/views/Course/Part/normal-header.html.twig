@@ -22,15 +22,15 @@
         <span><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></span>
     </div>
     <div class="content">{{course.subtitle}}</div>
-    <div class="metas">
-      <p class="student-num hidden-xs">
+    <div class="metas hidden-xs hidden-sm">
+      <p class="student-num ">
         {% if course.showStudentNumType == 'opened' %}
         <label for="">学员数</label><span>{{ course.studentNum }}</span>人
         {% endif %}
       </p> 
       {% if not member %}
         {% if course.expiryDay %}
-          <p class="expiry-date hidden-sm">
+          <p class="expiry-date">
             <label for="">有效期</label><span>{{ course.expiryDay }}天</span>
           </p>
         {% endif %}
