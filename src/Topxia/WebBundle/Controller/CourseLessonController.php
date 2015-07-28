@@ -59,7 +59,7 @@ class CourseLessonController extends BaseController
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }
-                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
             }
             
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {

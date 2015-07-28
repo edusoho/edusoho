@@ -29,7 +29,6 @@ class CoinController extends BaseController
           'cash_rate' => 1,
           'coin_name' => '虚拟币',
           'coin_content' => '',
-          'price_type' => 'RMB',
           'coin_picture' => '',
           'coin_picture_50_50' => '',
           'coin_picture_30_30' => '',
