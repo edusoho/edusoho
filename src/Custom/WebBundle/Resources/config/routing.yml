@@ -1,0 +1,19 @@
+my_teaching_courses:
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: CustomWebBundle:MyTeaching:courses, filter:'normal' }
+
+course_create:
+    pattern:  /course/create
+    defaults: { _controller: CustomWebBundle:Course:create }
+
+course_show:
+    pattern:  /course/{id}
+    defaults: { _controller: TopxiaWebBundle:Course:show }
+
+course_manage:
+    pattern:  /course/{id}/manage
+    defaults: { _controller: CustomWebBundle:CourseManage:index }
+
+course_manage_base:
+    pattern:  /course/{id}/manage/base
+    defaults: { _controller: CustomWebBundle:CourseManage:base }
