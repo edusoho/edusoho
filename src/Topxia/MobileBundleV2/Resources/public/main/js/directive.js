@@ -390,7 +390,21 @@ directive('categoryTree', function () {
             categoryCols[0] = [getRootCategory()].concat(categoryTree.childs);
             $scope.categoryCols = categoryCols;
 
+            var changeItemBG = function(item) {
+              var parentNode = item.parentNode;
+              if (!parentNode) {
+                return;
+              }
+
+              angular.forEach(parentNode.children, function(item) {
+                angular.element(item).css("background", "none");
+              });
+            };
+
             $scope.selectCategory = function($event, category) {
+                    
+                    changeItemBG($event.srcElement.parentNode);
+                    angular.element($event.srcElement.parentNode).css("background", "#ccc");
                     if (category.childs) {
                       for (var i = $scope.categoryCols.length- 1; i >= category.depth; i--) {
                           $scope.categoryCols[i] = [];

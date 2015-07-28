@@ -593,6 +593,16 @@ a {
   background-color: #ffffff;
 }
 
+.category-card .ui-list>li {
+  padding: 0;
+}
+
+.category-card .ui-list>li p {
+  height: 100%;
+  width: 100%;
+  padding: 15px 25px 12px 15px;
+}
+
 /*.category-card */
 
 /* sign */
@@ -1599,11 +1609,11 @@ a {
 /* discount-label */
 
 .discount-label.rebate span{
-  background: rgb(245, 168, 27);
+  background: #e74c3c;
 }
 
 .discount-label.free span{
-  background: rgb(237, 46, 61);
+  background: #f5a623;
 }
 
 .discount-label {
