@@ -55,14 +55,14 @@ class CommonController extends BaseController
         }else {
             if ($route_type == 'classroom-qrcode' && isset($data['classroomId'])){
                 $classroomId = (int)$data['classroomId'];
-                $token = $this->getTokenService()->makeToken('classroom-qrcode',array('userId'=>$user['id'],'data' => array('classroomId'=>$classroomId), 'times' => 0, 'duration' => 3600));    
+                $token = $this->getTokenService()->makeToken('classroom-qrcode',array('userId'=>$user['id'],'data' => array('classroomId'=>$classroomId), 'times' => 0, 'duration' => 900));    
             }elseif ($route_type == 'course-qrcode' && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
-                $token = $this->getTokenService()->makeToken('course-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId), 'times' => 0, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('course-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId), 'times' => 0, 'duration' => 900));
             }elseif ($route_type == 'lesson-qrcode' && isset($data['lessonId']) && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
                 $lessonId = (int)$data['lessonId'];
-                $token = $this->getTokenService()->makeToken('lesson-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId,'lessonId'=>$lessonId), 'times' => 0, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('lesson-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId,'lessonId'=>$lessonId), 'times' => 0, 'duration' => 900));
             }else {
                 throw $this->createNotFoundException('参数错误，无法找到指定二维码');
             }
@@ -82,7 +82,7 @@ class CommonController extends BaseController
         $pcUserId = $token['userId'];
         $user = $this->getUserService()->getUser($pcUserId);
         $currentUser = $this->getUserService()->getCurrentUser();
-        if (!$currentUser->isLogin() || $currentUser['id']!==$pcUserId){
+        if (!$currentUser->isLogin() || $currentUser['id']!=$pcUserId){
             $this->authenticateUser($user);
         }
         if (isset($route_type) && $route_type == 'course-qrcode' && !empty($token['data']['courseId'])){
