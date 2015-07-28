@@ -1,0 +1,67 @@
+{% extends 'CustomWebBundle:Course:Part/normal-header-layout.html.twig' %}
+
+{% set layoutClass = 'course-detail-header' %}
+{% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
+
+{% block content %}
+  {{ header_macro.picture(course) }}
+   <ul class="course-data clearfix">
+      {{ header_macro.favorite_btn(course, hasFavorited) }}
+      {{ header_macro.share_btn(course) }}
+   </ul>
+  {{ header_macro.info(course, member) }}
+  <div class="pull-rights">
+    <div class="score">
+        {{ web_macro.star(course.rating) }}
+        <span>( {{ course.ratingNum }}人 )</span>
+      </div>
+    <div class="study clearfix">
+      <a class="btn btn-study {{ courseFinished ? 'little-gray' : ''}}" 
+        {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
+            href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}" 
+        {% elseif userVipStatus == 'ok' %}
+            id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}" 
+        {% else %}
+            href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+        {% endif %}
+        {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum)  or courseFinished%}
+            disabled="disabled"
+        {% endif %}
+      >
+      {% if courseFinished %}
+        已结束
+      {% else %}
+        {% if (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0) %}
+          {{ userVipStatus=='ok' ? ("now"|date('U') >= course.startTime ? "加入学习" : " 报名参加") : "购买课程" }}
+          }
+        {% else %}
+          {{ "now"|date('U') >= course.startTime ? "加入学习" : " 报名参加" }}
+        {% endif %}
+      {% endif %}
+    </a>
+      {#多重情况
+        <a class="btn btn-study">报名参加</a> 
+        <a class="btn btn-study">继续学习</a> 
+        <a class="btn btn-study gray">已报名,等待参加</a>
+        <a class="btn btn-study little-gray">已结束</a> 
+      #}
+      {#  <div class="sns clearfix" id="es-sns">
+            <span class="collect">
+              <a class="tooltop" id="favorite-btn" href="javascript:;" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="收藏课程" data-placement="top">
+                <span class="collect-icon"></span>
+              </a>
+            </span>
+            
+            <span class="collect active">
+              <a class="tooltop" id="unfavorite-btn" href="javascript:;" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="已收藏" data-placement="top">
+                <span class="collect-icon"></span>
+              </a>
+            </span>
+
+            <span class="es-share dropdown tooltop" data-bdText="{{setting('default.groupShareContent')}}" data-role="tooltip" title="分享到" data-placement="top">
+              <span class="icon-share"></span>
+            </span>
+          </div>#}
+        </div> 
+      </div>
+{% endblock %}  

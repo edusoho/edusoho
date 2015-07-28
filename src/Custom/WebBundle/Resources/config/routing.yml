@@ -6,9 +6,10 @@ course_create:
     pattern:  /course/create
     defaults: { _controller: CustomWebBundle:Course:create }
 
+
 course_show:
     pattern:  /course/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:show }
+    defaults: { _controller: CustomWebBundle:Course:show }
 
 course_manage:
     pattern:  /course/{id}/manage
@@ -17,3 +18,5 @@ course_manage:
 course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: CustomWebBundle:CourseManage:base }
+
+
