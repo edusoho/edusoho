@@ -8,8 +8,11 @@ define(function(require, exports, module) {
     require('colorpicker');
     exports.run = function() {
 
-        initFirstTab();
-        bindClipboard();
+
+        if( $(".tab").length>0 ){
+            initFirstTab();
+            bindClipboard();
+        }
         $('.colorpicker-input').colorpicker();
         $('#btn-tabs .btn').click(function(){
             $(this).removeClass('btn-default').addClass('btn-primary')
