@@ -378,7 +378,7 @@ EOD;
     {
     	$output->write('  初始化主题');
     	
-        $this->getSettingService()->set('theme', array('uri' => 'default'));
+        $this->getSettingService()->set('theme', array('uri' => 'mooc'));
 
         $output->writeln(' ...<info>成功</info>');
     }
@@ -404,6 +404,8 @@ EOD;
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/mooc/block.json';
+        BlockToolkit::init($json, $this->getContainer());
     }
 
 	private function initServiceKernel()
