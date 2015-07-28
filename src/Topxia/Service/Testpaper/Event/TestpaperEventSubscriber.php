@@ -18,7 +18,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             'testpaper.create' => 'onTestpaperCreate',
             'testpaper.update' => 'onTestpaperUpdate',
             'testpaper.items.create' => 'onTestpaperItemsCreate',
-            'testpaper.items.update' => 'onTestpaperItemsUpdate'
+            'testpaper.items.update' => 'onTestpaperItemsUpdate',
+            'testpaper.items.delete' => 'onTestpaperItemsDelete'
         );
     }
 
@@ -99,6 +100,12 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
         $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
         $this->getTestpaperService()->updateTestpaperByParentId($testpaper['id'],$fields);
+    }
+
+    public function onTestpaperItemsDelete(ServiceEvent $event)
+    {
+        $item = $event->getSubject();
+        $this->getTestpaperService()->deleteTestpaperItemByPId($item['id']);
     }
 
     protected function simplifyTestpaper($testpaper)

@@ -269,8 +269,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets($targets);
     }
 
-
-
     public function startTestpaper($id, $target)
     {
     	$testpaper = $this->getTestpaperDao()->getTestpaper($id);
@@ -667,11 +665,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
     }
 
-    public function finishTestpaper($resultId)
-    {
-
-    }
-
     public function submitTestpaperAnswer($id, $answers)
     {
         if (empty($answers)) {
@@ -738,6 +731,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperItemDao()->addItem($item);
     }
 
+    public function deleteTestpaperItemByPId($pId)
+    {
+        return $this->getTestpaperItemDao()->deleteTestpaperItemByPId($pId);
+    }
+
     public function getTestpaperItems($testpaperId)
     {
         return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
@@ -745,8 +743,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items)
     {
-
-
         $testpaper = $this->getTestpaper($testpaperId);
         if (empty($testpaperId)) {
             throw $this->createServiceException();
@@ -777,7 +773,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
         }
 
-
         foreach ($items as $item) {
             $question = $questions[$item['questionId']];
             $item['seq'] = $seq;
@@ -801,6 +796,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $item = $this->getTestpaperItemDao()->addItem($item);
                 $this->dispatchEvent("testpaper.items.create",$item);
             } else {
+                
                 $existItem = $existItems[$item['questionId']];
                 if ($item['seq'] != $existItem['seq'] || $item['score'] != $existItem['score']) {
                     $existItem['seq'] = $item['seq'];
@@ -818,6 +814,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         foreach ($existItems as $existItem) {
             $this->getTestpaperItemDao()->deleteItem($existItem['id']);
+            $this->dispatchEvent("testpaper.items.delete",$existItem);
         }
 
 

@@ -16,6 +16,8 @@ interface TestpaperItemDao
 
     public function deleteItemsByTestpaperId($id);
 
+    public function deleteTestpaperItemByPId($pId);
+
     public function findItemByIds(array $ids);
 
     public function findItemsByTestPaperId($testPaperId);

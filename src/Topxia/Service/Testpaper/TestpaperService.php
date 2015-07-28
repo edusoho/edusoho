@@ -67,8 +67,6 @@ interface TestpaperService
      */
     public function startTestpaper($id, $target);
 
-    public function finishTestpaper($resultId);
-
     public function previewTestpaper($testpaperId);
 
     public function showTestpaper($testpaperResultId, $isAccuracy = null);
@@ -99,6 +97,8 @@ interface TestpaperService
      */
     public function createTestpaperItem($item);
 
+    public function deleteTestpaperItemByPId($pId);
+    
     public function getTestpaperItems($testpaperId);
 
     public function updateTestpaperItems($testpaperId, $items);
