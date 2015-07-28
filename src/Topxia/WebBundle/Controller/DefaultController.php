@@ -8,12 +8,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 use Topxia\Common\Paginator;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
 
     public function indexAction ()
     {
+        $api = CloudAPIFactory::create('leaf');
+
+        // $api->get('/');
+
+        var_dump($api);
+
+        exit();
+
+
         $conditions = array('status' => 'published', 'parentId' => 0);
 
         $coinSetting=$this->getSettingService()->get('coin',array());
