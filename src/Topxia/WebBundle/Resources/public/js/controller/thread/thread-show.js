@@ -134,7 +134,13 @@ define(function(require, exports, module) {
             var $pageBtn = $(e.currentTarget);
 
             $.post($pageBtn.attr('href'), function(result){
-               $pageBtn.closest('.thread-subpost-container').html(result);
+
+                var id = $pageBtn.parents(".thread-post").attr("id");
+                $("body,html").animate({
+                    scrollTop: $("#"+id).offset().top
+                }, 300), !1
+                
+               $pageBtn.closest('.thread-subpost-container .thread-subpost-content').html(result);
             });
             
         },
