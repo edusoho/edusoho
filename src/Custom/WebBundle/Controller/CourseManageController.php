@@ -30,6 +30,12 @@ class CourseManageController extends BaseCourseManageController
         $courseSetting = $this->getSettingService()->get('course', array());
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
+            if($course['type']=='periodic'){
+                if(!empty($data['startTime']))
+                    $data['startTime'] = strtotime($data['startTime']);
+                if(!empty($data['endTime']))
+                    $data['endTime'] = strtotime($data['endTime']);
+            }
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
             return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
@@ -43,14 +49,8 @@ class CourseManageController extends BaseCourseManageController
             $liveCapacity = null;
         }
         $default = $this->getSettingService()->get('default', array());
-        $url = null;
-        if($course['type'] == 'periodic'){
-            $url = 'Custom';
-        }else{
-            $url = 'Topxia';
-        }
 
-		return $this->render($url.'WebBundle:CourseManage:base.html.twig', array(
+		return $this->render('CustomWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
             'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],

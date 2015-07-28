@@ -51,7 +51,11 @@
                 <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
                 
                 {% if course.type == 'live' %}
-                  <span class="label label-success live-label">直播</span>
+                    <span class="label label-success live-label">直播</span>
+                {% endif  %}
+
+                {% if course.type == 'periodic' %}
+                    <span class="label label-success live-label">周期</span>
                 {% endif  %}
 
                 {% if filter == 'classroom' %} 

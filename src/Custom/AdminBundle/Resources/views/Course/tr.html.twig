@@ -69,7 +69,8 @@
           {% endif %}
 
           {% if course.type == 'periodic' %}
-            <li><a class="next-round-course" href="javascript:" data-url="{{ path('admin_course_next_round', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-hand-right"></span> 开设下一期</a></li>
+              <li ><a class="next-round-course" id="next-round-course" href="javascript:" data-toggle="modal" data-target="#modal"
+                      data-url="{{ path('admin_course_next_round', {id:course.id}) }}" data-type="{{course.type}}" ><span class="glyphicon glyphicon-plus-sign"></span>开设下一期</a></li>
           {% endif %}
 
           <li ><a class="copy-course" id="copy-course" href="javascript:" 
