@@ -24,7 +24,16 @@
       {% block course_sidebar %}
         {% if course.type=='periodic' %}
           <div class="es-panel open-class">
-            <div class="panel-heading clearfix">第{{ course.periods | num2chinese }}次开课<i class="iconfont icon-xiala"></i></div>
+            <div class="panel-heading clearfix dropdown">
+              <a href="javascript:;" class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">第{{ course.periods | num2chinese }}次开课
+                <i class="iconfont icon-xiala"></i>
+              </a>
+              <ul class="dropdown-menu open-class-dropdown">
+                  <li><a href="javascript:;">第一次开课</a></li>
+                  <li><a href="javascript:;">第二次开课</a></li>
+              </ul>
+            </div>            
+
              <div class="panel-body">
               <ul>
                 <li class="first gray">
