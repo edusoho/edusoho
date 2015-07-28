@@ -24,7 +24,7 @@
                 "type": "imglink",  
                 "default":[
                     {
-                        "src": "\/themes\/mooc\/img\/banner1.jpg",
+                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
                         "alt": "默认背景图１",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
@@ -107,7 +107,7 @@
                 "type": "imglink",  
                 "default":[
                     {
-                        "src": "\/themes\/mooc\/img\/banner2.png",
+                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
                         "alt": "默认背景图２",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
@@ -190,7 +190,7 @@
                 "type": "imglink",  
                 "default":[
                     {
-                        "src": "\/themes\/mooc\/img\/banner3.jpg",
+                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
                         "alt": "默认背景图３",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
