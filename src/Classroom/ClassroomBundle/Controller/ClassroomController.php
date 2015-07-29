@@ -94,7 +94,9 @@ class ClassroomController extends BaseController
         }
 
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-
+        foreach ($members as &$member) {
+            $member = $this->getClassroomService()->unSerialize($member);
+        }
         return $this->render("ClassroomBundle:Classroom:my-classroom.html.twig", array(
             'classrooms' => $classrooms,
             'members' => $members,
