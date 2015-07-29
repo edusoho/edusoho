@@ -733,22 +733,29 @@
     }
   }
   &.open-class{
+    .panel-heading{
+      .active{
+        color:@bg-primary;
+        &:hover{
+          color: #fff;
+        }
+      }
+    }
     .panel-body{
       padding: 0;
-    }
-    ul{
-      padding-top: 15px;
-       border-bottom: 1px dashed @little-gray;
-     
-    }
-    li{
-      display: inline-block;
-      width: 59%;
-      margin-bottom: 15px;
-     
-     
-    }
-    .first{
+        ul{
+        padding-top: 15px;
+        border-bottom: 1px dashed @little-gray;
+       
+      }
+      li{
+        display: inline-block;
+        width: 59%;
+        margin-bottom: 15px;
+       
+       
+      }
+      .first{
       width: 39%;
       text-align: center;
       font-size: 13px;
@@ -764,6 +771,9 @@
       padding-left: 6px;
       color: @font-color;
     }
+    }
+  
+  
     .red{
       color:#e74c3c;
       font-size: 16px;

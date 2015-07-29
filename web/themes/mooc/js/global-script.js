@@ -33,6 +33,7 @@ define(function(require, exports, module) {
         $("body").on("click",'.html-mask.active',function(e){
             removeNavMobile();
         });
+       
         
     }
 

@@ -11,12 +11,12 @@
             {% if member.orderId  %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
                 <p><i class="es-icon es-icon-exit"></i><p>
-                
+                <p>退出</p>
               </a>
             {% else %}
               <a id="exit-course-learning" class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}" {% if member.role != 'student' %} disabled {% endif %}>
                 <p><i class="es-icon es-icon-exit"></i><p>
-              
+                <p>退出</p>
               </a>
             {% endif %}
           </li>
