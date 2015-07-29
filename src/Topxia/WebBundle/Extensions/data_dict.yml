@@ -65,6 +65,7 @@ refundStatus:html:
 
 payment:
     alipay: 支付宝
+    wxpay: 微信支付
 
 moneyRecordType:
     income: 充值
@@ -200,7 +201,7 @@ userType:
     weibo: 微博登录
     renren: 人人连接
     qq: QQ登录
-    douban: 豆瓣连接
+    weixin: 微信登录
 
 userKeyWordTypes:
     nickname: 用户名

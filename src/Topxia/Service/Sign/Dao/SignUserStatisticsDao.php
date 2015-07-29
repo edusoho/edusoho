@@ -4,7 +4,7 @@ namespace Topxia\Service\Sign\Dao;
 
 interface SignUserStatisticsDao
 {
-	public function addStatistics($Statistics);
+	public function addStatistics($statistics);
 
 	public function updateStatistics($id, $fields);
 

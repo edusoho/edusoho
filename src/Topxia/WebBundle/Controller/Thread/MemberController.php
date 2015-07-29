@@ -99,7 +99,7 @@ class MemberController extends BaseController
     protected function _makeInfo($user)
     {
         $title = array(
-            'nickname' => '昵称',
+            'nickname' => '用户名',
             'truename' => '真实姓名',
             'mobile' => '手机号码',
             'createdTime' => '报名时间'

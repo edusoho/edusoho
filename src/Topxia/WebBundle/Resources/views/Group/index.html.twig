@@ -7,7 +7,8 @@
     <div class="col-md-8">
       <div class="panel panel-default">
         <div class="panel-heading">
-          热门小组<a href="{{path('group_search_group')}}" class="pull-right">&raquo;更多</a>
+          热门小组
+          <a href="{{path('group_search_group')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
         </div>
         <div class="panel-body">
           <div class="row group-grids">
@@ -71,7 +72,10 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             我的小组
-            {% if user.id %} <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="pull-right">&raquo;更多</a>{% endif %}
+            {% if user.id %} 
+              <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="more">
+              <i class="es-icon es-icon-morehoriz"></i></a>
+            {% endif %}
           </div>
           <div class="panel-body">
             <div class="row group-grids">

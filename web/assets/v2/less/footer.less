@@ -1,5 +1,7 @@
 
 .es-footer {
+  position: relative;
+  z-index: 1;
   .footer-link {
     background: #2e2e2e;
     padding: 55px 0;
@@ -80,11 +82,12 @@
       }
     }
     .sns-popover {
-      width: 194px;
-      height: 209px;
       position: absolute;
-      left: -68px;
-      top: -209px;
+      left: -65px;
+      top: -205px;
+      padding: 5px;
+      z-index: 1;
+      background: #fff;
       display: none \9;
       .opacity(0);
       .es-transform(0,0);
@@ -93,8 +96,27 @@
       -moz-transform-origin: 50% 100%;
       -o-transform-origin: 50% 100%;
       .es-transition;
+      -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.5);
+      -moz-box-shadow: 0 2px 3px rgba(0,0,0,.5);
+      box-shadow: 0 2px 3px rgba(0,0,0,.5);
+      &:after {
+        top: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-top-color: #fff;
+        border-width: 13px;
+        margin-left: -13px;
+      }
+      img {
+        width: 180px;
+        height: 180px;
+      }
     }
-
     i {
       display: block;
       width: 40px;

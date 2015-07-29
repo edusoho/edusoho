@@ -24,8 +24,9 @@ class CourseLessonController extends BaseController
         $courseSetting = $this->getSettingService()->get('course', array());
         $coinSetting = $this->getSettingService()->get('coin');
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-
-        if ($user->isLogin() && $courseSetting['buy_fill_userinfo'] == 0) {
+        
+        $userInfoEnable = isset($coinSetting['buy_fill_userinfo']) && $coinSetting['buy_fill_userinfo'] == 1;
+        if ($user->isLogin() && !$userInfoEnable && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
             if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
                 || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
                 
@@ -119,12 +120,22 @@ class CourseLessonController extends BaseController
             }
         }
 
+         //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user' => $user,
             'course' => $course,
             'lesson' => $lesson,
             'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
             'hlsUrl' => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
+            'vipStatus' => $vipStatus
         ));
     }
 
@@ -173,6 +184,7 @@ class CourseLessonController extends BaseController
         $json['courseId'] = $lesson['courseId'];
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider'] = $lesson["liveProvider"];
+        $json['nowDate'] = time();
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if (!empty($app)) {
@@ -213,7 +225,13 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                                'data' => $file['id'], 
+                                'times' => 3, 
+                                'duration' => 3600,
+                                'userId' => $this->getCurrentUser()->getId()
+                            ));
+
                             $url = array(
                                 'url' => $this->generateUrl('hls_playlist', array(
                                     'id' => $file['id'],
@@ -250,7 +268,8 @@ class CourseLessonController extends BaseController
                         $user = $this->getCurrentUser();
                         $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
                         if ($watchStatus['status'] == 'error') {
-                            $json['mediaError'] = "您的观看次数已经达到{$watchStatus['num']}次，最多只能看{$watchStatus['limit']}次。";
+                            $wathcLimitTime = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
+                            $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
                         }
                     }
                 } else {
@@ -617,7 +636,7 @@ class CourseLessonController extends BaseController
         return false;
     }
 
-    public function listAction(Request $request, $courseId, $member, $previewUrl)
+    public function listAction(Request $request, $courseId, $member, $previewUrl, $mode = 'full')
     {
         $user = $this->getCurrentUser();
         $learnStatuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
@@ -636,15 +655,23 @@ class CourseLessonController extends BaseController
             $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
         }
 
+        if ($this->setting('magic.lesson_watch_limit')) {
+            $lessonLearns = $this->getCourseService()->findUserLearnedLessons($user['id'], $courseId);
+        } else {
+            $lessonLearns = array();
+        }
+
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
             'member' => $member,
             'previewUrl' => $previewUrl,
             'learnStatuses' => $learnStatuses,
+            'lessonLearns' => $lessonLearns,
             'currentTime' => time(),
             'homeworkLessonIds' => $homeworkLessonIds,
-            'exercisesLessonIds' => $exercisesLessonIds
+            'exercisesLessonIds' => $exercisesLessonIds,
+            'mode' => $mode,
         ));
     }
 
@@ -692,5 +719,15 @@ class CourseLessonController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    } 
+    
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

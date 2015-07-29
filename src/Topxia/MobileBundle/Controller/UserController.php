@@ -164,7 +164,7 @@ class UserController extends MobileController
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse($request, 'nickname_invalid', '昵称格式不正确');
+            return $this->createErrorResponse($request, 'nickname_invalid', '用户名格式不正确');
         }
 
         if (!SimpleValidator::password($password)) {
@@ -176,7 +176,7 @@ class UserController extends MobileController
         }
 
         if (!$this->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse($request, 'nickname_exist', '该昵称已被注册');
+            return $this->createErrorResponse($request, 'nickname_exist', '该用户名已被注册');
         }
 
         $user = $this->getAuthService()->register(array(
