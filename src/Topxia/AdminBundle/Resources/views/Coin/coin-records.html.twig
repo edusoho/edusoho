@@ -31,6 +31,12 @@
         </div>
 
       <button class="btn btn-primary">搜索</button>
+      <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+      createdTime:app.request.get('createdTime'),
+      type:type,
+      keywordType:app.request.query.get('keywordType'),
+      keyword:app.request.query.get('keyword'),
+      })}}">导出结果</a>
     </form>
   
     <p class="text-muted">

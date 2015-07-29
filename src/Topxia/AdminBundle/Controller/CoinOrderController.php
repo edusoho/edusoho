@@ -29,10 +29,16 @@ class CoinOrderController extends BaseController
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+
+            $conditions['endTime'] = strtotime($conditions['endDateTime']);
+        } 
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCashOrdersService()->searchOrdersCount($conditions),
+            $a = $this->getCashOrdersService()->searchOrdersCount($conditions),
             20
           );
 
@@ -43,11 +49,20 @@ class CoinOrderController extends BaseController
             $paginator->getPerPageCount()
           );
 
+        foreach ($orders as $index => $expiredOrderToBeUpdated ){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+               $orders[$index]['status'] = 'cancelled';
+            }
+        }
+
         $userIds =  ArrayToolkit::column($orders, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-
+        $type = 'coin';
         return $this->render('TopxiaAdminBundle:Coin:coin-orders.html.twig',array(
+            'request' => $request,
             'users'=>$users,
+            'type'=>$type,
             'orders'=>$orders,
             'paginator'=>$paginator,
           ));
