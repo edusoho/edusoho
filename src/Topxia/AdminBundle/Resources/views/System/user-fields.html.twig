@@ -8,7 +8,7 @@
 {% endblock %}
 {% block main %}
 
-
+{{ web_macro.flash_messages() }}
 <form action="" class="form-horizontal" method="post">
   <fieldset>
     <legend>自定义字段设置</legend>
@@ -221,8 +221,6 @@
   <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
 </form>
 
-
-{{ web_macro.flash_messages() }}
 {% include 'TopxiaAdminBundle:System:user-fields.modal.html.twig' %}
 
 {% endblock %}
