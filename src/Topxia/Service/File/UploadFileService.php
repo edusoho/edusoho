@@ -19,6 +19,8 @@ interface UploadFileService
 
     public function addFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null);
 
+    public function createFile($file);
+
     public function renameFile($id, $newFilename);
 
     public function deleteFile($id);
