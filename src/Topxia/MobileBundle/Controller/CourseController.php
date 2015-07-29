@@ -234,6 +234,15 @@ class CourseController extends MobileController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            throw $this->createNotFoundException();
+        }
+
         return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $lesson['mediaId'], 'isDownload' => false));
     }
 
