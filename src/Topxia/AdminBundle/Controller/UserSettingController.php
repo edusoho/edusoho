@@ -268,7 +268,9 @@ class UserSettingController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
-           
+        $auth['registerFieldNameArray'] = array_merge($auth['registerFieldNameArray'], ArrayToolkit::column($userFields,'fieldName'));
+        $courseSetting['userinfoFieldNameArray'] = array_merge($courseSetting['userinfoFieldNameArray'], ArrayToolkit::column($userFields,'fieldName'));
+        
         if ($request->getMethod() == 'POST') {
             
             $courseUpdateSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
