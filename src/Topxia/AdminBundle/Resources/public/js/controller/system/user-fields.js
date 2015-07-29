@@ -2,17 +2,10 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    require('jquery.sortable');
     require('/bundles/topxiaadmin/js/controller/system/common');
 
     exports.run = function() {
-
-        /*$("#course-table tbody").sortable({
-            containerSelector: 'table',
-            itemPath: '> tbody',
-            draggedClass: "dragged",
-            itemSelector: 'tr',
-            placeholder: '<tr class="placeholder"/>' 
-        });*/
 
     	var $form = $('#field-form');
         var validator = new Validator({
@@ -56,6 +49,10 @@ define(function(require, exports, module) {
             errormessageRequired: '请选择字段类型'
         });
 
+
+        $(".fill-userinfo-list").sortable({
+          'distance': 20
+        });
 
         $('#field_type').on('change',function(){
             

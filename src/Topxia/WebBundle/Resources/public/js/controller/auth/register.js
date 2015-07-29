@@ -39,11 +39,10 @@ define(function(require, exports, module) {
             minView: 'month'
         });
         var $form = $('#register-form');
-        var captchaStatus = false;
+        
         var validator = new Validator({
             element: $form,
             onFormValidated: function(error, results, $form) {
-                console.log(error);
                 if (error) {
                     return false;
                 }
@@ -131,27 +130,6 @@ define(function(require, exports, module) {
             errormessageRequired: '勾选同意此服务协议，才能继续注册'
         });
 
-  
-        /*if ($('input[name="em_sms_code"]').length > 0) {
-            validator.addItem({
-                element: '[name="em_sms_code"]',
-                required: true,
-                triggerType: 'submit',
-                rule: 'integer fixedLength{len:6} remote',
-                display: '短信验证码'           
-            });
-
-            $form.on('click','.js-sms-send',function(e){
-                var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
-                    
-                $mobile_target.execute(function(error, results, element) {
-                    if (error) { 
-                        return;
-                    }
-                });
-            })
-        }*/
-
 
         $("#register_emailOrMobile").blur(function(){
             var emailOrMobile  = $("#register_emailOrMobile").val();
@@ -163,33 +141,6 @@ define(function(require, exports, module) {
             emSmsCodeValidate(mobile);
         });
 
-
-        /*if ($('.js-sms-send').length > 0 ) {
-            var smsSender = new SmsSender({
-                element: '.js-sms-send',
-
-                url: $('.js-sms-send').data('url'),
-                smsType:'sms_registration',
-                dataTo : $('[name="verifiedMobile"]').val() == null? 'emailOrMobile' : 'verifiedMobile',
-                preSmsSend: function(){
-                    var couldSender = true;
-                    console.log(captchaStatus);
-                    var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
-                    
-                    $mobile_target.execute(function(error, results, element) {
-                        if (error) {
-                            couldSender = false;
-                            return;s
-                        }
-                        couldSender = true;
-                        return;
-                    });
-
-                    return couldSender;
-                }      
-            });
-
-        }*/
 
         function emSmsCodeValidate(mobile){
             var reg_mobile = /^1\d{10}$/;
