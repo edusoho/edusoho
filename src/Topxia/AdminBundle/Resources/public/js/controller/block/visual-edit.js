@@ -9,8 +9,9 @@ define(function(require, exports, module) {
     exports.run = function() {
 
 
-        if( $(".tab").length>0 ){
-            initFirstTab();
+        if( $(".poster-btn").length>0 ){
+            var selector = $(".poster-btn");
+            initFirstTab(selector);
             bindClipboard();
         }
         $('.colorpicker-input').colorpicker();
@@ -210,8 +211,9 @@ define(function(require, exports, module) {
         });
     };
 
-    function initFirstTab(){
-        var id = $(".tab").attr('href').substr(1,8);
+    function initFirstTab(selector){
+        var href =selector.attr('href');
+        var id = href.substr(1,href.length-1);
         var imgSelf = $("#"+id).find(".img-mode-upload");
         var htmlSelf = $("#"+id).find(".html-mode-upload");
 
@@ -247,8 +249,9 @@ define(function(require, exports, module) {
         $(this).parent().siblings('.status-value').val($(this).val());
     });
 
-    $(".tab").on('click', function(){
-        var id = $(this).attr('href').substr(1,8);
+    $(".poster-btn").on('click', function(){
+        var href = $(this).attr('href');
+        var id = href.substr(1,href.length-1);
         var imgSelf = $("#"+id).find(".img-mode-upload");
         var htmlSelf = $("#"+id).find(".html-mode-upload");
         bindImgUpLoader(imgSelf);

@@ -37,19 +37,19 @@
 
     </section>
   {% else %}
-    <div class="btn-tabs" id="btn-tabs">
+    <ul class="nav nav-pills mvl" id="btn-tabs">
       {% include 'TopxiaAdminBundle:Block/Label:' ~ item.type ~ '.html.twig' %}
-    </div>
+    </ul>
     <div class="well">
 
       <div class="tab-content">
         {% include 'TopxiaAdminBundle:Block/Tag:' ~ item.type ~ '.html.twig' %}
       </div>
-      <div class="text-center mtl">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary mrm" data-toggle="block-edit-form" data-target="#block-edit-form">保存设置</button>
-
-        <button id="block-close-btn" data-submiting-text="" type="" class="btn btn-danger mlm">取消更改</button>
+      <div class="form-group mtl">
+        <div class="col-sm-10 col-sm-offset-2">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary mrm" data-toggle="block-edit-form" data-target="#block-edit-form">保存设置</button>
+        </div>
       </div>
     </div>
   {% endif %}
