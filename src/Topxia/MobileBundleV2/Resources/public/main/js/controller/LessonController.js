@@ -30,6 +30,7 @@ app.controller('CourseLessonController', ['$scope', '$stateParams', 'LessonServi
 function CourseLessonController($scope, $stateParams, LessonService, $state, cordovaUtil)
 {
 
+  var self = this;
   $scope.loading = true;
   this.loadLessons = function() {
       LessonService.getCourseLessons({
@@ -46,6 +47,18 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
       });
     }
 
+    this.createLessonIds = function() {
+      var lessonIds = [];
+      var lessons = $scope.lessons;
+      for (var i = 0; i < lessons.length; i++) {
+        if ("lesson" == lessons[i].itemType) {
+          lessonIds[i] = lessons[i].id;
+        }
+      };
+
+      return lessonIds;
+    };
+
     $scope.learnLesson = function(lesson) {
       if (! $scope.member && 1 != lesson.free) {
         alert("请先加入学习");
@@ -61,7 +74,7 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
         return;
       }
 
-      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id);     
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, self.createLessonIds());     
     }
 
     this.loadLessons();

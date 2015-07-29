@@ -39,8 +39,11 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         pay : function(title, url){
             exec(null, null, "ESNativeCore", "pay", [title, url]);
         },
-        learnCourseLesson : function(courseId, lessonId){
-            exec(null, null, "ESNativeCore", "learnCourseLesson", [courseId, lessonId]);
+        learnCourseLesson : function(courseId, lessonId, lessonArray){
+            /*
+                *lessonArray [];
+            */
+            exec(null, null, "ESNativeCore", "learnCourseLesson", [courseId, lessonId, lessonArray]);
         },
         clearUserToken : function(){
             exec(null, null, "ESNativeCore", "clearUserToken", []);
