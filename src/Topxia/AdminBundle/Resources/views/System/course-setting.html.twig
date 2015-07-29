@@ -31,7 +31,7 @@
           {% verbatim %}
           <div>变量说明：</div>
           <ul>
-            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{nickname}} 为接收方用户用户名</li>
             <li>{{course}} 为课程名称</li>
           </ul>
           {% endverbatim %}
@@ -213,6 +213,15 @@ glyphicon glyphicon-chevron-up"></span></a></div>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('teacher_modify_price', {1:'是', 0:'否'}, courseSetting.teacher_modify_price) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >允许教师查询课程订单</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_search_order', {1:'是', 0:'否'}, courseSetting.teacher_search_order) }}
       </div>
     </div>
 

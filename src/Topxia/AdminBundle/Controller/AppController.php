@@ -28,9 +28,9 @@ class AppController extends BaseController
         $content = $this->getEduCloudService()->getUserOverview();
         $info = $this->getEduCloudService()->getAccountInfo();
 
-        $EduSohoOpenClient = new EduSohoOpenClient();
+        $eduSohoOpenClient = new EduSohoOpenClient();
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
-            $articles = $EduSohoOpenClient->getArticles();
+            $articles = $eduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                 'articles' => $articles,
@@ -54,7 +54,7 @@ class AppController extends BaseController
 
         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'],0,stripos($isBinded['email'], '@')),-4),'****',$isBinded['email']) : null ;
 
-        $EduSohoOpenClient = new EduSohoOpenClient;
+        $eduSohoOpenClient = new EduSohoOpenClient;
 
         $currentTime = date('Y-m-d', time());
 
@@ -85,7 +85,7 @@ class AppController extends BaseController
 
         $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null ;
 
-        $notices = $EduSohoOpenClient->getNotices();
+        $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,

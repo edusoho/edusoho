@@ -10,6 +10,17 @@ use Topxia\Service\Util\LiveClientFactory;
 
 class LiveCourseController extends BaseController
 {
+    public function liveCapacityAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $client = LiveClientFactory::createClient();
+        $liveCapacity = $client->getCapacity();
+
+        return $this->createJsonResponse($liveCapacity);
+
+    }
+
 	public function exploreAction(Request $request)
 	{
         if (!$this->setting('course.live_course_enabled')) {
@@ -104,29 +115,10 @@ class LiveCourseController extends BaseController
         ));
     }
 
-    public function entryAction(Request $request,$courseId, $lessonId)
+    public function getClassroomUrlAction(Request $request,$courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        if (empty($lesson)) {
-            return $this->createMessageResponse('info', '课时不存在！');
-        }
-
-        if (empty($lesson['mediaId'])) {
-            return $this->createMessageResponse('info', '直播教室不存在！');
-        }
-
-        if ($lesson['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', '直播还没开始!');
-        }
-
-        if ($lesson['endTime'] < time()) {
-            return $this->createMessageResponse('info', '直播已结束!');
-        }
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             // 老师登录
@@ -144,11 +136,10 @@ class LiveCourseController extends BaseController
             $result = $client->startLive($params);
 
             if (empty($result) || isset($result['error'])) {
-                return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
+                return $this->createAccessDeniedException('进入直播教室失败，请重试！');
             }
 
-            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-                'lesson' => $lesson,
+            return $this->createJsonResponse(array(
                 'url' => $result['url'],
                 'param' => isset($result['param']) ? $result['param']:null
             ));
@@ -179,11 +170,10 @@ class LiveCourseController extends BaseController
             $result = $client->entryLive($params);
 
             if(isset($result["error"]) && $result["error"]){
-                return $this->createMessageResponse('error', $result["errorMsg"]);
+                return $this->createAccessDeniedException($result["errorMsg"]);
             }
 
-            return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-                'lesson' => $lesson,
+            return $this->createJsonResponse(array(
                 'url' => $result['url'],
                 'param' => isset($result['param']) ? $result['param']:null
             ));
@@ -191,6 +181,41 @@ class LiveCourseController extends BaseController
         }
 
         return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+    }
+
+    public function entryAction(Request $request,$courseId, $lessonId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', '课时不存在！');
+        }
+
+        if (empty($lesson['mediaId'])) {
+            return $this->createMessageResponse('info', '直播教室不存在！');
+        }
+
+        if ($lesson['startTime'] - time() > 7200) {
+            return $this->createMessageResponse('info', '直播还没开始!');
+        }
+
+        if ($lesson['endTime'] < time()) {
+            return $this->createMessageResponse('info', '直播已结束!');
+        }
+
+        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+            'courseId' => $courseId, 
+            'lessonId' => $lessonId,
+            'lesson' => $lesson,
+            'url' => $this->generateUrl('live_classroom_url',array(
+                'courseId' => $courseId, 
+                'lessonId' => $lessonId
+            ))
+        ));
     }
 
     public function verifyAction(Request $request)
@@ -210,18 +235,10 @@ class LiveCourseController extends BaseController
         return md5($string . $secret);
     }
 
-    public function replayAction(Request $request,$courseId,$lessonId)
-    {
-        return $this->forward('TopxiaWebBundle:LiveCourse:play', 
-            array(
-                'courseId'=>$courseId,
-                'lessonId'=>$lessonId
-            )
-        );
-    }
-
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
         $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
 
         if(array_key_exists("error", $resultList)) {
@@ -237,12 +254,28 @@ class LiveCourseController extends BaseController
 
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
+            'url' => $this->generateUrl('live_classroom_replay_url',array(
+                'courseId' => $courseId, 
+                'lessonId' => $lessonId,
+                'courseLessonReplayId' => $courseLessonReplayId
+            ))
+        ));
+    }
+
+    public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    {
+        $course = $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+
+        return $this->createJsonResponse(array(
             'url' => $result['url'],
-            'param' => isset($result['param']) ? $result['param']: null
+            'param' => isset($result['param']) ? $result['param']:null
         ));
     }
 

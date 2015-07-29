@@ -51,7 +51,9 @@ class MoneyCardDaoImpl extends BaseDao
 
     public function addMoneyCard ($moneyCards)
     {
-        if(empty($moneyCards)){ return array(); }
+        if(empty($moneyCards)){
+            return array();
+        }
 
         $moneyCardsForSQL = array();
         foreach ($moneyCards as $value) {

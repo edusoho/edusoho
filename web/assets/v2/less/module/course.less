@@ -1,5 +1,7 @@
 .course-list {
   .course-item {
+    position: relative;
+    z-index: 1;
     margin-bottom: 30px;
     .border-radius(4px);
     .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
@@ -63,11 +65,21 @@
       position: absolute;
       top: 0;
       left: 10px;
-      .tag-live {
+      .tag-live,
+      .tag-serialing,
+      .tag-finished {
         display: inline-block;
         width: 40px;
         height: 50px;
+      }
+      .tag-live {
         background: url("@{img-src}tag_live.png") no-repeat;
+      }
+      .tag-serialing {
+        background: url("@{img-src}tag_serialing.png") no-repeat;
+      }
+      .tag-finished {
+        background: url("@{img-src}tag_finished.png") no-repeat;
       }
     }
     .title {
@@ -117,6 +129,7 @@
     }
     .btn-circle {
       z-index: 1;
+      line-height: 40px;
       background: @gray-light;
       border: none;
       color: #fff;

@@ -11,8 +11,8 @@ class NoteController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $classroom_courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds = ArrayToolkit::column($classroom_courses, 'id');
+        $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $user = $this->getCurrentUser();

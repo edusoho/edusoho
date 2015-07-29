@@ -17,7 +17,7 @@ class GroupController extends BaseController
     {   
         $myJoinGroup = array();
 
-        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 8);
+        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
     
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
@@ -372,7 +372,7 @@ class GroupController extends BaseController
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
         $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
-            array('postNum','DESC'),0,12);
+            array('postNum','DESC'),0,15);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
@@ -408,12 +408,12 @@ class GroupController extends BaseController
             30
         );
 
-        $Members=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
+        $members=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
             array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
-        $memberIds = ArrayToolkit::column($Members, 'userId');
+        $memberIds = ArrayToolkit::column($members, 'userId');
 
         $users=$this->getUserService()->findUsersByIds($memberIds);
         $owner=$this->getUserService()->getUser($group['ownerId']);
@@ -429,7 +429,7 @@ class GroupController extends BaseController
         return $this->render("TopxiaWebBundle:Group:groupmember.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'groupmember_info'=>$Members,
+            'groupmember_info'=>$members,
             'owner_info'=>$owner,
             'paginator'=>$paginator,
             'members'=>$users,

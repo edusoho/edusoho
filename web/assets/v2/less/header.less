@@ -120,9 +120,10 @@
     position: fixed;
     left: -250px;
     top: 0;
-    height: 100%;
+    bottom: 0;
     background: #3f3f3f;
     visibility: hidden;
+    -webkit-overflow-scrolling: touch;
     .es-transition;
     &.active {
       visibility: visible;
@@ -214,6 +215,11 @@
   position: absolute;
   top: 0;
   right: 20px;
+  &.left {
+    @media(min-width: @screen-sm-min) {
+      right: 50px;
+    }
+  }
 }
 
 .nav.user-nav {

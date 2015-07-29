@@ -125,7 +125,7 @@ class DefaultController extends BaseController
 
         $unInstallAppCount=count($appsAll)-count($installedApps);
 
-        $app_count=count($apps);
+        $appCount=count($apps);
         if(isset($apps['error'])){
             $error="error";
         }
@@ -143,7 +143,7 @@ class DefaultController extends BaseController
             "apps"=>$apps,
             "error"=>$error,
             "mainAppUpgrade"=>$mainAppUpgrade,
-            "app_count"=>$app_count,
+            "app_count"=>$appCount,
             "unInstallAppCount"=>$unInstallAppCount,
             "liveCourseStatus" => $liveCourseStatus
         ));

@@ -23,7 +23,9 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function findLessonsByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -180,8 +182,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
-            ->andWhere('courseId IN ( :courseIds )');;
-
+            ->andWhere('courseId IN ( :courseIds )');
+        if(isset($conditions['notLearnedIds'])){
+            $builder->andWhere('id NOT IN ( :notLearnedIds)');
+        }
         return $builder;
     }
 

@@ -77,7 +77,9 @@ class FriendDaoImpl extends BaseDao implements FriendDao
 
     public function getFriendsByFromIdAndToIds($fromId, array $toIds)
     {
-        if (empty($toIds)) { return array(); }
+        if (empty($toIds)) {
+            return array();
+        }
         $toIds = array_values($toIds);
         $marks = str_repeat('?,', count($toIds) - 1) . '?';
         $parmaters = array_merge(array($fromId), $toIds);
