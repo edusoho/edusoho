@@ -443,7 +443,11 @@ class CourseLessonManageController extends BaseController
 		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
-		
+        if ($this->isPluginInstalled('Homework')) { //如果安装了作业插件那么也删除作业和练习
+            $homework = $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->getHomeworkByLessonId($lesson['id']);
+            $this->getServiceKernel()->createService('Homework:Homework.HomeworkService')->removeHomework($homework['id']);
+            $this->getServiceKernel()->createService('Homework:Homework.ExerciseService')->deleteExercisesByLessonId($lesson['id']);
+        }
 		return $this->createJsonResponse(true);
 	}
 

@@ -397,8 +397,8 @@ class GroupThreadController extends BaseController
 
         if($goods['coin'] > 0 && $user['id']!=$file['userId']){
 
-            $Trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user['id'],$goods['id']);
-            if(!$Trade) {
+            $trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user['id'],$goods['id']);
+            if(!$trade) {
                 return $this->createMessageResponse('info','您未购买该附件!');
             }
 
@@ -444,7 +444,7 @@ class GroupThreadController extends BaseController
             $account['cash']=intval($account['cash']);
         }
 
-        $Trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user->id,$attach['id']);
+        $trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user->id,$attach['id']);
 
         if($request->getMethod()=="POST"){
 
@@ -456,7 +456,7 @@ class GroupThreadController extends BaseController
                     
                 }
 
-                if(empty($Trade)){
+                if(empty($trade)){
 
                     $this->getCashAccountService()->reward($attach['coin'],'下载附件<'.$attach['title'].'>',$user->id,'cut');
 
@@ -481,7 +481,7 @@ class GroupThreadController extends BaseController
         return $this->render('TopxiaWebBundle:Group:buy-attach-modal.html.twig',array(
             'account'=>$account,
             'attach'=>$attach,
-            'Trade'=>$Trade,
+            'Trade'=>$trade,
             'attachId'=>$attachId,
             ));
     }
@@ -548,7 +548,7 @@ class GroupThreadController extends BaseController
                     $message);
             }
 
-            return $this->createJsonResponse($post);
+            return $this->createJsonResponse(true);
     }
     
     public function searchResultAction(Request $request,$id)
@@ -886,9 +886,9 @@ class GroupThreadController extends BaseController
         
             sscanf($value,"%[^#]#[hide=reply]%[^$$]",$replyContent,$replyHideContent);
             
-            $Trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
+            $trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
 
-            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
+            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($trade) ){
 
                 if($coin){
 

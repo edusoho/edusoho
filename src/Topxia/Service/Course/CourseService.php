@@ -101,6 +101,9 @@ interface CourseService
 	/**
 	 * Lesson API
 	 */
+
+	public function getLesson($id);
+
 	public function findLessonsByIds(array $ids);
 
 	public function getCourseLesson($courseId, $lessonId);
@@ -186,9 +189,6 @@ interface CourseService
 	public function searchWatchTime($conditions);
 
 	public function checkWatchNum($userId, $lessonId);
-
-	public function waveWatchNum($userId, $lessonId, $diff);
-
 
 	/**
 	 * Chapter API
@@ -345,5 +345,7 @@ interface CourseService
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
 
 	public function becomeStudentByClassroomJoined($courseId, $userId);
+
+	
 
 }

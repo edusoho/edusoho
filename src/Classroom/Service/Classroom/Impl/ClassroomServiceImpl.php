@@ -188,23 +188,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroom($id);
 
-        $teacherIds = $classroom['teacherIds'] ?: array();
-
         $ids = array();
-        foreach ($teacherIds as $key => $value) {
-            $isCourseInClassroom = $this->isCourseInClassroom($value, $id);
-
-            if (!$isCourseInClassroom) {
-                unset($teacherIds[$key]);
-            }
-        }
-
+        $teacherIds = array();
         foreach ($courses as $key => $value) {
             $course = $this->getCourseService()->getCourse($value['id']);
 
             $teacherIds = array_merge($teacherIds, $course['teacherIds']);
         }
-
         $teacherIds = array_unique($teacherIds);
 
         foreach ($teacherIds as $key => $value) {
@@ -212,30 +202,29 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $teacherIds = $ids;
-
         $classroomTeacherIds = $classroom['teacherIds'] ?: array();
-        if (count($classroomTeacherIds) > count($ids)) {
-            $diff = array_diff($classroomTeacherIds, $ids);
-            foreach ($diff as $key => $value) {
-                $this->getClassroomMemberDao()->deleteMemberByClassroomIdAndUserId($id, $value);
-            }
-        } else {
-            $diff = array_diff($ids, $classroomTeacherIds);
-            foreach ($diff as $key => $value) {
-                $fields = array(
-                    'classroomId' => $id,
-                    'userId' => $value,
-                    'role' => 'teacher',
-                    'createdTime' => time(),
-                );
 
-                $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($id, $value);
+        $diff = array_diff($ids, $classroomTeacherIds);
+        $diffs = array_diff($classroomTeacherIds, $ids);
 
-                if ($member) {
-                    $member = $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
-                } else {
-                    $member = $this->getClassroomMemberDao()->addMember($fields);
-                }
+        foreach ($diffs as $key => $value) {
+            $this->getClassroomMemberDao()->deleteMemberByClassroomIdAndUserId($id, $value);
+        }
+
+        foreach ($diff as $key => $value) {
+            $fields = array(
+                'classroomId' => $id,
+                'userId' => $value,
+                'role' => 'teacher',
+                'createdTime' => time(),
+            );
+
+            $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($id, $value);
+
+            if ($member) {
+                $member = $this->getClassroomMemberDao()->updateMember($member['id'], $fields);
+            } else {
+                $member = $this->getClassroomMemberDao()->addMember($fields);
             }
         }
 
@@ -417,7 +406,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createNotFoundException();
         }
 
-        if ($classroom['status'] != 'published') {
+        if (!in_array($classroom['status'],array('published','closed'))) {
             throw $this->createServiceException('不能加入未发布班级');
         }
 

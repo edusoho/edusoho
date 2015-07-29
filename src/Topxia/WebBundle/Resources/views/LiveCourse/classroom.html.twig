@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{{ lesson.title }}</title>
-{% if setting('site.favicon') %}
-<link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
-{% endif %}
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>{{ lesson.title }}</title>
+	{% if setting('site.favicon') %}
+	<link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+	{% endif %}
+	{% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-{% if not param %}
-	<iframe name="classroom" src="{{ url }}" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" ></iframe>
-{% else %}
 
-	<iframe name="classroom" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no" >
-	</iframe>
-	<FORM id="classroom-form" METHOD=POST ACTION="{{url}}" TARGET="classroom">
-	    <INPUT TYPE="hidden" NAME="param" value="{{param}}">
-	</FORM>
-	<script>
-	document.getElementById("classroom-form").submit();
-	</script>
-{% endif %}
+	{% set script_controller = 'live-course/classroom' %}
+
+	<div id="classroom-url" data-url="{{ url }}" class="well well-lg text-center text-success">正在打开教室，请稍后...</div>
+
+	{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+
 </body>
 </html>

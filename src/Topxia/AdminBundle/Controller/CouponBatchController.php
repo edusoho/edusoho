@@ -87,15 +87,15 @@ class CouponBatchController extends BaseController
         );
 
         $coupons = array_map(function($coupon) {
-            $export_coupon['batchId']  = $coupon['batchId'];
-            $export_coupon['deadline'] = date('Y-m-d',$coupon['deadline']);
-            $export_coupon['code']   = $coupon['code'];
+            $exportCoupon['batchId']  = $coupon['batchId'];
+            $exportCoupon['deadline'] = date('Y-m-d',$coupon['deadline']);
+            $exportCoupon['code']   = $coupon['code'];
             if ($coupon['status'] == 'unused') {
-                $export_coupon['status'] = '未使用';
+                $exportCoupon['status'] = '未使用';
             } else {
-                $export_coupon['status'] = '已使用'; 
+                $exportCoupon['status'] = '已使用'; 
             }
-            return implode(',', $export_coupon);
+            return implode(',', $exportCoupon);
         }, $coupons);
 
         $exportFilename = "couponBatch-".$batchId."-".date("YmdHi").".csv";

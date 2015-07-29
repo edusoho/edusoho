@@ -315,6 +315,19 @@ class CourseController extends BaseController
     public function chooserAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions["parentId"] = 0;
+        if(isset($conditions["categoryId"]) && $conditions["categoryId"]==""){
+            unset($conditions["categoryId"]);
+        }
+        if(isset($conditions["status"]) && $conditions["status"]==""){
+            unset($conditions["status"]);
+        }
+        if(isset($conditions["title"]) && $conditions["title"]==""){
+            unset($conditions["title"]);
+        }
+        if(isset($conditions["creator"]) && $conditions["creator"]==""){
+            unset($conditions["creator"]);
+        }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 

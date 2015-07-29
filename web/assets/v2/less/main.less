@@ -1,7 +1,12 @@
+/*
+** 目前仍处于新老版本更替阶段
+** 老的样式或者即将弃用的样式不要在使用
+*/
+
 // 变量
 @import "variables.less";
 
-// 临时
+// 临时文件，存放老的样式，随时会删除
 @import "temp.less";
 
 // 常用class
@@ -11,16 +16,21 @@
 @import "plugin/swiper.less";         //轮播
 @import "plugin/scrollbar.less";      //滚动条
 @import "plugin/select2.less";        //下拉框
+@import "plugin/vip.less";            //会员插件
+@import "plugin/bootstrap-notify.less"; //消息提醒插件
+@import "plugin/materiallib.less";    //教学资料库
+@import "plugin/sortable.less";      //拖动排序
+@import "plugin/homework.less";      //作业练习
 
 
 // 共通
+@import "common.less";
 @import "header.less";
 @import "footer.less";
-@import "common.less";
 
 
 // 模块---------------------------------------------------------------//
-@import "module/class-serve.less";    //班级服务
+@import "module/class-serve.less";    // 班级服务
 @import "module/course.less";         // 课程
 @import "module/banner.less";         // banner
 @import "module/nav-filter.less";     // 条件过滤
@@ -30,7 +40,7 @@
 
 
 // 组件---------------------------------------------------------------//
-@import "component/text-line.less";     //文字＋中划线
+@import "component/text-line.less";     // 文字＋中划线
 @import "component/panel.less";         // 面板
 @import "component/section.less";       // section
 @import "component/nav-tabs.less";      // tabs
@@ -59,7 +69,10 @@
 @import "component/user-avatar-list.less"; // 头像列表
 @import "component/class-sigin.less";   // 签到
 @import "component/popover.less";       // popover
-
+@import "component/modal.less";         // modal
+@import "component/nav.less";           // nav
+@import "component/course-price.less";  // 课程价格
+@import "component/table.less";         // 表格
 
 
 
@@ -76,15 +89,21 @@
 @import "page/search.less";               //班级列表页
 @import "page/teacher.less";              //教师列表页
 @import "page/page.less";                 //自定义页面
+@import "page/error.less";                //404、500等页面
+@import "page/order.less";                //订单
+@import "page/lesson.less";               //课时播放页
+@import "page/course-manage.less";        //课程管理
+@import "page/question.less";             //问题
+@import "page/pay-center.less";           //支付中心
+@import "page/login.less";                //登录页
+
 // @import "page/settings.less"              //用户设置页
 // @import "page/user.less"                  //用户主页
 // @import "page/live.less";                 //直播课程页
 // @import "page/vip.less";                  //会员中心
-
-@import "page/login.less";                //登录页
 // @import "page/resigister.less";           //注册页
 // @import "page/page.less";                 //单页
 // @import "page/message.less";              //私信
 // @import "page/notification.less";         //通知
-// @import "page/coin.less";                 //账户  
+@import "page/coin.less";                 //账户  
               

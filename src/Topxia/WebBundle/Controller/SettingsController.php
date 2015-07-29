@@ -95,9 +95,9 @@ class SettingsController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		
-		$is_nickname = $this->getSettingService()->get('user_partner');
+		$isNickname = $this->getSettingService()->get('user_partner');
 
-		if($is_nickname['nickname_enabled'] == 0){
+		if($isNickname['nickname_enabled'] == 0){
 			return $this->redirect($this->generateUrl('settings'));
 		}
 
@@ -105,7 +105,7 @@ class SettingsController extends BaseController
 
 			$nickname = $request->request->get('nickname');
 			$this->getAuthService()->changeNickname($user['id'], $nickname);
-			$this->setFlashMessage('success', '昵称修改成功！');
+			$this->setFlashMessage('success', '用户名修改成功！');
 			return $this->redirect($this->generateUrl('settings'));
 		}
 		return $this->render('TopxiaWebBundle:Settings:nickname.html.twig',array(
@@ -125,7 +125,7 @@ class SettingsController extends BaseController
 		if ($result == 'success'){
 			$response = array('success' => true, 'message' => '');
 		} else {
-			$response = array('success' => false, 'message' => '昵称已存在');
+			$response = array('success' => false, 'message' => '用户名已存在');
 		}
 	
 		return $this->createJsonResponse($response);
@@ -496,7 +496,9 @@ class SettingsController extends BaseController
 
 	protected function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
 	{
-		$question1 = null;$question2 = null;$question3 = null;
+		$question1 = null;
+		$question2 = null;
+		$question3 = null;
 		if ($hasSecurityQuestions){
 			$question1 = $userSecureQuestions[0]['securityQuestionCode'];
 			$question2 = $userSecureQuestions[1]['securityQuestionCode'];
@@ -743,6 +745,9 @@ class SettingsController extends BaseController
 		$clients = OAuthClientFactory::clients();
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
 		foreach($userBinds as $userBind) {
+			if ($userBind['type'] == 'weixin') {
+				$userBind['type'] = 'weixinweb';
+			}
 			$clients[$userBind['type']]['status'] = 'bind';
 		}
 		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array(
