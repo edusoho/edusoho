@@ -22,8 +22,7 @@ define(function(require, exports, module) {
         var titleArr = ['真实姓名','手机号码','QQ','所在公司','身份证号码','性别','职业','微博','微信'];
         $('#add-btn').on('click', function() {
             var field_title = $('input[name="field_title"]').val();
-            console.log('title='+field_title);
-            console.log($.inArray(field_title, titleArr));
+            
             if($.inArray(field_title, titleArr) >= 0 )
             {
                 Notify.danger('请勿添加与默认字段相同的自定义字段！')
