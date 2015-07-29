@@ -54,6 +54,12 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->delete($this->table, array('pId' => $pid));
     }
 
+    public function deleteTestpaperItemByTestId($testId)
+    {
+         $sql = "DELETE FROM {$this->table} WHERE testId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($testId));
+    }
+
     public function findItemByIds(array $ids)
     {
         if(empty($ids)){ 
@@ -109,9 +115,9 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
-    public function updateTestpaperItemsByQuestionIdAndItem($questionId, $item)
+    public function updateTestpaperItemsByPidItem($pId, $item)
     {
-       return $this->getConnection()->update($this->table, $item, array('questionId' => $questionId));  
+       return $this->getConnection()->update($this->table, $item, array('pId' => $pId)); 
     }
 
 

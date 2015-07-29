@@ -1724,7 +1724,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 					$item = $items[$itemId];
 					$fields = array('number' => $lessonNum, 'seq' => $seq, 'chapterId' => $currentChapter['id']);
 					if ($fields['number'] != $item['number'] || $fields['seq'] != $item['seq'] || $fields['chapterId'] != $item['chapterId']) {
-						$this->getLessonDao()->updateLesson($item['id'], $fields);
+						$lesson = $this->getLessonDao()->updateLesson($item['id'], $fields);
+						$this->dispatchEvent("course.lesson.update",$lesson);
+						
 					}
 					break;
 				case 'chapter':

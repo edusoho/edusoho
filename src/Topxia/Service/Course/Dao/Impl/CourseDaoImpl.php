@@ -123,6 +123,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
+
         $affected = $this->getConnection()->insert(self::TABLENAME, $course);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
@@ -224,7 +225,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('parentId > :parentId_GT')
             ->andWhere('parentId IN ( :parentIds )')
             ->andWhere('id NOT IN ( :excludeIds )')
-            ->andWhere('id IN ( :courseIds )');
+            ->andWhere('id IN ( :courseIds )')
+            ->andWhere('locked = :locked');
 
         return $builder;
     }

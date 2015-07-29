@@ -18,6 +18,8 @@ interface TestpaperItemDao
 
     public function deleteTestpaperItemByPId($pId);
 
+    public function deleteTestpaperItemByTestId($testId);
+
     public function findItemByIds(array $ids);
 
     public function findItemsByTestPaperId($testPaperId);
@@ -32,5 +34,5 @@ interface TestpaperItemDao
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
 
-    public function updateTestpaperItemsByQuestionIdAndItem($questionId, $item);
+    public function updateTestpaperItemsByPidItem($pId, $item);
 }

@@ -72,9 +72,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    public function updateTestpaperByParentId($parentId,$fields)
+    public function updateTestpaperByPid($pId,$fields)
     {
-        return $this->getTestpaperDao()->updateTestpaperByParentId($parentId, $fields);
+        return $this->getTestpaperDao()->updateTestpaperByPid($pId,$fields);
     }
 
     protected function filterTestpaperFields($fields, $mode = 'create')
@@ -156,6 +156,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $this->getTestpaperDao()->deleteTestpaper($id);
         $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
+        $this->dispatchEvent("testpaper.delete",$id);
+    }
+
+    public function deleteTestpaperByPid($pId)
+    {
+       $this->getTestpaperDao()->deleteTestpaperByParentId($parentId); 
     }
 
     public function buildTestpaper($id, $options)
@@ -205,6 +211,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'metas' => $metas,
         ));
 
+        $this->dispatchEvent("testpaper.items.update",new ServiceEvent($testpaper,array('items'=>$items)));
         return $items;
     }
 
@@ -736,6 +743,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperItemDao()->deleteTestpaperItemByPId($pId);
     }
 
+    public function deleteTestpaperItemByTestId($testId)
+    {
+        return $this->getTestpaperItemDao()->deleteTestpaperItemByTestId($testId);
+    }
+
     public function getTestpaperItems($testpaperId)
     {
         return $this->getTestpaperItemDao()->findItemsByTestpaperId($testpaperId);
@@ -759,9 +771,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $types = array();
         $totalScore = 0;
         $seq = 1;
-
         $items = ArrayToolkit::index($items, 'questionId');
-
         foreach ($items as $questionId => $item) {
             if ($questions[$questionId]['type'] == 'material' ) {
                 $items[$questionId]['score'] = 0;
@@ -802,12 +812,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
                     $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
+                    $this->dispatchEvent("testpaper.items.update",new ServiceEvent($testpaper,array('items'=>$item)));
                 } else {
                     $item = $existItem;
                 }
                 unset($existItems[$item['questionId']]);
             }
-
+            
             if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
                 $types[] = $item['questionType'];
             }
@@ -827,14 +838,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'score' => $totalScore,
             'metas' => $metas,
         ));
-
-        $this->dispatchEvent("testpaper.items.update",new ServiceEvent($testpaper,array('items'=>$items)));
     }
 
-    public function updateTestpaperItemsByQuestionIdAndItem($questionId, $item)
+    public function updateTestpaperItemsByPidItem($pId, $item)
     {
-        return $this->getTestpaperItemDao()->updateTestpaperItemsByQuestionIdAndItem($questionId, $item);
+        return $this->getTestpaperItemDao()->updateTestpaperItemsByPidItem($pId, $item);
     }
+
     public function canTeacherCheck($id)
     {
         $paper = $this->getTestpaperDao()->getTestpaper($id);
@@ -914,9 +924,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpaperIdsByParentId($parentId)
+    public function findTestpaperIdsByPid($pId)
     {
-        return ArrayToolkit::column($this->getTestpaperDao()->findTestpaperIdsByParentId($parentId),'id');
+        return ArrayToolkit::column($this->getTestpaperDao()->findTestpaperIdsByPid($pId),'id');
     }
 
     public function findTeacherTestpapersByTeacherId ($teacherId)

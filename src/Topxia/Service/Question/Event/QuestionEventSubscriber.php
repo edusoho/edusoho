@@ -12,7 +12,8 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'question.create' => 'onQuestionCreate',
-            'question.update' => 'onQuestionUpdate'
+            'question.update' => 'onQuestionUpdate',
+            'question.delete' => 'onQuestionDelete'
         );
     }
 
@@ -46,6 +47,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
                 } else {
                     $question['target'] = "course-".$value;
                 }
+                
                 $this->getQuestionService()->addQuestion($question);
             }
         }
@@ -58,6 +60,24 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         unset($question['id'],$question['target'],$question['parentId'],$question['pId']);
         foreach ($questionIds as $key => $value) {
             $this->getQuestionService()->editQuestion($questionIds[$key],$question);
+        }
+
+    }
+
+    public function onQuestionDelete(ServiceEvent $event)
+    {
+         $questionId = $event->getSubject();
+         $questionIds = $this->getQuestionService()->findQuestionsByPId($questionId);
+        foreach ($questionIds as  $value) {
+            $question = $this->getQuestionService()->getQuestion($value);
+            $this->getQuestionService()->deleteQuestion($value);
+            if ($question['subCount'] > 0) {
+                $this->getQuestionService()->deleteQuestionsByParentId($value);
+            }
+            if ($question['parentId'] > 0) {
+                $subCount = $this->getQuestionService()->findQuestionsCountByParentId($question['parentId']);
+                $this->getQuestionService()->editQuestion($question['parentId'], array('subCount' => $subCount));
+            }
         }
 
     }

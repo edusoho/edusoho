@@ -25,6 +25,8 @@ interface QuestionService
 
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
 
+    public function findQuestionsCountByParentId($parentId);
+
     public function searchQuestions($conditions, $sort, $start, $limit);
 
     public function searchQuestionsCount($conditions);
@@ -38,6 +40,10 @@ interface QuestionService
     public function editQuestion($id,$fields);
 
     public function deleteQuestion($id);
+
+    public function deleteQuestionByPid($pId);
+
+    public function deleteQuestionsByParentId($parentId);
 
     /**
      * 判断题目的回答是否正确

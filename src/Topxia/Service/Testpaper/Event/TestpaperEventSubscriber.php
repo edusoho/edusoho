@@ -17,6 +17,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             'testpaper.finish' => 'onTestpaperFinish',
             'testpaper.create' => 'onTestpaperCreate',
             'testpaper.update' => 'onTestpaperUpdate',
+            'testpaper.delete' => 'onTestpaperDelete',
             'testpaper.items.create' => 'onTestpaperItemsCreate',
             'testpaper.items.update' => 'onTestpaperItemsUpdate',
             'testpaper.items.delete' => 'onTestpaperItemsDelete'
@@ -46,10 +47,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     {
         $testpaper = $event->getSubject();
         $items = $event->getArgument('items');
-        $parentId = $testpaper['id'];
+        $pId = $testpaper['id'];
         $courseId = explode('-',$testpaper['target'])[1];
         $courseIds = $this->getCourseService()->findCoursesByParentId($courseId);
-        $testpaper['parentId'] = $testpaper['id'];
+        $testpaper['pId'] = $testpaper['id'];
 
         unset($testpaper['id']);        
         foreach ($courseIds as  $value) {
@@ -64,25 +65,35 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             }
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($parentId);
+        $testpaper = $this->getTestpaperService()->getTestpaper($pId);
         $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
-        $this->getTestpaperService()->updateTestpaperByParentId($testpaper['id'],$fields);
+        $this->getTestpaperService()->updateTestpaperByPid($testpaper['id'],$fields);
     }
 
 
     public function onTestpaperUpdate(ServiceEvent $event)
     {
         $testpaper = $event->getSubject();
-        $parentId = $testpaper['id'];
-        unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['metas'],$testpaper['parentId']);
-        $this->getTestpaperService()->updateTestpaperByParentId($parentId,$testpaper);
+        $pId = $testpaper['id'];
+        unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['metas'],$testpaper['pId']);
+        $this->getTestpaperService()->updateTestpaperByPid($pId,$testpaper);
+    }
+
+    public function onTestpaperDelete(ServiceEvent $event)
+    {
+       $testpaperId = $event->getSubject();
+       $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByPid($testpaperId);
+       $this->getTestpaperService()->deleteTestpaperByPid($testpaperId);
+       foreach ($testpaperIds as $value) {
+          $this->getTestpaperService()->deleteTestpaperItemByTestId($value);
+       }
     }
 
     public function onTestpaperItemsCreate(ServiceEvent $event)
     {
       $item = $event->getSubject();
       $item['pId'] = $item['id'];
-      $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByParentId($item['testId']);
+      $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByPid($item['testId']);
       unset($item['id']);
       foreach ($testpaperIds as $testpaperId) {
         $item['testId'] = $testpaperId;
@@ -94,12 +105,27 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     {
         $testpaper = $event->getSubject();
         $items = $event->getArgument('items');
-
-        foreach ($items as $item) {
-            $this->getTestpaperService()->updateTestpaperItemsByQuestionIdAndItem($item['questionId'],$item);
+        //判断是否是一维数组
+        if(array_key_exists('id', $items)){
+            $this->getTestpaperService()->updateTestpaperItemsByPidItem($items['id'],array('seq'=>$items['seq']));
+            return;
         }
+
+        //重新生成题目
+        $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByPid($items[0]['testId']);
+        foreach ($testpaperIds as $value) {
+            $this->getTestpaperService()->deleteTestpaperItemByTestId($value);
+            foreach ($items as $item) {
+                $item['pId'] = $item['id'];
+                unset($item['id']);
+                $item['testId'] = $value;
+                $this->getTestpaperService()->createTestpaperItem($item);
+            }
+        }
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
         $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
-        $this->getTestpaperService()->updateTestpaperByParentId($testpaper['id'],$fields);
+        $this->getTestpaperService()->updateTestpaperByPid($testpaper['id'],$fields);
     }
 
     public function onTestpaperItemsDelete(ServiceEvent $event)

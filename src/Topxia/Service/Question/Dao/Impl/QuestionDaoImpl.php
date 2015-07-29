@@ -173,6 +173,11 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
+    public function deleteQuestionByPid($pId)
+    {
+        return $this->getConnection()->delete($this->table, array('pId' => $pId));
+    }
+
     public function updateQuestionCountByIds($ids, $status)
     {
         if(empty($ids)){ 

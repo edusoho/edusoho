@@ -228,12 +228,12 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         if ($link) {
             $fields['status'] = empty($fields['status']) ? 'draft' : $fields['status'];
             $fields['parentId'] = $course['id'];
+            $fields['locked'] = 1;
         } else {
             $fields['status'] = 'draft';
         }
         $fields["coinPrice"] = $fields["originCoinPrice"];
         $fields["price"] = $fields["originPrice"];
-
         return $this->getCourseDao()->addCourse(CourseSerialize::serialize($fields));
     }
 

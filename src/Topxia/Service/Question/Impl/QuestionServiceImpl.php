@@ -57,6 +57,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
     }
     
+    public function findQuestionsCountByParentId($parentId)
+    {
+        return $this->getQuestionDao()->findQuestionsCountByParentId($parentId);
+    }
 
     public function findQuestionsByParentIds($ids)
     {
@@ -159,6 +163,18 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $subCount = $this->getQuestionDao()->findQuestionsCountByParentId($question['parentId']);
             $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
+
+        $this->dispatchEvent("question.delete",$id);
+    }
+
+    public function deleteQuestionByPid($pId)
+    {
+       return  $this->getQuestionDao()->deleteQuestionByPid($pId);
+    }
+
+    public function deleteQuestionsByParentId($parentId)
+    {
+       return $this->getQuestionDao()->deleteQuestionsByParentId($parentId);
     }
 
     public function judgeQuestion($id, $answer, $refreshStats = false)
