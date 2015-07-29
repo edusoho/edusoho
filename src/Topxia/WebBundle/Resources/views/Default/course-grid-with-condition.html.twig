@@ -1,10 +1,8 @@
 {% set categoriesFirst = data('Categories',{'group':'course'})%}
 <div class="container">
-  <div class="index-course-header">
-    <div class="text-line">
-      <h5><span>网校课程</span><div class="line"></div></h5>
-      <div class="subtitle">精选网校课程，满足你的学习兴趣。</div>
-    </div>
+  <div class="text-line">
+    <h5><span>网校课程</span><div class="line"></div></h5>
+    <div class="subtitle">精选网校课程，满足你的学习兴趣。</div>
   </div>
   <div class="course-filter" id="course-filter">
     <ul class="nav nav-pills hidden-xs" role="tablist">
@@ -53,7 +51,7 @@
     </div>
   </div>
   <div class="text-center mvl">
-    <a href="{{ path('course_explore') }}" class="btn btn-default active">
+    <a href="{{ path('course_explore') }}" class="btn btn-default">
       更多课程<i class="es-icon es-icon-chevronright"></i>
     </a>
   </div>
