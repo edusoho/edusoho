@@ -44,7 +44,7 @@
   <div class="course-header-bottom clearfix">
     <span class="pull-left">完成课时： {{ learnProgress.number }}/{{ learnProgress.total }}</span>
     {% if nextLearnLesson %}
-      <a class="btn btn-lg btn-primary btn-high" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
+      <a class="btn btn-lg btn-primary" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
       <span class="next-class hidden-xs">下一课时：<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title }}</a></span>
     {% endif %}
   </div>
