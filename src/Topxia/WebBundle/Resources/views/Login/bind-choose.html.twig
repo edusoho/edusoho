@@ -37,10 +37,13 @@
               <label id="user_terms">
                 <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
               </label>
-          {% endif %} #}
+          {% endif %} 
 
-          <button id="set-bind-new-btn" class="btn btn-primary btn-lg"  data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+          <div class="tac pvl">
+            <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
 
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg"  data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+          </div>
         </form>
       {# {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
 

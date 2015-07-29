@@ -131,12 +131,12 @@ class LoginBindController extends BaseController
     public function newSetAction(Request $request, $type)
     {
         $setData = $request->request->all();
-        if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
+        /*if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
            $setData['email'] = $setData['set_bind_emailOrMobile'];
         }else if(SimpleValidator::mobile($setData['set_bind_emailOrMobile'])){
            $setData['mobile'] = $setData['set_bind_emailOrMobile'];
         }
-        unset($setData['set_bind_emailOrMobile']);
+        unset($setData['set_bind_emailOrMobile']);*/
 
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
@@ -202,7 +202,7 @@ class LoginBindController extends BaseController
             $registration['emailOrMobile'] = $setData['email'];
         } else {
             $nicknames = array();
-            $nicknames[] = $oauthUser['name'];
+            $nicknames[] = $setData['nickname'] ? $setData['nickname'] : $oauthUser['name'];
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);

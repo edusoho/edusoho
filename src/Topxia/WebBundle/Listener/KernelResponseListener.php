@@ -32,7 +32,14 @@ class KernelResponseListener
         $auth = $this->getSettingService()->get('auth');
         if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) && $auth['fill_userinfo_after_login']) {
 
-            $whiteList = array('/fill/userinfo','/logout','/register/mobile/check','/register/email/check');
+            $whiteList = array(
+                '/fill/userinfo','/logout','/register/mobile/check',
+                '/register/email/check','/login/bind/weixinmob/newset',
+                '/login/bind/weixinmob/existbind', '/login/bind/weixinweb/newset',
+                '/login/bind/qq/newset', '/login/bind/weibo/newset', '/login/bind/renren/newset',
+                '/login/bind/qq/exist', '/login/bind/weibo/exist','/login/bind/renren/exist',
+                '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist'
+            );
             if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin')) {
                 return ;
             }
