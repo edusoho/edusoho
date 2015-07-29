@@ -1,6 +1,8 @@
 .teacher-item {
+  position: relative;
   margin: 10px auto;
   text-align: center;
+  z-index: 1;
   .border-radius(4px);
   .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
   .es-transition;
@@ -24,6 +26,8 @@
     }
   }
   .teacher-top {
+    position: relative;
+    z-index: 1;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     background-color: #fafafa;
@@ -50,6 +54,7 @@
     right: 20px;
     bottom: 20px;
     left: 20px;
+    z-index: 1;
     .es-transition;
   }
   .about {

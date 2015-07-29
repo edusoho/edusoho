@@ -75,50 +75,10 @@ class CourseStudentManageController extends BaseController
 		if ('POST' == $request->getMethod()) {
 			$data = $request->request->all();
 			$user = $this->getUserService()->getUserByLoginField($data['queryfield']);
-			if (empty($user)) {
-				throw $this->createNotFoundException("用户{$data['nickname']}不存在");
-			}
 
-			if ($this->getCourseService()->isCourseStudent($course['id'], $user['id'])) {
-				throw $this->createNotFoundException("用户已经是学员，不能添加！");
-			}
-
-			$order = $this->getOrderService()->createOrder(array(
-				'userId' => $user['id'],
-				'title' => "购买课程《{$course['title']}》(管理员添加)",
-				'targetType' => 'course',
-				'targetId' => $course['id'],
-				'amount' => $data['price'],
-				'totalPrice' => $data['price'],
-				'payment' => 'none',
-				'snPrefix' => 'C',
-			));
-
-			$this->getOrderService()->payOrder(array(
-				'sn' => $order['sn'],
-				'status' => 'success', 
-				'amount' => $order['amount'], 
-				'paidTime' => time(),
-			));
-
-			$info = array(
-				'orderId' => $order['id'],
-				'note'  => $data['remark'],
-			);
-
-			$this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-
-			$member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-
-			$this->getNotificationService()->notify($member['userId'], 'student-create', array(
-				'courseId' => $course['id'], 
-				'courseTitle' => $course['title'],
-			));
-
-
-
-			$this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
-
+			$data["isAdminAdded"] = 1;
+			
+			list($course, $member, $order) = $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course["id"], $data);
 			return $this->createStudentTrResponse($course, $member);
 		}
 		$default = $this->getSettingService()->get('default', array());
@@ -355,6 +315,26 @@ class CourseStudentManageController extends BaseController
 		));
 	}
 
+	public function importAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        return $this->render('TopxiaWebBundle:CourseStudentManage:import.html.twig', array(
+            'course' => $course,
+        ));
+    }
+
+    public function excelDataImportAction($id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['status'] != 'published') {
+            throw $this->createNotFoundException("未发布课程不能导入学员!");
+        }
+
+        return $this->render('TopxiaWebBundle:CourseStudentManage:import.step3.html.twig', array(
+            'course' => $course
+        ));
+    }
+
 	protected function calculateUserLearnProgress($course, $member)
 	{
 		if ($course['lessonNum'] == 0) {
@@ -388,6 +368,11 @@ class CourseStudentManageController extends BaseController
 			'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
 			'default'=>$default
 		));
+	}
+
+	protected function getCourseMemberService()
+	{
+		return $this->getServiceKernel()->createService('Course.CourseMemberService');
 	}
 
 	protected function getSettingService()

@@ -5,6 +5,7 @@
 {% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
+
 	{% if lesson.status == 'published' %}
 
 	  {% if lesson.mediaSource == 'iframe' %}
@@ -12,7 +13,8 @@
       </div>
 		{% elseif lesson.type == 'video' %}
 			{% if lesson.mediaSource == 'self' %}
-				<div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
+				<div id="lesson-preview-video-player" 
+        data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
@@ -71,7 +73,7 @@
       扫二维码继续学习
     </span>
   </span>
-  {% if lesson.status == 'published' %}
+   {% if lesson.status == 'published' %}
     {% if course.price=='0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
         {% if setting("course.buy_fill_userinfo")|default(false) %}
@@ -90,7 +92,7 @@
       </a>
     {% else %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if setting("course.buy_fill_userinfo")|default(false) %}
+        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok') %}
           href="javascript:;" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
         {% else %}
@@ -98,11 +100,16 @@
         {% endif %}
       >
         {% if user.id %}
-          觉得不错？点击购买此课程（{{ course.price }}元）
+          {% if vipStatus == 'ok' %}
+            觉得不错？点击加入此课程
+          {% else %}
+            觉得不错？点击购买此课程（{{ course.price }}元）
+          {% endif %}
         {% else %}
           登录后购买学习完整的课程
         {% endif %}
       </a>
     {% endif %}
-  {% endif %}
+  {% endif %} 
+ {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
 {% endblock %}

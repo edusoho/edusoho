@@ -19,7 +19,7 @@ Created by FontForge 20120731 at Wed Jul  8 10:49:43 2015
     bbox="0 -212.087 1024 812"
     underline-thickness="50"
     underline-position="-100"
-    unicode-range="U+0078-E685"
+    unicode-range="U+0078-E686"
   />
 <missing-glyph horiz-adv-x="374" 
 d="M34 0v682h272v-682h-272zM68 34h204v614h-204v-614z" />
@@ -394,5 +394,7 @@ d="M664 96l-46 174l140 116l-180 10l-66 168l-66 -168l-182 -10l142 -116l-46 -174l1
 v-170q-34 0 -59 -26t-25 -60z" />
     <glyph glyph-name="uniE685" unicode="&#xe685;" 
 d="M43 -96h938l-469 811zM555 32h-86v85h86v-85zM555 203h-86v170h86v-170z" />
+    <glyph glyph-name="uniE686" unicode="&#xe686;" 
+d="M598 214v-84h-300v84h300zM810 2v468h-596v-468h596zM810 684q34 0 60 -26t26 -60v-596q0 -34 -26 -60t-60 -26h-596q-36 0 -61 26t-25 60v596q0 34 25 60t61 26h42v86h86v-86h340v86h86v-86h42zM726 386v-86h-428v86h428z" />
   </font>
 </defs></svg>

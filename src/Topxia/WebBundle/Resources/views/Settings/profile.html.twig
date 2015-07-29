@@ -19,7 +19,7 @@
 				{{ web_macro.flash_messages() }}
 
 					<div class="form-group">
-					<label class="col-md-2 control-label" >昵称</label>
+					<label class="col-md-2 control-label" >用户名</label>
 						<div class="col-md-7 controls">
 						<div class="control-text">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">修改</a> {% endif %}</div>

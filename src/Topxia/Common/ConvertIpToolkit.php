@@ -7,7 +7,7 @@ class ConvertIpToolkit
 	{
 		$result = array();
 		foreach ($array as $key => $value) {
-			$value['location'] = self::convertIp($value['ip']);
+			$value['location'] = static::convertIp($value['ip']);
 			$result[$key] = $value;
 		}
 		return $result;

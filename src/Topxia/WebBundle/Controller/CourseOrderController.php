@@ -82,8 +82,18 @@ class CourseOrderController extends OrderController
             ));
         }
 
+        //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
+            'lessonId' => $request->query->get('lessonId'),
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
@@ -94,12 +104,12 @@ class CourseOrderController extends OrderController
             'userFields'=>$userFields,
             'account'=>$account,
             'amount'=>$amount,
+            'vipStatus'=>$vipStatus
         ));
     }
 
     public function modifyUserInfoAction(Request $request)
     {
-
         $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
@@ -131,18 +141,49 @@ class CourseOrderController extends OrderController
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
+        //免费课程,直接加入并进入课时
         $coinSetting = $this->setting("coin");
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
+        if ($user->isLogin() && !$userInfoEnable && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
+            if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+                || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0 )) {
+                
+                $data = array("price" => 0, "remark"=>'');
+                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
+                if(isset($formData['lessonId'])){
+                    return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
+                }else{
+                    return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+                }
+
+            }
+        }
+
+        //判断用户是否为VIP            
+        $vipStatus = $courseVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+                if($vipStatus == 'ok') {
+                    $formData['becomeUseMember'] = true;
+                }
+            }
+        }
 
         if((isset($coinSetting["coin_enabled"]) 
         && $coinSetting["coin_enabled"]==1
         && isset($coinSetting["price_type"])
         && $coinSetting["price_type"]=="Coin"
-        && $course['coinPrice']==0) || $course['price'] == 0) {
+        && $course['coinPrice']==0) || $course['price'] == 0 || $vipStatus == 'ok') {
             $formData['amount'] = 0;
             $formData['totalPrice'] = 0;
             $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
             $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
+
             $order = $this->getCourseOrderService()->createOrder($formData);
 
             if ($order['status'] == 'paid') {
@@ -188,6 +229,21 @@ class CourseOrderController extends OrderController
         $result["order"] = $order;
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
+    }
+
+    public function orderDetailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+
+        if (empty($order)) {
+            return $this->createMessageResponse('error', '订单不存在!');
+        }
+
+        $this->getCourseService()->tryManageCourse($order["targetId"]);
+
+        return $this->forward('TopxiaWebBundle:Order:detail', array(
+            'id' => $id,
+        ));
     }
 
     protected function getOrderInfo($id)
@@ -386,5 +442,19 @@ class CourseOrderController extends OrderController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
     }
 }

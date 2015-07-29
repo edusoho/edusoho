@@ -19,4 +19,6 @@ interface TokenDao
     public function waveRemainedTimes($id, $diff);
 
 	public function searchTokenCount($conditions);
+
+	public function deleteTokensByExpiredTime($expiredTime, $limit);
 }

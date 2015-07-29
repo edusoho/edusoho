@@ -281,13 +281,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         {
             return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
         }
+
+        if ($auth['register_mode'] == 'mobile') {
+            return $this->createErrorResponse('register_error', '移动端暂不支持手机注册，敬请期待!');
+        }
         
         if (!SimpleValidator::email($email)) {
             return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+            return $this->createErrorResponse('nickname_invalid', '用户名格式不正确');
         }
 
         if (!SimpleValidator::password($password)) {
@@ -299,11 +303,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+            return $this->createErrorResponse('nickname_exist', '该用户名已被注册');
         }
 
+        $registTypeName = $auth['register_mode'] == "email" ? "email" : "emailOrMobile";
         $user = $this->controller->getAuthService()->register(array(
-            'email' => $email,
+            $registTypeName => $email,
             'nickname' => $nickname,
             'password' => $password,
         ));
