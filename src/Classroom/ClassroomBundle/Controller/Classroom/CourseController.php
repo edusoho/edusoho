@@ -58,8 +58,7 @@ class CourseController extends BaseController
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
-        $user = $this->getClassroomService()->findTeachers($classroomId);
-
+        
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $currentUser = $this->getUserService()->getCurrentUser();
         $courseMembers = array();

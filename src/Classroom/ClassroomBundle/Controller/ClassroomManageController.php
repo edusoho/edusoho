@@ -264,7 +264,6 @@ class ClassroomManageController extends BaseController
                 'orderId' => $order['id'],
                 'note'  => $data['remark'],
             );
-
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
