@@ -122,7 +122,7 @@ class AbstractCloudAPI
             throw new CloudAPIIOException("Request api server timeout (url:{$url}).");
         }
 
-        if ($curlinfo['http_code'] != 500) {
+        if ($curlinfo['http_code'] > 500) {
             throw new CloudAPIIOException("Api server internal error (url:{$url}).");
         }
 
