@@ -224,33 +224,37 @@
 .recommend-class-list {
   .class-item {
     position: relative;
-    margin: 10px auto;
-    border: 3px solid #fff;
-    overflow: hidden;
-    .border-radius;
-    .box-shadow( 0 2px 4px rgba(0,0,0,.08));
-    h3 {
-      position: absolute;
-      display: block;
-      bottom: 0;
-      left: 0;
-      right: 0;
+    margin: 0 auto 30px;
+    z-index: 1;
+    .class-item-bg {
+      background-color: #fff;
       padding: 10px;
-      font-size: 16px;
-      color: #fff;
-      z-index: 1;
-      .text-overflow;
+      .border-radius;
+      .box-shadow( 0 0 4px rgba(0,0,0,.08));
+    }
+    .class-img {
+      display: block;
+      margin-bottom: 10px;
     }
     .img-responsive {
       width: 100%;
     }
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      .text-overflow;
+    }
   }
+}
+
+.lt-ie9 .recommend-class-list .class-item {
+  border: 1px solid @gray-light;
 }
 
 //小组动态
 .group-dynamic {
   padding-bottom: 20px;
-  background: #fafafa;
+  background: @bg-color;
 }
 
 .index-group {

@@ -1,3 +1,29 @@
+.class-bg-layer {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 100%;
+  background-color: #fff;
+  .border-radius;
+  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+  z-index: -1;
+  @media (max-width: @screen-xs-max) {
+    top: 2px;
+    left: 2px;
+  }
+  &.two {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: -2;
+    @media (max-width: @screen-xs-max) {
+      top: 4px;
+      left: 4px;
+    }
+  }
+}
+
 // 班级头部
 .class-header {
   background: url("@{img-src}class_bg.jpg");
@@ -6,37 +32,12 @@
   padding: 30px 0 40px 0;
   .class-header-mian {
     position: relative;
-    z-index: 2;
-  }
-  .class-bg-layer {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 100%;
-    width: 100%;
-    background-color: #fff;
-    .border-radius;
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    z-index: -1;
-    @media (max-width: @screen-xs-max) {
-      top: 2px;
-      left: 2px;
-    }
-    &.two {
-      top: 10px;
-      left: 10px;
-      z-index: -2;
-      @media (max-width: @screen-xs-max) {
-        top: 4px;
-        left: 4px;
-      }
-    }
+    z-index: 1;
   }
   .class-header-bg {
     background-color: #fff;
     .border-radius;
     .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    z-index: 1;
   }
   .class-img {
     float: left;
@@ -179,7 +180,7 @@
     position: absolute;
     display: block;
     top: -10px;
-    right: -15px;
+    right: -10px;
     width: 25px;
     height: 25px;
     line-height: 25px;
@@ -555,6 +556,7 @@
     } 
   }
 }
+
 // 课时列表
 .period-list {
   margin-top: 20px;
