@@ -411,6 +411,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = CourseSerialize::serialize($fields);
 
 		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
+
 		$this->dispatchEvent("course.update",$updatedCourse);
 		
 		return CourseSerialize::unserialize($updatedCourse);
@@ -786,7 +787,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fields['price'] = $price * ($discount / 10);
 		}
 
-		return $this->getCourseDao()->updateCourse($course['id'], $fields);
+		$course = $this->getCourseDao()->updateCourse($course['id'], $fields);
+		$this->dispatchEvent("course.update",$course);
+		return $course;
 	}
 
 	public function setCoursesPriceWithDiscount($discountId)
@@ -1928,11 +1931,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// 更新课程的teacherIds，该字段为课程可见教师的ID列表
 		$fields = array('teacherIds' => $visibleTeacherIds);
-		$this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
-		
+		$course = $this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
         $this->dispatchEvent("course.teacher.update", array(
             "courseId"=>$courseId
         ));
+
+        $this->dispatchEvent("course.update",$course);
 	}
 
 	/**

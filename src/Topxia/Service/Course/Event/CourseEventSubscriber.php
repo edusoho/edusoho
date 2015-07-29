@@ -189,7 +189,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {   
         $course = $event->getSubject();
         $parentId = $course['id'];
-        unset($course['id'],$course['parentId']);
+        unset($course['id'],$course['parentId'],$course['locked']);
         $this->getCourseService()->updateCourseByParentIdAndFields($parentId,$course);
 
     }
