@@ -5,6 +5,7 @@ namespace Topxia\MobileBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\SimpleValidator;
+use Topxia\Common\ArrayToolkit;
 
 class UserController extends MobileController
 {
@@ -272,6 +273,18 @@ class UserController extends MobileController
 
         return $html;
 
+    }
+
+    public function fillUserInfoAction()
+    {
+        $auth = $this->getSettingService()->get('auth');
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = ArrayToolkit::index($userFields,'fieldName');
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+
+        return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
+            'userFields' => $userFields,
+        ));
     }
     
     private function getSiteInfo($request)

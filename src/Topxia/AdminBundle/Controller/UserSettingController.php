@@ -36,8 +36,6 @@ class UserSettingController extends BaseController
             'welcome_body' => '',
             'user_terms' => 'closed',
             'user_terms_body' => '',
-            'registerFieldNameArray' => array(),
-            'registerSort' => array(0 => "email", 1 => "nickname", 2 => "password"),
             'captcha_enabled' => 0,
             'register_protective' => 'none',
             'nickname_enabled' => 0,
@@ -74,24 +72,25 @@ class UserSettingController extends BaseController
 
             if (isset($auth['setting_time']) && $auth['setting_time'] > 0) {
                 $firstSettingTime = $auth['setting_time'];
-                $auth = $request->request->all();
-                $auth['setting_time'] = $firstSettingTime;
+                $authUpdate = $request->request->all();
+                $authUpdate['setting_time'] = $firstSettingTime;
             } else {
-                $auth = $request->request->all();
-                $auth['setting_time'] = time();
+                $authUpdate = $request->request->all();
+                $authUpdate['setting_time'] = time();
             }
 
-            if (empty($auth['welcome_methods'])) {
-                $auth['welcome_methods'] = array();
+            if (empty($authUpdate['welcome_methods'])) {
+                $authUpdate['welcome_methods'] = array();
             }
 
-            if ($auth['register_protective'] == "none") {
-                $auth['captcha_enabled'] = 0;
+            if ($authUpdate['register_protective'] == "none") {
+                $authUpdate['captcha_enabled'] = 0;
             } else {
-                $auth['captcha_enabled'] = 1;
+                $authUpdate['captcha_enabled'] = 1;
             }
 
-            $this->getSettingService()->set('auth', $auth);
+            $authUpdate = array_merge($auth, $authUpdate);
+            $this->getSettingService()->set('auth', $authUpdate);
             
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
             $this->setFlashMessage('success', '注册设置已保存！');
@@ -269,7 +268,7 @@ class UserSettingController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
-            
+           
         if ($request->getMethod() == 'POST') {
             
             $courseUpdateSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
@@ -281,8 +280,15 @@ class UserSettingController extends BaseController
 
             $authSetting['avatar_alert'] = $request->request->get('avatar_alert');
             $authSetting['nickname_enabled'] = $request->request->get('nickname_enabled');
-            
+            $authSetting = array_merge($this->getSettingService()->get('user_partner', array()), $authSetting);
             $this->getSettingService()->set('user_partner', $authSetting);
+
+            $authUpdateSetting['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
+            $authUpdateSetting['registerSort'] = $request->request->get('registerSort');
+            $authUpdateSetting['registerFieldNameArray'] = $request->request->get('registerFieldNameArray');
+            $authUpdateSetting = array_merge($auth, $authUpdateSetting);
+            
+            $this->getSettingService()->set('auth', $authUpdateSetting);
 
             $this->getLogService()->info('system', 'update_settings', "更新用户信息设置", $auth);
             $this->setFlashMessage('success', '用户信息设置已保存！');

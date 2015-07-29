@@ -43,6 +43,7 @@ define(function(require, exports, module) {
         var validator = new Validator({
             element: $form,
             onFormValidated: function(error, results, $form) {
+                console.log(error);
                 if (error) {
                     return false;
                 }
@@ -131,7 +132,7 @@ define(function(require, exports, module) {
         });
 
   
-        if ($('input[name="em_sms_code"]').length > 0) {
+        /*if ($('input[name="em_sms_code"]').length > 0) {
             validator.addItem({
                 element: '[name="em_sms_code"]',
                 required: true,
@@ -149,10 +150,10 @@ define(function(require, exports, module) {
                     }
                 });
             })
-        }
+        }*/
 
 
-        /*$("#register_emailOrMobile").blur(function(){
+        $("#register_emailOrMobile").blur(function(){
             var emailOrMobile  = $("#register_emailOrMobile").val();
             emSmsCodeValidate(emailOrMobile);
         });
@@ -160,7 +161,7 @@ define(function(require, exports, module) {
         $("#register_mobile").blur(function(){
             var mobile  = $("#register_mobile").val();
             emSmsCodeValidate(mobile);
-        });*/
+        });
 
 
         /*if ($('.js-sms-send').length > 0 ) {
@@ -178,7 +179,7 @@ define(function(require, exports, module) {
                     $mobile_target.execute(function(error, results, element) {
                         if (error) {
                             couldSender = false;
-                            return;
+                            return;s
                         }
                         couldSender = true;
                         return;
@@ -188,7 +189,7 @@ define(function(require, exports, module) {
                 }      
             });
 
-        }
+        }*/
 
         function emSmsCodeValidate(mobile){
             var reg_mobile = /^1\d{10}$/;
@@ -201,10 +202,21 @@ define(function(require, exports, module) {
                     rule: 'integer fixedLength{len:6} remote',
                     display: '短信验证码'           
                 });
+
+                $form.on('click','.js-sms-send',function(e){
+                    var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
+                        
+                    $mobile_target.execute(function(error, results, element) {
+                        if (error) { 
+                            return;
+                        }
+                    });
+                })
+                
             }else{
                 validator.removeItem('[name="em_sms_code"]');
             }
-        }*/
+        }
 
 
     };

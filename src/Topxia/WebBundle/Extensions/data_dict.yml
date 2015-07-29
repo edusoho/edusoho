@@ -294,6 +294,7 @@ searchCourseType:
     live: 直播课程
 
 userInfoFields:
+    email: 邮箱地址
     truename: 真实姓名
     mobile: 手机号码
     qq: QQ

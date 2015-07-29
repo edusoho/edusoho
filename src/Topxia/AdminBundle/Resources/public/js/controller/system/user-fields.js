@@ -62,6 +62,24 @@ define(function(require, exports, module) {
             $('#type_num').html($(this).children('option:selected').attr('num'));
         });
 
+        $('#show-fields-list-btn').on('click',function(){
+            $('#show-fields-list').show();
+            $('#show-checked-fields-list').hide();
+        })
+
+        $("#hide-fields-list-btn").on("click", function() {
+            $("#show-fields-list").hide();
+
+            var fieldNameHtml = '';
+            $('.fill-userinfo-list input:checkbox:checked').each(function(){
+                var fieldName = $(this).closest('li').text();
+                fieldNameHtml += '<button type="button" class="btn btn-default btn-xs">'+$.trim(fieldName)+'</button>&nbsp;';
+            })
+
+            $('#show-checked-fields-list .pull-left').html(fieldNameHtml);
+            $("#show-checked-fields-list").show();
+        });
+
     };
 
 });

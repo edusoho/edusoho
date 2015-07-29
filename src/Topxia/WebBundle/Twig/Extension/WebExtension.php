@@ -93,6 +93,7 @@ class WebExtension extends \Twig_Extension
             'userAccount'=>new \Twig_Function_Method($this, 'getAccount'),
             'getUserNickNameById' => new \Twig_Function_Method($this, 'getUserNickNameById'),
             'blur_phone_number' => new \Twig_Function_Method($this, 'blur_phone_number'),
+            'blur_idcard_number' => new \Twig_Function_Method($this, 'blur_idcard_number'),
             'sub_str' => new \Twig_Function_Method($this, 'subStr'),
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
@@ -1037,6 +1038,13 @@ class WebExtension extends \Twig_Extension
         $head = substr($phoneNum,0,3);
         $tail = substr($phoneNum,-4,4);
         return ($head . '****' . $tail);
+    }
+
+    public function blur_idcard_number($idcardNum)
+    {
+        $head = substr($idcardNum,0,4);
+        $tail = substr($idcardNum,-2,2);
+        return ($head . '************' . $tail);
     }
 
     public function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) 

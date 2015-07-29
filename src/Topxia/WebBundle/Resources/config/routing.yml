@@ -1233,6 +1233,10 @@ user_card_show:
     pattern:  /user/{userId}/card/show
     defaults: { _controller: TopxiaWebBundle:User:cardShow }
 
+login_after_fill_userinfo:
+    pattern:  /fill/userinfo
+    defaults: { _controller: TopxiaWebBundle:User:fillUserInfo }
+
 message_create:
     pattern: /message/create/{toId}
     defaults: { _controller: TopxiaWebBundle:Message:create }
