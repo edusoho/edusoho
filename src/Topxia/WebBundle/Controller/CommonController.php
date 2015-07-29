@@ -115,16 +115,6 @@ class CommonController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
-    private function createUser()
-    {
-        $user = array();
-        $user['email'] = "uswdaer@usdaer.com";
-        $user['nickname'] = "uswwqere";
-        $user['password'] = "user";
-        $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
-
-        return $this->getUserService()->register($user);
-    }
 
     protected function getSettingService()
     {
