@@ -296,27 +296,13 @@ class ClassroomManageController extends BaseController
         $user = $this->getUserService()->getUserByLoginField($keyWord);
         if (!$user) {
             $response = array('success' => false, 'message' => '该用户不存在');
-        } else {
+        }
+        else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
             if ($isClassroomStudent) {
                 $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
             } else {
                 $response = array('success' => true, 'message' => '');
-            }
-
-            $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($id, $user['id']);
-            if ($isClassroomTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本班级的教师，不能添加');
-            }
-
-            $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($id, $user['id']);
-            if ($isClassroomHeadTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本班级的班主任，不能添加');
-            }
-
-            $isClassroomAssistent = $this->getClassroomService()->isClassroomAssistent($id, $user['id']);
-            if ($isClassroomAssistent) {
-                $response = array('success' => false, 'message' => '该用户是本班级的助教，不能添加');
             }
         }
 
@@ -334,7 +320,8 @@ class ClassroomManageController extends BaseController
 
         if ($role == 'student') {
             $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 1000);
-        } else {
+        } 
+        else {
             $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'auditor'), array('createdTime', 'DESC'), 0, 1000);
         }
 
@@ -459,8 +446,8 @@ class ClassroomManageController extends BaseController
             $this->setFlashMessage('success', "保存成功！");
         }
 
-        $teacherIds = $classroom['teacherIds'] ?: array();
-
+        $teachers = $this->getClassroomService()->findTeachers($id);
+        $teacherIds = ArrayToolkit::column($teachers,'userId');
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
         $teacherItems = array();

@@ -30,7 +30,7 @@
                           {% if courseMembers[course.id] and not member and setting('classroom.discount_buy') %}
                           已购买
                           {% else %}
-                            {% if member and member.role != 'auditor' %}
+                            {% if member and 'auditor' in member.role %}
                               {% if courseMembers[course.id] and courseMembers[course.id].learnedNum == 0 %}
                               未学
                               {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum == course.lessonNum %}
@@ -42,7 +42,7 @@
                               {% endif %} 
 
 
-                            {% elseif courseMembers[course.id] and member and member.role == 'auditor' and setting('classroom.discount_buy') %}
+                            {% elseif courseMembers[course.id] and member and 'auditor' in member.role  and setting('classroom.discount_buy') %}
                             已购买
                             {% else %}
                                 {% if setting('coin.coin_enabled') and setting('coin. price_type') == 'Coin' %}

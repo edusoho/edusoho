@@ -58,14 +58,7 @@ class CourseController extends BaseController
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
-
-        if (empty($classroom['teacherIds'])) {
-            $classroomTeacherIds = array();
-        } else {
-            $classroomTeacherIds = $classroom['teacherIds'];
-        }
-
-        $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+        $user = $this->getClassroomService()->findTeachers($classroomId);
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $currentUser = $this->getUserService()->getCurrentUser();
@@ -97,6 +90,7 @@ class CourseController extends BaseController
         ));
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        $member = $this->getClassroomService()->unSerialize($member);
         if ($member && !$member["locked"]) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
@@ -192,13 +186,13 @@ class CourseController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => 'auditor',
+                'role' => '|auditor|',
                 'locked' => 0,
                 'createdTime' => 0,
             );
 
             if ($previewAs == 'member') {
-                $member['role'] = 'member';
+                $member['role'] = '|member|';
             }
         }
 

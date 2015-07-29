@@ -98,6 +98,7 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
+            'classroom_permit' => new \Twig_Function_Method($this, 'isPermitRole'),
         );
     }
 
@@ -982,6 +983,16 @@ class WebExtension extends \Twig_Extension
             }
 
         return $default;
+    }
+
+    public function isPermitRole($classroomId, $permission, $isStudentOrAuditor = false)
+    {
+        $funcName = 'can'.$permission.'Classroom';
+        if ($isStudentOrAuditor) {
+            return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->$funcName($classroomId,$isStudentOrAuditor);
+        }
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->$funcName($classroomId);
+
     }
 
     public function calculatePercent($number, $total)

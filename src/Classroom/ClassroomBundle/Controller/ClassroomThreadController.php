@@ -21,6 +21,7 @@ class ClassroomThreadController extends BaseController
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && $member['locked'] == '0') {
+            $member = $this->getClassroomService()->unSerialize($member);
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
 

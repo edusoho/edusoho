@@ -10,10 +10,11 @@ class UtilityController extends BaseController
     public function headteacherMatchAction(Request $request, $classroomId)
     {
         $likeString = $request->query->get('q');
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $users = $this->getUserService()->searchUsers(array(
             'nickname' => $likeString,
             'roles' => 'ROLE_TEACHER',
-            'excludeIds' => $this->_getExcludeIds($classroomId),
+            'excludeIds' => array($classroom['headTeacherId']),
             ), array('createdTime', 'DESC'), 0, 10
         );
 
@@ -58,7 +59,6 @@ class UtilityController extends BaseController
             $assistantIds = array();
         }
         $excludeIds = $assistantIds;
-        $excludeIds[] = $classroom['headTeacherId'];
 
         return $excludeIds;
     }

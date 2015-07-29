@@ -129,7 +129,6 @@ class ClassroomController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
-
         $lessonNum = 0;
         $coinPrice = 0;
         $price = 0;
@@ -142,10 +141,8 @@ class ClassroomController extends BaseController
         }
 
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
-
-        $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
-        $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
         if ($member && !$member["locked"]) {
+            $member = $this->getClassroomService()->unSerialize($member);
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom' => $classroom,
                 'courses' => $courses,
@@ -153,8 +150,6 @@ class ClassroomController extends BaseController
                 'coinPrice' => $coinPrice,
                 'price' => $price,
                 'member' => $member,
-                'canManage' => $canManage,
-                'canHandle' => $canHandle,
                 'checkMemberLevelResult' => $checkMemberLevelResult,
                 'classroomMemberLevel' => $classroomMemberLevel,
                 'coursesNum' => $coursesNum,
@@ -169,7 +164,6 @@ class ClassroomController extends BaseController
             'classroomMemberLevel' => $classroomMemberLevel,
             'coursesNum' => $coursesNum,
             'member' => $member,
-            'canManage' => $canManage,
             'canFreeJoin' => $canFreeJoin,
         ));
     }
@@ -192,7 +186,6 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
         if ($request->query->get('previewAs')) {
             if ($this->getClassroomService()->canManageClassroom($id)) {
                 $previewAs = $request->query->get('previewAs');
@@ -200,8 +193,10 @@ class ClassroomController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
+
         if ($member && $member["locked"] == "0") {
-            if ($member['role'] == 'student') {
+            $member = $this->getClassroomService()->unSerialize($member);
+            if (in_array('student',$member['role'])) {
                 return $this->redirect($this->generateUrl('classroom_courses', array(
                     'classroomId' => $id,
                 )));
@@ -235,13 +230,13 @@ class ClassroomController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => 'auditor',
+                'role' => '|auditor|',
                 'locked' => 0,
                 'createdTime' => 0,
             );
 
             if ($previewAs == 'member') {
-                $member['role'] = 'member';
+                $member['role'] = '|member|';
             }
         }
 
@@ -255,6 +250,9 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        if (!empty($member)) {
+            $member = $this->getClassroomService()->unSerialize($member);
+        }
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
             'classroom' => $classroom,
@@ -333,6 +331,7 @@ class ClassroomController extends BaseController
         }
 
         if ($member && $member["locked"] == "0") {
+            $member = $this->getClassroomService()->unSerialize($member);
             return $this->render("ClassroomBundle:Classroom:role.html.twig", array(
                 'classroom' => $classroom,
                 'courses' => $courses,
@@ -497,8 +496,8 @@ class ClassroomController extends BaseController
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
-
-        if (!in_array($member["role"], array("auditor", "student"))) {
+        $member = $this->getClassroomService()->unSerialize($member);
+        if (!array_intersect($member["role"], array("auditor", "student"))) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
