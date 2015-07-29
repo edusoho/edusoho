@@ -11,6 +11,9 @@ define(function(require, exports, module) {
 
         if( $(".poster-btn").length>0 ){
             var selector = $(".poster-btn");
+            $(".poster-btn").each(function(){
+
+            })
             initFirstTab(selector);
             bindClipboard();
         }
@@ -276,7 +279,7 @@ define(function(require, exports, module) {
         });
 
         uploader.on('uploadSuccess', function(file, response ) {
-            self.closest('.edit-mode-html').find('.html-mrl').html(response.url);
+            var html = self.closest('.edit-mode-html').find('.html-mrl').append("<p>" + response.url + "</p>");
             Notify.success('上传成功！', 1);
         });
     }
