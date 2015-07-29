@@ -400,6 +400,7 @@ ddddd
 
 ```
 [
+    no-user,
     none,
     following,
     follower,
@@ -409,6 +410,7 @@ ddddd
 ```
 返回数组，排序与传入id对应,好友关系的值有：
 
+no-user : toId用户不存在
 none : 双方无关系
 following : id用户关注了toId用户
 follower : toId用户关注了id用户
@@ -423,9 +425,12 @@ $api->get('/{id}/friendship', function (Request $request, $id) {
     } else {
         $toIds = array($currentUser['id']);
     }
-
     foreach ($toIds as $toId) {
-        $toUser = convert($toId,'user');
+        $toUser = ServiceKernel::instance()->createService('User.UserService')->getUser($toId);
+        if (empty($toUser)) {
+            $result[] = 'no-user';
+            continue;
+        }
         //关注id的人
         $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
         //id关注的人
