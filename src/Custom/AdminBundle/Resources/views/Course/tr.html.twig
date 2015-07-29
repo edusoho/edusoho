@@ -8,7 +8,7 @@
       <span class="label label-success live-label mls">直播</span>
     {% endif %}
     {% if course.type == 'periodic' %}
-      <span class="label label-success live-label mls">周期</span>
+      <span class="label label-success live-label mls">第{{ course.periods }}周期</span>
     {% endif %}
 
     {% if filter == 'classroom' %} 

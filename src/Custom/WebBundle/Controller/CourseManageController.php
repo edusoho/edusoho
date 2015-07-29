@@ -31,14 +31,17 @@ class CourseManageController extends BaseCourseManageController
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
             if($course['type']=='periodic'){
+                var_dump($course['type']);
+                if($course['rootId']==0)
+                    $data['rootId'] = intval($id);
                 if(!empty($data['startTime']))
                     $data['startTime'] = strtotime($data['startTime']);
                 if(!empty($data['endTime']))
                     $data['endTime'] = strtotime($data['endTime']);
             }
-            $this->getCourseService()->updateCourse($id, $data);
+            $this->getCourseService()->customUpdateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
-            return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
+            return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id)));
         }
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);

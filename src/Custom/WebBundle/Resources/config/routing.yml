@@ -19,4 +19,11 @@ course_manage_base:
     pattern:  /course/{id}/manage/base
     defaults: { _controller: CustomWebBundle:CourseManage:base }
 
+course_next_round:
+    pattern: /course/{id}/nextRound
+    defaults: { _controller: CustomWebBundle:Course:nextRound }
+
+course_rounding:
+    pattern: /course/{id}/rounding
+    defaults: { _controller: CustomWebBundle:Course:rounding }
 

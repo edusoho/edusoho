@@ -8,4 +8,8 @@ use Custom\Service\File\Dao\UploadFileDao;
 
 class CourseDaoImpl extends BaseCourseDao implements CourseDao
 {
+    public function getPeriodicCoursesCount($rootId){
+        $sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE rootId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($rootId)) ? : null;
+    }
 }

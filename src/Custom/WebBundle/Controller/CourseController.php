@@ -30,25 +30,25 @@ class CourseController extends CourseBaseController
 			$type = 'normal';
 		}
 
-		if ($type == 'live') {
-
-			$courseSetting = $this->setting('course', array());
-
-			if (!empty($courseSetting['live_course_enabled'])) {
-				$client = LiveClientFactory::createClient();
-				$capacity = $client->getCapacity();
-			} else {
-				$capacity = array();
-			}
-
-			if (empty($courseSetting['live_course_enabled'])) {
-				return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
-			}
-
-			if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
-				return $this->createMessageResponse('info', '请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
-			}
-		}
+//		if ($type == 'live') {
+//
+//			$courseSetting = $this->setting('course', array());
+//
+//			if (!empty($courseSetting['live_course_enabled'])) {
+//				$client = LiveClientFactory::createClient();
+//				$capacity = $client->getCapacity();
+//			} else {
+//				$capacity = array();
+//			}
+//
+//			if (empty($courseSetting['live_course_enabled'])) {
+//				return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
+//			}
+//
+//			if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
+//				return $this->createMessageResponse('info', '请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+//			}
+//		}
 
 		if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
 			throw $this->createAccessDeniedException();
@@ -85,6 +85,32 @@ class CourseController extends CourseBaseController
             'items' => $items,
         ));
 
+    }
+
+    public function nextRoundAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+
+        return $this->render('CustomWebBundle:Course:next-round.html.twig', array(
+            'course' => $course,
+        ));
+    }
+
+    public function roundingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $conditions = $request->request->all();
+        $course['startTime'] = strtotime($conditions['startTime']);
+        $course['endTime'] = strtotime($conditions['endTime']);
+
+        $this->getNextRoundService()->rounding($course);
+
+        return $this->redirect($this->generateUrl('my_teaching_courses'));
+    }
+
+    protected function getNextRoundService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
     }
 
 }

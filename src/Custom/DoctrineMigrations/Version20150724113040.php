@@ -14,7 +14,7 @@ class Version20150724113040 extends AbstractMigration
      * @param Schema $schema
      */
     public function up(Schema $schema)
-    {periods
+    {//periods
         $this->addSql("ALTER TABLE `course` ADD `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间';");
         $this->addSql("ALTER TABLE `course` ADD `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间';");
         $this->addSql("ALTER TABLE `course` ADD `rootId` int(10) unsigned DEFAULT '0' COMMENT '根课程ID';");

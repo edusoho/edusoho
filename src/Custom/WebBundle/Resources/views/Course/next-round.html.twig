@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    <form id="course-next-round-form" class="form-horizontal" method="post" action="{{ path('admin_course_rounding',{id:course.id})}}">
+    <form id="course-next-round-form" class="form-horizontal" method="post" action="{{ path('course_rounding',{id:course.id})}}">
         <div>开设下一期将会在本课程的基础上复制出一个新的课程。新课程的内容可以独立编辑，只是课程的学习进度要求不同。</div>
         <div style="height: 18px"></div>
         <div class="row form-group">

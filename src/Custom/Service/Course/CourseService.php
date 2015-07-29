@@ -6,4 +6,5 @@ namespace Custom\Service\Course;
 
 interface CourseService
 {
+    public function updateCourse($id, $fields);
 }

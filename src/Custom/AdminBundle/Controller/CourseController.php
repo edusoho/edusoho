@@ -85,4 +85,21 @@ class CourseController extends BaseCourseController
             'course' => $course,
         ));
     }
+
+    public function roundingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $conditions = $request->request->all();
+        $course['startTime'] = strtotime($conditions['startTime']);
+        $course['endTime'] = strtotime($conditions['endTime']);
+
+        $this->getNextRoundService()->rounding($course);
+
+        return $this->redirect($this->generateUrl('admin_course'));
+    }
+
+    protected function getNextRoundService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
+    }
 }
