@@ -10,7 +10,7 @@ use Monolog\Handler\StreamHandler;
 class CloudAPIFactory 
 {
 
-    public static function create($type)
+    public static function create($type = 'root')
     {
         $setting = ServiceKernel::instance()->createService('System.SettingService');
 
@@ -24,9 +24,8 @@ class CloudAPIFactory
             'debug' => empty($developer['debug']) ? false : true,
         ));
 
-        $serverConfigFile = ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/api_server.php';
+        $serverConfigFile = ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/api_server.json';
         $api->setApiServerConfigPath($serverConfigFile);
-        
         $api->setApiType($type);
 
         $logger = new Logger('CloudAPI');

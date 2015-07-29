@@ -23,15 +23,15 @@ class FailoverCloudAPI extends AbstractCloudAPI
             }
 
             $this->refreshServerConfigFile(function($fp, $data) {
-                if ($data['failed_expired'] < time()) {
+                if (($data['failed_expired'] > 0) && ($data['failed_expired'] > time())) {
                     $data['failed_count'] ++;
                 } else {
                     $data['failed_count'] = 1;
+                    $data['failed_expired'] = time() + 10;
                 }
-                $data['failed_expired'] = time() + 10;
 
                 if ($data['failed_count'] == self::FAILOVER_COUNT) {
-                   $this->voteLeafServer($data);
+                   $data = $this->voteLeafServer($data);
                 }
 
                 return $data;
@@ -41,18 +41,19 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
     public function refreshServerConfigFile($callback)
     {
-        $fp = fopen($this->serverConfigPath, 'w');
+        $fp = fopen($this->serverConfigPath, 'r+');
         if (!flock($fp, LOCK_EX)) {
             fclose($fp);
             throw new \RuntimeException("Lock server config file failed.");
         }
 
-        $data = json_decode(stream_get_contents($fp), true);
+        $data = json_decode(fread($fp, filesize($this->serverConfigPath)), true);
         $data = $callback($fp, $data);
 
         ftruncate($fp, 0);
+        rewind($fp);
         fwrite($fp, json_encode($data));
-        fflush($fp);
+
         flock($fp, LOCK_UN);
         fclose($fp);
     }
@@ -60,37 +61,38 @@ class FailoverCloudAPI extends AbstractCloudAPI
     /**
      * 选举新的Leaf Server
      */
-    public function voteLeafServer($data)
+    public function voteLeafServer($servers)
     {
-        $leafs = $data['leafs'];
+        $leafs = $servers['leafs'];
         if (empty($leafs)) {
             throw new \RuntimeException("No leafs server.");
         }
 
-        unset($leafs[$data['current_leaf']]);
-        if (count($leafs) === 0) {
-            throw new \RuntimeException("Not enough leaf servers to vote.");
-        }
-        
-        $newLeafUrl = null;
-        $newLeafUsedCount = 0;
-        shuffle($leafs);
-        foreach ($leafs as $url => $usedCount) {
-            if (empty($newLeafUrl) || ($errorCount < $newLeafUsedCount)) {
-                $newLeafUrl = $url;
-                $newLeafUsedCount = $errorCount;
+        $newLeaf = array();
+
+        uksort($leafs, function($key1, $key2) {
+            $results = array(true, false);
+            return $results[rand(0, 1)];
+        });
+        foreach ($leafs as $i => $leaf) {
+            if ($leaf['url'] == $servers['current_leaf']) {
+                $servers['leafs'][$i]['used_count'] ++;
+                continue;
+            }
+            if (empty($newLeaf) || ($leaf['used_count'] < $newLeaf['used_count'])) {
+                $newLeaf = $leaf;
             }
         }
 
-        if (empty($newLeafUrl)) {
-            throw new \RuntimeException("New leaf server url is empty.");
+        if (empty($newLeaf)) {
+            throw new \RuntimeException("New leaf server is empty.");
         }
 
-        $data['leafs'][$data['current_leaf']] ++;
-        $data['current_leaf'] = $newLeafUrl;
-        $data['failed_count'] = 0;
+        $servers['current_leaf'] = $newLeaf['url'];
+        $servers['failed_count'] = 0;
+        $servers['failed_expired'] = 0;
 
-        return $data;
+        return $servers;
     }
 
     public function setApiType($type)
@@ -117,7 +119,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         $this->serverConfigPath = $path;
-        $this->servers = include $path;
+        $this->servers = json_decode(file_get_contents($path), true);
     }
 
 }

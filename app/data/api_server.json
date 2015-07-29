@@ -1,0 +1,1 @@
+{"root":"http:\/\/api.escloud.com","current_leaf":"http:\/\/api-3.escloud.com","leafs":[{"url":"http:\/\/api-1.escloud.com","used_count":12},{"url":"http:\/\/api-2.escloud.com","used_count":12},{"url":"http:\/\/api-3.escloud.com","used_count":12}],"failed_count":2,"failed_expired":1438183486,"next_refresh_time":0}
