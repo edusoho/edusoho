@@ -18,22 +18,22 @@ class FileEventSubscriber implements EventSubscriberInterface
 
     public function onUploadFileCreate(ServiceEvent $event)
     {
-    	// $file = $event->getSubject();
-    	// $courseIds = $this->getCourseService()->findCoursesByParentId($file['targetId']);
-    	// $pId = $file['id'];
-    	// unset($file['id'],$file['targetId'],$file['pId']);
-    	// foreach ($courseIds as $value) {
-    	// 	$file['targetId'] = $value;
-    	// 	if ($file['storage'] == 'local') {
-    	// 		$file['hashId'] = explode('/', $file['hashId']);
-    	// 		$file['hashId'][1] = $value;
-    	// 		$filxe['hashId'] =implode('/', $file['hashId']);
-    	// 		$file['convertHash'] = explode('/', $file['convertHash']);
-    	// 		$file['convertHash'][1] = $value;
-    	// 		$file['convertHash'] =implode('/', $file['convertHash']);
-    	// 	}
-    	// 	$this->getUploadFileService()->createFile($file);
-    	// }
+    	$file = $event->getSubject();
+    	$courseIds = $this->getCourseService()->findCoursesByParentId($file['targetId']);
+    	$pId = $file['id'];
+    	unset($file['id'],$file['targetId'],$file['pId']);
+    	foreach ($courseIds as $value) {
+    		$file['targetId'] = $value;
+    		if ($file['storage'] == 'local') {
+    			$file['hashId'] = explode('/', $file['hashId']);
+    			$file['hashId'][1] = $value;
+    			$filxe['hashId'] =implode('/', $file['hashId']);
+    			$file['convertHash'] = explode('/', $file['convertHash']);
+    			$file['convertHash'][1] = $value;
+    			$file['convertHash'] =implode('/', $file['convertHash']);
+    		}
+    		$this->getUploadFileService()->createFile($file);
+    	}
 
     }
 
