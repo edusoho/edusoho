@@ -16,9 +16,15 @@ class Version20150713165059 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `user` ADD `source` VARCHAR(50)  NOT NULL DEFAULT 'default' COMMENT '来源';");
+        $this->addSql("ALTER TABLE `user` ADD `source` VARCHAR(50)  NOT NULL DEFAULT 'default' COMMENT '注册详细来源';");
         $this->addSql("UPDATE `user` SET source = 'discuz' WHERE type = 'discuz';");
         $this->addSql("UPDATE `user` SET source = 'phpwind' WHERE type = 'phpwind';");
+        $this->addSql("UPDATE `user` SET source = 'qq' WHERE type = 'qq';");
+        $this->addSql("UPDATE `user` SET source = 'weibo' WHERE type = 'weibo';");
+        $this->addSql("UPDATE `user` SET source = 'renren' WHERE type = 'renren';");
+        $this->addSql("UPDATE `user` SET source = 'weixinweb' WHERE type = 'weixinweb';");
+        $this->addSql("UPDATE `user` SET source = 'weixinmob' WHERE type = 'weixinmob';");
+        
     }
 
     /**
