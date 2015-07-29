@@ -13,13 +13,9 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 				$scope.toast(data.error.message);
 				return;
 			}
-			$scope.lesson = data;
-			if (data.type != "text") {
-				cordovaUtil.learnCourseLesson(data.courseId, data.id); 
-				window.history.back();
-				return;
-			}
-			$scope.lessonView = "view/lesson_" + data.type + ".html";
+      
+			cordovaUtil.learnCourseLesson(data.courseId, data.id); 
+      window.history.back();
 		});
 	}
 
@@ -48,11 +44,12 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
     }
 
     this.createLessonIds = function() {
+      var index = 0;
       var lessonIds = [];
       var lessons = $scope.lessons;
       for (var i = 0; i < lessons.length; i++) {
         if ("lesson" == lessons[i].itemType) {
-          lessonIds[i] = lessons[i].id;
+          lessonIds[index++] = lessons[i].id;
         }
       };
 
@@ -66,11 +63,6 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
       }
 
       if ("lesson" != lesson.itemType) {
-        return;
-      }
-      
-      if ("text" == lesson.type) {
-        $state.go("lesson",  { courseId : lesson.courseId, lessonId : lesson.id } );
         return;
       }
 
