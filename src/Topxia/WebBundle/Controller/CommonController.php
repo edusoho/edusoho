@@ -82,9 +82,9 @@ class CommonController extends BaseController
         $pcUserId = $token['userId'];
         $user = $this->getUserService()->getUser($pcUserId);
         $currentUser = $this->getUserService()->getCurrentUser();
-        // if (!$currentUser->isLogin() || $currentUser['id']!==$pcUserId){
+        if (!$currentUser->isLogin() || $currentUser['id']!==$pcUserId){
             $this->authenticateUser($user);
-        // }
+        }
         if (isset($route_type) && $route_type == 'course-qrcode' && !empty($token['data']['courseId'])){
             $courseId = $token['data']['courseId'];
             $gotoUrl = $this->generateUrl('course_show',array('id'=>$courseId),true);
