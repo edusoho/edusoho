@@ -29,6 +29,24 @@ class KernelResponseListener
         $user_agent = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
 
+        $auth = $this->getSettingService()->get('auth');
+        if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) && $auth['fill_userinfo_after_login']) {
+
+            $whiteList = array('/fill/userinfo','/logout','/register/mobile/check','/register/email/check');
+            if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin')) {
+                return ;
+            }
+
+            $isFillUserInfo = $this->checkUserinfoFieldsFill($currentUser);
+
+            if (!$isFillUserInfo) {
+                $url = $this->container->get('router')->generate('login_after_fill_userinfo');
+                $response = new RedirectResponse($url);
+                $event->setResponse($response);
+                return ;
+            }
+        }
+
         if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             $route = 'login_bind';
             $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/existbind','/register','/partner/login');
@@ -42,6 +60,23 @@ class KernelResponseListener
         } 
 
     }
+
+    private function checkUserinfoFieldsFill($user)
+    {
+        $auth = $this->getSettingService()->get('auth');
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['email'] = strstr($user['email'],'@edusoho.net') ? '' : $user['email'];
+
+        $isFillUserInfo = true;
+        foreach($auth['registerSort'] as $key => $val){
+            if (!$userProfile[$val]) {
+                $isFillUserInfo = false;
+            }
+        }
+
+        return $isFillUserInfo;
+    }
+
 
     protected function getServiceKernel()
     {

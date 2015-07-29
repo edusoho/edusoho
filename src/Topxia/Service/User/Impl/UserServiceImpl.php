@@ -108,11 +108,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，设置帐号失败！');
         }
         if (!SimpleValidator::nickname($nickname)) {
-            throw $this->createServiceException('用户用户名格式不正确，设置帐号失败！');
+            throw $this->createServiceException('用户昵称格式不正确，设置帐号失败！');
         }
         $existUser = $this->getUserDao()->findUserByNickname($nickname);
         if ($existUser && $existUser['id'] != $userId) {
-            throw $this->createServiceException('用户名已存在！');
+            throw $this->createServiceException('昵称已存在！');
         }
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
@@ -378,7 +378,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
-            throw $this->createServiceException('用户名已存在');
+            throw $this->createServiceException('昵称已存在');
         }
 
         if (!SimpleValidator::email($registration['email'])) {
@@ -710,9 +710,6 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserBindByTypeAndFromId($type, $fromId)
     {
-        if ($type == 'weixinmob' || $type == 'weixinweb') {
-            $type = 'weixin';
-        }
         return $this->getUserBindDao()->getBindByTypeAndFromId($type, $fromId);
     }
 
@@ -729,9 +726,7 @@ class UserServiceImpl extends BaseService implements UserService
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
-        if ($type == 'weixinweb' || $type == 'weixinmob') {
-            $type = 'weixin';
-        }
+
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
     }
 
@@ -747,9 +742,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
-        }
-        if ($type == 'weixinmob' || $type == 'weixinweb') {
-            $type = 'weixin';
         }
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,

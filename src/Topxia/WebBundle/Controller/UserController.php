@@ -315,6 +315,10 @@ class UserController extends BaseController
                 'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
             ));
 
+            if (isset($formData['email']) && !empty($formData['email'])) {
+                $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            }
+
             $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
             
             return $this->redirect($this->generateUrl('homepage'));
@@ -433,4 +437,8 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
 }
