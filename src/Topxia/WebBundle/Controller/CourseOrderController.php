@@ -213,6 +213,21 @@ class CourseOrderController extends OrderController
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
     }
 
+    public function orderDetailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+
+        if (empty($order)) {
+            return $this->createMessageResponse('error', '订单不存在!');
+        }
+
+        $this->getCourseService()->tryManageCourse($order["targetId"]);
+
+        return $this->forward('TopxiaWebBundle:Order:detail', array(
+            'id' => $id,
+        ));
+    }
+
     protected function getOrderInfo($id)
     {
         $course = $this->getCourseService()->getCourse($id);

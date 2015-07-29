@@ -42,7 +42,21 @@ class HLSController extends BaseController
                 continue;
             }
 
-            $token = $this->getTokenService()->makeToken('hls.stream', array('data' => array('id' => $file['id']. $level, 'mode' => $mode) , 'times' => 1, 'duration' => 3600));
+            $tokenFields = array(
+                'data' => array(
+                    'id' => $file['id']. $level, 
+                    'mode' => $mode
+                ) , 
+                'times' => 1, 
+                'duration' => 3600
+            );
+
+            if(!empty($token['userId'])) {
+                $tokenFields['userId'] = $token['userId'];
+            }
+
+            $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
+
             $params = array(
                 'id' => $file['id'],
                 'level' => $level,
@@ -110,12 +124,27 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
 
-        $token = $this->getTokenService()->makeToken('hls.clef', array('data' => array('id' => $file['id'], 'mode' => $mode), 'times' => 1, 'duration' => 3600));
+
+        $tokenFields = array(
+            'data' => array(
+                'id' => $file['id'], 
+                'mode' => $mode
+            ), 
+            'times' => 1, 
+            'duration' => 3600
+        );
+
+        if(!empty($token['userId'])) {
+            $tokenFields['userId'] = $token['userId'];
+        }
+
+        $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
+
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' =>  $file['id'], 'token' => $token['token']), true);
 
         $hideBeginning = $request->query->get('hideBeginning');
         if (empty($hideBeginning)) {
-            $beginning = $this->getVideoBeginning($level);
+            $beginning = $this->getVideoBeginning($level, $token['userId']);
             if ($beginning['beginningKey']) {
                 $params = array_merge($params, $beginning);
             }
@@ -145,8 +174,16 @@ class HLSController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+
         if (empty($token)) {
             return new Response($fakeKey);
+        }
+
+        if(!empty($token['userId'])) {
+            if(!($this->getCurrentUser()->isLogin()
+                && $this->getCurrentUser()->getId() == $token['userId'])) {
+                return new Response($fakeKey);
+            }
         }
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
@@ -181,7 +218,7 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getVideoBeginning($level)
+    protected function getVideoBeginning($level, $userId = 0)
     {
         $beginning = array(
             'beginningKey' => null,
@@ -202,7 +239,7 @@ class HLSController extends BaseController
                 }
 
                 $beginning['beginningKey'] = $beginnings[$level]['key'];
-                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600, 'userId'=>$userId));
                 $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
                 break;
             }

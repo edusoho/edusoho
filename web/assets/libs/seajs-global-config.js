@@ -21,6 +21,7 @@ seajs.config({
         "jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
         "jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
         "jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
+        "jquery.waypoints": "jquery-plugin/waypoints/2.0.5/waypoints.min",
         "mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
         'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
         'echo.js': 'echo.js/1.7.0/index',
