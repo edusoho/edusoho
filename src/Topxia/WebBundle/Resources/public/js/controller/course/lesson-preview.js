@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-
+    require('../../util/qrcode').run();
 	var VideoJS = require('video-js'),
 		swfobject = require('swfobject');
 
@@ -171,24 +171,6 @@ define(function(require, exports, module) {
 				$modal.html(html);
 			});
 		});
-
-        $(".es-qrcode").click(function(){
-            var $this = $(this); 
-            if($this.hasClass('open')) {
-                $this.removeClass('open');
-            }else {
-                $.ajax({
-                    type: "post",
-                    url: $this.data("url"),
-                    dataType: "json",
-                    success:function(data){
-                        $this.find(".qrcode-popover img").attr("src",data.img);
-                        $this.addClass('open');
-                    }
-                });
-                
-            }
-        });
 
     };
 
