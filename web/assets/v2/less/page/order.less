@@ -261,7 +261,7 @@
 .order-item {
   .order-item-title {
     float: left;
-    width: 35%;
+    width: 36%;
     font-size: 16px;
     color: @gray;
     @media (max-width: @screen-xs-max) {
@@ -295,16 +295,43 @@
         margin-right: 10px;
       }
     }
-    >.form-control {
-      display: inline-block;
-      width: 20%;
-      margin:0 2%;
-      text-align: center;
+    >.pay-password {
+      padding: 0 20%;
+      text-align: left;
+      @media(max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+        padding:0 9%;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 0;
+      }
+      .form-control {
+        display: inline-block;
+        width: 48%;
+        margin:0 2%;
+        text-align: center;
+      }
+      .controls {
+        .form-control {
+          margin-left: 0;
+        }
+        //临时
+        .help-block {
+          width: 130px;
+          margin-top: 10px;
+          padding:0 15px;
+          line-height: 30px;
+          background-color: #fff1f0;
+          border: 1px solid #f0c7bd;
+          .text-danger {
+            color: #d85030;
+          }
+        }
+      }
     }
   }
   .order-item-price {
     float: right;
-    width: 20%;
+    width: 19%;
     font-size: 14px;
     text-align: right;
     color: @gray-dark;
@@ -332,7 +359,7 @@
         } 
       }
     }
-    .code-notify {
+    .code-notify{
       display: none;
       float: left;
       margin-top: 10px;

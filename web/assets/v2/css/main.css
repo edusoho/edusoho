@@ -9987,7 +9987,7 @@ textarea {
 }
 .order-item .order-item-title {
   float: left;
-  width: 35%;
+  width: 36%;
   font-size: 16px;
   color: #9e9e9e;
 }
@@ -10028,15 +10028,43 @@ textarea {
     margin-right: 10px;
   }
 }
-.order-item .order-item-detail > .form-control {
+.order-item .order-item-detail > .pay-password {
+  padding: 0 20%;
+  text-align: left;
+}
+@media (max-width: 991px) and (min-width: 768px) {
+  .order-item .order-item-detail > .pay-password {
+    padding: 0 9%;
+  }
+}
+@media (max-width: 767px) {
+  .order-item .order-item-detail > .pay-password {
+    padding: 0;
+  }
+}
+.order-item .order-item-detail > .pay-password .form-control {
   display: inline-block;
-  width: 20%;
+  width: 48%;
   margin: 0 2%;
   text-align: center;
 }
+.order-item .order-item-detail > .pay-password .controls .form-control {
+  margin-left: 0;
+}
+.order-item .order-item-detail > .pay-password .controls .help-block {
+  width: 130px;
+  margin-top: 10px;
+  padding: 0 15px;
+  line-height: 30px;
+  background-color: #fff1f0;
+  border: 1px solid #f0c7bd;
+}
+.order-item .order-item-detail > .pay-password .controls .help-block .text-danger {
+  color: #d85030;
+}
 .order-item .order-item-price {
   float: right;
-  width: 20%;
+  width: 19%;
   font-size: 14px;
   text-align: right;
   color: #616161;
@@ -10648,7 +10676,7 @@ textarea {
 }
 .order-detail-bg.checkout .order-detail .order-info {
   padding-top: 30px;
-  width: auto;
+  width: 70%;
 }
 .order-detail-bg.checkout .order-detail .order-info > p {
   margin-bottom: 15px;

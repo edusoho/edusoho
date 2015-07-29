@@ -9,32 +9,27 @@
     </div>
   </div>
   <div class="order-item-detail">
-    {% if hasPayPassword %}
+    <div class="pay-password">
+      {% if hasPayPassword %}
       本次使用
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
       <input id="coinPayAmount" class="form-control" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
       {{setting("coin.coin_name")}}
       {% endif %}
-    <div class="pay-password">
       <input style="display:none">{# Prevent autocompleting #}
       <input type="password" style="display:none">{# Prevent autocompleting #}
       {% if not hasPayPassword %}
       <div  class="set-password">
           为了保障账户资金安全，请先
-        <a class="btn-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">设置支付密码</a>
+        <a class="btn-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="">设置支付密码</a>
       </div>
       {% else %}
       <div role="password-input" style="display:none">
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="controls">
+            <div class="controls mtm">
               <input id="payPassword" class="form-control input-sm" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
-            </div>
-            <div>
               <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
+              <br>
             </div>
-          </div>
-        </div>
       </div>
       {% endif %}
     </div>
