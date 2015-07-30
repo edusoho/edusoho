@@ -39,7 +39,7 @@ class CoinOrderController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $a = $this->getCashOrdersService()->searchOrdersCount($conditions),
+            $this->getCashOrdersService()->searchOrdersCount($conditions),
             20
           );
 
