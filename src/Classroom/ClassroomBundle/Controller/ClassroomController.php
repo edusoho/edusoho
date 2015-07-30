@@ -739,7 +739,7 @@ class ClassroomController extends BaseController
             'threads' => $threads,
             'users' => $users,
             'classrooms' => $classrooms,
-            ));
+        ));
     }
 
     protected function getThreadService()

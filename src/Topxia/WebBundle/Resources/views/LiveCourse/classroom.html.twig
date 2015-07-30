@@ -5,10 +5,12 @@
 	{% if setting('site.favicon') %}
 	<link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
 	{% endif %}
-	{% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+
+	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
-<body>
+<body style="position: static;">
 
 	{% set script_controller = 'live-course/classroom' %}
 
