@@ -2,7 +2,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     var EduWebUploader  = require('edusoho.webuploader');
-    require('zeroclipboard');
     require('webuploader');
     require('jquery.sortable');
     require('colorpicker');
@@ -12,7 +11,6 @@ define(function(require, exports, module) {
         if( $(".poster-btn").length>0 ){
             var selector = $(".poster-btn");
             initFirstTab(selector);
-            bindClipboard();
             bindSortPoster();
         }
         $('.colorpicker-input').colorpicker();
@@ -33,7 +31,7 @@ define(function(require, exports, module) {
 
             setup: function() {
                 //this._bindImgPreview(this.element);
-                this._bindUploader(this.element);                
+                this._bindUploader(this.element);
                 this._initForm();
                 this._bindCollapseEvent(this.element);
                 this._bindSortable(this.element);
@@ -41,15 +39,15 @@ define(function(require, exports, module) {
             _initForm: function() {
                 $form = this.element;
 
-                $form.data('serialize', $form.serialize()); 
+                $form.data('serialize', $form.serialize());
                 $(window).on('beforeunload',function(){
                     if ($form.serialize() != $form.data('serialize')) {
                         return "还有没有保存的数据,是否要离开此页面?";
                     }
                 });
-                
+
                 this.$('#block-save-btn').on('click', function(){
-                    $form.data('serialize', $form.serialize()); 
+                    $form.data('serialize', $form.serialize());
                 });
             },
             onClickAddBtn: function(e) {
@@ -77,7 +75,7 @@ define(function(require, exports, module) {
                     $panelGroup.append($model);
                     this.refreshIndex($panelGroup);
                 }
-                
+
 
             },
             onClickRemoveBtn: function(e) {
@@ -129,7 +127,7 @@ define(function(require, exports, module) {
                 });
 
                 this._bindUploader($panelGroup);
-                this._bindCollapseEvent($panelGroup); 
+                this._bindCollapseEvent($panelGroup);
             },
             _bindImgPreview: function($element) {
                 $element.find('.js-img-preview').colorbox({rel:'group1', photo:true, current:'{current} / {total}', title:function() {
@@ -182,7 +180,7 @@ define(function(require, exports, module) {
                         $(e.target).find('.webuploader-container div:eq(1)').css({width:1, height:1});
                     });
                 });
-               
+
             },
             _bindSortable: function($element)
             {
@@ -204,7 +202,7 @@ define(function(require, exports, module) {
                 })
             },
             _destoryUploader: function($element) {
-            
+
             }
         });
         new editForm({
@@ -222,7 +220,7 @@ define(function(require, exports, module) {
         bindHtmlUpLoader(htmlSelf);
     }
 
-    $(".imgMode").on('click',function(){
+    $("#block-edit-form").on('click', '.imgMode', function(){
         $(this).parent().parent().siblings(".edit-mode-html").css("display","none");
         $(this).parent().parent().siblings(".edit-mode-img").removeAttr("style");
         $(this).parent().siblings().find('.htmlMode').removeAttr('checked');
@@ -230,8 +228,8 @@ define(function(require, exports, module) {
         var self = $(this).parent().parent().siblings(".edit-mode-img").find('.img-mode-upload');
         bindImgUpLoader(self);
     });
-    
-    $(".htmlMode").on('click', function () {
+
+    $("#block-edit-form").on('click', '.htmlMode', function () {
         $(this).parent().parent().siblings(".edit-mode-img").css("display","none");
         $(this).parent().parent().siblings(".edit-mode-html").removeAttr("style");
         $(this).parent().siblings().find('.imgMode').removeAttr('checked');
@@ -239,18 +237,18 @@ define(function(require, exports, module) {
         var self = $(this).parent().parent().siblings(".edit-mode-html").find('.html-mode-upload');
         bindHtmlUpLoader(self);
     });
-    
-    $(".layout-input").on('click', function () {
+
+    $("#block-edit-form").on('click', ".layout-input", function () {
         $(this).parent().siblings().find('.layout-input').removeAttr('checked');
         $(this).parent().siblings('.layout-value').val($(this).val());
     });
 
-    $(".status-input").on('click', function () {
+    $("#block-edit-form").on('click', '.status-input', function () {
         $(this).parent().siblings().find('.status-input').removeAttr('checked');
         $(this).parent().siblings('.status-value').val($(this).val());
     });
 
-    $(".poster-btn").on('click', function(){
+    $("#btn-tabs").on('click', '.poster-btn', function(){
         var href = $(this).attr('href');
         var id = href.substr(1,href.length-1);
         var imgSelf = $("#"+id).find(".img-mode-upload");
@@ -267,6 +265,7 @@ define(function(require, exports, module) {
         uploader.on('uploadSuccess', function(file, response ) {
             self.closest('.form-group').find('.img-mrl').html(response.url);
             self.closest('.form-group').find(".img-mtl").attr("src",response.url);
+            self.closest('.form-group').find(".img-value").val(response.url);
             Notify.success('上传成功！', 1);
         });
     }
@@ -282,24 +281,30 @@ define(function(require, exports, module) {
         });
     }
 
-    function bindClipboard(){
-        $(".copy-btn").each(function(){
-            var clip = new ZeroClipboard($(this));
-            var self = $(this);
-            clip.on('copy', function(event){
-                var text = self.siblings('.html-mrl').html();
-                clip.setText(text);
-                alert("复制成功");
-            });
-
-        });
-    }
-
     function bindSortPoster(){
-        $("#btn-tabs").each(function(){
-            $(this).sortable({
-                itemSelector : '.poster-table'
-            });
+        var $group = $("#btn-tabs");
+        $("#btn-tabs").sortable({
+            itemSelector : '.poster-table',
+            onDrop: function ($item, container, _super, event) {
+                $item.removeClass("dragged").removeAttr("style");
+                $("body").removeClass("dragging");
+                $group.children('.poster-table').each(function(index, object){
+                    var href = $(this).find('.poster-btn').attr('href');
+                    var id = href.substr(1,href.length-1);
+                    $("#" + id).children('div').each(function(){
+                        var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   "data[posters][" + index + "]");
+                        $(this).replaceWith(replace);
+                    });
+                    $(this).find('.poster-btn').text("海报" + (index+1));
+                    $(this).find('input[type=hidden]').val("海报" + (index+1));
+                    var nameReplace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   "data[posters][" + index + "]");
+                    $(this).replaceWith(nameReplace);
+
+                });
+                selectBtn = $item.find('.poster-btn');
+                initFirstTab(selectBtn);
+            }
         });
-    }
+
+    };
 });

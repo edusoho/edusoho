@@ -57,8 +57,7 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
-        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
-        'zeroclipboard' : 'zeroclipboard/2.2.0/ZeroClipboard.min.js'
+        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker'
     },
 
 	// 预加载项

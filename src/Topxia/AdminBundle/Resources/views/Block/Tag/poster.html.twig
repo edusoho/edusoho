@@ -25,11 +25,11 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">编辑模式</label>
       <label class="checkbox-inline">
-        <input class="imgMode" type="radio" id="imgMode" value="option1"
+        <input class="imgMode" type="radio" value="option1"
                {% if data.mode == 'img' %}checked="checked"{% endif %}> 图片模式
       </label>
       <label class="checkbox-inline">
-        <input class="htmlMode" type="radio" id="htmlMode" value="option2"
+        <input class="htmlMode" type="radio" value="option2"
                {% if data.mode == 'html' %}checked="checked"{% endif %}> HTML模式
       </label>
       <input type="hidden" name="data[{{ code }}][{{ dataId }}][mode]" class="mode-value" value="{{ data.mode }}">
@@ -44,7 +44,7 @@
           <label class="control-label img-mrl">{{ data.src }}</label>
           <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}"
              data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
-          <input class="form-control" type="hidden" name="data[{{ code }}][{{ dataId }}][src]"
+          <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]"
                  id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
           <img class="img-responsive mtm img-mtl" src="{{ asset(data.src) }}" alt="">
         </div>
@@ -79,7 +79,6 @@
           <label class="control-label html-mrl"></label><br>
           <a class="btn btn-default btn-sm html-mode-upload" id="html-{{ code }}-uploadId-{{ dataId }}"
              data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
-          <button type="button" class="btn btn-default copy-btn" id="copy-{{ code }}-{{ dataId }}">点击复制图片链接</button>
         </div>
       </div>
     </div>
