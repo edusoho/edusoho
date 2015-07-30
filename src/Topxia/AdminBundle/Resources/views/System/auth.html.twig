@@ -27,7 +27,8 @@
       </div>
     </div>
 
-    <div class="email-content">
+    
+    <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_mode == 'closed' %}hidden{% endif %}">
       <div class="form-group">
         <div class="col-md-3 control-label">
           <label >邮箱验证登录</label>

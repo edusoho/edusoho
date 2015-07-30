@@ -24,20 +24,6 @@ define(function(require, exports, module) {
 
     });
     
-    /*var old_selected_value = $("input[name='register_mode']:checked").val();
-    $('input[name=register_mode]:radio').change(function(){
-      var selected_value = $("input[name='register_mode']:checked").val();
-
-      if(selected_value !='email_or_mobile' && selected_value !='mobile'){
-        old_selected_value = selected_value; //记住上一次的记录
-      }else{
-        if($('input[name=_cloud_sms]').val() !=1){
-           $("input:radio[value="+old_selected_value+"]").prop("checked", true);
-           Notify.danger("请先开启云短信功能！");
-        }
-      }
-    })*/
-  
 
     var validator = new Validator({
       element: '#auth-form'
@@ -70,9 +56,9 @@ define(function(require, exports, module) {
         }
 
         if (modle == 'email' || modle == 'email_or_mobile') {
-            $('.email-content').show();
+            $('.email-content').removeClass('hidden');
         } else {
-            $('.email-content').hide();
+            $('.email-content').addClass('hidden');
         }
 
     });

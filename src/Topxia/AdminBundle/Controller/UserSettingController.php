@@ -89,8 +89,8 @@ class UserSettingController extends BaseController
                 $authUpdate['captcha_enabled'] = 1;
             }
 
-            $authUpdate = array_merge($auth, $authUpdate);
-            $this->getSettingService()->set('auth', $authUpdate);
+            $auth = array_merge($auth, $authUpdate);
+            $this->getSettingService()->set('auth', $auth);
             
             $this->getLogService()->info('system', 'update_settings', "更新注册设置", $auth);
             $this->setFlashMessage('success', '注册设置已保存！');
@@ -289,9 +289,9 @@ class UserSettingController extends BaseController
             $authUpdateSetting['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
             $authUpdateSetting['registerSort'] = $request->request->get('registerSort');
             $authUpdateSetting['registerFieldNameArray'] = $request->request->get('registerFieldNameArray');
-            $authUpdateSetting = array_merge($auth, $authUpdateSetting);
+            $auth = array_merge($auth, $authUpdateSetting);
             
-            $this->getSettingService()->set('auth', $authUpdateSetting);
+            $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新用户信息设置", $auth);
             $this->setFlashMessage('success', '用户信息设置已保存！');
