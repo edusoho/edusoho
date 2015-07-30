@@ -39,9 +39,8 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-    <a class="btn btn-primary" href="{{ path('admin_order_manage_bill_csv',
-    {type:type,
-    startTime:request.get('startDateTime'),
+    <a class="btn btn-primary" href="{{ path('admin_order_manage_export_coin_csv',
+    {startTime:request.get('startDateTime'),
     endTime:request.get('endDateTime'),
     status:request.get('status'),
     payment:request.get('payment'),

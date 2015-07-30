@@ -167,60 +167,7 @@ class OrderController extends BaseController
         return $response;
     }
 
-    public function coinExportCsvAction(Request $request)//coin
-    {
-        $conditions = $request->query->all();
-        if(!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime'] = strtotime($conditions['endTime']);
-        }
-        $status = array('created'=>'未付款','paid'=>'已付款','cancelled'=>'已关闭');
-        $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
-        $orders = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0,10);
-
-        $studentUserIds = ArrayToolkit::column($orders, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');
-
-        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');    
-
-        $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
-
-        $str .= "\r\n";
-
-        $results = array();
-        foreach ($orders as $key => $orders) {
-            $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
-            $member .= $orders['payment'].",";
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
-            $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
-            $results[] = $member;
-        }
-
-        $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
-        
-        $filename = sprintf("coin-order-(%s).csv",date('Y-n-d'));
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
-
-
-        return $response;
-
-    }
-
+    
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
         $course = $this->getClassroomService()->getClassroom($order['targetId']);
