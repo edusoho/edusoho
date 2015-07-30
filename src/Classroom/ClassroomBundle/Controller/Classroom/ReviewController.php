@@ -51,7 +51,6 @@ class ReviewController extends BaseController
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
-            $member = $this->getClassroomService()->unSerialize($member);
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
         return $this->render("ClassroomBundle:Classroom\Review:list.html.twig", array(

@@ -295,8 +295,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getUserService()->getUserByLoginField($keyWord);
         if (!$user) {
             $response = array('success' => false, 'message' => '该用户不存在');
-        }
-        else {
+        } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
             if ($isClassroomStudent) {
                 $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
@@ -319,8 +318,7 @@ class ClassroomManageController extends BaseController
 
         if ($role == 'student') {
             $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 1000);
-        } 
-        else {
+        } else {
             $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'auditor'), array('createdTime', 'DESC'), 0, 1000);
         }
 
