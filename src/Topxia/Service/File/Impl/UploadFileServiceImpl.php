@@ -136,8 +136,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $file = $this->getUploadFileDao()->addFile($file);
         
-        $this->dispatchEvent("upload.file.create",array('file'=>$file,'fileInfo'=>$fileInfo));
-
         return $file; 
     }
 
@@ -171,7 +169,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         foreach ($ids as $id) {
             $this->deleteFile($id);
-            $this->dispatchEvent("upload.file.delete",$id);
         }
     }
 
