@@ -7,8 +7,10 @@
   {% for classroom in classrooms %}
     <div class="bar-task">
       <div class="bar-task-header">
-        {{ setting('classroom.name')|default("班级") }}: {{ classroom.title }}
-        {{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}
+        <div class="title">
+          {{ setting('classroom.name')|default("班级") }}: {{ classroom.title }}
+          <span>{{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}</span>
+        </div>
       </div>
 
       <ul class="bar-time-line">
@@ -28,8 +30,10 @@
   {% for course in courses %}
     <div class="bar-task">
       <div class="bar-task-header">
-        课程: {{ course.title }}
-        {{ course.learnedLessonNum ~ '/' ~ course.allLessonNum }}
+        <div class="title">
+          课程: {{ course.title }}
+          <span>{{ course.learnedLessonNum ~ '/' ~ course.allLessonNum }}</span>
+        </div>
       </div>
 
       <ul class="bar-time-line">
