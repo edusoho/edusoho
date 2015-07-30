@@ -42,7 +42,7 @@
 .btn.btn-default {
   color: @gray-dark;
   background-color: @gray-lighter;
-  border-color: @gray-light;
+  border-color: darken(@gray-lighter,10%);
   &:hover,
   &:focus,
   &.active {
@@ -51,7 +51,7 @@
 }
 
 .btn.btn-primary {
-  border-color: @brand-primary;
+  border-color: darken(@brand-primary,10%);
   background-color: @brand-primary;
   color: #fff;
   &:hover,
