@@ -2,28 +2,29 @@
 namespace Topxia\MobileBundleV2\Processor\Tests;
 
 use Topxia\MobileBundleV2\Processor\Tests\BaseProcessorTest;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\MobileBundleV2\Controller\MobileApiController;
 
 class SchoolProcessorTest extends BaseProcessorTest
 {
+    protected $service = "School";
+
 	public function testGetSchoolSite()
     {
-        $requestData = array(
-        );
+        $requestData = array();
+        $jsonData = $this->getContent($requestData, $this->service, __FUNCTION__, "GET");
 
-        //$uri, $method = 'GET', $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null
-        $requst = Request::create("School/getSchoolSite", "GET");
-        $controller = new MobileApiController();
-        $result = $controller->indexAction($requst, "School", "getSchoolSite");
-
-        $data = $result->getContent();
-        var_dump($data);
-        $this->assertNotNull($data);
+        $this->assertNotNull($jsonData->site);
+        $this->assertNotNull($jsonData->site->name);
+        $this->assertNotNull($jsonData->site->url);
+        $this->assertNotNull($jsonData->site->host);
+        $this->assertNotNull($jsonData->site->apiVersionRange);
     }
 
-    private function getSchoolProcessor()
+    public function testGetSchoolBanner()
     {
+        $requestData = array();
+        $jsonData = $this->getContent($requestData, $this->service, __FUNCTION__, "GET");
 
+        $this->assertNotNull($jsonData);
     }
+
 }
