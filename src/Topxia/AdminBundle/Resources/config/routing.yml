@@ -373,9 +373,9 @@ admin_order:
     pattern: /order
     defaults: { _controller: TopxiaAdminBundle:Order:index }
 
-admin_order_detail:
-    pattern: /order/{id}/detail
-    defaults: { _controller: TopxiaAdminBundle:Order:detail }
+# admin_order_detail:
+#     pattern: /order/{id}/detail
+#     defaults: { _controller: TopxiaAdminBundle:Order:detail }
 
 admin_order_refunds:
     pattern: /order/refunds/{targetType}
@@ -1199,6 +1199,18 @@ admin_coin_give_check_nickname:
 admin_bill:
     pattern: /coin/bill
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
+
+admin_bill_export_csv:
+    pattern: /coin/bill/export/{cashType}
+    defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
+
+admin_order_manage_export_csv:
+    pattern: /order/manage/export/{targetType}
+    defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
+
+admin_order_manage_export_coin_csv:  
+    pattern: /order/manage/coin
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
 
 admin_coin_user_records:
     path:     /coin/records/user

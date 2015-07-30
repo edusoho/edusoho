@@ -152,7 +152,7 @@ class CourseController extends CourseBaseController
 			$currentLesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
 		}
 
-		return $this->render('TopxiaWebBundle:Course:archiveLesson.html.twig',array(
+		return $this->render('TopxiaWebBundle:Course:old_archiveLesson.html.twig',array(
 			'course' => $course,
 			'lessons' => $lessons,
 			'currentLesson' => $currentLesson,
