@@ -54,6 +54,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $findClassroomsByCourseId =  $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
+        $course = $context['course'];
+
+        $this->getCourseService()->updateCourseByParentIdAndFields($courseId,array('teacherIds'=>$course['teacherIds']));
+
         foreach ($findClassroomsByCourseId as $key => $value) {
             $this->getClassroomService()->updateClassroomTeachers($value);
         }

@@ -1933,10 +1933,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields = array('teacherIds' => $visibleTeacherIds);
 		$course = $this->getCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
         $this->dispatchEvent("course.teacher.update", array(
-            "courseId"=>$courseId
+            "courseId"=>$courseId,
+            "course"=>$course
         ));
-
-        $this->dispatchEvent("course.update",$course);
 	}
 
 	/**
