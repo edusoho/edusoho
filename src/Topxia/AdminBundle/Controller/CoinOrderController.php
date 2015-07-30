@@ -130,7 +130,12 @@ class CoinOrderController extends BaseController
             $member .= $orders['amount'].",";
             $member .= $orders['payment'].",";
             $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            if ($orders['paidTime'] != 0 ){
             $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            }
+            else{
+            $member .= "-".","; 
+            }
             $results[] = $member;
         }
 
