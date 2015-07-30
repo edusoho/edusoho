@@ -290,7 +290,6 @@ class CoinController extends BaseController
 
         $userIds =  ArrayToolkit::column($cashes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        $type = 'coin';
         return $this->render('TopxiaAdminBundle:Coin:coin-records.html.twig',array(
             'users'=>$users,
             'cashes'=>$cashes,
@@ -298,7 +297,7 @@ class CoinController extends BaseController
             'inflow'=>$inflow,
             'amounts'=>$amounts,
             'paginator'=>$paginator,
-            'type'=>$type,
+            'cashType'=>'Coin',
           ));
     }
 
@@ -672,30 +671,32 @@ class CoinController extends BaseController
 
         $conditions['type']  = 'outflow'; 
         $amountOutflow = $this->getCashService()->analysisAmount($conditions);
-        $type = 'RMB';
         return $this->render('TopxiaAdminBundle:Coin:cash-bill.html.twig',array(
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users'=>$users,
             'amountInflow' => $amountInflow?:0,
             'amountOutflow' => $amountOutflow?:0,
-            'type' => $type,          
+            'cashType' => 'RMB',          
         ));   
     }
 
-    public function exportCsvAction(Request $request,$type)//cash&coin bill
+    /**
+     * @param  [type]  $cashType  RMB | Coin
+     */
+    public function exportCsvAction(Request $request,$cashType)
     {
 
         $conditions = $request->query->all();
-        if(!empty($conditions)&&$type == 'coin'){
+        if(!empty($conditions)&&$cashType == 'Coin'){
           $conditions =$this->filterCondition($conditions);
         }
-        if(!empty($conditions)&&$type == 'RMB'){
+        if(!empty($conditions)&&$cashType == 'RMB'){
           $conditions = $this->filterConditionBill($conditions);
         }
-        $conditions['cashType'] = $type;
+        $conditions['cashType'] = $cashType;
         $num = $this->getCashService()->searchFlowsCount($conditions);
-        $orders = $this->getCashOrdersService()->searchFlows($conditions, array('ID', 'DESC'), 0,$num);
+        $orders = $this->getCashService()->searchFlows($conditions, array('ID', 'DESC'), 0,$num);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -724,7 +725,7 @@ class CoinController extends BaseController
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
         
-        $filename = sprintf("coin-order-(%s).csv",date('Y-n-d'));
+        $filename = sprintf("%s-order-(%s).csv", $cashType, date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');

@@ -1201,7 +1201,7 @@ admin_bill:
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
 
 admin_bill_export_csv:
-    pattern: /coin/bill/export/{type}
+    pattern: /coin/bill/export/{cashType}
     defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
 
 admin_order_manage_export_csv:
