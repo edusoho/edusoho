@@ -225,7 +225,6 @@ class LoginBindController extends BaseController
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
-        $registration['source'] = $type;
 
         if (isset($setData['mobile']) && !empty($setData['mobile'])) {
             $registration['mobile'] = $setData['mobile'];

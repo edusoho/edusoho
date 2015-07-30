@@ -25,7 +25,6 @@ class AuthServiceImpl extends BaseService implements AuthService
             $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
 
         } else {
-            $registration['source'] = $type;
             $newUser = $this->getUserService()->register($registration, $type);
             if (!empty($authUser['id'])) {
                 $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
