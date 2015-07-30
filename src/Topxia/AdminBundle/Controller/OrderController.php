@@ -23,21 +23,22 @@ class OrderController extends BaseController
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->searchOrderCount($conditions),
-            20
-        ); 
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
             $conditions['endTime'] = strtotime($conditions['endDateTime']);
         } 
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount($conditions),
+            20
+        ); 
         $orders = $this->getOrderService()->searchOrders(
-        $conditions,
-        array('createdTime', 'DESC'),
-        $paginator->getOffsetCount(),
-        $paginator->getPerPageCount()
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
