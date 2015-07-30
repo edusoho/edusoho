@@ -48,13 +48,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findAssistants($classroomId)
     {
         $members = $this->getClassroomMemberDao()->findAssistants($classroomId);
-        return  !$members ? null : MemberSerialize::unserializes($member);
+        return  !$members ? array() : MemberSerialize::unserializes($members);
     }
 
     public function findTeachers($classroomId)
     {   
         $members = $this->getClassroomMemberDao()->findTeachers($classroomId);
-        return  !$members ? null : MemberSerialize::unserializes($member);
+        return  !$members ? array() : MemberSerialize::unserializes($members);
     }
 
     public function addClassroom($classroom)
@@ -333,7 +333,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
     {
         $members = $this->getClassroomMemberDao()->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
-        return !$members ? null : ArrayToolkit::index(MemberSerialize::unserializes($members), 'classroomId');
+        return !$members ? array() : ArrayToolkit::index(MemberSerialize::unserializes($members), 'classroomId');
     }
 
     public function findClassroomsByIds(array $ids)
@@ -352,13 +352,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $conditions = $this->_prepareClassroomConditions($conditions);
         $members = $this->getClassroomMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
-        return !$members ? null : MemberSerialize::unserializes($members);
+        return !$members ? array() : MemberSerialize::unserializes($members);
     }
 
     public function getClassroomMember($classroomId, $userId)
     {
         $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
-        return !$member ? null : MemberSerialize::unserialize($member);
+        return !$member ? array() : MemberSerialize::unserialize($member);
     }
 
     public function remarkStudent($classroomId, $userId, $remark)
@@ -853,10 +853,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     private function canBecomeClassroomMember($member)
     {
-        if (empty($member)) {
-            return true;
-        }
-        return !array_intersect($member['role'], array('student', 'auditor'));
+        return empty($member) || in_array('auditor', $member['role']);
     }
 
     public function canManageClassroom($id)
@@ -1112,20 +1109,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findClassroomStudents($classroomId, $start, $limit)
     {
         $members = $this->getClassroomMemberDao()->findMembersByClassroomIdAndRole($classroomId, 'student', $start, $limit);
-        return !$members ? null : MemberSerialize::unserializes($members);
+        return !$members ? array() : MemberSerialize::unserializes($members);
     }
 
     public function findClassroomMembersByRole($classroomId, $role, $start, $limit)
     {
         $members = $this->getClassroomMemberDao()->findMembersByClassroomIdAndRole($classroomId, $role, $start, $limit);
-        return !$members ? null : ArrayToolkit::index(MemberSerialize::unserializes($members), 'userId');
+        return !$members ? array() : ArrayToolkit::index(MemberSerialize::unserializes($members), 'userId');
     }
 
     public function findMembersByClassroomIdAndUserIds($classroomId, $userIds)
     {
         $members = $this->getClassroomMemberDao()->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
 
-        return !$members ? null : ArrayToolkit::index(MemberSerialize::unserializes($members), 'userId');
+        return !$members ? array() : ArrayToolkit::index(MemberSerialize::unserializes($members), 'userId');
     }
 
     public function lockStudent($classroomId, $userId)
