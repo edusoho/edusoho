@@ -22,7 +22,7 @@ class DefaultController extends BaseController
         }else{
             $cashRate=1;
         } 
-        
+        print_r($this->getCurrentUser());
         $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
 
         $courseSetting = $this->getSettingService()->get('course', array());

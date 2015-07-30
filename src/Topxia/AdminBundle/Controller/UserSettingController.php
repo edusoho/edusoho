@@ -173,6 +173,8 @@ class UserSettingController extends BaseController
 
         $default = array(
             'mode' => 'default',
+            'nickname_enabled' => 0,
+            'avatar_alert' => 'none',
             'email_filter' => '',
         );
 
@@ -185,9 +187,9 @@ class UserSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
-            $setting = array('mode' => $data['mode'],
-                'email_filter' => $data['email_filter'],
-            );
+            $setting['mode'] = $data['mode'];
+            $setting['email_filter'] = $data['email_filter'];
+                
             $this->getSettingService()->set('user_partner', $setting);
 
             $discuzConfig = $data['discuz_config'];
@@ -266,6 +268,7 @@ class UserSettingController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth = $this->getSettingService()->get('auth', array());
+        $userPartner = $this->getSettingService()->get('user_partner', array());
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
         $userFieldNames = ArrayToolkit::column($userFields,'fieldName');
@@ -280,9 +283,9 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('course',$courseSetting);
 
-            $authSetting['avatar_alert'] = $request->request->get('avatar_alert');
-            $authSetting['nickname_enabled'] = $request->request->get('nickname_enabled');
-            $this->getSettingService()->set('user_partner', $authSetting);
+            $userPartner['avatar_alert'] = $request->request->get('avatar_alert');
+            $userPartner['nickname_enabled'] = $request->request->get('nickname_enabled');
+            $this->getSettingService()->set('user_partner', $userPartner);
 
             $auth['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
             $auth['registerSort'] = $request->request->get('registerSort');
