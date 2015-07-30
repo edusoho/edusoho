@@ -571,6 +571,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+        if(empty($courseIds)) {
+            return array();
+        }
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
         $sordtedCourses = array();
