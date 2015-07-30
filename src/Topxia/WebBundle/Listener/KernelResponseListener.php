@@ -30,7 +30,9 @@ class KernelResponseListener
         $_target_path = $request->getPathInfo();
 
         $auth = $this->getSettingService()->get('auth');
-        if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) && $auth['fill_userinfo_after_login']) {
+        
+        if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) 
+            && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])) {
 
             $whiteList = array(
                 '/fill/userinfo','/logout','/register/mobile/check',
@@ -75,11 +77,14 @@ class KernelResponseListener
         $userProfile['email'] = strstr($user['email'],'@edusoho.net') ? '' : $user['email'];
 
         $isFillUserInfo = true;
-        foreach($auth['registerSort'] as $key => $val){
-            if (!$userProfile[$val]) {
-                $isFillUserInfo = false;
+        if ($auth['registerSort']) {
+            foreach($auth['registerSort'] as $key => $val){
+                if (!$userProfile[$val]) {
+                    $isFillUserInfo = false;
+                }
             }
         }
+        
 
         return $isFillUserInfo;
     }

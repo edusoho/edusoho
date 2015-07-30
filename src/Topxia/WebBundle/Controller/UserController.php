@@ -291,6 +291,10 @@ class UserController extends BaseController
         $auth = $this->getSettingService()->get('auth');
         $user = $this->getCurrentUser();
 
+        if ($auth['fill_userinfo_after_login'] && !isset($auth['registerSort'])) {
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '请先登录！');
         }
