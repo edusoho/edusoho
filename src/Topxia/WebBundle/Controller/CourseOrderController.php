@@ -157,22 +157,21 @@ class CourseOrderController extends OrderController
         $coinSetting = $this->setting("coin");
         $courseSetting = $this->getSettingService()->get('course', array());
         $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
-        if ($user->isLogin() && !$userInfoEnable && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
-            if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
-                || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0 ) || $vipStatus == 'ok') {
-                
-                $data = array("price" => 0, "remark"=>'');
-                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
-                if(isset($formData['lessonId'])){
-                    return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
-                }else{
-                    return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
-                }
-
+        //$userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
+       
+        if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+            || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0 ) || $vipStatus == 'ok') {
+            
+            $data = array("price" => 0, "remark"=>'');
+            $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
+            if(isset($formData['lessonId'])){
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
+            }else{
+                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             }
-        }
 
+        }
+        
         if((isset($coinSetting["coin_enabled"]) 
         && $coinSetting["coin_enabled"]==1
         && isset($coinSetting["price_type"])
