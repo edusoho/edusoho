@@ -229,13 +229,12 @@ class ClassroomController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => 'auditor',
+                'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
             );
-
             if ($previewAs == 'member') {
-                $member['role'] = 'member';
+                $member['role'] = array('member');
             }
         }
 
@@ -487,7 +486,7 @@ class ClassroomController extends BaseController
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
-        if (!array_intersect($member["role"], array("auditor", "student"))) {
+        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 

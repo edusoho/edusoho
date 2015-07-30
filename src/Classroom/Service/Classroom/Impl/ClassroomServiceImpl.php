@@ -195,7 +195,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroom($id);
 
-        $oldTeachers = $this->getClassroomMemberDao()->findTeachers($id);
+        $oldTeachers = $this->findTeachers($id);
         $oldTeachers = ArrayToolkit::index($oldTeachers, 'userId');
         $oldTeacherIds = ArrayToolkit::column($oldTeachers, 'userId');
         $newTeacherIds = array();
@@ -636,7 +636,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
         if ($classroom['headTeacherId']) {
-            $headTeacherMember = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId,$classroom['headTeacherId']);            if (count($headTeacherMember['role']) == 1) {
+            $headTeacherMember = $this->getClassroomMember($classroomId,$classroom['headTeacherId']);
+            if (count($headTeacherMember['role']) == 1) {
                 $this->getClassroomMemberDao()->deleteMemberByClassroomIdAndUserId($classroomId, $classroom['headTeacherId']);
             } else {
                 foreach ($headTeacherMember['role'] as $key=>$value){
@@ -659,7 +660,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'userId' => $userId,
                 'orderId' => 0,
                 'levelId' => 0,
-                'role' => 'headTeacher',
+                'role' => '|headTeacher|',
                 'remark' => '',
                 'createdTime' => time(),
             );
@@ -744,7 +745,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId' => $userId,
             'orderId' => 0,
             'levelId' => 0,
-            'role' => 'auditor',
+            'role' => '|auditor|',
             'remark' => '',
             'createdTime' => time(),
         );
@@ -778,7 +779,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId' => $userId,
             'orderId' => 0,
             'levelId' => 0,
-            'role' => 'assistant',
+            'role' => '|assistant|',
             'remark' => '',
             'createdTime' => time(),
         );
@@ -811,7 +812,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'userId' => $userId,
             'orderId' => 0,
             'levelId' => 0,
-            'role' => 'teacher',
+            'role' => '|teacher|',
             'remark' => '',
             'createdTime' => time(),
         );
@@ -1030,8 +1031,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createNotFoundException();
         }
 
-        $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
-
+        $member = $this->getClassroomMember($classroomId, $userId);
         if (!$member) {
             throw $this->createAccessDeniedException('您不是班级学员，无法退出班级！');
         }
@@ -1078,7 +1078,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     continue;
                 }
 
-                $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($value, $userId);
+                $member = $this->getClassroomMember($value, $userId);
 
                 if ($member) {
                     $count = 1;
@@ -1219,7 +1219,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
-    public function getClassroomMembersByCourseId($courseId, $userId) {
+    public function getClassroomMembersByCourseId($courseId, $userId) 
+    {
 
         $classroomIds = $this->findClassroomIdsByCourseId($courseId);
         $members = $this->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
