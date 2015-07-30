@@ -48,12 +48,6 @@ class TokenDaoImpl extends BaseDao implements TokenDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
-    public function deleteExpiredToken()
-    {
-        $time = time();
-        $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT 1000";
-        return $this->getConnection()->executeQuery($sql,array($time));
-    }
     public function deleteTokensByExpiredTime($expiredTime, $limit)
     {
         $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";

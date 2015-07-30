@@ -66,7 +66,7 @@ class CommonController extends BaseController
             }else {
                 throw $this->createNotFoundException('参数错误，无法找到指定二维码');
             }
-            $routePath = $this->generateUrl('common_explain_qrcode',array('token'=>$token['token']),true);
+            $routePath = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
         }
         $url = $routePath.'?type='.$data['type']; 
         $response = array(
@@ -75,7 +75,7 @@ class CommonController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function explainLearnCodeAction(Request $request,$token)
+    public function parseLearnCodeAction(Request $request,$token)
     {
         $route_type = $request->get('type');
         $token = $this->getTokenService()->verifyToken($route_type,$token);

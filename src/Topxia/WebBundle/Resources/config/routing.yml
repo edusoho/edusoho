@@ -1784,9 +1784,9 @@ common_learn_qrcode:
     pattern: /qrcode/generate
     defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
 
-common_explain_qrcode:
-    pattern: /qrcode/explain/{token}
-    defaults: {_controller: TopxiaWebBundle:Common:explainLearnCode}
+common_parse_qrcode:
+    pattern: /qrcode/parse/{token}
+    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
 
 esbar_my_classroom:
     pattern:  /esbar/my/classroom
