@@ -707,14 +707,14 @@ class CoinController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');    
 
-        $str = "订单号,账目名称,购买者,姓名,收支,支付方式,创建时间";
+        $str = "流水号,账目名称,购买者,姓名,收支,支付方式,创建时间";
 
         $str .= "\r\n";
 
         $results = array();
         foreach ($orders as $key => $orders) {
             $member = "";
-            $member .= $orders['sn'].",";
+            $member .= "流水号".$orders['sn'].",";
             $member .= $orders['name'].",";
             $member .= $users[$orders['userId']]['nickname'].",";
             $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
