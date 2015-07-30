@@ -14,11 +14,11 @@ class OrderController extends BaseController
         ));
     }
 
-    public function manageAction(Request $request, $type)
+    public function manageAction(Request $request, $targetType)
     {
 
         $conditions = $request->query->all();
-        $conditions['targetType'] = $type;
+        $conditions['targetType'] = $targetType;
 
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
@@ -50,7 +50,7 @@ class OrderController extends BaseController
         }
         return $this->render('TopxiaAdminBundle:Order:manage.html.twig', array(
             'request' => $request,
-            'type' => $type,
+            'targetType' => $targetType,
             'orders' => $orders,
             'users' => $users,
             'paginator' => $paginator,
@@ -107,7 +107,11 @@ class OrderController extends BaseController
 
     }
 
-    public function exportCsvAction(Request $request,$type)//classroom,course,vip订单
+    /**
+     *  导出订单
+     * @param  string  $targetType    classroom | course | vip
+     */
+    public function exportCsvAction(Request $request, $targetType)
     {
 
         $conditions = $request->query->all();
@@ -115,19 +119,11 @@ class OrderController extends BaseController
             $conditions['startTime'] = strtotime($conditions['startTime']);
             $conditions['endTime'] = strtotime($conditions['endTime']);
         }
-        $conditions['targetType'] = $type;
+        $conditions['targetType'] = $targetType;
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
-        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
-        // $userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
+        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','coin'=>'虚拟币支付','none'=>'--');
 
-        $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0,10);
-        // $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        // foreach ($userFields as $userField) {
-        //     $fields[$userField['fieldName']] = $userField['title'];
-        // }
-        // $fields = array();
-        // $userinfoFields = array_flip($userinfoFields);
-        // $fields = array_intersect_key($fields, $userinfoFields);
+        $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -139,9 +135,6 @@ class OrderController extends BaseController
 
         $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
 
-        // foreach ($fields as $key => $value) {
-        //     $str .= ",".$value;
-        // }
         $str .= "\r\n";
 
         $results = array();
@@ -162,7 +155,7 @@ class OrderController extends BaseController
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
         
-        $filename = sprintf("%s-order-(%s).csv",$type,date('Y-n-d'));
+        $filename = sprintf("%s-order-(%s).csv",$targetType,date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');

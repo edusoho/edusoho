@@ -1205,7 +1205,7 @@ admin_bill_export_csv:
     defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
 
 admin_order_manage_export_csv:
-    pattern: /order/manage/export/{type}
+    pattern: /order/manage/export/{targetType}
     defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
 
 admin_order_manage_bill_csv:  
