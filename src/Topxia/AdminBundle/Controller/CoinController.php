@@ -686,7 +686,7 @@ class CoinController extends BaseController
      */
     public function exportCsvAction(Request $request,$cashType)
     {
-
+        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','coin'=>'虚拟币支付','none'=>'--');
         $conditions = $request->query->all();
         if(!empty($conditions)&&$cashType == 'Coin'){
           $conditions =$this->filterCondition($conditions);
@@ -695,9 +695,11 @@ class CoinController extends BaseController
           $conditions = $this->filterConditionBill($conditions);
         }
         $conditions['cashType'] = $cashType;
+
         $num = $this->getCashService()->searchFlowsCount($conditions);
         $orders = $this->getCashService()->searchFlows($conditions, array('ID', 'DESC'), 0,$num);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
+        
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $users = ArrayToolkit::index($users, 'id');
@@ -705,7 +707,7 @@ class CoinController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');    
 
-        $str = "订单号,账目名称,购买者,姓名,实付价格,支付方式,创建时间";
+        $str = "订单号,账目名称,购买者,姓名,收支,支付方式,创建时间";
 
         $str .= "\r\n";
 
@@ -716,8 +718,18 @@ class CoinController extends BaseController
             $member .= $orders['name'].",";
             $member .= $users[$orders['userId']]['nickname'].",";
             $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
-            $member .= $orders['payment'].",";
+            if($orders['type']=='inflow'){
+            $member .= "+".$orders['amount'].",";
+            }
+            if($orders['type']=='outflow'){
+            $member .= "-".$orders['amount'].",";  
+            }
+            if(!empty($orders['payment'])){
+                $member .= $payment[$orders['payment']] .",";
+            }
+            else{
+                $member .="-".",";
+            }
             $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
             $results[] = $member;
         }
