@@ -113,7 +113,6 @@ class OrderController extends BaseController
         $conditions['targetType'] = $targetType;
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
         $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','coin'=>'虚拟币支付','none'=>'--');
-
         $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
