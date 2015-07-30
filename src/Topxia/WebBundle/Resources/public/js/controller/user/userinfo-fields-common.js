@@ -46,7 +46,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="mobile"]',
                 required: true,
-                rule: 'phone remote'
+                rule: 'phone'
             });
 
             validator.addItem({
