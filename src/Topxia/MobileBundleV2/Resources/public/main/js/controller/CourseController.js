@@ -263,7 +263,7 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
 
       if (data.member) {
         var progress = data.course.lessonNum == 0 ? 0 : data.member.learnedNum / data.course.lessonNum;
-        $scope.learnProgress = (progress * 100) + "%" ;
+        $scope.learnProgress = ((progress * 100).toFixed(2)) + "%" ;
       }
 
       $scope.courseView = app.viewFloder + (data.member ? "view/course_learn.html" : "view/course_no_learn.html");
