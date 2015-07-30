@@ -22,6 +22,8 @@ interface UploadFileDao
 
     public function deleteFile($id);
 
+    public function deleteFilesByPid($pId);
+
     public function updateFile($id, array $fields);
 
     public function updateFileUsedCount($fileIds, $offset);
