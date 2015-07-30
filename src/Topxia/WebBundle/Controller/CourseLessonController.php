@@ -304,7 +304,16 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        return $this->fileAction($request, $lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            throw $this->createNotFoundException();
+        }
+        
+        return $this->createLocalMediaResponse($request, $file, $isDownload);
     }
 
     public function detailDataAction($courseId, $lessonId)

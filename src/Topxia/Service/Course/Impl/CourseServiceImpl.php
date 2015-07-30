@@ -2415,7 +2415,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 		if ($classroom['classroomId']) {
 			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
-			if ($member['role'] != 'auditor') {
+			if (!empty($member) && $member['role'] != 'auditor') {
 				return true;
 			}
 		}
