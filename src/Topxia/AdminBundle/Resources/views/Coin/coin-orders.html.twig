@@ -9,7 +9,7 @@
     <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
     <div class="form-group">
-      <label class="ptm" >起止日期</label>
+      <label class="ptm" >创建时间:</label>
         <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{request.get('startDateTime')}}" placeholder="起始时间">
         -
         <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{request.get('endDateTime')}}" placeholder="结束时间">
@@ -17,7 +17,7 @@
     </div>
     <div class="mbm">
     <div class="form-group">
-     <label class="ptm" >筛选</label>
+     <label class="ptm" >筛选条件:</label>
       <select class="form-control" name="status">
         {{ select_options({ paid: '已支付',created:'未付款',cancelled:'已取消'}, request.get('status'), '订单状态') }}
       </select>
@@ -28,7 +28,7 @@
    
 
     <div class="form-group">
-     <label class="ptm" >关键词</label>
+     <label class="ptm" >关键词:</label>
     <div class="form-group">
         <select class="form-control" name="keywordType">
         {{ select_options(dict('coinOrderType'), app.request.query.get('keywordType'), '--选择类型--') }}
