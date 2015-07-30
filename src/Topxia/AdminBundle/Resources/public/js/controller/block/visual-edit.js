@@ -11,11 +11,9 @@ define(function(require, exports, module) {
 
         if( $(".poster-btn").length>0 ){
             var selector = $(".poster-btn");
-            $(".poster-btn").each(function(){
-
-            })
             initFirstTab(selector);
             bindClipboard();
+            bindSortPoster();
         }
         $('.colorpicker-input').colorpicker();
         $('#btn-tabs .btn').click(function(){
@@ -297,5 +295,11 @@ define(function(require, exports, module) {
         });
     }
 
-
+    function bindSortPoster(){
+        $("#btn-tabs").each(function(){
+            $(this).sortable({
+                itemSelector : '.poster-table'
+            });
+        });
+    }
 });

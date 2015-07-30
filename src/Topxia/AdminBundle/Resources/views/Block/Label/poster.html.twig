@@ -1,11 +1,11 @@
 {% set first = 1 %}
 {% for dataId,data in  block.data[code]|default(null) %}
   {% if first == 1 %}
-    <li class="active">
+    <li class="poster-table active">
       <a class="poster-btn" href="#poster-{{ dataId }}" data-toggle="tab">{{ data.alt }}</a>
     </li>
   {% else %}
-    <li>
+    <li class="poster-table">
       <a class="poster-btn" href="#poster-{{ dataId }}" data-toggle="tab">{{ data.alt }}</a>
     </li>
   {% endif %}
