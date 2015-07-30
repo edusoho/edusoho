@@ -27,3 +27,6 @@ course_rounding:
     pattern: /course/{id}/rounding
     defaults: { _controller: CustomWebBundle:Course:rounding }
 
+course_manage_lesson:
+    pattern:  /course/{id}/manage/lesson
+    defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
