@@ -21,6 +21,11 @@ class AbstractCloudAPI
 
     public function __construct(array $options)
     {
+        $this->init($options);
+    }
+
+    public function init(array $options)
+    {
         $this->accessKey = $options['accessKey'];
         $this->secretKey = $options['secretKey'];
 

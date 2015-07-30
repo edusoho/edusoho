@@ -97,20 +97,24 @@ class CloudSettingController extends BaseController
                 $options['apiUrl'] = $settings['cloud_api_server'];
             }
 
-            $api = new CloudAPI($options);
+            // @todo: fixme
+            // $api = CloudAPIFactory::create('root');
+            // $api->init($options);
 
-            $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
+            // $api = new CloudAPI($options);
 
-            if (isset($result['error'])) {
-                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
-                goto render;
-            }
+            // $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
 
-            $user = $api->get('/me');
-            if ($user['edition'] != 'opensource') {
-                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
-                goto render;
-            }
+            // if (isset($result['error'])) {
+            //     $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
+            //     goto render;
+            // }
+
+            // $user = $api->get('/me');
+            // if ($user['edition'] != 'opensource') {
+            //     $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
+            //     goto render;
+            // }
 
             $settings['cloud_access_key'] = $options['accessKey'];
             $settings['cloud_secret_key'] = $options['secretKey'];

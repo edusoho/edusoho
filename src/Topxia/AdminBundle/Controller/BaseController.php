@@ -44,9 +44,4 @@ class BaseController extends WebBaseController
         }
     }
 
-    protected function createAPIClient($type)
-    {
-        
-    }
-
 }

@@ -115,6 +115,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
     public function setApiServerConfigPath($path)
     {
         if (!file_exists($path)) {
+
             $servers = parent::_request('GET', '/server_list', array(), array());
             if (empty($servers) or empty($servers['root']) or empty($servers['current_leaf']) or empty($servers['leafs'])) {
                 throw new \RuntimeException("Requested API Server list is invalid.");
