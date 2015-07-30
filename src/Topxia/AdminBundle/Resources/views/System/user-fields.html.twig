@@ -45,10 +45,16 @@
         <div class="pull-left">
           {% for sort in courseSetting.userinfoFields|default([]) %}
             {% set userCustomField = userFields[sort]|default(null) %}
-            <button type="button" class="btn btn-default btn-xs">
-              {% if userCustomField %}{{ userCustomField.title }}{% else %}
-                {{ dict_text('userInfoFields', sort) }}{% endif %}
-            </button>
+            {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
+            {% if userCustomField %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userCustomField.title }}
+              </button>
+            {% elseif userInfoFieldsDict %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userInfoFieldsDict }}
+              </button>
+            {% endif %}
           {% endfor %}
         </div>
           
@@ -124,10 +130,16 @@
         <div class="pull-left">
           {% for sort in authSetting.registerSort|default([]) %}
             {% set userCustomField = userFields[sort]|default(null) %}
-            <button type="button" class="btn btn-default btn-xs">
-              {% if userCustomField %}{{ userCustomField.title }}{% else %}
-                {{ dict_text('userInfoFields', sort) }}{% endif %}
-            </button>
+            {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
+            {% if userCustomField %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userCustomField.title }}
+              </button>
+            {% elseif userInfoFieldsDict %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userInfoFieldsDict }}
+              </button>
+            {% endif %}
           {% endfor %}
         </div>
           

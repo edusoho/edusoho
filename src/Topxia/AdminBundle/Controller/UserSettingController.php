@@ -274,23 +274,19 @@ class UserSettingController extends BaseController
         
         if ($request->getMethod() == 'POST') {
             
-            $courseUpdateSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
-            $courseUpdateSetting['userinfoFields'] = $request->request->get('userinfoFields');
-            $courseUpdateSetting['userinfoFieldNameArray'] = $request->request->get('userinfoFieldNameArray');
+            $courseSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
+            $courseSetting['userinfoFields'] = $request->request->get('userinfoFields');
+            $courseSetting['userinfoFieldNameArray'] = $request->request->get('userinfoFieldNameArray');
 
-            $courseSetting = array_merge($courseSetting,$courseUpdateSetting);
             $this->getSettingService()->set('course',$courseSetting);
 
             $authSetting['avatar_alert'] = $request->request->get('avatar_alert');
             $authSetting['nickname_enabled'] = $request->request->get('nickname_enabled');
-            $authSetting = array_merge($this->getSettingService()->get('user_partner', array()), $authSetting);
             $this->getSettingService()->set('user_partner', $authSetting);
 
-            $authUpdateSetting['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
-            $authUpdateSetting['registerSort'] = $request->request->get('registerSort');
-            $authUpdateSetting['registerFieldNameArray'] = $request->request->get('registerFieldNameArray');
-            $auth = array_merge($auth, $authUpdateSetting);
-            
+            $auth['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
+            $auth['registerSort'] = $request->request->get('registerSort');
+            $auth['registerFieldNameArray'] = $request->request->get('registerFieldNameArray');
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', "更新用户信息设置", $auth);
@@ -348,6 +344,7 @@ class UserSettingController extends BaseController
             }
 
             $field = $this->getUserFieldService()->updateField($id, $fields);
+            $this->changeUserInfoFields($field, $type="update");
 
             return $this->redirect($this->generateUrl('admin_setting_user_fields'));
         }
@@ -367,29 +364,7 @@ class UserSettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
 
-            $auth = $this->getSettingService()->get('auth', array());
-
-            $courseSetting = $this->getSettingService()->get('course', array());
-
-            if (isset($auth['registerFieldNameArray'])) {
-                foreach ($auth['registerFieldNameArray'] as $key => $value) {
-                    if ($value == $field['fieldName']) {
-                        unset($auth['registerFieldNameArray'][$key]);
-                    }
-
-                }
-            }
-            if (isset($courseSetting['userinfoFieldNameArray'])) {
-                foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
-                    if ($value == $field['fieldName']) {
-                        unset($courseSetting['userinfoFieldNameArray'][$key]);
-                    }
-
-                }
-            }
-            $this->getSettingService()->set('auth', $auth);
-
-            $this->getSettingService()->set('course', $courseSetting);
+            $this->changeUserInfoFields($field, $type="delete");
 
             $this->getUserFieldService()->dropField($id);
 
@@ -431,6 +406,44 @@ class UserSettingController extends BaseController
         );
 
         return $default;
+    }
+
+    private function changeUserInfoFields($fieldInfo, $type='update')
+    {
+        $auth = $this->getSettingService()->get('auth', array());
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        if (isset($auth['registerFieldNameArray'])) {
+            if ($type == 'delete' or ($type == 'update' and !$fieldInfo['enabled'])) {
+                foreach ($auth['registerFieldNameArray'] as $key => $value) {
+                    if ($value == $fieldInfo['fieldName']) {
+                        unset($auth['registerFieldNameArray'][$key]);
+                    }
+                }
+            } elseif ($type == 'update' && $fieldInfo['enabled']) {
+                $auth['registerFieldNameArray'][] = $fieldInfo['fieldName'];
+                array_unique($auth['registerFieldNameArray']);
+            }
+        }
+
+        if (isset($courseSetting['userinfoFieldNameArray'])) {
+            if ($type == 'delete' or ($type == 'update' and !$fieldInfo['enabled'])) {
+                foreach ($courseSetting['userinfoFieldNameArray'] as $key => $value) {
+                    if ($value == $fieldInfo['fieldName']) {
+                        unset($courseSetting['userinfoFieldNameArray'][$key]);
+                    }
+                }
+            } elseif ($type == 'update' and $fieldInfo['enabled']) {
+                $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
+                array_unique($courseSetting['userinfoFieldNameArray']);
+            }
+            
+        }
+
+        $this->getSettingService()->set('auth', $auth);
+        $this->getSettingService()->set('course', $courseSetting);
+
+        return true;
     }
 
     protected function getCourseService()
