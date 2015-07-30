@@ -1780,6 +1780,14 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
+common_learn_qrcode:
+    pattern: /qrcode/generate
+    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
+
+common_parse_qrcode:
+    pattern: /qrcode/parse/{token}
+    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
+
 esbar_my_classroom:
     pattern:  /esbar/my/classroom
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
@@ -1800,3 +1808,4 @@ esbar_my_practice:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+
