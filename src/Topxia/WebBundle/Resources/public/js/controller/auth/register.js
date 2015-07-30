@@ -99,6 +99,7 @@ define(function(require, exports, module) {
                 element: '[name="emailOrMobile"]',
                 required: true,
                 rule: 'email_or_mobile_check email_or_mobile_remote',
+                display: '手机/邮箱',
                 onItemValidated: function(error, message, eleme) {
                     if (error) {
                         $('.js-sms-send').addClass('disabled');
