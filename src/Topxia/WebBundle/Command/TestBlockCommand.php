@@ -160,7 +160,7 @@ class TestBlockCommand extends BaseCommand
                                 <span>{$oldData['carousel1title1'][0]['value']}</span><span>{$oldData['carousel1title2'][0]['value']}</span>
                             </div>
                             <div class=\"subtitle\">
-                                <span>{$oldData['carousel1subtitle1'][0]['value']}</span><span>{$oldData['carousel1subtitle1'][0]['value']}</span>
+                                <span>{$oldData['carousel1subtitle1'][0]['value']}</span><span>{$oldData['carousel1subtitle2'][0]['value']}</span>
                             </div>
                             <div class=\"item-mac\">
                                 <img class=\"img-responsive\" src=\"{$oldData['carousel1banner'][0]['src']}\">
@@ -179,7 +179,7 @@ class TestBlockCommand extends BaseCommand
                                 <span>{$oldData['carousel1title1'][0]['value']}</span><span>{$oldData['carousel1title2'][0]['value']}</span>
                             </div>
                             <div class=\"subtitle\">
-                                <span>{$oldData['carousel1subtitle1'][0]['value']}</span><span>{$oldData['carousel1subtitle1'][0]['value']}</span>
+                                <span>{$oldData['carousel1subtitle1'][0]['value']}</span><span>{$oldData['carousel1subtitle2'][0]['value']}</span>
                             </div>
                         </div>
                     </a>
