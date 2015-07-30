@@ -268,8 +268,9 @@ class UserSettingController extends BaseController
         $auth = $this->getSettingService()->get('auth', array());
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
-        $auth['registerFieldNameArray'] = array_merge($auth['registerFieldNameArray'], ArrayToolkit::column($userFields,'fieldName'));
-        $courseSetting['userinfoFieldNameArray'] = array_merge($courseSetting['userinfoFieldNameArray'], ArrayToolkit::column($userFields,'fieldName'));
+        $userFieldNames = ArrayToolkit::column($userFields,'fieldName');
+        $auth['registerFieldNameArray'] = array_unique(array_merge($auth['registerFieldNameArray'], $userFieldNames));
+        $courseSetting['userinfoFieldNameArray'] = array_unique(array_merge($courseSetting['userinfoFieldNameArray'], $userFieldNames));
         
         if ($request->getMethod() == 'POST') {
             
@@ -304,6 +305,7 @@ class UserSettingController extends BaseController
             'varcharCount' => $varcharCount,
             'fields' => $fields,
             'courseSetting' => $courseSetting,
+            'authSetting' => $auth,
             'userFields' => $userFields,
         ));
     }

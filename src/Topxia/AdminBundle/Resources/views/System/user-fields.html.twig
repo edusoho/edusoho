@@ -122,7 +122,7 @@
 
       <div class="controls col-md-8 col-md-offset-3" id="show-checked-fields-list">
         <div class="pull-left">
-          {% for sort in setting('auth.registerSort')|default([]) %}
+          {% for sort in authSetting.registerSort|default([]) %}
             {% set userCustomField = userFields[sort]|default(null) %}
             <button type="button" class="btn btn-default btn-xs">
               {% if userCustomField %}{{ userCustomField.title }}{% else %}
@@ -141,10 +141,10 @@
       <div class="controls col-md-8 col-md-offset-2" id="show-fields-list" style="display:none">
         <div class="form-group">
           <ul class="fill-userinfo-list sortable-list list-unstyled col-md-12" data-role="list">
-            {% set checkedUserFieldsKeys = setting('auth.registerSort')|default([]) %}
+            {% set checkedUserFieldsKeys = authSetting.registerSort|default([]) %}
 
-            {% if setting('auth.registerFieldNameArray')|default(null) %}
-              {% for field in setting('auth.registerFieldNameArray') %}
+            {% if authSetting.registerFieldNameArray|default(null) %}
+              {% for field in authSetting.registerFieldNameArray %}
                 {% set userCustomField = userFields[field]|default(null) %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
