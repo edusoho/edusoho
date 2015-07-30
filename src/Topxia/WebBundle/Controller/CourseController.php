@@ -92,7 +92,8 @@ class CourseController extends CourseBaseController
 	public function archiveAction(Request $request)
 	{   
 		$conditions = array(
-			'status' => 'published'
+			'status' => 'published',
+			'parentId' => '0'
 		);
 
 		$paginator = new Paginator(
