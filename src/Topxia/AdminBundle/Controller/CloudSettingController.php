@@ -15,7 +15,7 @@ use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
 
 use Topxia\Service\CloudPlatform\KeyApplier;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -36,7 +36,7 @@ class CloudSettingController extends BaseController
 
     public function keyInfoAction(Request $request)
     {
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
@@ -71,7 +71,7 @@ class CloudSettingController extends BaseController
 
     public function keyBindAction(Request $request)
     {
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $currentHost = $request->server->get('HTTP_HOST');
         $result = $api->post('/me/license-domain', array('domain' => $currentHost));
 
@@ -150,7 +150,7 @@ class CloudSettingController extends BaseController
     public function keyCopyrightAction(Request $request)
     {
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
 
         if (empty($info['copyright'])) {

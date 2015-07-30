@@ -17,7 +17,7 @@ class DefaultController extends BaseController
     {
         $api = CloudAPIFactory::create('leaf');
 
-        $api->get('/');
+        // $api->get('/');
 
         echo time();
         var_dump($api);

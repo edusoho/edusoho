@@ -115,7 +115,21 @@ class FailoverCloudAPI extends AbstractCloudAPI
     public function setApiServerConfigPath($path)
     {
         if (!file_exists($path)) {
-            throw new \RuntimeException("Cloud api server config file is not exist.");
+            $servers = parent::_request('GET', '/server_list', array(), array());
+            if (empty($servers) or empty($servers['root']) or empty($servers['current_leaf']) or empty($servers['leafs'])) {
+                throw new \RuntimeException("Requested API Server list is invalid.");
+            }
+
+            foreach ($servers['leafs'] as &$leaf) {
+                $leaf['used_count'] = 0;
+                unset($leaf);
+            }
+
+            $servers['failed_count'] = 0;
+            $servers['failed_expired'] = 0;
+            $servers['next_refresh_time'] = 0;
+
+            file_put_contents($path, json_encode($servers));
         }
 
         $this->serverConfigPath = $path;
