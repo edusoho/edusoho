@@ -401,6 +401,14 @@ class UserServiceImpl extends BaseService implements UserService
         $user['type'] = $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
+        if ($type == 'default') {
+            if (isset($registration['verifiedMobile'])) {
+                $user['type'] = 'web_mobile';
+            } else {
+                $user['type'] = 'web_email';
+            }
+        }
+        
 
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
