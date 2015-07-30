@@ -790,10 +790,6 @@ class OrderServiceTest extends BaseTestCase
         $logs = $this->getOrderService()->createOrderLog(100, "pay_success", "支付成功。", array());
     }
 
-    public function testSearchBill()
-    {
-        
-    }
 
 	//=================私有或者受保护的方法，用来调用命名空间外的对象[start]==============
 	protected function getUserService()
