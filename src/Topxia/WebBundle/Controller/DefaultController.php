@@ -15,6 +15,11 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
+        $api = CloudAPIFactory::create('leaf');
+        $data = $api->get('/me');
+        var_dump($data);
+        var_dump($api);
+        exit();
 
         $conditions = array('status' => 'published', 'parentId' => 0);
 

@@ -416,8 +416,8 @@ class SettingsController extends BaseController
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
         $canSmsFind = ($hasVerifiedMobile) && 
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
+        			  ($this->setting('cloud_sms.sms_enabled') == '1') &&
+        			  ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
 		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
 			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -452,9 +452,7 @@ class SettingsController extends BaseController
 
 	public function findPayPasswordBySmsAction(Request $request)
 	{
-		$eduCloudService = $this->getEduCloudService();
-		$scenario = "sms_forget_pay_password";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }		
 
@@ -562,7 +560,6 @@ class SettingsController extends BaseController
 
 	public function bindMobileAction(Request $request)
 	{
-		$eduCloudService = $this->getEduCloudService();
 		$currentUser = $this->getCurrentUser()->toArray();
 		$verifiedMobile = '';
 		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
@@ -572,7 +569,8 @@ class SettingsController extends BaseController
 		$setMobileResult = 'none';
 
 		$scenario = "sms_bind";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+
+		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
 
@@ -924,11 +922,6 @@ class SettingsController extends BaseController
 	protected function getUserFieldService()
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
-	}
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }	
+	}	
 
 }

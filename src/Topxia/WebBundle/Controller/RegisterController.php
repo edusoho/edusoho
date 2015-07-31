@@ -457,11 +457,6 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }   
-
     protected function getMessageService()
     {
         return $this->getServiceKernel()->createService('User.MessageService');
@@ -571,8 +566,8 @@ class RegisterController extends BaseController
     protected function smsCodeValidator($authSettings,$registration,$request){
         if ( isset($authSettings['registerSort'])
             &&in_array('mobile', $authSettings['registerSort'])
-            &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
-            &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
+            &&($this->setting('cloud_sms.sms_enabled') == '1')
+            &&($this->setting('cloud_sms.sms_registration') == 'on')){
           return true;
         }
     }

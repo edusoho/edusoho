@@ -35,6 +35,11 @@ class AbstractCloudAPI
         $this->debug = empty($options['debug']) ? false : true;
     }
 
+    public function getAccessKey()
+    {
+        return $this->accessKey;
+    }
+
     public function post($uri, array $params = array(), array $header = array())
     {
         return $this->_request('POST', $uri, $params, $header);
