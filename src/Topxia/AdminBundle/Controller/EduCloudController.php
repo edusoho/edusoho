@@ -23,7 +23,7 @@ class EduCloudController extends BaseController
                 $loginToken = $this->getAppService()->getLoginToken();
 
                 
-                $result = $api->post("/sms/{$this->getAccessKey()}/applyResult");
+                $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
 
                 if (isset($result['apply']) && isset($result['apply']['status'])) {
                     $smsStatus['status'] = $result['apply']['status'];
@@ -171,7 +171,7 @@ class EduCloudController extends BaseController
         $schoolCandidateName = $this->setting('cloud_sms.sms_school_candidate_name');
 
         $api = CloudAPIFactory::create('root');
-        $result = $api->post("/sms/{$this->getAccessKey()}/applyResult");
+        $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
         $smsStatus = array();
         if (isset($result['apply']) && isset($result['apply']['status'])) {
             $smsStatus['status'] = $result['apply']['status'];
