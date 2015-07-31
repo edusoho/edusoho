@@ -841,7 +841,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_login', "您尚未登录，不能收藏课程！");
         }
         
-        if ($user["vip"] == null || empty($user["vip"])) {
+        $vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
+
+        if (empty($vip)) {
             return $this->createErrorResponse('error', "用户不是vip会员!");
         }
         try {
