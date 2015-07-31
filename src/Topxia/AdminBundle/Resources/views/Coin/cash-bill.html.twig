@@ -16,6 +16,11 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
+    <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+    lastHowManyMonths:app.request.get('lastHowManyMonths'),
+    cashType:cashType,
+    nickname:app.request.query.get('nickname'),
+    })}}">导出结果</a>
 
     </form>
 
