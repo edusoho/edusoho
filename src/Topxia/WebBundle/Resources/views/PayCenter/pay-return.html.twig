@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %} 支付中心 - {{ parent() }}{% endblock %}
+{% set script_controller = 'pay/select' %}
+
+{% block content %}
+<div class="container order-pay pay-center">
+      <div class="order-nav hidden-xs clearfix ">
+        <div >
+          确认订单 <b></b>
+        </div>
+        <div>
+          <span></span>
+          订单支付 <b></b>
+        </div>
+        <div class="on">
+          <span></span>
+          订单完成
+        </div>
+      </div>
+</div>
+{% endblock %}
