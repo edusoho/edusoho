@@ -1,0 +1,124 @@
+<div class="ui-course top-header" style="padding-bottom: 58px;">
+    <div class="course-head-body">
+        <div class="course-head">
+            <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
+            <p class="mask">
+                <a class="rating-body">
+                    <span>
+		      		<i class="iconfont" ng-class="classRoom.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
+		      	</span>
+                    <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
+                </a>
+                <a class="right">{{ classRoom.studentNum }} 人在学</a>
+            </p>
+        </div>
+        <div class="item-body">
+            <p class="course-title">{{ classRoom.title }}</p>
+            <p class="course-price">
+                <span class="price-block">{{ classRoom.price | formatPrice }}</span>
+                <span ng-if="discount" class="discount-type discount">
+	    			{{ discount.type | coverDiscount : classRoom.discount }}</span>
+                <span ng-if="discount" class="discount-type type">{{ discount.name }}</span>
+            </p>
+            <p ng-if="discount" class="discount-body">
+                <s class="price-block">{{ classRoom.originPrice | formatPrice }}</s>
+                <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
+            </p>
+            <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
+                {{ service.name }}
+            </span>
+        </div>
+    </div>
+    <div class="ui-tab tab-top" ui-tab>
+        <ul class="ui-tab-nav ui-border-tb">
+            <li><span class="line">班级课程</span></li>
+            <li><span>班级详情</span></li>
+        </ul>
+        <ul class="ui-tab-content tab-display">
+            <li>
+                <div ng-include=" 'view/classroom_courses.html' | coverIncludePath ">
+                </div>
+            </li>
+            <li>
+                <section class="ui-panel ui-panel-card ui-border-t">
+                    <h2 class="title-body">
+			    	<span class="title">班级概览</span>
+
+			    	<a class="title-tips" href="#/coursedetail/{{ classRoom.id }}">
+			    		<i class="iconfont icon-gengduo"></i>
+			    	</a>
+			    </h2>
+                    <div class="ui-panel-content" ng-bind-html="classRoom.about | limitTo : 120" ng-img-show>
+                    </div>
+                </section>
+                <section class="ui-panel ui-panel-card ui-border-t">
+                    <h2 class="title-body">
+			    	<span class="title">班级教师 ({{ classRoom.teachers.length }})</span>
+
+			    	<a class="title-tips" href="#/teacherlist/{{ classRoom.id }}">
+			    		<i class="iconfont icon-gengduo"></i>
+			    	</a>
+			    </h2>
+                    <div class="ui-panel-content">
+                        <ul class="ui-list">
+                            <li class="ui-border-t" ng-if="classRoom.teachers[0]">
+                                <div class="ui-avatar-s" ui-sref="userInfo({ userId : classRoom.teachers[0].id })">
+                                    <img ng-src="{{ classRoom.teachers[0].avatar | coverAvatar }}" />
+                                </div>
+                                <div class="ui-list-info">
+                                    <h4 class="ui-nowrap">{{ classRoom.teachers[0].nickname }}
+				            	<label class="ui-label">教师</label>
+				            </h4>
+                                    <p class="ui-nowrap">{{ classRoom.teachers[0].title }}</p>
+                                </div>
+                            </li>
+                            <li ng-if="! classRoom.teachers[0]">
+                                <p>该课程暂无教师</p>
+                                </i>
+                        </ul>
+                    </div>
+                </section>
+                <section class="ui-panel ui-panel-card ui-border-t" ng-init="loadReviews()">
+                    <h2 class="title-body">
+			    	<span class="title">班级评价 ({{ reviews.length }})</span>
+
+			    	<a class="title-tips" href="#/coursereview/{{ classRoom.id }}">
+			    		<i class="iconfont icon-gengduo"></i>
+			    	</a>
+			    </h2>
+                    <div class="ui-panel-content ui-review">
+                        <ul class="ui-list">
+                            <li class="ui-border-t" ng-if="reviews[0]">
+                                <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
+                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" />
+                                </div>
+                                <div class="ui-list-info">
+                                    <h4 class="ui-nowrap ui-review-header">
+					            	{{ reviews[0].user.nickname }}
+					            	<span class="ui-review-rating">
+						      	<i class="iconfont" ng-class="reviews[0].rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
+						      	</span>
+					            </h4>
+                                    <p class="ui-nowrap">{{ reviews[0].content }}</p>
+                                </div>
+                            </li>
+                            <li ng-if="! reviews[0]">
+                                <p>该课程暂无评价</p>
+                                </i>
+                        </ul>
+                    </div>
+                </section>
+                </li>
+        </ul>
+    </div>
+</div>
+<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="ClassRoomToolController">
+    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
+    </button>
+    <button class="ui-btn btn-green" ng-class="classRoom.vipLevelId <= 0 ? 'btn-col-75' : 'btn-col-25' " ng-click="joinCourse()">
+        立即加入
+    </button>
+    <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="vipLeand()" ng-if="classRoom.vipLevelId > 0 ">
+        {{ vipLevels[classRoom.vipLevelId - 1].name }}会员免费学
+    </button>
+</div>

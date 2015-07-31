@@ -182,18 +182,24 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 }]).
 service('ClassRoomService', ['httpService', function(httpService) {
 
-	this.getClassRooms = function(params, callback) {
-		httpService.get({
-			url : app.host + '/mapi_v2/ClassRoom/getClassRooms',
-			params : {
-				limit : params.limit
-			},
-			success : function(data, status, headers, config) {
-				callback(data);
-			},
-			error : function(data) {
-			}
-		});
+	this.getClassRoomCourses = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/ClassRoom/getClassRoomCourses", arguments);
+	}
+
+	this.getLatestClassrooms = function(params, callback) {
+		httpService.simplePost("/mapi_v2/ClassRoom/getLatestClassrooms", arguments);
+	}
+
+	this.getRecommendClassRooms = function(params, callback) {
+		httpService.simplePost("/mapi_v2/ClassRoom/getRecommendClassRooms", arguments);
+	}
+
+	this.searchClassRoom = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/ClassRoom/getClassRooms", arguments);
+	}
+
+	this.getClassRoom = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/ClassRoom/getClassRoom", arguments);
 	}
 
 	this.myClassRooms = function(params, callback) {

@@ -1,0 +1,25 @@
+<div class="ui-course top-header">
+    <div class="course-head-body">
+        <div class="course-head">
+            <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
+            <p class="mask">
+                <a class="rating-body">
+                    <span>
+                    <i class="iconfont" ng-class="classRoom.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
+                </span>
+                    <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
+                </a>
+                <a class="right">{{ classRoom.studentNum }} 人在学</a>
+            </p>
+        </div>
+        <div class="item-body">
+            <p class="course-title">{{ classRoom.title }}</p>
+            
+            <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
+                {{ service.name }}
+            </span>
+        </div>
+    </div>
+    <div ng-include=" 'view/classroom_courses.html' | coverIncludePath ">
+    </div>
+</div>

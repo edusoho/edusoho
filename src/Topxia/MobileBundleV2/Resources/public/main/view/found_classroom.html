@@ -1,39 +1,70 @@
-<ion-view>
-  <ion-content class="found-body content-padding">
-    
-    <ion-slide-box on-slide-changed="slideHasChanged($index)">
-	  <ion-slide ng-repeat="banner in banners"  slide-init>
-	    <div class="box banner">
-	    	<img ng-src='{{ banner.url }}' />
-	    </div>
-	  </ion-slide>
-	</ion-slide-box>
-
+<div class="top-tab-header ui-found-course" ng-controller="FoundClassRoomController">
 	<div class="course-card">
 		<h4>推荐</h4>
-		<div class="list">
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="classRoom in recommendClassRooms" ng-href="#/classroom/{{ classRoom.id  }}">
+		        <div class="ui-list-img">
+		            <span style="background-image:url( {{ classRoom.middlePicture }} )">
+		            	<span class="discount-label" ng-class="classRoom.discount == 0 ? 'free' : 'rebate' " ng-if="classRoom.discountId > 0">
+				      		<span class="discount-label-bottom"></span>
+				      		<span class="discount-label-content" ng-if="classRoom.discount == 0">限时免费</span>
+				      		<span class="discount-label-content" ng-if="classRoom.discount > 0">限时打折</span>
+						</span>
+		            </span>
 
-		    <a class="item item-thumbnail-left" href="#" ng-repeat="classRoom in classRooms">
-		      <img src="{{ classRoom.middlePicture | coverPic}}">
-		      <h2>{{ classRoom.title }}</h2>
-		      <p class="bottom price-body">
-		      	
-		      	<span class="origin-price">
-			      {{ classRoom.price | formatPrice }}
-			      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
-			      	{{ classRoom.originPrice | formatPrice }}
-			      </s>
-			</span>
+		        </div>
+		        <div class="ui-list-info">
+		            <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
+		            <p class="bottom price-body">
+		            	<span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
+		            		{{ service.name }}
+		            	</span>
 
-			<span class="right">
-			      <i class="iconfont icon-person"></i>
-			      {{ classRoom.studentNum }}人在学
-			</span>
-		      </p>
-		    </a>
+						<span class="right">
+						      <i class="iconfont icon-person"></i>
+						      {{ classRoom.studentNum }}
+						</span>
+		            </p>
+		        </div>
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="recommendClassRooms.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/classroomlist/">更多</button>
 		</div>
-
-		<a class="button button-clear more" href="#/courselist">查看更多</a>
 	</div>
-  </ion-content>
-</ion-view>
+
+	<div class="course-card">
+		<h4>最新</h4>
+		<list-empty-view data="latestCourses" title="暂时没有最新课程">
+          		</list-empty-view>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="classRoom in latestClassrooms" ng-href="#/classroom/{{ classRoom.id  }}">
+		        <div class="ui-list-img">
+		            <span style="background-image:url( {{ classRoom.middlePicture }} )"></span>
+		            <span class="discount-label" ng-class="classRoom.discount == 0 ? 'free' : 'rebate' " ng-if="classRoom.discountId > 0">
+				      	<span class="discount-label-bottom"></span>
+				      	<span class="discount-label-content" ng-if="classRoom.discount == 0">限时免费</span>
+				      	<span class="discount-label-content" ng-if="classRoom.discount > 0">限时打折</span>
+			</span>
+		        </div>
+		        <div class="ui-list-info">
+		            <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
+		            <p class="bottom price-body">
+		            
+						<span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
+			            		{{ service.name }}
+			            </span>
+
+						<span class="right">
+						      <i class="iconfont icon-person"></i>
+						      {{ classRoom.studentNum }}
+						</span>
+		            </p>
+		        </div>
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="latestClassrooms.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/classroomlist/">更多</button>
+		</div>
+	</div>
+</div>

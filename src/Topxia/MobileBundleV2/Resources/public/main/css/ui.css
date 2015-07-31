@@ -463,6 +463,10 @@ a {
   width: 60%;
 }
 
+.ui-btn.btn-col-75 {
+  width: 75%;
+}
+
 .ui-btn.btn-col-35 {
   width: 35%;
 }
@@ -560,6 +564,27 @@ a {
   max-width: 120px;
   height: auto;
 }
+
+.classroom-service-label {
+  display: inline-block;
+  margin-right: 3px;
+  background: #37b97d;
+  border-radius: 2px;
+  text-align: center;
+  color: white;
+  height: 20px;
+  width: 20px;
+  font-size: 10px;
+}
+
+.classroom-service-label.active {
+  background: #37b97d;
+}
+
+.classroom-service-label.enable {
+  background: #ccc;
+}
+
 /* course-card*/ 
 
 /** .category-card */

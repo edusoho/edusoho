@@ -71,6 +71,64 @@ factory('ServcieUtil', function() {
 		}
 	}
 }).
+factory('ClassRoomUtil', function() {
+	var getService = function() {
+		return {
+			"homeworkReview" : {
+				class : "enable",
+				name : "练"
+			},
+			"testpaperReview" : {
+				class : "enable",
+				name : "试"
+			},
+			"teacherAnswer" : {
+				class : "enable",
+				name : "问"
+			},
+			"liveAnswer" : {
+				class : "enable",
+				name : "疑"
+			},
+			"event" : {
+				class : "enable",
+				name : "动"
+			},
+			"workAdvise" : {
+				class : "enable",
+				name : "业"
+			},
+		};
+	};
+
+	var filter = function(classRoom) {
+		var classRoomService = classRoom.service;
+		var service = getService();
+		if (!classRoomService || classRoomService == "null") {
+			classRoom.service = service;
+			return classRoom;
+		}
+		for (var j = 0; j < classRoomService.length; j++) {
+			service[classRoomService[j]].class = "active";
+		};
+		classRoom.service = service;
+
+		return classRoom;
+	};
+	return {
+		filterClassRoom : function(classRoom) {
+			return filter(classRoom);
+		},
+		filterClassRooms : function(classRooms) {
+				for (var i = 0; i < classRooms.length; i++) {
+					var classRoomService = classRooms[i].service;
+					classRooms[i] = filter(classRooms[i]);
+				};
+
+				return classRooms;
+			}
+	}
+}).
 factory('VipUtil', function() {
 
 	var payByYear = {
@@ -161,6 +219,19 @@ factory('CourseUtil', ['$rootScope', 'CourseService', 'ClassRoomService' ,functi
 		  		{
 		  			name : "最热",
 		  			type : "popular"
+		  		},
+		  		{
+		  			name : "推荐",
+		  			type : "recommendedSeq"
+		  		}
+		  	]
+		},
+
+		getClassRoomListSorts : function() {
+			return [
+		  		{
+		  			name : "最新",
+		  			type : "createdTime"
 		  		},
 		  		{
 		  			name : "推荐",

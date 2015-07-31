@@ -91,6 +91,16 @@ appProvider.provider('appRouter', function($stateProvider) {
 	              }
 	            });
 
+	            $stateProvider.state('classRoomList', {
+	              url: "/classroomlist/:categoryId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/classroom_list.html",
+	                  controller: ClassRoomListController
+	                }
+	              }
+	            });
+
 	            $stateProvider.state('login', {
 	              url: "/login/:goto",
 	              views: {
@@ -173,6 +183,16 @@ appProvider.provider('appRouter', function($stateProvider) {
 	                'rootView': {
 	                  templateUrl: app.viewFloder  + "view/course.html",
 	                  controller : CourseController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('classroom', {
+	              url: "/classroom/:classRoomId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/classroom.html",
+	                  controller : ClassRoomController
 	                }
 	              }
 	            });

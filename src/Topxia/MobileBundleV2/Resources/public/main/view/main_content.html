@@ -9,7 +9,8 @@
 <div class="ui-tab tab-top" ui-tab>
     <ul class="ui-tab-nav ui-border-b">
         <li><span class="line">课程</span></li>
-        <li><span>直播</span></li>
+        <li><span class="line">直播</span></li>
+        <li><span>班级</span></li>
     </ul>
     <ul class="ui-tab-content tab-display">
         <li>
@@ -17,6 +18,9 @@
         </li>
         <li>
             <div ng-include=" 'view/found_live.html' | coverIncludePath "></div>
+        </li>
+        <li>
+            <div ng-include=" 'view/found_classroom.html' | coverIncludePath "></div>
         </li>
     </ul>
 </div>

@@ -80,21 +80,23 @@ function CourseDetailController($scope, $stateParams, CourseService)
       courseId : $stateParams.courseId
     }, function(data) {
       $scope.course = data.course;
-    });
+  });
 }
 
 app.controller('CourseToolController', ['$scope', '$stateParams', 'OrderService', 'CourseService', 'cordovaUtil', '$state', CourseToolController]);
-function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)
+
+function BaseToolController($scope, OrderService, cordovaUtil)
 {
-    var self = this;
-    this.payCourse = function() {
+  var self = this;
+
+  this.payCourse = function(price, targetType, targetId) {
       OrderService.createOrder({
         payment : "alipay",
         payPassword : "",
-        totalPrice : $scope.course.price,
+        totalPrice : price,
         couponCode : "",
-        targetType : "course",
-        targetId : $stateParams.courseId
+        targetType : targetType,
+        targetId : targetId
       }, function(data) {
         if (data.paid == true) {
           console.log("reload");
@@ -111,9 +113,48 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
       });
     }
 
+  this.vipLeand = function(callback) {
+    if ($scope.user == null) {
+      cordovaUtil.openWebView(app.rootPath + "#/login/course");
+      return;
+    }
+    callback();
+  }
+
+  this.joinCourse = function(callback) {
+      if ($scope.user == null) {
+        cordovaUtil.openWebView(app.rootPath + "#/login/course");
+        return;
+      }
+
+      callback();
+    }
+
+  this.favoriteCourse = function(callback) {
+    if ($scope.user == null) {
+      cordovaUtil.openWebView(app.rootPath + "#/login/course");
+      return;
+    }
+
+    callback();
+  }
+
+  this.shardCourse = function(url, title, about, pic) {
+    if (about.length > 20) {
+      about = about.substring(0, 20);
+    }
+    cordovaUtil.share(app.host + url, title, about, pic);
+  }
+}
+
+function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)
+{
+    this.__proto__ = new BaseToolController($scope, OrderService, cordovaUtil);
+    var self = this;
+
     this.goToPay = function() {
       if ($scope.course.price <= 0) {
-        self.payCourse();
+        self.payCourse($scope.course.price, "course", $stateParams.courseId);
       } else {
         $state.go("coursePay", { courseId : $scope.course.id });
       }
@@ -174,56 +215,52 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     };
 
     $scope.vipLeand = function() {
-      if ($scope.user == null) {
-        cordovaUtil.openWebView(app.rootPath + "#/login/course");
-        return;
-      }
-      CourseService.vipLearn({
-        courseId : $stateParams.courseId
-      }, function(data){
-        if (! data.error) {
-          window.location.reload();
-        } else {
-          $scope.toast(data.error.message);
-        }
-      }, function(error) {
-        console.log(error);
+      self.vipLeand(function() {
+        CourseService.vipLearn({
+          courseId : $stateParams.courseId
+        }, function(data){
+          if (! data.error) {
+            window.location.reload();
+          } else {
+            $scope.toast(data.error.message);
+          }
+        }, function(error) {
+          console.log(error);
+        });
       });
+
     }
 
     $scope.joinCourse = function() {
-      if ($scope.user == null) {
-        cordovaUtil.openWebView(app.rootPath + "#/login/course");
-        return;
-      }
-
-      self.getModifyUserInfo(function() {
-        self.goToPay();
+      self.joinCourse(function() {
+        self.getModifyUserInfo(function() {
+          self.goToPay();
+        });
       });
+
     }
 
     $scope.favoriteCourse = function() {
-      if ($scope.user == null) {
-        cordovaUtil.openWebView(app.rootPath + "#/login/course");
-        return;
-      }
-      var params = {
-          courseId : $stateParams.courseId
-      };
 
-      if ($scope.isFavorited) {
-        CourseService.unFavoriteCourse(params, function(data) {
-          if (data == true) {
-            $scope.isFavorited = false;
-          }
-        });
-      } else {
-        CourseService.favoriteCourse(params, function(data) {
-          if (data == true) {
-            $scope.isFavorited = true;
-          }
-        });
-      }
+      self.favoriteCourse(function() {
+        var params = {
+            courseId : $stateParams.courseId
+        };
+
+        if ($scope.isFavorited) {
+          CourseService.unFavoriteCourse(params, function(data) {
+            if (data == true) {
+              $scope.isFavorited = false;
+            }
+          });
+        } else {
+          CourseService.favoriteCourse(params, function(data) {
+            if (data == true) {
+              $scope.isFavorited = true;
+            }
+          });
+        }
+      });
     }
 
     $scope.shardCourse = function() {
@@ -231,7 +268,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
       if (about.length > 20) {
         about = about.substring(0, 20);
       }
-      cordovaUtil.share(app.host + "/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture);
+      self.shardCourse("/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture)      
     }
 }
 
@@ -301,4 +338,100 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
     $scope.$parent.$on("refresh", function(event, data) {
       window.location.reload();
     });
+}
+
+app.controller('ClassRoomController', ['$scope', '$stateParams', 'ClassRoomService', 'AppUtil', '$state', 'cordovaUtil', 'ClassRoomUtil', ClassRoomController]);
+app.controller('ClassRoomCoursesController', ['$scope', '$stateParams', 'ClassRoomService', '$state', ClassRoomCoursesController]);
+app.controller('ClassRoomToolController', ['$scope', '$stateParams', 'OrderService', 'ClassRoomService', 'cordovaUtil', '$state', ClassRoomToolController]);
+
+function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomService, cordovaUtil, $state)
+{
+  this.__proto__ = new BaseToolController($scope, OrderService, cordovaUtil);
+  var self = this;
+
+    this.goToPay = function() {
+      if ($scope.classRoom.price <= 0) {
+        self.payCourse($scope.classRoom.price, "classroom", $stateParams.classRoomId);
+      } else {
+        $state.go("coursePay", { courseId : $scope.course.id });
+      }
+    };
+
+    $scope.vipLeand = function() {
+      self.vipLeand(function() {
+        ClassRoomService.learnByVip({
+          classRoomId : $stateParams.classRoomId
+        }, function(data){
+          if (! data.error) {
+            window.location.reload();
+          } else {
+            $scope.toast(data.error.message);
+          }
+        }, function(error) {
+          console.log(error);
+        });
+      });
+
+    }
+
+    $scope.joinCourse = function() {
+      self.joinCourse(function() {
+        self.goToPay();
+      });
+    }
+
+    $scope.shardCourse = function() {
+      var about = $scope.course.about;
+      if (about.length > 20) {
+        about = about.substring(0, 20);
+      }
+      self.shardCourse("/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture)      
+    }
+}
+
+function ClassRoomCoursesController($scope, $stateParams, ClassRoomService, $state)
+{
+  var self = this;
+
+  this.loadClassRoomCourses = function() {
+    $scope.loading = true;
+    ClassRoomService.getClassRoomCourses({
+      classRoomId : $stateParams.classRoomId
+    }, function(data) {
+      $scope.loading = false;
+      
+      if (data.error) {
+        $scope.toast(data.error.message);
+        return;
+      }
+      $scope.courses = data;
+    });
+  };
+
+  this.loadClassRoomCourses();
+}
+
+function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $state, cordovaUtil, ClassRoomUtil)
+{
+  var self = this;
+
+  this.loadClassRoom = function() {
+    $scope.showLoad();
+    ClassRoomService.getClassRoom({
+      id : $stateParams.classRoomId
+    }, function(data) {
+      
+      $scope.vipLevels = data.vipLevels;
+      $scope.ratingArray = AppUtil.createArray(5);
+      $scope.member = data.member;
+      $scope.isFavorited = data.userFavorited;
+      $scope.discount = data.discount;
+
+      $scope.classRoomView = app.viewFloder + (data.member ? "view/classroom_learn.html" : "view/classroom_no_learn.html");
+      $scope.classRoom = ClassRoomUtil.filterClassRoom(data.classRoom);
+      $scope.hideLoad();
+    });
+  };
+
+  this.loadClassRoom();
 }

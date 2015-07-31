@@ -34,18 +34,19 @@ function FoundLiveController($scope, SchoolService)
 	});
 }
 
+app.controller('FoundClassRoomController', ['$scope', 'ClassRoomService', 'ClassRoomUtil', FoundClassRoomController]);
 
-app.controller('FoundClassRoomController', ['$scope', '$http', FoundClassRoomController]);
-
-function FoundClassRoomController($scope, ClassRoomService, SchoolService)
+function FoundClassRoomController($scope, ClassRoomService, ClassRoomUtil)
 {
 	console.log("FoundClassRoomController");
 
-	SchoolService.getSchoolBanner(function(data) {
-		$scope.banners = data;
-	});
-
-  	ClassRoomService.getClassRooms({ limit : 3 }, function(data) {
-  		$scope.classRooms = data.data;
+  	ClassRoomService.getRecommendClassRooms({ limit : 3 }, function(data) {
+  		$scope.recommendClassRooms = ClassRoomUtil.filterClassRooms(data.data);
   	});
+
+  	ClassRoomService.getLatestClassrooms({ limit : 3 }, function(data) {
+  		$scope.latestClassrooms = ClassRoomUtil.filterClassRooms(data.data);
+  	});
+
+
 }
