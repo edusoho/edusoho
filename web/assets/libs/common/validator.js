@@ -11,13 +11,10 @@ define(function(require, exports, module) {
             inputClass: "input-with-feedback",
             textareaClass: "input-with-feedback",
             showMessage: function(message, element) {
-                 this.element.css("display","block");
+                this.element.css("display","block");
                 message = '<span class="text-danger">' + message + '</span>';
                 console.log(message);
                 this.getExplain(element).html(message).show();
-                if(message=="") {
-                    console.log("sdfsdf");
-                }
                 this.getItem(element).addClass(this.get("itemErrorClass"));
             }
         },
