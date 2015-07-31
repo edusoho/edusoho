@@ -550,6 +550,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         		$client = $factory->createClient();
 
         		$ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+                $error = json_decode($ppt);
+                if ($error->error) {
+                    $ppt = array();
+                }
         		$lesson['content'] = $ppt;
 
         		return $lesson;
