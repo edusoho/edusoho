@@ -11,6 +11,10 @@ interface ClassRoomProcessor
 
 	public function getClassRoomCourses();
 
+	public function getLatestClassrooms();
+
+	public function getRecommendClassRooms();
+
 	public function getClassRoomMember();
 
 	public function learnByVip();

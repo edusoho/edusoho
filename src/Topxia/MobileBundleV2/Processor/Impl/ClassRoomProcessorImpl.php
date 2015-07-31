@@ -17,6 +17,65 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+	public function getRecommendClassRooms()
+	{
+		$conditions = array(
+            'status' => 'published',
+            'private' => 0
+        );
+
+        $start  = (int) $this->getParam("start", 0);
+        $limit  = (int) $this->getParam("limit", 10);
+
+        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('recommendedSeq', 'desc'),
+            $start,
+            $limit
+        );
+
+        $allClassrooms = array();
+        for ($i=0; $i < count($classrooms); $i++) { 
+        	if ($classrooms[$i]["recommendedTime"] > 0) {
+        		$allClassrooms[] = $classrooms[$i];
+        	}
+        }
+
+        return array(
+	            "start" => $start,
+	            "limit" => $limit,
+	            "total" => $total,
+	            "data" => $this->filterClassRooms($allClassrooms)
+	    ); 
+	}
+
+	public function getLatestClassrooms()
+	{
+		$conditions = array(
+            'status' => 'published',
+            'private' => 0,
+        );
+
+        $start  = (int) $this->getParam("start", 0);
+        $limit  = (int) $this->getParam("limit", 10);
+
+        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'desc'),
+            $start,
+            $limit
+        );
+        $allClassrooms = array_values($classrooms);
+        return array(
+	            "start" => $start,
+	            "limit" => $limit,
+	            "total" => $total,
+	            "data" => $this->filterClassRooms($allClassrooms)
+	    ); 
+	}
+
 	public function exitClassRoom($classRoomId, $user)
     	{
         		$member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
@@ -143,25 +202,25 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	            	$classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->controller->getLevelService()->getLevel($classroom['vipLevelId']) : null;
 	        	}
 		return array(
-			"classRoom" => $this->filterClassRoom($classroom),
+			"classRoom" => $this->filterClassRoom($classroom, false),
 			"member" => $member,
 			"vip" => $checkMemberLevelResult,
 			"vipLevels" => $vipLevels
 			);
 	}
 
-	private function filterClassRoom($classroom)
+	private function filterClassRoom($classroom, $isList = true)
 	{
 		if (empty($classroom)) {
 	            	return null;
 	        	}
 
-	        	$classrooms = $this->filterClassRooms(array($classroom));
+	        	$classrooms = $this->filterClassRooms(array($classroom), $isList);
 
 	        	return current($classrooms);
 	}
 
-	public function filterClassRooms($classrooms)
+	public function filterClassRooms($classrooms, $isList = true)
 	{
 		if (empty($classrooms)) {
 			return array();
@@ -169,12 +228,17 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
 		$self = $this->controller;
 		$container = $this->getContainer();
-		return array_map(function($classroom) use ($self, $container) {
+		return array_map(function($classroom) use ($self, $container, $isList) {
 
 			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
             		$classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
             		$classroom['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
+			
+			$classroom['recommendedTime'] = date("c", $classroom['recommendedTime']);
 			$classroom['createdTime'] = date("c", $classroom['createdTime']);
+			if ($isList) {
+				$classroom["about"] = mb_substr($classroom["about"], 0, 20, "utf-8");
+			}
 			$classroom['about'] = $self->convertAbsoluteUrl($container->get('request'), $classroom['about']);
 			return $classroom;
 		}, $classrooms);
@@ -201,7 +265,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	public function myClassRooms()
 	{	
 		$start  = (int) $this->getParam("start", 0);
-        		$limit  = (int) $this->getParam("limit", 10);
+        $limit  = (int) $this->getParam("limit", 10);
 
 		$user = $this->controller->getUserByToken($this->request);
        		if (!$user->isLogin()) {
@@ -253,8 +317,8 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		return array_map(function($classroom) use($progresses) {
 			$progresse = $progresses[$classroom["id"]];
 			$classroom["percent"] = $progresse["percent"];
-		           $classroom["number"] = $progresse["number"];
-		           $classroom["total"] = $progresse["total"];
+		    $classroom["number"] = $progresse["number"];
+		    $classroom["total"] = $progresse["total"];
 
 			unset($classroom["description"]);
 			unset($classroom["about"]);
@@ -296,49 +360,66 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	public function getClassRooms()
 	{
 		$start = (int) $this->getParam("start", 0);
-        		$limit = (int) $this->getParam("limit", 10);
-	        $conditions = array(
-	            'status' => 'published'
-	        );
+        $limit = (int) $this->getParam("limit", 10);
+        $category = $this->getParam("category", 0);
 
-	        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $title = $this->getParam("title", "");
+        $sort = $this->getParam("sort", "createdTime");
+        $conditions = array(
+            'status' => 'published',
+            'title' => $title,
+        );
 
-	        $classrooms = $this->getClassroomService()->searchClassrooms(
-	                $conditions,
-	                array('createdTime','desc'),
-	                $start,
-	                $limit
-	        );
+        if (!empty($category)) {
+            $categoryArray = $this->getCategoryService()->getCategory($category);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
+            $conditions['categoryIds'] = $categoryIds;
+        }
 
-	        $classRoomTeacherIds = ArrayToolkit::column($classrooms,'teacherIds');
+        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
 
-	        for ($i=0; $i < count($classRoomTeacherIds); $i++) { 
-	        	$teacherIds = $classRoomTeacherIds[$i];
-	        	$users = $this->getUserService()->findUsersByIds($teacherIds);
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+                $conditions,
+                array($sort,'desc'),
+                $start,
+                $limit
+        );
 
-	    	$classrooms[$i]["teacherIds"] = $this->filterUsersFiled($users);
-	        }
+        $classRoomTeacherIds = ArrayToolkit::column($classrooms,'teacherIds');
 
-	        return array(
-	            "start" => $start,
-	            "limit" => $limit,
-	            "total" => $total,
-	            "data" => $this->filterClassRooms($classrooms)
-	        );
+        for ($i=0; $i < count($classRoomTeacherIds); $i++) { 
+        	$teacherIds = $classRoomTeacherIds[$i];
+        	$users = $this->getUserService()->findUsersByIds($teacherIds);
+
+    		$classrooms[$i]["teacherIds"] = $this->filterUsersFiled($users);
+        }
+
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data" => $this->filterClassRooms($classrooms)
+        );
 	}
 
-	    private function getClassroomService() 
-	    {
-	    	return $this->controller->getService('Classroom:Classroom.ClassroomService');
-	    }
+	private function getCategoryService()
+	{
+    	return $this->controller->getService('Taxonomy.CategoryService');
+	}
 
-	    protected function getClassroomOrderService()
-	    {
-	        return $this->controller->getService('Classroom:Classroom.ClassroomOrderService'); 
-	    }
+    private function getClassroomService() 
+    {
+    	return $this->controller->getService('Classroom:Classroom.ClassroomService');
+    }
 
-	    protected function getClassroomReviewService()
-	    {
-	        return $this->controller->getService('Classroom:Classroom.ClassroomReviewService');
-	    }
+    protected function getClassroomOrderService()
+    {
+        return $this->controller->getService('Classroom:Classroom.ClassroomOrderService'); 
+    }
+
+    protected function getClassroomReviewService()
+    {
+        return $this->controller->getService('Classroom:Classroom.ClassroomReviewService');
+    }
 }

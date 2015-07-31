@@ -41,6 +41,14 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         return $couponInfo;
     }
 
+    private function getPayOrderInfo($targetType, $targetId)
+    {
+        if ("course" == $targetType) {
+            $course  = $this->controller->getCourseService()->getCourse($tergetId);
+            $course  = $this->controller->filterCourse($course);
+        }
+    }
+
     public function getPayOrder()
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -48,13 +56,14 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', "您尚未登录");
         }
 
-        $courseId = $this->getParam("courseId");
+        $tergetId = $this->getParam("targetId");
+        $targetType = $this->getParam("targetType");
 
-        if (empty($courseId)) {
-            return $this->createErrorResponse('not_courseId', "没有发现指定课程");
+        if (empty($tergetId)) {
+            return $this->createErrorResponse('not_tergetId', "没有发现购买内容！");
         }
 
-        $course   = $this->controller->getCourseService()->getCourse($courseId);
+        $course  = $this->controller->getCourseService()->getCourse($tergetId);
         $course  = $this->controller->filterCourse($course);
         if ($course["status"] != "published") {
             return $this->createErrorResponse('course_close', "课程已关闭");
@@ -243,7 +252,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             try {
                 $this->checkUserSetPayPassword($user, $fields["payPassword"]);
             } catch(\Exception $e) {
-                return $this->createErrorResponse('error', "修改失败");
+                return $this->createErrorResponse('error', "修改失败, 请在pc端修改支付密码!");
             }
             $fields["coinPayAmount"] = (float) $fields['totalPrice'] * (float) $cashRate;
         }
