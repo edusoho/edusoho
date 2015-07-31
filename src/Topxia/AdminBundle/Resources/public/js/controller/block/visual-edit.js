@@ -292,6 +292,13 @@ define(function(require, exports, module) {
                     var href = $(this).find('.poster-btn').attr('href');
                     var id = href.substr(1,href.length-1);
                     $("#" + id).children('div').each(function(){
+                        $(this).find("input[type=radio]").each(function(){
+
+                            if ($(this).prop('checked')) {
+                                $(this).attr('checked', 'checked');
+                            }
+                        });
+
                         var replace = $(this)[0].outerHTML.replace(/\bdata\[.*?\]\[.*?\]/g,   "data[posters][" + index + "]");
                         $(this).replaceWith(replace);
                     });

@@ -265,7 +265,7 @@ class TestBlockCommand extends BaseCommand
     protected function getOldBlockData($output)
     {
         $output->writeln('<info>获取编辑区老数据</info>');
-        $block = $this->getBlockService()->getBlock(5);
+        $block = $this->getBlockService()->getBlockByCode('jianmo:home_top_banner');
         return $block;
     }
 
