@@ -55,7 +55,14 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
 
+		$this->dispatchEvent("material.create",$material);
+
 		return $material;
+	}
+
+	public function createMaterial($fields)
+	{
+		return $this->getMaterialDao()->addMaterial($fields);
 	}
 
 	public function deleteMaterial($courseId, $materialId)

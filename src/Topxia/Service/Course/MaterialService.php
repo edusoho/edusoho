@@ -5,6 +5,8 @@ interface MaterialService
 {
 	public function uploadMaterial($material);
 
+	public function createMaterial($fields);
+
 	public function deleteMaterial($courseId, $materialId);
 
 	public function deleteMaterialsByLessonId($lessonId);

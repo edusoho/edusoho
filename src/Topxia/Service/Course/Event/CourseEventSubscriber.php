@@ -23,7 +23,9 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.note.delete' => 'onCourseNoteDelete',
             'course.note.liked' => 'onCourseNoteLike',
             'course.note.cancelLike' => 'onCourseNoteCancelLike',
-            'course.update' => 'onCourseUpdate'
+            'course.update' => 'onCourseUpdate',
+            'material.create' => 'onMaterialCreate'
+
         );
     }
 
@@ -194,6 +196,20 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     }
 
+    public function onMaterialCreate(ServiceEvent $event)
+    {
+        $material = $event->getSubject();
+        $courseIds = $this->getCourseService()->findCoursesByParentId($material['courseId']);
+        $lessonIds = $this->getCourseService()->findLessonsByParentId($material['lessonId']);
+        $material['pId'] = $material['id'];
+        unset($material['id']);
+        foreach ($courseIds as $key => $value) {
+           $material['courseId'] = $value;
+           $material['lessonId'] = $lessonIds[$key];
+           $this->getMaterialService()->createMaterial($material);
+        }
+    }
+
     protected function simplifyCousrse($course)
     {
         return array(
@@ -236,6 +252,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getMaterialService()
+    {
+        return ServiceKernel::instance()->createService('Course.MaterialService');
     }
 
 }
