@@ -645,7 +645,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                         unset($headTeacherMember['role'][$key]);
                     }
                 }
-                $member = $headTeacherMember;
                 $member = MemberSerialize::serialize($headTeacherMember);
                 $this->getClassroomMemberDao()->updateMember($member['id'], $member);
             }
@@ -668,7 +667,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if ($member['role'][0] == 'auditor') {
                     $member['role'][0] = 'headTeacher';
                 } else {             
-                    $member['role'] = array('headTeacher');
+                    $member['role'][] = 'headTeacher';
                 }
                 $member = MemberSerialize::serialize($member);
                 $this->getClassroomMemberDao()->updateMember($member['id'], $member);
@@ -693,7 +692,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if ($addMembers[$userId]['role'][0] == 'auditor') {
                     $addMembers[$userId]['role'][0] = 'assistant';
                 } else {             
-                    $addMembers[$userId]['role'] = array('assistant');
+                    $addMembers[$userId]['role'][] = 'assistant';
                 }
                 $addMembers[$userId] = MemberSerialize::serialize($addMembers[$userId]);
                 $this->getClassroomMemberDao()->updateMember($addMembers[$userId]['id'], $addMembers[$userId]);
