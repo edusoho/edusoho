@@ -119,27 +119,32 @@ class AbstractCloudAPI
 
         curl_close($curl);
 
+        $context = array(
+            'CURLINFO' => $curlinfo,
+            'HEADER' => $header,
+            'BODY' => $body,
+        );
+
         if (empty($curlinfo['connect_time'])) {
+            $this->logger && $this->logger->error("[{$requestId}] API_CONNECT_TIMEOUT", $context);
             throw new CloudAPIIOException("Connect api server timeout (url: {$url}).");
         }
 
         if (empty($curlinfo['starttransfer_time'])) {
+            $this->logger && $this->logger->error("[{$requestId}] API_TIMEOUT", $context);
             throw new CloudAPIIOException("Request api server timeout (url:{$url}).");
         }
 
-        if ($curlinfo['http_code'] > 500) {
+        if ($curlinfo['http_code'] >= 500) {
+            $this->logger && $this->logger->error("[{$requestId}] API_RESOPNSE_ERROR", $context);
             throw new CloudAPIIOException("Api server internal error (url:{$url}).");
         }
 
         $result = json_decode($body, true);
+
         if (empty($result)) {
-            $context = array(
-                'CURLINFO' => $curlinfo,
-                'HEADER' => $header,
-                'BODY' => $body,
-            );
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
-            throw new \RuntimeException("Response json decode error:<br> $response");
+            throw new CloudAPIIOException("Api result json decode error: (url:{$url}).");
         }
 
         return $result;

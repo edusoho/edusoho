@@ -5,7 +5,7 @@ use Psr\Log\LoggerInterface;
 
 class FailoverCloudAPI extends AbstractCloudAPI
 {
-    const FAILOVER_COUNT = 5;
+    const FAILOVER_COUNT = 3;
 
     protected $servers = array();
 
