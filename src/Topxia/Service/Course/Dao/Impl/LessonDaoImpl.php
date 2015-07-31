@@ -143,6 +143,11 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getLesson($id);
     }
 
+    public function updateLessonByParentId($parentId,$fields)
+    {
+        return $this->getConnection()->update($this->table, $fields, array('parentId' => $parentId));  
+    }
+
     public function deleteLessonsByCourseId($courseId)
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";

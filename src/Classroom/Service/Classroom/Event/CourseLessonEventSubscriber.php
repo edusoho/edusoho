@@ -56,7 +56,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $course = $context['course'];
 
-        $this->getCourseService()->updateCourseByParentIdAndFields($courseId,array('teacherIds'=>$course['teacherIds']));
+        $this->getCourseService()->updateCourseByParentId($courseId,array('teacherIds'=>$course['teacherIds']));
 
         foreach ($findClassroomsByCourseId as $key => $value) {
             $this->getClassroomService()->updateClassroomTeachers($value);
@@ -66,5 +66,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     private function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 }

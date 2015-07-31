@@ -3,6 +3,7 @@ namespace Topxia\Service\Question\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Common\StringToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -21,21 +22,21 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     {
         $question = $event->getSubject();
         $courseId = explode('-',explode('/', $question['target'])[0])[1];
-        $courseIds = $this->getCourseService()->findCoursesByParentId($courseId);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentId($courseId),'id');
         $num = count(explode('/',$question['target']));
         if($num > 1) {
             $lessonId = explode('-',explode('/', $question['target'])[1])[1];
-            $lessonIds = $this->getCourseService()->findLessonsByParentId($lessonId);
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentId($lessonId),'id');
         }
 
         if($question['parentId']){
-            $questionIds = $this->getQuestionService()->findQuestionsByPId($question['parentId']);
+            $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($question['parentId']),'id');
             $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
         }
         $question['pId'] = $question['id'];
         unset($question['id']);
         if (!empty($courseIds)) {
-            foreach ($courseIds as $key => $value) {
+            foreach ($courseIds as $key => $courseId) {
                 
                 if($question['parentId']){
                     $question['parentId'] = $questionIds[$key];
@@ -43,9 +44,9 @@ class QuestionEventSubscriber implements EventSubscriberInterface
                 }
 
                 if ($num > 1) {
-                    $question['target'] = "course-".$value."/lesson-".$lessonIds[$key]."";
+                    $question['target'] = "course-".$courseId."/lesson-".$lessonIds[$key]."";
                 } else {
-                    $question['target'] = "course-".$value;
+                    $question['target'] = "course-".$courseId;
                 }
                 
                 $this->getQuestionService()->addQuestion($question);
@@ -56,10 +57,10 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     public function onQuestionUpdate(ServiceEvent $event)
     {
         $question = $event->getSubject();
-        $questionIds = $this->getQuestionService()->findQuestionsByPId($question['id']);
+        $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($question['parentId']),'id');
         unset($question['id'],$question['target'],$question['parentId'],$question['pId']);
-        foreach ($questionIds as $key => $value) {
-            $this->getQuestionService()->editQuestion($questionIds[$key],$question);
+        foreach ($questionIds as $value) {
+            $this->getQuestionService()->editQuestion($value,$question);
         }
 
     }
@@ -67,7 +68,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     public function onQuestionDelete(ServiceEvent $event)
     {
          $questionId = $event->getSubject();
-         $questionIds = $this->getQuestionService()->findQuestionsByPId($questionId);
+         $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($question['parentId']),'id');
         foreach ($questionIds as  $value) {
             $question = $this->getQuestionService()->getQuestion($value);
             $this->getQuestionService()->deleteQuestion($value);

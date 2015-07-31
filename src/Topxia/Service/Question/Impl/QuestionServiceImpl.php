@@ -27,9 +27,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
-    public function findQuestionsByPId($pid)
+    public function findQuestionsByPId($pId)
     {
-        return ArrayToolkit::column($this->getQuestionDao()->findQuestionsByPId($pid),"id");
+        return $this->getQuestionDao()->findQuestionsByPId($pId);
     }
 
     public function findQuestionsbyTypes($types, $start, $limit)
@@ -167,9 +167,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->dispatchEvent("question.delete",$id);
     }
 
-    public function deleteQuestionByPid($pId)
+    public function deleteQuestionsByPId($pId)
     {
-       return  $this->getQuestionDao()->deleteQuestionByPid($pId);
+       return  $this->getQuestionDao()->deleteQuestionsByPId($pId);
     }
 
     public function deleteQuestionsByParentId($parentId)

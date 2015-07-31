@@ -66,7 +66,7 @@ interface CourseService
 
 	public function updateCourse($id, $fields);
 
-	public function updateCourseByParentIdAndFields($parentId, $fields);
+	public function updateCourseByParentId($parentId, $fields);
 
 	public function updateCourseCounter($id, $counter);
 
@@ -136,7 +136,7 @@ interface CourseService
 
 	public function updateLesson($courseId, $lessonId, $fields);
 
-	public function editLesson($lessonId, $fields);
+	public function updateLessonByParentId($parentId,$fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
@@ -330,8 +330,11 @@ interface CourseService
 	public function tryLearnCourse($courseId);
 
 	public function increaseLessonQuizCount($lessonId);
+	
 	public function resetLessonQuizCount($lessonId,$count);
+	
 	public function increaseLessonMaterialCount($lessonId);
+	
 	public function resetLessonMaterialCount($lessonId,$count);
 
 	public function setMemberNoteNumber($courseId, $userId, $number);

@@ -34,8 +34,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCoursesByParentId($parentId)
 	{
-		$courses = $this->getCourseDao()->findCoursesByParentId($parentId);
-		return ArrayToolkit::column($courses, 'id');
+		return $this->getCourseDao()->findCoursesByParentId($parentId);
 	}
 
 	public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -88,8 +87,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findLessonsByParentId($parentId)
 	{
-		$lessons = $this->getLessonDao()->findLessonsByParentId($parentId);
-		return ArrayToolkit::column($lessons, 'id');
+		return $this->getLessonDao()->findLessonsByParentId($parentId);
 	}
 
 	public function getCourse($id, $inChanging = false)
@@ -417,9 +415,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($updatedCourse);
 	}
 
-	public function updateCourseByParentIdAndFields($parentId, $fields)
+	public function updateCourseByParentId($parentId, $fields)
 	{
-		return $this->getCourseDao()->updateCourseByParentIdAndFields($parentId, $fields);
+		return $this->getCourseDao()->updateCourseByParentId($parentId, $fields);
 	}
 
 	public function updateCourseCounter($id, $counter)
@@ -1171,9 +1169,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $updatedLesson;
 	}
 
-	public function editLesson($lessonId, $fields)
+	public function updateLessonByParentId($parentId,$fields)
 	{
-		return $this->getLessonDao()->updateLesson($lessonId, $fields);
+		return $this->getLessonDao()->updateLessonByParentId($parentId,$fields);
 	}
 
 	public function deleteLesson($courseId, $lessonId)
@@ -1477,10 +1475,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+
 		$totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
 
 		$memberFields = array();
 		$memberFields['learnedNum'] = count($learns);
+
 		$course = $this->getCourseDao()->getCourse($courseId);
 	    if ($course['serializeMode'] != 'serialize' ) {
 	    	$memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;

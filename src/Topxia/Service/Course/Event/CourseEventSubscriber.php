@@ -3,6 +3,7 @@ namespace Topxia\Service\Course\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Common\StringToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -32,7 +33,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onLessonCreate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $courseIds = $this->getCourseService()->findCoursesByParentId($lesson['courseId']);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentId($lesson['courseId']),'id');
         if (!empty($courseIds)){
             $courseLesson = $this->getCourseService()->getCourseLesson($lesson['courseId'],$lesson['lessonId']);
             $courseLesson['parentId'] = $courseLesson['id'];
@@ -47,14 +48,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     public function onLessonUpdate(ServiceEvent $event)
     {
-       $lesson = $event->getSubject();
-       if (isset($lesson)) {
-            $lessonIds = $this->getCourseService()->findLessonsByParentId($lesson['id']);
-            unset($lesson['id'],$lesson['courseId'],$lesson['parentId']);
-            foreach ($lessonIds as $key => $value) {
-                $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
-            }
-       }    
+        $lesson = $event->getSubject();
+        $parentId = $lesson['id'];
+        unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+        $this->getCourseService()->updateLessonByParentId($parentId,$lesson);
     }
 
     public function onLessonStart(ServiceEvent $event)
@@ -192,22 +189,27 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $course = $event->getSubject();
         $parentId = $course['id'];
         unset($course['id'],$course['parentId'],$course['locked']);
-        $this->getCourseService()->updateCourseByParentIdAndFields($parentId,$course);
+        $this->getCourseService()->updateCourseByParentId($parentId,$course);
 
     }
 
     public function onMaterialCreate(ServiceEvent $event)
     {
         $material = $event->getSubject();
-        $courseIds = $this->getCourseService()->findCoursesByParentId($material['courseId']);
-        $lessonIds = $this->getCourseService()->findLessonsByParentId($material['lessonId']);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentId($material['courseId']),'id');
+        $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentId($material['lessonId']),'id');
         $material['pId'] = $material['id'];
+        $lesson = $this->getCourseService()->getLesson($material['lessonId']);
+        $parentId = $lesson['id'];
         unset($material['id']);
+        unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
         foreach ($courseIds as $key => $value) {
            $material['courseId'] = $value;
            $material['lessonId'] = $lessonIds[$key];
            $this->getMaterialService()->createMaterial($material);
         }
+        $this->getCourseService()->updateLessonByParentId($parentId,$lesson);
+
     }
 
     protected function simplifyCousrse($course)

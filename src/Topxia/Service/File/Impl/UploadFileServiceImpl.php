@@ -139,11 +139,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $file; 
     }
 
-    public function createFile($file)
-    {
-        $this->getUploadFileDao()->addFile($file);
-    }
-
     public function renameFile($id, $newFilename)
     {
         $this->getUploadFileDao()->updateFile($id,array('filename'=>$newFilename));
@@ -170,11 +165,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         foreach ($ids as $id) {
             $this->deleteFile($id);
         }
-    }
-
-    public function deleteFilesByPid($pId)
-    {
-        return $this->getUploadFileDao()->deleteFilesByPid($pId);
     }
 
     public function saveConvertResult($id, array $result = array())

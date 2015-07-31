@@ -23,7 +23,7 @@ interface TestpaperService
 
     public function updateTestpaper($id, $fields);
 
-    public function updateTestpaperByPid($pId,$fields);
+    public function updateTestpaperByPId($pId,$fields);
 
     public function publishTestpaper($id);
 
@@ -31,7 +31,7 @@ interface TestpaperService
 
     public function deleteTestpaper($id);
 
-    public function deleteTestpaperByPid($pId);
+    public function deleteTestpaperByPId($pId);
 
     public function buildTestpaper($id, $options);
 
@@ -39,7 +39,7 @@ interface TestpaperService
 
     public function canLookTestpaper($resultId);
 
-    public function findTestpaperIdsByPid($pId);
+    public function findTestpaperIdsByPId($pId);
 
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 
@@ -107,5 +107,5 @@ interface TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items);
 
-    public function updateTestpaperItemsByPidItem($pId, $item);
+    public function updateTestpaperItemsByPId($pId, $item);
 }

@@ -35,6 +35,8 @@ interface LessonDao
 
     public function updateLesson($id, $fields);
 
+    public function updateLessonByParentId($parentId,$fields);
+
     public function deleteLesson($id);
 
     public function deleteLessonsByCourseId($courseId);

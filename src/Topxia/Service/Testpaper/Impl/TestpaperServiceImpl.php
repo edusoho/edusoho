@@ -72,9 +72,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    public function updateTestpaperByPid($pId,$fields)
+    public function updateTestpaperByPId($pId,$fields)
     {
-        return $this->getTestpaperDao()->updateTestpaperByPid($pId,$fields);
+        return $this->getTestpaperDao()->updateTestpaperByPId($pId,$fields);
     }
 
     protected function filterTestpaperFields($fields, $mode = 'create')
@@ -159,7 +159,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $this->dispatchEvent("testpaper.delete",$id);
     }
 
-    public function deleteTestpaperByPid($pId)
+    public function deleteTestpaperByPId($pId)
     {
        $this->getTestpaperDao()->deleteTestpaperByParentId($parentId); 
     }
@@ -840,9 +840,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
     }
 
-    public function updateTestpaperItemsByPidItem($pId, $item)
+    public function updateTestpaperItemsByPId($pId, $item)
     {
-        return $this->getTestpaperItemDao()->updateTestpaperItemsByPidItem($pId, $item);
+        return $this->getTestpaperItemDao()->updateTestpaperItemsByPId($pId, $item);
     }
 
     public function canTeacherCheck($id)
@@ -924,9 +924,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpaperIdsByPid($pId)
+    public function findTestpaperIdsByPId($pId)
     {
-        return ArrayToolkit::column($this->getTestpaperDao()->findTestpaperIdsByPid($pId),'id');
+        return $this->getTestpaperDao()->findTestpaperIdsByPId($pId);
     }
 
     public function findTeacherTestpapersByTeacherId ($teacherId)

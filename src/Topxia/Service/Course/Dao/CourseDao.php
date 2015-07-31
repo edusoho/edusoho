@@ -28,7 +28,7 @@ interface CourseDao
 
     public function updateCourse($id, $fields);
 
-    public function updateCourseByParentIdAndFields($parentId, $fields);
+    public function updateCourseByParentId($parentId, $fields);
 
     public function deleteCourse($id);
     

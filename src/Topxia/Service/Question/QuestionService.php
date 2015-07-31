@@ -11,7 +11,7 @@ interface QuestionService
 
     public function findQuestionsByParentId($id);
 
-    public function findQuestionsByPId($pid);
+    public function findQuestionsByPId($pId);
 
     public function findQuestionsByParentIds($ids);
 
@@ -41,7 +41,7 @@ interface QuestionService
 
     public function deleteQuestion($id);
 
-    public function deleteQuestionByPid($pId);
+    public function deleteQuestionsByPId($pId);
 
     public function deleteQuestionsByParentId($parentId);
 

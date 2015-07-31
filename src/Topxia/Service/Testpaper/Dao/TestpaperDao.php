@@ -16,13 +16,13 @@ interface TestpaperDao
 
     public function updateTestpaper($id, $fields);
    
-    public function updateTestpaperByPid($pId,$fields);
+    public function updateTestpaperByPId($pId,$fields);
 
     public function deleteTestpaper($id);
 
-    public function deleteTestpaperByPid($pId);
+    public function deleteTestpaperByPId($pId);
 
     public function findTestpaperByTargets(array $targets);
 
-    public function findTestpaperIdsByPid($pId);
+    public function findTestpaperIdsByPId($pId);
 }

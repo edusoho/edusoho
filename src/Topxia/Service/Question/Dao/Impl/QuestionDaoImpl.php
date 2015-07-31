@@ -38,7 +38,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
-    public function findQuestionsByPId($pid)
+    public function findQuestionsByPId($pId)
     {
         $sql ="SELECT * FROM {$this->table} WHERE pId = ?";
         return $this->getConnection()->fetchAll($sql, array($pid));
@@ -173,7 +173,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function deleteQuestionByPid($pId)
+    public function deleteQuestionsByPId($pId)
     {
         return $this->getConnection()->delete($this->table, array('pId' => $pId));
     }

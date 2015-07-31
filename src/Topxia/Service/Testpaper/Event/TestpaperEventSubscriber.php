@@ -7,6 +7,7 @@ use Topxia\WebBundle\Util\TargetHelper;
 
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 class TestpaperEventSubscriber implements EventSubscriberInterface
 {
@@ -18,9 +19,9 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             'testpaper.create' => 'onTestpaperCreate',
             'testpaper.update' => 'onTestpaperUpdate',
             'testpaper.delete' => 'onTestpaperDelete',
-            'testpaper.items.create' => 'onTestpaperItemsCreate',
-            'testpaper.items.update' => 'onTestpaperItemsUpdate',
-            'testpaper.items.delete' => 'onTestpaperItemsDelete'
+            'testpaper.items.create' => 'onTestpaperItemCreate',
+            'testpaper.items.update' => 'onTestpaperItemUpdate',
+            'testpaper.items.delete' => 'onTestpaperItemDelete'
         );
     }
 
@@ -49,15 +50,14 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $items = $event->getArgument('items');
         $pId = $testpaper['id'];
         $courseId = explode('-',$testpaper['target'])[1];
-        $courseIds = $this->getCourseService()->findCoursesByParentId($courseId);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentId($courseId),'id');
         $testpaper['pId'] = $testpaper['id'];
 
         unset($testpaper['id']);        
         foreach ($courseIds as  $value) {
             $testpaper['target'] = "course-".$value;
             $testpaperId = $this->getTestpaperService()->addTestpaper($testpaper);
-            foreach($items as $k=>$item)
-            {
+            foreach($items as $item) {
                 $item['pId'] = $item['id'];
                 unset($item['id']);
                 $item['testId'] = $testpaperId['id'];
@@ -67,7 +67,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
         $testpaper = $this->getTestpaperService()->getTestpaper($pId);
         $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
-        $this->getTestpaperService()->updateTestpaperByPid($testpaper['id'],$fields);
+        $this->getTestpaperService()->updateTestpaperByPId($testpaper['id'],$fields);
     }
 
 
@@ -76,24 +76,24 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $testpaper = $event->getSubject();
         $pId = $testpaper['id'];
         unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['metas'],$testpaper['pId']);
-        $this->getTestpaperService()->updateTestpaperByPid($pId,$testpaper);
+        $this->getTestpaperService()->updateTestpaperByPId($pId,$testpaper);
     }
 
     public function onTestpaperDelete(ServiceEvent $event)
     {
        $testpaperId = $event->getSubject();
-       $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByPid($testpaperId);
-       $this->getTestpaperService()->deleteTestpaperByPid($testpaperId);
+       $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperIdsByPId($testpaperId),'id');
+       $this->getTestpaperService()->deleteTestpaperByPId($testpaperId);
        foreach ($testpaperIds as $value) {
           $this->getTestpaperService()->deleteTestpaperItemByTestId($value);
        }
     }
 
-    public function onTestpaperItemsCreate(ServiceEvent $event)
+    public function onTestpaperItemCreate(ServiceEvent $event)
     {
       $item = $event->getSubject();
       $item['pId'] = $item['id'];
-      $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByPid($item['testId']);
+      $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperIdsByPId($item['testId']),'id');
       unset($item['id']);
       foreach ($testpaperIds as $testpaperId) {
         $item['testId'] = $testpaperId;
@@ -101,18 +101,18 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
       }
     }
 
-    public function onTestpaperItemsUpdate(ServiceEvent $event)
+    public function onTestpaperItemUpdate(ServiceEvent $event)
     {
         $testpaper = $event->getSubject();
         $items = $event->getArgument('items');
         //判断是否是一维数组
         if(array_key_exists('id', $items)){
-            $this->getTestpaperService()->updateTestpaperItemsByPidItem($items['id'],array('seq'=>$items['seq']));
+            $this->getTestpaperService()->updateTestpaperItemsByPId($items['id'],array('seq'=>$items['seq']));
             return;
         }
 
         //重新生成题目
-        $testpaperIds = $this->getTestpaperService()->findTestpaperIdsByPid($items[0]['testId']);
+        $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperIdsByPId($items[0]['testId']),'id');
         foreach ($testpaperIds as $value) {
             $this->getTestpaperService()->deleteTestpaperItemByTestId($value);
             foreach ($items as $item) {
@@ -125,10 +125,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
         $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
-        $this->getTestpaperService()->updateTestpaperByPid($testpaper['id'],$fields);
+        $this->getTestpaperService()->updateTestpaperByPId($testpaper['id'],$fields);
     }
 
-    public function onTestpaperItemsDelete(ServiceEvent $event)
+    public function onTestpaperItemDelete(ServiceEvent $event)
     {
         $item = $event->getSubject();
         $this->getTestpaperService()->deleteTestpaperItemByPId($item['id']);
