@@ -76,7 +76,7 @@ class EduCloudController extends BaseController
                 && ($this->calStrlen($dataUserPosted['name']) <= 16)
             ) {
                 $api = CloudAPIFactory::create('root');
-                $result = $api->post("/sms/{$this->getAccessKey()}/apply", array('name' => $dataUserPosted['name']));
+                $result = $api->post("/sms/{$api->getAccessKey()}/apply", array('name' => $dataUserPosted['name']));
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
                     $this->setCloudSmsKey('sms_school_candidate_name', $dataUserPosted['name']);
                     $this->setCloudSmsKey('show_message', 'on');
