@@ -35,7 +35,7 @@ class CloudSettingController extends BaseController
 
     public function keyInfoAction(Request $request)
     {
-        $api = CloudAPIFactory::create('leaf');
+        $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
