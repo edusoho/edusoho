@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %} 支付中心 - {{ parent() }}{% endblock %}
-{% set script_controller = 'pay/turn' %}
+{% set script_controller = 'pay/success-redirect' %}
 
 {% block content %}
 <div class="container order-pay pay-center">
@@ -33,7 +33,7 @@
       {#order-pay-state error  #}
       <div class="order-pay-state">
         <i class="es-icon  es-icon-iccheckcircleblack24px"></i>
-        <p class="js-turn" data-url="www.baidu.com">订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
+        <p class="js-turn" data-url= {{ goto }}>订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
 {#         <i class="es-icon  es-icon-icon_close_circle"></i>
         <p>订单支付失败，将在 3 秒后跳转到支付页面...</p> #}
       </div>

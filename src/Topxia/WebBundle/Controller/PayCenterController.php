@@ -140,7 +140,9 @@ class PayCenterController extends BaseController
 
         $goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
 
-        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig');
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig',array(
+            'goto'=> $goto,
+            ));
     }
 
     public function payErrorAction(Request $request)
@@ -195,9 +197,11 @@ class PayCenterController extends BaseController
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
         $router = $processor->getRouter();
+        $router = $this->generateUrl($router, array('id' => $order['targetId']));
 
-        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig');
-        //return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig',array(
+            'goto'=> $router,
+            ));
     }
 
     public function payPasswordCheckAction(Request $request)
