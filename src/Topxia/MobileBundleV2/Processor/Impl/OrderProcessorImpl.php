@@ -43,10 +43,30 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     private function getPayOrderInfo($targetType, $targetId)
     {
+        $payOrderInfo = array();
         if ("course" == $targetType) {
-            $course  = $this->controller->getCourseService()->getCourse($tergetId);
-            $course  = $this->controller->filterCourse($course);
+            $course  = $this->controller->getCourseService()->getCourse($targetId);
+            if ($course["status"] != "published") {
+                return $this->createErrorResponse('course_close', "课程已关闭");
+            }
+            $payOrderInfo = array(
+                'title' => $course['title'],
+                'price' => $course['price'],
+                'picture' =>$course['middlePicture']
+            );
+        } else if ("classroom" == $targetType) {
+            $classroom = $this->getClassroomService()->getClassRoom($targetId);
+            if (empty($classroom)) {
+                return $this->createErrorResponse('no_classroom', "no_classroom");
+            }
+            $payOrderInfo = array(
+                'title' => $classroom['title'],
+                'price' => $classroom['price'],
+                'picture' =>$classroom['middlePicture']
+            );
         }
+
+        return $payOrderInfo;
     }
 
     public function getPayOrder()
@@ -56,24 +76,17 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('not_login', "您尚未登录");
         }
 
-        $tergetId = $this->getParam("targetId");
+        $targetId = $this->getParam("targetId", 0);
         $targetType = $this->getParam("targetType");
 
-        if (empty($tergetId)) {
+        if (empty($targetId)) {
             return $this->createErrorResponse('not_tergetId', "没有发现购买内容！");
         }
 
-        $course  = $this->controller->getCourseService()->getCourse($tergetId);
-        $course  = $this->controller->filterCourse($course);
-        if ($course["status"] != "published") {
-            return $this->createErrorResponse('course_close', "课程已关闭");
-        }
-
-        foreach ($course as $key => $value) {
-            if (!in_array($key, array(
-                "id", "title", "price", "originPrice", "originCoinPrice", "middlePicture", "coinPrice"))) {
-                unset($course[$key]);
-            }
+        $payOrderInfo = $this->getPayOrderInfo($targetType, $targetId);
+        
+        if (isset($payOrderInfo['error'])) {
+            return $this->createErrorResponse('error', "没有发现购买内容！");
         }
 
         $userProfile = $this->controller->getUserService()->getUserProfile($user["id"]);
@@ -93,9 +106,9 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         return array(
             "userProfile" => $userProfile,
-            "course" => $course,
+            "orderInfo" => $payOrderInfo,
             "coinEnabled" => $coinEnabled,
-            "coinPay" => (float)$course["price"] * (float)$cashRate,
+            "coinPay" => (float)$payOrderInfo["price"] * (float)$cashRate,
             "isInstalledCoupon" => $this->controller->isinstalledPlugin("Coupon")
             );
     }
@@ -642,5 +655,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         }
         $result['status'] = 'ok';
         return $result;
+    }
+
+    private function getClassroomService() 
+    {
+        return $this->controller->getService('Classroom:Classroom.ClassroomService');
     }
 }
