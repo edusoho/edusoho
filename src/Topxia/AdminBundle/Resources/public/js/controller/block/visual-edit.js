@@ -12,8 +12,9 @@ define(function(require, exports, module) {
             var selector = $(".poster-btn");
             initFirstTab(selector);
             bindSortPoster();
+            $('.colorpicker-input').colorpicker();
         }
-        $('.colorpicker-input').colorpicker();
+
         $('#btn-tabs .btn').click(function(){
             $(this).removeClass('btn-default').addClass('btn-primary')
                             .siblings('.btn-primary').removeClass('btn-primary').addClass('btn-default');
@@ -292,8 +293,11 @@ define(function(require, exports, module) {
                     var href = $(this).find('.poster-btn').attr('href');
                     var id = href.substr(1,href.length-1);
                     $("#" + id).children('div').each(function(){
-                        $(this).find("input[type=radio]").each(function(){
+                        $(this).find('input[type=text]').each(function(element){
+                            $(this).attr('value', $(this).val());
+                        });
 
+                        $(this).find("input[type=radio]").each(function(){
                             if ($(this).prop('checked')) {
                                 $(this).attr('checked', 'checked');
                             }
@@ -310,6 +314,7 @@ define(function(require, exports, module) {
                 });
                 selectBtn = $item.find('.poster-btn');
                 initFirstTab(selectBtn);
+                $('.colorpicker-input').colorpicker();
             }
         });
 
