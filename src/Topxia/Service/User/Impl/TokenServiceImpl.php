@@ -81,6 +81,7 @@ class TokenServiceImpl extends BaseService implements TokenService
         return ;
     }
 
+
     protected function _makeTokenValue($length)
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

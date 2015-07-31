@@ -125,7 +125,7 @@ class SettingsController extends BaseController
 		if ($result == 'success'){
 			$response = array('success' => true, 'message' => '');
 		} else {
-			$response = array('success' => false, 'message' => '用户名已存在');
+			$response = array('success' => false, 'message' => $message);
 		}
 	
 		return $this->createJsonResponse($response);

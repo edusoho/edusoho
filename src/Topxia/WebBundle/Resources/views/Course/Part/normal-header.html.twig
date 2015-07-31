@@ -37,7 +37,16 @@
 {% macro info(course, member, userVipStatus) %}
   {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   <div class="course-info">
-    <h2 class="title">{{ course.title }}</h2>
+    <h2 class="title">
+      {{ course.title }}
+      <span class="es-qrcode top" data-url="{{path('common_learn_qrcode',{courseId: course.id,type:"course-qrcode"})}}">
+        <i class="es-icon es-icon-qrcode"></i>
+        <span class="qrcode-popover">
+          <img src="" alt="">
+          扫二维码继续学习
+        </span>
+      </span>
+    </h2>
     <div class="subtitle">{{ course.subtitle }}</div>
     <div class="metas">
       <div class="score">

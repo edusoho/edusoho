@@ -112,6 +112,9 @@ class LoginBindController extends BaseController
             goto response;
         }
 
+        if (!empty($oauthUser['name']) && !empty($oauthUser['email'])) {
+            $this->getUserService()->setupAccount($user['id']);
+        }
         $this->authenticateUser($user);
         $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
         if (!$response['_target_path']) {
@@ -193,6 +196,9 @@ class LoginBindController extends BaseController
         if (!empty($setData['nickname']) && !empty($setData['email'])) {
             $registration['nickname'] = $setData['nickname'];
             $registration['email'] = $setData['email'];
+        } elseif (!empty($oauthUser['name']) && !empty($oauthUser['email'])) {
+            $registration['nickname'] = $oauthUser['name'];
+            $registration['email'] = $oauthUser['email'];
         } else {
             $nicknames = array();
             $nicknames[] = $oauthUser['name'];
