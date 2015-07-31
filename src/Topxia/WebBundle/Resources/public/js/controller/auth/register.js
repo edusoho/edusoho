@@ -154,6 +154,8 @@ define(function(require, exports, module) {
                     display: '短信验证码'           
                 });
 
+                validator.removeItem('[name="captcha_num"]');
+
                 $form.on('click','.js-sms-send',function(e){
                     var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
                         
@@ -165,6 +167,18 @@ define(function(require, exports, module) {
                 })
                 
             }else{
+
+                validator.addItem({
+                    element: '[name="captcha_num"]',
+                    required: true,
+                    rule: 'alphanumeric remote',
+                    onItemValidated: function(error, message, eleme) {
+                        if (message == "验证码错误"){
+                            $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                        }
+                    }                
+                });
+                
                 validator.removeItem('[name="em_sms_code"]');
             }
         }

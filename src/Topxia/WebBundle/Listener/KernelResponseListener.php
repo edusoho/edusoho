@@ -32,7 +32,7 @@ class KernelResponseListener
         $auth = $this->getSettingService()->get('auth');
         
         if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) 
-            && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])) {
+            && isset($auth['fill_userinfo_after_login']) && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])) {
 
             $whiteList = array(
                 '/fill/userinfo','/logout','/register/mobile/check',

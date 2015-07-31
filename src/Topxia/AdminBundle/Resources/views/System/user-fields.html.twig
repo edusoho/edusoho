@@ -129,6 +129,7 @@
       <div class="controls col-md-8 col-md-offset-3" id="show-checked-fields-list">
         <div class="pull-left">
           {% for sort in authSetting.registerSort|default([]) %}
+            {% if sort == 'emailOrMobile' %}{% set sort = 'email' %}{% endif %}
             {% set userCustomField = userFields[sort]|default(null) %}
             {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
             {% if userCustomField %}
@@ -157,6 +158,7 @@
 
             {% if authSetting.registerFieldNameArray|default(null) %}
               {% for field in authSetting.registerFieldNameArray %}
+                {% if field == 'emailOrMobile' %}{% set field = 'email' %}{% endif %}
                 {% set userCustomField = userFields[field]|default(null) %}
                 <li class="list-group-item clearfix" data-role="item" >
                   <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;

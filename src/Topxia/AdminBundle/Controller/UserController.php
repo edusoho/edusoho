@@ -135,7 +135,6 @@ class UserController extends BaseController
         $userData['nickname'] = $formData['nickname'];
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
-        $userData['source'] = 'import';
         
         return $userData;
     }

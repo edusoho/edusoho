@@ -268,13 +268,11 @@ class UserSettingController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth = $this->getSettingService()->get('auth', array());
+
         $userPartner = $this->getSettingService()->get('user_partner', array());
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
-        $userFieldNames = ArrayToolkit::column($userFields,'fieldName');
-        $auth['registerFieldNameArray'] = array_unique(array_merge($auth['registerFieldNameArray'], $userFieldNames));
-        $courseSetting['userinfoFieldNameArray'] = array_unique(array_merge($courseSetting['userinfoFieldNameArray'], $userFieldNames));
-        
+
         if ($request->getMethod() == 'POST') {
             
             $courseSetting['buy_fill_userinfo'] = $request->request->get('buy_fill_userinfo');
@@ -388,6 +386,8 @@ class UserSettingController extends BaseController
         }
 
         $field = $this->getUserFieldService()->addUserField($field);
+
+        $this->changeUserInfoFields($field, $type="update");
 
         if ($field == false) {
             $this->setFlashMessage('danger', '已经没有可以添加的字段了!');

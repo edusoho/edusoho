@@ -25,6 +25,8 @@ define(function(require, exports, module) {
             smsType = 'sms_registration';
         }
 
+        $('#captcha-form').find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+
         var captchaModal = new CaptchaModal({
             element: '#captcha-form',
             dataTo: dataTo,
