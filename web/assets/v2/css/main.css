@@ -5130,7 +5130,6 @@ a:focus {
   position: relative;
   float: left;
   width: 33.3%;
-  background: #9e9e9e;
   text-align: center;
   line-height: 46px;
   color: #fff;
@@ -5166,6 +5165,16 @@ a:focus {
 }
 .order-nav .on b {
   border-left-color: #37b97d;
+}
+.order-nav .on.error {
+  background: #e74c3c;
+}
+.order-nav .on.error span {
+  border: 23px solid #e74c3c;
+  border-left-color: #eeeff0;
+}
+.order-nav .on.error b {
+  border-left-color: #e74c3c;
 }
 .text-line {
   position: relative;
@@ -10721,6 +10730,26 @@ textarea {
 }
 .paystyle .order-detail-bg .check img {
   width: 100%;
+}
+.order-pay-state {
+  padding: 40px 300px;
+  margin-bottom: 15px;
+  color: #659f13;
+  border: 1px solid #cddfb4;
+  background-color: #f2fae3;
+  font-size: 22px;
+  text-align: center;
+}
+.order-pay-state .es-icon {
+  font-size: 70px;
+}
+.order-pay-state p {
+  margin: 40px 0 60px 0;
+}
+.order-pay-state.error {
+  color: #e74c3c;
+  border: 1px solid #f0c7bd;
+  background-color: #fff1f0;
 }
 .pemember-password-wrap {
   position: relative;
