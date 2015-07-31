@@ -85,7 +85,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 				userId : $scope.user.id,
 				toId : $stateParams.userId
 			}, function(data) {
-				$scope.isFollower = true == data ? true : false;
+				$scope.isFollower = (true == data) ? true : false;
 			});
 		}
 	});
