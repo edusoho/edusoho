@@ -661,6 +661,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $toId = $this->getParam('toId');
         $followingIds = array($toId);
         $result = $this->controller->getUserService()->filterFollowingIds($userId, $followingIds);
+
         if(!$result || empty($result)){
             return false;
         }else{
