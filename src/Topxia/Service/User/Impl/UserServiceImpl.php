@@ -398,10 +398,10 @@ class UserServiceImpl extends BaseService implements UserService
         $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
-        $user['type'] = $type;
+        $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
-        if ($type == 'default') {
+        if ($type == 'default' && (!isset($registration['type']) or $registration['type'] != 'import')) {
             if (isset($registration['verifiedMobile'])) {
                 $user['type'] = 'web_mobile';
             } else {
