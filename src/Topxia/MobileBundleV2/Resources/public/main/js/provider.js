@@ -218,7 +218,7 @@ appProvider.provider('appRouter', function($stateProvider) {
 	            });
 
 	            $stateProvider.state('coursePay', {
-	              url: "/coursepay/:courseId",
+	              url: "/coursepay/:targetId/:targetType",
 	              views: {
 	                'rootView': {
 	                  templateUrl: app.viewFloder  + "view/course_pay.html",

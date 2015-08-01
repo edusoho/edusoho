@@ -158,7 +158,8 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 
 	this.loadOrder = function() {
 		OrderService.getPayOrder({
-			courseId : $stateParams.courseId
+			targetType : $stateParams.targetType,
+			targetId : $stateParams.targetId
 		}, function(data) {
 			$scope.data = data;
 			self.changePrice($scope.payMode);
@@ -174,7 +175,7 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 			$scope.payPrice = $scope.data.coinPay;
 		} else {
 			var couponPrice = $scope.coupon ? $scope.coupon.decreaseAmount : 0;
-			$scope.payPrice = $scope.data.course.price - couponPrice;
+			$scope.payPrice = $scope.data.orderInfo.price - couponPrice;
 		}
 	}
 
@@ -200,7 +201,7 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		OrderService.createOrder({
 			payment : payment,
 			payPassword : payPassword ? payPassword : "",
-			totalPrice : $scope.data.course.price,
+			totalPrice : $scope.data.orderInfo.price,
 			couponCode : $scope.formData ? $scope.formData.code : "",
 			targetType : "course",
 			targetId : $stateParams.courseId

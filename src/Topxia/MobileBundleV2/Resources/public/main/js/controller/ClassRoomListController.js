@@ -1,4 +1,5 @@
 app.controller('ClassRoomListController', ['$scope', '$stateParams', '$state', 'CourseUtil', 'ClassRoomService', 'CategoryService', ClassRoomListController]);
+
 function ClassRoomListController($scope, $stateParams, $state, CourseUtil, ClassRoomService, CategoryService)
 {
     $scope.categoryTab = {

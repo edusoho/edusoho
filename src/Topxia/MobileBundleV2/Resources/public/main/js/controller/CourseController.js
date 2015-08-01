@@ -4,7 +4,6 @@ app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseServ
 
 function CourseReviewController($scope, $stateParams, CourseService, $window)
 {
-
   var self = this;
   $scope.canLoad = true;
   $scope.start = $scope.start || 0;
@@ -156,7 +155,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
       if ($scope.course.price <= 0) {
         self.payCourse($scope.course.price, "course", $stateParams.courseId);
       } else {
-        $state.go("coursePay", { courseId : $scope.course.id });
+        $state.go("coursePay", { targetId : $scope.course.id, targetType : 'course' });
       }
     };
 
@@ -353,7 +352,7 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
       if ($scope.classRoom.price <= 0) {
         self.payCourse($scope.classRoom.price, "classroom", $stateParams.classRoomId);
       } else {
-        $state.go("coursePay", { courseId : $scope.course.id });
+        $state.go("coursePay", { targetId : $scope.classRoom.id, targetType : 'classroom' });
       }
     };
 
