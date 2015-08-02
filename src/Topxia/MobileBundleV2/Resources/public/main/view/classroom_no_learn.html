@@ -4,12 +4,15 @@
             <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
             <p class="mask">
                 <a class="rating-body">
-                    <span>
-		      		<i class="iconfont" ng-class="classRoom.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
-		      	</span>
-                    <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
+                    <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
+                        {{ service.name }}
+                    </span>
                 </a>
-                <a class="right">{{ classRoom.studentNum }} 人在学</a>
+                <a class="right">
+                    <span>
+                        <i class="iconfont icon-favorfill"></i>
+                        <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
+                    </span>{{ classRoom.studentNum }} 人在学</a>
             </p>
         </div>
         <div class="item-body">
@@ -24,9 +27,7 @@
                 <s class="price-block">{{ classRoom.originPrice | formatPrice }}</s>
                 <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
             </p>
-            <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
-                {{ service.name }}
-            </span>
+            
         </div>
     </div>
     <div class="ui-tab tab-top" ui-tab>

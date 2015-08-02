@@ -421,7 +421,6 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
     }, function(data) {
       
       $scope.vipLevels = data.vipLevels;
-      $scope.ratingArray = AppUtil.createArray(5);
       $scope.member = data.member;
       $scope.isFavorited = data.userFavorited;
       $scope.discount = data.discount;
