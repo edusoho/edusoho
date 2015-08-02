@@ -187,20 +187,20 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		$id = $this->getParam("id");
 		$classroom = $this->getClassroomService()->getClassroom($id);
 
-        		$user = $this->controller->getUserByToken($this->request);
-        		$userId = empty($user) ? 0 : $user["id"];
-        		$member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
+        $user = $this->controller->getUserByToken($this->request);
+        $userId = empty($user) ? 0 : $user["id"];
+        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
 		$vipLevels = array();
-	        	if ($this->controller->setting('vip.enabled')) {
-	            	$vipLevels = $this->controller->getLevelService()->searchLevels(array(
-	                		'enabled' => 1
-	            	), 0, 100);
-	        	}
+    	if ($this->controller->setting('vip.enabled')) {
+        	$vipLevels = $this->controller->getLevelService()->searchLevels(array(
+            		'enabled' => 1
+        	), 0, 100);
+    	}
 
-	        	$checkMemberLevelResult = null;
-	        	if ($this->controller->setting('vip.enabled')) {
-	            	$classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->controller->getLevelService()->getLevel($classroom['vipLevelId']) : null;
-	        	}
+    	$checkMemberLevelResult = null;
+    	if ($this->controller->setting('vip.enabled')) {
+        	$classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->controller->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+    	}
 		return array(
 			"classRoom" => $this->filterClassRoom($classroom, false),
 			"member" => $member,
@@ -212,12 +212,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	private function filterClassRoom($classroom, $isList = true)
 	{
 		if (empty($classroom)) {
-	            	return null;
-	        	}
+        	return null;
+    	}
 
-	        	$classrooms = $this->filterClassRooms(array($classroom), $isList);
+    	$classrooms = $this->filterClassRooms(array($classroom), $isList);
 
-	        	return current($classrooms);
+    	return current($classrooms);
 	}
 
 	public function filterClassRooms($classrooms, $isList = true)
@@ -228,11 +228,19 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
 		$self = $this->controller;
 		$container = $this->getContainer();
+
+		$teacherIds = array();
+        foreach ($classrooms as $classroom) {
+            $teacherIds = array_merge($teacherIds, $classroom['teacherIds']);
+        }
+        $teachers = $this->controller->getUserService()->findUsersByIds($teacherIds);
+        $teachers = $this->controller->simplifyUsers($teachers);
+
 		return array_map(function($classroom) use ($self, $container, $isList) {
 
 			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
-            		$classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
-            		$classroom['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
+            $classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
+            $classroom['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
 			
 			$classroom['recommendedTime'] = date("c", $classroom['recommendedTime']);
 			$classroom['createdTime'] = date("c", $classroom['createdTime']);
@@ -240,6 +248,15 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 				$classroom["about"] = mb_substr($classroom["about"], 0, 20, "utf-8");
 			}
 			$classroom['about'] = $self->convertAbsoluteUrl($container->get('request'), $classroom['about']);
+			
+			$classroom['teachers'] = array();
+            foreach ($classroom['teacherIds'] as $teacherId) {
+                if (isset($teachers[$teacherId])) {
+                    $classroom['teachers'][] = $teachers[$teacherId];
+                }
+            }
+            unset($classroom['teacherIds']);
+
 			return $classroom;
 		}, $classrooms);
 	}
