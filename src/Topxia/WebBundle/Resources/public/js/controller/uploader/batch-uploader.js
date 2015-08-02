@@ -12,13 +12,21 @@ define(function(require, exports, module) {
             initUrl: null,
             finishUrl: null,
             uploadUrl: null,
+            accept: null,
             uploadToken: null
         },
 
         setup: function() {
+            var accept = {};
+            accept.title = '文件';
+            accept.extensions = this.get('accept')['extensions'].join(',');
+            accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
+
+            console.log(accept);
             var defaults = {
 
                 dnd: this.element.find('.balloon-uploader-body'),
+                accept: accept,
 
                 // 不压缩image
                 resize: false,
@@ -28,7 +36,7 @@ define(function(require, exports, module) {
 
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-                pick: this.element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      .find('.file-pick-btn') ,
+                pick: this.element.find('.file-pick-btn') ,
                 chunked: true,
                 chunkSize: 1024000,
                 chunkRetry: 2,

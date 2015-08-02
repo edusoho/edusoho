@@ -14,7 +14,8 @@
       {% if type == 'courselesson' %}
         <button class="btn btn-info btn-sm pull-right files-batch-upload-btn"
             data-toggle="modal" data-target="#modal"
-            data-url="{{ path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}">
+            data-url="{{ path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
+            >
           <i class="glyphicon glyphicon-cloud-upload"></i> 上传课时文件
         </button>
       {% elseif type == 'coursematerial' %}

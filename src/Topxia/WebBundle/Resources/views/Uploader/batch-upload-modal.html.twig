@@ -182,6 +182,7 @@
   <div class="balloon-uploader" id="batch-uploader"
     data-init-url="{{ path('uploader_init', {token:token}) }}"
     data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+    data-accept="{{ accept|json_encode }}"
   >
     <div class="balloon-uploader-heading">上传文件</div>
     <div class="balloon-uploader-body">
