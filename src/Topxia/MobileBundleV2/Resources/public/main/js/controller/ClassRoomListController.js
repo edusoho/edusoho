@@ -1,6 +1,18 @@
-app.controller('ClassRoomListController', ['$scope', '$stateParams', '$state', 'CourseUtil', 'ClassRoomService', 'CategoryService', ClassRoomListController]);
+app.controller(
+  'ClassRoomListController', 
+  [
+    '$scope', 
+    '$stateParams', 
+    '$state', 
+    'CourseUtil', 
+    'ClassRoomService', 
+    'CategoryService', 
+    'ClassRoomUtil',
+     ClassRoomListController
+  ]
+);
 
-function ClassRoomListController($scope, $stateParams, $state, CourseUtil, ClassRoomService, CategoryService)
+function ClassRoomListController($scope, $stateParams, $state, CourseUtil, ClassRoomService, CategoryService, ClassRoomUtil)
 {
     $scope.categoryTab = {
       category : "分类",
@@ -37,9 +49,9 @@ function ClassRoomListController($scope, $stateParams, $state, CourseUtil, Class
                             $scope.canLoad = false;
                         }
 
-                        $scope.courses = $scope.courses || [];
+                        $scope.classRooms = $scope.classRooms || [];
                         for (var i = 0; i < length; i++) {
-                          $scope.courses.push(data.data[i]);
+                          $scope.classRooms.push(ClassRoomUtil.filterClassRoom(data.data[i]));
                         };
 
                         $scope.start += data.limit;
