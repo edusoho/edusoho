@@ -166,7 +166,10 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        $this->getUserService()->setupAccount($user['id']);
+        if (!$user['setup']) {
+            $this->getUserService()->setupAccount($user['id']);
+        }
+        
         $this->authenticateUser($user);
 
         $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
