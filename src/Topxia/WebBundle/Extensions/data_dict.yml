@@ -296,10 +296,10 @@ searchCourseType:
 
 userInfoFields:
     email: 邮箱地址
-    truename: 真实姓名
+    truename: 姓名
     mobile: 手机号码
     qq: QQ
-    company: 所在公司
+    company: 公司
     idcard: 身份证号码
     gender: 性别
     job: 职业

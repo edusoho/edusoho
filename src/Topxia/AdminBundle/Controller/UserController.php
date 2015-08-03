@@ -57,9 +57,13 @@ class UserController extends BaseController
             $showUserExport = version_compare($app['version'], "1.0.2", ">=");
         }
 
+        $userIds = ArrayToolkit::column($users,'id');
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+            'profiles' => $profiles,
             'showUserExport' => $showUserExport
         ));
     }

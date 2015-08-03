@@ -43,7 +43,6 @@ define(function(require, exports, module) {
         $('.model').removeClass("btn-primary");
         $(this).addClass("btn-primary");
         var modle = $(this).data('modle');
-        $('[name="register_mode"]').val(modle);
 
         if (modle == 'mobile' || modle == 'email_or_mobile') {
             if ($('input[name=_cloud_sms]').val() !=1) {
@@ -55,6 +54,7 @@ define(function(require, exports, module) {
             }
         }
 
+        $('[name="register_mode"]').val(modle);
         if (modle == 'email' || modle == 'email_or_mobile') {
             $('.email-content').removeClass('hidden');
         } else {
