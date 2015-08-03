@@ -104,7 +104,6 @@ class CoinOrderController extends BaseController
             $conditions['endTime'] = strtotime($conditions['endTime']);
         }
         $status = array('created'=>'未付款','paid'=>'已付款','cancelled'=>'已关闭');
-        //$userinfoFields = array('sn','status','targetType','amount','payment','createdTime','paidTime');
         $orders = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -130,7 +129,12 @@ class CoinOrderController extends BaseController
             $member .= $orders['amount'].",";
             $member .= $orders['payment'].",";
             $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            if ($orders['paidTime'] != 0 ){
             $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            }
+            else{
+            $member .= "-".","; 
+            }
             $results[] = $member;
         }
 

@@ -134,7 +134,15 @@ class LoginBindController extends BaseController
     public function newSetAction(Request $request, $type)
     {
         $setData = $request->request->all();
-
+        if (isset($setData['set_bind_emailOrMobile']) && !empty($setData['set_bind_emailOrMobile'])) {
+            if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
+               $setData['email'] = $setData['set_bind_emailOrMobile'];
+            }else if(SimpleValidator::mobile($setData['set_bind_emailOrMobile'])){
+               $setData['mobile'] = $setData['set_bind_emailOrMobile'];
+            }
+            unset($setData['set_bind_emailOrMobile']);
+        }
+        
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');
@@ -196,12 +204,11 @@ class LoginBindController extends BaseController
         if (!empty($setData['nickname']) && !empty($setData['email'])) {
             $registration['nickname'] = $setData['nickname'];
             $registration['email'] = $setData['email'];
-        } elseif (!empty($oauthUser['name']) && !empty($oauthUser['email'])) {
-            $registration['nickname'] = $oauthUser['name'];
-            $registration['email'] = $oauthUser['email'];
+            $registration['emailOrMobile'] = $setData['email'];
+
         } else {
             $nicknames = array();
-            $nicknames[] = $oauthUser['name'];
+            $nicknames[] = isset($setData['nickname']) ? $setData['nickname'] : $oauthUser['name'];
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
@@ -223,10 +230,15 @@ class LoginBindController extends BaseController
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
 
-        if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
+        if (isset($setData['mobile']) && !empty($setData['mobile'])) {
+            $registration['mobile'] = $setData['mobile'];
+            $registration['emailOrMobile'] = $setData['mobile'];
+        }
+
+        /*if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
             $registration['emailOrMobile'] = $registration['email'];
             unset($registration['email']);
-        }
+        }*/
 
         $user = $this->getAuthService()->register($registration, $type);
         return $user;
@@ -238,9 +250,18 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $data = $request->request->all();
-        $user = $this->getUserService()->getUserByEmail($data['email']);
+
+        $message = 'Email地址或手机号码输入错误';
+        if(SimpleValidator::email($data['emailOrMobile'])){
+           $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+           $message = '该Email地址尚未注册';
+        }else if(SimpleValidator::mobile($data['emailOrMobile'])){
+           $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+           $message = '该手机号码尚未注册';
+        }
+
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+            $response = array('success' => false, 'message' => $message);
         } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => '密码不正确，请重试！');
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {

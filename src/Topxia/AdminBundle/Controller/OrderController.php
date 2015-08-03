@@ -23,21 +23,22 @@ class OrderController extends BaseController
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->searchOrderCount($conditions),
-            20
-        ); 
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
             $conditions['endTime'] = strtotime($conditions['endDateTime']);
         } 
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount($conditions),
+            20
+        ); 
         $orders = $this->getOrderService()->searchOrders(
-        $conditions,
-        array('createdTime', 'DESC'),
-        $paginator->getOffsetCount(),
-        $paginator->getPerPageCount()
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
@@ -57,22 +58,12 @@ class OrderController extends BaseController
         ));
     }
 
-    // public function detailAction(Request $request, $id)
-    // {
-    //     $order = $this->getOrderService()->getOrder($id);
-    //     $user = $this->getUserService()->getUser($order['userId']);
-
-    //     $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
-
-    //     $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-
-    //     return $this->render('TopxiaAdminBundle:Order:detail-modal.html.twig', array(
-    //         'order' => $order,
-    //         'user' => $user,
-    //         'orderLogs' => $orderLogs,
-    //         'users' => $users,
-    //     ));
-    // }
+    public function detailAction(Request $request, $id)
+    {
+        return $this->forward('TopxiaWebBundle:Order:detail',array(
+            'id' => $id,
+        ));
+    }
 
     public function cancelRefundAction(Request $request, $id)
     {
@@ -122,7 +113,6 @@ class OrderController extends BaseController
         $conditions['targetType'] = $targetType;
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
         $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','coin'=>'虚拟币支付','none'=>'--');
-
         $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -148,7 +138,12 @@ class OrderController extends BaseController
             $member .= $orders['amount'].",";
             $member .= $payment[$orders['payment']].",";
             $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            if ($orders['paidTime'] != 0 ){
             $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            }
+            else{
+            $member .= "-".","; 
+            }
             $results[] = $member;
         }
 
