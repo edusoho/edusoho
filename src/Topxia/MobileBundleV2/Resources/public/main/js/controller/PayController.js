@@ -163,8 +163,22 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		}, function(data) {
 			$scope.data = data;
 			self.changePrice($scope.payMode);
+			$scope.orderLabel = self.getOrderLabel($stateParams.targetType);
 		});
 	};
+
+	this.getOrderLabel  = function(type) {
+		switch(type) {
+			case 'course':
+				return "购买课程";
+			case 'vip':
+				return "购买会员";
+			case 'classroom':
+				return "购买班级";
+		}
+
+		return "";
+	}
 
 	$scope.$parent.$on("coupon", function(event, data) {
 		$scope.coupon = data.coupon;
@@ -203,8 +217,8 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 			payPassword : payPassword ? payPassword : "",
 			totalPrice : $scope.data.orderInfo.price,
 			couponCode : $scope.formData ? $scope.formData.code : "",
-			targetType : "course",
-			targetId : $stateParams.courseId
+			targetType : $stateParams.targetType,
+			targetId : $stateParams.targetId
 		}, function(data) {
 			if (data.status != "ok") {
 				$scope.toast(data.message);

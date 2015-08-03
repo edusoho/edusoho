@@ -574,7 +574,7 @@ a {
   color: white;
   height: 18px;
   width: 18px;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 18px;
 }
 
@@ -970,7 +970,7 @@ a {
 }
 
 .ui-course .ui-panel-auto .ui-panel-content {
-  height: 200px;
+  height: auto;
   overflow: hidden;
 }
 

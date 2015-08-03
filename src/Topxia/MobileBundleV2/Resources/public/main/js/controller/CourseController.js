@@ -138,7 +138,7 @@ function BaseToolController($scope, OrderService, cordovaUtil)
           var error = "加入学习失败";
           if (data.error) {
             error = data.error.message;
-          } 
+          }
           $scope.toast(error);
         }
       }, function(error) {
@@ -464,6 +464,11 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
       $scope.hideLoad();
     });
   };
+
+  $scope.loadClassRoomDetail = function() {
+    console.log(11);
+    $scope.classRoomDetailContent = $scope.classRoom.about;
+  }
 
   $scope.loadReviews = function(){
       ClassRoomService.getReviews({

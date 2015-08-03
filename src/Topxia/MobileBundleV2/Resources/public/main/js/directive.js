@@ -8,7 +8,7 @@ app.directive('onElementReadey', function ($parse, $timeout) {
         }
     };
 }).
-directive('uiAutoPanel', function() {
+directive('uiAutoPanel', function () {
   return {
         restrict: 'A',
         link : function(scope, element, attrs) {
@@ -16,6 +16,9 @@ directive('uiAutoPanel', function() {
           var autoBtn = element[0].querySelector(".ui-panel-autobtn");
           var content = element[0].querySelector(".ui-panel-content");
 
+          scope.$watch(attrs.data, function(newValue) {
+            console.log(newValue);
+          });
           var expand = angular.element("<i class='iconfont icon-expandmore'></i>");
           angular.element(autoBtn).append(expand);
           angular.element(autoBtn).on('click', function() {
@@ -37,7 +40,7 @@ directive('uiAutoPanel', function() {
         }
     };
 }).
-directive('uiTab', function() {
+directive('uiTab', function ($parse) {
   return {
     restrict: 'A',
     link : function(scope, element, attrs) {
@@ -46,9 +49,20 @@ directive('uiTab', function() {
           var scroller = element[0].querySelector('.ui-tab-content');
           var nav = element[0].querySelector('.ui-tab-nav');
 
+          function itmOnLoadListener(currentItem) {
+            var isFirstRun = currentItem.attr("isFirstRun");
+            var itemOnLoad = currentItem.attr("ng-onload");
+            if ("true" != isFirstRun) {
+              $parse(itemOnLoad)(scope);
+              console.log(itemOnLoad);
+              currentItem.attr("isFirstRun", "true");
+            }
+          }
+
           if ("empty"  != attrs.select) {
             angular.element(scroller.children[0]).addClass('current');
             angular.element(nav.children[0]).addClass('current');
+            itmOnLoadListener(angular.element(nav.children[0]));
           }
 
           this.currentPage = 0;
@@ -63,11 +77,13 @@ directive('uiTab', function() {
           }
 
           angular.forEach(nav.children, function(item) {
-            angular.element(item).on("touchstart", function(e) {
+            angular.element(item).on("click", function(e) {
 
-                var tagetHasCurrent = $(item).hasClass('current');
+                var currentItem = $(item);
+                itmOnLoadListener(currentItem);
+                var tagetHasCurrent = currentItem.hasClass('current');
                 var tempCurrentPage = self.currentPage;
-                self.currentPage = $(item).index();
+                self.currentPage = currentItem.index();
 
                 $(nav).children().removeClass('current');
                 $(scroller).children().removeClass('current');
@@ -78,7 +94,7 @@ directive('uiTab', function() {
                 }
 
                 var currentScrooler = angular.element(scroller.children[self.currentPage]);
-                $(item).addClass('current');
+                currentItem.addClass('current');
                 currentScrooler.addClass("current");
                 changeTabContentHeight("100%");
             });

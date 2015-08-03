@@ -1,6 +1,8 @@
 <div class="top-tab-header ui-found-course" ng-controller="FoundClassRoomController">
 	<div class="course-card">
 		<h4>推荐</h4>
+		<list-empty-view data="recommendClassRooms" title="暂时没有推荐班级">
+        </list-empty-view>
 		<ul class="ui-list ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="classRoom in recommendClassRooms" ng-href="#/classroom/{{ classRoom.id  }}">
 		        <div class="ui-list-img">
@@ -35,8 +37,8 @@
 
 	<div class="course-card">
 		<h4>最新</h4>
-		<list-empty-view data="latestCourses" title="暂时没有最新课程">
-          		</list-empty-view>
+		<list-empty-view data="latestClassrooms" title="暂时没有最新班级">
+        </list-empty-view>
 		<ul class="ui-list ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="classRoom in latestClassrooms" ng-href="#/classroom/{{ classRoom.id  }}">
 		        <div class="ui-list-img">
