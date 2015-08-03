@@ -44,8 +44,11 @@
 						return;
 					}
 				}
-				var insertHtml='<img kityformula="true" src="http://latex.codecogs.com/gif.latex?'+source+'" alt="'+source+'">';
-				editor.insertHtml(insertHtml);
+				var $imgUrl = 'http://latex.codecogs.com/gif.latex?'+source;
+				$.post($('#'+editor.name).data('imageDownloadUrl')+'&url='+$imgUrl, function(result){
+					var insertHtml='<img kityformula="true" src="'+result+'" alt="'+source+'">';
+					editor.insertHtml(insertHtml);
+				});
 			},
 			onLoad:function(){
 				if(!isIE){

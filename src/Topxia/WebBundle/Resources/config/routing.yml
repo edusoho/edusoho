@@ -189,6 +189,11 @@ editor_upload:
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
     methods: [POST]
 
+editor_download:
+    pattern:  /editor/download
+    defaults: { _controller: TopxiaWebBundle:Editor:download }
+    methods: [POST]
+
 live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
