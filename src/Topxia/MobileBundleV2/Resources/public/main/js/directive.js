@@ -17,26 +17,37 @@ directive('uiAutoPanel', function () {
           var content = element[0].querySelector(".ui-panel-content");
 
           scope.$watch(attrs.data, function(newValue) {
-            console.log(newValue);
-          });
-          var expand = angular.element("<i class='iconfont icon-expandmore'></i>");
-          angular.element(autoBtn).append(expand);
-          angular.element(autoBtn).on('click', function() {
-            var isClose = element.attr("close");
-            if ("true" == isClose) {
-                content.style.overflow = 'auto';
-                content.style.height = 'auto';
-                expand.removeClass("icon-expandmore");
-                expand.addClass("icon-expandless");
-                element.attr("close", "false");
-            } else {
-                content.style.overflow = 'hidden';
-                content.style.height = '200px';
-                expand.addClass("icon-expandmore");
-                expand.removeClass("icon-expandless");
-                element.attr("close", "true");
+            if (newValue) {
+              initAutoBtn();
             }
           });
+
+          function initAutoBtn() {
+
+            if (200 > content.offsetHeight) {
+              autoBtn.style.display = 'none';
+              return;
+            }
+            content.style.height = '200px';
+            var expand = angular.element("<i class='iconfont icon-expandmore'></i>");
+            angular.element(autoBtn).append(expand);
+            angular.element(autoBtn).on('click', function() {
+              var isClose = element.attr("close");
+              if ("true" == isClose) {
+                  content.style.overflow = 'auto';
+                  content.style.height = 'auto';
+                  expand.removeClass("icon-expandmore");
+                  expand.addClass("icon-expandless");
+                  element.attr("close", "false");
+              } else {
+                  content.style.overflow = 'hidden';
+                  content.style.height = '200px';
+                  expand.addClass("icon-expandmore");
+                  expand.removeClass("icon-expandless");
+                  element.attr("close", "true");
+              }
+            });
+          }
         }
     };
 }).
@@ -53,8 +64,10 @@ directive('uiTab', function ($parse) {
             var isFirstRun = currentItem.attr("isFirstRun");
             var itemOnLoad = currentItem.attr("ng-onload");
             if ("true" != isFirstRun) {
-              $parse(itemOnLoad)(scope);
-              console.log(itemOnLoad);
+              if (itemOnLoad) {
+                $parse(itemOnLoad)(scope);
+              }
+              
               currentItem.attr("isFirstRun", "true");
             }
           }
@@ -62,7 +75,7 @@ directive('uiTab', function ($parse) {
           if ("empty"  != attrs.select) {
             angular.element(scroller.children[0]).addClass('current');
             angular.element(nav.children[0]).addClass('current');
-            itmOnLoadListener(angular.element(nav.children[0]));
+            itmOnLoadListener(angular.element(scroller.children[0]));
           }
 
           this.currentPage = 0;
@@ -80,7 +93,6 @@ directive('uiTab', function ($parse) {
             angular.element(item).on("click", function(e) {
 
                 var currentItem = $(item);
-                itmOnLoadListener(currentItem);
                 var tagetHasCurrent = currentItem.hasClass('current');
                 var tempCurrentPage = self.currentPage;
                 self.currentPage = currentItem.index();
@@ -96,6 +108,8 @@ directive('uiTab', function ($parse) {
                 var currentScrooler = angular.element(scroller.children[self.currentPage]);
                 currentItem.addClass('current');
                 currentScrooler.addClass("current");
+
+                itmOnLoadListener(currentScrooler);
                 changeTabContentHeight("100%");
             });
           });

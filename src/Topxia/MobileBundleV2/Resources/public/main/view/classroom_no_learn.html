@@ -43,7 +43,7 @@
                 <div ng-include=" 'view/classroom_courses.html' | coverIncludePath ">
                 </div>
             </li>
-            <li>
+            <li ng-onload="loadClassRoomDetail()">
                 <section class="ui-panel ui-panel-card ui-border-t ui-panel-auto" ui-auto-panel data="classRoomDetailContent">
                     <h2 class="title-body">
 			    	    <span class="title">班级概览</span>

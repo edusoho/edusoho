@@ -466,8 +466,8 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
   };
 
   $scope.loadClassRoomDetail = function() {
-    console.log(11);
     $scope.classRoomDetailContent = $scope.classRoom.about;
+    $scope.$apply();
   }
 
   $scope.loadReviews = function(){
