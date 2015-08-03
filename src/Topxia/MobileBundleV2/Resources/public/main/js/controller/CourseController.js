@@ -488,5 +488,20 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
     });
   };
 
+  $scope.unLearn = function() {
+      $scope.showLoad();
+      ClassRoomService.unLearn({
+        targetType : "classroom",
+        classRoomId : $stateParams.classRoomId
+      }, function(data) {
+        $scope.hideLoad();
+        if (! data.error) {
+          window.location.reload();
+        } else {
+          $scope.toast(data.error.message);
+        }
+      });
+    }
+
   this.loadClassRoom();
 }

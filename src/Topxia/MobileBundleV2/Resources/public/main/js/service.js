@@ -182,6 +182,10 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 }]).
 service('ClassRoomService', ['httpService', function(httpService) {
 
+	this.unLearn = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/ClassRoom/unLearn", arguments);
+	}
+
 	this.getTeachers = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/ClassRoom/getTeachers", arguments);
 	}

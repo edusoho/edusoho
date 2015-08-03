@@ -10,7 +10,7 @@
                 <ul class="ui-pop-content" ng-show="isShowMenuPop">
                     <li><a class="ui-btn btn-outline iconfont icon-tixing" href="#/coursenotice/{{ course.id }}">公告</a></li>
                     <li><a class="ui-btn btn-outline iconfont icon-fenxiang">分享</a></li>
-                    <li ng-if="member && member.role =='student' "><a class="ui-btn btn-outline iconfont icon-shezhi" ng-click="exitLearnCourse()">退出</a></li>
+                    <li ng-if="member && member.role =='student' "><a class="ui-btn btn-outline iconfont icon-shezhi" ng-click="unLearn()">退出</a></li>
                 </ul>
             </div>
         </div>
