@@ -70,7 +70,7 @@ define(function(require, exports, module) {
             validator.addItem({
                 element: '[name="gender"]',
                 required: true,
-                errormessageRequired: '请输入性别'
+                errormessageRequired: '请选择性别'
             });
 
             validator.addItem({
