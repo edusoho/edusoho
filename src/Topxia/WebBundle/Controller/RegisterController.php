@@ -543,10 +543,9 @@ class RegisterController extends BaseController
     }
 
     protected function smsCodeValidator($authSettings,$registration,$request){
-        if ( isset($authSettings['registerSort'])
-            &&in_array('mobile', $authSettings['registerSort'])
-            &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
-            &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
+        if (($authSettings['register_mode'] == 'mobile' or $authSettings['register_mode'] == 'email_or_mobile')
+            &&isset($registration['mobile']) && !empty($registration['mobile'])
+            &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')){
           return true;
         }
     }
