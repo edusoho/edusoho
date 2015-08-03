@@ -3,16 +3,19 @@
         <div class="course-head">
             <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
             <p class="mask">
-                <a class="rating-body">
+                <a>
                     <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
                         {{ service.name }}
                     </span>
                 </a>
-                <a class="right">
+                <a class="right rating-body">
+                    <i class="iconfont icon-iconfontxiaoyou"></i>
+                    <span class="rating">{{ classRoom.studentNum }}</span>
                     <span>
                         <i class="iconfont icon-favorfill"></i>
                         <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
-                    </span>{{ classRoom.studentNum }} 人在学</a>
+                    </span>
+                </a>
             </p>
         </div>
         <div class="item-body">
@@ -41,22 +44,19 @@
                 </div>
             </li>
             <li>
-                <section class="ui-panel ui-panel-card ui-border-t">
+                <section class="ui-panel ui-panel-card ui-border-t ui-panel-auto" ui-auto-panel>
                     <h2 class="title-body">
-			    	<span class="title">班级概览</span>
-
-			    	<a class="title-tips" href="#/coursedetail/{{ classRoom.id }}">
-			    		<i class="iconfont icon-gengduo"></i>
-			    	</a>
-			    </h2>
-                    <div class="ui-panel-content" ng-bind-html="classRoom.about | limitTo : 120" ng-img-show>
+			    	    <span class="title">班级概览</span>
+			        </h2>
+                    <div class="ui-panel-content" ng-bind-html="classRoom.about" ng-img-show>
                     </div>
+                    <p class="ui-panel-autobtn">展开</p>
                 </section>
                 <section class="ui-panel ui-panel-card ui-border-t">
                     <h2 class="title-body">
 			    	<span class="title">班级教师 ({{ classRoom.teachers.length }})</span>
 
-			    	<a class="title-tips" href="#/teacherlist/{{ classRoom.id }}">
+			    	<a class="title-tips" href="#/teacherlist/classroom/{{ classRoom.id }}">
 			    		<i class="iconfont icon-gengduo"></i>
 			    	</a>
 			    </h2>
@@ -76,14 +76,44 @@
                             <li ng-if="! classRoom.teachers[0]">
                                 <p>该课程暂无教师</p>
                                 </i>
+                            </li>
                         </ul>
                     </div>
                 </section>
+
+                <section class="ui-panel ui-panel-card ui-border-t" ng-init="loadStudents()">
+                    <h2 class="title-body">
+                    <span class="title">班级学员 ({{ classRoom.studentNum }})</span>
+
+                    <a class="title-tips" href="#/studentlist/classroom/{{ classRoom.id }}">
+                        <i class="iconfont icon-gengduo"></i>
+                    </a>
+                </h2>
+                    <div class="ui-panel-content">
+                        <ul class="ui-list">
+                            <li class="ui-border-t" ng-repeat="student in students">
+                                <div class="ui-avatar-s" ui-sref="userInfo({ userId : student.id })">
+                                    <img ng-src="{{ student.avatar | coverAvatar }}" />
+                                </div>
+                                <div class="ui-list-info">
+                                    <h4 class="ui-nowrap">{{ student.nickname }}
+                                    </h4>
+                                    <p class="ui-nowrap">{{ student.title }}</p>
+                                </div>
+                            </li>
+                            <li ng-if="! students">
+                                <p>该班级暂无学员</p>
+                                </i>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
                 <section class="ui-panel ui-panel-card ui-border-t" ng-init="loadReviews()">
                     <h2 class="title-body">
 			    	<span class="title">班级评价 ({{ reviews.length }})</span>
 
-			    	<a class="title-tips" href="#/coursereview/{{ classRoom.id }}">
+			    	<a class="title-tips" href="#/coursereview/classroom/{{ classRoom.id }}">
 			    		<i class="iconfont icon-gengduo"></i>
 			    	</a>
 			    </h2>
@@ -91,7 +121,7 @@
                         <ul class="ui-list">
                             <li class="ui-border-t" ng-if="reviews[0]">
                                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
-                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" />
+                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" img-error="avatar"/>
                                 </div>
                                 <div class="ui-list-info">
                                     <h4 class="ui-nowrap ui-review-header">
@@ -113,10 +143,8 @@
         </ul>
     </div>
 </div>
-<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="ClassRoomToolController">
-    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
-    </button>
-    <button class="ui-btn btn-green" ng-class="classRoom.vipLevelId <= 0 ? 'btn-col-75' : 'btn-col-25' " ng-click="joinCourse()">
+<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);text-align: center;" ng-controller="ClassRoomToolController">
+    <button class="ui-btn btn-green" ng-class="classRoom.vipLevelId <= 0 ? 'btn-col-75' : 'btn-col-60' " ng-click="joinCourse()">
         立即加入
     </button>
     <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="vipLeand()" ng-if="classRoom.vipLevelId > 0 ">

@@ -1,13 +1,52 @@
 app.controller('MyInfoController', ['$scope', 'httpService', '$stateParams', MyInfoController]);
-app.controller('TeacherListController', ['$scope', 'UserService', '$stateParams', TeacherListController]);
+app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
 app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
+app.controller('StudentListController', ['$scope', 'ClassRoomService', '$stateParams', StudentListController]);
 
-function TeacherListController($scope, UserService, $stateParams)
+function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
 {
-	UserService.getCourseTeachers({
-		courseId : $stateParams.courseId
+	$scope.title = "课程教师";
+	var self = this;
+	this.initService = function() {
+		if ("course" == $stateParams.targetType) {
+			self.targetService = self.loadCourseTeachers;
+		} else if ("classroom" == $stateParams.targetType) {
+			$scope.title = "班级教师";
+			self.targetService = self.loadClassRoomTeachers;
+		}
+	};
+
+	this.loadClassRoomTeachers = function() {
+		ClassRoomService.getTeachers({
+			classRoomId : $stateParams.targetId
+		}, function(data) {
+			$scope.users = data;
+		});
+	};
+
+	this.loadCourseTeachers = function() {
+		UserService.getCourseTeachers({
+			courseId : $stateParams.targetId
+		}, function(data) {
+			$scope.users = data;
+		});
+	};
+
+	$scope.loadUsers = function() {
+		self.targetService();
+	}
+
+	this.initService();
+}
+
+function StudentListController($scope, ClassRoomService, $stateParams)
+{
+	$scope.title = "班级学员";
+	ClassRoomService.getStudents({
+		classRoomId : $stateParams.targetId,
+		limit : -1
 	}, function(data) {
-		$scope.users = data;
+		$scope.users = data.data;
 	});
 }
 

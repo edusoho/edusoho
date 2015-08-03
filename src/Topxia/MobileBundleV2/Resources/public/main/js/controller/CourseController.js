@@ -1,8 +1,8 @@
 app.controller('CourseController', ['$scope', '$stateParams', 'CourseService', 'AppUtil', '$state', 'cordovaUtil', CourseController]);
 app.controller('CourseDetailController', ['$scope', '$stateParams', 'CourseService', CourseDetailController]);
-app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', '$window', CourseSettingController]);
+app.controller('CourseSettingController', ['$scope', '$stateParams', 'CourseService', 'ClassRoomService', CourseSettingController]);
 
-function CourseReviewController($scope, $stateParams, CourseService, $window)
+function CourseReviewController($scope, $stateParams, CourseService, ClassRoomService)
 {
   var self = this;
   $scope.canLoad = true;
@@ -17,13 +17,35 @@ function CourseReviewController($scope, $stateParams, CourseService, $window)
        }, 200);
   };
 
-  this.loadReviews = function() {
+  this.loadCourseReviews = function(callback) {
     CourseService.getReviews({
       start : $scope.start,
       limit : 10,
-      courseId : $stateParams.courseId
-    }, function(data) {
+      courseId : $stateParams.targetId
+    }, callback);
+  };
 
+  this.loadClassRoomReviews = function(callback) {
+    ClassRoomService.getReviews({
+      start : $scope.start,
+      limit : 10,
+      classRoomId : $stateParams.targetId
+    }, callback);
+  };
+
+  this.initTargetService = function(targetType) {
+    console.log(self);
+    if (targetType == "course") {
+      self.targetInfoService = this.loadCourseReviewInfo;
+      self.targetService = this.loadCourseReviews;
+    } else if (targetType == "classroom") {
+      self.targetInfoService = this.loadClassRoomReviewInfo;
+      self.targetService = this.loadClassRoomReviews;
+    }
+  };
+
+  this.loadReviews = function() {
+    self.targetService(function(data) {
       var length  = data ? data.data.length : 0;
       if (!data || length == 0 || length < 10) {
           $scope.canLoad = false;
@@ -35,20 +57,32 @@ function CourseReviewController($scope, $stateParams, CourseService, $window)
       };
 
       $scope.start += data.limit;
-
     });
-  }
+  };
 
-  this.loadReviewInfo = function() {
+  this.loadCourseReviewInfo = function() {
     CourseService.getCourseReviewInfo({
-      courseId : $stateParams.courseId
+      courseId : $stateParams.targetId
     }, function(data) {
       $scope.reviewData = data;
     });
   }
+
+  this.loadClassRoomReviewInfo = function() {
+    ClassRoomService.getReviewInfo({
+      classRoomId : $stateParams.targetId
+    }, function(data) {
+      $scope.reviewData = data;
+    });
+  }
+
+  $scope.loadReviewResult = function() {
+
+    self.targetInfoService();
+    self.loadReviews();
+  }
   
-  this.loadReviewInfo();
-  this.loadReviews();
+  this.initTargetService($stateParams.targetType);
 }
 
 function CourseSettingController($scope, $stateParams, CourseService, $window)
@@ -428,6 +462,24 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
       $scope.classRoomView = app.viewFloder + (data.member ? "view/classroom_learn.html" : "view/classroom_no_learn.html");
       $scope.classRoom = ClassRoomUtil.filterClassRoom(data.classRoom);
       $scope.hideLoad();
+    });
+  };
+
+  $scope.loadReviews = function(){
+      ClassRoomService.getReviews({
+        classRoomId : $stateParams.classRoomId,
+        limit : 1
+      }, function(data) {
+        $scope.reviews = data.data;
+      });
+  };
+
+  $scope.loadStudents = function() {
+    ClassRoomService.getStudents({
+      classRoomId : $stateParams.classRoomId,
+      limit : 3
+    }, function(data) {
+      $scope.students = data.data;
     });
   };
 

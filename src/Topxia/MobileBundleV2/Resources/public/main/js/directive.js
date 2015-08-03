@@ -8,6 +8,35 @@ app.directive('onElementReadey', function ($parse, $timeout) {
         }
     };
 }).
+directive('uiAutoPanel', function() {
+  return {
+        restrict: 'A',
+        link : function(scope, element, attrs) {
+          element.attr("close", "true");
+          var autoBtn = element[0].querySelector(".ui-panel-autobtn");
+          var content = element[0].querySelector(".ui-panel-content");
+
+          var expand = angular.element("<i class='iconfont icon-expandmore'></i>");
+          angular.element(autoBtn).append(expand);
+          angular.element(autoBtn).on('click', function() {
+            var isClose = element.attr("close");
+            if ("true" == isClose) {
+                content.style.overflow = 'auto';
+                content.style.height = 'auto';
+                expand.removeClass("icon-expandmore");
+                expand.addClass("icon-expandless");
+                element.attr("close", "false");
+            } else {
+                content.style.overflow = 'hidden';
+                content.style.height = '200px';
+                expand.addClass("icon-expandmore");
+                expand.removeClass("icon-expandless");
+                element.attr("close", "true");
+            }
+          });
+        }
+    };
+}).
 directive('uiTab', function() {
   return {
     restrict: 'A',

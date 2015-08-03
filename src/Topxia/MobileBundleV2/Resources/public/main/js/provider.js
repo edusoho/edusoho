@@ -208,11 +208,21 @@ appProvider.provider('appRouter', function($stateProvider) {
 	            });
 
 	            $stateProvider.state('teacherlist', {
-	              url: "/teacherlist/:courseId",
+	              url: "/teacherlist/:targetType/:targetId",
 	              views: {
 	                'rootView': {
 	                  templateUrl: app.viewFloder  + "view/teacher_list.html",
 	                  controller : TeacherListController
+	                }
+	              }
+	            });
+
+	            $stateProvider.state('studentlist', {
+	              url: "/studentlist/:targetType/:targetId",
+	              views: {
+	                'rootView': {
+	                  templateUrl: app.viewFloder  + "view/teacher_list.html",
+	                  controller : StudentListController
 	                }
 	              }
 	            });
@@ -278,7 +288,7 @@ appProvider.provider('appRouter', function($stateProvider) {
 	            });
 
 	            $stateProvider.state('courseReview', {
-	              url: "/coursereview/:courseId",
+	              url: "/coursereview/:targetType/:targetId",
 	              views: {
 	                'rootView': {
 	                  templateUrl: app.viewFloder  + "view/course_review.html",
