@@ -106,42 +106,42 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		$classRoomId = $this->getParam("classRoomId");
 		$targetType = $this->getParam("targetType");
 
-	        if(!in_array($targetType, array("course", "classroom"))) {
-	            throw $this->createErrorResponse('error', '退出学习失败');
-	        }
-	        $processor = OrderRefundProcessorFactory::create($targetType);
+        if(!in_array($targetType, array("course", "classroom"))) {
+            throw $this->createErrorResponse('error', '退出学习失败');
+        }
+        $processor = OrderRefundProcessorFactory::create($targetType);
 
-	        $target = $processor->getTarget($classRoomId);
-	        $user = $this->controller->getUserByToken($this->request);
-	        if (!$user->isLogin()) {
-            	return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
+        $target = $processor->getTarget($classRoomId);
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+        	return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
+    	}
+
+        $member = $processor->getTargetMember($classRoomId, $user["id"]);
+        if (empty($member) || empty($member['orderId'])) {
+            return $this->exitClassRoom($classRoomId, $user);
+        }
+
+        $order = $this->getOrderService()->getOrder($member['orderId']);
+        if (empty($order)) {
+            return $this->createErrorResponse('error', '您尚未购买，不能退学。');
+        }
+
+        $data = $this->request->request->all();
+        	$reason = empty($data['reason']) ? array() : $data['reason'];
+        	$amount = empty($data['applyRefund']) ? 0 : null;
+
+        	try {
+        		if(isset($data["applyRefund"]) && $data["applyRefund"] ){
+            			$refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+            	} else {
+                		$processor->removeStudent($order['targetId'], $user['id']);
+            	}
+        	} catch(\Exception $e) {
+        		return $this->createErrorResponse('error', $e->getMessage());
         	}
 
-	        $member = $processor->getTargetMember($classRoomId, $user["id"]);
-	        if (empty($member) || empty($member['orderId'])) {
-	            return $this->exitClassRoom($classRoomId, $user);
-	        }
-
-	        $order = $this->getOrderService()->getOrder($member['orderId']);
-	        if (empty($order)) {
-	            return $this->createErrorResponse('error', '您尚未购买，不能退学。');
-	        }
-
-	        $data = $this->request->request->all();
-            	$reason = empty($data['reason']) ? array() : $data['reason'];
-            	$amount = empty($data['applyRefund']) ? 0 : null;
-
-            	try {
-            		if(isset($data["applyRefund"]) && $data["applyRefund"] ){
-                			$refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
-	            	} else {
-	                		$processor->removeStudent($order['targetId'], $user['id']);
-	            	}
-            	} catch(\Exception $e) {
-            		return $this->createErrorResponse('error', $e->getMessage());
-            	}
-
-            	return true;
+        	return true;
 	}
 
 	public function getTeachers()
