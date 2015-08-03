@@ -8,4 +8,5 @@ define(function(require, exports, module){
             $("input[name='payment']").val($(this).attr("id"));
         });
     };
+
 });
