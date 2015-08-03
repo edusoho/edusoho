@@ -80,45 +80,10 @@ class RegisterController extends BaseController
 
         }
 
-        $auth=$this->getSettingService()->get('auth');
-
-        // if(!isset($auth['registerSort'])){
-        //     $auth['registerSort']="";
-        // }
-        
-
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        for($i=0;$i<count($userFields);$i++){
-           if(strstr($userFields[$i]['fieldName'], "textField")){
-            $userFields[$i]['type']="text";
-           }
-           if(strstr($userFields[$i]['fieldName'], "varcharField")){
-            $userFields[$i]['type']="varchar";
-           }
-           if(strstr($userFields[$i]['fieldName'], "intField")){
-            $userFields[$i]['type']="int";
-           }
-           if(strstr($userFields[$i]['fieldName'], "floatField")){
-            $userFields[$i]['type']="float";
-           }
-           if(strstr($userFields[$i]['fieldName'], "dateField")){
-            $userFields[$i]['type']="date";
-           }
-        }
-
-        //$auth['registerSort'] = array();
-        /*if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
-            && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
-            && !in_array('mobile', $auth['registerSort']) 
-            && $this->setting('auth.register_mode') != 'email_or_mobile'
-            && $this->setting('auth.register_mode') != 'mobile') {
-            $auth['registerSort'][] = "mobile";
-        }*/
 
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isRegisterEnabled' => $registerEnable,
             'registerSort'=>array(),
-            'userFields'=>$userFields,
             '_target_path' => $this->getTargetPath($request),
         ));
     }

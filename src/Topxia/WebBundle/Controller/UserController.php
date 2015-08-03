@@ -321,10 +321,11 @@ class UserController extends BaseController
 
             if (isset($formData['email']) && !empty($formData['email'])) {
                 $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+                $this->authenticateUser($this->getUserService()->getUser($user['id']));
             }
 
             $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
-            
+
             return $this->redirect($this->generateUrl('homepage'));
         }
 

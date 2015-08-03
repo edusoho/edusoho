@@ -42,7 +42,8 @@ class KernelResponseListener
                 '/login/bind/qq/exist', '/login/bind/weibo/exist','/login/bind/renren/exist',
                 '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist',
                 '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
-                '/login/bind/weixinmob/new', '/login/bind/weixinweb/new'
+                '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
+                '/partner/discuz/api/notify', '/partner/phpwind/api/notify'
             );
             if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin')) {
                 return ;

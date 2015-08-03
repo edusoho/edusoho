@@ -294,6 +294,13 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', '用户信息设置已保存！');
         }
 
+        unset($auth['registerSort']['nickname']);
+        unset($auth['registerSort']['password']);
+        unset($auth['registerSort']['confirmPassword']);
+        unset($auth['registerFieldNameArray']['nickname']);
+        unset($auth['registerFieldNameArray']['password']);
+        unset($auth['registerFieldNameArray']['confirmPassword']);
+
         return $this->render('TopxiaAdminBundle:System:user-fields.html.twig', array(
             'textCount' => $textCount,
             'intCount' => $intCount,
