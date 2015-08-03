@@ -204,7 +204,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
 
-        $conditions = array('classroomId', $classRoomId);
+        $conditions = array('classroomId'=>$classRoomId);
         $total   = $this->getClassroomReviewService()->searchReviewCount($conditions);
         $reviews = $this->getClassroomReviewService()->searchReviews(
         	$conditions, 
@@ -227,7 +227,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $classRoomId = $this->getParam("classRoomId", 0);
         $classroom = $this->getClassroomService()->getClassroom($classRoomId);
 
-        $conditions = array('classroomId', $classRoomId);
+        $conditions = array('classroomId'=>$classRoomId);
         $total = $this->getClassroomReviewService()->searchReviewCount($conditions);
         $reviews = $this->getClassroomReviewService()->searchReviews(
         	$conditions, 
