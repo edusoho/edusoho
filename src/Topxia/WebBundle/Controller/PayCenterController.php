@@ -22,9 +22,12 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，不能支付。');
         }
 
-        $paymentSetting = $this->setting("payment");
-        if(!isset($paymentSetting["enabled"]) || $paymentSetting["enabled"] == 0) {
-            return $this->createMessageResponse('error', $paymentSetting["disabled_message"]);
+        $paymentSetting = $this->setting('payment');
+        if(!isset($paymentSetting['enabled']) || $paymentSetting['enabled'] == 0) {
+            if (!$isset($paymentSetting['disabled_message']) {
+                $paymentSetting['disabled_message'] = '尚未开启支付模块，无法购买课程。';
+            }
+            return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
 		$fields = $request->query->all();
