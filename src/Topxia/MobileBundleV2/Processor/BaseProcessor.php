@@ -40,7 +40,7 @@ class BaseProcessor {
         {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "salt", "title"))) {
+                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))) {
                     unset($user[$key]);
                 }
             }

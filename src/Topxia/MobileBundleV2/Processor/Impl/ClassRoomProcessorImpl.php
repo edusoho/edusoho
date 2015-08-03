@@ -77,29 +77,29 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	}
 
 	public function exitClassRoom($classRoomId, $user)
-    	{
-        		$member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
+	{
+    		$member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
 
-        		if (empty($member)) {
-            		throw $this->createErrorResponse('error', '您不是班级的学员。');
-        		}
+    		if (empty($member)) {
+        		throw $this->createErrorResponse('error', '您不是班级的学员。');
+    		}
 
-        		if (!in_array($member["role"], array("auditor", "student"))) {
-        			return $this->createErrorResponse('error', "您不是班级的学员。");
-        		}
+    		if (!in_array($member["role"], array("auditor", "student"))) {
+    			return $this->createErrorResponse('error', "您不是班级的学员。");
+    		}
 
-        		if (!empty($member['orderId'])) {
-            		return $this->createErrorResponse('error', "有关联的订单，不能直接退出学习。");
-        		}
+    		if (!empty($member['orderId'])) {
+        		return $this->createErrorResponse('error', "有关联的订单，不能直接退出学习。");
+    		}
 
-        		try {
-        			$this->getClassroomService()->exitClassroom($classRoomId, $user["id"]);
-        		} catch (\Exception $e) {
-        			return $this->createErrorResponse('error', $e->getMessage());
-        		}
-        		
-        		return true;
-    	}
+    		try {
+    			$this->getClassroomService()->exitClassroom($classRoomId, $user["id"]);
+    		} catch (\Exception $e) {
+    			return $this->createErrorResponse('error', $e->getMessage());
+    		}
+    		
+    		return true;
+	}
 
 	public function unLearn()
 	{	
@@ -115,7 +115,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	        $user = $this->controller->getUserByToken($this->request);
 	        if (!$user->isLogin()) {
             	return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
-        	        }
+        	}
 
 	        $member = $processor->getTargetMember($classRoomId, $user["id"]);
 	        if (empty($member) || empty($member['orderId'])) {
@@ -143,6 +143,112 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
             	return true;
 	}
+
+	public function getTeachers()
+	{
+		$classRoomId = $this->getParam("classRoomId", 0);
+        $classroom = $this->getClassroomService()->getClassroom($classRoomId);
+        if (empty($classroom)) {
+			return $this->createErrorResponse('error', "班级不存在!");
+		}
+        $headTeacher = $this->getClassroomService()->findClassroomMembersByRole($classRoomId, 'headTeacher', 0, 1);
+        $assistants = $this->getClassroomService()->findClassroomMembersByRole($classRoomId, 'assistant', 0, PHP_INT_MAX);
+        $studentAssistants = $this->getClassroomService()->findClassroomMembersByRole($classRoomId, 'studentAssistant', 0, PHP_INT_MAX);
+        $members = $this->getClassroomService()->findClassroomMembersByRole($classRoomId, 'teacher', 0, PHP_INT_MAX);
+        $members = array_merge($headTeacher, $members, $assistants,$studentAssistants);
+        $members = ArrayToolkit::index($members, 'userId');
+        $teacherIds = ArrayToolkit::column($members, 'userId');
+        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+
+        $sortTeachers = array();
+        foreach ($members as $key => $member) {
+        	$teacher = $teachers[$member['userId']];
+        	$teacher["memberRole"] = $member["role"];
+            $sortTeachers[] = $teacher;
+        }
+
+        return $this->controller->filterUsers($sortTeachers);
+	}
+
+	public function getStudents()
+	{
+		$classRoomId = $this->getParam("classRoomId", 0);
+		$start   = (int) $this->getParam("start", 0);
+        $limit   = (int) $this->getParam("limit", 10);
+		$classroom = $this->getClassroomService()->getClassroom($classRoomId);
+		if (empty($classroom)) {
+			return $this->createErrorResponse('error', "班级不存在!");
+		}
+
+		$total = (int) $classroom["studentNum"];
+
+		if ($limit == -1) {
+			$limit = $total;
+		}
+		$students = $this->getClassroomService()->findClassroomStudents($classRoomId, 0, $limit);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
+
+        $users = $this->controller->filterUsers($users);
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $classroom["studentNum"],
+            "data" => array_values($users)
+        );
+	}
+
+	public function getReviews()
+    {
+        $classRoomId = $this->getParam("classRoomId", 0);
+        
+        $start   = (int) $this->getParam("start", 0);
+        $limit   = (int) $this->getParam("limit", 10);
+
+        $conditions = array('classroomId', $classRoomId);
+        $total   = $this->getClassroomReviewService()->searchReviewCount($conditions);
+        $reviews = $this->getClassroomReviewService()->searchReviews(
+        	$conditions, 
+        	array('createdTime', 'DESC' ),
+        	$start, 
+        	$limit
+        );
+
+        $reviews = $this->controller->filterReviews($reviews);
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data" => $reviews
+        );
+    }
+
+    public function getReviewInfo()
+    {
+        $classRoomId = $this->getParam("classRoomId", 0);
+        $classroom = $this->getClassroomService()->getClassroom($classRoomId);
+
+        $conditions = array('classroomId', $classRoomId);
+        $total = $this->getClassroomReviewService()->searchReviewCount($conditions);
+        $reviews = $this->getClassroomReviewService()->searchReviews(
+        	$conditions, 
+        	array('createdTime', 'DESC' ),
+        	0, 
+        	$total
+        );
+
+        $progress = array(0, 0, 0, 0, 0);
+        foreach ($reviews as $key => $review) {
+            $rating = $review["rating"] < 1 ? 1 : $review["rating"];
+            $progress[$review["rating"] - 1] ++;
+        }
+        return array(
+            "info" => array(
+                "ratingNum" => $classroom["ratingNum"],
+                "rating" => $classroom["rating"],
+            ),
+            "progress" => $progress
+        );
+    }
 
 	public function learnByVip()
 	{
@@ -201,6 +307,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     	if ($this->controller->setting('vip.enabled')) {
         	$classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->controller->getLevelService()->getLevel($classroom['vipLevelId']) : null;
     	}
+
+    	$teacherIds = $classroom["teacherIds"];
+    	$users = $this->controller->getUserService()->findUsersByIds($teacherIds);
+    	$classroom["teachers"] = array_values($this->filterUsersFiled($users));
 		return array(
 			"classRoom" => $this->filterClassRoom($classroom, false),
 			"member" => $member,
@@ -229,13 +339,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		$self = $this->controller;
 		$container = $this->getContainer();
 
-		$teacherIds = array();
-        foreach ($classrooms as $classroom) {
-            $teacherIds = array_merge($teacherIds, $classroom['teacherIds']);
-        }
-        $teachers = $this->controller->getUserService()->findUsersByIds($teacherIds);
-        $teachers = $this->controller->simplifyUsers($teachers);
-
 		return array_map(function($classroom) use ($self, $container, $isList) {
 
 			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
@@ -248,14 +351,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 				$classroom["about"] = mb_substr($classroom["about"], 0, 20, "utf-8");
 			}
 			$classroom['about'] = $self->convertAbsoluteUrl($container->get('request'), $classroom['about']);
-			
-			$classroom['teachers'] = array();
-            foreach ($classroom['teacherIds'] as $teacherId) {
-                if (isset($teachers[$teacherId])) {
-                    $classroom['teachers'][] = $teachers[$teacherId];
-                }
-            }
-            unset($classroom['teacherIds']);
 
 			return $classroom;
 		}, $classrooms);
@@ -267,16 +362,16 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		$user = $this->controller->getUserByToken($this->request);
 		$classroom = $this->getClassroomService()->getClassroom($classroomId);
 		if (empty($classroom)) {
-            		return $this->createErrorResponse('error', "没有找到该班级");
-        		}
+    		return $this->createErrorResponse('error', "没有找到该班级");
+		}
 
-        		$courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        		$courseMembers = array();
-        		foreach ($courses as $key => $course) {
-	           	$courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
-	        	}
+		$courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+		$courseMembers = array();
+		foreach ($courses as $key => $course) {
+       	$courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
+    	}
 
-	        	return $this->controller->filterCourses($courses);
+    	return $this->controller->filterCourses($courses);
 	}
 
 	public function myClassRooms()
@@ -402,15 +497,6 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
                 $start,
                 $limit
         );
-
-        $classRoomTeacherIds = ArrayToolkit::column($classrooms,'teacherIds');
-
-        for ($i=0; $i < count($classRoomTeacherIds); $i++) { 
-        	$teacherIds = $classRoomTeacherIds[$i];
-        	$users = $this->getUserService()->findUsersByIds($teacherIds);
-
-    		$classrooms[$i]["teacherIds"] = $this->filterUsersFiled($users);
-        }
 
         return array(
             "start" => $start,

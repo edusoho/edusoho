@@ -20,4 +20,12 @@ interface ClassRoomProcessor
 	public function learnByVip();
 
 	public function unLearn();
+
+	public function getReviews();
+
+	public function getReviewInfo();
+
+	public function getStudents();
+
+	public function getTeachers();
 }
