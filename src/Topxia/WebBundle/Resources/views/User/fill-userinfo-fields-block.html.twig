@@ -95,11 +95,11 @@
 
       {% if field == 'gender' %}
         <div class="form-group">        
-          <div class="controls">
-            <label class="col-md-3 control-label required" for="{{ field }}" style="padding: 0 20px 0 0px;">性别</label>&nbsp;
-            <input type="radio" id="{{ field }}_0" name="{{ field }}" required="required" value="male" {% if user.gender=="male"%}checked=true{% endif %}>
+          <label class="col-md-3 control-label required" for="gender" style="padding: 0 20px 0 0px;">性别</label>&nbsp;
+          <div class="col-md-6 controls">
+            <input type="radio" id="gender_0" name="gender" value="male" {% if user.gender=="male"%}checked=true{% endif %}>
             <label for="profile_gender_0" class="required" style="padding: 0 20px 0 0px;">男</label>
-            <input type="radio" id="{{ field }}_1" name="{{ field }}" required="required" value="female"  {% if user.gender=="female"%}checked=true{% endif %}>
+            <input type="radio" id="gender_1" name="gender" value="female"  {% if user.gender=="female"%}checked=true{% endif %}>
             <label for="profile_gender_1" class="required" >女</label>
           </div>
         </div>

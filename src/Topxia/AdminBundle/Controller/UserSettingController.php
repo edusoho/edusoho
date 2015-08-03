@@ -294,12 +294,9 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', '用户信息设置已保存！');
         }
 
-        unset($auth['registerSort']['nickname']);
-        unset($auth['registerSort']['password']);
-        unset($auth['registerSort']['confirmPassword']);
-        unset($auth['registerFieldNameArray']['nickname']);
-        unset($auth['registerFieldNameArray']['password']);
-        unset($auth['registerFieldNameArray']['confirmPassword']);
+        
+        $auth['registerSort'] = $this->deleteArrayItem($auth['registerSort'], array('nickname','password','confirmPassword'));
+        $auth['registerFieldNameArray'] = $this->deleteArrayItem($auth['registerFieldNameArray'], array('nickname','password','confirmPassword'));
 
         return $this->render('TopxiaAdminBundle:System:user-fields.html.twig', array(
             'textCount' => $textCount,
@@ -454,6 +451,17 @@ class UserSettingController extends BaseController
         $this->getSettingService()->set('course', $courseSetting);
 
         return true;
+    }
+
+    protected function deleteArrayItem($userInfoFields, $items)
+    {
+        foreach ($userInfoFields as $key => $value) {
+            if (in_array($value, $items)) {
+                unset($userInfoFields[$key]);
+            }
+        }
+
+        return $userInfoFields;
     }
 
     protected function getCourseService()
