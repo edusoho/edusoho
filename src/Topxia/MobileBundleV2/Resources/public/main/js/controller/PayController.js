@@ -221,7 +221,7 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 			targetId : $stateParams.targetId
 		}, function(data) {
 			if (data.status != "ok") {
-				$scope.toast(data.message);
+				$scope.toast(data.error.message);
 				return;
 			}
 
