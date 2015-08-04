@@ -10,7 +10,6 @@ class CourseHomeworkManageController extends BaseManageController
 {
     public function listAction(Request $request)
     {
-        var_dump('custom list');
         $status = $request->query->get('status', 'finished');
         $currentUser = $this->getCurrentUser();
 
@@ -34,8 +33,7 @@ class CourseHomeworkManageController extends BaseManageController
         $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
         $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
-        var_dump($status);
-
+     
         return $this->render('CustomWebBundle:CourseHomeworkManage:list.html.twig',array(
             'status' => $status,
             'homeworkResults' => $homeworkResults,
