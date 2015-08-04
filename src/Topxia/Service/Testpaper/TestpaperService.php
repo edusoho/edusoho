@@ -39,7 +39,7 @@ interface TestpaperService
 
     public function canLookTestpaper($resultId);
 
-    public function findTestpaperIdsByPId($pId);
+    public function findTestpaperByPId($pId);
 
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 

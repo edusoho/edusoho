@@ -50,12 +50,12 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $items = $event->getArgument('items');
         $pId = $testpaper['id'];
         $courseId = explode('-',$testpaper['target'])[1];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentId($courseId),'id');
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         $testpaper['pId'] = $testpaper['id'];
 
         unset($testpaper['id']);        
-        foreach ($courseIds as  $value) {
-            $testpaper['target'] = "course-".$value;
+        foreach ($courseIds as  $courseId) {
+            $testpaper['target'] = "course-".$courseId;
             $testpaperId = $this->getTestpaperService()->addTestpaper($testpaper);
             foreach($items as $item) {
                 $item['pId'] = $item['id'];
@@ -81,11 +81,12 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
     public function onTestpaperDelete(ServiceEvent $event)
     {
-       $testpaperId = $event->getSubject();
-       $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperIdsByPId($testpaperId),'id');
+       $testpaper = $event->getSubject();
+       $testpaperId = $testpaper['id'];
+       $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPId($testpaperId),'id');
        $this->getTestpaperService()->deleteTestpaperByPId($testpaperId);
-       foreach ($testpaperIds as $value) {
-          $this->getTestpaperService()->deleteTestpaperItemByTestId($value);
+       foreach ($testpaperIds as $testpaperId) {
+          $this->getTestpaperService()->deleteTestpaperItemByTestId($testpaperId);
        }
     }
 
@@ -93,7 +94,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     {
       $item = $event->getSubject();
       $item['pId'] = $item['id'];
-      $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperIdsByPId($item['testId']),'id');
+      $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPId($item['testId']),'id');
       unset($item['id']);
       foreach ($testpaperIds as $testpaperId) {
         $item['testId'] = $testpaperId;
@@ -112,7 +113,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
 
         //重新生成题目
-        $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperIdsByPId($items[0]['testId']),'id');
+        $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPId($items[0]['testId']),'id');
         foreach ($testpaperIds as $value) {
             $this->getTestpaperService()->deleteTestpaperItemByTestId($value);
             foreach ($items as $item) {

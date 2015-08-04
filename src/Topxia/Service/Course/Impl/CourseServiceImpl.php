@@ -32,9 +32,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
 	}
 
-	public function findCoursesByParentId($parentId)
+	public function findCoursesByParentIdAndLocked($parentId, $locked)
 	{
-		return $this->getCourseDao()->findCoursesByParentId($parentId);
+		return $this->getCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
 	}
 
 	public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -415,9 +415,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($updatedCourse);
 	}
 
-	public function updateCourseByParentId($parentId, $fields)
+	public function updateCourseByParentIdAndLocked($parentId, $locked, $fields)
 	{
-		return $this->getCourseDao()->updateCourseByParentId($parentId, $fields);
+		return $this->getCourseDao()->updateCourseByParentIdAndLocked($parentId, $locked, $fields);
 	}
 
 	public function updateCourseCounter($id, $counter)
@@ -1010,7 +1010,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 		$this->dispatchEvent("course.lesson.create", array(
 			"courseId"=>$lesson["courseId"], 
-			"lessonId"=>$lesson["id"]
+			"lesson"=>$lesson
 		));
 
 		return $lesson;
@@ -1221,11 +1221,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
 		$this->getLogService()->info('lesson', 'delete', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
-
 		$this->dispatchEvent("course.lesson.delete", array(
 			"courseId"=>$courseId, 
-			"lessonId"=>$lessonId
+			"lesson"=>$lesson
 		));
+	}
+
+	public function deleteLessonByParentId($parentId)
+	{
+		return $this->getLessonDao()->deleteLessonByParentId($parentId);
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
@@ -1621,6 +1625,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
 		$chapter['createdTime'] = time();
+		$chapter = $this->getChapterDao()->addChapter($chapter);
+		$this->dispatchEvent("chapter.create",$chapter);
+		return $chapter;
+	}
+
+	public function  addChapter($chapter)
+	{
 		return $this->getChapterDao()->addChapter($chapter);
 	}
 
@@ -1631,7 +1642,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException("章节#{$chapterId}不存在！");
 		}
 		$fields = ArrayToolkit::parts($fields, array('title'));
-		return $this->getChapterDao()->updateChapter($chapterId, $fields);
+		$chapter = $this->getChapterDao()->updateChapter($chapterId, $fields);
+		$this->dispatchEvent("chapter.update",$chapter);
+		return $chapter;
+	}
+
+	public function updateChapterByPId($pId, $fields)
+	{
+		return $this->getChapterDao()->updateChapterByPId($pId, $fields);
 	}
 
 	public function deleteChapter($courseId, $chapterId)
@@ -1655,7 +1673,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lessons = $this->getLessonDao()->findLessonsByChapterId($deletedChapter['id']);
 		foreach ($lessons as $lesson) {
 			$this->getLessonDao()->updateLesson($lesson['id'], array('chapterId' => $prevChapter['id']));
+			$this->dispatchEvent("course.lesson.update",$lesson);
 		}
+
+		$this->dispatchEvent("chapter.delete",$deletedChapter);
+	}
+
+	public function deleteChapterByPId($pId)
+	{
+		return $this->getChapterDao()->deleteChapterByPId($pId);
 	}
 	
 
@@ -1744,8 +1770,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 						$fields = array('number' => $chapterNum, 'seq' => $seq, 'parentId' => 0);
 				    }
 					if ($fields['parentId'] != $item['parentId'] || $fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
-						$this->getChapterDao()->updateChapter($item['id'], $fields);
+						$chapter = $this->getChapterDao()->updateChapter($item['id'], $fields);
+						$this->dispatchEvent("chapter.update",$chapter);
 					}
+					
 					break;
 			}
 		}
@@ -1812,6 +1840,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			}
 		}
 		return array($shouldNotifyCourses, $shouldNotifyCourseMembers);
+	}
+
+	public function createMember($member)
+	{
+		return $this->getMemberDao()->addMember($member);
 	}
 
 	public function searchMembers($conditions, $orderBy, $start, $limit)
@@ -1911,6 +1944,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
+			$this->dispatchEvent('course.member.delete',$member);
 		}
 
 		// 逐个插入新的教师的学员数据
@@ -1921,7 +1955,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			if ($existMember) {
 				$this->getMemberDao()->deleteMember($existMember['id']);
 			}
-			$this->getMemberDao()->addMember($member);
+			$member = $this->getMemberDao()->addMember($member);
+			$this->dispatchEvent('course.member.create',$member);
+
 			if ($member['isVisible']) {
 				$visibleTeacherIds[] = $member['userId'];
 			}
@@ -1967,6 +2003,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 		$fields = array('remark' => empty($remark) ? '' : (string) $remark);
 		return $this->getMemberDao()->updateMember($member['id'], $fields);
+	}
+
+	public function deleteMemberByCourseIdAndUserId($courseId, $userId)
+	{
+		return $this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId, $userId);
 	}
 
 	public function becomeStudent($courseId, $userId, $info = array())

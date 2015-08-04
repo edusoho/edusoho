@@ -23,7 +23,11 @@ interface CourseChapterDao
 
     public function updateChapter($id, array $chapter);
 
+    public function updateChapterByPId($pId, $fields);
+
     public function deleteChapter($id);
+
+    public function deleteChapterByPId($pId);
 
     public function deleteChaptersByCourseId($courseId);
 

@@ -12,7 +12,7 @@ interface CourseDao
 
     public function findCoursesByIds(array $ids);
 
-    public function findCoursesByParentId($parentId);
+    public function findCoursesByParentIdAndLocked($parentId, $locked);
     
     public function findCoursesByCourseIds(array $ids, $start, $limit);
 
@@ -28,7 +28,7 @@ interface CourseDao
 
     public function updateCourse($id, $fields);
 
-    public function updateCourseByParentId($parentId, $fields);
+    public function updateCourseByParentIdAndLocked($parentId, $locked, $fields);
 
     public function deleteCourse($id);
     

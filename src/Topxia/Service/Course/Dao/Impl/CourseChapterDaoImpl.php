@@ -66,9 +66,19 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getChapter($id);
     }
 
+    public function updateChapterByPId($pId, $fields)
+    {
+        return $this->getConnection()->update($this->table, $fields, array('pId' => $pId));
+    }
+
     public function deleteChapter($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    public function deleteChapterByPId($pId)
+    {
+       return $this->getConnection()->delete($this->table, array('pId' => $pId)); 
     }
 
     public function deleteChaptersByCourseId($courseId)

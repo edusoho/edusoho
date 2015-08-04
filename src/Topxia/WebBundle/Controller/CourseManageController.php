@@ -265,6 +265,7 @@ class CourseManageController extends BaseController
         }
 
         $teacherMembers = $this->getCourseService()->findCourseTeachers($id);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
 
         $teachers = array();
@@ -279,7 +280,6 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
-
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers

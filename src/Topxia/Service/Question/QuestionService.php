@@ -39,6 +39,8 @@ interface QuestionService
 
     public function editQuestion($id,$fields);
 
+    public function updateQuestionByPId($pId, $fields);
+
     public function deleteQuestion($id);
 
     public function deleteQuestionsByPId($pId);

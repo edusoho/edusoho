@@ -154,14 +154,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function deleteTestpaper($id)
     {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($id);
         $this->getTestpaperDao()->deleteTestpaper($id);
         $this->getTestpaperItemDao()->deleteItemsByTestpaperId($id);
-        $this->dispatchEvent("testpaper.delete",$id);
+        $this->dispatchEvent("testpaper.delete", $testpaper);
     }
 
     public function deleteTestpaperByPId($pId)
     {
-       $this->getTestpaperDao()->deleteTestpaperByParentId($parentId); 
+       return $this->getTestpaperDao()->deleteTestpaperByPId($pId); 
     }
 
     public function buildTestpaper($id, $options)
@@ -924,9 +925,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpaperIdsByPId($pId)
+    public function findTestpaperByPId($pId)
     {
-        return $this->getTestpaperDao()->findTestpaperIdsByPId($pId);
+        return $this->getTestpaperDao()->findTestpaperByPId($pId);
     }
 
     public function findTeacherTestpapersByTeacherId ($teacherId)

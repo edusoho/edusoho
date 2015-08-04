@@ -36,13 +36,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findCoursesByParentId($parentId)
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
         if(empty($parentId)){
             return array();
         }
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($parentId));
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
+        return $this->getConnection()->fetchAll($sql, array($parentId,$locked));
     }
 
     public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -137,9 +137,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getCourse($id);
     }
 
-    public function updateCourseByParentId($parentId, $fields)
+    public function updateCourseByParentIdAndLocked($parentId, $locked, $fields)
     {
-       return $this->getConnection()->update(self::TABLENAME, $fields, array('parentId' => $parentId));
+       return $this->getConnection()->update(self::TABLENAME, $fields, array('parentId' => $parentId,'locked'=>$locked));
     }
 
     public function deleteCourse($id)

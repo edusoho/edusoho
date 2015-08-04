@@ -49,9 +49,9 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function deleteTestpaperItemByPId($pid)
+    public function deleteTestpaperItemByPId($pId)
     {
-        return $this->getConnection()->delete($this->table, array('pId' => $pid));
+        return $this->getConnection()->delete($this->table, array('pId' => $pId));
     }
 
     public function deleteTestpaperItemByTestId($testId)

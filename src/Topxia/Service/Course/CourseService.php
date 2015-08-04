@@ -22,7 +22,7 @@ interface CourseService
 
 	public function findCoursesByIds(array $ids);
 
-	public function findCoursesByParentId($parentId);
+	public function findCoursesByParentIdAndLocked($parentId, $locked);
 	
 	public function findCoursesByCourseIds(array $ids, $start, $limit);
 
@@ -66,7 +66,7 @@ interface CourseService
 
 	public function updateCourse($id, $fields);
 
-	public function updateCourseByParentId($parentId, $fields);
+	public function updateCourseByParentIdAndLocked($parentId, $locked, $fields);
 
 	public function updateCourseCounter($id, $counter);
 
@@ -142,6 +142,8 @@ interface CourseService
 
 	public function deleteLesson($courseId, $lessonId);
 
+	public function deleteLessonByParentId($parentId);
+
 	public function publishLesson($courseId, $lessonId);
 
 	public function unpublishLesson($courseId, $lessonId);
@@ -210,9 +212,15 @@ interface CourseService
 
 	public function createChapter($chapter);
 
+	public function addChapter($chapter);
+
 	public function updateChapter($courseId, $chapterId, $fields);
 
+	public function updateChapterByPId($pId, $fields);
+
 	public function deleteChapter($courseId, $chapterId);
+
+	public function deleteChapterByPId($pId);
 
 	public function getNextChapterNumber($courseId);
 
@@ -229,6 +237,7 @@ interface CourseService
 	/**
 	 * Member API
 	 */
+	public function createMember($member);
 
 	public function searchMembers($conditions, $orderBy, $start, $limit);
 
@@ -265,6 +274,8 @@ interface CourseService
 	public function cancelTeacherInAllCourses($userId);
 
 	public function remarkStudent($courseId, $userId, $remark);
+
+	public function deleteMemberByCourseIdAndUserId($courseId, $userId);
 
 	/**
 	 * 成为学员，即加入课程的学习

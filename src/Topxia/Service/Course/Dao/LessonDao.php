@@ -39,6 +39,8 @@ interface LessonDao
 
     public function deleteLesson($id);
 
+    public function deleteLessonByParentId($parentId);
+
     public function deleteLessonsByCourseId($courseId);
 
     public function findLessonsByIds(array $ids);

@@ -22,7 +22,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     {
         $question = $event->getSubject();
         $courseId = explode('-',explode('/', $question['target'])[0])[1];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentId($courseId),'id');
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         $num = count(explode('/',$question['target']));
         if($num > 1) {
             $lessonId = explode('-',explode('/', $question['target'])[1])[1];
@@ -32,43 +32,38 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         if($question['parentId']){
             $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($question['parentId']),'id');
             $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
+            $this->getQuestionService()->updateQuestionByPId($parentQuestion['id'],array('subCount'=>$parentQuestion['subCount']));
         }
         $question['pId'] = $question['id'];
         unset($question['id']);
         if (!empty($courseIds)) {
             foreach ($courseIds as $key => $courseId) {
-                
-                if($question['parentId']){
+                if($question['parentId']) {
                     $question['parentId'] = $questionIds[$key];
-                    $this->getQuestionService()->editQuestion($questionIds[$key],array('subCount'=>$parentQuestion['subCount']));
-                }
-
+                } 
                 if ($num > 1) {
                     $question['target'] = "course-".$courseId."/lesson-".$lessonIds[$key]."";
                 } else {
                     $question['target'] = "course-".$courseId;
                 }
-                
                 $this->getQuestionService()->addQuestion($question);
             }
         }
+
     }
 
     public function onQuestionUpdate(ServiceEvent $event)
     {
         $question = $event->getSubject();
-        $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($question['parentId']),'id');
+        $pId = $question['id'];
         unset($question['id'],$question['target'],$question['parentId'],$question['pId']);
-        foreach ($questionIds as $value) {
-            $this->getQuestionService()->editQuestion($value,$question);
-        }
-
+        $this->getQuestionService()->updateQuestionByPId($pId, $question);
     }
 
     public function onQuestionDelete(ServiceEvent $event)
     {
-         $questionId = $event->getSubject();
-         $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($question['parentId']),'id');
+        $questionId = $event->getSubject();
+        $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPId($questionId),'id');
         foreach ($questionIds as  $value) {
             $question = $this->getQuestionService()->getQuestion($value);
             $this->getQuestionService()->deleteQuestion($value);
