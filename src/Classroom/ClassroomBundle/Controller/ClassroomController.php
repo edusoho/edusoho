@@ -599,24 +599,6 @@ class ClassroomController extends BaseController
         
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        for($i=0;$i<count($userFields);$i++){
-           if(strstr($userFields[$i]['fieldName'], "textField")){
-            $userFields[$i]['type']="text";
-           }
-           if(strstr($userFields[$i]['fieldName'], "varcharField")){
-            $userFields[$i]['type']="varchar";
-           }
-           if(strstr($userFields[$i]['fieldName'], "intField")){
-            $userFields[$i]['type']="int";
-           }
-           if(strstr($userFields[$i]['fieldName'], "floatField")){
-            $userFields[$i]['type']="float";
-           }
-           if(strstr($userFields[$i]['fieldName'], "dateField")){
-            $userFields[$i]['type']="date";
-           }
-        }
-
         //判断用户是否为VIP            
         $vipStatus = $classroomVip = null;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {

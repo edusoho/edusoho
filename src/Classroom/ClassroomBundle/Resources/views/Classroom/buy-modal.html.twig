@@ -62,7 +62,7 @@
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user} %}
+    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user, showNavTip:1} %}
   
   </form>
 {% endblock %}
