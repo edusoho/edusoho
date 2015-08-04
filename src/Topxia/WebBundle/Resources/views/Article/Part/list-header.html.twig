@@ -13,7 +13,7 @@
         <div class="swiper-container">
           <div class="swiper-wrapper">
             {% for index,featuredArticle in featuredArticles %}
-              <div class="swiper-slide">
+              <div class="swiper-slide swiper-hidden">
                 <a href="{{ path('article_detail', {id:featuredArticle.id}) }}">
                   <img class="img-responsive" src="{{ asset(featuredArticle.picture) }}"  alt="{{ featuredArticle.title }}">
                   <div class="swiper-caption">

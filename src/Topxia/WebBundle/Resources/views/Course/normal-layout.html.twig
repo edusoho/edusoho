@@ -36,6 +36,9 @@
         {% if member|default(null) %}
           {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
         {% endif %}
+
+        {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
+
         {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
         {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
         {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
