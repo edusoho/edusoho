@@ -26,7 +26,7 @@
 
         <form id="set-bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" >
           <div class="form-group">
-            <label class="control-label" for="set-bind-nickname-field">昵称</label>
+            <label class="control-label" for="set-bind-nickname-field">用户名</label>
             <div class="controls">
               <input id="set-bind-nickname-field" class="form-control" type="text" name="nickname" value="{{ oauthUser.name }}" data-url="{{ path('register_nickname_check') }}" />
               <p class="help-block">推荐用现在这个，也可以另外取一个。最长18个英文或者9个汉字</p>
@@ -67,10 +67,10 @@
 
           {# {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
             <div class="form-group mb40 {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
-              <label class="control-label required" for="em_sms_code">短信验证码</label>
+              <label class="control-label required" for="sms_code">短信验证码</label>
               <div class="controls row" >
                 <div class = "col-md-8" >
-                  <input type="text" class="form-control" id="em_sms_code" name="em_sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                  <input type="text" class="form-control" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
                   <p class="help-block"> </p> 
                 </div>
                 <div class="col-md-4">
