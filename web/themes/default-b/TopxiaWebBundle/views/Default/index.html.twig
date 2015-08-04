@@ -418,7 +418,7 @@
     {% for course in courses %}
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-          <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
+          {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive thumb', '') }}
             {% if course.status == 'draft' %}
               <span class="label  label-warning course-status">未发布</span>
             {% elseif course.status == 'closed' %}
