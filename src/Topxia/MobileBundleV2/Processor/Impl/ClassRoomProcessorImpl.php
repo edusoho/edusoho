@@ -17,6 +17,25 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+    public function getAnnouncements()
+    {
+        $start    = (int) $this->getParam("start", 0);
+        $limit    = (int) $this->getParam("limit", 10);
+        $classRoomId = $this->getParam("classRoomId", 0);
+        if (empty($classRoomId)) {
+            return array();
+        }
+
+        $conditions = array(
+            'targetType' => "classroom",
+            'targetId' => $classRoomId
+        );
+
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), $start, $limit);
+        $announcements = array_values($announcements);
+        return $this->filterAnnouncements($announcements);
+    }
+
 	public function getRecommendClassRooms()
 	{
 		$conditions = array(

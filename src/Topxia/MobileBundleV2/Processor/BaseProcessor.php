@@ -60,6 +60,29 @@ class BaseProcessor {
         );
     }
 
+    protected function filterAnnouncements($announcements)
+    {
+        $controller = $this->controller;
+        return array_map(function($announcement) use ($controller)
+        {
+            unset($announcement["userId"]);
+            unset($announcement["courseId"]);
+            unset($announcement["updatedTime"]);
+            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
+            $announcement["createdTime"] = date('c', $announcement['createdTime']);
+            $announcement["startTime"] = date('c', $announcement['startTime']);
+            $announcement["endTime"] = date('c', $announcement['endTime']);
+            return $announcement;
+        }, $announcements);
+    }
+    
+    protected function filterAnnouncement($announcement)
+    {
+        return $this->filterAnnouncements(array(
+            $announcement
+        ));
+    }
+
     protected function setParam($name, $value)
     {
         $this->request->request->set($name, $value);

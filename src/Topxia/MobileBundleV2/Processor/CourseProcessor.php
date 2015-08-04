@@ -30,8 +30,6 @@ interface CourseProcessor
 	public function unFavoriteCourse();
 	public function getTeacherCourses();
 
-	public function getCourseNotice();
-
 	/**
 	*获取课程公告列表
 	*/

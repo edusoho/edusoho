@@ -708,37 +708,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         );
     }
     
-    public function getCourseNotice()
-    {
-        $courseId = $this->getParam("courseId");
-        if (empty($courseId)) {
-            return array();
-        }
-        $announcements = $this->controller->getCourseService()->findAnnouncements($courseId, 0, 10);
-        return $this->filterAnnouncements($announcements);
-    }
-    
-    private function filterAnnouncements($announcements)
-    {
-        $controller = $this->controller;
-        return array_map(function($announcement) use ($controller)
-        {
-            unset($announcement["userId"]);
-            unset($announcement["courseId"]);
-            unset($announcement["updatedTime"]);
-            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
-            $announcement["createdTime"] = date('c', $announcement['createdTime']);
-            return $announcement;
-        }, $announcements);
-    }
-    
-    private function filterAnnouncement($announcement)
-    {
-        return $this->filterAnnouncements(array(
-            $announcement
-        ));
-    }
-    
     public function getCourseReviewInfo()
     {
         $courseId = $this->getParam("courseId", 0);
