@@ -33,6 +33,19 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 		return AppUtil.createArray(num);
 	};
 }]).
+filter('lessonLearnStatus', function(){
+	return function(progress) {
+		if (progress.progressValue == 0) {
+			return "还没开始学习";
+		}
+
+		if (progress.progressValue == 100) {
+			return "已完结";
+		}
+
+		return "最近学习:" + lastLesson.title;
+	};
+}).
 filter('lessonType', function() {
 	var lessonType = {
 		text  : "图文",

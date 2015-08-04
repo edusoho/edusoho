@@ -278,7 +278,7 @@ appProvider.provider('appRouter', function($stateProvider) {
 	            });
 
 	            $stateProvider.state('courseNotice', {
-	              url: "/coursenotice/:courseId",
+	              url: "/coursenotice/:targetType/:targetId",
 	              views: {
 	                'rootView': {
 	                  templateUrl: app.viewFloder  + "view/course_notice.html",

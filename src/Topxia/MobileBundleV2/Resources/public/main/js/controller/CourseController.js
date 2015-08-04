@@ -34,7 +34,6 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   };
 
   this.initTargetService = function(targetType) {
-    console.log(self);
     if (targetType == "course") {
       self.targetInfoService = this.loadCourseReviewInfo;
       self.targetService = this.loadCourseReviews;
@@ -171,13 +170,6 @@ function BaseToolController($scope, OrderService, cordovaUtil)
 
     callback();
   }
-
-  this.shardCourse = function(url, title, about, pic) {
-    if (about.length > 20) {
-      about = about.substring(0, 20);
-    }
-    cordovaUtil.share(app.host + url, title, about, pic);
-  }
 }
 
 function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)
@@ -301,7 +293,12 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
       if (about.length > 20) {
         about = about.substring(0, 20);
       }
-      self.shardCourse("/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture)      
+      cordovaUtil.share(
+        app.host + "/course/" + $scope.course.id, 
+        $scope.course.title, 
+        about, 
+        $scope.course.largePicture
+      );      
     }
 }
 
@@ -437,7 +434,8 @@ function ClassRoomCoursesController($scope, $stateParams, ClassRoomService, $sta
         $scope.toast(data.error.message);
         return;
       }
-      $scope.courses = data;
+      $scope.courses = data.courses;
+      $scope.progressArray = data.progress;
     });
   };
 
@@ -486,6 +484,19 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
     }, function(data) {
       $scope.students = data.data;
     });
+  };
+
+  $scope.shardClassRoom = function() {
+      var about = $scope.classRoom.about;
+      if (about.length > 20) {
+        about = about.substring(0, 20);
+      }
+      cordovaUtil.share(
+        app.host + "/classroom/" + $scope.classRoom.id, 
+        $scope.classRoom.title, 
+        about, 
+        $scope.classRoom.largePicture
+      );
   };
 
   $scope.unLearn = function() {

@@ -510,6 +510,10 @@ a {
   font-size: 18px;
 }
 
+.course-card .ui-list-info .ui-list-title.tag-learn {
+  height: 35px;
+}
+
 .course-card .ui-list-info{
   padding-right : 16px;
 }
@@ -530,7 +534,7 @@ a {
 
 .course-card .origin-price {
   color: #37b97d;
-  font-size: 16px;
+  font-size: 17px;
   margin-right: 10px;
 }
 
@@ -546,6 +550,16 @@ a {
   padding-bottom: 0px;
   padding-left: 16px;
   margin: 0;
+}
+
+.course-card .circle-label {
+  width: 7px;
+  height: 7px;
+  margin: 2px 8px 2px 2px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  border: solid 2px #37b97d;
 }
 
 .course-card .more {
@@ -1150,6 +1164,39 @@ a {
 .ui-course-notice .ui-list>li {
   margin: 15px;
 }
+
+/* ui-progress */
+.ui-progress {
+  border: 0;
+  height: 20px;
+  background: none;
+  position: relative;
+}
+
+.ui-progress .ui-progress-bg{
+  top: 8px;
+  height: 5px;
+  width: 100%;
+  background: #ccc;
+  position: absolute;
+  display: inline-block;
+}
+
+.ui-progress .ui-progress-title {
+  left: 0%;
+  font-size: 8px;
+  height: 20px;
+  line-height: 20px;
+  position: relative;
+  background: #ffffff;
+  display: inline-block;
+}
+
+.ui-progress .ui-progress-bg span {
+  background : #37b97d;
+}
+
+/* ui-progress */
 
 /* ui-course-learn */
 .ui-course-learn .ui-progress {

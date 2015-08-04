@@ -73,9 +73,18 @@ directive('uiTab', function ($parse) {
           }
 
           if ("empty"  != attrs.select) {
-            angular.element(scroller.children[0]).addClass('current');
-            angular.element(nav.children[0]).addClass('current');
-            itmOnLoadListener(angular.element(scroller.children[0]));
+            var childrenIndex = 0;
+            var childrenElement;
+            for (var i = 0; i < nav.children.length; i++) {
+              if (angular.element(nav.children[i]).hasClass('current')) {
+                childrenIndex = i;
+                break;
+              }
+            };
+
+            angular.element(scroller.children[childrenIndex]).addClass('current');
+            angular.element(nav.children[childrenIndex]).addClass('current');
+            itmOnLoadListener(angular.element(scroller.children[childrenIndex]));
           }
 
           this.currentPage = 0;

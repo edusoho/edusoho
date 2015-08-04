@@ -22,6 +22,20 @@
             <p class="course-title">{{ classRoom.title }}</p>
         </div>
     </div>
-    <div ng-include=" 'view/classroom_courses.html' | coverIncludePath ">
+    <div class="ui-tab tab-top" ui-tab>
+        <ul class="ui-tab-nav ui-border-tb">
+            <li><span class="line">班级课程</span></li>
+            <li><span>班级详情</span></li>
+        </ul>
+        <ul class="ui-tab-content tab-display">
+            <li>
+                <div ng-include=" 'view/classroom_courses_learn.html' | coverIncludePath ">
+                </div>
+            </li>
+            <li ng-onload="loadClassRoomDetail()">
+                <div ng-include=" 'view/classroom_detail.html' | coverIncludePath ">
+                </div>
+            </li>
+        </ul>
     </div>
 </div>

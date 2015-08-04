@@ -1,19 +1,20 @@
 <div class="top-tab-header ui-found-course" ng-controller="FoundLiveController">
 
 	<div class="course-card">
-		<h4>推荐</h4>
+		<h4><span class="circle-label"></span>推荐</h4>
 		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐课程">
           		</list-empty-view>
 		<ul class="ui-list ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="liveRecommedCourse in liveRecommedCourses" ng-href="#/course/{{ liveRecommedCourse.id  }}">
 		        <div class="ui-list-img">
-		            <span style="background-image:url( {{ liveRecommedCourse.middlePicture }} )">
+		        		<img ng-src="{{ liveRecommedCourse.middlePicture }}" img-error="course" />
+
 		            	<span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
-				      	<span class="discount-label-bottom"></span>
-				      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时免费</span>
-				      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时打折</span>
-				</span>
-		            </span>
+					      	<span class="discount-label-bottom"></span>
+					      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时免费</span>
+					      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时打折</span>
+					
+		            	</span>
 		        </div>
 		        <div class="ui-list-info">
 		            <h2 class="ui-nowrap ui-list-title">{{ liveRecommedCourse.title }}</h2>
@@ -26,7 +27,6 @@
 				</span>
 
 				<span class="right">
-				      <i class="iconfont icon-person"></i>
 				      {{ liveRecommedCourse.studentNum }}人在学
 				</span>
 		            </p>
@@ -39,19 +39,19 @@
 	</div>
 
 	<div class="course-card">
-		<h4>最新</h4>
+		<h4><span class="circle-label"></span>最新</h4>
 
 		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
           		</list-empty-view>
 		<ul class="ui-list ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="liveLatestCourse in liveLatestCourses" ng-href="#/course/{{ liveLatestCourse.id  }}">
 		        <div class="ui-list-img">
-		            <span style="background-image:url( {{ liveLatestCourse.middlePicture }} )">
+		        	<img ng-src="{{ recommendCourse.middlePicture }}" img-error="course" />
 		            	<span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
 				      	<span class="discount-label-bottom"></span>
 				      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时免费</span>
 				      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时打折</span>
-				</span>
+				
 		            </span>
 		        </div>
 		        <div class="ui-list-info">
@@ -65,7 +65,6 @@
 				</span>
 
 				<span class="right">
-				      <i class="iconfont icon-person"></i>
 				      {{ liveLatestCourse.studentNum }}人在学
 				</span>
 		            </p>
