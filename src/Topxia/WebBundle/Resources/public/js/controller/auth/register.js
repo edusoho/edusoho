@@ -147,7 +147,7 @@ define(function(require, exports, module) {
             var isMobile = reg_mobile.test(mobile);
             if(isMobile){
                 validator.addItem({
-                    element: '[name="em_sms_code"]',
+                    element: '[name="sms_code"]',
                     required: true,
                     rule: 'integer fixedLength{len:6} remote',
                     display: '短信验证码'           
@@ -178,7 +178,7 @@ define(function(require, exports, module) {
                     }                
                 });
                 
-                validator.removeItem('[name="em_sms_code"]');
+                validator.removeItem('[name="sms_code"]');
             }
         }
 
