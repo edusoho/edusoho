@@ -265,7 +265,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             try {
                 $this->checkUserSetPayPassword($user, $fields["payPassword"]);
             } catch(\Exception $e) {
-                return $this->createErrorResponse('error', "修改失败, 请在pc端修改支付密码!");
+                //return $this->createErrorResponse('error', "修改失败, 请在pc端修改支付密码!");
             }
             $fields["coinPayAmount"] = (float) $fields['totalPrice'] * (float) $cashRate;
         }
