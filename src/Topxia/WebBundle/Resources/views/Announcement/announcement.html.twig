@@ -6,12 +6,14 @@
       {% for announcement in announcements %}
         {% if announcement.url %}
         <div class="swiper-slide">
-          <a href="{{announcement.url}}" target="_blank">
-          {{announcement.content|sub_text(50)}}
+          <a class="alert-link" href="{{announcement.url}}" target="_blank">
+            <i class="es-icon es-icon-info mrm"></i>
+            {{announcement.content|sub_text(50)}}
           </a>
         </div>
         {% else %}
         <div class="swiper-slide">
+          <i class="es-icon es-icon-info mrm"></i>
           {{announcement.content|sub_text(50)}}
         </div>
         {% endif %}
