@@ -2,6 +2,12 @@
 
 <section class="class-header after {% if member.role == 'auditor'%} auditor{% endif %}">
   <div class="container">
+    <!-- 填充真实数据 -->
+    <ol class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Library</a></li>
+      <li class="active">Data</li>
+    </ol>
     <div class="class-header-mian">
       <div class="class-bg-layer"></div>
       <div class="class-bg-layer two"></div>
@@ -27,6 +33,23 @@
               {{ web_macro.star(classroom.rating) }}
               <span>({{ classroom.ratingNum }}评价)</span>
             </div>
+            {% if member.role == 'auditor'%}
+              <div class="price hidden-sm">
+                价格： <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                      {% if classroom.price > 0 %}
+                     {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                      {% else %}
+                      免费
+                      {% endif %}
+                  {% else %}
+                    {% if classroom.price > 0 %}
+                      {{ classroom.price }}元
+                    {% else %}
+                      免费
+                    {% endif %}
+                  {% endif %}</span>
+              </div>
+            {% endif %}
           </div>
           <div class="class-serve hidden-sm hidden-xs">
             <div class="serve-frame">
@@ -78,25 +101,9 @@
             </div>
           {% endif %}
         </div>
-        {% if member.role == 'auditor'%}
-        <div class="price hidden-sm">
-          价格： <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if classroom.price > 0 %}
-               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                {% else %}
-                免费
-                {% endif %}
-            {% else %}
-              {% if classroom.price > 0 %}
-                {{ classroom.price }}元
-              {% else %}
-                免费
-              {% endif %}
-            {% endif %}</span>
-        </div>
-        {% endif %}
+        
       {% if canManage %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default btn-mini setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% elseif canHandle %}

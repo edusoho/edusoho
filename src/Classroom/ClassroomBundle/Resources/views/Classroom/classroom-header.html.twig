@@ -1,16 +1,5 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 
-{% if member.locked|default("0") == "1" %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="mtl alert alert-warning">
-      您的退款申请已提交，请等待管理员的处理。
-      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
-    </div>
-  </div>
-</div>
-{% endif %}
-
 <section class="class-header before">
   <div class="container">
     {% if member.locked|default("0") == "1" %}
@@ -19,6 +8,13 @@
         <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
       </div>
     {% endif %}
+
+    <!-- 填充真实数据 -->
+    <ol class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Library</a></li>
+      <li class="active">Data</li>
+    </ol>
     
     <div class="class-header-mian">
       <div class="class-bg-layer"></div>
@@ -48,6 +44,24 @@
               {{ web_macro.star(classroom.rating) }}
               <span>({{ classroom.ratingNum }}评价)</span>
             </div>
+            <div class="price">
+              价格： 
+              <span>
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {% if classroom.price > 0 %}
+                   {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                    {% else %}
+                    免费
+                    {% endif %}
+                {% else %}
+                  {% if classroom.price > 0 %}
+                    {{ classroom.price }}元
+                  {% else %}
+                    免费
+                  {% endif %}
+                {% endif %}
+              </span>
+            </div>
           </div>
           <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
             <li>
@@ -68,11 +82,10 @@
               </span>
             </li>
           {% if classroomMemberLevel and not classroom.private %}
-
-              <li class="hidden-xs color-warning icon-vip" title="会员班级" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员班级" title="会员班级">
-                <i class="es-icon es-icon-crown"></i><br>
-                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
-              </li>
+            <li class="hidden-xs color-warning icon-vip" title="会员班级" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员班级" title="会员班级">
+              <i class="es-icon es-icon-crown"></i><br>
+                {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+            </li>
           {% endif %}
           </ul>
 
@@ -109,26 +122,9 @@
             
           </div>
         </div>
-        <div class="price">
-          价格： 
-         <span>
-            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if classroom.price > 0 %}
-               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                {% else %}
-                免费
-                {% endif %}
-            {% else %}
-              {% if classroom.price > 0 %}
-                {{ classroom.price }}元
-              {% else %}
-                免费
-              {% endif %}
-            {% endif %}
-        </span>
-        </div>
+        
       {% if canManage %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default btn-mini setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}

@@ -26,9 +26,10 @@
 
 // 班级头部
 .class-header {
-  background: url("@{img-src}class_bg.jpg");
+  // background: url("@{img-src}class_bg.jpg");
   // background-size: 100% 100%;
   // background-attachment: fixed;
+  background-color: @gray-lighter;
   padding: 30px 0 40px 0;
   .class-header-mian {
     position: relative;
@@ -37,7 +38,7 @@
   .class-header-bg {
     background-color: #fff;
     .border-radius;
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+    .box-shadow(0 0 4px rgba(0, 0, 0, 0.08));
   }
   .class-img {
     float: left;
@@ -75,6 +76,12 @@
       }
       @media (max-width: @screen-sm-max) {
         margin-bottom: 10px;
+      }
+    }
+    .price {
+      span {
+        font-size: 24px;
+        color: @gray-darker;
       }
     }
   }
@@ -137,62 +144,49 @@
       }
     }
   }
-  .price {
-    position: absolute;
-    width: 205px;
-    height: 82px;
-    line-height: 77px;
-    top: 60px;
-    right: -22px;
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
-    overflow: hidden;
-    background: url("@{img-src}price_bg.png");
-    span {
-      font-size: 22px;
-    }
-    @media (max-width: @screen-md-max) {
-      top: 50px;
-      width: 150px;
-      height: 60px;
-      line-height: 55px;
-      background-size: 150px 60px;
-      span {
-        font-size: 18px;
-      }
-    }
-    @media (max-width: @screen-sm-max) {
-      right: -18px;
-      width: 135px;
-      height: 54px;
-      line-height: 50px;
-      background-size: 135px 54px;
-      span {
-        font-size: 16px;
-      }
-    }
-    @media (max-width: @screen-xs-max) {
-      right: -12px;
-    }
-  }
+  // .price {
+  //   position: absolute;
+  //   width: 205px;
+  //   height: 82px;
+  //   line-height: 77px;
+  //   top: 60px;
+  //   right: -22px;
+  //   text-align: center;
+  //   color: #fff;
+  //   font-size: 12px;
+  //   overflow: hidden;
+  //   background: url("@{img-src}price_bg.png");
+  //   span {
+  //     font-size: 22px;
+  //   }
+  //   @media (max-width: @screen-md-max) {
+  //     top: 50px;
+  //     width: 150px;
+  //     height: 60px;
+  //     line-height: 55px;
+  //     background-size: 150px 60px;
+  //     span {
+  //       font-size: 18px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-sm-max) {
+  //     right: -18px;
+  //     width: 135px;
+  //     height: 54px;
+  //     line-height: 50px;
+  //     background-size: 135px 54px;
+  //     span {
+  //       font-size: 16px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-xs-max) {
+  //     right: -12px;
+  //   }
+  // }
   .setting {
     position: absolute;
-    display: block;
-    top: -10px;
-    right: -10px;
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    text-align: center;
-    .border-radius(50%);
-    background-color: @gray;
-    color: #fff;
-    .es-transition;
-    &:hover {
-      .es-transition;
-      background-color: @brand-primary;
-    }
+    top: 10px;
+    right: 10px;
   }
   &.before {
     .class-img {
@@ -307,6 +301,9 @@
       @media (max-width: @screen-xs-max) {
         width: 100%;
       }
+      .price span {
+        font-size: 16px;
+      }
     }
     .class-operation {
       float: left;
@@ -406,31 +403,31 @@
         padding: 10px 20px;
       }
     }
-    .price {
-      top: 125px;
-      right: -19px;
-      height: 60px;
-      width: 150px;
-      line-height: 60px;
-      background-size: 150px 60px;
-      span {
-        font-size: 20px;
-      }
-      @media (max-width: @screen-md-max) {
-        top: 145px;
-        right: -18px;
-        width: 135px;
-        height: 54px;
-        line-height: 54px;
-        background-size: 135px 54px; 
-        span {
-          font-size: 18px;
-        }
-      }
-      @media (max-width: @screen-xs-max) {
-        top: 30px;
-      }
-    }
+    // .price {
+    //   top: 125px;
+    //   right: -19px;
+    //   height: 60px;
+    //   width: 150px;
+    //   line-height: 60px;
+    //   background-size: 150px 60px;
+    //   span {
+    //     font-size: 20px;
+    //   }
+    //   @media (max-width: @screen-md-max) {
+    //     top: 145px;
+    //     right: -18px;
+    //     width: 135px;
+    //     height: 54px;
+    //     line-height: 54px;
+    //     background-size: 135px 54px; 
+    //     span {
+    //       font-size: 18px;
+    //     }
+    //   }
+    //   @media (max-width: @screen-xs-max) {
+    //     top: 30px;
+    //   }
+    // }
   }
 }
 
