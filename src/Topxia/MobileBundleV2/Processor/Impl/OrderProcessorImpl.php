@@ -52,7 +52,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $payOrderInfo = array(
                 'title' => $course['title'],
                 'price' => $course['price'],
-                'picture' =>$course['middlePicture']
+                'picture' =>$this->coverPic($course['middlePicture'], 'course-large.png')
             );
         } else if ("classroom" == $targetType) {
             $classroom = $this->getClassroomService()->getClassRoom($targetId);
@@ -62,7 +62,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $payOrderInfo = array(
                 'title' => $classroom['title'],
                 'price' => $classroom['price'],
-                'picture' =>$classroom['middlePicture']
+                'picture' =>$this->coverPic($classroom['middlePicture'], 'course-large.png')
             );
         }
 

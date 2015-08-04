@@ -53,6 +53,15 @@ class BaseProcessor {
         }, $users);
     }
 
+    /**
+    * course-large.png
+    */
+    protected function coverPic($src, $srcType)
+    {
+        $container = $this->controller->getContainer();
+        return $container->get('topxia.twig.web_extension')->getFilePath($src, $srcType, true);      
+    }
+
     protected function log($action, $message, $data)
     {
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,  
