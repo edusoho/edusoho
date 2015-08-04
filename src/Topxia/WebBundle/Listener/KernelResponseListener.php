@@ -30,22 +30,23 @@ class KernelResponseListener
         $_target_path = $request->getPathInfo();
 
         $auth = $this->getSettingService()->get('auth');
-        
+
         if ($currentUser->isLogin() && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles']) 
             && isset($auth['fill_userinfo_after_login']) && $auth['fill_userinfo_after_login'] && isset($auth['registerSort'])) {
 
             $whiteList = array(
-                '/fill/userinfo','/logout','/register/mobile/check',
-                '/register/email/check','/login/bind/weixinmob/newset',
+                '/fill/userinfo','/logout','/login_check','/register/mobile/check',
+                '/register','/register/email/check','/login/bind/weixinmob/newset',
                 '/login/bind/weixinmob/existbind', '/login/bind/weixinweb/newset',
                 '/login/bind/qq/newset', '/login/bind/weibo/newset', '/login/bind/renren/newset',
                 '/login/bind/qq/exist', '/login/bind/weibo/exist','/login/bind/renren/exist',
                 '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist',
                 '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
                 '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
-                '/partner/discuz/api/notify', '/partner/phpwind/api/notify'
+                '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login'
             );
-            if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin')) {
+            if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin') 
+                or strstr($request->getPathInfo(),'/register/submited')) {
                 return ;
             }
 
