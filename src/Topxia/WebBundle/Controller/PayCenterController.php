@@ -94,7 +94,12 @@ class PayCenterController extends BaseController
 		if(!array_key_exists("orderId", $fields)) {
 			return $this->createMessageResponse('error', '缺少订单，支付失败');
 		}
-        $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields["payment"]));
+
+        if (!isset($fields['payment'])) {
+            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
+        }
+
+        $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields['payment']));
         $order = $this->getOrderService()->getOrder($fields["orderId"]);
 
 		if($user["id"] != $order["userId"]) {

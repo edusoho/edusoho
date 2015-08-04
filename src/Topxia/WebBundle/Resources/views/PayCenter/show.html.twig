@@ -69,11 +69,13 @@
           	<div class="form-group order-detail-bg ">
               <div class="pay-type-lable">支付方式</div>
               {% for payment, options in payments %}
-              <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
-                {% set picture = 'assets/img/order/'~payment~'.png' %}
-                <img src="{{ asset(picture) }}" />
-                <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
-              </div>
+                <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
+                  {% set picture = 'assets/img/order/'~payment~'.png' %}
+                  <img src="{{ asset(picture) }}" />
+                  <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
+                </div>
+              {% else %}
+                <div class="pay-type-lable text-warning ">支付方式未开启，请联系管理员。</div>
               {% endfor %}
             </div>
             <div class="form-group pay pay-amount ">
