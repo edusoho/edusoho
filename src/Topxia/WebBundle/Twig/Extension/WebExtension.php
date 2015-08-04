@@ -99,7 +99,7 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
-
+            'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
             'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
         );
     }
@@ -1081,6 +1081,11 @@ class WebExtension extends \Twig_Extension
         return $dict[$key];
     }
 
+    public function getNextExecutedTime()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService')->getNextExcutedTime();
+    }
+
     public function getUploadMaxFilesize($formated = true)
     {
         $max = FileToolkit::getMaxFilesize();
@@ -1102,10 +1107,10 @@ class WebExtension extends \Twig_Extension
         return ($head . '****' . $tail);
     }
 
-    public function blur_idcard_number($phoneNum)
+    public function blur_idcard_number($idcardNum)
     {
-        $head = substr($phoneNum,0,4);
-        $tail = substr($phoneNum,-2,2);
+        $head = substr($idcardNum,0,4);
+        $tail = substr($idcardNum,-2,2);
         return ($head . '************' . $tail);
     }
 

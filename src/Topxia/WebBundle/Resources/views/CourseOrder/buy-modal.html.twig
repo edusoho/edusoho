@@ -19,6 +19,7 @@
       <div class="col-md-3 control-label">课程名称</div>
       <div class="col-md-9 controls">
       	<span class="control-text text-muted">《{{ course.title }}》</span>
+        <input type="hidden" name="lessonId" value="{{ lessonId}}">
       </div>
     </div>
 
@@ -62,8 +63,10 @@
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user} %}
-  
+    {% set userinfo_enable = setting('course.buy_fill_userinfo')|default(false) %}
+    {% set checkedFields = setting('course.userinfoFields')|default([]) %}
+    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:userinfo_enable, userinfoFieldsSetting:checkedFields, userFields:userFields, user:user, showNavTip:1} %}
+
   </form>
 {% endblock %}
 
@@ -92,7 +95,7 @@
         {% if course.status != 'published' or (course.type == 'live' and course.studentNum >= course.maxStudentNum) %}
         disabled="disabled"
         {% endif %}
-        data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
+        data-loading-text="正在加入..." data-submiting-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
       {% endif %}
     {% endif %}
 

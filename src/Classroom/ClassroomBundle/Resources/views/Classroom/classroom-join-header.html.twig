@@ -1,4 +1,5 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+
 <section class="class-header after {% if member.role == 'auditor'%} auditor{% endif %}">
   <div class="container">
     <div class="class-header-mian">
@@ -11,7 +12,16 @@
           </a>
         </div>
         <div class="class-info">
-          <h2 class="title">{{ classroom.title }}</h2>
+          <h2 class="title">
+            {{ classroom.title }}
+            <span class="es-qrcode top" data-url="{{path('common_learn_qrcode',{classroomId: classroom.id,type:"classroom-qrcode"})}}">
+              <i class="es-icon es-icon-qrcode"></i>
+              <span class="qrcode-popover">
+                <img src="" alt="">
+                扫二维码继续学习
+              </span>
+            </span>
+          </h2>
           <div class="metas">
             <div class="score">
               {{ web_macro.star(classroom.rating) }}

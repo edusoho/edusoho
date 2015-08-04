@@ -21,22 +21,6 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $user = $this->getCurrentUser();
 
-        $courseSetting = $this->getSettingService()->get('course', array());
-        $coinSetting = $this->getSettingService()->get('coin');
-        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        
-        $userInfoEnable = isset($coinSetting['buy_fill_userinfo']) && $coinSetting['buy_fill_userinfo'] == 1;
-        if ($user->isLogin() && !$userInfoEnable && (!$course['approval'] || ($course['approval'] && $user['approvalStatus'] == 'approved'))) {
-            if (($coinEnable && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
-                || ($coinSetting['price_type'] == "RMB" && $course['price'] == 0 )) {
-                
-                $data = array("price" => 0, "remark"=>'');
-                $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $courseId, $data);
-
-                return $this->redirect($this->generateUrl('course_learn', array('id' => $courseId)).'#lesson/'.$lessonId);
-            }
-        }
-
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
@@ -57,8 +41,7 @@ class CourseLessonController extends BaseController
             if($course["parentId"]>0){
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
-
-            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true , 'lessonId' => $lesson['id']) );
         }
 
         //在可预览情况下查看网站设置是否可匿名预览
@@ -76,7 +59,7 @@ class CourseLessonController extends BaseController
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }
-                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true));
+                return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
             }
             
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -225,7 +208,13 @@ class CourseLessonController extends BaseController
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
+                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                                'data' => $file['id'], 
+                                'times' => 3, 
+                                'duration' => 3600,
+                                'userId' => $this->getCurrentUser()->getId()
+                            ));
+
                             $url = array(
                                 'url' => $this->generateUrl('hls_playlist', array(
                                     'id' => $file['id'],
@@ -315,7 +304,16 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        return $this->fileAction($request, $lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            throw $this->createNotFoundException();
+        }
+        
+        return $this->createLocalMediaResponse($request, $file, $isDownload);
     }
 
     public function detailDataAction($courseId, $lessonId)
@@ -708,11 +706,6 @@ class CourseLessonController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course.CourseMemberService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getVipService()
