@@ -385,13 +385,47 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 
 		$courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-		$courseMembers = array();
-		foreach ($courses as $key => $course) {
-       	$courseMembers[$course['id']] = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
-    	}
+		$progressArray = array();
+        $user = $this->controller->getUserByToken($this->request);
 
-    	return $this->controller->filterCourses($courses);
+		foreach ($courses as $key => $course) {
+       	    $courseMember = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
+
+            $lessonNum = (float)$course['lessonNum'];
+            $progress = $lessonNum == 0 ? 0 : (float)$courseMember['learnedNum'] / $lessonNum;
+            
+            $lastLesson = null;
+            if ($user) {
+                $userLearnStatus = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']);
+                $lessonIds = array_keys($userLearnStatus ? $userLearnStatus : array());
+                $lastLesson = $this->getCourseService()->getLesson(end($lessonIds));
+            }
+            $progressArray[$course['id']] = array(
+                "lastLesson" => $this->filterLastLearnLesson($lastLesson),
+                "progress" => (int)($progress * 100) . "%",
+                "progressValue" => (int)($progress * 100)
+            );
+        }
+
+        return array(
+            'courses' => $this->controller->filterCourses($courses),
+            'progress' => $progressArray
+        );
 	}
+
+    private function filterLastLearnLesson($lastLesson)
+    {
+        if (empty($lastLesson)) {
+            return $lastLesson;
+        }
+        foreach ($lastLesson as $key => $value) {
+            if (!in_array($key, array('id', 'title', 'courseId', 'itemType'))) {
+                unset($lastLesson[$key]);
+            }
+        }
+
+        return $lastLesson;
+    }
 
 	public function myClassRooms()
 	{	
