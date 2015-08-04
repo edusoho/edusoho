@@ -33,7 +33,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $this->getClassroomService()->updateClassroom($classroomId, array("lessonNum" => $lessonNum));
         }
 
-        $courseIds = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         foreach ($courseIds as $courseId) {
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
             foreach ($classroomIds as  $classroomId) {
