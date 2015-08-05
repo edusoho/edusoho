@@ -4,12 +4,24 @@
 {% block esBar %}{% endblock %}
 {% set script_controller = 'pay/wxpay-roll' %}
 {% block content %}
-
-  <div class="panel panel-default panel-qrcode">
-    <div class="panel-heading">
-      <h2 class="panel-title">微信支付</h2>
+  <div class="order-nav hidden-xs clearfix ">
+        <div >
+          确认订单 <b></b>
+        </div>
+        <div class="on">
+          <span></span>
+          订单支付 <b></b>
+        </div>
+        <div>
+          <span></span>
+          订单完成
+        </div>
+  </div>
+  <div class="es-section panel-qrcode">
+    <div class="order-pay-heading">
+      微信支付
     </div>
-    <div class="panel-body">
+    <div class="order-pay-body">
       <div class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         订单已提交，请在４８小时内完成支付！逾期订单将被取消。
