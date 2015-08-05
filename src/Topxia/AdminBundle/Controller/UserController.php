@@ -57,9 +57,13 @@ class UserController extends BaseController
             $showUserExport = version_compare($app['version'], "1.0.2", ">=");
         }
 
+        $userIds = ArrayToolkit::column($users,'id');
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
+            'profiles' => $profiles,
             'showUserExport' => $showUserExport
         ));
     }
@@ -105,7 +109,8 @@ class UserController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-          
+            $formData['type'] = 'import';
+
             $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
             $this->get('session')->set('registed_email', $user['email']);
 
@@ -135,6 +140,7 @@ class UserController extends BaseController
         $userData['nickname'] = $formData['nickname'];
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
+        $userData['type'] = $formData['type'];
         return $userData;
     }
 

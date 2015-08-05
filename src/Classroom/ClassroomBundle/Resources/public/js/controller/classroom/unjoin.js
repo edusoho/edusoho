@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    require('../../../../topxiaweb/js/util/qrcode').run();
     exports.run = function() {
 
         var join_btn = false;
