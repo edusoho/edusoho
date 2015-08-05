@@ -182,7 +182,8 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }, $oldAvatars);
 
-        return  $this->getUserDao()->updateUser($userId, $fields);
+        $user = $this->getUserDao()->updateUser($userId, $fields);
+        return UserSerialize::unserialize($user);
     }
 
     public function isNicknameAvaliable($nickname)
