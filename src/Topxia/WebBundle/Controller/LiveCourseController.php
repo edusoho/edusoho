@@ -207,12 +207,11 @@ class LiveCourseController extends BaseController
         } else {
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
-
         $client = LiveClientFactory::createClient();
         $result = $client->entryLive($params);
 
         if (empty($result) || isset($result['error'])) {
-            return $this->createAccessDeniedException('进入直播教室失败，请重试！');
+            return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
