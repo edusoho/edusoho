@@ -123,7 +123,7 @@
                 {% else %}
                   <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
                   <li>
-                    视频将上传到<strong>网站服务器</strong>。如需使用EduSoho云视频,点击<a href="{{ path('admin_cloud_video') }}" target="_blank">这里</a>了解详情,EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+                    视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="{{ path('admin_cloud_video') }}" target="_blank">这里</a>了解详情,EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
                   </li>
                 {% endif %}
               </ul>
@@ -231,7 +231,9 @@
                   <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
                   <li>音频将上传到<strong>云服务器</strong></li>
                 {% else %}
-                  <li>音频将上传到<strong>网站服务器</strong></li>
+                  <li>
+                    音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="{{ path('admin_cloud_video') }}" target="_blank">这里</a>了解详情。
+                  </li>
                 {% endif %}
               </ul>
             </div>
