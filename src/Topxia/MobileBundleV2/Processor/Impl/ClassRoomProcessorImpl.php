@@ -17,6 +17,35 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+    public function signHistory()
+    {
+        $classRoomId = $this->getParam("classRoomId", 0);
+        $user  = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能查看班级！");
+        }
+        $classroom = $this->getClassroomService()->getClassroom($classRoomId);
+
+        $isSignedToday = $this->getSignService()->isSignedToday($user['id'], 'classroom_sign', $classroom['id']);
+
+        $week = array('日','一','二','三','四','五','六');
+
+        $userSignStatistics = $this->getSignService()->getSignUserStatistics($user['id'], 'classroom_sign', $classroom['id']);
+
+        $day = date('d', time());
+
+        $signDay = $this->getSignService()->getSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time()+3600));
+        $notSign = $day-count($signDay);
+
+        return array(
+            'isSignedToday' => $isSignedToday,
+            'userSignStatistics' => $userSignStatistics,
+            'notSign' => $notSign,
+            'week' => $week[date('w', time())]
+        );
+
+    }
+
     public function getAnnouncements()
     {
         $start    = (int) $this->getParam("start", 0);
@@ -558,6 +587,11 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             "data" => $this->filterClassRooms($classrooms)
         );
 	}
+
+    private function getSignService()
+    {
+        return $this->controller->getService('Sign.SignService');
+    }
 
 	private function getCategoryService()
 	{
