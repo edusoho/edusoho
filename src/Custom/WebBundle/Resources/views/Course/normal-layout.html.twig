@@ -22,7 +22,7 @@
     </div>
     <div class="course-about-sidebar">
       {% block course_sidebar %}
-        {% if course.type=='periodic' %}
+        {% if 'periodic'==course.type %}
           <div class="es-panel open-class">
             <div class="panel-heading clearfix dropdown">
               <a href="javascript:;" class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">第{{ course.periods | num2chinese }}次开课

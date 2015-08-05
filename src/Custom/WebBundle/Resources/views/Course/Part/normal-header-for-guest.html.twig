@@ -15,6 +15,7 @@
         <span>( {{ course.ratingNum }}人 )</span>
       </div>
     <div class="study clearfix">
+      {% set needToPay=( (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0)) %}
       {% if 'periodic'==course.type %}
         {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
         <a class="btn btn-study {{ courseFinished ? 'little-gray' : ''}}" 
@@ -32,9 +33,8 @@
         {% if courseFinished %}
           已结束
         {% else %}
-          {% if (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0) %}
+          {% if needToPay %}
             {{ userVipStatus=='ok' ? ("now"|date('U') >= course.startTime ? "加入学习" : " 报名参加") : "购买课程" }}
-            }
           {% else %}
             {{ "now"|date('U') >= course.startTime ? "加入学习" : " 报名参加" }}
           {% endif %}
@@ -54,14 +54,10 @@
             disabled="disabled"
           {% endif %}
         >
-          {% if userVipStatus == 'ok' %}
-            加入学习
+          {% if needToPay %}
+            {{ userVipStatus=='ok' ? "加入学习" : "购买课程" }}
           {% else %}
-            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              {% if course.coinPrice > 0 %}购买课程{% else %}加入学习{% endif %}              
-            {% else %}
-              {% if course.price > 0 %}购买课程{% else %}加入学习{% endif %}
-            {% endif %}
+            加入学习
           {% endif %}
         </a>
       {% endif %}
