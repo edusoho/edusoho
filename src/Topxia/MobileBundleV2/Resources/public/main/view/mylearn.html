@@ -25,7 +25,9 @@
                                 上次学习时间:{{ course.startTime | coverLearnTime }}
                             </span>
                             <div class="ui-progress">
-                                <span ng-style="course | coverLearnProsser"></span>
+                                <div class="ui-progress-bg">
+                                  <span ng-style="course | coverLearnProsser"></span>
+                                </div>
                             </div>
                           </p>
                       </div>

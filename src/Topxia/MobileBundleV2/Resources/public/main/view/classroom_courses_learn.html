@@ -9,7 +9,7 @@
               <p class="bottom price-body">
                 <span class="ui-nowrap">{{ progressArray[course.id] | lessonLearnStatus }}</span>
                 <span class="origin-price">
-                      <div class="ui-progress">
+                      <div class="ui-progress" ui-progress data="{{ progressArray[course.id].progressValue }}">
                           <div class="ui-progress-bg">
                             <span style="width:{{ progressArray[course.id].progress }}"></span>
                           </div>

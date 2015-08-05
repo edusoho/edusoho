@@ -43,7 +43,7 @@ filter('lessonLearnStatus', function(){
 			return "已完结";
 		}
 
-		return "最近学习:" + lastLesson.title;
+		return "最近学习:" + progress.lastLesson.title;
 	};
 }).
 filter('lessonType', function() {

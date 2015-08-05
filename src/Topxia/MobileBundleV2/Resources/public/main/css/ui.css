@@ -1184,11 +1184,15 @@ a {
 
 .ui-progress .ui-progress-title {
   left: 0%;
-  font-size: 8px;
   height: 20px;
+  color: #ffffff;
+  font-size: 8px;
   line-height: 20px;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 50%;
   position: relative;
-  background: #ffffff;
+  background: #ccc;
   display: inline-block;
 }
 
@@ -1204,8 +1208,12 @@ a {
   height: 5px;
 }
 
-.ui-course-learn .ui-progress span {
-  background : #37b97d;
+.ui-course-learn .ui-progress .ui-progress-bg {
+  top: 0px;
+}
+
+.ui-course-learn .course-card .ui-list-info .ui-list-title {
+  height: 40px;
 }
 
 /** ui-course-review **/

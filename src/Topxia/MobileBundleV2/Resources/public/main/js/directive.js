@@ -8,6 +8,27 @@ app.directive('onElementReadey', function ($parse, $timeout) {
         }
     };
 }).
+directive('uiProgress', function($timeout) {
+  return {
+        restrict: 'A',
+        link : function(scope, element, attrs) {
+          var titleLabel = element[0].querySelector(".ui-progress-title");
+          $timeout(function() {
+            var totalWidth = element[0].offsetWidth;
+            var titleLabelWidth = titleLabel.offsetWidth;
+            console.log(totalWidth + " " + titleLabelWidth);
+
+            var progressValue = attrs.data ? attrs.data : 0;
+            var left = progressValue * totalWidth;
+            if (left > (totalWidth - titleLabelWidth)) {
+              left = totalWidth - titleLabelWidth;
+            }
+
+            titleLabel.style.left = left + "px";
+          }, 100);
+        }
+    };
+}).
 directive('uiAutoPanel', function () {
   return {
         restrict: 'A',
