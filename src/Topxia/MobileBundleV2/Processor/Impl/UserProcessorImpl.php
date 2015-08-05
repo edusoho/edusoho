@@ -9,6 +9,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Cookie;
 use Topxia\Common\SmsToolkit;
+use Topxia\Common\FileToolkit;
 use Topxia\MobileBundleV2\Processor\XingeApp;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
@@ -19,6 +20,67 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $this->formData;
     }
     
+    public function uploadAvatar()
+    {
+        $groupCode = 'default';
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $file = $this->request->files->get('file');
+        if (empty($file)) {
+            return $this->createErrorResponse('error', "没有选择上传文件!");
+        }
+        if (!FileToolkit::isImageFile($file)) {
+            return $this->createErrorResponse('error', "您上传的不是图片文件，请重新上传。");
+        }
+
+        $record = $this->getFileService()->uploadFile($groupCode, $file);
+        if (empty($record)) {
+            return $this->createErrorResponse('error', "上传失败 ～请重新尝试!");
+        }
+
+        $host = $this->request->getSchemeAndHttpHost();
+        $record['url'] = $host . $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['createdTime'] = date('c', $record['createdTime']);
+        unset($record['uri']);
+        return $record;
+    }
+
+    public function updateUserProfile()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $profile = $this->request->request->get('profile');
+        
+        try {
+            $this->updateNickname($user, $profile['nickname']);
+            $this->getUserService()->updateUserProfile($user['id'], $profile);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('not_login', $e->getMessage());
+        }
+
+        return true;
+    }
+
+    private function updateNickname($user, $nickname)
+    {
+        $isNickname = $this->getSettingService()->get('user_partner');
+        $oldNickname = $user['nickname'];
+        if ($oldNickname == $nickname) {
+            return;
+        }
+        if($isNickname['nickname_enabled'] == 0){
+            throw new RuntimeException("nickname update Error");
+        }
+
+        $this->getAuthService()->changeNickname($user['id'], $nickname);
+    }
+
     public function getUserCoin()
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -1009,6 +1071,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $users = $this->controller->getUserService()->findUsersByIds($course['teacherIds']);
 
         return array_values($this->filterUsersFiled($users));
+    }
+
+    protected function getAuthService()
+    {
+        return $this->controller->getService('User.AuthService');
     }
 
 }

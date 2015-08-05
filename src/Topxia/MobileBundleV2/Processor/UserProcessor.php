@@ -48,4 +48,8 @@ interface UserProcessor
 	public function smsSend();
 
 	public function getCourseTeachers();
+
+	public function updateUserProfile();
+
+	public function uploadAvatar();
 }
