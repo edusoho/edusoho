@@ -7,13 +7,13 @@
         {% if announcement.url %}
         <div class="swiper-slide">
           <a class="alert-link" href="{{announcement.url}}" target="_blank">
-            <i class="es-icon es-icon-info mrm"></i>
+            <i class="es-icon es-icon-infooutline mrm"></i>
             {{announcement.content|sub_text(50)}}
           </a>
         </div>
         {% else %}
         <div class="swiper-slide">
-          <i class="es-icon es-icon-info mrm"></i>
+          <i class="es-icon es-icon-infooutline mrm"></i>
           {{announcement.content|sub_text(50)}}
         </div>
         {% endif %}
