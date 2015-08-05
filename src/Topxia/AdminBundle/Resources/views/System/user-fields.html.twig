@@ -34,7 +34,7 @@
     <legend>个人资料设置</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >购买课程时填写个人资料</label>
+        <label >购买课程或班级时填写个人资料</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo|default(0)) }}
@@ -107,7 +107,7 @@
             {% endif %}
           </ul>
 
-          <div class="help-block col-md-12">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</div>
+          <div class="help-block col-md-12">可拖动调整先后次序.勾选后，在购买课程或班级时就必须要填写该项目</div>
         </div>
         <div class="mbl" style="text-align:center;">
           <a href="javascript:" id="hide-list-btn">收起 
@@ -194,7 +194,7 @@
             {% endif %}
           </ul>
 
-          <div class="help-block col-md-12">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</div>
+          <div class="help-block col-md-12">可拖动调整先后次序.勾选后，如果用户没有填写勾选项信息，在登录时就必须要填写该项目</div>
         </div>
         <div class="mbl" style="text-align:center;">
           <a href="javascript:" id="hide-fields-list-btn">收起 
