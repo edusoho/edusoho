@@ -36,7 +36,9 @@ use Topxia\Common\BlockToolkit;
 
     private function updateScheme()
     {
-            
+        $connection = $this->getConnection();
+
+        $connection->exec("delete from crontab_job where name='DeleteSessionJob';");
     }
 
     protected function isFieldExist($table, $filedName)
