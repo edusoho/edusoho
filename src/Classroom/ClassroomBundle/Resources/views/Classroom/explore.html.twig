@@ -3,16 +3,15 @@
 {% set script_controller = 'classroombundle/controller/classroom/explore' %}
 
 {% block top_content %}
-  <div class="class-banner es-banner">
+  <div class="es-banner">
     <div class="container">
       <div class="title">
-        <span>{{ setting('classroom.name')|default("班级") }}</span>
+        <i class="es-icon es-icon-viewmodule"></i>
+        {{ setting('classroom.name')|default("班级") }}列表
       </div>
-      <div class="course-more">
-        <a class="btn-more" href="{{ path('course_explore') }}">
-          查看<br>课程
-        </a>
-      </div>
+      <a class="btn btn-primary btn-lg more" href="{{ path('course_explore') }}">
+        查看课程
+      </a>
     </div>
   </div>
   
