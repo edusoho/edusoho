@@ -9,6 +9,8 @@ interface MaterialService
 
 	public function deleteMaterial($courseId, $materialId);
 
+	public function deleteMaterialByPId($pId);
+
 	public function deleteMaterialsByLessonId($lessonId);
 
 	public function deleteMaterialsByCourseId($courseId);

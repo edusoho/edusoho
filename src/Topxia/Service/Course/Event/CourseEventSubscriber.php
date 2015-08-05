@@ -23,11 +23,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'course.update' => 'onCourseUpdate',
             'course.teacher.update' => array('onCourseTeacherUpdate', 0),
             'material.create' => 'onMaterialCreate',
+            'material.delete' => 'onMaterialDelete',
             'chapter.create' => 'onChapterCreate',
             'chapter.delete' => 'onChapterDelete',
             'chapter.update' => 'onChapterUpdate',
             'course.member.create' => 'onCourseMemberCreate',
-            'course.member.delete' => 'onCourseMemberDelete'
+            'course.member.delete' => ' onCourseMemberDelete'
         );
     }
 
@@ -179,6 +180,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
         $this->getCourseService()->updateLessonByParentId($parentId,$lesson);
 
+    }
+
+    public function onMaterialDelete(ServiceEvent $event)
+    {
+        $material = $event->getSubject();
+        $this->getMaterialService()->deleteMaterialByPId($material['id']);
     }
 
     public function onChapterCreate(ServiceEvent $event)
