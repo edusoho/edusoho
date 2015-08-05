@@ -32,7 +32,7 @@ class EdusohoLiveClient
         return CloudAPIFactory::create('leaf')->get('/lives/capacity', $args);
     }
 
-    public function startLive($args)
+    public function getRoomUrl($args)
     {
         return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
@@ -48,7 +48,7 @@ class EdusohoLiveClient
 
     public function entryLive($args)
     {
-        return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/room_url', $args);
+        return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/entry_room', $args);
     }
 
     public function entryReplay($args)

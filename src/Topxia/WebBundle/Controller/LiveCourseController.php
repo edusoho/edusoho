@@ -118,69 +118,55 @@ class LiveCourseController extends BaseController
     public function getClassroomUrlAction(Request $request,$courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('尚未登入！');
+        }
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            throw $this->createAccessDeniedException('课时不存在！');
+        }
+
+        if (empty($lesson['mediaId'])) {
+            throw $this->createAccessDeniedException('直播教室不存在！');
+        }
+
+        if ($lesson['startTime'] - time() > 7200) {
+            throw $this->createAccessDeniedException('直播还没开始!');
+        }
+
+        if ($lesson['endTime'] < time()) {
+            throw $this->createAccessDeniedException('直播已结束!');
+        }
+
+        $params = array(
+            'liveId' => $lesson['mediaId'], 
+            'provider' => $lesson['liveProvider'],
+            'user' => $user['email'],
+            'nickname' => $user['nickname'],
+        );
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
-            // 老师登录
-
-            $client = LiveClientFactory::createClient();
-            
-            $params = array(
-                'liveId' => $lesson['mediaId'], 
-                'provider' => $lesson['liveProvider'],
-                'user' => $user['email'],
-                'nickname' => $user['nickname'],
-                'role' => 'teacher'
-            );
-
-            $result = $client->startLive($params);
-
-            if (empty($result) || isset($result['error'])) {
-                return $this->createAccessDeniedException('进入直播教室失败，请重试！');
-            }
-
-            return $this->createJsonResponse(array(
-                'url' => $result['url'],
-                'param' => isset($result['param']) ? $result['param']:null
-            ));
-
-        }
-
-        if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
-
-            // http://webinar.vhall.com/appaction.php?module=inituser&pid=***&email=***&name=****&k=****&refer=****
-            // $matched = preg_match('/^c(\d+)u(\d+)t(\d+)s(\w+)$/', $k, $matches);
-            $now = time();
-            $params = array();
-
-            $params['email'] = 'live-' . $user['id'] . '@edusoho.net';
-            $params['nickname'] = $user['nickname'];
-
-            $params['sign'] = "c{$lesson['courseId']}u{$user['id']}t{$now}";
-            $params['sign'] .= 's' . $this->makeSign($params['sign']);
-
-            $params['liveId'] = $lesson['mediaId'];
-            $params['provider'] = $lesson["liveProvider"];
+            $params['role'] = 'teacher';
+        } else if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
-
-            $client = LiveClientFactory::createClient();
-
-            $params['user'] = $params['email'];
-
-            $result = $client->entryLive($params);
-
-            if(isset($result["error"]) && $result["error"]){
-                return $this->createAccessDeniedException($result["errorMsg"]);
-            }
-
-            return $this->createJsonResponse(array(
-                'url' => $result['url'],
-                'param' => isset($result['param']) ? $result['param']:null
-            ));
-
+        } else {
+            throw $this->createAccessDeniedException('您不是课程学员，不能参加直播！');
         }
 
-        return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+        $client = LiveClientFactory::createClient();
+        $result = $client->getRoomUrl($params);
+
+        if (empty($result) || isset($result['error'])) {
+            throw $this->createAccessDeniedException('进入直播教室失败，请重试！');
+        }
+
+        return $this->createJsonResponse(array(
+            'url' => $result['url'],
+            'param' => isset($result['param']) ? $result['param']:null
+        ));
+        
     }
 
     public function entryAction(Request $request,$courseId, $lessonId)
@@ -205,6 +191,28 @@ class LiveCourseController extends BaseController
 
         if ($lesson['endTime'] < time()) {
             return $this->createMessageResponse('info', '直播已结束!');
+        }
+
+        $params = array(
+            'liveId' => $lesson['mediaId'], 
+            'provider' => $lesson['liveProvider'],
+            'user' => $user['email'],
+            'nickname' => $user['nickname'],
+        );
+
+        if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+            $params['role'] = 'teacher';
+        } else if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+            $params['role'] = 'student';
+        } else {
+            return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+        }
+
+        $client = LiveClientFactory::createClient();
+        $result = $client->entryLive($params);
+
+        if (empty($result) || isset($result['error'])) {
+            return $this->createAccessDeniedException('进入直播教室失败，请重试！');
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
