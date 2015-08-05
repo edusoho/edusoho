@@ -13,6 +13,7 @@ define(function(require, exports, module) {
             finishUrl: null,
             uploadUrl: null,
             accept: null,
+            process: 'none',
             uploadToken: null
         },
 
@@ -124,6 +125,31 @@ define(function(require, exports, module) {
             });
         },
 
+        _getProcessParams: function(file) {
+            var extOutputs = {
+                mp4: 'HLSEncryptedVideo',
+                avi: 'HLSEncryptedVideo',
+                flv: 'HLSEncryptedVideo',
+                f4v: 'HLSEncryptedVideo',
+                wmv: 'HLSEncryptedVideo',
+                mov: 'HLSEncryptedVideo',
+                rmvb: 'HLSEncryptedVideo',
+                mkv: 'HLSEncryptedVideo',
+            };
+
+            var paramsDefault = {
+                'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'}
+            }
+
+            var params = {};
+            if ((this.get('process') == 'auto') && extOutputs[file.ext]) {
+                params = paramsDefault[extOutputs[file.ext]];
+                params.output = extOutputs[file.ext];
+            } 
+
+            return params;
+        },
+
         _initUploaderHook: function() {
             var self = this;
             WebUploader.Uploader.register({
@@ -141,8 +167,7 @@ define(function(require, exports, module) {
                             fileSize: file.size,
                             hashType: 'chunk_md5',
                             hashValue: hash,
-                            convertor: '',
-                            processParams: {'qulity': 'low'}
+                            processParams: self._getProcessParams(file)
                         }
 
                         $.support.cors = true;

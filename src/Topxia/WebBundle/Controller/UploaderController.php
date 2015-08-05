@@ -23,8 +23,6 @@ class UploaderController extends BaseController
         	return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
         }
 
-        var_dump($params);
-
         $params = array_merge($request->request->all(), $params);
 
         $result = $this->getUploadFileService()->initUpload($params);
@@ -67,7 +65,23 @@ class UploaderController extends BaseController
             'token' => $token,
             'targetType' => $params['targetType'],
             'accept' => $accept,
+            'process' => $this->geteProcessMode($params['targetType']),
         ));
+    }
+
+    protected function geteProcessMode($targetType)
+    {
+        $modes = array(
+            'courselesson' => 'auto',
+            'coursematerial' => 'none',
+            'materiallib' => 'auto',
+        );
+
+        if (isset($modes[$targetType])) {
+            return $modes[$targetType];
+        }
+
+        return 'none';
     }
 
     protected function getUploadFileAccept($targetType, $only = '')

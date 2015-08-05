@@ -39,6 +39,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $file['bucket'] = $params['bucket'];
         $file['hashType'] = $params['hashType'];
         $file['hashValue'] = $params['hashValue'];
+        $file['processParams'] = empty($params['processParams']) ? array() : $params['processParams'];
 
         $params = $implementor->initUpload($file);
 

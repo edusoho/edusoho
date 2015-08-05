@@ -45,7 +45,6 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'hashType' => $file['hashType'],
             'hashValue' => $file['hashValue'],
             'callbackUrl' => '',
-            'processor' => empty($file['processor']) ? '' : $file['processor'],
             'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
             'extras' => empty($file['extras']) ? '' : $file['extras'],
         );
