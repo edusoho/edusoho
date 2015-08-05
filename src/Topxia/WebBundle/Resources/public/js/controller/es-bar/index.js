@@ -111,7 +111,6 @@ define(function(require, exports, module) {
     var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
 
     if (isIE10 || isIE11) {
-        console.log(1);
         $(".es-bar").css( "margin-right",'16px');
     }
 

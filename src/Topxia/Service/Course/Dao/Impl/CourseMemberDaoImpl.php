@@ -52,6 +52,22 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $role));
     }
 
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
+    {
+        $this->filterStartLimit($start, $limit);
+
+        $sql  = "SELECT m.* FROM {$this->table} m ";
+        $sql.= ' JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
+        $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
+        if($onlyPublished){
+            $sql .= " AND c.status = 'published' ";
+        }
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($userId, $role));
+    }
+
     public function getMembersByCourseIds($courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1) . '?';
@@ -65,6 +81,17 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
         $sql.= " AND m.role =  ? AND m.courseId = c.id ";
+        if($onlyPublished){
+            $sql.= " AND c.status = 'published' ";
+        }
+        return $this->getConnection()->fetchColumn($sql,array($userId, $role));
+    }
+
+    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
+        $sql.= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
         if($onlyPublished){
             $sql.= " AND c.status = 'published' ";
         }
