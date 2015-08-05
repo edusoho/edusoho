@@ -88,6 +88,22 @@ service('CouponService', ['httpService', function(httpService) {
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
 
+	this.uploadAvatar = function(params, callback) {
+		httpService.muiltPost({
+			url : app.host + '/mapi_v2/User/uploadAvatar',
+			data : params,
+			success : callback
+		});
+	};
+
+	this.updateUserProfile = function(params, callback) {
+		httpService.simplePost("/mapi_v2/User/updateUserProfile", arguments);
+	};
+
+	this.getUserInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/User/getUserInfo", arguments);
+	};
+
 	this.follow = function(params, callback) {
 		httpService.simplePost("/mapi_v2/User/follow", arguments);
 	};
@@ -547,7 +563,8 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 
 	this.get = function(options) {
 		options.method  = "get";
-		options.headers = { "token" : $rootScope.token };
+		options.headers = options.headers || {};
+		options.headers["token"] = $rootScope.token;
 
 		var http = $http(options).success(options.success);
 
@@ -563,7 +580,8 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 	this.post = function(options) {
 
 		options.method  = "post";
-		options.headers = { "token" : $rootScope.token };
+		options.headers = options.headers || {};
+		options.headers["token"] = $rootScope.token;
 
 		var angularPost = function(options) {
 			var http = $http(options).success(options.success);
@@ -581,5 +599,28 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		} else {
 			angularPost(options);
 		}
+	}
+
+	this.muiltPost = function(options) {
+		var headers = options.headers || {};
+		headers['Content-Type'] = undefined;
+
+		var fd = new FormData();
+		for (var key in options.data) {
+			fd.append(key, options.data[key]);
+		}
+
+		$http.post(
+			options.url, 
+			fd, 
+			{
+            	transformRequest: angular.identity,
+            	headers: headers
+            }
+        ).success(function(data){
+        	options.success(data);
+        }).error(function(error){
+        	console.log(error);
+        });
 	}
 }]);

@@ -16,7 +16,6 @@ directive('uiProgress', function($timeout) {
           $timeout(function() {
             var totalWidth = element[0].offsetWidth;
             var titleLabelWidth = titleLabel.offsetWidth;
-            console.log(totalWidth + " " + titleLabelWidth);
 
             var progressValue = attrs.data ? attrs.data : 0;
             var left = progressValue * totalWidth;
@@ -24,7 +23,7 @@ directive('uiProgress', function($timeout) {
               left = totalWidth - titleLabelWidth;
             }
 
-            titleLabel.style.left = left + "px";
+            $(titleLabel).animate({ 'left' : left + 'px' }, 500, 'ease-out');
           }, 100);
         }
     };

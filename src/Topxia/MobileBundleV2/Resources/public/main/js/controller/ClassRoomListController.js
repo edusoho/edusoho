@@ -75,9 +75,9 @@ function ClassRoomListController($scope, $stateParams, $state, CourseUtil, Class
       }
 
       function clearData() {
-                $scope.canLoad = true;
-                $scope.start = 0;
-                $scope.courses = null;
+        $scope.canLoad = true;
+        $scope.start = 0;
+        $scope.classRooms = null;
       }
 
       $scope.selectSort = function(item) {

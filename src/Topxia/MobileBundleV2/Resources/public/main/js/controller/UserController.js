@@ -50,20 +50,53 @@ function StudentListController($scope, ClassRoomService, $stateParams)
 	});
 }
 
-function MyInfoController($scope, httpService, $stateParams) 
-{
-	httpService.get({
-		url : app.host + "/mapi_v2/User/getUserInfo",
-		params : {
+function MyInfoController($scope, UserService, $stateParams) 
+{	
+	var self = this;
+	this.uploadAvatar = function(file) {
+		
+		$scope.showLoad();
+		UserService.uploadAvatar({
+			file : file.files[0]
+		}, function(data) {
+			$scope.hideLoad();
+			if (data.error) {
+				$scope.toast(data.error.message);
+				return;
+			}
+			$scope.userinfo.mediumAvatar = data.url;
+		});
+	};
+
+	$scope.loadUserInfo = function() {
+		$scope.showLoad();
+		UserService.getUserInfo({
 			userId : $scope.user.id
-		},
-		success : function(data) {
+		}, function(data) {
 			$scope.userinfo = data;
-		},
-		error : function(data) {
-			$ionicLoading.hide();
+			$scope.hideLoad();
+		});
+	};
+
+	$scope.generArray = ['female', 'male'];
+
+	$scope.updateUserProfile = function() {
+		var userinfo = $scope.userinfo;
+		var params = {
+			'profile[nickname]' : userinfo.nickname,
+			'profile[gender]' : userinfo.gender,
+			'profile[signature]' : userinfo.signature
+		};
+		UserService.updateUserProfile(params, function(data) {
+			console.log(data);
+		});
+	};
+
+	$scope.uploadChange = function(file) {
+		if (file && file.value) {
+			self.uploadAvatar(file);
 		}
-	});
+	}
 }
 
 function UserInfoController($scope, UserService, $stateParams, AppUtil) 
