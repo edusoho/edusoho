@@ -403,7 +403,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             $progressArray[$course['id']] = array(
                 "lastLesson" => $this->filterLastLearnLesson($lastLesson),
                 "progress" => (int)($progress * 100) . "%",
-                "progressValue" => (int)($progress * 100)
+                "progressValue" => $progress
             );
         }
 
