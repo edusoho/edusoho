@@ -29,6 +29,7 @@ class ClassroomController extends BaseController
             'private' => 0,
         );
 
+        $categoryArray = array();
         if (!empty($category)) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
@@ -59,6 +60,7 @@ class ClassroomController extends BaseController
             'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
             'category' => $category,
+            'categoryArray' => $categoryArray,
         ));
     }
 
@@ -256,7 +258,6 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
-
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
