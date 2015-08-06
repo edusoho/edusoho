@@ -47,11 +47,12 @@ class TagController extends BaseController
                 $paginator->getPerPageCount()
             );
         }
-
+        $site = $this->getSettingService()->get('site', array());
         return $this->render('TopxiaWebBundle:Tag:show.html.twig',array(
             'tag'=>$tag,
             'courses'=>$courses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'site' => $site
         ));
     }
 
@@ -86,6 +87,10 @@ class TagController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

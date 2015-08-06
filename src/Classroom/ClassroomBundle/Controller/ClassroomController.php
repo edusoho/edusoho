@@ -35,6 +35,10 @@ class ClassroomController extends BaseController
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
+        else
+        {
+            $categoryArray = '';
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -53,12 +57,15 @@ class ClassroomController extends BaseController
 
         $allClassrooms = ArrayToolkit::index($classrooms, 'id');
 
+        $site = $this->getSettingService()->get('site', array());
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator' => $paginator,
             'classrooms' => $classrooms,
             'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
             'category' => $category,
+            'categoryArray' => $categoryArray,
+            'site' => $site
         ));
     }
 
@@ -250,15 +257,16 @@ class ClassroomController extends BaseController
 
     public function introductionAction(Request $request, $id)
     {
+        $site = $this->getSettingService()->get('site', array());
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
-
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
             'classroom' => $classroom,
             'member' => $member,
+            'site' => $site
         ));
     }
 

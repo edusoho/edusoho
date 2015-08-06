@@ -4,6 +4,17 @@
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% else %}{{ '全部' }}{% endif %}{% endblock %}
+  {% block description %}{{ setting('site.seo_description') }}{% endblock %}
+    {% block title %}
+    {%  if categoryArray %}
+      {{ categoryArray.name }}
+    {% else %}
+      {{'全部'}}
+    {% endif %}
+    - {{site.name}} - {% if site.slogan %}{{site.slogan}}{% endif %} - Powered By EduSoho
+    {% endblock %}
+
 {% block top_content %}
   <div class="course-banner es-banner">
     <div class="container">

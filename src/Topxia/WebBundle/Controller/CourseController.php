@@ -23,6 +23,10 @@ class CourseController extends CourseBaseController
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
+        else
+        {
+        	$categoryArray = '';
+        }
         unset($conditions['code']);
 
 		if(!isset($conditions['fliter'])){
@@ -75,6 +79,7 @@ class CourseController extends CourseBaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
+		$site = $this->getSettingService()->get('site', array());
 
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
@@ -84,8 +89,10 @@ class CourseController extends CourseBaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'path' => 'course_explore'
-			
+			'path' => 'course_explore',
+			'categoryArray' => $categoryArray,
+			'site'=> $site,
+			'group' => $group
 		));	
 	}
 
