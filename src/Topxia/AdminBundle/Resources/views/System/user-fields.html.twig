@@ -34,7 +34,7 @@
     <legend>个人资料设置</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >购买课程时填写个人资料</label>
+        <label >购买课程或班级时填写个人资料</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo|default(0)) }}
@@ -108,6 +108,7 @@
           </ul>
 
           <div class="help-block col-md-12"><span class="text-success">可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。</span></div>
+
         </div>
         <div class="mbl" style="text-align:center;">
           <a href="javascript:" id="hide-list-btn">收起 
@@ -195,6 +196,7 @@
           </ul>
 
           <div class="help-block col-md-12"><span class="text-success">可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。</span></div>
+
         </div>
         <div class="mbl" style="text-align:center;">
           <a href="javascript:" id="hide-fields-list-btn">收起 
