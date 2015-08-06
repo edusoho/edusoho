@@ -8,4 +8,9 @@ use Custom\Service\File\Dao\UploadFileDao;
 
 class CourseDaoImpl extends BaseCourseDao implements CourseDao
 {
+	public function findOtherPeriods($course){
+		$rootId = ($course['rootId']==0 ? $course['id'] : $course['rootId']);
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE rootId = {$rootId} and id != {$course['id']};";
+        return $this->getConnection()->fetchAll($sql);
+	}
 }

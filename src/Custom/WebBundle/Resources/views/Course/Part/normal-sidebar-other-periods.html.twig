@@ -1,0 +1,5 @@
+<ul class="dropdown-menu open-class-dropdown">
+  {% for c in otherPeriods %}
+    <li><a href="{{ path('course_show', {id:c.id})}}">第{{ c.periods | num2chinese }}次开课</a></li>
+  {% endfor %}
+</ul>
