@@ -6,6 +6,9 @@ course_create:
     pattern:  /course/create
     defaults: { _controller: CustomWebBundle:Course:create }
 
+course_explore:
+    pattern:  /course/explore/{category}
+    defaults: { _controller: CustomWebBundle:Course:explore, category:'' }
 
 course_show:
     pattern:  /course/{id}

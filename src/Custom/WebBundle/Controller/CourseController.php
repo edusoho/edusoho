@@ -108,6 +108,83 @@ class CourseController extends CourseBaseController
         return $this->redirect($this->generateUrl('my_teaching_courses'));
     }
 
+	public function exploreAction(Request $request, $category)
+	{
+		$conditions = $request->query->all();
+
+		$conditions['code'] = $category;
+		if (!empty($conditions['code'])) {
+			$categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+			$childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+			$categoryIds = array_merge($childrenIds, array($categoryArray['id']));
+			$conditions['categoryIds'] = $categoryIds;
+		}
+		unset($conditions['code']);
+
+		if(!isset($conditions['fliter'])){
+			$conditions['fliter'] ='all';
+		} elseif ($conditions['fliter'] == 'free') {
+			$coinSetting = $this->getSettingService()->get("coin");
+			$coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+			$priceType = "RMB";
+			if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
+				$priceType = $coinSetting["price_type"];
+			}
+
+			if($priceType == 'RMB'){
+				$conditions['price'] = '0.00';
+			} else {
+				$conditions['coinPrice'] = '0.00';
+			}
+		} elseif ($conditions['fliter'] == 'live'){
+			$conditions['type'] = 'live';
+		}
+		$fliter = $conditions['fliter'];
+		unset($conditions['fliter']);
+
+		$courseSetting = $this->getSettingService()->get('course', array());
+		if (!isset($courseSetting['explore_default_orderBy'])) {
+			$courseSetting['explore_default_orderBy'] = 'latest';
+		}
+		$orderBy = $courseSetting['explore_default_orderBy'];
+		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
+		unset($conditions['orderBy']);
+
+		$conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
+
+		$conditions['parentId'] = 0;
+		$conditions['status'] = 'published';
+		$paginator = new Paginator(
+			$this->get('request'),
+			$this->getCourseService()->searchCourseCount($conditions),
+			12
+		);
+		$courses = $this->getCourseService()->searchCourses(
+			$conditions,
+			$orderBy,
+			$paginator->getOffsetCount(),
+			$paginator->getPerPageCount()
+		);
+		$group = $this->getCategoryService()->getGroupByCode('course');
+		if (empty($group)) {
+			$categories = array();
+		} else {
+			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
+		}
+
+		return $this->render('CustomWebBundle:Course:explore.html.twig', array(
+			'courses' => $courses,
+			'category' => $category,
+			'fliter' => $fliter,
+			'orderBy' => $orderBy,
+			'paginator' => $paginator,
+			'categories' => $categories,
+			'consultDisplay' => true,
+			'path' => 'course_explore'
+
+		));
+	}
+
     protected function getNextRoundService()
     {
         return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
