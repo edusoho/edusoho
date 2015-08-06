@@ -70,7 +70,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
 	public function updateLearn($id, $fields)
 	{
-        $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLearn($id);
 	}
 
@@ -115,6 +115,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
+
     protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetType'])) {
@@ -132,9 +133,11 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
             ->andWhere("courseId = :courseId")
             ->andWhere("finishedTime >= :startTime")
             ->andWhere("finishedTime <= :endTime");
+
         }
 
-        $builder->andWhere("courseId IN (:courseIds)");
+        $builder->andWhere("courseId IN (:courseIds)")
+                ->andWhere('lessonId IN (:lessonIds)');
 
         return $builder;
     }

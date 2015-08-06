@@ -443,7 +443,13 @@ class CourseLessonManageController extends BaseController
 		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
-		
+        if ($this->isPluginInstalled('Homework')) { //如果安装了作业插件那么也删除作业和练习
+        	$homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
+        	if(!empty($homework)) {
+            	$this->getHomeworkService()->removeHomework($homework['id']);
+        	}
+            $this->getExerciseService()->deleteExercisesByLessonId($lesson['id']);
+        }
 		return $this->createJsonResponse(true);
 	}
 
@@ -503,4 +509,13 @@ class CourseLessonManageController extends BaseController
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getHomeworkService()
+    {
+    	return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    }
+
+    protected function getExerciseService()
+    {
+    	return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
 }

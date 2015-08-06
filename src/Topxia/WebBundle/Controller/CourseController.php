@@ -152,7 +152,7 @@ class CourseController extends CourseBaseController
 			$currentLesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
 		}
 
-		return $this->render('TopxiaWebBundle:Course:archiveLesson.html.twig',array(
+		return $this->render('TopxiaWebBundle:Course:old_archiveLesson.html.twig',array(
 			'course' => $course,
 			'lessons' => $lessons,
 			'currentLesson' => $currentLesson,
@@ -447,9 +447,19 @@ class CourseController extends CourseBaseController
 			$this->createAccessDeniedException();
 		}
 
-		$this->getCourseService()->waveWatchingTime($user['id'],$lessonId,$time);
+		$learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
-		return $this->createJsonResponse(true);
+		$isLimit = $this->setting('magic.lesson_watch_limit');
+		if ($isLimit) {
+			$lesson = $this->getCourseService()->getLesson($lessonId);
+			$course = $this->getCourseService()->getCourse($lesson['courseId']);
+			$watchLimitTime = $course['watchLimit'] * $lesson['length'];
+			if ($lesson['type'] == 'video' && ($course['watchLimit'] > 0) && ($learn['watchTime'] >= $watchLimitTime)) {
+				$learn['watchLimited'] = true;
+			}
+		}
+
+		return $this->createJsonResponse($learn);
 	}
 
 	public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)

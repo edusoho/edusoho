@@ -4,47 +4,54 @@
 
 {% block title %}客户端 - {{ parent() }}{% endblock %}
 
-{% block content %}
-
-<div class="page-header">
-  <h1>手机客户端 V2.0 <small>求知，随时随地</small></h1>
-</div>
-
-<div class="row">
-  <div class="col-sm-6">
-    <div class="mobile-download-panel panel panel-default">
-      <div class="panel-heading">下载客户端</div>
-      <div class="panel-body">
-
-        <p style="text-align:center;">
-         <img src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" width="150" height="150" />
-        </p>
-
-        <p style="text-align:center;">
-          <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" id="iphone-download-btn" class="btn btn-default btn-lg"><span class="es-icon es-icon-apple"></span> iPhone 客户端</a>
-        </p>
-
-        <p style="text-align:center;">
-          <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn btn-default btn-lg" target="_blank"><span class="es-icon es-icon-android"></span> Android 客户端</a>
-        </p>
-
+{% block full_content %}
+  <div class="es-mobile">
+    <div class="js-mobile-item mobile-first">
+      <div class="container">
+        <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
+        <img class="img-two  hidden-xs" src="{{asset("assets/v2/img/mobile/phone_white.png")}}" alt="">
+        <div class="mobile-content">
+          <img class="title img-responsive" src="{{asset("assets/v2/img/mobile/title.png")}}" alt="阔知学堂">
+          <img class="subtitle img-responsive" src="{{asset("assets/v2/img/mobile/subtitle.png")}}" alt="">
+          <div class="label-mobile">仅需两步，轻松搞定！</div>
+          <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">立即下载体验<i class="es-icon es-icon-keyboardarrowdown"></i></a>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="col-sm-6">
-    <div class="mobile-login-panel panel panel-default">
-      <div class="panel-heading">登录客户端</div>
-      <div class="panel-body">
-        <p style="text-align:center;">启动客户端，扫一扫</p>
-        <p style="text-align:center;">
-          <img src="{{ path('topxia_mobile_qrcode') }}" width="218" height="218" />
-        </p>
-        <p style="text-align:center;">或者在客户端输入<strong>{{ host }}</strong>搜索并登录</p>
+    <div class="js-mobile-item mobile-second">
+      <div class="container">
+        <div class="step">
+          <span class="member">1</span> 扫描二维码，下载手机APP。
+        </div>
+        <div class="mobile-content row">
+          <div class="col-md-4 col-sm-6 col-xs-6">
+            <img class="img-one" src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-6">
+            <img class="img-two" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
+          </div>
+          <div class="col-md-4">
+            <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn-android"><i class='es-icon es-icon-android'></i>Android 客户端</a>
+            <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" class="btn-apple"><i class='es-icon es-icon-apple'></i>iPhone客户端</a>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="js-mobile-item mobile-third">
+      <div class="container">
+        <div class="step">
+          <span class="member">2</span> 打开阔知学堂APP，扫描网校二维码。
+        </div>
+        <div class="qrcode">
+          <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
+          <p>扫一扫登录客户端</p>
+        </div>
+        <img class="img-two hidden-xs" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
+      </div>
+      <div class="mobile-footer hidden-xs">
+        <div class="container"><img src="{{asset("assets/v2/img/mobile/phone_gui_shadow.png")}}" alt=""></div>
+      </div>
+    </div>
+    
   </div>
-  
-</div>
-
 {% endblock %}

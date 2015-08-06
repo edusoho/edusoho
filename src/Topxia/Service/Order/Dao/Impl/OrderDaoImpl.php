@@ -42,6 +42,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
+    public function findOrdersBySns(array $sns)
+    {
+        if(empty($sns)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($sns) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE sn IN ({$marks});";
+        $orders = $this->getConnection()->fetchAll($sql, $sns);
+        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
+    }
+
     public function addOrder($order)
     {
         $order = $this->createSerializer()->serialize($order, $this->serializeFields);

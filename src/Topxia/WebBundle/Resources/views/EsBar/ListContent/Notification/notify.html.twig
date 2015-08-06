@@ -1,0 +1,14 @@
+{% if notifications %}
+  {% set notificationsCount = 15  %}
+  {% for notification in notifications %}
+    {% set notificationsCount = loop.length  %}
+    {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
+  {% endfor %}
+  {% if notificationsCount >= 15 %}
+    <li class="text-center"><a class="link-light" href="{{ path('notification') }}" target="_blank">更多<i class="es-icon es-icon-angledoubleright"></i></a></li>
+  {% endif %}
+{% else %}
+  <div>
+    <p class="empty">暂无通知</p>
+  </div>
+{% endif %}
