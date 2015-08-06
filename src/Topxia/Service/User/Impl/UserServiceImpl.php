@@ -396,6 +396,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
         
         $user['email'] = $registration['email'];
+        $user['emailVerified'] = isset($registration['emailVerified']) ? $registration['emailVerified'] : 0;
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
@@ -1110,6 +1111,14 @@ class UserServiceImpl extends BaseService implements UserService
         );
         
         $currentUser = $this->getCurrentUser();
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
+            array(
+            'userId'=> $user['id'],
+            'note'=> $note,
+            'status' => 'approved',
+            'operatorId' => $currentUser['id'])
+        );
+
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
         $message = array(
             'note' => $note ? $note : '',
@@ -1130,8 +1139,9 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime' => time(),
         ));
 
+        $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'],'approved');
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->addApproval(
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
             array(
             'userId'=> $user['id'],
             'note'=> $note,
