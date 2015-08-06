@@ -529,14 +529,15 @@ a {
 .ui-classroom .service-btn {
   top: 8px;
   right: 0;
+  height: 50%;
   color: #999;
-  font-size: 10px;
+  font-size: 12px;
   display: inline-block;
   position: absolute;
 }
 
 .ui-classroom .service-btn>i {
-  font-size: 5px;
+  font-size: 12px;
   display: inline-block;
 }
 
@@ -585,13 +586,13 @@ a {
   color: white;
   height: 18px;
   width: 18px;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 18px;
 }
 
 .ui-classroom .service-body .title {
   color: #999;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .ui-classroom .label.homeworkReview {
@@ -1221,9 +1222,12 @@ a {
 }
 
 .ui-course .title-body .title-tips {
-  display: block;
-  position: absolute;
   right: 16px;
+  width: 50px;
+  height: 50px;
+  display: block;
+  text-align: right;
+  position: absolute;
 }
 
 .ui-course .ui-panel-content {

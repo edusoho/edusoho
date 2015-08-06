@@ -253,7 +253,6 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
           console.log(error);
         });
       });
-
     }
 
     $scope.joinCourse = function() {
@@ -389,6 +388,10 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
     };
 
     $scope.sign = function() {
+      if ($scope.signInfo && $scope.signInfo.isSignedToday) {
+        $scope.toast("今天已经签到了!");
+        return;
+      }
       ClassRoomService.sign({
         classRoomId : $stateParams.classRoomId
       }, function(data) {
@@ -427,6 +430,22 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
         $scope.classRoom.largePicture
       );
     };
+
+    $scope.learnByVip = function() {
+      self.vipLeand(function() {
+        ClassRoomService.learnByVip({
+          classRoomId : $stateParams.classRoomId
+        }, function(data){
+          if (! data.error) {
+            window.location.reload();
+          } else {
+            $scope.toast(data.error.message);
+          }
+        }, function(error) {
+          console.log(error);
+        });
+      });
+    }
 }
 
 function ClassRoomCoursesController($scope, $stateParams, ClassRoomService, $state)
