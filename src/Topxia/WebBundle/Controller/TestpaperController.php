@@ -22,9 +22,8 @@ class TestpaperController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
-
+        $testpapersTargets = ArrayToolkit::column($testpaperResults,'target');
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
         $testpapers = ArrayToolkit::index($testpapers, 'id');
 
@@ -34,7 +33,16 @@ class TestpaperController extends BaseController
             $course = explode('-', $course[0]);
             return $course[1];
         }, $targets);
+        $lessonIds = array_map(function($target){
+            $lesson = explode('/', $target);
+            $lesson = explode('-', $lesson[1]);
+            return $lesson[1];
+        }, $testpapersTargets);
 
+        foreach ($testpaperResults as $ke => &$value) {
+               $value['lessonId'] =  $lessonIds[$ke];
+        }
+  
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
