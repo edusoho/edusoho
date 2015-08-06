@@ -145,7 +145,7 @@ define(function(require, exports, module) {
         var swiper = new Swiper('#panel-class .swiper-container', {
 
             paginationClickable: true,
-            autoplay: 5000,
+            // autoplay: 5000,
             autoplayDisableOnInteraction: false,
             loop: true,
             calculateHeight: true,
