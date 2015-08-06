@@ -1,3 +1,28 @@
+.pay-center .check {
+  cursor: pointer;
+  width: 150px;
+  height: 58px;
+  border: 2px solid @gray-light;
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  line-height: 58px;
+  display:inline-block;
+  margin-right:15px;
+  // @media(max-width: @screen-xs-max) {
+  //   margin-right: 5px;
+  //   width: 120px;
+  //   height: 50px;
+  //   line-height: 50px;
+  //   img {
+  //     width: 80px;
+  //   }
+  // }
+  &.active {
+    border: 2px solid @brand-primary;
+  }
+}
+
 .pay-center .uncheck {
   cursor: pointer;
   width: 150px;
@@ -9,8 +34,6 @@
   border: 1px solid #cccccc; 
   margin-bottom: 30px;
 }
-
-
 
 .pay-center .uncheck .icon {
   background: url('@{img-src}old/pay-check-status.png') no-repeat;
@@ -84,22 +107,22 @@
         display: block;
       }
     }
-    .check {
-      cursor: pointer;
-      margin-right: 10%;
-      position: relative;
-      text-align:center;
-      font-size: 16px;
-      line-height: 47px;
-      padding: 0 5px;
-      @media (max-width: @screen-xs-max) {
-        display: block;
-        margin: 20px auto 0 auto;
-      }
-      img {
-        width: 100%;
-      }
-    }
+    // .check {
+    //   cursor: pointer;
+    //   margin-right: 10%;
+    //   position: relative;
+    //   text-align:center;
+    //   font-size: 16px;
+    //   line-height: 47px;
+    //   padding: 0 5px;
+    //   @media (max-width: @screen-xs-max) {
+    //     display: block;
+    //     margin: 20px auto 0 auto;
+    //   }
+    //   img {
+    //     width: 100%;
+    //   }
+    // }
   }
 }
 
