@@ -1274,7 +1274,9 @@ input:focus {
   background-position: -315px 0;
 }
 .course-detail-header-join {
+  margin-bottom: 18px;
   background-color: #fff;
+  position: relative;
 }
 @media (min-width: 1200px) {
   .course-detail-header-join {
@@ -1480,6 +1482,7 @@ input:focus {
   float: left;
   width: 57.9%;
   padding: 15px 30px;
+  position: relative;
 }
 @media (max-width: 1199px) and (min-width: 992px) {
   .course-detail-header .course-hader-info {
@@ -1589,6 +1592,9 @@ input:focus {
 .course-detail-header .study .sns {
   float: right;
   margin-top: 10px;
+  position: absolute;
+  top: 14px;
+  right: 74px;
 }
 @media (max-width: 991px) and (min-width: 768px) {
   .course-detail-header .study .sns {
