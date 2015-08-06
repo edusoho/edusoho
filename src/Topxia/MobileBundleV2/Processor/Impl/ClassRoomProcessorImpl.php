@@ -330,20 +330,20 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 	{
 		$classRoomId = $this->getParam("classRoomId");
 		if (!$this->controller->setting('vip.enabled')) {
-	            	return $this->createErrorResponse('not_login', "网校未开启会员体系");
-	        	}
+        	return $this->createErrorResponse('not_login', "网校未开启会员体系");
+    	}
 
-	        	$user = $this->controller->getUserByToken($this->request);
-	        	if (!$user->isLogin()) {
-            		return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
-        		}
-        		try {
-        			$this->getClassroomService()->becomeStudent($classRoomId, $user['id'], array('becomeUseMember' => true));
-        		} catch (\Exception $e) {
-        			return $this->createErrorResponse('error', $e->getMessage());
-        		}
-	        	
-	        	return true;
+    	$user = $this->controller->getUserByToken($this->request);
+    	if (!$user->isLogin()) {
+    		return $this->createErrorResponse('not_login', "您尚未登录，不能学习班级！");
+		}
+		try {
+			$this->getClassroomService()->becomeStudent($classRoomId, $user['id'], array('becomeUseMember' => true));
+		} catch (\Exception $e) {
+			return $this->createErrorResponse('error', $e->getMessage());
+		}
+    	
+    	return true;
 	}
 
 	public function getClassRoomMember()
