@@ -15,17 +15,13 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$conditions = $request->query->all();
-		
+		$categoryArray = array();
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
-        }
-        else
-        {
-        	$categoryArray = '';
         }
         unset($conditions['code']);
 
