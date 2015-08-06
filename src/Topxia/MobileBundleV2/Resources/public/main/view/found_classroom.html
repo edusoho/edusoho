@@ -1,5 +1,5 @@
 <div class="top-tab-header ui-found-course" ng-controller="FoundClassRoomController">
-	<div class="course-card">
+	<div class="course-card classroom-card">
 		<h4><span class="circle-label"></span>推荐</h4>
 		<list-empty-view data="recommendClassRooms" title="暂时没有推荐班级">
         </list-empty-view>
@@ -17,14 +17,11 @@
 		        <div class="ui-list-info">
 		            <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
 		            <p class="bottom price-body">
-		            	<span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
-		            		{{ service.name }}
-		            	</span>
-
-						<span class="right">
-						      {{ classRoom.studentNum }}人在学
+		            	<span class="origin-price">
+						      {{ classRoom.price | formatPrice }}
 						</span>
 		            </p>
+		            <p class="price-body">{{ classRoom.studentNum }}人在学</p>
 		        </div>
 		    </li>
 		</ul>
@@ -33,7 +30,7 @@
 		</div>
 	</div>
 
-	<div class="course-card">
+	<div class="course-card classroom-card">
 		<h4><span class="circle-label"></span>最新</h4>
 		<list-empty-view data="latestClassrooms" title="暂时没有最新班级">
         </list-empty-view>
@@ -50,15 +47,11 @@
 		        <div class="ui-list-info">
 		            <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
 		            <p class="bottom price-body">
-		            
-						<span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
-			            		{{ service.name }}
-			            </span>
-
-						<span class="right">
-						      {{ classRoom.studentNum }}人在学
+		            	<span class="origin-price">
+						      {{ classRoom.price | formatPrice }}
 						</span>
 		            </p>
+		            <p class="price-body">{{ classRoom.studentNum }}人在学</p>
 		        </div>
 		    </li>
 		</ul>

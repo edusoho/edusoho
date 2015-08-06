@@ -1,25 +1,34 @@
-<div class="ui-course top-header">
+<div class="ui-course ui-classroom top-header">
     <div class="course-head-body">
         <div class="course-head">
             <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
             <p class="mask">
-                <a>
-                    <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
-                        {{ service.name }}
+                <a class="rating-body">
+                    <span>
+                        <i class="iconfont" ng-class="course.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
                     </span>
+                    <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
                 </a>
                 <a class="right rating-body">
                     <i class="iconfont icon-iconfontxiaoyou"></i>
                     <span class="rating">{{ classRoom.studentNum }}</span>
-                    <span>
-                        <i class="iconfont icon-favorfill"></i>
-                        <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
-                    </span>
                 </a>
             </p>
         </div>
         <div class="item-body">
             <p class="course-title">{{ classRoom.title }}</p>
+        </div>
+        <div class="service-body ui-border-t" ui-service-panel>
+            <ul class="ui-list">
+                <li ng-repeat="service in classRoom.service">
+                <span class="label {{ service.class }}">{{ service.name }}</span>
+                <span class="title">{{ service.title }}</span>
+                </li>
+            </ul>
+            <a class="service-btn" expand="true">
+                {{ classRoom.service.length }}个服务
+                <i class="service-icon iconfont icon-expandmore"></i>
+            </a>
         </div>
     </div>
     <div class="ui-tab tab-top" ui-tab>
@@ -38,4 +47,18 @@
             </li>
         </ul>
     </div>
+</div>
+<div class="ui-course-tool ui-classroom" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="ClassRoomToolController">
+    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
+    </button>
+
+    <div class="ui-btn btn-gray btn-sign btn-col-75">
+        <button class="ui-btn sign-left">
+        9-4
+        </button>
+        <button class="ui-btn sign-right btn-green" ng-click="joinCourse()">
+        签到
+        </button>
+    </div>
+    
 </div>

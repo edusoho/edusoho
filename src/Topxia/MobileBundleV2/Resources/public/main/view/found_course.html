@@ -25,14 +25,14 @@
 		            <h2 class="ui-nowrap ui-list-title">{{ recommendCourse.title }}</h2>
 		            <p class="bottom price-body">
 		            	<span class="origin-price">
-				      {{ recommendCourse.price | formatPrice }}
-				      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
-				      	{{ recommendCourse.originPrice | formatPrice }}
-				      </s>
-				</span>
+									      {{ recommendCourse.price | formatPrice }}
+									      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
+									      	{{ recommendCourse.originPrice | formatPrice }}
+									      </s>
+									</span>
 
 				<span class="right">
-				<!-- <i class="iconfont icon-person"></i> -->
+					<!-- <i class="iconfont icon-person"></i> -->
 				      {{ recommendCourse.studentNum }}人在学
 				</span>
 		            </p>

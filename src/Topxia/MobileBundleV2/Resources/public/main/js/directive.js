@@ -8,23 +8,27 @@ app.directive('onElementReadey', function ($parse, $timeout) {
         }
     };
 }).
-directive('uiProgress', function($timeout) {
+directive('uiServicePanel', function($timeout) {
   return {
         restrict: 'A',
         link : function(scope, element, attrs) {
-          var titleLabel = element[0].querySelector(".ui-progress-title");
-          $timeout(function() {
-            var totalWidth = element[0].offsetWidth;
-            var titleLabelWidth = titleLabel.offsetWidth;
+          var list = element[0].querySelector(".ui-list");
+          var btn = element[0].querySelector(".service-btn");
+          var expandIcon = angular.element(element[0].querySelector(".service-icon"));
 
-            var progressValue = attrs.data ? attrs.data : 0;
-            var left = progressValue * totalWidth;
-            if (left > (totalWidth - titleLabelWidth)) {
-              left = totalWidth - titleLabelWidth;
-            }
+          var btnElement = angular.element(btn);
+          btnElement.on('click', function(e) {
+            
+            var expand = btnElement.attr("expand");
+            btnElement.attr("expand", "true" == expand ? "false" : "true");
+            expandIcon.css("-webkit-transform", ("true" == expand ? "rotate(-180deg)" : "rotate(0)"));
 
-            $(titleLabel).animate({ 'left' : left + 'px' }, 500, 'ease-out');
-          }, 100);
+            var length = list.children.length;
+            for (var i = 2; i < length; i++) {
+              list.children[i].style.display = ("true" == expand ? 'none' : 'block');
+            };
+          });
+          //$(titleLabel).animate({ 'left' : left + 'px' }, 500, 'ease-out');
         }
     };
 }).

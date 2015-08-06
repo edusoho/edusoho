@@ -385,6 +385,19 @@ a {
   border: solid 1px #27A86C;
 }
 
+.ui-btn.btn-gray{
+  border-radius: 2px;
+  color: #fff;
+  background: #f0f0f0;
+  border: solid 1px #f0f0f0;
+}
+
+.ui-btn.btn-gray:not(.disabled):not(:disabled):active, .active.ui-btn.btn-green{
+  color: #fff;
+  background: #f0f0f0;
+  border: solid 1px #f0f0f0;
+}
+
 .ui-btn.btn-yellow{
   border-radius: 2px;
   color: #fff;
@@ -493,6 +506,142 @@ a {
   margin-bottom: 10px;
 }
 /* ui-slider */
+
+/* ui-classroom */
+.ui-classroom {
+  background: #f0f0f0;
+}
+
+.ui-classroom .course-head-body{
+  background: #fff;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ui-classroom .item-body {
+  position: relative;
+}
+
+.ui-classroom .item-body p {
+  margin-bottom: 0 ! important;
+}
+
+.ui-classroom .service-btn {
+  top: 8px;
+  right: 0;
+  color: #999;
+  font-size: 10px;
+  display: inline-block;
+  position: absolute;
+}
+
+.ui-classroom .service-btn>i {
+  font-size: 5px;
+  display: inline-block;
+}
+
+.ui-classroom .service-body {
+  margin: 0 16px;
+  position: relative;
+  padding: 8px 0 8px 0;
+}
+
+.ui-classroom .btn-sign .sign-right {
+  right: 0;
+  border: 0;
+  width: 30%;
+  border-radius: 3px;
+  position: absolute;
+}
+
+.ui-classroom .btn-sign .sign-left {
+  left: 0;
+  border: 0;
+  width: 73%;
+  z-index: 1;
+  color:#37b97d;
+  border-radius: 0;
+  border-radius: 0;
+  background: #f0f0f0;
+  position: absolute;
+}
+
+.ui-classroom .service-body .ui-list>li {
+  height: 25px;
+  margin-left: 0;
+  line-height: 25px;
+}
+
+.ui-classroom .service-body .label {
+  display: inline-block;
+  margin-right: 3px;
+  background: #37b97d;
+  border-radius: 2px;
+  text-align: center;
+  color: white;
+  height: 18px;
+  width: 18px;
+  font-size: 10px;
+  line-height: 18px;
+}
+
+.ui-classroom .service-body .title {
+  color: #999;
+  font-size: 8px;
+}
+
+.ui-classroom .label.homeworkReview {
+  background: #f08383;
+}
+
+.ui-classroom .label.testpaperReview {
+  background: #f0c183;
+}
+
+.ui-classroom .label.teacherAnswer {
+  background: #7bdebe;
+}
+
+.ui-classroom .label.liveAnswer {
+  background: #4ccbd2;
+}
+
+.ui-classroom .label.event {
+  background: #83baf0;
+}
+
+.ui-classroom .label.workAdvise {
+  background: #abb5f4;
+}
+
+.ui-classroom .course-title {
+  width: 85% ! important;
+}
+
+.ui-classroom .price-block {
+  width: auto ! important;
+}
+
+.ui-classroom .course-price {
+  width: 15%;
+  font-size: 18px ! important;
+  display: inline-block;
+  position: absolute;
+  text-align: center;
+}
+
+/* ui-classroom */
+
+/* classroom-card */
+.classroom-card .ui-list .ui-list-img {
+  height: 80px;
+}
+
+.classroom-card .ui-list-info .ui-list-title {
+  line-height: 44px;
+}
+
+/* classroom-card */
 
 /* course-card*/ 
 
@@ -1118,6 +1267,7 @@ a {
 
 .ui-course-tool {
   height: 58px;
+  z-index: 11;
   padding: 8px 9px 8px 9px;
   position: fixed;
   bottom: 0;

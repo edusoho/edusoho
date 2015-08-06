@@ -75,27 +75,33 @@ factory('ClassRoomUtil', function() {
 	var getService = function() {
 		return {
 			"homeworkReview" : {
-				class : "enable",
+				title : "24小时作业批改",
+				class : "homeworkReview",
 				name : "练"
 			},
 			"testpaperReview" : {
-				class : "enable",
+				title : "24小时阅卷点评",
+				class : "testpaperReview",
 				name : "试"
 			},
 			"teacherAnswer" : {
-				class : "enable",
+				title : "提问必答",
+				class : "teacherAnswer",
 				name : "问"
 			},
 			"liveAnswer" : {
-				class : "enable",
+				title : "一对一在线答疑",
+				class : "liveAnswer",
 				name : "疑"
 			},
 			"event" : {
-				class : "enable",
+				title : "班级活动",
+				class : "event",
 				name : "动"
 			},
 			"workAdvise" : {
-				class : "enable",
+				title : "就业指导",
+				class : "workAdvise",
 				name : "业"
 			},
 		};
@@ -115,9 +121,23 @@ factory('ClassRoomUtil', function() {
 
 		return classRoom;
 	};
+
+	var cover = function(classRoom) {
+		var classRoomService = classRoom.service;
+		var service = getService();
+		if (!classRoomService || classRoomService == "null") {
+			return [];
+		}
+		for (var i = 0; i < classRoomService.length; i++) {
+			classRoomService[i] = service[classRoomService[i]];
+		};
+
+		return classRoom;
+	};
+
 	return {
 		filterClassRoom : function(classRoom) {
-			return filter(classRoom);
+			return cover(classRoom);
 		},
 		filterClassRooms : function(classRooms) {
 				for (var i = 0; i < classRooms.length; i++) {

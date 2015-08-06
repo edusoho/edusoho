@@ -1,37 +1,37 @@
-<div class="ui-course top-header" style="padding-bottom: 58px;">
+<div class="ui-course ui-classroom top-header" style="padding-bottom: 58px;">
     <div class="course-head-body">
         <div class="course-head">
             <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
             <p class="mask">
-                <a>
-                    <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
-                        {{ service.name }}
+                <a class="rating-body">
+                    <span>
+                        <i class="iconfont" ng-class="course.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
                     </span>
+                    <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
                 </a>
                 <a class="right rating-body">
                     <i class="iconfont icon-iconfontxiaoyou"></i>
-                    <span class="rating">{{ classRoom.studentNum }}</span>
-                    <span>
-                        <i class="iconfont icon-favorfill"></i>
-                        <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
-                    </span>
+                    <span class="rating">{{ classRoom.studentNum }}人在学</span>
                 </a>
             </p>
         </div>
         <div class="item-body">
             <p class="course-title">{{ classRoom.title }}</p>
-            <div ng-if="!member">
-                <p class="course-price">
-                    <span class="price-block">{{ classRoom.price | formatPrice }}</span>
-                    <span ng-if="discount" class="discount-type discount">
-    	    			{{ discount.type | coverDiscount : classRoom.discount }}</span>
-                    <span ng-if="discount" class="discount-type type">{{ discount.name }}</span>
-                </p>
-                <p ng-if="discount" class="discount-body">
-                    <s class="price-block">{{ classRoom.originPrice | formatPrice }}</s>
-                    <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
-                </p>
-            </div>
+            <p class="course-price" ng-if="!member">
+                <span class="price-block">{{ classRoom.price | formatPrice }}</span>
+            </p>
+        </div>
+        <div class="service-body ui-border-t" ui-service-panel>
+            <ul class="ui-list">
+                <li ng-repeat="service in classRoom.service">
+                <span class="label {{ service.class }}">{{ service.name }}</span>
+                <span class="title">{{ service.title }}</span>
+                </li>
+            </ul>
+            <a class="service-btn" expand="true">
+                {{ classRoom.service.length }}个服务
+                <i class="service-icon iconfont icon-expandmore"></i>
+            </a>
         </div>
     </div>
     <div class="ui-tab tab-top" ui-tab>
@@ -51,7 +51,10 @@
         </ul>
     </div>
 </div>
-<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);text-align: center;" ng-controller="ClassRoomToolController">
+<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="ClassRoomToolController">
+    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
+    </button>
+
     <button class="ui-btn btn-green" ng-class="classRoom.vipLevelId <= 0 ? 'btn-col-75' : 'btn-col-60' " ng-click="joinCourse()">
         立即加入
     </button>
