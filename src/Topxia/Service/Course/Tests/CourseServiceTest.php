@@ -2163,6 +2163,217 @@ class CourseServiceTest extends BaseTestCase
         $user['roles'] = array('ROLE_USER');
         return $user;
     }
+
+
+    /**
+     *　同步课程数据
+     */
+
+    public function testFindCoursesByParentIdAndLocked()
+    {
+        $course1 = array('title' => 'test-one');
+        $course2 = array('title' => 'test-two');
+        $course1 = $this->getCourseService()->createCourse($course1);
+        $course2 = $this->getCourseService()->createCourse($course2);
+        $this->getCourseService()->updateCourseByParentIdAndLocked(0,0, array('parentId'=>1,'locked'=>1));
+        $this->getCourseService()->updateCourseByParentIdAndLocked(0,0, array('parentId'=>1,'locked'=>1));
+        $result = $this->getCourseService()->findCoursesByParentIdAndLocked(1,1);
+        $this->assertEquals(2,count($result));
+    }
+
+
+    public function testupdateCourseByParentIdAndLocked()
+    {
+        $course = array(
+            'title' => 'test-one' 
+        );
+        $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->updateCourseByParentIdAndLocked(0,0,array('title'=>'test-two'));
+        $course = $this->getCourseService()->findCoursesByLikeTitle('test-two');
+        $this->assertEquals('test-two', $course[1]['title']);   
+    }
+
+    public function testFindLessonsByParentId()
+    {
+
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $createdLesson1 = $this->getCourseService()->createLesson($lesson1);
+        $this->getCourseService()->updateLessonByParentId(0,array('parentId'=>1));
+        $result = $this->getCourseService()->findLessonsByParentId(1);
+        $this->assertEquals('test', $createdLesson1['title']);
+        $this->assertEquals(1, count($result));  
+    }
+
+    public function testAddLesson()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
+        $this->assertEquals('test lesson',$createdLesson1['title']);
+    }
+
+    public function testUpdateLessonByParentId()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
+        $this->getCourseService()->updateLessonByParentId($createdLesson1['parentId'],array('title' => 'test update'));
+        $lesson = $this->getCourseService()->findLessonsByParentId($lesson1['parentId']);
+        $this->assertEquals('test update',$lesson[0]['title']);
+    }
+
+    public function testDeleteLessonByParentId()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $lesson2 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+
+        $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
+        $createdLesson2 = $this->getCourseService()->addLesson($lesson2);
+        $lesson = $this->getCourseService()->findLessonsByParentId(1);
+        $this->assertEquals(2,count($lesson));
+        $this->getCourseService()->deleteLessonByParentId(1);
+        $lesson = $this->getCourseService()->findLessonsByParentId(1);
+        $this->assertEquals(0,count($lesson));
+    }
+
+    public function testAddChapter()
+    {
+        $chapter1 = array('courseId' => 1, 'title' => 'chapter 1', 'type' => 'chapter');
+        $chapter2 = array('courseId' => 1, 'title' => 'chapter 2', 'type' => 'chapter');
+        $chapter3 = array('courseId' => 1, 'title' => 'chapter 3', 'type' => 'chapter');
+
+        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
+
+        $this->assertTrue(is_array($createdChapter1));
+        $this->assertEquals($chapter1['courseId'], $createdChapter1['courseId']);
+        $this->assertEquals($chapter1['title'], $createdChapter1['title']);
+
+
+        $createdChapter2 = $this->getCourseService()->addChapter($chapter2);
+        $this->assertEquals($chapter2['courseId'], $createdChapter2['courseId']);
+        $this->assertEquals($chapter2['title'], $createdChapter2['title']);
+
+        $createdChapter3 = $this->getCourseService()->addChapter($chapter3);
+        $this->assertEquals($chapter3['courseId'], $createdChapter3['courseId']);
+        $this->assertEquals($chapter3['title'], $createdChapter3['title']);
+    }
+
+    public function testUpdateChapterByPId()
+    {
+        $chapter1 = array('courseId' => 1, 'title' => 'chapter 1', 'type' => 'chapter','pId'=>1);
+        $chapter2 = array('courseId' => 1, 'title' => 'chapter 2', 'type' => 'chapter','pId'=>1);
+        $chapter3 = array('courseId' => 1, 'title' => 'chapter 3', 'type' => 'chapter','pId'=>1);
+
+        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
+        $createdChapter2 = $this->getCourseService()->addChapter($chapter2);
+        $createdChapter3 = $this->getCourseService()->addChapter($chapter3);
+        $count = $this->getCourseService()->updateChapterByPId(1,array('title'=>'course chapter'));
+        $this->assertEquals(3, $count);
+    }
+
+    public function testDeleteChapterByPId()
+    {
+        $chapter1 = array('courseId' => 1, 'title' => 'chapter 1', 'type' => 'chapter','pId'=>1);
+        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
+        $this->assertTrue(is_array($createdChapter1));
+        $count = $this->getCourseService()->deleteChapterByPId(1);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testCreateMember()
+    {
+        $member = array('courseId'=>1);
+        $member = $this->getCourseService()->createMember($member);
+        $count = $this->getCourseService()->searchMemberCount(array('courseId'=>1));
+        $this->assertEquals(1, $count);
+    }
+
+    public function testDeleteMemberByCourseIdAndUserId()
+    {
+        $member = array('courseId'=>1,'userId'=>1);
+        $member = $this->getCourseService()->createMember($member);
+        $this->assertTrue(is_array($member));
+        $count = $this->getCourseService()->deleteMemberByCourseIdAndUserId(1,1);
+        $this->assertEquals(1, $count);
+    }
     
     protected function getUserService()
     {

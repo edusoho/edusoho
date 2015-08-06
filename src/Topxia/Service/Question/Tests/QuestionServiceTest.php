@@ -233,6 +233,120 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals('none', $result[$question['id']]['status']);
     }
 
+    /*
+        问题数据同步
+    */
+
+    public function testAddQuestion()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']); 
+
+    }
+
+    public function testFindQuestionsByPId()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $question = $this->getQuestionService()->findQuestionsByPId(1);
+        $this->assertEquals('question.',$question[0]['stem']);
+    }
+
+    public function testFindQuestionsCountByParentId()
+    {
+       $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']); 
+        $count = $this->getQuestionService()->findQuestionsCountByParentId(1);
+        $this->assertEquals(1,$count); 
+    }
+
+    public function testEditQuestion()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $question = $this->getQuestionService()->editQuestion($question['id'],array('target' => 'course-2'));
+        $this->assertEquals('course-2',$question['target']);
+    }
+
+    public function testUpdateQuestionByPId()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $count = $this->getQuestionService()->updateQuestionByPId(1,array('target' => 'course-3'));
+        $this->assertEquals(1,$count);
+    }
+
+    public function testDeleteQuestionsByPId()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $count = $this->getQuestionService()->deleteQuestionsByPId(1);
+        $this->assertEquals(1,$count);
+    }
+
+    public function testDeleteQuestionsByParentId()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $count = $this->getQuestionService()->deleteQuestionsByParentId(1);
+        $this->assertEquals(1,$count);
+    }
+
 
     protected function getQuestionService()
     {

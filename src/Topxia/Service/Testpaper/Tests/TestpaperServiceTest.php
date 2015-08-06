@@ -103,6 +103,77 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
+    /* 试卷同步
+    */
+
+    public function testAddTestpaper()
+    {
+        $testpaper = array('name' => 'Test');
+        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
+        $this->assertEquals('Test',$testpaper['name']);
+    }
+
+    public function testUpdateTestpaperByPId()
+    {
+        $testpaper = array('name' => 'Test','pId'=>1);
+        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
+        $this->assertEquals('Test',$testpaper['name']);
+        $count = $this->getTestpaperService()->updateTestpaperByPId(1,array('name'=>'Test2'));
+        $this->assertEquals(1,$count);    
+    }
+
+    public function testDeleteTestpaperByPId()
+    {
+        $testpaper = array('name' => 'Test','pId'=>1);
+        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
+        $this->assertEquals('Test',$testpaper['name']);
+        $count = $this->getTestpaperService()->deleteTestpaperByPId(1);;
+        $this->assertEquals(1,$count);
+    }
+
+    public function testFindTestpaperByPId()
+    {
+        $testpaper = array('name' => 'Test','pId'=>1);
+        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
+        $this->assertEquals('Test',$testpaper['name']);
+        $testpaper = $this->getTestpaperService()->findTestpaperByPId(1);
+        $this->assertEquals('Test',$testpaper[0]['name']);
+    }
+
+    public function testCreateTestpaperItem()
+    {
+        $testpaperItem = array('questionType'=>'single_choice');
+        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
+        $this->assertEquals('single_choice',$testpaperItem['questionType']);
+    }
+
+    public function testDeleteTestpaperItemByPId()
+    {
+        $testpaperItem = array('questionType'=>'single_choice','pId'=>1);
+        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
+        $this->assertEquals('single_choice',$testpaperItem['questionType']);
+        $count = $this->getTestpaperService()->deleteTestpaperItemByPId(1);
+        $this->assertEquals(1,$count);
+    }
+
+    public function testDeleteTestpaperItemByTestId()
+    {
+        $testpaperItem = array('questionType'=>'single_choice','pId'=>1,'testId'=>1);
+        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
+        $this->assertEquals('single_choice',$testpaperItem['questionType']);
+        $count = $this->getTestpaperService()->deleteTestpaperItemByTestId(1);
+        $this->assertEquals(1,$count);
+    }
+
+    public function testUpdateTestpaperItemsByPId()
+    {
+        $testpaperItem = array('questionType'=>'single_choice','pId'=>1,'testId'=>1);
+        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
+        $this->assertEquals('single_choice',$testpaperItem['questionType']);
+        $count = $this->getTestpaperService()->updateTestpaperItemsByPId(1,array('questionType'=>'fill'));
+        $this->assertEquals(1,$count);
+    }
+
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');

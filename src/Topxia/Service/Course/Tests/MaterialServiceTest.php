@@ -53,6 +53,25 @@ class MaterialServiceTest extends BaseTestCase
             'address'=>'test');
         return $this->getCourseService()->createCourse($course);
     }
+    /*
+        课程数据同步
+    */
+    public function testCreateMaterial()
+    {
+        $Material = array('title'=>'material');
+        $Material = $this->getMaterialService()->createMaterial($Material);
+        $this->assertEquals('material', $Material['title']);
+    
+    }
+
+    public function testDeleteMaterialByPId()
+    {
+        $Material = array('title'=>'material','pId'=>1);
+        $Material = $this->getMaterialService()->createMaterial($Material);
+        $this->assertEquals('material', $Material['title']);
+        $count = $this->getMaterialService()->deleteMaterialByPId(1);
+        $this->assertEquals(1, $count);
+    }
 
     protected function getUserService()
     {
