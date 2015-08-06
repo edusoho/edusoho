@@ -15,12 +15,12 @@
         <span>( {{ course.ratingNum }}人 )</span>
       </div>
     <div class="study clearfix">
-      {% set needToPay= true %}
+      {% set needToPay=((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0)) %}
       {% set userNotReady = setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
       {% set courseNotPublishedOrAlreadyFull = course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
       {% if 'periodic'==course.type %}
         {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
-        {% set courseNotStarted=("now"|date('U') >= course.startTime) %}
+        {% set courseStarted=("now"|date('U') >= course.startTime) %}
         <a class="btn btn-study {{ courseFinished ? 'little-gray' : ''}}" 
           {% if userNotReady %}
               href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}" 
@@ -37,9 +37,9 @@
           已结束
         {% else %}
           {% if needToPay %}
-            {{ userVipStatus=='ok' ? (courseNotStarted ? "加入学习" : " 报名参加") : "购买课程" }}
+            {{ userVipStatus=='ok' ? (courseStarted ? "加入学习" : " 报名参加") : "购买课程" }}
           {% else %}
-            {{ courseNotStarted ? "加入学习" : " 报名参加" }}
+            {{ courseStarted ? "加入学习" : " 报名参加" }}
           {% endif %}
         {% endif %}
       {% else %}
