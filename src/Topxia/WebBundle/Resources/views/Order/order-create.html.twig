@@ -47,6 +47,7 @@
               {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
             {% endif %}
             </div>
+
             <div class="order-detail-bg">
 
             {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) %}
@@ -75,7 +76,15 @@
             </div>
             <div class="form-group pay clearfix">
               <div class="pull-right controls">
-                <a href="javascript:;" class=" link-light  mrl" role="cancel-coupon" style="">取消</a>
+                <a 
+                  {% if targetType == "course" and courses|default(null) %}
+                    href="{{ path('course_show', {id:courses[0].id}) }}" 
+                  {% elseif targetType == "vip" %}
+                    href="{{ path('vip_renew') }}"
+                  {% elseif targetType == "classroom" %}
+                    href="{{ path('classroom_show', {id:classroom.id}) }}"
+                  {% endif %}
+                  class=" link-light  mrl" style="">取消</a>
                 {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %} 
                   <a class="btn btn-primary btn-high" id="js-order-create-sms-btn" data-toggle="modal" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" >提交订单</a>
                 {% else %}
