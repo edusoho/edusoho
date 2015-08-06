@@ -6,24 +6,11 @@
   height: 100%;
   background-color: #fff;
   .border-radius;
-  box-shadow: 0 2px 0px 0 rgba(0,0,0,.1),0 2px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-  -webkit-box-shadow: 0 2px 0px 0 rgba(0,0,0,.1),0 2px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-  -moz-box-shadow: 0 2px 0px 0 rgba(0,0,0,.1),0 2px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  .es-box-shadow;
   z-index: -1;
   @media (max-width: @screen-xs-max) {
     top: 2px;
     left: 2px;
-  }
-  &.two {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    z-index: -2;
-    .es-box-shadow;
-    @media (max-width: @screen-xs-max) {
-      top: 4px;
-      left: 4px;
-    }
   }
 }
 
@@ -33,7 +20,12 @@
   // background-size: 100% 100%;
   // background-attachment: fixed;
   background-color: @gray-lighter;
-  padding: 30px 0 40px 0;
+  // padding: 20px 0 30px 0;
+  padding-bottom: 25px;
+  .breadcrumb {
+    margin: 12px auto;
+    padding: 8px 0;
+  }
   .class-header-mian {
     position: relative;
     z-index: 1;
@@ -114,14 +106,14 @@
   .class-data {
     list-style-type: none;
     padding: 10px 0;
-    background-color: @gray-lighter;
+    background-color: @bg-color;
     >li {
       float: left;
       margin: 10px 0;
       color: @gray;
       text-align: center;
       line-height: 30px;
-      border-left: 1px solid @gray-light;
+      border-left: 1px solid @gray-lighter;
       @media (max-width: @screen-md-max) {
         padding: 8px 0;
         line-height: 25px;
