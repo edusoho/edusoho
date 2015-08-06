@@ -6,13 +6,7 @@
 
 {% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% else %}{{ '全部' }}{% endif %}{% endblock %}
   {% block description %}{{ setting('site.seo_description') }}{% endblock %}
-    {% block title %}
-    {%  if categoryArray %}
-      {{ categoryArray.name }}
-    {% else %}
-      {{'全部'}}
-    {% endif %}
-    - {{site.name}} - {% if site.slogan %}{{site.slogan}}{% endif %} - Powered By EduSoho
+    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %} - Powered By EduSoho
     {% endblock %}
 
 {% block top_content %}

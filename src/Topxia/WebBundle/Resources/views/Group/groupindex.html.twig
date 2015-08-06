@@ -2,7 +2,7 @@
 {% set script_controller = 'group/group' %}
 {% block title %}{{groupinfo.title}}小组 {{ parent() }}{% endblock %}
 {% block keywords %}{{groupinfo.title}}{% endblock %}
-{% block description %}{% if groupAbout %}{{groupAbout|plain_text(100)}}{% else %}{{''|plain_text(100)}}{% endif %}{% endblock %}
+{% block description %}{{groupAbout|default('')|plain_text(100)}}{% endblock %}
 {% set groupNav = 'index' %}
 
 {% block group_main %}

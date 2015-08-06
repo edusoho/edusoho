@@ -29,15 +29,12 @@ class ClassroomController extends BaseController
             'private' => 0,
         );
 
+        $categoryArray = array();
         if (!empty($category)) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
             $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
-        }
-        else
-        {
-            $categoryArray = '';
         }
 
         $paginator = new Paginator(
@@ -57,7 +54,6 @@ class ClassroomController extends BaseController
 
         $allClassrooms = ArrayToolkit::index($classrooms, 'id');
 
-        $site = $this->getSettingService()->get('site', array());
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator' => $paginator,
             'classrooms' => $classrooms,
@@ -65,7 +61,6 @@ class ClassroomController extends BaseController
             'path' => 'classroom_explore',
             'category' => $category,
             'categoryArray' => $categoryArray,
-            'site' => $site
         ));
     }
 
@@ -257,7 +252,6 @@ class ClassroomController extends BaseController
 
     public function introductionAction(Request $request, $id)
     {
-        $site = $this->getSettingService()->get('site', array());
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
@@ -266,7 +260,6 @@ class ClassroomController extends BaseController
             'introduction' => $introduction,
             'classroom' => $classroom,
             'member' => $member,
-            'site' => $site
         ));
     }
 

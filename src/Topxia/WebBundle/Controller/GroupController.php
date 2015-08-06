@@ -57,7 +57,6 @@ class GroupController extends BaseController
         $newGroups=$this->getGroupService()->searchGroups(array('status'=>'open',),
             array('createdTime','DESC'),0,8);
 
-        $site = $this->getSettingService()->get('site', array());
         return $this->render("TopxiaWebBundle:Group:index.html.twig", array(
             'activeGroup' => $activeGroup,
             'myJoinGroup' => $myJoinGroup,
@@ -67,7 +66,6 @@ class GroupController extends BaseController
             'groupinfo'=>$groups,
             'user'=>$user,  
             'recentlyThread'=>$recentlyThread,
-            'site' => $site
         ));
     }
 

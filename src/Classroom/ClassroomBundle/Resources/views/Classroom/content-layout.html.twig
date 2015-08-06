@@ -1,4 +1,4 @@
-{% extends 'ClassroomBundle:Classroom:layout.html.twig' %}
+{% extends layout|default('ClassroomBundle:Classroom:layout.html.twig') %}
 
 {% block title %}{{ parent() }}{% endblock %}
 {% block content %}

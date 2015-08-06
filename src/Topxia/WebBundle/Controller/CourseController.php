@@ -79,7 +79,6 @@ class CourseController extends CourseBaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-		$site = $this->getSettingService()->get('site', array());
 
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
@@ -91,7 +90,6 @@ class CourseController extends CourseBaseController
 			'consultDisplay' => true,
 			'path' => 'course_explore',
 			'categoryArray' => $categoryArray,
-			'site'=> $site,
 			'group' => $group
 		));	
 	}
