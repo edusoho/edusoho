@@ -1,56 +1,3 @@
-<!-- 将删除 -->
-{% if classrooms == 1 %}
-  <section class="recommend-class">
-    <div class="container">
-      <div class="class-label hidden-xs hidden-sm">推荐{{ setting('classroom.name')|default("班级") }}</div>
-      <div class="recommend-class-list">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-
-            {% for classroom in classrooms %}
-              <div class="swiper-slide">
-                <div class="class-item">
-                  <div class="class-bg-layer"></div>
-                  <div class="class-item-bg">
-                    <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img class="img-responsive" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt="{{ classroom.title }}">
-                      {% if classroom.belogCourse|default(false) %}
-                        <div class="class-belong hidden-xs hidden-sm">所属{{ setting('classroom.name')|default("班级") }}</div>
-                      {% endif %}
-                    </a>
-                    <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-
-            {% set emptyClassroomNum = 4 - classrooms|length %}
-            {% if emptyClassroomNum > 0 %}
-              {% for i in range(1, emptyClassroomNum) %}
-                <div class="swiper-slide">
-                  <div class="class-item item-default">
-                    <img class="img-responsive" src="{{ asset('assets/v2/img/class_default.png') }}" alt="班级默认图片">
-                  </div>
-                </div>
-              {% endfor %}
-            {% endif %}
-          </div>
-        </div>
-
-        {% if classrooms|length > 4 %}
-          <a href="javascipt:;" class="arrow-prev">
-            <i class="es-icon es-icon-chevronleft"></i>
-          </a>
-          <a href="javascipt:;" class="arrow-next">
-            <i class="es-icon es-icon-chevronright"></i>
-          </a>
-        {% endif %}
-
-      </div>
-    </div>
-  </section>
-{% endif %}
-
 {% if classrooms %}
   <div class="panel panel-default panel-class hidden-sm" id="panel-class">
     <div class="panel-heading">
@@ -83,4 +30,5 @@
       </div>
     </div>
   </div>
+  {% do load_script('course/recommend-classroom') %}
 {% endif %}
