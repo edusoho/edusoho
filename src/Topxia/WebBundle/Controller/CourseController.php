@@ -223,7 +223,7 @@ class CourseController extends CourseBaseController
 
 		$this->getCourseService()->hitCourse($id);
 
-        $items = $this->getCourseService()->getCourseItems($course['id']);
+    $items = $this->getCourseService()->getCourseItems($course['id']);
 
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,

@@ -3,6 +3,13 @@
 {% set layoutClass = 'before' %}
 
 {% block before_content %}
+  <ol class="breadcrumb">
+    <li><a href="{{ path('homepage') }}">首页</a></li>
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+    {% endfor %}
+    <li class="active">{{ course.title }}</li>
+  </ol>
   {% if member and member.locked %}
   <div class="alert alert-warning">
     您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。

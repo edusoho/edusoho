@@ -145,6 +145,7 @@ class ClassroomController extends BaseController
 
         $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
         if ($member && !$member["locked"]) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom' => $classroom,
@@ -159,6 +160,7 @@ class ClassroomController extends BaseController
                 'classroomMemberLevel' => $classroomMemberLevel,
                 'coursesNum' => $coursesNum,
                 'canFreeJoin' => $canFreeJoin,
+                'breadcrumbs' => $breadcrumbs
             ));
         }
 
@@ -171,6 +173,7 @@ class ClassroomController extends BaseController
             'member' => $member,
             'canManage' => $canManage,
             'canFreeJoin' => $canFreeJoin,
+            'breadcrumbs' => $breadcrumbs
         ));
     }
 

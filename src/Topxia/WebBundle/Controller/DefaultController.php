@@ -14,8 +14,7 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published', 'parentId' => 0);
-
+        $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $coinSetting=$this->getSettingService()->get('coin',array());
         if(isset($coinSetting['cash_rate'])){
             $cashRate=$coinSetting['cash_rate'];
@@ -23,7 +22,7 @@ class DefaultController extends BaseController
             $cashRate=1;
         } 
         
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
