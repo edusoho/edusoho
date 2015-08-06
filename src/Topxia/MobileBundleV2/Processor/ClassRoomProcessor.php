@@ -29,5 +29,7 @@ interface ClassRoomProcessor
 
 	public function getTeachers();
 
-	public function signHistory();
+	public function getTodaySignInfo();
+
+	public function sign();
 }

@@ -17,7 +17,33 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
-    public function signHistory()
+    public function sign()
+    {
+        $classRoomId = $this->getParam("classRoomId", 0);
+        $user  = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录，不能签到！");
+        }
+
+        $userSignStatistics = array();
+        $member = $this->getClassroomService()->getClassroomMember($classRoomId, $user['id']);
+
+        try {
+            if ($this->getClassroomService()->canTakeClassroom($classRoomId) || (isset($member) && $member['role'] == "auditor")) {
+                $this->getSignService()->userSign($user['id'], 'classroom_sign', $classRoomId);
+
+                $userSignStatistics = $this->getSignService()->getSignUserStatistics($user['id'], 'classroom_sign', $classRoomId);
+            }
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+        return array(
+            'isSignedToday' => true,
+            'userSignStatistics' => $userSignStatistics
+        );
+    }
+
+    public function getTodaySignInfo()
     {
         $classRoomId = $this->getParam("classRoomId", 0);
         $user  = $this->controller->getUserByToken($this->request);
@@ -37,13 +63,15 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $signDay = $this->getSignService()->getSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time()+3600));
         $notSign = $day-count($signDay);
 
+        if (!empty($userSignStatistics)) {
+            $userSignStatistics['createdTime'] = date('c', $userSignStatistics['createdTime']);
+        }
         return array(
             'isSignedToday' => $isSignedToday,
             'userSignStatistics' => $userSignStatistics,
             'notSign' => $notSign,
             'week' => $week[date('w', time())]
         );
-
     }
 
     public function getAnnouncements()
