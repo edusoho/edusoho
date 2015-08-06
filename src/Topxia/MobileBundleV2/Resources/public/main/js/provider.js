@@ -120,7 +120,7 @@ appProvider.provider('appRouter', function($stateProvider) {
 	            });
 
 	            $stateProvider.state('myinfo', {
-	              url: "/myinfo/:userId",
+	              url: "/myinfo",
 	              views: {
 	                'rootView': {
 	                  templateUrl: app.viewFloder  + "view/myinfo.html",

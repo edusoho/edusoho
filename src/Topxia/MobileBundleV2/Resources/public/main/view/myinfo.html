@@ -14,6 +14,7 @@
           <div class="ui-avatar">
               <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" img-error="avatar"/>
           </div>
+          <input type="hidden" ng-model="userinfo.fileId" />
           <input type="file" id="uploadFile" name="file" class="upload-file" accept="image/*" onchange="angular.element(this).scope().uploadChange(this)">
           <label class="upload-label" for="uploadFile"></label>
       </li>

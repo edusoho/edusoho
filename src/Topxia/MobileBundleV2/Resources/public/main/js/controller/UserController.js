@@ -64,6 +64,7 @@ function MyInfoController($scope, UserService, $stateParams)
 				$scope.toast(data.error.message);
 				return;
 			}
+			$scope.userinfo.fileId = data.id;
 			$scope.userinfo.mediumAvatar = data.url;
 		});
 	};
@@ -83,12 +84,17 @@ function MyInfoController($scope, UserService, $stateParams)
 	$scope.updateUserProfile = function() {
 		var userinfo = $scope.userinfo;
 		var params = {
+			'fileId' : userinfo.fileId,
 			'profile[nickname]' : userinfo.nickname,
 			'profile[gender]' : userinfo.gender,
 			'profile[signature]' : userinfo.signature
 		};
+		$scope.showLoad();
 		UserService.updateUserProfile(params, function(data) {
-			console.log(data);
+			if (data.error) {
+				$scope.toast(data.error.message);
+			}
+			$scope.hideLoad();
 		});
 	};
 

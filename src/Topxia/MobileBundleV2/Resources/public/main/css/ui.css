@@ -781,7 +781,15 @@ a {
 /** ui-userinfo**/
 
 .ui-userinfo .ui-avatar {
-  margin: 10px -12px 10px 0;
+  margin: 10px 0px 10px 0;
+}
+
+.ui-userinfo .ui-form-item {
+  padding-right: 25px;
+}
+
+.ui-userinfo .ui-form-item input,textarea {
+  text-align: right;
 }
 
 .ui-userinfo .upload-file {
@@ -803,16 +811,16 @@ a {
 }
 
 .ui-userinfo .ui-select select {
-  -webkit-appearance: none;
   border: 0;
   background: 0 0;
-  width: 100%;
   padding-right: 14px;
+  -webkit-appearance: none;
 }
 
 .ui-userinfo .ui-select {
-  position: relative;
   margin-right: 6px;
+  text-align: right;
+  position: relative;
 }
 
 .ui-userinfo .ui-form-item>.ui-select {
@@ -820,18 +828,17 @@ a {
 }
 
 .ui-userinfo .ui-select:after {
-  position: absolute;
   top: 50%;
-  right: 0;
-  margin-top: -4px;
   width: 0;
   height: 0;
+  content: "";
+  color: #a6a6a6;
+  margin-top: -4px;
+  position: absolute;
+  pointer-events: none;
   border-top: 6px solid;
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
-  color: #a6a6a6;
-  content: "";
-  pointer-events: none;
 }
 
 /** ui-userinfo**/

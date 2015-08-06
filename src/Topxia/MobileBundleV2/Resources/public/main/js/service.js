@@ -603,6 +603,7 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 
 	this.muiltPost = function(options) {
 		var headers = options.headers || {};
+		headers["token"] = $rootScope.token;
 		headers['Content-Type'] = undefined;
 
 		var fd = new FormData();
