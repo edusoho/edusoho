@@ -10,6 +10,7 @@ use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Cookie;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\XingeApp;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
@@ -22,7 +23,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     
     public function uploadAvatar()
     {
-        $groupCode = 'default';
+        $groupCode = 'tmp';
         $user = $this->controller->getUserByToken($this->request);
         if (empty($user)) {
             return $this->createErrorResponse('not_login', "您尚未登录！");
@@ -58,13 +59,76 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $profile = $this->request->request->get('profile');
         
         try {
+            $fileId = $this->getParam("fileId", 0);
+            $this->updateUserAvatar($user, $fileId);
             $this->updateNickname($user, $profile['nickname']);
             $this->getUserService()->updateUserProfile($user['id'], $profile);
         } catch(\Exception $e) {
-            return $this->createErrorResponse('not_login', $e->getMessage());
+            return $this->createErrorResponse('error', $e->getMessage());
         }
 
         return true;
+    }
+
+    private function createImgCropOptions($naturalSize, $scaledSize)
+    {
+        $options = array();
+
+        $options['x'] = 0;
+        $options['y'] = 0;
+        $options['x2'] = $scaledSize->getWidth();
+        $options['y2'] = $scaledSize->getHeight();
+        $options['w'] = $naturalSize->getWidth();
+        $options['h'] = $naturalSize->getHeight();
+
+        $options['imgs'] = array();
+        $options['imgs']['large'] = array(200, 200);
+        $options['imgs']['medium'] = array(120, 120);
+        $options['imgs']['small'] = array(48, 48);
+        $options['width'] = $naturalSize->getWidth();
+        $options['height'] = $naturalSize->getHeight();
+
+        return $options;
+    }
+
+    private function updateUserAvatar($user, $fileId)
+    {
+        if(empty($fileId)) {
+            return;
+        }
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        
+        $options = $this->createImgCropOptions($naturalSize, $scaledSize);
+        $record = $this->getFileService()->getFile($fileId);
+        if(empty($record)) {
+            throw new \RuntimeException("Error file not exists");
+        }
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
+
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
+
+        $fields = array();
+        foreach ($filePaths as $key => $value) {
+            $file = $this->getFileService()->uploadFile("user", new File($value));
+            $fields[] = array(
+                "type" => $key,
+                "id" => $file['id']
+            );
+        }
+
+        if(isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+            $fields[] = array(
+                "type" => "origin",
+                "id" => $record['id']
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record["uri"]);
+        }
+
+        if (empty($fields)) {
+            throw new \RuntimeException("Error uplaod avatar");
+        }
+        $this->getUserService()->changeAvatar($user['id'], $fields);
     }
 
     private function updateNickname($user, $nickname)
@@ -75,7 +139,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return;
         }
         if($isNickname['nickname_enabled'] == 0){
-            throw new RuntimeException("nickname update Error");
+            throw new \RuntimeException("nickname update Error");
         }
 
         $this->getAuthService()->changeNickname($user['id'], $nickname);
