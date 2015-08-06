@@ -571,7 +571,7 @@
   .arrow-prev,
   .arrow-next {
     position: absolute;
-    top: 40%;
+    top: 35%;
     width: 30px;
     height: 30px;
     line-height: 30px;
@@ -581,6 +581,7 @@
     color: #fff;
     text-align: center;
     .es-transition;
+    visibility: hidden;
     &:hover {
       background-color: rgba(127, 127, 127, 0.8);
       .es-transition;
@@ -591,5 +592,11 @@
   }
   .arrow-next {
     right: 5px;
+  }
+  &:hover {
+    .arrow-prev,
+    .arrow-next {
+      visibility: visible;
+    }
   }
 }

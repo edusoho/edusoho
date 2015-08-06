@@ -6,8 +6,8 @@
       {% for announcement in announcements %}
         {% if announcement.url %}
         <div class="swiper-slide">
-          <a class="alert-link" href="{{announcement.url}}" target="_blank">
-            <i class="es-icon es-icon-infooutline mrm"></i>
+          <i class="es-icon es-icon-infooutline mrm"></i>
+          <a href="{{announcement.url}}" target="_blank">
             {{announcement.content|sub_text(50)}}
           </a>
         </div>
