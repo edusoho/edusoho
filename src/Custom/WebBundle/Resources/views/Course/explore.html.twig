@@ -1,0 +1,33 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set bodyClass = 'course-list-page' %}
+{% set siteNav = 'course/explore' %}
+{% set script_controller = 'course/explore' %}
+
+{% block content %}
+  {% set fliter = fliter|default('all') %}
+  {% set orderBy = orderBy|default('latest')%}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
+  <div class="category-filters">
+    <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'latest'}) }}" class=" {% if (orderBy == 'latest') %} selected {% endif %}">最近更新</a>        
+    <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'studentNum'}) }}" class=" {% if (orderBy == 'studentNum') %} selected {% endif %}">最热课程</a>
+    <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class=" {% if (orderBy == 'recommendedSeq') %} selected {% endif %}">推荐课程</a>
+  </div>
+
+  <div class="course-list">
+
+    {% if courses %}
+      {% for course in courses %}
+        <div class="course-item clearfix">
+          {% include 'CustomWebBundle:Course:Widget/course-grid.html.twig' %}
+        </div>
+        {% endfor %}
+    {% else %}
+      <div class="empty">该分类下无课程</div>
+    {% endif %}
+    
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}
+
