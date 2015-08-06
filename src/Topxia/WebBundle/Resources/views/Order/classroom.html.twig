@@ -13,7 +13,7 @@
     <span class="pay-rmb">{{classroom.price * cashRate}}</span>
     {{setting("coin.coin_name")}}
     {% endif %}
-    <span role="total-price" class="order-price " style="disable">{{totalPrice}}</span>
+    <span role="total-price" class="order-price hidden">{{totalPrice}}</span>
   </div>
 </div>
 {% if paidCourses|length > 0 and setting('classroom.discount_buy')|default(1) == 1 %}
