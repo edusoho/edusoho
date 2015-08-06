@@ -9,11 +9,13 @@ define(function(require, exports, module){
         });
 
         $('.link-light').click( function(){
+            var that = this;
             $.post($(this).data('url'), function(data) {
                 if(data!=true) {
                     Notify.danger('订单取消失败！');
                 }
                 Notify.success('订单已取消成功！');
+                window.location.href = $(that).data('goto');
             });
         });
 

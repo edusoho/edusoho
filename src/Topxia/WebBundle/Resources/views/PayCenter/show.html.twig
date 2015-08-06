@@ -85,14 +85,16 @@
                 <span role="pay-rmb" class="pay-rmb">￥{{order.amount}}</span>
               </div>
              <a 
+                href="javascript:;"
                 {% if targetType == "course" and courses|default(null) %}
-                  href="{{ path('course_show', {id:courses[0].id}) }}" 
+                  data-goto="{{ path('course_show', {id:courses[0].id}) }}" 
                 {% elseif targetType == "vip" %}
-                  href="{{ path('vip_renew') }}"
+                  data-goto="{{ path('vip_renew') }}"
                 {% elseif targetType == "classroom" %}
-                  href="{{ path('classroom_show', {id:classroom.id}) }}"
+                  data-goto="{{ path('classroom_show', {id:classroom.id}) }}"
                 {% endif %}
-                 class=" link-light  mrl " role="js-cancle" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消</a>
+                 class=" link-light  mrl " data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消
+              </a>
               <button class="pay-button btn btn-primary btn-high"  type="submit">确认支付</button>
             </div>
           </form>
