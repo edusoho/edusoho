@@ -5,7 +5,11 @@
   // background-size: 100% 100%;
   // background-attachment: fixed;
   // padding: 30px 0 10px 0;
-  padding-top: 20px;
+  // padding-top: 20px;
+  .breadcrumb {
+    margin: 12px auto;
+    padding: 8px 0;
+  }
   .es-section {
     position: relative;
     padding: 0;
@@ -81,6 +85,9 @@
       height: 50px;
       background: url("@{img-src}tag_finished.png") no-repeat;
     }
+  }
+  .title {
+    color: @gray-darker;
   }
   .subtitle {
     color: @gray;
@@ -161,7 +168,7 @@
   }
   .course-operation {
     padding: 12px 15px;
-    background-color: #f0f0f0;
+    background-color: @bg-color;
     color: @gray;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -241,7 +248,7 @@
     float: left;
     width: 390px;
     width: 386px\9;
-    padding: 15px 25px;
+    padding: 15px 20px 15px 5px;
     background-color: #fff;
     @media (max-width: @screen-md-max) {
       width: 350px;
@@ -280,7 +287,7 @@
       padding: 10px 10px 0 10px;
     }
     .student-num {
-      border-bottom: 1px solid @gray-light;
+      border-bottom: 1px solid @gray-lighter;
       @media (max-width: @screen-sm-max) {
         float: left;
         width: 33.33%;
@@ -376,7 +383,7 @@
     }
     .student-num {
       padding: 15px 0;
-      border-bottom: 1px solid @gray-light;
+      border-bottom: 1px solid @gray-lighter;
       @media (max-width: @screen-md-max) {
         font-size: 20px;
         padding: 10px 0;
@@ -531,6 +538,10 @@
 //   }
 // }
 
+.class-detail {
+  margin-top: -10px;
+}
+
 .course-material {
   input {
     margin-right: 10px;
@@ -599,4 +610,8 @@
       visibility: visible;
     }
   }
+}
+
+.course-detail {
+  margin-top: -10px; 
 }

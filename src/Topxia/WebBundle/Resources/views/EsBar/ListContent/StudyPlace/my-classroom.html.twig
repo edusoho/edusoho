@@ -11,7 +11,6 @@
       {% set classroomCount = loop.length %}
       <div class="class-item">
         <div class="class-bg-layer"></div>
-        <div class="class-bg-layer two"></div>
         <div class="class-item-bg">
           <a class="class-img" target="_blank" href="{{ path('classroom_show',{id:classroom.id}) }}">
             <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
