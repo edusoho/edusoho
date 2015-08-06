@@ -113,6 +113,7 @@ define(function(require, exports, module) {
     	},
 
         _initUploadPane: function() {
+            console.log('init video pane');
             var self = this;
             var $el = $('#batch-uploader');
             var uploader = new BatchUploader({

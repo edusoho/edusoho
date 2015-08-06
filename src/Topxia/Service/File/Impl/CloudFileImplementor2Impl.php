@@ -9,6 +9,37 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 {
+    public function getFile($file)
+    {
+        $api = CloudAPIFactory::create();
+        $cloudFile = $api->get("/files/{$file['globalId']}");
+
+        $file['hashId'] = $cloudFile['storageKey'];
+        $file['size'] = $cloudFile['size'];
+
+        $statusMap = array(
+            'none' => 'none',
+            'waiting' => 'waiting',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+        $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
+
+        if ($file['type'] == 'video') {
+            $file['convertParams'] = array(
+                'convertor' => $cloudFile['processParams']['output'],
+                'videoQuality' => $cloudFile['processParams']['videoQuality'],
+                'audioQuality' => $cloudFile['processParams']['audioQuality'],
+            );
+            $file['metas2'] = $cloudFile['metas']['levels'];
+        } elseif ($file['type'] == 'ppt') {
+            
+        }
+        // echo "<pre>";var_dump($cloudFile, $file); echo "</pre>";exit();
+
+        return $file;
+    }
     public function prepareUpload($params)
     {
         $file = array();
@@ -28,7 +59,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['createdTime'] = $file['updatedTime'];
 
         // 以下参数在cloud模式下弃用，填充随机值
-        $file['hashId'] = uniqid('R') . date('Yndhis');
+        $file['hashId'] = uniqid('NIL') . date('Yndhis');
         $file['etag'] = $file['hashId'];
         $file['convertHash'] = $file['hashId'];
         

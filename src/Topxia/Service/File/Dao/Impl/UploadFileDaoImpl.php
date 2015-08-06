@@ -9,10 +9,16 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 {
     protected $table = 'upload_files';
 
+    private $serializeFields = array(
+            'metas2' => 'json',
+            'convertParams' => 'json',
+    );
+
     public function getFile($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $file = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $file ? $this->createSerializer()->unserialize($file, $this->serializeFields) : null;
     }
 
     public function getFileByHashId($hash)

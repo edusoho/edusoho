@@ -18,6 +18,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         'cloud' => 'File.CloudFileImplementor2',
     );
 
+    public function getFile($id)
+    {
+        $file = $this->getUploadFileDao()->getFile($id);
+        if(empty($file)){
+            return null;
+        }
+
+        return $this->getFileImplementor($file)->getFile($file);
+    }
+
     public function initUpload($params)
     {
     	$user = $this->getCurrentUser();
