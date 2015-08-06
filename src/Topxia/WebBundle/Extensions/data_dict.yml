@@ -65,6 +65,7 @@ refundStatus:html:
 
 payment:
     alipay: 支付宝
+    wxpay: 微信支付
 
 moneyRecordType:
     income: 充值
@@ -200,7 +201,7 @@ userType:
     weibo: 微博登录
     renren: 人人连接
     qq: QQ登录
-    douban: 豆瓣连接
+    weixin: 微信登录
 
 userKeyWordTypes:
     nickname: 用户名
@@ -288,7 +289,19 @@ classroomRoles:
     assistantStudent: 助教
 
 searchCourseType:
-    'all': 全部课程
-    'vip': 会员课程
-    'free': 免费课程
-    'live': 直播课程
+    all: 全部课程
+    vip: 会员课程
+    free: 免费课程
+    live: 直播课程
+
+userInfoFields:
+    email: 邮箱地址
+    truename: 姓名
+    mobile: 手机号码
+    qq: QQ
+    company: 公司
+    idcard: 身份证号码
+    gender: 性别
+    job: 职业
+    weibo: 微博
+    weixin: 微信

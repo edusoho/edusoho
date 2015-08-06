@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-
+    require('../../util/qrcode').run();
     exports.run = function() {
 
         $('.course-exit-btn').on('click', function(){
