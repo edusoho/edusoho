@@ -36,7 +36,7 @@
               <span>({{ classroom.ratingNum }}评价)</span>
             </div>
             {% if member.role == 'auditor'%}
-              <div class="price hidden-sm">
+              <div class="price">
                 价格： <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                       {% if classroom.price > 0 %}
                      {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
