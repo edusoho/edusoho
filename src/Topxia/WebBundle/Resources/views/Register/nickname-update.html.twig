@@ -27,12 +27,12 @@
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3 ptl">
     <div class="panel panel-default panel-page">
-       <div class="panel-heading"><h2>仅需一步，完善资料，让大家记住你！ </h2></div>
-      <form id="register-nickname-form" class="form-vertical" method="post" action="{{path('register_nickname_update')}}">
-          <input type="hidden" name='id' value="{{user.id}}">
-          <input type="hidden" name='emailOrMobile' value="{{user.verifiedMobile}}">
+      <div class="panel-heading"><h2>仅需一步，完善资料，让大家记住你！ </h2></div>
+      <form id="login-fill-userinfo-form" class="form-vertical" method="post" action="{{path('register_nickname_update')}}">
+        <input type="hidden" name='id' value="{{user.id}}">
+        <input type="hidden" name='emailOrMobile' value="{{user.verifiedMobile}}">
 
-          {{ web_macro.flash_messages() }}
+        {{ web_macro.flash_messages() }}
         <div class="form-group">
           <label class="control-label required hidden" for="register_nickname">用户名</label>
           <div class="controls">
@@ -47,9 +47,11 @@
               <p class="help-block">如果跳过，您将使用随机生成的用户名 <a href="javascript:;" class="pull-right nickname_ingnore">跳过</a></p>           
             </div>
           </div>
-          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        </form>
-       </div>    
+          
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>    
   </div>
 </div>
 {% endblock %}

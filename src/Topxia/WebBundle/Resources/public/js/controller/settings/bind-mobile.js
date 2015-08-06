@@ -34,7 +34,15 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="mobile"]',
             required: true,
-            rule: 'phone'            
+            rule: 'phone email_or_mobile_remote',
+            onItemValidated: function(error, message, eleme) {
+                if (error) {
+                    $('.js-sms-send').addClass('disabled');
+                    return;
+                } else {
+                    $('.js-sms-send').removeClass('disabled');
+                }
+            }            
         });
 
         if($('input[name="sms_code"]').length>0){
@@ -45,9 +53,17 @@ define(function(require, exports, module) {
                 rule: 'integer fixedLength{len:6} remote',
                 display: '短信验证码'           
             });
+
+            $('#bind-mobile-form').on('click','.js-sms-send',function(){
+                validator.query('[name="mobile"]').execute(function(error, results, element) {
+                    if (error) {
+                        return;
+                    }
+                });
+            })
         }
 
-		var smsSender = new SmsSender({
+		/*var smsSender = new SmsSender({
             element: '.js-sms-send',
             url: $('.js-sms-send').data('url'),
             smsType: 'sms_bind',
@@ -65,7 +81,7 @@ define(function(require, exports, module) {
 
                 return couldSender;
             }          
-        });
+        });*/
 
 	};
 });

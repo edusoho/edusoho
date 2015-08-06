@@ -286,6 +286,59 @@ class UserController extends BaseController
         ));
     }
 
+    public function fillUserInfoAction(Request $request)
+    {
+        $auth = $this->getSettingService()->get('auth');
+        $user = $this->getCurrentUser();
+
+        if ($auth['fill_userinfo_after_login'] && !isset($auth['registerSort'])) {
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '请先登录！');
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+
+            $userInfo = ArrayToolkit::parts($formData, array(
+                'truename',
+                'mobile',
+                'qq',
+                'company',
+                'weixin',
+                'weibo',
+                'idcard',
+                'gender',
+                'job',
+                'intField1','intField2','intField3','intField4','intField5',
+                'floatField1','floatField2','floatField3','floatField4','floatField5',
+                'dateField1','dateField2','dateField3','dateField4','dateField5',
+                'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+                'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
+            ));
+
+            if (isset($formData['email']) && !empty($formData['email'])) {
+                $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+                $this->authenticateUser($this->getUserService()->getUser($user['id']));
+            }
+
+            $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = ArrayToolkit::index($userFields,'fieldName');
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+
+        return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
+            'userFields' => $userFields,
+            'user' => $userInfo,
+        ));
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
@@ -379,4 +432,18 @@ class UserController extends BaseController
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
+    }
 }
