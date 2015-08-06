@@ -376,6 +376,10 @@ class GroupController extends BaseController
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
+        $groupAbout = strip_tags($group['about'],'');
+
+        $groupAbout =  preg_replace("/ /","",$groupAbout);  
+        
         return $this->render("TopxiaWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
@@ -390,7 +394,7 @@ class GroupController extends BaseController
             'lastPostMembers'=>$lastPostMembers,
             'userIsGroupMember'=>$userIsGroupMember,
             'members'=>$recentlyMembers,
-                   
+            'groupAbout' => $groupAbout 
         ));
     }
 

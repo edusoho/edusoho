@@ -15,7 +15,7 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$conditions = $request->query->all();
-		
+		$categoryArray = array();
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
@@ -84,8 +84,9 @@ class CourseController extends CourseBaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'path' => 'course_explore'
-			
+			'path' => 'course_explore',
+			'categoryArray' => $categoryArray,
+			'group' => $group
 		));	
 	}
 
