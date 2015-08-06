@@ -9,15 +9,15 @@ define(function(require, exports, module) {
             'element': '.course-detail-content'
         });
 
-        $('#teacher-carousel').carousel({
-            interval: 0
-        });
-        $('#teacher-carousel').on('slide.bs.carousel', function(e) {
-            var teacherId = $(e.relatedTarget).data('id');
+        // $('#teacher-carousel').carousel({
+        //     interval: 0
+        // });
+        // $('#teacher-carousel').on('slide.bs.carousel', function(e) {
+        //     var teacherId = $(e.relatedTarget).data('id');
 
-            $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
-            $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
-        });
+        //     $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
+        //     $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
+        // });
 
         var reviewTabInited = false;
 
@@ -142,14 +142,17 @@ define(function(require, exports, module) {
              });
         }
 
-        var swiper = new Swiper('.recommend-class-list .swiper-container', {
-            // loop:true,
-            // grabCursor: true,
-            // paginationClickable: true,
-            simulateTouch: false,
-            spaceBetween: 10,
-            slidesPerView: 4,
-            calculateHeight: true
+        var swiper = new Swiper('#panel-class .swiper-container', {
+
+            paginationClickable: true,
+            autoplay: 5000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            calculateHeight: true,
+            roundLengths: true,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
+            }
         });
 
         $('.arrow-prev').on('click', function(e){

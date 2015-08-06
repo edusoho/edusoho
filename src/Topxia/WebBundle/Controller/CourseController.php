@@ -15,7 +15,7 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$conditions = $request->query->all();
-		
+		$categoryArray = array();
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
@@ -84,15 +84,17 @@ class CourseController extends CourseBaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'path' => 'course_explore'
-			
+			'path' => 'course_explore',
+			'categoryArray' => $categoryArray,
+			'group' => $group
 		));	
 	}
 
 	public function archiveAction(Request $request)
 	{   
 		$conditions = array(
-			'status' => 'published'
+			'status' => 'published',
+			'parentId' => '0'
 		);
 
 		$paginator = new Paginator(
@@ -223,7 +225,7 @@ class CourseController extends CourseBaseController
 
 		$this->getCourseService()->hitCourse($id);
 
-        $items = $this->getCourseService()->getCourseItems($course['id']);
+    $items = $this->getCourseService()->getCourseItems($course['id']);
 
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,
@@ -363,6 +365,10 @@ class CourseController extends CourseBaseController
 		if (empty($course)) {
 			throw $this->createNotFoundException("课程不存在，或已删除。");
 		}
+
+		if($course['approval'] == 1 && ($user['approvalStatus'] != 'approved')){
+            return $this->createMessageResponse('info', "该课程需要通过实名认证，你还没有通过实名认证。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));
+        }
 
 		if (!$this->getCourseService()->canTakeCourse($id)) {
 			return $this->createMessageResponse('info', "您还不是课程《{$course['title']}》的学员，请先购买或加入学习。", null, 3000, $this->generateUrl('course_show', array('id' => $id)));

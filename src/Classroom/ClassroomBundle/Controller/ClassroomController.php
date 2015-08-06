@@ -29,6 +29,7 @@ class ClassroomController extends BaseController
             'private' => 0,
         );
 
+        $categoryArray = array();
         if (!empty($category)) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
@@ -59,6 +60,7 @@ class ClassroomController extends BaseController
             'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
             'category' => $category,
+            'categoryArray' => $categoryArray,
         ));
     }
 
@@ -145,6 +147,7 @@ class ClassroomController extends BaseController
 
         $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
         if ($member && !$member["locked"]) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom' => $classroom,
@@ -159,6 +162,7 @@ class ClassroomController extends BaseController
                 'classroomMemberLevel' => $classroomMemberLevel,
                 'coursesNum' => $coursesNum,
                 'canFreeJoin' => $canFreeJoin,
+                'breadcrumbs' => $breadcrumbs
             ));
         }
 
@@ -171,6 +175,7 @@ class ClassroomController extends BaseController
             'member' => $member,
             'canManage' => $canManage,
             'canFreeJoin' => $canFreeJoin,
+            'breadcrumbs' => $breadcrumbs
         ));
     }
 
@@ -253,7 +258,6 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
-
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,

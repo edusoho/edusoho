@@ -13,180 +13,88 @@
   &.active {
     .box-shadow(none);
   }
-}
-
-.btn-link:hover, 
-.btn-link:focus {
-  color: @brand-primary;
-}
-
-.btn.btn-ghost {
-  color: #fff;
-  background: none;
-  border-color: #fff;
-  &:hover {
-    border-color: #fff;
-    background: #fff;
-    color: @brand-primary;
+  // 用于图标按钮
+  &.btn-mini {
+    padding: 0 3px;
+    line-height: 1.42857143;
   }
-  &:focus,
-  &.active {
-    background: #fff;
-    color: @brand-primary;
-    border-color: #fff;
-    .box-shadow(none);
+  >i {
+    font-size: 14px;
   }
 }
 
+.btn-link {
+  color: @gray-darker;
+  &:hover, 
+  &:focus {
+    color: @brand-primary;
+    text-decoration: none;
+  }
+}
 
 .btn.btn-default {
-  color: @gray;
-  background: none;
-  border-color: @gray;
-  &:hover {
-    border-color: @brand-primary;
-    background: none;
-    color: @brand-primary;
-  }
+  color: @gray-dark;
+  background-color: @gray-lighter;
+  border-color: darken(@gray-lighter,10%);
+  &:hover,
   &:focus,
   &.active {
-    background: @brand-primary;
-    color: #fff;
-    border-color: @brand-primary;
-    .box-shadow(none);
+    background-color: darken(@gray-lighter,5%);
   }
 }
 
 .btn.btn-primary {
-  border-color: @brand-primary;
-  background: none;
-  color: @brand-primary;
+  border-color: darken(@brand-primary,10%);
+  background-color: @brand-primary;
+  color: #fff;
   &:hover,
+  &:focus,
   &.active {
-    border-color: @brand-primary;
-    background-color: @brand-primary;
-    color: #fff;
+    background-color: darken(@brand-primary,5%);
   }
 }
 
 .btn.btn-success {
-  border-color: @brand-success;
-  background: none;
-  color: @brand-success;
+  border-color: darken(@brand-success,10%);
+  background-color: @brand-success;
+  color: #fff;
   &:hover,
+  &:focus,
   &.active {
-    border-color: @brand-success;
-    background-color: @brand-success;
-    color: #fff;
+    background-color: darken(@brand-success,5%);
   }
 }
 
-
 .btn.btn-info {
-  border-color: @brand-info;
-  background: none;
-  color: @brand-info;
+  border-color: darken(@brand-info,10%);
+  background-color: @brand-info;
+  color: #fff;
   &:hover,
+  &:focus,
   &.active {
-    border-color: @brand-info;
-    background-color: @brand-info;
-    color: #fff;
+    background-color: darken(@brand-info,5%);
   }
 }
 
 .btn.btn-warning {
-  border-color: @brand-warning;
-  background: none;
-  color: @brand-warning;
+  border-color: darken(@brand-warning,10%);
+  background-color: @brand-warning;
+  color: #fff;
   &:hover,
+  &:focus,
   &.active {
-    border-color: @brand-warning;
-    background-color: @brand-warning;
-    color: #fff;
+    background-color: darken(@brand-warning,5%);
   }
 }
 
 .btn.btn-danger {
-  border-color: @brand-danger;
-  background: none;
-  color: @brand-danger;
-  &:hover,
-  &.active {
-    border-color: @brand-danger;
-    background-color: @brand-danger;
-    color: #fff;
-  }
-}
-
-.btn.btn-default.btn-high {
-  border-color: @gray;
-  background: @gray;
+  border-color: darken(@brand-danger,10%);
+  background-color: @brand-danger;
   color: #fff;
   &:hover,
+  &:focus,
   &.active {
-    border-color: @gray - #222;
-    background-color: @gray - #222;
-    color: #fff;
-  }
-}
-
-.btn.btn-primary.btn-high {
-  border-color: @brand-primary;
-  background: @brand-primary;
-  color: #fff;
-  &:hover,
-  &.active {
-    border-color: @brand-primary - #222;
-    background-color: @brand-primary - #222;
-    color: #fff;
-  }
-}
-
-.btn.btn-success.btn-high {
-  border-color: @brand-success;
-  background: @brand-success;
-  color: #fff;
-  &:hover,
-  &.active {
-    border-color: @brand-success - #222;
-    background-color: @brand-success - #222;
-    color: #fff;
-  }
-}
-
-.btn.btn-info.btn-high {
-  border-color: @brand-info;
-  background: @brand-info;
-  color: #fff;
-  &:hover,
-  &.active {
-    border-color: @brand-info - #222;
-    background-color: @brand-info - #222;
-    color: #fff;
-  }
-}
-
-.btn.btn-warning.btn-high {
-  border-color: @brand-warning;
-  background: @brand-warning;
-  color: #fff;
-  &:hover,
-  &.active {
-    border-color: @brand-warning - #222;
-    background-color: @brand-warning - #222;
-    color: #fff;
-  }
-}
-
-.btn.btn-danger.btn-high {
-  border-color: @brand-danger;
-  background: @brand-danger;
-  color: #fff;
-  &:hover,
-  &.active {
-    border-color: @brand-danger - #222;
-    background-color: @brand-danger - #222;
-    color: #fff;
+    background-color: darken(@brand-danger,5%);
   }
 }
 
