@@ -3,7 +3,7 @@
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
 Created by FontForge 20120731 at Wed Aug  5 14:49:03 2015
- By Ads
+By Ads
 </metadata>
 <defs>
 <font id="es-icon" horiz-adv-x="1024" >
@@ -20,6 +20,7 @@ Created by FontForge 20120731 at Wed Aug  5 14:49:03 2015
     underline-thickness="50"
     underline-position="-100"
     unicode-range="U+0078-E68C"
+    unicode-range="U+0078-E68B"
   />
 <missing-glyph horiz-adv-x="374" 
 d="M34 0v682h272v-682h-272zM68 34h204v614h-204v-614z" />

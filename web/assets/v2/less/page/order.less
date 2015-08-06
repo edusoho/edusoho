@@ -3,6 +3,8 @@
   .border-radius;
   padding: 3px;
   margin-bottom: 20px;
+  border: 1px solid #f5f5f5;
+  margin-bottom: 30px;
 }
 .order-detail-bg .order-detail {
   position: relative;
@@ -24,10 +26,7 @@
 .order-detail-bg .class-count .class-price {
   font-size: 24px;
 }
-.order-detail-bg .order-item {
-  border-bottom: 0;
-  padding: 25px 30px;
-}
+
 .order-detail-bg .order-count {
   padding: 0;
 }
@@ -81,36 +80,13 @@
   .border-radius;
 }
 
-.order-pay .order-item {
-  padding-top: 30px;
-  line-height: 30px;
-}
+// .order-pay .order-item {
+//   padding-top: 30px;
+//   line-height: 30px;
+// }
 
 .order-pay .order-item-clear {
   border-bottom: 1px solid #E5E5E5;
-}
-
-.order-item .order-item-title {
-  padding-left: 20px;
-  height: 48px;
-}
-
-.order-item-title .order-item-title-icon {
-  background-repeat: no-repeat;
-  background-position: -4px -9px;
-  display: inline-block;
-  width: 29px;
-  height: 29px;
-  float: left;
-}
-
-.order-item-title .title {
-  font-size: 18px;
-  font-weight: normal;
-  margin-left: 20px;
-  float: left;
-  margin-top: 2px;
-  line-height: 1.2em;
 }
 
 .order-item-title .add-coun {
@@ -149,39 +125,17 @@
 }
 
 .order-item .price_r_mark {
-  font-size: 27px; 
-  float: left; 
   margin-right: 5px; 
-  margin-top: -3px;
-}
-
-.order-item .price_r_num {
-  font-size: 19px; 
-  float: left;margin-top: -4px; 
-  line-height: 26px;
 }
 
 .order-item .pricehead {
   float: left;
   font-size: 15px;
 }
-
-.order-item .coupon-detail {
-  padding: 0px 56px 17px 56px;
-  font-size: 14px;
-  margin-left: 15px;
-}
-
 .order-detail {
+  height: 150px;
   width: auto;
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
-  min-height: 188px;
-  padding: 20px;
-}
-.order-price {
-  font-size: 24px;
+  background-color: #fafafa;
 }
 
 .order-count {
@@ -189,7 +143,7 @@
 }
 
 .order-item {
-  padding: 0 5px;
+  padding: 0 30px;
 }
 
 .order-panel {
@@ -230,51 +184,6 @@
   line-height: 22px;
 }
 
-.order-item .order-item-detail{
-  padding: 0px 56px 17px 56px;
-}
-
-.order-item .coin-detail {
-  margin-left: 15px;
-  font-size: 14px;
-}
-
-.order-item .total-price {
-  float: right;
-  text-align: right;
-  margin-bottom: 30px;
-}
-
-.order-item .total-price .pay-rmb {
-  color: #f60;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.coin-detail input {
-  height: 27px;
-  line-height: 27px;
-  border: 1px solid #b5b5b5;
-  font-size: 18px;
-  margin: 0 15px;
-  width: 64px;
-  text-align: center;
-}
-
-.coin-detail span {
-  color: #ff7e00;
-}
-
-.order-pay .pay {
-  margin-top: 20px
-}
-
-.order-item-detail .pay-password {
-  margin-left: 15px;
-  font-size: 12px;
-  padding-top: 10px;
-}
-
 .order-pay .buy-vip-num {
   float: right; 
   margin-right: 15px; 
@@ -282,3 +191,236 @@
   line-height: 19px;
   position: relative;
 }
+
+// =============新调整=====
+.order-detail-bg .order-item {
+  border-bottom: 0;
+  padding: 50px 30px 50px 40px;
+  line-height: 33px;
+}
+
+.order-item .coin-detail {
+  margin-left: 55px;
+  font-size: 14px;
+  color: @gray-dark;
+  @media (max-width: @screen-xs-max) {
+    margin-left: 0;
+  }
+  @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
+    margin-left: 30px;
+  } 
+  input {
+    height: 27px;
+    line-height: 27px;
+    border: 1px solid #b5b5b5;
+    font-size: 18px;
+    margin: 0 15px;
+    width: 64px;
+    text-align: center;
+  }
+  span {
+  color: #ff7e00;
+  }
+}
+
+.order-detail {
+  .order-img  {
+    float: left;
+    width: 30%;
+    img {
+      height: 150px;
+      width: 100%;
+    }
+  }
+  .order-info {
+    float: left;
+    width: 50%;
+    padding: 60px 0 0 50px;
+    font-size: 18px;
+    color: @gray-dark;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      padding: 50px 0 0 25px;
+    }
+  }
+  .order-price {
+    float: right;
+    font-size: 24px;
+    width: 20%;
+    text-align: right;
+    padding: 60px 30px 0 0;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      padding: 0 0 0 25px;
+      text-align: left;
+    }
+  }
+}
+
+.pay-rmb {
+  color: #f72848;
+  font-size: 24px;   
+}
+
+.order-item {
+  .order-item-title {
+    float: left;
+    width: 36%;
+    font-size: 16px;
+    color: @gray;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      line-height: 50px;
+    }
+    .title {
+      font-size: 18px;
+      color: #333;
+      margin: 0 15px 0 25px;
+      @media (max-width: @screen-md-max) {
+        margin: 0;
+      }
+    }
+    .es-icon {
+      font-size: 22px;
+      color: #333;
+    }
+  }
+  .order-item-detail {
+    float: left;
+    width: 45%;
+    text-align: center;
+    font-size: 14px;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      line-height: 50px;
+      text-align: left;
+      .form-control {
+        margin-top: 9px;
+        margin-right: 10px;
+      }
+    }
+    >.pay-password {
+      padding: 0 20%;
+      text-align: left;
+      @media(max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+        padding:0 9%;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 0;
+      }
+      .form-control {
+        display: inline-block;
+        width: 48%;
+        margin:0 2%;
+        text-align: center;
+      }
+      .controls {
+        .form-control {
+          margin-left: 0;
+        }
+        //临时
+        .help-block {
+          display: none;
+          width: 130px;
+          margin-top: 10px;
+          padding:0 15px;
+          line-height: 30px;
+          background-color: #fff1f0;
+          border: 1px solid #f0c7bd;
+          .text-danger {
+            color: #d85030;
+          }
+        }
+      }
+    }
+  }
+  .order-item-price {
+    float: right;
+    width: 19%;
+    font-size: 14px;
+    text-align: right;
+    color: @gray-dark;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      line-height: 50px;
+      text-align: left;
+    }
+  }
+  .coupon-detail {
+    .input-group  {
+      display: inline-block;
+      width: 80%;
+      float: left;
+      margin-top: -2px;
+      .form-control {
+        width: 72%;
+        margin-right: 2%;
+        @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
+          width: 60%;
+          margin-right: 0;
+        } 
+        @media (max-width: @screen-xs-max) {
+          width: 90%;
+        } 
+      }
+    }
+    .code-notify{
+      display: none;
+      float: left;
+      margin-top: 10px;
+      padding:0 15px;
+      background-color: #f2fae3;
+      border: 1px solid #cddfb4;
+      color: #659f13;
+      line-height: 30px;
+    }
+    .code-notify.failure {
+      background-color: #fff1f0;
+      border: 1px solid #f0c7bd;
+      color: #d85030;
+    }
+  }
+  .form-control {
+    width: 72%;
+    margin-right: 2%;
+    background-color: #fafafa;
+    border:1px solid #f5f5f5;
+  }
+}
+
+.order-item-detail .pay-password {
+  .set-password {
+    display: inline-block;
+    padding: 0 20px;
+    border: 1px solid #f3d6ba;
+    background-color: #fffceb;
+    font-size: 14px;
+    color: #e28327;
+    .btn-link {
+      color: #844d17;
+    }
+  }
+}
+
+.total-price {
+  float: right;
+  text-align: right;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.order-pay-heading {
+  font-size: 22px;
+  padding: 0 15px 15px 15px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.order-pay-body {
+  padding: 30px 0;
+}
+
+.pay  {
+  margin-right: 30px;
+}
+
+

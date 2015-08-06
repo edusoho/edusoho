@@ -189,12 +189,12 @@ define(function(require, exports, module) {
             validatorSet.addItem({
                 element: '#set-bind-nickname-field',
                 required: true,
-                rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+                rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
             });
 
-            if ($('input[name="em_sms_code"]').length > 0) {
+            if ($('input[name="sms_code"]').length > 0) {
                 validatorSet.addItem({
-                    element: '[name="em_sms_code"]',
+                    element: '[name="sms_code"]',
                     required: true,
                     triggerType: 'submit',
                     rule: 'integer fixedLength{len:6} remote',
