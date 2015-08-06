@@ -1,5 +1,4 @@
 {% extends 'CustomWebBundle:Course:Part/normal-header-layout.html.twig' %}
-
 {% set layoutClass = 'course-detail-header' %}
 
 {% block content %}
@@ -7,6 +6,19 @@
    <ul class="course-data clearfix">
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
+      {% if member and not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course' %}
+        <li>
+          {% if member.orderId  %}
+            <a href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
+              <p><i class="es-icon es-icon-exit"></i><p>
+            </a>
+          {% else %}
+            <a id="exit-course-learning" class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}" {% if member.role != 'student' %} disabled {% endif %}>
+              <p><i class="es-icon es-icon-exit"></i><p>
+            </a>
+          {% endif %}
+        </li>
+      {% endif %}
    </ul>
   {{ header_macro.info(course, member) }}
   <div class="pull-rights">
@@ -21,25 +33,19 @@
       {% if 'periodic'==course.type %}
         {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
         {% set courseStarted=("now"|date('U') >= course.startTime) %}
-        <a class="btn btn-study {{ courseFinished ? 'little-gray' : ''}}" 
-          {% if userNotReady %}
-              href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}" 
-          {% elseif userVipStatus == 'ok' %}
-              id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}" 
-          {% else %}
-              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-          {% endif %}
-          {% if courseNotPublishedOrAlreadyFull  or courseFinished%}
-              disabled="disabled"
-          {% endif %}
-        >
         {% if courseFinished %}
-          已结束
+          <a class="btn btn-study little-gray">已结束</a>
+        {% elseif member and not courseStarted %}
+          <a class="btn btn-study gray">已报名,等待参加</a>
         {% else %}
           {% if needToPay %}
-            {{ userVipStatus=='ok' ? (courseStarted ? "加入学习" : " 报名参加") : "购买课程" }}
+            {% if userVipStatus=='ok' %}
+              {{ _self.join_periodic_course_btn(course,courseStarted) }}
+            {% else %}
+              <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}" >购买课程</a>
+            {% endif %}
           {% else %}
-            {{ courseStarted ? "加入学习" : " 报名参加" }}
+            {{ _self.join_periodic_course_btn(course,courseStarted) }}
           {% endif %}
         {% endif %}
       {% else %}
@@ -90,4 +96,13 @@
           </div>#}
         </div> 
       </div>
-{% endblock %}  
+{% endblock %} 
+
+
+{% macro join_periodic_course_btn(course,courseStarted, hasFavorited) %}
+  {% if courseStarted %}
+    <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">加入学习</a>
+  {% else %}
+    <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">报名参加</a>
+  {% endif %}
+{% endmacro %}

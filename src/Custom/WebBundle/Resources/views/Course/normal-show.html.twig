@@ -8,7 +8,7 @@
 
   <div class="course-detail-content">
 
-    {% if not member %}
+    {% if not member or ('periodic'==course.type and "now"|date('U') < course.startTime)%}
       <div class="es-piece">
         <div class="piece-header">
           课程介绍

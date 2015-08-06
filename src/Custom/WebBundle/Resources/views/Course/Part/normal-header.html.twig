@@ -2,13 +2,16 @@
 {% import _self as header_macro %}
 {% do load_script('course/common') %}
 
-{% if member and not member.locked %}
-  {% include 'CustomWebBundle:Course:Part/normal-header-for-member.html.twig' %}
-{% elseif course.parentId|default(false) %}
-  {% include 'CustomWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
+{% if not member or member.locked or ('periodic'==course.type and "now"|date('U') < course.startTime)%}
+  {% if 'periodic'!=course.type and course.parentId|default(false) %}
+    {% include 'CustomWebBundle:Course:Part/normal-header-for-guest.html.twig' with {source:"classroom"} %}
+  {% else %}
+    {% include 'CustomWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+  {% endif %}
 {% else %}
-  {% include 'CustomWebBundle:Course:Part/normal-header-for-guest.html.twig' %}
+  {% include 'CustomWebBundle:Course:Part/normal-header-for-member.html.twig' %}
 {% endif %}
+
 {% macro picture(course) %}
   <div class="course-header-img">
     <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"></a>
