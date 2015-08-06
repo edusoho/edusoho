@@ -1,5 +1,5 @@
 {% for code,item in block.meta.items|default(null) %}
-  {% if block.code != 'jianmo:home_top_banner' %}
+  {% if item.type != 'poster' %}
     <section id="js-affix-{{ code }}">
       <div class="item-title">
         <strong>{{ item.title }}</strong>
