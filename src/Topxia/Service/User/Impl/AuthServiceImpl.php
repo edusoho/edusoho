@@ -16,14 +16,14 @@ class AuthServiceImpl extends BaseService implements AuthService
         $registration = $this->refillFormData($registration, $type);
         $authUser = $this->getAuthProvider()->register($registration);
 
-        if ($type == 'default' && empty($authUser['id'])) {
+        if ($type == 'default') {
             if (!empty($authUser['id'])){
                 $registration['token'] = array(
                     'userId' => $authUser['id'],
                 );
             }
             
-            $newUser = $this->getUserService()->register($registration, $type);
+            $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
 
         } else {
             $newUser = $this->getUserService()->register($registration, $type);

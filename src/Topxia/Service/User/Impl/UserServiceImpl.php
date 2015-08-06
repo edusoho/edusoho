@@ -324,9 +324,11 @@ class UserServiceImpl extends BaseService implements UserService
             if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
                 if (SimpleValidator::email($registration['emailOrMobile'])) {
                     $registration['email'] = $registration['emailOrMobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
                 } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
                     $registration['mobile'] = $registration['emailOrMobile'];
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
                     throw $this->createServiceException('emailOrMobile error!');
                 }
@@ -338,6 +340,7 @@ class UserServiceImpl extends BaseService implements UserService
                 if (SimpleValidator::mobile($registration['mobile'])) {
                     $registration['mobile'] = $registration['mobile'];
                     $registration['verifiedMobile'] = $registration['mobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
                     throw $this->createServiceException('mobile error!');
                 }
@@ -345,6 +348,7 @@ class UserServiceImpl extends BaseService implements UserService
                 throw $this ->createServiceException('参数不正确，手机不能为空。');
             }
         }else{
+            $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
             return $registration;
         }
 
@@ -401,14 +405,6 @@ class UserServiceImpl extends BaseService implements UserService
         $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
-        if ($type == 'default' && (!isset($registration['type']) or $registration['type'] != 'import')) {
-            if (isset($registration['verifiedMobile'])) {
-                $user['type'] = 'web_mobile';
-            } else {
-                $user['type'] = 'web_email';
-            }
-        }
-        
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
