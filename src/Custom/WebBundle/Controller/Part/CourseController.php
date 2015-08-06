@@ -44,6 +44,15 @@ class CourseController extends BaseCourseController
         ));
     }
 
+    public function otherPeriodsAction($course){
+        $course = $this->getCourse($course);
+        $otherPeriods = $this->getCourseService()->findOtherPeriods($course['id']);
+        
+        return $this->render('CustomWebBundle:Course:Part/normal-sidebar-other-periods.html.twig', array(
+            'course' => $course,
+            'otherPeriods' => $otherPeriods,
+        ));
+    }
 
 }
 

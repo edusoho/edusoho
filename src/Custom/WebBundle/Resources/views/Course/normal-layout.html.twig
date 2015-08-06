@@ -22,9 +22,15 @@
     </div>
     <div class="course-about-sidebar">
       {% block course_sidebar %}
-        {% if course.type=='periodic' %}
+        {% if 'periodic'==course.type %}
           <div class="es-panel open-class">
-            <div class="panel-heading clearfix">第{{ course.periods | num2chinese }}次开课<i class="iconfont icon-xiala"></i></div>
+            <div class="panel-heading clearfix dropdown">
+              <a href="javascript:;" class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">第{{ course.periods | num2chinese }}次开课
+                <i class="iconfont icon-xiala"></i>
+              </a>
+              {{ render(controller('CustomWebBundle:Part/Course:otherPeriods',{course: course})) }}
+            </div>            
+
              <div class="panel-body">
               <ul>
                 <li class="first gray">
@@ -45,8 +51,10 @@
                   <p>结束：{{course.endTime | date('m月d日 H : i')}}</p>
                 </li>
               </ul>
-              {# <p class="red">获得证书 ></p> #}
-{#               <p class="red gray"><i class="iconfont icon-xunzhang"></i>已结束</p> #}
+              {% if course.certi %}
+                {# <p class="red gray">获得证书 ></p> #}
+                <p class="red"><i class="iconfont icon-xunzhang"></i></p>
+              {% endif %}
              </div>
           </div>
         {% endif %}

@@ -67,42 +67,54 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
         }
         return $fields;
     }
+
+	public function findOtherPeriods($courseId){
+		$course=$this->getCourseDao()->getCourse($courseId);
+
+		$courses = CourseSerialize::unserializes(
+            $this->getCourseDao()->findOtherPeriods($course)
+        );
+
+        return ArrayToolkit::index($courses, 'periods');
+	}
 }
+
+
 class CourseSerialize
 {
     public static function serialize(array &$course)
     {
-        if (isset($course['tags'])) {
-            if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|' . implode('|', $course['tags']) . '|';
-            } else {
-                $course['tags'] = '';
-            }
-        }
+    	if (isset($course['tags'])) {
+    		if (is_array($course['tags']) && !empty($course['tags'])) {
+    			$course['tags'] = '|' . implode('|', $course['tags']) . '|';
+    		} else {
+    			$course['tags'] = '';
+    		}
+    	}
+    	
+    	if (isset($course['goals'])) {
+    		if (is_array($course['goals']) && !empty($course['goals'])) {
+    			$course['goals'] = '|' . implode('|', $course['goals']) . '|';
+    		} else {
+    			$course['goals'] = '';
+    		}
+    	}
 
-        if (isset($course['goals'])) {
-            if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|' . implode('|', $course['goals']) . '|';
-            } else {
-                $course['goals'] = '';
-            }
-        }
+    	if (isset($course['audiences'])) {
+    		if (is_array($course['audiences']) && !empty($course['audiences'])) {
+    			$course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
+    		} else {
+    			$course['audiences'] = '';
+    		}
+    	}
 
-        if (isset($course['audiences'])) {
-            if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
-            } else {
-                $course['audiences'] = '';
-            }
-        }
-
-        if (isset($course['teacherIds'])) {
-            if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
-            } else {
-                $course['teacherIds'] = null;
-            }
-        }
+    	if (isset($course['teacherIds'])) {
+    		if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
+    			$course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
+    		} else {
+    			$course['teacherIds'] = null;
+    		}
+    	}
 
         return $course;
     }
@@ -135,6 +147,7 @@ class CourseSerialize
         }
 
         return $course;
+
     }
 
     public static function unserializes(array $courses)
