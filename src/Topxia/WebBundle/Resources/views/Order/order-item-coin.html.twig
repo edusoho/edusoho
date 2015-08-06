@@ -12,7 +12,7 @@
       {% if hasPayPassword %}
       本次使用
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
-      <input id="coinPayAmount" class="form-control" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
+      <input id="coinPayAmount" class="form-control text-center" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
       {{setting("coin.coin_name")}}
       {% endif %}
       <input style="display:none">{# Prevent autocompleting #}
