@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set billable = false %}
-{% if course.price > 0 %}
+{% if course.price > 0 or course.coinPrice > 0 %}
   {% set billable = true %}
 {% endif %}
 
