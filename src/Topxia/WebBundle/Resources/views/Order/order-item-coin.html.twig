@@ -1,7 +1,6 @@
 <div class="order-item clearfix">
   <div class="order-item-title">
-    <i class="es-icon es-icon-money">
-    </i>
+    <i class="es-icon es-icon-money"></i>
     <span class="title">{{ setting("coin.coin_name") }}</span>
     <span >（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
        <div class="coin-detail mtm">
@@ -19,24 +18,24 @@
       <input style="display:none">{# Prevent autocompleting #}
       <input type="password" style="display:none">{# Prevent autocompleting #}
       {% if not hasPayPassword %}
-      <div  class="set-password">
+      <div  class="alert alert-warning alert-xs">
           为了保障账户资金安全，请先
         <a class="btn-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="">设置支付密码</a>
       </div>
       {% else %}
       <div role="password-input" style="display:none">
-            <div class="controls mtm">
-              <input id="payPassword" class="form-control" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
-              <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
-              <br>
-            </div>
+        <div class="controls mtm">
+          <input id="payPassword" class="form-control" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
+          <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
+          <br>
+        </div>
       </div>
       {% endif %}
     </div>
   </div>
-  <div  class="order-item-price">
-      <span class="mrs">抵扣</span>
-      <span>￥</span>
-      <span role="cash-discount"></span>
+  <div class="order-item-price">
+    <span class="mrs">抵扣</span>
+    <span>￥</span>
+    <span role="cash-discount"></span>
   </div>
 </div>   
