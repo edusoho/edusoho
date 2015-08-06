@@ -21,8 +21,8 @@ define(function(require, exports, module) {
 					}
 				},
 				error: function(){
-					var html = "进入直播教室错误，请联系管理员，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
-					$("#classroom-url").html(html);
+					//var html = "进入直播教室错误，请联系管理员，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
+					//$("#classroom-url").html(html);
 				}
 			})
 		}, 5000);
