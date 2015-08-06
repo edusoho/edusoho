@@ -8,7 +8,7 @@
       <span class="label label-success live-label mls">直播</span>
     {% endif %}
 
-    {% if filter == 'classroom' %} 
+    {% if filter == 'classroom' %}
       {% set classroom = classrooms[course.id]|default(null) %}
       {% if not classroom %}
         <span class="label label-danger live-label mls">已移除</span>
@@ -19,7 +19,7 @@
     {% if course.recommended %}
       <span class="label label-default">荐:{{ course.recommendedTime|date('Y-m-d') }} / 序号:{{ course.recommendedSeq }}</span>
     {% endif %}
-    
+
   </td>
   <td>
     {% if  course.serializeMode =="none" %}
@@ -33,7 +33,7 @@
   {% if filter == 'classroom' %}
   <td>
     {% set classroom = classrooms[course.id]|default(null) %}
-    {% if classroom %} 
+    {% if classroom %}
       <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
     {% endif %}
   </td>
@@ -64,15 +64,15 @@
           {% if course.recommended %}
             <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
           {% endif %}
-          
-          <li ><a class="copy-course" id="copy-course" href="javascript:" 
+
+          <li ><a class="copy-course" id="copy-course" href="javascript:"
           {% if course.type == "live" %}
           title="直播课程不支持复制"
           style="color:#909090"
           {% endif %}
-          data-toggle="modal" 
-          data-target="#modal"  
-          data-url="{{ path('admin_course_copy', {id:course.id}) }}" 
+          data-toggle="modal"
+          data-target="#modal"
+          data-url="{{ path('admin_course_copy', {id:course.id}) }}"
           data-type="{{course.type}}"
           ><span class="glyphicon glyphicon-plus-sign"></span> 复制课程</a></li>
         {% endif %}
