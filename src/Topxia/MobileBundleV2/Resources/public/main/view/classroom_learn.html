@@ -1,4 +1,4 @@
-<div class="ui-course ui-classroom top-header">
+<div class="ui-course ui-classroom top-header" style="padding-bottom: 58px;">
     <div class="course-head-body">
         <div class="course-head">
             <img class="full-image" ng-src="{{ classRoom.largePicture }}" img-error="course" />
@@ -10,15 +10,14 @@
                     <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
                 </a>
                 <a class="right rating-body">
-                    <i class="iconfont icon-iconfontxiaoyou"></i>
-                    <span class="rating">{{ classRoom.studentNum }}</span>
+                    <span class="rating">{{ classRoom.studentNum }}人在学</span>
                 </a>
             </p>
         </div>
         <div class="item-body">
             <p class="course-title">{{ classRoom.title }}</p>
         </div>
-        <div class="service-body ui-border-t" ui-service-panel>
+        <div class="service-body ui-border-t" ng-if="classRoom.service.length > 0" ui-service-panel>
             <ul class="ui-list">
                 <li ng-repeat="service in classRoom.service">
                 <span class="label {{ service.class }}">{{ service.name }}</span>
@@ -27,7 +26,7 @@
             </ul>
             <a class="service-btn" expand="true">
                 {{ classRoom.service.length }}个服务
-                <i class="service-icon iconfont icon-expandmore"></i>
+                <i class="service-icon iconfont icon-arrowdropdown"></i>
             </a>
         </div>
     </div>
@@ -49,15 +48,15 @@
     </div>
 </div>
 <div class="ui-course-tool ui-classroom" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="ClassRoomToolController">
-    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
+    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardClassRoom()">
     </button>
 
-    <div class="ui-btn btn-gray btn-sign btn-col-75">
+    <div class="ui-btn btn-gray btn-sign btn-col-75" ng-init="getTodaySignInfo()" ng-click="sign()">
         <button class="ui-btn sign-left">
-        9-4
+        <i class="iconfont icon-rili"></i>&nbsp;{{ signDate | date : 'MM月dd号'}}
         </button>
-        <button class="ui-btn sign-right btn-green" ng-click="joinCourse()">
-        签到
+        <button class="ui-btn sign-right btn-green">
+        {{ signInfo | classRoomSignFilter }}
         </button>
     </div>
     

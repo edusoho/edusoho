@@ -126,7 +126,8 @@ factory('ClassRoomUtil', function() {
 		var classRoomService = classRoom.service;
 		var service = getService();
 		if (!classRoomService || classRoomService == "null") {
-			return [];
+			classRoom.service = [];
+			return classRoom;
 		}
 		for (var i = 0; i < classRoomService.length; i++) {
 			classRoomService[i] = service[classRoomService[i]];
@@ -142,7 +143,7 @@ factory('ClassRoomUtil', function() {
 		filterClassRooms : function(classRooms) {
 				for (var i = 0; i < classRooms.length; i++) {
 					var classRoomService = classRooms[i].service;
-					classRooms[i] = filter(classRooms[i]);
+					classRooms[i] = cover(classRooms[i]);
 				};
 
 				return classRooms;

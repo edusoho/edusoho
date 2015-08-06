@@ -30,7 +30,7 @@
         </li>
     </ul>
 
-    <div class="ui-scroller course-card" ui-scroll data="classRooms" on-infinite="loadMore()">
+    <div class="ui-scroller course-card classroom-card" ui-scroll data="classRooms" on-infinite="loadMore()">
       <ul class="ui-list ui-border-tb">
           <li class="ui-border-t" ng-repeat="classRoom in classRooms" ng-href="#/classroom/{{ classRoom.id }}">
               <div class="ui-list-img">
@@ -45,15 +45,11 @@
               <div class="ui-list-info">
                   <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
                   <p class="bottom price-body">
-                    <span class="classroom-service-label" ng-class="service.class" ng-repeat="service in classRoom.service">
-                      {{ service.name }}
-                    </span>
-
-                    <span class="right">
-                          <i class="iconfont icon-person"></i>
-                          {{ classRoom.studentNum }}
-                    </span>
+                      <span class="origin-price">
+                        {{ classRoom.price | formatPrice }}
+                      </span>
                   </p>
+                  <p class="price-body">{{ classRoom.studentNum }}人在学</p>
               </div>
           </li>
       </ul>

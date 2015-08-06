@@ -32,7 +32,19 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 	return function(num){
 		return AppUtil.createArray(num);
 	};
-}]).
+}]).filter('classRoomSignFilter', function() {
+	return function(signInfo){
+		if (!signInfo) {
+			return "签到";
+		}
+
+		if (signInfo.isSignedToday) {
+			return "连续" + signInfo.userSignStatistics.keepDays + "天";
+		}
+
+		return "签到";
+	};
+}).
 filter('lessonLearnStatus', function(){
 	return function(progress) {
 		if (progress.progressValue == 0) {

@@ -198,6 +198,14 @@ service('UserService', ['httpService', 'applicationProvider', function(httpServi
 }]).
 service('ClassRoomService', ['httpService', function(httpService) {
 
+	this.sign = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/ClassRoom/sign", arguments);
+	}
+
+	this.getTodaySignInfo = function(params, callback) {
+		httpService.simpleGet("/mapi_v2/ClassRoom/getTodaySignInfo", arguments);
+	}
+
 	this.getAnnouncements = function(params, callback) {
 		httpService.simpleGet("/mapi_v2/ClassRoom/getAnnouncements", arguments);
 	}

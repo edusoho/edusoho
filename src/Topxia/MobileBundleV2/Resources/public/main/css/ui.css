@@ -546,10 +546,14 @@ a {
   padding: 8px 0 8px 0;
 }
 
+.ui-classroom .btn-sign {
+  font-size: 13px;
+}
+
 .ui-classroom .btn-sign .sign-right {
   right: 0;
   border: 0;
-  width: 30%;
+  width: 40%;
   border-radius: 3px;
   position: absolute;
 }
@@ -557,7 +561,7 @@ a {
 .ui-classroom .btn-sign .sign-left {
   left: 0;
   border: 0;
-  width: 73%;
+  width: 63%;
   z-index: 1;
   color:#37b97d;
   border-radius: 0;

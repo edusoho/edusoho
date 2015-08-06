@@ -377,8 +377,9 @@ app.controller('ClassRoomToolController', ['$scope', '$stateParams', 'OrderServi
 function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomService, cordovaUtil, $state)
 {
   this.__proto__ = new BaseToolController($scope, OrderService, cordovaUtil);
-  var self = this;
+    var self = this;
 
+    $scope.signDate = new Date();
     this.goToPay = function() {
       if ($scope.classRoom.price <= 0) {
         self.payCourse($scope.classRoom.price, "classroom", $stateParams.classRoomId);
@@ -387,21 +388,17 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
       }
     };
 
-    $scope.vipLeand = function() {
-      self.vipLeand(function() {
-        ClassRoomService.learnByVip({
-          classRoomId : $stateParams.classRoomId
-        }, function(data){
-          if (! data.error) {
-            window.location.reload();
-          } else {
-            $scope.toast(data.error.message);
-          }
-        }, function(error) {
-          console.log(error);
-        });
-      });
+    $scope.sign = function() {
+      ClassRoomService.sign({
+        classRoomId : $stateParams.classRoomId
+      }, function(data) {
+        if(data.error) {
+          $scope.toast(data.error.message);
+          return;
+        }
 
+        $scope.signInfo = data;
+      });
     }
 
     $scope.joinCourse = function() {
@@ -410,13 +407,26 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
       });
     }
 
-    $scope.shardCourse = function() {
-      var about = $scope.course.about;
+    $scope.getTodaySignInfo = function() {
+      ClassRoomService.getTodaySignInfo({
+        classRoomId : $stateParams.classRoomId
+      }, function(data) {
+        $scope.signInfo = data;
+      });
+    };
+
+    $scope.shardClassRoom = function() {
+      var about = $scope.classRoom.about;
       if (about.length > 20) {
         about = about.substring(0, 20);
       }
-      self.shardCourse("/course/" + $scope.course.id, $scope.course.title, about, $scope.course.largePicture)      
-    }
+      cordovaUtil.share(
+        app.host + "/classroom/" + $scope.classRoom.id, 
+        $scope.classRoom.title, 
+        about, 
+        $scope.classRoom.largePicture
+      );
+    };
 }
 
 function ClassRoomCoursesController($scope, $stateParams, ClassRoomService, $state)
@@ -484,19 +494,6 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
     }, function(data) {
       $scope.students = data.data;
     });
-  };
-
-  $scope.shardClassRoom = function() {
-      var about = $scope.classRoom.about;
-      if (about.length > 20) {
-        about = about.substring(0, 20);
-      }
-      cordovaUtil.share(
-        app.host + "/classroom/" + $scope.classRoom.id, 
-        $scope.classRoom.title, 
-        about, 
-        $scope.classRoom.largePicture
-      );
   };
 
   $scope.unLearn = function() {
