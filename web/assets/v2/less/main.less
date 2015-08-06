@@ -1,7 +1,12 @@
+/*
+** 目前仍处于新老版本更替阶段
+** 老的样式或者即将弃用的样式不要在使用
+*/
+
 // 变量
 @import "variables.less";
 
-// 临时
+// 临时文件，存放老的样式，随时会删除
 @import "temp.less";
 
 // 常用class
@@ -18,11 +23,10 @@
 @import "plugin/homework.less";      //作业练习
 
 
-
 // 共通
+@import "common.less";
 @import "header.less";
 @import "footer.less";
-@import "common.less";
 
 
 // 模块---------------------------------------------------------------//
@@ -33,6 +37,7 @@
 @import "module/topic.less";          // 话题
 @import "module/note.less";           // 笔记
 @import "module/es-bar.less";         // 侧边栏快捷操作
+@import "module/nav-flow.less";       // 流程导航
 
 
 // 组件---------------------------------------------------------------//
@@ -69,6 +74,8 @@
 @import "component/nav.less";           // nav
 @import "component/course-price.less";  // 课程价格
 @import "component/table.less";         // 表格
+@import "component/qrcode.less";        // 二维码
+
 
 
 
@@ -91,8 +98,9 @@
 @import "page/course-manage.less";        //课程管理
 @import "page/question.less";             //问题
 @import "page/pay-center.less";           //支付中心
+@import "page/pay-state.less";            //支付状态
 @import "page/login.less";                //登录页
-
+@import "page/mobile.less";               //app下载页
 // @import "page/settings.less"              //用户设置页
 // @import "page/user.less"                  //用户主页
 // @import "page/live.less";                 //直播课程页
@@ -101,5 +109,5 @@
 // @import "page/page.less";                 //单页
 // @import "page/message.less";              //私信
 // @import "page/notification.less";         //通知
-// @import "page/coin.less";                 //账户  
+@import "page/coin.less";                 //账户  
               

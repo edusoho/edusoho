@@ -22,11 +22,11 @@ interface ArticleDao
 
 	public function searchArticlesCount($conditions);
 
-	public function addArticle($Article);
+	public function addArticle($article);
 
 	public function waveArticle($id,$field,$diff);
 
-	public function updateArticle($id, $Article);
+	public function updateArticle($id, $article);
 
 	public function deleteArticle($id);
 

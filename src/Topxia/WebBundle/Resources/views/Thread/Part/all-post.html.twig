@@ -2,7 +2,7 @@
   <div class="js-all-post-head page-header">
     所有回复
   </div>
-  <div class="panel-body">
+  <!-- <div class="panel-body"> -->
     <ul class="comment-list thread-pripost-list">
       {% for post in posts %}
         {% set author = users[post.userId] %}
@@ -16,5 +16,5 @@
       {{ web_macro.paginator(paginator) }}
     </nav>
 
-  </div>
+  <!-- </div> -->
 </div>

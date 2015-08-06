@@ -16,7 +16,7 @@
 </div>
 <div class="question-eassy-form-control">
 	 {% for rightAnswer in question.answer %}
-		   <div class="question-eassy-rightanswer"><strong>正确答案</strong></div> <p class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</p>
+		   <div class="question-eassy-rightanswer"><strong>正确答案</strong></div> <p class="question-text-success">{{ rightAnswer|bbCode2Html|raw }}</p>
 	{% endfor %}
 
 </div>

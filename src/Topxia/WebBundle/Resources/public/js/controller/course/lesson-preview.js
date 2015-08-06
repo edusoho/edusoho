@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
-
+    require('../../util/qrcode').run();
 	var VideoJS = require('video-js'),
 		swfobject = require('swfobject');
 
 	require('mediaelementplayer');
 
-	var MediaPlayer = require('../widget/media-player4');
+    var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -15,13 +15,14 @@ define(function(require, exports, module) {
 
 			if ($("#lesson-preview-video-player").data('hlsUrl')) {
 
-		        $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
-			        
-        		var mediaPlayer = new MediaPlayer({
-        			element: '#lesson-preview-video-player',
-        			playerId: 'lesson-video-player',
-        			height: '360px'
-        		});
+                $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
+                   
+                var mediaPlayer = new MediaPlayer({
+                   element: '#lesson-preview-video-player',
+                   playerId: 'lesson-video-player',
+                   height: '360px'
+                });
+                
                 var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
                 if ($("#lesson-preview-video-player").data('timelimit')) {
                     $("#lesson-preview-video-player").append($('.js-buy-text').html());
@@ -31,8 +32,8 @@ define(function(require, exports, module) {
                     });
                 }
 
-        		mediaPlayer.setSrc($hlsUrl, 'video');
-        		mediaPlayer.play();
+                mediaPlayer.setSrc($hlsUrl, 'video');
+                mediaPlayer.play();
 
                 $('#modal').one('hidden.bs.modal', function () {
                     mediaPlayer.dispose();
@@ -170,7 +171,6 @@ define(function(require, exports, module) {
                 $modal.html(html);
             });
         });
-
     };
 
 });

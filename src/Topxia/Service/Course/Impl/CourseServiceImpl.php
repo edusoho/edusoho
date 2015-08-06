@@ -67,6 +67,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return  $this->getLessonDao()->findMinStartTimeByCourseId($courseId);
 	}
 
+	public function getLesson($id)
+	{
+		return $this->getLessonDao()->getLesson($id);
+	}
+
 	public function findLessonsByIds(array $ids)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByIds($ids);
@@ -198,9 +203,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $conditions;
 	}
 
-	public function findUserLearnCourses($userId, $start, $limit)
+	public function findUserLearnCourses($userId, $start, $limit,$onlyPublished = true)
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
 
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 		foreach ($members as $member) {
@@ -213,9 +218,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $courses;
 	}
 
-	public function findUserLearnCourseCount($userId)
+	public function findUserLearnCoursesNotInClassroom($userId, $start, $limit,$onlyPublished = true)
 	{
-		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', 0);
+		$members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
+
+		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+		return $courses;
+	}
+
+	public function findUserLearnCourseCount($userId, $onlyPublished = true)
+	{
+		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
+	}
+					
+	public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
+	{
+		return $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
 	}
 
 	public function findUserLeaningCourseCount($userId, $filters = array())
@@ -687,11 +706,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$learn=$this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId,$lessonId);
 
 		if($time<=200){
-			$this->getLessonLearnDao()->updateLearn($learn['id'], array(
+			$learn = $this->getLessonLearnDao()->updateLearn($learn['id'], array(
 				'watchTime' => $learn['watchTime']+intval($time),
 				'updateTime' => time(),
 			));
 		}
+		return $learn;
 	}
 
 	public function checkWatchNum($userId, $lessonId)
@@ -704,37 +724,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+		$watchLimitTime = $lesson['length'] * $course['watchLimit'];
 		if (empty($learn)) {
-			return array('status' => 'ok', 'num' => 0, 'limit' => $course['watchLimit']);
+			return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
 		}
 
-		if ($learn['watchNum'] < $course['watchLimit']) {
-			return array('status' => 'ok', 'num' => $learn['watchNum'], 'limit' => $course['watchLimit']);
+		if ($learn['watchTime'] < $watchLimitTime) {
+			return array('status' => 'ok', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
 		}
 
-		return array('status' => 'error', 'num' => $learn['watchNum'] , 'limit' => $course['watchLimit']);
-	}
-
-	public function waveWatchNum($userId, $lessonId, $diff)
-	{
-		$lesson = $this->getLessonDao()->getLesson($lessonId);
-		$course = $this->getCourse($lesson['courseId']);
-
-		if (empty($course['watchLimit'])) {
-			return array('status' => 'ignore');
-		}
-
-		$learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
-		if (empty($learn)) {
-			return array('status' => 'ignore');
-		}
-
-		if (($learn['watchNum'] + $diff) <= $course['watchLimit']) {
-			$this->getLessonLearnDao()->updateLearn($learn['id'], array('watchNum' => $learn['watchNum'] + $diff));
-			return array('status' => 'ok', 'num' => $learn['watchNum'] + $diff, 'limit' => $course['watchLimit']);
-		}
-
-		return array('status' => 'error', 'num' => $learn['watchNum'], 'limit' => $course['watchLimit']);
+		return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
 	}
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
@@ -2416,7 +2415,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 		if ($classroom['classroomId']) {
 			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
-			if ($member['role'] != 'auditor') {
+			if (!empty($member) && $member['role'] != 'auditor') {
 				return true;
 			}
 		}

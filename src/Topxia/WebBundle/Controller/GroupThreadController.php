@@ -548,7 +548,7 @@ class GroupThreadController extends BaseController
                     $message);
             }
 
-            return $this->createJsonResponse($post);
+            return $this->createJsonResponse(true);
     }
     
     public function searchResultAction(Request $request,$id)

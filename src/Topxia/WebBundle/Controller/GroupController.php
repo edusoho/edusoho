@@ -17,7 +17,7 @@ class GroupController extends BaseController
     {   
         $myJoinGroup = array();
 
-        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 8);
+        $activeGroup = $this->getGroupService()->searchGroups(array('status'=>'open',),  array('memberNum', 'DESC'),0, 12);
     
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
@@ -372,7 +372,7 @@ class GroupController extends BaseController
         $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
 
         $activeMembers=$this->getGroupService()->searchMembers(array('groupId'=>$id,'role'=>'member'),
-            array('postNum','DESC'),0,12);
+            array('postNum','DESC'),0,15);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 

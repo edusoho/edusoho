@@ -1,0 +1,19 @@
+{% extends 'TopxiaWebBundle:EsBar:layout.html.twig' %}
+
+
+{% block esBarTitle %}
+    学习中心
+{% endblock %}
+
+{% block esBarBody %}
+  <!-- 用户 -->
+  {% include 'TopxiaWebBundle:EsBar:ListContent/StudyCenter/user.html.twig' %}
+
+
+  <!-- 直播预告 -->
+  {% include 'TopxiaWebBundle:EsBar:ListContent/StudyCenter/live.html.twig' %}
+
+  <!-- 学习任务 -->
+  {{ render(controller('TopxiaWebBundle:EsBar/EsBar:studyPlan' )) }}
+{% endblock %}
+
