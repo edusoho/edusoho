@@ -4,9 +4,9 @@
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
-{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% else %}{{ '全部' }}{% endif %}{% endblock %}
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if CategoryParent %}{{ ','}}{{ CategoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('全部') }} - {{ CategoryParent.name|default('') }}{% if CategoryParent %}{{ ' - '}}{% endif %}{{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %} - Powered By EduSoho
+    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %} - Powered By EduSoho
     {% endblock %}
 
 {% block top_content %}

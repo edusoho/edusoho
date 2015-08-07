@@ -107,7 +107,7 @@ class CourseController extends BaseController
         $classroomDescription = $classroom['about'];
         $classroomDescription = strip_tags($classroomDescription,'');
         $classroomDescription = preg_replace("/ /","",$classroomDescription);
-        } 
+        }
         return $this->render("ClassroomBundle:Classroom/Course:list.html.twig", array(
             'classroom' => $classroom,
             'member' => $member,

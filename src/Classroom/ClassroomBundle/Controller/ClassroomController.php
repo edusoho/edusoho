@@ -60,6 +60,7 @@ class ClassroomController extends BaseController
         $categoryArrayDescription = $categoryArray['description'];
         $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
         $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+        $categoryArrayDescription = substr( $categoryArrayDescription, 0, 100 );
         } 
         if(!$categoryArray){
             $CategoryParent = '';
@@ -83,6 +84,21 @@ class ClassroomController extends BaseController
             'CategoryParent' => $CategoryParent
         ));
     }
+    public function keywordsAction($classroom)
+    {
+        
+        $category = $this->getCategoryService()->getCategory($classroom['categoryId']);
+        $parentCategory = array();
+        if (!empty($category) && $category['parentId'] != 0) {
+            $parentCategory = $this->getCategoryService()->getCategory($category['parentId']);
+        }
+        return $this->render('ClassroomBundle:Classroom:keywords.html.twig', array(
+            'category' => $category,
+            'parentCategory' => $parentCategory,
+            'classroom' => $classroom
+        ));
+    }
+
 
     public function myClassroomAction()
     {
@@ -825,5 +841,9 @@ class ClassroomController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }

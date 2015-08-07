@@ -82,6 +82,7 @@ class CourseController extends CourseBaseController
 		$categoryArrayDescription = $categoryArray['description'];
 		$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
         $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+        $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         } 
         if(!$categoryArray){
             $CategoryParent = '';
@@ -149,12 +150,21 @@ class CourseController extends CourseBaseController
 		$lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'],'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
 		$tags = $this->getTagService()->findTagsByIds($course['tags']);
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
-
+		if(!$course){
+            $courseDescription = array();
+        }
+        else{
+        $courseDescription = $course['about'];
+        $courseDescription = strip_tags($courseDescription,'');
+        $courseDescription = preg_replace("/ /","",$courseDescription);
+        $courseDescription = substr($courseDescription,0,100);
+        } 
 		return $this->render('TopxiaWebBundle:Course:archiveCourse.html.twig', array(
 			'course' => $course,
 			'lessons' => $lessons,
 			'tags' => $tags,
-			'category' => $category
+			'category' => $category,
+			'courseDescription' => $courseDescription
 		));
 	}
 
@@ -250,6 +260,7 @@ class CourseController extends CourseBaseController
         $courseAbout = strip_tags($courseAbout,'');
 
       	$courseAbout = preg_replace("/ /","",$courseAbout); 
+      	$courseAbout = substr( $courseAbout, 0, 100 );
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
@@ -263,7 +274,6 @@ class CourseController extends CourseBaseController
 	{
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
     	$tags = $this->getTagService()->findTagsByIds($course['tags']);
-
     	return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
 			'category' => $category,
 			'tags' => $tags,
