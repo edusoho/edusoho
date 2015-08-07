@@ -49,6 +49,11 @@ function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $stat
         var bannerAction = self.parseBannerAction(banner.action);
         bannerAction(banner.params);
     }
+
+    $scope.loadPage = function(pageName) {
+        $scope[pageName] = 'view/found_' + pageName + '.html';
+        $scope.$apply();
+    }
 }
 
 

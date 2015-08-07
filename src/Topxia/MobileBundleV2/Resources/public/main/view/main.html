@@ -3,7 +3,7 @@
   <div id="st-container" class="st-container">
 
       <nav class="st-menu st-effect-1 menu-content" id="menu-1">
-          <ul class="ui-list ui-list-text ui-border-tb ui-list-avatar">
+          <ul class="ui-list ui-list-text ui-list-avatar">
             <li class="ui-border-t" ng-click="showMyView('userinfo')">
                 <div class="ui-avatar-one">
                     <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
@@ -11,7 +11,7 @@
                 
                 <div class="ui-list-info ui-border-t" ng-if="user">
                     <h3>{{ user.nickname }}</h3>
-                    <p>{{ user.signature }}</p>
+                    <p>{{ user.signature ? user.signature : '神马都没有' }}</p>
                 </div>
                 <div class="ui-list-info ui-border-t" ng-if="!user">
                     <h3>个人中心</h3>
@@ -28,13 +28,13 @@
                         <a class="ui-btn-lg btn-black" href="#/regist">注 册</a>
                     </div>
             </div>
-            <ul class="ui-list ui-list-text ui-border-tb ui-list-active" ng-if="user">
+            <ul class="ui-list ui-list-text" ng-if="user">
                 <li class="ui-border-t" ng-click="showMyView('mylearn')">
-                    <i class="icon iconfont icon-xuexishuben"></i>
+                    <i class="icon iconfont icon-shuben"></i>
                     我的学习
                 </li>
                 <li class="ui-border-t" ui-sref="viplist()">
-                    <i class="icon iconfont icon-infenicon14"></i>
+                    <i class="icon iconfont icon-huizhang"></i>
                     开通会员
                 </li>
                 <li class="ui-border-t" ng-click="showMyView('myfavorite')">

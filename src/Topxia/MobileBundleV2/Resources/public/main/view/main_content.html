@@ -16,11 +16,11 @@
         <li>
             <div ng-include=" 'view/found_course.html' | coverIncludePath "></div>
         </li>
-        <li>
-            <div ng-include=" 'view/found_live.html' | coverIncludePath "></div>
+        <li ng-onload="loadPage('live')">
+            <div ng-include="live | coverIncludePath"></div>
         </li>
-        <li>
-            <div ng-include=" 'view/found_classroom.html' | coverIncludePath "></div>
+        <li ng-onload="loadPage('classroom')">
+            <div ng-include="classroom | coverIncludePath "></div>
         </li>
     </ul>
 </div>

@@ -1,7 +1,7 @@
 <ul class="ui-list ui-list-lesson ui-border-b" ng-controller="CourseLessonController">  
     <li class="{{ lesson.type }}" ng-repeat="lesson in lessons" ng-class="lesson.id == lastLearnStatusIndex ? 'list-green' : '' " ng-click="learnLesson(lesson)">
           <div class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
-                <i class="iconfont" ng-class="learnStatuses[lesson.id] == 'finished' ? 'icon-xiazaiwancheng' : 'icon-iconfontround' "></i>
+                <i class="iconfont" ng-class="learnStatuses[lesson.id] == 'finished' ? 'icon-roundcheck' : 'icon-iconfontround' "></i>
             </div>
             <div class="ui-list-info ui-border-t" ng-class="lesson.type">
                 <h4 class="ui-nowrap"> {{ lesson | formatChapterNumber }} {{ lesson.title }}</h4>

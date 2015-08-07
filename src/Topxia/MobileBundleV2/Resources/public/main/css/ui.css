@@ -14,12 +14,16 @@ a {
 
 .rootView , .side-content{
   height: 100%;
-  background: #fff;
+  background: #f0f0f0;
 }
 
 .rootView {
   position: relative;
   top: 0;
+}
+
+.bottom-space {
+  height: 1px;
 }
 
 .top-tab-header {
@@ -53,9 +57,10 @@ a {
 }
 
 .menu-content .ui-list-avatar {
-  padding-bottom: 16px;
-  border-bottom-width: 1px ! important;
   margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: #999 1px solid;
+  border-bottom-width: 1px ! important;
 }
 
 .menu-content .ui-list-avatar .ui-list-info {
@@ -71,6 +76,7 @@ a {
 .menu-content .ui-list li {
   font-size: 18px;
   border-width : 0;
+  background-image: none;
 }
 
 .menu-content .ui-list i{
@@ -310,31 +316,33 @@ a {
   color: #37b97d;
   height: 44px;
   line-height: 44px;
-  width: 44px;
+  width: 56px;
   min-width: inherit;
   padding: 0;
 }
 
 .ui-bar .ui-btn {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .ui-bar .bar-tool.ui-btn {
-  height: 36px;
-  line-height: 36px;
   width: 36px;
+  height: 36px;
+  font-size: 18px;
+  line-height: 36px;
 }
 
 .ui-bar .bar-tool .ui-btn {
-  height: 36px;
-  line-height: 36px;
   width: 36px;
+  height: 36px;
+  font-size: 18px;
+  line-height: 36px;
 }
 
 .ui-bar .bar-tool {
-  margin: 4px;
-  right: 0;
   top: 0;
+  right: 0;
+  margin: 4px;
   position: absolute;
 }
 
@@ -998,6 +1006,10 @@ a {
 /** ui-userinfo**/
 
 /** ui-course **/
+.ui-course {
+  background: #f0f0f0;
+}
+
 .ui-course .course-head {
   margin-bottom: -35px;
 }
@@ -1164,6 +1176,7 @@ a {
 }
 
 .ui-course .item-body {
+  background: #fff;
   padding: 12px 16px 12px 16px;
 }
 
@@ -1206,7 +1219,7 @@ a {
 
 .ui-course .ui-panel-card {
   border: 1px solid #e0e0e0;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+  //box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
   background: #fff;
   padding : 18px;
 }
@@ -1940,7 +1953,7 @@ a {
 }
 
 .discount-label-content {
-  font-size: 0.75rem;
+  font-size: 0.70rem;
   color: white;
   text-align: center;
 }

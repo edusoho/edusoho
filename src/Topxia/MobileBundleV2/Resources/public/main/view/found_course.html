@@ -16,8 +16,8 @@
 		        		<img ng-src="{{ recommendCourse.middlePicture }}" img-error="course" />
 		            	<span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
 					      	<span class="discount-label-bottom"></span>
-					      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时免费</span>
-					      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时打折</span>
+					      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时<br>免费</span>
+					      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时<br>打折</span>
 			            </span>
 
 		        </div>
@@ -54,8 +54,8 @@
 		        	<img ng-src="{{ latestCourse.middlePicture }}" img-error="course" />
 		            <span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
 				      	<span class="discount-label-bottom"></span>
-				      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时免费</span>
-				      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时打折</span>
+				      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时<br>免费</span>
+				      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时<br>打折</span>
 					</span>
 		        </div>
 		        <div class="ui-list-info">
