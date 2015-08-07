@@ -1,0 +1,43 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}确定要开设下一期嘛？{% endblock %}
+
+{% block body %}
+
+    <form id="course-next-round-form" class="form-horizontal" method="post" action="{{ path('admin_course_rounding',{id:course.id})}}">
+        <div>开设下一期将会在本课程的基础上复制出一个新的课程。新课程的内容可以独立编辑，只是课程的学习进度要求不同。</div>
+        <div style="height: 18px"></div>
+        <div class="row form-group">
+
+            <div class="row form-group">
+                <div class="col-md-2 control-label">
+                    <label for="startTime">开始时间</label>
+                </div>
+                <div class="col-md-8 controls" style="z-index:2000;">
+                    <input type="text" id="startTime"  name="startTime" class="form-control" value="">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2 control-label">
+                    <label for="endTime">结束时间</label>
+                </div>
+                <div class="col-md-8 controls" style="z-index:2000;">
+                    <input type="text" id="endTime"  name="endTime" class="form-control" value="">
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+{% endblock %}
+
+{% block footer %}
+    <button id="course-next-round-btn" data-submiting-text="正在创建" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#course-next-round-form">确定</button>
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+    <script>app.load('customadminbundle/controller/course/nextRound')</script>
+{% endblock %}
+
+

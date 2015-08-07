@@ -1,0 +1,9 @@
+<div class="clearfix {{ layoutClass|default('') }}">
+	{% block content %}{% endblock %}
+    {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
+      <a class="tooltop pull-right" href="{{ path('course_manage', {id:course.id}) }}" data-role="tooltip" title="课程管理" data-placement="top">
+	     <i class="icon icon-setting"></i>
+	    </a>
+    {% endif %}	 	
+</div>
+{% block after_content %}{% endblock %}

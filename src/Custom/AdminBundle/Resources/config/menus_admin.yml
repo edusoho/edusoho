@@ -1,0 +1,7 @@
+admin_periodic_course_add:
+    name: 创建周期课程
+    parent: admin_course_manage
+    router_name: course_create
+    router_params: {'flag': 'periodic'}
+    group: 2
+    blank: 1

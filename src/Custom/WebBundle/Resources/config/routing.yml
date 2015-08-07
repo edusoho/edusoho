@@ -1,3 +1,39 @@
+my_teaching_courses:
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: CustomWebBundle:MyTeaching:courses, filter:'normal' }
+
+course_create:
+    pattern:  /course/create
+    defaults: { _controller: CustomWebBundle:Course:create }
+
+course_explore:
+    pattern:  /course/explore/{category}
+    defaults: { _controller: CustomWebBundle:Course:explore, category:'' }
+
+course_show:
+    pattern:  /course/{id}
+    defaults: { _controller: CustomWebBundle:Course:show }
+
+course_manage:
+    pattern:  /course/{id}/manage
+    defaults: { _controller: CustomWebBundle:CourseManage:index }
+
+course_manage_base:
+    pattern:  /course/{id}/manage/base
+    defaults: { _controller: CustomWebBundle:CourseManage:base }
+
+course_next_round:
+    pattern: /course/{id}/nextRound
+    defaults: { _controller: CustomWebBundle:Course:nextRound }
+
+course_rounding:
+    pattern: /course/{id}/rounding
+    defaults: { _controller: CustomWebBundle:Course:rounding }
+
+course_manage_lesson:
+    pattern:  /course/{id}/manage/lesson
+    defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
+
 my_homework_list:
     pattern: /my/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
@@ -5,11 +41,3 @@ my_homework_list:
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
-
-#course_create:
-#    pattern:  /course/create
-#    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:test }
-#
-#course_show:
-#    pattern:  /course/{id}
-#    defaults: { _controller: TopxiaWebBundle:Course:show }
