@@ -11,10 +11,10 @@
       <div class="metas">
         {% if 'periodic'== course.type %}
           {% if "now"|date('U') >= course.startTime %}
-            {#    <a class="pull-right week"><i class="iconfont icon-time"></i>1/9周</a> #} 
-            <a class="pull-right week"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+            {#    <a class="pull-right week-reminder"><i class="iconfont icon-time"></i>1/9周</a> #} 
+            <a class="pull-right week-reminder"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
           {% else %}
-            <a class="pull-right time"><i class="iconfont icon-time"></i>{{course.startTime | date('Y年m月d号')}}开课</a>
+            <a class="pull-right time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y年m月d号')}}开课</a>
           {% endif %}
         {% endif %}
         <span class="student-mun">已有<span>{{course.studentNum}}</span>人学习</span>
