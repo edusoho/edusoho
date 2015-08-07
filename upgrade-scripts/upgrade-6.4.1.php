@@ -6,8 +6,8 @@ use Topxia\Common\BlockToolkit;
 
  class EduSohoUpgrade extends AbstractUpdater
  {
-     public function update()
-     {
+    public function update()
+    {
          $this->getConnection()->beginTransaction();
          try {
              $this->updateScheme();
@@ -52,9 +52,15 @@ use Topxia\Common\BlockToolkit;
     private function updateScheme()
     {
         $connection = $this->getConnection();
+        $sql = "SELECT count(*) FROM (SELECT fromId,count(*) AS fcount FROM `user_bind` GROUP BY fromId) AS f WHERE fcount>1;";
+        $count = $this->getConnection()->fetchColumn($sql) ? : 0;
+        for ($i=0; $i < $count; $i++) { 
+            $connection->exec("DELETE FROM `user_bind` WHERE fromId IN (SELECT f.fromId FROM (SELECT fromId,count(*) AS fcount FROM `user_bind` GROUP BY fromId) AS f WHERE fcount>1) ORDER BY createdTime DESC LIMIT 1;");
+        }
 
-        $connection->exec("DELETE FROM `user_bind` WHERE fromId IN (SELECT f.fromId FROM (SELECT fromId,count(*) AS fcount FROM `user_bind` GROUP BY fromId) AS f WHERE fcount>1) ORDER BY createdTime DESC LIMIT 1;");
-        $connection->exec("DELETE FROM `user_bind` WHERE fromId IN (SELECT f.fromId FROM (SELECT fromId,count(*) AS fcount FROM `user_bind` GROUP BY fromId) AS f WHERE fcount>1) ORDER BY createdTime DESC LIMIT 1;");
+        for ($i=0; $i < $count; $i++) { 
+            $connection->exec("DELETE FROM `user_bind` WHERE fromId IN (SELECT f.fromId FROM (SELECT fromId,count(*) AS fcount FROM `user_bind` GROUP BY fromId) AS f WHERE fcount>1) ORDER BY createdTime DESC LIMIT 1;");
+        }
         $connection->exec("UPDATE `user_bind` SET `type`='weixin' WHERE `type` in ('weixinmob','weixinweb');");
     }
 
