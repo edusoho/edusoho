@@ -20,7 +20,7 @@
                 <span class="price-block">{{ classRoom.price | formatPrice }}</span>
             </p>
         </div>
-        <div class="service-body ui-border-t" ui-service-panel>
+        <div class="service-body ui-border-t" ng-if="classRoom.service.length > 0" ui-service-panel>
             <ul class="ui-list">
                 <li ng-repeat="service in classRoom.service">
                 <span class="label {{ service.class }}">{{ service.name }}</span>
