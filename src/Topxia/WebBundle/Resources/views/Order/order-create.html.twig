@@ -66,11 +66,10 @@
             <div class="order-item  clearfix">
               <div class="total-price mtl">
                 应付金额：
-                <span class="pay-rmb">￥</span>
                 {% if priceType|default('RMB') == "Coin" %}
-                  <span role="pay-coin">0</span> {{setting("coin.coin_name")}} ÷ 汇率({{cashRate|default(1)}}) = <span role="pay-rmb" class="pay-rmb"></span> 元
+                  <span role="pay-coin">0</span> {{setting("coin.coin_name")}} ÷ 汇率({{cashRate|default(1)}}) = <span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb"></span> 元
                 {% else %}
-                  <span role="pay-rmb" class="pay-rmb"></span> 
+                  <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span> 
                 {% endif %}
               </div>
             </div>
