@@ -75,7 +75,25 @@ class CourseController extends CourseBaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-
+		if(!$categoryArray){
+			$categoryArrayDescription = array();
+		}
+		else{
+		$categoryArrayDescription = $categoryArray['description'];
+		$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+        } 
+        if(!$categoryArray){
+            $CategoryParent = '';
+        }
+        else{
+            if(!$categoryArray['parentId']){
+                    $CategoryParent = '';
+                }
+                else{
+                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+            }
+        }
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -86,7 +104,9 @@ class CourseController extends CourseBaseController
 			'consultDisplay' => true,
 			'path' => 'course_explore',
 			'categoryArray' => $categoryArray,
-			'group' => $group
+			'group' => $group,
+			'categoryArrayDescription' => $categoryArrayDescription,
+			'CategoryParent' => $CategoryParent
 		));	
 	}
 
@@ -225,11 +245,16 @@ class CourseController extends CourseBaseController
 		$this->getCourseService()->hitCourse($id);
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
+        $courseAbout = $course['about'];
 
+        $courseAbout = strip_tags($courseAbout,'');
+
+      	$courseAbout = preg_replace("/ /","",$courseAbout); 
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
 			'items' => $items,
+			'courseAbout' => $courseAbout
 		));
 
 	}

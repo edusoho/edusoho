@@ -53,7 +53,25 @@ class ClassroomController extends BaseController
         // $classroomIds = ArrayToolkit::column($classrooms, 'id');
 
         $allClassrooms = ArrayToolkit::index($classrooms, 'id');
-
+        if(!$categoryArray){
+            $categoryArrayDescription = array();
+        }
+        else{
+        $categoryArrayDescription = $categoryArray['description'];
+        $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+        } 
+        if(!$categoryArray){
+            $CategoryParent = '';
+        }
+        else{
+            if(!$categoryArray['parentId']){
+                    $CategoryParent = '';
+                }
+                else{
+                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+            }
+        }
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator' => $paginator,
             'classrooms' => $classrooms,
@@ -61,6 +79,8 @@ class ClassroomController extends BaseController
             'path' => 'classroom_explore',
             'category' => $category,
             'categoryArray' => $categoryArray,
+            'categoryArrayDescription' => $categoryArrayDescription,
+            'CategoryParent' => $CategoryParent
         ));
     }
 
@@ -256,10 +276,19 @@ class ClassroomController extends BaseController
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+    }
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
             'classroom' => $classroom,
             'member' => $member,
+            'classroomDescription' => $classroomDescription
         ));
     }
 
