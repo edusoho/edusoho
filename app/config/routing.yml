@@ -21,6 +21,9 @@ classroom_admin:
     resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
+_plugins:
+    resource: routing_plugins.yml
+
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
     prefix:   /
@@ -28,9 +31,6 @@ custom_web:
 custom_admin:
     resource: "@CustomAdminBundle/Resources/config/routing.yml"
     prefix:   /admin
-
-_plugins:
-    resource: routing_plugins.yml
 
 # Internal routing configuration to handle ESI
 # _internal:
