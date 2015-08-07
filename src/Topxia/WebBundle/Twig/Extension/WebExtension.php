@@ -100,9 +100,15 @@ class WebExtension extends \Twig_Extension
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
             'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
             'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
+            'preview' => new \Twig_Function_Method($this, 'getpreview'),
         );
     }
-
+    public function getpreview($url)
+    {
+        $BaseUrl = parse_url($url);
+        $parameter = isset($BaseUrl['query']) ?  explode('=',$BaseUrl['query']) :null;
+        return  $parameter;
+    }
     public function getFingerprint() 
     {
         $user = $this->getUserService()->getCurrentUser();
