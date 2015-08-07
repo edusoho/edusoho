@@ -33,3 +33,11 @@ course_rounding:
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
+
+my_homework_list:
+    pattern: /my/homework/list
+    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
+
+course_manage_lesson_homework_create:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
+    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
