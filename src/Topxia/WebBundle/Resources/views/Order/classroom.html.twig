@@ -6,7 +6,7 @@
   </div>
   <div class="order-info">{{ classroom.title}}</div>
   <div class="order-price">
-    <span class="pay-rmb mrs">￥</span>
+    <span class="pay-rmb">￥</span>
     {% if priceType|default('RMB') == "RMB" %}
     <span class="pay-rmb">{{classroom.price}}</span>
     {% elseif priceType|default('RMB') == "Coin" %}

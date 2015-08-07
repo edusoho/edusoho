@@ -1,15 +1,13 @@
 .order-detail-bg {
-  border: 1px solid #ddd;
-  .border-radius;
+  // .border-radius;
   padding: 3px;
   margin-bottom: 20px;
-  border: 1px solid #f5f5f5;
-  margin-bottom: 30px;
+  border: 1px solid @gray-light;
 }
 .order-detail-bg .order-detail {
   position: relative;
 }
-@media (max-width: 767px) {
+@media (max-width: @screen-xs-max) {
   .order-detail-bg .order-detail .img-responsive {
     width: 100%;
     margin-bottom: 10px;
@@ -135,7 +133,8 @@
 .order-detail {
   height: 150px;
   width: auto;
-  background-color: #fafafa;
+  // background-color: #fafafa;
+  background-color: @gray-lighter;
 }
 
 .order-count {
@@ -200,15 +199,15 @@
 }
 
 .order-item .coin-detail {
-  margin-left: 55px;
+  margin-left: 20px;
   font-size: 14px;
   color: @gray-dark;
-  @media (max-width: @screen-xs-max) {
-    margin-left: 0;
-  }
-  @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
-    margin-left: 30px;
-  } 
+  // @media (max-width: @screen-xs-max) {
+  //   margin-left: 0;
+  // }
+  // @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
+  //   margin-left: 30px;
+  // } 
   input {
     height: 27px;
     line-height: 27px;
@@ -218,9 +217,9 @@
     width: 64px;
     text-align: center;
   }
-  span {
-  color: #ff7e00;
-  }
+  // span {
+  // color: #ff7e00;
+  // }
 }
 
 .order-detail {
@@ -287,7 +286,7 @@
   .order-item-detail {
     float: left;
     width: 45%;
-    text-align: center;
+    // text-align: center;
     font-size: 14px;
     @media (max-width: @screen-xs-max) {
       width: 100%;
@@ -299,17 +298,17 @@
       }
     }
     >.pay-password {
-      padding: 0 20%;
-      text-align: left;
-      @media(max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-        padding:0 9%;
-      }
-      @media (max-width: @screen-xs-max) {
-        padding: 0;
-      }
+      // padding: 0 20%;
+      // text-align: left;
+      // @media(max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+      //   padding:0 9%;
+      // }
+      // @media (max-width: @screen-xs-max) {
+      //   padding: 0;
+      // }
       .form-control {
         display: inline-block;
-        width: 48%;
+        // width: 48%;
         margin:0 2%;
         // text-align: center;
       }
@@ -344,6 +343,9 @@
       line-height: 50px;
       text-align: left;
     }
+    .cash-discount {
+      font-size: 24px;
+    }
   }
   .coupon-detail {
     .input-group  {
@@ -351,17 +353,17 @@
       width: 80%;
       float: left;
       margin-top: -2px;
-      .form-control {
-        width: 72%;
-        margin-right: 2%;
-        @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
-          width: 60%;
-          margin-right: 0;
-        } 
-        @media (max-width: @screen-xs-max) {
-          width: 90%;
-        } 
-      }
+      // .form-control {
+      //   width: 72%;
+      //   margin-right: 2%;
+      //   @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
+      //     width: 60%;
+      //     margin-right: 0;
+      //   } 
+      //   @media (max-width: @screen-xs-max) {
+      //     width: 90%;
+      //   } 
+      // }
     }
     .code-notify{
       display: none;
@@ -380,8 +382,8 @@
     }
   }
   .form-control {
-    width: 72%;
-    margin-right: 2%;
+    // width: 72%;
+    // margin-right: 2%;
     background-color: #fafafa;
     border:1px solid #f5f5f5;
   }
@@ -424,12 +426,12 @@
 
 
 .order-detail-item {
-  padding-top: 30px;
+  // padding-top: 30px;
   line-height: 30px;
   border-bottom: 0;
-  padding: 25px 30px;
+  padding: 15px 20px;
   .order-item-title {
-    padding-left: 20px;
+    // padding-left: 20px;
     height: 48px;
   }
   .order-item-title-icon {
@@ -443,9 +445,9 @@
   .title {
     font-size: 18px;
     font-weight: normal;
-    margin-left: 20px;
-    float: left;
-    margin-top: 2px;
+    // margin-left: 20px;
+    // float: left;
+    // margin-top: 2px;
     line-height: 1.2em;
   }
 }

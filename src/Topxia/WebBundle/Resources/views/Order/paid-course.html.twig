@@ -1,9 +1,5 @@
 <div class="order-detail-item clearfix">
   <div class="order-item-title">
-    <i class="order-item-title-icon">
-      <img src="/bundles/topxiaweb/img/order-pay/course-discount.png" width="25px">
-    </i>
-
     <h4 class="title">您已购买过：</h4>
   </div>
   <div class="paid-courses" >
@@ -13,10 +9,11 @@
         <a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank"><img  src="{{ filepath(paidCourse.middlePicture, 'course.png') }}" alt=""></a>
       </div>
       <div class="course-title">
-        <h4><a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
+        <h4><a class="link-light" href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
       </div>
       <div class="course-info">
-        抵扣：{{paidCourse.afterDiscountPrice}}               
+        抵扣：
+        <span style="font-size: 18px">{{paidCourse.afterDiscountPrice}}</span>
         <span> {% if priceType|default('RMB') == "RMB" %}
           元
         {% elseif priceType|default('RMB') == "Coin" %}
