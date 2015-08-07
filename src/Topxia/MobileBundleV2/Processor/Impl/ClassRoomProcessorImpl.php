@@ -431,6 +431,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             $service = $classroom['service'];
             if ($service && isset($service['studyPlan'])) {
                 unset($service['studyPlan']);
+                $classroom['service'] = $service;
             }
 			return $classroom;
 		}, $classrooms);
