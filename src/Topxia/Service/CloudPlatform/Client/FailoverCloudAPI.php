@@ -22,7 +22,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
                 throw $e;
             }
 
-            $this->refreshServerConfigFile(function($fp, $data) {
+            $this->refreshServerConfigFile(function($fp, $data, $maxFailoverCount) {
                 if (($data['failed_expired'] > 0) && ($data['failed_expired'] > time())) {
                     $data['failed_count'] ++;
                 } else {
@@ -30,7 +30,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
                     $data['failed_expired'] = time() + 10;
                 }
 
-                if ($data['failed_count'] == self::FAILOVER_COUNT) {
+                if ($data['failed_count'] == $maxFailoverCount) {
                    $data = $this->voteLeafServer($data);
                 }
 
@@ -48,7 +48,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         $data = json_decode(fread($fp, filesize($this->serverConfigPath)), true);
-        $data = $callback($fp, $data);
+        $data = $callback($fp, $data, self::FAILOVER_COUNT);
 
         ftruncate($fp, 0);
         rewind($fp);
