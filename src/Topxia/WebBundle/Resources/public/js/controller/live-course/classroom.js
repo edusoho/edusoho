@@ -4,7 +4,8 @@ define(function(require, exports, module) {
 
 		var intervalId = 0;
 
-		intervalId = setInterval(function(){
+
+		function getRoomUrl(){
 			$.ajax({
 				url: $("#classroom-url").data("url"),
 				success: function(data){
@@ -25,7 +26,11 @@ define(function(require, exports, module) {
 					//$("#classroom-url").html(html);
 				}
 			})
-		}, 5000);
+		}
+
+		getRoomUrl();
+
+		intervalId = setInterval(getRoomUrl, 3000);
 		
 	}
 });
