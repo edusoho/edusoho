@@ -428,10 +428,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 			}
 			$classroom['about'] = $self->convertAbsoluteUrl($container->get('request'), $classroom['about']);
 
-            $service = $classroom['service'];
+            $service = $classroom['service'];            
             if (!empty($service)) {
                 $searchIndex = array_search('studyPlan', $service);
-                if ($searchIndex) {
+                if ($searchIndex !== false) {
                     array_splice($service, $searchIndex, 1);
                     $classroom['service'] = $service;
                 }
