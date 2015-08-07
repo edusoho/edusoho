@@ -87,9 +87,10 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
 function CourseSettingController($scope, $stateParams, CourseService, $window)
 {
   $scope.isLearn = $stateParams.isLearn;
-  $scope.exitLearnCourse = function() {
+  $scope.exitLearnCourse = function(reason) {
     $scope.showLoad();
     CourseService.unLearnCourse({
+      reason : reason,
       courseId : $stateParams.courseId
     }, function(data) {
       $scope.hideLoad();
@@ -345,11 +346,11 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
       });
     }
 
-    $scope.exitLearnCourse = function() {
+    $scope.exitLearnCourse = function(reason) {
       $scope.showLoad();
       CourseService.unLearnCourse({
-        courseId : $stateParams.courseId,
-        token : $scope.token
+        reason : reason,
+        courseId : $stateParams.courseId
       }, function(data) {
         $scope.hideLoad();
         if (! data.error) {
@@ -515,9 +516,10 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
     });
   };
 
-  $scope.unLearn = function() {
+  $scope.unLearn = function(reason) {
       $scope.showLoad();
       ClassRoomService.unLearn({
+        reason : reason,
         targetType : "classroom",
         classRoomId : $stateParams.classRoomId
       }, function(data) {
