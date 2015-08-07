@@ -36,16 +36,16 @@
         {% if courseFinished %}
           <a class="btn btn-study little-gray">已结束</a>
         {% elseif member and not courseStarted %}
-          <a class="btn btn-study gray">已报名,等待参加</a>
+          <a class="btn btn-study gray">{{ 'student'==member.role ? "已报名," : ""}}等待开课</a>
         {% else %}
           {% if needToPay %}
             {% if userVipStatus=='ok' %}
-              {{ _self.join_periodic_course_btn(course,courseStarted) }}
+              {{ _self.button_for_periodic_course(course,courseStarted) }}
             {% else %}
               <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}" >购买课程</a>
             {% endif %}
           {% else %}
-            {{ _self.join_periodic_course_btn(course,courseStarted) }}
+            {{ _self.button_for_periodic_course(course,courseStarted) }}
           {% endif %}
         {% endif %}
       {% else %}
@@ -99,7 +99,7 @@
 {% endblock %} 
 
 
-{% macro join_periodic_course_btn(course,courseStarted, hasFavorited) %}
+{% macro button_for_periodic_course(course,courseStarted, hasFavorited) %}
   {% if courseStarted %}
     <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">加入学习</a>
   {% else %}
