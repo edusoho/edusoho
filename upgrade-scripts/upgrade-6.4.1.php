@@ -194,7 +194,7 @@ use Topxia\Common\BlockToolkit;
     protected function oldDataConvertHtml($oldData)
     {
         $html1 = !empty($oldData['carousel1banner']) ?
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
+            "<div class=\"swiper-slide swiper-hidden\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel1ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel1ground'][0]['src']}\">
@@ -213,7 +213,7 @@ use Topxia\Common\BlockToolkit;
                 </div>
             </div>"
             :
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
+            "<div class=\"swiper-slide swiper-hidden\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel1ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel1ground'][0]['src']}\">
@@ -230,7 +230,7 @@ use Topxia\Common\BlockToolkit;
             </div>";
 
         $html2 = !empty($oldData['carousel2banner']) ?
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
+            "<div class=\"swiper-slide swiper-hidden\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel2ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel2ground'][0]['src']}\">
@@ -249,7 +249,7 @@ use Topxia\Common\BlockToolkit;
                 </div>
             </div>"
             :
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
+            "<div class=\"swiper-slide swiper-hidden\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel2ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel2ground'][0]['src']}\">
@@ -266,7 +266,7 @@ use Topxia\Common\BlockToolkit;
             </div>";
 
         $html3 = !empty($oldData['carousel3banner']) ?
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
+            "<div class=\"swiper-slide swiper-hidden\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel3ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel3ground'][0]['src']}\">
@@ -285,7 +285,7 @@ use Topxia\Common\BlockToolkit;
                 </div>
             </div>"
             :
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
+            "<div class=\"swiper-slide swiper-hidden\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel3ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel3ground'][0]['src']}\">
