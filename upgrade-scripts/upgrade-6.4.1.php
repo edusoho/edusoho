@@ -53,6 +53,7 @@ use Topxia\Common\BlockToolkit;
     {
         $connection = $this->getConnection();
 
+        $connection->exec("DELETE FROM `user_bind` WHERE fromId IN (SELECT f.fromId FROM (SELECT fromId,count(*) AS fcount FROM `user_bind` GROUP BY fromId) AS f WHERE fcount=2) ORDER BY createdTime DESC LIMIT 1;");
         $connection->exec("UPDATE `user_bind` SET `type`='weixin' WHERE `type` in ('weixinmob','weixinweb');");
     }
 
