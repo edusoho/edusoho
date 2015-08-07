@@ -78,4 +78,9 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE  fileId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($fileId)); 
      }  
+
+    public function updateMaterialByCourseId($courseId,$fields)
+    {
+        return $this->getConnection()->update($this->table, $fields, array('courseId' => $courseId));
+    }
 }

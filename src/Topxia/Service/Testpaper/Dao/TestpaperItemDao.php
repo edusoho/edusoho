@@ -34,5 +34,7 @@ interface TestpaperItemDao
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
 
-    public function updateTestpaperItemsByPId($pId, $item);
+    public function updateTestpaperItemByPId($pId, $item);
+
+    public function updateTestpaperItemByTestId($testId, $fields);
 }

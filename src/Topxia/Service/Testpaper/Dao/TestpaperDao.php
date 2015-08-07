@@ -18,6 +18,8 @@ interface TestpaperDao
    
     public function updateTestpaperByPId($pId,$fields);
 
+    public function updateTestpaperByTarget($target,$fields);
+
     public function deleteTestpaper($id);
 
     public function deleteTestpaperByPId($pId);

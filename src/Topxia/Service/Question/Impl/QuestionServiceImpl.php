@@ -139,6 +139,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->updateQuestionByPId($pId, $fields);
     }
 
+    public function updateQuestionByTarget($target, $fields)
+    {   
+        $set = array();
+        foreach ($fields as $key => $value) {
+            $set[] = $key.' = "'.$value.'"';
+        }
+        return $this->getQuestionDao()->updateQuestionByTarget($target, $set);
+    }
+
     public function statQuestionTimes ($answers)
     {
         $ids = array_keys($answers);

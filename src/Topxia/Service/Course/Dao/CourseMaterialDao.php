@@ -27,4 +27,6 @@ interface CourseMaterialDao
 
     public function getMaterialCountByFileId($fileId);
 
+    public function updateMaterialByCourseId($courseId,$fileId);
+
 }

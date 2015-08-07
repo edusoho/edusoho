@@ -77,6 +77,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->updateTestpaperByPId($pId,$fields);
     }
 
+    public function updateTestpaperAndTestpaperItemByTarget($target,$fields)
+    {
+        $set = array();
+        foreach ($fields as $key => $value) {
+            $set[] = $key.' = "'.$value.'"';
+        }
+
+        $testpaper = $this->getTestpaperDao()->updateTestpaperByTarget('course-'.$target, $set);
+        $testpaperIds = ArrayToolkit::column($this->findAllTestpapersByTarget($target),'id');
+        foreach ($testpaperIds as $testpaperId) {
+
+            $this->getTestpaperItemDao()->updateTestpaperItemByTestId($testpaperId,$fields);
+        }
+        
+        return $testpaper;
+    }
+
     protected function filterTestpaperFields($fields, $mode = 'create')
     {
         $filtedFields = array();
@@ -276,6 +293,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         return $this->getTestpaperDao()->findTestpaperByTargets($targets);
     }
+
 
     public function startTestpaper($id, $target)
     {
@@ -841,9 +859,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
     }
 
-    public function updateTestpaperItemsByPId($pId, $item)
+    public function updateTestpaperItemByPId($pId, $item)
     {
-        return $this->getTestpaperItemDao()->updateTestpaperItemsByPId($pId, $item);
+        return $this->getTestpaperItemDao()->updateTestpaperItemByPId($pId, $item);
     }
 
     public function canTeacherCheck($id)

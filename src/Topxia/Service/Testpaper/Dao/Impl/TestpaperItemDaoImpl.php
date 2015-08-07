@@ -115,10 +115,15 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
-    public function updateTestpaperItemsByPId($pId, $item)
+    public function updateTestpaperItemByPId($pId, $item)
     {
        return $this->getConnection()->update($this->table, $item, array('pId' => $pId)); 
     }
+
+    public function updateTestpaperItemByTestId($testId, $fields)
+    {
+      return $this->getConnection()->update($this->table, $fields, array('testId' => $testId));  
+    } 
 
 
 }

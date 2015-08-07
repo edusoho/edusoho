@@ -347,6 +347,22 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals(1,$count);
     }
 
+    public function testUpdateQuestionByTarget()
+    {
+        $question = array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            'parentId' =>1,
+            'pId' => 1
+        );
+        $question = $this->getQuestionService()->addQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $count = $this->getQuestionService()->updateQuestionByTarget('course-1',array('type'=>'eassy'));
+        $this->assertEquals(1,$count);
+    }
+
 
     protected function getQuestionService()
     {

@@ -73,6 +73,15 @@ class MaterialServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
+    public function testUpdateMaterialByCourseId()
+    {
+       $Material = array('title'=>'material','pId'=>1,'courseId'=>1);
+       $Material = $this->getMaterialService()->createMaterial($Material);
+       $this->assertEquals('material', $Material['title']);
+       $count = $this->getMaterialService()->UpdateMaterialByCourseId(1,array('title'=>'material update'));
+       $this->assertEquals(1, $count); 
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

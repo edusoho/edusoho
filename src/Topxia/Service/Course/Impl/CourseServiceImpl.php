@@ -449,8 +449,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'maxStudentNum' => 0,
 			'watchLimit' => 0,
 			'approval' => 0,
+			'locked'=>0
 		));
-		
+
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
@@ -462,6 +463,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$item = (int) $item['id'];
 			});
 		}
+
 		return $fields;
 	}
 
@@ -1169,6 +1171,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $updatedLesson;
 	}
 
+	public function updateLessonByCourseId($courseId,$fields)
+	{	
+		$this->getLessonDao()->updateLessonByCourseId($courseId,$fields);
+		$courseLessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
+		return $courseLessons;
+	}
+
 	public function updateLessonByParentId($parentId,$fields)
 	{
 		return $this->getLessonDao()->updateLessonByParentId($parentId,$fields);
@@ -1647,6 +1656,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $chapter;
 	}
 
+	public function updateChapterByCourseId($courseId, $fields)
+	{
+		return $this->getChapterDao()->updateChapterByCourseId($courseId, $fields);
+	}
+
 	public function updateChapterByPId($pId, $fields)
 	{
 		return $this->getChapterDao()->updateChapterByPId($pId, $fields);
@@ -1944,7 +1958,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
-			$this->dispatchEvent('course.member.delete',$member);
+			if ($member) {
+				$this->dispatchEvent('course.member.delete',$member);
+			}	
 		}
 
 		// 逐个插入新的教师的学员数据

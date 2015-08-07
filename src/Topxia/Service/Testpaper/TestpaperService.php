@@ -25,6 +25,8 @@ interface TestpaperService
 
     public function updateTestpaperByPId($pId,$fields);
 
+    public function updateTestpaperAndTestpaperItemByTarget($target,$fields);
+
     public function publishTestpaper($id);
 
     public function closeTestpaper($id);
@@ -107,5 +109,5 @@ interface TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items);
 
-    public function updateTestpaperItemsByPId($pId, $item);
+    public function updateTestpaperItemByPId($pId, $item);
 }

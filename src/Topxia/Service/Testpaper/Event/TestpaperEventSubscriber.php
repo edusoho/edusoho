@@ -108,7 +108,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $items = $event->getArgument('items');
         //判断是否是一维数组
         if(array_key_exists('id', $items)){
-            $this->getTestpaperService()->updateTestpaperItemsByPId($items['id'],array('seq'=>$items['seq']));
+            $this->getTestpaperService()->updateTestpaperItemByPId($items['id'],array('seq'=>$items['seq']));
             return;
         }
 

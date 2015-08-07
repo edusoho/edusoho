@@ -19,7 +19,11 @@ use Imagine\Image\ImageInterface;
 class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)
-	{
+	{      
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['locked'] == '1') {
+            return $this->redirect($this->generateUrl('course_manage_course_sync',array('id' => $id,'type'=>'base')));
+        }
         return $this->forward('TopxiaWebBundle:CourseManage:base',  array('id' => $id));
 	}
 
@@ -310,6 +314,84 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
+    #课程同步
+    public function courseSyncAction(Request $request,$id,$type)
+    {
+        $courseId = $id;
+        $type = $type;
+        $title = '';
+        $url = '';
+        switch ($type) {
+            case 'base':
+                $title = '基本信息';
+                $url= 'course_manage_base';
+                break;
+            case 'detail':
+                $title = '详细信息';
+                $url= 'course_manage_detail';
+                break;
+            case 'picture':
+                $title = '课程图片';
+                $url= 'course_manage_picture';
+                break;
+            case 'lesson':
+                $title = '课时管理';
+                $url= 'course_manage_lesson';
+                break;
+            case 'price':
+                $title = '价格设置';
+                $url= 'course_manage_price';
+                break;
+            case 'teachers':
+                $title = '教师设置';
+                $url= 'course_manage_teachers';
+                break;
+            case 'question':
+                $title = '题目管理';
+                $url= 'course_manage_question';
+                break;
+            case 'testpaper':
+                $title = '试卷管理';
+                $url= 'course_manage_testpaper';
+                break;
+            default:
+                $title = '未知页面';
+                $url= '';
+                break;
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        return $this->render('TopxiaWebBundle:CourseManage:courseSync.html.twig',array(
+        'course'=>$course,
+        'type'=>$type,
+        'title'=>$title,
+        'url'=>$url
+        ));
+    }
+
+    public function courseSyncEditAction(Request $request)
+    {
+        $courseId = $request->query->get('courseId');
+        if ($request->getMethod() == 'POST'){
+            $courseId = $request->request->get('courseId');
+            $course = $this->getCourseService()->getCourse($courseId);
+            if($course['locked'] == 1) {
+              $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
+              $this->getCourseService()->updateLessonByCourseId($courseId,array('parentId'=>0));
+              $this->getCourseService()->updateChapterByCourseId($courseId,array('pId'=>0));
+              $this->getMaterialService()->updateMaterialByCourseId($courseId,array('pId'=>0));
+              $this->getQuestionService()->updateQuestionByTarget('course-'.$courseId,array('pId'=>0));
+              $this->getTestpaperService()->updateTestpaperAndTestpaperItemByTarget($courseId,array('pId'=>0));
+              if ($this->isPluginInstalled('Homework')) {
+                $this->getHomeworkService()->updateHomeworkAndHomeworkItemByCourseId($courseId,array('pId'=>0));
+                $this->getExerciseService()->updateExerciseByCourseId($courseId,array('pId'=>0));
+              }
+            }
+          //return $this->createJsonResponse(true);
+        }
+        return $this->render('TopxiaWebBundle:CourseManage:courseSyncEdit.html.twig',array('courseId'=>$courseId));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -364,5 +446,23 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }
 
+    protected function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
 
+    protected function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    protected function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    }
+
+    protected function getExerciseService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
 }
