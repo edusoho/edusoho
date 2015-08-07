@@ -1016,7 +1016,8 @@ class ClassroomController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
-
+    }
+    
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
