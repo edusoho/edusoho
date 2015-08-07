@@ -311,7 +311,7 @@ use Topxia\Common\BlockToolkit;
 
      private function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content.BlockService');
+        return ServiceKernel::instance()->createService('Content.BlockService');
     }
 
  }
