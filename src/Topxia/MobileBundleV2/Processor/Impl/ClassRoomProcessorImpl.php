@@ -428,9 +428,9 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 			}
 			$classroom['about'] = $self->convertAbsoluteUrl($container->get('request'), $classroom['about']);
 
-            $servcie = $classroom['servcie'];
-            if ($servcie && isset($servcie['studyPlan'])) {
-                unset($servcie['studyPlan']);
+            $service = $classroom['service'];
+            if ($service && isset($service['studyPlan'])) {
+                unset($service['studyPlan']);
             }
 			return $classroom;
 		}, $classrooms);
