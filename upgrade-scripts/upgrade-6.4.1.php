@@ -38,14 +38,15 @@ use Topxia\Common\BlockToolkit;
     protected function updateBlock()
     {
         $block = $this->getBlockService()->getBlockByCode('jianmo:home_top_banner');
-        
-        $this->replaceData($block);
+        if(!empty($block) && isset($block['data']['carousel1ground'])){
+            $this->replaceData($block);
 
-        $this->replaceMetaItems($block);
+            $this->replaceMetaItems($block);
 
-        $this->replaceContent($block);
+            $this->replaceContent($block);
 
-        $block = $this->getBlockService()->updateBlock($block['id'],$block);
+            $block = $this->getBlockService()->updateBlock($block['id'],$block);
+        }
     }
 
     private function updateScheme()
