@@ -33,3 +33,15 @@ course_rounding:
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
+
+user_show: 
+    pattern:  /user/{id}
+    defaults: { _controller: CustomWebBundle:User:show }
+
+user_learn: 
+    pattern:  /user/{id}/learn
+    defaults: { _controller: CustomWebBundle:User:learn }
+
+user_favorited: 
+    pattern:  /user/{id}/favorited
+    defaults: { _controller: CustomWebBundle:User:favorited }
