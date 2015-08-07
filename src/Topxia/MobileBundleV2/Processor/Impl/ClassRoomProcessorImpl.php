@@ -431,8 +431,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             $service = $classroom['service'];
             if (!empty($service)) {
                 $searchIndex = array_search('studyPlan', $service);
-                unset($service[$searchIndex]);
-                $classroom['service'] = $service;
+                if ($searchIndex) {
+                    array_splice($service, $searchIndex, 1);
+                    $classroom['service'] = $service;
+                }
             }
 			return $classroom;
 		}, $classrooms);
