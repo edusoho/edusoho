@@ -100,14 +100,30 @@ class WebExtension extends \Twig_Extension
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
             'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
             'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
-            'preview' => new \Twig_Function_Method($this, 'getpreview'),
+            'get_parameters_from_url' => new \Twig_Function_Method($this, 'getParametersFromUrl'),
         );
     }
-    public function getpreview($url)
+    public function getParametersFromUrl($url)
     {
         $BaseUrl = parse_url($url);
-        $parameter = isset($BaseUrl['query']) ?  explode('=',$BaseUrl['query']) :null;
-        return  $parameter;
+        if(isset($BaseUrl['query'])){
+            if(strstr($BaseUrl['query'],'&')){
+            $parameter = explode('&',$BaseUrl['query']);
+            $parameters = array();
+                foreach ($parameter as $key => $value) {
+                $parameters[$key] = explode('=',$value); 
+                }
+            }
+            else{
+            $parameter = explode('=',$BaseUrl['query']);   
+            $parameters = array();
+            $parameters[0]= $parameter;
+            }
+        }
+        else{
+            return null;
+        }
+        return  $parameters;
     }
     public function getFingerprint() 
     {
