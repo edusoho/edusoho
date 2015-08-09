@@ -1,0 +1,128 @@
+.pay-center .check {
+  cursor: pointer;
+  width: 150px;
+  height: 58px;
+  border: 2px solid @gray-light;
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  line-height: 58px;
+  display:inline-block;
+  margin-right:15px;
+  // @media(max-width: @screen-xs-max) {
+  //   margin-right: 5px;
+  //   width: 120px;
+  //   height: 50px;
+  //   line-height: 50px;
+  //   img {
+  //     width: 80px;
+  //   }
+  // }
+  &.active {
+    border: 2px solid @brand-primary;
+  }
+}
+
+.pay-center .uncheck {
+  cursor: pointer;
+  width: 150px;
+  height: 58px;
+  position: relative;
+  text-align:center;
+  font-size: 16px;
+  line-height: 58px;
+  border: 1px solid #cccccc; 
+  margin-bottom: 30px;
+}
+
+.pay-center .uncheck .icon {
+  background: url('@{img-src}old/pay-check-status.png') no-repeat;
+  top: 0px;
+  right: 0px;
+  width: 23px;
+  height: 26px;
+  background-position: 0 -30px;
+  position: absolute;
+  overflow: hidden;
+}
+
+.pay-center .check .icon {
+  background: url('@{img-src}old/pay-check-status.png') no-repeat;
+  top: -1px;
+  right: -1px;
+  width: 23px;
+  height: 26px;
+  background-position: 0 -4px;
+  position: absolute;
+  overflow: hidden;
+}
+
+.pay-center .help {
+  float: left;
+  width: 400px;
+  height: 40px;
+  line-height: 19px;
+  padding-left: 30px;
+  background: url('@{img-src}old/iconfont-caution-block.png') no-repeat;
+  font-size: 12px;
+  color: #666;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+// =============新调整=====
+.pay-center .pay-amount {
+  text-align: right;
+  .total-price {
+    float: inherit;
+  }
+}
+
+.order-detail-bg.checkout {
+  .order-detail .order-info {
+    padding-top: 30px;
+    width: 70%;
+    >p {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .pay-rmb {
+      font-size: 18px;
+    }
+  } 
+}
+
+.paystyle  {
+  .order-detail-bg {
+    padding: 50px;
+    margin-bottom: 50px;
+    @media (max-width: @screen-xs-max) {
+      padding-left: 25px; 
+    } 
+    .pay-type-lable  {
+      display: inline-block;
+      margin-right: 10%;
+      font-size: 18px;
+      @media (max-width: @screen-xs-max) {
+        display: block;
+      }
+    }
+    // .check {
+    //   cursor: pointer;
+    //   margin-right: 10%;
+    //   position: relative;
+    //   text-align:center;
+    //   font-size: 16px;
+    //   line-height: 47px;
+    //   padding: 0 5px;
+    //   @media (max-width: @screen-xs-max) {
+    //     display: block;
+    //     margin: 20px auto 0 auto;
+    //   }
+    //   img {
+    //     width: 100%;
+    //   }
+    // }
+  }
+}
+

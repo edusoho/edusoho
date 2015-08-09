@@ -1,10 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set bodyClass = 'homepage' %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/default.css') }}" />
-{% endblock %}
+{% set script_controller = 'index' %}
 
 {% block content %}
 
@@ -33,7 +29,7 @@
                 <ul class="home-class-list">
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                     </a>
                     <div class="class-body">
                       <h3 class="class-title">
@@ -279,7 +275,7 @@
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+        {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'course-picture', '') }}
       </a>
       <div class="course-body">
         <div class="course-price-info">

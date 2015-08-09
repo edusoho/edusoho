@@ -1,7 +1,9 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %} {{user.nickname}}的公共主页 - {{ parent() }}{% endblock %}
+{% block title %}{% if pageNav == 'teach' %}{{'在教课程'}} - {% elseif pageNav == 'learn' %}{{'在学课程'}} - {% elseif pageNav == 'favorited' %}{{'收藏的课程'}} - {% elseif pageNav == 'group' %}{{'加入的小组'}} - {% elseif pageNav == 'friend' %}{{'关注/粉丝'}} - {% else %}{{''}}{% endif %}{{user.nickname}}的个人主页 - {{ parent() }}{% endblock %}
 
+{% block keywords %}{{ user.title }}{% endblock %}
+{% block description %}{{ user.about|default('')|plain_text(100) }}{% endblock %}
 {% set bodyClass = 'userpage' %}
 {% set pageNav = pageNav|default(null) %}
 

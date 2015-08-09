@@ -25,6 +25,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function findOrdersBySns(array $sns)
+    {
+        $orders = $this->getOrderDao()->findOrdersBySns($sns);
+        return ArrayToolkit::index($orders, 'id');
+    }
+
     public function createOrder($order)
     {
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
@@ -94,11 +100,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (empty($order)) {
             throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
         }
-
+        
         if ($payData['status'] == 'success') {
             // 避免浮点数比较大小可能带来的问题，转成整数再比较。
             if (intval($payData['amount']*100) !== intval($order['amount']*100)) {
-                $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', array($order['sn'], $order['price'], $payData['amount']));
+                $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
                 $this->_createLog($order['id'], 'pay_error', $message, $payData);
                 throw $this->createServiceException($message);
             }
@@ -219,7 +225,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $payment = $this->getSettingService()->get("payment");
-        if(isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1){
+        if(isset($payment["enable"]) && $payment["enable"]==1
+         && isset($payment[$order["payment"]."_enable"]) && $payment[$order["payment"]."_enable"] == 1 
+         && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1){
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
 

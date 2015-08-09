@@ -8,8 +8,8 @@ define(function(require, exports, module) {
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
         chapterAnimate = require('../course/widget/chapter-animate');
-
-    require('mediaelementplayer');
+        
+        require('mediaelementplayer');
 
 
 
@@ -277,17 +277,20 @@ define(function(require, exports, module) {
                         element: '#lesson-video-content',
                         playerId: 'lesson-video-player'
                     });
+
                     mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
                         if(parseInt(data.currentTime) != parseInt(data.duration)){
                             DurationStorage.set(userId, lesson.mediaId, data.currentTime);
                         }
                     });
+
                     mediaPlayer.on("ready", function(playerId, data){
                         var player = document.getElementById(playerId);
                         var userId = $('#lesson-video-content').data("userId");
                         player.seek(DurationStorage.get(userId, lesson.mediaId));
                     });
+
                     mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
                     mediaPlayer.on('ended', function() {
                         var userId = $('#lesson-video-content').data("userId");
@@ -300,7 +303,6 @@ define(function(require, exports, module) {
                     });
 
                     mediaPlayer.play();
-
                     that.set('mediaPlayer', mediaPlayer);
 
                 } else {
@@ -392,10 +394,12 @@ define(function(require, exports, module) {
                             clearInterval(iID);
                         }
 
+                        var intervalSecond = 0;
+
                         function generateHtml() {
-                            var nowDate = new Date();
-                            var startLeftSeconds = parseInt((startTime*1000 - nowDate) / 1000);
-                            var endLeftSeconds = parseInt((endTime*1000 - nowDate) / 1000);
+                            var nowDate = lesson.nowDate + intervalSecond;
+                            var startLeftSeconds = parseInt(startTime - nowDate);
+                            var endLeftSeconds = parseInt(endTime - nowDate);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
                             var modulo = startLeftSeconds % (60 * 60 * 24);
                             var hours = Math.floor(modulo / (60 * 60));
@@ -472,7 +476,7 @@ define(function(require, exports, module) {
 
                             $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
 
-
+                            intervalSecond++;
                         }
 
                         generateHtml();
@@ -779,24 +783,16 @@ define(function(require, exports, module) {
             var posted = false;
             if(learningCounter >= this.interval || (learningCounter>0 && paused)){
                 var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
-                $.post(url);
-                posted = true;
-                learningCounter = 0;
-            } else if(!paused){
-                learningCounter++;
-            }
-
-            if (this.watchLimit && this.type == 'MediaPlayer' && !this.watched && learningCounter >= 1) {
-                this.watched = true;
-                var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
-                $.post(url, function(result) {
-                    if (result.status == 'ok') {
-                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
-                    } else if (result.status == 'error') {
+                var self = this;
+                $.post(url, function(response) {
+                    if (self.watchLimit && response.watchLimited && self.type == 'MediaPlayer') {
                         window.location.reload();
                     }
-
                 }, 'json');
+                posted = true;
+                learningCounter = 0;
+            } else if(!paused) {
+                learningCounter++;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
@@ -810,7 +806,24 @@ define(function(require, exports, module) {
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
-
+        $(".es-qrcode").click(function(){
+            var $this = $(this); 
+            var url=document.location.href.split("#");
+            var id=url[1].split("/");
+            if($this.hasClass('open')) {
+                $this.removeClass('open');
+            }else {
+                $.ajax({
+                    type: "post",
+                    url: $this.data("url")+"&lessonId="+id[1],
+                    dataType: "json",
+                    success:function(data){
+                        $this.find(".qrcode-popover img").attr("src",data.img);
+                        $this.addClass('open');
+                    }
+                });
+            }
+        });
     };
 
 });

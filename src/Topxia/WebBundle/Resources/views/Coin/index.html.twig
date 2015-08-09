@@ -8,7 +8,7 @@
     <div class="panel-heading" style="font-weight:normal;">
       {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
       {# 账户余额: #}
-      <span class="label label-default">账户余额</span>
+      <span class="label label-primary label-md">账户余额</span>
       {% if setting('coin.coin_content') %}
         <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
       {% endif %}
@@ -95,16 +95,18 @@
 
               <td>
                 <span class="text-sm">
-                  {% if cash.cashType == "RMB" %}
-                  支付宝支付
-                  {% elseif cash.cashType == "Coin" and cash.category == "inflow" %}
+                  {% if cash.cashType == "Coin" and cash.category == "inflow" %}
                   学习卡充值
                   {% elseif cash.cashType == "Coin" and cash.category == "change" %}
-                  支付宝支付
+                    {% if cash.payment == 'wxpay' %}
+                    微信支付
+                    {% elseif cash.payment == 'alipay' %}
+                    支付宝支付
+                    {% endif %}
                   {% elseif cash.category == "moneyCardRecharge" %}
                   学习卡
                   {% else %}
-                  余额支付                
+                  余额支付             
                   {% endif %}
                 </span>
               </td>

@@ -87,7 +87,6 @@ class CoinController extends BaseController
 
         // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        
         return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
           'payments' => $this->getEnabledPayments(),
           'account'=>$account,
@@ -143,7 +142,6 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
         $conditions['type']  = 'inflow';      
         $amountInflow = $this->getCashService()->analysisAmount($conditions);
 
@@ -154,7 +152,7 @@ class CoinController extends BaseController
             'cashes' => $cashes,
             'paginator' => $paginator,
             'amountInflow' => $amountInflow?:0,
-            'amountOutflow' => $amountOutflow?:0            
+            'amountOutflow' => $amountOutflow?:0         
           
         ));   
     }
@@ -283,7 +281,6 @@ class CoinController extends BaseController
     {
         $formData = $request->request->all();
         $user = $this->getCurrentUser();
-        $formData['payment']="alipay";
         $formData['userId']=$user['id'];
 
         $order=$this->getCashOrdersService()->addOrder($formData);
@@ -302,11 +299,32 @@ class CoinController extends BaseController
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
-        
-        return $this->render('TopxiaWebBundle:Coin:submit-pay-request.html.twig', array(
-            'form' => $paymentRequest->form(),
-            'order' => $order,
-        ));
+        $formRequest = $paymentRequest->form();
+        $params = $formRequest['params'];
+        $payment = $request->request->get('payment');
+        if ($payment == 'alipay') {
+            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+                'form' => $paymentRequest->form(),
+                'order' => $order,
+            ));
+        }
+        elseif ($payment == 'wxpay') {
+            $returnXml = $paymentRequest->unifiedOrder();
+            if(!$returnXml){
+                throw new \RuntimeException("xml数据异常！");
+            }
+            $returnArray = $paymentRequest->fromXml($returnXml);
+            if($returnArray['return_code'] == 'SUCCESS'){
+                $url = $returnArray['code_url'];
+                return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
+                    'url' => $url,
+                    'order' => $order,
+                ));
+            }
+            else{
+                throw new \RuntimeException($returnArray['return_msg']);
+            }
+        }
     }
 
 
@@ -354,7 +372,14 @@ class CoinController extends BaseController
     public function payNotifyAction(Request $request,$name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        $response = $this->createPaymentResponse($name, $request->request->all());
+        if ($name == 'alipay') {
+            $response = $this->createPaymentResponse($name, $request->request->all());
+        }
+        elseif ($name == 'wxpay') {
+            $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
+            $returnArray = $this->fromXml($returnXml);
+            $response = $this->createPaymentResponse($name, $returnArray);
+        }
 
         $payData = $response->getPayData();
         try {
@@ -394,13 +419,27 @@ class CoinController extends BaseController
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 
-        $options = array(
-            'key' => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
-        );
+        if ($payment == 'alipay') {
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'type' => $settings["{$payment}_type"]
+            );
+        }
+        elseif ($payment == 'wxpay') {
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"]
+            );
+        }
 
         return $options;
+    }
+
+    private function fromXml($xml)
+    {
+        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
+        return $array;
     }
 
     protected function getEnabledPayments()

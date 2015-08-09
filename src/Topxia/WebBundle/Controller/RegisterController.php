@@ -25,6 +25,7 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
 
             $registration = $request->request->all();
+            $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
@@ -33,6 +34,8 @@ class RegisterController extends BaseController
             //手机校验码
             if($this->smsCodeValidator($authSettings,$registration,$request)){
                 $registration['verifiedMobile'] = '';
+                $request->request->add(array_merge($request->request->all(),array('mobile'=>$registration['mobile'])));
+                
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
                 if ($result){
                     $registration['verifiedMobile'] = $sessionField['to'];
@@ -46,6 +49,7 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
+            $this->sendRegisterMessage($user);
 
             if(!isset($registration['nickname'])){
                 return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
@@ -54,7 +58,6 @@ class RegisterController extends BaseController
 
                 if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) ||   !$this->isEmptyVeryfyMobile($user)){
                      $this->authenticateUser($user);
-                     $this->sendRegisterMessage($user);
                 }
 
                 $goto = $this->generateUrl('register_submited', array(
@@ -65,7 +68,6 @@ class RegisterController extends BaseController
              
                 if ($this->getAuthService()->hasPartnerAuth()) {
                      $this->authenticateUser($user);
-                     $this->sendRegisterMessage($user);
                     return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
                 }
 
@@ -79,44 +81,10 @@ class RegisterController extends BaseController
 
         }
 
-        $auth=$this->getSettingService()->get('auth');
-
-        if(!isset($auth['registerSort'])){
-            $auth['registerSort']="";
-        }
-        
-
-        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-        for($i=0;$i<count($userFields);$i++){
-           if(strstr($userFields[$i]['fieldName'], "textField")){
-            $userFields[$i]['type']="text";
-           }
-           if(strstr($userFields[$i]['fieldName'], "varcharField")){
-            $userFields[$i]['type']="varchar";
-           }
-           if(strstr($userFields[$i]['fieldName'], "intField")){
-            $userFields[$i]['type']="int";
-           }
-           if(strstr($userFields[$i]['fieldName'], "floatField")){
-            $userFields[$i]['type']="float";
-           }
-           if(strstr($userFields[$i]['fieldName'], "dateField")){
-            $userFields[$i]['type']="date";
-           }
-        }
-
-        if($this->setting('cloud_sms.sms_enabled', '0') == '1' 
-            && $this->setting('cloud_sms.sms_registration', 'off') == 'on'
-            && !in_array('mobile', $auth['registerSort']) 
-            && $this->setting('auth.register_mode') != 'email_or_mobile'
-            && $this->setting('auth.register_mode') != 'mobile') {
-            $auth['registerSort'][] = "mobile";
-        }
 
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'isRegisterEnabled' => $registerEnable,
-            'registerSort'=>$auth['registerSort'],
-            'userFields'=>$userFields,
+            'registerSort'=>array(),
             '_target_path' => $this->getTargetPath($request),
         ));
     }
@@ -170,7 +138,7 @@ class RegisterController extends BaseController
                 return true;
              }
         }elseif(isset($registration['mobile']) && !empty($registration['mobile'])){
-            if( SimpleValidator::mobile($registration['emailOrMobile'])){
+            if( SimpleValidator::mobile($registration['mobile'])){
                 return true;
              }
         }
@@ -261,7 +229,7 @@ class RegisterController extends BaseController
         if(!empty($user['verifiedMobile'])){
               return $this->redirect($this->generateUrl('homepage'));
         }
-        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
+        if($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
                return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
@@ -269,12 +237,14 @@ class RegisterController extends BaseController
                 '_target_path' => $this->getTargetPath($request),
                 ));
            }else{
-                return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
+                /*return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                 '_target_path' => $this->getTargetPath($request),
-                ));
+                ));*/
+                $this->authenticateUser($user);
+                return $this->redirect($this->generateUrl('homepage'));
            }
     }
 
@@ -370,6 +340,7 @@ class RegisterController extends BaseController
     {
         $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+        
         return $this->validateResult($result, $message);
     }
 
@@ -396,9 +367,15 @@ class RegisterController extends BaseController
         return $this->validateResult($result, $message);
     }
 
+    public function captchaModalAction()
+    {
+        return $this->render('TopxiaWebBundle:Register:captcha-modal.html.twig',array());
+    }
+
     public function captchaCheckAction(Request $request)
     {
-        $captchaFilledByUser = strtolower($request->query->get('value'));       
+        $captchaFilledByUser = strtolower($request->query->get('value')); 
+        
         if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
             $response = array('success' => true, 'message' => '验证码正确');
         } else {
@@ -551,7 +528,7 @@ class RegisterController extends BaseController
 
     //validate captcha
     protected function captchaEnabledValidator($authSettings,$registration,$request){
-         if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1)){                
+         if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1) && !isset($registration['mobile'])){                
             $captchaCodePostedByUser = strtolower($registration['captcha_num']);
             $captchaCode = $request->getSession()->get('captcha_code');                   
             if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
@@ -569,10 +546,9 @@ class RegisterController extends BaseController
     }
 
     protected function smsCodeValidator($authSettings,$registration,$request){
-        if ( isset($authSettings['registerSort'])
-            &&in_array('mobile', $authSettings['registerSort'])
-            &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
-            &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')){
+        if (($authSettings['register_mode'] == 'mobile' or $authSettings['register_mode'] == 'email_or_mobile')
+            &&isset($registration['mobile']) && !empty($registration['mobile'])
+            &&($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')){
           return true;
         }
     }

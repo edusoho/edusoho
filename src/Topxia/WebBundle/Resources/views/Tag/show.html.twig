@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}标签{% if tag %}:{{ tag.name }}{% endif %} - {{ parent() }}{% endblock %}
-
+{% block keywords %}{% if tag %}{{ tag.name }}{% endif %},{{ setting('site.seo_keywords') }}{% endblock %}
 {% block content %}
 
 <div class="es-section">

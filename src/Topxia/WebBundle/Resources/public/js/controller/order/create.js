@@ -185,7 +185,7 @@ define(function(require, exports, module) {
 			$('[role="coupon-code-input"]').focus();
 			$('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
-			$('[role="code-notify"]').show();
+			// $('[role="code-notify"]').show();
 			$(this).hide();
 		})
 
@@ -220,10 +220,11 @@ define(function(require, exports, module) {
 			data.amount = totalPrice;
 			
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
+				$('[role="code-notify"]').css("display","inline-block");
 				if(data.useable == "no") {
-					$('[role="code-notify"]').css("color","red").text(data.message);
+					$('[role="code-notify"]').addClass("failure").text(data.message);
 				} else if(data.useable == "yes"){
-					$('[role="code-notify"]').css("color","green").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
+					$('[role="code-notify"]').removeClass("failure").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 					$('[role="coupon-code-verified"]').val(couponCode.val());
 				}

@@ -1,3 +1,35 @@
+.media-list {
+  .media {
+    border-bottom: 1px solid @gray-lighter;
+    padding-bottom: 15px;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  .media-body .bullet {
+    padding: 0 3px;
+    font-size: 75%;
+    color: #ccc;
+    line-height: 1.4;
+  }
+  .empty-item {
+    text-align: center;
+    color: #999;
+  }
+}
+
+// .media-left {
+//   padding-left: 5px;
+// }
+
+// 即将弃用
+.media .media-object-small img {
+  width: 48px;
+  height: 48px;
+  border-radius: 3px;
+}
+
+
 // 默认
 .media-default {
   .media-body {
@@ -139,9 +171,9 @@
       margin-left: 5px;
     }
   }
-  p {
-    padding-right: 30px;
-  }
+  // p {
+  //   padding-right: 30px;
+  // }
   .comment-sns {
     i {
       margin-right: 5px;
@@ -208,18 +240,19 @@
   &:first-child {
     margin-top: 15px;
   }
-  .media-left {
-    margin-left: 10px;
-  }
   .title {
     height: 20px;
     overflow: hidden;
-    margin-bottom: 10px;
+    margin: 5px 0;
   }
   .metas {
-    color: @gray;
+    color: @gray-medium;
+    span {
+      margin-right: 10px;
+    }
     i {
       margin-right: 5px;
+      font-size: 14px;
     }
   }
 }
@@ -255,7 +288,8 @@
   .date {
     position: absolute;
     right: 0px;
-    top: 15px;
+    top: 9px;
+    font-size: 16px;
     color: @gray-light;
   }
 }
