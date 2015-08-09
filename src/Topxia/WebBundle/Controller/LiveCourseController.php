@@ -211,7 +211,7 @@ class LiveCourseController extends BaseController
         $result = $client->entryLive($params);
 
         if (empty($result) || isset($result['error'])) {
-            return $this->createMessageResponse('info', '进入直播教室失败，请重试！');
+            return $this->createMessageResponse('info', $result['errorMsg']);
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
