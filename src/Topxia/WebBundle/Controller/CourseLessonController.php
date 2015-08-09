@@ -8,6 +8,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -376,6 +377,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url = $this->generateUrl('course_manage_files', array('id' => $courseId));
@@ -391,12 +393,16 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
+        $api = CloudAPIFactory::create();
+        $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
 
-        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
+        if (empty($result['images'])) {
+            return $this->createJsonResponse(array(
+                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。'),
+            ));
+        }
 
-        return $this->createJsonResponse($result);
+        return $this->createJsonResponse($result['images']);
     }
 
     public function documentAction(Request $request, $courseId, $lessonId)
@@ -435,16 +441,19 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client = $factory->createClient();
+        $api = CloudAPIFactory::create();
+        $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
 
-        $metas2 = $file['metas2'];
-        $url = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-        $result['pdfUri'] = $url['url'];
-        $url = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-        $result['swfUri'] = $url['url'];
+        if (empty($result['pdf']) or empty($result['swf'])) {
+            return $this->createJsonResponse(array(
+                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。'),
+            ));
+        }
 
-        return $this->createJsonResponse($result);
+        return $this->createJsonResponse(array(
+            'pdfUri' => $result['pdf'],
+            'swfUri' => $result['swf'],
+        ));
     }
 
     public function flashAction(Request $request, $courseId, $lessonId)

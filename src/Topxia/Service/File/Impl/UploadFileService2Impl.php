@@ -50,6 +50,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $file['hashType'] = $params['hashType'];
         $file['hashValue'] = $params['hashValue'];
         $file['processParams'] = empty($params['processParams']) ? array() : $params['processParams'];
+        if (!empty($file['processParams'])) {
+            $file['processParams']['callback'] = $params['processCallback'];
+        }
+        $file['uploadCallback'] = $params['uploadCallback'];
 
         $params = $implementor->initUpload($file);
 
@@ -77,34 +81,24 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
             $file = $this->getUploadFileDao()->getFileByGlobalId($params['globalId']);
 
-            $qulities = array('sd', 'hd', 'shd');
-
-            $metas = array();
-
-            // UploadFileService2
-            // {"convertor":"HLSEncryptedVideo","segtime":10,"videoQuality":"low","audioQuality":"low"}
-
-            foreach ($params['data']['m3u8s'] as $index => $key) {
-                $metas[$qulities[$index]] = array(
-                    'type' => $qulities[$index],
-                    'cmd' => array('hlsKey' => '1234567890123456'),
-                    'key' => $key,
-                );
-            }
-
-            $this->getUploadFileDao()->updateFile($file['id'], array(
-                'metas2' => json_encode($metas),
+            $fields = array(
                 'convertStatus' => 'success',
-                'convertParams' => json_encode(array(
-                    'convertor' => 'HLSEncryptedVideo',
-                    'videoQuality' => 'low',
-                    'audioQuality' => 'low',
-                ))
-            ));
+            );
+
+            $this->getUploadFileDao()->updateFile($file['id'], $fields);
+
+
         } catch (\Exception $e) {
             $msg = $e->getMessage();
 
             file_put_contents('/tmp/error', $msg);
+        }
+    }
+
+    public function deleteFiles(array $ids)
+    {
+        foreach ($ids as $id) {
+            $this->getUploadFileDao()->deleteFile($id);
         }
     }
 

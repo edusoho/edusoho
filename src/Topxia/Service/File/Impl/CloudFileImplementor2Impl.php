@@ -44,14 +44,15 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     {
         $file = array();
         $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
+        $file['ext'] = empty( $pos = strrpos($file['filename'], '.')) ? '' : substr($file['filename'], $pos+1);
+
         $file['size'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
         $file['status'] = 'uploading';
         $file['targetId'] = $params['targetId'];
         $file['targetType'] = $params['targetType'];
         $file['storage'] = 'cloud';
-        $file['type'] = 'video';
 
-        // $file['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
+        $file['type'] = FileToolkit::getFileTypeByExtension($file['ext']);
 
         $file['updatedUserId'] = empty($params['userId']) ? 0 : $params['userId'];
         $file['updatedTime'] = time();
@@ -75,7 +76,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'fileSize' => $file['size'],
             'hashType' => $file['hashType'],
             'hashValue' => $file['hashValue'],
-            'callbackUrl' => '',
+            'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
             'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
             'extras' => empty($file['extras']) ? '' : $file['extras'],
         );

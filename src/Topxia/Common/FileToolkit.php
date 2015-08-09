@@ -872,13 +872,13 @@ class FileToolkit
     {   
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov'))) {
+        if (in_array($extension, array('mp4', 'avi', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';
-        } elseif (in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))) {
+        } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
             return 'image';
-        } elseif (in_array($extension, array('txt', 'doc', 'docx', 'xls', 'xlsx', 'pdf'))) {
+        } elseif (in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt', 'txt'))) {
             return 'document';
         } elseif (in_array($extension, array('ppt', 'pptx'))) {
             return 'ppt';

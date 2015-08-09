@@ -135,10 +135,18 @@ define(function(require, exports, module) {
                 mov: 'HLSEncryptedVideo',
                 rmvb: 'HLSEncryptedVideo',
                 mkv: 'HLSEncryptedVideo',
+                doc: 'document',
+                docx: 'document',
+                pdf: 'document',
+                ppt: 'ppt',
+                pptx: 'ppt'
             };
+            file
 
             var paramsDefault = {
-                'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'}
+                'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'},
+                'document' : {},
+                'ppt' : {}
             }
 
             var params = {};

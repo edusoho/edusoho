@@ -5,56 +5,14 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
-
     var VideoQualitySwitcher = require('../video-quality-switcher');
-
-    var BatchUploader = require('../../uploader/batch-uploader');
 
     var VideoChooser = BaseChooser.extend({
 
         qualitySwitcher:null,
 
     	attrs: {
-    		uploaderSettings: {
-                file_types : "*.mp4;*.avi;*.flv",
-                file_size_limit : "1000 MB",
-                file_types_description: "视频文件"
-    		},
-            preUpload: function(uploader, file) {
-                var data = {};
-                if (this.qualitySwitcher) {
-                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    if (this.element.data('hlsEncrypted')) {
-                        data.convertor = 'HLSEncryptedVideo';
-                    } else {
-                        data.convertor = 'HLSVideo';
-                    }
-                    data.lazyConvert = 1;
-                }
-                var self = this;
-                $.ajax({
-                    url: this.element.data('paramsUrl'),
-                    async: false,
-                    dataType: 'json',
-                    data: data, 
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        var paramsKey = {};
-                        paramsKey.data=data;
-                        paramsKey.targetType=self.element.data('targetType');
-                        paramsKey.targetId=self.element.data('targetId');
 
-                        response.postParams.paramsKey = JSON.stringify(paramsKey);
-
-                        uploader.setUploadURL(response.url);
-                        uploader.setPostParams(response.postParams);
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
-                    }
-                });
-            }
     	},
 
     	events: {
@@ -72,7 +30,6 @@ define(function(require, exports, module) {
 
                 this.qualitySwitcher = switcher;
             }
-
     	},
 
     	onImport: function(e) {
@@ -110,38 +67,7 @@ define(function(require, exports, module) {
             });
 
             return;
-    	},
-
-        _initUploadPane: function() {
-            console.log('init video pane');
-            var self = this;
-            var $el = $('#batch-uploader');
-            var uploader = new BatchUploader({
-                element: $el,
-                initUrl: $el.data('initUrl'),
-                finishUrl: $el.data('finishUrl')
-            });
-
-            uploader.on('file.uploaded', function(file, data){
-                console.log('file.uploaded', file, data);
-                var item = {
-                    id: file.outerId,
-                    status: 'waiting',
-                    type: 'video',
-                    source: 'self',
-                    name: file.name,
-                    length: parseInt(data.length)
-                };
-
-                self.trigger("change", item);
-            });
-
-            uploader.on('file.queued', function(file) {
-                this.uploader.upload();
-            });
-
-
-        }
+    	}
 
     });
 

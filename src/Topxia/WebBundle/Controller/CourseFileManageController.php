@@ -172,7 +172,7 @@ class CourseFileManageController extends BaseController
 
         $ids = $request->request->get('ids', array());
 
-        $this->getUploadFileService()->deleteFiles($ids);
+        $this->getUploadFileService2()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
     }
@@ -185,6 +185,11 @@ class CourseFileManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getUploadFileService2()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getSettingService()

@@ -1,8 +1,9 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
-    var UploadPanel = require('edusoho.uploadpanel');
     var Notify = require('common/bootstrap-notify');
+
+    var BatchUploader = require('../../uploader/batch-uploader');
     
     if ($("div .file-browser-list-container").length > 0) {
         var MaterialFileBrowser = require('../file/file-browser-material-lib');
@@ -12,12 +13,10 @@ define(function(require, exports, module) {
 	
 
     var BaseChooser = Widget.extend({
+        uploader: null,
+
         attrs: {
             choosed: null,
-            uploader: null,
-            uploaderSettings: {},
-            preUpload: null,
-            uploadPanel: null
         },
 
         events: {
@@ -27,11 +26,9 @@ define(function(require, exports, module) {
         setup: function() {
             this._chooses = {};
             this.on('change', this.onChanged);
-            this.on('preUpload', this.get("preUpload"));
 
             this._initTabs();
             this.FileBrowser();
-            this._initUploadPane();
 
             var choosed = this.get('choosed');
             if (choosed) {
@@ -47,7 +44,9 @@ define(function(require, exports, module) {
         },
 
         show: function() {
+            console.log('show chooser');
             this.element.show();
+            this._initUploader();
             return this;
         },
 
@@ -96,7 +95,6 @@ define(function(require, exports, module) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
                     if (self.get('uploaderProgressbar')) {
                         self.get('uploaderProgressbar').reset().hide();
-
                     }
                     
                 }
@@ -135,25 +133,46 @@ define(function(require, exports, module) {
             });
         },
 
-        _initUploadPane: function() {
-            var self = this;
-            var uploadPanel = new UploadPanel({
-                element: this.element,
-                uploaderSettings: this.get("uploaderSettings")
-            });
-            uploadPanel.on("preUpload", function(uploader, file){
-                self.trigger("preUpload", uploader, file);
-            });
-            uploadPanel.on("change", function(item){
-                self.trigger("change",item);
-            });
-            this.set("uploadPanel", uploadPanel);
-            this.set("uploaderProgressbar", uploadPanel.get("uploaderProgressbar"));
-        },
-        destroy: function(){
-            if (this.get("uploadPanel")) {
-                this.get("uploadPanel").destroy();
+        _initUploader: function() {
+            if (this.uploader) {
+                return ;
             }
+
+            console.log('init pane');
+            var self = this;
+            var $el = this.element.find('.balloon-uploader');
+            var uploader = new BatchUploader({
+                element: $el,
+                initUrl: $el.data('initUrl'),
+                finishUrl: $el.data('finishUrl')
+            });
+
+            uploader.on('file.uploaded', function(file, data){
+                console.log('file.uploaded', file, data);
+                var item = {
+                    id: file.outerId,
+                    status: 'waiting',
+                    source: 'self',
+                    name: file.name,
+                    length: parseInt(data.length)
+                };
+
+                self.trigger("change", item);
+            });
+
+            uploader.on('file.queued', function(file) {
+                this.uploader.upload();
+            });
+
+
+            this.uploader = uploader;
+        },
+
+        destroy: function() {
+            if (!this.uploader) {
+                return ;
+            }
+            this.uploader.destroy();
         }
 
     });

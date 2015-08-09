@@ -175,8 +175,6 @@
 <div id="media-choosers">
 
   <div class="file-chooser" id="video-chooser" style="display:none;"
-    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
-    data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
     data-targetType="{{targetType}}"
     data-targetId="{{targetId}}"
   >
@@ -250,7 +248,7 @@
   {% endif %}
 
   {% set token = uploader_token(targetType, targetId, 'private') %}
-  <div class="balloon-uploader" id="batch-uploader"
+  <div class="balloon-uploader"
     data-init-url="{{ path('uploader_init', {token:token}) }}"
     data-finish-url="{{ path('uploader_finished', {token:token}) }}"
     data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
@@ -325,7 +323,6 @@
 
 
   <div class="file-chooser" id="audio-chooser" style="display:none;"
-      data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
       data-targetType="{{targetType}}"
       data-targetId="{{targetId}}"
   >
@@ -354,26 +351,28 @@
         <div class="tab-pane active" id="audio-chooser-upload-pane">
 
           <div class="file-chooser-uploader">
-            <div class="file-chooser-uploader-label">选择你要上传的音频文件：</div>
-            <div class="file-chooser-uploader-control">
-              <span id="audio-choose-uploader-btn" 
-                data-role="uploader-btn"
-                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-progressbar="#audio-chooser-progress"
-                data-storage-type="{{storageSetting.upload_mode}}"
-                data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'audio'})}}"
-                >
-                <a class="uploadBtn btn btn-default btn-lg">
-                  上传
-                </a>
-                <div style="display:none">
-                  <input data-role="fileSelected" class="filePrew" type="file" />
+            {% set token = uploader_token(targetType, targetId, 'private') %}
+            <div class="balloon-uploader"
+              data-init-url="{{ path('uploader_init', {token:token}) }}"
+              data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-accept="{{ uploader_accept(targetType, 'audio')|json_encode }}"
+              data-process="{{ uploader_process(targetType) }}"
+            >
+              <div class="balloon-uploader-heading">上传文件</div>
+              <div class="balloon-uploader-body">
+                <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
+                <div class="balloon-filelist">
+                  <div class="balloon-filelist-heading">
+                    <div class="file-name">文件名</div>
+                    <div class="file-size">大小</div>
+                    <div class="file-status">状态</div>
+                  </div>
+                  <ul>
+                  </ul>
                 </div>
-              </span>
-            </div>
-            <div class="progress" id="audio-chooser-progress" style="display:none;">
-              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+              <div class="balloon-uploader-footer">
+                <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
               </div>
             </div>
 
@@ -452,24 +451,28 @@
         <div class="tab-pane active" id="ppt-chooser-upload-pane">
 
           <div class="file-chooser-uploader">
-            <div class="file-chooser-uploader-label">选择你要上传的PPT文件：</div>
-            <div class="file-chooser-uploader-control">
-              <span id="ppt-choose-uploader-btn" 
-                data-role="uploader-btn"
-                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId,lazyConvert:1}) }}{% endif %}" 
-                data-storage-type="{{storageSetting.upload_mode}}"
-                data-progressbar="#ppt-chooser-progress">
-                <a class="uploadBtn btn btn-default btn-lg">
-                  上传
-                </a>
-                <div style="display:none">
-                  <input data-role="fileSelected" class="filePrew" type="file" />
+            {% set token = uploader_token(targetType, targetId, 'private') %}
+            <div class="balloon-uploader"
+              data-init-url="{{ path('uploader_init', {token:token}) }}"
+              data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-accept="{{ uploader_accept(targetType, 'ppt')|json_encode }}"
+              data-process="{{ uploader_process(targetType) }}"
+            >
+              <div class="balloon-uploader-heading">上传文件</div>
+              <div class="balloon-uploader-body">
+                <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
+                <div class="balloon-filelist">
+                  <div class="balloon-filelist-heading">
+                    <div class="file-name">文件名</div>
+                    <div class="file-size">大小</div>
+                    <div class="file-status">状态</div>
+                  </div>
+                  <ul>
+                  </ul>
                 </div>
-              </span>
-            </div>
-            <div class="progress" id="ppt-chooser-progress" style="display:none;">
-              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+              <div class="balloon-uploader-footer">
+                <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
               </div>
             </div>
 
@@ -536,24 +539,29 @@
         <div class="tab-pane active" id="document-chooser-upload-pane">
 
           <div class="file-chooser-uploader">
-            <div class="file-chooser-uploader-label">选择你要上传的文档：</div>
-            <div class="file-chooser-uploader-control">
-              <span id="document-choose-uploader-btn" 
-                data-role="uploader-btn"
-                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId,lazyConvert:1}) }}{% endif %}" 
-                data-storage-type="{{storageSetting.upload_mode}}"
-                data-progressbar="#document-chooser-progress">
-                <a class="uploadBtn btn btn-default btn-lg">
-                  上传
-                </a>
-                <div style="display:none">
-                  <input data-role="fileSelected" class="filePrew" type="file" />
+
+            {% set token = uploader_token(targetType, targetId, 'private') %}
+            <div class="balloon-uploader"
+              data-init-url="{{ path('uploader_init', {token:token}) }}"
+              data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-accept="{{ uploader_accept(targetType, 'document')|json_encode }}"
+              data-process="{{ uploader_process(targetType) }}"
+            >
+              <div class="balloon-uploader-heading">上传文件</div>
+              <div class="balloon-uploader-body">
+                <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
+                <div class="balloon-filelist">
+                  <div class="balloon-filelist-heading">
+                    <div class="file-name">文件名</div>
+                    <div class="file-size">大小</div>
+                    <div class="file-status">状态</div>
+                  </div>
+                  <ul>
+                  </ul>
                 </div>
-              </span>
-            </div>
-            <div class="progress" id="document-chooser-progress" style="display:none;">
-              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+              <div class="balloon-uploader-footer">
+                <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
               </div>
             </div>
 
@@ -620,26 +628,31 @@
         <div class="tab-pane active" id="flash-chooser-upload-pane">
 
           <div class="file-chooser-uploader">
-            <div class="file-chooser-uploader-label">选择你要上传的Flash：</div>
-            <div class="file-chooser-uploader-control">
-              <span id="flash-choose-uploader-btn" 
-                data-role="uploader-btn"
-                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
-                data-storage-type="{{storageSetting.upload_mode}}"
-                data-progressbar="#flash-chooser-progress">
-                <a class="uploadBtn btn btn-default btn-lg">
-                  上传
-                </a>
-                <div style="display:none">
-                  <input data-role="fileSelected" class="filePrew" type="file" />
+            {% set token = uploader_token(targetType, targetId, 'private') %}
+            <div class="balloon-uploader"
+              data-init-url="{{ path('uploader_init', {token:token}) }}"
+              data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-accept="{{ uploader_accept(targetType, 'flash')|json_encode }}"
+              data-process="{{ uploader_process(targetType) }}"
+            >
+              <div class="balloon-uploader-heading">上传文件</div>
+              <div class="balloon-uploader-body">
+                <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
+                <div class="balloon-filelist">
+                  <div class="balloon-filelist-heading">
+                    <div class="file-name">文件名</div>
+                    <div class="file-size">大小</div>
+                    <div class="file-status">状态</div>
+                  </div>
+                  <ul>
+                  </ul>
                 </div>
-              </span>
-            </div>
-            <div class="progress" id="flash-chooser-progress" style="display:none;">
-              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+              <div class="balloon-uploader-footer">
+                <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
               </div>
             </div>
+
 
             <div class="alert alert-info">
               <ul>
