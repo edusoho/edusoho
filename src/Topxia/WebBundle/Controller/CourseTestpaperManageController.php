@@ -242,6 +242,10 @@ class CourseTestpaperManageController extends BaseController
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
 
+            if (isset($data['passedScore'])) {
+                $this->getTestpaperService()->updateTestpaper($testpaperId, array('passedScore'=>$data['passedScore']));
+            }
+
             $this->setFlashMessage('success', '试卷题目保存成功！');
             return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
         }
@@ -252,14 +256,21 @@ class CourseTestpaperManageController extends BaseController
         $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
 
         $subItems = array();
+        $hasEssay = false;
+        $scoreTotal = 0;
         foreach ($items as $key => $item) {
+            if ($item['questionType'] == 'essay') {
+                $hasEssay = true;
+            }
+
+            $scoreTotal = $scoreTotal+$item['score'];
             if ($item['parentId'] > 0) {
                 $subItems[$item['parentId']][] = $item;
                 unset($items[$key]);
             }
         }
 
-
+        $passedScoreDefault = ceil($scoreTotal*0.6);
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items.html.twig', array(
             'course' => $course,
             'testpaper' => $testpaper,
@@ -267,6 +278,8 @@ class CourseTestpaperManageController extends BaseController
             'subItems' => $subItems,
             'questions' => $questions,
             'targets' => $targets,
+            'hasEssay' => $hasEssay,
+            'passedScoreDefault' => $passedScoreDefault
         ));
     }
 
