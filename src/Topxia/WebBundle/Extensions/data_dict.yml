@@ -305,3 +305,9 @@ userInfoFields:
     job: 职业
     weibo: 微博
     weixin: 微信
+
+passedStatus: 
+    excellent: 优秀
+    good: 良好
+    passed: 合格
+    unpassed: 不合格
