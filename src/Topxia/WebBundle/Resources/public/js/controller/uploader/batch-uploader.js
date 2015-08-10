@@ -104,6 +104,11 @@ define(function(require, exports, module) {
 
             });
 
+            uploader.on('beforeFileQueued', function(file) {
+                console.log('beforeFileQueued');
+                file.uploaderWidget = self;
+            });
+
             uploader.on('uploadComplete', function(file) {
                 console.log('upload complete');
             });
@@ -170,7 +175,6 @@ define(function(require, exports, module) {
 
             hookRegisted = true;
 
-            var self = this;
             WebUploader.Uploader.register({
                 'before-send-file': 'preupload',
                 'before-send' : 'checkchunk',
@@ -179,27 +183,27 @@ define(function(require, exports, module) {
                 preupload: function(file) {
                     var deferred = WebUploader.Deferred();
 
-                    self._makeFileHash(file).done(function(hash) {
+                    file.uploaderWidget._makeFileHash(file).done(function(hash) {
                         file.hash = hash;
                         var params = {
                             fileName: file.name,
                             fileSize: file.size,
                             hashType: 'chunk_md5',
                             hashValue: hash,
-                            processParams: self._getProcessParams(file)
+                            processParams: file.uploaderWidget._getProcessParams(file)
                         }
 
                         $.support.cors = true;
 
-                        $.post(self.get('initUrl'), params, function(response) {
+                        $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
                             console.log('init',response);
                             file.gid = response.globalId;
                             file.globalId = response.globalId;
                             file.outerId = response.outerId;
 
-                            self.set('uploadToken', response.postData.token);
-                            self.set('uploadUrl', response.uploadUrl);
-                            self.uploader.option('server', response.uploadUrl + '/chunks');
+                            file.uploaderWidget.set('uploadToken', response.postData.token);
+                            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
+                            file.uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
 
                             var startUrl = response.uploadUrl + '/chunks/start';
                             var postData = {file_gid:file.globalId, file_size: file.size, file_name:file.name};
@@ -242,21 +246,20 @@ define(function(require, exports, module) {
                     store.remove('file_' + file.hash);
                     var deferred = WebUploader.Deferred();
 
-                    var xhr = $.ajax(self.get('uploadUrl') + '/chunks/finish', {
+                    var xhr = $.ajax(file.uploaderWidget.get('uploadUrl') + '/chunks/finish', {
                         type: 'POST',
                         data: {file_gid:file.gid},
                         dataType: 'json',
                         headers: {
-                            'Upload-Token': self.get('uploadToken')
+                            'Upload-Token': file.uploaderWidget.get('uploadToken')
                         }
                     });
 
                     xhr.done(function( data, textStatus, xhr ) {
                         console.log('finish command:', data);
-                        $.post(self.get('finishUrl'), data, function() {
+                        $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                             deferred.resolve();
-                            console.log('self', self);
-                            self.trigger('file.uploaded', file, data);
+                            file.uploaderWidget.trigger('file.uploaded', file, data);
                         });
                     });
 
