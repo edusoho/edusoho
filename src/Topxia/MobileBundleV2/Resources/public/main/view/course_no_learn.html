@@ -111,7 +111,7 @@
         </ul>
     </div>
 </div>
-<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="CourseToolController">
+<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-if="!course.source" ng-controller="CourseToolController">
     <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
     </button>
     <button ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="ui-btn btn-outline btn-col-15 iconfont icon-heart">

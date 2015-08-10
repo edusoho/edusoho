@@ -99,6 +99,7 @@ function MyInfoController($scope, UserService, $stateParams)
 	};
 
 	$scope.uploadChange = function(file) {
+		console.log(file.value);
 		if (file && file.value) {
 			self.uploadAvatar(file);
 		}

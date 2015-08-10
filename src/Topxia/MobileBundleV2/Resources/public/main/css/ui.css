@@ -17,6 +17,10 @@ a {
   background: #f0f0f0;
 }
 
+.bg-white {
+  background: #fff;
+}
+
 .rootView {
   position: relative;
   top: 0;
@@ -818,7 +822,9 @@ a {
 /* sign */
 
 .sign {
-    margin-bottom: 0;
+  height: 100%;
+  margin-bottom: 0;
+  background: #fff;
 }
 
 .sign .margin-t {
