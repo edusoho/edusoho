@@ -310,43 +310,45 @@ define(function(require, exports, module) {
             choosed: choosedMedia
         });
 
+        var fillTitle = function(name) {
+            var $title = $form.find('[name=title]');
+            if ($title.val().length > 0) {
+                return ;
+            }
+
+            $title.val(name.substring(0, name.lastIndexOf('.')));
+        }; 
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
             updateDuration(item.length);
-            var $title = $form.find('[id="lesson-title-field"]');
-            if($title.val()==""){
-                var ext = "." + item.name.replace(/.+\./, "");
-                var filenameNoExt = item.name.replace(ext, "");
-                $title.val(filenameNoExt);
-            }
+            fillTitle(item.name);
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
             updateDuration(item.length);
-            var $title = $form.find('[id="lesson-title-field"]');
-            if($title.val()==""){
-                var ext = "." + item.name.replace(/.+\./, "");
-                var filenameNoExt = item.name.replace(ext, "");
-                $title.val(filenameNoExt);
-            }
+            fillTitle(item.name);
         });
 
         pptChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         documentChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         flashChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         $('.modal').unbind("hide.bs.modal");
