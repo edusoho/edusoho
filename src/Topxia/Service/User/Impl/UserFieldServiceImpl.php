@@ -54,7 +54,27 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
     public function getAllFieldsOrderBySeqAndEnabled()
     {
-        return $this->getUserFieldDao()->getAllFieldsOrderBySeqAndEnabled();
+        $fields = $this->getUserFieldDao()->getAllFieldsOrderBySeqAndEnabled();
+
+        for($i=0;$i<count($fields);$i++){
+            if(strstr($fields[$i]['fieldName'], "textField")){
+                $fields[$i]['type']="text";
+            }
+            if(strstr($fields[$i]['fieldName'], "varcharField")){
+                $fields[$i]['type']="varchar";
+            }
+            if(strstr($fields[$i]['fieldName'], "intField")){
+                $fields[$i]['type']="int";
+            }
+            if(strstr($fields[$i]['fieldName'], "floatField")){
+                $fields[$i]['type']="float";
+            }
+            if(strstr($fields[$i]['fieldName'], "dateField")){
+                $fields[$i]['type']="date";
+            }
+        }
+
+        return $fields;
     }
 
     public function updateField($id,$fields)

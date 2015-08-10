@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\Common\SmsToolkit;
+use Topxia\Common\ArrayToolkit;
 
 class OrderController extends BaseController
 {
@@ -171,6 +172,24 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', $e->getMessage());
         }
 
+    }
+
+    public function detailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+
+        $user = $this->getUserService()->getUser($order['userId']);
+
+        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
+        
+        return $this->render('TopxiaWebBundle:Order:detail-modal.html.twig', array(
+            'order'=>$order,
+            'user'=>$user,
+            'orderLogs'=>$orderLogs,
+            'users' => $users
+        ));
     }
 
     public function couponCheckAction (Request $request, $type, $id)
