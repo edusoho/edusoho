@@ -29,4 +29,6 @@ interface TestpaperItemDao
     public function deleteItemByIds(array $ids);
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
+
+    public function getItemsCountByTestIdAndType(array $conditions, $groupBy='');
 }

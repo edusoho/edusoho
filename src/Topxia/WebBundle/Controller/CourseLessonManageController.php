@@ -327,12 +327,12 @@ class CourseLessonManageController extends BaseController
 		}
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
-									   'features' => $features,
-									   'parentId' =>$parentId
+			'features' => $features,
+			'parentId' =>$parentId,
 		));
 	}
 
