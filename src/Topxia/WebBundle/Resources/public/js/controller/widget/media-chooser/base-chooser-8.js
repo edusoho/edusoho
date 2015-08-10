@@ -120,7 +120,14 @@ define(function(require, exports, module) {
                     }).show();
 
                     materialBrowser.on('select', function(file) {
-                        self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                        var media = {
+                            id: file.id,
+                            status: file.convertStatus,
+                            source: 'self',
+                            name: file.filename,
+                            length: file.length
+                        };
+                        self.trigger('change', media);
                     });
             }
             
@@ -129,7 +136,14 @@ define(function(require, exports, module) {
             }).show();
 
             courseBrowser.on('select', function(file) {
-                self.trigger('change', self.get("uploadPanel")._convertFileToMedia(file));
+                var media = {
+                    id: file.id,
+                    status: file.convertStatus,
+                    source: 'self',
+                    name: file.filename,
+                    length: file.length
+                };
+                self.trigger('change', media);
             });
         },
 

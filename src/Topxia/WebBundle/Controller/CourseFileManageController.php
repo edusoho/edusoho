@@ -8,6 +8,7 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CourseFileManageController extends BaseController
 {
@@ -107,23 +108,30 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
+
         if($id != $file["targetId"]){
             throw $this->createNotFoundException();
         }
 
-        if ($file['targetType'] == 'courselesson') {
-            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
-        } else if ($file['targetType'] == 'coursematerial' || $file['targetType'] == 'materiallib') {
-            if ($file['storage'] == 'cloud') {
-                $factory = new CloudClientFactory();
-                $client = $factory->createClient();
-                $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-            } else {
-                return $this->createPrivateFileDownloadResponse($request, $file);
-            }
-        }
+        $api = CloudAPIFactory::create();
+        $result = $api->get("/files/{$file['globalId']}/download");
 
-        throw $this->createNotFoundException();
+        header("Location: {$result['url']}");
+        exit();
+
+        // if ($file['targetType'] == 'courselesson') {
+        //     return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
+        // } else if ($file['targetType'] == 'coursematerial' || $file['targetType'] == 'materiallib') {
+        //     if ($file['storage'] == 'cloud') {
+        //         $factory = new CloudClientFactory();
+        //         $client = $factory->createClient();
+        //         $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
+        //     } else {
+        //         return $this->createPrivateFileDownloadResponse($request, $file);
+        //     }
+        // }
+
+        // throw $this->createNotFoundException();
     }
 
     public function convertAction(Request $request, $id, $fileId)
