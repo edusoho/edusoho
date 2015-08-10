@@ -936,6 +936,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 'enabled' => 1
             ), 0, 100);
         }
+        $course["source"] = $this->setCourseTarget($course['id']);
         return array(
             "course" => $this->controller->filterCourse($course),
             "userFavorited" => $userFavorited,
@@ -943,6 +944,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             "vipLevels" => $vipLevels,
             "discount" => $this->getCourseDiscount($course["discountId"])
         );
+    }
+
+    private function setCourseTarget($courseId)
+    {
+        $classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+
+        return empty($classroom) ? null : 'classroom';
     }
     
     private function getCourseDiscount($discountId)
@@ -1451,5 +1459,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getDiscountService() 
     {
         return $this->controller->getService('Discount:Discount.DiscountService');
+    }
+
+    private function getClassroomService() 
+    {
+        return $this->controller->getService('Classroom:Classroom.ClassroomService');
     }
 }
