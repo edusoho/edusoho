@@ -44,7 +44,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     {
         $file = array();
         $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
-        $file['ext'] = empty( $pos = strrpos($file['filename'], '.')) ? '' : substr($file['filename'], $pos+1);
+
+        $pos = strrpos($file['filename'], '.');
+        $file['ext'] = empty( $pos ) ? '' : substr($file['filename'], $pos+1);
 
         $file['size'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
         $file['status'] = 'uploading';
