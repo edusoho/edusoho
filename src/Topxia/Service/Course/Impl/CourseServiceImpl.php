@@ -1115,7 +1115,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'homeworkId' => 0,
-			'exerciseId' => 0
+			'exerciseId' => 0,
 			'suggestHours' => '1.0',
 
 		));
