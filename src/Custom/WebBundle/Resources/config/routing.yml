@@ -53,3 +53,7 @@ my_homework_list:
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
+
+search:
+    pattern:  /search
+    defaults: { _controller: CustomWebBundle:Search:index }
