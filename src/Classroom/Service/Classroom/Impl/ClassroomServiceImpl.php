@@ -380,7 +380,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function getClassroomMember($classroomId, $userId)
     {
         $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
-        return !$member ? array() : MemberSerialize::unserialize($member);
+        return !$member ? null : MemberSerialize::unserialize($member);
     }
 
     public function remarkStudent($classroomId, $userId, $remark)
