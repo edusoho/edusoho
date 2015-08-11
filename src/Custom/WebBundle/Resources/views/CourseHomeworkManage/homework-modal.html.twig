@@ -1,0 +1,144 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{% if homework|default(null) %}编辑{% else %}添加{% endif %}作业 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'lesson' %}
+{% set script_controller = 'customwebbundle/controller/course-manage/homework-modal' %}
+
+{% block main %}
+    <div class="panel panel-default panel-col lesson-manage-panel" id="homework-items-manager">
+        <div class="panel-heading">
+
+            <ol class="breadcrumb">
+                <li><a href="{{ path('course_manage_lesson',{id:course.id}) }}">Custom课时管理</a></li>
+                <li class="active">{% if homework|default(null) %}编辑{% else %}添加{% endif %}作业</li>
+            </ol>
+
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" id="homework-form">
+                <div class="form-group">
+                    <div class="col-md-2 control-label"><label>课时名称</label></div>
+                    <div class="col-md-8 controls" style="margin-top:7px">
+                        {{ lesson.title }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label"><label>作业说明</label></div>
+                    <div class="col-md-8 controls">
+                        <textarea name="description" rows="10" id="homework-about-field"
+                                  class="form-control">{{ homework.description|default('') }}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label"><label>启用作业互评</label></div>
+                    <div class="col-md-7 controls radios">
+                        <input type="radio" id="comment_true" name="comment" required="required" value="1">
+                        <label for="comment_true" class="required">是</label>
+                        <input type="radio" id="comment_false" name="comment" required="required" value="0"
+                               checked="checked">
+                        <label for="comment_false" class="required">否</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        <label for="completeTime">作业完成时间</label>
+                    </div>
+                    <div class="col-md-8 controls" >
+                        <input type="text" id="completeTime" name="completeTime" class="form-control" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        <label for="reviewEndTime">互评结束时间</label>
+                    </div>
+                    <div class="col-md-8 controls" >
+                        <input type="text" id="reviewEndTime" name="reviewEndTime" class="form-control" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label">
+                        <label for="scoreRule">作业成绩占比</label>
+                    </div>
+                    <div class="col-md-8 controls">
+                        <input type="text" id="scoreRule" name="scoreRule" class="form-control" value="">
+                    </div>
+                </div>
+
+                {% if homework|default(null) %}
+                    <div class="col-md-offset-2 col-md-8 controls">
+                        <div class="btn btn-primary confirm-submit" id="save-homework-btn" data-saving-text="正在保存..."
+                             data-url="{{ path('course_manage_lesson_homework_edit',{ courseId:course.id, lessonId:lesson.id,homeworkId:homework.id }) }} "
+                             data-role="homework-edit">确定
+                        </div>
+                    </div>
+                {% endif %}
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+            </form>
+            {% if homework|default(null) is null %}
+                <hr>
+                <div class="clearfix mbm">
+                    <button id="picker_homework_items"
+                            data-url="{{ path('course_manage_homework_item_picker',{courseId:course.id}) }}"
+                            class="btn btn-info btn-sm pull-right" data-role="pick-item" 　><span
+                                class="glyphicon glyphicon-plus"></span> 选择题目
+                    </button>
+                </div>
+
+                <form id="homework-create-form" class="form-horizontal" method="post">
+
+                    <table class="table table-striped table-hover tab-content" id="homework-table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th><input type="checkbox" data-role="batch-select"></th>
+                            <th>题号</th>
+                            <th width="40%">题干</th>
+                            <th>类型</th>
+                            <th>难度</th>
+                            <th width="25%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="homework-table-tbody">
+                        {% if questions|default(null) %}
+                            {% for key,homeworkItem in homeworkItems %}
+                                {% set questionId = homeworkItem.questionId %}
+                                {% set question = questions[questionId] %}
+                                {% include 'TopxiaWebBundle:CourseHomeworkManage:homework-item-tr.html.twig' %}
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                    <div>
+                        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
+                        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"
+                                data-name="题目">删除
+                        </button>
+                    </div>
+                    <div id="homework_items_help" class="help-block" style="display:none;">请选择题目</div>
+
+                    <div class="btn btn-primary pull-right mlm confirm-submit" id="save-homework-btn"
+                         data-saving-text="正在保存..."
+                         data-url="{% if homework|default(null) %}{{ path('course_manage_lesson_homework_edit',{ courseId:course.id, lessonId:lesson.id,homeworkId:homework.id }) }} {% else %}{{ path('course_manage_lesson_homework_create',{ courseId:course.id, lessonId:lesson.id }) }} {% endif %}">
+                        保存
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                    <br>
+
+                    <p class="help-block">提示：作业保存以后将会添加到课时中去，作业一旦保存将不能修改。</p>
+                </form>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+
+{% endblock %}

@@ -7,6 +7,7 @@ namespace Custom\Service\Homework;
 **/
 interface HomeworkService
 {
+	public function createCustomHomework($courseId,$lessonId,$fields);
 
 	/**
 	 * 随机获取一份未曾互评的作业答卷.
