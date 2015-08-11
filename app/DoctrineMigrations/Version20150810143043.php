@@ -16,7 +16,7 @@ class Version20150810143043 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->addSql(
-            "CREATE TABLE IF NOT EXISTS `homework_score` (
+            "CREATE TABLE IF NOT EXISTS `homework_review` (
                 `id` int(10) unsigned NOT NULL auto_increment ,
                 `userId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '评分用户id',
                 `homeworkId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业id',
@@ -28,10 +28,10 @@ class Version20150810143043 extends AbstractMigration
             ) comment='作业评分' ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;") ; 
 
         $this->addSql(
-            "CREATE TABLE IF NOT EXISTS `homework_item_score` (
+            "CREATE TABLE IF NOT EXISTS `homework_review_item` (
                 `id` int(10) unsigned NOT NULL auto_increment ,
                 `homeworkItemResultId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '答题id',
-                `homeworkScoreId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业id',
+                `homeworkReviewId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业评分id',
                 `score` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '分数',
                 `review` varchar(64) COMMENT '点评' ,
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0',       
@@ -46,8 +46,8 @@ class Version20150810143043 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-       $schema->dropTable('homework_score');
-       $schema->dropTable('homework_item_score');
+       $schema->dropTable('homework_review');
+       $schema->dropTable('homework_review_item');
        $this->addSql("ALTER TABLE `homework_result` DROP `studentScore`;");
        $this->addSql("ALTER TABLE `homework_result` DROP `teacherScore`;");
     }

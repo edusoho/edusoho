@@ -40,7 +40,7 @@ class CourseController extends CourseBaseController
 			} else {
 				$capacity = array();
 			}
-
+			
 			if (empty($courseSetting['live_course_enabled'])) {
 				return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
 			}
@@ -65,48 +65,49 @@ class CourseController extends CourseBaseController
 			'type'=>$type
 		));
 	}
-    public function showAction(Request $request, $id)
-    {
-        list ($course, $member) = $this->buildCourseLayoutData($request, $id);
-        if(empty($member)) {
-            $user = $this->getCurrentUser();
-            $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
-            if(isset($member["id"])) {
-                $course['studentNum'] ++ ;
-            }
-        }
+	
+	public function showAction(Request $request, $id)
+	{
+		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
+		if(empty($member)) {
+			$user = $this->getCurrentUser();
+			$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
+			if(isset($member["id"])) {
+				$course['studentNum'] ++ ;
+			}
+		}
 
-        $this->getCourseService()->hitCourse($id);
-            $items = $this->getCourseService()->getCourseItems($course['id']);
+		$this->getCourseService()->hitCourse($id);
+		$items = $this->getCourseService()->getCourseItems($course['id']);
 
-        return $this->render("CustomWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course' => $course,
-            'member' => $member,
-            'items' => $items,
-        ));
+		return $this->render("CustomWebBundle:Course:{$course['type']}-show.html.twig", array(
+			'course' => $course,
+			'member' => $member,
+			'items' => $items,
+		));
 
-    }
+	}
 
-    public function nextRoundAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
+		public function nextRoundAction(Request $request, $id)
+		{
+			$course = $this->getCourseService()->getCourse($id);
 
-        return $this->render('CustomWebBundle:Course:next-round.html.twig', array(
-            'course' => $course,
-        ));
-    }
+			return $this->render('CustomWebBundle:Course:next-round.html.twig', array(
+					'course' => $course,
+			));
+		}
 
-    public function roundingAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
-        $conditions = $request->request->all();
-        $course['startTime'] = strtotime($conditions['startTime']);
-        $course['endTime'] = strtotime($conditions['endTime']);
+		public function roundingAction(Request $request, $id)
+		{
+			$course = $this->getCourseService()->getCourse($id);
+			$conditions = $request->request->all();
+			$course['startTime'] = strtotime($conditions['startTime']);
+			$course['endTime'] = strtotime($conditions['endTime']);
 
-        $this->getNextRoundService()->rounding($course);
+			$this->getNextRoundService()->rounding($course);
 
-        return $this->redirect($this->generateUrl('my_teaching_courses'));
-    }
+			return $this->redirect($this->generateUrl('my_teaching_courses'));
+		}
 
 	public function exploreAction(Request $request, $category)
 	{
@@ -185,9 +186,9 @@ class CourseController extends CourseBaseController
 		));
 	}
 
-    protected function getNextRoundService()
-    {
-        return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
-    }
+	protected function getNextRoundService()
+	{
+		return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
+	}
 
 }
