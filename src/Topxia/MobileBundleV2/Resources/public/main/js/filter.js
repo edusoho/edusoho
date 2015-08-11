@@ -100,11 +100,11 @@ filter('formatPrice', ['$rootScope', function($rootScope){
 	return function(price) {
 		if (price) {
 			price = parseFloat(price);
-			return parseFloat(price) <= 0 ? "免费" : "¥" + price.toFixed(2);
+			return price <= 0 ? "免费" : "¥" + price.toFixed(2);
 		}
 		return price;
 	}
-}]).
+}])
 filter('coverLearnProsser', ['$rootScope', function($rootScope){
 
 	return function(course) {

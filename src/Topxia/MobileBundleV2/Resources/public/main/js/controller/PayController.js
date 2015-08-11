@@ -162,6 +162,7 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 			targetId : $stateParams.targetId
 		}, function(data) {
 			$scope.data = data;
+			$scope.coin = data.coin;
 			self.changePrice($scope.payMode);
 			$scope.orderLabel = self.getOrderLabel($stateParams.targetType);
 		});
@@ -185,11 +186,12 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 	});
 
 	this.changePrice = function(payMode) {
-		if (payMode == "coin") {
-			$scope.payPrice = $scope.data.coinPay;
+		var price = $scope.data.orderInfo.price;
+		if (payMode == "coin" && $scope.coin) {
+			$scope.payPrice = price * $scope.coin.cashRate;
 		} else {
 			var couponPrice = $scope.coupon ? $scope.coupon.decreaseAmount : 0;
-			$scope.payPrice = $scope.data.orderInfo.price - couponPrice;
+			$scope.payPrice = price > couponPrice ? price - couponPrice : 0;
 		}
 	}
 

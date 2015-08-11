@@ -37,7 +37,7 @@ a {
 }
 
 .top-header {
-  top: 45px;
+  top: 44px;
   position: relative;
 }
 
@@ -194,7 +194,7 @@ a {
 /** tab **/
 
 .ui-tab .ui-tab-nav{
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .tab-top .ui-tab-nav{
@@ -225,7 +225,7 @@ a {
 
 .ui-tab.tab-top .ui-tab-nav {
   position: fixed;
-  top: 46px;
+  top: 44px;
 }
 
 .ui-tab.tab-top .ui-tab-nav .line{
@@ -233,7 +233,7 @@ a {
   height: 25px;
   width: 100%;
   line-height: 25px;
-  border-right: solid 1px #ccc;
+  border-right: solid 1px #ddd;
 }
 
 .ui-tab.tab-bottom .ui-tab-content {
@@ -275,9 +275,8 @@ a {
   color: #37b97d;
   background: #fff;
   display: inline-block;
-  height: 46px;
+  height: 44px;
   width: 100%;
-  margin-bottom: 2px;
   position: fixed;
   top: 0;
 }
@@ -307,8 +306,8 @@ a {
 }
 
 .ui-bar .ui-bar-bg {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   height: 44px;
+  border-bottom: solid 1px #ddd;
 }
 
 .ui-bar .ui-btn.small {
@@ -1334,6 +1333,10 @@ a {
   font-size: 22px;
 }
 
+.ui-course-pay .pay-price>span {
+  font-size: 18px;
+}
+
 .ui-course-pay .pay-body {
   height: 44px;
   line-height: 30px;
@@ -1675,7 +1678,7 @@ a {
   height: 100%;
   background: #f0f0f0;
   top: 0;
-  padding-top: 45px;
+  padding-top: 44px;
 }
 
 .ui-vippay .ui-form {
@@ -1977,6 +1980,14 @@ a {
 }
 
 /** .ui-loading **/
+
+/** .ui-list **/
+.ui-list .ui-list-info h4>.subtitle {
+  color: #999;
+  font-size: 12px;
+}
+
+/** .ui-list **/
 
 /* ui-actionsheet */
 .ui-actionsheet {

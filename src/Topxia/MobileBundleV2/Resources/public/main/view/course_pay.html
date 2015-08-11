@@ -29,9 +29,9 @@
 	</div>
 
 	<ul class="ui-list ui-list-text ui-border-b ui-paycard">
-		<li class="ui-border-t ui-list-divider">
-			{{ orderLabel }}
-		</li>
+			<li class="ui-border-t ui-list-divider">
+				{{ orderLabel }}
+			</li>
 	    	<li class="ui-border-t">
 	        <div class="ui-list-img">
 	            <img ng-src="{{ data.orderInfo.picture }}" />
@@ -53,10 +53,13 @@
 	        </h4>
 	    	</li>
 	</ul>
-	<ul class="ui-list ui-list-link ui-list-text ui-border-b" ng-if="data.coinEnabled">
+	<ul class="ui-list ui-list-link ui-list-text ui-border-b" ng-if="coin">
 		<li class="ui-border-t">
 			<div class="ui-list-info">
-            			<h4>使用虚拟币</h4>
+            			<h4>
+            				使用{{ coin.name }}
+            				<span class="subtitle">汇率{{ coin.cashRate }}</span>
+            			</h4>
         			</div>
         			<label class="ui-switch">
 	            		<input type="checkbox" ng-model="payMode" ng-change="changePayMode()" ng-checked="payMode == 'coin' ">
@@ -65,7 +68,11 @@
 	</ul>
 	<div class="ui-btn-wrap" style="background: #f0f0f0;">
 		<div class="pay-body">
-	  		需支付:<p class="pay-price">{{ payPrice | formatPrice }}</p>
+	  		需支付:
+	  		<p class="pay-price">
+	  			{{ payPrice | formatPrice }}
+	  			<span>{{ payMode == 'coin' ? coin.name : '' }}</span>
+	  		</p>
 	  	</div>
 	    
 		<button class="ui-btn-lg btn-yellow" ng-click="pay()">
