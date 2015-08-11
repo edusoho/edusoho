@@ -9,7 +9,7 @@ use Topxia\Common\ArrayToolkit;
 class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkService
 {
 	public function randomizeHomeworkResultForPairReview($homeworkId,$userId){
-		$homework=$this->getHomeworkDao()->
+		$homework=$this->getHomeworkDao()->getHomework($homeworkId);
 	}
 
 	private function getReviewDao(){
