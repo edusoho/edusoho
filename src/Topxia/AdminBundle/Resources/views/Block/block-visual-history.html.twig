@@ -19,10 +19,10 @@
           <td>{{ historyUsers[blockHistory.userId].nickname|default('用户已删除'|trans) }}</td>
           <td>
             <a class="btn btn-xs btn-default edit-btn" 
-            href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
+            href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> {{'预览'|trans}} </a>
             
             {% if blockHistory.data %}
-              <a class="btn btn-xs btn-default edit-btn" href="{{ path('admin_block_recovery', {blockId:block.id, historyId:blockHistory.id})}}">恢复此内容</a>
+              <a class="btn btn-xs btn-default edit-btn" href="{{ path('admin_block_recovery', {blockId:block.id, historyId:blockHistory.id})}}">{{'恢复此内容'|trans}}</a>
             {% endif %}
           </td>
         </tr>
