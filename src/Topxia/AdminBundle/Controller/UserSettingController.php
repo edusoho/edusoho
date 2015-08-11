@@ -431,7 +431,7 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' && $fieldInfo['enabled']) {
                 $auth['registerFieldNameArray'][] = $fieldInfo['fieldName'];
-                array_unique($auth['registerFieldNameArray']);
+                $auth['registerFieldNameArray'] = array_unique($auth['registerFieldNameArray']);
             }
         }
 
@@ -444,7 +444,7 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' and $fieldInfo['enabled']) {
                 $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
-                array_unique($courseSetting['userinfoFieldNameArray']);
+                $auth['registerFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
             }
             
         }
