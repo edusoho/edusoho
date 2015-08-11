@@ -219,9 +219,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->getClassroom($id);
 
-        $oldTeachers = $this->findTeachers($id);
-        $oldTeachers = ArrayToolkit::index($oldTeachers, 'userId');
-        $oldTeacherIds = ArrayToolkit::column($oldTeachers, 'userId');
+        $oldTeacherIds = $this->findTeachers($id);
         $newTeacherIds = array();
 
         foreach ($courses as $key => $value) {
