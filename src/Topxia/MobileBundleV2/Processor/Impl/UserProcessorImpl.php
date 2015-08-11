@@ -60,8 +60,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         
         try {
             $fileId = $this->getParam("fileId", 0);
-            $this->updateUserAvatar($user, $fileId);
             $this->updateNickname($user, $profile['nickname']);
+            $this->updateUserAvatar($user, $fileId);
             $this->getUserService()->updateUserProfile($user['id'], $profile);
 
             $user = $this->getUserService()->getUser($user['id']);
@@ -140,7 +140,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return;
         }
         if($isNickname['nickname_enabled'] == 0){
-            throw new \RuntimeException("nickname update Error");
+            throw new \RuntimeException("网校设置不能修改昵称!");
         }
 
         $this->getAuthService()->changeNickname($user['id'], $nickname);
