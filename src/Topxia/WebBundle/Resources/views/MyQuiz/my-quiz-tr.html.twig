@@ -22,7 +22,7 @@
 		{% if myTestpaperResult.status in ['doing', 'paused'] %}
 			<a href="{{ path('course_manage_show_test', {id:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">继续考试</a>
 		{% else %}
-			<a href="{{ path('course_manage_redo_test', {testId:myTestpaper.id}) }}" class="btn btn-default btn-sm">再做一次</a>
+			<a href="{{ path('course_manage_redo_test',{testId:myTestpaper.id,targetType:'lesson',targetId:myTestpaperResult.lessonId}) }}" class="btn btn-default btn-sm">再做一次</a>
 			<a href="{{ path('course_manage_test_results', {id:myTestpaperResult.id}) }}" class="btn btn-link btn-sm" target="_blank">查看结果</a>
 		{% endif %}
 	</td>

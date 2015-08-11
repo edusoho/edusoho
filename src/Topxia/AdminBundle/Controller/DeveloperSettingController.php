@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class DeveloperSettingController extends BaseController
@@ -22,6 +21,7 @@ class DeveloperSettingController extends BaseController
             'debug' => '0',
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_api_failover' => '0',
             'hls_encrypted' => '1',
         );
 

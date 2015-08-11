@@ -2,6 +2,7 @@
 
 {% set script_controller = 'classroombundle/controller/classroom/thread-list' %}
 {% set nav = 'thread' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% block main %}
 
   {% include 'ClassroomBundle:ClassroomThread/Part:thread-list-header.html.twig' %}

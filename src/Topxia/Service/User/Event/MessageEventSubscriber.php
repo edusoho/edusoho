@@ -7,6 +7,7 @@ use Topxia\WebBundle\Util\TargetHelper;
 
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\EdusohoTuiClient;
 
 class MessageEventSubscriber implements EventSubscriberInterface
 {
@@ -34,12 +35,8 @@ class MessageEventSubscriber implements EventSubscriberInterface
             'typeBusiness' => 'normal',
             'createdTime' => time()
         ));
-        $this->getEduCloudService()->sendMessage($message);
-    }
-
-    protected function getEduCloudService()
-    {
-        return ServiceKernel::instance()->createService('EduCloud.EduCloudService');
+        $tuiClient = new EdusohoTuiClient();
+        $result = $tuiClient->sendMessage($message);
     }
 
     protected function getUserService()

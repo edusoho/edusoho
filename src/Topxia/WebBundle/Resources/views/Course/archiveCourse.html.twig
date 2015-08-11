@@ -1,8 +1,8 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}{{ course.title }} -{{ parent() }}{% endblock %}
-{% block keywords %}{{ course.title }}{% endblock %}
-{% block description %}{{ course.about }}{% endblock %}
+{% block keywords %}{% for tag in tags %}{{tag.name}}{% if not loop.last%}{{','}}{% endif %}{% endfor %}{% endblock %}
+{% block description %}{{ courseDescription|default('') }}{% endblock %}
 
 {% block content %}
 

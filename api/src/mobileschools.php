@@ -4,6 +4,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Silex\Application;
+use Topxia\Service\Util\EdusohoTuiClient;
 
 $api = $app['controllers_factory'];
 
@@ -41,7 +42,8 @@ $api->get('/about', function () {
 */
 
 $api->get('/token', function () {
-    $token = ServiceKernel::instance()->createService('EduCloud.EduCloudService')->getToken();
+    $tuiClient = new EdusohoTuiClient();
+    $token = $tuiClient->getToken();
     if (isset($token['error'])) {
         throw new Exception($token['error']);
     }

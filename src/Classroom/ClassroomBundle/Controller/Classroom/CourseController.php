@@ -100,7 +100,14 @@ class CourseController extends BaseController
         if ($member && !$member["locked"]) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        }
         return $this->render("ClassroomBundle:Classroom/Course:list.html.twig", array(
             'classroom' => $classroom,
             'member' => $member,
@@ -108,6 +115,7 @@ class CourseController extends BaseController
             'courses' => $courses,
             'courseMembers' => $courseMembers,
             'layout' => $layout,
+            'classroomDescription' => $classroomDescription
         ));
     }
 

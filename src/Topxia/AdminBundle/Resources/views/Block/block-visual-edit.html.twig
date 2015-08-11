@@ -5,6 +5,7 @@
 {% block page_title %} 编辑内容 {% endblock %}
 
 {% set script_controller = 'block/visual-edit' %}
+
 {% block main %}
   <style type="text/css">
     .sortable-list .placeholder {
@@ -15,26 +16,45 @@
       border: 1px dashed #ccc;
       list-style: none;
     }
-
+    .nav.sortable-list .placeholder {
+      width: 80px;
+      padding: 10px 15px;
+      background: #eee;
+      margin: 0;
+    }
+    #btn-tabs li {
+      width: 66px;
+    }
+    .nav.nav-pills .dragged{
+      position: absolute!important;
+    }
   </style>
   {% if app.debug %}
     <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockId:block.id}) }}" target="_blank">查看JSON配置</a>
   {% endif %}
+  {% if block.code != 'jianmo:home_top_banner' %}
+  <!-- <div class="col-md-6"> -->
+    <div>
+      <h4>{{ block.title }}</h4>
+      <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+        {{ web_macro.flash_messages() }}
+        {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-  <div class="col-md-6">
+        <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
+      </form>
+    </div>
+
+  {% else %}
+    <!-- 以下是简墨新版的样式 -->
     <h4>{{ block.title }}</h4>
     <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
       {{ web_macro.flash_messages() }}
       {% include 'TopxiaAdminBundle:Block:block-visual-items.html.twig' %}
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    
-      <button id="block-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="block-edit-form" data-target="#block-edit-form">保存</button>
     </form>
-  </div>
-  
-  
+    <!-- 以上是新版的样式 -->
+  {% endif %}
 
-  
   <!-- <div class="col-md-4">
     {% include 'TopxiaAdminBundle:Block:affix-nav.html.twig' %}
   </div> -->
