@@ -52,7 +52,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
 	public function randomizeHomeworkResultForPairReview($homeworkId,$userId){
-		$homework=$this->getHomeworkDao()->
+		$homework=$this->getHomeworkDao()->getHomework($homeworkId);
 	}
 
 	private function getReviewDao(){
