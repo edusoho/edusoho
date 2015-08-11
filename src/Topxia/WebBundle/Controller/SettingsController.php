@@ -39,23 +39,7 @@ class SettingsController extends BaseController
 		}
 
 		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-		for($i=0;$i<count($fields);$i++){
-			if(strstr($fields[$i]['fieldName'], "textField")){
-				$fields[$i]['type']="text";
-			}
-			if(strstr($fields[$i]['fieldName'], "varcharField")){
-				$fields[$i]['type']="varchar";
-			}
-			if(strstr($fields[$i]['fieldName'], "intField")){
-				$fields[$i]['type']="int";
-			}
-			if(strstr($fields[$i]['fieldName'], "floatField")){
-				$fields[$i]['type']="float";
-			}
-			if(strstr($fields[$i]['fieldName'], "dateField")){
-				$fields[$i]['type']="date";
-			}
-		}
+		
 		
 		if (array_key_exists('idcard',$profile) && $profile['idcard']=="0") {
 			$profile['idcard'] = "";
@@ -452,7 +436,13 @@ class SettingsController extends BaseController
 
 	public function findPayPasswordBySmsAction(Request $request)
 	{
+<<<<<<< HEAD
 		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
+=======
+		$eduCloudService = $this->getEduCloudService();
+		$scenario = "sms_forget_pay_password";
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1') {
+>>>>>>> master
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }		
 

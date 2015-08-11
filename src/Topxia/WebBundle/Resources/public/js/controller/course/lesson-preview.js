@@ -167,11 +167,10 @@ define(function(require, exports, module) {
 
 		$modal = $('#modal');
         $modal.on('click','.js-buy-btn', function(){
-			$.post($(this).data('url'), function(html) {
-				$modal.html(html);
-			});
-		});
-
+            $.get($(this).data('url'), function(html) {
+                $modal.html(html);
+            });
+        });
     };
 
 });

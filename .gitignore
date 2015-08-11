@@ -55,3 +55,4 @@ web/assets/img/default/video.png
 .phpintel*
 /src/Tests/*
 /web/assets/v2/bootstrap/less
+/app/data/api_server.json

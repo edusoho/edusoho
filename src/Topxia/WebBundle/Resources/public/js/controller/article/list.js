@@ -9,7 +9,10 @@ define(function(require, exports, module) {
             paginationClickable: true,
             autoplay: 5000,
             autoplayDisableOnInteraction: false,
-            loop: true
+            loop: true,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
+            }
         });
     }
     

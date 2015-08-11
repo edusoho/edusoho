@@ -21,16 +21,22 @@ class DefaultController extends BaseController
         var_dump($api);
         exit();
 
-        $conditions = array('status' => 'published', 'parentId' => 0);
+        $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
+        
+        $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
+        $orderBy = 'recommendedSeq';
+        if (empty($courses)) {
+            $orderBy = 'latest';
+            unset($conditions['recommended']);
+            $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+        }
 
         $coinSetting=$this->getSettingService()->get('coin',array());
         if(isset($coinSetting['cash_rate'])){
             $cashRate=$coinSetting['cash_rate'];
         }else{
             $cashRate=1;
-        } 
-        
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+        }
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -49,7 +55,8 @@ class DefaultController extends BaseController
             'blocks' => $blocks,
             'recentLiveCourses' => $recentLiveCourses,
             'consultDisplay' => true,
-            'cashRate' => $cashRate
+            'cashRate' => $cashRate,
+            'orderBy' => $orderBy
         ));
     }
 
