@@ -44,11 +44,6 @@ class EduCloudServiceImpl extends BaseService
         return $api->get('/accounts');
     }
 
-    public function getToken()
-    {
-        $api = $this->getCloudApi();
-        return $api->get('/token');
-    }
 
     public function getUserOverview()
     {
@@ -120,16 +115,6 @@ class EduCloudServiceImpl extends BaseService
         return $result;
     }
 
-    public function findMessagesByUserIdAndlastMaxId($userId, $lastMaxId)
-    {
-        $api = $this->getCloudApi();
-        $result = $api->get(
-            sprintf('/tui/message/%s/list', $userId),
-            array('lastMaxId' => $lastMaxId, 'limit' => 20)
-        );
-        return $result;
-    }
-
     public function getLiveCourseStatus()
     {
         $api = $this->getCloudApi();
@@ -143,6 +128,23 @@ class EduCloudServiceImpl extends BaseService
             return $setting[$key];
         }
         return null;
+    }
+
+    /**------------------------------推送接口----------------------------------*/
+    public function getToken()
+    {
+        $api = $this->getCloudApi();
+        return $api->get('/token');
+    }
+
+    public function findMessagesByUserIdAndlastMaxId($userId, $lastMaxId)
+    {
+        $api = $this->getCloudApi();
+        $result = $api->get(
+            sprintf('/tui/message/%s/list', $userId),
+            array('lastMaxId' => $lastMaxId, 'limit' => 20)
+        );
+        return $result;
     }
 
     public function addStudent($user)
