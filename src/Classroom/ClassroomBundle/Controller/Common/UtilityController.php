@@ -53,11 +53,7 @@ class UtilityController extends BaseController
     private function _getExcludeIds($classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $assistants = $this->getClassroomService()->findAssistants($classroomId);
-        $assistantIds = ArrayToolkit::column($assistants, 'userId');
-        if(empty($assistantIds)){
-            $assistantIds = array();
-        }
+        $assistantIds = $this->getClassroomService()->findAssistants($classroomId);
         $excludeIds = $assistantIds;
 
         return $excludeIds;

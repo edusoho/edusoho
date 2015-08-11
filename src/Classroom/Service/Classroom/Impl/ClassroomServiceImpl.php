@@ -47,14 +47,38 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function findAssistants($classroomId)
     {
-        $members = $this->getClassroomMemberDao()->findAssistants($classroomId);
-        return  !$members ? array() : MemberSerialize::unserializes($members);
+        $classroom = $this->getClassroom($classroomId);
+        $assistants = $this->getClassroomMemberDao()->findAssistants($classroomId);
+        if (!$assistants) {
+            return array();
+        }
+        $assistantIds = ArrayToolkit::column($assistants, 'userId');
+        $oldAssistantIds = $classroom['assistantIds'] ?: array();
+        if (!empty($oldAssistantIds)) {
+            $orderAssistantIds = array_intersect($oldAssistantIds, $assistantIds);
+            $orderAssistantIds = array_merge($orderAssistantIds,array_diff($assistantIds, $oldAssistantIds));   
+        } else {
+            $orderAssistantIds = $assistantIds;
+        }
+        return  $orderAssistantIds;
     }
 
     public function findTeachers($classroomId)
     {   
-        $members = $this->getClassroomMemberDao()->findTeachers($classroomId);
-        return  !$members ? array() : MemberSerialize::unserializes($members);
+        $teachers = $this->getClassroomMemberDao()->findTeachers($classroomId);
+        if (!$teachers) {
+            return array();
+        }
+        $classroom = $this->getClassroom($classroomId);
+        $teacherIds = ArrayToolkit::column($teachers,'userId');
+        $oldTeacherIds = $classroom['teacherIds'] ?: array();
+        if (!empty($oldTeacherIds)) {
+            $orderTeacherIds = array_intersect($oldTeacherIds, $teacherIds);
+            $orderTeacherIds = array_merge($orderTeacherIds,array_diff($teacherIds, $oldTeacherIds));   
+        } else {
+            $orderTeacherIds = $teacherIds;
+        }
+        return  $orderTeacherIds;
     }
 
     public function addClassroom($classroom)
@@ -141,7 +165,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds' , 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service'));
 
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新失败！');
@@ -679,9 +703,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function updateAssistants($classroomId, $userIds)
     {
-        $assistants = $this->findAssistants($classroomId);
-        $assistants = ArrayToolkit::index($assistants, 'userId');
-        $assistantIds = ArrayToolkit::column($assistants, 'userId');
+        $assistantIds = $this->findAssistants($classroomId);
         $deleteAssistantIds = array_diff($assistantIds, $userIds);
         $addAssistantIds = array_diff($userIds, $assistantIds);
         $addMembers = $this->findMembersByClassroomIdAndUserIds($classroomId, $addAssistantIds);
@@ -852,7 +874,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     private function canBecomeClassroomMember($member)
     {
-        return empty($member) || in_array('auditor', $member['role']);
+        return empty($member) || !in_array('student', $member['role']);
     }
 
     public function canManageClassroom($id)

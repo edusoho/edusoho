@@ -10,14 +10,25 @@ class TeacherController extends BaseController
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $headTheader = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
+        $headTeacher = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
         $assisants = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'assistant', 0, PHP_INT_MAX);
-        $members = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
-        $members = array_merge($headTheader, $members, $assisants);
+        $teachers = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        $members = array_merge($headTeacher, $teachers, $assisants);
         $members = ArrayToolkit::index($members, 'userId');
-        $teacherIds = ArrayToolkit::column($members, 'userId');
+
+        $headTeacherIds = ArrayToolkit::column($headTeacher,'userId');
+        $teacherIds = $this->getClassroomService()->findTeachers($classroomId);
+        $assisantIds = $this->getClassroomService()->findAssistants($classroomId);
+
+        $teacherIds = array_unique(array_merge($headTeacherIds, $teacherIds, $assisantIds));
+        foreach ($teacherIds as $key => $value) {
+            $newteacherIds[] = $value;
+        }
+        $teacherIds = $newteacherIds;
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
-        $teachers = $this->sort($teachers, $members);
+        foreach ($teacherIds as $key => $teacherId) {
+            $users[$key] = $teachers[$teacherId];
+        }
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
@@ -33,7 +44,7 @@ class TeacherController extends BaseController
             'layout' => $layout,
             'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
             'classroom' => $classroom,
-            'teachers' => $teachers,
+            'teachers' => $users,
             'profiles' => $profiles,
             'member' => $member,
             'members' => $members,

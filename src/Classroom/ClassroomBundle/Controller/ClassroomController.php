@@ -257,8 +257,7 @@ class ClassroomController extends BaseController
 
     public function teachersBlockAction($classroom)
     {
-        $classroomTeachers = $this->getClassroomService()->findTeachers($classroom['id']);
-        $classroomTeacherIds = ArrayToolkit::column($classroomTeachers,'userId');
+        $classroomTeacherIds = $this->getClassroomService()->findTeachers($classroom['id']);
         $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
         $headTeacherprofiles = $this->getUserService()->getUserProfile($classroom['headTeacherId']);

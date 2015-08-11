@@ -27,8 +27,8 @@
         </div>
         <div class="class-operation">
           <ul class='class-data clearfix 
-          {% if classroom_permit(classroom.id, 'Manage') %}
-          two-col
+          {% if classroom_permit(classroom.id, 'Take', true) %}
+          three-col
           {% endif %}
           '>
             <li>

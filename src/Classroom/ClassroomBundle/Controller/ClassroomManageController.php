@@ -442,9 +442,7 @@ class ClassroomManageController extends BaseController
             }
             $this->setFlashMessage('success', "保存成功！");
         }
-
-        $teachers = $this->getClassroomService()->findTeachers($id);
-        $teacherIds = ArrayToolkit::column($teachers,'userId');
+        $teacherIds = $this->getClassroomService()->findTeachers($id);
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
         $teacherItems = array();
@@ -506,17 +504,21 @@ class ClassroomManageController extends BaseController
             $data = $request->request->all();
             $userIds = empty($data['ids']) ? array() : $data['ids'];
             $this->getClassroomService()->updateAssistants($id, $userIds);
+            if ($userIds) {
+                $fields = array('assistantIds' => $userIds);
+
+                $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
+            }
 
             $this->setFlashMessage('success', "保存成功！");
             
         }
 
-        $assistants = $this->getClassroomService()->findAssistants($id);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
-        $users = ArrayToolkit::index($users, "id");
+        $assistantIds = $this->getClassroomService()->findAssistants($id);
+        $users = $this->getUserService()->findUsersByIds($assistantIds);
         $sortedAssistants = array();
-        foreach ($assistants as $key => $assistant) {
-            $user = $users[$assistant["userId"]];
+        foreach ($assistantIds as $key => $assistantId) {
+            $user = $users[$assistantId];
             $sortedAssistants[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
