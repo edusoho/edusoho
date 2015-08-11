@@ -55,6 +55,44 @@ define(function(require, exports, module) {
             nextIndex = nextIndex + 1;
             $(this).attr('data-length', nextIndex);
         });
+
+        $('[data-parentId=consult-qqgroup]').on('click',function(){
+            var nextIndex = $(this).attr('data-length');
+            nextIndex = parseInt(nextIndex);
+            if( nextIndex > 9 ) {
+                Notify.danger('最多设置10个..');
+                return;
+            }
+            var $parent = $('#'+$(this).attr('data-parentId'));
+            var $first = $parent.children(':first');
+            var $template = $('[data-role=qqGroupTemplate]');
+
+            var firstPlaceholder = $first.find('input:eq(0)').attr('placeholder');
+            var midPlaceholder = $first.find('input:eq(1)').attr('placeholder');
+            var lastPlaceholder = $first.find('input:eq(2)').attr('placeholder');
+            var firstName = $first.find('input:eq(0)').attr('name');
+            var midName = $first.find('input:eq(1)').attr('name');
+            var lastName = $first.find('input:eq(2)').attr('name');
+            firstName = firstName.replace(/\d/, nextIndex);
+            midName = midName.replace(/\d/, nextIndex);
+            lastName = lastName.replace(/\d/, nextIndex);
+            $template.find('input:eq(0)').attr('placeholder', firstPlaceholder);
+            $template.find('input:eq(1)').attr('placeholder', midPlaceholder);
+            $template.find('input:eq(2)').attr('placeholder', lastPlaceholder);
+
+            $template.find('input:eq(0)').attr('name', firstName);
+            $template.find('input:eq(1)').attr('name', midName);
+            $template.find('input:eq(2)').attr('name', lastName);
+
+            $parent.append($template.html());
+
+            $('[data-role=item-delete]').on('click',function(){
+                $(this).parent().parent().remove();
+            });
+
+            nextIndex = nextIndex + 1;
+            $(this).attr('data-length', nextIndex);
+        });
         
         $('[data-role=item-delete]').on('click',function(){
                 $(this).parent().parent().remove();

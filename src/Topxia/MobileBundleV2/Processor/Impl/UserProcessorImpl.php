@@ -287,7 +287,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+            return $this->createErrorResponse('nickname_invalid', '用户名格式不正确');
         }
 
         if (!SimpleValidator::password($password)) {
@@ -299,7 +299,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+            return $this->createErrorResponse('nickname_exist', '该用户名已被注册');
         }
 
         $user = $this->controller->getAuthService()->register(array(

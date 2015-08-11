@@ -19,6 +19,8 @@
 .es-icon-videocam:before { content: "\e678"; }
 .es-icon-anonymous-iconfont:before { content: "\e666"; }
 .es-icon-wenhao:before { content: "\e671"; }
+.es-icon-dot:before { content: "\e68a"; }
+.es-icon-icon_close_circle:before { content: "\e687"; }
 .es-icon-angledoubleright:before { content: "\e67d"; }
 .es-icon-angledoubleleft:before { content: "\e67e"; }
 .es-icon-playcircleoutline:before { content: "\e66d"; }
@@ -150,3 +152,8 @@
 .es-icon-warning:before { content: "\e685"; }
 .es-icon-eventnote:before { content: "\e686"; }
 .es-icon-localplay:before { content: "\e684"; }
+.es-icon-money:before { content: "\e688"; }
+.es-icon-lock1:before { content: "\e689"; }
+.es-icon-iccheckcircleblack24px:before { content: "\e68b"; }
+.es-icon-viewcomfy:before { content: "\e68c"; }
+

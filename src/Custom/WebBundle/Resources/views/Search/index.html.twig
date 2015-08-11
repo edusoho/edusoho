@@ -62,20 +62,16 @@
 
   </div>
 
-    <!-- 课程列表 -->
   <div class="course-list">
-      {% if courses %}
-        <div class="row">
-          {% for course in courses %}
-            <div class="col-lg-3 col-md-4 col-sm-6">
-              {% include 'CustomWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
-            </div>
-          {% endfor %}
+    {% if courses %}
+      {% for course in courses %}
+        <div class="course-item clearfix">
+          {% include 'CustomWebBundle:Course:Widget/course-grid.html.twig' %}
         </div>
-      {% else %}
-        <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
-      {% endif %}
-
+        {% endfor %}
+    {% else %}
+      <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
+    {% endif %}
   </div>
 
   <nav class="text-center">

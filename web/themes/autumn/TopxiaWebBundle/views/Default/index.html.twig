@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set bodyClass = 'homepage' %}
+{% set script_controller = 'theme/index' %}
 
 {% block content %}
   {% set top_banner = block_show('autumn:home_top_banner')%}
@@ -40,7 +41,7 @@
                  {% if loop.index <= 5%}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                    <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                    {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                   </a>
                   <div class="class-body">
                     <h3 class="class-title">
@@ -124,6 +125,7 @@
       {% endif %}
 
       {% if setting('course.live_course_enabled') %}
+      {% set recentLiveCourses = data('RecentLiveCourses', {count:4}) %}
         {% if recentLiveCourses %}
           <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">

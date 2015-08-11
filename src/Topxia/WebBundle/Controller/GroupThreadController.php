@@ -327,6 +327,10 @@ class GroupThreadController extends BaseController
 
         $files=$this->getFileService()->getFilesByIds($fileIds);
 
+        $threadMainContent = strip_tags($threadMain['content'],'');
+
+        $threadMainContent = preg_replace("/ /","",$threadMainContent); 
+        
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
             'isCollected' => $isCollected,
@@ -349,6 +353,7 @@ class GroupThreadController extends BaseController
             'files'=>$files,
             'postFiles'=>$postFiles,
             'postAttachs'=>$postAttachs,
+            'threadMainContent' =>$threadMainContent,
             'is_groupmember' => $this->getGroupMemberRole($id)));
     }
 

@@ -90,9 +90,7 @@ class CoinController extends BaseController
         $coinSettings = $this->getSettingService()->get('coin',array());
 
         if($request->getMethod()=="POST"){
-
             $set=$request->request->all();
-
             if($set['cash_model']=="none"){
 
                 $coinSettings['cash_model']="none";
@@ -106,11 +104,11 @@ class CoinController extends BaseController
 
             }
 
-            $courses=$this->getCourseService()->searchCourses(array('originPrice_GT'=>'0.00'), 'latest', 0 ,99999);
+            $courses=$this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00','parentId' => 0), 'latest', 0 ,99999);
             
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
-            'set' => $set,
-            'courses'=>$courses
+                'set' => $set,
+                'courses'=>$courses
             ));
 
         }
@@ -129,9 +127,7 @@ class CoinController extends BaseController
     public function modelSaveAction(Request $request)
     {   
         $coinSettings = $this->getSettingService()->get('coin',array());
-
         if($request->getMethod()=="POST"){
-
             $data=$request->request->all();
 
             $coinSettings['coin_enabled']=1;
@@ -155,8 +151,7 @@ class CoinController extends BaseController
         }
 
         $this->setFlashMessage('success', '虚拟币模式已保存！');
-        return $this->redirect($this->generateUrl('admin_coin_model', array(
-        )));
+        return $this->redirect($this->generateUrl('admin_coin_model'));
     }
 
     protected function updateCoursesPrice($data)
@@ -295,7 +290,6 @@ class CoinController extends BaseController
 
         $userIds =  ArrayToolkit::column($cashes, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
-        
         return $this->render('TopxiaAdminBundle:Coin:coin-records.html.twig',array(
             'users'=>$users,
             'cashes'=>$cashes,
@@ -303,6 +297,7 @@ class CoinController extends BaseController
             'inflow'=>$inflow,
             'amounts'=>$amounts,
             'paginator'=>$paginator,
+            'cashType'=>'Coin',
           ));
     }
 
@@ -667,7 +662,7 @@ class CoinController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $userIds=ArrayToolkit::column($cashes,"userId");
         $users=$this->getUserService()->findUsersByIds($userIds);
 
@@ -676,15 +671,83 @@ class CoinController extends BaseController
 
         $conditions['type']  = 'outflow'; 
         $amountOutflow = $this->getCashService()->analysisAmount($conditions);
-
         return $this->render('TopxiaAdminBundle:Coin:cash-bill.html.twig',array(
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users'=>$users,
             'amountInflow' => $amountInflow?:0,
-            'amountOutflow' => $amountOutflow?:0            
-          
+            'amountOutflow' => $amountOutflow?:0,
+            'cashType' => 'RMB',          
         ));   
+    }
+
+    /**
+     * @param  [type]  $cashType  RMB | Coin
+     */
+    public function exportCsvAction(Request $request,$cashType)
+    {
+        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','coin'=>'虚拟币支付','none'=>'--');
+        $conditions = $request->query->all();
+        if(!empty($conditions)&&$cashType == 'Coin'){
+          $conditions =$this->filterCondition($conditions);
+        }
+        if(!empty($conditions)&&$cashType == 'RMB'){
+          $conditions = $this->filterConditionBill($conditions);
+        }
+        $conditions['cashType'] = $cashType;
+
+        $num = $this->getCashService()->searchFlowsCount($conditions);
+        $orders = $this->getCashService()->searchFlows($conditions, array('ID', 'DESC'), 0,$num);
+        $studentUserIds = ArrayToolkit::column($orders, 'userId');
+        
+
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');    
+
+        $str = "流水号,账目名称,购买者,姓名,收支,支付方式,创建时间";
+
+        $str .= "\r\n";
+
+        $results = array();
+        foreach ($orders as $key => $orders) {
+            $member = "";
+            $member .= "流水号".$orders['sn'].",";
+            $member .= $orders['name'].",";
+            $member .= $users[$orders['userId']]['nickname'].",";
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            if($orders['type']=='inflow'){
+            $member .= "+".$orders['amount'].",";
+            }
+            if($orders['type']=='outflow'){
+            $member .= "-".$orders['amount'].",";  
+            }
+            if(!empty($orders['payment'])){
+                $member .= $payment[$orders['payment']] .",";
+            }
+            else{
+                $member .="-".",";
+            }
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $results[] = $member;
+        }
+
+        $str .= implode("\r\n", $results);
+        $str = chr(239).chr(187).chr(191).$str;
+        
+        $filename = sprintf("%s-order-(%s).csv", $cashType, date('Y-n-d'));
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+
+        return $response;
+
     }
 
     protected function convertFiltersToCondition($condition)
@@ -778,6 +841,42 @@ class CoinController extends BaseController
 
 
         return $condition;
+    }
+    protected function filterConditionBill($conditions)
+    {
+        if(!empty($conditions['nickname'])){
+            $user=$this->getUserService()->getUserByNickname($conditions['nickname']);
+            if($user){
+                $conditions['userId']=$user['id'];
+            }else{
+                $conditions['userId']=-1;
+            }
+        }
+
+        $conditions['cashType'] = 'RMB';
+        $conditions['startTime'] = 0; 
+        $conditions['endTime'] = time();
+
+        if(!empty($conditions['lastHowManyMonths'])){
+        switch ($conditions['lastHowManyMonths']) { 
+            case 'oneWeek': 
+                $conditions['startTime'] = $conditions['endTime']-7*24*3600; 
+                break; 
+            case 'twoWeeks': 
+                $conditions['startTime'] = $conditions['endTime']-14*24*3600; 
+                break; 
+            case 'oneMonth': 
+                $conditions['startTime'] = $conditions['endTime']-30*24*3600;               
+                break;     
+            case 'twoMonths': 
+                $conditions['startTime'] = $conditions['endTime']-60*24*3600;               
+                break;   
+            case 'threeMonths': 
+                $conditions['startTime'] = $conditions['endTime']-90*24*3600;               
+                break;  
+        } 
+        }
+        return $conditions;
     }
 
     protected function filterCondition($conditions)
