@@ -32,7 +32,6 @@ class DefaultController extends BaseController
         } else {
             $recentLiveCourses = array();
         }
-
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
@@ -96,23 +95,23 @@ class DefaultController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
 
-        $recentCourses = array();
+        $liveCourses = array();
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
             if ($course['status'] != 'published') {
                 continue;
             }
+            if($course['parentId'] != 0){
+                continue;   
+            }
             $course['lesson'] = $lesson;
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-            if (count($recentCourses) >= 8) {
+            if (count($liveCourses) >= 8) {
                 break;
             }
-
-            $recentCourses[] = $course;
+            $liveCourses[] = $course;
         }
-
-        return $recentCourses;
+        return  $liveCourses;
     }
 
     public function promotedTeacherBlockAction()

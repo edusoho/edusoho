@@ -145,6 +145,20 @@ class PasswordResetController extends BaseController
         return 'http://mail.' . $host;
     }
 
+    public function checkMobileExistsAction(Request $request)
+    {
+        $mobile = $request->query->get('value');
+        list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+
+        if ($result == 'success') {
+           $response = array('success' => false, 'message' => '该手机号码不存在');
+        } else {
+           $response = array('success' => true, 'message' => '');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');

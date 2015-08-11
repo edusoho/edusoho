@@ -230,7 +230,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $currentUser = $this->getCurrentUser();
+        // $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -373,14 +373,14 @@ class ClassroomManageController extends BaseController
                 $member .= $profiles[$classroomMember['userId']][$key] ? $profiles[$classroomMember['userId']][$key]."," : "-".",";
             }
             $students[] = $member;
-        };
+        }
 
         $str .= implode("\r\n", $students);
         $str = chr(239).chr(187).chr(191).$str;
 
         $filename = sprintf("classroom-%s-students-(%s).csv", $classroom['id'], date('Y-n-d'));
 
-        $userId = $this->getCurrentUser()->id;
+        // $userId = $this->getCurrentUser()->id;
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -697,7 +697,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
+        // $classroom = $this->getClassroomService()->getClassroom($id);
 
         $this->getClassroomService()->publishClassroom($id);
 
@@ -723,7 +723,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
+        // $classroom = $this->getClassroomService()->getClassroom($id);
 
         $this->getClassroomService()->closeClassroom($id);
 
@@ -761,7 +761,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $user = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
+        // $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
         $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
         
         $courseIds=ArrayToolkit::column($courses,'id');
@@ -884,9 +884,9 @@ class ClassroomManageController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
         $findLearnedCourses = array();
         foreach ($courseIds as $key => $value) {
-            $LearnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $member['userId']);
-            if (!empty($LearnedCourses)) {
-                $findLearnedCourses[] = $LearnedCourses;
+            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $member['userId']);
+            if (!empty($learnedCourses)) {
+                $findLearnedCourses[] = $learnedCourses;
             }
         }
 

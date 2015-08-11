@@ -9,6 +9,8 @@ define(function(require, exports, module) {
         	url:'',
         	smsType:'',
         	dataTo:'mobile',
+            captcha:false,
+            captchaValidated:false,
         	getPostData: function(data){
 	        	return data;
         	},
@@ -20,7 +22,9 @@ define(function(require, exports, module) {
         	"click" : "smsSend"
         },
         setup: function() {
-
+            if(this.get('captcha')) {
+                this.smsSend();
+            }
         },
         postData: function(url, data) {
 	        var refreshTimeLeft = function(){
@@ -31,14 +35,17 @@ define(function(require, exports, module) {
 	        	} else {
 	        		$('#js-time-left').html('');
 			        $('#js-fetch-btn-text').html('获取短信验证码');
+                    self.element.removeClass('disabled');
 	        	}
 	        };
 
+            var self = this;
         	$.post(url,data,function(response){
         		if (("undefined" != typeof response['ACK'])&&(response['ACK']=='ok')) {
 	        		$('#js-time-left').html('120');
 	        		$('#js-fetch-btn-text').html('秒后重新获取');
 	        		Notify.success('发送短信成功');
+                    self.element.addClass('disabled');
 	        		refreshTimeLeft();
 	        	}else{
 	        		if ("undefined" != typeof response['error']){
@@ -50,6 +57,7 @@ define(function(require, exports, module) {
         	});
         	return this;
         },
+
         smsSend: function(){
 
     		var leftTime = $('#js-time-left').html();
@@ -60,8 +68,12 @@ define(function(require, exports, module) {
 			var data = {};
 	        data.to = $('[name="'+this.get("dataTo")+'"]').val();   
 	        data.sms_type = this.get("smsType");
-
 			data = $.extend(data, this.get("getPostData")(data));
+            if (this.get('captcha')) {
+                if (!this.get('captchaValidated')) {
+                    return false;
+                }
+            }
 
 			if(this.get("preSmsSend")()) {
 				this.postData(url, data);

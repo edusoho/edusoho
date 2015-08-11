@@ -319,7 +319,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function parseRegistration($registration)
     {
-        $mode = $this->getRegisterMode($registration);
+        $mode = $this->getRegisterMode();
         if($mode =='email_or_mobile'){
             if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
                 if (SimpleValidator::email($registration['emailOrMobile'])) {
@@ -398,15 +398,28 @@ class UserServiceImpl extends BaseService implements UserService
         $user['email'] = $registration['email'];
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
-        $user['type'] = $type;
+        $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
+        if ($type == 'default' && (!isset($registration['type']) or $registration['type'] != 'import')) {
+            if (isset($registration['verifiedMobile'])) {
+                $user['type'] = 'web_mobile';
+            } else {
+                $user['type'] = 'web_email';
+            }
+        }
+        
 
+        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
-        } else {
+        } elseif (in_array($type, array('qq', 'weibo', 'renren','weixinweb')) && isset($thirdLoginInfo["{$type}_set_fill_account"]) && $thirdLoginInfo["{$type}_set_fill_account"]){
+            $user['salt'] = '';
+            $user['password'] = '';
+            $user['setup'] = 1;
+        }else {
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 0;
