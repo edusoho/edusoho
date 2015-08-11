@@ -436,13 +436,9 @@ class SettingsController extends BaseController
 
 	public function findPayPasswordBySmsAction(Request $request)
 	{
-<<<<<<< HEAD
-		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
-=======
-		$eduCloudService = $this->getEduCloudService();
+
 		$scenario = "sms_forget_pay_password";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1') {
->>>>>>> master
+		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }		
 
