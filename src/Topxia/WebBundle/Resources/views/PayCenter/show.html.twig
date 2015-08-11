@@ -84,7 +84,17 @@
                 应付金额：
                 <span role="pay-rmb" class="pay-rmb">￥{{order.amount}}</span>
               </div>
-             <a href="javascript:;" class=" link-light  mrl" role="cancel-coupon" style="">取消</a>
+             <a 
+                href="javascript:;"
+                {% if targetType == "course" and courses|default(null) %}
+                  data-goto="{{ path('course_show', {id:courses[0].id}) }}" 
+                {% elseif targetType == "vip" %}
+                  data-goto="{{ path('vip_renew') }}"
+                {% elseif targetType == "classroom" %}
+                  data-goto="{{ path('classroom_show', {id:classroom.id}) }}"
+                {% endif %}
+                 class=" link-light  mrl " data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消
+              </a>
               <button class="pay-button btn btn-primary btn-high"  type="submit">确认支付</button>
             </div>
           </form>

@@ -313,7 +313,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
         
-        return $this->createLocalMediaResponse($request, $file, $isDownload);
+        return $this->createLocalMediaResponse($request, $file, false);
     }
 
     public function detailDataAction($courseId, $lessonId)

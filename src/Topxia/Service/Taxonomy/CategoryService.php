@@ -25,6 +25,8 @@ interface CategoryService
 
     public function makeNavCategories($categoryId, $groupCode);
 
+    public function findCategoryBreadcrumbs($categoryId);
+
     public function isCategoryCodeAvaliable($code, $exclude = null);
 
     public function createCategory(array $category);

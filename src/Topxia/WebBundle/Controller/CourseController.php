@@ -15,7 +15,7 @@ class CourseController extends CourseBaseController
 	public function exploreAction(Request $request, $category)
 	{
 		$conditions = $request->query->all();
-		
+		$categoryArray = array();
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
@@ -75,7 +75,26 @@ class CourseController extends CourseBaseController
 		} else {
 			$categories = $this->getCategoryService()->getCategoryTree($group['id']);
 		}
-
+		if(!$categoryArray){
+			$categoryArrayDescription = array();
+		}
+		else{
+		$categoryArrayDescription = $categoryArray['description'];
+		$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+        $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
+        } 
+        if(!$categoryArray){
+            $CategoryParent = '';
+        }
+        else{
+            if(!$categoryArray['parentId']){
+                    $CategoryParent = '';
+                }
+                else{
+                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+            }
+        }
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
 			'courses' => $courses,
 			'category' => $category,
@@ -84,15 +103,19 @@ class CourseController extends CourseBaseController
 			'paginator' => $paginator,
 			'categories' => $categories,
 			'consultDisplay' => true,
-			'path' => 'course_explore'
-			
+			'path' => 'course_explore',
+			'categoryArray' => $categoryArray,
+			'group' => $group,
+			'categoryArrayDescription' => $categoryArrayDescription,
+			'CategoryParent' => $CategoryParent
 		));	
 	}
 
 	public function archiveAction(Request $request)
 	{   
 		$conditions = array(
-			'status' => 'published'
+			'status' => 'published',
+			'parentId' => '0'
 		);
 
 		$paginator = new Paginator(
@@ -128,12 +151,21 @@ class CourseController extends CourseBaseController
 		$lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'],'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
 		$tags = $this->getTagService()->findTagsByIds($course['tags']);
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
-
+		if(!$course){
+            $courseDescription = array();
+        }
+        else{
+        $courseDescription = $course['about'];
+        $courseDescription = strip_tags($courseDescription,'');
+        $courseDescription = preg_replace("/ /","",$courseDescription);
+        $courseDescription = substr($courseDescription,0,100);
+        } 
 		return $this->render('TopxiaWebBundle:Course:archiveCourse.html.twig', array(
 			'course' => $course,
 			'lessons' => $lessons,
 			'tags' => $tags,
-			'category' => $category
+			'category' => $category,
+			'courseDescription' => $courseDescription
 		));
 	}
 
@@ -223,12 +255,19 @@ class CourseController extends CourseBaseController
 
 		$this->getCourseService()->hitCourse($id);
 
-        $items = $this->getCourseService()->getCourseItems($course['id']);
 
+        $items = $this->getCourseService()->getCourseItems($course['id']);
+        $courseAbout = $course['about'];
+
+        $courseAbout = strip_tags($courseAbout,'');
+
+      	$courseAbout = preg_replace("/ /","",$courseAbout); 
+      	$courseAbout = substr( $courseAbout, 0, 100 );
 		return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
 			'course' => $course,
 			'member' => $member,
 			'items' => $items,
+			'courseAbout' => $courseAbout
 		));
 
 	}
@@ -237,7 +276,6 @@ class CourseController extends CourseBaseController
 	{
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
     	$tags = $this->getTagService()->findTagsByIds($course['tags']);
-
     	return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
 			'category' => $category,
 			'tags' => $tags,

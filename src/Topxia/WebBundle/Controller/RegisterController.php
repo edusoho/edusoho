@@ -49,6 +49,7 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
+            $this->sendRegisterMessage($user);
 
             if(!isset($registration['nickname'])){
                 return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
@@ -57,7 +58,6 @@ class RegisterController extends BaseController
 
                 if(($authSettings && array_key_exists('email_enabled',$authSettings) && ($authSettings['email_enabled'] == 'closed') ) ||   !$this->isEmptyVeryfyMobile($user)){
                      $this->authenticateUser($user);
-                     $this->sendRegisterMessage($user);
                 }
 
                 $goto = $this->generateUrl('register_submited', array(
@@ -68,7 +68,6 @@ class RegisterController extends BaseController
              
                 if ($this->getAuthService()->hasPartnerAuth()) {
                      $this->authenticateUser($user);
-                     $this->sendRegisterMessage($user);
                     return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
                 }
 
@@ -230,7 +229,7 @@ class RegisterController extends BaseController
         if(!empty($user['verifiedMobile'])){
               return $this->redirect($this->generateUrl('homepage'));
         }
-        if($auth && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
+        if($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
                return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
@@ -238,12 +237,14 @@ class RegisterController extends BaseController
                 '_target_path' => $this->getTargetPath($request),
                 ));
            }else{
-                return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
+                /*return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                 '_target_path' => $this->getTargetPath($request),
-                ));
+                ));*/
+                $this->authenticateUser($user);
+                return $this->redirect($this->generateUrl('homepage'));
            }
     }
 
