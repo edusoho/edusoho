@@ -97,20 +97,37 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             }
         }
 
-        $coinSetting = $this->controller->setting("coin");
-        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
-        $cashRate = 1;
-        if ($coinEnabled && isset($coinSetting["cash_rate"])) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
-
+        $coin = $this->getCoinSetting();
         return array(
             "userProfile" => $userProfile,
             "orderInfo" => $payOrderInfo,
-            "coinEnabled" => $coinEnabled,
-            "coinPay" => (float)$payOrderInfo["price"] * (float)$cashRate,
+            "coin" => $coin,
             "isInstalledCoupon" => $this->controller->isinstalledPlugin("Coupon")
             );
+    }
+
+    private function getCoinSetting()
+    {
+        $coinSetting = $this->controller->setting("coin");
+        if (empty($coinSetting)) {
+            return null;
+        }
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        if (empty($coinEnabled)) {
+            return null;
+        }
+        $cashRate = 1;
+        if (isset($coinSetting["cash_rate"])) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
+        
+        $coin = array(
+            "cashRate"=>$cashRate,
+            "priceType"=>isset($coinSetting["price_type"]) ? $coinSetting["price_type"] : null,
+            "name"=>isset($coinSetting["coin_name"]) ? $coinSetting["coin_name"] : "虚拟币"
+        );
+
+        return $coin;
     }
 
     private function requestReceiptData($userId, $amount, $receipt, $isSandbox = false)     
