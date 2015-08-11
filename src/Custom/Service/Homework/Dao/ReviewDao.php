@@ -1,11 +1,9 @@
 <?php
 
-namespace Custom\Service\Course\Dao;
+namespace Custom\Service\Homework\Dao;
 
-interface CourseDao
+interface ReviewDao
 {
-
-	public function getPeriodicCoursesCount($rootId);
 
 	/**
 	 * 获取课程相关的其它期课程.
