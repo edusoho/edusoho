@@ -9,6 +9,7 @@
 /app/logs/*
 /build
 /files
+/installFiles
 /app/config/uc_client_config.php
 /app/config/windid_client_config.php
 /app/data/udisk/*
