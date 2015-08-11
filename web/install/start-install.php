@@ -303,9 +303,6 @@ function init_data($pdo, $config)
     $sql = file_get_contents('./edusoho_init.sql');
     $result = $pdo->exec($sql);
 
-    $sql = file_get_contents('./edusoho_init_1.sql');
-    $result = $pdo->exec($sql);
-
     $sql = "show tables";
     $results = $pdo->query($sql)->fetchAll();
     foreach ($results as $result) {
