@@ -63,11 +63,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $this->updateUserAvatar($user, $fileId);
             $this->updateNickname($user, $profile['nickname']);
             $this->getUserService()->updateUserProfile($user['id'], $profile);
+
+            $user = $this->getUserService()->getUser($user['id']);
+            return $this->controller->filterUser($user);
         } catch(\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
-
-        return true;
     }
 
     private function createImgCropOptions($naturalSize, $scaledSize)
