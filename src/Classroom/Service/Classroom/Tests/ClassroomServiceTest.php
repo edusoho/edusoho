@@ -724,7 +724,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(1,count($assistants));
     }
 
-    public function testIsClassroomAssistent()
+    public function testisClassroomAssistant()
     {
         $user = $this->createUser();
         $currentUser = new CurrentUser();
@@ -749,11 +749,11 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getServiceKernel()->setCurrentUser($currentUser2);
 
-        $result = $this->getClassroomService()->isClassroomAssistent($classroom['id'], $currentUser2['id']);
+        $result = $this->getClassroomService()->isClassroomAssistant($classroom['id'], $currentUser2['id']);
         $this->assertEquals(false,$result);
 
         $this->getClassroomService()->becomeAssistant($classroom['id'], $currentUser2['id']);
-        $result = $this->getClassroomService()->isClassroomAssistent($classroom['id'], $currentUser2['id']);
+        $result = $this->getClassroomService()->isClassroomAssistant($classroom['id'], $currentUser2['id']);
         $this->assertEquals(true,$result);
     }
 
