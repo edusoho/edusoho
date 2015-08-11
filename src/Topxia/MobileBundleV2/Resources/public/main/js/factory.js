@@ -341,6 +341,8 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		startAppView : function(name, data) {
 			alert("该功能仅支持客户端!");
+		},
+		updateUser : function(user) {
 		}
 	};
 

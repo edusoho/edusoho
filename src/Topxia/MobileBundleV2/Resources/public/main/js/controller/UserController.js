@@ -1,4 +1,4 @@
-app.controller('MyInfoController', ['$scope', 'httpService', '$stateParams', MyInfoController]);
+app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', '$stateParams', MyInfoController]);
 app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
 app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
 app.controller('StudentListController', ['$scope', 'ClassRoomService', '$stateParams', StudentListController]);
@@ -50,7 +50,7 @@ function StudentListController($scope, ClassRoomService, $stateParams)
 	});
 }
 
-function MyInfoController($scope, UserService, $stateParams) 
+function MyInfoController($scope, UserService, cordovaUtil, $stateParams) 
 {	
 	var self = this;
 	this.uploadAvatar = function(file) {
@@ -94,12 +94,12 @@ function MyInfoController($scope, UserService, $stateParams)
 			if (data.error) {
 				$scope.toast(data.error.message);
 			}
+			cordovaUtil.updateUser(data);
 			$scope.hideLoad();
 		});
 	};
 
 	$scope.uploadChange = function(file) {
-		console.log(file.value);
 		if (file && file.value) {
 			self.uploadAvatar(file);
 		}

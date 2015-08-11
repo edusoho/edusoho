@@ -86,5 +86,8 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             }
             exec(null, null, "ESNativeCore", "startAppView", [ name, data, type ]);
         },
+        updateUser : function(user){
+            exec(null, null, "ESNativeCore", "updateUser", [ user ]);
+        }
     };
 });
