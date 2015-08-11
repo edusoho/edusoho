@@ -48,8 +48,8 @@
                   <img ng-src="{{ course.middlePicture }}" img-error="course" />
                     <span class="discount-label" ng-class="course.discount == 0 ? 'free' : 'rebate' " ng-if="course.discountId > 0">
                             <span class="discount-label-bottom"></span>
-                            <span class="discount-label-content" ng-if="course.discount == 0">限时免费</span>
-                            <span class="discount-label-content" ng-if="course.discount > 0">限时打折</span>
+                            <span class="discount-label-content" ng-if="course.discount == 0">限时<br>免费</span>
+                            <span class="discount-label-content" ng-if="course.discount > 0">限时<br>打折</span>
                     </span>
                     
               </div>

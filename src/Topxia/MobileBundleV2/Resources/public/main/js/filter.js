@@ -104,7 +104,7 @@ filter('formatPrice', ['$rootScope', function($rootScope){
 		}
 		return price;
 	}
-}])
+}]).
 filter('coverLearnProsser', ['$rootScope', function($rootScope){
 
 	return function(course) {
