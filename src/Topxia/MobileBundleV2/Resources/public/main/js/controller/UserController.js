@@ -93,7 +93,9 @@ function MyInfoController($scope, UserService, cordovaUtil, $stateParams)
 		UserService.updateUserProfile(params, function(data) {
 			if (data.error) {
 				$scope.toast(data.error.message);
+				return;
 			}
+			$scope.toast("更新成功!");
 			cordovaUtil.updateUser(data);
 			$scope.hideLoad();
 		});
