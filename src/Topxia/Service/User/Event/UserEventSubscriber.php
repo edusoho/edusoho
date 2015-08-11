@@ -7,6 +7,7 @@ use Topxia\WebBundle\Util\TargetHelper;
 
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\EdusohoTuiClient;
 
 class UserEventSubscriber implements EventSubscriberInterface
 {
@@ -23,7 +24,8 @@ class UserEventSubscriber implements EventSubscriberInterface
     public function onUserRegistered(ServiceEvent $event)
     {
         $user = $event->getSubject();
-        $this->getEduCloudService()->addStudent($user);
+        $tuiClient = new EdusohoTuiClient();
+        $result = $tuiClient->addStudent($user);
     }
 
     public function onUserFollowed(ServiceEvent $event)
@@ -50,7 +52,8 @@ class UserEventSubscriber implements EventSubscriberInterface
                 'typeBusiness' => 'verified'
             ))
         );
-        $this->getEduCloudService()->sendMessage($message);
+        $tuiClient = new EdusohoTuiClient();
+        $result = $tuiClient->sendMessage($message);
     }
 
     public function onUserUnfollowed(ServiceEvent $event)
@@ -64,11 +67,6 @@ class UserEventSubscriber implements EventSubscriberInterface
             'opration' => 'unfollow'
         );
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
-    }
-
-    private function getEduCloudService()
-    {
-        return ServiceKernel::instance()->createService('EduCloud.EduCloudService');
     }
 
     private function getUserService()

@@ -3,15 +3,15 @@ namespace Topxia\Service\CloudPlatform\Client;
 
 use Psr\Log\LoggerInterface;
 
-class CloudAPI extends AbstractCloudAPI
+class AbstractCloudAPI
 {
     const VERSION = 'v1';
 
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
-    protected $connectTimeout = 30;
+    protected $connectTimeout = 2;
 
-    protected $timeout = 60;
+    protected $timeout = 4;
 
     protected $apiUrl = 'http://api.edusoho.net';
 
@@ -21,6 +21,11 @@ class CloudAPI extends AbstractCloudAPI
 
     public function __construct(array $options)
     {
+        $this->init($options);
+    }
+
+    public function init(array $options)
+    {
         $this->accessKey = $options['accessKey'];
         $this->secretKey = $options['secretKey'];
 
@@ -28,6 +33,11 @@ class CloudAPI extends AbstractCloudAPI
             $this->apiUrl = rtrim($options['apiUrl'], '/');
         }
         $this->debug = empty($options['debug']) ? false : true;
+    }
+
+    public function getAccessKey()
+    {
+        return $this->accessKey;
     }
 
     public function post($uri, array $params = array(), array $header = array())
@@ -113,15 +123,33 @@ class CloudAPI extends AbstractCloudAPI
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_BODY {$body}");
 
         curl_close($curl);
+
+        $context = array(
+            'CURLINFO' => $curlinfo,
+            'HEADER' => $header,
+            'BODY' => $body,
+        );
+
+        if (empty($curlinfo['connect_time'])) {
+            $this->logger && $this->logger->error("[{$requestId}] API_CONNECT_TIMEOUT", $context);
+            throw new CloudAPIIOException("Connect api server timeout (url: {$url}).");
+        }
+
+        if (empty($curlinfo['starttransfer_time'])) {
+            $this->logger && $this->logger->error("[{$requestId}] API_TIMEOUT", $context);
+            throw new CloudAPIIOException("Request api server timeout (url:{$url}).");
+        }
+
+        if ($curlinfo['http_code'] >= 500) {
+            $this->logger && $this->logger->error("[{$requestId}] API_RESOPNSE_ERROR", $context);
+            throw new CloudAPIIOException("Api server internal error (url:{$url}).");
+        }
+
         $result = json_decode($body, true);
-        if ($result === null) {
-            $context = array(
-                'CURLINFO' => $curlinfo,
-                'HEADER' => $header,
-                'BODY' => $body,
-            );
+
+        if (empty($result)) {
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
-            throw new \RuntimeException("Response json decode error:<br> $response");
+            throw new CloudAPIIOException("Api result json decode error: (url:{$url}).");
         }
 
         return $result;
@@ -140,4 +168,5 @@ class CloudAPI extends AbstractCloudAPI
 
         return "{$this->accessKey}:{$hash}";
     }
+
 }

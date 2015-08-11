@@ -3,7 +3,7 @@ namespace Topxia\Service\CloudPlatform\Client;
 
 use Psr\Log\LoggerInterface;
 
-class CloudAPI extends AbstractCloudAPI
+class TuiCloudAPI extends AbstractCloudAPI
 {
     const VERSION = 'v1';
 
@@ -13,7 +13,7 @@ class CloudAPI extends AbstractCloudAPI
 
     protected $timeout = 60;
 
-    protected $apiUrl = 'http://api.edusoho.net';
+    protected $apiUrl = 'http://115.29.78.158:89';
 
     protected $debug = false;
 
@@ -123,7 +123,6 @@ class CloudAPI extends AbstractCloudAPI
             $this->logger && $this->logger->error("[{$requestId}] RESPONSE_JSON_DECODE_ERROR", $context);
             throw new \RuntimeException("Response json decode error:<br> $response");
         }
-
         return $result;
     }
 
