@@ -20,12 +20,9 @@
   {% if RecentLiveCourses %}
   <section class="live-course-section">
     <div class="container">
-      <div class="index-class-header">
-        <div class="text-line gray">
-          <h5><span>近期直播</span></h5>
-          <div class="line"></div>
-          <a href="{{ path('live_course_explore') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
-        </div>
+      <div class="text-line gray">
+        <h5><span>近期直播</span><div class="line"></div></h5>
+        <!-- <div class="subtitle">实时跟踪直播课程，避免课程遗漏。</div> -->
       </div>
       <div class="course-list">
         <div class="row">
@@ -37,7 +34,7 @@
               {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                 <div class="course-date visible-lg">
                   <div class="btn-circle btn-live  btn-circle-md">
-                    <i class="es-icon es-icon-videoplay"></i>
+                    <i class="es-icon es-icon-videocam"></i>
                   </div>
                   <div class="date">
                     正在直播
@@ -76,6 +73,11 @@
           {% endif %}
         </div>
       </div>
+      <div class="text-center mvl">
+        <a href="{{ path('live_course_explore') }}" class="btn btn-default btn-lg">
+          更多直播 <i class="es-icon es-icon-morehoriz"></i>
+        </a>
+      </div>
     </div>
   </section>
   {% endif %}
@@ -89,19 +91,24 @@
   {% if RecommendClassrooms %}
     <section class="class-section">
       <div class="container">
-        <div class="index-class-header">
-          <div class="text-line">
-            <h5><span>推荐{{ setting('classroom.name')|default("班级") }}</span></h5>
+        <div class="text-line">
+          <h5>
+            <span>推荐{{ setting('classroom.name')|default("班级") }}</span>
             <div class="line"></div>
-            <a href="{{path('classroom_explore')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
-          </div>
+          </h5>
+          <!-- <div class="subtitle">班级化学习体系，给你更多的课程相关服务。</div> -->
         </div>
         <div class="recommend-class-list row">
-          {% for classroom in RecommendClassrooms%}
+          {% for classroom in RecommendClassrooms %}
             <div class="col-md-3 col-sm-6">
                {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %} 
             </div>
           {% endfor %}
+        </div>
+        <div class="text-center mvl">
+          <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
+            更多{{ setting('classroom.name')|default("班级") }} <i class="es-icon es-icon-morehoriz"></i>
+          </a>
         </div>
       </div>
     </section>
@@ -112,11 +119,9 @@
   {% if groups %}
     <section class="group-dynamic">
       <div class="container">
-        <div class="group-dynamic-header">
-          <div class="text-line gray">
-            <h5><span>小组动态</span></h5>
-            <div class="line"></div>
-          </div>
+        <div class="text-line gray">
+          <h5><span>小组动态</span><div class="line"></div></h5>
+          <!-- <div class="subtitle">参与小组，结交更多同学，关注课程动态。</div> -->
         </div>
         <div class="group-dynamic-body row">
           <div class="col-md-6">
@@ -192,12 +197,9 @@
   {% if teachers %}
   <section class="recommend-teacher">
     <div class="container">
-      <div class="recommend-teacher-header">
-        <div class="text-line">
-          <h5><span>推荐教师</span></h5>
-          <div class="line"></div>
-          <a href="{{ path('teacher') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
-        </div>
+      <div class="text-line">
+        <h5><span>推荐教师</span><div class="line"></div></h5>
+        <!-- <div class="subtitle">名师汇集，保证教学质量与学习效果。</div> -->
       </div>
       <div class="row">
         {% for teacher in teachers %}
@@ -207,6 +209,11 @@
             {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
           </div>
         {% endfor %}
+      </div>
+      <div class="text-center mvl">
+        <a href="{{ path('teacher') }}" class="btn btn-default btn-lg">
+          更多教师 <i class="es-icon es-icon-morehoriz"></i>
+        </a>
       </div>
     </div>
   </section>

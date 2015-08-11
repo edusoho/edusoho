@@ -117,6 +117,10 @@ register_captcha_check:
     pattern:  /register/captcha/check
     defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
 
+register_captcha_modal:
+    pattern:  /register/captcha/modal
+    defaults: { _controller: TopxiaWebBundle:Register:captchaModal }
+
 register_analysis:
     pattern:  /register/analysis
     defaults: { _controller: TopxiaWebBundle:Register:analysis }
@@ -1050,6 +1054,10 @@ password_reset_update:
     pattern:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+password_reset_check_mobile:
+    pattern:  /password/reset/check/mobile
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
+
 browser_upgrade:
     pattern:  /browser/upgrade
     defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
@@ -1259,6 +1267,10 @@ user_learning_classrooms:
 user_card_show:
     pattern:  /user/{userId}/card/show
     defaults: { _controller: TopxiaWebBundle:User:cardShow }
+
+login_after_fill_userinfo:
+    pattern:  /fill/userinfo
+    defaults: { _controller: TopxiaWebBundle:User:fillUserInfo }
 
 message_create:
     pattern: /message/create/{toId}
@@ -1780,6 +1792,14 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
+common_learn_qrcode:
+    pattern: /qrcode/generate
+    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
+
+common_parse_qrcode:
+    pattern: /qrcode/parse/{token}
+    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
+
 esbar_my_classroom:
     pattern:  /esbar/my/classroom
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
@@ -1800,3 +1820,4 @@ esbar_my_practice:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+

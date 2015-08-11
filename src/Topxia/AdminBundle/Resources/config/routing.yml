@@ -689,6 +689,10 @@ admin_cloud_video:
     pattern:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
 
+admin_cloud_doc:
+    pattern:  /cloud/doc
+    defaults: { _controller: TopxiaAdminBundle:Cloud:doc }
+
 admin_cloud_live:
     pattern:  /cloud/live
     defaults: { _controller: TopxiaAdminBundle:Cloud:live }
@@ -1199,6 +1203,18 @@ admin_coin_give_check_nickname:
 admin_bill:
     pattern: /coin/bill
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
+
+admin_bill_export_csv:
+    pattern: /coin/bill/export/{cashType}
+    defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
+
+admin_order_manage_export_csv:
+    pattern: /order/manage/export/{targetType}
+    defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
+
+admin_order_manage_export_coin_csv:  
+    pattern: /order/manage/coin
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
 
 admin_coin_user_records:
     path:     /coin/records/user

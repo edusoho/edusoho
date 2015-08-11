@@ -95,6 +95,16 @@
       <div class="toolbar-nav">
 
         <ul class="toolbar-nav-stacked" id="lesson-toolbar-primary"></ul>
+        <ul class="list-unstyled">
+          <li class="es-qrcode toolbar-qrcode" data-url="{{path('common_learn_qrcode',{courseId: course.id,type:"lesson-qrcode"})}}">
+            <i class="es-icon es-icon-qrcode"></i><br>
+            扫一扫
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              扫二维码继续学习
+            </span>
+          </li>
+        </ul>
         <ul class="toolbar-nav-stacked" id="lesson-toolbar-secondary">
           <li class="hide-pane" style="display:none;">
             <a href="javascript:"><span class="glyphicon glyphicon-chevron-right"></span></a>

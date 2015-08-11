@@ -1,27 +1,25 @@
 .es-banner {
   position: relative;
-  height: 100px;
-  padding: 30px 0;
-  color: #fff;
+  height: 80px;
+  padding: 20px 0;
+  background-color: @gray-lighter;
   letter-spacing: 1px;
+  .container {
+    position: relative;
+  }
   .title {
     text-transform: uppercase;
-    font-size: 18px;
-    span {
-      font-size: 30px;
+    padding: 6px 0;
+    font-size: 20px;
+    >i {
+      float: left;
       margin-right: 10px;
+      font-size: 20px;
     }
   }
-  .course-more {
+  .more {
     position: absolute;
-    bottom: -28px;
-    margin-left: -28px;
-    left: 50%;
-    z-index: 1;
-    .btn-more {
-      padding: 10px 5px;
-      color: #fff;
-      background-color: @brand-primary;
-    }
+    top: 0;
+    right: 10px;
   }
 }

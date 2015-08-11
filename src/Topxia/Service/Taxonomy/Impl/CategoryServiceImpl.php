@@ -105,6 +105,35 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $childrenIds;
     }
 
+    public function findCategoryBreadcrumbs($categoryId)
+    {
+        $breadcrumbs = array();
+        $category = $this->getCategory($categoryId);
+        if (empty($category)) {
+            return array();
+        }
+        $categoryTree = $this->getCategoryTree($category['groupId']);
+
+        $indexedCategories = ArrayToolkit::index($categoryTree, 'id');
+
+        while (true) {
+            if (empty($indexedCategories[$categoryId])) {
+                break;
+            }
+
+            $category = $indexedCategories[$categoryId];
+            $breadcrumbs[] = $category;
+
+            if (empty($category['parentId'])) {
+                break;
+            }
+
+            $categoryId = $category['parentId'];
+        }
+
+        return array_reverse($breadcrumbs);
+    }
+
     public function makeNavCategories($code, $groupCode)
     {
        
