@@ -191,14 +191,21 @@ class CourseController extends BaseController
         ));
     }
 
-    public function cancelRecommendAction(Request $request, $id)
+
+    public function cancelRecommendAction(Request $request, $id,$type)
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
+        if($type == 'default'){
         return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
             'request' => $request
         ));
+        }
+        else{
+        return $this->renderCourseTr($id,$request);
+        }
     }
+
 
     public function recommendListAction(Request $request)
     {
