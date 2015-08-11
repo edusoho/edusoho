@@ -33,19 +33,19 @@ $api = $app['controllers_factory'];
 ```
 */
 
-$api->post('/', function (Request $request) {
-    $type = $request->request->get('type', 'image');
-    $maker = new UploadToken();
-    $token = $maker->make('default',$type);
+// $api->post('/', function (Request $request) {
+//     $type = $request->request->get('type', 'image');
+//     $maker = new UploadToken();
+//     $token = $maker->make('default',$type);
 
-    $token = $maker->parse($token);
-    if (empty($token)) {
-        throw new \RuntimeException("上传授权码已过期！");
-    }
+//     $token = $maker->parse($token);
+//     if (empty($token)) {
+//         throw new \RuntimeException("上传授权码已过期！");
+//     }
 
-    $groupCode = empty($groupCode) ? 'default' : $token['group'];
-    $file = $request->files->get('file');
-    $record = ServiceKernel::instance()->createService('Content.FileService')->uploadFile($groupCode, $file);
-    return filter($record, 'file');
-});
+//     $groupCode = empty($groupCode) ? 'default' : $token['group'];
+//     $file = $request->files->get('file');
+//     $record = ServiceKernel::instance()->createService('Content.FileService')->uploadFile($groupCode, $file);
+//     return filter($record, 'file');
+// });
 return $api;

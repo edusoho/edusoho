@@ -5,6 +5,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\MessageService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Util\EdusohoTuiClient;
 
 class MessageServiceImpl extends BaseService implements MessageService
 {   
@@ -147,7 +148,8 @@ class MessageServiceImpl extends BaseService implements MessageService
             $messageSetting = array('lastMaxId' => 0);
             $this->getSettingService()->set('message', $messageSetting);
         }
-        $messages = $this->getEduCloudService()->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
+        $tuiClient = new EdusohoTuiClient();
+        $messages = $tuiClient->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
         $lastMaxId = 0;
         if (isset($messages['error'])) {
             throw $this->createServiceException('获取远程私信错误');
@@ -293,11 +295,6 @@ class MessageServiceImpl extends BaseService implements MessageService
     protected function getUserService()
     {
         return $this->createService('User.UserService');
-    }
-
-    protected function getEduCloudService()
-    {
-        return $this->createService('EduCloud.EduCloudService');
     }
 
     protected function getSettingService()

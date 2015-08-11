@@ -19,6 +19,7 @@ use Symfony\Component\Debug\ExceptionHandler;
 ErrorHandler::register();
 ExceptionHandler::register();
 $config = include __DIR__ . '/config.php';
+$config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
 $connection = DriverManager::getConnection(array(
     'dbname' => $config['database_name'],

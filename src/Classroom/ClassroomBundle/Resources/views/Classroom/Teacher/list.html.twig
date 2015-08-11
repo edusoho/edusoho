@@ -1,6 +1,7 @@
 {% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
 
 {% set nav = 'teachers' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% do load_script('classroombundle/controller/classroom/detail/teacher-list') %}
 {% block main %}
 

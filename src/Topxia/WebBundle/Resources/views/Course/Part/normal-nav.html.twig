@@ -1,7 +1,7 @@
 {% set tab = tab|default(null) %}
-
 <div class="nav-btn-tab">
   <ul class="nav nav-tabs" role="tablist">
+
     {% if not member %}
       <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">课程概览</a></li>
       <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}>

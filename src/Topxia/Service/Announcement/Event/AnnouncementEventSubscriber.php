@@ -7,6 +7,7 @@ use Topxia\WebBundle\Util\TargetHelper;
 
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\EdusohoTuiClient;
 
 class AnnouncementEventSubscriber implements EventSubscriberInterface
 {
@@ -22,12 +23,8 @@ class AnnouncementEventSubscriber implements EventSubscriberInterface
     {
         $announcement = $event->getSubject();
         if ($announcement['targetType'] == 'global') {
-            $this->getEduCloudService()->sendAnnouncement($announcement);
+            $tuiClient = new EdusohoTuiClient();
+            $result = $tuiClient->sendAnnouncement($announcement);
         }
-    }
-
-    private function getEduCloudService()
-    {
-        return ServiceKernel::instance()->createService('EduCloud.EduCloudService');
     }
 }

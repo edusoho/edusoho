@@ -5,6 +5,7 @@
 @import "mixins/scale.less";                //css3效果
 @import "mixins/loader-inner.less";         //css3效果
 @import "mixins/shake.less";                //css3效果-上下抖动
+@import "mixins/transup.less";              //css3效果-向上推动
 @import "mixins/color.less";                //颜色
 @import "mixins/input.less";                //输入框
 @import "mixins/spacing.less";              //间距
@@ -48,7 +49,7 @@
 // 用于空数据
 .empty {
   text-align: center;
-  color: #999;
+  color: @gray-medium;
   padding: 20px 0;
 }
 
@@ -142,7 +143,18 @@ a.transition {
           box-shadow: @box-shadow;
 }
 
-.border-radius(@border-radius:4px) {
+.es-box-shadow {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
+     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
+  // -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  //    -moz-box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  //         box-shadow: 0 0 6px rgba(0,0,0,0.08);
+  
+
+}
+
+.border-radius(@border-radius:2px) {
   -webkit-border-radius: @border-radius;
      -moz-border-radius: @border-radius;
           border-radius: @border-radius;
