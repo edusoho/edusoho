@@ -111,12 +111,7 @@
       {% endif %}
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
-          {% if course.locked == 1 %}
-            <a href="#modal" class="btn btn-primary" data-toggle="modal" data-url="{{ path('course_manage_course_sync_edit',{courseId:course.id})}}">保存
-            </a>
-          {% else %}
             <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">保存</button>
-          {% endif %}
         </div>
       </div>
 
