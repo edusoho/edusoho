@@ -16,15 +16,17 @@ class Version20150618194042 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("
-            CREATE TABLE `blacklist` (
-             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-             `userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
-             `blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
-             `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
-             PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COMMENT='黑名单表';
-        ");
+        if (!$this->isTableExist('blacklist')) {
+            $this->addSql("
+                CREATE TABLE `blacklist` (
+                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                 `userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
+                 `blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
+                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
+                 PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COMMENT='黑名单表';
+            ");
+        }
     }
 
     /**
@@ -34,5 +36,12 @@ class Version20150618194042 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->connection->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 }

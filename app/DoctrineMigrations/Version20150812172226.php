@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150706112110 extends AbstractMigration
+class Version20150812172226 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -16,12 +16,8 @@ class Version20150706112110 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        if (!$this->isFieldExist('message', 'type')) {
-            $this->addSql("ALTER TABLE `message` ADD `type` enum('text','img','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型' AFTER `id`;");
-        }
-
-        if (!$this->isFieldExist('message_conversation', 'latestMessageType')) {
-            $this->addSql("ALTER TABLE `message_conversation` ADD `latestMessageType` enum('text','img','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型' AFTER `latestMessageContent`;");
+        if (!$this->isFieldExist('friend', 'pair')) {
+            $this->addSql("ALTER TABLE `friend` ADD `pair` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否为互加好友' AFTER `toId`;");
         }
     }
 

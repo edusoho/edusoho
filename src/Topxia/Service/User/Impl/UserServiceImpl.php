@@ -1054,13 +1054,15 @@ class UserServiceImpl extends BaseService implements UserService
         if(!empty($friend)) {
             throw $this->createServiceException('不允许重复关注!');
         }
-
+        $isFollowed = $this->isFollowed($toId, $fromId);
+        $pair = $isFollowed ? 1 : 0;
         $friend = $this->getFriendDao()->addFriend(array(
-            "fromId"=>$fromId,
-            "toId"=>$toId,
-            "createdTime"=>time()
+            'fromId' => $fromId,
+            'toId' => $toId,
+            'createdTime' => time(),
+            'pair' => $pair
         ));
-
+        $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => $pair));
         $this->getDispatcher()->dispatch('user.service.follow', new ServiceEvent($friend));
         return $friend;
     }
@@ -1077,6 +1079,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('不存在此关注关系，取消关注失败！');
         }
         $result = $this->getFriendDao()->deleteFriend($friend['id']);
+        $isFollowed = $this->isFollowed($toId, $fromId);
+        if ($isFollowed) {
+            $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => 0));
+        }
         $this->getDispatcher()->dispatch('user.service.unfollow', new ServiceEvent($friend));
         return $result;
     }
