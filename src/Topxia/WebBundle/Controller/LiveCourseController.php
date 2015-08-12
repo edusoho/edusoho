@@ -265,9 +265,8 @@ class LiveCourseController extends BaseController
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
             'url' => $this->generateUrl('live_classroom_replay_url',array(

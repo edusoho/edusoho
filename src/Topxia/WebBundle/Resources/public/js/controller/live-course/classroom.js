@@ -3,9 +3,15 @@ define(function(require, exports, module) {
 	exports.run = function() {
 
 		var intervalId = 0;
-
+		var tryCount = 1;
 
 		function getRoomUrl(){
+			if(tryCount>10) {
+				clearInterval(intervalId);
+				var html = "进入直播教室错误，请联系管理员，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
+				$("#classroom-url").html(html);
+				return;
+			}
 			$.ajax({
 				url: $("#classroom-url").data("url"),
 				success: function(data){
@@ -20,6 +26,7 @@ define(function(require, exports, module) {
 
 						clearInterval(intervalId);
 					}
+					tryCount++;
 				},
 				error: function(){
 					//var html = "进入直播教室错误，请联系管理员，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
