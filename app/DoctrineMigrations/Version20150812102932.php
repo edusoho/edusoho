@@ -30,19 +30,7 @@ class Version20150812102932 extends AbstractMigration
         $this->addSql("ALTER TABLE `testpaper` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id'");
         $this->addSql("ALTER TABLE `testpaper_item` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id'");
         $this->addSql("ALTER TABLE `course_material` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id'");
-        $this->addSql("ALTER TABLE `course_chapter` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id'");
-        
-        if($this->isTableExist('homework')) {
-            $this->addSql("ALTER TABLE `homework` DROP `pId`");
-            $this->addSql("ALTER TABLE `homework_item` DROP `pId`");
-            $this->addSql("ALTER TABLE `homework` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的作业Id'");
-            $this->addSql("ALTER TABLE `homework_item` ADD `pId`INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习问题ID'");
-        }
-
-        if($this->isTableExist('exercise')){
-            $this->addSql("ALTER TABLE `exercise` DROP `pId`");
-            $this->addSql("ALTER TABLE `exercise` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习的ID'");
-        }
+        $this->addSql("ALTER TABLE `course_chapter` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id'");  
     }
 
     /**
@@ -52,12 +40,5 @@ class Version20150812102932 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->connection->fetchAssoc($sql);
-        return empty($result) ? false : true;
     }
 }
