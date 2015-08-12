@@ -15,7 +15,8 @@ define(function(require, exports, module) {
 	       	}
 	       	console.log($form.serialize());
 	        $.post($form.attr('action'), $form.serialize(), function(html){
-	            $modal.modal('hide');
+	            window.location.href = html;
+                $modal.modal('hide');
 	        });
         }
      });
