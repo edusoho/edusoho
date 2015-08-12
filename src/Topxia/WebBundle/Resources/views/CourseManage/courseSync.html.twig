@@ -15,7 +15,7 @@
     line-height:35px;
   }
   .panel-margin{
-    margin-top:50px !important;
+    margin-top:30px;
   }
 </style>
 
@@ -23,10 +23,16 @@
   <div class="panel-heading">{{title}}</div>
   <div class="panel-body">
     <div class="panel-locked">
-      <h5><p>本课程内容与原课程<a href="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>实时同步中。如需更改内容可以选择对原课程进行更改。</p></h5>
-      <h5><p class="panel-margin">如需解除同步单独编辑本课程，可点击下方按钮解除同步。</h5>
-      <h5><p class="panel-margin"><font color="#f3b760">注意：本过程不可逆！</font></h5>
-      <p class="panel-margin"><a href="#modal" data-toggle="modal" data-url= "{{ path('course_manage_course_sync_edit',{courseId:course.id,type:type,url:url}) }}" class="btn btn-success">解除同步</a></p>
+      <h5><p>本操作内容与原课程
+        <a href="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>
+        实时同步中。如需更改内容可以选择对原课程进行更改。
+        </p>
+      </h5>
+      <h5>
+        <p class="panel-margin">如需解除同步单独编辑本课程，可点击下方按钮解除同步。<font color="#f3b760">注意：本过程不可逆！</font>
+        </p>
+      </h5>
+      <p class="panel-margin"><a href="#modal" data-toggle="modal" data-url= "{{ path('course_manage_course_sync_edit',{courseId:course.id,type:type,url:url}) }}" class="btn btn-danger">解除同步</a></p>
     </div>
   </div>
 </div>
