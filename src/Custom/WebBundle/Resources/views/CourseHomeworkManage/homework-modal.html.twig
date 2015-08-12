@@ -10,7 +10,7 @@
         <div class="panel-heading">
 
             <ol class="breadcrumb">
-                <li><a href="{{ path('course_manage_lesson',{id:course.id}) }}">Custom课时管理</a></li>
+                <li><a href="{{ path('course_manage_lesson',{id:course.id}) }}">课时管理</a></li>
                 <li class="active">{% if homework|default(null) %}编辑{% else %}添加{% endif %}作业</li>
             </ol>
 
@@ -43,29 +43,32 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="completeTimeGroup" style="display:none">
                     <div class="col-md-2 control-label">
                         <label for="completeTime">作业完成时间</label>
                     </div>
-                    <div class="col-md-8 controls" >
+                    <div class="col-md-8 controls">
                         <input type="text" id="completeTime" name="completeTime" class="form-control" value="">
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="reviewEndTimeGroup" style="display:none">
                     <div class="col-md-2 control-label">
                         <label for="reviewEndTime">互评结束时间</label>
                     </div>
-                    <div class="col-md-8 controls" >
+                    <div class="col-md-8 controls">
                         <input type="text" id="reviewEndTime" name="reviewEndTime" class="form-control" value="">
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="scoreRuleGroup" style="display:none">
                     <div class="col-md-2 control-label">
                         <label for="scoreRule">作业成绩占比</label>
                     </div>
                     <div class="col-md-8 controls">
-                        <input type="text" id="scoreRule" name="scoreRule" class="form-control" value="">
+                        <input type="text" id="scoreRule" name="scoreRule" class="form-control" value=""
+                               placeholder="1:0.8:0.5,5">
+
+                        <p class="help-block">请按如下格式依次输入完成互评的，部分完成的，未互评的，最少互评人数：1:0.8:0.5:5</p>
                     </div>
                 </div>
 

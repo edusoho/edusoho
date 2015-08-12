@@ -8,6 +8,37 @@ use Topxia\Common\Paginator;
 
 class CourseHomeworkManageController extends BaseManageController
 {
+    public function createAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程(#{$courseId})不存在！");
+        }
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        if ($request->getMethod() == 'POST') {
+
+            $fields = $request->request->all();
+            $homework = $this->getHomeworkService()->createHomework($courseId, $lessonId, $fields);
+
+            if ($homework) {
+                return $this->createJsonResponse(array("status" => "success", 'courseId' => $courseId));
+            } else {
+                return $this->createJsonResponse(array("status" => "failed"));
+            }
+        }
+
+        return $this->render('CustomWebBundle:CourseHomeworkManage:homework-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+        ));
+    }
+
     public function listAction(Request $request)
     {
         $status = $request->query->get('status', 'finished');
@@ -33,8 +64,8 @@ class CourseHomeworkManageController extends BaseManageController
         $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
         $courses = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
         $lessons = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
-     
-        return $this->render('CustomWebBundle:CourseHomeworkManage:list.html.twig',array(
+
+        return $this->render('CustomWebBundle:CourseHomeworkManage:list.html.twig', array(
             'status' => $status,
             'homeworkResults' => $homeworkResults,
             'courses' => $courses,
@@ -46,7 +77,7 @@ class CourseHomeworkManageController extends BaseManageController
 
     private function getHomeworkService()
     {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return $this->getServiceKernel()->createService('Custom:Homework.HomeworkService');
     }
 
     private function getCourseService()

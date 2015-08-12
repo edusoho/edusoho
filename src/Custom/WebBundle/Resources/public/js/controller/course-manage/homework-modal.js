@@ -23,6 +23,26 @@ define(function (require, exports, module) {
         }, "作业完成时间必须小于互评结束时间"
     );
 
+    Validator.addRule(
+        'scoreRule_check',
+        /^[0-9]+(:\d+.\d+){2}:[0-9]+$/,
+        "请按如下格式依次输入完成互评的，部分完成的，未互评的，最少互评人数：1:0.8:0.5:5"
+    );
+
+    comment();
+    function comment() {
+        var $comment = $('[name="comment"]:checked').val();
+        if ($comment == 1) {
+            $('#completeTimeGroup').show();
+            $('#reviewEndTimeGroup').show();
+            $('#scoreRuleGroup').show();
+        } else {
+            $('#completeTimeGroup').hide();
+            $('#reviewEndTimeGroup').hide();
+            $('#scoreRuleGroup').hide();
+        }
+    }
+
     // group: 'default'
     var editor = CKEDITOR.replace('homework-about-field', {
         toolbar: 'Minimal',
@@ -46,11 +66,16 @@ define(function (require, exports, module) {
             'click [data-role=batch-item]': 'onClickItemBatchSelect',
             'click [data-role=batch-delete]': 'onClickBatchDelete',
             'click .item-delete-btn': 'onClickItemDelete',
+            'click [name=comment]': 'changeComment',
             'click #save-homework-btn': 'onConfirmSubmit'
         },
 
         setup: function () {
             this.initItemSortable();
+        },
+
+        changeComment: function () {
+            comment();
         },
 
         onConfirmSubmit: function (e) {
@@ -59,6 +84,11 @@ define(function (require, exports, module) {
             var $btn = $('#save-homework-btn');
             var $description = editor.getData();
             var $completeLimit = $('[name="completeLimit"]:checked').val();
+            var $comment = $('[name="comment"]:checked').val();
+            var $completeTime = $('#completeTime').val();
+            var $reviewEndTime = $('#reviewEndTime').val();
+            var $scoreRule = $('#scoreRule').val();
+            var $rules = $scoreRule.split(':');
             var excludeIds = [];
             var $tbodyValueLength = $('#homework-table-tbody:has(tr)').length;
 
@@ -69,12 +99,22 @@ define(function (require, exports, module) {
                 $btn.attr("disabled", true);
                 if ($('[data-role=homework-edit]').length > 0) {
                     $btn.button('saving');
-                    $.post($('#save-homework-btn').data('url'), {description: $description}, function (response) {
+                    $.post($('#save-homework-btn').data('url'), {
+                        description: $description,
+                        pairReview: $comment,
+                        completeTime: $completeTime,
+                        reviewEndTime: $reviewEndTime,
+                        completePercent: $rules[0],
+                        partPercent: $rules[1],
+                        zeroPercent: $rules[2],
+                        minReviews: $rules[3]
+                    }, function (response) {
                         if (response.status == 'success') {
                             window.location.href = "/course/" + response.courseId + "/manage/lesson";
                         }
                     });
-                };
+                }
+                ;
 
             } else {
 
@@ -88,7 +128,14 @@ define(function (require, exports, module) {
 
                 $.post($('#save-homework-btn').data('url'), {
                     description: $description,
+                    pairReview: $comment,
+                    completeTime: $completeTime,
+                    reviewEndTime: $reviewEndTime,
                     completeLimit: $completeLimit,
+                    completePercent: $rules[0],
+                    partPercent: $rules[1],
+                    zeroPercent: $rules[2],
+                    minReviews: $rules[3],
                     excludeIds: excludeIds.join(',')
                 }, function (response) {
                     if (response.status == 'success') {
@@ -230,7 +277,8 @@ define(function (require, exports, module) {
 
         validator.addItem({
             element: '[name=scoreRule]',
-            required: true
+            required: true,
+            rule: 'scoreRule_check'
         });
 
         var now = new Date();
