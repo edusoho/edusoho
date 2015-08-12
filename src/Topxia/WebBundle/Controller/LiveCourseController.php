@@ -60,7 +60,8 @@ class LiveCourseController extends BaseController
 
         $liveCourses = $this->getCourseService()->searchCourses( array(
             'status' => 'published',
-            'type' => 'live'
+            'type' => 'live',
+            'parentId' => '0'
         ), 'lastest',0, 10 );
 
         $userIds = array();
@@ -84,6 +85,7 @@ class LiveCourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'type' => 'live',
+            'parentId' => '0',
             'ratingGreaterThan' => 0.01
         );
 
