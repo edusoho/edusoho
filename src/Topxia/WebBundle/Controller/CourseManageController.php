@@ -392,7 +392,6 @@ class CourseManageController extends BaseController
             }
           //return $this->createJsonResponse(true);
         }
-        exit();
         return $this->render('TopxiaWebBundle:CourseManage:courseSyncEdit.html.twig',array('courseId'=>$courseId));
     }
 

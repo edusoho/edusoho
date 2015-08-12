@@ -4,8 +4,6 @@
 
 {% set side_nav = type %}
 
-{% set script_controller = 'course-manage/sync' %}
-
 {% block main %}
 
 <style>
@@ -17,7 +15,7 @@
     line-height:35px;
   }
   .panel-margin{
-    margin-top:50px;
+    margin-top:50px !important;
   }
 </style>
 
@@ -27,7 +25,7 @@
     <div class="panel-locked">
       <h5><p>本课程的内容跟原课程<a href="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>同步实时更新。</b></p></h5>
       <h5><p class="panel-margin">开始编辑课程内容，但是一旦保存后，本课程将<font color="#f3b760">不再同步实时更新</font>，全部内容需要您手动编辑。</h5>
-      <p class="panel-margin"><a href="#modal" data-toggle="modal" data-url　="{{ path('course_manage_course_sync_edit',{courseId:course.id}) }}" class="btn btn-success">编辑</a></p>
+      <p class="panel-margin"><a href="#modal" data-toggle="modal" data-url= "{{ path('course_manage_course_sync_edit',{courseId:course.id}) }}" class="btn btn-success">编辑</a></p>
     </div>
   </div>
 </div>
