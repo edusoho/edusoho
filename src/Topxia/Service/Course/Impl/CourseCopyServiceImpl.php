@@ -72,6 +72,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields['target'] = "course-{$newCourse['id']}";
             $fields['createdTime'] = time();
             $fields['updatedTime'] = time();
+            $fields['pId'] = $testpaper['id'];
             unset($fields['id']);
             $newTestpaper = $this->getTestpaperDao()->addTestpaper($fields);
             $map[$testpaper['id']] = $newTestpaper;
@@ -86,6 +87,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
                     'score' => $item['score'],
                     'missScore' => $item['missScore'],
+                    'pId'=>$item['id']
                 );
 
                 $this->getTestpaperItemDao()->addItem($fields);
@@ -119,6 +121,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map = array();
         foreach ($questions as $question) {
             $oldQuestionId = $question['id'];
+            $fields['pId'] = $question['id'];
             $fields = ArrayToolkit::parts($question, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'parentId', 'subCount', 'userId'));
             if (strpos($question['target'], 'lesson') > 0) {
                 $pos = strrpos($question['target'], '-');
@@ -142,6 +145,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     $fields['parentId'] = $question['id'];
                     $fields['updatedTime'] = time();
                     $fields['createdTime'] = time();
+                    $fields['pId'] = $subQuestion['id'];
                     if (strpos($subQuestion['target'], 'lesson') > 0) {
                         $pos = strrpos($subQuestion['target'], '-');
                         $oldLessonId = substr($subQuestion['target'], $pos+1);
@@ -149,6 +153,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     } else {
                         $fields['target'] = "course-{$newCourse['id']}";
                     }
+
+
 
                     $map[$subQuestion['id']] = $this->getQuestionDao()->addQuestion($fields);
                 }
@@ -196,6 +202,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             }
 
             $orgChapterId = $chapter['id'];
+            $chapter['pId'] = $chapter['id'];
 
             $chapter['courseId'] = $newCourse['id'];
             $chapter['createdTime'] = time();
@@ -248,6 +255,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId'));
 
             $fields['courseId'] = $newCourse['id'];
+            $fields['pId'] = $material['id'];
             if ($material['lessonId']) {
                 $fields['lessonId'] = $newLessons[$material['lessonId']]['id'];
             } else {
@@ -284,6 +292,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
             $fields['updatedTime'] = time();
+            $fields['pId'] = $homework['id'];
             $newHomework = $this->getHomeworkDao()->addHomework($fields);
             $map[$homework['id']] =  $newHomework;
 
@@ -296,6 +305,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     'score' => $item['score'],
                     'missScore' => $item['missScore'],
                     'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
+                    'pId'=>$item['id']
                 );
 
                 $this->getHomeworkItemDao()->addItem($fields);
@@ -322,6 +332,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             }
 
             $fields['createdTime'] = time();
+
+            $fields['pId'] = $exercise['id'];
 
             $map[$exercise['id']] = $this->getExerciseDao()->addExercise($fields);
         }
