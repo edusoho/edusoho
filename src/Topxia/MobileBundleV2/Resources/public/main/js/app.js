@@ -10,9 +10,6 @@ var app = angular.module('app', [
 
 app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
-app.config(['appRouterProvider', function(appRouterProvider) {
-
-}]);
 app.config(['$httpProvider', function($httpProvider) {
 
     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -66,7 +63,7 @@ app.config(['$httpProvider', function($httpProvider) {
 app.config([ 'appRouterProvider', '$urlRouterProvider', function(appRouterProvider, $urlRouterProvider)
 {
   $urlRouterProvider.when("/", "/index").
-  otherwise('/');
+  otherwise('/index');
 
   appRouterProvider.init();
 }]);
