@@ -207,11 +207,14 @@ class LiveCourseController extends BaseController
         } else {
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
-        $client = LiveClientFactory::createClient();
-        $result = $client->entryLive($params);
 
-        if (empty($result) || isset($result['error'])) {
-            return $this->createMessageResponse('info', $result['errorMsg']);
+        if($this->setting("developer.cloud_api_failover", 0)) {
+            $client = LiveClientFactory::createClient();
+            $result = $client->entryLive($params);
+
+            if (empty($result) || isset($result['error'])) {
+                return $this->createMessageResponse('info', $result['errorMsg']);
+            }
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
