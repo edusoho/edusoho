@@ -28,7 +28,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'chapter.delete' => 'onChapterDelete',
             'chapter.update' => 'onChapterUpdate',
             'course.member.create' => 'onCourseMemberCreate',
-            'course.member.delete' => ' onCourseMemberDelete'
+            'course.member.delete' => 'onCourseMemberDelete'
         );
     }
 
