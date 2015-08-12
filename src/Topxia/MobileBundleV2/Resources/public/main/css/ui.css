@@ -298,7 +298,7 @@ a {
 }
 
 .ui-bar.transparent .ui-bar-bg{
-  box-shadow : none;
+  border: 0;
 }
 
 .ui-bar.transparent .title{
@@ -1498,6 +1498,7 @@ a {
 
 .ui-course-review .ui-scroller {
   top: 0;
+  background: #fff;
   padding-top: 214px;
 }
 
