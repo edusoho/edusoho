@@ -61,7 +61,7 @@ class LiveCourseController extends BaseController
         $liveCourses = $this->getCourseService()->searchCourses( array(
             'status' => 'published',
             'type' => 'live',
-            'parentId' => '0',
+            'parentId' => '0'
         ), 'lastest',0, 10 );
 
         $userIds = array();
