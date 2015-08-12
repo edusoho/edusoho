@@ -15,6 +15,14 @@ class Version20150812102932 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
+        
+        $this->addSql("ALTER TABLE `course` DROP `locked`");
+        $this->addSql("ALTER TABLE `course_lesson` DROP `parentId`");
+        $this->addSql("ALTER TABLE `question` DROP `pId`");
+        $this->addSql("ALTER TABLE `testpaper` DROP `pId`");
+        $this->addSql("ALTER TABLE `testpaper_item` DROP `pId`");
+        $this->addSql("ALTER TABLE `course_material` DROP `pId`");
+        $this->addSql("ALTER TABLE `course_chapter` DROP `pId`");
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `course` ADD `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁'");
         $this->addSql("ALTER TABLE `course_lesson` ADD `parentId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id'");
@@ -25,11 +33,14 @@ class Version20150812102932 extends AbstractMigration
         $this->addSql("ALTER TABLE `course_chapter` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id'");
         
         if($this->isTableExist('homework')) {
+            $this->addSql("ALTER TABLE `homework` DROP `pId`");
+            $this->addSql("ALTER TABLE `homework_item` DROP `pId`");
             $this->addSql("ALTER TABLE `homework` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的作业Id'");
             $this->addSql("ALTER TABLE `homework_item` ADD `pId`INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习问题ID'");
         }
-        
+
         if($this->isTableExist('exercise')){
+            $this->addSql("ALTER TABLE `exercise` DROP `pId`");
             $this->addSql("ALTER TABLE `exercise` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习的ID'");
         }
     }
@@ -41,5 +52,12 @@ class Version20150812102932 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->connection->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 }
