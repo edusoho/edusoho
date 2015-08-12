@@ -2,6 +2,7 @@
 
 namespace Custom\Service\Homework\Impl;
 
+use Custom\Service\Homework\HomeworkService;
 use Homework\Service\Homework\Impl\HomeworkServiceImpl as BaseHomeworkServiceImpl;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
@@ -51,11 +52,29 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $homework;
     }
 
-	public function randomizeHomeworkResultForPairReview($homeworkId,$userId){
-		$homework=$this->getHomeworkDao()->getHomework($homeworkId);
-	}
+    public function randomizeHomeworkResultForPairReview($homeworkId,$userId){
+        $homework=$this->getHomeworkDao()->getHomework($homeworkId);
+        $reviewableResultIds=$this->getResultDao()->findPairReviewableIds($homework,$userId);
+        if(empty($reviewableResultIds)){
+            return null;
+        }
+        $selectedId=$reviewableResultIds[rand(0, count($reviewableResultIds)-1)];
+        $result=$this->getResultDao()->getResult($selectedId);
+        $resultItems=$this->getItemSetResultByHomeworkIdAndUserId($homeworkId,$result['userId']);
+        $result['items']=$resultItems;
 
-	private function getReviewDao(){
-	    	return $this->createDao('Homework:Homework.ReviewDao');
-	}
+        return $result;
+    }
+
+    protected function getReviewDao(){
+          return $this->createDao('Custom:Homework.ReviewDao');
+    }
+
+    protected function getHomeworkDao(){
+          return $this->createDao('Homework:Homework.HomeworkDao');
+    }
+
+    protected function getResultDao(){
+          return $this->createDao('Custom:Homework.HomeworkResultDao');
+    }
 }
