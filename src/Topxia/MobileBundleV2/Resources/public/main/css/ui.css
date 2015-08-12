@@ -286,7 +286,7 @@ a {
 }
 
 .ui-bar.search-bar .ui-searchbar-wrap {
-  background: #fff;
+  background: none;
 }
 
 .ui-bar.search-bar .ui-searchbar {
