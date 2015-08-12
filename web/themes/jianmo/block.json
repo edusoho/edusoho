@@ -12,83 +12,83 @@
                 "type":"poster",
                 "default":[
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报1",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
                         "status" : "1",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg_2.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_app.jpg",
                         "alt" : "海报2",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#0984f7",
                         "href" : "",
-                        "html" : "<div class=\"swiper-slide\" style=\"background: #3F3F3F;\"><div class=\"container\"><a href=\"http:\/\/www.edusoho.com\" target=\"_blank\" ><img class=\"img-responsive\" src=\"\/themes\/jianmo\/img\/poster_bg.jpg\"><div class=\"mask\"><div class=\"title\"><span>全新改版</span><span>简约风格</span></div><div class=\"subtitle\"><span>专注学习内容</span><span>提升用户体验</span></div><div class=\"item-mac\"><img class=\"img-responsive\" src=\"\/assets\/v2\/img\/paster_mac.png\"></div></div></a></div></div>",
+                        "html" : "",
                         "status" : "1",
-                        "mode" : "html"
+                        "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_eweek.jpg",
                         "alt" : "海报3",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3b4250",
                         "href" : "",
                         "html" : "",
                         "status" : "1",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报4",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
-                        "status" : "1",
+                        "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报5",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
-                        "status" : "1",
+                        "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报6",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
-                        "status" : "1",
+                        "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报7",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
-                        "status" : "1",
+                        "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/assets\/v2\/img\/poster_bg.jpg",
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
                         "alt" : "海报8",
                         "layout" : "tile",
-                        "background" : "#3F3F3F",
+                        "background" : "#3ec768",
                         "href" : "",
                         "html" : "",
-                        "status" : "1",
+                        "status" : "0",
                         "mode" : "img"
                     }
                 ]

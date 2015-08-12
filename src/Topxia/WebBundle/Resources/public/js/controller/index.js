@@ -12,7 +12,10 @@ define(function(require, exports, module) {
             autoplayDisableOnInteraction: false,
             loop: true,
             calculateHeight: true,
-            roundLengths: true
+            roundLengths: true,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
+            }
         });
         Lazyload.init();
 

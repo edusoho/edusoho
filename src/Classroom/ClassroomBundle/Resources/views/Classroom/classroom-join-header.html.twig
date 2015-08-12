@@ -1,9 +1,17 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
+  
+    <ol class="breadcrumb">
+      <li><a href="{{ path('homepage') }}">首页</a></li>
+      {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+      {% endfor %}
+      <li class="active">{{ classroom.title }}</li>
+    </ol>
+
     <div class="class-header-mian">
       <div class="class-bg-layer"></div>
-      <div class="class-bg-layer two"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
           <a href="{{path('classroom_show',{id:classroom.id})}}">
@@ -26,6 +34,23 @@
               {{ web_macro.star(classroom.rating) }}
               <span>({{ classroom.ratingNum }}评价)</span>
             </div>
+            {% if member.role == 'auditor'%}
+              <div class="price">
+                价格： <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                      {% if classroom.price > 0 %}
+                     {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                      {% else %}
+                      免费
+                      {% endif %}
+                  {% else %}
+                    {% if classroom.price > 0 %}
+                      {{ classroom.price }}元
+                    {% else %}
+                      免费
+                    {% endif %}
+                  {% endif %}</span>
+              </div>
+            {% endif %}
           </div>
           <div class="class-serve hidden-sm hidden-xs">
             <div class="serve-frame">
@@ -73,27 +98,16 @@
           {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
               您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
-              <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a>
+              
+              {% if setting("course.buy_fill_userinfo")|default(false) %}
+                <a href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" >立即加入购买</a>
+              {% else %}
+                <a href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">立即加入购买</a>
+              {% endif %}
+              
             </div>
           {% endif %}
         </div>
-        {% if 'auditor' in member.role %}
-        <div class="price hidden-sm">
-          价格： <span>{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if classroom.price > 0 %}
-               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                {% else %}
-                免费
-                {% endif %}
-            {% else %}
-              {% if classroom.price > 0 %}
-                {{ classroom.price }}元
-              {% else %}
-                免费
-              {% endif %}
-            {% endif %}</span>
-        </div>
-        {% endif %}
       {% if classroom_permit(classroom.id, 'Manage') %}
         <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>

@@ -3,7 +3,7 @@
     {% for poster in posters %}
       {% if poster.status == 1 %}
         {% if poster.mode == "img" %}
-          <div class="swiper-slide" style="background: {{poster.background}};">
+          <div class="swiper-slide swiper-hidden" style="background: {{poster.background}};">
             <div {% if poster.layout == 'limitWide' %}class="container"{% endif %}>
               <a href="{{ poster.href|default('') }}" target="_blank" ><img class="img-responsive" src="{{ poster.src|default('') }}">
               </a>

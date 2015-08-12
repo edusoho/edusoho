@@ -41,7 +41,14 @@ class TeacherController extends BaseController
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        } 
         return $this->render('ClassroomBundle:Classroom\Teacher:list.html.twig', array(
             'layout' => $layout,
             'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
@@ -51,6 +58,7 @@ class TeacherController extends BaseController
             'member' => $member,
             'members' => $members,
             'Myfollowings' => $myfollowings,
+            'classroomDescription' => $classroomDescription
         ));
     }
     public function catchIdsAction(Request $request,$classroomId)

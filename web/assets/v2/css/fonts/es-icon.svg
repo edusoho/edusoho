@@ -2,12 +2,8 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-<<<<<<< HEAD
-Created by FontForge 20120731 at Wed Jul  8 10:49:43 2015
-=======
-Created by FontForge 20120731 at Fri Jul 31 14:24:19 2015
->>>>>>> feature/new-7029-order
- By Ads
+Created by FontForge 20120731 at Wed Aug  5 14:49:03 2015
+By Ads
 </metadata>
 <defs>
 <font id="es-icon" horiz-adv-x="1024" >
@@ -23,6 +19,7 @@ Created by FontForge 20120731 at Fri Jul 31 14:24:19 2015
     bbox="0 -212.087 1024 812"
     underline-thickness="50"
     underline-position="-100"
+    unicode-range="U+0078-E68C"
     unicode-range="U+0078-E68B"
   />
 <missing-glyph horiz-adv-x="374" 
@@ -413,5 +410,8 @@ t42.5 11.5q35 0 60 -25t25 -60t-25 -60t-60 -25zM644 459h-264v85q0 55 38.5 93.5t93
 d="M671 322q0 -66 -46.5 -112.5t-112.5 -46.5q-43 0 -80 21t-58 58t-21 80q0 66 46.5 112.5t112.5 46.5t112.5 -46.5t46.5 -112.5z" />
     <glyph glyph-name="uniE68B" unicode="&#xe68b;" 
 d="M512 727q-87 0 -166 -34t-136 -91t-91 -136t-34 -166q0 -116 57.5 -214t155.5 -155.5t214 -57.5t214 57.5t155.5 155.5t57.5 214t-57.5 214t-155.5 155.5t-214 57.5zM427 87l-214 213l60 60l154 -153l324 324l60 -60z" />
+    <glyph glyph-name="uniE68C" unicode="&#xe68c;" 
+d="M128 428h171v171h-171v-171zM128 215h171v170h-171v-170zM341 215h171v170h-171v-170zM555 215h170v170h-170v-170zM341 428h171v171h-171v-171zM555 599v-171h170v171h-170zM768 215h171v170h-171v-170zM128 1h171v171h-171v-171zM341 1h171v171h-171v-171zM555 1h170
+v171h-170v-171zM768 1h171v171h-171v-171zM768 599v-171h171v171h-171z" />
   </font>
 </defs></svg>
