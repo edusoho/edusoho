@@ -268,7 +268,7 @@ class UserSettingController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth = $this->getSettingService()->get('auth', array());
-        if ($auth['registerFieldNameArray']) {
+        if (isset($auth['registerFieldNameArray'])) {
             if (!in_array('weixin', $auth['registerFieldNameArray']) ) {
                 $auth['registerFieldNameArray'] = array_merge($auth['registerFieldNameArray'], array('qq','weixin','weibo'));
             }
