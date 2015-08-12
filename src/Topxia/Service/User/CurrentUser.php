@@ -31,9 +31,14 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
         unset($this->data[$name]);
     }
 
-    public function clearNotifacation()
+    public function clearNotifacationNum()
     {
         $this->data['newNotificationNum'] = '0';
+    }
+
+    public function clearMessageNum()
+    {
+        $this->data['newMessageNum'] = '0';
     }
 
     public function offsetExists ($offset) {
