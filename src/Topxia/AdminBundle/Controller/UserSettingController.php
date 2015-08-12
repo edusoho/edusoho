@@ -444,7 +444,7 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' and $fieldInfo['enabled']) {
                 $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
-                $auth['registerFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
+                $courseSetting['userinfoFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
             }
             
         }
