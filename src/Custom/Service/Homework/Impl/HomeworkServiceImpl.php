@@ -12,7 +12,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     public function createCustomHomework($courseId,$lessonId,$fields)
     {
         if(empty($fields)){
-            $this->createServiceException("内容为空，创建作业失败！");
+            throw$this->createServiceException("内容为空，创建作业失败！");
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
@@ -30,7 +30,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $excludeIds = $fields['excludeIds'];
 
         if (empty($excludeIds)) {
-            $this->createServiceException("题目不能为空，创建作业失败！");
+            throw $this->createServiceException("题目不能为空，创建作业失败！");
         }
 
         unset($fields['excludeIds']);
@@ -52,18 +52,59 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $homework;
     }
 
+    public function createHomeworkPairReview($homeworkResultId, array $fields){
+        $homeworkResult=$this->loadHomeworkResult($homeworkResultId);
+        $fields['homeworkResultId'] = $homeworkResult['id'];
+        $fields['homeworkId'] = $homeworkResult['homeworkId'];
+        $fields['userId'] = $this->getCurrentUser()->id;
+        return $this->getReviewDao()->create($fields);
+    }
+
     public function randomizeHomeworkResultForPairReview($homeworkId,$userId){
         $homework=$this->getHomeworkDao()->getHomework($homeworkId);
-        $reviewableResultIds=$this->getResultDao()->findPairReviewableIds($homework,$userId);
-        if(empty($reviewableResultIds)){
+        $reviewableResults=$this->getResultDao()->findPairReviewables($homework,$userId);
+        if(empty($reviewableResults)){
             return null;
         }
-        $selectedId=$reviewableResultIds[rand(0, count($reviewableResultIds)-1)];
-        $result=$this->getResultDao()->getResult($selectedId);
+        $selectedId = $this->pickReviewable($reviewableResults, $homework);
+        $result=$this->loadHomeworkResult($selectedId);
         $resultItems=$this->getItemSetResultByHomeworkIdAndUserId($homeworkId,$result['userId']);
         $result['items']=$resultItems;
 
         return $result;
+    }
+
+    public function getHomeworkResult($homeworkResultId){
+        return $this->getResultDao()->getResult($homeworkResultId);
+    }
+
+    public function loadHomeworkResult($homeworkResultId){
+        if(empty($homeworkResultId)){
+           throw $this->createServiceException("作业答卷id为空.");  
+        }
+        $homeworkResult = $this -> getHomeworkResult($homeworkResultId);
+        if(empty($homeworkResult)){
+           throw $this->createServiceException("未能找到作业答卷！");
+        }
+        return $homeworkResult;
+    }
+
+    public function updateHomeworkResult($homeworkResultId, array $fields){
+        return $this->getResultDao()->updateResult($homeworkResultId, $fields);
+    }
+
+    private  function pickReviewable($results, $homework) {
+        $insufficient = array();
+        $sufficient = array();
+        foreach($results as $result){
+            if($result['pairReviews']< $homework['minReviews']){
+                array_push($insufficient, $result['id']);
+            }else{
+                array_push($sufficient, $result['id']);
+            }
+        }
+        $ids = empty($insufficient) ? $sufficient : $insufficient;
+        return empty($ids) ? null : $ids[rand(0,count($ids)-1)];
     }
 
     protected function getReviewDao(){
