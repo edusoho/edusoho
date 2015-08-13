@@ -92,28 +92,21 @@ class CloudSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
 
-            if (!empty($settings['cloud_api_server'])) {
-                $options['apiUrl'] = $settings['cloud_api_server'];
+            $api = CloudAPIFactory::create('root');
+            $api->setKey($options['accessKey'], $options['secretKey']);
+
+            $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
+
+            if (isset($result['error'])) {
+                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
+                goto render;
             }
 
-            // @todo: fixme
-            // $api = CloudAPIFactory::create('root');
-            // $api->init($options);
-
-            // $api = new CloudAPI($options);
-
-            // $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
-
-            // if (isset($result['error'])) {
-            //     $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
-            //     goto render;
-            // }
-
-            // $user = $api->get('/me');
-            // if ($user['edition'] != 'opensource') {
-            //     $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
-            //     goto render;
-            // }
+            $user = $api->get('/me');
+            if ($user['edition'] != 'opensource') {
+                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
+                goto render;
+            }
 
             $settings['cloud_access_key'] = $options['accessKey'];
             $settings['cloud_secret_key'] = $options['secretKey'];
