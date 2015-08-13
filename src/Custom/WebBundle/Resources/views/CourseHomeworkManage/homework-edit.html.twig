@@ -35,10 +35,11 @@
                 <div class="form-group">
                     <div class="col-md-2 control-label"><label>启用作业互评</label></div>
                     <div class="col-md-7 controls radios">
-                        <input type="radio" id="comment_true" name="comment" required="required" value="1">
+                        <input type="radio" id="comment_true" name="comment" required="required" value="1"
+                                {% if homework.pairReview == 1 %} checked="checked" {% endif %}>
                         <label for="comment_true" class="required">是</label>
                         <input type="radio" id="comment_false" name="comment" required="required" value="0"
-                               checked="checked">
+                                {% if homework.pairReview == 0 %} checked="checked" {% endif %}>
                         <label for="comment_false" class="required">否</label>
                     </div>
                 </div>
@@ -48,7 +49,8 @@
                         <label for="completeTime">作业完成时间</label>
                     </div>
                     <div class="col-md-8 controls">
-                        <input type="text" id="completeTime" name="completeTime" class="form-control" value="">
+                        <input type="text" id="completeTime" name="completeTime" class="form-control"
+                               value="{% if homework.completeTime > 0 %}{{ homework.completeTime|date("Y-m-d") }}{% endif %}">
                     </div>
                 </div>
                 <div class="form-group" id="reviewEndTimeGroup" style="display:none">
@@ -56,7 +58,8 @@
                         <label for="reviewEndTime">互评结束时间</label>
                     </div>
                     <div class="col-md-8 controls">
-                        <input type="text" id="reviewEndTime" name="reviewEndTime" class="form-control" value="">
+                        <input type="text" id="reviewEndTime" name="reviewEndTime" class="form-control"
+                               value="{% if homework.reviewEndTime > 0 %}{{ homework.reviewEndTime|date("Y-m-d") }}{% endif %}">
                     </div>
                 </div>
 
@@ -65,7 +68,8 @@
                         <label for="scoreRule">作业成绩占比</label>
                     </div>
                     <div class="col-md-8 controls">
-                        <input type="text" id="scoreRule" name="scoreRule" class="form-control" value="">
+                        <input type="text" id="scoreRule" name="scoreRule" class="form-control"
+                               value="{{ homework.scoreRule|default('') }}">
 
                         <p class="help-block">请按如下格式依次输入完成互评的，部分完成的，未互评的，最少互评人数：1.0:0.8:0.5:5</p>
                     </div>

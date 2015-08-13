@@ -24,8 +24,24 @@ define(function (require, exports, module) {
     );
 
     Validator.addRule(
+        'completeTimeCheck',
+        function (options) {
+            alert(1);
+            var completeTimeGroup = $('#completeTimeGroup');
+            var completeTime = $('#completeTime').val();
+            if (completeTimeGroup[0].style.display != 'none' && completeTime != "") {
+                return true;
+            } else {
+                return false;
+            }
+
+
+        }, "作业完成时间必须小于互评结束时间"
+    );
+
+    Validator.addRule(
         'scoreRule_check',
-        /^[0-9]+(:\d+.\d+){2}:[0-9]+$/,
+        /^[0-9]+(.\d)?(:\d+.\d+){2}:[0-9]+$/,
         "请按如下格式依次输入完成互评的，部分完成的，未互评的，最少互评人数：1:0.8:0.5:5"
     );
 
@@ -78,8 +94,22 @@ define(function (require, exports, module) {
             comment();
         },
 
-        onConfirmSubmit: function (e) {
+        onConfirmSubmit: function () {
+            var v = window.validator;
+            var $comment = $('[name="comment"]:checked').val();
+            if ($comment == 1) {
+                for (var i = 0; i < v.items.length; i++) {
+                    v.items[i].attrs.required.value = true;
+                }
+            } else {
+                for (var i = 0; i < v.items.length; i++) {
+                    v.items[i].attrs.required.value = false;
+                }
+            }
 
+            $("#homework-form").trigger("submit.validator");
+            if (window.validateResult == false)
+                return false;
             editor.updateElement();
             var $btn = $('#save-homework-btn');
             var $description = editor.getData();
@@ -261,8 +291,16 @@ define(function (require, exports, module) {
         var validator = new Validator({
             element: '#homework-form',
             failSilently: true,
-            triggerType: 'change'
+            autoSubmit: false,
+
+            onFormValidated: function (error, results, $form) {
+                if (error) {
+                    window.validateResult = false;
+                } else
+                    window.validateResult = true;
+            }
         });
+        window.validator = validator;
 
         validator.addItem({
             element: '[name=completeTime]',
