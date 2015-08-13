@@ -678,16 +678,13 @@ class ClassroomManageController extends BaseController
 
         $data = $request->request->all();
         $ids = array();
-
         if (isset($data['ids']) && $data['ids'] != "") {
             $ids = $data['ids'];
             $ids = explode(",", $ids);
         } else {
             return new Response('success');
         }
-
         $this->getClassroomService()->addCoursesToClassroom($id, $ids);
-
         $this->setFlashMessage('success', "课程添加成功");
 
         return new Response('success');
