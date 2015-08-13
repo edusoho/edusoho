@@ -206,11 +206,6 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals('test1234',$classroom['title']);
     }
 
-    
-    public function testUpdateClassroomCourses()
-    {
-       
-    }
 
     public function testFindClassroomByTitle()
     {
