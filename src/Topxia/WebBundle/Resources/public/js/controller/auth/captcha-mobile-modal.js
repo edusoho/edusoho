@@ -53,6 +53,7 @@ define(function(require, exports, module) {
 
                         } else {
                             self._captchaValidated = false;
+                            $form.find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
                             
                             $form.find('.help-block').html('<span class="text-danger">验证码错误</span>');
                             $form.find('.help-block').show();
