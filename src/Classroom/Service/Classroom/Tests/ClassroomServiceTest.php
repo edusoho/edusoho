@@ -900,6 +900,30 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(true, $enabled);
     }
 
+    public function testAddHeadTeacher2()
+    {
+        $teacher1 = $this->createTeacher('1');
+        $teacher2 = $this->createTeacher('2');
+        $textClassroom = array(
+            'title' => 'test',
+        );
+        $course1 = array('title'=>'Test Course 1');
+        $course1 = $this->getCourseService()->createCourse($course1);
+        $this->getCourseService()->setCourseTeachers($course1['id'],array(array('id'=>$teacher1['id'],'isVisible' => 1),array('id'=>$teacher2['id'],'isVisible' => 1) ));
+    
+        $courseIds = array($course1['id']);
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
+        $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher1['id']);
+        $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
+        $this->assertEquals($teacher1['id'],$classroom['headTeacherId']);
+        $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher2['id']);
+        $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
+        $this->assertEquals($teacher2['id'],$classroom['headTeacherId']);
+
+    }
+
     public function testIsClassroomHeadTeacher()
     {
         $user = $this->createUser();
@@ -1224,31 +1248,7 @@ class ClassroomServiceTest extends BaseTestCase
         $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
 
         $this->assertEquals(2, count($courses));
-    }
-
-    public function testAddHeadTeacher()
-    {
-        $teacher1 = $this->createTeacher('1');
-        $teacher2 = $this->createTeacher('2');
-        $textClassroom = array(
-            'title' => 'test',
-        );
-        $course1 = array('title'=>'Test Course 1');
-        $course1 = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->setCourseTeachers($course1['id'],array(array('id'=>$teacher1['id'],'isVisible' => 1),array('id'=>$teacher2['id'],'isVisible' => 1) ));
-    
-        $courseIds = array($course1['id']);
-
-        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
-        $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher1['id']);
-        $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
-        $this->assertEquals($teacher1['id'],$classroom['headTeacherId']);
-        $this->getClassroomService()->addHeadTeacher($classroom['id'], $teacher2['id']);
-        $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
-        $this->assertEquals($teacher2['id'],$classroom['headTeacherId']);
-
-    }
+    }    
 
     public function testUpdateAssistant()
     {
