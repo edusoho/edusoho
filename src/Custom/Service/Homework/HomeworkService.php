@@ -8,7 +8,7 @@ namespace Custom\Service\Homework;
 interface HomeworkService
 {
     /**
-     * 创建一份作业
+     * 创建一份作业.
      * @param $courseId
      * @param $lessonId
      * @param $fields
