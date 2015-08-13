@@ -106,10 +106,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
         if ($type == 'leaf') {
             $this->apiUrl = $this->servers['current_leaf'];
-        } else {
-            $this->apiUrl = $this->servers['root'];
         }
-
     }
 
     public function setApiServerConfigPath($path)
