@@ -121,8 +121,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map = array();
         foreach ($questions as $question) {
             $oldQuestionId = $question['id'];
-            $fields['pId'] = $question['id'];
-            $fields = ArrayToolkit::parts($question, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'parentId', 'subCount', 'userId'));
+            $fields = ArrayToolkit::parts($question, array('type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'parentId', 'subCount', 'userId','pId'));
             if (strpos($question['target'], 'lesson') > 0) {
                 $pos = strrpos($question['target'], '-');
                 $oldLessonId = substr($question['target'], $pos+1);
@@ -133,7 +132,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['updatedTime'] = time();
             $fields['createdTime'] = time();
-
+            $fields['pId'] = $question['id'];
             $question = $this->getQuestionDao()->addQuestion($fields);
 
             $map[$oldQuestionId] = $question;
