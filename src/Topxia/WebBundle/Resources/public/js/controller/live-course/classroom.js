@@ -15,6 +15,13 @@ define(function(require, exports, module) {
 			$.ajax({
 				url: $("#classroom-url").data("url"),
 				success: function(data){
+					if(data.error){
+						clearInterval(intervalId);
+						var html = data.errorMsg+"，<a href='javascript:document.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>"
+						$("#classroom-url").html(html);
+						return;
+					}
+
 					if(data.url) {
 						var url = data.url;
 						if(data.param) {
