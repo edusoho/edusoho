@@ -4,6 +4,9 @@ namespace Custom\Service\Homework\Tests;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Announcement\AnnouncementService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\User\CurrentUser;
+
+use Custom\Service\Homework\Dao\Impl\HomeworkResultDaoImpl;
 
 class HomeworkServiceTest extends BaseTestCase
 {
@@ -19,6 +22,7 @@ class HomeworkServiceTest extends BaseTestCase
                 'email'=>'sam@geewang.com'
             )
         );
+        $this->assertNotNull($sam);
 
         $zoya=$this->getUserService()->register(
             array(
@@ -27,6 +31,25 @@ class HomeworkServiceTest extends BaseTestCase
                 'email'=>'zoya@geewang.com'
             )
         );
+        $this->assertNotNull($zoya);
+
+        $tom=$this->getUserService()->register(
+            array(
+                'nickname'=>'tom', 
+                'password'=> '123456',
+                'email'=>'tom@geewang.com'
+            )
+        );
+        $this->assertNotNull($tom);
+
+        $bill=$this->getUserService()->register(
+            array(
+                'nickname'=>'bill', 
+                'password'=> '123456',
+                'email'=>'bill@geewang.com'
+            )
+        );
+        $this->assertNotNull($bill);
 
         $course1=$this->getCourseService()->createCourse(
             array(
@@ -34,7 +57,7 @@ class HomeworkServiceTest extends BaseTestCase
                 'type'=>'periodic'
             )
         );
-        $this->assertNotEmpty($course1);
+        $this->assertNotNull($course1);
 
         $lesson1=$this->getCourseService()->createLesson(
             array(
@@ -44,7 +67,7 @@ class HomeworkServiceTest extends BaseTestCase
                 'type' => 'text'
             )
         );
-        $this->assertNotEmpty($lesson1);
+        $this->assertNotNull($lesson1);
 
         $question1=$this->getQuestionService()->createQuestion(
             array(
@@ -60,32 +83,74 @@ class HomeworkServiceTest extends BaseTestCase
                 'target' => 'course-1'
             )
         );
-        $this->assertNotEmpty($question1);
+        $this->assertNotNull($question1);
 
         $homework1=$this->getHomeworkService()->createHomework($course1['id'],$lesson1['id'],array(
             'excludeIds'=>"{$question1['id']}",
+            'minReviews' => 5,
             'description'=>'helo'
         ));
+        $this -> assertNotNull($homework1);
 
         // $homeworkItem1=$this->getHomeworkService()->createHomeworkItems($homework1['id'], array(
         //     'questionId'=>$question1['id'],
         //     'score'=>5
         // ));
 
+        //
         $homeworkResult1=$this->getHomeworkService()->startHomework($homework1['id']);
-        $homeworkResult1=$this->getHomeworkService()->submitHomework($homeworkResult1['id'],array(
-            'questionId'=>$question1['id'],
-            'answer'=>$question1['answer']
+        $homeworkResult1=$this->getHomeworkService()->updateHomeworkResult($homeworkResult1['id'],array(
+            'pairReviews' => 5
+        ));
+        $homeworkResult1=$this->getHomeworkService()->submitHomework($homework1['id'],array(
+            'questionId'=>$question1['id']
+        ));
+        $this -> assertNotNull($homeworkResult1);
+
+        //
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($sam);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $homeworkResult2=$this->getHomeworkService()->startHomework($homework1['id']);
+        $homeworkResult2=$this->getHomeworkService()->submitHomework($homework1['id'],array(
+            'questionId'=>$question1['id']
+        ));
+        $this -> assertNotNull($homeworkResult2);
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($zoya);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $homeworkResult3=$this->getHomeworkService()->startHomework($homework1['id']);
+        $homeworkResult3=$this->getHomeworkService()->submitHomework($homework1['id'],array(
+            'questionId'=>$question1['id']
+        ));
+        $this -> assertNotNull($homeworkResult3);
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($tom);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $homeworkResult4=$this->getHomeworkService()->startHomework($homework1['id']);
+        $homeworkResult4=$this->getHomeworkService()->submitHomework($homework1['id'],array(
+            'questionId'=>$question1['id']
+        ));
+        $this -> assertNotNull($homeworkResult4);
+
+        //bill自己的作业
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($bill);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $homeworkResult5=$this->getHomeworkService()->startHomework($homework1['id']);
+        $homeworkResult5=$this->getHomeworkService()->submitHomework($homework1['id'],array(
+            'questionId'=>$question1['id']
+        ));
+        $this->getHomeworkService()->createHomeworkPairReview($homeworkResult4['id'], array(
+            'score'=>3
         ));
 
-        $result = $this->getHomeworkService()->randomizeHomeworkResultForPairReview($homework1['id'], $sam['id']);
+        //为bill分配一份作业，自己的作业不能被分配到，本人已经互评的作业不能被分配到，在存在未达最小互评数的答卷时，已经达到互评数要求的不能被分配到.
+        $result = $this->getHomeworkService()->randomizeHomeworkResultForPairReview($homework1['id'], $bill['id']);
         $this->assertNotNull($result);
-
-        // $getedAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);
-
-        // $this->assertEquals($this->getCurrentUser()->id, $getedAnnouncement['userId']);
-        // $this->assertEquals(1, $getedAnnouncement['targetId']);
-        // $this->assertEquals('test_announcement', $getedAnnouncement['content']);
+        $this ->assertContains($result['id'], array($homeworkResult2['id'], $homeworkResult3['id']));
     }
 
     protected function getUserService(){

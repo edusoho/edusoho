@@ -5,10 +5,15 @@ namespace Custom\Service\Homework\Dao;
 interface ReviewDao
 {
 
-	/**
-	 * 获取课程相关的其它期课程.
-	 * @param course 课程对象.
-	 * @return 相关课程列表.
-	**/
-	public function findOtherPeriods($course);
+    /**
+     * 创建作业点评.
+     * @param review 点评数据.
+     * @return 保存后的点评数据.
+    **/
+    public function create($review);
+
+    /**
+     * 获取一个作业点评.
+    **/
+    public function get($id);
 }
