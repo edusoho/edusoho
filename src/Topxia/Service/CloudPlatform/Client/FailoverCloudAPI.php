@@ -111,11 +111,19 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
     public function setApiServerConfigPath($path)
     {
+        
         if (!file_exists($path)) {
 
             $servers = parent::_request('GET', '/server_list', array(), array());
             if (empty($servers) or empty($servers['root']) or empty($servers['current_leaf']) or empty($servers['leafs'])) {
-                throw new \RuntimeException("Requested API Server list is invalid.");
+                $servers = $this->getServerListFromCdn();
+                if (empty($servers) || empty($servers['root']) || empty($servers['leafs'])) {
+                    throw new \RuntimeException("Requested API Server list from CDN failed.");
+                }
+            }
+
+            if (empty($servers['current_leaf'])) {
+                $servers['current_leaf'] = $servers['leafs'][array_rand($servers['leafs'])]['url'];
             }
 
             foreach ($servers['leafs'] as &$leaf) {
@@ -132,6 +140,22 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
         $this->serverConfigPath = $path;
         $this->servers = json_decode(file_get_contents($path), true);
+    }
+
+    protected function getServerListFromCdn()
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_URL, 'http://api-common.b0.upaiyun.com/serverList.json');
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return json_decode($response, true);
     }
 
 }
