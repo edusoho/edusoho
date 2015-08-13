@@ -13,13 +13,12 @@ class ClassroomThreadServiceImpl extends BaseService implements ClassroomThreadS
         $userIds = ArrayToolkit::column($users, 'id');
         $classroomMembers = $this->getClassroomService()->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
         foreach ($classroomMembers as $member) {
-            if (in_array($member['userId'], $userIds) && $member['role'] != 'student' && $member['role'] != 'auditor') {
+            if (in_array($member['userId'], $userIds) && !array_intersect($member['role'],array('student', 'auditor')) {
                 $user = $users[$member['userId']];
                 $user['badgeTitle'] = $member['role'];
                 $users[$member['userId']] = $user;
             }
         }
-
         return $users;
     }
 

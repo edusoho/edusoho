@@ -23,11 +23,13 @@ class TeacherController extends BaseController
         $assisantIds = $this->getClassroomService()->findAssistants($classroomId);
 
         $teacherIds = array_unique(array_merge($headTeacherIds, $teacherIds, $assisantIds));
+        $newteacherIds = array();
         foreach ($teacherIds as $key => $value) {
             $newteacherIds[] = $value;
         }
         $teacherIds = $newteacherIds;
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
+        $users = array();
         foreach ($teacherIds as $key => $teacherId) {
             $users[$key] = $teachers[$teacherId];
         }
