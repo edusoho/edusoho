@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DeveloperSettingController extends BaseController
 {
@@ -22,6 +22,7 @@ class DeveloperSettingController extends BaseController
             'debug' => '0',
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_api_failover' => '0',
             'hls_encrypted' => '1',
         );
 
@@ -34,6 +35,11 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('developer', $developerSetting);
 
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+
+            $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/api_server.json';
+            $fileSystem = new Filesystem();
+            $fileSystem->remove($serverConfigFile);
+
             $this->setFlashMessage('success', '开发者已保存！');
         }
 
