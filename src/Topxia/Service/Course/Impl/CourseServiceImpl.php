@@ -8,7 +8,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolKit;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -1308,7 +1308,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId)
 	{
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $liveStudentCapacity = $client->getCapacity();
         $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
 
@@ -2345,7 +2345,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course = $this->tryManageCourse($courseId);
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
-		$client = LiveClientFactory::createClient();
+		$client = new EdusohoLiveClient();
 		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
 
 		if(array_key_exists("error", $replayList)){
@@ -2391,7 +2391,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'nickname' => $user['nickname']
 		);
 
-		$client = LiveClientFactory::createClient();
+		$client = new EdusohoLiveClient();
 		$result = $client->entryReplay($args);
 		return $result;
 	}

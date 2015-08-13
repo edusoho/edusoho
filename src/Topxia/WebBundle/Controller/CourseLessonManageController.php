@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Common\Paginator;
 
 class CourseLessonManageController extends BaseController
@@ -435,7 +435,7 @@ class CourseLessonManageController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 		if($course['type']=='live'){
-			$client = LiveClientFactory::createClient();
+			$client = new EdusohoLiveClient();
 			if ($lesson['type'] == 'live') {
 				$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
 			}
