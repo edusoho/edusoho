@@ -149,7 +149,8 @@ class BuildCommand extends BaseCommand
 	public function buildPluginsDirectory()
 	{
 		$this->output->writeln('build plugins/ .');
-		$this->filesystem->mkdir("{$this->distDirectory}/plugins");
+		$this->filesystem->mirror("{$this->rootDirectory}/plugins", "{$this->distDirectory}/plugins");
+		// $this->filesystem->mkdir("{$this->distDirectory}/plugins");
 	}
 
 	public function buildSrcDirectory()
