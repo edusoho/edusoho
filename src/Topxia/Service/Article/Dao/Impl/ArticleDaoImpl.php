@@ -149,6 +149,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
     public function deleteArticle($id)
     {
+        $this->getConnection()->delete('thread_post',array('targetId' => $id));
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
