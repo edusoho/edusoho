@@ -50,16 +50,18 @@ class LiveCourseController extends BaseController
         $recentCourses = array();
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
-            if ($course['status'] != 'published') {
+            if ($course['status'] != 'published' || $course['parentId'] != '0') {
                 continue;
             }
             $course['lesson'] = $lesson;
             $recentCourses[] = $course;
+
         }
 
         $liveCourses = $this->getCourseService()->searchCourses( array(
             'status' => 'published',
-            'type' => 'live'
+            'type' => 'live',
+            'parentId' => '0'
         ), 'lastest',0, 10 );
 
         $userIds = array();
@@ -83,6 +85,7 @@ class LiveCourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'type' => 'live',
+            'parentId' => '0',
             'ratingGreaterThan' => 0.01
         );
 
