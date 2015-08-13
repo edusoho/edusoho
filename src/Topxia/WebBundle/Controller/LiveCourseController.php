@@ -162,7 +162,7 @@ class LiveCourseController extends BaseController
         $result = $client->getRoomUrl($params);
 
         if (empty($result) || isset($result['error'])) {
-            throw $this->createAccessDeniedException('进入直播教室失败，请重试！');
+            return $this->createJsonResponse($result);
         }
 
         return $this->createJsonResponse(array(
