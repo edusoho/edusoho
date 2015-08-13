@@ -2183,8 +2183,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createNotFoundException();
 		}
 
-		if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
-			throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+		if ($course['parentId'] != 0) {
+			$classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+			$this->getClassroomService()->tryManageClassroom($classroom['classroomId']);
+		} else {
+			if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
+				throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+			}
 		}
 
 		return CourseSerialize::unserialize($course);
