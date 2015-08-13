@@ -115,7 +115,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             foreach ($sameCourseIds as $key => $courseId) {
                 $courseId = $existCourseIds[$courseId];
                 $this->getClassroomCourseDao()->updateByParam(array('classroomId' => $classroomId, 'courseId' => $courseId), array('disabled' => 0));
-                $this->getCourseService()->publishCourse($courseId);
+                $this->getCourseService()->publishCourse($courseId, 'classroom');
             }
 
             $diff = array_values(array_diff($courseIds, $sameCourseIds));
@@ -564,7 +564,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
                     $this->getClassroomCourseDao()->update($courses[$courseId]['classroom_course_id'], array('disabled' => 1));
-                    $this->getCourseService()->closeCourse($courseId);
+                    $this->getCourseService()->closeCourse($courseId,'classroom');
                 }
 
                 $courses = $this->findActiveCoursesByClassroomId($classroomId);
@@ -907,7 +907,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     public function tryManageClassroom($id)
-    {
+    {   
         if (!$this->canManageClassroom($id)) {
             throw $this->createAccessDeniedException('您无权操作！');
         }
