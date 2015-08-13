@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveCourseController extends BaseController
 {
@@ -14,7 +14,7 @@ class LiveCourseController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $liveCapacity = $client->getCapacity();
 
         return $this->createJsonResponse($liveCapacity);
@@ -155,7 +155,7 @@ class LiveCourseController extends BaseController
             throw $this->createAccessDeniedException('您不是课程学员，不能参加直播！');
         }
 
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $result = $client->getRoomUrl($params);
 
         if (empty($result) || isset($result['error'])) {
@@ -209,7 +209,7 @@ class LiveCourseController extends BaseController
         }
 
         if($this->setting("developer.cloud_api_failover", 0)) {
-            $client = LiveClientFactory::createClient();
+            $client = new EdusohoLiveClient();
             $result = $client->entryLive($params);
 
             if (empty($result) || isset($result['error'])) {

@@ -15,12 +15,6 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $api = CloudAPIFactory::create('leaf');
-        $data = $api->get('/me');
-        var_dump($data);
-        var_dump($api);
-        exit();
-
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         
         $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
