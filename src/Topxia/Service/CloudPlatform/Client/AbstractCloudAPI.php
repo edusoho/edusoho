@@ -9,9 +9,9 @@ class AbstractCloudAPI
 
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
-    protected $connectTimeout = 2;
+    protected $connectTimeout = 5;
 
-    protected $timeout = 4;
+    protected $timeout = 15;
 
     protected $apiUrl = 'http://api.edusoho.net';
 
