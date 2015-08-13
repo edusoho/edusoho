@@ -9,7 +9,7 @@ use Topxia\Common\ArrayToolkit;
 
 class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkService
 {
-    public function createCustomHomework($courseId,$lessonId,$fields)
+    public function createHomework($courseId, $lessonId, $fields)
     {
         if(empty($fields)){
             throw$this->createServiceException("内容为空，创建作业失败！");
@@ -21,7 +21,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             throw $this->createServiceException('课程不存在，创建作业失败！');
         }
 
-        $lesson = $this->getCourseService()->getCourseLesson($courseId,$lessonId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createServiceException('课时不存在，创建作业失败！');
@@ -32,25 +32,30 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         if (empty($excludeIds)) {
             throw $this->createServiceException("题目不能为空，创建作业失败！");
         }
+        if (!empty($fields['pairReview']) and $fields['pairReview'] == 1) {
+            $completeTime = strtotime($fields['completeTime']);
+            $reviewEndTime = strtotime($fields['reviewEndTime']);
+            $fields['completeTime'] = $completeTime;
+            $fields['reviewEndTime'] = $reviewEndTime;
+        }
 
         unset($fields['excludeIds']);
 
-        $fields = $this->filterHomeworkFields($fields,$mode = 'add');
+        $fields = $this->filterHomeworkFields($fields, $mode = 'add');
         $fields['courseId'] = $courseId;
         $fields['lessonId'] = $lessonId;
-        $excludeIds = explode(',',$excludeIds);
+        $excludeIds = explode(',', $excludeIds);
         $fields['itemCount'] = count($excludeIds);
-//        $fields[comment] = $fields[comment];
-
         $fields['updatedUserId'] = 0;
         $fields['updatedTime'] = 0;
         $homework = $this->getHomeworkDao()->addHomework($fields);
-        $this->addHomeworkItems($homework['id'],$excludeIds);
+        $this->addHomeworkItems($homework['id'], $excludeIds);
 
-        $this->getLogService()->info('homework','create','创建课程{$courseId}课时{$lessonId}的作业');
+        $this->getLogService()->info('homework', 'create', '创建课程{$courseId}课时{$lessonId}的作业');
 
         return $homework;
     }
+
 
     public function createHomeworkPairReview($homeworkResultId, array $fields){
         $homeworkResult=$this->loadHomeworkResult($homeworkResultId);
@@ -70,7 +75,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $result=$this->loadHomeworkResult($selectedId);
         $resultItems=$this->getItemSetResultByHomeworkIdAndUserId($homeworkId,$result['userId']);
         $result['items']=$resultItems;
-
         return $result;
     }
 
@@ -107,15 +111,85 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return empty($ids) ? null : $ids[rand(0,count($ids)-1)];
     }
 
-    protected function getReviewDao(){
-          return $this->createDao('Custom:Homework.ReviewDao');
+    protected function getReviewDao()
+    {
+        return $this->createDao('Custom:Homework.ReviewDao');
     }
 
-    protected function getHomeworkDao(){
-          return $this->createDao('Homework:Homework.HomeworkDao');
+    protected function getHomeworkDao()
+    {
+        return $this->createDao('Homework:Homework.HomeworkDao');
     }
 
-    protected function getResultDao(){
-          return $this->createDao('Custom:Homework.HomeworkResultDao');
+    protected function getResultDao()
+    {
+        return $this->createDao('Custom:Homework.HomeworkResultDao');
+    }
+
+    private function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
+    }
+
+    private function getLogService()
+    {
+        return $this->createService('System.LogService');
+    }
+
+    private function getQuestionService()
+    {
+        return $this->createService('Question.QuestionService');
+    }
+
+    private function getHomeworkItemDao()
+    {
+        return $this->createDao('Homework:Homework.HomeworkItemDao');
+    }
+
+    private function filterHomeworkFields($fields, $mode)
+    {
+        $fields['description'] = $fields['description'];
+
+        if ($mode == 'add') {
+            $fields['createdUserId'] = $this->getCurrentUser()->id;
+            $fields['createdTime'] = time();
+        }
+
+        if ($mode == 'edit') {
+            $fields['updatedUserId'] = $this->getCurrentUser()->id;
+            $fields['updatedTime'] = time();
+        }
+
+        return $fields;
+    }
+
+    private function addHomeworkItems($homeworkId, $excludeIds)
+    {
+        $homeworkItems = array();
+        $homeworkItemsSub = array();
+        $includeItemsSubIds = array();
+        $index = 1;
+
+        foreach ($excludeIds as $key => $excludeId) {
+
+            $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
+
+            $items['seq'] = $index++;
+            $items['questionId'] = $excludeId;
+            $items['homeworkId'] = $homeworkId;
+            $items['parentId'] = 0;
+            $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+
+            if (!empty($questions)) {
+                $i = 1;
+                foreach ($questions as $key => $question) {
+                    $items['seq'] = $i++;
+                    $items['questionId'] = $question['id'];
+                    $items['homeworkId'] = $homeworkId;
+                    $items['parentId'] = $question['parentId'];
+                    $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+                }
+            }
+        }
     }
 }

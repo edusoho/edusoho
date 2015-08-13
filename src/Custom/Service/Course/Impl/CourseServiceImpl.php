@@ -13,7 +13,6 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 {
 	public function customUpdateCourse($id, $fields)
 	{
-		var_dump('custom updatacourse');
 		$course = $this->getCourseDao()->getCourse($id);
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
