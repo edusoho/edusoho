@@ -35,7 +35,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             throw $this->createServiceException("用户未登录，上传初始化失败！");
         }
 
-        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'bucket', 'hashType', 'hashValue'))) {
+        if (!ArrayToolkit::requireds($params, array('targetId', 'targetType', 'bucket', 'hash'))) {
             throw $this->createServiceException("参数缺失，上传初始化失败！");
         }
 
@@ -47,8 +47,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $file = $this->getUploadFileDao()->addFile($implementor->prepareUpload($params));
 
         $file['bucket'] = $params['bucket'];
-        $file['hashType'] = $params['hashType'];
-        $file['hashValue'] = $params['hashValue'];
+        $file['hash'] = $params['hash'];
         $file['processParams'] = empty($params['processParams']) ? array() : $params['processParams'];
         if (!empty($file['processParams'])) {
             $file['processParams']['callback'] = $params['processCallback'];

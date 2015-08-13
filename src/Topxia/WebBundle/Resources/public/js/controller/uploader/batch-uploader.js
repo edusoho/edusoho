@@ -111,6 +111,7 @@ define(function(require, exports, module) {
 
             uploader.on('uploadComplete', function(file) {
                 console.log('upload complete');
+                store.remove('file_' + object.file.hash);
             });
 
             uploader.on('uploadAccept', function(object, ret) {
@@ -188,8 +189,7 @@ define(function(require, exports, module) {
                         var params = {
                             fileName: file.name,
                             fileSize: file.size,
-                            hashType: 'chunk_md5',
-                            hashValue: hash,
+                            hash: hash,
                             processParams: file.uploaderWidget._getProcessParams(file)
                         }
 
@@ -293,7 +293,7 @@ define(function(require, exports, module) {
                 hash += hash2.slice(8, 16);
                 hash += hash3.slice(16, 24);
                 hash += hash4.slice(24, 32);
-                deferred.resolve(hash);
+                deferred.resolve('cmd5|' + hash);
 
             });
             return deferred.promise();
