@@ -13,6 +13,8 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
     protected $apiType = null;
 
+    protected $rootApiUrl = null;
+
     protected function _request($method, $uri, $params, $headers)
     {
         try {
@@ -37,7 +39,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
                     $data['failed_count'] ++;
                 } else {
                     $data['failed_count'] = 1;
-                    $data['failed_expired'] = time() + 10;
+                    $data['failed_expired'] = time() + 120;
                 }
 
                 if ($data['failed_count'] == $maxFailoverCount) {
@@ -67,7 +69,12 @@ class FailoverCloudAPI extends AbstractCloudAPI
             }
         }
 
-        $data = json_decode(fread($fp, filesize($this->serverConfigPath)), true);
+        if (filesize($this->serverConfigPath) > 0) {
+            $data = json_decode(fread($fp, filesize($this->serverConfigPath)), true);
+        } else {
+            $data = array();
+        }
+
         $data = $callback($fp, $data, self::FAILOVER_COUNT);
 
         ftruncate($fp, 0);
@@ -115,7 +122,9 @@ class FailoverCloudAPI extends AbstractCloudAPI
         if ($newLeaf['used_count'] > 3) {
             // 确保1小时后更新地址列表
             $nextRefreshTime = time() + 3600;
-            $this->getServerList($nextRefreshTime);
+            $servers = $this->getServerList($nextRefreshTime);
+
+            return $servers;
         }
 
         $servers['current_leaf'] = $newLeaf['url'];
@@ -133,7 +142,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         $this->apiType = $type;
-
+        $this->rootApiUrl = $this->apiUrl;
         if ($type == 'leaf') {
             $this->apiUrl = $this->servers['current_leaf'];
         }
@@ -145,6 +154,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         
         if (!file_exists($path)) {
             $self = $this;
+            touch($path);
             $this->servers = $this->refreshServerConfigFile(function() use ($self) {
                 return $self->getServerList();
             }, 'blocking');
@@ -155,7 +165,11 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
     protected function getServerList($nextRefreshTime = 0)
     {
+        $prevApiUrl = $this->apiUrl;
+        $this->setApiUrl($this->rootApiUrl);
         $servers = parent::_request('GET', '/server_list', array(), array());
+        $this->setApiUrl($prevApiUrl);
+
         if (empty($servers) or empty($servers['root']) or empty($servers['current_leaf']) or empty($servers['leafs'])) {
             $servers = $this->getServerListFromCdn();
             if (empty($servers) || empty($servers['root']) || empty($servers['leafs'])) {

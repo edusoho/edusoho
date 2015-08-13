@@ -24,9 +24,15 @@ class AbstractCloudAPI
         $this->setKey($options['accessKey'], $options['secretKey']);
 
         if (!empty($options['apiUrl'])) {
-            $this->apiUrl = rtrim($options['apiUrl'], '/');
+            $this->apiUrl = $this->setApiUrl($options['apiUrl']);
         }
         $this->debug = empty($options['debug']) ? false : true;
+    }
+
+    public function setApiUrl($url)
+    {
+        $this->apiUrl = rtrim($url, '/');
+        return $this;
     }
 
     public function setKey($accessKey, $secretKey)
