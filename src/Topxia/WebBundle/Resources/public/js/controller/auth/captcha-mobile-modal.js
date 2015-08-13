@@ -55,6 +55,7 @@ define(function(require, exports, module) {
                             self._captchaValidated = false;
                             
                             $form.find('.help-block').html('<span class="text-danger">验证码错误</span>');
+                            $form.find('.help-block').show();
                         }
                     }, 'json');
                 }
