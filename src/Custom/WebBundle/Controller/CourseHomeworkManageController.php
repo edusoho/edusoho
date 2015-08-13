@@ -39,6 +39,61 @@ class CourseHomeworkManageController extends BaseManageController
         ));
     }
 
+    public function editAction(Request $request, $courseId, $lessonId, $homeworkId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程(#{$courseId})不存在！");
+        }
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        $homework = $this->getHomeworkService()->getHomework($homeworkId);
+
+        if (empty($homework)) {
+            throw $this->createNotFoundException("作业(#{$homeworkId})不存在！");
+        }
+
+        $homeworkItems = $this->getHomeworkService()->findItemsByHomeworkId($homeworkId);
+        $homeworkItemsArray = array();
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+            if ($homeworkItem['parentId'] == "0") {
+                $homeworkItemsArray[] = $homeworkItem;
+            }
+        }
+
+        $homeworkItems = $homeworkItemsArray;
+        $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($homeworkItems, 'questionId'));
+
+        if ($request->getMethod() == 'POST') {
+
+            $fields = $request->request->all();
+            $homework = $this->getHomeworkService()->updateHomework($homeworkId, $fields);
+
+            if ($homework) {
+                return $this->createJsonResponse(array("status" => "success", 'courseId' => $courseId));
+            } else {
+                return $this->createJsonResponse(array("status" => "failed"));
+            }
+        }
+        if ($homework['pairReview'])
+            $homework['scoreRule'] = $homework['completePercent'] . ":"
+                . $homework['partPercent'] . ":" . $homework['zeroPercent'] . ":" . $homework['minReviews'];
+
+        return $this->render('CustomWebBundle:CourseHomeworkManage:homework-edit.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'homework' => $homework,
+            'homeworkItems' => $homeworkItems,
+            'questions' => $questions,
+        ));
+    }
+
     public function listAction(Request $request)
     {
         $status = $request->query->get('status', 'finished');

@@ -38,6 +38,14 @@ my_homework_list:
     pattern: /my/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
 
+course_lesson_plugin_homework_list:
+    pattern:  /lessonplugin/homework/list
+    defaults: { _controller: CustomWebBundle:LessonHomeworkPlugin:list }
+
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
+
+course_manage_lesson_homework_edit:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
+    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:edit }

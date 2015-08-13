@@ -32,9 +32,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         if (empty($excludeIds)) {
             $this->createServiceException("题目不能为空，创建作业失败！");
         }
-        if ($fields['pairReview'] == 1) {
-            $completeTime = strtotime($fields['completeTime']);
-            $reviewEndTime = strtotime($fields['reviewEndTime']);
+        $completeTime = strtotime($fields['completeTime']);
+        $reviewEndTime = strtotime($fields['reviewEndTime']);
+        if ($fields['pairReview'] == 0) {
+            $completeTime = 0;
+            $reviewEndTime = 0;
         }
 
         unset($fields['excludeIds']);
@@ -54,6 +56,32 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $this->getLogService()->info('homework', 'create', '创建课程{$courseId}课时{$lessonId}的作业');
 
         return $homework;
+    }
+
+    public function updateHomework($id, $fields)
+    {
+        $homework = $this->getHomework($id);
+
+        if (empty($homework)) {
+            throw $this->createServiceException('作业不存在，更新作业失败！');
+        }
+        if ($fields['pairReview'] == 1) {
+            $fields['completeTime'] = strtotime($fields['completeTime']);
+            $fields['reviewEndTime'] = strtotime($fields['reviewEndTime']);
+        } else {
+            $fields['completeTime'] = 0;
+            $fields['reviewEndTime'] = 0;
+        }
+
+        $fields = $this->filterHomeworkFields($fields, $mode = 'edit');
+
+        $homework = $this->getHomeworkDao()->updateHomework($id, $fields);
+
+        $this->getLogService()->info('homework', 'update', '更新课程{$courseId}课时{$lessonId}的{$id}作业');
+
+        return $homework;
+
+
     }
 
     public function randomizeHomeworkResultForPairReview($homeworkId, $userId)

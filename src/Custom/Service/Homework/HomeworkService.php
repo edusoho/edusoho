@@ -17,6 +17,14 @@ interface HomeworkService
 	public function createHomework($courseId,$lessonId,$fields);
 
 	/**
+	 * 更新作业
+	 * @param $id
+	 * @param $fields
+	 * @return mixed
+	 */
+	public function updateHomework($id, $fields);
+
+	/**
 	 * 随机获取一份未曾互评的作业答卷.
 	 * @param homeworkId, 作业id.
 	 * @param userId, 参加互评的学员用户id.
