@@ -264,7 +264,6 @@ class ClassroomManageController extends BaseController
                 'orderId' => $order['id'],
                 'note'  => $data['remark'],
             );
-
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
@@ -302,21 +301,6 @@ class ClassroomManageController extends BaseController
                 $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
             } else {
                 $response = array('success' => true, 'message' => '');
-            }
-
-            $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($id, $user['id']);
-            if ($isClassroomTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本班级的教师，不能添加');
-            }
-
-            $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($id, $user['id']);
-            if ($isClassroomHeadTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本班级的班主任，不能添加');
-            }
-
-            $isClassroomAssistent = $this->getClassroomService()->isClassroomAssistent($id, $user['id']);
-            if ($isClassroomAssistent) {
-                $response = array('success' => false, 'message' => '该用户是本班级的助教，不能添加');
             }
         }
 
@@ -458,9 +442,7 @@ class ClassroomManageController extends BaseController
             }
             $this->setFlashMessage('success', "保存成功！");
         }
-
-        $teacherIds = $classroom['teacherIds'] ?: array();
-
+        $teacherIds = $this->getClassroomService()->findTeachers($id);
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
         $teacherItems = array();
@@ -522,17 +504,21 @@ class ClassroomManageController extends BaseController
             $data = $request->request->all();
             $userIds = empty($data['ids']) ? array() : $data['ids'];
             $this->getClassroomService()->updateAssistants($id, $userIds);
+            if ($userIds) {
+                $fields = array('assistantIds' => $userIds);
+
+                $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
+            }
 
             $this->setFlashMessage('success', "保存成功！");
             
         }
 
-        $assistants = $this->getClassroomService()->findAssistants($id);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
-        $users = ArrayToolkit::index($users, "id");
+        $assistantIds = $this->getClassroomService()->findAssistants($id);
+        $users = $this->getUserService()->findUsersByIds($assistantIds);
         $sortedAssistants = array();
-        foreach ($assistants as $key => $assistant) {
-            $user = $users[$assistant["userId"]];
+        foreach ($assistantIds as $key => $assistantId) {
+            $user = $users[$assistantId];
             $sortedAssistants[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
