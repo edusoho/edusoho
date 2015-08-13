@@ -207,9 +207,6 @@ class ClassroomServiceTest extends BaseTestCase
     }
 
     
-      
-    }
-
     public function testUpdateClassroomCourses()
     {
        
