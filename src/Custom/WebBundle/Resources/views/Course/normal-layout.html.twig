@@ -16,7 +16,7 @@
     <div class="course-about-main">
       {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
       <div class="course-detail">
-        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% include 'CustomWebBundle:Course:Part/normal-nav.html.twig' %}
         {% block course_main %}{% endblock %}
       </div>
     </div>

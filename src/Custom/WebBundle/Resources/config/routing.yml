@@ -49,3 +49,27 @@ course_manage_lesson_homework_create:
 course_manage_lesson_homework_edit:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:edit }
+
+course_threads:
+    pattern:  /course/{id}/thread/
+    defaults: { _controller: CustomWebBundle:CourseThread:index }
+
+course_materials:
+    pattern:  /course/{id}/material/
+    defaults: { _controller: CustomWebBundle:CourseMaterial:index }
+
+course_homeworks:
+    pattern:  /course/{id}/homeworks/
+    defaults: { _controller: CustomWebBundle:Homework:index }
+
+course_review_list:
+    pattern:  /course/{id}/reviews/
+    defaults: { _controller: CustomWebBundle:CourseReview:index }
+
+course_notes:
+    pattern:  /course/{courseId}/notes
+    defaults: { _controller: CustomWebBundle:CourseNote:index }
+
+course_info:
+    pattern:  /course/{id}/info
+    defaults: { _controller: CustomWebBundle:CourseInfo:index }

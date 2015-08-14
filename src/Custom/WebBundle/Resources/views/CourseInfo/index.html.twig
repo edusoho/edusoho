@@ -1,0 +1,69 @@
+{% extends 'CustomWebBundle:Course:normal-layout.html.twig' %}
+
+{% set tab = 'info' %}
+
+{% block course_main %}
+
+  <div class="course-detail-content">
+
+    <div class="es-piece">
+      <div class="piece-header">
+        课程介绍
+      </div>
+      <div class="piece-body p-lg">
+        {% if course.about %}
+          {{ course.about|raw }}
+        {% else %}
+          <div class="text-muted">暂无课程简介</div>
+        {% endif %}
+
+        {% if category %}
+          <p><strong>分类：</strong><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></p>
+        {% endif %}
+
+        {% if tags %}
+          <p><strong>标签：</strong>
+            {% for tag in tags %}
+              <a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a>
+            {% endfor %}
+          </p>
+        {% endif %}
+
+      </div>
+    </div>
+
+    {% if course.goals %}
+      <div class="es-piece">
+        <div class="piece-header">
+          课程目标
+        </div>
+        <div class="piece-body">
+          <ul class="piece-body-list">
+            {% for goal in course.goals %}
+            <li>
+              <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if course.audiences %}
+      <div class="es-piece">
+        <div class="piece-header">
+          适合人群
+        </div>
+        <div class="piece-body">
+          <ul class="piece-body-list">
+            {% for audience in course.audiences %}
+            <li>
+              <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
