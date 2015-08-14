@@ -151,6 +151,10 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       cordovaUtil.openWebView(app.rootPath + "#/login/course");
       return;
     }
+    if ($scope.user.vip == null || $scope.user.vip.levelId < $scope.course.vipLevelId) {
+      cordovaUtil.openWebView(app.rootPath + "#/viplist");
+      return;
+    }
     callback();
   }
 
