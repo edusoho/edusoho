@@ -57,4 +57,5 @@ web/assets/img/default/video.png
 .phpintel*
 /src/Tests/*
 /web/assets/v2/bootstrap/less
+/web/install/edusoho_init.sql
 /app/data/api_server.json
