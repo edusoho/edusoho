@@ -57,3 +57,23 @@ course_manage_lesson_homework_create:
 search:
     pattern:  /search
     defaults: { _controller: CustomWebBundle:Search:index }
+
+course_threads:
+    pattern:  /course/{id}/thread/
+    defaults: { _controller: CustomWebBundle:CourseThread:index }
+
+course_materials:
+    pattern:  /course/{id}/material/
+    defaults: { _controller: CustomWebBundle:CourseMaterial:index }
+
+course_review_list:
+    pattern:  /course/{id}/reviews/
+    defaults: { _controller: CustomWebBundle:CourseReview:index }
+
+course_notes:
+    pattern:  /course/{courseId}/notes
+    defaults: { _controller: CustomWebBundle:CourseNote:index }
+
+course_info:
+    pattern:  /course/{id}/info
+    defaults: { _controller: CustomWebBundle:CourseInfo:index }
