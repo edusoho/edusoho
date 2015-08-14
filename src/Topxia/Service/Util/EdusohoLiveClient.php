@@ -32,9 +32,9 @@ class EdusohoLiveClient
         return CloudAPIFactory::create('leaf')->get('/lives/capacity', $args);
     }
 
-    public function getRoomUrl($args)
+    public function getRoomUrl($args, $server='leaf')
     {
-        return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/room_url', $args);
+        return CloudAPIFactory::create($server)->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
     public function deleteLive($liveId, $provider)

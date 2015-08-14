@@ -1156,7 +1156,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $params['user'] = $params['email'];
 
         $client = new EdusohoLiveClient();
-        $result = $client->entryLive($params);
+        $result = $client->getRoomUrl($params, 'root');
 
         return array('data' =>
             array(
