@@ -6,18 +6,15 @@
         
       </a>
       <div class="title">
-        <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-        {% if member.role == 'headTeacher' %}
+        <a class="link-light" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+        {% if 'headTeacher' in member.role %}
           <i class="es-icon es-icon-school color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="班主任"></i>
-        {% endif %}
-
-        {% if member.role == 'assistant' or member.role == 'studentAssistant' %}
+        {% elseif 'teacher' in member.role %}
+          <i class="es-icon es-icon-school color-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="教师"></i>
+        {% elseif 'assistant' in member.role %}
           <i class="es-icon es-icon-school color-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="助教"></i>
         {% endif %}
 
-        {% if member.role == 'teacher' %}
-          <i class="es-icon es-icon-school color-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="教师"></i>
-        {% endif %}
       </div>
       <div class="position">
         {% if teacher.title %}
