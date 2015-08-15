@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -15,7 +14,7 @@ use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
 
 use Topxia\Service\CloudPlatform\KeyApplier;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -36,7 +35,7 @@ class CloudSettingController extends BaseController
 
     public function keyInfoAction(Request $request)
     {
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
@@ -71,7 +70,7 @@ class CloudSettingController extends BaseController
 
     public function keyBindAction(Request $request)
     {
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $currentHost = $request->server->get('HTTP_HOST');
         $result = $api->post('/me/license-domain', array('domain' => $currentHost));
 
@@ -93,11 +92,8 @@ class CloudSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
 
-            if (!empty($settings['cloud_api_server'])) {
-                $options['apiUrl'] = $settings['cloud_api_server'];
-            }
-
-            $api = new CloudAPI($options);
+            $api = CloudAPIFactory::create('root');
+            $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
 
@@ -150,7 +146,7 @@ class CloudSettingController extends BaseController
     public function keyCopyrightAction(Request $request)
     {
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
 
         if (empty($info['copyright'])) {

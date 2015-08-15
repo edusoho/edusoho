@@ -17,8 +17,8 @@
   <td>
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}<span class="text-success">(已绑定)</span>
-    {% elseif profiles[user.id].mobile %}
-      {{ profiles[user.id].mobile }}<span class="text-danger">(未绑定)</span>
+    {% elseif profile.mobile %}
+      {{ profile.mobile }}<span class="text-danger">(未绑定)</span>
     {% else %}
        -- 
     {% endif %}
