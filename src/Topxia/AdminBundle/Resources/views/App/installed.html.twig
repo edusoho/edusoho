@@ -79,7 +79,7 @@
                   <a href="{{url(url)}}"  class="btn btn-primary">管理</a>
                   {% endif %}
 
-                  {% if setting('developer.debug') and app.code|lower != 'main' %}
+                  {% if setting('developer.debug') and app.code|lower != 'moocmain' %}
                     <br>
                     <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn mtm">卸载</a>
                   {% endif %}
