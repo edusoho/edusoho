@@ -1156,7 +1156,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $params['user'] = $params['email'];
 
         $client = new EdusohoLiveClient();
-        $result = $client->getRoomUrl($params, 'root');
+        if($lesson['replayStatus'] == 'generated'){
+            $result = $client->entryReplay($params, 'root');
+        } else {
+            $result = $client->getRoomUrl($params, 'root');
+
+        }
 
         return array('data' =>
             array(

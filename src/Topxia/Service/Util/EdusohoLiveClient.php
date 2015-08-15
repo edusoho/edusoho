@@ -51,9 +51,9 @@ class EdusohoLiveClient
         return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/entry_room', $args);
     }
 
-    public function entryReplay($args)
+    public function entryReplay($args, $server='leaf')
     {
-        return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/record_url', $args);
+        return CloudAPIFactory::create($server)->post('/lives/'.$args['liveId'].'/record_url', $args);
     }
 
     public function createReplayList($liveId, $title, $provider)
