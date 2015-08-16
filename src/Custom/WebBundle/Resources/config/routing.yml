@@ -73,3 +73,7 @@ course_notes:
 course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: CustomWebBundle:CourseInfo:index }
+
+pair_review_create:
+    pattern:  /homeworks/{homeworkId}/pair_reviews/create
+    defaults: { _controller: CustomWebBundle:HomeworkPairReview:create }

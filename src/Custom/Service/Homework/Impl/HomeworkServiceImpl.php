@@ -113,11 +113,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     public function loadHomeworkResult($homeworkResultId)
     {
         if (empty($homeworkResultId)) {
-            throw $this->createServiceException("作业答卷id为空.");
+            throw $this->createNotFoundException("作业答卷关键字为空.");
         }
         $homeworkResult = $this->getHomeworkResult($homeworkResultId);
         if (empty($homeworkResult)) {
-            throw $this->createServiceException("未能找到作业答卷！");
+            throw $this->createNotFoundException("作业答卷{$homeworkResultId}不存在！");
         }
         return $homeworkResult;
     }
@@ -140,6 +140,17 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         }
         $ids = empty($insufficient) ? $sufficient : $insufficient;
         return empty($ids) ? null : $ids[rand(0, count($ids) - 1)];
+    }
+
+    public function loadHomework($id){
+        if(empty($id)){
+            throw $this->createNotFoundException("作业关键字为空！");
+        }
+        $homework = $this -> getHomework($id);
+        if( empty($homework)){
+            throw $this->createNotFoundException("作业{id}不存在！");
+        }
+        return $homework;
     }
 
     protected function getReviewDao()

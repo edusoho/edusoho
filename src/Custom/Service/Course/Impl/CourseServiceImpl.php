@@ -75,6 +75,34 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 
 		return ArrayToolkit::index($courses, 'periods');
 	}
+
+	public function loadCourse($id){
+        if(empty($id)){
+            throw $this->createNotFoundException("课程关键字为空！");
+        }
+        $course = $this -> getCourse($id);
+        if( empty($course)){
+            throw $this->createNotFoundException("课程{id}不存在！");
+        }
+        return $course;
+    }
+
+	public function loadLesson($id){
+        if(empty($id)){
+            throw $this->createNotFoundException("课时关键字为空！");
+        }
+        $lesson = $this -> getLesson($id);
+        if( empty($lesson)){
+            throw $this->createNotFoundException("课时{id}不存在！");
+        }
+        return $lesson;
+    }
+
+    public function getLesson($id)
+    {
+        $lesson = $this->getLessonDao()->getLesson($id);
+        return LessonSerialize::unserialize($lesson);
+    }
 }
 
 
@@ -154,4 +182,24 @@ class CourseSerialize
 			return CourseSerialize::unserialize($course);
 		}, $courses);
 	}
+}
+
+class LessonSerialize
+{
+    public static function serialize(array $lesson)
+    {
+        return $lesson;
+    }
+
+    public static function unserialize(array $lesson = null)
+    {
+        return $lesson;
+    }
+
+    public static function unserializes(array $lessons)
+    {
+        return array_map(function($lesson) {
+            return LessonSerialize::unserialize($lesson);
+        }, $lessons);
+    }
 }
