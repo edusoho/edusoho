@@ -89,19 +89,6 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
-
-                // $.ajax(startUrl, {
-                //  type: 'POST',
-                //  data: {fileId:file.gid},
-                //  dataType: 'json',
-                //  headers: {
-                //      'Upload-Token': response.postData.token
-                //  },
-                //  success: function() {
-                //      console.log('finished');
-                //  }
-                // });
-
             });
 
             uploader.on('beforeFileQueued', function(file) {
@@ -235,19 +222,18 @@ define(function(require, exports, module) {
 
                     var key = 'file_' + block.file.globalId + '_' + block.file.hash;
 
-                    var currentChunk = store.get(key);
+                    var resumedChunk = store.get(key);
 
-                    if (currentChunk !== undefined) {
-                        
+                    if (resumedChunk === undefined) {
+                        block.file.startUploading = true;
                     }
 
-                    console.log(currentChunk);
-
-
-                    // if (continueChunkNum && continueChunkNum > 0 && block.chunk < continueChunkNum) {
-                    //     console.log('秒传');
-                    //     deferred.reject();
-                    // }
+                    if (!block.file.startUploading && block.chunk <= resumedChunk) {
+                        console.log('秒传');
+                        deferred.reject();
+                    } else {
+                        block.file.startUploading = true;
+                    }
 
                     deferred.resolve();
 
