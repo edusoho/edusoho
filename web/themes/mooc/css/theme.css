@@ -2530,6 +2530,7 @@ label {
 .es-poster .swiper-slide a img {
   width: 100%;
 }
+
 .homework-time .homework-content {
   display: inline-block;
 }
@@ -2566,4 +2567,31 @@ label {
 .homework-time .homework-btn .btn-start,
 .homework-time .homework-btn .btn-comment {
   margin-bottom: 10px;
+}
+.question-set-rule ol li {
+  list-style-type: decimal;
+}
+.homework-question-result {
+  float: none;
+}
+.question-set-main .form-group {
+  margin-top: 15px;
+}
+.question-set-main .form-grade {
+  width: 52px;
+}
+.question-set-main .form-grade:focus {
+  outline: none;
+}
+.evaluate-time {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #000;
+  font-size: 12px;
+}
+.evaluate-time ul {
+  padding: 0;
+}
+.evaluate-time ul li {
+  color: #ff0000;
 }

@@ -1,0 +1,27 @@
+  <div class="question-set-item">
+
+    <div class="question-set-item-side">
+      <span class="question-set-item-seq">
+      {% if item.parentId %}
+        {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}  
+      {% else %}
+        {{ item.seq }}
+      {% endif %}
+      </span>
+      {% if item.score > 0 %}
+        <span class="question-set-item-score">{{ item.score }}</span>
+      {% endif %}
+    </div>
+
+    <div class="question-set-item-main">
+      {% set question = item.question %}
+      {% set itemResult = item.itemResult|default(null) %}
+      {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}
+      {% if question %}
+      {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+      {% else %}
+      此题已删除。
+      {% endif %}
+    </div>
+
+  </div>

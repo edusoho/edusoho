@@ -7,6 +7,14 @@ namespace Custom\Service\Homework;
  **/
 interface HomeworkService
 {
+
+    /**
+     * 根据id获取作业.
+     * @param id, 作业id.
+     * @throws ServiceException 当id为空或者未能找到指定id的作业.
+    **/
+    public function loadHomework($id);
+
     /**
      * 创建一份作业.
      * @param $courseId
