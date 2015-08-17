@@ -22,7 +22,7 @@
 
                 <li {% if status == 'pairReviewing' %} class="active"{% endif %}>
                     <a href="{{ url('my_teaching_homework_list', {status:'pairReviewing'}) }}">互评中
-                        <span class="badge">{{ finishedCount|default(0) }}</span>
+                        <span class="badge">{{ pairReviewingCount|default(0) }}</span>
                     </a>
                 </li>
             </ul>

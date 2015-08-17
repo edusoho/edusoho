@@ -58,16 +58,19 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         if ($status == 'reviewing') {
             $reviewingCount = $homeworkResultsCounts;
             $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, 'finished');
+            $pairReviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, 'pairReviewing');
         }
 
         if ($status == 'finished') {
             $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, 'reviewing');
             $finishedCount = $homeworkResultsCounts;
+            $pairReviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, 'pairReviewing');
         }
 
         if ($status == 'pairReviewing') {
             $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, 'reviewing');
-            $finishedCount = $homeworkResultsCounts;
+            $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdAndStatus($courseId, 'finished');
+            $pairReviewingCount = $homeworkResultsCounts;
         }
 
         return $this->render('CustomWebBundle:CourseHomework:check-list.html.twig', array(
@@ -77,7 +80,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
             'users' => $users,
             'reviewingCount' => $reviewingCount,
             'finishedCount' => $finishedCount,
-            'pairReviewingCount' => 0,
+            'pairReviewingCount' => $pairReviewingCount,
             'lessons' => $lessons,
             'paginator' => $paginator
         ));
