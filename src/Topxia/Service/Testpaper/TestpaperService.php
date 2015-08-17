@@ -23,7 +23,7 @@ interface TestpaperService
 
     public function updateTestpaper($id, $fields);
 
-    public function updateTestpaperByPId($pId,$fields);
+    public function editTestpaper($id, $fields);
 
     public function publishTestpaper($id);
 
@@ -31,7 +31,7 @@ interface TestpaperService
 
     public function deleteTestpaper($id);
 
-    public function deleteTestpaperByPId($pId);
+    public function deleteTestpaperByTestpaperId($testpaperId);
 
     public function buildTestpaper($id, $options);
 
@@ -40,6 +40,8 @@ interface TestpaperService
     public function canLookTestpaper($resultId);
 
     public function findTestpaperByPId($pId);
+
+    public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);
 
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 
@@ -97,9 +99,11 @@ interface TestpaperService
      * @param  integer $id 试卷ID
      * @return array     试卷所有题目，包含item对应的question的信息
      */
+    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+
     public function createTestpaperItem($item);
 
-    public function deleteTestpaperItemByPId($pId);
+    public function deleteTestpaperItem($id);
 
     public function deleteTestpaperItemByTestId($testId);
     
@@ -107,5 +111,5 @@ interface TestpaperService
 
     public function updateTestpaperItems($testpaperId, $items);
 
-    public function updateTestpaperItemsByPId($pId, $item);
+    public function editTestpaperItem($testpaperId, $item);
 }

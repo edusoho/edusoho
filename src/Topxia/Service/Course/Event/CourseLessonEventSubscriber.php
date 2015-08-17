@@ -45,7 +45,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         
         $lesson = $context["lesson"];
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        $this->getCourseService()->updateCourseByParentIdAndLocked($lesson['courseId'], 1, array("lessonNum"=>$course['lessonNum']));
+        foreach ($courseIds as $courseId) {
+            $this->getCourseService()->editCourse($courseId, array("lessonNum"=>$course['lessonNum']));
+        }
         if (!empty($courseIds)){
             $lesson ['parentId'] = $lesson ['id'];
             unset($lesson ['id'],$lesson['courseId']);
@@ -63,35 +65,51 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
         $courseId = $context["courseId"];
 
-        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-        foreach ($classroomIds as $key => $value) {
-            $classroom = $this->getClassroomService()->getClassroom($value);
-            $lessonNum = $classroom['lessonNum']-1;
-            $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
-        }
-
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-        foreach ($courseIds as $courseId) {
-            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-            foreach ($classroomIds as  $classroomId) {
-                $classroom = $this->getClassroomService()->getClassroom($classroomId);
-                $lessonNum = $classroom['lessonNum']-1;
-                $this->getClassroomService()->updateClassroom($classroomId, array("lessonNum" => $lessonNum));
-            }
-        }
 
-        $lesson = $context["lesson"];
-        $this->getCourseService()->deleteLessonByParentId($lesson['id']);
-        $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        $this->getCourseService()->updateCourseByParentIdAndLocked($lesson['courseId'], 1, array("lessonNum"=>$course['lessonNum']));
+        if ($courseIds) {
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
+            foreach ($classroomIds as $key => $value) {
+                $classroom = $this->getClassroomService()->getClassroom($value);
+                $lessonNum = $classroom['lessonNum']-1;
+                $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
+            }
+
+            foreach ($courseIds as $courseId) {
+                $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
+                foreach ($classroomIds as  $classroomId) {
+                    $classroom = $this->getClassroomService()->getClassroom($classroomId);
+                    $lessonNum = $classroom['lessonNum']-1;
+                    $this->getClassroomService()->updateClassroom($classroomId, array("lessonNum" => $lessonNum));
+                }
+            }
+
+            $lesson = $context["lesson"];
+            if ($courseIds) {
+                $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
+                foreach ($lessonIds as $key=>$lessonId) {
+                    $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
+                }
+            }
+            $course = $this->getCourseService()->getCourse($lesson['courseId']);
+            foreach ($courseIds as $courseId) {
+                $this->getCourseService()->editCourse($courseId, array("lessonNum"=>$course['lessonNum']));
+            }
+
+        }
     }
 
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $parentId = $lesson['id'];
-        unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
-        $this->getCourseService()->updateLessonByParentId($parentId,$lesson);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
+            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            foreach ($courseIds as $key=>$courseId) {
+                $this->getCourseService()->editLesson($courseId,$lessonIds[$key],$lesson);
+            } 
+        }
     }
 
     public function onLessonStart(ServiceEvent $event)

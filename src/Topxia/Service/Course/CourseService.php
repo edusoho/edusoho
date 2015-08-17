@@ -66,7 +66,7 @@ interface CourseService
 
 	public function updateCourse($id, $fields);
 
-	public function updateCourseByParentIdAndLocked($parentId, $locked, $fields);
+	public function editCourse($id, $fields);
 
 	public function updateCourseCounter($id, $counter);
 
@@ -110,7 +110,7 @@ interface CourseService
 
 	public function findLessonsByIds(array $ids);
 
-	public function findLessonsByParentId($parentId);
+	public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds);
 
 	public function getCourseLesson($courseId, $lessonId);
 
@@ -136,13 +136,11 @@ interface CourseService
 
 	public function updateLesson($courseId, $lessonId, $fields);
 
-	public function updateLessonByParentId($parentId,$fields);
+	public function editLesson($courseId, $lessonId, $fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
 	public function deleteLesson($courseId, $lessonId);
-
-	public function deleteLessonByParentId($parentId);
 
 	public function publishLesson($courseId, $lessonId);
 
@@ -216,13 +214,13 @@ interface CourseService
 
 	public function updateChapter($courseId, $chapterId, $fields);
 
-	public function updateChapterByPId($pId, $fields);
+	public function editChapter($chapterId, $fields);
 
 	public function deleteChapter($courseId, $chapterId);
 
-	public function deleteChapterByPId($pId);
-
 	public function getNextChapterNumber($courseId);
+
+	public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds);
 
 	/**
 	 * 获得课程的目录项

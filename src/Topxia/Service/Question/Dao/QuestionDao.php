@@ -12,7 +12,7 @@ interface QuestionDao
 
     public function findQuestionsByParentIds(array $ids);
 
-    public function findQuestionsByPId($pId);
+    public function findQuestionsByPIdAndLockedTarget($pId,$lockedTarget);
 
     public function findQuestionsbyTypes($types, $start, $limit);
 
@@ -34,13 +34,9 @@ interface QuestionDao
 
     public function updateQuestion($id, $fields);
 
-    public function updateQuestionByPId($pId, $fields);
-
     public function deleteQuestion($id);
 
     public function deleteQuestionsByParentId($id);
-
-    public function deleteQuestionsByPId($pId);
 
     public function updateQuestionCountByIds($ids, $status);
 

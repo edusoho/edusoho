@@ -113,21 +113,21 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('Test',$testpaper['name']);
     }
 
-    public function testUpdateTestpaperByPId()
+    public function testEditTestpaper()
     {
         $testpaper = array('name' => 'Test','pId'=>1);
         $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
         $this->assertEquals('Test',$testpaper['name']);
-        $count = $this->getTestpaperService()->updateTestpaperByPId(1,array('name'=>'Test2'));
-        $this->assertEquals(1,$count);    
+        $testpaper = $this->getTestpaperService()->editTestpaper(1,array('name'=>'Test2'));
+        $this->assertEquals('Test2',$testpaper['name']);    
     }
 
-    public function testDeleteTestpaperByPId()
+    public function testDeleteTestpaperByTestpaperId()
     {
-        $testpaper = array('name' => 'Test','pId'=>1);
+        $testpaper = array('name' => 'Test');
         $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
         $this->assertEquals('Test',$testpaper['name']);
-        $count = $this->getTestpaperService()->deleteTestpaperByPId(1);;
+        $count = $this->getTestpaperService()->deleteTestpaperByTestpaperId($testpaper['id']);
         $this->assertEquals(1,$count);
     }
 
@@ -140,6 +140,15 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('Test',$testpaper[0]['name']);
     }
 
+    public function testFindTestpaperByPIdAndLockedTarget()
+    {
+        $testpaper = array('name' => 'Test','pId'=>1,'target'=>'course-1');
+        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
+        $this->assertEquals('Test',$testpaper['name']);
+        $testpaper = $this->getTestpaperService()->findTestpaperByPIdAndLockedTarget(1,"('course-1')");
+        $this->assertEquals('Test',$testpaper[0]['name']);
+    }
+
     public function testCreateTestpaperItem()
     {
         $testpaperItem = array('questionType'=>'single_choice');
@@ -147,13 +156,22 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('single_choice',$testpaperItem['questionType']);
     }
 
-    public function testDeleteTestpaperItemByPId()
+    public function testDeleteTestpaperItem()
     {
-        $testpaperItem = array('questionType'=>'single_choice','pId'=>1);
-        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-        $this->assertEquals('single_choice',$testpaperItem['questionType']);
-        $count = $this->getTestpaperService()->deleteTestpaperItemByPId(1);
-        $this->assertEquals(1,$count);
+      $testpaperItem = array('questionType'=>'single_choice');
+      $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
+      $this->assertEquals('single_choice',$testpaperItem['questionType']);
+      $count = $this->getTestpaperService()->deleteTestpaperItem($testpaperItem['id']);  
+      $this->assertEquals(1,$count);
+    }
+
+    public function testEditTestpaperItem()
+    {
+      $testpaperItem = array('questionType'=>'single_choice');
+      $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
+      $this->assertEquals('single_choice',$testpaperItem['questionType']);
+      $testpaperItem = $this->getTestpaperService()->editTestpaperItem($testpaperItem['id'],array('questionType'=>'single'));  
+      $this->assertEquals('single',$testpaperItem['questionType']);
     }
 
     public function testDeleteTestpaperItemByTestId()
@@ -162,15 +180,6 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
         $this->assertEquals('single_choice',$testpaperItem['questionType']);
         $count = $this->getTestpaperService()->deleteTestpaperItemByTestId(1);
-        $this->assertEquals(1,$count);
-    }
-
-    public function testUpdateTestpaperItemsByPId()
-    {
-        $testpaperItem = array('questionType'=>'single_choice','pId'=>1,'testId'=>1);
-        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-        $this->assertEquals('single_choice',$testpaperItem['questionType']);
-        $count = $this->getTestpaperService()->updateTestpaperItemsByPId(1,array('questionType'=>'fill'));
         $this->assertEquals(1,$count);
     }
 

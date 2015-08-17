@@ -136,12 +136,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }
-
-    public function updateCourseByParentIdAndLocked($parentId, $locked, $fields)
-    {
-       return $this->getConnection()->update(self::TABLENAME, $fields, array('parentId' => $parentId,'locked'=>$locked));
-    }
-
+    
     public function deleteCourse($id)
     {
         return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));

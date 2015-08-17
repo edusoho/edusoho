@@ -27,9 +27,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
-    public function findQuestionsByPId($pId)
+    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget)
     {
-        return $this->getQuestionDao()->findQuestionsByPId($pId);
+        return $this->getQuestionDao()->findQuestionsByPIdAndLockedTarget($pId,$lockedTarget);
     }
 
     public function findQuestionsbyTypes($types, $start, $limit)
@@ -113,6 +113,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function updateQuestion($id, $fields)
     {
         $question = $this->getQuestion($id);
+
         if (empty($question)) {
             throw $this->createServiceException("Question #{$id} is not exist.");
         }
@@ -122,9 +123,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($fields['target']);
         }
 
+        $oldTarget = $question['target'];
+
         $question = $this->getQuestionDao()->updateQuestion($id, $fields);
 
-        $this->dispatchEvent("question.update",$question);
+        $this->dispatchEvent('question.update', array('question'=>$question,'oldTarget' => $oldTarget));
 
         return $question;
     }
@@ -132,11 +135,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function editQuestion($id,$fields)
     {
         return $this->getQuestionDao()->updateQuestion($id, $fields);
-    }
-
-    public function updateQuestionByPId($pId, $fields)
-    {
-        return $this->getQuestionDao()->updateQuestionByPId($pId, $fields);
     }
 
     public function statQuestionTimes ($answers)
@@ -169,12 +167,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
 
-        $this->dispatchEvent("question.delete",$id);
-    }
-
-    public function deleteQuestionsByPId($pId)
-    {
-       return  $this->getQuestionDao()->deleteQuestionsByPId($pId);
+        $this->dispatchEvent("question.delete",$question);
     }
 
     public function deleteQuestionsByParentId($parentId)

@@ -85,9 +85,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($lessons, 'id');
 	}
 
-	public function findLessonsByParentId($parentId)
+	public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds)
 	{
-		return $this->getLessonDao()->findLessonsByParentId($parentId);
+		return $this->getLessonDao()->findLessonByParentIdAndLockedCourseIds($parentId ,$courseIds);
 	}
 
 	public function getCourse($id, $inChanging = false)
@@ -415,9 +415,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return CourseSerialize::unserialize($updatedCourse);
 	}
 
-	public function updateCourseByParentIdAndLocked($parentId, $locked, $fields)
+	public function editCourse($id, $fields)
 	{
-		return $this->getCourseDao()->updateCourseByParentIdAndLocked($parentId, $locked, $fields);
+		return $this->getCourseDao()->updateCourse($id, $fields);
 	}
 
 	public function updateCourseCounter($id, $counter)
@@ -449,6 +449,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'maxStudentNum' => 0,
 			'watchLimit' => 0,
 			'approval' => 0,
+			'locked' =>0
 		));
 		
 		if (!empty($fields['about'])) {
@@ -1169,9 +1170,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $updatedLesson;
 	}
 
-	public function updateLessonByParentId($parentId,$fields)
+	public function editLesson($courseId, $lessonId, $fields)
 	{
-		return $this->getLessonDao()->updateLessonByParentId($parentId,$fields);
+		return $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields));
 	}
 
 	public function deleteLesson($courseId, $lessonId)
@@ -1225,11 +1226,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"courseId"=>$courseId, 
 			"lesson"=>$lesson
 		));
-	}
-
-	public function deleteLessonByParentId($parentId)
-	{
-		return $this->getLessonDao()->deleteLessonByParentId($parentId);
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
@@ -1647,9 +1643,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $chapter;
 	}
 
-	public function updateChapterByPId($pId, $fields)
+	public function editChapter($chapterId, $fields)
 	{
-		return $this->getChapterDao()->updateChapterByPId($pId, $fields);
+		return $this->getChapterDao()->updateChapter($chapterId, $fields);
 	}
 
 	public function deleteChapter($courseId, $chapterId)
@@ -1679,16 +1675,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->dispatchEvent("chapter.delete",$deletedChapter);
 	}
 
-	public function deleteChapterByPId($pId)
-	{
-		return $this->getChapterDao()->deleteChapterByPId($pId);
-	}
-	
-
 	public function getNextChapterNumber($courseId)
 	{
 		$counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
 		return $counter + 1;
+	}
+
+	public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds)
+	{
+		return $this->getChapterDao()->findChapterByChapterIdAndLockedCourseIds($pId, $courseIds);
 	}
 
 	public function getNextUnitNumberAndParentId($courseId)

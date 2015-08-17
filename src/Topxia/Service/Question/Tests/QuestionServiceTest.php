@@ -240,7 +240,7 @@ class QuestionServiceTest extends BaseTestCase
     public function testAddQuestion()
     {
         $question = array(
-            'type' => 'essay',
+            'type' => 'single_choice',
             'stem' => 'question.',
             'answer' => array('answer'),
             'target' => 'course-1',
@@ -252,18 +252,17 @@ class QuestionServiceTest extends BaseTestCase
 
     }
 
-    public function testFindQuestionsByPId()
+    public function testFindQuestionsByPIdAndLockedTarget()
     {
         $question = array(
-            'type' => 'essay',
+            'type' => 'single_choice',
             'stem' => 'question.',
             'answer' => array('answer'),
-            'target' => 'course-1',
-            'pId' => 1
+            'target' => 'course-1'
         );
         $question = $this->getQuestionService()->addQuestion($question);
         $this->assertEquals('question.',$question['stem']);
-        $question = $this->getQuestionService()->findQuestionsByPId(1);
+        $question = $this->getQuestionService()->findQuestionsByPIdAndLockedTarget(1,"('course-1')");
         $this->assertEquals('question.',$question[0]['stem']);
     }
 
@@ -297,38 +296,6 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals('question.',$question['stem']);
         $question = $this->getQuestionService()->editQuestion($question['id'],array('target' => 'course-2'));
         $this->assertEquals('course-2',$question['target']);
-    }
-
-    public function testUpdateQuestionByPId()
-    {
-        $question = array(
-            'type' => 'essay',
-            'stem' => 'question.',
-            'answer' => array('answer'),
-            'target' => 'course-1',
-            'parentId' =>1,
-            'pId' => 1
-        );
-        $question = $this->getQuestionService()->addQuestion($question);
-        $this->assertEquals('question.',$question['stem']);
-        $count = $this->getQuestionService()->updateQuestionByPId(1,array('target' => 'course-3'));
-        $this->assertEquals(1,$count);
-    }
-
-    public function testDeleteQuestionsByPId()
-    {
-        $question = array(
-            'type' => 'essay',
-            'stem' => 'question.',
-            'answer' => array('answer'),
-            'target' => 'course-1',
-            'parentId' =>1,
-            'pId' => 1
-        );
-        $question = $this->getQuestionService()->addQuestion($question);
-        $this->assertEquals('question.',$question['stem']);
-        $count = $this->getQuestionService()->deleteQuestionsByPId(1);
-        $this->assertEquals(1,$count);
     }
 
     public function testDeleteQuestionsByParentId()

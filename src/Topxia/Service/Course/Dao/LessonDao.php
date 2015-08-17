@@ -35,17 +35,13 @@ interface LessonDao
 
     public function updateLesson($id, $fields);
 
-    public function updateLessonByParentId($parentId,$fields);
-
     public function deleteLesson($id);
-
-    public function deleteLessonByParentId($parentId);
 
     public function deleteLessonsByCourseId($courseId);
 
     public function findLessonsByIds(array $ids);
 
-    public function findLessonsByParentId($parentId);
+    public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds);
 
     public function sumLessonGiveCreditByCourseId($courseId);
 

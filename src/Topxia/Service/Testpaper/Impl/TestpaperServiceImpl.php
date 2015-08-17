@@ -72,9 +72,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    public function updateTestpaperByPId($pId,$fields)
+    public function editTestpaper($id, $fields)
     {
-        return $this->getTestpaperDao()->updateTestpaperByPId($pId,$fields);
+        return  $this->getTestpaperDao()->updateTestpaper($id, $fields);
     }
 
     protected function filterTestpaperFields($fields, $mode = 'create')
@@ -160,9 +160,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $this->dispatchEvent("testpaper.delete", $testpaper);
     }
 
-    public function deleteTestpaperByPId($pId)
+    public function deleteTestpaperByTestpaperId($testpaperId)
     {
-       return $this->getTestpaperDao()->deleteTestpaperByPId($pId); 
+       return $this->getTestpaperDao()->deleteTestpaper($testpaperId); 
     }
 
     public function buildTestpaper($id, $options)
@@ -212,7 +212,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'metas' => $metas,
         ));
 
-        $this->dispatchEvent("testpaper.items.update",new ServiceEvent($testpaper,array('items'=>$items)));
+        $this->dispatchEvent("testpaper.items.update",array('testpaper'=>$testpaper,'items'=>$items));
         return $items;
     }
 
@@ -734,19 +734,24 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
     }
 
+    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId)
+    {
+        return $this->getTestpaperItemDao()->findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+    }
+
     public function createTestpaperItem($item)
     {
         return $this->getTestpaperItemDao()->addItem($item);
     }
 
-    public function deleteTestpaperItemByPId($pId)
+    public function deleteTestpaperItem($id)
     {
-        return $this->getTestpaperItemDao()->deleteTestpaperItemByPId($pId);
+        return $this->getTestpaperItemDao()->deleteItem($id);
     }
 
     public function deleteTestpaperItemByTestId($testId)
     {
-        return $this->getTestpaperItemDao()->deleteTestpaperItemByTestId($testId);
+        return $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testId);
     }
 
     public function getTestpaperItems($testpaperId)
@@ -805,7 +810,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
-                $this->dispatchEvent("testpaper.items.create",$item);
+                $this->dispatchEvent("testpaper.items.create",array('item'=>$item,'testpaper'=>$testpaper));
             } else {
                 
                 $existItem = $existItems[$item['questionId']];
@@ -813,7 +818,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
                     $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
-                    $this->dispatchEvent("testpaper.items.update",new ServiceEvent($testpaper,array('items'=>$item)));
+                    $this->dispatchEvent("testpaper.items.update",array('items'=>$item,'testpaper'=>$testpaper));
                 } else {
                     $item = $existItem;
                 }
@@ -826,7 +831,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         foreach ($existItems as $existItem) {
             $this->getTestpaperItemDao()->deleteItem($existItem['id']);
-            $this->dispatchEvent("testpaper.items.delete",$existItem);
+            $this->dispatchEvent("testpaper.items.delete",array('testpaper'=>$testpaper,'existItem'=>$existItem));
         }
 
 
@@ -839,11 +844,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'score' => $totalScore,
             'metas' => $metas,
         ));
+        $this->dispatchEvent("testpaper.update",$testpaper);
     }
 
-    public function updateTestpaperItemsByPId($pId, $item)
+    public function editTestpaperItem($testpaperId, $item)
     {
-        return $this->getTestpaperItemDao()->updateTestpaperItemsByPId($pId, $item);
+        return $this->getTestpaperItemDao()->updateItem($testpaperId, $item);
     }
 
     public function canTeacherCheck($id)
@@ -928,6 +934,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function findTestpaperByPId($pId)
     {
         return $this->getTestpaperDao()->findTestpaperByPId($pId);
+    }
+
+    public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget)
+    {
+        return $this->getTestpaperDao()->findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);
     }
 
     public function findTeacherTestpapersByTeacherId ($teacherId)

@@ -66,25 +66,30 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getChapter($id);
     }
 
-    public function updateChapterByPId($pId, $fields)
-    {
-        return $this->getConnection()->update($this->table, $fields, array('pId' => $pId));
-    }
-
     public function deleteChapter($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function deleteChapterByPId($pId)
-    {
-       return $this->getConnection()->delete($this->table, array('pId' => $pId)); 
     }
 
     public function deleteChaptersByCourseId($courseId)
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId));
+    }
+
+    public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds)
+    {
+       if(empty($courseIds)){
+            return array();
+        }
+       
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+       
+        $parmaters = array_merge(array($pId), $courseIds);
+
+        $sql ="SELECT * FROM {$this->table} WHERE pId= ? AND courseId IN ({$marks})";
+        
+        return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
     }
 
 }

@@ -31,10 +31,19 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findLessonsByParentId($parentId)
+    public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds)
     {
-       $sql = "SELECT * FROM {$this->table} WHERE  parentId = ? ";
-       return $this->getConnection()->fetchAll($sql, array($parentId)); 
+        if(empty($courseIds)){
+            return array();
+        }
+       
+       $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+       
+       $parmaters = array_merge(array($parentId), $courseIds);
+             
+       $sql = "SELECT * FROM {$this->table} WHERE  parentId = ? AND courseId IN ({$marks})";
+       
+       return $this->getConnection()->fetchAll($sql,$parmaters); 
     }
 
     public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -143,11 +152,6 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getLesson($id);
     }
 
-    public function updateLessonByParentId($parentId,$fields)
-    {
-        return $this->getConnection()->update($this->table, $fields, array('parentId' => $parentId));  
-    }
-
     public function deleteLessonsByCourseId($courseId)
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
@@ -157,11 +161,6 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     public function deleteLesson($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function deleteLessonByParentId($parentId)
-    {
-        return $this->getConnection()->delete($this->table, array('parentId' => $parentId));
     }
 
     public function sumLessonGiveCreditByCourseId($courseId)

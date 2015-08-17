@@ -70,19 +70,9 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         return $this->getTestpaper($id);
     }
 
-    public function updateTestpaperByPId($pId,$fields)
-    {
-      return $this->getConnection()->update($this->table, $fields, array('pId'=> $pId));  
-    }
-
     public function deleteTestpaper($id)
-    {
+    {  
         return $this->getConnection()->delete($this->table, array('id' => $id));
-    }
-
-    public function deleteTestpaperByPId($pId)
-    {
-        return $this->getConnection()->delete($this->table, array('pId' => $pId));
     }
 
     public function findTestpaperByTargets(array $targets)
@@ -99,6 +89,12 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     public function findTestpaperByPId($pId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE pId = ? ";
+        return $this->getConnection()->fetchAll($sql,array($pId));
+    }
+
+    public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND target IN {$lockedTarget}";
         return $this->getConnection()->fetchAll($sql,array($pId));
     }
 
