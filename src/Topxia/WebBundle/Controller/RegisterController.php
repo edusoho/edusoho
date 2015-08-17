@@ -26,6 +26,7 @@ class RegisterController extends BaseController
 
             $registration = $request->request->all();
             $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+            $registration['createdIp'] = $request->getClientIp();
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
