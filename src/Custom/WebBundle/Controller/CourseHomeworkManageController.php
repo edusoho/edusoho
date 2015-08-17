@@ -164,16 +164,19 @@ class CourseHomeworkManageController extends BaseManageController
         if ($status == 'reviewing') {
             $reviewingCount = $homeworksResultsCounts;
             $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'finished');
+            $pairReviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'pairReviewing');
         }
 
         if ($status == 'finished') {
             $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'reviewing');
             $finishedCount = $homeworksResultsCounts;
+            $pairReviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'pairReviewing');
         }
 
         if ($status == 'pairReviewing') {
             $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'reviewing');
-            $finishedCount = $homeworksResultsCounts;
+            $pairReviewingCount = $homeworksResultsCounts;
+            $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'finished');
         }
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($homeworksResults, 'courseId'));
@@ -190,7 +193,8 @@ class CourseHomeworkManageController extends BaseManageController
             'courses' => $courses,
             'lessons' => $lessons,
             'reviewingCount' => $reviewingCount,
-            'finishedCount' => $finishedCount
+            'finishedCount' => $finishedCount,
+            'pairReviewingCount' => $pairReviewingCount
         ));
     }
 
