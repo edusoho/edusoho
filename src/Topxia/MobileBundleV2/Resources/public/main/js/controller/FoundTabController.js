@@ -6,9 +6,6 @@ function FoundCourseController($scope, SchoolService, $state)
 	SchoolService.getSchoolBanner(function(data) {
 		$scope.banners = data;
 	});
-	SchoolService.getSchoolBanner(function(data) {
-		$scope.banners = data;
-	});
 
 	SchoolService.getRecommendCourses({ limit : 3 }, function(data) {
 		$scope.recommedCourses = data.data;

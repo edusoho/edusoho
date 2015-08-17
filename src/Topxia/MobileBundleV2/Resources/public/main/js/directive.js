@@ -53,17 +53,20 @@ directive('uiAutoPanel', function () {
               return;
             }
             content.style.height = '200px';
-            var expand = angular.element("<i class='iconfont icon-expandmore'></i>");
-            angular.element(autoBtn).append(expand);
+            var expand = angular.element(autoBtn.querySelector(".autobtn-icon"));
+            var autoBtnText = autoBtn.querySelector(".autobtn-text");
+            
             angular.element(autoBtn).on('click', function() {
               var isClose = element.attr("close");
               if ("true" == isClose) {
+                  autoBtnText.innerText = "合并";
                   content.style.overflow = 'auto';
                   content.style.height = 'auto';
                   expand.removeClass("icon-expandmore");
                   expand.addClass("icon-expandless");
                   element.attr("close", "false");
               } else {
+                  autoBtnText.innerText = "展开";
                   content.style.overflow = 'hidden';
                   content.style.height = '200px';
                   expand.addClass("icon-expandmore");
