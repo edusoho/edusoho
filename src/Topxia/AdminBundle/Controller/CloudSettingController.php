@@ -107,7 +107,7 @@ class CloudSettingController extends BaseController
             }
 
             $user = $api->get('/me');
-            if ($user['edition'] != 'opensource') {
+            if ($user['edition'] != 'mooc') {
                 $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
                 goto render;
             }
