@@ -168,13 +168,6 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
        return $this->getConnection()->update($this->table, $fields, array('pId' => $pId)); 
     }
 
-    public function updateQuestionByTarget($target, $fields)
-    {
-        $sql ="UPDATE {$this->table} SET ". implode(', ', $fields)
-                ." WHERE target LIKE ?";
-        return $this->getConnection()->executeUpdate($sql, array($target));
-    }
-
     public function deleteQuestion($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));

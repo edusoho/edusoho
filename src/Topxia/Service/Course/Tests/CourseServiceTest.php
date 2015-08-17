@@ -2247,30 +2247,6 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals('test lesson',$createdLesson1['title']);
     }
 
-    public function testUpdateLessonByCourseId()
-    {
-        $user = $this->createUser(); 
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $course1 = array(
-            'title' => 'test one'
-        );
-        $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
-        $lesson1 = array(
-            'courseId' =>$createCourse1['id'],
-            'chapterId' => 0,
-            'free' => 0,
-            'title' => 'test lesson',
-            'summary' => '',
-            'type' => 'text'
-        );
-        $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
-        $courses = $this->getCourseService()->updateLessonByCourseId($createCourse1['id'],array('title' => 'test update'));
-        $this->assertEquals('test update',$courses[0]['title']);
-    }
-
     public function testUpdateLessonByParentId()
     {
         $user = $this->createUser();    
@@ -2358,20 +2334,6 @@ class CourseServiceTest extends BaseTestCase
         $createdChapter3 = $this->getCourseService()->addChapter($chapter3);
         $this->assertEquals($chapter3['courseId'], $createdChapter3['courseId']);
         $this->assertEquals($chapter3['title'], $createdChapter3['title']);
-    }
-
-    public function testUpdateChapterByCourseId()
-    {
-        $chapter1 = array('courseId' => 1, 'title' => 'chapter 1', 'type' => 'chapter','pId'=>1);
-        $chapter2 = array('courseId' => 1, 'title' => 'chapter 2', 'type' => 'chapter','pId'=>1);
-        $chapter3 = array('courseId' => 1, 'title' => 'chapter 3', 'type' => 'chapter','pId'=>1);
-
-        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
-        $createdChapter2 = $this->getCourseService()->addChapter($chapter2);
-        $createdChapter3 = $this->getCourseService()->addChapter($chapter3);
-
-        $count = $this->getCourseService()->updateChapterByCourseId(1,array('title'=>'course chapter'));
-        $this->assertEquals(3, $count);
     }
 
     public function testUpdateChapterByPId()

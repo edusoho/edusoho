@@ -1171,13 +1171,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $updatedLesson;
 	}
 
-	public function updateLessonByCourseId($courseId,$fields)
-	{	
-		$this->getLessonDao()->updateLessonByCourseId($courseId,$fields);
-		$courseLessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
-		return $courseLessons;
-	}
-
 	public function updateLessonByParentId($parentId,$fields)
 	{
 		return $this->getLessonDao()->updateLessonByParentId($parentId,$fields);
@@ -1654,11 +1647,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$chapter = $this->getChapterDao()->updateChapter($chapterId, $fields);
 		$this->dispatchEvent("chapter.update",$chapter);
 		return $chapter;
-	}
-
-	public function updateChapterByCourseId($courseId, $fields)
-	{
-		return $this->getChapterDao()->updateChapterByCourseId($courseId, $fields);
 	}
 
 	public function updateChapterByPId($pId, $fields)

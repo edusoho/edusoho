@@ -136,8 +136,6 @@ interface CourseService
 
 	public function updateLesson($courseId, $lessonId, $fields);
 
-	public function updateLessonByCourseId($courseId, $fields);
-
 	public function updateLessonByParentId($parentId,$fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
@@ -217,8 +215,6 @@ interface CourseService
 	public function addChapter($chapter);
 
 	public function updateChapter($courseId, $chapterId, $fields);
-
-	public function updateChapterByCourseId($courseId, $fields);
 
 	public function updateChapterByPId($pId, $fields);
 

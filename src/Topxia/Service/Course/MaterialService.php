@@ -24,6 +24,4 @@ interface MaterialService
 	public function getMaterialCount($courseId);
 
 	public function getMaterialCountByFileId($fileId);
-
-	public function updateMaterialByCourseId($courseId,$fields);
 }

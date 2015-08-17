@@ -384,15 +384,6 @@ class CourseManageController extends BaseController
             $course = $this->getCourseService()->getCourse($courseId);
             if($course['locked'] == 1) {
               $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
-              $this->getCourseService()->updateLessonByCourseId($courseId,array('parentId'=>0));
-              $this->getCourseService()->updateChapterByCourseId($courseId,array('pId'=>0));
-              $this->getMaterialService()->updateMaterialByCourseId($courseId,array('pId'=>0));
-              $this->getQuestionService()->updateQuestionByTarget('course-'.$courseId,array('pId'=>0));
-              $this->getTestpaperService()->updateTestpaperAndTestpaperItemByTarget($courseId,array('pId'=>0));
-              if ($this->isPluginInstalled('Homework')) {
-                $this->getHomeworkService()->updateHomeworkAndHomeworkItemByCourseId($courseId,array('pId'=>0));
-                $this->getExerciseService()->updateExerciseByCourseId($courseId,array('pId'=>0));
-              }
             }
           return $this->createJsonResponse($url);
         }

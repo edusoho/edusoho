@@ -174,18 +174,6 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals(1,$count);
     }
 
-    public function testUpdateTestpaperAndTestpaperItemByTarget()
-    {
-        $testpaper = array('name' => 'Test','target'=>'course-1');
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-        $testpaperItem = array('questionType'=>'single_choice','testId'=>$testpaper['id']);
-        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-        $this->assertEquals('single_choice',$testpaperItem['questionType']);
-        $count = $this->getTestpaperService()->updateTestpaperAndTestpaperItemByTarget(1,array('pId'=>1));
-        $this->assertEquals(1,$count);
-    }
-
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');

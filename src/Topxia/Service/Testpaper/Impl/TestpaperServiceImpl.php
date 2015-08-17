@@ -77,23 +77,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->updateTestpaperByPId($pId,$fields);
     }
 
-    public function updateTestpaperAndTestpaperItemByTarget($target,$fields)
-    {
-        $set = array();
-        foreach ($fields as $key => $value) {
-            $set[] = $key.' = "'.$value.'"';
-        }
-
-        $testpaper = $this->getTestpaperDao()->updateTestpaperByTarget('course-'.$target, $set);
-        $testpaperIds = ArrayToolkit::column($this->findAllTestpapersByTarget($target),'id');
-        foreach ($testpaperIds as $testpaperId) {
-
-            $this->getTestpaperItemDao()->updateTestpaperItemByTestId($testpaperId,$fields);
-        }
-        
-        return $testpaper;
-    }
-
     protected function filterTestpaperFields($fields, $mode = 'create')
     {
         $filtedFields = array();

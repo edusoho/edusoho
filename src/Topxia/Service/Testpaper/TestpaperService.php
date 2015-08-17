@@ -24,9 +24,7 @@ interface TestpaperService
     public function updateTestpaper($id, $fields);
 
     public function updateTestpaperByPId($pId,$fields);
-
-    public function updateTestpaperAndTestpaperItemByTarget($target,$fields);
-
+    
     public function publishTestpaper($id);
 
     public function closeTestpaper($id);
