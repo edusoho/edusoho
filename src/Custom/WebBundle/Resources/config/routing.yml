@@ -42,6 +42,10 @@ course_homework_check_list:
     pattern: /course/{courseId}/check/homework/{status}/list
     defaults: { _controller: CustomWebBundle:CourseHomework:checkList }
 
+course_homework_result:
+    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}/{userId}
+    defaults: { _controller: CustomWebBundle:CourseHomework:result }
+
 my_teaching_homework_list:
     pattern: /my/teaching/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:teachingList }
