@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+ {% set answer = itemResult.answer[0]|default("") %}
+ 
+    <textarea name="answer[{{ question.id }}]" rows="1" class="form-control question-essay-input-short"  data-question-id={{ question.id }} >{{ answer }}</textarea>
+
+	<textarea id="question-essay-{{ question.id }}" class="form-control question-essay-input-long"  data-type="essay" style="display:none;"  name="essay-packup-{{ question.id }}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ answer }}</textarea>
+
+	<a class="btn btn-link btn-muted btn-sm essay-textarea-pack-up" style="display:none"><span class="glyphicon glyphicon-chevron-up text-muted"></span> 收起</a>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
