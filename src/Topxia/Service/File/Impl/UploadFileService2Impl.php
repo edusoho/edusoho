@@ -43,8 +43,19 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
         $implementor = $this->getFileImplementorByStorage($params['storage']);
+        $file = $implementor->prepareUpload($params);
 
-        $file = $this->getUploadFileDao()->addFile($implementor->prepareUpload($params));
+        $resumed = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
+        if ($resumed) {
+            $this->getUploadFileDao()->updateFile($resumed['outerId'], array(
+                'filename' => $file['filename'],
+                'targetId' => $file['targetId'],
+                'targetType' => $file['targetType'],
+            ));
+            return $resumed;
+        }
+
+        $file = $this->getUploadFileDao()->addFile($file);
 
         $file['bucket'] = $params['bucket'];
         $file['hash'] = $params['hash'];

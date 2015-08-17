@@ -40,6 +40,27 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
         return $file;
     }
+
+    public function resumeUpload($hash, $file)
+    {
+        $params = array(
+            'bucket' => $file['bucket'],
+            'fileName' => $file['filename'],
+            'fileSize' => $file['size'],
+            'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
+            'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
+            'extras' => empty($file['extras']) ? '' : $file['extras'],
+        );
+
+        $api = CloudAPIFactory::create();
+        $resumed = $api->post("/files/{$hash}/resume_upload", $params);
+        if ($resumed['resumed'] !== 'ok') {
+            return null;
+        }
+
+        return $resumed;
+    }
+
     public function prepareUpload($params)
     {
         $file = array();

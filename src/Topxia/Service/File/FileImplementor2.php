@@ -10,4 +10,6 @@ interface FileImplementor2
 
 	public function initUpload($file);
 
+    public function resumeUpload($hash, $params);
+
 }

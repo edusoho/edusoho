@@ -111,12 +111,14 @@ define(function(require, exports, module) {
 
             uploader.on('uploadComplete', function(file) {
                 console.log('upload complete');
-                store.remove('file_' + object.file.hash);
+                var key = 'file_' + file.globalId + '_' + file.hash;
+                store.remove('file_' + file.hash);
             });
 
             uploader.on('uploadAccept', function(object, ret) {
                 console.log('uploadAccept', object, ret);
-                store.set('file_' + object.file.hash, object.chunk);
+                var key = 'file_' + object.file.globalId + '_' + object.file.hash;
+                store.set(key, object.chunk);
 
             });
 
@@ -230,6 +232,17 @@ define(function(require, exports, module) {
                 checkchunk: function(block) {
                     console.log('checkchunk', block);
                     var deferred = WebUploader.Deferred();
+
+                    var key = 'file_' + block.file.globalId + '_' + block.file.hash;
+
+                    var currentChunk = store.get(key);
+
+                    if (currentChunk !== undefined) {
+                        
+                    }
+
+                    console.log(currentChunk);
+
 
                     // if (continueChunkNum && continueChunkNum > 0 && block.chunk < continueChunkNum) {
                     //     console.log('秒传');
