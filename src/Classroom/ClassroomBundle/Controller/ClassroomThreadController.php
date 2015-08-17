@@ -23,7 +23,14 @@ class ClassroomThreadController extends BaseController
         if ($member && $member['locked'] == '0') {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        } 
         return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
                 'classroom' => $classroom,
                 'filters' => $this->getThreadSearchFilters($request),
@@ -31,6 +38,7 @@ class ClassroomThreadController extends BaseController
                 'service' => $this->getThreadService(),
                 'layout' => $layout,
                 'member' => $member,
+                'classroomDescription' => $classroomDescription
         ));
     }
 

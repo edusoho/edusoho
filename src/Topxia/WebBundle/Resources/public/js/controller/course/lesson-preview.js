@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-    require('../../util/qrcode').run();
 	var VideoJS = require('video-js'),
 		swfobject = require('swfobject');
 
@@ -171,6 +170,7 @@ define(function(require, exports, module) {
                 $modal.html(html);
             });
         });
+
     };
 
 });

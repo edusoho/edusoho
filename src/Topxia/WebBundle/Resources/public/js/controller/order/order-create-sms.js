@@ -11,7 +11,7 @@ define(function(require, exports, module) {
     	if (mobile.length > 0) {
     		var smsValidator = new Validator({
 	            element: '#js-sms-modal-form',
-	            autoSubmit: true,
+	            autoSubmit: false,
 	            onFormValidated: function(error){
 	                if (error) {
 	                    return false;

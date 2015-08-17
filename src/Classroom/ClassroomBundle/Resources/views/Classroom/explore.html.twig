@@ -1,8 +1,8 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set script_controller = 'classroombundle/controller/classroom/explore' %}
-{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
-  {% block description %}{{ setting('site.seo_description') }}{% endblock %}
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if CategoryParent %}{{ ','}}{{ CategoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
+  {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
     {% block title %}{{ categoryArray.name|default('全部')  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %} - Powered By EduSoho
     {% endblock %}
 
