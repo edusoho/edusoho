@@ -31,7 +31,6 @@ class CourseManageController extends BaseCourseManageController
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
             if($course['type']=='periodic'){
-                var_dump($course['type']);
                 if($course['rootId']==0)
                     $data['rootId'] = intval($id);
                 if(!empty($data['startTime']))

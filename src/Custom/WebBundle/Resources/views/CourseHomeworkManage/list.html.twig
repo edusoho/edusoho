@@ -11,7 +11,7 @@
 	  		<ul class="nav nav-tabs">
 				<li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'finished'}) }}">已批改</a></li>
 				<li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'reviewing'}) }}">批改中</a></li>
-				<li class="{% if status == 'evaluating' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'evaluating'}) }}">互评中</a></li>
+				<li class="{% if status == 'pairReviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'pairReviewing'}) }}">互评中</a></li>
 			</ul>
 			{% if homeworkResults %}
 			<table class="table table-striped">

@@ -4,6 +4,7 @@ namespace Custom\Service\Homework\Impl;
 
 use Custom\Service\Homework\HomeworkService;
 use Homework\Service\Homework\Impl\HomeworkServiceImpl as BaseHomeworkServiceImpl;
+use Symfony\Component\Validator\Constraints\Date;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
@@ -79,7 +80,41 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
         return $homework;
 
+    }
 
+    public function submitHomework($id, $homework_result)
+    {
+        $st = 'reviewing';
+        $homework = $this->getHomeworkDao()->getHomework($id);
+
+        if ($homework['pairReview']) {
+            if (intval($homework['completeTime']) > time()) {
+                throw$this->createServiceException("已经超过作业提交截止时间，提交作业失败！");
+            } else {
+                $st = 'editing';
+            }
+        }
+        $this->addItemResult($id, $homework_result);
+        //reviewing
+        $rightItemCount = 0;
+
+        $homeworkItemsRusults = $this->getItemResultDao()->findItemResultsbyHomeworkId($id);
+
+        foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
+            if ($homeworkItemRusult['status'] == 'right') {
+                $rightItemCount++;
+            }
+        }
+
+        $homeworkitemResult['rightItemCount'] = $rightItemCount;
+        $homeworkitemResult['status'] = $st;
+        $homeworkitemResult['updatedTime'] = time();
+
+        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+
+        $result = $this->getResultDao()->updateResult($homeworkResult['id'], $homeworkitemResult);
+
+        return $result;
     }
 
     public function createHomeworkPairReview($homeworkResultId, array $fields)
@@ -157,6 +192,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $this->createDao('Custom:Homework.HomeworkResultDao');
     }
 
+    private function getItemResultDao()
+    {
+        return $this->createDao('Homework:Homework.HomeworkItemResultDao');
+    }
+
     private function getCourseService()
     {
         return $this->createService('Course.CourseService');
@@ -192,6 +232,45 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         }
 
         return $fields;
+    }
+
+    private function addItemResult($id, $homework)
+    {
+
+        $homeworkResult = $this->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+        $homeworkItems = $this->findItemsByHomeworkId($id);
+        $itemResult = array();
+        $homeworkitemResult = array();
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+            if (!empty($homework[$homeworkItem['questionId']])) {
+
+                if (!empty($homework[$homeworkItem['questionId']]['answer'])) {
+
+                    $answer = $homework[$homeworkItem['questionId']]['answer'];
+
+                    $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $answer);
+
+                    $status = $result['status'];
+                } else {
+                    $answer = null;
+                    $status = "noAnswer";
+                }
+
+            } else {
+                $answer = null;
+                $status = "noAnswer";
+
+            }
+            $itemResult['itemId'] = $homeworkItem['id'];
+            $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
+            $itemResult['homeworkResultId'] = $homeworkResult['id'];
+            $itemResult['questionId'] = $homeworkItem['questionId'];
+            $itemResult['userId'] = $this->getCurrentUser()->id;
+            $itemResult['status'] = $status;
+            $itemResult['answer'] = $answer;
+            $this->getItemResultDao()->addItemResult($itemResult);
+        }
     }
 
     private function addHomeworkItems($homeworkId, $excludeIds)

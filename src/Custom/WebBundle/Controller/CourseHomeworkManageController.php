@@ -130,6 +130,70 @@ class CourseHomeworkManageController extends BaseManageController
         ));
     }
 
+    public function teachingListAction(Request $request)
+    {
+        $status = $request->query->get('status', 'reviewing');
+        $currentUser = $this->getCurrentUser();
+        if (empty($currentUser)) {
+            throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+        }
+
+        $courses = $this->getCourseService()->findUserTeachCourses(array("userId" => $currentUser['id']), 0, PHP_INT_MAX, false);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $homeworksResultsCounts = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, $status);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $homeworksResultsCounts
+            , 5
+        );
+
+        if ($status == 'reviewing' or $status == 'pairReviewing') {
+            $orderBy = array('usedTime', 'DESC');
+        }
+
+        if ($status == 'finished') {
+            $orderBy = array('checkedTime', 'DESC');
+        }
+
+        $homeworksResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
+            $courseIds, $status, $orderBy,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        if ($status == 'reviewing') {
+            $reviewingCount = $homeworksResultsCounts;
+            $finishedCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'finished');
+        }
+
+        if ($status == 'finished') {
+            $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'reviewing');
+            $finishedCount = $homeworksResultsCounts;
+        }
+
+        if ($status == 'pairReviewing') {
+            $reviewingCount = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'reviewing');
+            $finishedCount = $homeworksResultsCounts;
+        }
+
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($homeworksResults, 'courseId'));
+        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($homeworksResults, 'lessonId'));
+
+        $usersIds = ArrayToolkit::column($homeworksResults, 'userId');
+        $users = $this->getUserService()->findUsersByIds($usersIds);
+
+        return $this->render('CustomWebBundle:CourseHomeworkManage:teaching-list.html.twig', array(
+            'status' => $status,
+            'users' => $users,
+            'homeworksResults' => $homeworksResults,
+            'paginator' => $paginator,
+            'courses' => $courses,
+            'lessons' => $lessons,
+            'reviewingCount' => $reviewingCount,
+            'finishedCount' => $finishedCount
+        ));
+    }
+
     private function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Custom:Homework.HomeworkService');

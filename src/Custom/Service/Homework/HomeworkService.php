@@ -24,6 +24,8 @@ interface HomeworkService
      */
     public function updateHomework($id, $fields);
 
+    public function submitHomework($id, $homework_result);
+
     /**
      * 随机获取一份未曾互评的作业答卷.
      * @param homeworkId , 作业id.

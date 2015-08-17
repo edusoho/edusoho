@@ -5,6 +5,7 @@ use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Announcement\AnnouncementService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 use Custom\Service\Homework\Dao\Impl\HomeworkResultDaoImpl;
 
@@ -12,6 +13,41 @@ class HomeworkServiceTest extends BaseTestCase
 {
     public function testSample(){
         $this->assertNull(null);
+    }
+
+    public function testQueryJoin(){
+        $user = $this->getUserService()->register(
+            array(
+                'nickname'=>'user',
+                'password'=>'000000',
+                'email'=>'123456@qq.com'
+            )
+        );
+        $this->assertNotNull($user);
+
+        $course1=$this->getCourseService()->createCourse(
+            array(
+                'title'=>'course1',
+                'type'=>'periodic'
+            )
+        );
+        $this->assertNotNull($course1);
+
+        $lesson1=$this->getCourseService()->createLesson(
+            array(
+                'courseId' => $course1['id'],
+                'title' => 'test lesson 1',
+                'content' => 'test lesson content 1',
+                'type' => 'text'
+            )
+        );
+        $this->assertNotNull($lesson1);
+        $qb = new QueryBuilder($this->getServiceKernel()->getConnection());
+
+        $qb->select('*')->from('course_lesson', 'l')->join('l', 'course', 'c', 'c.id = l.courseId ');
+        $lessons = $qb->execute()->fetchAll();
+        $this->assertNotNull($lessons);
+
     }
 
     public function testRandomizeHomeworkResultForPairReview(){

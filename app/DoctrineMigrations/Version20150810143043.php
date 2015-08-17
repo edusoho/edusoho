@@ -47,6 +47,7 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql("ALTER TABLE `homework` ADD `partPercent` float(5,1)  NOT NULL  DEFAULT 0 COMMENT '作业成绩占比:部分互评的';");
         $this->addSql("ALTER TABLE `homework` ADD `zeroPercent` float(5,1) NOT NULL DEFAULT 0 COMMENT '作业成绩占比:没有参与互评的';");
         $this->addSql("ALTER TABLE `homework` ADD `minReviews` int(10) NOT NULL DEFAULT 0 COMMENT '最少互评人数';");
+        $this->addSql("ALTER TABLE `homework_result` CHENGE `status` `status` ENUM('doing','editing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
     }
 
     /**

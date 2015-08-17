@@ -34,6 +34,18 @@ course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
 
+course_homework_submit:
+    pattern: /course/{courseId}/homework/{homeworkId}/submit
+    defaults: { _controller: CustomWebBundle:CourseHomework:submit }
+
+course_homework_check_list:
+    pattern: /course/{courseId}/check/homework/{status}/list
+    defaults: { _controller: CustomWebBundle:CourseHomework:checkList }
+
+my_teaching_homework_list:
+    pattern: /my/teaching/homework/list
+    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:teachingList }
+
 my_homework_list:
     pattern: /my/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
