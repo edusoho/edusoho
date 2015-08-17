@@ -18,11 +18,11 @@
       {% set itemResult = item.itemResult|default(null) %}
       {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}
       {% if question %}
-      {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+        {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
       {% else %}
-      此题已删除。
+        此题已删除。
       {% endif %}
-      <form>
+{#       <form>
         <div class="form-group">
           请评分：<input class="form-grade" type="text">分
         </div>
@@ -32,7 +32,7 @@
         <div class="form-group">
           <textarea class="form-control" rows="2"></textarea>
         </div>
-      </form>
+      </form> #}
     </div>
 
   </div>

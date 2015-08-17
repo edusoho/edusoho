@@ -15,7 +15,8 @@ class HomeworkResultDaoImpl extends BaseHomeworkResultDao implements HomeworkRes
     public function findPairReviewables($homework,$userId){
         $sql = "select r.* from {$this->table} r ".
                         " left join {$this->homework_table} w on r.homeworkId=w.id ".
-                        " where r.homeworkId=? ".
+                        " where r.status='pairReviewing' ".
+                        " and r.homeworkId=? ".
                         " and r.userId != ? ".
                         " and r.teacherScore is null ".
                         " and r.id not in (select v.homeworkResultId from {$this->homework_review_table} v where v.homeworkId=? and v.userId=?)";

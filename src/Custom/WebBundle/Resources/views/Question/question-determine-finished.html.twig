@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+ {% set rightAnswerIndex = question.answer[0]|default(null) %}
+{% spaceless %}
+    <div class="homework-question-result">
+    正确答案是: <strong style="color:red">{% if rightAnswerIndex == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，
+    {% if itemResult.status == 'right' %}
+       <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了
+    {% elseif itemResult.status == 'wrong' %}
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了
+    {% elseif itemResult.status == 'noAnswer' %}
+        <span class="glyphicon glyphicon-remove question-text-danger">你未答题</span>
+    {% endif %}
+    </div>
+{% endspaceless %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

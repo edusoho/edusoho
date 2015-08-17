@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+<div style="margin-bottom:18px">
+	<div style="margin-bottom:5px">
+        <strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:
+        </strong>
+    </div>
+	<p class="">{{ itemResult.answer[0]|default('')|raw }}</p>
+
+</div>
+<div style="margin-bottom:18px">
+ {% for rightAnswer in question.answer %}
+	   <div style="margin-bottom:5px">
+        <strong>正确答案</strong>
+       </div> 
+       <p class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</p>
+	{% endfor %}
+</div>
+{% if itemResult.teacherSay|default(null) %}
+	<div  class="question-eassy-form-control question-teacher-say-input">
+		<div class="teacher-say-text">老师评语:</div>
+		{{ itemResult.teacherSay }}
+	</div> 
+{% endif %}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

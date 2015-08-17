@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle:Question:question-choice-doing.html.twig' %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question:question-choice-options.html.twig' %}
+
+{% if itemResult.answer|default(null) %}
+ {% set answerChoiceIndex = itemResult.answer|chr %}
+ {% else %}
+ {% set answerChoiceIndex = '-1' %}
+{% endif %}
+
+<div class="question-choices-inputs">
+    {% for key, choice in question.metas.choices %}
+      {% set choiceIndex = (65+key)|chr %}
+      <label class="radio-inline">
+        <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if choiceIndex ==  answerChoiceIndex %}checked{% endif %}> {{ choiceIndex }}
+      </label>
+    {% endfor %}
+  </div>
+
+
+{% endblock %}
