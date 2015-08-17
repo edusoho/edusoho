@@ -85,7 +85,7 @@ class OrderController extends BaseController
         $fields = $request->request->all(); 
 
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
-
+            $scenario = "sms_user_pay";
             if ($this->setting('cloud_sms.sms_enabled') == '1'  && $this->setting("cloud_sms.{$scenario}") == 'on') {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
                 if (!$result) {
@@ -236,5 +236,5 @@ class OrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-   
+    
 }

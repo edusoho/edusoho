@@ -6,7 +6,7 @@ use Topxia\MobileBundleV2\Processor\CourseProcessor;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 {
@@ -1152,10 +1152,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $params['provider'] = $lesson["liveProvider"];
         $params['role'] = 'student';
 
-        $client = LiveClientFactory::createClient();
 
         $params['user'] = $params['email'];
 
+        $client = new EdusohoLiveClient();
         $result = $client->entryLive($params);
 
         return array('data' =>

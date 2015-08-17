@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.4.1
+        assets_version: 6.4.2
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -126,12 +126,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
     
-    kernel.listener.kernel_response_listener:
-        class: Topxia\WebBundle\Listener\KernelResponseListener
-        arguments:    [@service_container]
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
-
     kernel.listener.kernel_response_listener:
         class: Topxia\WebBundle\Listener\KernelResponseListener
         arguments:    [@service_container]

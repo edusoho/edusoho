@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveCourseController extends BaseController
 {
@@ -14,7 +14,7 @@ class LiveCourseController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $liveCapacity = $client->getCapacity();
 
         return $this->createJsonResponse($liveCapacity);
@@ -50,16 +50,18 @@ class LiveCourseController extends BaseController
         $recentCourses = array();
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
-            if ($course['status'] != 'published') {
+            if ($course['status'] != 'published' || $course['parentId'] != '0') {
                 continue;
             }
             $course['lesson'] = $lesson;
             $recentCourses[] = $course;
+
         }
 
         $liveCourses = $this->getCourseService()->searchCourses( array(
             'status' => 'published',
-            'type' => 'live'
+            'type' => 'live',
+            'parentId' => '0'
         ), 'lastest',0, 10 );
 
         $userIds = array();
@@ -83,6 +85,7 @@ class LiveCourseController extends BaseController
         $conditions = array(
             'status' => 'published',
             'type' => 'live',
+            'parentId' => '0',
             'ratingGreaterThan' => 0.01
         );
 
@@ -155,11 +158,11 @@ class LiveCourseController extends BaseController
             throw $this->createAccessDeniedException('您不是课程学员，不能参加直播！');
         }
 
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $result = $client->getRoomUrl($params);
 
         if (empty($result) || isset($result['error'])) {
-            throw $this->createAccessDeniedException('进入直播教室失败，请重试！');
+            return $this->createJsonResponse($result);
         }
 
         return $this->createJsonResponse(array(
@@ -207,11 +210,14 @@ class LiveCourseController extends BaseController
         } else {
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
-        $client = LiveClientFactory::createClient();
-        $result = $client->entryLive($params);
 
-        if (empty($result) || isset($result['error'])) {
-            return $this->createMessageResponse('info', $result['errorMsg']);
+        if($this->setting("developer.cloud_api_failover", 0)) {
+            $client = new EdusohoLiveClient();
+            $result = $client->entryLive($params);
+
+            if (empty($result) || isset($result['error'])) {
+                return $this->createMessageResponse('info', $result['errorMsg']);
+            }
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
@@ -262,9 +268,8 @@ class LiveCourseController extends BaseController
     public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
-
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
             'url' => $this->generateUrl('live_classroom_replay_url',array(

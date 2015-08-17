@@ -138,7 +138,7 @@ class DefaultController extends BaseController
             }
         }
 
-        $api = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('leaf');
         $liveCourseStatus = $api->get('/lives/account');
         
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(

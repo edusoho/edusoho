@@ -58,15 +58,7 @@ class CourseController extends BaseController
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
-
-        if (empty($classroom['teacherIds'])) {
-            $classroomTeacherIds = array();
-        } else {
-            $classroomTeacherIds = $classroom['teacherIds'];
-        }
-
-        $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
-
+        
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $currentUser = $this->getUserService()->getCurrentUser();
         $courseMembers = array();
@@ -200,13 +192,13 @@ class CourseController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => 'auditor',
+                'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
             );
 
             if ($previewAs == 'member') {
-                $member['role'] = 'member';
+                $member['role'] = array('member');
             }
         }
 
