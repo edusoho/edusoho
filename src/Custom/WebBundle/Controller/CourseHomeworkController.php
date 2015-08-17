@@ -86,6 +86,50 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         ));
     }
 
+    public function resultAction(Request $request, $courseId, $homeworkId, $resultId, $userId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
+        }
+
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            throw $this->createNotFoundException('此课程不存在或者已删除！');
+        }
+
+        $canLookHomeworkResult = $this->getHomeworkService()->canLookHomeworkResult($resultId);
+        if (!$canLookHomeworkResult) {
+            throw $this->createAccessDeniedException('无权查看作业！');
+        }
+
+        $homework = $this->getHomeworkService()->getHomework($homeworkId);
+
+        if ($homework['courseId'] != $course['id']) {
+            throw $this->createNotFoundException();
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info', '作业所属课时不存在！');
+        }
+
+        $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'], $userId);
+        $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $userId);
+        var_dump($homeworkResult['status']);
+//        var_dump($itemSetResult['items']);
+        return $this->render('CustomWebBundle:CourseHomework:result.html.twig', array(
+            'homework' => $homework,
+            'itemSetResult' => $itemSetResult,
+            'course' => $course,
+            'lesson' => $lesson,
+            'teacherSay' => $homeworkResult['teacherSay'],
+            'userId' => $homeworkResult['userId'],
+            'questionStatus' => $homeworkResult['status']
+        ));
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
