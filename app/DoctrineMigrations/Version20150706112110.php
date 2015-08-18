@@ -16,9 +16,13 @@ class Version20150706112110 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
+        if (!$this->isFieldExist('message', 'type')) {
+            $this->addSql("ALTER TABLE `message` ADD `type` enum('text','img','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型' AFTER `id`;");
+        }
 
-        $this->addSql("ALTER TABLE `message` ADD `type` varchar(32) NOT NULL DEFAULT 'text' COMMENT '私信类型' AFTER `id`;");
-        $this->addSql("ALTER TABLE `message_conversation` ADD `latestMessageType` varchar(32) NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型' AFTER `latestMessageContent`;");
+        if (!$this->isFieldExist('message_conversation', 'latestMessageType')) {
+            $this->addSql("ALTER TABLE `message_conversation` ADD `latestMessageType` enum('text','img','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型' AFTER `latestMessageContent`;");
+        }
     }
 
     /**
@@ -28,5 +32,13 @@ class Version20150706112110 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->connection->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
     }
 }

@@ -24,12 +24,12 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name="_username"]',
+            element: '#ajax-username',
             required: true
         });
 
         validator.addItem({
-            element: '[name="_password"]',
+            element: '#ajax-password',
             required: true
         });
 

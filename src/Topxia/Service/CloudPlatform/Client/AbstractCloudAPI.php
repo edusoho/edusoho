@@ -9,9 +9,9 @@ class AbstractCloudAPI
 
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
-    protected $connectTimeout = 2;
+    protected $connectTimeout = 5;
 
-    protected $timeout = 4;
+    protected $timeout = 15;
 
     protected $apiUrl = 'http://api.edusoho.net';
 
@@ -21,18 +21,26 @@ class AbstractCloudAPI
 
     public function __construct(array $options)
     {
-        $this->init($options);
-    }
-
-    public function init(array $options)
-    {
-        $this->accessKey = $options['accessKey'];
-        $this->secretKey = $options['secretKey'];
+        $this->setKey($options['accessKey'], $options['secretKey']);
 
         if (!empty($options['apiUrl'])) {
-            $this->apiUrl = rtrim($options['apiUrl'], '/');
+            $this->setApiUrl($options['apiUrl']);
         }
         $this->debug = empty($options['debug']) ? false : true;
+    }
+
+    public function setApiUrl($url)
+    {
+        $this->apiUrl = rtrim($url, '/');
+        return $this;
+    }
+
+    public function setKey($accessKey, $secretKey)
+    {
+        $this->accessKey = $accessKey;
+        $this->secretKey = $secretKey;
+
+        return $this;
     }
 
     public function getAccessKey()

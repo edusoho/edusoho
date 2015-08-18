@@ -1,6 +1,8 @@
 <?php
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\NotFoundException;
+use Topxia\Service\Common\AccessDeniedException;
 
 function filter($data, $type)
 {
@@ -23,10 +25,17 @@ function convert($data, $type)
     return $convert->convert($data);
 }
 
-function setCurrentUser($token)
+function setCurrentUser($user)
 {
     $currentUser = new CurrentUser();
-    $user = convert($token,'me');
+    if (empty($user)) {
+        $user = array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' =>  '',
+            'roles' => array(),
+        );
+    }
     $currentUser->fromArray($user);
     ServiceKernel::instance()->setCurrentUser($currentUser);
 }
@@ -34,4 +43,14 @@ function setCurrentUser($token)
 function getCurrentUser()
 {
     return ServiceKernel::instance()->getCurrentUser();
+}
+
+function createAccessDeniedException($message = 'Access Denied', $code = 0)
+{
+    return new AccessDeniedException($message, null, $code);
+}
+
+function createNotFoundException($message = 'Not Found', $code = 0)
+{
+    return new NotFoundException($message, $code);
 }

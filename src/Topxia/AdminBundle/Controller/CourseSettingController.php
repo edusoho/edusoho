@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
 
 class CourseSettingController extends BaseController
@@ -140,7 +140,7 @@ class CourseSettingController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
         $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
         $default = array(

@@ -21,8 +21,16 @@ class MessageServiceImpl extends BaseService implements MessageService
     
     public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
     {   
+        if (empty($fromId) || empty($toId)) {
+            throw $this->createServiceException("发件人或收件人未注册!"); 
+        }
+
         if($fromId == $toId){
             throw $this->createServiceException("抱歉,不允许给自己发送私信!"); 
+        }
+
+        if(empty($content)){
+            throw $this->createServiceException("抱歉,不能发送空内容!"); 
         }
 
         $createdTime = empty($createdTime) ? time() : $createdTime;
@@ -148,16 +156,16 @@ class MessageServiceImpl extends BaseService implements MessageService
             $messageSetting = array('lastMaxId' => 0);
             $this->getSettingService()->set('message', $messageSetting);
         }
-        $tuiClient = new EdusohoTuiClient();
-        $messages = $tuiClient->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
-        $lastMaxId = 0;
-        if (isset($messages['error'])) {
-            throw $this->createServiceException('获取远程私信错误');
-        }
-        foreach ($messages as $message) {
-            $messageSetting['lastMaxId'] = $message['id'];
-            $this->sendMessage($message['userId'], $user['id'], $message['context'], $message['type'], $message['createdTime']);
-        }
+        // $tuiClient = new EdusohoTuiClient();
+        // $messages = $tuiClient->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
+        // $lastMaxId = 0;
+        // if (isset($messages['error'])) {
+        //     throw $this->createServiceException('获取远程私信错误');
+        // }
+        // foreach ($messages as $message) {
+        //     $messageSetting['lastMaxId'] = $message['id'];
+        //     $this->sendMessage($message['userId'], $user['id'], $message['context'], $message['type'], $message['createdTime']);
+        // }
         $this->getSettingService()->set('message', $messageSetting);
     }
 

@@ -13,10 +13,22 @@ class FailoverCloudAPI extends AbstractCloudAPI
 
     protected $apiType = null;
 
+    protected $rootApiUrl = null;
+
     protected function _request($method, $uri, $params, $headers)
     {
         try {
-            return parent::_request($method, $uri, $params, $headers);
+            $result = parent::_request($method, $uri, $params, $headers);
+
+            if ($this->servers['next_refresh_time'] < time()) {
+                $self = $this;
+                $this->servers = $this->refreshServerConfigFile(function() use ($self) {
+                    return $self->getServerList(0);
+                }, 'noneblocking');
+            }
+
+            return $result;
+
         } catch (CloudAPIIOException $e) {
             if ($this->apiType !== 'leaf') {
                 throw $e;
@@ -27,7 +39,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
                     $data['failed_count'] ++;
                 } else {
                     $data['failed_count'] = 1;
-                    $data['failed_expired'] = time() + 10;
+                    $data['failed_expired'] = time() + 120;
                 }
 
                 if ($data['failed_count'] == $maxFailoverCount) {
@@ -35,27 +47,46 @@ class FailoverCloudAPI extends AbstractCloudAPI
                 }
 
                 return $data;
-            });
+            }, 'nonblocking');
+
+            throw $e;
         }
     }
 
-    public function refreshServerConfigFile($callback)
+    public function refreshServerConfigFile($callback, $lockMode = 'blocking')
     {
         $fp = fopen($this->serverConfigPath, 'r+');
-        if (!flock($fp, LOCK_EX)) {
-            fclose($fp);
-            throw new \RuntimeException("Lock server config file failed.");
+
+        if ($lockMode == 'blocking') {
+            if (!flock($fp, LOCK_EX)) {
+                fclose($fp);
+                throw new \RuntimeException("Lock server config file failed.");
+            }
+        } elseif ($lockMode == 'nonblocking') {
+            if (!flock($fp, LOCK_EX | LOCK_NB)) {
+                fclose($fp);
+                return ;
+            }
         }
 
-        $data = json_decode(fread($fp, filesize($this->serverConfigPath)), true);
+        if (filesize($this->serverConfigPath) > 0) {
+            $data = json_decode(fread($fp, filesize($this->serverConfigPath)), true);
+        } else {
+            $data = array();
+        }
+
         $data = $callback($fp, $data, self::FAILOVER_COUNT);
 
         ftruncate($fp, 0);
         rewind($fp);
         fwrite($fp, json_encode($data));
 
-        flock($fp, LOCK_UN);
+        if ($lockMode != 'none') {
+            flock($fp, LOCK_UN);
+        }
         fclose($fp);
+
+        return $data;
     }
 
     /**
@@ -88,6 +119,14 @@ class FailoverCloudAPI extends AbstractCloudAPI
             throw new \RuntimeException("New leaf server is empty.");
         }
 
+        if ($newLeaf['used_count'] > 3) {
+            // 确保1小时后更新地址列表
+            $nextRefreshTime = time() + 3600;
+            $servers = $this->getServerList($nextRefreshTime);
+
+            return $servers;
+        }
+
         $servers['current_leaf'] = $newLeaf['url'];
         $servers['failed_count'] = 0;
         $servers['failed_expired'] = 0;
@@ -103,38 +142,80 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
 
         $this->apiType = $type;
-
+        $this->rootApiUrl = $this->apiUrl;
         if ($type == 'leaf') {
             $this->apiUrl = $this->servers['current_leaf'];
-        } else {
-            $this->apiUrl = $this->servers['root'];
         }
-
     }
 
     public function setApiServerConfigPath($path)
     {
+        $this->serverConfigPath = $path;
+        
         if (!file_exists($path)) {
+            $self = $this;
+            touch($path);
+            $this->servers = $this->refreshServerConfigFile(function() use ($self) {
+                return $self->getServerList();
+            }, 'blocking');
+        } else {
+            $this->servers = json_decode(file_get_contents($path), true);
+        }
+    }
 
-            $servers = parent::_request('GET', '/server_list', array(), array());
-            if (empty($servers) or empty($servers['root']) or empty($servers['current_leaf']) or empty($servers['leafs'])) {
-                throw new \RuntimeException("Requested API Server list is invalid.");
+    protected function getServerList($nextRefreshTime = 0)
+    {
+        $prevApiUrl = $this->apiUrl;
+        $this->setApiUrl($this->rootApiUrl);
+        $servers = parent::_request('GET', '/server_list', array(), array());
+        $this->setApiUrl($prevApiUrl);
+
+        if (empty($servers) or empty($servers['root']) or empty($servers['current_leaf']) or empty($servers['leafs'])) {
+            $servers = $this->getServerListFromCdn();
+            if (empty($servers) || empty($servers['root']) || empty($servers['leafs'])) {
+                throw new \RuntimeException("Requested API Server list from CDN failed.");
             }
-
-            foreach ($servers['leafs'] as &$leaf) {
-                $leaf['used_count'] = 0;
-                unset($leaf);
-            }
-
-            $servers['failed_count'] = 0;
-            $servers['failed_expired'] = 0;
-            $servers['next_refresh_time'] = 0;
-
-            file_put_contents($path, json_encode($servers));
         }
 
-        $this->serverConfigPath = $path;
-        $this->servers = json_decode(file_get_contents($path), true);
+        if (empty($servers['current_leaf'])) {
+            $servers['current_leaf'] = $servers['leafs'][array_rand($servers['leafs'])]['url'];
+        }
+
+        foreach ($servers['leafs'] as &$leaf) {
+            $leaf['used_count'] = 0;
+            unset($leaf);
+        }
+
+        $servers['failed_count'] = 0;
+        $servers['failed_expired'] = 0;
+
+        if (empty($nextRefreshTime)) {
+            //确保每天的凌晨0~5点之间的时间内更新
+            $hour = rand(0, 5);
+            $minute = rand(0, 59);
+            $second = rand(0, 59);
+            $nextRefreshTime = strtotime(date('Y-m-d 0:0:0', strtotime('+1 day'))) + $hour * 3600 + $minute * 60 + $second;
+        }
+
+        $servers['next_refresh_time'] = $nextRefreshTime;
+
+        return $servers;
+    }
+
+    protected function getServerListFromCdn()
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 3);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_URL, 'http://api-common.b0.upaiyun.com/serverList.json');
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return json_decode($response, true);
     }
 
 }

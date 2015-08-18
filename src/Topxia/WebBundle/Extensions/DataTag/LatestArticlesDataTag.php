@@ -43,7 +43,7 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
             $conditions['categoryId'] = (int) $arguments['categoryId'];
             $conditions['includeChildren'] = 1;
         }
-
+        $conditions['status'] = 'published';
     	$articles = $this->getArticleService()->searchArticles($conditions,'created', 0, $arguments['count']);
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));

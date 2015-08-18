@@ -30,9 +30,8 @@ $connection = DriverManager::getConnection(array(
     'charset' => $config['database_charset'],
 ));
 
-// var_dump($config);
 
-$serviceKernel = ServiceKernel::create('dev', true);
+$serviceKernel = ServiceKernel::create($config['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($config));
 $serviceKernel->setConnection($connection);
 // $serviceKernel->getConnection()->exec('SET NAMES UTF8');
@@ -51,24 +50,33 @@ $app->view(function (array $result, Request $request) use ($app) {
 
 
 $app->before(function (Request $request) use ($app) {
+
+    $whiteLists = include __DIR__ . '/whiteList.php';
+    $whiteLists = $request->getMethod() == 'GET' ? $whiteLists['get'] : $whiteLists['post'];
+    $inWhiteList = 0;
+    foreach ($whiteLists as $whiteList) {
+        $path = $request->getPathInfo();
+        if (preg_match($whiteList, $request->getPathInfo())) {
+            $inWhiteList = 1;
+            break;
+        }
+    }
     $token = $request->headers->get('Auth-Token', '');
-    // if (empty($token)) {
-    //     return array('error' => array('code' => 'AUTH_TOKEN_EMPTY', 'message' => 'AuthToken is not exist.'));
-    // }
+    if (!$inWhiteList && empty($token)) {
+        throw createNotFoundException("AuthToken is not exist.");
+    }
+    $userService = ServiceKernel::instance()->createService('User.UserService');
+    $token = $userService->getToken('mobile_login', $token);
 
-    // $userService = ServiceKernel::instance()->create('User.UserService');
+    if (!$inWhiteList && empty($token['userId'])) {
+        throw createAccessDeniedException("AuthToken is invalid.");
+    }
 
-    // $token = $userService->getToken('api_login', $token);
-    // if (empty($token['userId'])) {
-    //     return array('error' => array('code' => 'AUTH_TOKEN_INVALID', 'message' => 'AuthToken is invalid.'));
-    // }
-
-    // $user = $userService->getUser($token['userId']);
-    // if (empty($user)) {
-    //     return array('error' => array('code' => 'AUTH_USER_NOT_FOUND', 'message' => 'Auth user is not found'));
-    // }
-
-    setCurrentUser($token);
+    $user = $userService->getUser($token['userId']);
+    if (!$inWhiteList && empty($user)) {
+        throw createNotFoundException("Auth user is not found.");
+    }
+    setCurrentUser($user);
 
 });
 
@@ -86,5 +94,6 @@ $app->mount('/api/announcements', include __DIR__ . '/src/announcements.php' );
 $app->mount('/api/coursethreads', include __DIR__ . '/src/coursethreads.php' );
 $app->mount('/api/mobileschools', include __DIR__ . '/src/mobileschools.php' );
 $app->mount('/api/blacklists', include __DIR__ . '/src/blacklists.php' );
+$app->mount('/api/messages', include __DIR__ . '/src/messages.php' );
 $app->mount('/api/files', include __DIR__ . '/src/files.php' );
 $app->run();
