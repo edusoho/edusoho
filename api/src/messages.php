@@ -20,6 +20,7 @@ $api = $app['controllers_factory'];
 | ---- | ----- | ----- | ---- |
 | nickname | string | 是 | 发送对象昵称 |
 | content | string | 是 | 私信内容 |
+| type | string | 否 | 私信类型,默认为text |
 
 ** 响应 **
 
@@ -33,12 +34,13 @@ $api = $app['controllers_factory'];
 $api->post('/', function (Request $request) {
     $nickname = $request->request->get('nickname');
     $content = $request->request->get('content');
+    $type = $request->request->get('type','text');
     $sender = getCurrentUser();
     $receiver = ServiceKernel::instance()->createService('User.UserService')->getUserByNickname($nickname); 
     if(empty($receiver)){
         throw $this->createNotFoundException("抱歉，该收信人尚未注册!");
     }
-    $message = ServiceKernel::instance()->createService('User.MessageService')->sendMessage($sender['id'], $receiver['id'], $content);
+    $message = ServiceKernel::instance()->createService('User.MessageService')->sendMessage($sender['id'], $receiver['id'], $content, $type);
     return array(
         'success' => empty($message) ? 'flase' : 'true'
     );
