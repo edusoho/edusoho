@@ -25,7 +25,7 @@ INSERT INTO `category_group` (`id`, `code`, `name`, `depth`) VALUES (1,'course',
 
 
 
-INSERT INTO `cloud_app` (`id`, `name`, `code`, `type`, `description`, `icon`, `version`, `fromVersion`, `developerId`, `developerName`, `installedTime`, `updatedTime`) VALUES (1,'EduSoho慕课版','MOOCMAIN','plugin','EduSoho慕课版','','1.0.2','0.0.0',1,'EduSoho官方',1439536736,1439536736);
+INSERT INTO `cloud_app` (`id`, `name`, `code`, `type`, `description`, `icon`, `version`, `fromVersion`, `developerId`, `developerName`, `installedTime`, `updatedTime`) VALUES (1,'EduSoho慕课版','MOOCMAIN','plugin','EduSoho慕课版','','1.0.3','0.0.0',1,'EduSoho官方',1439536736,1439536736);
 
 
 
