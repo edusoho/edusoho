@@ -86,11 +86,6 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
     }
 
-    public function findTestpaperByPId($pId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE pId = ? ";
-        return $this->getConnection()->fetchAll($sql,array($pId));
-    }
 
     public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget)
     {

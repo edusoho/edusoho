@@ -64,11 +64,6 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function deleteMaterialByPId($pId)
-    {
-       return $this->getConnection()->delete($this->table, array('pId' => $pId)); 
-    }
-
     public function deleteMaterialsByLessonId($lessonId)
     {
         $sql = "DELETE FROM {$this->table} WHERE lessonId = ?";

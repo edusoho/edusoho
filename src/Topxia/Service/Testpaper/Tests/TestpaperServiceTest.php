@@ -122,14 +122,7 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('Test2',$testpaper['name']);    
     }
 
-    public function testFindTestpaperByPId()
-    {
-        $testpaper = array('name' => 'Test','pId'=>1);
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-        $testpaper = $this->getTestpaperService()->findTestpaperByPId(1);
-        $this->assertEquals('Test',$testpaper[0]['name']);
-    }
+
 
     public function testFindTestpaperByPIdAndLockedTarget()
     {

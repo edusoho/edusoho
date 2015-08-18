@@ -64,14 +64,7 @@ class MaterialServiceTest extends BaseTestCase
     
     }
 
-    public function testDeleteMaterialByPId()
-    {
-        $Material = array('title'=>'material','pId'=>1);
-        $Material = $this->getMaterialService()->createMaterial($Material);
-        $this->assertEquals('material', $Material['title']);
-        $count = $this->getMaterialService()->deleteMaterialByPId(1);
-        $this->assertEquals(1, $count);
-    }
+
 
     protected function getUserService()
     {

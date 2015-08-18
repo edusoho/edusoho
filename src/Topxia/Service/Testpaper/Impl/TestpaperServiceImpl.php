@@ -921,11 +921,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpaperByPId($pId)
-    {
-        return $this->getTestpaperDao()->findTestpaperByPId($pId);
-    }
-
     public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget)
     {
         return $this->getTestpaperDao()->findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);

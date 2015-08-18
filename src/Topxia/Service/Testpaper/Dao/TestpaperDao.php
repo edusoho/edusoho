@@ -20,7 +20,5 @@ interface TestpaperDao
 
     public function findTestpaperByTargets(array $targets);
 
-    public function findTestpaperByPId($pId);
-
     public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);
 }

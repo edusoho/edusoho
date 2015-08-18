@@ -37,8 +37,6 @@ interface TestpaperService
 
     public function canLookTestpaper($resultId);
 
-    public function findTestpaperByPId($pId);
-
     public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);
 
     public function findTestpaperResultsByUserId ($id, $start, $limit);
