@@ -2,11 +2,11 @@
 
 namespace Custom\Service\Homework\Dao\Impl;
 
-use Custom\Service\Homework\Dao\HomeworkResultDao;
+use Custom\Service\Homework\Dao\ResultDao;
 use Homework\Service\Homework\Dao\Impl\HomeworkDaoImpl;
 use Homework\Service\Homework\Dao\Impl\HomeworkResultDaoImpl as BaseHomeworkResultDao;
 
-class HomeworkResultDaoImpl extends BaseHomeworkResultDao implements HomeworkResultDao
+class ResultDaoImpl extends BaseHomeworkResultDao implements ResultDao
 {
     protected $table = 'homework_result';
     protected $homework_table = "homework";

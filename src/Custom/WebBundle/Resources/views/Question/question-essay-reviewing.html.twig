@@ -25,14 +25,13 @@
         <div class="form-group">
             <div class="control-label"><label for="review-score-{{question.id}}-field">评分</label></div>
             <div class="controls">
-                <input class="form-control score" id='review-score-{{question.id}}-field' name="score[{{question.id}}]" data-max-score="{{ question.score}}" data-question-id="{{ question.id}}">
-                <div class="help-block" style="display:none;"></div>
+                <input class="form-control homework-result-item score" id='review-score-{{question.id}}-field' name="score[{{question.id}}]" data-max-score="{{ question.score}}" data-question-id="{{ question.id}}">
             </div>
         </div>
 
         <div  class="form-group question-teacher-say-input">
             <div class="teacher-say-text">评语:</div>
-            <textarea class="form-control  teacher-say"  name="review[{{ question.id }}]"  data-type="essay" data-question-id="{{ question.id }}"></textarea>
+            <textarea class="form-control homework-result-item teacher-say"  name="review[{{ question.id }}]"  data-type="essay" data-question-id="{{ question.id }}"></textarea>
         </div>
     {% else %}
         <div class="question-score">

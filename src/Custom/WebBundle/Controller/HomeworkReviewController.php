@@ -17,36 +17,34 @@ class HomeworkReviewController extends BaseController
     /**
      * 显示作业批改界面界面.
      * @param request
-     * @param courseId,课程id.
-     * @param homeworkId , 作业id.
-     * @param userId 作业用户id.
+     * @param homeworkResultId , 作业答卷id.
     **/
-    public function createAction(Request $request, $courseId, $homeworkId, $userId)
+    public function createAction(Request $request, $homeworkResultId)
     {
-        $canCheckHomework = $this->getHomeworkService()->canCheckHomework($homeworkId);
+        $homeworkResult = $this->getHomeworkService()->loadHomeworkResult($homeworkResultId);
+
+        $canCheckHomework = $this->getHomeworkService()->canCheckHomework($homeworkResult['homeworkId']);
         if (!$canCheckHomework) {
             throw $this->createAccessDeniedException('无权批改作业！');
         }
 
-        $homework = $this->getHomeworkService()->loadHomework($homeworkId);
+        $homework = $this->getHomeworkService()->loadHomework($homeworkResult['homeworkId']);
         $course = $this -> getCourseService() -> loadCourse($homework['courseId']);
         $lesson = $this -> getCourseService() -> loadLesson($homework['lessonId']);
 
-        $homeworkResult = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homeworkId, $userId);
         if ($homeworkResult['status'] != 'reviewing') {
             return $this->createMessageResponse('warning', '作业已批阅或者未做完!');
         }
 
-        $items = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
+        $items = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homeworkResult['homeworkId'],$homeworkResult['userId']);
 
         if ($request->getMethod() == 'POST') {
-            $checkHomeworkData = $request->request->all();
-            $checkHomeworkData = empty($checkHomeworkData['data']) ? "" : $checkHomeworkData['data'];
-            $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData);
-
+            $reviews = $request->request->all();
+            $reviews = empty($reviews['data']) ? "" : $reviews['data'];
+            $this->getHomeworkService()->createHomeworkReview($homeworkResultId, $this->getCurrentUser()->id,$reviews);
             return $this->createJsonResponse(
                 array(
-                    'courseId' => $courseId,
+                    'courseId' => $homework['courseId'],
                     'lessonId' => $homework['lessonId']
                 )
             );
@@ -58,11 +56,26 @@ class HomeworkReviewController extends BaseController
             'itemSet' => $items,
             'course' => $course,
             'lesson' => $lesson,
-            'userId' => $userId,
+            'userId' => $homeworkResult['userId'],
             'questionStatus' => 'reviewing',
             'targetId' => $request->query->get('targetId'),
             'source' => $request->query->get('source','course'),
             'canCheckHomework' => $canCheckHomework
+        ));
+    }
+
+    /**
+     * 
+    **/
+    public function checkAction(Request $request, $homeworkResultId)
+    {
+        $homeworkResult = $this->getHomeworkService()->loadHomeworkResult($homeworkResultId);
+
+        return $this->render('CustomWebBundle:HomeworkReview:check-modal.html.twig',array(
+            'homeworkResult' => $homeworkResult,
+            'homeworkResultId' => $homeworkResultId,
+            'targetId' => $request->query->get('targetId'),
+            'source' => $request->query->get('source','course')
         ));
     }
 

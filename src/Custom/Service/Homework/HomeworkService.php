@@ -58,11 +58,21 @@ interface HomeworkService
     public function updateHomeworkResult($homeworkResultId, array $fields);
 
     /**
+     * 为老师创建一个作业点评.
+     * @param homeworkResultId 作业答卷id.
+     * @param userId,老师id.
+     * @param fields 更新字段.
+     * 
+    **/
+    public function createHomeworkReview($homeworkResultId,$userId, array $fields);
+
+    /**
      * 创建一个作业互评.
      * @param homeworkResultId 作业答卷id.
+     * @param userId 同学id.
      * @param fields 互评数据.
      * @return 保存的保存后的互评数据.
      **/
-    public function createHomeworkPairReview($homeworkResultId, array $fields);
+    public function createHomeworkPairReview($homeworkResultId,$userId, array $fields);
 
 }

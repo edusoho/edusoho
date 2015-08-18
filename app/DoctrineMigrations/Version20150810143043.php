@@ -37,8 +37,9 @@ class Version20150810143043 extends AbstractMigration
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0',       
                 PRIMARY KEY  (`id`)
             ) comment='答题评分' ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
-        $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` int(10) unsigned  COMMENT '同学评分(互评成绩)';");
-        $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` int(10) unsigned  COMMENT '老师评分';");
+        $this->addSql("ALTER TABLE `homework_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
+        $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` float(10,1) unsigned  COMMENT '同学评分(互评成绩)';");
+        $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` float(10,1) unsigned  COMMENT '老师评分';");
         $this->addSql("ALTER TABLE `homework_result` ADD `pairReviews` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评数量';");
         $this->addSql("ALTER TABLE `homework` ADD `completeTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业完成时间';");
         $this->addSql("ALTER TABLE `homework` ADD `reviewEndTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评结束时间';");
@@ -57,6 +58,7 @@ class Version20150810143043 extends AbstractMigration
     {
         $schema->dropTable('homework_review');
         $schema->dropTable('homework_review_item');
+        $this->addSql("ALTER TABLE `homework_result` DROP `score`;");
         $this->addSql("ALTER TABLE `homework_result` DROP `studentScore`;");
         $this->addSql("ALTER TABLE `homework_result` DROP `teacherScore`;");
         $this->addSql("ALTER TABLE `homework` DROP `completeTime`;");

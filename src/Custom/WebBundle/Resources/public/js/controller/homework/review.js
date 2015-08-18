@@ -45,25 +45,12 @@ define(function(require, exports, module) {
         }).render();
 
         $('#modal').on('show.bs.modal', function (e) {
-            var items= validator.items;
-            for(var i=0;i < items.length;i++){
-                var result=items[i].execute();
-            }
+            validator.execute();
 
-            // $('input.score').each(function(index,item){
-            //     var field=$(item);
-            //     if(!field.val()){
-            //         var position=$('.question-7').offset();
-            //         $(document).scrollTop(position.top-10);
-            //         Notify.danger("作业未批改完");
-            //         return ;
-            //     }
-            //     // var $item = $(item);
-            //     // teacherSay.push($item.val());
-            //     // questionIds.push($item.data('questionId'));
-            // });
-            e.preventDefault();
-            return false;
+            if($('.text-danger').length>0){
+                e.preventDefault();
+                return false;
+            }
         })
     };
 
@@ -77,9 +64,12 @@ define(function(require, exports, module) {
         },
 
         onSubmit: function(event) {
-            // if (!confirm('确认要提交作业批改吗？')) return false;
-            // var $btn = $(event.currentTarget);
-            // saveModule.save($btn,'list');
+            // validator.execute();
+
+            // e.preventDefault();
+
+            // $("#modal").load('wwww.baidu.com');
+            // $("#modal").modal('show');
         },
 
        onClickSetCard: function(event) {
