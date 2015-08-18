@@ -160,6 +160,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $this->dispatchEvent("testpaper.delete", $testpaper);
     }
 
+    public function deleteTestpaperItemByTestId($testpaperId)
+    {
+        return $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testpaperId);
+    }
+
     public function buildTestpaper($id, $options)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($id);

@@ -258,7 +258,8 @@ class QuestionServiceTest extends BaseTestCase
             'type' => 'single_choice',
             'stem' => 'question.',
             'answer' => array('answer'),
-            'target' => 'course-1'
+            'target' => 'course-1',
+            'pId'=>1
         );
         $question = $this->getQuestionService()->addQuestion($question);
         $this->assertEquals('question.',$question['stem']);

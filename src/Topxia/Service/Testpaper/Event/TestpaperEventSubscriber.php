@@ -97,7 +97,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             }
             $lockedTarget = "(".trim($lockedTarget,',').")";
             $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
-            unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['metas'],$testpaper['pId']);
+            unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['pId']);
             foreach ($testpaperIds as $testpaperId) {
                $this->getTestpaperService()->editTestpaper($testpaperId,$testpaper);
             }  
@@ -157,6 +157,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         //判断是否是一维数组
         if(array_key_exists('id', $items)){
+
             if($courseIds){
                 $lockedTarget = ''; 
                 foreach ($courseIds as $courseId) {
@@ -171,7 +172,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
                 $lockedTestId = "(".trim($lockedTestId,',').")";
                 $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestId($items['id'],$lockedTestId),'id');
                 foreach ($testpaperItemIds as $testpaperItemId) {
-                     $this->getTestpaperService()->editTestpaperItem($testpaperItemId,array('seq'=>$items['seq']));
+                     $this->getTestpaperService()->editTestpaperItem($testpaperItemId,array('seq'=>$items['seq'],'score'=>$items['score']));
                 }
             }
             return; 
@@ -198,7 +199,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             }
 
             $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
-            $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>json_encode($testpaper['metas']));
+            $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>$testpaper['metas']);
             foreach ($testpaperIds as $testpaperId) {
                 $this->getTestpaperService()->editTestpaper($testpaperId, $fields);
             }
@@ -230,6 +231,11 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             foreach ($testpaperItemIds as $testpaperItemId) {
                 $this->getTestpaperService()->deleteTestpaperItem($testpaperItemId);
             }
+            // $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
+            // $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>$testpaper['metas']);
+            // foreach ($testpaperIds as $testpaperId) {
+            //     $this->getTestpaperService()->editTestpaper($testpaperId, $fields);
+            // }
         }  
     }
 
