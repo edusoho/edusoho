@@ -30,9 +30,8 @@ class MessageEventSubscriber implements EventSubscriberInterface
             'fromId' => $message['fromId'],
             'nickname' => $user['nickname'],
             'imgUrl' => empty($largeAvatar) ? '' : 'files/'.$largeAvatar['path'],
-            'typeObject' => in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'friend',
             'typeMsg' => $message['type'],
-            'typeBusiness' => 'normal',
+            'typeBusiness' => in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'friend',
             'createdTime' => time()
         ));
         $tuiClient = new EdusohoTuiClient();
