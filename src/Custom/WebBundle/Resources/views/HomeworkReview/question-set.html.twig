@@ -3,6 +3,7 @@
     <div class="panel-heading">作业题目 <small class="text-muted">共{{ itemSet.total }}题</small></div>
     <div class="panel-body">
       <div class="question-set-items">
+        <form id='review-form' method='post' >
         {% for item in itemSet.items %}
           {% if item.subItems|default(null) %}
             {% include 'CustomWebBundle:Question:question-set-item-have-sub.html.twig' %}
@@ -10,6 +11,7 @@
             {% include 'CustomWebBundle:Question:question-set-item.html.twig' %}
           {% endif %}
         {% endfor %}
+      </form>
       </div>
     </div>
   </div>

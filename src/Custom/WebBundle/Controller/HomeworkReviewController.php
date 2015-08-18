@@ -54,6 +54,7 @@ class HomeworkReviewController extends BaseController
 
         return $this->render("CustomWebBundle:HomeworkReview:create.html.twig", array(
             'homework' => $homework,
+            'homeworkResult' => $homeworkResult,
             'itemSet' => $items,
             'course' => $course,
             'lesson' => $lesson,

@@ -26,7 +26,6 @@ define(function (require, exports, module) {
     Validator.addRule(
         'completeTimeCheck',
         function (options) {
-            alert(1);
             var completeTimeGroup = $('#completeTimeGroup');
             var completeTime = $('#completeTime').val();
             if (completeTimeGroup[0].style.display != 'none' && completeTime != "") {

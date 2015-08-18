@@ -85,6 +85,7 @@ class HomeworkPairReviewController extends BaseController
             'itemSet' => $homeworkResult['items'],
             'course' => $course,
             'lesson' => $lesson,
+            'homeworkResult' => $homeworkResult,
             'questionStatus' => 'reviewing'
         ));
 
