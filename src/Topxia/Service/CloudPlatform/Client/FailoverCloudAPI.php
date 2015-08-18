@@ -163,7 +163,7 @@ class FailoverCloudAPI extends AbstractCloudAPI
         }
     }
 
-    protected function getServerList($nextRefreshTime = 0)
+    public function getServerList($nextRefreshTime = 0)
     {
         $prevApiUrl = $this->apiUrl;
         $this->setApiUrl($this->rootApiUrl);
