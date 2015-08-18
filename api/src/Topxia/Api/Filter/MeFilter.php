@@ -27,11 +27,11 @@ class MeFilter implements Filter
         $host = ServiceKernel::instance()->getParameter('host');
         $host = ServiceKernel::instance()->getParameter('host');
         $smallAvatar = empty($data['smallAvatar']) ? '' : $fileService->parseFileUri($data['smallAvatar']);
-        $data['smallAvatar'] = empty($smallAvatar) ? '' : $host.'/files/'.$smallAvatar['path'];
+        $data['smallAvatar'] = empty($smallAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$smallAvatar['path'];
         $mediumAvatar = empty($data['mediumAvatar']) ? '' : $fileService->parseFileUri($data['mediumAvatar']);
-        $data['mediumAvatar'] = empty($mediumAvatar) ? '' : $host.'/files/'.$mediumAvatar['path'];
+        $data['mediumAvatar'] = empty($mediumAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$mediumAvatar['path'];
         $largeAvatar = empty($data['largeAvatar']) ? '' : $fileService->parseFileUri($data['largeAvatar']);
-        $data['largeAvatar'] = empty($largeAvatar) ? '' : $host.'/files/'.$largeAvatar['path'];
+        $data['largeAvatar'] = empty($largeAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$largeAvatar['path'];
 
         $profile = $userService->getUserProfile($data['id']);
         $profile['about'] = $this->convertAbsoluteUrl($host, $profile['about']);
