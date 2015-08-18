@@ -31,7 +31,7 @@ $connection = DriverManager::getConnection(array(
 ));
 
 
-$serviceKernel = ServiceKernel::create('dev', true);
+$serviceKernel = ServiceKernel::create($config['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($config));
 $serviceKernel->setConnection($connection);
 // $serviceKernel->getConnection()->exec('SET NAMES UTF8');
@@ -94,5 +94,6 @@ $app->mount('/api/announcements', include __DIR__ . '/src/announcements.php' );
 $app->mount('/api/coursethreads', include __DIR__ . '/src/coursethreads.php' );
 $app->mount('/api/mobileschools', include __DIR__ . '/src/mobileschools.php' );
 $app->mount('/api/blacklists', include __DIR__ . '/src/blacklists.php' );
+$app->mount('/api/messages', include __DIR__ . '/src/messages.php' );
 $app->mount('/api/files', include __DIR__ . '/src/files.php' );
 $app->run();
