@@ -31,8 +31,6 @@ interface TestpaperService
 
     public function deleteTestpaper($id);
 
-    public function deleteTestpaperByTestpaperId($testpaperId);
-
     public function buildTestpaper($id, $options);
 
     public function canBuildTestpaper($builder, $options);
@@ -104,8 +102,6 @@ interface TestpaperService
     public function createTestpaperItem($item);
 
     public function deleteTestpaperItem($id);
-
-    public function deleteTestpaperItemByTestId($testId);
     
     public function getTestpaperItems($testpaperId);
 

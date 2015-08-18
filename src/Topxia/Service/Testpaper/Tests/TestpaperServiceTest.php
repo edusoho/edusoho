@@ -122,15 +122,6 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('Test2',$testpaper['name']);    
     }
 
-    public function testDeleteTestpaperByTestpaperId()
-    {
-        $testpaper = array('name' => 'Test');
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-        $count = $this->getTestpaperService()->deleteTestpaperByTestpaperId($testpaper['id']);
-        $this->assertEquals(1,$count);
-    }
-
     public function testFindTestpaperByPId()
     {
         $testpaper = array('name' => 'Test','pId'=>1);
@@ -174,14 +165,7 @@ class TestpaperServiceTest extends BaseTestCase
       $this->assertEquals('single',$testpaperItem['questionType']);
     }
 
-    public function testDeleteTestpaperItemByTestId()
-    {
-        $testpaperItem = array('questionType'=>'single_choice','pId'=>1,'testId'=>1);
-        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-        $this->assertEquals('single_choice',$testpaperItem['questionType']);
-        $count = $this->getTestpaperService()->deleteTestpaperItemByTestId(1);
-        $this->assertEquals(1,$count);
-    }
+
 
     protected function getQuestionService()
     {

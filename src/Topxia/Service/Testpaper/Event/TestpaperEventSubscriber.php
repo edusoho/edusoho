@@ -119,8 +119,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             $lockedTarget = "(".trim($lockedTarget,',').")";
             $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPIdAndLockedTarget($testpaperId,$lockedTarget),'id');
             foreach ($testpaperIds as $testpaperId) {
-              $this->getTestpaperService()->deleteTestpaperByTestpaperId($testpaperId);
-              $this->getTestpaperService()->deleteTestpaperItemByTestId($testpaperId);
+              $this->getTestpaperService()->deleteTestpaper($testpaperId);
             }
        }
     }
