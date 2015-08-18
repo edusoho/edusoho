@@ -1390,7 +1390,8 @@ a {
 }
 
 .ui-course-notice .ui-list>li {
-  margin: 15px;
+  padding: 15px 0;
+  margin: 0px 15px 0px 15px;
 }
 
 /* ui-progress */
