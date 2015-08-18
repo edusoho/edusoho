@@ -27,7 +27,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'base'}) }}{% else %}
             {{ path('course_manage_base', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %} ></span>基本信息
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>基本信息
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'detail' %}active{% endif %}">
@@ -35,7 +35,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'detail'}) }}{% else %}
             {{ path('course_manage_detail', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %} ></span>详细信息
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>详细信息
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
@@ -43,7 +43,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'picture'}) }}{% else %}
             {{ path('course_manage_picture', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %} ></span>课程图片
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>课程图片
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
@@ -51,7 +51,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'lesson'}) }}{% else %}
             {{ path('course_manage_lesson', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %} ></span>课时管理
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>课时管理
             </a>
           </li>
           {% if course.type == 'live' %}
@@ -73,7 +73,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'price'}) }}{% else %}
             {{ path('course_manage_price', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %}></span>价格设置
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>价格设置
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
@@ -81,7 +81,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'teachers'}) }}{% else %}
             {{ path('course_manage_teachers', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %}></span>教师设置
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>教师设置
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
@@ -98,7 +98,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'question'}) }}{% else %}
             {{ path('course_manage_question', {courseId:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %}></span>题目管理
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>题目管理
             </a>
           </li>
 
@@ -117,7 +117,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'testpaper'}) }}{% else %}
             {{ path('course_manage_testpaper', {courseId:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="glyphicon glyphicon-lock" aria-hidden="true" {% endif %}></span>试卷管理
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>试卷管理
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
