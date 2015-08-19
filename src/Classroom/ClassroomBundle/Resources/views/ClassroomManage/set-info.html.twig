@@ -47,10 +47,20 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label >是否开放加入</label>
+          <label >是否开放展示</label>
         </div>
         <div class="col-md-8 controls radios">
-          {{ radios('private', {'0':'是', '1':'否'}, classroom.private|default('0') ) }}
+          {{ radios('showable', {'0':'是', '1':'否'}, classroom.showable|default('0') ) }}
+          <div class="help-block">选择“否”，将不允许自行加入，适用于封闭教学</div>
+        </div>
+
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >是否开放购买</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          {{ radios('buyable', {'0':'是', '1':'否'}, classroom.buyable|default('0') ) }}
           <div class="help-block">选择“否”，将不允许自行加入，适用于封闭教学</div>
         </div>
 

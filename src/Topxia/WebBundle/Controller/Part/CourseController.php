@@ -105,13 +105,20 @@ class CourseController extends BaseController
         $classrooms = array();
         $classrooms = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
         $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
-
+        $conditions = array(
+            'categoryIds' => array($course['categoryId']),
+            'showable' => 0
+            );
         if ($course['categoryId'] > 0) {
-            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId']),'private' => 0), array('recommendedSeq', 'ASC'), 0, 8));
+            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 8));
         }
+        $conditions = array(
+            'recommended' => 1,
+            'showable' => 0, 
+            'status'=>'published'
+            );
 
-
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0, 'status'=>'published'), array('recommendedSeq', 'ASC'), 0, 11));
+        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 11));
 
         $recommends = array();
         foreach ($classrooms as $key =>  $classroom) {

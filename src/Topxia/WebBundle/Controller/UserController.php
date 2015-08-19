@@ -75,9 +75,12 @@ class UserController extends BaseController
         $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
-
-        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
-
+        $conditions = array(
+            'status'=>'published',
+            'showable'=>'0',
+            'classroomIds' => $classroomIds
+        );
+        $classrooms=$this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
         foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
@@ -114,7 +117,7 @@ class UserController extends BaseController
         $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
         $conditions = array(
             'status'=>'published',
-            'private'=>'0',
+            'showable'=>'0',
             'classroomIds' => $classroomIds
         );
 

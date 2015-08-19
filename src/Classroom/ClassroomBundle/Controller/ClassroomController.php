@@ -26,7 +26,7 @@ class ClassroomController extends BaseController
     {
         $conditions = array(
             'status' => 'published',
-            'private' => 0,
+            'showable' => 0,
         );
 
         $categoryArray = array();
