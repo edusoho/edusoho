@@ -881,7 +881,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
             if (!empty($classroom)) {
                 $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'],$user['id']);
-                $isAssistant = $this->getClassroomService()->isClassroomAssistent($classroom['classroomId'],$user['id']);
+                $isAssistant = $this->getClassroomService()->isClassroomAssistant($classroom['classroomId'],$user['id']);
                 $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'],$user['id']);
                 if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {
                     return $user['id'];
@@ -924,7 +924,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $classroom = $this->getClassroomService()->findClassroomByCourseId($targetId[0]);
             if (!empty($classroom)) {
                 $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['classroomId'],$user['id']);
-                $isAssistant = $this->getClassroomService()->isClassroomAssistent($classroom['classroomId'],$user['id']);
+                $isAssistant = $this->getClassroomService()->isClassroomAssistant($classroom['classroomId'],$user['id']);
                 $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classroom['classroomId'],$user['id']);
                 
                 if ($isTeacher || $isAssistant || $isClassroomHeadTeacher) {

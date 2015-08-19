@@ -38,6 +38,16 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>API故障转移机制</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('cloud_api_failover', {1:'开启', 0:'关闭'}, developerSetting.cloud_api_failover|default(0)) }}
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>HLS加密视频</label>
     </div>
     <div class="controls col-md-8 radios">

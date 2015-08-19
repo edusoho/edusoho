@@ -1,10 +1,12 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% set billable = false %}
-{% if course.price > 0 %}
-  {% set billable = true %}
+{% set billable = true %}
+{% if (
+  (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.coinPrice == 0)  
+  or (( not setting('coin.price_type') or setting('coin.price_type') == "RMB" ) and course.price == 0 )
+  ) %}
+  {% set billable = false %}
 {% endif %}
-
 {% block title %}{% if billable %}购买课程{% else %}加入学习{% endif %}{% endblock %}
 {% block body %}
 

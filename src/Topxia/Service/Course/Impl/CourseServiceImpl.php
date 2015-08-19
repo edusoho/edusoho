@@ -9,7 +9,7 @@ use Topxia\Common\SynchroData;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolKit;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -245,6 +245,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 					
 	public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
 	{
+>>>>>>> develop
 		return $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
 	}
 
@@ -285,7 +286,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
 		if ($classroom['classroomId']) {
 			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
-			if(in_array($member['role'], array('student', 'teacher', 'headTeacher', 'studentAssistant', 'assistant')) && !$isCourseStudent) {
+			if(!$isCourseStudent && !empty($member) && array_intersect($member['role'], array('student', 'teacher', 'headTeacher', 'assistant'))) {
 				$member = $this->createMemberByClassroomJoined($courseId, $userId, $member["classroomId"]);
 				return $member;
 			}
@@ -616,16 +617,30 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return true;
 	}
 
-	public function publishCourse($id)
+	public function publishCourse($id,$source = 'course')
 	{
-		$course = $this->tryManageCourse($id);
+		if ($source == 'course') {
+			$course = $this->tryManageCourse($id);
+		} elseif ($source == 'classroom') {
+			$course = $this->getCourseDao()->getCourse($id);
+			if (empty($course)) {
+				throw $this->createNotFoundException();
+			}
+		}
 		$this->getCourseDao()->updateCourse($id, array('status' => 'published'));
 		$this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
 	}
 
-	public function closeCourse($id)
+	public function closeCourse($id, $source = 'course')
 	{
-		$course = $this->tryManageCourse($id);
+		if ($source == 'course') {
+			$course = $this->tryManageCourse($id);
+		} elseif ($source == 'classroom') {
+			$course = $this->getCourseDao()->getCourse($id);
+			if (empty($course)) {
+				throw $this->createNotFoundException();
+			}
+		}
 		$this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
 		$this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
 	}
@@ -1347,7 +1362,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId)
 	{
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $liveStudentCapacity = $client->getCapacity();
         $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
 
@@ -2260,6 +2275,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$course = $this->getCourseDao()->getCourse($courseId);
+
 		if (empty($course)) {
 			throw $this->createNotFoundException();
 		}
@@ -2421,7 +2437,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$course = $this->tryManageCourse($courseId);
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
-		$client = LiveClientFactory::createClient();
+		$client = new EdusohoLiveClient();
 		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
 
 		if(array_key_exists("error", $replayList)){
@@ -2467,7 +2483,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'nickname' => $user['nickname']
 		);
 
-		$client = LiveClientFactory::createClient();
+		$client = new EdusohoLiveClient();
 		$result = $client->entryReplay($args);
 		return $result;
 	}

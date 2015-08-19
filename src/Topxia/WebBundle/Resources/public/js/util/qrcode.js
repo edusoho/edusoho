@@ -1,6 +1,10 @@
 define(function(require, exports, module) {
     exports.run = function() {
+<<<<<<< HEAD
         $(".es-qrcode").click(function(){
+=======
+        $("body").on("click",".es-qrcode",function(){
+>>>>>>> develop
             var $this = $(this); 
             if($this.hasClass('open')) {
                 $this.removeClass('open');

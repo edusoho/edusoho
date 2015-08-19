@@ -78,7 +78,7 @@ class HLSController extends BaseController
             'audio' => $file['convertParams']['audioQuality'],
         );
 
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('leaf');
 
         $playlist = $api->get('/hls/playlist', array( 'streams' => $streams, 'qualities' => $qualities));
 
@@ -155,7 +155,7 @@ class HLSController extends BaseController
             $params['line'] = $line;
         }
         
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('leaf');
         
         $stream = $api->get('/hls/stream', $params);
 

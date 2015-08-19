@@ -331,6 +331,12 @@ class UserController extends BaseController
             return $this->createMessageResponse('error', '请先登录！');
         }
 
+        if ($request->query->get('goto')) {
+            $goto = $request->query->get('goto');
+        } else {
+            $goto = $this->generateUrl('homepage');
+        }
+
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
 
@@ -361,7 +367,7 @@ class UserController extends BaseController
 
             $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($goto);
         }
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -371,6 +377,7 @@ class UserController extends BaseController
         return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
             'userFields' => $userFields,
             'user' => $userInfo,
+            'goto' => $goto
         ));
     }
 
