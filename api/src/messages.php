@@ -18,7 +18,7 @@ $api = $app['controllers_factory'];
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| nickname | string | 是 | 发送对象昵称 |
+| nickname | string | 是 | 接收者昵称 |
 | content | string | 是 | 私信内容 |
 | type | string | 否 | 私信类型,默认为text |
 
@@ -42,7 +42,8 @@ $api->post('/', function (Request $request) {
     }
     $message = ServiceKernel::instance()->createService('User.MessageService')->sendMessage($sender['id'], $receiver['id'], $content, $type);
     return array(
-        'success' => empty($message) ? 'flase' : 'true'
+        'success' => empty($message) ? 'flase' : 'true',
+        'id' => empty($message) ? 0 : $message['id'],
     );
 });
 return $api;
