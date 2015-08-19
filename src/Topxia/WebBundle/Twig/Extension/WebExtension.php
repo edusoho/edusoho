@@ -50,7 +50,7 @@ class WebExtension extends \Twig_Extension
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
             'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
-            'strReplace' => new \Twig_Filter_Method($this, 'strReplace'),
+            'space2nbsp' => new \Twig_Filter_Method($this, 'spaceToNbsp'),
         );
     }
 
@@ -106,9 +106,8 @@ class WebExtension extends \Twig_Extension
         );
     }
 
-    public function strReplace($content)
+    public function spaceToNbsp($content)
     {
-        $content = str_replace("\r\n","<br/>",$content);
         $content = str_replace(" ","&nbsp;",$content);
         return $content;
     }
