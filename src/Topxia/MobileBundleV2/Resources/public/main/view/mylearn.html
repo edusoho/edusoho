@@ -82,7 +82,7 @@
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="classroom in classroom.data" ng-href="#/classroom/{{ classroom.id  }}">
                       <div class="ui-list-img">
-                          <img ng-src="{{ classroom.middlePicture | coverPic }}" img-error="course"/>
+                          <img ng-src="{{ classroom.middlePicture | coverPic }}" img-error="classroom"/>
                       </div>
                       <div class="ui-list-info">
                           <h2 class="ui-nowrap ui-list-title">{{ classroom.title }}</h2>
