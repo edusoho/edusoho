@@ -22,14 +22,18 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，不能支付。');
         }
 
-        $paymentSetting = $this->setting("payment");
-        if(!isset($paymentSetting["enabled"]) || $paymentSetting["enabled"] == 0) {
-            return $this->createMessageResponse('error', $paymentSetting["disabled_message"]);
+        $paymentSetting = $this->setting('payment');
+        if(!isset($paymentSetting['enabled']) || $paymentSetting['enabled'] == 0) {
+            if (!isset($paymentSetting['disabled_message'])) {
+                $paymentSetting['disabled_message'] = '尚未开启支付模块，无法购买课程。';
+            }
+            return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
 		$fields = $request->query->all();
-		$order = $this->getOrderService()->getOrderBySn($fields["sn"]);
 
+		$order = $this->getOrderService()->getOrderBySn($fields["sn"]);
+        $orderInfo = $this->getOrderInfo($order);
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
         }
@@ -74,11 +78,9 @@ class PayCenterController extends BaseController
 
             return $this->redirect($goto);
         }
-
-		return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', array(
-            'order' => $order,
-            'payments' => $this->getEnabledPayments(),
-        ));
+        $orderInfo['order'] = $order;
+        $orderInfo['payments'] =  $this->getEnabledPayments();
+		return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', $orderInfo);
 	}
 
 	public function payAction(Request $request)
@@ -92,7 +94,12 @@ class PayCenterController extends BaseController
 		if(!array_key_exists("orderId", $fields)) {
 			return $this->createMessageResponse('error', '缺少订单，支付失败');
 		}
-        $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields["payment"]));
+
+        if (!isset($fields['payment'])) {
+            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
+        }
+
+        $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields['payment']));
         $order = $this->getOrderService()->getOrder($fields["orderId"]);
 
 		if($user["id"] != $order["userId"]) {
@@ -141,7 +148,9 @@ class PayCenterController extends BaseController
 
         $goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
 
-        return $this->redirect($goto);
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig',array(
+            'goto'=> $goto,
+            ));
     }
 
     public function payErrorAction(Request $request)
@@ -196,7 +205,11 @@ class PayCenterController extends BaseController
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
         $router = $processor->getRouter();
-        return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+        $router = $this->generateUrl($router, array('id' => $order['targetId']));
+
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig',array(
+            'goto'=> $router,
+            ));
     }
 
     public function payPasswordCheckAction(Request $request)
@@ -339,6 +352,22 @@ class PayCenterController extends BaseController
         return $request->setParams($requestParams);
     }
 
+
+    protected function getOrderInfo($order)
+    {
+        $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+        if ($order['targetType'] ==  'vip') {
+            $defaultBuyMonth = $this->setting('vip.default_buy_months');
+            $fields['unit'] = $order['data']['unitType'];
+            $fields['duration'] = $order['data']['duration'];
+            $fields['defaultBuyMonth'] = $defaultBuyMonth;
+            $fields['type'] = $order['data']['buyType'];   
+        }
+        $processor = OrderProcessorFactory::create($order['targetType']);
+        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
+
+        return $orderInfo;
+    }
 
     protected function getPaymentOptions($payment)
     {

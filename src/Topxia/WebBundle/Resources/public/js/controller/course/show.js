@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     require('jquery.countdown');
-    var Swiper = require('swiper');
+    
     var chapterAnimate = require('topxiawebbundle/controller/course/widget/chapter-animate');
 
     exports.run = function() {
@@ -9,15 +9,15 @@ define(function(require, exports, module) {
             'element': '.course-detail-content'
         });
 
-        $('#teacher-carousel').carousel({
-            interval: 0
-        });
-        $('#teacher-carousel').on('slide.bs.carousel', function(e) {
-            var teacherId = $(e.relatedTarget).data('id');
+        // $('#teacher-carousel').carousel({
+        //     interval: 0
+        // });
+        // $('#teacher-carousel').on('slide.bs.carousel', function(e) {
+        //     var teacherId = $(e.relatedTarget).data('id');
 
-            $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
-            $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
-        });
+        //     $('#teacher-detail').find('.teacher-item').removeClass('teacher-item-active');
+        //     $('#teacher-detail').find('.teacher-item-' + teacherId).addClass('teacher-item-active');
+        // });
 
         var reviewTabInited = false;
 
@@ -141,25 +141,6 @@ define(function(require, exports, module) {
                 }, 2000);
              });
         }
-
-        var swiper = new Swiper('.recommend-class-list .swiper-container', {
-            // loop:true,
-            // grabCursor: true,
-            // paginationClickable: true,
-            simulateTouch: false,
-            spaceBetween: 10,
-            slidesPerView: 4,
-            calculateHeight: true
-        });
-
-        $('.arrow-prev').on('click', function(e){
-            e.preventDefault();
-            swiper.swipePrev();
-        })
-        $('.arrow-next').on('click', function(e){
-            e.preventDefault();
-            swiper.swipeNext();
-        })
 
     };
 

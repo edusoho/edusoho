@@ -1,5 +1,8 @@
 {% extends layout|default('ClassroomBundle:Classroom:layout.html.twig') %}
-
+{% block keywords %}
+  {{ render(controller('ClassroomBundle:Classroom:keywords',{classroom: classroom} )) }}
+{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
 {% block content %}
 <div class="class-detail row" id="detail-content">
   <div class="col-lg-9 col-md-8 class-detail-main">
@@ -19,7 +22,7 @@
 
   <aside class="col-lg-3 col-md-4 class-sidebar">
     {% block side %}
-      {% if member.role|default(null) == 'auditor' or member.role|default(null) == 'student' %}
+      {% if classroom_permit(classroom.id, 'Take', true) %}
         {{ render(controller('ClassroomBundle:Classroom:signPage',{classroomId:classroom.id})) }}
       {% endif %}
 
