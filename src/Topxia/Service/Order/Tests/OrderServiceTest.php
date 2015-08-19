@@ -429,8 +429,6 @@ class OrderServiceTest extends BaseTestCase
         $result = $this->getOrderService()->createOrder($testAmountOrder);
         $this->assertEquals('none',$result['payment']);
 	}
-
-
 	// /**  
 	// * @expectedException Topxia\Service\Common\ServiceException  
 	// */
@@ -1013,11 +1011,6 @@ class OrderServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-
-    // protected function getCouponService()
-    // {
-    //     return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
-    // }
 
 
     private function createUser()
