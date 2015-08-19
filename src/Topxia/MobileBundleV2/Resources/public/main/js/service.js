@@ -254,7 +254,7 @@ service('ClassRoomService', ['httpService', function(httpService) {
 		httpService.simpleGet("/mapi_v2/ClassRoom/getClassRoom", arguments);
 	}
 
-	this.myClassRooms = function(params, callback) {
+	this.getLearnClassRooms = function(params, callback) {
 		httpService.get({
 			url : app.host + '/mapi_v2/ClassRoom/myClassRooms',
 			params : params,

@@ -1,6 +1,6 @@
-app.controller('MyLearnController', ['$scope', 'CourseService', MyLearnController]);
+app.controller('MyLearnController', ['$scope', 'CourseService', 'ClassRoomService', MyLearnController]);
 
-function MyLearnController($scope, CourseService)
+function MyLearnController($scope, CourseService, ClassRoomService)
 {
 	var self = this;
 	self.content = {
@@ -13,11 +13,17 @@ function MyLearnController($scope, CourseService)
 			start : 0,
 			canLoad : true,
 			data : undefined
-		}
+		},
+    classroom : {
+      start : 0,
+      canLoad : true,
+      data : undefined
+    }
 	};
 
 	$scope.course = self.content.course;
 	$scope.live = self.content.live;
+  $scope.classroom = self.content.classroom
 
   	self.loadDataList = function(content, serviceCallback) {
   		serviceCallback({
@@ -54,6 +60,9 @@ function MyLearnController($scope, CourseService)
   			case "live": 
   				self.loadDataList(self.content.live, CourseService.getLiveCourses);
   				break;
+        case "classroom":
+          self.loadDataList(self.content.classroom, ClassRoomService.getLearnClassRooms);
+          break;
   		}
   	};
 
@@ -65,6 +74,9 @@ function MyLearnController($scope, CourseService)
   		self.loadDataList(self.content.live, CourseService.getLiveCourses);
   	}
 
+    $scope.loadClassRooms = function() {
+      self.loadDataList(self.content.classroom, ClassRoomService.getLearnClassRooms);
+    }
+
   	$scope.loadCourses();
-  	$scope.loadLiveCourses();
 }
