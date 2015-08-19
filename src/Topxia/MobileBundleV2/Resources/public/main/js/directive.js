@@ -172,10 +172,13 @@ directive('imgError', function() {
                       errorSrc = app.viewFloder  + "img/avatar.png";
                       break;
                     case "course":
-                      errorSrc = app.viewFloder  + "img/course_default.jpg";
+                      errorSrc = app.viewFloder  + "img/default_course.jpg";
                       break;
                     case "vip":
                       errorSrc = app.viewFloder  + "img/vip_default.jpg";
+                      break;
+                    case "classroom":
+                      errorSrc = app.viewFloder  + "img/default_class.jpg";
                       break;
                   }
 
