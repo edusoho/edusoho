@@ -583,26 +583,6 @@ class CourseManageController extends BaseController
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }
 
-<<<<<<< HEAD
-    protected function getMaterialService()
-    {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
-    }
-
-    protected function getQuestionService()
-    {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
-    }
-
-    protected function getHomeworkService()
-    {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
-    }
-
-    protected function getExerciseService()
-    {
-        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
-=======
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
@@ -611,6 +591,5 @@ class CourseManageController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
->>>>>>> develop
     }
 }
