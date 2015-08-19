@@ -54,7 +54,7 @@ class OAuthClientFactory
                 'large_icon_img' => 'assets/img/social/qq.png',
                 'key_setting_label' => 'App ID',
                 'secret_setting_label' => 'App Key',
-                'apply_url' => 'http://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E7%BD%91%E7%AB%99%E6%8E%A5%E5%85%A5#2._QQ.E7.99.BB.E5.BD.95'
+                'apply_url' => 'http://connect.qq.com/'
 
             ),
             'renren' => array(
