@@ -73,6 +73,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->from($this->table, $this->table)
             ->andWhere('status = :status')
             ->andWhere('title like :title')
+            ->andWhere('price > :price_GT')
             ->andWhere('private = :private')
             ->andWhere('categoryId IN (:categoryIds)')
             ->andWhere('id IN (:classroomIds)')

@@ -102,6 +102,7 @@ define(function(require, exports, module) {
 
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
+			var maxCoin = parseFloat($('[role="maxCoin"]').text());
 			//totalPrice = afterDiscountCourses(totalPrice);
 			totalPrice = afterCouponPay(totalPrice);
 			if(totalPrice <= 0){
@@ -114,6 +115,7 @@ define(function(require, exports, module) {
 				if(cashRateElement.data("priceType") == "RMB") {
 					coinNum = multiple(totalPrice, cashRate);
 					coinNum = moneyFormatCeil(coinNum);
+					coinNum = coinNum < maxCoin ? coinNum:maxCoin;
 				} else {
 					coinNum = totalPrice;
 				}

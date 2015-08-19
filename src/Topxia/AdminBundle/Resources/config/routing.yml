@@ -1224,6 +1224,10 @@ admin_coin_model:
     path:     /setting/coin/model
     defaults: { _controller: TopxiaAdminBundle:Coin:model }
 
+admin_coin_model_ajax:
+    path: /setting/coin/model/ajax
+    defaults: { _controller: TopxiaAdminBundle:Coin:tableAjax}
+
 admin_coin_model_save:
     path:     /coin/model/save
     defaults: { _controller: TopxiaAdminBundle:Coin:modelSave }

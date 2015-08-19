@@ -83,7 +83,6 @@ class OrderController extends BaseController
     public function createAction(Request $request)
     {
         $fields = $request->request->all(); 
-
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
             $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
@@ -119,7 +118,7 @@ class OrderController extends BaseController
         }
 
         $processor = OrderProcessorFactory::create($targetType);
-
+        $orderInfo = $processor->getOrderInfo($targetId, $fields);
         try {
             if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
                 $fields["couponCode"] = "";
@@ -139,6 +138,10 @@ class OrderController extends BaseController
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
+            //虚拟币抵扣率比较
+            if (isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * 100) > intval($orderInfo['maxCoin'] * 100))) {
+                return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
+            }
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
                 $coupon = $fields["couponCode"];
                 $couponDiscount = $couponResult["decreaseAmount"];

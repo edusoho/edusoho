@@ -1,5 +1,4 @@
 <div class="order-detail">
-  {% for course in courses %}
   <div class="col-md-4">
     <a href="{{ path('course_show', {id:course.id}) }}">
       <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
@@ -23,5 +22,4 @@
     {% endif %}
     <span class="course-text">课时数：{{ course.lessonNum }}</span>
   </div>
-  {% endfor %}
 </div>
