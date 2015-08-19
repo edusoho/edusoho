@@ -735,9 +735,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
     }
 
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId)
+    public function findTestpaperItemByPIdAndLockedTestIds($pId,$testIds)
     {
-        return $this->getTestpaperItemDao()->findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+        return $this->getTestpaperItemDao()->findTestpaperItemByPIdAndLockedTestIds($pId,$testIds);
     }
 
     public function createTestpaperItem($item)

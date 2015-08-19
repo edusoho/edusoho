@@ -133,12 +133,12 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals('Test',$testpaper[0]['name']);
     }
 
-    public function textFindTestpaperItemByPIdAndLockedTestId()
+    public function textFindTestpaperItemByPIdAndLockedTestIds()
     {
         $testpaper = array('name' => 'Test','pId'=>1,'target'=>'course-1','testId'=>1);
         $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
         $this->assertEquals('Test',$testpaper['name']);
-        $testpaper = $this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestId(1,"('1')");
+        $testpaper = $this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestIds(1,array(1));
         $this->assertEquals('Test',$testpaper[0]['name']);
     }
 

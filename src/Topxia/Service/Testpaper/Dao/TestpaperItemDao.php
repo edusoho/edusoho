@@ -30,5 +30,5 @@ interface TestpaperItemDao
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
 
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+    public function findTestpaperItemByPIdAndLockedTestIds($pId,$testIds);
 }

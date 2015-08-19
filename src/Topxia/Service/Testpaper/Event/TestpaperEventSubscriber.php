@@ -165,12 +165,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
                 }       
                 $lockedTarget = "(".trim($lockedTarget,',').")";
                 $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
-                $lockedTestId = '';
-                foreach ($testpaperIds as $testpaperId) {
-                    $lockedTestId .= $testpaperId.",";
-                }
-                $lockedTestId = "(".trim($lockedTestId,',').")";
-                $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestId($items['id'],$lockedTestId),'id');
+                $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestIs($items['id'],$testpaperIds),'id');
                 foreach ($testpaperItemIds as $testpaperItemId) {
                      $this->getTestpaperService()->editTestpaperItem($testpaperItemId,array('seq'=>$items['seq'],'score'=>$items['score']));
                 }
@@ -222,12 +217,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             }       
             $lockedTarget = "(".trim($lockedTarget,',').")";
             $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');  
-            $lockedTestId = '';
-            foreach ($testpaperIds as $testpaperId) {
-                $lockedTestId .= $testpaperId.",";
-            }
-            $lockedTestId = "(".trim($lockedTestId,',').")";
-            $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestId($item['id'],$lockedTestId),'id');
+            $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemByPIdAndLockedTestIds($item['id'],$testpaperIds),'id');
             foreach ($testpaperItemIds as $testpaperItemId) {
                 $this->getTestpaperService()->deleteTestpaperItem($testpaperItemId);
             }

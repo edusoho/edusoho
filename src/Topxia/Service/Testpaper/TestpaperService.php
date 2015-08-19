@@ -97,7 +97,7 @@ interface TestpaperService
      * @param  integer $id 试卷ID
      * @return array     试卷所有题目，包含item对应的question的信息
      */
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+    public function findTestpaperItemByPIdAndLockedTestIds($pId,$testIds);
 
     public function createTestpaperItem($item);
 

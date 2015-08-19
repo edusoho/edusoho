@@ -100,20 +100,19 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         }
         $params = array_merge(array($missScore), $ids);
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks});";
+        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks})";
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId)
+    public function findTestpaperItemByPIdAndLockedTestIds($pId,$testIds)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND testId IN {$lockedTestId}";
-        return $this->getConnection()->fetchAll($sql,array($pId));
+        if(empty($testIds)){ 
+            return array(); 
+        }
+        $params = array_merge(array($pId), $testIds);
+        $marks = str_repeat('?,', count($testIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND testId IN ({$marks})";
+        return $this->getConnection()->fetchAll($sql,$params);
     }
-
-    public function updateTestpaperItemByTestId($testId, $fields)
-    {
-      return $this->getConnection()->update($this->table, $fields, array('testId' => $testId));  
-    } 
-
 
 }
