@@ -49,8 +49,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $testpaper = $event->getSubject();
         $items = $event->getArgument('items');
         $id = $testpaper['id'];
-
-        $courseId = explode('-',$testpaper['target'])[1];
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
 
         if($courseIds){
@@ -87,7 +87,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     public function onTestpaperUpdate(ServiceEvent $event)
     {
         $testpaper = $event->getSubject();
-        $courseId = explode('-',$testpaper['target'])[1];
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         
         if($courseIds){
@@ -108,8 +109,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     {
        $testpaper = $event->getSubject();
        $testpaperId = $testpaper['id'];
-
-       $courseId = explode('-',$testpaper['target'])[1];
+       $testpaperTarget = explode('-',$testpaper['target']);
+       $courseId = $testpaperTarget[1];
        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
        if($courseIds){
             $lockedTarget = '';
@@ -129,7 +130,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $item = $context['item'];
         $testpaper = $context['testpaper'];
-        $courseId = explode('-',$testpaper['target'])[1];
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         if($courseIds){
             $lockedTarget = '';
@@ -153,7 +155,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $items = $context['items'];
         $testpaper = $context['testpaper'];
 
-        $courseId = explode('-',$testpaper['target'])[1];
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         //判断是否是一维数组
         if(array_key_exists('id', $items)){
@@ -207,7 +210,8 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         $item = $context['existItem'];
         $testpaper = $context['testpaper'];
 
-        $courseId = explode('-',$testpaper['target'])[1];
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');        
     
         if($courseIds){
