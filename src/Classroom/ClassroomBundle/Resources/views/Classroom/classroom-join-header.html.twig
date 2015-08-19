@@ -108,14 +108,8 @@
             </div>
           {% endif %}
         </div>
-<<<<<<< HEAD
-        
-      {% if canManage %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default btn-mini setting" title="{{ setting('classroom.name')|default("班级") }}管理">
-=======
       {% if classroom_permit(classroom.id, 'Manage') %}
         <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
->>>>>>> develop
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% elseif classroom_permit(classroom.id, 'Handle') %}
