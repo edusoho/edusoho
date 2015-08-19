@@ -175,6 +175,18 @@ function BaseToolController($scope, OrderService, cordovaUtil)
 
     callback();
   }
+
+  $scope.getVipTitle = function(vipLevelId) {
+      var vipLevels = $scope.vipLevels;
+      for (var i = 0; i < vipLevels.length; i++) {
+        var level = vipLevels[i];
+        if (level.id == vipLevelId) {
+          return level.name;
+        }
+      };
+      
+      return "";
+  }
 }
 
 function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)

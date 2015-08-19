@@ -58,6 +58,6 @@
         立即加入
     </button>
     <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="learnByVip()" ng-if="classRoom.vipLevelId > 0 ">
-        {{ vipLevels[classRoom.vipLevelId - 1].name }}免费学
+        {{ getVipTitle(classRoom.vipLevelId) }}免费学
     </button>
 </div>
