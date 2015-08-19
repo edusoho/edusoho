@@ -214,7 +214,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
         $courseId = explode('-',$testpaper['target'])[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');        
-        
+    
         if($courseIds){
             $lockedTarget = ''; 
             foreach ($courseIds as $courseId) {
@@ -231,11 +231,6 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             foreach ($testpaperItemIds as $testpaperItemId) {
                 $this->getTestpaperService()->deleteTestpaperItem($testpaperItemId);
             }
-            // $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
-            // $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>$testpaper['metas']);
-            // foreach ($testpaperIds as $testpaperId) {
-            //     $this->getTestpaperService()->editTestpaper($testpaperId, $fields);
-            // }
         }  
     }
 

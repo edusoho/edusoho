@@ -315,7 +315,6 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals(1,$count);
     }
 
-
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');

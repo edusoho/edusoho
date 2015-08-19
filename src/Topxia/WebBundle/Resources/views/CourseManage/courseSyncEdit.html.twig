@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}保存确认{% endblock %}
+{% block body %}
+<style>
+  .courseSync-text{
+    padding:50px;
+    text-align:center;
+  }
+</style>
+  <form id="courseSync-form" class="form-horizontal" method="post" action="{{path('course_manage_course_sync_edit')}}">
+    <h5><p class="courseSync-text">提交保存后，本课程将<font color="#f3b760">不再同步实时更新</font>，确定要继续吗？</p></h5>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="courseId" value="{{course.id}}">
+    <input type="hidden" name="url" value="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:course.id})}}{% else %}{{path(url,{id:course.id})}}{% endif %}">
+  </form>
+{% endblock %}
+{% block footer %}
+    <button id="courseSync-btn" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#courseSync-form">保存</button>
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+
+    <script>app.load('course-manage/sync-edit')</script>
+{% endblock %}

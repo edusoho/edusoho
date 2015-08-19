@@ -175,9 +175,7 @@ class TestpaperServiceTest extends BaseTestCase
       $testpaperItem = $this->getTestpaperService()->editTestpaperItem($testpaperItem['id'],array('questionType'=>'single'));  
       $this->assertEquals('single',$testpaperItem['questionType']);
     }
-
-
-
+    
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');

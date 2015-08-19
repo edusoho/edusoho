@@ -355,7 +355,7 @@ interface CourseService
 	public function hasFavoritedCourse($courseId);
 
 	public function generateLessonReplay($courseId,$lessonId);
-
+	
 	public function entryReplay($lessonId, $courseLessonReplayId);
 
 	public function getCourseLessonReplayByLessonId($lessonId);

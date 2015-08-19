@@ -2251,6 +2251,7 @@ class CourseServiceTest extends BaseTestCase
     {
 
         $user = $this->createUser(); 
+
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -2339,7 +2340,7 @@ class CourseServiceTest extends BaseTestCase
         $count = $this->getCourseService()->deleteMemberByCourseIdAndUserId(1,1);
         $this->assertEquals(1, $count);
     }
-    
+ 
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

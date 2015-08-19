@@ -451,7 +451,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'approval' => 0,
 			'locked' =>0
 		));
-		
+
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
 		}
@@ -463,6 +463,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				$item = (int) $item['id'];
 			});
 		}
+
 		return $fields;
 	}
 
@@ -1939,7 +1940,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$existTeacherMembers = $this->findCourseTeachers($courseId);
 		foreach ($existTeacherMembers as $member) {
 			$this->getMemberDao()->deleteMember($member['id']);
-			$this->dispatchEvent('course.member.delete',$member);
+			if ($member) {
+				$this->dispatchEvent('course.member.delete',$member);
+			}	
 		}
 
 		// 逐个插入新的教师的学员数据
