@@ -154,23 +154,7 @@ class CourseOrderController extends OrderController
 
         }
         
-        if((isset($coinSetting["coin_enabled"]) 
-        && $coinSetting["coin_enabled"]==1
-        && isset($coinSetting["price_type"])
-        && $coinSetting["price_type"]=="Coin"
-        && $course['coinPrice']==0) || $course['price'] == 0 || $vipStatus == 'ok') {
-            $formData['amount'] = 0;
-            $formData['totalPrice'] = 0;
-            $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
-            $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
-            $formData['coinAmount'] = 0;
-
-            $order = $this->getCourseOrderService()->createOrder($formData);
-
-            if ($order['status'] == 'paid') {
-                return $this->redirect($this->generateUrl('course_show', array('id' => $order['targetId'])));
-            }
-        }
+        
 
         return $this->redirect($this->generateUrl('order_show', array(
             'targetId' => $formData['targetId'],

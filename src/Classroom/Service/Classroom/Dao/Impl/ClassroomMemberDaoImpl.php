@@ -27,14 +27,14 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function getClassroomStudentCount($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role='student' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
 
     public function getClassroomAuditorCount($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role='auditor' LIMIT 1";
+        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
 
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
@@ -48,7 +48,14 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function findAssistants($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role IN ('assistant', 'studentAssistant')";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
+
+        return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+    }
+
+    public function findTeachers($classroomId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
 
         return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
     }
@@ -119,20 +126,24 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     public function findMembersByClassroomIdAndRole($classroomId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $role = '%|'.$role.'|%';
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($classroomId, $role));
     }
 
     private function _createSearchQueryBuilder($conditions)
     {
+        if (isset($conditions['role'])) {
+            $conditions['role'] = "%{$conditions['role']}%";
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'classroom_member')
             ->andWhere('userId = :userId')
             ->andWhere('classroomId = :classroomId')
             ->andWhere('noteNum > :noteNumGreaterThan')
-            ->andWhere('role = :role')
-            ->andWhere('role IN (:roles)')
+            ->andWhere('role LIKE :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime < :startTimeLessThan');
 

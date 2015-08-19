@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Endroid\QrCode\QrCode;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {    
@@ -28,7 +28,7 @@ class MobileController extends BaseController
             return $this->createMessageResponse('info', '客户端尚未开启！');
         }
 
-        $result = $this->createAPIClient()->get('/me');
+        $result = CloudAPIFactory::create('leaf')->get('/me');
 
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),

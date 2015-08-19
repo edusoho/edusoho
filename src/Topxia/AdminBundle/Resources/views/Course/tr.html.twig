@@ -1,4 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% set target = 'normal_index' %}
 <tr id="course-tr-{{ course.id }}">
   <td>{{ course.id }}</td>
   <td>
@@ -62,7 +63,7 @@
           {% endif %}
 
           {% if course.recommended %}
-            <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+            <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
           {% endif %}
 
           <li ><a class="copy-course" id="copy-course" href="javascript:"
