@@ -8,6 +8,14 @@ interface ResultDao
      * @param homework 作业对象.
      * @param userId 参与互评的学员id.
      * @return 可以被互评的作业答卷id集合,.
-    **/
-    public function findPairReviewables($homework,$userId);
+     **/
+    public function findPairReviewables($homework, $userId);
+
+    /**
+     * 根据courseId和userIdeas查找homework_result
+     * @param $courseId
+     * @param $userId
+     * @return mixed
+     */
+    public function getResultByCourseIdAndUserId($courseId, $userId);
 }

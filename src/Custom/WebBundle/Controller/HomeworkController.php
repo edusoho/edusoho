@@ -16,32 +16,37 @@ class HomeworkController extends CourseBaseController
 {
     public function indexAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
         list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $id);
         if ($response) {
             return $response;
         }
 
-        // $paginator = new Paginator(
-        //     $request,
-        //     $this->getMaterialService()->getMaterialCount($id),
-        //     20
-        // );
-
-        // $materials = $this->getMaterialService()->findCourseMaterials(
-        //     $id,
-        //     $paginator->getOffsetCount(),
-        //     $paginator->getPerPageCount()
-        // );
-
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $lessons = ArrayToolkit::index($lessons, 'id');
+
+        $lessonIds = ArrayToolkit::column($lessons, 'id');
+
+        if ($this->isPluginInstalled('Homework')) {
+            $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
+        }
+
+        $homeworkResults = $this->getHomeworkService()->getResultByCourseIdAndUserId($id, $user['id']);
+        $homeworkItemsResults = $this->getHomeworkService()->findItemResultsbyUserId($user['id']);
 
         return $this->render("CustomWebBundle:Homework:index.html.twig", array(
             'course' => $course,
             'member' => $member,
-            'lessons'=>$lessons,
-            // 'materials' => $materials,
-            // 'paginator' => $paginator,
+            'lessons' => $lessons,
+            'homeworks' => empty($homeworks) ? array() : $homeworks,
+            'homeworkResults' => empty($homeworkResults) ? array() : $homeworkResults,
+            'homeworkItemsResults' => empty($homeworkItemsResults) ? array() : $homeworkItemsResults,
+            'now' => time(),
         ));
+    }
+
+    private function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Homework.HomeworkService');
     }
 }
