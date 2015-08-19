@@ -385,7 +385,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     	}
 
     	$teacherIds = $classroom["teacherIds"];
-    	$users = $this->controller->getUserService()->findUsersByIds($teacherIds);
+    	$users = $this->controller->getUserService()->findUsersByIds(empty($teacherIds) ? array() : $teacherIds);
     	$classroom["teachers"] = array_values($this->filterUsersFiled($users));
 		return array(
 			"classRoom" => $this->filterClassRoom($classroom, false),
