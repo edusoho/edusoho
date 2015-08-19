@@ -82,6 +82,12 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     }
 
+    public function getHomeworksByCourseId($courseId)
+    {
+        $homeworks = $this->getHomeworkDao()->findHomeworksByCourseId($courseId);
+        return $homeworks;
+    }
+
     public function submitHomework($id, $homework_result)
     {
         $st = 'reviewing';
@@ -117,6 +123,12 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $result;
     }
 
+    public function getResultByCourseIdAndUserId($courseId, $userId)
+    {
+        $homeworkResults = $this->getResultDao()->getResultByCourseIdAndUserId($courseId, $userId);
+        return empty($homeworkResults) ? null : ArrayToolkit::index($homeworkResults, 'lessonId');
+    }
+
     public function createHomeworkPairReview($homeworkResultId, array $fields)
     {
         $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
@@ -143,6 +155,12 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     public function getHomeworkResult($homeworkResultId)
     {
         return $this->getResultDao()->getResult($homeworkResultId);
+    }
+
+    public function findItemResultsbyUserId($userId)
+    {
+        $homeworkItemsResults = $this->getItemResultDao()->findItemResultsbyUserId($userId);
+        return empty($homeworkItemsResults) ? null : ArrayToolkit::index($homeworkItemsResults, 'homeworkId');
     }
 
     public function loadHomeworkResult($homeworkResultId)
@@ -177,12 +195,13 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return empty($ids) ? null : $ids[rand(0, count($ids) - 1)];
     }
 
-    public function loadHomework($id){
-        if(empty($id)){
+    public function loadHomework($id)
+    {
+        if (empty($id)) {
             throw $this->createNotFoundException("作业关键字为空！");
         }
-        $homework = $this -> getHomework($id);
-        if( empty($homework)){
+        $homework = $this->getHomework($id);
+        if (empty($homework)) {
             throw $this->createNotFoundException("作业{id}不存在！");
         }
         return $homework;
@@ -205,7 +224,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     private function getItemResultDao()
     {
-        return $this->createDao('Homework:Homework.HomeworkItemResultDao');
+        return $this->createDao('Custom:Homework.HomeworkItemResultDao');
     }
 
     private function getCourseService()

@@ -68,6 +68,7 @@ class CourseController extends CourseBaseController
     
     public function showAction(Request $request, $id)
     {
+        $user = $this->getCurrentUser();
         list ($course, $member) = $this->buildCourseLayoutData($request, $id);
         if(empty($member)) {
             $user = $this->getCurrentUser();
@@ -84,6 +85,7 @@ class CourseController extends CourseBaseController
             'course' => $course,
             'member' => $member,
             'items' => $items,
+            'isTeacher' => $user->isTeacher(),
         ));
 
     }

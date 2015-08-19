@@ -22,4 +22,13 @@ class HomeworkResultDaoImpl extends BaseHomeworkResultDao implements HomeworkRes
                         " and r.id not in (select v.homeworkResultId from {$this->homework_review_table} v where v.homeworkId=? and v.userId=?)";
         return $this->getConnection()->fetchAll($sql, array($homework['id'] , $userId, $homework['id'] ,$userId)) ? : array();
     }
+
+    public function getResultByCourseIdAndUserId($courseId,$userId){
+        if (empty($courseId) or empty($userId)) {
+            return null;
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND userId = ?";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $userId)) ? : null;
+    }
 }
