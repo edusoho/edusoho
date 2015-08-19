@@ -2132,9 +2132,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'joinedType' => 'classroom'
 		);
 		$isMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId,$userId);
-		if ($isMember) {
-			$this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId,$userId);
-		}
 		$member = $this->getMemberDao()->addMember($fields);
 		$fields = array(
 			'studentNum'=> $this->getCourseStudentCount($courseId),
