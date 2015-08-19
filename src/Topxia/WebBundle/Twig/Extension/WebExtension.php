@@ -50,6 +50,7 @@ class WebExtension extends \Twig_Extension
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
             'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
+            'strReplace' => new \Twig_Filter_Method($this, 'strReplace'),
         );
     }
 
@@ -103,6 +104,13 @@ class WebExtension extends \Twig_Extension
             'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
             'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
         );
+    }
+
+    public function strReplace($content)
+    {
+        $content = str_replace("\r\n","<br/>",$content);
+        $content = str_replace(" ","&nbsp;",$content);
+        return $content;
     }
 
     public function getFingerprint() 
