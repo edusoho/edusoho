@@ -214,9 +214,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $conditions;
 	}
 
-	public function findUserLearnCourses($userId, $start, $limit)
+	public function findUserLearnCourses($userId, $start, $limit,$onlyPublished = true)
 	{
-		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit);
+		$members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
 
 		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
 		foreach ($members as $member) {
@@ -229,9 +229,23 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $courses;
 	}
 
-	public function findUserLearnCourseCount($userId)
+	public function findUserLearnCoursesNotInClassroom($userId, $start, $limit,$onlyPublished = true)
 	{
-		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', 0);
+		$members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
+
+		$courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+		return $courses;
+	}
+
+	public function findUserLearnCourseCount($userId, $onlyPublished = true)
+	{
+		return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
+	}
+					
+	public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
+	{
+		return $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
 	}
 
 	public function findUserLeaningCourseCount($userId, $filters = array())
@@ -2485,7 +2499,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 		if ($classroom['classroomId']) {
 			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
-			if ($member['role'] != 'auditor') {
+			if (!empty($member) && $member['role'] != 'auditor') {
 				return true;
 			}
 		}

@@ -21,6 +21,7 @@ seajs.config({
         "jquery.plupload-queue-css": "jquery-plugin/plupload-queue/2.0.0/css/queue.css",
         "jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
         "jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
+        "jquery.waypoints": "jquery-plugin/waypoints/2.0.5/waypoints.min",
         "mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
         'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
         'echo.js': 'echo.js/1.7.0/index',
@@ -56,7 +57,8 @@ seajs.config({
         'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
-        'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js'
+        'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
+        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker'
     },
 
 	// 预加载项

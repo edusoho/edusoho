@@ -136,6 +136,12 @@
             <a href="{{path('course_manage_data',{id:course.id})}}">
               <span></span>课程学习数据</a>
           </li>
+
+          {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
+          <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
+            <a href="{{path('course_manage_order',{id:course.id})}}">课程订单查询</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     {% endblock %}

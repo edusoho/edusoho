@@ -39,23 +39,7 @@ class SettingsController extends BaseController
 		}
 
 		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-		for($i=0;$i<count($fields);$i++){
-			if(strstr($fields[$i]['fieldName'], "textField")){
-				$fields[$i]['type']="text";
-			}
-			if(strstr($fields[$i]['fieldName'], "varcharField")){
-				$fields[$i]['type']="varchar";
-			}
-			if(strstr($fields[$i]['fieldName'], "intField")){
-				$fields[$i]['type']="int";
-			}
-			if(strstr($fields[$i]['fieldName'], "floatField")){
-				$fields[$i]['type']="float";
-			}
-			if(strstr($fields[$i]['fieldName'], "dateField")){
-				$fields[$i]['type']="date";
-			}
-		}
+		
 		
 		if (array_key_exists('idcard',$profile) && $profile['idcard']=="0") {
 			$profile['idcard'] = "";
@@ -125,7 +109,7 @@ class SettingsController extends BaseController
 		if ($result == 'success'){
 			$response = array('success' => true, 'message' => '');
 		} else {
-			$response = array('success' => false, 'message' => '用户名已存在');
+			$response = array('success' => false, 'message' => $message);
 		}
 	
 		return $this->createJsonResponse($response);
@@ -416,8 +400,7 @@ class SettingsController extends BaseController
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
         $canSmsFind = ($hasVerifiedMobile) && 
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
+        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1');
 
 		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
 			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -454,7 +437,7 @@ class SettingsController extends BaseController
 	{
 		$eduCloudService = $this->getEduCloudService();
 		$scenario = "sms_forget_pay_password";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }		
 

@@ -127,6 +127,14 @@ classroom_introductions:
 #     pattern:  /classroom/{id}/review/create
 #     defaults: { _controller: ClassroomBundle:Classroom:create }
 
+classroom_buy:
+    pattern: /classroom/{id}/buy
+    defaults: { _controller: ClassroomBundle:Classroom:buy }
+
+classroom_buy_modify_user_info:
+    pattern: /classroom/buy/modify_user_info
+    defaults: { _controller: ClassroomBundle:Classroom:modifyUserInfo }
+
 classroom_sign:
     pattern:  classroom/sign/{classroomId}
     defaults: { _controller: ClassroomBundle:Classroom:sign }

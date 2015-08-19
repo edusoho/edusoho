@@ -1,12 +1,14 @@
 
 .es-footer {
+  position: relative;
+  z-index: 1;
   .footer-link {
     background: #2e2e2e;
     padding: 55px 0;
     border-bottom: 1px solid #111;
   }
   .copyright {
-    background: @gray-darker;
+    background: #212121;
     border-top: 1px solid #444;
     text-align: center;
     padding: 20px 0;
@@ -39,6 +41,9 @@
     color: #eeeeee;
     margin-top: 0;
     margin-bottom: 40px;
+    @media (max-width: @screen-xs-max) {
+      font-size: 16px;
+    }
   }
   ul {
     padding: 0;
@@ -84,6 +89,7 @@
       left: -65px;
       top: -205px;
       padding: 5px;
+      z-index: 1;
       background: #fff;
       display: none \9;
       .opacity(0);

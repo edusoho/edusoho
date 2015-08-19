@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 	                }
 	            }
 	        });
-
+    		
     		
 	        if($('input[name="sms_code_modal"]').length>0){
 	            smsValidator.addItem({
