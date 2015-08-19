@@ -93,3 +93,15 @@ course_info:
 pair_review_create:
     pattern:  /homeworks/{homeworkId}/pair_reviews/create
     defaults: { _controller: CustomWebBundle:HomeworkPairReview:create }
+
+homework_review_create:
+    pattern: /homework_results/{homeworkResultId}/reviews/create
+    defaults: { _controller: CustomWebBundle:HomeworkReview:create }
+
+# course_homework_check:
+#     pattern: /course/{courseId}/homework/{homeworkId}/check/{userId}
+#     defaults: { _controller: CustomWebBundle:HomeworkReview:create }
+
+homework_review_check:
+    pattern: /homework_results/{homeworkResultId}/reviews/check
+    defaults: { _controller: CustomWebBundle:HomeworkReview:check }

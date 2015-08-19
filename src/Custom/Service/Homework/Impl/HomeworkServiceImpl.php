@@ -129,7 +129,48 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return empty($homeworkResults) ? null : ArrayToolkit::index($homeworkResults, 'lessonId');
     }
 
-    public function createHomeworkPairReview($homeworkResultId, array $fields)
+    public function createHomeworkReview($homeworkResultId, $userId, array $fields)
+    {
+        $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
+        $result['status'] = 'finished';
+        $result['checkedTime'] = time();
+        $result['teacherSay'] = empty($fields['teacherFeedback']) ? "" : $fields['teacherFeedback'];
+        $this->getResultDao()->updateResult($homeworkResult['id'], $result);
+
+        $review['userId'] = $userId;
+        $review['homeworkId'] = $homeworkResult['homeworkId'];
+        $review['homeworkResultId'] = $homeworkResultId;
+        $review['cateogry'] = 'teacher';
+        $review['score'] = $this->sumScore($fields['items']);
+        $review['createdTime'] = time();
+        $review = $this->getResultDao()->create($review);
+
+        if (empty($fields['questionIds'])) {
+            return $review;
+        }
+
+
+        // foreach ($fields['questionIds'] as $key => $questionId) {
+        //     if (!empty($fields['teacherSay'][$key])) {
+        //         $item['homeworkItemResultId'] = $homeworkResult
+        //         $this -> getReviewItemDao() -> createOrUpdate();
+        //         $item = $this->getItemResultDao()->getItemResultByResultIdAndQuestionId($homeworkResult['id'],$questionId);
+        //         $this->getItemResultDao()->updateItemResult($item['id'],array('teacherSay'=>$fields['score'][$key]));
+        //     }
+        // }
+        // return true;
+    }
+
+    private function sumScore($items)
+    {
+        $sum = 0;
+        foreach ($items as $item) {
+            $sum += $item['score'];
+        }
+        return $sum;
+    }
+
+    public function createHomeworkPairReview($homeworkResultId, $userId, array $fields)
     {
         $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
         $fields['homeworkResultId'] = $homeworkResult['id'];
@@ -212,6 +253,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $this->createDao('Custom:Homework.ReviewDao');
     }
 
+    protected function getReviewItemDao()
+    {
+        return $this->createDao('Custom:Homework.ReviewItemDao');
+    }
+
     protected function getHomeworkDao()
     {
         return $this->createDao('Homework:Homework.HomeworkDao');
@@ -219,7 +265,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     protected function getResultDao()
     {
-        return $this->createDao('Custom:Homework.HomeworkResultDao');
+        return $this->createDao('Custom:Homework.ResultDao');
     }
 
     private function getItemResultDao()

@@ -1,7 +1,7 @@
 <?php
 namespace Custom\Service\Homework\Dao;
 
-interface HomeworkResultDao
+interface ResultDao
 {
     /**
      * 查找所有可以被userId互评作业答卷，其中包括未被老师点评过，且userId未曾互评过的其他童鞋的答卷.

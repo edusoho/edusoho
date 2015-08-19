@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set script_controller = 'homeworkbundle/controller/homework/do' %}
+{% set script_controller = 'customwebbundle/controller/homework/review' %}
 
 {% block content %}
   <div class="question-set homework-set" id="homework-set">
@@ -19,7 +19,7 @@
               </div>
 
               <div class="panel-footer">
-                  <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" data-url="{{ path('pair_review_create',{ homeworkId: homework.id}) }}" id="homework-check-show-btn">提交互评</button>
+                  <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" id="submit-review-btn" data-url="{{ path('homework_review_check',{homeworkResultId: homeworkResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}">完成批改</button>
               </div>
 
           </div>
