@@ -74,9 +74,10 @@
     </span>
   </span>
    {% if lesson.status == 'published' %}
+
     {% if course.price=='0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if setting("course.buy_fill_userinfo")|default(false) %}
+        {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
           href="#modal" 
           data-toggle="modal" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
@@ -92,7 +93,7 @@
       </a>
     {% else %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok') %}
+        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
           href="javascript:;" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
         {% else %}
@@ -112,4 +113,5 @@
     {% endif %}
   {% endif %} 
  {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
+
 {% endblock %}
