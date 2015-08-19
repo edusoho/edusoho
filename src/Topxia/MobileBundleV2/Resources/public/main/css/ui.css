@@ -60,6 +60,10 @@ a {
   background-image: url("../img/drawer_bg.png");
 }
 
+.st-content .ui-bar .ui-btn {
+  width: 56px;
+}
+
 .menu-content .ui-list-avatar {
   margin-bottom: 32px;
   padding-bottom: 16px;
@@ -319,7 +323,7 @@ a {
   color: #37b97d;
   height: 44px;
   line-height: 44px;
-  width: 56px;
+  width: 44px;
   min-width: inherit;
   padding: 0;
 }
