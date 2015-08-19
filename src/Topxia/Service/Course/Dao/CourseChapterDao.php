@@ -28,5 +28,4 @@ interface CourseChapterDao
     public function deleteChaptersByCourseId($courseId);
 
     public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds);
-
 }

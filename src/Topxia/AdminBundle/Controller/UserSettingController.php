@@ -267,9 +267,7 @@ class UserSettingController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth = $this->getSettingService()->get('auth', array());
-
         if (isset($auth['registerFieldNameArray'])) {
-
             if (!in_array('weixin', $auth['registerFieldNameArray']) ) {
                 $auth['registerFieldNameArray'] = array_merge($auth['registerFieldNameArray'], array('qq','weixin','weibo'));
             }
@@ -432,9 +430,7 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' && $fieldInfo['enabled']) {
                 $auth['registerFieldNameArray'][] = $fieldInfo['fieldName'];
-
                 $auth['registerFieldNameArray'] = array_unique($auth['registerFieldNameArray']);
-
             }
         }
 
@@ -447,11 +443,8 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' and $fieldInfo['enabled']) {
                 $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
-
                 $courseSetting['userinfoFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
-
-            }
-            
+            }        
         }
 
         $this->getSettingService()->set('auth', $auth);
