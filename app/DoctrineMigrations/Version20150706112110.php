@@ -17,11 +17,11 @@ class Version20150706112110 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         if (!$this->isFieldExist('message', 'type')) {
-            $this->addSql("ALTER TABLE `message` ADD `type` enum('text','img','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型' AFTER `id`;");
+            $this->addSql("ALTER TABLE `message` ADD `type` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型' AFTER `id`;");
         }
 
         if (!$this->isFieldExist('message_conversation', 'latestMessageType')) {
-            $this->addSql("ALTER TABLE `message_conversation` ADD `latestMessageType` enum('text','img','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型' AFTER `latestMessageContent`;");
+            $this->addSql("ALTER TABLE `message_conversation` ADD `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型' AFTER `latestMessageContent`;");
         }
     }
 
