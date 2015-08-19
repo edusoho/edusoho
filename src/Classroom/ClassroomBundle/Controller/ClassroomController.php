@@ -904,7 +904,7 @@ class ClassroomController extends BaseController
             'users' => $users,
             'classrooms' => $classrooms,
         ));
-<<<<<<< HEAD
+
     }
 
     protected function getEnabledPayments()
@@ -929,32 +929,7 @@ class ClassroomController extends BaseController
         return $enableds;
     }
 
-=======
-    }
 
-    protected function getEnabledPayments()
-    {
-        $enableds = array();
-
-        $setting = $this->setting('payment', array());
-
-        if (empty($setting['enabled'])) {
-            return $enableds;
-        }
-
-        $payNames = array('alipay');
-        foreach ($payNames as $payName) {
-            if (!empty($setting[$payName . '_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
-                );
-            }
-        }
-
-        return $enableds;
-    }
-
->>>>>>> develop
 
     protected function getThreadService()
     {
