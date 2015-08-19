@@ -37,22 +37,19 @@ define(function(require, exports, module) {
 
 
     $(".es-bar .bar-menu-top li").click(function(){
-<<<<<<< HEAD
-=======
+
         var $this = $(this);
 
->>>>>>> develop
+
         if($("#notLogin").length>0){
             isNotLogin();
             return;
         }
-<<<<<<< HEAD
-        var $this = $(this);
-=======
+
         if($this.find(".dot")) {
           $this.find(".dot").remove();  
         }
->>>>>>> develop
+
         if(!$this.hasClass('active')) {
             $this.siblings(".active").removeClass('active').end().addClass('active').parents(".es-bar").animate({
                 right: '0'

@@ -245,7 +245,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 					
 	public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
 	{
->>>>>>> develop
+
 		return $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($userId, 'student', $onlyPublished);
 	}
 
