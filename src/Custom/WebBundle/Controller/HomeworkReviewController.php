@@ -39,9 +39,10 @@ class HomeworkReviewController extends BaseController
         $items = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homeworkResult['homeworkId'],$homeworkResult['userId']);
 
         if ($request->getMethod() == 'POST') {
-            $reviews = $request->request->all();
-            $reviews = empty($reviews['data']) ? "" : $reviews['data'];
-            $this->getHomeworkService()->createHomeworkReview($homeworkResultId, $this->getCurrentUser()->id,$reviews);
+            $items = $request->request->all();
+            $items = empty($items['data']) ? "" : $items['data'];
+            $this->getHomeworkService()->createHomeworkReview($homeworkResultId, $this->getCurrentUser()->id,$items);
+
             return $this->createJsonResponse(
                 array(
                     'courseId' => $homework['courseId'],

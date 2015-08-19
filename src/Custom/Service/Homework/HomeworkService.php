@@ -75,4 +75,11 @@ interface HomeworkService
      **/
     public function createHomeworkPairReview($homeworkResultId,$userId, array $fields);
 
+
+    /**
+     * 根据id获取作业答题.
+     * @param id 作业答题id.
+     * @return 作业答题.
+    **/
+    public function loadHomeworkResultItem($id);
 }
