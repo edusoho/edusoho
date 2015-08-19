@@ -21,11 +21,14 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     public function onQuestionCreate(ServiceEvent $event)
     {
         $question = $event->getSubject();
-        $courseId = explode('-',explode('/', $question['target'])[0])[1];
+        $questionTarget = explode('/', $question['target']);
+        $questionCourseTarget = explode('-',$questionTarget[0]);
+        $courseId = $questionCourseTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         $num = count(explode('/',$question['target']));
         if($num > 1) {
-            $lessonId = explode('-',explode('/', $question['target'])[1])[1];
+            $questionLessonTarget = explode('-',$questionTarget[1]);
+            $lessonId = $questionLessonTarget[1];
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
 
@@ -76,20 +79,25 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $question = $context['question'];
         $oldTarget = $context['oldTarget'];
         $pId = $question['id'];
-        $courseId = explode('-',explode('/', $oldTarget)[0])[1];
+        $questionOldTarget = explode('/', $oldTarget);
+        $questionOldCourseTarget = explode('-',$questionOldTarget[0]);
+        $courseId = $questionOldCourseTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         
         $num = count(explode('/',$question['target']));
         
         if($num > 1) {
-            $lessonId = explode('-',explode('/', $question['target'])[1])[1];
+            $questionTarget = explode('/', $question['target']);
+            $questionLessonTarget = explode('-',$questionTarget[1]);
+            $lessonId = $questionLessonTarget[1];
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
 
         $oldNum = count(explode('/',$oldTarget));
 
         if($oldNum > 1){
-            $oldLessonId = explode('-',explode('/', $oldTarget)[1])[1];
+            $questionOldLessonTarget = explode('-',$questionOldTarget[1]);
+            $oldLessonId = $questionOldLessonTarget[1];
             $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
 
@@ -121,11 +129,14 @@ class QuestionEventSubscriber implements EventSubscriberInterface
     public function onQuestionDelete(ServiceEvent $event)
     {
         $question = $event->getSubject();
-        $courseId = explode('-',explode('/', $question['target'])[0])[1];
+        $questionTarget = explode('/', $question['target']);
+        $questionCourseTarget = explode('-',$questionTarget[0]);
+        $courseId = $questionCourseTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
         $num = count(explode('/',$question['target']));
         if($num > 1) {
-            $lessonId = explode('-',explode('/', $question['target'])[1])[1];
+            $questionLessonTarget = explode('-',$questionTarget[1]);
+            $lessonId = $questionLessonTarget[1];
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
         if ($courseIds) {
