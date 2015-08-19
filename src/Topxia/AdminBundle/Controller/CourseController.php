@@ -195,7 +195,9 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
-        return $this->renderCourseTr($id,$request);
+        return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
+            'request' => $request
+        ));
     }
 
     public function recommendListAction(Request $request)
@@ -363,7 +365,6 @@ class CourseController extends BaseController
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
-
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),

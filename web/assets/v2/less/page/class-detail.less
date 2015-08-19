@@ -1,54 +1,55 @@
+.class-bg-layer {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 100%;
+  background-color: #fff;
+  .border-radius;
+  .es-box-shadow;
+  z-index: -1;
+  @media (max-width: @screen-xs-max) {
+    top: 2px;
+    left: 2px;
+  }
+}
+
 // 班级头部
 .class-header {
-  background: url("@{img-src}class_bg.jpg");
-  background-size: 100% 100%;
-  background-attachment: fixed;
-  padding: 30px 0 40px 0;
-  .class-header-mian {
-    position: relative;
-    z-index: 2;
+  // background: url("@{img-src}class_bg.jpg");
+  // background-size: 100% 100%;
+  // background-attachment: fixed;
+  // background-color: @gray-lighter;
+  // padding: 20px 0 30px 0;
+  // padding-bottom: 25px;
+  .breadcrumb {
+    margin: 12px auto;
+    padding: 8px 0;
+    background: none;
   }
   .class-bg-layer {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 100%;
-    width: 100%;
-    background-color: #fff;
-    .border-radius;
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    z-index: -1;
-    @media (max-width: @screen-xs-max) {
-      top: 2px;
-      left: 2px;
-    }
-    &.two {
-      top: 10px;
-      left: 10px;
-      z-index: -2;
-      @media (max-width: @screen-xs-max) {
-        top: 4px;
-        left: 4px;
-      }
-    }
+    top: 8px;
+  }
+  .class-header-mian {
+    position: relative;
+    z-index: 1;
   }
   .class-header-bg {
     background-color: #fff;
     .border-radius;
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    z-index: 1;
+    .es-box-shadow;
   }
   .class-img {
     float: left;
     img {
       .img-responsive;
       width: 100%;
-      border-top-left-radius: 4px;
+      border-top-left-radius: 2px;
       @media (min-width: @screen-sm-min) {
-        border-bottom-left-radius: 4px;
+        border-bottom-left-radius: 2px;
       }
       @media (max-width: @screen-xs-max) {
-        border-top-right-radius: 4px;
+        border-top-right-radius: 2px;
       }
     }
   }
@@ -60,9 +61,9 @@
       @media (max-width: @screen-md-max) {
         font-size: 20px;
       }
-      @media (min-width: @screen-sm-min) {
-        .text-overflow;
-      }
+      // @media (min-width: @screen-sm-min) {
+      //   .text-overflow;
+      // }
     }
     >.metas {
       min-height: 40px;
@@ -70,10 +71,20 @@
       color: @gray;
       @media (max-width: @screen-md-max) {
         min-height: 30px;
+        margin-bottom: 8px;
         // padding-left: 20px;
       }
       @media (max-width: @screen-sm-max) {
         margin-bottom: 10px;
+      }
+    }
+    .price {
+      span {
+        font-size: 24px;
+        color: @gray-darker;
+        @media (max-width: @screen-md-max) {
+          font-size: 20px;
+        }
       }
     }
   }
@@ -103,14 +114,15 @@
   .class-data {
     list-style-type: none;
     padding: 10px 0;
-    background-color: @gray-lighter;
+    margin-bottom: 0;
+    background-color: @bg-color;
     >li {
       float: left;
       margin: 10px 0;
       color: @gray;
       text-align: center;
       line-height: 30px;
-      border-left: 1px solid @gray-light;
+      border-left: 1px solid @gray-lighter;
       @media (max-width: @screen-md-max) {
         padding: 8px 0;
         line-height: 25px;
@@ -136,62 +148,49 @@
       }
     }
   }
-  .price {
-    position: absolute;
-    width: 205px;
-    height: 82px;
-    line-height: 77px;
-    top: 60px;
-    right: -22px;
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
-    overflow: hidden;
-    background: url("@{img-src}price_bg.png");
-    span {
-      font-size: 22px;
-    }
-    @media (max-width: @screen-md-max) {
-      top: 50px;
-      width: 150px;
-      height: 60px;
-      line-height: 55px;
-      background-size: 150px 60px;
-      span {
-        font-size: 18px;
-      }
-    }
-    @media (max-width: @screen-sm-max) {
-      right: -18px;
-      width: 135px;
-      height: 54px;
-      line-height: 50px;
-      background-size: 135px 54px;
-      span {
-        font-size: 16px;
-      }
-    }
-    @media (max-width: @screen-xs-max) {
-      right: -12px;
-    }
-  }
+  // .price {
+  //   position: absolute;
+  //   width: 205px;
+  //   height: 82px;
+  //   line-height: 77px;
+  //   top: 60px;
+  //   right: -22px;
+  //   text-align: center;
+  //   color: #fff;
+  //   font-size: 12px;
+  //   overflow: hidden;
+  //   background: url("@{img-src}price_bg.png");
+  //   span {
+  //     font-size: 22px;
+  //   }
+  //   @media (max-width: @screen-md-max) {
+  //     top: 50px;
+  //     width: 150px;
+  //     height: 60px;
+  //     line-height: 55px;
+  //     background-size: 150px 60px;
+  //     span {
+  //       font-size: 18px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-sm-max) {
+  //     right: -18px;
+  //     width: 135px;
+  //     height: 54px;
+  //     line-height: 50px;
+  //     background-size: 135px 54px;
+  //     span {
+  //       font-size: 16px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-xs-max) {
+  //     right: -12px;
+  //   }
+  // }
   .setting {
     position: absolute;
-    display: block;
-    top: -10px;
-    right: -15px;
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    text-align: center;
-    .border-radius(50%);
-    background-color: @gray;
-    color: #fff;
-    .es-transition;
-    &:hover {
-      .es-transition;
-      background-color: @brand-primary;
-    }
+    top: 10px;
+    right: 10px;
   }
   &.before {
     .class-img {
@@ -218,14 +217,14 @@
         width: 100%;
       }
       >.title {
-        margin: 30px 30px 20px 30px;
+        margin: 20px;
         @media (max-width: @screen-md-max) {
           margin: 20px 20px 15px 20px;
         }
       }
       >.metas {
         min-height: 60px;
-        padding-left: 30px;
+        padding-left: 20px;
         @media (max-width: @screen-md-max) {
           min-height: 50px;
           padding-left: 20px;
@@ -236,13 +235,16 @@
       }
     }
     .bottom-metas {
-      padding: 20px 10px 20px 30px;
+      padding: 20px;
       @media (max-width: @screen-md-max) {
-        padding: 10px 10px 10px 20px;
+        padding: 10px;
       }
       @media (max-width: @screen-sm-max) {
-        padding: 5px 10px 5px 10px;
+        padding: 0 10px;
       }
+      // @media (max-width: @screen-sm-max) {
+      //   padding: 5px 10px 5px 10px;
+      // }
       .btn-buy {
         float: right;
         width: 50%;
@@ -306,13 +308,16 @@
       @media (max-width: @screen-xs-max) {
         width: 100%;
       }
+      .price span {
+        font-size: 16px;
+      }
     }
     .class-operation {
       float: left;
       width: 430px;
       background-color: @gray-lighter;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
       @media (max-width: @screen-md-max) {
         width: 300px;
       }
@@ -327,7 +332,7 @@
       display: inline-block;
     }
     .class-data {
-      border-top-right-radius: 4px;
+      border-top-right-radius: 2px;
       margin-bottom: 0;
       @media (max-width: @screen-md-max) {
         padding: 20px 0;
@@ -336,8 +341,8 @@
         padding: 0;
       }
       @media (max-width: @screen-xs-max) {
-        border-bootom-left-radius: 4px;
-        border-bootom-right-radius: 4px;
+        border-bootom-left-radius: 2px;
+        border-bootom-right-radius: 2px;
       }
       >li {
         width: 33.33%;
@@ -405,31 +410,31 @@
         padding: 10px 20px;
       }
     }
-    .price {
-      top: 125px;
-      right: -19px;
-      height: 60px;
-      width: 150px;
-      line-height: 60px;
-      background-size: 150px 60px;
-      span {
-        font-size: 20px;
-      }
-      @media (max-width: @screen-md-max) {
-        top: 145px;
-        right: -18px;
-        width: 135px;
-        height: 54px;
-        line-height: 54px;
-        background-size: 135px 54px; 
-        span {
-          font-size: 18px;
-        }
-      }
-      @media (max-width: @screen-xs-max) {
-        top: 30px;
-      }
-    }
+    // .price {
+    //   top: 125px;
+    //   right: -19px;
+    //   height: 60px;
+    //   width: 150px;
+    //   line-height: 60px;
+    //   background-size: 150px 60px;
+    //   span {
+    //     font-size: 20px;
+    //   }
+    //   @media (max-width: @screen-md-max) {
+    //     top: 145px;
+    //     right: -18px;
+    //     width: 135px;
+    //     height: 54px;
+    //     line-height: 54px;
+    //     background-size: 135px 54px; 
+    //     span {
+    //       font-size: 18px;
+    //     }
+    //   }
+    //   @media (max-width: @screen-xs-max) {
+    //     top: 30px;
+    //   }
+    // }
   }
 }
 
@@ -437,8 +442,7 @@
 .study-plan-info {
   color: #fff;
   text-align: center;
-  background-image: -webkit-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
-  background-color: rgb(255, 255, 255);
+  background-color: @brand-primary;
   .plan-info-item {
     font-size: 24px;
     padding: 10px;
@@ -555,6 +559,7 @@
     } 
   }
 }
+
 // 课时列表
 .period-list {
   margin-top: 20px;
@@ -845,8 +850,8 @@
     right: 0;
     color: #fff;
     background-color: @brand-primary;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
     &.after {
       // padding: 8px 15px;
       line-height: 20px;

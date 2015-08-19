@@ -197,8 +197,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
-            ->andWhere('courseId IN ( :courseIds )');;
-
+            ->andWhere('courseId IN ( :courseIds )');
+        if(isset($conditions['notLearnedIds'])){
+            $builder->andWhere('id NOT IN ( :notLearnedIds)');
+        }
         return $builder;
     }
 

@@ -117,6 +117,10 @@ register_captcha_check:
     pattern:  /register/captcha/check
     defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
 
+register_captcha_modal:
+    pattern:  /register/captcha/modal
+    defaults: { _controller: TopxiaWebBundle:Register:captchaModal }
+
 register_analysis:
     pattern:  /register/analysis
     defaults: { _controller: TopxiaWebBundle:Register:analysis }
@@ -306,6 +310,10 @@ course_order_buy:
 course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
+
+course_order_detail:
+    pattern:  /course/order/{id}/detail
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:orderDetail }
 
 order_refund:
     pattern:  /target/{id}/order/refund
@@ -554,6 +562,14 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
+course_manage_order:
+    pattern:  /course/{id}/manage/order
+    defaults: { _controller: TopxiaWebBundle:CourseManage:order }
+
+course_manage_order_export_csv:
+    pattern:  /course/{id}/manage/order/export
+    defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
+
 course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
@@ -612,6 +628,15 @@ course_manage_student_remark:
 course_manage_student_check:
     pattern:  /course/{id}/manage/student_check
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
+
+course_manage_student_import:
+    pattern:  /course/{id}/manage/student/import
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:import }
+
+course_manage_student_to_base:
+    pattern:  /course/{id}/manage/student/importing
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:excelDataImport }
+    methods: [POST]
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
@@ -1029,6 +1054,10 @@ password_reset_update:
     pattern:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+password_reset_check_mobile:
+    pattern:  /password/reset/check/mobile
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
+
 browser_upgrade:
     pattern:  /browser/upgrade
     defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
@@ -1141,7 +1170,7 @@ my_order_cancel:
     methods: [POST]
 
 web_user_order_detail:
-    pattern: /order/{id}/detail
+    pattern: /my/order/{id}/detail
     defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
 
 my_order_cancel_refund:
@@ -1238,6 +1267,10 @@ user_learning_classrooms:
 user_card_show:
     pattern:  /user/{userId}/card/show
     defaults: { _controller: TopxiaWebBundle:User:cardShow }
+
+login_after_fill_userinfo:
+    pattern:  /fill/userinfo
+    defaults: { _controller: TopxiaWebBundle:User:fillUserInfo }
 
 message_create:
     pattern: /message/create/{toId}
@@ -1758,4 +1791,33 @@ course_note_cancel_like:
     pattern:  /course/note/{noteId}/cancel_like
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
+
+common_learn_qrcode:
+    pattern: /qrcode/generate
+    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
+
+common_parse_qrcode:
+    pattern: /qrcode/parse/{token}
+    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
+
+esbar_my_classroom:
+    pattern:  /esbar/my/classroom
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
+
+esbar_my_course:
+    pattern:  /esbar/my/course
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:course }
+
+esbar_my_notify:
+    pattern:  /esbar/my/notify
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:notify }
+
+esbar_my_practice:
+    pattern:  /esbar/my/practice/{status}
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+
+#esbar_my_history:
+#    pattern:  /esbar/my/history
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
 

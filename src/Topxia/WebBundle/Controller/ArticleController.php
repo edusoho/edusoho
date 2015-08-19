@@ -115,7 +115,6 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
         return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
             'categoryCode' => $categoryCode,
             'category' => $category,
@@ -215,7 +214,14 @@ class ArticleController extends BaseController
         }
 
         $user = $this->getCurrentUser();
+
         $userLike = $this->getArticleService()->getArticleLike($id, $user['id']);
+
+        $articleBody = $article['body'];
+
+        $articleBody = strip_tags($articleBody,'');
+
+        $articleBody = preg_replace("/ /","",$articleBody); 
 
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
@@ -225,7 +231,7 @@ class ArticleController extends BaseController
             'articleNext' => $articleNext,
             'tags' => $tags,
             'seoKeyword' => $seoKeyword,
-            'seoDesc' => $article['body'],
+            'seoDesc' => $articleBody,
             'breadcrumbs' => $breadcrumbs,
             'categoryName' => $category['name'],
             'categoryCode' => $category['code'],
@@ -236,7 +242,8 @@ class ArticleController extends BaseController
             'count' => $count,
             'tagNames' => $tagNames,
             'sameTagArticles' => $sameTagArticles,
-            'userLike' => $userLike
+            'userLike' => $userLike,
+            'category' => $category
         ));
     }
 

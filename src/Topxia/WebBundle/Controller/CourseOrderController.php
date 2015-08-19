@@ -52,24 +52,6 @@ class CourseOrderController extends OrderController
        
         $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
-        for($i=0;$i<count($userFields);$i++){
-           if(strstr($userFields[$i]['fieldName'], "textField")){
-            $userFields[$i]['type']="text";
-           }
-           if(strstr($userFields[$i]['fieldName'], "varcharField")){
-            $userFields[$i]['type']="varchar";
-           }
-           if(strstr($userFields[$i]['fieldName'], "intField")){
-            $userFields[$i]['type']="int";
-           }
-           if(strstr($userFields[$i]['fieldName'], "floatField")){
-            $userFields[$i]['type']="float";
-           }
-           if(strstr($userFields[$i]['fieldName'], "dateField")){
-            $userFields[$i]['type']="date";
-           }
-        }
-
         if($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')){
             return $this->render('TopxiaWebBundle:CourseOrder:approve-modal.html.twig', array(
                 'course' => $course
@@ -93,6 +75,7 @@ class CourseOrderController extends OrderController
 
         return $this->render('TopxiaWebBundle:CourseOrder:buy-modal.html.twig', array(
             'course' => $course,
+            'lessonId' => $request->query->get('lessonId'),
             'payments' => $this->getEnabledPayments(),
             'user' => $userInfo,
             'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
@@ -109,7 +92,6 @@ class CourseOrderController extends OrderController
 
     public function modifyUserInfoAction(Request $request)
     {
-
         $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
@@ -141,8 +123,6 @@ class CourseOrderController extends OrderController
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-        $coinSetting = $this->setting("coin");
-
         //判断用户是否为VIP            
         $vipStatus = $courseVip = null;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
@@ -155,6 +135,25 @@ class CourseOrderController extends OrderController
             }
         }
 
+        //免费课程,直接加入并进入课时
+        $coinSetting = $this->setting("coin");
+        $courseSetting = $this->getSettingService()->get('course', array());
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        //$userInfoEnable = isset($courseSetting['buy_fill_userinfo']) && $courseSetting['buy_fill_userinfo'] == 1;
+       
+        if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
+            || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0 ) || $vipStatus == 'ok') {
+            
+            $data = array("price" => 0, "remark"=>'');
+            $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
+            if(isset($formData['lessonId'])){
+                return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
+            }else{
+                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+            }
+
+        }
+        
         if((isset($coinSetting["coin_enabled"]) 
         && $coinSetting["coin_enabled"]==1
         && isset($coinSetting["price_type"])
@@ -211,6 +210,21 @@ class CourseOrderController extends OrderController
         $result["order"] = $order;
 
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $result);
+    }
+
+    public function orderDetailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+
+        if (empty($order)) {
+            return $this->createMessageResponse('error', '订单不存在!');
+        }
+
+        $this->getCourseService()->tryManageCourse($order["targetId"]);
+
+        return $this->forward('TopxiaWebBundle:Order:detail', array(
+            'id' => $id,
+        ));
     }
 
     protected function getOrderInfo($id)
@@ -418,5 +432,10 @@ class CourseOrderController extends OrderController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseMemberService');
     }
 }
