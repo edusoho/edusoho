@@ -22,6 +22,10 @@ $api = $app['controllers_factory'];
 | content | string | 是 | 私信内容 |
 | type | string | 否 | 私信类型,默认为text |
 
+`type`的值有:
+
+    'text','image','video','audio'
+
 ** 响应 **
 
 ```

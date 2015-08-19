@@ -26,10 +26,11 @@ class MessageEventSubscriber implements EventSubscriberInterface
         $largeAvatar = empty($user['largeAvatar']) ? '' : $this->getFileService()->parseFileUri($user['largeAvatar']);
 
         $message['title'] = $user['nickname'];
+        $host = 'http://'.$_SERVER['HTTP_HOST'];
         $message['custom'] = json_encode(array(
             'fromId' => $message['fromId'],
             'nickname' => $user['nickname'],
-            'imgUrl' => empty($largeAvatar) ? '' : 'files/'.$largeAvatar['path'],
+            'imgUrl' => empty($largeAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$largeAvatar['path'],
             'typeMsg' => $message['type'],
             'typeBusiness' => in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'friend',
             'createdTime' => time()
