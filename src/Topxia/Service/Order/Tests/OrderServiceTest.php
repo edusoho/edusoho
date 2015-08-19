@@ -429,81 +429,6 @@ class OrderServiceTest extends BaseTestCase
         $result = $this->getOrderService()->createOrder($testAmountOrder);
         $this->assertEquals('none',$result['payment']);
 	}
-
-<<<<<<< HEAD
-	/**  
-	* @expectedException Topxia\Service\Common\ServiceException  
-	*/
-	public function testCreateOrderSixth()
-	{
-		$user = $this->createUser(); 
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-        $payment = array(
-            'enabled' => 1,
-            'disabled_message' => '尚未开启支付模块，无法购买课程。',
-            'bank_gateway' => 'none',
-            'alipay_enabled' => 0,
-            'alipay_key' => '',
-            'alipay_secret' => '',
-            'alipay_account' => '',
-            'alipay_type' => 'direct',
-            'tenpay_enabled' => 1	,
-            'tenpay_key' => '',
-            'tenpay_secret' => '',
-        );
-		$this->getSettingService()->set('payment', $payment);
-		$course1 = array(
-			'title' => 'course 1'
-		);
-		$course2 = array(
-			'title' => 'course 1'
-		);
-		$createCourse1 = $this->getCourseService()->createCourse($course1);
-		$createCourse2 = $this->getCourseService()->createCourse($course2);
-		$couponData = array(
-            'name' => 'test Coupon', 
-            'prefix' => 'prefixCoupon', 
-            'type' => 'minus', 
-            'rate' => 100, 
-            'generatedNum' => 10, 
-            'digits' => 8, 
-            'deadline' => date('Y-m-d',time() + 10*24*3600), 
-            'targetType' =>	'course'
-        );
-		$generateCoupon = $this->getCouponService()->generateCoupon($couponData);
-		$findCouponsByBatchId = $this->getCouponService()->findCouponsByBatchId($generateCoupon['id'],0,5);
-		$user = $this->createNormalUser();
-		$currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
-
-        $testOrder1 = array(
-        	'userId' => $user['id'],
-        	'title' => 'buy course 1',  
-        	'amount' => '100', 
-        	'targetType' => 'course', 
-        	'targetId' => $createCourse1['id'], 
-        	'payment' => 'alipay',
-        	'couponCode' => $findCouponsByBatchId[1]['code']
-        );
-        $createOrder1 = $this->getOrderService()->createOrder($testOrder1);
-        $this->getCouponService()->useCoupon($findCouponsByBatchId[1]['code'],$createOrder1);
-        //这里省去了paycenter的步骤，直接将优惠码设为已用
-        $testOrder2 = array(
-        	'userId' => $user['id'],
-        	'title' => 'buy course 2',  
-        	'amount' => '100', 
-        	'targetType' => 'course', 
-        	'targetId' => $createCourse2['id'], 
-        	'payment' => 'alipay',
-        	'couponCode' => $findCouponsByBatchId[1]['code']
-        );
-        $this->getOrderService()->createOrder($testOrder2);
-        //如果在测试的时候此方法出错，可以优先排查是否安装了优惠吗插件依赖！！
-	}
-=======
 	// /**  
 	// * @expectedException Topxia\Service\Common\ServiceException  
 	// */
@@ -576,7 +501,7 @@ class OrderServiceTest extends BaseTestCase
  //        $this->getOrderService()->createOrder($testOrder2);
  //        //如果在测试的时候此方法出错，可以优先排查是否安装了优惠吗插件依赖！！
 	// }
->>>>>>> develop
+
 
     public function testSearchOrders()
     {
@@ -966,12 +891,11 @@ class OrderServiceTest extends BaseTestCase
         ));
     }
 
-<<<<<<< HEAD
-=======
+
     /**  
     * @expectedException Topxia\Service\Common\ServiceException  
     */
->>>>>>> develop
+
     public function testPayOrderThird()
     {
         $user = $this->createUser(); 
@@ -1087,17 +1011,12 @@ class OrderServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-<<<<<<< HEAD
-    protected function getCouponService()
-    {
-        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
-    }
-=======
+
     // protected function getCouponService()
     // {
     //     return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
     // }
->>>>>>> develop
+
 
     private function createUser()
     {
