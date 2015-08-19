@@ -2,7 +2,7 @@
   <table class="table" style="table-layout:fixed;word-break:break-all">
     {% if set.cash_model =="deduction" %}
     <tr>
-      <th>课程</th>
+      <th width="40%">课程</th>
       <th>人民币价格</th>
       <th>最大可抵扣比率</th>
       <th>最大可抵扣金额</th>
@@ -19,9 +19,11 @@
       {% for item in items %}
         <tr>
           <td>
-            <img src="{{ filepath(item.smallPicture,'course.png') }}" style="width:100px;"/>
-            <a href="{{ path('course_show', {id:item.id}) }}" target=blank >{{item.title}}
-            </a>
+            <div class="clearfix">
+              <img class="pull-left mrl" src="{{ filepath(item.smallPicture,'course.png') }}" style="width:100px;"/>
+              <a class="pull-left" href="{{ path('course_show', {id:item.id}) }}" target="_blank" >{{item.title}}
+              </a>
+            </div>
           </td>
           <td>
             {% if set.cash_model =="deduction" %}
@@ -33,11 +35,7 @@
           </td>
           {% if set.cash_model =="deduction" %}
             <td>
-              <div class="form-group">
-                <div class="controls">
-                  <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:40%;" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/>%
-                </div>
-              </div>
+              <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> %
             </td>
             <td>
               <span id="deRmb{{item.id}}">{{ item.maxRate * item.originPrice / 100 }}</sapn>
