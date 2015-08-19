@@ -148,14 +148,15 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
 
+        
+        $findClassroomsByCourseIds =  $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
+
+        foreach ($findClassroomsByCourseIds as $findClassroomsByCourseId) {
+            $this->getClassroomService()->updateClassroomTeachers($findClassroomsByCourseId);
+        }
+
         if ($courseIds) {
-            $findClassroomsByCourseIds =  $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-
-            foreach ($findClassroomsByCourseIds as $findClassroomsByCourseId) {
-                $this->getClassroomService()->updateClassroomTeachers($findClassroomsByCourseId);
-            }
-
-
+            
             $course = $context['course'];
 
             foreach ($courseIds as $courseId) {
