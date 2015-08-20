@@ -189,7 +189,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                $this->getMaterialService()->createMaterial($material);
             }
             foreach ($courseIds as $key => $courseId) {
-               $this->getCourseService()->editLesson($courseId, $lessonIds[$key], $lesson);
+               $this->getCourseService()->editLesson($lessonIds[$key], $lesson);
             } 
         }
     }

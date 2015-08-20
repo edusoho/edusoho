@@ -107,7 +107,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
             unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
             foreach ($courseIds as $key=>$courseId) {
-                $this->getCourseService()->editLesson($courseId,$lessonIds[$key],$lesson);
+                $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
             } 
         }
     }

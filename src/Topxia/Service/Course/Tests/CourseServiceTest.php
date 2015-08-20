@@ -2216,7 +2216,7 @@ class CourseServiceTest extends BaseTestCase
             'parentId'=> 1
         );
         $createdLesson1 = $this->getCourseService()->createLesson($lesson1);
-        $this->getCourseService()->editLesson(1,1,array('parentId'=>1));
+        $this->getCourseService()->editLesson(1,array('parentId'=>1));
         $result = $this->getCourseService()->findLessonByParentIdAndLockedCourseIds(1,array(1));
         $this->assertEquals('test', $createdLesson1['title']);
         $this->assertEquals(1, count($result));  
@@ -2270,7 +2270,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
 
-        $editLesson = $this->getCourseService()->editLesson($createCourse1['id'],$createdLesson1['id'],array("title"=>"edit lesson"));
+        $editLesson = $this->getCourseService()->editLesson($createdLesson1['id'],array("title"=>"edit lesson"));
         
         $this->assertEquals("edit lesson", $editLesson['title']);
 

@@ -140,7 +140,7 @@ interface CourseService
 
 	public function updateLesson($courseId, $lessonId, $fields);
 
-	public function editLesson($courseId, $lessonId, $fields);
+	public function editLesson($lessonId, $fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 

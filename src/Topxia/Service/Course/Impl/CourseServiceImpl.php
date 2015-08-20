@@ -1199,7 +1199,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $updatedLesson;
 	}
 
-	public function editLesson($courseId, $lessonId, $fields)
+	public function editLesson($lessonId, $fields)
 	{
 		return $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields));
 	}
