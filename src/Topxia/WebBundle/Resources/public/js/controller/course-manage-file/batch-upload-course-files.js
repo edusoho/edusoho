@@ -169,7 +169,7 @@ define(function(require, exports, module) {
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
             var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v";
-            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name)[0])>-1){
+            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: videoInfoUrl,
                     data: {key: serverData.key},
@@ -179,7 +179,7 @@ define(function(require, exports, module) {
                         serverData.lazyConvert = 1;
                     }
                 });
-            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name)[0])>-1){
+            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: audioInfoUrl,
                     data: {key: serverData.key},
