@@ -83,7 +83,7 @@ class BuildVendorCommand extends BaseCommand
 	{
 		$this->output->writeln('build vendor2/ .');
 		$this->filesystem->mkdir("{$this->distDirectory}/vendor2");
-		$this->filesystem->copy("{$this->rootDirectory}/vendor2/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
+		$this->filesystem->copy("{$this->rootDirectory}/vendor/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
 
 		$directories = array(
 			'composer',
@@ -93,36 +93,39 @@ class BuildVendorCommand extends BaseCommand
 			'doctrine/common/lib/Doctrine',
 			'doctrine/dbal/lib/Doctrine',
 			'doctrine/doctrine-bundle',
-			'doctrine/doctrine-migrations-bundle',
+			'doctrine/doctrine-cache-bundle',
 			'doctrine/inflector/lib',
 			'doctrine/lexer/lib',
 			'doctrine/migrations/lib',
 			'doctrine/orm/lib',
+			'endroid/qrcode/src',
+			'endroid/qrcode/assets',
 			'ezyang/htmlpurifier/library',
 			'gregwar/captcha',
 			'imagine/imagine/lib',
+			'incenteev/composer-parameter-handler',
 			'jdorn/sql-formatter/lib',
 			'kriswallsmith/assetic/src',
 			'monolog/monolog/src',
 			'phpoffice/phpexcel/Classes',
+			'pimple/pimple/lib',
 			'psr/log/Psr',
 			'sensio/distribution-bundle',
 			'sensio/framework-extra-bundle',
 			'sensio/generator-bundle',
+			'sensiolabs/security-checker',
+			'silex/silex/src',
 			'swiftmailer/swiftmailer/lib',
 			'symfony/assetic-bundle',
-			'symfony/icu',
 			'symfony/monolog-bundle',
 			'symfony/swiftmailer-bundle',
 			'symfony/symfony/src',
-			'twig/twig/lib',
 			'twig/extensions/lib',
-			'endroid/qrcode/src',
-			'endroid/qrcode/assets',
+			'twig/twig/lib',
 		);
 
 		foreach ($directories as $dir) {
-			$this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
+			$this->filesystem->mirror("{$this->rootDirectory}/vendor/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
 		}
 
 		$this->filesystem->remove("{$this->distDirectory}/vendor2/composer/installed.json");
@@ -139,37 +142,6 @@ class BuildVendorCommand extends BaseCommand
 
 		$this->filesystem->remove($toDeletes);
 
-		$this->cleanIcuVendor();
-
-	}
-
-	private function cleanIcuVendor()
-	{
-		$icuBase = "{$this->distDirectory}/vendor2/symfony/icu/Symfony/Component/Icu/Resources/data";
-		$whileFiles = array(
-			'svn-info.txt',
-			'version.txt',
-			'curr/en.res',
-			'curr/zh.res',
-			'curr/zh_CN.res',
-			'lang/en.res',
-			'lang/zh.res',
-			'lang/zh_CN.res',
-			'locales/en.res',
-			'locales/zh.res',
-			'locales/zh_CN.res',
-			'region/en.res',
-			'region/zh.res',
-			'region/zh_CN.res'
-		);
-
-		$finder = new Finder();
-		$finder->files()->in($icuBase);
-		foreach ($finder as $file) {
-			if (!in_array($file->getRelativePathname(), $whileFiles)) {
-				$this->filesystem->remove($file->getRealpath());
-			}
-		}
 	}
 
 	public function cleanMacosDirectory()
