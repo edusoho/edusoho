@@ -114,7 +114,7 @@ interface CourseService
 
 	public function findLessonsByIds(array $ids);
 
-	public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds);
+	public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds);
 
 	public function getCourseLesson($courseId, $lessonId);
 
@@ -224,7 +224,7 @@ interface CourseService
 
 	public function getNextChapterNumber($courseId);
 
-	public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds);
+	public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
 
 	/**
 	 * 获得课程的目录项

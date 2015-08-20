@@ -29,7 +29,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         if($num > 1) {
             $questionLessonTarget = explode('-',$questionTarget[1]);
             $lessonId = $questionLessonTarget[1];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
 
         //材料题
@@ -90,7 +90,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
             $questionTarget = explode('/', $question['target']);
             $questionLessonTarget = explode('-',$questionTarget[1]);
             $lessonId = $questionLessonTarget[1];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
 
         $oldNum = count(explode('/',$oldTarget));
@@ -98,7 +98,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         if($oldNum > 1){
             $questionOldLessonTarget = explode('-',$questionOldTarget[1]);
             $oldLessonId = $questionOldLessonTarget[1];
-            $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
 
         if ($courseIds) {
@@ -137,7 +137,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         if($num > 1) {
             $questionLessonTarget = explode('-',$questionTarget[1]);
             $lessonId = $questionLessonTarget[1];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
         }
         if ($courseIds) {
             $lockedTarget= '';

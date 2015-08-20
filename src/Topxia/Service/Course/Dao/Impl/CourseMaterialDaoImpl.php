@@ -44,7 +44,7 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getMaterial($this->getConnection()->lastInsertId());
     }
 
-    public function findmaterialByPIdAndLockedCourseIds($pId, $courseIds)
+    public function findmaterialsByPIdAndLockedCourseIds($pId, $courseIds)
     {
         if(empty($courseIds)){
             return array();

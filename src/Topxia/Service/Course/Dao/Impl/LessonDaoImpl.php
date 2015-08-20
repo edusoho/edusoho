@@ -31,7 +31,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds)
+    public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
     {
         if(empty($courseIds)){
             return array();

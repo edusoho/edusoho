@@ -85,9 +85,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($lessons, 'id');
 	}
 
-	public function findLessonByParentIdAndLockedCourseIds($parentId ,array $courseIds)
+	public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
 	{
-		return $this->getLessonDao()->findLessonByParentIdAndLockedCourseIds($parentId ,$courseIds);
+		return $this->getLessonDao()->findLessonsByParentIdAndLockedCourseIds($parentId ,$courseIds);
 	}
 
 	public function getCourse($id, $inChanging = false)
@@ -1710,9 +1710,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $counter + 1;
 	}
 
-	public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds)
+	public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds)
 	{
-		return $this->getChapterDao()->findChapterByChapterIdAndLockedCourseIds($pId, $courseIds);
+		return $this->getChapterDao()->findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
 	}
 
 	public function getNextUnitNumberAndParentId($courseId)

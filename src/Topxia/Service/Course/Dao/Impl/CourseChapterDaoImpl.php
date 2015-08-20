@@ -77,7 +77,7 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getConnection()->executeUpdate($sql, array($courseId));
     }
 
-    public function findChapterByChapterIdAndLockedCourseIds($pId, $courseIds)
+    public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds)
     {
        if(empty($courseIds)){
             return array();
