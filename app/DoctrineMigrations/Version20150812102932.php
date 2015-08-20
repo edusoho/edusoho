@@ -43,6 +43,20 @@ class Version20150812102932 extends AbstractMigration
         if (!$this->isFieldExist('course_chapter', 'pId')) {
             $this->addSql("ALTER TABLE `course_chapter` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id'");  
         }
+
+        if($this->isTableExist('homework')) {
+            if(!$this->isFieldExist('homework', 'pId')){
+              $connection->exec("ALTER TABLE `homework` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的作业Id'"); 
+            }
+
+            if(!$this->isFieldExist('homework_item', 'pId')){
+              $connection->exec("ALTER TABLE `homework_item` ADD `pId`INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习问题ID'"); 
+            }
+
+            if(!$this->isFieldExist('exercise', 'pId')){
+              $connection->exec("ALTER TABLE `exercise` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习的ID'"); 
+            }
+        }
         // this up() migration is auto-generated, please modify it to your needs
     }
 
@@ -60,6 +74,13 @@ class Version20150812102932 extends AbstractMigration
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->connection->fetchAssoc($sql);
 
+        return empty($result) ? false : true;
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->connection->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 }
