@@ -19,7 +19,6 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         if ($exception->getMessage() == "Bad credentials") {
             $message = "用户名或密码错误";
         }else{
-            $message = " ";
             goto end;
         }
 
