@@ -295,6 +295,16 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array();
 	}
 
+	public function addCourseLessonReplay($courseLessonReplay)
+	{
+		return $this->getCourseLessonReplayDao()->addCourseLessonReplay($courseLessonReplay);
+	}
+
+	public function deleteLessonReplayByLessonId($lessonId)
+	{
+		return $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+	}
+
 	public function findUserLeanedCourseCount($userId, $filters = array())
 	{
 		if (isset($filters["type"])) {
@@ -2458,12 +2468,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fields["replayId"] = $replay["id"];
 			$fields["userId"] = $this->getCurrentUser()->id;
 			$fields["createdTime"] = time();
-			$this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+			$courseLessonReplay = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+			$this->dispatchEvent("course.lesson.replay",$courseLessonReplay);
 		}
 		$fields = array(
 			"replayStatus" => "generated"
 		);
-		$this->getLessonDao()->updateLesson($lessonId, $fields);
+		$lesson = $this->getLessonDao()->updateLesson($lessonId, $fields);
+		$this->dispatchEvent("course.lesson.update",$lesson);
 		return $replayList;
 	}
 

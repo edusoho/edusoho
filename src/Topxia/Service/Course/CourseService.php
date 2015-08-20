@@ -372,6 +372,7 @@ interface CourseService
 
 	public function becomeStudentByClassroomJoined($courseId, $userId);
 
-	
+	public function addCourseLessonReplay($courseLessonReplay);
 
+	public function deleteLessonReplayByLessonId($lessonId);
 }

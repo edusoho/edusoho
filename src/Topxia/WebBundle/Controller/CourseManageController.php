@@ -477,6 +477,10 @@ class CourseManageController extends BaseController
                 $title = '文件管理';
                 $url = 'course_manage_files';
                 break;
+            case 'replay':
+                $title = '录播管理';
+                $url = 'live_course_manage_replay';
+                break;
             case 'price':
                 $title = '价格设置';
                 $url= 'course_manage_price';

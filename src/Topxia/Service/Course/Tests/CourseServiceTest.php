@@ -2340,6 +2340,13 @@ class CourseServiceTest extends BaseTestCase
         $count = $this->getCourseService()->deleteMemberByCourseIdAndUserId(1,1);
         $this->assertEquals(1, $count);
     }
+
+    public function testAddCourseLessonReplay()
+    { 
+        $courseLessonReplay = array('lessonId'=>1,'courseId'=>1,'title'=>'录播回放');
+        $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+    }
  
     protected function getUserService()
     {
