@@ -38,7 +38,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
         $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
         $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
-        $this->getDispatcher()->dispatch('message.service.send', new ServiceEvent($message));
+        // $this->getDispatcher()->dispatch('message.service.send', new ServiceEvent($message));
         return $message;
     }
 
