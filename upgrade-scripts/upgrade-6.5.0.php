@@ -3,6 +3,7 @@
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\BlockToolkit;
+use Symfony\Component\Yaml\Yaml;
 
  class EduSohoUpgrade extends AbstractUpdater
  {
@@ -32,7 +33,8 @@ use Topxia\Common\BlockToolkit;
          $developerSetting['debug'] = 0;
 
          ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
-         ServiceKernel::instance()->createService('Crontab.CrontabService')->setNextExecutedTime(time());
+         ServiceKernel::instance()->createService('Crontab.CrontabService')->setNextExcutedTime(time());
+
     }
 
    
