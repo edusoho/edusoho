@@ -17,7 +17,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'course.lesson.delete' => array('onCourseLessonDelete', 0),
             'course.lesson.update'=> 'onCourseLessonUpdate',
             'course.lesson_start' => 'onLessonStart',
-            'course.lesson_finish' =>'onLessonFinish'
+            'course.lesson_finish' =>'onLessonFinish',
+            'course.lesson.replay'=>'onCourseLessonReplay'
         );
     }
 
@@ -96,6 +97,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 $this->getCourseService()->editCourse($courseId, array("lessonNum"=>$course['lessonNum']));
             }
 
+            foreach ($lessonIds as $lessonId) {
+                 $this->getCourseService()->deleteLessonReplayByLessonId($lessonId);
+            }
+
         }
     }
 
@@ -144,6 +149,20 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 'lesson' => $this->simplifyLesson($lesson),
             ),
         ));
+    }
+
+    public function onCourseLessonReplay(ServiceEvent $event)
+    {
+        $courseLessonReplay = $event->getSubject();
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseLessonReplay['courseId'],1),'id');
+        $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($courseLessonReplay['lessonId'],$courseIds),'id');
+        $courseLessonReplay = array('title'=>$courseLessonReplay['title'],'replayId'=>$courseLessonReplay['replayId'],'userId'=>$courseLessonReplay['userId']);
+        foreach ($courseIds as $key=>$courseId) {
+            $courseLessonReplay['courseId'] = $courseId;
+            $courseLessonReplay['lessonId'] = $lessonIds[$key];
+            $courseLessonReplay['createdTime'] = time();
+            $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+        }
     }
 
 
