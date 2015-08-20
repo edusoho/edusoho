@@ -1,0 +1,187 @@
+<?php
+namespace Topxia\WebBundle\Command;
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Topxia\System;
+use Topxia\Common\BlockToolkit;
+
+
+class BuildVendorCommand extends BaseCommand
+{
+
+	protected function configure()
+	{
+		$this->setName ( 'topxia:build-vendor' );
+	}
+
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
+		$output->writeln('<info>Start build.</info>');
+		$this->initBuild($input, $output);
+		$this->buildAppDirectory();
+		$this->buildVendorDirectory();
+		$this->cleanMacosDirectory();
+
+		$this->package();
+
+		$this->clean();
+
+		$output->writeln('<info>End build.</info>');
+
+		// $filesystem->mirror("{$rootDirectory}/{$directory}", "{$targetDirectory}/{$directory}");
+	}
+
+	private function initBuild(InputInterface $input, OutputInterface $output)
+	{
+		$this->input = $input;
+		$this->output = $output;
+
+		$this->rootDirectory = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+		$this->buildDirectory = $this->rootDirectory . '/build';
+
+		$this->filesystem = new Filesystem();
+
+		if ($this->filesystem->exists($this->buildDirectory)) {
+			$this->filesystem->remove($this->buildDirectory);
+		}
+		$this->distDirectory = $this->buildDirectory . '/vendor2';
+		$this->filesystem->mkdir($this->distDirectory);
+	}
+
+	private function package()
+	{
+		$this->output->writeln('packaging...');
+
+		chdir($this->buildDirectory);
+
+		$command = "tar czvf vendor-" . System::VERSION . ".tar.gz vendor2/";
+		exec($command);
+	}
+
+	private function clean()
+	{
+		$this->output->writeln('cleaning...');
+
+	}
+
+	private function buildAppDirectory()
+	{
+		$this->output->writeln('build app/ .');
+
+		$this->filesystem->mkdir("{$this->distDirectory}/app");
+
+		$this->filesystem->copy("{$this->rootDirectory}/app/autoload.php", "{$this->distDirectory}/app/autoload.php");
+		$this->filesystem->copy("{$this->rootDirectory}/app/bootstrap.php.cache", "{$this->distDirectory}/app/bootstrap.php.cache");
+
+	}
+
+	public function buildVendorDirectory()
+	{
+		$this->output->writeln('build vendor2/ .');
+		$this->filesystem->mkdir("{$this->distDirectory}/vendor2");
+		$this->filesystem->copy("{$this->rootDirectory}/vendor2/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
+
+		$directories = array(
+			'composer',
+			'doctrine/annotations/lib',
+			'doctrine/cache/lib',
+			'doctrine/collections/lib',
+			'doctrine/common/lib/Doctrine',
+			'doctrine/dbal/lib/Doctrine',
+			'doctrine/doctrine-bundle',
+			'doctrine/doctrine-migrations-bundle',
+			'doctrine/inflector/lib',
+			'doctrine/lexer/lib',
+			'doctrine/migrations/lib',
+			'doctrine/orm/lib',
+			'ezyang/htmlpurifier/library',
+			'gregwar/captcha',
+			'imagine/imagine/lib',
+			'jdorn/sql-formatter/lib',
+			'kriswallsmith/assetic/src',
+			'monolog/monolog/src',
+			'phpoffice/phpexcel/Classes',
+			'psr/log/Psr',
+			'sensio/distribution-bundle',
+			'sensio/framework-extra-bundle',
+			'sensio/generator-bundle',
+			'swiftmailer/swiftmailer/lib',
+			'symfony/assetic-bundle',
+			'symfony/icu',
+			'symfony/monolog-bundle',
+			'symfony/swiftmailer-bundle',
+			'symfony/symfony/src',
+			'twig/twig/lib',
+			'twig/extensions/lib',
+			'endroid/qrcode/src',
+			'endroid/qrcode/assets',
+		);
+
+		foreach ($directories as $dir) {
+			$this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
+		}
+
+		$this->filesystem->remove("{$this->distDirectory}/vendor2/composer/installed.json");
+
+		$finder = new Finder();
+		$finder->directories()->in("{$this->distDirectory}/vendor2");
+
+		$toDeletes = array();
+		foreach ($finder as $dir) {
+			if ($dir->getFilename() == 'Tests') {
+				$toDeletes[] = $dir->getRealpath();
+			}
+		}
+
+		$this->filesystem->remove($toDeletes);
+
+		$this->cleanIcuVendor();
+
+	}
+
+	private function cleanIcuVendor()
+	{
+		$icuBase = "{$this->distDirectory}/vendor2/symfony/icu/Symfony/Component/Icu/Resources/data";
+		$whileFiles = array(
+			'svn-info.txt',
+			'version.txt',
+			'curr/en.res',
+			'curr/zh.res',
+			'curr/zh_CN.res',
+			'lang/en.res',
+			'lang/zh.res',
+			'lang/zh_CN.res',
+			'locales/en.res',
+			'locales/zh.res',
+			'locales/zh_CN.res',
+			'region/en.res',
+			'region/zh.res',
+			'region/zh_CN.res'
+		);
+
+		$finder = new Finder();
+		$finder->files()->in($icuBase);
+		foreach ($finder as $file) {
+			if (!in_array($file->getRelativePathname(), $whileFiles)) {
+				$this->filesystem->remove($file->getRealpath());
+			}
+		}
+	}
+
+	public function cleanMacosDirectory()
+	{
+		$finder = new Finder();
+		$finder->files()->in($this->distDirectory)->ignoreDotFiles(false);
+		foreach ($finder as $dir) {
+
+			if ($dir->getBasename() == '.DS_Store') {
+				$this->filesystem->remove($dir->getRealpath());
+			}
+		}
+	}
+
+}
