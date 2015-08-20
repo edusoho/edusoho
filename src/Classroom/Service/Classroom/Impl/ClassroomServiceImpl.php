@@ -229,7 +229,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $newTeacherIds = array_unique($newTeacherIds);
-
+        $ids = array();
         foreach ($newTeacherIds as $key => $value) {
             $ids[] = $value;
         }
