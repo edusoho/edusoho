@@ -58,7 +58,7 @@ class BuildVendorCommand extends BaseCommand
 
 		chdir($this->buildDirectory);
 
-		$command = "tar czvf vendor-" . System::VERSION . ".tar.gz vendor2/";
+		$command = "zip -r vendor-" . System::VERSION . ".zip vendor2/";
 		exec($command);
 	}
 
