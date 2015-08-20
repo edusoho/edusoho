@@ -1,0 +1,44 @@
+.teacher-say-text {
+  margin-bottom: 5px;
+}
+.question-eassy-form-control {
+  margin-bottom: 18px;
+}
+.question-eassy-form-control img {
+  max-width: 100%;
+}
+.question-set-item {
+  margin-bottom: 50px;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
+}
+.question-set-item-side {
+  float: left;
+  width: 40px;
+}
+.question-set-item-main {
+  margin-left: 50px;
+}
+.question-heading {
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #ddd;
+  margin-bottom: 10px;
+  overflow: hidden;
+  zoom: 1;
+}
+.question-choices {
+  list-style: none;
+  padding-left: 0;
+}
+.question-choices > li {
+  padding: 6px 6px;
+}
+.question-choices > li:hover {
+  background: #eee;
+  cursor: pointer;
+}
+.question-choices .choice-index {
+  color: #999;
+  margin-right: 20px;
+  float: left;
+}

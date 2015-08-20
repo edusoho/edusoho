@@ -195,7 +195,9 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
 
-        return $this->renderCourseTr($id,$request);
+        return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
+            'request' => $request
+        ));
     }
 
     public function recommendListAction(Request $request)
@@ -315,6 +317,19 @@ class CourseController extends BaseController
     public function chooserAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions["parentId"] = 0;
+        if(isset($conditions["categoryId"]) && $conditions["categoryId"]==""){
+            unset($conditions["categoryId"]);
+        }
+        if(isset($conditions["status"]) && $conditions["status"]==""){
+            unset($conditions["status"]);
+        }
+        if(isset($conditions["title"]) && $conditions["title"]==""){
+            unset($conditions["title"]);
+        }
+        if(isset($conditions["creator"]) && $conditions["creator"]==""){
+            unset($conditions["creator"]);
+        }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
@@ -350,7 +365,6 @@ class CourseController extends BaseController
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
-
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),

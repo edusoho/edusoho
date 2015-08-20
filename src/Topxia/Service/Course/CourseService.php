@@ -42,7 +42,11 @@ interface CourseService
 
 	public function findUserLearnCourses($userId, $start, $limit);
 
+	public function findUserLearnCoursesNotInClassroom($userId, $start, $limit);//
+
 	public function findUserLearnCourseCount($userId);
+
+	public function findUserLearnCourseCountNotInClassroom($userId);//
  
 	public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 

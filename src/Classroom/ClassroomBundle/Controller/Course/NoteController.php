@@ -11,8 +11,8 @@ class NoteController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $classroom_courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds = ArrayToolkit::column($classroom_courses, 'id');
+        $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $user = $this->getCurrentUser();
@@ -27,7 +27,14 @@ class NoteController extends BaseController
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+    }
         return $this->render('ClassroomBundle:Classroom\Course:notes-list.html.twig', array(
             'layout' => $layout,
             'filters' => $this->getNoteSearchFilters($request),
@@ -36,6 +43,7 @@ class NoteController extends BaseController
             'courseIds' => $courseIds,
             'courses' => $courses,
             'member' => $member,
+            'classroomDescription' => $classroomDescription
         ));
     }
 

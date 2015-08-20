@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ setting('classroom.name')|default("班级") }} -{{classroom.title}} {{ parent() }}{% endblock %}
+{% block title %}{{classroom.title}} - {{ parent() }}{% endblock %}
 
 {% do load_script('classroombundle/controller/classroom/classroom-join') %}
 

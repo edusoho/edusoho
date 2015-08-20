@@ -75,6 +75,8 @@ class CashOrdersDaoImpl extends BaseDao implements CashOrdersDao
             ->andWhere('userId = :userId')
             ->andWhere('payment = :payment')
             ->andWhere('title = :title')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime < :endTime')
             ->andWhere('sn = :sn');
     }
 

@@ -32,7 +32,7 @@
         {% if app.installed|default(0) or app.purchased or (app.userAccess|default(null) == "ok" ) and (app.price == 0 and not  app.licensed ) %}
         <tr>
           <td>
-              {% if app.code == "MAIN" %}
+              {% if app.code == "MOOCMAIN" %}
                 <img src="/assets/img/default/MAIN_icon.png" class="app-img pull-left mrl mtm"/>
               {% else %}
                 <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
@@ -71,7 +71,7 @@
               </div>
               
               {% if app.installed|default(0) %}
-                  {% if app.code|lower != 'MAIN' %}
+                  {% if app.code|lower != 'MOOCMAIN' %}
                     {% set url = appMeta[app.code].manage_index|default('') %}
                   {% endif %}
               <div class="right-info pull-right">

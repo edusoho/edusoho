@@ -186,6 +186,32 @@ class CourseController extends CourseBaseController
         ));
     }
 
+	public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
+	{
+		$userIds = array();
+		foreach ($courses as $key => $course) {
+			$userIds = array_merge($userIds, $course['teacherIds']);
+
+			$classroomIds=$this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+
+			$courses[$key]['classroomCount']=count($classroomIds);
+
+			if(count($classroomIds)>0){
+				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
+				$courses[$key]['classroom']=$classroom;
+			}
+		}
+		
+		$users = $this->getUserService()->findUsersByIds($userIds);
+		
+		return $this->render("CustomWebBundle:Course:courses-block-{$view}.html.twig", array(
+			'courses' => $courses,
+			'users' => $users,
+			'classroomIds'=>$classroomIds,
+			'mode' => $mode,
+		));
+	}
+
     protected function getNextRoundService()
     {
         return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');

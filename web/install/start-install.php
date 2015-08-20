@@ -176,11 +176,11 @@ function install_step3()
         $init->initNavigations();
         $init->initBlocks();
         $init->initThemes();
-        $init->initLockFile();
         $init->initRefundSetting();
         $init->initArticleSetting();
         $init->initDefaultSetting();
         $init->initCrontabJob();
+        $init->initLockFile();
 
         header("Location: start-install.php?step=4");
         exit();
@@ -281,10 +281,15 @@ function _create_database($config, $replace)
 
         $pdo->exec("USE `{$config['database_name']}`;");
 
-        $sql = file_get_contents('./edusoho.sql');
+        $sql = file_get_contents('./edusoho.sql') . file_get_contents('./edusoho_mooc.sql');
         $result = $pdo->exec($sql);
+
         if ($result === false) {
             return "创建数据库表结构失败，请删除数据库后重试！";
+        }
+
+        if(!empty($config["database_init"]) && $config["database_init"]==1) {
+            init_data($pdo,$config);
         }
 
         return null;
@@ -292,6 +297,34 @@ function _create_database($config, $replace)
     } catch (\PDOException $e) {
         return '数据库连接不上，请检查数据库服务器、用户名、密码是否正确!';
     }
+}
+
+function init_data($pdo, $config)
+{
+    $sql = file_get_contents('./edusoho_init.sql');
+    $result = $pdo->exec($sql);
+
+    $sql = "show tables";
+    $results = $pdo->query($sql)->fetchAll();
+    foreach ($results as $result) {
+        $table = $result["0"];
+        $countSql = "select count(*) from {$table}";
+        $sqlPdo = $pdo->query($countSql);
+        if(!empty($sqlPdo)) {
+            $count = $pdo->query($countSql)->fetchColumn(0);
+            if($count>0) {
+                $pdo->exec("alter table {$table} AUTO_INCREMENT={$count};");
+            }
+        }
+    }
+
+    _create_config($config);
+
+    $init = new SystemInit();
+    $init->initLockFile();
+
+    header("Location: start-install.php?step=4");
+    exit();
 }
 
 function _create_config($config)
@@ -743,6 +776,26 @@ EOD;
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
         ));
+
+        $this->getCrontabService()->createJob(array(
+            'name'=>'DeleteExpiredTokenJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteSessionJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobParams'=>'',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+
+        $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     public function initLockFile()

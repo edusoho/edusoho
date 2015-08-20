@@ -1,7 +1,3 @@
-my_teaching_courses:
-    pattern: /my/teaching/courses/{filter}
-    defaults: { _controller: CustomWebBundle:MyTeaching:courses, filter:'normal' }
-
 course_create:
     pattern:  /course/create
     defaults: { _controller: CustomWebBundle:Course:create }
@@ -50,6 +46,22 @@ my_teaching_homework_list:
     pattern: /my/teaching/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:teachingList }
 
+user_show: 
+    pattern:  /user/{id}
+    defaults: { _controller: CustomWebBundle:User:show }
+
+user_learn: 
+    pattern:  /user/{id}/learn
+    defaults: { _controller: CustomWebBundle:User:learn }
+
+user_favorited: 
+    pattern:  /user/{id}/favorited
+    defaults: { _controller: CustomWebBundle:User:favorited }
+
+my_courses_learning:
+    pattern: /my/courses/learning
+    defaults: { _controller: CustomWebBundle:MyCourse:learning }
+
 my_homework_list:
     pattern: /my/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
@@ -58,6 +70,10 @@ course_lesson_plugin_homework_list:
     pattern:  /lessonplugin/homework/list
     defaults: { _controller: CustomWebBundle:LessonHomeworkPlugin:list }
 
+my_teaching_courses:
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: CustomWebBundle:MyTeaching:courses, filter:'normal' }
+
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
@@ -65,6 +81,10 @@ course_manage_lesson_homework_create:
 course_manage_lesson_homework_edit:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:edit }
+
+search:
+    pattern:  /search
+    defaults: { _controller: CustomWebBundle:Search:index }
 
 course_threads:
     pattern:  /course/{id}/thread/

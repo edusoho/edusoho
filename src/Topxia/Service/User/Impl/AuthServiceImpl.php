@@ -13,7 +13,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function register($registration, $type = 'default')
     {
 
-        $registration = $this->refillFormData($registration);
+        $registration = $this->refillFormData($registration, $type);
         $authUser = $this->getAuthProvider()->register($registration);
 
         if ($type == 'default') {
@@ -22,6 +22,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                     'userId' => $authUser['id'],
                 );
             }
+            
             $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
 
         } else {
@@ -34,8 +35,10 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $newUser;
     }
 
-    protected function refillFormData($registration){
-        $registration = $this->getUserService()->parseRegistration($registration);
+    protected function refillFormData($registration, $type='default'){
+        if ($type == 'default') {
+            $registration = $this->getUserService()->parseRegistration($registration);
+        }
         if(!isset($registration['nickname']) || empty($registration['nickname'])){
             $registration['nickname'] = $this->getUserService()->generateNickname($registration);
         }

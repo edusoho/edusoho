@@ -213,7 +213,7 @@ class AppController extends BaseController
             $appsInstalled[$key]['installed'] = 1;
             $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
             
-            if ($key != 'MAIN') {
+            if ($key != 'MOOCMAIN') {
                 if(in_array($key, array("vip", "coupon"))){
                     $key = ucfirst($appItem);
                 } else {

@@ -1,0 +1,31 @@
+{% extends 'TopxiaWebBundle:EsBar:ListContent/study-place.html.twig' %}
+
+{% set esBarMenu = 'classroom' %}
+{% block myStudyPlace %}
+
+{% if classrooms %}
+  <!-- 班级 -->
+  <div class="recommend-class-list">
+    {% set classroomCount = 15 %}
+    {% for classroom in classrooms %}
+      {% set classroomCount = loop.length %}
+      <div class="class-item">
+        <div class="class-bg-layer"></div>
+        <div class="class-item-bg">
+          <a class="class-img" target="_blank" href="{{ path('classroom_show',{id:classroom.id}) }}">
+            <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+          </a>
+          <h3><a class="link-dark" target="_blank" href="{{ path('classroom_show',{id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+        </div>
+      </div>
+    {% endfor %}
+    {% if classroomCount >= 15 %}
+      <p class="text-center"><a class="link-light" href="{{ path('my_classrooms') }}" target="_blank">更多<i class="es-icon es-icon-angledoubleright"></i></a></p>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}</div>
+{% endif %}
+{% endblock %}
+
+

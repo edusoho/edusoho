@@ -1,0 +1,29 @@
+.course-filter.search-filter {
+  padding-right: 0;
+}
+.course-filter.search-filter .nav-pills {
+  float: right;
+}
+.course-filter.search-filter .nav-pills > li {
+  margin: 0 0 10px 20px;
+}
+.course-filter.search-filter .result-declare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 48px;
+}
+.course-filter.search-filter .result-declare span {
+  color: red;
+  padding: 0 10px;
+}
+.course-filter.search-filter .btn-group > .btn-primary {
+  float: right;
+}
+.course-filter.search-filter .btn-group > .dropdown-menu {
+  left: inherit;
+  right: 0;
+}
+.course-filter.search-filter .btn-group > .dropdown-menu > li > a {
+  text-align: center;
+}
