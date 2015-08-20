@@ -103,7 +103,7 @@
 // 移动端
 .navbar-mobile {
   position: absolute;
-  left: 0;
+  top: 0;
   left: 0;
   .navbar-more { 
     position: relative;
@@ -114,16 +114,15 @@
     z-index: 1001;
   }
   .nav-mobile {
-    width: 250px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    position: fixed;
+    position: absolute;
     left: -250px;
     top: 0;
     bottom: 0;
+    width: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: #3f3f3f;
     visibility: hidden;
-    -webkit-overflow-scrolling: touch;
     .es-transition;
     &.active {
       visibility: visible;

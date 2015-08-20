@@ -50,6 +50,7 @@ class WebExtension extends \Twig_Extension
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
             'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
+            'space2nbsp' => new \Twig_Filter_Method($this, 'spaceToNbsp'),
         );
     }
 
@@ -102,7 +103,36 @@ class WebExtension extends \Twig_Extension
             'classroom_permit' => new \Twig_Function_Method($this, 'isPermitRole'),
             'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
             'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
+            'get_parameters_from_url' => new \Twig_Function_Method($this, 'getParametersFromUrl'),
         );
+    }
+    public function getParametersFromUrl($url)
+    {
+        $BaseUrl = parse_url($url);
+        if(isset($BaseUrl['query'])){
+            if(strstr($BaseUrl['query'],'&')){
+            $parameter = explode('&',$BaseUrl['query']);
+            $parameters = array();
+                foreach ($parameter as $key => $value) {
+                $parameters[$key] = explode('=',$value); 
+                }
+            }
+            else{
+            $parameter = explode('=',$BaseUrl['query']);   
+            $parameters = array();
+            $parameters[0]= $parameter;
+            }
+        }
+        else{
+            return null;
+        }
+        return  $parameters;
+    }
+
+    public function spaceToNbsp($content)
+    {
+        $content = str_replace(" ","&nbsp;",$content);
+        return $content;
     }
 
     public function getFingerprint() 

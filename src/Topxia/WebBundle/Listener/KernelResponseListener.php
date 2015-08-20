@@ -55,7 +55,7 @@ class KernelResponseListener
             $isFillUserInfo = $this->checkUserinfoFieldsFill($currentUser);
 
             if (!$isFillUserInfo) {
-                $url = $this->container->get('router')->generate('login_after_fill_userinfo');
+                $url = $this->container->get('router')->generate('login_after_fill_userinfo', array('goto' => $request->getPathInfo()));
                 $response = new RedirectResponse($url);
                 $event->setResponse($response);
                 return ;
