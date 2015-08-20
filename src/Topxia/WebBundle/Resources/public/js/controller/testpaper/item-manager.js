@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     var Widget     = require('widget');
     var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
     require('jquery.sortable');
 
     var TestpaperItemManager = Widget.extend({
@@ -79,6 +81,13 @@ define(function(require, exports, module) {
                 return ;
             }
 
+            if( $('[name="passedScore"]').length > 0){
+                var passedScoreErrorMsg = $('[name="passedScore"]').siblings('.help-block').html();
+                if ($.trim(passedScoreErrorMsg) != ''){
+                    return ;
+                }
+            }
+
             $modal = $("#testpaper-confirm-modal");
 
             var stats = this._calTestpaperStats();
@@ -113,6 +122,7 @@ define(function(require, exports, module) {
                 html += ' 漏选得分<strong>' + stats[type].missScore + '</strong>分</span>';
             }
 
+            $('input[name="passedScore"]').attr('data-score-total',stats.total.score.toFixed(1));
             $("#testpaper-stats").html(html);
         },
 
@@ -139,6 +149,41 @@ define(function(require, exports, module) {
             stats.total = total;
 
             return stats;
+        },
+
+        refreshPassedScoreStats: function() {
+            var hasEssay = false;
+
+            $('.testpaper-table-tbody').each(function() {
+                var self = this;
+                var tbodyType = $(this).data('type');
+
+                if (tbodyType == 'essay' || tbodyType == 'material') {
+                    $(self).find('tr').each(function() {
+                        var type = $(this).data('type');
+                        if (type == 'essay') {
+                            hasEssay = true;
+                        }
+                    })
+                }
+            })
+
+            if (hasEssay) {
+                $('.passedScoreDiv').html('');
+            } else {
+                var stats = this._calTestpaperStats();
+                var passeScoreDefault = Math.ceil(stats.total.score * 0.6);
+                var html = '这是一份纯客观题的试卷, 达到 <input type="text" name="passedScore" class="form-control width-input width-input-small" value="'+passeScoreDefault+'" data-score-total="'+stats.total.score+'" />分（含）可以自动审阅通过考试。';
+
+                $('.passedScoreDiv').html(html);
+
+                validator.addItem({
+                    element: '[name="passedScore"]',
+                    required: true,
+                    rule: 'score',
+                    display: '分数'
+                });
+            }
         },
 
         onClickPickItem: function(e) {
@@ -181,7 +226,8 @@ define(function(require, exports, module) {
             this.$('[data-role=batch-select]:visible').prop('checked', false);
 
             this.refreshSeqs();
-            this0.refreshTestpaperStats();
+            this.refreshTestpaperStats();
+            this.refreshPassedScoreStats();
         },
 
         onClickBatchSelect: function(e) {
@@ -202,6 +248,7 @@ define(function(require, exports, module) {
             $tr.remove();
             this.refreshSeqs();
             this.refreshTestpaperStats();
+            this.refreshPassedScoreStats();
         },
 
         onClickNav: function(e) {
@@ -242,8 +289,37 @@ define(function(require, exports, module) {
     });
 
     exports.run = function() {
+
+        validator = new Validator({
+                element: '#testpaper-items-form',
+                failSilently: true
+            });
+
+        Validator.addRule('score', function(options) {
+            var element = options.element;
+            var isFloat = /^[1-9]+(\.\d)?$/.test(element.val());
+            if (!isFloat){
+                return false;
+            }
+
+            if (Number(element.val()) <= Number(element.data('scoreTotal'))) {
+                return true;
+            } else {
+                return false;
+            }
+        }, '{{display}}只能是<=试卷总分、且>0的整数或者1位小数');
+
+
         new TestpaperItemManager({
-            element: '#testpaper-items-manager'
+            element: '#testpaper-items-manager',
         });
+
+        validator.addItem({
+            element: '[name="passedScore"]',
+            required: true,
+            rule: 'score',
+            display: '分数'
+        });
+        
     }
 });

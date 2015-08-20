@@ -6,6 +6,7 @@
 
 {% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' )) and not canHandle %}
 {% else %}
+
   {# {% if showTestpaperNavbar|default('on') == 'off' %} #}
     <form id='teacherCheckForm' autocomplete="off">
     {# {% endif %} #}
@@ -39,4 +40,3 @@
       <textarea name="teacherSay" id="teacherSay" style="display:none"></textarea>
     {% endif %}
   </form>
-{% endif %}
