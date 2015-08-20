@@ -199,7 +199,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $material = $event->getSubject();
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'],1),'id');
         if ($courseIds) {
-            $materialIds = ArrayToolkit::column($this->getMaterialService()->findmaterialsByPIdAndLockedCourseIds($material['id'],$courseIds),'id');
+            $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByPIdAndLockedCourseIds($material['id'],$courseIds),'id');
             foreach ($materialIds as $key=>$materialId) {
                 $this->getMaterialService()->deleteMaterial($courseIds[$key],$materialId);
             }

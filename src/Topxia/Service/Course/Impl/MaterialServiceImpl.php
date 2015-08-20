@@ -86,9 +86,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	}
 
 
-	public function findmaterialsByPIdAndLockedCourseIds($pId, $courseIds)
+	public function findMaterialsByPIdAndLockedCourseIds($pId, $courseIds)
 	{
-		return $this->getMaterialDao()->findmaterialsByPIdAndLockedCourseIds($pId, $courseIds);
+		return $this->getMaterialDao()->findMaterialsByPIdAndLockedCourseIds($pId, $courseIds);
 	}
 
 	public function deleteMaterialByMaterialId($materialId)
