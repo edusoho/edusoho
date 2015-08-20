@@ -69,7 +69,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
-    
+
     public function addFile(array $file)
     {
         $file['createdTime'] = time();

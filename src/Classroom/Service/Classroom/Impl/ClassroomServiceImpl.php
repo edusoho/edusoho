@@ -229,7 +229,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $newTeacherIds = array_unique($newTeacherIds);
-
+        $ids = array();
         foreach ($newTeacherIds as $key => $value) {
             $ids[] = $value;
         }
@@ -563,7 +563,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $diff = array_diff($existCourseIds, $activeCourseIds);
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
-                    $this->getClassroomCourseDao()->update($courses[$courseId]['classroom_course_id'], array('disabled' => 1));
+                    $this->getClassroomCourseDao()->deleteCourseByClassroomIdAndCourseId($classroomId,$courseId);
                     $this->getCourseService()->closeCourse($courseId,'classroom');
                 }
 

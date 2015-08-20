@@ -11,6 +11,12 @@ interface QuestionService
 
     public function findQuestionsByParentId($id);
 
+    /*
+        findQuestionsByPIdAndLockedTarget
+        course　表中locked 为　１的课程
+    */
+    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget);
+
     public function findQuestionsByParentIds($ids);
 
     public function findQuestionsbyTypes($types, $start, $limit);
@@ -23,15 +29,23 @@ interface QuestionService
 
     public function findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
 
+    public function findQuestionsCountByParentId($parentId);
+
     public function searchQuestions($conditions, $sort, $start, $limit);
 
     public function searchQuestionsCount($conditions);
 
     public function createQuestion($fields);
 
+    public function addQuestion($fields);
+
     public function updateQuestion($id, $fields);
 
+    public function editQuestion($id,$fields);
+
     public function deleteQuestion($id);
+
+    public function deleteQuestionsByParentId($parentId);
 
     /**
      * 判断题目的回答是否正确
