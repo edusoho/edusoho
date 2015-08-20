@@ -35,6 +35,8 @@
       {% elseif "now"|date('U') <= course.endTime %}
         {% if nextLearnLesson %}
           <a class="" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
+        {% else %}
+          <a class="" disabled='disabled'>已学完</a> 
         {% endif %}
       {% else %}
           <a class="" disabled='disabled'>已结束</a> 

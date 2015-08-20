@@ -49,6 +49,9 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql("ALTER TABLE `homework` ADD `zeroPercent` float(5,1) NOT NULL DEFAULT 0 COMMENT '作业成绩占比:没有参与互评的';");
         $this->addSql("ALTER TABLE `homework` ADD `minReviews` int(10) NOT NULL DEFAULT 0 COMMENT '最少互评人数';");
         $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','editing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
+      
+        $this->addSql("ALTER TABLE `mooc-dev`.`crontab_job` CHANGE COLUMN `cycle` `cycle` ENUM('once','everyminute','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期' ;");
+        $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('FinishHomeworkEditingJob', 'everyminute', '0', 'Custom\\\\Service\\\\Homework\\\\Job\\\\FinishHomeworkEditingJob', '', '0', '0', '0', '0', '0');");
     }
 
     /**
