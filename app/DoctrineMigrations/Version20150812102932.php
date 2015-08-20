@@ -46,15 +46,15 @@ class Version20150812102932 extends AbstractMigration
 
         if($this->isTableExist('homework')) {
             if(!$this->isFieldExist('homework', 'pId')){
-              $connection->exec("ALTER TABLE `homework` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的作业Id'"); 
+              $this->addSql("ALTER TABLE `homework` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的作业Id'"); 
             }
 
             if(!$this->isFieldExist('homework_item', 'pId')){
-              $connection->exec("ALTER TABLE `homework_item` ADD `pId`INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习问题ID'"); 
+              $this->addSql("ALTER TABLE `homework_item` ADD `pId`INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习问题ID'"); 
             }
 
             if(!$this->isFieldExist('exercise', 'pId')){
-              $connection->exec("ALTER TABLE `exercise` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习的ID'"); 
+              $this->addSql("ALTER TABLE `exercise` ADD `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习的ID'"); 
             }
         }
         // this up() migration is auto-generated, please modify it to your needs
