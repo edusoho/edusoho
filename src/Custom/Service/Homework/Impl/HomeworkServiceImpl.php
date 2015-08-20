@@ -253,6 +253,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $item;
     }
 
+    public function forwardHomeworkStatus(){
+        $this->getHomeworkDao() -> forwardEditingHomeworks();
+    }
+
     protected function getReviewDao()
     {
         return $this->createDao('Custom:Homework.ReviewDao');

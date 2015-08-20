@@ -110,4 +110,9 @@ interface HomeworkService
      * @return 作业答题.
     **/
     public function loadHomeworkResultItem($id);
+
+    /**
+     * 推动编辑中的作业。如果已过作业提交时间，将作业状态变更为互评中；如果作业已过互评时间，计算互评分数.
+    **/
+    public function forwardHomeworkStatus();
 }
