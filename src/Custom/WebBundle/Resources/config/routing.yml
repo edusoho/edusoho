@@ -34,6 +34,14 @@ course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
 
+course_homework_do:
+    pattern: /course/{courseId}/homework/{homeworkId}/do/{resultId}
+    defaults: { _controller: CustomWebBundle:CourseHomework:do }
+
+course_homework_continue:
+    pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
+    defaults: { _controller: CustomWebBundle:CourseHomework:continue }
+
 course_homework_submit:
     pattern: /course/{courseId}/homework/{homeworkId}/submit
     defaults: { _controller: CustomWebBundle:CourseHomework:submit }

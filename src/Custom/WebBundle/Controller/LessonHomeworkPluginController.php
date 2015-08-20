@@ -25,7 +25,8 @@ class LessonHomeworkPluginController extends BaseLessonHomeworkPluginController
             'homework' => $homework,
             'exercise' => $exercise,
             'homeworkResult' => $homeworkResult,
-            'homeworkItemsResult' => $homeworkItemsResult
+            'homeworkItemsResult' => $homeworkItemsResult,
+            'now' => time()
         ));
     }
 
