@@ -27,6 +27,18 @@ class HomeworkPairReviewController extends BaseController
 
         $homeworkResult = $this->getHomeworkService()->randomizeHomeworkResultForPairReview($homework['id'], $this->getCurrentUser()->id);
 
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $this->getHomeworkService()->createHomeworkPairReview($homeworkResult['id'],$this->getCurrentUser()->id,$fields);
+
+            return $this->createJsonResponse(
+                array(
+                    'courseId' => $courseId,
+                    'lessonId' => $homework['lessonId']
+                )
+            );
+        }
+
         $tip = "1.每位同学必须评价" . $homework['minReviews'] . "人，互评成绩按如下规则换算：未评分的=自己所得分数*" . ($homework['zeroPercent'] * 100) . "%，
         评价不到" . $homework['minReviews'] . "人的=自己所得分数*" . ($homework['partPercent'] * 100) . "%，
         达到" . $homework['minReviews'] . "人=自己所得分数*" . ($homework['completePercent'] * 100) . "%；";
@@ -54,20 +66,6 @@ class HomeworkPairReviewController extends BaseController
 
         // if (empty($lesson)) {
         //     return $this->createMessageResponse('info','作业所属课时不存在！');
-        // }
-
-        // if ($request->getMethod() == 'POST') {
-
-        //     $checkHomeworkData = $request->request->all();
-        //     $checkHomeworkData = empty($checkHomeworkData['data']) ? "" : $checkHomeworkData['data'];
-        //     $this->getHomeworkService()->checkHomework($homeworkId,$userId,$checkHomeworkData);
-
-        //     return $this->createJsonResponse(
-        //         array(
-        //             'courseId' => $courseId,
-        //             'lessonId' => $homework['lessonId']
-        //         )
-        //     );
         // }
 
         // $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
