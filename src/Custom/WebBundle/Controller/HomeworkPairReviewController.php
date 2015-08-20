@@ -11,21 +11,25 @@ use Topxia\WebBundle\Controller\BaseController;
 
 /**
  * 作业互评控制器.
-**/
+ **/
 class HomeworkPairReviewController extends BaseController
 {
     /**
      * 随机显示一个作业答卷互评界面.
      * @param request
      * @param homeworkId , 作业id.
-    **/
+     **/
     public function createAction(Request $request, $homeworkId)
     {
         $homework = $this->getHomeworkService()->loadHomework($homeworkId);
-        $course = $this -> getCourseService() -> loadCourse($homework['courseId']);
-        $lesson = $this -> getCourseService() -> loadLesson($homework['lessonId']);
+        $course = $this->getCourseService()->loadCourse($homework['courseId']);
+        $lesson = $this->getCourseService()->loadLesson($homework['lessonId']);
 
-        $homeworkResult = $this -> getHomeworkService() -> randomizeHomeworkResultForPairReview($homework['id'], $this -> getCurrentUser() -> id);
+        $homeworkResult = $this->getHomeworkService()->randomizeHomeworkResultForPairReview($homework['id'], $this->getCurrentUser()->id);
+
+        $tip = "1.每位同学必须评价" . $homework['minReviews'] . "人，互评成绩按如下规则换算：未评分的=自己所得分数*" . ($homework['zeroPercent'] * 100) . "%，
+        评价不到" . $homework['minReviews'] . "人的=自己所得分数*" . ($homework['partPercent'] * 100) . "%，
+        达到" . $homework['minReviews'] . "人=自己所得分数*" . ($homework['completePercent'] * 100) . "%；";
 
         // $canCheckHomework = $this->getHomeworkService()->canCheckHomework($homeworkId);
         // if (!$canCheckHomework) {
@@ -47,7 +51,7 @@ class HomeworkPairReviewController extends BaseController
         // }
 
         // $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
-        
+
         // if (empty($lesson)) {
         //     return $this->createMessageResponse('info','作业所属课时不存在！');
         // }
@@ -67,7 +71,7 @@ class HomeworkPairReviewController extends BaseController
         // }
 
         // $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
-    
+
         // return $this->render('HomeworkBundle:CourseHomework:check.html.twig', array(
         //     'homework' => $homework,
         //     'itemSetResult' => $itemSetResult,
@@ -86,14 +90,15 @@ class HomeworkPairReviewController extends BaseController
             'course' => $course,
             'lesson' => $lesson,
             'homeworkResult' => $homeworkResult,
-            'questionStatus' => 'reviewing'
+            'questionStatus' => 'reviewing',
+            'tip' => $tip
         ));
 
     }
 
     /**
      * 获取作业服务.
-    **/
+     **/
     protected function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Custom:Homework.HomeworkService');

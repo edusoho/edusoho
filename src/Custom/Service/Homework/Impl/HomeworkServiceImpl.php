@@ -82,17 +82,19 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     }
 
+    public function getHomeworksByCourseId($courseId)
+    {
+        $homeworks = $this->getHomeworkDao()->findHomeworksByCourseId($courseId);
+        return $homeworks;
+    }
+
     public function submitHomework($id, $homework_result)
     {
         $st = 'reviewing';
         $homework = $this->getHomeworkDao()->getHomework($id);
 
         if ($homework['pairReview']) {
-            if (intval($homework['completeTime']) > time()) {
-                throw$this->createServiceException("已经超过作业提交截止时间，提交作业失败！");
-            } else {
-                $st = 'editing';
-            }
+            $st = 'editing';
         }
         $this->addItemResult($id, $homework_result);
         //reviewing
@@ -117,49 +119,51 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $result;
     }
 
-    public function createHomeworkReview($homeworkResultId,$userId, array $fields)
+    public function getResultByCourseIdAndUserId($courseId, $userId)
     {
+        $homeworkResults = $this->getResultDao()->getResultByCourseIdAndUserId($courseId, $userId);
+        return empty($homeworkResults) ? null : ArrayToolkit::index($homeworkResults, 'lessonId');
+    }
+
+    public function createHomeworkReview($homeworkResultId, $userId, array $fields)
+    {
+        $finalScore = $this->sumScore($fields['items']);
+
         $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
         $result['status'] = 'finished';
         $result['checkedTime'] = time();
         $result['teacherSay'] = empty($fields['teacherFeedback']) ? "" : $fields['teacherFeedback'];
-        $this->getResultDao()->updateResult($homeworkResult['id'],$result);
+        $result['score'] = $finalScore;
+        $this->getResultDao()->updateResult($homeworkResult['id'], $result);
 
         $review['userId'] = $userId;
         $review['homeworkId'] = $homeworkResult['homeworkId'];
         $review['homeworkResultId'] = $homeworkResultId;
-        $review['cateogry'] = 'teacher';
-        $review['score'] = $this->sumScore($fields['items']);
+        $review['category'] = 'teacher';
+        $review['score'] = $finalScore;
         $review['createdTime'] = time();
-        $review = $this -> getResultDao() -> create($review);
+        $review = $this->getReviewDao()->create($review);
 
-        if (empty($fields['questionIds'])) {
-            return $review;
+        $review['items'] = array();
+        foreach ($fields['items'] as $index => $item) {
+            $item['homeworkReviewId'] = $review['id'];
+            $item['createdTime'] = time();
+            $item = $this->getReviewItemDao()->create($item);
+            array_push($review['items'], $item);
         }
-
-
-
-
-        // foreach ($fields['questionIds'] as $key => $questionId) {
-        //     if (!empty($fields['teacherSay'][$key])) {
-        //         $item['homeworkItemResultId'] = $homeworkResult
-        //         $this -> getReviewItemDao() -> createOrUpdate();
-        //         $item = $this->getItemResultDao()->getItemResultByResultIdAndQuestionId($homeworkResult['id'],$questionId);
-        //         $this->getItemResultDao()->updateItemResult($item['id'],array('teacherSay'=>$fields['score'][$key]));
-        //     }
-        // }
-        // return true;
+        return $review;
     }
 
-    private function sumScore($items){
-        $sum=0;
-        foreach($items as $item){
-            $sum+=$item['score'];
+    private function sumScore($items)
+    {
+        $sum = 0;
+        foreach ($items as $item) {
+            $sum += $item['score'];
         }
         return $sum;
     }
 
-    public function createHomeworkPairReview($homeworkResultId,$userId, array $fields)
+    public function createHomeworkPairReview($homeworkResultId, $userId, array $fields)
     {
         $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
         $fields['homeworkResultId'] = $homeworkResult['id'];
@@ -185,6 +189,12 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     public function getHomeworkResult($homeworkResultId)
     {
         return $this->getResultDao()->getResult($homeworkResultId);
+    }
+
+    public function findItemResultsbyUserId($userId)
+    {
+        $homeworkItemsResults = $this->getItemResultDao()->findItemResultsbyUserId($userId);
+        return empty($homeworkItemsResults) ? null : ArrayToolkit::index($homeworkItemsResults, 'homeworkId');
     }
 
     public function loadHomeworkResult($homeworkResultId)
@@ -219,15 +229,28 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return empty($ids) ? null : $ids[rand(0, count($ids) - 1)];
     }
 
-    public function loadHomework($id){
-        if(empty($id)){
+    public function loadHomework($id)
+    {
+        if (empty($id)) {
             throw $this->createNotFoundException("作业关键字为空！");
         }
-        $homework = $this -> getHomework($id);
-        if( empty($homework)){
+        $homework = $this->getHomework($id);
+        if (empty($homework)) {
             throw $this->createNotFoundException("作业{id}不存在！");
         }
         return $homework;
+    }
+
+    public function loadHomeworkResultItem($id)
+    {
+        if (empty($id)) {
+            throw $this->createNotFoundException("作业答题关键字为空！");
+        }
+        $item = $this->getItemResultDao()->getItemResult($id);
+        if (empty($item)) {
+            throw $this->createNotFoundException("作业答题{id}不存在！");
+        }
+        return $item;
     }
 
     protected function getReviewDao()
@@ -252,7 +275,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     private function getItemResultDao()
     {
-        return $this->createDao('Homework:Homework.HomeworkItemResultDao');
+        return $this->createDao('Custom:Homework.HomeworkItemResultDao');
     }
 
     private function getCourseService()

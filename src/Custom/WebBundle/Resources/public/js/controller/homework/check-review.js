@@ -1,26 +1,26 @@
 define(function(require, exports, module) {
     var Widget = require('widget');
-	var teacherFeedback = {};
+    var teacherFeedback = {};
     exports.run = function() {
         var homeworkCheckBody = new homeworkBodyCheck({
             element: '#homework-check-body'
         });
 
-		var homeworkCheckFoot = new homeworkFootCheck({
+        var homeworkCheckFoot = new homeworkFootCheck({
             element: '#homework-check-foot'
         });
     };
 
      var homeworkBodyCheck = Widget.extend({
 
-		setup: function() {
+        setup: function() {
             var items=[];
             $('.score').each(function(index,item){
                 var field=$(item);
                 var reviewItem={};
-                reviewItem.questionId=field.data('questionId');
+                reviewItem.homeworkItemResultId=field.data('itemId');
                 reviewItem.score=field.val();
-                var selector=$('[name=review\\['+reviewItem.questionId+'\\]]');
+                var selector=$('[name=review\\['+reviewItem.id+'\\]]');
                 if(selector.length>0){
                     reviewItem.review = selector.val();
                 }
@@ -28,24 +28,24 @@ define(function(require, exports, module) {
             });
 
             homeworkReview = {items: items};
-		},
+        },
 
-     	events:{
-			'change #homework-teacherSay-select':'onChangeTeacherSaySelect'
-     	},
+        events:{
+            'change #homework-teacherSay-select':'onChangeTeacherSaySelect'
+        },
 
-		onChangeTeacherSaySelect: function (event) {
-			var element = event.currentTarget;
-			var elementText = $(element).find('option:selected').text();
-			$('#homework-teacherSay-input').text(elementText);
-		}
+        onChangeTeacherSaySelect: function (event) {
+            var element = event.currentTarget;
+            var elementText = $(element).find('option:selected').text();
+            $('#homework-teacherSay-input').text(elementText);
+        }
      });
 
-	var homeworkFootCheck = Widget.extend({
+    var homeworkFootCheck = Widget.extend({
 
-     	events:{
+        events:{
             'click #homework-check-btn': 'onClickCheckBtn'
-     	},
+        },
         onClickCheckBtn: function(event) {
             var $btn = $(event.currentTarget);
                 $btn.button('saving');
@@ -59,6 +59,6 @@ define(function(require, exports, module) {
                 // location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/check/homework/reviewing/list";
             });
         }
-	});
+    });
 
 });

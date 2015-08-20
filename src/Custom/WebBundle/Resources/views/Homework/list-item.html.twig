@@ -1,0 +1,46 @@
+<div class="homework-item">
+    <div class="homework-content">
+        <h4>课时作业(课时{{ lesson.number }} {{ lesson.title }})</h4>
+        {% if homework.pairReview %}
+            <p>截止时间: {{ homework.completeTime|date("m月d日") }}</p>
+            <p>互评时间: {{ homework.completeTime|date("m月d日") }} - {{ homework.reviewEndTime|date("m月d日") }}</p>
+            <p class="red">提交作业后，不参与互评将影响成绩</p>
+        {% else %}
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p class="red">&nbsp;</p>
+        {% endif %}
+    </div>
+    <div class="homework-btn">
+        <div class="btn-start">
+            {% if now > homework.completeTime and homework.pairReview %}
+                <a href="" class="gary">截止时间已过</a>
+            {% elseif homeworkResult %}
+                {% if homeworkResult.status == 'reviewing' or homeworkResult.status == 'pairReviewing' or homeworkResult.status == 'finished' %}
+                    <a href="" class="gary">已提交</a>
+                {% else %}
+                    {% if homeworkItemsResult|default(null) %}
+                        <a href="{{ path('course_homework_continue',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id}) }}"
+                           class="green">继续做题</a>
+                    {% else %}
+                        <a href="{{ path('course_homework_start_do',{courseId:course.id,homeworkId:homework.id}) }}"
+                           class="green">开始做题</a>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <a href="{{ path('course_homework_start_do',{courseId:course.id,homeworkId:homework.id}) }}"
+                   class="green">开始做题</a>
+            {% endif %}
+        </div>
+        <div class="btn-comment">
+            {% if homework.pairReview %}
+                {% if now >homework.completeTime and now < homework.reviewEndTime %}
+                    <a href="" class="green">点评同学作业</a>
+                {% endif %}
+                {% if now > homework.reviewEndTime %}
+                    <a href="" class="gary">截止时间已过</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
