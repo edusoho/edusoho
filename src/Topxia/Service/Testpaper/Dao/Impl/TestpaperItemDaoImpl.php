@@ -104,7 +104,7 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId)
+    public function findTestpaperItemsByPIdAndLockedTestId($pId,$lockedTestId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND testId IN {$lockedTestId}";
         return $this->getConnection()->fetchAll($sql,array($pId));

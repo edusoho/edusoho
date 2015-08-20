@@ -41,7 +41,7 @@ interface TestpaperService
 
     public function canLookTestpaper($resultId);
 
-    public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);
+    public function findTestpapersByPIdAndLockedTarget($pId, $lockedTarget);
 
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 
@@ -99,7 +99,7 @@ interface TestpaperService
      * @param  integer $id 试卷ID
      * @return array     试卷所有题目，包含item对应的question的信息
      */
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+    public function findTestpaperItemsByPIdAndLockedTestId($pId,$lockedTestId);
 
     public function createTestpaperItem($item);
 

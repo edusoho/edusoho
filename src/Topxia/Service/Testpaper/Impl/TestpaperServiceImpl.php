@@ -741,9 +741,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->updateTestpaperResult($id, $fields);
     }
 
-    public function findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId)
+    public function findTestpaperItemsByPIdAndLockedTestId($pId,$lockedTestId)
     {
-        return $this->getTestpaperItemDao()->findTestpaperItemByPIdAndLockedTestId($pId,$lockedTestId);
+        return $this->getTestpaperItemDao()->findTestpaperItemsByPIdAndLockedTestId($pId,$lockedTestId);
     }
 
     public function createTestpaperItem($item)
@@ -933,9 +933,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
-    public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget)
+    public function findTestpapersByPIdAndLockedTarget($pId, $lockedTarget)
     {
-        return $this->getTestpaperDao()->findTestpaperByPIdAndLockedTarget($pId, $lockedTarget);
+        return $this->getTestpaperDao()->findTestpapersByPIdAndLockedTarget($pId, $lockedTarget);
     }
 
     public function findTeacherTestpapersByTeacherId ($teacherId)
