@@ -12,7 +12,7 @@
     <h5><p class="courseSync-text"><font color="#e83d2c">解除后本课程将停止同步更新,本操作不可逆！</font></p></h5>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="hidden" name="courseId" value="{{course.id}}">
-    <input type="hidden" name="url" value="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:course.id})}}{% else %}{{path(url,{id:course.id})}}{% endif %}">
+    <input type="hidden" name="url" value="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:course.id})}}{% elseif type == 'question_plumber' %}{{path(url,{courseId:course.id,type:'import'})}}{% else %}{{path(url,{id:course.id})}}{% endif %}">
   </form>
 {% endblock %}
 {% block footer %}

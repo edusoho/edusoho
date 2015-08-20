@@ -24,7 +24,7 @@
   <div class="panel-body">
     <div class="panel-locked">
       <h5><p>本课程内容与原课程
-        <a href="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}" target="_blank">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>
+        <a href="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% elseif type == 'question_plumber' %}{{path(url,{courseId:parentCourse.id,type:'import'})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}" target="_blank">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>
         实时同步中。如需更改内容可以选择对原课程进行更改。
         </p>
       </h5>

@@ -60,8 +60,11 @@
           </li>
           {% endif %}
           <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
-            <a href="{{ path('course_manage_files', {id:course.id}) }}">
-              <span></span>文件管理
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'files'}) }}{% else %}
+            {{ path('course_manage_files', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>文件管理
             </a>
           </li>
         </ul>
@@ -105,7 +108,7 @@
           {% if is_plugin_installed('QuestionPlus') and setting('question_plus.enabled') %}
             <li class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}">
               <a href="{% if course.locked|default(0) == 1 %}
-              {{ path('course_manage_course_sync', {id:course.id,type:'question'}) }}{% else %}
+              {{ path('course_manage_course_sync', {id:course.id,type:'question_plumber'}) }}{% else %}
               {{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}
               {% endif %}">
               <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>题目导入/导出
