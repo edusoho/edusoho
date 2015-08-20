@@ -27,11 +27,16 @@
                             </div>
                         {% endif %}
                         {% if teacherSay|default(null) %}
-                            <div class="alert alert-success" style="margin-bottom:0px">
+                            <div class="alert alert-success" style="margin:10px 0">
                                 <div><strong>评语：</strong></div>
                                 <div class="mtm">{{ teacherSay|default('') }}</div>
                             </div>
                         {% endif %}
+                       {#  点评次数显示 #}
+                       <div class="alert alert-success" style="margin-bottom:0px">
+                                <p><strong>我的成绩：28分</strong></p>
+                                <p style="margin-top:20px">作业总分：28分 <span style="padding-left:40px">被点评：<strong style="color:#ff0000">8</strong>次</span></p>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -46,6 +51,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="question-set-items">
+
                             {% for item in itemSet.items %}
                                 {% if item.subItems|default(null) %}
                                     {% include 'CustomWebBundle:Question:question-set-item-have-sub.html.twig' %}
@@ -53,6 +59,7 @@
                                     {% include 'CustomWebBundle:Question:question-set-item.html.twig' %}
                                 {% endif %}
                             {% endfor %}
+
                         </div>
                     </div>
                 </div>
