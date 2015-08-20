@@ -473,6 +473,10 @@ class CourseManageController extends BaseController
                 $title = '课时管理';
                 $url= 'course_manage_lesson';
                 break;
+            case 'files':
+                $title = '文件管理';
+                $url = 'course_manage_files';
+                break;
             case 'price':
                 $title = '价格设置';
                 $url= 'course_manage_price';
@@ -484,6 +488,10 @@ class CourseManageController extends BaseController
             case 'question':
                 $title = '题目管理';
                 $url= 'course_manage_question';
+                break;
+            case 'question_plumber':
+                $title = '题目导入/导出';
+                $url = 'course_question_plumber';
                 break;
             case 'testpaper':
                 $title = '试卷管理';
