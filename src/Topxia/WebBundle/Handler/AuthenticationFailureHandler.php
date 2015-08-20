@@ -17,6 +17,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     {
         $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
         if ($exception->getMessage() != "Bad credentials") {
+            $message = " ";
             goto end;
         }
 
@@ -30,6 +31,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         $setting = array_merge($default, $setting);
 
         if (empty($setting['temporary_lock_enabled'])) {
+           $message = "Bad credentials";
             goto end;
         }
 
