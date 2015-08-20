@@ -7,12 +7,9 @@ use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\ReviewType;
 use Topxia\WebBundle\Controller\CourseReviewController as CourseReviewBaseController;
 
-<<<<<<< HEAD
 /**
  * 作业评价控制器.
 **/
-=======
->>>>>>> course_homepage_fix
 class CourseReviewController extends CourseReviewBaseController
 {
 
