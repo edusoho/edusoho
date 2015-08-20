@@ -104,7 +104,8 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
-    public function findTestpaperItemByPIdAndLockedTestIds($pId,$testIds)
+
+    public function findTestpaperItemsByPIdAndLockedTestIds($pId,$testIds)
     {
         if(empty($testIds)){ 
             return array(); 

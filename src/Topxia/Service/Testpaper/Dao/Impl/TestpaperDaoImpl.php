@@ -87,7 +87,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     }
 
 
-    public function findTestpaperByPIdAndLockedTarget($pId, $lockedTarget)
+    public function findTestpapersByPIdAndLockedTarget($pId, $lockedTarget)
     {
         $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND target IN {$lockedTarget}";
         return $this->getConnection()->fetchAll($sql,array($pId));
