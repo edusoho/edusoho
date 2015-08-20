@@ -146,7 +146,7 @@ class CourseOrderController extends OrderController
             
             $data = array("price" => 0, "remark"=>'');
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
-            if(isset($formData['lessonId'])){
+            if(isset($formData['lessonId']) && !empty($formData['lessonId'])){
                 return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
             }else{
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
