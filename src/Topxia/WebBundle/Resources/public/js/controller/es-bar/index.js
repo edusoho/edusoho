@@ -120,7 +120,19 @@ define(function(require, exports, module) {
 
     // 回到顶端
     var goTop = function() {
-        $(".go-top").click(function() {
+        var $gotop = $(".go-top");
+
+        $(window).scroll(function(event) {
+            var scrollTop = $(window).scrollTop();
+
+            if(scrollTop>=300) {
+                $gotop.addClass('show');
+
+            }else if($gotop.hasClass('show')) {
+                $gotop.removeClass('show');
+            }
+        });
+        $gotop.click(function() {
             return $("body,html").animate({
                 scrollTop: 0
             }, 300), !1

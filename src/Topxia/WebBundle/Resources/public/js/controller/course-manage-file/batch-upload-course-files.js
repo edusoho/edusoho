@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
     function getFileType(fileSuffix) {
         var fileSuffixs = {
-            "video": "*.mp4;*.avi;*.flv;*.wmv;*.mov;",
+            "video": "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;",
             "audio": "*.mp3",
             "document": "*.doc;*.docx;*.pdf",
             "ppt": "*.ppt;*.pptx",
@@ -139,7 +139,7 @@ define(function(require, exports, module) {
         var chunkUpload = new ChunkUpload({
             element: '#selectFiles',
             file_types : fileExts,
-            file_size_limit : "1 GB",
+            file_size_limit : "2 GB",
             uploadOnSelected: false
         });
 		var switcher = null;

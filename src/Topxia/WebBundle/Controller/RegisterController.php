@@ -26,6 +26,7 @@ class RegisterController extends BaseController
 
             $registration = $request->request->all();
             $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+            $registration['createdIp'] = $request->getClientIp();
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
@@ -229,7 +230,7 @@ class RegisterController extends BaseController
         if(!empty($user['verifiedMobile'])){
               return $this->redirect($this->generateUrl('homepage'));
         }
-        if($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened') && !($this->getAuthService()->hasPartnerAuth())){
+        if($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled',$auth) && ($auth['email_enabled'] == 'opened')){
                return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user' => $user,
                 'hash' => $hash,
