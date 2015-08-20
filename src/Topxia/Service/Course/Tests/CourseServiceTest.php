@@ -2341,7 +2341,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
-    public function textAddCourseLessonReplay()
+    public function testAddCourseLessonReplay()
     { 
         $courseLessonReplay = array('lessonId'=>1,'courseId'=>1,'title'=>'录播回放');
         $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
