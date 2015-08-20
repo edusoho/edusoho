@@ -49,7 +49,6 @@ define(function(require, exports, module) {
     }
 
 	function uploadStart(file, self, switcher) {
-        console.log(file);
         var data = {};
         var targetType = self.element.data('targetType');
 		var uploadMode = self.element.data('uploadMode');
@@ -129,7 +128,7 @@ define(function(require, exports, module) {
     }
     function getFileExt(str) { 
         var d=/\.[^\.]+$/.exec(str); 
-        return d; 
+        return d[0].toLowerCase(); 
     }
 
     exports.run = function() {
@@ -169,7 +168,7 @@ define(function(require, exports, module) {
 
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
-            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov";
+            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v";
             if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name)[0])>-1){
                 $.ajax({
                     url: videoInfoUrl,
@@ -193,7 +192,7 @@ define(function(require, exports, module) {
                 serverData.mimeType=file.type;
             }
 
-            if('*.ppt;*.pptx;*.doc;*.docx;*.pdf'.indexOf(getFileExt(file.name)[0])>-1){
+            if('*.ppt;*.pptx;*.doc;*.docx;*.pdf'.indexOf(getFileExt(file.name))>-1){
 
                 serverData.lazyConvert = 1;
             } 
