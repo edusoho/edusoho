@@ -38,14 +38,14 @@
         {% elseif member and not courseStarted %}
           <a class="btn btn-study gray">{{ 'student'==member.role ? "已报名," : ""}}等待开课</a>
         {% else %}
-          {% if needToPay %}
-            {% if userVipStatus=='ok' %}
-              {{ _self.button_for_periodic_course(course,courseStarted) }}
-            {% else %}
-              <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}" >购买课程</a>
-            {% endif %}
+          {% if userVipStatus=='ok' %}
+            <a class="btn btn-study" id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}">{{courseStarted ? '加入学习' : '报名参加'}}</a>
           {% else %}
-            {{ _self.button_for_periodic_course(course,courseStarted) }}
+            {% if needToPay %}
+              <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}" >{{ courseStarted ? '购买课程' : '报名参加' }}</a>
+            {% else %}
+              <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">{{courseStarted ? '加入学习' : '报名参加'}}</a>
+            {% endif %}
           {% endif %}
         {% endif %}
       {% else %}
@@ -97,12 +97,3 @@
         </div> 
       </div>
 {% endblock %} 
-
-
-{% macro button_for_periodic_course(course,courseStarted, hasFavorited) %}
-  {% if courseStarted %}
-    <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">加入学习</a>
-  {% else %}
-    <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">报名参加</a>
-  {% endif %}
-{% endmacro %}
