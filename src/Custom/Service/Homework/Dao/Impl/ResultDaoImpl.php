@@ -31,4 +31,17 @@ class ResultDaoImpl extends BaseHomeworkResultDao implements ResultDao
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND userId = ?";
         return $this->getConnection()->fetchAll($sql, array($courseId, $userId)) ? : null;
     }
+
+    public function findSubmitableResults()
+    {
+        $sql = "SELECT r.* FROM {$this->table} r LEFT JOIN {$this->homework_table} h ON r.homeworkId=h.id ".
+            " WHERE r.status='editing' and h.completeTime<?";
+        return $this->getConnection()->fetchAll($sql, array(time()));
+    }
+
+    public function findFinishableResults(){
+        $sql = "SELECT r.* FROM {$this->table} r LEFT JOIN {$this->homework_table} h ON r.homeworkId=h.id ".
+            " WHERE r.status='pairReviewing' and h.reviewEndTime<?";
+        return $this->getConnection()->fetchAll($sql, array(time()));
+    }
 }

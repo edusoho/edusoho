@@ -35,7 +35,7 @@
         <div class="btn-comment">
             {% if homework.pairReview %}
                 {% if now >homework.completeTime and now < homework.reviewEndTime %}
-                    <a href="" class="green">点评同学作业</a>
+                    <a href="{{path('homework_pair_review_randomize',{homeworkId: homework.id})}}" class="green">点评同学作业</a>
                 {% endif %}
                 {% if now > homework.reviewEndTime %}
                     <a href="" class="gary">截止时间已过</a>

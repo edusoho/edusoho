@@ -18,4 +18,16 @@ interface ResultDao
      * @return mixed
      */
     public function getResultByCourseIdAndUserId($courseId, $userId);
+
+    /**
+     * 查找可以提交的作业.
+     * @return 作业集合.
+     */
+    public function findSubmitableResults();
+
+    /**
+     * 查找可以结算的作业.
+     * @return 作业集合.
+    **/
+    public function findFinishableResults();
 }

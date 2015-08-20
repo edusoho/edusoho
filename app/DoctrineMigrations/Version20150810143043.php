@@ -38,6 +38,7 @@ class Version20150810143043 extends AbstractMigration
                 PRIMARY KEY  (`id`)
             ) comment='答题评分' ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
         $this->addSql("ALTER TABLE `homework_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
+        $this->addSql("ALTER TABLE `homework_item_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
         $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` float(10,1) unsigned  COMMENT '同学评分(互评成绩)';");
         $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` float(10,1) unsigned  COMMENT '老师评分';");
         $this->addSql("ALTER TABLE `homework_result` ADD `pairReviews` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评数量';");

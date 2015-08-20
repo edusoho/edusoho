@@ -90,12 +90,8 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     public function submitHomework($id, $homework_result)
     {
-        $st = 'reviewing';
         $homework = $this->getHomeworkDao()->getHomework($id);
 
-        if ($homework['pairReview']) {
-            $st = 'editing';
-        }
         $this->addItemResult($id, $homework_result);
         //reviewing
         $rightItemCount = 0;
@@ -109,11 +105,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         }
 
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
-        $homeworkitemResult['status'] = $st;
+        $homeworkitemResult['status'] = $homework['pairReview'] ? (time() >= $homework['completeTime'] ? 'pairReviewing' : 'editing') : 'reviewing';
         $homeworkitemResult['updatedTime'] = time();
 
         $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
-
         $result = $this->getResultDao()->updateResult($homeworkResult['id'], $homeworkitemResult);
 
         return $result;
@@ -149,6 +144,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $item['homeworkReviewId'] = $review['id'];
             $item['createdTime'] = time();
             $item = $this->getReviewItemDao()->create($item);
+
+            //老师的分数为该提的最终得分
+            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
             array_push($review['items'], $item);
         }
         return $review;
@@ -168,7 +166,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
         $fields['homeworkResultId'] = $homeworkResult['id'];
         $fields['homeworkId'] = $homeworkResult['homeworkId'];
-        $fields['userId'] = $this->getCurrentUser()->id;
+        $fields['userId'] = $userId;
         return $this->getReviewDao()->create($fields);
     }
 
@@ -254,7 +252,26 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     public function forwardHomeworkStatus(){
-        $this->getHomeworkDao() -> forwardEditingHomeworks();
+        $results=$this->getResultDao()->findSubmitableResults();
+        foreach($results as $result){
+            $this->submitHomework($result['homeworkId'], array('id'=>$result['id']));       
+        }
+
+        $results=$this->getResultDao()->findFinishableResults();
+        foreach($results as $result){
+            $this->finishHomeworkResult($result);
+        }
+    }
+
+    /**
+     * 结束一个互评中的作业答卷.
+     * 为作业答卷计算评分，更新作业答卷状态.
+     * @param result 作业答卷.
+    **/
+    private function finishHomeworkResult($result){
+
+
+        $result=$this->getResultDao()->updateResult($result['id'], $result);
     }
 
     protected function getReviewDao()
