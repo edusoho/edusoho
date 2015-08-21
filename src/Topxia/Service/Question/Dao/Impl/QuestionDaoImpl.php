@@ -38,6 +38,13 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget)
+    {
+
+        $sql ="SELECT * FROM {$this->table} WHERE pId = ? AND target IN {$lockedTarget}";
+        return $this->getConnection()->fetchAll($sql, array($pId));
+    }
+
     //@todo:sql
     public function findQuestionsbyTypes($types, $start, $limit)
     {
