@@ -186,18 +186,13 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             if (array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"]>0 && in_array($copiedLesson["type"], array('video', 'audio', 'ppt'))) {
                 $this->getUploadFileDao()->updateFileUsedCount(array($copiedLesson["mediaId"]), 1);
             }
-
             if(array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated' && !empty($copiedLesson)){
                 $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId,$lesson['id']);
-                $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseLessonReplay['courseId'],1),'id');
                 $courseLessonReplay = array('title'=>$courseLessonReplay['title'],'replayId'=>$courseLessonReplay['replayId'],'userId'=>$courseLessonReplay['userId']);
-                $this->getCourseService()->deleteLessonReplayByLessonId($copiedLesson['id']);
-                foreach ($courseIds as $key=>$value) {
-                    $courseLessonReplay['courseId'] = $value;
-                    $courseLessonReplay['lessonId'] = $copiedLesson['id'];
-                    $courseLessonReplay['createdTime'] = time();
-                    $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
-                }
+                $courseLessonReplay['courseId'] = $copiedLesson['courseId'];
+                $courseLessonReplay['lessonId'] = $copiedLesson['id'];
+                $courseLessonReplay['createdTime'] = time();
+                $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
             }
         }
 
