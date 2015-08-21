@@ -71,7 +71,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     }
 
     public function deleteTestpaper($id)
-    {
+    {  
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
@@ -81,9 +81,16 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
             return array(); 
         }
         $marks = str_repeat('?,', count($targets) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks})";
         $results = $this->getConnection()->fetchAll($sql, $targets) ? : array();
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
+    }
+
+
+    public function findTestpapersByPIdAndLockedTarget($pId, $lockedTarget)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND target IN {$lockedTarget}";
+        return $this->getConnection()->fetchAll($sql,array($pId));
     }
 
     protected function _createSearchQueryBuilder($conditions)

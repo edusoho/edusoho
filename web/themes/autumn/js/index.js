@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Lazyload = require('echo.js');
     exports.run = function() {
         Lazyload.init();
+        
         var carousel = function() {
 
             var $this = $("#autumn-carousel .carousel-inner .item");
@@ -19,6 +20,5 @@ define(function(require, exports, module) {
 
         }
         carousel();
-
     }
 });

@@ -2163,7 +2163,200 @@ class CourseServiceTest extends BaseTestCase
         $user['roles'] = array('ROLE_USER');
         return $user;
     }
-    
+
+
+    /**
+     *　同步课程数据
+     */
+
+    public function testFindCoursesByParentIdAndLocked()
+    {
+        $course1 = array('title' => 'test-one');
+        $course2 = array('title' => 'test-two');
+        $course1 = $this->getCourseService()->createCourse($course1);
+        $course2 = $this->getCourseService()->createCourse($course2);
+        $this->getCourseService()->editCourse(1, array('parentId'=>1,'locked'=>1));
+        $this->getCourseService()->editCourse(2, array('parentId'=>1,'locked'=>1));
+        $result = $this->getCourseService()->findCoursesByParentIdAndLocked(1,1);
+        $this->assertEquals(2,count($result));
+    }
+
+    public function testEditCourse()
+    {
+        $course1 = array('title' => 'test-one');
+        $course2 = array('title' => 'test-two');
+        $course1 = $this->getCourseService()->createCourse($course1);
+        $course2 = $this->getCourseService()->createCourse($course2);
+        $editCourse1 = $this->getCourseService()->editCourse(1, array('title'=>'test-three'));
+        $editCourse2 = $this->getCourseService()->editCourse(2, array('title'=>'test-four'));
+        $this->assertEquals('test-three',$editCourse1['title']);
+        $this->assertEquals('test-four',$editCourse2['title']);
+    }
+
+    public function testFindLessonsByParentIdAndLockedCourseIds()
+    {
+
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $createdLesson1 = $this->getCourseService()->createLesson($lesson1);
+        $this->getCourseService()->editLesson(1,array('parentId'=>1));
+        $result = $this->getCourseService()->findLessonsByParentIdAndLockedCourseIds(1,array(1));
+        $this->assertEquals('test', $createdLesson1['title']);
+        $this->assertEquals(1, count($result));  
+    }
+
+    public function testAddLesson()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
+        $this->assertEquals('test lesson',$createdLesson1['title']);
+    }
+
+    public function testEditLesson()
+    {
+
+        $user = $this->createUser(); 
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $lesson1 = array(
+            'courseId' =>$createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'summary' => '',
+            'type' => 'text',
+            'parentId'=> 1
+        );
+        $createdLesson1 = $this->getCourseService()->addLesson($lesson1);
+
+        $editLesson = $this->getCourseService()->editLesson($createdLesson1['id'],array("title"=>"edit lesson"));
+        
+        $this->assertEquals("edit lesson", $editLesson['title']);
+
+    }
+
+    public function testAddChapter()
+    {
+        $chapter1 = array('courseId' => 1, 'title' => 'chapter 1', 'type' => 'chapter');
+        $chapter2 = array('courseId' => 1, 'title' => 'chapter 2', 'type' => 'chapter');
+        $chapter3 = array('courseId' => 1, 'title' => 'chapter 3', 'type' => 'chapter');
+
+        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
+
+        $this->assertTrue(is_array($createdChapter1));
+        $this->assertEquals($chapter1['courseId'], $createdChapter1['courseId']);
+        $this->assertEquals($chapter1['title'], $createdChapter1['title']);
+
+
+        $createdChapter2 = $this->getCourseService()->addChapter($chapter2);
+        $this->assertEquals($chapter2['courseId'], $createdChapter2['courseId']);
+        $this->assertEquals($chapter2['title'], $createdChapter2['title']);
+
+        $createdChapter3 = $this->getCourseService()->addChapter($chapter3);
+        $this->assertEquals($chapter3['courseId'], $createdChapter3['courseId']);
+        $this->assertEquals($chapter3['title'], $createdChapter3['title']);
+    }
+
+    public function testEditChapter()
+    {
+        $chapter1 = array('courseId' => 1, 'title' => 'chapter 1', 'type' => 'chapter'); 
+        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
+        $chapter = $this->getCourseService()->editChapter(1,array('title'=>'chapter edit'));
+        $this->assertEquals('chapter edit', $chapter['title']);
+    }
+
+    public function testFindChaptersByChapterIdAndLockedCourseIds()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course1 = array(
+            'title' => 'test one'
+        );
+
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $chapter1 = array('courseId' => $createCourse1['id'], 'title' => 'chapter 1', 'type' => 'chapter','pId'=>1);  
+        $createdChapter1 = $this->getCourseService()->addChapter($chapter1);
+        $chapter = $this->getCourseService()->findChaptersByChapterIdAndLockedCourseIds(1,array(1));
+        $this->assertEquals('chapter 1',$chapter[0]['title']);
+    }
+
+    public function testCreateMember()
+    {
+        $member = array('courseId'=>1);
+        $member = $this->getCourseService()->createMember($member);
+        $count = $this->getCourseService()->searchMemberCount(array('courseId'=>1));
+        $this->assertEquals(1, $count);
+    }
+
+    public function testDeleteMemberByCourseIdAndUserId()
+    {
+        $member = array('courseId'=>1,'userId'=>1);
+        $member = $this->getCourseService()->createMember($member);
+        $this->assertTrue(is_array($member));
+        $count = $this->getCourseService()->deleteMemberByCourseIdAndUserId(1,1);
+        $this->assertEquals(1, $count);
+    }
+
+    public function testAddCourseLessonReplay()
+    { 
+        $courseLessonReplay = array('lessonId'=>1,'courseId'=>1,'title'=>'录播回放');
+        $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+    }
+
+    public function testGetCourseLessonReplayByCourseIdAndLessonId()
+    {
+        $courseLessonReplay = array('lessonId'=>1,'courseId'=>1,'title'=>'录播回放');
+        $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+        $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1,1);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+    }
+ 
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');

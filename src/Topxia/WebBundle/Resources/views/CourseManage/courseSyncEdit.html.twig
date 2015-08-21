@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}解除确认{% endblock %}
+{% block body %}
+<style>
+  .courseSync-text{
+    padding:10px 50px;
+    text-align:center;
+  }
+</style>
+  <form id="courseSync-form" class="form-horizontal" method="post" action="{{path('course_manage_course_sync_edit')}}">
+    <div style="text-align:center;"><span class="es-icon es-icon-warning" style="font-size:60px;color:#e83d2c;"></span></div>
+    <h5><p class="courseSync-text"><font color="#e83d2c">解除后本课程将停止同步更新,本操作不可逆！</font></p></h5>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input type="hidden" name="courseId" value="{{course.id}}">
+    <input type="hidden" name="url" value="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:course.id})}}{% elseif type == 'question_plumber' %}{{path(url,{courseId:course.id,type:'import'})}}{% else %}{{path(url,{id:course.id})}}{% endif %}">
+  </form>
+{% endblock %}
+{% block footer %}
+    <button id="courseSync-btn" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#courseSync-form">确认</button>
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+
+    <script>app.load('course-manage/sync-edit')</script>
+{% endblock %}
