@@ -72,11 +72,14 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('status = :status')
-            ->andWhere('type = :type')
+            ->andWhere('batchId = :batchId')
+            ->andWhere('taskType = :taskType')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('taskStartTime >= :taskStartTimeGreaterThan')
             ->andWhere('taskStartTime < :taskStartTimeLessThan')
+            ->andWhere('taskEndTime >= :tasktaskEndTimeGreaterThan')
+            ->andWhere('taskEndTime <= :tasktaskEndTimeLessThan')
             ->andWhere('batchId IN ( :batchIds )');
 
         return $builder;
