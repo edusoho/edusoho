@@ -30,6 +30,7 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql(
             "CREATE TABLE IF NOT EXISTS `homework_review_item` (
                 `id` int(10) unsigned NOT NULL auto_increment ,
+                `homeworkResultId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '',
                 `homeworkItemResultId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '答题id',
                 `homeworkReviewId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业评分id',
                 `score` float(10,1) unsigned NOT NULL DEFAULT 0 COMMENT '分数',

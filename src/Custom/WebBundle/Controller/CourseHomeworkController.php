@@ -73,16 +73,11 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $data = !empty($data['data']) ? $data['data'] : array();
-//            $homework = $this->getHomeworkService()->getHomework($homeworkId);
-//            if ($homework['pairReview'] and intval($homework['completeTime']) > time()) {
-//                $this->setFlashMessage('danger', '已经超过作业提交截止时间，提交作业失败！');
-//                return $this->redirect($this->generateUrl('course_homework_do',
-//                    array(
-//                        'courseId' => $courseId,
-//                        'homeworkId' => $homeworkId,
-//                        'resultId' => '2',
-//                    )));
-//            }
+
+            $homework=$this->getHomeworkService()->loadHomework($homeworkId);
+            if ($homework['pairReview'] and intval($homework['completeTime']) < time()) {
+                return $this->createMessageResponse('error',"已经超过作业提交截止时间，提交作业失败！");
+            }
             $res = $this->getHomeworkService()->submitHomework($homeworkId, $data);
             $course = $this->getCourseService()->getCourse($courseId);
             $lesson = $this->getCourseService()->getCourseLesson($courseId, $res['lessonId']);

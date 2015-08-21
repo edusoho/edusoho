@@ -20,4 +20,11 @@ interface ReviewItemDao
      * 获取一个作业点评.
     **/
     public function get($id);
+
+    /**
+     * 计算答卷下所有答题的用户互评平均分.
+     * @param resultId 答卷id.
+     * @param 答题平均分集合, 如[{'homeworkItemResultId': 1, 'score': 1.5}].
+    **/
+    public function averageItemScores($resultId);
 }

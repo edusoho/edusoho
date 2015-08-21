@@ -24,10 +24,6 @@ class HomeworkPairReviewController extends BaseController
         $userId=$this -> getCurrentUser() -> id;
         $homeworkResult = $this -> getHomeworkService() -> randomizeHomeworkResultForPairReview($homeworkId, $userId);
 
-	$tip = "1.每位同学必须评价" . $homework['minReviews'] . "人，互评成绩按如下规则换算：未评分的=自己所得分数*" . ($homework['zeroPercent'] * 100) . "%，
-        评价不到" . $homework['minReviews'] . "人的=自己所得分数*" . ($homework['partPercent'] * 100) . "%，
-        达到" . $homework['minReviews'] . "人=自己所得分数*" . ($homework['completePercent'] * 100) . "%；";
-
         if(empty($homeworkResult)){
             return $this->createMessageResponse('info', '没有可以互评的作业!');
         }else{
