@@ -40,6 +40,60 @@ define(function(require, exports, module) {
             }
         });
 
+         var View = Widget.extend({
+            setup: function() {
+
+            },
+
+            events: {
+                'click #submit-review-btn': 'onSubmitReview',
+                'click #submit-pair-review-btn': 'onSubmitPairReview',
+                'click #randomize-next-pair-review-btn': 'onRandomizeNextPairReview',
+                'click .question-index': 'onClickSetCard'
+            },
+
+            onSubmitReview: function(event) {
+            },
+
+            onRandomizeNextPairReview: function(event){
+                if (!confirm('确认要放弃当前作业互评，随机挑选一份新的作业互评么？')) return false;
+                var btn = $(event.currentTarget);
+                location.href = btn.data('url');
+            },
+
+            onSubmitPairReview: function(event){
+                var btn = $(event.currentTarget);
+
+                validator.execute();
+                if($('.text-danger').length>0){
+                    return false;
+                }
+                
+                var items=[];
+                $('.score').each(function(index,item){
+                    var field=$(item);
+                    var reviewItem={};
+                    reviewItem.homeworkItemResultId=field.data('itemId');
+                    reviewItem.score=field.val();
+                    var selector=$('[name=review\\['+reviewItem.id+'\\]]');
+                    if(selector.length>0){
+                        reviewItem.review = selector.val();
+                    }
+                    items.push(reviewItem);
+                });
+
+                $.post(btn.data('url'),{data:{items: items}},function(res){
+                    location.href = btn.data('goto');
+                    // location.href= window.location.protocol+"//"+window.location.host+"/course/"+res.courseId+"/check/homework/reviewing/list";
+                });
+            },
+
+           onClickSetCard: function(event) {
+                var position = $('.question-'+$(event.currentTarget).data('anchor')).offset();
+                $(document).scrollTop(position.top-10);
+            }
+        });       
+
         var v = new View({
             element: '#homework-set'
         }).render();
@@ -53,28 +107,4 @@ define(function(require, exports, module) {
             }
         })
     };
-
-    var View = Widget.extend({
-        setup: function() {
-        },
-
-        events: {
-            'click #submit-review-btn': 'onSubmit',
-            'click .question-index': 'onClickSetCard'
-        },
-
-        onSubmit: function(event) {
-            // validator.execute();
-
-            // e.preventDefault();
-
-            // $("#modal").load('wwww.baidu.com');
-            // $("#modal").modal('show');
-        },
-
-       onClickSetCard: function(event) {
-            var position = $('.question-'+$(event.currentTarget).data('anchor')).offset();
-            $(document).scrollTop(position.top-10);
-        }
-    });
 });

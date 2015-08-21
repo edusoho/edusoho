@@ -19,7 +19,7 @@
               </div>
 
               <div class="panel-footer">
-                  <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" id="submit-review-btn" data-url="{{ path('homework_review_check',{homeworkResultId: homeworkResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}">完成批改</button>
+                  <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modal" id="submit-review-btn" data-url="{{ path('homework_review_check',{homeworkResultId: homeworkResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" data-homewor-result-id="{{homeworkResult.id}}" >完成批改</button>
               </div>
 
           </div>

@@ -21,7 +21,7 @@
 
     </div>
 
-    {% if app.user.id!=homeworkResult.userId %}
+    {% if app.user.isTeacher or app.user.id!=homeworkResult.userId %}
         <div class="form-group">
             <div class="control-label"><label for="review-score-{{question.id}}-field">评分</label></div>
             <div class="controls">
@@ -31,7 +31,7 @@
 
         <div  class="form-group question-teacher-say-input">
             <div class="teacher-say-text">评语:</div>
-            <textarea class="form-control homework-result-item teacher-say"  name="review[{{ itemResult.id }}]"  data-type="essay" data-item-id="{{ itemResult.id }}"></textarea>
+            <textarea class="form-control homework-result-item teacher-say"  name="review[{{ itemResult.id }}]"  data-type="essay" data-item-id="{{ itemResult.id }}" data-question-id="{{question.id}}" ></textarea>
         </div>
     {% else %}
         <div class="question-score">

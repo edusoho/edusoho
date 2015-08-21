@@ -92,6 +92,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     {
         $homework = $this->getHomeworkDao()->getHomework($id);
 
+        if ($homework['pairReview'] and intval($homework['completeTime']) < time()) {
+            throw$this->createServiceException("已经超过作业提交截止时间，提交作业失败！");
+        }
         $this->addItemResult($id, $homework_result);
         //reviewing
         $rightItemCount = 0;
@@ -137,18 +140,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $review['category'] = 'teacher';
         $review['score'] = $finalScore;
         $review['createdTime'] = time();
-        $review = $this->getReviewDao()->create($review);
+        $review = $this -> getReviewDao() -> create($review);
+        $review['items'] = $this->createHomeworkPairReviewItems($review['id'], $fields['items']);
+        $review['homeworkResult'] = $homeworkResult;
 
-        $review['items'] = array();
-        foreach ($fields['items'] as $index => $item) {
-            $item['homeworkReviewId'] = $review['id'];
-            $item['createdTime'] = time();
-            $item = $this->getReviewItemDao()->create($item);
-
-            //老师的分数为该提的最终得分
-            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
-            array_push($review['items'], $item);
-        }
         return $review;
     }
 
@@ -161,18 +156,44 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $sum;
     }
 
+    private function createHomeworkPairReviewItems($homeworkReviewId, $items){
+        $reviewItems=array();
+        foreach($items as $index =>$item){
+            $item['homeworkReviewId'] = $homeworkReviewId;
+            $item['createdTime'] = time();
+            $item=$this ->getReviewItemDao()->create($item);
+
+	    //老师的分数为该提的最终得分
+            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            array_push($reviewItems,$item);
+        }
+        return $reviewItems;
+    }
+
     public function createHomeworkPairReview($homeworkResultId, $userId, array $fields)
     {
         $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
-        $fields['homeworkResultId'] = $homeworkResult['id'];
-        $fields['homeworkId'] = $homeworkResult['homeworkId'];
-        $fields['userId'] = $userId;
-        return $this->getReviewDao()->create($fields);
+        $result['pairReviews'] = ++$homeworkResult['pairReviews'];
+        $this->getResultDao()->updateResult($homeworkResult['id'],$result);
+        
+        $finalScore=$this->sumScore($fields['items']);
+        $review['userId'] = $userId;
+        $review['homeworkId'] = $homeworkResult['homeworkId'];
+        $review['homeworkResultId'] = $homeworkResultId;
+        $review['category'] = 'student';
+        $review['score'] = $finalScore;
+        $review['createdTime'] = time();
+        $review = $this -> getReviewDao() -> create($review);
+        $review['items'] = $this->createHomeworkPairReviewItems($review['id'], $fields['items']);
+        $review['homeworkResult'] = $homeworkResult;
+
+        return $review;
     }
 
     public function randomizeHomeworkResultForPairReview($homeworkId, $userId)
     {
-        $homework = $this->getHomeworkDao()->getHomework($homeworkId);
+        $homework = $this->loadHomework($homeworkId);
+
         $reviewableResults = $this->getResultDao()->findPairReviewables($homework, $userId);
         if (empty($reviewableResults)) {
             return null;
@@ -181,6 +202,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $result = $this->loadHomeworkResult($selectedId);
         $resultItems = $this->getItemSetResultByHomeworkIdAndUserId($homeworkId, $result['userId']);
         $result['items'] = $resultItems;
+        $course=$this->getCourseService() ->loadCourse($result['courseId']);
+        $result['course'] = $course;
+        $lesson=$this ->getCourseService()->loadLesson($result['lessonId']);
+        $result['lesson'] =$lesson;
+        $result['homework']=$homework;
         return $result;
     }
 
@@ -249,6 +275,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             throw $this->createNotFoundException("作业答题{id}不存在！");
         }
         return $item;
+    }
+
+    public function countUserHomeworkPairReviews($homeworkId, $userId){
+        return $this->getReviewDao() -> countUserPairReviews($homeworkId, $userId);
     }
 
     public function forwardHomeworkStatus(){

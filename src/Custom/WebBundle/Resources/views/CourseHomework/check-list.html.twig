@@ -60,7 +60,7 @@
 
                             <td>
                                 {% if status == 'reviewing' %}
-                                    <a href="{{ path('course_homework_check', {courseId:course.id,homeworkId:homeworkResult.homeworkId,userId:userId }) }}"
+                                    <a href="{{ path('homework_review_create', {homeworkResultId:homeworkResult.id}) }}"
                                        class="btn btn-default btn-sm pull-right">批改</a>
                                 {% else %}
                                     <a class="btn btn-default btn-sm pull-right"

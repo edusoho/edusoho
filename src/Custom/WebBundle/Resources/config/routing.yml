@@ -118,9 +118,14 @@ course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: CustomWebBundle:CourseInfo:index }
 
-pair_review_create:
-    pattern:  /homeworks/{homeworkId}/pair_reviews/create
+homework_pair_review_randomize:
+    pattern:  /homeworks/{homeworkId}/pair_reviews/randomize
+    defaults: { _controller: CustomWebBundle:HomeworkPairReview:randomize }
+
+homework_pair_review_create:
+    pattern:  /homeworks_results/{homeworkResultId}/pair_reviews/create
     defaults: { _controller: CustomWebBundle:HomeworkPairReview:create }
+    methods: [POST]
 
 homework_review_create:
     pattern: /homework_results/{homeworkResultId}/reviews/create

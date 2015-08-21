@@ -20,4 +20,9 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         $sql = "SELECT * FROM {$this->table} WHERE id = ? limit 1";
         return  $this->getConnection()->fetchAssoc($sql,array($id)) ? : array();
     }
+
+    public function countUserPairReviews($homeworkId, $userId){
+        $sql = "SELECT count(id) FROM {$this->table} WHERE homeworkId=? and userId=?";
+        return $this->getConnection()->fetchColumn($sql, array($homeworkId,$userId));
+    }
 }

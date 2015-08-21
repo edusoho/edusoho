@@ -18,80 +18,53 @@ class HomeworkPairReviewController extends BaseController
      * 随机显示一个作业答卷互评界面.
      * @param request
      * @param homeworkId , 作业id.
-     **/
-    public function createAction(Request $request, $homeworkId)
+    **/
+    public function randomizeAction(Request $request, $homeworkId)
     {
-        $homework = $this->getHomeworkService()->loadHomework($homeworkId);
-        $course = $this->getCourseService()->loadCourse($homework['courseId']);
-        $lesson = $this->getCourseService()->loadLesson($homework['lessonId']);
+        $userId=$this -> getCurrentUser() -> id;
+        $homeworkResult = $this -> getHomeworkService() -> randomizeHomeworkResultForPairReview($homeworkId, $userId);
 
-        $homeworkResult = $this->getHomeworkService()->randomizeHomeworkResultForPairReview($homework['id'], $this->getCurrentUser()->id);
+	$tip = "1.每位同学必须评价" . $homework['minReviews'] . "人，互评成绩按如下规则换算：未评分的=自己所得分数*" . ($homework['zeroPercent'] * 100) . "%，
+        评价不到" . $homework['minReviews'] . "人的=自己所得分数*" . ($homework['partPercent'] * 100) . "%，
+        达到" . $homework['minReviews'] . "人=自己所得分数*" . ($homework['completePercent'] * 100) . "%；";
 
+        if(empty($homeworkResult)){
+            return $this->createMessageResponse('info', '没有可以互评的作业!');
+        }else{
+            return $this->render("CustomWebBundle:HomeworkPairReview:create.html.twig", array(
+                'homeworkResult' => $homeworkResult,
+                'itemSet' => $homeworkResult['items'],
+                'homeworkId' => $homeworkResult['homeworkId'],
+                'homework' => $homeworkResult['homework'],
+                'course' => $homeworkResult['course'],
+                'lesson' => $homeworkResult['lesson'],
+                'questionStatus' => 'reviewing',
+                'pairReviewCount' => $this->getHomeworkService() -> countUserHomeworkPairReviews($homeworkId, $userId)
+            ));
+        }
+    }
+
+    /**
+     * 作业答卷互评提交界面.
+     * @param request
+     * @param homeworkResultId , 作业答卷id.
+    **/
+    public function createAction(Request $request, $homeworkResultId)
+    {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $this->getHomeworkService()->createHomeworkPairReview($homeworkResult['id'],$this->getCurrentUser()->id,$fields);
-
+            $fields = empty($fields['data']) ? "" : $fields['data'];
+            $homeworkReview=$this->getHomeworkService()->createHomeworkPairReview($homeworkResultId,$this->getCurrentUser()->id,$fields);
+            
             return $this->createJsonResponse(
                 array(
-                    'courseId' => $courseId,
-                    'lessonId' => $homework['lessonId']
+                    'courseId' => $homeworkReview['homeworkResult']['courseId'],
+                    'lessonId' => $homeworkReview['homeworkResult']['lessonId']
                 )
             );
         }
 
-        $tip = "1.每位同学必须评价" . $homework['minReviews'] . "人，互评成绩按如下规则换算：未评分的=自己所得分数*" . ($homework['zeroPercent'] * 100) . "%，
-        评价不到" . $homework['minReviews'] . "人的=自己所得分数*" . ($homework['partPercent'] * 100) . "%，
-        达到" . $homework['minReviews'] . "人=自己所得分数*" . ($homework['completePercent'] * 100) . "%；";
-
-        // $canCheckHomework = $this->getHomeworkService()->canCheckHomework($homeworkId);
-        // if (!$canCheckHomework) {
-        //     throw $this->createAccessDeniedException('无权批改作业！');
-        // }
-        // $course = $this->getCourseService()->getCourse($courseId);
-        // $homework = $this->getHomeworkService()->getHomework($homeworkId);
-        // if (empty($homework)) {
-        //     throw $this->createNotFoundException();
-        // }
-
-        // $homeworkResult = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homeworkId, $userId);
-        // if ($homeworkResult['status'] != 'reviewing') {
-        //     return $this->createMessageResponse('warning', '作业已批阅或者未做完!');
-        // }
-
-        // if ($homework['courseId'] != $course['id']) {
-        //     throw $this->createNotFoundException();
-        // }
-
-        // $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
-
-        // if (empty($lesson)) {
-        //     return $this->createMessageResponse('info','作业所属课时不存在！');
-        // }
-
-        // $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'],$userId);
-
-        // return $this->render('HomeworkBundle:CourseHomework:check.html.twig', array(
-        //     'homework' => $homework,
-        //     'itemSetResult' => $itemSetResult,
-        //     'course' => $course,
-        //     'lesson' => $lesson,
-        //     'userId' => $userId,
-        //     'questionStatus' => 'reviewing',
-        //     'targetId' => $request->query->get('targetId'),
-        //     'source' => $request->query->get('source','course'),
-        //     'canCheckHomework' => $canCheckHomework
-        // ));
-
-        return $this->render("CustomWebBundle:HomeworkPairReview:create.html.twig", array(
-            'homework' => $homework,
-            'itemSet' => $homeworkResult['items'],
-            'course' => $course,
-            'lesson' => $lesson,
-            'homeworkResult' => $homeworkResult,
-            'questionStatus' => 'reviewing',
-            'tip' => $tip
-        ));
-
+        return $this->createJsonResponse(true);
     }
 
     /**

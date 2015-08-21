@@ -90,6 +90,7 @@ interface HomeworkService
      * @param homeworkResultId 作业答卷id.
      * @param userId,老师id.
      * @param fields 更新字段.
+     * @return 保存的点评数据.
      * 
     **/
     public function createHomeworkReview($homeworkResultId,$userId, array $fields);
@@ -103,6 +104,13 @@ interface HomeworkService
      **/
     public function createHomeworkPairReview($homeworkResultId,$userId, array $fields);
 
+    /**
+     * 统计用户的作业互评数量.
+     * @param homeworkId, 作业id.
+     * @param userId 用户id.
+     * @return 用户作业互评数量.
+    **/
+    public function countUserHomeworkPairReviews($homeworkId, $userId);
 
     /**
      * 根据id获取作业答题.
