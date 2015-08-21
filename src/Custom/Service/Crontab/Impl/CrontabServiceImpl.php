@@ -38,7 +38,7 @@ class CrontabServiceImpl extends BaseCrontabService implements CrontabService
                 $this->getJobDao()->updateJob($job['id'], array(
                     'executing' => '0',
                     'latestExecutedTime' => $time,
-                    'nextExcutedTime' => strtotime('+1 minutes',$time);
+                    'nextExcutedTime' => strtotime('+1 minutes',$time)
                 ));
             }
 
