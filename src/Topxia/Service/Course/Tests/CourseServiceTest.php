@@ -2347,6 +2347,15 @@ class CourseServiceTest extends BaseTestCase
         $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
         $this->assertEquals('录播回放', $courseLessonReplay['title']);
     }
+
+    public function testGetCourseLessonReplayByCourseIdAndLessonId()
+    {
+        $courseLessonReplay = array('lessonId'=>1,'courseId'=>1,'title'=>'录播回放');
+        $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+        $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1,1);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+    }
  
     protected function getUserService()
     {
