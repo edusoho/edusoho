@@ -32,4 +32,6 @@ interface ClassRoomProcessor
 	public function getTodaySignInfo();
 
 	public function sign();
+
+	public function search();
 }

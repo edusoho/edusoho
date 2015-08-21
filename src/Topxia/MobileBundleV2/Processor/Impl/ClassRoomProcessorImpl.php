@@ -17,6 +17,33 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}
 	}
 
+    public function search()
+    {
+        $conditions = array(
+            'status' => 'published',
+            'private' => 0
+        );
+
+        $start  = (int) $this->getParam("start", 0);
+        $limit  = (int) $this->getParam("limit", 10);
+
+        $conditions['title'] = $this->getParam("title");
+        $total = $this->getClassroomService()->searchClassroomsCount($conditions);
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('recommendedSeq', 'desc'),
+            $start,
+            $limit
+        );
+
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data" => $this->filterClassRooms($classrooms)
+        );
+    }
+
     public function sign()
     {
         $classRoomId = $this->getParam("classRoomId", 0);
