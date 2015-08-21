@@ -1,5 +1,5 @@
 <?php
-namespace Custom\Service\Order\Job;
+namespace Custom\Service\Homework\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
@@ -11,7 +11,7 @@ class ForwardHomeworkStatusJob implements Job
     	$this -> getHomeworkService() -> forwardHomeworkStatus();
     }
 
-    protected function getHomewokService()
+    protected function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Custom:Homework.HomeworkService');
     }

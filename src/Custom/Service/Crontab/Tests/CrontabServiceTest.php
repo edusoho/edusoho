@@ -11,7 +11,19 @@ use Doctrine\DBAL\Query\QueryBuilder;
 class CrontabServiceTest extends BaseTestCase
 {
     public function testExecuteJbo(){
-        $this->getCrontabService()->executeJob(3);
+        $job=$this->getCrontabService()->createJob(array(
+            'name'=>'ForwardHomeworkStatusJob',
+            'jobClass'=>'Custom\Service\Homework\Job\ForwardHomeworkStatusJob',
+            'cycle'=>'everyminute',
+            'cycleTime'=>'0',
+            'jobParams'=>'',
+            'executing'=>'0',
+            'nextExcutedTime'=>'0',
+            'latestExecutedTime'=>'0',
+            'creatorId'=>'0',
+            'createdTime'=>'0'
+        ));
+        $this->getCrontabService()->executeJob($job['id']);
     }
 
     protected function getCrontabService(){
