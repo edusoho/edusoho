@@ -279,6 +279,8 @@ interface CourseService
 
 	public function deleteMemberByCourseIdAndUserId($courseId, $userId);
 
+	public function deleteMemberByCourseId($courseId);
+
 	/**
 	 * 成为学员，即加入课程的学习
 	 */
