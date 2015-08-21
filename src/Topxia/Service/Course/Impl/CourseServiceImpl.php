@@ -2448,8 +2448,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson = $this->getLessonDao()->getLesson($lessonId);
 		$mediaId = $lesson["mediaId"];
 		$client = new EdusohoLiveClient();
-		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
-
+		$replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);	
 		if(array_key_exists("error", $replayList)){
 			return $replayList;
 		}
@@ -2508,6 +2507,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function deleteCourseLessonReplayByLessonId($lessonId)
 	{
 		$this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+	}
+
+	public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId)
+	{
+		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
 	}
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
