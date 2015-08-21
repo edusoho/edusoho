@@ -189,7 +189,8 @@ class CourseHomeworkController extends BaseCourseHomeworkController
             'lesson' => $lesson,
             'teacherSay' => $homeworkResult['teacherSay'],
             'userId' => $homeworkResult['userId'],
-            'questionStatus' => $homeworkResult['status']
+            'questionStatus' => $homeworkResult['status'],
+            'homeworkResult' => $homeworkResult
         ));
     }
 

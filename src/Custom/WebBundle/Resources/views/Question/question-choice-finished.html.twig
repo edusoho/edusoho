@@ -5,6 +5,7 @@
   {% elseif question.type == 'choice' %}（多选）
   {% endif %}
   {{ question.stem|bbCode2Html|raw }}
+  <span>{{ question.score | round}}分</span>
 {% endblock %}
 
 {% block body %}
@@ -14,6 +15,7 @@
 {% if itemResult.answer|default(null) or itemResult.answer == 0 %}
   {% set choiceIndex = itemResult.answer %}
 {% endif %}
+
   <div class="homework-question-result">
 
     {% if itemResult.status == 'right' %}

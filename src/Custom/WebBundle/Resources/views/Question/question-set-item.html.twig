@@ -16,17 +16,23 @@
     <div class="question-set-item-main">
         {% set question = item.question %}
         {% set itemResult = item.itemResult|default(null) %}
-        {% if questionStatus == 'previewing' or questionStatus == 'pairReviewing' %}{% set questionStatus = 'doing' %}{% endif %}
+        {% if questionStatus == 'previewing' %}
+          {% set questionStatus = 'doing' %}
+        {% elseif questionStatus=='pairReviewing' %}
+          {% set questionStatus = 'reviewing' %}
+        {% endif %}
         {% if question %}
             {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+            {% if 'finished'==homeworkResult.status %}
+              <div class="student-comment alert alert-success">
+                学生点评：
+                <p>学员A：very goog</p>
+                <p>学员B：very goog</p>
+              </div>
+            {% endif %}
         {% else %}
             此题已删除。
         {% endif %}
-          <div class="student-comment alert alert-success">
-            学生点评：
-            <p>学员A：very goog</p>
-            <p>学员B：very goog</p>
-          </div>
     </div>
 
 
