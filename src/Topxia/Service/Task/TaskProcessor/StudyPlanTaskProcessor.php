@@ -5,7 +5,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Exception;
 
-class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
+class StudyPlanTaskProcessor implements TaskProcessor
 {
 
     public function getTask($taskId)
@@ -24,12 +24,13 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
         }
 
         $planTasks = $this->getClassroomPlanTaskService()->findTasksByPlanId($plan['id']);
-        $planMember = $this->getClassroomPlanMemberService()->getPlanMemberByPlanId($plan['id'], $user['id']);
+        $planMember = $this->getClassroomPlanMemberService()->getPlanMemberByPlanId($plan['id'], $userId);
+        
 
         if ($planTasks) {
             $taskCourseIds = array_unique(ArrayToolkit::column($planTasks, 'courseId'));
 
-            $this->_prepareTaskAddInfo($planTasks, $userId, $taskCourseIds, $planMember);
+            $this->_prepareTaskAddInfo($planTasks, $plan, $userId, $taskCourseIds, $planMember);
         }
 
         return true;
@@ -40,7 +41,7 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
         return $this->getTaskService()->updateTask($taskId, $fields);
     }
     
-    protected function _prepareTaskAddInfo($planTasks, $userId, $courseIds, $planMember)
+    protected function _prepareTaskAddInfo($planTasks, $plan, $userId, $courseIds, $planMember)
     {
         //获取我学过的课时
         $conditions = array(
@@ -48,7 +49,7 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
             'courseIds' => $courseIds,
             'status' => 'finished'
         );
-        $userLearnedLessons = $this->getCourseService()->searchLearns($conditions, array(), 0, 1000);
+        $userLearnedLessons = $this->getCourseService()->searchLearns($conditions, array('id','DESC'), 0, 1000);
         $userLearnedLessons = ArrayToolkit::index($userLearnedLessons,
             'lessonId');
 
@@ -58,10 +59,10 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
             'createdTime' => time()
         );
 
-        
+
         $i = 0;
         $perDayStudyTime = 0;
-        foreach ($planTasks as $key => $task) {
+        foreach ($planTasks as $key => $planTask) {
 
             $availableHours = $planMember['metas']['availableHours'];
             $availableDate = $planMember['metas']['availableDate'];
@@ -69,15 +70,17 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
 
             $taskInfo['title'] = $planTask['title'];
             $taskInfo['batchId'] = $plan['id'];
-            $taskInfo['targetId'] = $task['objectId'];
-            $taskInfo['targetType'] = $task['type'];
-            $taskInfo['meta']['classroomId'] = $classroomId;
+            $taskInfo['targetId'] = $planTask['objectId'];
+            $taskInfo['targetType'] = $planTask['type'];
+            $taskInfo['meta']['classroomId'] = $plan['classroomId'];
             $taskInfo['meta']['courseId'] = $planTask['courseId'];
             $taskInfo['meta']['phaseId'] = $planTask['phaseId'];
 
-            $perDayStudyTime += $task['suggestHours'];
+            $perDayStudyTime += $planTask['suggestHours'];
+            
             //获取任务执行时间
             for ($i = $i; $i <= $targetDays; $i++) {
+                
                 $taskStartTime = $i == 0 ? time() : strtotime("+{$i} day");
 
                 $weekDay = date('w', $taskStartTime);
@@ -85,22 +88,28 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
                     continue;
                 }
 
-                if ($perDayStudyTime <= $availableHours) {
+                if ($perDayStudyTime < $availableHours) {
                     $taskEndTime = $taskStartTime;
-                } else {
-                    $taskNeedDay = ceil($task['suggestHours'] / $availableHours);
+                } 
+                else if ($perDayStudyTime == $availableHours) {
+                    $taskEndTime = $taskStartTime;
+                    $perDayStudyTime = $perDayStudyTime - $availableHours;
+                    $i++;
+                } 
+                else {
+                    $taskNeedDay = ceil($planTask['suggestHours'] / $availableHours);
                     $taskEndTime = strtotime("+{$taskNeedDay} day", $taskStartTime);
                     $perDayStudyTime = $perDayStudyTime - $availableHours;
 
-                    $i--;
-                    continue;
+                    $i++;
                 }
 
                 $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00');
                 $taskInfo['taskEndTime'] = strtotime(date('Y-m-d',$taskEndTime).' 23:59:59');
 
-                $taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
-                $taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
+                /*$taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
+                $taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);*/
+                
                 break;
             }
             
@@ -120,8 +129,8 @@ class StudyPlanProcessor extends BaseProcessor implements TaskProcessor
                 $info = $this->_getUserTestpaperPassed($planTask['objectId'], $userId);
                 $taskInfo = array_merge($taskInfo, $info);
             }
-print_r($taskInfo);
-            //$this->getTaskService()->addTask($taskInfo);
+
+            $this->getTaskService()->addTask($taskInfo);
         }
 
         return true;
@@ -136,11 +145,12 @@ print_r($taskInfo);
     {
         $taskInfo['required'] = 1;
         $homeworkconditions = array(
-            'homeworkId' => $planTask['objectId'],
+            'homeworkId' => $homeworkId,
             'userId' => $userId,
             'passedStatus' => array('good','excellent')
         );
-        $homeworkPassed = $this->getHomeworkService()->searchResults($homeworkconditions, array(), 0, 1);
+        $homeworkPassed = $this->getHomeworkService()->searchResults($homeworkconditions, array('id','DESC'), 0, 1);
+
         if ($homeworkPassed) {
             $taskInfo['status'] = 'completed';
             $taskInfo['completedTime'] = $homeworkPassed[0]['checkedTime'];
@@ -159,10 +169,12 @@ print_r($taskInfo);
             'status' => 'finished',
             'passesStatus' => 'passed'
         );
-        $testpaperPassed = $this->getTestpaperService()->searchTestpaperResults($testConditions, array(), 0, 1);
+        $testpaperPassed = $this->getTestpaperService()->searchTestpaperResults($testConditions, array('id','DESC'), 0, 1);
 
-        $taskInfo['status'] = 'completed';
-        $taskInfo['completedTime'] = $homeworkPassed[0]['checkedTime'];
+        if ($testpaperPassed) {
+            $taskInfo['status'] = 'completed';
+            $taskInfo['completedTime'] = $testpaperPassed[0]['checkedTime'];
+        }
 
         return $taskInfo;
     }
@@ -184,27 +196,27 @@ print_r($taskInfo);
 
     protected function getClassroomPlanService()
     {
-        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+        return ServiceKernel::instance()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
     }
 
     protected function getClassroomPlanTaskService()
     {
-        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanTaskService');
+        return ServiceKernel::instance()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanTaskService');
     }
 
     protected function getClassroomPlanMemberService()
     {
-        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
+        return ServiceKernel::instance()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
     }
 
     protected function getHomeworkService()
     {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return ServiceKernel::instance()->createService('Homework:Homework.HomeworkService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
     }
 
 }

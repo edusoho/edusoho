@@ -8,7 +8,7 @@ class TaskProcessorFactory
 
 	public static function create($target)
     {
-    	if(empty($target) || !in_array($target,array('studyplan'))) {
+    	if(empty($target) || !in_array($target,array('studyPlan'))) {
     		throw new Exception("用户导入类型不存在");
     	}
 
