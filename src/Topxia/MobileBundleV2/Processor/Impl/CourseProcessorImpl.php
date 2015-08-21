@@ -920,9 +920,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         
         if(empty($member)) {
             $member = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
-            if(isset($member["id"])) {
-                $course['studentNum'] ++ ;
-            }
             if (empty($member)) {
                 $member = null;
             }
