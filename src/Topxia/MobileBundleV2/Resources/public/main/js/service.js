@@ -239,7 +239,7 @@ service('ClassRoomService', ['httpService', function(httpService) {
 	}
 
 	this.getClassRoomCourses = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/ClassRoom/getClassRoomCourses", arguments);
+		httpService.simpleGet("/mapi_v2/ClassRoom/getClassRoomCoursesAndProgress", arguments);
 	}
 
 	this.getLatestClassrooms = function(params, callback) {
