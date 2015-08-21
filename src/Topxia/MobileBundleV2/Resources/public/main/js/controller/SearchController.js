@@ -1,6 +1,6 @@
-app.controller('SearchController', ['$scope', 'CourseService', 'cordovaUtil', '$timeout', SearchController]);
+app.controller('SearchController', ['$scope', 'CourseService', 'ClassRoomService', 'cordovaUtil', '$timeout', SearchController]);
 
-function SearchController($scope, CourseService, cordovaUtil, $timeout)
+function SearchController($scope, CourseService, ClassRoomService, cordovaUtil, $timeout)
 {
 	$scope.search = "";
 	var self = this;
@@ -25,42 +25,74 @@ function SearchController($scope, CourseService, cordovaUtil, $timeout)
 		self.search();
 	};
 
-	$scope.canLoad = false;
-    	$scope.start = $scope.start || 0;
+	this.initSearch = function() {
+		self.content = {
+			course : {
+				start : 0,
+				canLoad : true,
+				total : 0,
+				data : undefined
+			},
+	    classroom : {
+	      start : 0,
+	      canLoad : true,
+	      total : 0,
+	      data : undefined
+	    }
+		};
 
-    	this.search = function() {
-    		$scope.start = 0;
-		$scope.searchDatas = undefined;
-		self.loadSearchData();
-    	};
-
-	this.loadSearchData = function() {
-             $scope.showLoad();
-              CourseService.searchCourse({
-                limit : 10,
-                start: $scope.start,
-                search : $scope.search
-              }, function(data) {
-                        $scope.hideLoad();
-                        var length  = data ? data.data.length : 0;
-                        $scope.canLoad = ! (! data || length < 10);
-
-                        $scope.searchDatas = $scope.searchDatas || [];
-                        for (var i = 0; i < length; i++) {
-                          $scope.searchDatas.push(data.data[i]);
-                        };
-
-                        $scope.start += data.limit;
-                        $scope.$apply();
-              });
-      	};
-
-      	$scope.loadMore = function(){
-	            if (! $scope.canLoad) {
-	              return;
-	            }
-	           setTimeout(function() {
-	              self.loadSearchData();
-	           }, 200); 
+		$scope.searchCourse = self.content.course;
+		$scope.searchClassRoom = self.content.classroom;
 	};
+
+	this.search = function() {
+		$scope.showLoad();
+		self.initSearch();
+		self.loadSearchCourses(self.content.course);
+		self.loadSearchClassrooms(self.content.classroom);
+	};
+
+	this.loadSearchCourses = function(content) {
+          CourseService.searchCourse({
+            limit : 5,
+            start: content.start,
+            search : $scope.search
+          }, function(data) {
+                    $scope.hideLoad();
+                    var length  = data ? data.data.length : 0;
+                    content.canLoad = ! (! data || length < 10);
+
+                    content.data = content.data || [];
+                    for (var i = 0; i < length; i++) {
+                      content.data.push(data.data[i]);
+                    };
+
+                    content.total = data.total;
+                    content.start += data.limit;
+                    $scope.searchCourse = content;
+                    $scope.$apply();
+          });
+  };
+
+  this.loadSearchClassrooms = function(content) {
+  	ClassRoomService.search({
+  		limit : 5,
+  		start : content.start,
+  		title : $scope.search
+  	}, function(data) {
+  		$scope.hideLoad();
+      var length  = data ? data.data.length : 0;
+      content.canLoad = ! (! data || length < 10);
+
+      content.data = content.data || [];
+      for (var i = 0; i < length; i++) {
+        content.data.push(data.data[i]);
+      };
+
+      content.total = data.total;
+      content.start += data.limit;
+      $scope.searchClassRoom = content;
+      $scope.$apply();
+  	});
+  }
 }
