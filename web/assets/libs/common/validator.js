@@ -13,7 +13,6 @@ define(function(require, exports, module) {
             showMessage: function(message, element) {
                 this.element.css("display","block");
                 message = '<span class="text-danger">' + message + '</span>';
-                console.log(message);
                 this.getExplain(element).html(message).show();
                 this.getItem(element).addClass(this.get("itemErrorClass"));
             }
