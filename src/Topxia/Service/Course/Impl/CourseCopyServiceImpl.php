@@ -191,6 +191,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                 $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId,$lesson['id']);
                 $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseLessonReplay['courseId'],1),'id');
                 $courseLessonReplay = array('title'=>$courseLessonReplay['title'],'replayId'=>$courseLessonReplay['replayId'],'userId'=>$courseLessonReplay['userId']);
+                $this->getCourseService()->deleteLessonReplayByLessonId($copiedLesson['id']);
                 foreach ($courseIds as $key=>$value) {
                     $courseLessonReplay['courseId'] = $value;
                     $courseLessonReplay['lessonId'] = $copiedLesson['id'];
