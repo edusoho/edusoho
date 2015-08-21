@@ -47,7 +47,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
     public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy,array('createdTime','taskStartTime'));
+        $orderBy = $this->checkOrderBy($orderBy,array('id','createdTime','taskStartTime'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
