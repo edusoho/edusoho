@@ -11,7 +11,6 @@ define(function(require, exports, module) {
             inputClass: "input-with-feedback",
             textareaClass: "input-with-feedback",
             showMessage: function(message, element) {
-                this.element.css("display","block");
                 message = '<span class="text-danger">' + message + '</span>';
                 this.getExplain(element).html(message).show();
                 this.getItem(element).addClass(this.get("itemErrorClass"));
@@ -25,9 +24,6 @@ define(function(require, exports, module) {
             if (explain.length == 0) {
                 var explain = $('<div class="' + this.get("explainClass") + '" style="display:none;"></div>').appendTo(ele.parents('.controls'));
             }
-
-            $(explain).css("display", "none");
-
             return explain;
         }
     });
