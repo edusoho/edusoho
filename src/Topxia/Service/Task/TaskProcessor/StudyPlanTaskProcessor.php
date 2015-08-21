@@ -72,6 +72,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
             $taskInfo['batchId'] = $plan['id'];
             $taskInfo['targetId'] = $planTask['objectId'];
             $taskInfo['targetType'] = $planTask['type'];
+            $taskInfo['required'] = 0;
             $taskInfo['meta']['classroomId'] = $plan['classroomId'];
             $taskInfo['meta']['courseId'] = $planTask['courseId'];
             $taskInfo['meta']['phaseId'] = $planTask['phaseId'];
@@ -116,9 +117,15 @@ class StudyPlanTaskProcessor implements TaskProcessor
             $taskInfo['targetId'] = $planTask['objectId'];
             $taskInfo['targetType'] = $planTask['type'];
             if ($planTask['type'] != 'homework' && $planTask['type'] != 'testpaper') {
-                if (in_array($planTask['objectId'], $userLearnedLessons)) {
+                if ($userLearnedLessons && $userLearnedLessons[$planTask['objectId']]) {
                     $taskInfo['status'] = 'completed';
                     $taskInfo['completedTime'] = $userLearnedLessons[$planTask['objectId']]['finishedTime'];
+                }
+
+                if ($planTask['type'] == 'live') {
+                    $liveLesson = $this->getCourseService()->getLesson($planTask['objectId']);
+                    $taskInfo['taskStartTime'] = $liveLesson['startTime'];
+                    $taskInfo['taskEndTime'] = $liveLesson['endTime'];
                 }
             } 
             else if ($planTask['type'] == 'homework') {
