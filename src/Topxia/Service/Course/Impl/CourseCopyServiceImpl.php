@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\CourseCopyService;
 
-
 class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 {
     public function copy($course, $link = false)
