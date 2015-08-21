@@ -7,9 +7,10 @@
   {% endif %}
 {% else %}
   {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
+    {% if classroom.buyable == 0%}
     <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
     <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
-
+    {% endif %}
   {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
     <a href="{{ path('vip_buy') }}"  class="btn btn-primary btn-lg" >{{ classroomMemberLevel.name }}，免费学</a>  
 

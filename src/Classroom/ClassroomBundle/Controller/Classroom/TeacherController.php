@@ -38,7 +38,11 @@ class TeacherController extends BaseController
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        if($classroom['showable']){
+            if(empty($member)){
+                return $this->createMessageResponse('error', '无权限访问'); 
+            }
+        }
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';

@@ -18,7 +18,11 @@ class NoteController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        if($classroom['showable']){
+            if(empty($member)){
+                return $this->createMessageResponse('error', '无权限访问'); 
+            }
+        }
         if ($classroom['private'] && (!$member || ($member && $member['locked']))) {
             return $this->createMessageResponse('error', '该班级是封闭班级,您无权查看');
         }

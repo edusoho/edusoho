@@ -24,7 +24,12 @@ class OrderController extends BaseController
         if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createMessageResponse('error', '参数不正确');
         }
-
+        if($targetType == 'classroom'){
+            $classroom = $this->getClassroomService()->getClassroom($targetId);
+            if($classroom['buyable']){
+                return $this->createMessageResponse('error', '参数不正确');
+            }
+        }
         $processor = OrderProcessorFactory::create($targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
         if (isset($checkInfo['error'])) {
@@ -235,6 +240,10 @@ class OrderController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+    private function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
     
 }

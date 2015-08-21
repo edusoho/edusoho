@@ -75,7 +75,11 @@ class CourseController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        if($classroom['showable']){
+            if(empty($member)){
+                return $this->createMessageResponse('error', '无权限访问'); 
+            }
+        }
         if ($request->query->get('previewAs')) {
             if ($this->getClassroomService()->canManageClassroom($classroomId)) {
                 $previewAs = $request->query->get('previewAs');
