@@ -190,7 +190,6 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             if(array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated' && !empty($copiedLesson)){
                 $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId,$lesson['id']);
                 $courseLessonReplay = array('title'=>$courseLessonReplay['title'],'replayId'=>$courseLessonReplay['replayId'],'userId'=>$courseLessonReplay['userId']);
-                $this->getCourseService()->deleteLessonReplayByLessonId($copiedLesson['id']);
                 $courseLessonReplay['courseId'] = $copiedLesson['courseId'];
                 $courseLessonReplay['lessonId'] = $copiedLesson['id'];
                 $courseLessonReplay['createdTime'] = time();
