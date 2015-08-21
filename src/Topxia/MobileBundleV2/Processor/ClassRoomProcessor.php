@@ -34,4 +34,6 @@ interface ClassRoomProcessor
 	public function sign();
 
 	public function search();
+
+	public function getClassRoomCoursesAndProgress();
 }

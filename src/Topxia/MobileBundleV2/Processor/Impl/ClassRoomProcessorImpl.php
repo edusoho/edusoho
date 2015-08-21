@@ -467,7 +467,21 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		}, $classrooms);
 	}
 
-	public function getClassRoomCourses()
+    public function getClassRoomCourses()
+    {
+        $classroomId = $this->getParam("classRoomId");
+        $user = $this->controller->getUserByToken($this->request);
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return $this->createErrorResponse('error', "没有找到该班级");
+        }
+
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        
+        return $this->controller->filterCourses($courses);
+    }
+
+	public function getClassRoomCoursesAndProgress()
 	{
 		$classroomId = $this->getParam("classRoomId");
 		$user = $this->controller->getUserByToken($this->request);
