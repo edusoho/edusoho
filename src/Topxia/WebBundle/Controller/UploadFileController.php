@@ -65,6 +65,12 @@ class UploadFileController extends BaseController
         }
 
         $conditions = $request->query->all();
+        if(array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])){
+            $course = $this->getCourseService()->getCourse($conditions['targetId']);
+            if($course['parentId']>0 && $course['locked'] == 1 ){
+                $conditions['targetId'] = $course['parentId'];
+            }
+        }
 
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
         
