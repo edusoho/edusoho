@@ -167,6 +167,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     {
         $lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
         $map = array();
+
+
         foreach ($lessons as $lesson) {
             $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId','replayStatus'));
             $fields['courseId'] = $newCourse['id'];
@@ -189,8 +191,8 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                 $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId,$lesson['id']);
                 $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseLessonReplay['courseId'],1),'id');
                 $courseLessonReplay = array('title'=>$courseLessonReplay['title'],'replayId'=>$courseLessonReplay['replayId'],'userId'=>$courseLessonReplay['userId']);
-                foreach ($courseIds as $key=>$courseId) {
-                    $courseLessonReplay['courseId'] = $courseId;
+                foreach ($courseIds as $key=>$value) {
+                    $courseLessonReplay['courseId'] = $value;
                     $courseLessonReplay['lessonId'] = $copiedLesson['id'];
                     $courseLessonReplay['createdTime'] = time();
                     $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
