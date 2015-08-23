@@ -29,4 +29,9 @@ class ReviewItemDaoImpl extends BaseDao implements ReviewItemDao
             " group by i.homeworkItemResultId";
         return $this->getConnection()->fetchAll($sql, array($resultId));
     }
+
+    public function findItemsByResultId($resultId){
+        $sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?";
+        return $this->getConnection()->fetchAll($sql, array($resultId)) ? : null;
+    }
 }

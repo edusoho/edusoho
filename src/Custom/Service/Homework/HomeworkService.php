@@ -123,4 +123,22 @@ interface HomeworkService
      * 推动编辑中的作业。如果已过作业提交时间，将作业状态变更为互评中；如果作业已过互评时间，计算互评分数.
     **/
     public function forwardHomeworkStatus();
+
+    /**
+     * 获取经过索引的作业点评明细记录.
+     * @param homeworkResultId 作业答题id.
+     * @return 索引后的点评明细记录，结构如： 
+     *      [
+     *           {
+     *               'teacher': [
+     *                   {id: 1, score: 10, review: 'good'}....
+     *               ]
+     *           },{
+     *               'student':[
+     *                   {id: 2,score: 2, review: 'bad'}....
+     *               ]
+     *           }
+     *      ]
+    **/
+    public function getIndexedReviewItems();
 }

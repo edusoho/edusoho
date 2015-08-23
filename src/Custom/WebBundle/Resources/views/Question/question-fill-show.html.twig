@@ -5,9 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'CustomWebBundle:Question:question-choice-answer.html.twig' %}
-    
-    {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %} 
+{#     <div class="question-fill-inputs ">
+        <div class=""> #}
+          {% include 'CustomWebBundle:Question:question-fill-answer.html.twig' %}
+{#         </div>
+    </div> #}
 {% endblock %}
 
 {% block footer %}

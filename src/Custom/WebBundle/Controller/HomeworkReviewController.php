@@ -58,10 +58,10 @@ class HomeworkReviewController extends BaseController
             'course' => $course,
             'lesson' => $lesson,
             'userId' => $homeworkResult['userId'],
-            'questionStatus' => 'reviewing',
             'targetId' => $request->query->get('targetId'),
             'source' => $request->query->get('source','course'),
-            'canCheckHomework' => $canCheckHomework
+            'canCheckHomework' => $canCheckHomework,
+            'view' => 'reviewing'
         ));
     }
 

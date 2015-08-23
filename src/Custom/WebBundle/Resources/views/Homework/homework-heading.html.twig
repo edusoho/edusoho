@@ -5,7 +5,7 @@
                 <div class="question-set-type">作业</div>
                 <div class="question-set-title">{{ lesson.title }}</div>
                 <div class="homwork-status">
-                    <div class="pull-right label label-success">批改中</div>
+                    <div class="pull-right label label-success">{{('pairReviewing'==homeworkResult.status) ? '互评中' : '批改中' }}</div>
                 </div>
                 <div class="question-set-description">
                     {{ homework.description |raw }}

@@ -1,14 +1,11 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  <div class="well well-sm">
-  {{ question.stem|bbCode2Html|raw }}
-  <span>{{ question.score | round}}分</span>
-  </div>
+	{% include 'CustomWebBundle:Question:question-header.html.twig' %}
 {% endblock %}
 
 {% block body %}
-
+	{% include 'CustomWebBundle:Question:question-review-edit.html.twig' %}
 {% endblock %}
 
 {% block footer %}

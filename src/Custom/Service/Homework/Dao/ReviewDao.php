@@ -26,4 +26,11 @@ interface ReviewDao
      * @return 用户作业互评数量.
     **/
     public function countUserPairReviews($homeworkId, $userId);
+
+    /**
+     * 根据作业答卷id查找作业互评.
+     * @param resultId 作业答卷id.
+     * @return 互评记录集合.
+    **/
+    public function findReviewsByResultId($resultId);
 }

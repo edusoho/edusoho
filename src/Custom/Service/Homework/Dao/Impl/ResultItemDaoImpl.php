@@ -7,7 +7,7 @@ use Custom\Service\Homework\Dao\ResultItemDao;
 
 class ResultItemDaoImpl extends BaseResultItemDao implements ResultItemDao
 {
-    public function getItemsByResultId($resultId){
+    public function findItemsByResultId($resultId){
         $sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?";
         return $this->getConnection()->fetchAll($sql, array($resultId)) ? : null;
     }

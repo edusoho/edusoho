@@ -34,8 +34,8 @@ class HomeworkPairReviewController extends BaseController
                 'homework' => $homeworkResult['homework'],
                 'course' => $homeworkResult['course'],
                 'lesson' => $homeworkResult['lesson'],
-                'questionStatus' => 'reviewing',
-                'pairReviewCount' => $this->getHomeworkService() -> countUserHomeworkPairReviews($homeworkId, $userId)
+                'pairReviewCount' => $this->getHomeworkService() -> countUserHomeworkPairReviews($homeworkId, $userId),
+                'view' => 'reviewing'
             ));
         }
     }

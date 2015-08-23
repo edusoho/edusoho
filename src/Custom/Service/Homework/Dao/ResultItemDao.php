@@ -8,7 +8,7 @@ interface ResultItemDao
      * @param $resultId
      * @return 答题列表.
      */
-    public function getItemsByResultId($resultId);
+    public function findItemsByResultId($resultId);
 
     /**
      * 根据userId查找homework_item_result

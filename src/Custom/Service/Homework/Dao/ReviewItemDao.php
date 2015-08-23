@@ -27,4 +27,11 @@ interface ReviewItemDao
      * @param 答题平均分集合, 如[{'homeworkItemResultId': 1, 'score': 1.5}].
     **/
     public function averageItemScores($resultId);
+
+    /**
+     * 根据作业答卷id查找该答卷下的所有点评记录.
+     * @param resultId 答卷id.
+     * @return 点评记录集合.
+    **/
+    public function findItemsByResultId($resultId);
 }

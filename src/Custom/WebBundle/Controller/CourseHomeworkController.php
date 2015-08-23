@@ -28,6 +28,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         }
 
         $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
+        $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $this->getCurrentUser()->id);
 
         return $this->render('CustomWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
@@ -35,7 +36,8 @@ class CourseHomeworkController extends BaseCourseHomeworkController
             'course' => $course,
             'lesson' => $lesson,
             'now' => time(),
-            'questionStatus' => 'doing'
+            'homeworkResult' => $homeworkResult,
+            'view' => 'doing'
         ));
     }
 
@@ -58,13 +60,15 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         }
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'], $this->getCurrentuser()->id);
+        $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $this->getCurrentUser()->id);
         return $this->render('CustomWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
             'course' => $course,
             'lesson' => $lesson,
             'now' => time(),
-            'questionStatus' => 'doing'
+            'homeworkResult' => $homeworkResult,
+            'view' => 'doing'
         ));
     }
 
@@ -182,6 +186,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'], $userId);
         $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $userId);
 
+        $reviewItems = ('finished'==$homeworkResult['status']) ? $this->getHomeworkService()->getIndexedReviewItems($homeworkResult['id']) : null;
         return $this->render('CustomWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
@@ -189,9 +194,40 @@ class CourseHomeworkController extends BaseCourseHomeworkController
             'lesson' => $lesson,
             'teacherSay' => $homeworkResult['teacherSay'],
             'userId' => $homeworkResult['userId'],
-            'questionStatus' => $homeworkResult['status'],
-            'homeworkResult' => $homeworkResult
+            'homeworkResult' => $homeworkResult,
+            'view' => 'show'
         ));
+    }
+
+    public function previewAction(Request $request, $courseId, $homeworkId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $homework = $this->getHomeworkService()->getHomework($homeworkId);
+
+        if (empty($homework)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($homework['courseId'] != $course['id']) {
+            throw $this->createNotFoundException();
+        }
+
+        $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+        if (empty($lesson)) {
+            return $this->createMessageResponse('info','作业所属课时不存在！');
+        }
+
+        $itemSet = $this->getHomeworkService()->getItemSetByHomeworkId($homework['id']);
+        $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $this->getCurrentUser()->id);
+
+        return $this->render('CustomWebBundle:CourseHomework:preview.html.twig', array(
+            'homework' => $homework,
+            'itemSet' => $itemSet,
+            'course' => $course,
+            'lesson' => $lesson,
+            'homeworkResult' => $homeworkResult,
+            'view' => 'preview'
+        ));   
     }
 
     protected function getUserService()

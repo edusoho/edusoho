@@ -1,0 +1,16 @@
+{% set rightAnswerIndex = question.answer[0]|default(null) %}
+{% spaceless %}
+    {%- if itemResult.status == 'noAnswer' -%}
+        未答题，
+    {%- else -%}
+        回答是{{ itemResult.answer[0]==1 ? '<strong class="question-text-success">正确</strong>' : '<strong class="question-text-danger">错误</strong>'}}，
+    {%- endif -%}
+    正确答案是<strong style="color:red">{% if rightAnswerIndex == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，
+    {% if itemResult.status == 'right' %}
+        <span class="glyphicon glyphicon-ok question-text-success"></span> 答对了
+    {% elseif itemResult.status == 'wrong' %}
+        <span class="glyphicon glyphicon-remove question-text-danger"></span> 答错了
+    {% elseif itemResult.status == 'noAnswer' %}
+        <span class="glyphicon glyphicon-remove question-text-danger">未答题</span>
+    {% endif %}
+{% endspaceless %}

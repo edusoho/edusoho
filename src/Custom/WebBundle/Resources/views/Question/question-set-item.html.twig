@@ -16,19 +16,17 @@
     <div class="question-set-item-main">
         {% set question = item.question %}
         {% set itemResult = item.itemResult|default(null) %}
-        {% if questionStatus == 'previewing' %}
-          {% set questionStatus = 'doing' %}
-        {% elseif questionStatus=='pairReviewing' %}
-          {% set questionStatus = 'reviewing' %}
-        {% endif %}
         {% if question %}
-            {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+            {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ ('preview'==view ? 'doing' : view) ~ '.html.twig' %}
             {% if 'finished'==homeworkResult.status %}
-              <div class="student-comment alert alert-success">
-                学生点评：
-                <p>学员A：very goog</p>
-                <p>学员B：very goog</p>
-              </div>
+              <span>得分: {{itemResult.score | default(0)}}分</span>
+              {% if 'essay'==question.type %}
+                <div class="student-comment alert alert-success">
+                  学生点评：
+                  <p>学员A：very goog</p>
+                  <p>学员B：very goog</p>
+                </div>
+              {% endif %}
             {% endif %}
         {% else %}
             此题已删除。

@@ -1,13 +1,11 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
-  <span>{{ question.score | round}}分</span>
+    {% include 'CustomWebBundle:Question:question-header.html.twig' %}
 {% endblock %}
 
 {% block body %}
-
-{% if itemResult.status == 'right' %}
+{# {% if itemResult.status == 'right' %}
 
   {% set itemResultStatus = '你答对了' %}
 
@@ -23,45 +21,15 @@
 
   {% set itemResultStatus = '你未回答' %}
 
-{% endif %}
+{% endif %} #}
 
-  <div>
-    <div class="">
-      <div class="homework-question-fill">
-         <ul>
-          {% for index,rightAnswer in question.answer %}
+{#   <div>
+    <div class=""> #}
+      {% include 'CustomWebBundle:Question:question-fill-answer.html.twig' %}
 
-            <li>
-              填空({{index+1}})： 正确答案 
-              <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
-              {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
-             回答是
-
-              <strong class="question-text-danger">{{ itemResult.answer[index]|default('') }}</strong>。
-              {% else %}
-              未回答
-              {% endif %}
-
-              {% if itemResult.answer[index]|default(null) in rightAnswer %}
-                  <span class="glyphicon glyphicon-ok question-text-success">
-
-              {% else %}
-                  <span class="glyphicon glyphicon-remove question-text-danger">
-              {% endif %}
-            </li>
-
-          {% endfor %}
-
-         </ul>
-      </div>
-      <div class="form-group">
-        <div class="control-label"><label for="review-score-{{question.id}}-field">评分</label></div>
-        <div class="controls">
-            <input class="form-control homework-result-item score" id='review-score-{{question.id}}-field' name="score[{{question.id}}]" data-max-score="{{ question.score}}" data-item-id="{{ itemResult.id }}" value="{{ itemResult.status=='right' ? (question.score| round) : 0 }}" data-question-id="{{question.id}}" disabled>
-        </div>
-    </div> 
-    </div>
-  </div>
+      {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %}
+{#     </div>
+  </div> #}
 {% endblock %}
 
 {% block footer %}
