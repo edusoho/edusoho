@@ -18,7 +18,7 @@
         {% set itemResult = item.itemResult|default(null) %}
         {% if question %}
             {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ ('preview'==view ? 'doing' : view) ~ '.html.twig' %}
-            {% if 'finished'==homeworkResult.status %}
+            {% if view!='preview' and 'finished'==homeworkResult.status %}
               <span>得分: {{itemResult.score | default(0)}}分</span>
               {% if 'essay'==question.type %}
                     {% if not (reviewItems is empty) and (reviewItems[itemResult.id].teacher is defined) %}

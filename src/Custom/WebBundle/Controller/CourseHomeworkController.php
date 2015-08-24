@@ -61,6 +61,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'], $this->getCurrentuser()->id);
         $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $this->getCurrentUser()->id);
+
         return $this->render('CustomWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,

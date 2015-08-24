@@ -14,14 +14,14 @@
                         <div class="question-set-type">作业</div>
                         <div class="question-set-title">{{ lesson.title }}</div>
                         <div class="homwork-status">
-                            <div class="pull-right label label-success">{% if homeworkResult.status == 'doing' or homeworkResult.status=='editing' %}答题中{% elseif homeworkResult.status == 'reviewing' %}批改中{% elseif homeworkResult.status == 'pairReviewing' %}互评中{% elseif homeworkResult.status=='finished' %}已批改{% else %} 未知作业状态{% endif %}</div>
+                            <div class="pull-right label label-success">{% if view=='preview' %}预览中{% elseif homeworkResult.status == 'doing' or homeworkResult.status=='editing' %}答题中{% elseif homeworkResult.status == 'reviewing' %}批改中{% elseif homeworkResult.status == 'pairReviewing' %}互评中{% elseif homeworkResult.status=='finished' %}已批改{% else %} 未知作业状态{% endif %}</div>
                         </div>
                         <div class="question-set-description">
                             {{ homework.description |raw }}
                             <p class="text-muted">所属课程 <a href="#">{{ course.title }}</a></p>
                         </div>
                         <hr>
-                        {% if 'doing'==homeworkResult.status or 'editing'==homeworkResult.status %}
+                        {% if view=='preview' or 'doing'==homeworkResult.status or 'editing'==homeworkResult.status %}
                             <div class="alert alert-success" style="margin-bottom:0px">
                                 <div><strong>作业提交截止时间：{{ homework.completeTime|date("Y-m-d") }}</strong></div>
                             </div>
@@ -33,9 +33,9 @@
                             </div>
                         {% endif %}
                        {#  点评次数显示 #}
-                       {% if 'finished' == homeworkResult.status %}
+                       {% if view!='preview' and 'finished' == homeworkResult.status %}
                            <div class="alert alert-success" style="margin-bottom:0px">
-                                <p><strong>我的成绩：{{homeworkResult.score | default(0) }}分</strong></p>
+                                <p><strong>作业得分：{{homeworkResult.score | default(0) }}分</strong></p>
                                 <p style="margin-top:20px">作业总分：{{homework.fullScore | default(0) }}分 <span style="padding-left:40px">被点评：<strong style="color:#ff0000">{{homeworkResult.pairReviews}}</strong>次</span></p>
                              </div>
                         {% endif %}
