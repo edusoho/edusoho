@@ -51,6 +51,7 @@ define(function (require, exports, module) {
             $('#completeTimeGroup').show();
             $('#reviewEndTimeGroup').show();
             $('#scoreRuleGroup').show();
+            $('#tip').show();
         } else {
             $('#completeTimeGroup').hide();
             $('#reviewEndTimeGroup').hide();
