@@ -20,10 +20,10 @@ class TaskEventSubscriber implements EventSubscriberInterface
     public function onFinished(ServiceEvent $event)
     {
         $targetObject = $event->getSubject();
-        $type = $event->getArgument('type');
+        $taskType = $event->getArgument('taskType');
         $userId = $event->getArgument('userId');
 
-        $taskProcessor = $this->getTaskProcessor($type);
+        $taskProcessor = $this->getTaskProcessor($taskType);
 
         $taskProcessor->finishTask($targetObject, $userId);
     }

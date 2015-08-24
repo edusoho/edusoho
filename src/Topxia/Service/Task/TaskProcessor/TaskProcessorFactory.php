@@ -9,7 +9,7 @@ class TaskProcessorFactory
 	public static function create($target)
     {
     	if(empty($target) || !in_array($target,array('studyPlan'))) {
-    		throw new Exception("用户导入类型不存在");
+    		throw new Exception("任务类型不存在不存在");
     	}
 
     	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'TaskProcessor';
