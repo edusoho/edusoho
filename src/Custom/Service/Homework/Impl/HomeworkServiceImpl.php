@@ -374,7 +374,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     private function getUserService(){
-        return $this->createService('User:UserService');
+        return $this->createService('User.UserService');
     }
 
     private function filterHomeworkFields($fields, $mode)
@@ -471,8 +471,35 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     public function getIndexedReviewItems($homeworkResultId){
-        // $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
-        // $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
-        // $users=$this->getUserService()->findUsersByIds();
+        $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
+        $reviews=$this->loadReviewAssociations($reviews);
+        $indexedReviews=ArrayToolkit::index($reviews, 'id');
+        
+        $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
+        $indexed=array();
+        foreach($items as $item){
+            $item['homeworkReview'] = $indexedReviews[$item['homeworkReviewId']];
+            if(!array_key_exists($item['homeworkItemResultId'],  $indexed)){
+                $indexed[$item['homeworkItemResultId']] = array();
+            }
+            if(!array_key_exists($item['homeworkReview']['category'], $indexed[$item['homeworkItemResultId']])){
+                $indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']] = array();
+            }
+            array_push($indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']], $item);
+        }
+        
+        return $indexed;
+    }
+
+    private function loadReviewAssociations($reviews){
+        $userIds=ArrayToolKit::column($reviews, "userId");
+        $users=$this->getUserService()->findUsersByIds($userIds);
+        $users=ArrayToolkit::index($users, 'id');
+        $indexedUsers=ArrayToolkit::index($users, 'id');
+        foreach($reviews as $i=>$review){
+            $review['user'] = $indexedUsers[$review['userId']];
+            $reviews[$i] = $review;
+        }
+        return $reviews;
     }
 }
