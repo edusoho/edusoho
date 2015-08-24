@@ -21,10 +21,19 @@
             {% if 'finished'==homeworkResult.status %}
               <span>得分: {{itemResult.score | default(0)}}分</span>
               {% if 'essay'==question.type %}
+                    {% if not (reviewItems is empty) and (reviewItems[itemResult.id].teacher is defined) %}
+                        老师点评：
+                        {% for item in reviewItems[itemResult.id].teacher %}
+                            {{ item.review}}
+                        {% endfor %}
+                    {% endif %}
                 <div class="student-comment alert alert-success">
-                  学生点评：
-                  <p>学员A：very goog</p>
-                  <p>学员B：very goog</p>
+                    {% if not (reviewItems is empty) and (reviewItems[itemResult.id].student is defined) %}
+                        学生点评：
+                        {% for item in reviewItems[itemResult.id].student %}
+                            <p>{{item.homeworkReview.user.nickname}}：{{ item.review}}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
               {% endif %}
             {% endif %}

@@ -31,7 +31,7 @@ class ReviewItemDaoImpl extends BaseDao implements ReviewItemDao
     }
 
     public function findItemsByResultId($resultId){
-        $sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?";
+        $sql = "SELECT i.* FROM {$this->table} i left join {$this->review_table} r on i.homeworkReviewId=r.id WHERE r.homeworkResultId = ?";
         return $this->getConnection()->fetchAll($sql, array($resultId)) ? : null;
     }
 }
