@@ -21,8 +21,17 @@
   right: -230px;
   width: 265px;
   z-index: 888;
-  // background-color: @gray-light;
   background-color: #fff;
+  .go-top {
+    visibility: hidden;
+    .opacity(0);
+    .es-transition;
+    &.show {
+      visibility: visible;
+      .opacity(1);
+      .es-transition;
+    }
+  }
 }
 
 .es-bar-menu {
@@ -113,6 +122,7 @@
   bottom: 0;
   z-index: 1;
 }
+
 
 .es-bar-main {
   position: absolute;

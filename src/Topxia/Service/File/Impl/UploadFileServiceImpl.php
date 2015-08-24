@@ -133,10 +133,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
         $file = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
-        
+
         $file = $this->getUploadFileDao()->addFile($file);
         
-        return $file;
+        return $file; 
     }
 
     public function renameFile($id, $newFilename)
@@ -250,7 +250,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     public function makeUploadParams($params)
-    {
+    {    
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
     }
 
@@ -496,6 +496,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!array_key_exists($key, self::$implementor)) {
             throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
         }
+
         return $this->createService(self::$implementor[$key]);
     }
 

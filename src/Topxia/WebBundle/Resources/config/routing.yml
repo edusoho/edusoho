@@ -562,6 +562,17 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
+
+#课程同步
+course_manage_course_sync:
+    pattern:  /course/manage/course/sync/{id}/{type}
+    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSync}
+
+course_manage_course_sync_edit:
+    pattern:  /course/manage/course/sync/edit
+    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSyncEdit}
+
+
 course_manage_order:
     pattern:  /course/{id}/manage/order
     defaults: { _controller: TopxiaWebBundle:CourseManage:order }
@@ -569,6 +580,7 @@ course_manage_order:
 course_manage_order_export_csv:
     pattern:  /course/{id}/manage/order/export
     defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
+
 
 course_manage_files:
     pattern:  /course/{id}/manage/files
@@ -1820,4 +1832,5 @@ esbar_my_practice:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+
 
