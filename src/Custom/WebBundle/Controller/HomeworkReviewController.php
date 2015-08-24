@@ -32,7 +32,7 @@ class HomeworkReviewController extends BaseController
         $course = $this -> getCourseService() -> loadCourse($homework['courseId']);
         $lesson = $this -> getCourseService() -> loadLesson($homework['lessonId']);
 
-        if ($homeworkResult['status'] != 'reviewing') {
+        if ( !in_array($homeworkResult['status'], array('reviewing','pairReviewing'))) {
             return $this->createMessageResponse('warning', '作业已批阅或者未做完!');
         }
 

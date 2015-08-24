@@ -105,7 +105,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         }
 
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
-        $homeworkitemResult['status'] = $homework['pairReview'] ? (time() >= $homework['completeTime'] ? 'pairReviewing' : 'editing') : 'reviewing';
+        $homeworkitemResult['status'] = $homework['pairReview'] ? 'pairReviewing' : 'reviewing';
         $homeworkitemResult['updatedTime'] = time();
 
         $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
@@ -478,7 +478,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $indexedReviews=ArrayToolkit::index($reviews, 'id');
             
             $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
-            
+
             foreach($items as $item){
                 $item['homeworkReview'] = $indexedReviews[$item['homeworkReviewId']];
                 if(!array_key_exists($item['homeworkItemResultId'],  $indexed)){

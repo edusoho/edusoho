@@ -40,7 +40,7 @@ app.load('customwebbundle/controller/homework/check-review')
 	{% if source|default('course') == 'classroom' %}
     data-goto="{{ path('classroom_manage_homework',{id:targetId,status:'reviewing'}) }}"
   {% else %}
-    data-goto="{{ path('course_homework_check_list',{courseId:homeworkResult.courseId,status:'reviewing'}) }}"
+    data-goto="{{ path('my_teaching_homework_list',{status:'reviewing'}) }}"
   {% endif %}
 	>完成批改</button>
 </div>

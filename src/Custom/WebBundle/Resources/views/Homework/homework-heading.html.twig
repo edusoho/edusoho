@@ -17,11 +17,12 @@
         评价不到" . $homework['minReviews'] . "人的=自己所得分数*" . ($homework['partPercent'] * 100) . "%，
         达到" . $homework['minReviews'] . "人=自己所得分数*" . ($homework['completePercent'] * 100) . "%；";
  #}
-                {% if homework.pairReview and tip%}
+                {% if homework.pairReview %}
                     <div class="alert alert-success" style="margin-bottom:0px">
                         <div><strong>互评评分标准：</strong></div>
-                        <div class="mtm">{{ tip }}</div>
-                        <div class="mtm">2.互评结束后，不能再评分</div>
+                        <div class="mtm">1.每位同学必须评价{{homework.minReviews}}人，互评成绩按如下规则换算：未评分的=自己所得分数 × {{homework.zeroPercent * 100}}%，
+        达到{{homework.minReviews}}人=自己所得分数 × {{homework.completePercent * 100}}%。</div>
+                        <div class="mtm">2.互评结束后，不能再评分。</div>
                     </div>
                 {% endif %}
                 {% if teacherSay|default(null) %}
