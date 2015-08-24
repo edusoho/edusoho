@@ -1467,7 +1467,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
-
 	}
 
 	public function searchLearnCount($conditions)
