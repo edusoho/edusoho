@@ -6,6 +6,8 @@ interface TaskService
 {
     public function getTask($id);
 
+    public function getActiveTaskBy($userId, $taskType, $targetId, $targetType);
+
     public function addTask(array $fields);
 
     public function updateTask($id, array $fields);
@@ -15,4 +17,5 @@ interface TaskService
     public function searchTasks($conditions, $orderBy, $start, $limit);
 
     public function searchTaskCount($conditions);
+
 }

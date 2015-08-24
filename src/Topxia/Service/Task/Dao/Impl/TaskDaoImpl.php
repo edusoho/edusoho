@@ -20,6 +20,13 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
     }
 
+    public function getActiveTaskBy($userId, $taskType, $targetId, $targetType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? AND `status`='active' LIMIT 1";
+        $task = $this->getConnection()->fetchAssoc($sql, array($userId, $taskType, $targetId, $targetType));
+        return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
+    }
+
     public function addTask(array $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
@@ -47,7 +54,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
     public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy,array('createdTime','taskStartTime'));
+        $orderBy = $this->checkOrderBy($orderBy,array('id','createdTime','taskStartTime'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
@@ -65,7 +72,6 @@ class TaskDaoImpl extends BaseDao implements TaskDao
             ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
-
 
     protected function _createSearchQueryBuilder($conditions)
     {

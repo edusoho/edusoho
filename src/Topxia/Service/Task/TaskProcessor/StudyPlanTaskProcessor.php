@@ -7,12 +7,6 @@ use Exception;
 
 class StudyPlanTaskProcessor implements TaskProcessor
 {
-
-    public function getTask($taskId)
-    {
-        return $this->getTaskService()->getTask();
-    }
-
     public function addTask(array $fields)
     {
         $classroomId = $fields['classroomId'];
@@ -36,9 +30,17 @@ class StudyPlanTaskProcessor implements TaskProcessor
         return true;
     }
 
-    public function updateTask($taskId, array $fields)
+    public function finishTask(array $targetObject, $userId)
     {
-        return $this->getTaskService()->updateTask($taskId, $fields);
+        $getTask = $this->getTaskService()->getActiveTaskBy($userId, 'studyplan', $targetObject['id'], $targetObject['type']);
+
+        if ($getTask) {
+            $updateInfo = array('status'=>'completed', 'completedTime'=>time());
+
+            return $this->getTaskService()->updateTask($getTask['id'], $updateInfo);
+        }
+
+        return array();
     }
     
     protected function _prepareTaskAddInfo($planTasks, $plan, $userId, $courseIds, $planMember)
