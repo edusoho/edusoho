@@ -1,4 +1,4 @@
-{% if 'choice'==question.type or 'single_choice'==question.type %}
+{% if 'choice'==question.type%}
     {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}（多选）
 {% elseif 'single_choice'==question.type %}
     {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}（单选）
