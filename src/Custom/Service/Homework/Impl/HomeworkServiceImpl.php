@@ -471,21 +471,24 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     public function getIndexedReviewItems($homeworkResultId){
-        $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
-        $reviews=$this->loadReviewAssociations($reviews);
-        $indexedReviews=ArrayToolkit::index($reviews, 'id');
-        
-        $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
         $indexed=array();
-        foreach($items as $item){
-            $item['homeworkReview'] = $indexedReviews[$item['homeworkReviewId']];
-            if(!array_key_exists($item['homeworkItemResultId'],  $indexed)){
-                $indexed[$item['homeworkItemResultId']] = array();
+        $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
+        if(!empty($reviews)){
+            $reviews=$this->loadReviewAssociations($reviews);
+            $indexedReviews=ArrayToolkit::index($reviews, 'id');
+            
+            $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
+            
+            foreach($items as $item){
+                $item['homeworkReview'] = $indexedReviews[$item['homeworkReviewId']];
+                if(!array_key_exists($item['homeworkItemResultId'],  $indexed)){
+                    $indexed[$item['homeworkItemResultId']] = array();
+                }
+                if(!array_key_exists($item['homeworkReview']['category'], $indexed[$item['homeworkItemResultId']])){
+                    $indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']] = array();
+                }
+                array_push($indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']], $item);
             }
-            if(!array_key_exists($item['homeworkReview']['category'], $indexed[$item['homeworkItemResultId']])){
-                $indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']] = array();
-            }
-            array_push($indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']], $item);
         }
         
         return $indexed;
