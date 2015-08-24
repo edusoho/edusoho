@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var MediaPlayer = require('../widget/media-player4');
+    var EsCloudPlayer = require('../widget/video-js-player');
     var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -283,21 +283,25 @@ define(function(require, exports, module) {
                         url: that.get('courseUri') + '/lesson/' + lesson.id + '/playlist'
                     });
 
-                    mediaPlayer.on("timeChange", function(data){
+                    esCloudPlayer.on('beforePlay', function(player){
                         var userId = $('#lesson-video-content').data("userId");
-                        if(parseInt(data.currentTime) != parseInt(data.duration)){
-                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
+                        var currentTime = DurationStorage.get(userId, lesson.mediaId);
+                        if(currentTime < 0) {
+                            currentTime = 0;
+                        }
+                        currentTime = currentTime/10;
+                        player.currentTime(currentTime*10);
+                    });
+
+                    esCloudPlayer.on("timeupdate", function(player){
+                        var currentTime = player.currentTime();
+                        var userId = $('#lesson-video-content').data("userId");
+                        if(parseInt(currentTime) != parseInt(player.duration())){
+                            DurationStorage.set(userId, lesson.mediaId, currentTime);
                         }
                     });
 
-                    mediaPlayer.on("ready", function(playerId, data){
-                        var player = document.getElementById(playerId);
-                        var userId = $('#lesson-video-content').data("userId");
-                        player.seek(DurationStorage.get(userId, lesson.mediaId));
-                    });
-
-                    mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
-                    mediaPlayer.on('ended', function() {
+                    esCloudPlayer.on('ended', function(player) {
                         var userId = $('#lesson-video-content').data("userId");
                         DurationStorage.del(userId, lesson.mediaId);
                         if (that._counter) {
@@ -796,6 +800,19 @@ define(function(require, exports, module) {
                 learningCounter = 0;
             } else if(!paused) {
                 learningCounter++;
+            }
+
+            if (this.watchLimit && this.type == 'EsCloudPlayer' && !this.watched && learningCounter >= 1) {
+                this.watched = true;
+                var url = '../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
+                $.post(url, function(result) {
+                    if (result.status == 'ok') {
+                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
+                    } else if (result.status == 'error') {
+                        window.location.reload();
+                    }
+
+                }, 'json');
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
