@@ -140,5 +140,5 @@ interface HomeworkService
      *           }
      *      ]
     **/
-    public function getIndexedReviewItems();
+    public function getIndexedReviewItems($homeworkResultId);
 }

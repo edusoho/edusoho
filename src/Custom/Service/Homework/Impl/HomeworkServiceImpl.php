@@ -471,8 +471,8 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     public function getIndexedReviewItems($homeworkResultId){
-        $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
-        $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
-        $users=$this->getUserService()->findUsersByIds();
+        // $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
+        // $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
+        // $users=$this->getUserService()->findUsersByIds();
     }
 }
