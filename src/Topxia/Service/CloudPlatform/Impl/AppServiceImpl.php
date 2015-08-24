@@ -549,17 +549,13 @@ class AppServiceImpl extends BaseService implements AppService
         include_once($packageDir . '/Upgrade.php');
         $upgrade = new \EduSohoUpgrade($this->getKernel());
 
-        if (method_exists($upgrade, 'batchDownload')) {
-            $index = $upgrade->batchDownload($index);
-            return empty($index) ? array() : array('index' => $index);
-        }
-
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
         }
 
         if(method_exists($upgrade, 'update')){
-            $upgrade->update();
+            $index = $upgrade->update($index);
+            return empty($index) ? array() : array('index' => $index);
         }
         return array();
     }
