@@ -158,8 +158,8 @@
                   <th style="width:20%"></th>
                   <th style="width:30%">短信类型</th>
                   <th style="width:10%">类型编号</th>
-                  <th style="width:20%">启用状态</th>
                   <th style="width:20%">发送方式</th>
+                  <th style="width:20%">启用状态</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,6 +170,7 @@
                   </td>
                   <td>手机绑定</td>
                   <td>1</td>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_bind" value="1"
@@ -184,7 +185,6 @@
                         {% endif %}> 关闭
                     </label>
                   </td>
-                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
                   </td>
                 </tr>
                 <tr>
@@ -249,8 +249,8 @@
                   <th style="width:20%"></th>
                   <th style="width:30%">短信类型</th>
                   <th style="width:10%">类型编号</th>
-                  <th style="width:20%">启用状态</th>
                   <th style="width:20%">发送方式</th>
+                  <th style="width:20%">启用状态</th>
                 </tr>
               </thead>
               <tbody>
@@ -261,6 +261,9 @@
                   </td>
                   <td>新班级发布</td>
                   <td>5</td>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;"> 
+                  手动群发
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_classroom_publish" value="1"
@@ -274,9 +277,6 @@
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
-                  </td>
-                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;"> 
-                  手动群发
                   </td>
                 </tr>
                 <tr>
@@ -354,6 +354,9 @@
                 <tr>
                   <td>直播开播前通知（提前1天）</td>
                   <td>9</td>
+                  <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
+                  自动群发
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_live_play_one_day" value="1"
@@ -367,9 +370,6 @@
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
-                  </td>
-                  <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
-                  自动群发
                   </td>
                 </tr>
                 <tr>
@@ -393,6 +393,9 @@
                 <tr>
                   <td>作业完成批阅</td>
                   <td>11</td>
+                  <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
+                  自动单发
+                  </td>
                   <td class="radios">
                     {% if (is_plugin_installed('Homework')) %}
                       <label>
@@ -410,9 +413,6 @@
                     {% else %}
                       请先安装作业插件！
                     {% endif %}
-                  </td>
-                  <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
-                  自动单发
                   </td>
                 </tr>
                 <tr>
@@ -441,8 +441,8 @@
                   <th style="width:20%"></th>
                   <th style="width:30%">短信类型</th>
                   <th style="width:10%">类型编号</th>
-                  <th style="width:20%">启用状态</th>
                   <th style="width:20%">发送方式</th>
+                  <th style="width:20%">启用状态</th>
                 </tr>
               </thead>
               <tbody>
@@ -453,6 +453,8 @@
                   </td>
                   <td>课程购买</td>
                   <td>13</td>
+                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_course_buy_receipt" value="1"
@@ -466,8 +468,6 @@
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
-                  </td>
-                  <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
                   </td>
                 </tr>
                 <tr>

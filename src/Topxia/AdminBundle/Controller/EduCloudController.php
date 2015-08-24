@@ -98,7 +98,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
-
             $defaultSetting = array(
                 'sms_enabled' => '0',
                 'sms_registration' => 'off',
@@ -106,6 +105,19 @@ class EduCloudController extends BaseController
                 'sms_user_pay' => 'off',
                 'sms_forget_pay_password' => 'off',
                 'sms_bind' => 'off',
+                'sms_classroom_publish' => 'off',
+                'sms_course_publish' => 'off',
+                'sms_normal_lesson_publish' => 'off',
+                'sms_live_lesson_publish' => 'off',
+                'sms_live_play_one_day' => 'off',
+                'sms_live_play_one_hour' => 'off',
+                'sms_homework_correct' => 'off',
+                'sms_testpaper_correct' => 'off',
+                'sms_course_buy_receipt' => 'off',
+                'sms_classroom_buy_receipt' => 'off',
+                'sms_vip_buy_receipt' => 'off',
+                'sms_coin_buy_receipt' => 'off',
+
             );
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
