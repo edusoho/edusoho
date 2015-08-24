@@ -1487,7 +1487,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->dispatchEvent(
 			'task.finished', 
-			new ServiceEvent($lesson, array('type'=>'studyplan', 'userId'=>$member['userId']))
+			new ServiceEvent($lesson, array('taskType'=>'studyPlan', 'userId'=>$member['userId']))
 		);
 	}
 
