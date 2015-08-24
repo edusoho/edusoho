@@ -2,7 +2,7 @@ parameters:
 #    custom_web.example.class: Custom\WebBundle\Example
     topxia_services:
         'Course.CourseService' : 'Custom\Service\Course\Impl\CourseServiceImpl'
-#        'Crontab.CrontabService' : 'Custom\Service\Crontab\Impl\CrontablServiceImpl'
+        'Crontab.CrontabService' : 'Custom\Service\Crontab\Impl\CrontabServiceImpl'
     topxia_daos:
         'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
 services:

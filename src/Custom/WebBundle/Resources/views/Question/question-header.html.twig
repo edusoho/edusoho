@@ -1,0 +1,16 @@
+{% if 'choice'==question.type or 'single_choice'==question.type %}
+	{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% elseif 'determine'==question.type %}
+	{{ question.stem|bbCode2Html|raw }}
+{% elseif 'essay'==question.type %}
+	{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% elseif 'fill'==question.type %}
+	{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% elseif 'material'==question.type %}
+	<div class="well well-sm"> {{ question.stem|bbCode2Html|raw }} </div>
+{% elseif 'uncertain_choice'==question.type %}
+	（不定项）{{ question.stem|bbCode2Html|raw }}
+{% else %}
+	未知的题目类型
+{% endif %}
+<span>{{ question.score | round}}分</span>

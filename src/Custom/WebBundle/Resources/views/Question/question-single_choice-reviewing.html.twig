@@ -1,8 +1,9 @@
 {% extends 'CustomWebBundle:Question:question-choice-reviewing.html.twig' %}
 
 {% block body %}
+    {% include 'CustomWebBundle:Question:question-choice-options-result.html.twig' %}
 
-  {% include 'CustomWebBundle:Question:question-choice-options-result.html.twig' %}
+
 
 {% set choiceIndex = (65+itemResult.answer[0]|default('-1'))|chr %}
 {% if itemResult %}
@@ -26,5 +27,8 @@
 </div>
 {% endif %}
 
+    {% include 'CustomWebBundle:Question:question-single_choice-answer.html.twig' %}
 
+
+    {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %}
 {% endblock %}

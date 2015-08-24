@@ -9,10 +9,5 @@ class HomeworkItemResultDaoImpl extends BaseHomeworkItemResultDao implements Hom
 {
     protected $table = 'homework_item_result';
 
-    public function findItemResultsbyUserId($userId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = {$userId} ;";
 
-        return $this->getConnection()->fetchAll($sql, array($userId));
-    }
 }

@@ -1,14 +1,17 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
+
   {{ question.stem|bbCode2Html|raw }}
   <span>({{ question.score | round}}分)</span>
+
+    {% include 'CustomWebBundle:Question:question-header.html.twig' %}
+
 {% endblock %}
 
 {% block body %}
+    {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
 
-  {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
-  
   {% set choiceIndex = '' %}
   {% for key,choice in itemResult.answer %}
     {% set choiceIndex = choiceIndex ~ " " ~ (65+choice)|chr %}
@@ -33,6 +36,10 @@
     </div>
 </div> 
 
+    {% include 'CustomWebBundle:Question:question-uncertain_choice-answer.html.twig' %}
+
+
+    {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %} 
 {% endblock %}
 
 {% block footer %}

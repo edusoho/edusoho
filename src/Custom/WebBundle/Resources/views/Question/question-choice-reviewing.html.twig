@@ -2,6 +2,7 @@
 
 {% block heading %}
 
+
   {{ question.stem|bbCode2Html|raw }}
     <span>({{ question.score | round}}分)</span>
     {% if question.type == 'single_choice' %}（单选）
@@ -48,6 +49,15 @@
         <input class="form-control homework-result-item score" id='review-score-{{question.id}}-field' name="score[{{question.id}}]" data-max-score="{{ question.score}}" data-item-id="{{ itemResult.id }}" value="{{ itemResult.status=='right' ? (question.score| round) : 0 }}" data-question-id="{{question.id}}" disabled>
     </div>
 </div> 
+
+
+    {% include 'CustomWebBundle:Question:question-header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    {% include 'CustomWebBundle:Question:question-choice-answer.html.twig' %}
+    
+    {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %} 
 
 {% endblock %}
 

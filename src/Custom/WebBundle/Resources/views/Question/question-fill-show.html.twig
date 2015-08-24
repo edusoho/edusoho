@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+    {% include 'CustomWebBundle:Question:question-header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+{#     <div class="question-fill-inputs ">
+        <div class=""> #}
+          {% include 'CustomWebBundle:Question:question-fill-answer.html.twig' %}
+{#         </div>
+    </div> #}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

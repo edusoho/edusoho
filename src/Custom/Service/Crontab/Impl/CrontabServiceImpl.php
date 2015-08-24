@@ -4,6 +4,7 @@ namespace Custom\Service\Crontab\Impl;
 use Topxia\Service\Crontab\CrontabService;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Crontab\Impl\CrontabServiceImpl as BaseCrontabService;
+use Custom\Service\Homework\Job\ForwardHomeworkStatusJob;
 
 class CrontabServiceImpl extends BaseCrontabService implements CrontabService
 {
@@ -38,7 +39,7 @@ class CrontabServiceImpl extends BaseCrontabService implements CrontabService
                 $this->getJobDao()->updateJob($job['id'], array(
                     'executing' => '0',
                     'latestExecutedTime' => $time,
-                    'nextExcutedTime' => strtotime('+1 minutes',$time);
+                    'nextExcutedTime' => strtotime('+5 minutes',$time)
                 ));
             }
 

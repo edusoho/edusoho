@@ -30,6 +30,7 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql(
             "CREATE TABLE IF NOT EXISTS `homework_review_item` (
                 `id` int(10) unsigned NOT NULL auto_increment ,
+                `homeworkResultId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '',
                 `homeworkItemResultId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '答题id',
                 `homeworkReviewId` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业评分id',
                 `score` float(10,1) unsigned NOT NULL DEFAULT 0 COMMENT '分数',
@@ -42,6 +43,8 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` float(10,1) unsigned  COMMENT '同学评分(互评成绩)';");
         $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` float(10,1) unsigned  COMMENT '老师评分';");
         $this->addSql("ALTER TABLE `homework_result` ADD `pairReviews` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评数量';");
+        $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','editing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
+        $this->addSql("ALTER TABLE `homework` ADD `fullScore` float(10,1) unsigned  COMMENT '总分';");
         $this->addSql("ALTER TABLE `homework` ADD `completeTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业完成时间';");
         $this->addSql("ALTER TABLE `homework` ADD `reviewEndTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评结束时间';");
         $this->addSql("ALTER TABLE `homework` ADD `pairReview` boolean NOT NULL DEFAULT  false COMMENT '是否启用互评';");
@@ -49,10 +52,9 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql("ALTER TABLE `homework` ADD `partPercent` float(5,1)  NOT NULL  DEFAULT 0 COMMENT '作业成绩占比:部分互评的';");
         $this->addSql("ALTER TABLE `homework` ADD `zeroPercent` float(5,1) NOT NULL DEFAULT 0 COMMENT '作业成绩占比:没有参与互评的';");
         $this->addSql("ALTER TABLE `homework` ADD `minReviews` int(10) NOT NULL DEFAULT 0 COMMENT '最少互评人数';");
-        $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','editing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
       
-        $this->addSql("ALTER TABLE `mooc-dev`.`crontab_job` CHANGE COLUMN `cycle` `cycle` ENUM('once','everyminute','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期' ;");
-        $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('ForwardHomeworkStatusJob', 'everyminute', '0', 'Custom\\\\Service\\\\Homework\\\\Job\\\\FinishHomeworkEditingJob', '', '0', '0', '0', '0', '0');");
+        $this->addSql("ALTER TABLE `crontab_job` CHANGE COLUMN `cycle` `cycle` ENUM('once','everyminute','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期' ;");
+        $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('ForwardHomeworkStatusJob', 'everyminute', '0', 'Custom\\Service\\Homework\\Job\\ForwardHomeworkStatusJob', '', '0', '0', '0', '0', '0');");
     }
 
     /**

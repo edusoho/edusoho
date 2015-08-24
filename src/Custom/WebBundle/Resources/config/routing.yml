@@ -38,6 +38,10 @@ course_homework_continue:
     pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
     defaults: { _controller: CustomWebBundle:CourseHomework:continue }
 
+course_homework_preview:
+    pattern: /course/{courseId}/homework/{homeworkId}/preview
+    defaults: { _controller: CustomWebBundle:CourseHomework:preview }
+
 course_homework_submit:
     pattern: /course/{courseId}/homework/{homeworkId}/submit
     defaults: { _controller: CustomWebBundle:CourseHomework:submit }

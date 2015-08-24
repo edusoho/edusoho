@@ -223,7 +223,7 @@ class HomeworkServiceTest extends BaseTestCase
         $this ->assertContains($result['id'], array($homeworkResult2['id'], $homeworkResult3['id']));
     }
 
-    public function testForwardHomeworkStatus(){
+    public function testForwardHomeworkStatusForEditingHomeworks(){
         $user=$this->getServiceKernel()->getCurrentUser();
         $homework1=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('-1 hours', time()),'pairReview'=>true));
         $homework2=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('+1 hours', time()),'pairReview'=>true));
@@ -238,6 +238,127 @@ class HomeworkServiceTest extends BaseTestCase
         $this->assertEquals('finished',$l2['status']);
         $l3=$this->getResultDao()->getResult($result3['id']);
         $this->assertEquals('editing',$l3['status']);
+    }
+
+    public function testForwardHomeworkStatusForFinishingHomeworks(){
+        $user=$this->getServiceKernel()->getCurrentUser();
+        $homework1=$this->getHomeworkDao()->addHomework(array('minReviews'=>2,'completePercent'=>1.0,'reviewEndTime'=>strtotime('-1 hours', time()),'pairReview'=>true));
+        $homework2=$this->getHomeworkDao()->addHomework(array('reviewEndTime'=>strtotime('+1 hours', time()),'pairReview'=>true));
+        $result1=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'pairReviewing'));
+        $result1Item1=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>1,
+            'homeworkResultId'=>$result1['id'],
+        ));
+        $result1Item2=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>2,
+            'homeworkResultId'=>$result1['id'],
+        ));
+        $result1review1=$this->getReviewDao()->create(array(
+            'homeworkResultId'=>$result1['id'],
+            'homeworkId'=>$homework1['id'],
+            'category'=>'student'
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result1['id'],
+            'homeworkItemResultId'=>$result1Item1['id'],
+            'homeworkReviewId'=>$result1review1['id'],
+            'score'=>8
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result1['id'],
+            'homeworkItemResultId'=>$result1Item2['id'],
+            'homeworkReviewId'=>$result1review1['id'],
+            'score'=>2
+        ));
+        $result1review2=$this->getReviewDao()->create(array(
+            'homeworkResultId'=>$result1['id'],
+            'homeworkId'=>$homework1['id'],
+            'category'=>'student'
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result1['id'],
+            'homeworkItemResultId'=>$result1Item1['id'],
+            'homeworkReviewId'=>$result1review2['id'],
+            'score'=>10
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result1['id'],
+            'homeworkItemResultId'=>$result1Item2['id'],
+            'homeworkReviewId'=>$result1review2['id'],
+            'score'=>6
+        ));
+
+        $result2=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'finished'));
+        $result2Item1=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>1,
+            'homeworkResultId'=>$result2['id'],
+        ));
+        $result2Item2=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>2,
+            'homeworkResultId'=>$result2['id'],
+        ));
+        $result2review1=$this->getReviewDao()->create(array(
+            'homeworkResultId'=>$result2['id'],
+            'category'=>'student',
+            'homeworkId'=>$homework1['id'],
+            'userId'=>$user->id
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result2['id'],
+            'homeworkItemResultId'=>$result2Item1['id'],
+            'homeworkReviewId'=>$result2review1['id'],
+            'score'=>6
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result2['id'],
+            'homeworkItemResultId'=>$result2Item2['id'],
+            'homeworkReviewId'=>$result2review1['id'],
+            'score'=>8
+        ));
+
+        $result3=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'finished'));
+        $result3review1=$this->getReviewDao()->create(array(
+            'homeworkResultId'=>$result3['id'],
+            'category'=>'student',
+            'homeworkId'=>$homework1['id'],
+            'userId'=>$user->id
+        ));
+
+        $result4=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework2['id'],'status'=>'pairReviewing'));
+        $result4Item1=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>1,
+            'homeworkResultId'=>$result4['id'],
+        ));
+        $result4Item2=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>2,
+            'homeworkResultId'=>$result4['id'],
+        ));
+        $result4review1=$this->getReviewDao()->create(array(
+            'homeworkResultId'=>$result4['id'],
+            'homeworkId'=>$homework2['id'],
+            'category'=>'student'
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result4['id'],
+            'homeworkItemResultId'=>$result4Item1['id'],
+            'homeworkReviewId'=>$result4review1['id'],
+            'score'=>2
+        ));
+        $this->getReviewItemDao()->create(array(
+            'homeworkResultId'=>$result4['id'],
+            'homeworkItemResultId'=>$result4Item2['id'],
+            'homeworkReviewId'=>$result4review1['id'],
+            'score'=>4
+        ));
+
+        $this->getHomeworkService()->forwardHomeworkStatus();
+        $l1=$this->getResultDao()->getResult($result1['id']);
+        $this->assertEquals('finished',$l1['status']);
+        $this->assertEquals(13,$l1['score']);
+        $l2=$this->getResultDao()->getResult($result2['id']);
+        $this->assertEquals('finished',$l2['status']);
+        $l3=$this->getResultDao()->getResult($result3['id']);
+        $this->assertEquals('finished',$l3['status']);
     }
 
     protected function getUserService(){
@@ -262,5 +383,17 @@ class HomeworkServiceTest extends BaseTestCase
 
     protected function getResultDao(){
         return $this->getServiceKernel()->createDao('Custom:Homework.ResultDao');
+    }
+
+    protected function getResultItemDao(){
+        return $this->getServiceKernel()->createDao('Custom:Homework.ResultItemDao');
+    }
+
+    protected function getReviewDao(){
+        return $this->getServiceKernel()->createDao('Custom:Homework.ReviewDao');
+    }
+
+    protected function getReviewItemDao(){
+        return $this->getServiceKernel()->createDao('Custom:Homework.ReviewItemDao');
     }
 }

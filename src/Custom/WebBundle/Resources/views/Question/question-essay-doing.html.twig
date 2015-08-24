@@ -1,12 +1,11 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+	{% include 'CustomWebBundle:Question:question-header.html.twig' %}
 {% endblock %}
 
 {% block body %}
-
- {% set answer = itemResult.answer[0]|default("") %}
+	{% set answer = itemResult.answer[0]|default("") %}
  
     <textarea name="answer[{{ question.id }}]" rows="1" class="form-control question-essay-input-short"  data-question-id={{ question.id }} >{{ answer }}</textarea>
 

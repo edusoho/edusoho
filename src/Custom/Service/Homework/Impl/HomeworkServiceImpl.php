@@ -92,14 +92,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     {
         $homework = $this->getHomeworkDao()->getHomework($id);
 
-        if ($homework['pairReview'] and intval($homework['completeTime']) < time()) {
-            throw$this->createServiceException("已经超过作业提交截止时间，提交作业失败！");
-        }
         $this->addItemResult($id, $homework_result);
         //reviewing
         $rightItemCount = 0;
 
-        $homeworkItemsRusults = $this->getItemResultDao()->findItemResultsbyHomeworkId($id);
+        $homeworkItemsRusults = $this->getResultItemDao()->findItemResultsbyHomeworkId($id);
 
         foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
             if ($homeworkItemRusult['status'] == 'right') {
@@ -141,7 +138,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $review['score'] = $finalScore;
         $review['createdTime'] = time();
         $review = $this -> getReviewDao() -> create($review);
-        $review['items'] = $this->createHomeworkPairReviewItems($review['id'], $fields['items']);
+        $review['items'] = $this->createHomeworkReviewItems($review, $fields['items']);
         $review['homeworkResult'] = $homeworkResult;
 
         return $review;
@@ -156,14 +153,15 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $sum;
     }
 
-    private function createHomeworkPairReviewItems($homeworkReviewId, $items){
+    private function createHomeworkReviewItems($homeworkReview, $items){
         $reviewItems=array();
         foreach($items as $index =>$item){
-            $item['homeworkReviewId'] = $homeworkReviewId;
+            $item['homeworkReviewId'] = $homeworkReview['id'];
             $item['createdTime'] = time();
+            $item['homeworkResultId'] = $homeworkReview['homeworkResultId'];
             $item=$this ->getReviewItemDao()->create($item);
 
-	    //老师的分数为该提的最终得分
+            //老师的分数为该提的最终得分
             $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
             array_push($reviewItems,$item);
         }
@@ -184,7 +182,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $review['score'] = $finalScore;
         $review['createdTime'] = time();
         $review = $this -> getReviewDao() -> create($review);
-        $review['items'] = $this->createHomeworkPairReviewItems($review['id'], $fields['items']);
+        $review['items'] = $this->createHomeworkReviewItems($review, $fields['items']);
         $review['homeworkResult'] = $homeworkResult;
 
         return $review;
@@ -217,7 +215,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
     public function findItemResultsbyUserId($userId)
     {
-        $homeworkItemsResults = $this->getItemResultDao()->findItemResultsbyUserId($userId);
+        $homeworkItemsResults = $this->getResultItemDao()->findItemResultsbyUserId($userId);
         return empty($homeworkItemsResults) ? null : ArrayToolkit::index($homeworkItemsResults, 'homeworkId');
     }
 
@@ -270,7 +268,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         if (empty($id)) {
             throw $this->createNotFoundException("作业答题关键字为空！");
         }
-        $item = $this->getItemResultDao()->getItemResult($id);
+        $item = $this->getResultItemDao()->getItemResult($id);
         if (empty($item)) {
             throw $this->createNotFoundException("作业答题{id}不存在！");
         }
@@ -282,11 +280,13 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     public function forwardHomeworkStatus(){
+        //作业结束时间到来之后，把作业状态改为互评中
         $results=$this->getResultDao()->findSubmitableResults();
         foreach($results as $result){
             $this->submitHomework($result['homeworkId'], array('id'=>$result['id']));       
         }
 
+        //作业互评时间结束后计算评分
         $results=$this->getResultDao()->findFinishableResults();
         foreach($results as $result){
             $this->finishHomeworkResult($result);
@@ -299,9 +299,33 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
      * @param result 作业答卷.
     **/
     private function finishHomeworkResult($result){
+        $averages=$this->getReviewItemDao()-> averageItemScores($result['id']);
+        $averages = ArrayToolkit::index($averages, 'homeworkItemResultId');
+        $resultItems=$this->getResultItemDao()-> findItemsByResultId($result['id']);
+        if( !empty($resultItems)){
+            $total=0.0;
+            foreach($resultItems as $item){
+                if(array_key_exists($item['id'], $averages)){
+                    $score=$averages[$item['id']]['score'];
+                    $this->getResultItemDao()->updateItemResult($item['id'],array('score'=>$score));
+                    $total+=$score;
+                }
+            }
+            $final= $this->computeFinalScore($result,$total);            
+            $result=$this->getResultDao()->updateResult($result['id'], array('status'=>'finished','score'=>$final,'studentScore'=>$final));
+        }
+    }
 
-
-        $result=$this->getResultDao()->updateResult($result['id'], $result);
+    private function computeFinalScore($result,$score){
+        $count=$this->countUserHomeworkPairReviews($result['homeworkId'],$result['userId']);
+        $homework=$this->loadHomework($result['homeworkId']);
+        if($count==0){
+            return $homework['zeroPercent'] * $score;
+        }elseif($count<$homework['minReviews']){
+            return $homework['partPercent'] * $score;
+        }else{
+            return $homework['completePercent'] * $score;
+        }
     }
 
     protected function getReviewDao()
@@ -324,9 +348,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $this->createDao('Custom:Homework.ResultDao');
     }
 
-    private function getItemResultDao()
+    private function getResultItemDao()
     {
-        return $this->createDao('Custom:Homework.HomeworkItemResultDao');
+        return $this->createDao('Custom:Homework.ResultItemDao');
     }
 
     private function getCourseService()
@@ -347,6 +371,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     private function getHomeworkItemDao()
     {
         return $this->createDao('Homework:Homework.HomeworkItemDao');
+    }
+
+    private function getUserService(){
+        return $this->createService('User:UserService');
     }
 
     private function filterHomeworkFields($fields, $mode)
@@ -401,7 +429,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $itemResult['userId'] = $this->getCurrentUser()->id;
             $itemResult['status'] = $status;
             $itemResult['answer'] = $answer;
-            $this->getItemResultDao()->addItemResult($itemResult);
+            $this->getResultItemDao()->addItemResult($itemResult);
         }
     }
 
@@ -412,16 +440,20 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $includeItemsSubIds = array();
         $index = 1;
 
+        $fullScore=0;
         foreach ($excludeIds as $key => $excludeId) {
+            $question = $this->getQuestionService()->getQuestion($excludeId);
+            if(!empty($question)){                
+                $items['seq'] = $index++;
+                $items['questionId'] = $excludeId;
+                $items['homeworkId'] = $homeworkId;
+                $items['parentId'] = 0;
+                $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+
+                $fullScore +=$question['score'];
+            }
 
             $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
-
-            $items['seq'] = $index++;
-            $items['questionId'] = $excludeId;
-            $items['homeworkId'] = $homeworkId;
-            $items['parentId'] = 0;
-            $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
-
             if (!empty($questions)) {
                 $i = 1;
                 foreach ($questions as $key => $question) {
@@ -430,8 +462,17 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                     $items['homeworkId'] = $homeworkId;
                     $items['parentId'] = $question['parentId'];
                     $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
+                    $fullScore += $question['score'];
                 }
             }
         }
+
+        $this->getHomeworkDao()->updateHomework($homeworkId,array('fullScore'=>$fullScore));
+    }
+
+    public function getIndexedReviewItems($homeworkResultId){
+        $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
+        $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
+        $users=$this->getUserService()->findUsersByIds();
     }
 }

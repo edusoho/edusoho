@@ -1,17 +1,12 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
-  <span>{{ question.score | round}}分</span>
+    {% include 'CustomWebBundle:Question:question-header.html.twig' %}
 {% endblock %}
 
 {% block body %}
-    <div class="question-eassy-form-control">
-        <div class="question-eassy-answer">
-            <strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:
-            </strong>
-        </div>
-        <p>{% if itemResult.answer[0]|default(null) %}{{ itemResult.answer[0]|raw }}{% else %}未回答{% endif %}</p>
+    {% include 'CustomWebBundle:Question:question-essay-answer.html.twig' %}
+
 
     </div>
     <div class="question-eassy-form-control">
@@ -38,6 +33,9 @@
             <div class="question-result-title">老师正在批阅！</div>
         </div>
     {% endif %}
+
+    {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %}
+
 {% endblock %}
 
 {% block footer %}
