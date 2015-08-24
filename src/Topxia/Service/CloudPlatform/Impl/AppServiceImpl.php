@@ -396,9 +396,9 @@ class AppServiceImpl extends BaseService implements AppService
                 throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
             }
 
-            $filepath = $this->createAppClient()->downloadPackage($packageId);
+            // $filepath = $this->createAppClient()->downloadPackage($packageId);
 
-            $this->unzipPackageFile($filepath, $this->makePackageFileUnzipDir($package));
+            // $this->unzipPackageFile($filepath, $this->makePackageFileUnzipDir($package));
 
         } catch(\Exception $e) {
             $errors[] = $e->getMessage();
@@ -417,7 +417,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $result['errors'];
     }
 
-    public function beginPackageUpdate($packageId, $type)
+    public function beginPackageUpdate($packageId, $type, $index = 0)
     {
         $errors = array();
         $package = $packageDir = null;
@@ -432,24 +432,27 @@ class AppServiceImpl extends BaseService implements AppService
             goto last;
         }
 
-        try {
-            $this->_deleteFilesForPackageUpdate($package, $packageDir);
-        } catch(\Exception $e) {
-            $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
-        }
+        // try {
+        //     $this->_deleteFilesForPackageUpdate($package, $packageDir);
+        // } catch(\Exception $e) {
+        //     $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
+        //     $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+        //     goto last;
+        // }
+
+        // try {
+        //     $this->_replaceFileForPackageUpdate($package, $packageDir);
+        // } catch (\Exception $e) {
+        //     $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
+        //     $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+        //     goto last;
+        // }
 
         try {
-            $this->_replaceFileForPackageUpdate($package, $packageDir);
-        } catch (\Exception $e) {
-            $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
-        }
-
-        try {
-            $this->_execScriptForPackageUpdate($package, $packageDir, $type);
+            $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
+            if (isset($info['index'])) {
+                goto last;
+            }
         } catch (\Exception $e) {
             $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
@@ -474,7 +477,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         last:
         $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
-        return $errors;
+        return empty($info) ? $errors : $info;
     }
 
     public function repairProblem($token)
@@ -537,7 +540,7 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
-    protected function _execScriptForPackageUpdate($package, $packageDir, $type)
+    protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return ;
@@ -546,6 +549,11 @@ class AppServiceImpl extends BaseService implements AppService
         include_once($packageDir . '/Upgrade.php');
         $upgrade = new \EduSohoUpgrade($this->getKernel());
 
+        if (method_exists($upgrade, 'batchDownload')) {
+            $index = $upgrade->batchDownload($index);
+            return empty($index) ? array() : array('index' => $index);
+        }
+
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
         }
@@ -553,6 +561,7 @@ class AppServiceImpl extends BaseService implements AppService
         if(method_exists($upgrade, 'update')){
             $upgrade->update();
         }
+        return array();
     }
 
     protected function _deleteFilesForPackageUpdate($package, $packageDir)

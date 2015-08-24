@@ -92,9 +92,7 @@ define(function(require, exports, module) {
                 window.location.reload();
             }, 3000);
         });
-
     };
-
 
 
     function exec(title, url, progressBar, startProgress, endProgress) {
@@ -106,6 +104,12 @@ define(function(require, exports, module) {
         }).done(function(data, textStatus, jqXHR) {
             if (data.status == 'error') {
                 progressBar.error(makeErrorsText(title + '失败：', data.errors));
+            } else if (typeof(data.index) != "undefined") {
+                if (url.indexOf('index') < 0) {
+                    url = url+'&index=0';
+                }
+                url = url.replace(/index=\d+/g,'index='+data.index);
+                exec(title, url, progressBar, startProgress, endProgress);
             } else {
                 progressBar.setProgress(endProgress, title + '完成');
                 $(document).dequeue('update_step_queue');
