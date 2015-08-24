@@ -11,7 +11,7 @@
                     <li class="ui-border-b">
                         <a class="ui-btn btn-outline iconfont icon-xiazai" ng-click="showDownLesson()">下载</a></li>
                     <li class="ui-border-b">
-                        <a class="ui-btn btn-outline iconfont icon-tixing" href="#/coursenotice/course/{{ course.id }}">通知</a>
+                        <a class="ui-btn btn-outline iconfont icon-tixing" href="#/coursenotice/course/{{ course.id }}">公告</a>
                         </li>
                     <li ng-if="!course.source && member && member.role =='student' ">
                         <a class="ui-btn btn-outline iconfont icon-tuichu" ng-click="$parent.showUnLearnDlg = true ">退出</a></li>
