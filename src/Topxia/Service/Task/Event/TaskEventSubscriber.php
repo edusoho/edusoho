@@ -22,8 +22,10 @@ class TaskEventSubscriber implements EventSubscriberInterface
         $targetObject = $event->getSubject();
         $type = $event->getArgument('type');
         $userId = $event->getArgument('userId');
-        
-        $this->getTaskProcessor()->finishTask($targetObject, $userId);
+
+        $taskProcessor = $this->getTaskProcessor($type);
+
+        $taskProcessor->finishTask($targetObject, $userId);
     }
 
     
