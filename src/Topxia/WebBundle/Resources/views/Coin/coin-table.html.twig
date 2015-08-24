@@ -1,0 +1,60 @@
+    
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% if setting('coin.coin_enabled') %}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>名称</th>
+          <th>创建时间</th>
+          <th>状态</th>
+          <th>价格<small class="text-muted">(元)</small></th>
+          <th>购买者</th>
+          <th>支付方式</th>
+          
+          {# <th>查看</th> #}
+        </tr>
+        </thead>
+
+       {% for order in orders %}
+       <tr style="word-break: break-all;word-wrap: break-word;">
+          <td ><strong>{{order.title}}</strong>
+            <br>
+            <span class="text-muted text-sm">订单号：{{order.sn}}</span>
+          </td>
+           <td>
+            <span class="text-muted text-sm">{{order.createdTime|date('Y-m-d H:i:s')}}</span>
+          </td> 
+          <td>
+          {{ dict_text('orderStatus:html', order.status) }}
+          </td>
+          <td>
+            <span class="money-text">{{order.amount}}</span>
+          </td> 
+          <td>
+            <a target="_blank" href="{{ path('user_show', {id:order.userId}) }}">
+            {{users[order.userId].nickname}}</a>
+          </td>
+          <td>
+            {{dict_text('payment',order.payment)}}
+            <br>
+            <span class="text-muted text-sm">{% if order.paidTime %}{{order.paidTime|date('Y-m-d H:i:s')}}{% else %}-{% endif %}</span>
+          </td>
+         
+{#           <td>
+            <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
+          </td> #}
+       </tr>
+       {% endfor %}
+      </table>
+    </div>
+ {{ web_macro.paginator(paginator) }}
+
+{% else %}
+<div class="well" style="text-align:center;">
+
+
+虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
+
+</div>
+{% endif %}

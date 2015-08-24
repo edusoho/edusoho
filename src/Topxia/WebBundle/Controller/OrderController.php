@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\Common\SmsToolkit;
+use Topxia\Common\ArrayToolkit;
 
 class OrderController extends BaseController
 {
@@ -84,9 +85,8 @@ class OrderController extends BaseController
         $fields = $request->request->all(); 
 
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
-            $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
-            if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
+            if ($this->setting('cloud_sms.sms_enabled') == '1'  && $this->setting("cloud_sms.{$scenario}") == 'on') {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
                 if (!$result) {
                     return $this->createMessageResponse('error', '短信验证失败。');
@@ -173,6 +173,24 @@ class OrderController extends BaseController
 
     }
 
+    public function detailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+
+        $user = $this->getUserService()->getUser($order['userId']);
+
+        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
+        
+        return $this->render('TopxiaWebBundle:Order:detail-modal.html.twig', array(
+            'order'=>$order,
+            'user'=>$user,
+            'orderLogs'=>$orderLogs,
+            'users' => $users
+        ));
+    }
+
     public function couponCheckAction (Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {
@@ -218,9 +236,5 @@ class OrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }   
+    
 }

@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class SiteSettingController extends BaseController
@@ -57,7 +56,7 @@ class SiteSettingController extends BaseController
                 array('name' => '', 'number' => ''),
             ),
             'qqgroup' => array(
-                array('name' => '', 'number' => ''),
+                array('name' => '', 'number' => '' , 'url' => ''),
             ),
             'phone' => array(
                 array('name' => '', 'number' => ''),
@@ -70,6 +69,7 @@ class SiteSettingController extends BaseController
         $consult = array_merge($default, $consult);
         if ($request->getMethod() == 'POST') {
             $consult = $request->request->all();
+
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
@@ -79,6 +79,27 @@ class SiteSettingController extends BaseController
         }
         return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
             'consult' => $consult,
+        ));
+    }
+
+    public function esBarSettingAction(Request $request)
+    {
+        $esBar = $this->getSettingService()->get('esBar', array());
+
+        $default = array(
+            'enabled'=> 0
+        );
+
+        $esBar = array_merge($default,$esBar);
+
+        if($request->getMethod() == 'POST'){
+            $esBar = $request->request->all();
+            $this->getSettingService()->set('esBar', $esBar);
+            $this->getLogService()->info('system', 'update_settings', "更新侧边栏设置", $esBar);
+            $this->setFlashMessage('success', '侧边栏设置已保存！');
+        }
+        return $this->render('TopxiaAdminBundle:System:esbar-setting.html.twig',array(
+            'esBar' => $esBar
         ));
     }
 

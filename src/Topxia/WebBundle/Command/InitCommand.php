@@ -41,6 +41,7 @@ class InitCommand extends BaseCommand
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
         $this->initBlock($output);
+        $this->initCrontabJob($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
@@ -420,6 +421,40 @@ EOD;
 
     }
 
+    public function initCrontabJob($output){
+        $output->write('  初始化CrontabJob');
+        $this->getCrontabService()->createJob(array(
+            'name'=>'CancelOrderJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        $this->getCrontabService()->createJob(array(
+            'name'=>'DeleteExpiredTokenJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteSessionJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobParams'=>'',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+        
+        $this->getSettingService()->set("crontab_next_executed_time", time());
+
+        $output->writeln(' ...<info>成功</info>');
+    }
+
 	private function initServiceKernel()
 	{
 		$serviceKernel = ServiceKernel::create('dev', false);
@@ -461,4 +496,8 @@ EOD;
 		return $this->getServiceKernel()->createService('User.UserService');
 	}
 
+    protected function getCrontabService()
+    {
+        return $this->getServiceKernel()->createService('Crontab.CrontabService');
+    }
 }

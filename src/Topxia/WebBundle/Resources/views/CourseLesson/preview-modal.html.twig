@@ -5,7 +5,6 @@
 {% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
-  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
 
 	{% if lesson.status == 'published' %}
 
@@ -20,12 +19,11 @@
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ finger_print() }}"
+            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
           {% endif %}
           {% if not lesson.free %}
             data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
           {% endif %}
-            data-change-res-url = "{{ path('hls_change_res',{id:lesson.mediaId}) }}"
         >
         </div>
         <div class="js-time-limit-dev hidden">
@@ -68,10 +66,18 @@
 {% endblock %}
 
 {% block footer %}
+  <span class="es-qrcode bottom mrl" data-url="{{path('common_learn_qrcode',{lessonId: lesson.id,courseId: lesson.courseId,type:"lesson-qrcode"})}}">
+    <i class="es-icon es-icon-qrcode"></i>
+    <span class="qrcode-popover">
+      <img src="" alt="">
+      扫二维码继续学习
+    </span>
+  </span>
    {% if lesson.status == 'published' %}
+
     {% if course.price=='0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if setting("course.buy_fill_userinfo")|default(false) %}
+        {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
           href="#modal" 
           data-toggle="modal" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
@@ -87,7 +93,7 @@
       </a>
     {% else %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok') %}
+        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
           href="javascript:;" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
         {% else %}
@@ -107,4 +113,5 @@
     {% endif %}
   {% endif %} 
  {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
+
 {% endblock %}

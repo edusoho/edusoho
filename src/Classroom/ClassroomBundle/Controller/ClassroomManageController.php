@@ -230,7 +230,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $currentUser = $this->getCurrentUser();
+        // $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -264,7 +264,6 @@ class ClassroomManageController extends BaseController
                 'orderId' => $order['id'],
                 'note'  => $data['remark'],
             );
-
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
 
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
@@ -302,21 +301,6 @@ class ClassroomManageController extends BaseController
                 $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
             } else {
                 $response = array('success' => true, 'message' => '');
-            }
-
-            $isClassroomTeacher = $this->getClassroomService()->isClassroomTeacher($id, $user['id']);
-            if ($isClassroomTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本班级的教师，不能添加');
-            }
-
-            $isClassroomHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($id, $user['id']);
-            if ($isClassroomHeadTeacher) {
-                $response = array('success' => false, 'message' => '该用户是本班级的班主任，不能添加');
-            }
-
-            $isClassroomAssistent = $this->getClassroomService()->isClassroomAssistent($id, $user['id']);
-            if ($isClassroomAssistent) {
-                $response = array('success' => false, 'message' => '该用户是本班级的助教，不能添加');
             }
         }
 
@@ -389,14 +373,14 @@ class ClassroomManageController extends BaseController
                 $member .= $profiles[$classroomMember['userId']][$key] ? $profiles[$classroomMember['userId']][$key]."," : "-".",";
             }
             $students[] = $member;
-        };
+        }
 
         $str .= implode("\r\n", $students);
         $str = chr(239).chr(187).chr(191).$str;
 
         $filename = sprintf("classroom-%s-students-(%s).csv", $classroom['id'], date('Y-n-d'));
 
-        $userId = $this->getCurrentUser()->id;
+        // $userId = $this->getCurrentUser()->id;
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -458,9 +442,7 @@ class ClassroomManageController extends BaseController
             }
             $this->setFlashMessage('success', "保存成功！");
         }
-
-        $teacherIds = $classroom['teacherIds'] ?: array();
-
+        $teacherIds = $this->getClassroomService()->findTeachers($id);
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
         $teacherItems = array();
@@ -522,17 +504,21 @@ class ClassroomManageController extends BaseController
             $data = $request->request->all();
             $userIds = empty($data['ids']) ? array() : $data['ids'];
             $this->getClassroomService()->updateAssistants($id, $userIds);
+            if ($userIds) {
+                $fields = array('assistantIds' => $userIds);
+
+                $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
+            }
 
             $this->setFlashMessage('success', "保存成功！");
             
         }
 
-        $assistants = $this->getClassroomService()->findAssistants($id);
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($assistants, 'userId'));
-        $users = ArrayToolkit::index($users, "id");
+        $assistantIds = $this->getClassroomService()->findAssistants($id);
+        $users = $this->getUserService()->findUsersByIds($assistantIds);
         $sortedAssistants = array();
-        foreach ($assistants as $key => $assistant) {
-            $user = $users[$assistant["userId"]];
+        foreach ($assistantIds as $key => $assistantId) {
+            $user = $users[$assistantId];
             $sortedAssistants[] = array(
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
@@ -692,16 +678,13 @@ class ClassroomManageController extends BaseController
 
         $data = $request->request->all();
         $ids = array();
-
         if (isset($data['ids']) && $data['ids'] != "") {
             $ids = $data['ids'];
             $ids = explode(",", $ids);
         } else {
             return new Response('success');
         }
-
         $this->getClassroomService()->addCoursesToClassroom($id, $ids);
-
         $this->setFlashMessage('success', "课程添加成功");
 
         return new Response('success');
@@ -711,7 +694,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
+        // $classroom = $this->getClassroomService()->getClassroom($id);
 
         $this->getClassroomService()->publishClassroom($id);
 
@@ -737,7 +720,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
-        $classroom = $this->getClassroomService()->getClassroom($id);
+        // $classroom = $this->getClassroomService()->getClassroom($id);
 
         $this->getClassroomService()->closeClassroom($id);
 
@@ -775,7 +758,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $user = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
+        // $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
         $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
         
         $courseIds=ArrayToolkit::column($courses,'id');
@@ -898,9 +881,9 @@ class ClassroomManageController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
         $findLearnedCourses = array();
         foreach ($courseIds as $key => $value) {
-            $LearnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $member['userId']);
-            if (!empty($LearnedCourses)) {
-                $findLearnedCourses[] = $LearnedCourses;
+            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $member['userId']);
+            if (!empty($learnedCourses)) {
+                $findLearnedCourses[] = $learnedCourses;
             }
         }
 

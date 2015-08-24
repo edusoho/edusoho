@@ -3,6 +3,7 @@ namespace Topxia\Service\Crontab\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Crontab\CrontabService;
+use Symfony\Component\Yaml\Yaml;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
@@ -35,7 +36,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         try {
             // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
-            $this->getSettingService()->set('crontab_next_executed_time', 0);
+            $this->setNextExcutedTime(0);
 
             $this->getJobDao()->getConnection()->beginTransaction();
             
@@ -118,11 +119,36 @@ class CrontabServiceImpl extends BaseService implements CrontabService
 
         $job = $this->getJobDao()->searchJobs($conditions, array('nextExcutedTime', 'ASC'), 0, 1);
         if (empty($job)) {
-            $this->getSettingService()->set('crontab_next_executed_time', 0);
+            $this->setNextExcutedTime(0);
         } else {
-            $this->getSettingService()->set('crontab_next_executed_time', $job[0]['nextExcutedTime']);
+            $this->setNextExcutedTime($job[0]['nextExcutedTime']);
         }
+    }
 
+    public function getNextExcutedTime()
+    {
+        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
+        $yaml = new Yaml();
+        if (!file_exists($filePath)) {
+            $content = $yaml->dump(array('crontab_next_executed_time' => 0));
+            $fh = fopen($filePath,"w");
+            fwrite($fh,$content);
+            fclose($fh);
+        }
+        $fileContent = file_get_contents($filePath);
+        $config = $yaml->parse($fileContent);
+        return $config['crontab_next_executed_time'];
+        
+    }
+
+    public function setNextExcutedTime($nextExcutedTime)
+    {
+        $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
+        $yaml = new Yaml();
+        $content = $yaml->dump(array('crontab_next_executed_time' => $nextExcutedTime));
+        $fh = fopen($filePath,"w");
+        fwrite($fh,$content);
+        fclose($fh);
     }
 
     protected function getJobDao()

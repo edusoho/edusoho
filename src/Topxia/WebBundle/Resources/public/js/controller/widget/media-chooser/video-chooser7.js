@@ -12,8 +12,8 @@ define(function(require, exports, module) {
 
     	attrs: {
     		uploaderSettings: {
-                file_types : "*.mp4;*.avi;*.flv",
-                file_size_limit : "1000 MB",
+                file_types : "*.mp4;*.avi;*.flv;*.m4v",
+                file_size_limit : "2048 MB",
                 file_types_description: "视频文件"
     		},
             preUpload: function(uploader, file) {

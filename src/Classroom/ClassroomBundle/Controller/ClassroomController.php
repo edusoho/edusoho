@@ -29,6 +29,7 @@ class ClassroomController extends BaseController
             'private' => 0,
         );
 
+        $categoryArray = array();
         if (!empty($category)) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($category);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
@@ -49,18 +50,55 @@ class ClassroomController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $classroomIds = ArrayToolkit::column($classrooms, 'id');
+        // $classroomIds = ArrayToolkit::column($classrooms, 'id');
 
         $allClassrooms = ArrayToolkit::index($classrooms, 'id');
-
+        if(!$categoryArray){
+            $categoryArrayDescription = array();
+        }
+        else{
+        $categoryArrayDescription = $categoryArray['description'];
+        $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+        $categoryArrayDescription = substr( $categoryArrayDescription, 0, 100 );
+        } 
+        if(!$categoryArray){
+            $CategoryParent = '';
+        }
+        else{
+            if(!$categoryArray['parentId']){
+                    $CategoryParent = '';
+                }
+                else{
+                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+            }
+        }
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator' => $paginator,
             'classrooms' => $classrooms,
             'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
             'category' => $category,
+            'categoryArray' => $categoryArray,
+            'categoryArrayDescription' => $categoryArrayDescription,
+            'CategoryParent' => $CategoryParent
         ));
     }
+    public function keywordsAction($classroom)
+    {
+        
+        $category = $this->getCategoryService()->getCategory($classroom['categoryId']);
+        $parentCategory = array();
+        if (!empty($category) && $category['parentId'] != 0) {
+            $parentCategory = $this->getCategoryService()->getCategory($category['parentId']);
+        }
+        return $this->render('ClassroomBundle:Classroom:keywords.html.twig', array(
+            'category' => $category,
+            'parentCategory' => $parentCategory,
+            'classroom' => $classroom
+        ));
+    }
+
 
     public function myClassroomAction()
     {
@@ -94,7 +132,6 @@ class ClassroomController extends BaseController
         }
 
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-
         return $this->render("ClassroomBundle:Classroom:my-classroom.html.twig", array(
             'classrooms' => $classrooms,
             'members' => $members,
@@ -129,7 +166,6 @@ class ClassroomController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
-
         $lessonNum = 0;
         $coinPrice = 0;
         $price = 0;
@@ -142,9 +178,7 @@ class ClassroomController extends BaseController
         }
 
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
-
-        $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
-        $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
         if ($member && !$member["locked"]) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
                 'classroom' => $classroom,
@@ -153,12 +187,11 @@ class ClassroomController extends BaseController
                 'coinPrice' => $coinPrice,
                 'price' => $price,
                 'member' => $member,
-                'canManage' => $canManage,
-                'canHandle' => $canHandle,
                 'checkMemberLevelResult' => $checkMemberLevelResult,
                 'classroomMemberLevel' => $classroomMemberLevel,
                 'coursesNum' => $coursesNum,
                 'canFreeJoin' => $canFreeJoin,
+                'breadcrumbs' => $breadcrumbs
             ));
         }
 
@@ -169,8 +202,8 @@ class ClassroomController extends BaseController
             'classroomMemberLevel' => $classroomMemberLevel,
             'coursesNum' => $coursesNum,
             'member' => $member,
-            'canManage' => $canManage,
             'canFreeJoin' => $canFreeJoin,
+            'breadcrumbs' => $breadcrumbs
         ));
     }
 
@@ -180,6 +213,7 @@ class ClassroomController extends BaseController
      */
     public function showAction(Request $request, $id)
     {
+
         $classroom = $this->getClassroomService()->getClassroom($id);
         $previewAs = "";
 
@@ -200,8 +234,9 @@ class ClassroomController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
+
         if ($member && $member["locked"] == "0") {
-            if ($member['role'] == 'student') {
+            if (in_array('student',$member['role'])) {
                 return $this->redirect($this->generateUrl('classroom_courses', array(
                     'classroomId' => $id,
                 )));
@@ -235,13 +270,12 @@ class ClassroomController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => 'auditor',
+                'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
             );
-
             if ($previewAs == 'member') {
-                $member['role'] = 'member';
+                $member['role'] = array('member');
             }
         }
 
@@ -253,23 +287,26 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
-
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+    }
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
             'classroom' => $classroom,
             'member' => $member,
+            'classroomDescription' => $classroomDescription
         ));
     }
 
     public function teachersBlockAction($classroom)
     {
-        if (empty($classroom['teacherIds'])) {
-            $classroomTeacherIds = array();
-        } else {
-            $classroomTeacherIds = $classroom['teacherIds'];
-        }
-
+        $classroomTeacherIds = $this->getClassroomService()->findTeachers($classroom['id']);
         $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
         $headTeacherprofiles = $this->getUserService()->getUserProfile($classroom['headTeacherId']);
@@ -435,7 +472,7 @@ class ClassroomController extends BaseController
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
-        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && $member['role'] == "auditor")) {
+        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && array_intersect(array('auditor'),$member['role']))) {
             $this->getSignService()->userSign($user['id'], 'classroom_sign', $classroomId);
 
             $userSignStatistics = $this->getSignService()->getSignUserStatistics($user->id, 'classroom_sign', $classroomId);
@@ -497,8 +534,7 @@ class ClassroomController extends BaseController
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
-
-        if (!in_array($member["role"], array("auditor", "student"))) {
+        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
@@ -562,6 +598,134 @@ class ClassroomController extends BaseController
         return $this->render("ClassroomBundle:Classroom:classroom-block.html.twig", array(
             'classroom' => $classroom,
         ));
+    }
+
+    public function buyAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $previewAs = $request->query->get('previewAs');
+
+        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $this->previewAsMember($previewAs, $member, $classroom);
+
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo['approvalStatus'] = $user['approvalStatus'];
+        
+        $account=$this->getCashAccountService()->getAccountByUserId($user['id'],true);
+        
+        if(empty($account)){
+            $this->getCashAccountService()->createAccount($user['id']);
+        }
+
+        if(isset($account['cash'])){
+            $account['cash']=intval($account['cash']);
+        }
+    
+        $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        
+        $userFields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        //判断用户是否为VIP            
+        $vipStatus = $classroomVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            if ($classroomVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomVip['id']);
+            }
+        }
+
+        return $this->render('ClassroomBundle:Classroom:buy-modal.html.twig', array(
+            'classroom' => $classroom,
+            'payments' => $this->getEnabledPayments(),
+            'user' => $userInfo,
+            'noVerifiedMobile' => (strlen($user['verifiedMobile']) == 0),
+            'verifiedMobile' => (strlen($user['verifiedMobile']) > 0)?$user['verifiedMobile']:'',
+            'courseSetting' => $courseSetting,
+            'member' => $member,
+            'userFields'=>$userFields,
+            'account'=>$account,
+            'amount'=>$amount,
+            'vipStatus'=>$vipStatus
+        ));
+    }
+
+    public function modifyUserInfoAction(Request $request)
+    {
+
+        $formData = $request->request->all();
+
+        $user = $this->getCurrentUser();
+        if (empty($user)) {
+            return $this->createMessageResponse('error', '用户未登录，不能购买。');
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
+        if (empty($classroom)) {
+            return $this->createMessageResponse('error', '班级不存在，不能购买。');
+        }
+
+        $userInfo = ArrayToolkit::parts($formData, array(
+            'truename',
+            'mobile',
+            'qq',
+            'company',
+            'weixin',
+            'weibo',
+            'idcard',
+            'gender',
+            'job',
+            'intField1','intField2','intField3','intField4','intField5',
+            'floatField1','floatField2','floatField3','floatField4','floatField5',
+            'dateField1','dateField2','dateField3','dateField4','dateField5',
+            'varcharField1','varcharField2','varcharField3','varcharField4','varcharField5','varcharField10','varcharField6','varcharField7','varcharField8','varcharField9',
+            'textField1','textField2','textField3','textField4','textField5', 'textField6','textField7','textField8','textField9','textField10',
+        ));
+
+        $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+
+        $coinSetting = $this->setting("coin");
+
+        //判断用户是否为VIP            
+        $vipStatus = $classroomVip = null;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $classroomVip = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            if ($classroomVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+                if($vipStatus == 'ok') {
+                    $formData['becomeUseMember'] = true;
+                }
+            }
+        }
+
+        if($classroom['price'] == 0 || $vipStatus == 'ok') {
+            $formData['amount'] = 0;
+            $formData['totalPrice'] = 0;
+            $formData['priceType'] = empty($coinSetting["priceType"])?'RMB':$coinSetting["priceType"];
+            $formData['coinRate'] = empty($coinSetting["coinRate"])?1:$coinSetting["coinRate"];
+            $formData['coinAmount'] = 0;
+
+            $order = $this->getClassroomOrderService()->createOrder($formData);
+
+            if ($order['status'] == 'paid') {
+                return $this->redirect($this->generateUrl('classroom_show', array('id' => $order['targetId'])));
+            }
+        }
+
+        return $this->redirect($this->generateUrl('order_show', array(
+            'targetId' => $formData['targetId'],
+            'targetType' => 'classroom'
+        )));
+        
     }
 
     private function canFreeJoin($classroom, $courses, $user)
@@ -630,9 +794,9 @@ class ClassroomController extends BaseController
         $courseIds = ArrayToolkit::column($courses, 'id');
         $findLearnedCourses = array();
         foreach ($courseIds as $key => $value) {
-            $LearnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
-            if (!empty($LearnedCourses)) {
-                $findLearnedCourses[] = $LearnedCourses;
+            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
+            if (!empty($learnedCourses)) {
+                $findLearnedCourses[] = $learnedCourses;
             }
         }
 
@@ -739,8 +903,32 @@ class ClassroomController extends BaseController
             'threads' => $threads,
             'users' => $users,
             'classrooms' => $classrooms,
-            ));
+        ));
+
     }
+
+    protected function getEnabledPayments()
+    {
+        $enableds = array();
+
+        $setting = $this->setting('payment', array());
+
+        if (empty($setting['enabled'])) {
+            return $enableds;
+        }
+
+        $payNames = array('alipay');
+        foreach ($payNames as $payName) {
+            if (!empty($setting[$payName . '_enabled'])) {
+                $enableds[$payName] = array(
+                    'type' => empty($setting[$payName . '_type']) ? '' : $setting[$payName . '_type'],
+                );
+            }
+        }
+
+        return $enableds;
+    }
+
 
     protected function getThreadService()
     {
@@ -795,5 +983,32 @@ class ClassroomController extends BaseController
     private function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+
+    protected function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+    
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+
     }
 }

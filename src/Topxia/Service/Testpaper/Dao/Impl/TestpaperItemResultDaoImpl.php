@@ -18,8 +18,8 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
     public function getItemResult($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $ItemResult = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $ItemResult ? $this->createSerializer()->unserialize($ItemResult, $this->serializeFields) : null;
+        $itemResult = $this->getConnection()->fetchAssoc($sql, array($id));
+        return $itemResult ? $this->createSerializer()->unserialize($itemResult, $this->serializeFields) : null;
     }
 
     public function addItemResult($fields)

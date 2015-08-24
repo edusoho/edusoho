@@ -315,7 +315,7 @@ admin_course_recommend:
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
 
 admin_course_cancel_recommend:
-    pattern: /course/{id}/recommend/cancel
+    pattern: /course/{id}/recommend/cancel/{target}
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
 
@@ -591,6 +591,10 @@ admin_setting_consult_setting:
     pattern:  /setting/consult-setting
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultSetting }
 
+admin_setting_es_bar:
+    pattern:  /setting/es-bar
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:esBarSetting }
+
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
@@ -684,6 +688,10 @@ admin_cloud_tlp:
 admin_cloud_video:
     pattern:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
+
+admin_cloud_doc:
+    pattern:  /cloud/doc
+    defaults: { _controller: TopxiaAdminBundle:Cloud:doc }
 
 admin_cloud_live:
     pattern:  /cloud/live
@@ -1195,6 +1203,18 @@ admin_coin_give_check_nickname:
 admin_bill:
     pattern: /coin/bill
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
+
+admin_bill_export_csv:
+    pattern: /coin/bill/export/{cashType}
+    defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
+
+admin_order_manage_export_csv:
+    pattern: /order/manage/export/{targetType}
+    defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
+
+admin_order_manage_export_coin_csv:  
+    pattern: /order/manage/coin
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
 
 admin_coin_user_records:
     path:     /coin/records/user

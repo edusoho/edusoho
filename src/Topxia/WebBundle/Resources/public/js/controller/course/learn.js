@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var EsCloudPlayer = require("../widget/video-js-player");
+    var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -268,7 +268,6 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-
                     var lessonVideoDiv = $('#lesson-video-content');
                     var html = [];
                     html.push('<video id="video-player" class="video-js vjs-default-skin" width="100%" height="100%">');
@@ -284,25 +283,21 @@ define(function(require, exports, module) {
                         url: that.get('courseUri') + '/lesson/' + lesson.id + '/playlist'
                     });
 
-                    esCloudPlayer.on('beforePlay', function(player){
+                    mediaPlayer.on("timeChange", function(data){
                         var userId = $('#lesson-video-content').data("userId");
-                        var currentTime = DurationStorage.get(userId, lesson.mediaId);
-                        if(currentTime < 0) {
-                            currentTime = 0;
-                        }
-                        currentTime = currentTime/10;
-                        player.currentTime(currentTime*10);
-                    });
-
-                    esCloudPlayer.on("timeupdate", function(player){
-                        var currentTime = player.currentTime();
-                        var userId = $('#lesson-video-content').data("userId");
-                        if(parseInt(currentTime) != parseInt(player.duration())){
-                            DurationStorage.set(userId, lesson.mediaId, currentTime);
+                        if(parseInt(data.currentTime) != parseInt(data.duration)){
+                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
                         }
                     });
 
-                    esCloudPlayer.on('ended', function(player) {
+                    mediaPlayer.on("ready", function(playerId, data){
+                        var player = document.getElementById(playerId);
+                        var userId = $('#lesson-video-content').data("userId");
+                        player.seek(DurationStorage.get(userId, lesson.mediaId));
+                    });
+
+                    mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
+                    mediaPlayer.on('ended', function() {
                         var userId = $('#lesson-video-content').data("userId");
                         DurationStorage.del(userId, lesson.mediaId);
                         if (that._counter) {
@@ -403,8 +398,10 @@ define(function(require, exports, module) {
                             clearInterval(iID);
                         }
 
+                        var intervalSecond = 0;
+
                         function generateHtml() {
-                            var nowDate = lesson.nowDate;
+                            var nowDate = lesson.nowDate + intervalSecond;
                             var startLeftSeconds = parseInt(startTime - nowDate);
                             var endLeftSeconds = parseInt(endTime - nowDate);
                             var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
@@ -483,7 +480,7 @@ define(function(require, exports, module) {
 
                             $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
 
-
+                            intervalSecond++;
                         }
 
                         generateHtml();
@@ -812,7 +809,24 @@ define(function(require, exports, module) {
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
-
+        $(".es-qrcode").click(function(){
+            var $this = $(this); 
+            var url=document.location.href.split("#");
+            var id=url[1].split("/");
+            if($this.hasClass('open')) {
+                $this.removeClass('open');
+            }else {
+                $.ajax({
+                    type: "post",
+                    url: $this.data("url")+"&lessonId="+id[1],
+                    dataType: "json",
+                    success:function(data){
+                        $this.find(".qrcode-popover img").attr("src",data.img);
+                        $this.addClass('open');
+                    }
+                });
+            }
+        });
     };
 
 });

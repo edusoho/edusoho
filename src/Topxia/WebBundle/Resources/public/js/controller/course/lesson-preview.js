@@ -1,11 +1,10 @@
 define(function(require, exports, module) {
-
 	var VideoJS = require('video-js'),
 		swfobject = require('swfobject');
 
 	require('mediaelementplayer');
 
-	var EsCloudPlayer = require('../widget/video-js-player');
+    var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -28,9 +27,21 @@ define(function(require, exports, module) {
                     watermark: videoPlayerDiv.data('watermark'),
                     url: videoPlayerDiv.data('hlsUrl')
                 });
+                
+                var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
+                if ($("#lesson-preview-video-player").data('timelimit')) {
+                    $("#lesson-preview-video-player").append($('.js-buy-text').html());
+
+                    mediaPlayer.on('ended', function() {
+                        $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
+                    });
+                }
+
+                mediaPlayer.setSrc($hlsUrl, 'video');
+                mediaPlayer.play();
 
                 $('#modal').one('hidden.bs.modal', function () {
-                    esCloudPlayer.destroy();
+                    mediaPlayer.dispose();
                 });
 
 			} else {
@@ -161,11 +172,10 @@ define(function(require, exports, module) {
 
 		$modal = $('#modal');
         $modal.on('click','.js-buy-btn', function(){
-			$.post($(this).data('url'), function(html) {
-				$modal.html(html);
-			});
-		});
-
+            $.get($(this).data('url'), function(html) {
+                $modal.html(html);
+            });
+        });
     };
 
 });

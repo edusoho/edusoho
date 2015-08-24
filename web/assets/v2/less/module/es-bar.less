@@ -19,9 +19,19 @@
   top: 0;
   bottom: 0;
   right: -230px;
-  width: 270px;
+  width: 265px;
   z-index: 888;
-  background-color: @gray-light;
+  background-color: #fff;
+  .go-top {
+    visibility: hidden;
+    .opacity(0);
+    .es-transition;
+    &.show {
+      visibility: visible;
+      .opacity(1);
+      .es-transition;
+    }
+  }
 }
 
 .es-bar-menu {
@@ -29,9 +39,9 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 40px;
-  background: @gray-darker;
-  background: @gray-lighter;
+  width: 35px;
+  // background: @gray-lighter;
+  background-color: #fff;
   .box-shadow(-2px 2px 4px rgba(0, 0, 0, 0.2));
   >ul {
     position: absolute;
@@ -61,7 +71,9 @@
         }
       }
       >a {
-        color: @gray;
+        display: block;
+        // color: @gray;
+        color: @gray-dark;
         .es-transition;
         >i {
           display: block;
@@ -73,22 +85,20 @@
 }
 
 .bar-menu-top {
-  top: 50px;
-  background: @gray-lighter;
+  // top: 50px;
+  top: 100px;
+  // background: @gray-lighter;
+  background-color: #fff;
   z-index: 2;
   .bar-user {
-    position: relative;
     padding: 10px 0;
-    border-top: 1px solid @gray-light;
-    border-bottom: 1px solid @gray-light;
+    // border-top: 1px solid @gray-light;
+    // border-bottom: 1px solid @gray-light;
+    border-top: 1px solid @gray-lighter;
+    border-bottom: 1px solid @gray-lighter;
     // .avatar-xs {
     //   border: 1px solid #fff;
     // }
-    .dot {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
     &.active,
     &:hover {
       .badge {
@@ -98,6 +108,14 @@
       } 
     }
   }
+  >li {
+    position: relative;
+    .dot {
+      position: absolute;
+      top: 8px;
+      right: 6px;
+    }
+  }
 }
 
 .bar-menu-sns {
@@ -105,16 +123,17 @@
   z-index: 1;
 }
 
+
 .es-bar-main {
   position: absolute;
   top: 0;
-  left: 40px;
+  left: 35px;
   bottom: 0;
   width: 230px;
   z-index: 888;
   .opacity(0);
   visibility: hidden;
-  background-color: @background-color;
+  background-color: @bg-color;
   .es-transform(.8,.8);
   .es-transition;
   &.active {
@@ -126,11 +145,16 @@
     .es-transition;
   }
   .bar-main-header {
+    position: relative;
     height: 40px;
     line-height: 40px;
     padding: 0 10px;
     font-size: 16px;
     text-align: center;
+    >a {
+      position: absolute;
+      left: 10px;
+    }
   }
   .bar-main-body {
     position: absolute;
@@ -139,16 +163,22 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    overflow-x: hidden;
     font-size: 12px;
-    margin: 60px  10px 0 10px;
+    margin-top: 60px;
+    padding: 0 15px;
+    .ps-scrollbar-x-rail {
+      display: none !important;
+    }
   }
   .btn-action {
-    margin: 20px auto 40px auto;
+    margin-bottom: 20px;
+    padding: 0 10px;
     text-align: center;
-    .btn {
-      margin: 0 5px;
-      display: inline-block;
-    }
+    // .btn {
+    //   margin: 0 5px;
+    //   display: inline-block;
+    // }
     span {
       position: relative;
     }
@@ -158,14 +188,34 @@
       right: -4px;
     }
   }
+  .course-item {
+    // margin-top: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  .course-item .title {
+    margin: 0;
+    padding: 5px 10px;
+  }
+  .progress {
+    margin-bottom: 0;
+  }
 }
 
 .bar-message {
   list-style-type: none;
-  padding-left: 20px;
+  padding-left: 0;
   >li {
     position: relative;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
+    margin-top: 0;
+    padding: 15px 0;
+    border-bottom: 1px dashed @gray-light;
+    &:last-child {
+      border: none;
+    }
+    .notification-footer {
+      display: none;
+    }
     >i {
       position: absolute;
       top: 6px;
@@ -174,26 +224,29 @@
   }
 }
 
-.bar-homework {
-  list-style-type: none;
-  padding-left: 30px;
-  >li {
-    position: relative;
-    margin-bottom: 20px;
-    >span {
-      position: absolute;
-      left: -30px;
-      top: -2px;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      background-color: @brand-primary;
-      .border-radius(4px);
-      color: #fff;
-    }
-  }
+.bar-homework li {
+  padding: 10px 0;
 }
+// .bar-homework {
+//   list-style-type: none;
+//   padding-left: 30px;
+//   >li {
+//     position: relative;
+//     margin-bottom: 20px;
+//     >span {
+//       position: absolute;
+//       left: -30px;
+//       top: -2px;
+//       width: 20px;
+//       height: 20px;
+//       line-height: 20px;
+//       text-align: center;
+//       background-color: @brand-primary;
+//       .border-radius;
+//       color: #fff;
+//     }
+//   }
+// }
 
 .bar-user-center {
   text-align: center;
@@ -229,8 +282,19 @@
     background-color: @brand-primary;
     color: #fff;
     padding: 4px 10px;
+    line-height: 16px;
     border-radius: 20px;
-    text-align: center;
+    // text-align: center;
+    .title {
+      position: relative;
+      padding-right: 45px;
+      .text-overflow;
+      span {
+        position: absolute;
+        top: 0;
+        right: 5px;
+      }
+    }
   }
   .bar-time-line {
     position: relative;
@@ -238,7 +302,8 @@
     list-style-type: none;
     >li {
       position: relative;
-      padding: 30px 0 0 35px;
+      padding: 20px 0 0 30px;
+      .text-overflow;
       &:before {
         position: absolute;
         content: '';
@@ -246,36 +311,19 @@
         left: 10px;
         width: 2px;
         height: 100%;
-        background-color: @gray-light;
+        background-color: @brand-primary;
       }
-      &.active,
-      &.last {
-        .icon {
-          border-color: @brand-primary; 
-        }
-        &:before {
-          background-color: @brand-primary;
-        }
-      }
-      &.active {
-        .icon {
-          background-color: @brand-primary;
-        }
-      }
-      .icon {
+      .es-icon {
         position: absolute;
-        top: 28px;
-        left: 1px;
+        top: 20px;
+        left: 4px;
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        line-height: 16px;
+        font-size: 14px;
+        line-height: 17px;
         text-align: center;
-        color: #fff;
-        .border-radius(50%);
-        background-color: @gray-lighter;
-        border: 2px solid @gray-light;
         z-index: 1;
+        color: @brand-primary;
+        background-color: @bg-color;
       }
     }
   }

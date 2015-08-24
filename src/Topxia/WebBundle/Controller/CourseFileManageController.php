@@ -24,6 +24,13 @@ class CourseFileManageController extends BaseController
             'targetId'=>$course['id']
         );
 
+        if(array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])){
+            $course = $this->getCourseService()->getCourse($conditions['targetId']);
+            if($course['parentId']>0 && $course['locked'] == 1 ){
+                $conditions['targetId'] = $course['parentId'];
+            }
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
@@ -70,13 +77,15 @@ class CourseFileManageController extends BaseController
 
     public function showAction(Request $request, $id, $fileId)
     {
-        if($id != 0){
-	        $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if($id != $file["targetId"]){
             throw $this->createNotFoundException();
         }
 

@@ -18,8 +18,7 @@
       {{ radios('upload_mode', {'local':'关闭', 'cloud':'开启'}, storageSetting.upload_mode) }}
 
       <div class="help-block">
-        云视频，提供更快的视频播放速度，以及更低廉的网络流量价格。<br />
-        <strong class="text-info">如需使用云视频，请联系<a href="http://www.edusoho.com/services/price?type=teach" target="_blank">{{ 'Edusoho官方'|copyright_less }}</a></strong>。
+        EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
       </div>
 
     </div>
@@ -121,7 +120,7 @@
     </div>  
     <div class="controls col-md-8 radios">
       {{ radios('video_fingerprint', {'0':'关闭', '1':'开启'}, storageSetting.video_fingerprint) }}
-      <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的昵称。</div>
+      <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的用户名。</div>
     </div>
   </div>
   {% if storageSetting.upload_mode == 'cloud' %}

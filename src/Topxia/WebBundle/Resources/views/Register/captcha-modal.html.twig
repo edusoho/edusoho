@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}请输入验证码{% endblock %}
+{% block body %}
+
+<form id="captcha-form" method="get" action="{{ path('register_captcha_check') }}">
+
+  <div class="form-group">
+    <div class="controls col-md-7" >
+      <input type="text" class="form-control" id="captcha_num_modal" name="captcha_num" maxlength="5" placeholder="验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
+      <div class="help-block"></div>
+    </div>
+    <div class="controls col-md-5">
+      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;" >
+    </div>
+	</div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right captcha-btn" data-toggle="form-submit" data-target="#captcha-form">确定</button>
+  
+<script>app.load('auth/captcha-modal')</script>
+{% endblock %}
