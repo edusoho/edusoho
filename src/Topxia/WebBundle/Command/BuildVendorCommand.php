@@ -83,7 +83,7 @@ class BuildVendorCommand extends BaseCommand
 	{
 		$this->output->writeln('build vendor2/ .');
 		$this->filesystem->mkdir("{$this->distDirectory}/vendor2");
-		$this->filesystem->copy("{$this->rootDirectory}/vendor2/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
+		$this->filesystem->copy("{$this->rootDirectory}/vendor/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
 
 		$directories = array(
 			'composer',
@@ -126,7 +126,7 @@ class BuildVendorCommand extends BaseCommand
 		);
 
 		foreach ($directories as $dir) {
-			$this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
+			$this->filesystem->mirror("{$this->rootDirectory}/vendor/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
 		}
 
 		$this->filesystem->remove("{$this->distDirectory}/vendor2/composer/installed.json");
@@ -143,7 +143,6 @@ class BuildVendorCommand extends BaseCommand
 
 		$this->filesystem->remove($toDeletes);
 
-
 		$remainFiles = array(
 			'composer/LICENSE',
 			'doctrine/annotations/LICENSE',
@@ -152,11 +151,38 @@ class BuildVendorCommand extends BaseCommand
 			'doctrine/common/LICENSE',
 			'doctrine/dbal/LICENSE',
 			'doctrine/doctrine-bundle/LICENSE',
-			'doctrine/doctrine-cache-bundle/LICENSE',
-			'doctrine/doctrine-migrations-bundle/LICENSE',
 			'doctrine/inflector/LICENSE',
 			'doctrine/lexer/LICENSE',
+			'doctrine/migrations/LICENSE',
+			'doctrine/orm/LICENSE',
+			'endroid/qrcode/LICENSE',
+			'ezyang/htmlpurifier/LICENSE',
+			'gregwar/captcha/LICENSE',
+			'imagine/imagine/LICENSE',
+			'incenteev/composer-parameter-handler/LICENSE',
+			'jdorn/sql-formatter/LICENSE.txt',
+			'kriswallsmith/assetic/LICENSE',
+			'monolog/monolog/LICENSE',
+			'phpoffice/phpexcel/license.md',
+			'pimple/pimple/LICENSE',
+			'psr/log/LICENSE',
+			'sensiolabs/security-checker/LICENSE',
+			'silex/silex/LICENSE',
+			'swiftmailer/swiftmailer/LICENSE',
+			'symfony/assetic-bundle/LICENSE',
+			'symfony/symfony/LICENSE',
 		);
+
+		foreach ($remainFiles as $file) {
+			// $path = "{$this->rootDirectory}/vendor/{$file}";
+
+			// if (!file_exists($path)) {
+			// 	echo $path . "\n";
+			// }
+
+
+			$this->filesystem->copy("{$this->rootDirectory}/vendor/{$file}", "{$this->distDirectory}/vendor2/{$file}");
+		}
 
 	}
 
