@@ -143,6 +143,21 @@ class BuildVendorCommand extends BaseCommand
 
 		$this->filesystem->remove($toDeletes);
 
+
+		$remainFiles = array(
+			'composer/LICENSE',
+			'doctrine/annotations/LICENSE',
+			'doctrine/cache/LICENSE',
+			'doctrine/collections/LICENSE',
+			'doctrine/common/LICENSE',
+			'doctrine/dbal/LICENSE',
+			'doctrine/doctrine-bundle/LICENSE',
+			'doctrine/doctrine-cache-bundle/LICENSE',
+			'doctrine/doctrine-migrations-bundle/LICENSE',
+			'doctrine/inflector/LICENSE',
+			'doctrine/lexer/LICENSE',
+		);
+
 	}
 
 	public function cleanMacosDirectory()
