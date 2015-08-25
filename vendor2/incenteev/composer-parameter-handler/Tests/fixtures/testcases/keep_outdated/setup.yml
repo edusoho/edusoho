@@ -1,0 +1,4 @@
+title: Outdated keys can be kept in the parameters file
+
+config:
+    keep-outdated: true

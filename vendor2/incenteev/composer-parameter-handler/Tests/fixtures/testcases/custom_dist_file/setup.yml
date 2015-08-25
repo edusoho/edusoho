@@ -1,0 +1,6 @@
+title: Existing values are kept
+
+config:
+    dist-file: parameters.dist.yml
+
+dist-file: parameters.dist.yml

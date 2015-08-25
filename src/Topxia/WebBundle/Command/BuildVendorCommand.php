@@ -94,6 +94,7 @@ class BuildVendorCommand extends BaseCommand
 			'doctrine/dbal/lib/Doctrine',
 			'doctrine/doctrine-bundle',
 			'doctrine/doctrine-cache-bundle',
+			'doctrine/doctrine-migrations-bundle',
 			'doctrine/inflector/lib',
 			'doctrine/lexer/lib',
 			'doctrine/migrations/lib',
