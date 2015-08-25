@@ -169,7 +169,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
                 $lockedTarget = "(".trim($lockedTarget,',').")";
 
                 $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
-                $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemsByPIdAndLockedTestIs($items['id'],$testpaperIds),'id');
+                $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemsByPIdAndLockedTestIds($items['id'],$testpaperIds),'id');
                 foreach ($testpaperItemIds as $testpaperItemId) {
                      $this->getTestpaperService()->editTestpaperItem($testpaperItemId,array('seq'=>$items['seq'],'score'=>$items['score']));
                 }
