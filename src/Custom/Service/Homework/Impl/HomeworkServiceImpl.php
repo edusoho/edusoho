@@ -160,10 +160,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $item['createdTime'] = time();
             $item['homeworkResultId'] = $homeworkReview['homeworkResultId'];
             $item=$this ->getReviewItemDao()->create($item);
-            //老师的分数为该题的最终得分
-            if('teacher'==$homeworkReview['category']){
-                $this->getResultItemDao()->updateItemResult($item['homeworkItemResultId'],array('score'=>$item['score']));
-            }
+
+            //老师的分数为该提的最终得分
+            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
             array_push($reviewItems,$item);
         }
         return $reviewItems;
@@ -437,8 +436,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     private function addHomeworkItems($homeworkId, $excludeIds)
     {
         $homeworkItems = array();
-        $homeworkItemsSub = array();
-        $includeItemsSubIds = array();
         $index = 1;
 
         $fullScore=0;
