@@ -202,10 +202,8 @@ class SettingsController extends BaseController
 		if(empty($options['group'])){
             $options['group'] = "default";
         }
-		// list($groupCode, $type) = $this->tryUploadFile($request);
 		$record = $this->getFileService()->uploadFile($groupCode, $file);
 		$parsed = $this->getFileService()->parseFileUri($record['uri']);
-var_dump($parsed);
         $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
 
         $fields = array();
@@ -226,22 +224,6 @@ var_dump($parsed);
             $this->getFileService()->deleteFileByUri($record["uri"]);
         }
         $this->getUserService()->changeAvatar($currentUser["id"],$fields);
-        // return $this->createJsonResponse($fields);
-
-		// // $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-		// $request->getSession()->set("fileId", $record["id"]);
-
-		// // var_dump($filePath);
-		// // print_r($imgUrl);
-		// return $this->createJsonResponse($file);
-		// return $this->createJsonResponse(true);
-		// $record = $this->getFileService()->uploadFile($groupCode, $file);
-
-		// $avatarPath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
-
-		// file_put_contents($avatarPath, $avatar);
-
-		// $this->getUserService()->changeAvatar($currentUser['id'], $avatarPath, array('x'=>0, 'y'=>0, 'width'=>200, 'height' => 200));
 
 		return $this->createJsonResponse(true);
 	}
@@ -969,8 +951,6 @@ var_dump($parsed);
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}	
-
-
 
     protected function downloadImg($url)
     {
