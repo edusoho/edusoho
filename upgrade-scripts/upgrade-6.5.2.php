@@ -11,12 +11,25 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $info = $this->batchDownload($index);
-            if (!empty($info)) {
-                return $info;
+            if($index>0 && $index<=19)
+                return $this->batchDownload($index);
             }
-            $this->vendorExtract();
-            $this->replaceFiles();
+
+            if($index == 20) {
+                $this->vendorExtract();
+                $this->replaceFiles();
+                return array(
+                    'index' => 21,
+                    'message' => '正在解压下载后的文件',
+                    'progress' => 2
+                );
+            }
+
+            if($index == 21) {
+                $this->replaceAutoloadFile();
+                return array();
+            }
+
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -43,34 +56,30 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function batchDownload($index)
     {
-        if ($index < 19) {
-            $progress = 38/19;
-            $filepath = 'http://try6.edusoho.cn/vendor-'.$index.'.zip';
-            $curl = curl_init($filepath);
-            $targetPath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/vendor-'.$index.'.zip';
-            if (!file_exists($targetPath)) {
-                curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
-                curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-                $file = curl_exec($curl);
-                curl_close($curl);
-                $tp = @fopen($targetPath, 'a');
-                fwrite($tp, $file);
-                fclose($tp);
-            }
-            $index++;
-            return array(
-                'index' => $index,
-                'message' => '下载大型文件'.intval($index/19*100).'%',
-                'progress' => $progress
-            );
+        $filepath = 'http://try6.edusoho.cn/vendor-'.$index.'.zip';
+        $curl = curl_init($filepath);
+        $targetPath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/vendor-'.$index.'.zip';
+        if (!file_exists($targetPath)) {
+            curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+            $file = curl_exec($curl);
+            curl_close($curl);
+            $tp = @fopen($targetPath, 'a');
+            fwrite($tp, $file);
+            fclose($tp);
         }
-        return 0;
+        $index++;
+        return array(
+            'index' => $index,
+            'message' => '下载大型文件'.intval($index/20*100).'%',
+            'progress' => 2
+        );
     }
 
     private function vendorExtract()
     {
         // exec('mkdir '.ServiceKernel::instance()->getParameter('kernel.root_dir').'/../vendor_v2');
-        for ($i=0; $i < 19; $i++) { 
+        for ($i=0; $i < 20; $i++) { 
             $zip = new \ZipArchive;
             $filepath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/vendor-'.$i.'.zip';
             $tmpUnzipDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade';
@@ -89,10 +98,19 @@ class EduSohoUpgrade extends AbstractUpdater
         // file_put_contents($autoFilePath, $content);
     }
 
+    private function replaceAutoloadFile()
+    {
+        $filesystem = new Filesystem();
+        $filesystem->mirror(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/edusoho/app',  ServiceKernel::instance()->getParameter('kernel.root_dir') , null, array(
+            'override' => true,
+            'copy_on_windows' => true
+        ));
+    }
+
     private function replaceFiles()
     {
         $filesystem = new Filesystem();
-        $filesystem->mirror(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/edusoho',  ServiceKernel::instance()->getParameter('kernel.root_dir').'/..' , null, array(
+        $filesystem->mirror(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/edusoho/vendor2',  ServiceKernel::instance()->getParameter('kernel.root_dir') , null, array(
             'override' => true,
             'copy_on_windows' => true
         ));
