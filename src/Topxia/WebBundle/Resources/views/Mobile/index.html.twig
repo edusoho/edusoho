@@ -9,19 +9,23 @@
     <div class="js-mobile-item mobile-first">
       <div class="container">
         <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
-        <img class="img-two  hidden-xs" src="{{asset("assets/v2/img/mobile/phone_white.png")}}" alt="">
+        <div class="img-two hidden-xs">
+          <img class="img-two-bg" src="{{asset("assets/v2/img/mobile/phone_white_bg.png")}}" alt="">
+          <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
+        </div>
         <div class="mobile-content">
-          <img class="title img-responsive" src="{{asset("assets/v2/img/mobile/title.png")}}" alt="阔知学堂">
-          <img class="subtitle img-responsive" src="{{asset("assets/v2/img/mobile/subtitle.png")}}" alt="">
+          <div class="title">阔知学堂</div>
+          <div class="subtitle">将学校装进口袋，移动学习，随时随地</div>
           <div class="label-mobile">仅需两步，轻松搞定！</div>
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">立即下载体验<i class="es-icon es-icon-keyboardarrowdown"></i></a>
         </div>
       </div>
     </div>
-    <div class="js-mobile-item mobile-second">
+    <div class="mobile-second">
       <div class="container">
         <div class="step">
-          <span class="member">1</span> 扫描二维码，下载手机APP。
+          <span class="member">1</span> 
+          扫描二维码，下载手机APP。
         </div>
         <div class="mobile-content row">
           <div class="col-md-4 col-sm-6 col-xs-6">
@@ -37,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="js-mobile-item mobile-third">
+    <div class="mobile-third">
       <div class="container">
         <div class="step">
           <span class="member">2</span> 打开阔知学堂APP，扫描网校二维码。
