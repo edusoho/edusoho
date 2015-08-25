@@ -162,7 +162,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $item=$this ->getReviewItemDao()->create($item);
 
             //老师的分数为该提的最终得分
-            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            if('teacher'==$homeworkReview['category']){
+                $this->getResultItemDao()->updateItemResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            }
             array_push($reviewItems,$item);
         }
         return $reviewItems;
