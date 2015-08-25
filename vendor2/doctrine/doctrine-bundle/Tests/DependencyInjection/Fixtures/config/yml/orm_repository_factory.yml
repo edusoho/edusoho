@@ -1,9 +1,0 @@
-doctrine:
-    dbal:
-        default_connection: default
-        connections:
-            default:
-                dbname: db
-
-    orm:
-        repository_factory: repository_factory

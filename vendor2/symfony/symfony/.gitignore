@@ -1,8 +1,0 @@
-.php_cs.cache
-autoload.php
-composer.lock
-composer.phar
-package*.tar
-packages.json
-phpunit.xml
-/vendor/

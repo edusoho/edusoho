@@ -1,4 +1,0 @@
-swiftmailer:
-    delivery_address: single@host.com
-    delivery_whitelist:
-        - /foo@.*/

@@ -83,7 +83,7 @@ class BuildVendorCommand extends BaseCommand
 	{
 		$this->output->writeln('build vendor2/ .');
 		$this->filesystem->mkdir("{$this->distDirectory}/vendor2");
-		$this->filesystem->copy("{$this->rootDirectory}/vendor/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
+		$this->filesystem->copy("{$this->rootDirectory}/vendor2/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
 
 		$directories = array(
 			'composer',
@@ -126,7 +126,7 @@ class BuildVendorCommand extends BaseCommand
 		);
 
 		foreach ($directories as $dir) {
-			$this->filesystem->mirror("{$this->rootDirectory}/vendor/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
+			$this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
 		}
 
 		$this->filesystem->remove("{$this->distDirectory}/vendor2/composer/installed.json");
