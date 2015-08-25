@@ -202,9 +202,20 @@ class HomeworkServiceTest extends BaseTestCase
     }
 
     public function testCreateHomeworkReview(){
-        $user=$this->getServiceKernel()->getCurrentUser();
+        $sam=$this->getUserDao()->addUser(
+            array(
+                'nickname'=>'sam',
+                'password'=> '123456',
+                'email'=>'sam@geewang.com'
+            )
+        );
+        $this->assertNotNull($sam);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($sam);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $homework1=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('-1 hours', time()),'pairReview'=>true));
-        $result1=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'editing'));
+        $result1=$this->getResultDao()->addResult(array('userId'=>$currentUser->id,'homeworkId'=>$homework1['id'],'status'=>'editing'));
         $result1Item1=$this->getResultItemDao()->addItemResult(array(
             'itemId'=>1,
             'homeworkResultId'=>$result1['id'],
@@ -215,7 +226,7 @@ class HomeworkServiceTest extends BaseTestCase
             'homeworkResultId'=>$result1['id'],
         ));
 
-        $review = $this->getHomeworkService()->createHomeworkReview($result1['id'], $user->id, array(
+        $review = $this->getHomeworkService()->createHomeworkReview($result1['id'], $currentUser->id, array(
             'category' => 'teacher',
             'items' => array(
                 array(
@@ -381,6 +392,10 @@ class HomeworkServiceTest extends BaseTestCase
 
     protected function getUserService(){
         return $this->getServiceKernel()->createService('Topxia:User.UserService');
+    }
+
+    protected function getUserDao(){
+        return $this->getServiceKernel()->createDao('Topxia:User.UserDao');
     }
 
     protected function getHomeworkService(){

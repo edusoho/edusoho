@@ -499,7 +499,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     private function loadReviewAssociations($reviews){
         $userIds=ArrayToolKit::column($reviews, "userId");
         $users=$this->getUserService()->findUsersByIds($userIds);
-        $users=ArrayToolkit::index($users, 'id');
         $indexedUsers=ArrayToolkit::index($users, 'id');
         foreach($reviews as $i=>$review){
             $review['user'] = $indexedUsers[$review['userId']];
