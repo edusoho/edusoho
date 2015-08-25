@@ -34,21 +34,19 @@ class QuestionEventSubscriber implements EventSubscriberInterface
             }
             //材料题
             if($question['parentId']){
-                if ($courseIds) {
-                    $lockedTarget= '';
-                    foreach ($courseIds as $key => $courseId) {
-                        if ($num > 1) {
-                            $lockedTarget .= "'course-".$courseId."/lesson-".$lessonIds[$key]."',";
-                        } else {
-                            $lockedTarget .= "'course-".$courseId."',";
-                        }
+                $lockedTarget= '';
+                foreach ($courseIds as $key => $courseId) {
+                    if ($num > 1) {
+                        $lockedTarget .= "'course-".$courseId."/lesson-".$lessonIds[$key]."',";
+                    } else {
+                        $lockedTarget .= "'course-".$courseId."',";
                     }
-                    $lockedTarget = "(".trim($lockedTarget,',').")";
-                    $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPIdAndLockedTarget($question['parentId'],$lockedTarget ),'id');
-                    $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
-                    foreach ($questionIds as $questionId) {
-                        $this->getQuestionService()->editQuestion($questionId,array('subCount'=>$parentQuestion['subCount']));
-                    }
+                }
+                $lockedTarget = "(".trim($lockedTarget,',').")";
+                $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPIdAndLockedTarget($question['parentId'],$lockedTarget ),'id');
+                $parentQuestion = $this->getQuestionService()->getQuestion($question['parentId']);
+                foreach ($questionIds as $questionId) {
+                    $this->getQuestionService()->editQuestion($questionId,array('subCount'=>$parentQuestion['subCount']));
                 }
             }
             $question['pId'] = $question['id'];
