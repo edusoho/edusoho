@@ -10,14 +10,6 @@
       action="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}"
     {% endif %}
   >
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="content">公告内容</label>
-      </div>
-      <div class="col-md-9 controls">
-        <textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
-      </div>
-    </div>
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
@@ -34,6 +26,15 @@
       </div>
       <div class="col-md-9 controls" style="z-index:2000;">
         <input type="text" id="endTime"  name="endTime" class="form-control" value="{% if announcement.endTime|default(null) %}{{announcement.endTime|date("Y-m-d H:i")}}{% endif %}">
+      </div>
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="content">公告内容</label>
+      </div>
+      <div class="col-md-9 controls">
+        <textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
       </div>
     </div>
 
