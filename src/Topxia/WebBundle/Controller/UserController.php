@@ -331,11 +331,7 @@ class UserController extends BaseController
             return $this->createMessageResponse('error', '请先登录！');
         }
 
-        if ($request->query->get('goto')) {
-            $goto = $request->query->get('goto');
-        } else {
-            $goto = $this->generateUrl('homepage');
-        }
+        $goto = $this->getTargetPath($request);
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -379,6 +375,40 @@ class UserController extends BaseController
             'user' => $userInfo,
             'goto' => $goto
         ));
+    }
+
+    protected function getTargetPath($request)
+    {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } else if ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        if ($targetPath == $this->generateUrl('login', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if ($url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinmob'), true) or 
+            $url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinweb'), true)
+            ) 
+        {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        return $targetPath;
     }
 
     protected function getUserService()
