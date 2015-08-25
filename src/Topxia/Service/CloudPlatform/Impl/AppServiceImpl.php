@@ -421,31 +421,33 @@ class AppServiceImpl extends BaseService implements AppService
     {
         $errors = array();
         $package = $packageDir = null;
-        try {
-            $package = $this->getCenterPackageInfo($packageId);
-            if (empty($package)) {
-                throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+        if (empty($index)) {
+            try {
+                $package = $this->getCenterPackageInfo($packageId);
+                if (empty($package)) {
+                    throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
+                }
+                $packageDir = $this->makePackageFileUnzipDir($package);
+            } catch(\Exception $e) {
+                $errors[] = $e->getMessage();
+                goto last;
             }
-            $packageDir = $this->makePackageFileUnzipDir($package);
-        } catch(\Exception $e) {
-            $errors[] = $e->getMessage();
-            goto last;
-        }
 
-        try {
-            $this->_deleteFilesForPackageUpdate($package, $packageDir);
-        } catch(\Exception $e) {
-            $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
-        }
+            try {
+                $this->_deleteFilesForPackageUpdate($package, $packageDir);
+            } catch(\Exception $e) {
+                $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
+                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+                goto last;
+            }
 
-        try {
-            $this->_replaceFileForPackageUpdate($package, $packageDir);
-        } catch (\Exception $e) {
-            $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
+            try {
+                $this->_replaceFileForPackageUpdate($package, $packageDir);
+            } catch (\Exception $e) {
+                $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
+                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+                goto last;
+            }
         }
 
         try {
