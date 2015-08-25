@@ -16,6 +16,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return $info;
             }
             $this->vendorExtract();
+            $this->replaceFiles();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -37,7 +38,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
         ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
-        return $index;
+        return $info;
     }
 
     private function batchDownload($index)
@@ -68,13 +69,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function vendorExtract()
     {
-        exec('mkdir '.ServiceKernel::instance()->getParameter('kernel.root_dir').'/../vendor_v2');
+        // exec('mkdir '.ServiceKernel::instance()->getParameter('kernel.root_dir').'/../vendor_v2');
         for ($i=0; $i < 19; $i++) { 
             $zip = new \ZipArchive;
             $filepath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/vendor-'.$i.'.zip';
-            $unzipDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../vendor_v2';
+            $tmpUnzipDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade';
             if ($zip->open($filepath) === TRUE) {
-                $zip->extractTo($unzipDir);
+                $zip->extractTo($tmpUnzipDir);
                 $zip->close();
                 $filesystem = new Filesystem();
                 $filesystem->remove($filepath);
@@ -82,10 +83,19 @@ class EduSohoUpgrade extends AbstractUpdater
                 throw new \Exception('无法解压缩安装包！');
             }
         }
-        $autoFilePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/autoload.php';
-        $content = file_get_contents($autoFilePath);
-        $content = str_replace('/vendor/', '/vendor_v2/', $content);
-        file_put_contents($autoFilePath, $content);
+        // $autoFilePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/autoload.php';
+        // $content = file_get_contents($autoFilePath);
+        // $content = str_replace('/vendor/', '/vendor_v2/', $content);
+        // file_put_contents($autoFilePath, $content);
+    }
+
+    private function replaceFiles()
+    {
+        $filesystem = new Filesystem();
+        $filesystem->mirror(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/edusoho',  ServiceKernel::instance()->getParameter('kernel.root_dir').'/..' , null, array(
+            'override' => true,
+            'copy_on_windows' => true
+        ));
     }
 
     protected function isFieldExist($table, $filedName)
