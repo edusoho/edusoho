@@ -11,9 +11,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $index = $this->batchDownload($index);
-            if (!empty($index)) {
-                return $index;
+            $info = $this->batchDownload($index);
+            if (!empty($info)) {
+                return $info;
             }
             $this->vendorExtract();
             $this->updateScheme();
