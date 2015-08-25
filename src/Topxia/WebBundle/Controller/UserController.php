@@ -387,25 +387,25 @@ class UserController extends BaseController
             $targetPath = $request->headers->get('Referer');
         }
 
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
+        if ($targetPath == $this->generateUrl('login')) {
             return $this->generateUrl('homepage');
         }
 
         $url = explode('?', $targetPath);
 
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+        if ($url[0] == $this->generateUrl('partner_logout')) {
             return $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+        if ($url[0] == $this->generateUrl('password_reset_update')) {
+            $targetPath = $this->generateUrl('homepage');
         }
 
-        if ($url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinmob'), true) or 
-            $url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinweb'), true)
+        if ($url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinmob')) or 
+            $url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinweb'))
             ) 
         {
-            $targetPath = $this->generateUrl('homepage', array(), true);
+            $targetPath = $this->generateUrl('homepage');
         }
 
         return $targetPath;
