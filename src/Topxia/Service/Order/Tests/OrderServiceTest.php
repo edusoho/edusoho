@@ -923,7 +923,7 @@ class OrderServiceTest extends BaseTestCase
             'title' => "testOrder",
             'targetType' => 'course',
             'targetId' => $createCourse['id'],
-            'amount' => 10,
+            'amount' => 100,
             'payment' => 'none',
             'snPrefix' => 'CR',
         ));

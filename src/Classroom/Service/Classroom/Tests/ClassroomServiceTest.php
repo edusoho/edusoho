@@ -61,6 +61,9 @@ class ClassroomServiceTest extends BaseTestCase
         $textClassroom2 = array(
             'title' => 'test2'
         );
+        $textClassroom3 = array(
+            'title' => 'test3'
+            );
         $classroom1 = $this->getClassroomService()->addClassroom($textClassroom1);
         $this->getClassroomService()->updateClassroom($classroom1['id'],$textClassroom1);
         $classroom2 = $this->getClassroomService()->addClassroom($textClassroom2);
@@ -68,6 +71,11 @@ class ClassroomServiceTest extends BaseTestCase
         $conditions = array('status' => 'draft');
         $result = $this->getClassroomService()->searchClassroomsCount($conditions);
         $this->assertEquals(2,$result);
+        $classroom3 = $this->getClassroomService()->addClassroom($textClassroom3);
+        $this->getClassroomService()->updateClassroom($classroom3['id'],$textClassroom3);
+        $conditions2 = array('showable' => 0,'buyable' => 0);
+        $result2 = $this->getClassroomService()->searchClassroomsCount($conditions2);
+        $this->assertEquals(1,$result2);
     }
 
     public function testRecommendClassroom()
