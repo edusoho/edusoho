@@ -86,6 +86,12 @@
         <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#course-buy-form">去支付</button>
         {% endif %}
       {% endif %}
+    {% elseif not payments and vipStatus == 'ok' %}
+      <button id="join-course-btn" class="btn btn-primary" 
+        {% if course.status != 'published' or (course.type == 'live' and course.studentNum >= course.maxStudentNum) %}
+        disabled="disabled"
+        {% endif %}
+        data-loading-text="正在加入..." data-submiting-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#course-buy-form">加入学习</button>
     {% endif %}
   {% else %}
     {% if member %}
