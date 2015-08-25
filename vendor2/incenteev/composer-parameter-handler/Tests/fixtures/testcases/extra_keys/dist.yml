@@ -1,5 +1,0 @@
-parameters:
-    foo: bar
-    boolean: false
-
-extra_key: a new extra key

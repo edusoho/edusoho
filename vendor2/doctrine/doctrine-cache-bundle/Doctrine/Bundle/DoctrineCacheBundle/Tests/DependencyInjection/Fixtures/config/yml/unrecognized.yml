@@ -1,4 +1,0 @@
-doctrine_cache:
-    providers:
-        unrecognized_cache_provider:
-            type: unrecognized_type

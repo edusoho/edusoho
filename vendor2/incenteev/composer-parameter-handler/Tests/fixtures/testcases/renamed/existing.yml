@@ -1,6 +1,0 @@
-# This file is auto-generated during the composer install
-parameters:
-    old: old_value
-    new2: foo
-    old2: bar
-    old4: old4

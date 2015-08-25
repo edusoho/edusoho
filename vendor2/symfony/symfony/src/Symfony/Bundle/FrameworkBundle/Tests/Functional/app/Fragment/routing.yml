@@ -1,2 +1,0 @@
-_fragmenttest_bundle:
-    resource: @TestBundle/Resources/config/routing.yml

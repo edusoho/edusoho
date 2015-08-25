@@ -1,8 +1,0 @@
-# This file is auto-generated during the composer install
-config:
-    foo: existing_foo
-    boolean: false
-    another: ~
-    nested:
-        foo: bar
-        bar: baz

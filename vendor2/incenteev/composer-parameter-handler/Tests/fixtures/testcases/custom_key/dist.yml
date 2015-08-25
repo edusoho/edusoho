@@ -1,7 +1,0 @@
-config:
-    foo: bar
-    boolean: false
-    another: ~
-    nested:
-        foo: bar
-        bar: baz
