@@ -79,7 +79,7 @@
                     {% if view == 'doing' %}
                         <div class="panel-heading">
                             答题卡
-                            {% if now < homework.completeTime %}
+                            {% if not (now > homework.completeTime and homework.pairReview) %}
                                 <button class="btn btn-default btn-sm pull-right" id="homework-save-btn"
                                         data-url="{{ path('course_homework_save',{courseId:course.id,homeworkId:homework.id}) }}">
                                     下次再做
