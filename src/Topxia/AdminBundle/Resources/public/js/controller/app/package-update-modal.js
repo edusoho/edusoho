@@ -49,7 +49,7 @@ define(function(require, exports, module) {
             {
                 title: '执行安装升级程序',
                 url: urls.beginUpgradeUrl,
-                progressRange: [63, 100]
+                progressRange: [62, 100]
             }
         ];
 
@@ -109,13 +109,13 @@ define(function(require, exports, module) {
                     url = url+'&index=0';
                 }
                 url = url.replace(/index=\d+/g,'index='+data.index);
-                endProgress = startProgress + 2;
+                endProgress = startProgress + data.progress;
                 if (endProgress > 100) {
                     endProgress = 100;
                 }
-                progressBar.setProgress(endProgress, '文件'+data.index+'下载完成');
+                progressBar.setProgress(endProgress, data.message+'完成');
                 startProgress = endProgress;
-                title = '下载大型文件';
+                title =  data.message;
                 exec(title, url, progressBar, startProgress, endProgress);
             } else {
                 progressBar.setProgress(endProgress, title + '完成');
