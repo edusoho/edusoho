@@ -16,7 +16,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 return $info;
             }
             $this->vendorExtract();
-            $this->updateScheme();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -60,7 +59,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $index++;
             return array(
                 'index' => $index,
-                'message' => '下载大型文件'.$index.'/19',
+                'message' => '下载大型文件'.intval($index/19*100).'%',
                 'progress' => $progress
             );
         }
@@ -87,18 +86,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $content = file_get_contents($autoFilePath);
         $content = str_replace('/vendor/', '/vendor_v2/', $content);
         file_put_contents($autoFilePath, $content);
-    }
-    
-    private function updateScheme()
-    {
-        $connection = $this->getConnection();
-        $connection->exec("ALTER TABLE `classroom_member` CHANGE `role` `role` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'auditor' COMMENT '角色'");
-        if (!$this->isFieldExist('classroom', 'assistantIds')) {
-            $connection->exec("ALTER TABLE `classroom` ADD `assistantIds` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '助教Ids' AFTER `teacherIds`");
-        }
-        $connection->exec("UPDATE `classroom_member` SET `role` = concat('|',role,'|') WHERE `role` NOT LIKE '%|%'");
-        $connection->exec("UPDATE `classroom_member` SET `role` = '|assistant|student|' WHERE `role` = '|studentAssistant|'");
-        $connection->exec("UPDATE user_approval set `status` = 'approving' where `status` = 'approved'");
     }
 
     protected function isFieldExist($table, $filedName)
