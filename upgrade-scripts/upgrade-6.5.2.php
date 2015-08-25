@@ -9,9 +9,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function update($index = 0)
     {
-        $this->getConnection()->beginTransaction();
         try {
-            if($index>0 && $index<=19)
+            if($index>=0 && $index<=19)
                 return $this->batchDownload($index);
             }
 
@@ -30,9 +29,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return array();
             }
 
-            $this->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->getConnection()->rollback();
             throw $e;
         }
 
@@ -71,7 +68,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $index++;
         return array(
             'index' => $index,
-            'message' => '下载大型文件'.intval($index/20*100).'%',
+            'message' => '下载文件'.intval($index/20*100).'%',
             'progress' => 2
         );
     }
