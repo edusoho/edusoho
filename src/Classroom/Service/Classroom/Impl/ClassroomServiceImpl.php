@@ -1305,30 +1305,36 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom:Classroom.ClassroomCourseDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->createService('Order.OrderService');
     }
 
-    private function getVipService()
+    protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
     }
 
-    private function getNoteDao()
+    protected function getNoteDao()
     {
         return $this->createDao('Course.CourseNoteDao');
     }
 
-    private function getStatusService()
+    protected function getStatusService()
     {
         return $this->createService('User.StatusService');
     }
+
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform.AppService');
+    }
+
 }
 
 class MemberSerialize

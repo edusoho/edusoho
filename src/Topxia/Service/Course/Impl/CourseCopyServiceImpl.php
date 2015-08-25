@@ -170,7 +170,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
 
         foreach ($lessons as $lesson) {
-            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId','replayStatus'));
+            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId','replayStatus', 'suggestHours'));
             $fields['courseId'] = $newCourse['id'];
             if ($lesson['chapterId']) {
                 $fields['chapterId'] = $chapters[$lesson['chapterId']]['id'];
