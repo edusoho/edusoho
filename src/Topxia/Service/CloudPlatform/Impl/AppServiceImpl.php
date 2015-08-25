@@ -421,17 +421,17 @@ class AppServiceImpl extends BaseService implements AppService
     {
         $errors = array();
         $package = $packageDir = null;
-        if (empty($index)) {
-            try {
-                $package = $this->getCenterPackageInfo($packageId);
-                if (empty($package)) {
-                    throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
-                }
-                $packageDir = $this->makePackageFileUnzipDir($package);
-            } catch(\Exception $e) {
-                $errors[] = $e->getMessage();
-                goto last;
+        try {
+            $package = $this->getCenterPackageInfo($packageId);
+            if (empty($package)) {
+                throw $this->createServiceException("应用包#{$packageId}不存在或网络超时，读取包信息失败");
             }
+            $packageDir = $this->makePackageFileUnzipDir($package);
+        } catch(\Exception $e) {
+            $errors[] = $e->getMessage();
+            goto last;
+        }
+        if (empty($index)) {
 
             try {
                 $this->_deleteFilesForPackageUpdate($package, $packageDir);
