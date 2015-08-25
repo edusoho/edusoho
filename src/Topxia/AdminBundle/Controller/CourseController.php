@@ -120,7 +120,7 @@ class CourseController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $result = $this->getCourseService()->deleteCourse($id);
+        $result = $this->getCourseDeleteService()->delete($id);
 
         return $this->createJsonResponse(true);
     }
@@ -383,6 +383,11 @@ class CourseController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCourseDeleteService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseDeleteService');
     }
 
     protected function getCourseCopyService()
