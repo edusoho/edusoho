@@ -14,8 +14,12 @@
     <div class="testpaper-status">{% block testpaper_heading_status %}{% endblock %}</div>
   </div>
   {% block testpaper_heading_content %}{% endblock %}
-
-  {% if (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not app.user.isTeacher() %}
+  {% if (source|default(null) == 'classroom') %}
+      {% set canHandle = classroom_permit(targetId, 'Handle') %}  
+  {% else %}  
+      {% set canHandle = app.user.isTeacher() %}
+  {% endif %}
+  {% if (paperResult|default(null) and paperResult.status in ['finished','reviewing'] ) and not 1 %}
 
   {% else %}
     {% if showTestpaperNavbar|default('on') == 'on' %}

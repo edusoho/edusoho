@@ -6,7 +6,7 @@
 
 {% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if CategoryParent %}{{ ','}}{{ CategoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %} - Powered By EduSoho
+    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
     {% endblock %}
 
 {% block top_content %}
@@ -16,9 +16,11 @@
         <i class="es-icon es-icon-viewcomfy"></i>
         课程列表
       </div>
+      {% if setting("classroom.enabled") %}
       <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
         查看{{ setting('classroom.name')|default('班级') }}
       </a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
@@ -31,7 +33,9 @@
     <ul class="nav nav-pills hidden-xs" role="tablist">
       <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy}) }}">全部课程</a></li>
       <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy}) }}">免费课程</a></li>
+      {% if setting("course.live_course_enabled") == 1 %}
       <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy}) }}">直播课程</a></li>
+      {% endif %}
     </ul>
     <div class="btn-group visible-xs">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} <span class="caret"></span></button>

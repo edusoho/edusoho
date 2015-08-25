@@ -21,7 +21,9 @@
     {% endif %}
   </div>
   <div class="order-price">
-    <span class="pay-rmb">￥</span>
+    {% if priceType|default('RMB') == "RMB" %}
+      <span class="pay-rmb">￥</span>
+    {% endif %}
     <span role="total-price" class="pay-rmb">{{totalPrice}}</span>
     {% if priceType|default('RMB') == "RMB" %}
     {% elseif priceType|default('RMB') == "Coin" %}

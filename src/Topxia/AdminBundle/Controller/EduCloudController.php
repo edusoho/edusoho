@@ -6,20 +6,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class EduCloudController extends BaseController
 {
     public function indexAction(Request $request)
     {
         try {
-            $account = $this->getAccount();
+            $api = CloudAPIFactory::create('root');
+
+            $account = $api->get('/accounts');
 
             if(!empty($account)) {
                 $money = isset($account['cash']) ? $account['cash'] : '--';
 
                 $loginToken = $this->getAppService()->getLoginToken();
 
-                $result = $this->getSmsOpenStatus();
+                
+                $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
+
                 if (isset($result['apply']) && isset($result['apply']['status'])) {
                     $smsStatus['status'] = $result['apply']['status'];
                     $smsStatus['message'] = $result['apply']['message'];
@@ -70,7 +75,8 @@ class EduCloudController extends BaseController
                 && ($this->calStrlen($dataUserPosted['name']) >= 2)
                 && ($this->calStrlen($dataUserPosted['name']) <= 16)
             ) {
-                $result = $this->applyForSms($dataUserPosted['name']);
+                $api = CloudAPIFactory::create('root');
+                $result = $api->post("/sms/{$api->getAccessKey()}/apply", array('name' => $dataUserPosted['name']));
                 if (isset($result['status']) && ($result['status'] == 'ok')) {
                     $this->setCloudSmsKey('sms_school_candidate_name', $dataUserPosted['name']);
                     $this->setCloudSmsKey('show_message', 'on');
@@ -125,11 +131,14 @@ class EduCloudController extends BaseController
     public function smsBillAction(Request $request)
     {
         try {
+
+            $api = CloudAPIFactory::create('root');
             
             $loginToken = $this->getAppService()->getLoginToken();
-            $account = $this->getAccount();
+            $account = $api->get('/accounts');
 
-            $result = $this->getBills($type='sms', 1, 20);
+            
+            $result = $api->get('/bills', array('type' => 'sms', 'page' => 1, 'limit' => 20));
 
             $paginator = new Paginator(
                 $this->get('request'),
@@ -137,7 +146,12 @@ class EduCloudController extends BaseController
                 20
             );
 
-            $result = $this->getBills($type='sms', $paginator->getCurrentPage(), $paginator->getPerPageCount());
+            $result = $api->get('/bills', array(
+                'type' => 'sms', 
+                'page' => $paginator->getCurrentPage(), 
+                'limit' => $paginator->getPerPageCount()
+            ));
+
             $bills = $result['items'];
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
@@ -153,9 +167,11 @@ class EduCloudController extends BaseController
 
     protected function getSchoolName()
     {
-        $schoolName = $this->getCloudSmsKey('sms_school_name');
-        $schoolCandidateName = $this->getCloudSmsKey('sms_school_candidate_name');
-        $result = $this->getSmsOpenStatus();
+        $schoolName = $this->setting('cloud_sms.sms_school_name');
+        $schoolCandidateName = $this->setting('cloud_sms.sms_school_candidate_name');
+
+        $api = CloudAPIFactory::create('root');
+        $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
         $smsStatus = array();
         if (isset($result['apply']) && isset($result['apply']['status'])) {
             $smsStatus['status'] = $result['apply']['status'];
@@ -205,50 +221,6 @@ class EduCloudController extends BaseController
         $setting = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
         $this->getSettingService()->set('cloud_sms', $setting);
-    }
-
-    protected function getCloudSmsKey($key)
-    {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
-        if (isset($setting[$key])){
-            return $setting[$key];
-        }
-        return null;
-    }
-
-    protected function getAccount()
-    {
-        return $this->getEduCloudService()->getAccount();
-    }
-
-    protected function applyForSms($name = 'smsHead')
-    {
-        return $this->getEduCloudService()->applyForSms($name);
-    }
-
-    protected function getSmsOpenStatus()
-    {
-        return $this->getEduCloudService()->getSmsOpenStatus();
-    }
-
-    protected function getBills($type = 'sms', $page=1, $limit=20)
-    {
-        return $this->getEduCloudService()->getBills($type, $page, $limit);
-    }
-
-    protected function sendSms($to, $verify, $category = 'verify')
-    {
-        return $this->getEduCloudService()->sendSms($to, $verify, $category);
-    }
-
-    protected function verifyKeys()
-    {
-        return $this->getEduCloudService()->verifyKeys();
-    }
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
     }
 
     protected function getAppService()

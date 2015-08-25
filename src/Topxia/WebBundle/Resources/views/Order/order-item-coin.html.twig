@@ -18,7 +18,7 @@
       <input style="display:none">{# Prevent autocompleting #}
       <input type="password" style="display:none">{# Prevent autocompleting #}
       {% if not hasPayPassword %}
-      <div  class="alert alert-warning alert-xs">
+      <div  class="alert alert-warning alert-xs mtm">
           为了保障账户资金安全，请先
         <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">设置支付密码</a>
       </div>
@@ -35,7 +35,10 @@
   </div>
   <div class="order-item-price">
     <span class="mrs">抵扣</span>
-    <span>￥</span>
+     {% if priceType|default("RMB") == "RMB" %}<span>￥</span>{% endif %}
     <span role="cash-discount" style="font-size: 24px"></span>
+    <span>
+      {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
+    </span>
   </div>
 </div>   

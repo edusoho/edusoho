@@ -130,11 +130,11 @@ a.transition {
           transform: scale(@x, @y);
 }
 
-.es-transition(@time:.3s) {
-  -webkit-transition: all @time ease;
-     -moz-transition: all @time ease;
-       -o-transition: all @time ease;
-          transition: all @time ease;
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
 }
 
 .box-shadow(@box-shadow:none) {

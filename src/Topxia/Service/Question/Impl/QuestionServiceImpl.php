@@ -27,6 +27,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
+    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget)
+    {
+        return $this->getQuestionDao()->findQuestionsByPIdAndLockedTarget($pId,$lockedTarget);
+    }
+
     public function findQuestionsbyTypes($types, $start, $limit)
     {
         return $this->getQuestionDao()->findQuestionsbyTypes($types, $start, $limit); 
@@ -52,6 +57,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsCountbyTypesAndSource($types,$questionSource,$courseId,$lessonId);
     }
     
+    public function findQuestionsCountByParentId($parentId)
+    {
+        return $this->getQuestionDao()->findQuestionsCountByParentId($parentId);
+    }
 
     public function findQuestionsByParentIds($ids)
     {
@@ -73,7 +82,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         if (!in_array($fields['type'], $this->supportedQuestionTypes)) {
             throw $this->createServiceException('question type error！');
         }
-
         $fields = QuestionTypeFactory::create($fields['type'])->filter($fields, 'create');
 
         if ($fields['parentId'] > 0) {
@@ -92,12 +100,20 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
 
+        $this->dispatchEvent("question.create",$question);
+
         return $question;
+    }
+
+    public function addQuestion($fields)
+    {
+        return $this->getQuestionDao()->addQuestion($fields);
     }
 
     public function updateQuestion($id, $fields)
     {
         $question = $this->getQuestion($id);
+
         if (empty($question)) {
             throw $this->createServiceException("Question #{$id} is not exist.");
         }
@@ -107,6 +123,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($fields['target']);
         }
 
+        $oldTarget = $question['target'];
+
+        $question = $this->getQuestionDao()->updateQuestion($id, $fields);
+
+        $this->dispatchEvent('question.update', array('question'=>$question,'oldTarget' => $oldTarget));
+
+        return $question;
+    }
+
+    public function editQuestion($id,$fields)
+    {
         return $this->getQuestionDao()->updateQuestion($id, $fields);
     }
 
@@ -139,6 +166,13 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $subCount = $this->getQuestionDao()->findQuestionsCountByParentId($question['parentId']);
             $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
+
+        $this->dispatchEvent("question.delete",$question);
+    }
+
+    public function deleteQuestionsByParentId($parentId)
+    {
+       return $this->getQuestionDao()->deleteQuestionsByParentId($parentId);
     }
 
     public function judgeQuestion($id, $answer, $refreshStats = false)

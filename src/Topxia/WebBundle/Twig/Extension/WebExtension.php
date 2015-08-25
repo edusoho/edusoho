@@ -50,6 +50,7 @@ class WebExtension extends \Twig_Extension
             'at' => new \Twig_Filter_Method($this, 'atFilter'),
             'copyright_less' => new \Twig_Filter_Method($this, 'removeCopyright'),
             'array_merge' => new \Twig_Filter_Method($this, 'arrayMerge'),
+            'space2nbsp' => new \Twig_Filter_Method($this, 'spaceToNbsp'),
         );
     }
 
@@ -99,9 +100,39 @@ class WebExtension extends \Twig_Extension
             'load_script' => new \Twig_Function_Method($this, 'loadScript'),
             'export_scripts' => new \Twig_Function_Method($this, 'exportScripts'), 
             'order_payment' => new \Twig_Function_Method($this, 'getOrderPayment'),
+            'classroom_permit' => new \Twig_Function_Method($this, 'isPermitRole'),
             'crontab_next_executed_time' => new \Twig_Function_Method($this, 'getNextExecutedTime'),
             'finger_print' => new \Twig_Function_Method($this, 'getFingerprint'),
+            'get_parameters_from_url' => new \Twig_Function_Method($this, 'getParametersFromUrl'),
         );
+    }
+    public function getParametersFromUrl($url)
+    {
+        $BaseUrl = parse_url($url);
+        if(isset($BaseUrl['query'])){
+            if(strstr($BaseUrl['query'],'&')){
+            $parameter = explode('&',$BaseUrl['query']);
+            $parameters = array();
+                foreach ($parameter as $key => $value) {
+                $parameters[$key] = explode('=',$value); 
+                }
+            }
+            else{
+            $parameter = explode('=',$BaseUrl['query']);   
+            $parameters = array();
+            $parameters[0]= $parameter;
+            }
+        }
+        else{
+            return null;
+        }
+        return  $parameters;
+    }
+
+    public function spaceToNbsp($content)
+    {
+        $content = str_replace(" ","&nbsp;",$content);
+        return $content;
     }
 
     public function getFingerprint() 
@@ -1034,6 +1065,16 @@ class WebExtension extends \Twig_Extension
             }
 
         return $default;
+    }
+
+    public function isPermitRole($classroomId, $permission, $isStudentOrAuditor = false)
+    {
+        $funcName = 'can'.$permission.'Classroom';
+        if ($isStudentOrAuditor) {
+            return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->$funcName($classroomId,$isStudentOrAuditor);
+        }
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService')->$funcName($classroomId);
+
     }
 
     public function calculatePercent($number, $total)

@@ -21,11 +21,13 @@ interface CourseService
 	public function getCoursesCount();
 
 	public function findCoursesByIds(array $ids);
+
+	public function findCoursesByParentIdAndLocked($parentId, $locked);
 	
 	public function findCoursesByCourseIds(array $ids, $start, $limit);
 
 	public function findCoursesByLikeTitle($title);
-	
+
 	public function findMinStartTimeByCourseId($courseId);
 
 	public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
@@ -67,6 +69,8 @@ interface CourseService
 	public function createCourse($course);
 
 	public function updateCourse($id, $fields);
+
+	public function editCourse($id, $fields);
 
 	public function updateCourseCounter($id, $counter);
 
@@ -110,6 +114,8 @@ interface CourseService
 
 	public function findLessonsByIds(array $ids);
 
+	public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds);
+
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
@@ -126,11 +132,15 @@ interface CourseService
 
 	public function createLesson($lesson);
 
+	public function addLesson($lesson);
+
 	public function getCourseDraft($id);
 
 	public function createCourseDraft($draft);
 
 	public function updateLesson($courseId, $lessonId, $fields);
+
+	public function editLesson($lessonId, $fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
@@ -204,11 +214,17 @@ interface CourseService
 
 	public function createChapter($chapter);
 
+	public function addChapter($chapter);
+
 	public function updateChapter($courseId, $chapterId, $fields);
+
+	public function editChapter($chapterId, $fields);
 
 	public function deleteChapter($courseId, $chapterId);
 
 	public function getNextChapterNumber($courseId);
+
+	public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
 
 	/**
 	 * 获得课程的目录项
@@ -223,6 +239,7 @@ interface CourseService
 	/**
 	 * Member API
 	 */
+	public function createMember($member);
 
 	public function searchMembers($conditions, $orderBy, $start, $limit);
 
@@ -259,6 +276,10 @@ interface CourseService
 	public function cancelTeacherInAllCourses($userId);
 
 	public function remarkStudent($courseId, $userId, $remark);
+
+	public function deleteMemberByCourseIdAndUserId($courseId, $userId);
+
+	public function deleteMemberByCourseId($courseId);
 
 	/**
 	 * 成为学员，即加入课程的学习
@@ -324,8 +345,11 @@ interface CourseService
 	public function tryLearnCourse($courseId);
 
 	public function increaseLessonQuizCount($lessonId);
+	
 	public function resetLessonQuizCount($lessonId,$count);
+	
 	public function increaseLessonMaterialCount($lessonId);
+	
 	public function resetLessonMaterialCount($lessonId,$count);
 
 	public function setMemberNoteNumber($courseId, $userId, $number);
@@ -337,7 +361,7 @@ interface CourseService
 	public function hasFavoritedCourse($courseId);
 
 	public function generateLessonReplay($courseId,$lessonId);
-
+	
 	public function entryReplay($lessonId, $courseLessonReplayId);
 
 	public function getCourseLessonReplayByLessonId($lessonId);
@@ -350,6 +374,9 @@ interface CourseService
 
 	public function becomeStudentByClassroomJoined($courseId, $userId);
 
-	
+	public function addCourseLessonReplay($courseLessonReplay);
 
+	public function deleteLessonReplayByLessonId($lessonId);
+
+	public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
 }

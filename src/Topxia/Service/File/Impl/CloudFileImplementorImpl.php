@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {   
@@ -361,7 +361,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $task['callbackUrl'] = $convertCallback;
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $result = $api->post('/processes', $task);
         if (empty($result['taskNo'])) {
             return null;
@@ -451,16 +451,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
-    }
-
-    protected function createAPIClient()
-    {
-        $settings = $this->getSettingService()->get('storage', array());
-        return new CloudAPI(array(
-            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
-        ));
     }
 
 }
