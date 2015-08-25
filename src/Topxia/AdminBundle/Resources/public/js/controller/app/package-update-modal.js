@@ -19,37 +19,37 @@ define(function(require, exports, module) {
             {
                 title: '检查系统环境',
                 url: urls.checkEnvironmentUrl,
-                progressRange: [5, 15]
+                progressRange: [3, 10]
             },
             {
                 title: '检查依赖',
                 url: urls.checkDependsUrl,
-                progressRange: [20, 30]
+                progressRange: [13, 20]
             },
             {
                 title: '备份系统文件',
                 url: urls.backupFileUrl,
-                progressRange: [35, 45]
+                progressRange: [23, 30]
             },
             {
                 title: '备份数据库',
                 url: urls.backupDbUrl,
-                progressRange: [50, 60]
+                progressRange: [33, 40]
             },
             {
                 title: '检查下载权限',
                 url: urls.checkDownloadExtractUrl,
-                progressRange: [65, 70]
+                progressRange: [43, 50]
             },
             {
                 title: '下载安装升级程序',
                 url: urls.downloadExtractUrl,
-                progressRange: [75, 80]
+                progressRange: [53, 60]
             },
             {
                 title: '执行安装升级程序',
                 url: urls.beginUpgradeUrl,
-                progressRange: [90, 100]
+                progressRange: [63, 100]
             }
         ];
 
@@ -109,6 +109,13 @@ define(function(require, exports, module) {
                     url = url+'&index=0';
                 }
                 url = url.replace(/index=\d+/g,'index='+data.index);
+                endProgress = startProgress + 2;
+                if (endProgress > 100) {
+                    endProgress = 100;
+                }
+                progressBar.setProgress(endProgress, '文件'+data.index+'下载完成');
+                startProgress = endProgress;
+                title = '下载大型文件';
                 exec(title, url, progressBar, startProgress, endProgress);
             } else {
                 progressBar.setProgress(endProgress, title + '完成');
