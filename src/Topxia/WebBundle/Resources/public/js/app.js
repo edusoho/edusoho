@@ -130,7 +130,7 @@ define(function(require, exports, module) {
 		})
 
 		if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
-			$(".nav-mobile li.nav-hover>a").attr("href","javascrpt:;");
+			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
 		}
 	}
 	
