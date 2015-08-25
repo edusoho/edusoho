@@ -16,7 +16,9 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $request->getSession()->set('_target_path',  $request->request->get('_target_path'));
-        if ($exception->getMessage() != "Bad credentials") {
+        if ($exception->getMessage() == "Bad credentials") {
+            $message = "用户名或密码错误";
+        }else{
             goto end;
         }
 
