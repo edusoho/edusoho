@@ -449,8 +449,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                 $items['homeworkId'] = $homeworkId;
                 $items['parentId'] = 0;
                 $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
-
-                $fullScore +=$question['score'];
             }
 
             $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
@@ -463,6 +461,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                     $items['parentId'] = $question['parentId'];
                     $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
                     $fullScore += $question['score'];
+                }
+            }else{
+                if(!empty($question)){
+                    $fullScore +=$question['score'];    
                 }
             }
         }
