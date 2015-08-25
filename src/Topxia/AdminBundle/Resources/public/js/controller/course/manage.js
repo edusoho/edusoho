@@ -40,8 +40,12 @@ define(function(require, exports, module) {
 			}
 
 			var $tr = $(this).parents('tr');
-			$.post($(this).data('url'), function(){
-				$tr.remove();
+			$.post($(this).data('url'), function(data){
+				if(data){
+					$tr.remove();
+				}else{
+					Notify.danger('关联子课程,请先删除子课程');	
+				}
 			});
 
 		});

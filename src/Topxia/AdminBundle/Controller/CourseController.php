@@ -119,10 +119,14 @@ class CourseController extends BaseController
     }
 
     public function deleteAction(Request $request, $id)
-    {
-        $result = $this->getCourseDeleteService()->delete($id);
-
-        return $this->createJsonResponse(true);
+    {   
+        $childCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($id,1);
+         if($childCourse){
+            return $this->createJsonResponse(false);
+        } else {
+           $result = $this->getCourseDeleteService()->delete($id);
+           return $this->createJsonResponse(true);
+        }
     }
 
     public function publishAction(Request $request, $id)
