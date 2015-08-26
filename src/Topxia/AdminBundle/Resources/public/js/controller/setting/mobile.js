@@ -225,11 +225,11 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#site-applogo-container").html('');
-                $form.find('[name=logo]').val('');
+                $form.find('[name=applogo]').val('');
                 $btn.hide();
-                Notify.success('删除网校appLOGO成功！');
+                Notify.success('删除网校applogo成功！');
             }).error(function(){
-                Notify.danger('删除网校appLOGO失败！');
+                Notify.danger('删除网校applogo失败！');
             });
         });
 
@@ -258,11 +258,11 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#site-appcover-container").html('');
-                $form.find('[name=logo]').val('');
+                $form.find('[name=appcover]').val('');
                 $btn.hide();
-                Notify.success('删除网校appLOGO成功！');
+                Notify.success('删除appcover成功！');
             }).error(function(){
-                Notify.danger('删除网校appLOGO失败！');
+                Notify.danger('删除appcover失败！');
             });
         });
 

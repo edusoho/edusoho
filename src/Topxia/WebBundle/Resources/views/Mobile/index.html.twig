@@ -11,10 +11,10 @@
         <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
         <div class="img-two hidden-xs">
           <img class="img-two-bg" src="{{asset("assets/v2/img/mobile/phone_white_bg.png")}}" alt="">
-          {% if  not setting('mobile.appcover') %}
-          <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
-          {% else %}
+          {% if setting('mobile.appcover') %}
           <img class="img-two-content" src="{{asset(setting('mobile.appcover'))}}" alt="">
+          {% else %}
+          <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
           {% endif %}
         </div>
         <div class="mobile-content">
@@ -33,10 +33,10 @@
         </div>
         <div class="mobile-content row">
           <div class="col-md-4 col-sm-6 col-xs-6">
-          {% if  not setting('mobile.applogo') %}
-            <img class="img-one" src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
+          {% if setting('mobile.applogo') %}
+          <img class="img-one" src="{{asset(setting('mobile.applogo'))}}" alt="">   
           {% else %}
-            <img class="img-one" src="{{asset(setting('mobile.applogo'))}}" alt="">
+          <img class="img-one" src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt=""> 
           {% endif %}
           </div>
           <div class="col-md-4 col-sm-6 col-xs-6">
