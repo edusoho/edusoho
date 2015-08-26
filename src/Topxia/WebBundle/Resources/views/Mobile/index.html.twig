@@ -18,14 +18,13 @@
           {% endif %}
         </div>
         <div class="mobile-content">
-          <div class="title">{{mobile.appname|default('阔知学堂')}}</di v>
-          <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地')}}</div>       
+          <div class="title">{{mobile.appname|default('阔知学堂')}}</div>
+          <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地')}}</div>    
           <div class="label-mobile">{% if mobile.appname|default() %}仅需一步，轻松搞定！{% else %}仅需两步，轻松搞定！ {% endif %}</div>
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">立即下载体验<i class="es-icon es-icon-keyboardarrowdown"></i></a>
         </div>
       </div>
     </div>
-  </div>
     <div class="mobile-second">
       <div class="container">
         <div class="step">
@@ -67,6 +66,5 @@
       </div>
     </div>
     {% endif %}
-    
   </div>
 {% endblock %}
