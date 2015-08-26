@@ -53,7 +53,14 @@ class ReviewController extends BaseController
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        } 
         return $this->render("ClassroomBundle:Classroom\Review:list.html.twig", array(
             'classroom' => $classroom,
             'courses' => $courses,
@@ -65,6 +72,7 @@ class ReviewController extends BaseController
             'users' => $reviewUsers,
             'member' => $member,
             'layout' => $layout,
+            'classroomDescription' => $classroomDescription
         ));
     }
 

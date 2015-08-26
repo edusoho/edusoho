@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}注册 - {{ parent() }}{% endblock %}
+{% set script_controller = 'user/fill-userinfo-fields' %}
+
+{% block content %}
+
+<div class="row row-6">
+  <div class="col-md-6 col-md-offset-3 ptl">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading empty">
+        <h3>仅需一步，完善资料，让我们更好的为你服务！ </h3>
+      </div>
+
+      <form id="fill-userinfo-form" class="form-horizontal" method="post" action="{{path('login_after_fill_userinfo', {goto:goto})}}">
+
+
+        {{ web_macro.flash_messages() }}
+
+        {% set userinfo_enable = setting('auth.fill_userinfo_after_login')|default(false) %}
+        {% set checkedFields = setting('auth.registerSort')|default([]) %}
+        {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:userinfo_enable, userinfoFieldsSetting:checkedFields, userFields:userFields, user:user, showNavTip:0} %}
+
+          <div class="form-group">
+            <div class="controls text-center">
+              <button type="submit" id="fill-userinfo-form-btn" data-submiting-text="正在提交" class="btn btn-primary btn-large">保存</button>
+            </div>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>    
+  </div>
+</div>
+{% endblock %}
+{% block esBar %}{% endblock %}

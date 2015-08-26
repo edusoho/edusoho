@@ -15,6 +15,7 @@
       position: absolute;
       bottom: -60px;
       left: 7%;
+      opacity: 0;
       @media(max-width: @screen-md-max) {
         width: 260px;
       }
@@ -27,6 +28,7 @@
       bottom: -100px;
       left: 12%;
       z-index: 1;
+      opacity: 0;
       @media(max-width: @screen-md-max) {
         width: 320px;
       }
@@ -49,6 +51,7 @@
     .title {
       // font-size: 60px;
       margin-bottom: 20px;
+      opacity: 0;
       // @media(max-width: @screen-md-max) {
       //   font-size: 48px;
       // }
@@ -56,6 +59,7 @@
     .subtitle {
       // font-size: 18px;
       margin-bottom: 30px;
+      opacity: 0;
       // @media(max-width: @screen-md-max) {
       //   font-size: 16px;
       // }
@@ -67,6 +71,7 @@
       font-size: 16px;
       text-align: center;
       margin-bottom: 30px;
+      opacity: 0;
       @media(max-width: @screen-md-max) {
         font-size: 14px;
         background-size: 90% 90%;
@@ -83,6 +88,7 @@
       font-size: 16px;
       padding: 15px 20px;
       color: #fff;
+      opacity: 0;
       .es-transition;
       @media(max-width: @screen-md-max) {
         font-size: 14px;
@@ -207,12 +213,12 @@
     position: relative;
     padding-top: 100px;
     min-height: 200px;
-    background: @background-color url('@{img-src}mobile/mobile_bg2.jpg') center 82% no-repeat;
+    background: @bg-color url('@{img-src}mobile/mobile_bg2.jpg') center 82% no-repeat;
     @media(max-width: @screen-md-max) {
       padding-top: 50px;
     }
     @media(max-width: @screen-xs-max) {
-      background: @background-color;
+      background: @bg-color;
     }
     >.container {
       position: relative;

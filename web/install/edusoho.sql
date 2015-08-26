@@ -1415,6 +1415,7 @@ CREATE TABLE `classroom` (
   `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
   `headTeacherId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班主任ID',
   `teacherIds` varchar(255) NOT NULL DEFAULT '' COMMENT '教师IDs',
+  `assistantIds` TEXT COMMENT '助教Ids',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `auditorNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '旁听生数',
   `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
@@ -1457,7 +1458,7 @@ CREATE TABLE `classroom_member` (
   `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
   `remark` text COMMENT '备注',
-  `role` enum('auditor','student','teacher','headTeacher','assistant', 'studentAssistant') NOT NULL DEFAULT 'auditor' COMMENT '角色',
+  `role` VARCHAR(255) NOT NULL DEFAULT '|auditor|' COMMENT '角色',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

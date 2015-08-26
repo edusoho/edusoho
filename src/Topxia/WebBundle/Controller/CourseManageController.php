@@ -9,7 +9,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -19,7 +18,11 @@ use Imagine\Image\ImageInterface;
 class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)
-	{
+	{      
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['locked'] == '1') {
+            return $this->redirect($this->generateUrl('course_manage_course_sync',array('id' => $id,'type'=>'base')));
+        }
         return $this->forward('TopxiaWebBundle:CourseManage:base',  array('id' => $id));
 	}
 
@@ -232,7 +235,7 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting("course");
         if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
-            return $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
         $conditions = $request->query->all();
@@ -286,7 +289,7 @@ class CourseManageController extends BaseController
 
         $courseSetting = $this->setting("course");
         if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
-            return $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
         $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
@@ -399,6 +402,7 @@ class CourseManageController extends BaseController
         }
 
         $teacherMembers = $this->getCourseService()->findCourseTeachers($id);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
 
         $teachers = array();
@@ -413,7 +417,6 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
-
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers
@@ -442,6 +445,98 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse($teachers);
+    }
+
+    #课程同步
+    public function courseSyncAction(Request $request,$id,$type)
+    {
+        $courseId = $id;
+        $course = $this->getCourseService()->getCourse($courseId);
+        $parentCourse = $this->getCourseService()->getCourse($course['parentId']);
+        $type = $type;
+        $title = '';
+        $url = '';
+        switch ($type) {
+            case 'base':
+                $title = '基本信息';
+                $url= 'course_manage_base';
+                break;
+            case 'detail':
+                $title = '详细信息';
+                $url= 'course_manage_detail';
+                break;
+            case 'picture':
+                $title = '课程图片';
+                $url= 'course_manage_picture';
+                break;
+            case 'lesson':
+                $title = '课时管理';
+                $url= 'course_manage_lesson';
+                break;
+            case 'files':
+                $title = '文件管理';
+                $url = 'course_manage_files';
+                break;
+            case 'replay':
+                $title = '录播管理';
+                $url = 'live_course_manage_replay';
+                break;
+            case 'price':
+                $title = '价格设置';
+                $url= 'course_manage_price';
+                break;
+            case 'teachers':
+                $title = '教师设置';
+                $url= 'course_manage_teachers';
+                break;
+            case 'question':
+                $title = '题目管理';
+                $url= 'course_manage_question';
+                break;
+            case 'question_plumber':
+                $title = '题目导入/导出';
+                $url = 'course_question_plumber';
+                break;
+            case 'testpaper':
+                $title = '试卷管理';
+                $url= 'course_manage_testpaper';
+                break;
+            default:
+                $title = '未知页面';
+                $url= '';
+                break;
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        return $this->render('TopxiaWebBundle:CourseManage:courseSync.html.twig',array(
+        'course'=>$course,
+        'type'=>$type,
+        'title'=>$title,
+        'url'=>$url,
+        'parentCourse' =>$parentCourse
+        ));
+    }
+
+    public function courseSyncEditAction(Request $request)
+    {
+        $courseId = $request->query->get('courseId');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $type = $request->query->get('type');
+        $url = $request->query->get('url');
+        if ($request->getMethod() == 'POST'){
+            $courseId = $request->request->get('courseId');
+            $url = $request->request->get('url');
+            $course = $this->getCourseService()->getCourse($courseId);
+            if($course['locked'] == 1) {
+              $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
+            }
+          return $this->createJsonResponse($url);
+        }
+        return $this->render('TopxiaWebBundle:CourseManage:courseSyncEdit.html.twig',array(
+        'course'=>$course,
+        'type'=>$type,
+        'url'=>$url
+        ));
     }
 
     protected function getCourseService()

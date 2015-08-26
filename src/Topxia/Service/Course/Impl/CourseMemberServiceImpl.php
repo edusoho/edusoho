@@ -58,10 +58,12 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 
 		$member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
 
-		$this->getNotificationService()->notify($member['userId'], 'student-create', array(
-			'courseId' => $course['id'], 
-			'courseTitle' => $course['title'],
-		));
+		if(isset($data["isAdminAdded"]) && $data["isAdminAdded"]==1) {
+			$this->getNotificationService()->notify($member['userId'], 'student-create', array(
+				'courseId' => $course['id'], 
+				'courseTitle' => $course['title'],
+			));
+		}
 
 		$this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 

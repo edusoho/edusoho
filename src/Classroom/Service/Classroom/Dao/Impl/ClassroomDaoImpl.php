@@ -10,6 +10,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     protected $table = 'classroom';
 
     private $serializeFields = array(
+        'assistantIds' =>'json',
         'teacherIds' => 'json',
         'service' => 'json',
     );

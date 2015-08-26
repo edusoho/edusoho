@@ -31,6 +31,8 @@ class CourseController extends BaseController
 
         $previewLesson = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
 
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($course['categoryId']);
+
         return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
             'course' => $course,
             'member' => $member,
@@ -40,6 +42,7 @@ class CourseController extends BaseController
             'nextLearnLesson' => $nextLearnLesson,
             'learnProgress' => $learnProgress,
             'previewLesson' => empty($previewLesson) ? null : $previewLesson[0],
+            'breadcrumbs' => $breadcrumbs
         ));
     }
 
@@ -173,6 +176,11 @@ class CourseController extends BaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
     protected function calculateUserLearnProgress($course, $member)
