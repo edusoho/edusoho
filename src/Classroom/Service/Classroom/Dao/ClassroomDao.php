@@ -10,6 +10,8 @@ interface ClassroomDao
 
     public function waveClassroom($id, $field, $diff);
 
+    public function waveDownClassroom($id, $field, $diff)
+
     public function searchClassrooms($conditions, $orderBy, $start, $limit);
 
     public function searchClassroomsCount($condtions);
