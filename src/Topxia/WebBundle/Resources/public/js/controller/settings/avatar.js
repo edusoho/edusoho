@@ -14,18 +14,11 @@ define(function(require, exports, module) {
             document.location.href = url;
         });
 
-        // $('.use-partner-avatar').on('click', function(){
-        //     var goto = $(this).data('goto');
-        //     $.post($(this).data('url'), function(){
-        //         window.location.href = goto;
-        //     });
-        // });
-
         $('.use-partner-avatar').on('click', function(){
             var $this = $(this);
             var goto = $this.data('goto');
 
-            $.post($this.data('url'), {imgUrl:$this.data('imgUrl'),token:$this.data('uploadToken')},function(){
+            $.post($this.data('url'), {imgUrl:$this.data('imgUrl')},function(){
                 window.location.href = goto;
             });
         });
