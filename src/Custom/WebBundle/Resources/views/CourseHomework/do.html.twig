@@ -32,12 +32,16 @@
                                 <div class="mtm">{{ teacherSay|default('') }}</div>
                             </div>
                         {% endif %}
-                       {#  点评次数显示 #}
-                       {% if view!='preview' and 'finished' == homeworkResult.status %}
-                           <div class="alert alert-success" style="margin-bottom:0px">
-                                <p><strong>作业得分：{{homeworkResult.score | round | default(0) }}分</strong></p>
-                                <p style="margin-top:20px">作业总分：{{homework.fullScore | round | default(0) }}分 <span style="padding-left:40px">被点评：<strong style="color:#ff0000">{{homeworkResult.pairReviews}}</strong>次</span></p>
-                             </div>
+                        {#  点评次数显示 #}
+                        {% if view!='preview' and 'finished' == homeworkResult.status %}
+                            <div class="alert alert-success" style="margin-bottom:0px">
+                                <p><strong>作业得分：{{ homeworkResult.score | round | default(0) }}分</strong></p>
+
+                                <p style="margin-top:20px">作业总分：{{ homework.fullScore | round | default(0) }}分 <span
+                                            style="padding-left:40px">被点评：<strong
+                                                style="color:#ff0000">{{ homeworkResult.pairReviews }}</strong>次</span>
+                                </p>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -102,6 +106,7 @@
                                 <button id="homework-finish-btn" class="btn btn-success btn-block"
                                         data-saving-text="正在保存..." disabled>已经截止
                                 </button>
+                            {% elseif view == 'show' %}
                             {% else %}
                                 <button id="homework-finish-btn" class="btn btn-success btn-block"
                                         data-url="{{ path('course_homework_submit',{courseId:course.id,homeworkId:homework.id}) }}"
