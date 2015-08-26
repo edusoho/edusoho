@@ -32,7 +32,8 @@ class MobileController extends BaseController
 
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
-            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
+            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho"),
+            'mobile' => $mobile
         ));
     }
 

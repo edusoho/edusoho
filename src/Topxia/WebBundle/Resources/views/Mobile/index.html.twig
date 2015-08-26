@@ -11,25 +11,34 @@
         <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
         <div class="img-two hidden-xs">
           <img class="img-two-bg" src="{{asset("assets/v2/img/mobile/phone_white_bg.png")}}" alt="">
+          {% if  not setting('mobile.appcover') %}
           <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
+          {% else %}
+          <img class="img-two-content" src="{{asset(setting('mobile.appcover'))}}" alt="">
+          {% endif %}
         </div>
         <div class="mobile-content">
-          <div class="title">阔知学堂</div>
-          <div class="subtitle">将学校装进口袋，移动学习，随时随地</div>
-          <div class="label-mobile">仅需两步，轻松搞定！</div>
+          <div class="title">{{mobile.appname|default('阔知学堂')}}</di v>
+          <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地')}}</div>       
+          <div class="label-mobile">{% if mobile.appname|default() %}仅需一步，轻松搞定！{% else %}仅需两步，轻松搞定！ {% endif %}</div>
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">立即下载体验<i class="es-icon es-icon-keyboardarrowdown"></i></a>
         </div>
       </div>
     </div>
+  </div>
     <div class="mobile-second">
       <div class="container">
         <div class="step">
-          <span class="member">1</span> 
+          {% if mobile.appname|default() == '' %}<span class="member">1</span>{% endif %} 
           扫描二维码，下载手机APP。
         </div>
         <div class="mobile-content row">
           <div class="col-md-4 col-sm-6 col-xs-6">
+          {% if  not setting('mobile.applogo') %}
             <img class="img-one" src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
+          {% else %}
+            <img class="img-one" src="{{asset(setting('mobile.applogo'))}}" alt="">
+          {% endif %}
           </div>
           <div class="col-md-4 col-sm-6 col-xs-6">
             <img class="img-two" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
@@ -41,6 +50,7 @@
         </div>
       </div>
     </div>
+    {% if mobile.appname|default() == ''%}
     <div class="mobile-third">
       <div class="container">
         <div class="step">
@@ -56,6 +66,7 @@
         <div class="container"><img src="{{asset("assets/v2/img/mobile/phone_gui_shadow.png")}}" alt=""></div>
       </div>
     </div>
+    {% endif %}
     
   </div>
 {% endblock %}
