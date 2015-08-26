@@ -10,7 +10,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function update($index = 0)
     {
         try {
-            if($index>=0 && $index<=7)
+            if($index>=0 && $index<=7){
                 return $this->batchDownload($index);
             }
 
@@ -20,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return array(
                     'index' => 9,
                     'message' => '正在解压下载后的文件',
-                    'progress' => 2
+                    'progress' => 4.4
                 );
             }
 
@@ -54,29 +54,28 @@ class EduSohoUpgrade extends AbstractUpdater
     private function batchDownload($index)
     {
         $filepath = 'http://7xlcgd.dl1.z0.glb.clouddn.com/es-vendor2/vendor-'.$index.'.zip';
-        $curl = curl_init($filepath);
-        $targetPath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/vendor2/vendor-'.$index.'.zip';
-        if (!file_exists($targetPath)) {
-            curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-            $file = curl_exec($curl);
-            curl_close($curl);
-            $tp = @fopen($targetPath, 'a');
-            fwrite($tp, $file);
-            fclose($tp);
+
+        $dir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/vendor2';
+        $filesystem = new Filesystem();
+        if(!$filesystem->exists($dir)) {
+            $filesystem->mkdir($dir);
         }
+        $targetPath = $dir.'/vendor-'.$index.'.zip';
+        touch($targetPath);
+        $file = file_get_contents($filepath);
+        file_put_contents($targetPath, $file);
         $index++;
         return array(
             'index' => $index,
             'message' => '下载文件'.intval($index/8*100).'%',
-            'progress' => 2
+            'progress' => 4.4
         );
     }
 
     private function vendorExtract()
     {
         // exec('mkdir '.ServiceKernel::instance()->getParameter('kernel.root_dir').'/../vendor_v2');
-        for ($i=0; $i < 7; $i++) { 
+        for ($i=0; $i < 8; $i++) { 
             $zip = new \ZipArchive;
             $filepath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/vendor2/vendor-'.$i.'.zip';
             $tmpUnzipDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/vendor2';
@@ -107,7 +106,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function replaceFiles()
     {
         $filesystem = new Filesystem();
-        $filesystem->mirror(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/vendor2/edusoho/vendor2',  ServiceKernel::instance()->getParameter('kernel.root_dir') , null, array(
+        $filesystem->mirror(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/upgrade/vendor2/edusoho/vendor2',  ServiceKernel::instance()->getParameter('kernel.root_dir').'/../vendor2' , null, array(
             'override' => true,
             'copy_on_windows' => true
         ));
