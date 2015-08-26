@@ -100,7 +100,7 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         }
         $params = array_merge(array($missScore), $ids);
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks});";
+        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks})";
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
@@ -112,6 +112,7 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         if (!empty($groupBy)) {
             $builder->addGroupBy($groupBy);
         }
+
 
          return $builder->execute()->fetchAll() ? : array();
     }
@@ -136,4 +137,16 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         
         return $builder;
     }
+
+    public function findTestpaperItemsByPIdAndLockedTestIds($pId,$testIds)
+    {
+        if(empty($testIds)){ 
+            return array(); 
+        }
+        $params = array_merge(array($pId), $testIds);
+        $marks = str_repeat('?,', count($testIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND testId IN ({$marks})";
+        return $this->getConnection()->fetchAll($sql,$params);
+    }
+
 }

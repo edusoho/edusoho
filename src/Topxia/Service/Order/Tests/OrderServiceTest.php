@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Service\Order\Tests;
 
+
 // use Coupon\Service\Coupon\CouponService;
+
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\Order\OrderService;
 use Topxia\Service\User\UserService;
@@ -427,7 +429,6 @@ class OrderServiceTest extends BaseTestCase
         $result = $this->getOrderService()->createOrder($testAmountOrder);
         $this->assertEquals('none',$result['payment']);
 	}
-
 	// /**  
 	// * @expectedException Topxia\Service\Common\ServiceException  
 	// */
@@ -500,6 +501,7 @@ class OrderServiceTest extends BaseTestCase
  //        $this->getOrderService()->createOrder($testOrder2);
  //        //如果在测试的时候此方法出错，可以优先排查是否安装了优惠吗插件依赖！！
 	// }
+
 
     public function testSearchOrders()
     {
@@ -889,9 +891,11 @@ class OrderServiceTest extends BaseTestCase
         ));
     }
 
+
     /**  
     * @expectedException Topxia\Service\Common\ServiceException  
     */
+
     public function testPayOrderThird()
     {
         $user = $this->createUser(); 
@@ -1007,10 +1011,7 @@ class OrderServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-    // protected function getCouponService()
-    // {
-    //     return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
-    // }
+
 
     private function createUser()
     {

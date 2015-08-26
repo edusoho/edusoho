@@ -68,7 +68,6 @@ class CourseTestpaperManageController extends BaseController
         $conditions["courseId"] = $course["id"];
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, "type");
-
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
@@ -311,12 +310,16 @@ class CourseTestpaperManageController extends BaseController
             );
         }
 
-
+        $conditions["types"] = ArrayToolkit::column($types,"key");
+        $conditions["courseId"] = $course["id"];
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $questionNums = ArrayToolkit::index($questionNums, "type");
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items-reset.html.twig', array(
             'course'    => $course,
             'testpaper' => $testpaper,
             'ranges' => $this->getQuestionRanges($course),
             'types' => $types,
+            'questionNums' => $questionNums
         ));
     }
 

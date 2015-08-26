@@ -14,6 +14,7 @@
 
       <form id="fill-userinfo-form" class="form-horizontal" method="post" action="{{path('login_after_fill_userinfo', {goto:goto})}}">
 
+
         {{ web_macro.flash_messages() }}
 
         {% set userinfo_enable = setting('auth.fill_userinfo_after_login')|default(false) %}

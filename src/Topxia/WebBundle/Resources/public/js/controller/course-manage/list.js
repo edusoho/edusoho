@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         require('./header').run();
         var $container = $('#quiz-table-container');
+        require('./header').run();
         require('../../util/short-long-text')($container);
         require('../../util/batch-select')($container);
         require('../../util/batch-delete')($container);

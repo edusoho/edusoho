@@ -229,7 +229,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $newTeacherIds = array_unique($newTeacherIds);
-
+        $ids = array();
         foreach ($newTeacherIds as $key => $value) {
             $ids[] = $value;
         }
@@ -563,7 +563,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $diff = array_diff($existCourseIds, $activeCourseIds);
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
-                    $this->getClassroomCourseDao()->update($courses[$courseId]['classroom_course_id'], array('disabled' => 1));
+                    $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
+                    $this->getClassroomCourseDao()->deleteCourseByClassroomIdAndCourseId($classroomId,$courseId);
+                    $this->getCourseService()->deleteMemberByCourseId($courseId);
                     $this->getCourseService()->closeCourse($courseId,'classroom');
                 }
 
@@ -583,6 +585,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->refreshCoursesSeq($classroomId, $activeCourseIds);
 
             $this->getClassroomDao()->getConnection()->commit();
+
+            if ($this->getAppService()->findInstallApp('ClassroomPlan') && !empty($activeCourseIds)) {
+                $this->dispatchEvent(
+                    'studyplan.course.delete',
+                    new ServiceEvent($activeCourseIds, array('classroomId' => $classroomId))
+                );
+            }
+            
         } catch (\Exception $e) {
             $this->getClassroomDao()->getConnection()->rollback();
             throw $e;
@@ -1303,30 +1313,36 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom:Classroom.ClassroomCourseDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->createService('Order.OrderService');
     }
 
-    private function getVipService()
+    protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
     }
 
-    private function getNoteDao()
+    protected function getNoteDao()
     {
         return $this->createDao('Course.CourseNoteDao');
     }
 
-    private function getStatusService()
+    protected function getStatusService()
     {
         return $this->createService('User.StatusService');
     }
+
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform.AppService');
+    }
+
 }
 
 class MemberSerialize
