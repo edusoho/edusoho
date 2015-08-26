@@ -66,6 +66,9 @@ class FileServiceImpl extends BaseService implements FileService
 		}
 		$group = $this->getGroupDao()->findGroupByCode($group);
 		$user = $this->getCurrentUser();
+		if (!$user->isLogin()) {
+			throw $this->createServiceException("用户尚未登陆。");
+		}
 		$record = array();
 		$record['userId'] = $user['id'];
 		$record['groupId'] = $group['id'];
