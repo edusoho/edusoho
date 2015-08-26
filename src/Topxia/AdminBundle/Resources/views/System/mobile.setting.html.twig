@@ -90,7 +90,7 @@
         </div>
         <div class="col-md-8 controls">
 
-         <div id="site-applogo-container">{% if mobile.applogo %}<img src="{{ asset(mobile.applogo) }}">{% endif %}</div>
+         <div id="site-applogo-container" class="mbl">{% if mobile.applogo %}<img src="{{ asset(mobile.applogo) }}">{% endif %}</div>
           <button class="btn btn-default btn-sm" id="site-applogo-upload" type="button"
           data-url="{{ path('admin_setting_mobile_picture_upload', {type:'applogo'}) }}">上传</button>
           <button class="btn btn-default btn-sm" id="site-applogo-remove" type="button" 
@@ -105,8 +105,7 @@
           <label for="appcover">APP封面</label>
         </div>
         <div class="col-md-8 controls">
-
-         <div id="site-appcover-container">{% if mobile.appcover %}<img src="{{ asset(mobile.appcover) }}">{% endif %}</div>
+         <div id="site-appcover-container" class="mbl">{% if mobile.appcover %}<img class="img-responsive" src="{{ asset(mobile.appcover) }}">{% endif %}</div>
           <button class="btn btn-default btn-sm" id="site-appcover-upload" type="button" 
           data-url="{{ path('admin_setting_mobile_picture_upload', {type:'appcover'}) }}">上传</button>
           <button class="btn btn-default btn-sm" id="site-appcover-remove" type="button" 
@@ -114,6 +113,7 @@
           <p class="help-block">请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。</p>
           <input type="hidden" name="appcover" value="{{ mobile.appcover }}">
         </div>
+
       </div>
   </fieldset>
 {% endif %}
