@@ -40,7 +40,7 @@
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>个人主页</a></li>
             <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
-            <li class="visible-xs">
+            <li class="hidden-lg">
               <a href="{{ path('my') }}">
                 <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}我的教学{% else %}我的学习{% endif %}
               </a>
@@ -54,7 +54,7 @@
             <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
           </ul>
         </li>
-        <li class="hidden-xs">
+        <li class="visible-lg">
           <a href="{{ path('my') }}">
             {% if 'ROLE_TEACHER' in app.user.roles %}
               我的教学
