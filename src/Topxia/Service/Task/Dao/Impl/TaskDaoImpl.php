@@ -80,6 +80,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
             ->andWhere('status = :status')
             ->andWhere('batchId = :batchId')
             ->andWhere('taskType = :taskType')
+            ->andWhere('targetType = :targetType')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('taskStartTime >= :taskStartTimeGreaterThan')
