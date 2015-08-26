@@ -22,9 +22,44 @@ class BaseProcessor {
         $instance->setDelegator($processorDelegator);
         return $processorDelegator;
     }
+
+    protected function stopInvoke()
+    {
+        $this->delegator ->stopInvoke();
+    }
+
     protected function getParam($name, $default = null) {
         $result = $this->request->get($name, $default);
         return $result;
+    }
+
+    protected function filterUsersFiled($users)
+    {
+        $container = $this->controller->getContainer();
+        return array_map(function($user) use ($container)
+        {
+            foreach ($user as $key => $value) {
+                if (!in_array($key, array(
+                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))) {
+                    unset($user[$key]);
+                }
+            }
+
+            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            
+            return $user;
+        }, $users);
+    }
+
+    /**
+    * course-large.png
+    */
+    protected function coverPic($src, $srcType)
+    {
+        $container = $this->controller->getContainer();
+        return $container->get('topxia.twig.web_extension')->getFilePath($src, $srcType, true);      
     }
 
     protected function log($action, $message, $data)
@@ -32,6 +67,29 @@ class BaseProcessor {
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,  
                 $data
         );
+    }
+
+    protected function filterAnnouncements($announcements)
+    {
+        $controller = $this->controller;
+        return array_map(function($announcement) use ($controller)
+        {
+            unset($announcement["userId"]);
+            unset($announcement["courseId"]);
+            unset($announcement["updatedTime"]);
+            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
+            $announcement["createdTime"] = date('c', $announcement['createdTime']);
+            $announcement["startTime"] = date('c', $announcement['startTime']);
+            $announcement["endTime"] = date('c', $announcement['endTime']);
+            return $announcement;
+        }, $announcements);
+    }
+    
+    protected function filterAnnouncement($announcement)
+    {
+        return $this->filterAnnouncements(array(
+            $announcement
+        ));
     }
 
     protected function setParam($name, $value)
@@ -42,6 +100,7 @@ class BaseProcessor {
     public function setDelegator($processorDelegator) {
         $this->delegator = $processorDelegator;
     }
+
     public function getDelegator() {
         return $this->delegator;
     }
@@ -158,6 +217,24 @@ class BaseProcessor {
         return $this->controller->getService('Testpaper.TestpaperService');
     }
 
+    protected function getAnnouncementService()
+    {
+        return $this->controller->getService('Announcement.AnnouncementService');
+    }
+
+    public function getEduCloudService(){
+        return $this->controller->getService('EduCloud.EduCloudService');
+    }
+
+    protected function getLogService(){
+        return $this->controller->getService('System.LogService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->controller->getService('User.UserFieldService');
+    }
+
     public function createErrorResponse($name, $message) {
         $error = array(
             'error' => array(
@@ -167,26 +244,11 @@ class BaseProcessor {
         );
         return $error;
     }
+
     protected function previewAsMember($member, $courseId, $user) {
+
         if (empty($member)) {
             return null;
-        }
-
-        if ($this->controller->get('security.context')->isGranted('ROLE_ADMIN')) {
-            return array(
-                'id' => 0,
-                'courseId' => $courseId,
-                'userId' => $user['id'],
-                'levelId' => 0,
-                'learnedNum' => 0,
-                'isLearned' => 0,
-                'seq' => 0,
-                'isVisible' => 0,
-                'role' => 'teacher',
-                'locked' => 0,
-                'createdTime' => time() ,
-                'deadline' => 0
-            );
         }
     
         $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);

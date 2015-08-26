@@ -1,0 +1,61 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">评价详情</h3>
+    </div>
+</div>
+<div class="ui-course ui-course-review" ng-init="loadReviewResult()">
+	<div class="top-header">
+		<ul class="ui-grid-halve ui-border-b">
+			<li style="width:40%;">
+				<div class="ui-list-info rating-body">
+			           	<h4 class="title">平均评分</h4>
+			           	<h4 class="rating-num">{{ reviewData.info.rating | limitTo : 4 }}</h4>
+			           	<h4>
+			           		<i class="iconfont" ng-class="reviewData.info.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in 5 | array" ></i>
+			           	</h4>
+			           	<p>({{ reviewData.info.ratingNum }}评价)</p>
+			        	</div>
+			</li>
+			<li style="width:60%;">
+				<div class="ui-list-info">
+			           	<div class="rating-progress" ng-repeat="i in reviewData.progress track by $index">
+			           		<span class="progress-title">{{ $index + 1 }}星</span>
+			           		<div class="ui-progress">
+						    <span style="width:{{ i | reviewProgress : reviewData.info.rating }}"></span>
+						</div>
+						<span class="progress">{{ i | reviewProgress : reviewData.info.rating }}</span>
+			           	</div>
+			        	</div>
+			</li>
+		</ul>
+	</div>
+	<div class="ui-scroller" ui-scroll data="reviews" on-infinite="loadMore()">
+		<div class="ui-panel-content ui-review">
+		    	<ul class="ui-list" style="padding : 16px;">  
+		    		<li class="ui-border-t" ng-repeat="review in reviews">
+				        <div class="ui-avatar-s" ui-sref="userInfo({ userId : review.user.id })">
+				            <img ng-src="{{ review.user.mediumAvatar | coverAvatar }}" img-error="avatar" />
+				        </div>
+				        <div class="ui-list-info">
+				            <h4 class="ui-nowrap ui-review-header">
+				            	{{ review.user.nickname }}
+				            	<span class="ui-review-rating">
+				            		<i class="iconfont" ng-class="review.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in 5 | array" ></i>
+					      	</span>
+				            </h4>
+				            <p class="ui-nowrap">{{ review.content }}</p>
+				        </div>
+				</li>
+			</ul>
+		</div>
+
+		<list-empty-view data="reviews" title="暂时没有评价">
+	      	</list-empty-view>
+
+	      	<div class="ui-loading-wrap" ng-show="canLoad">
+	       	 	<p>正在加载中...</p>
+	        		<i class="ui-loading"></i>
+	      	</div>
+	</div>
+</div>
