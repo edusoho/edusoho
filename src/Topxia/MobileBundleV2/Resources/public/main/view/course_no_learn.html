@@ -20,7 +20,7 @@
                 </span>
                 <span class="price-block" ng-if="course.priceType == 'Coin'">
                     {{ course.coinPrice | formatCoinPrice }}
-                    <small>{{ course.coinName }}</small>
+                    <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
                 </span>
                 <span ng-if="discount" class="discount-type discount">
 	    			{{ discount.type | coverDiscount : course.discount }}</span>
