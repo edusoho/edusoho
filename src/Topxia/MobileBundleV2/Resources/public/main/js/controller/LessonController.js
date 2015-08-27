@@ -56,6 +56,7 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
       return lessonIds;
     };
 
+    //lesson.free=1 is free
     $scope.learnLesson = function(lesson) {
       if (! $scope.member && 1 != lesson.free) {
         alert("请先加入学习");
@@ -66,6 +67,10 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
         return;
       }
 
+      if (lesson.type == "flash" || "qqvideo" == lesson.mediaSource) {
+        alert("客户端暂不支持该课时类型，敬请期待新版");
+        return;
+      }
       cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, self.createLessonIds());     
     }
 
