@@ -3,7 +3,7 @@
 {% elseif targetType == 'course' %}
   {% set maxRate = course.maxRate %}
 {% else %}
-  {% set maxRate = vip.maxRate %}
+  {% set maxRate = level.maxRate %}
 {% endif %}
 <div class="order-item clearfix">
   <div class="order-item-title" style="width:30%">
@@ -16,7 +16,7 @@
       {% if hasPayPassword %}
       本次使用
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
-      <input  {% if maxRate == 0%}readOnly="true"{% endif %} id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ min(coinPayAmount|default(0),maxCoin|default(0))}}" maxlength="">
+      <input  {% if maxRate == 0%}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ min(coinPayAmount|default(0),maxCoin|default(0))}}" maxlength="">
       {{setting("coin.coin_name")}}
       {% endif %}
       <span class="coin-detail">
