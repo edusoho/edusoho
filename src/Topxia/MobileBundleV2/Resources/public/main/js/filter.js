@@ -39,7 +39,8 @@ app.filter('blockStr', ['$rootScope', function($rootScope) {
 		}
 
 		if (signInfo.isSignedToday) {
-			return "连续" + signInfo.userSignStatistics.keepDays + "天";
+			var day = signInfo.userSignStatistics.keepDays ? signInfo.userSignStatistics.keepDays : 1;
+			return "连续" + day + "天";
 		}
 
 		return "签到";
