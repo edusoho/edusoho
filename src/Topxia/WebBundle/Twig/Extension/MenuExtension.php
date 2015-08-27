@@ -27,10 +27,9 @@ class MenuExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'menu_children' => new \Twig_Function_Method($this, 'getMenuChildren'),
-            'menu_breadcrumb' => new \Twig_Function_Method($this, 'getMenuBreadcrumb'),
-            'menu_path' => new \Twig_Function_Method($this, 'getMenuPath', array('needs_context' => true, 'needs_environment' => true)),
-
+            new \Twig_SimpleFunction('menu_children', array($this, 'getMenuChildren')),
+            new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
+            new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true)),
         );
     }
 
