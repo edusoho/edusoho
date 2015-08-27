@@ -31,12 +31,10 @@
           <div class="order-detail-bg   checkout">
             <div class="order-detail  clearfix">
               <div class="order-img hidden-xs">
-                {% if order.targetType == "course" and courses|default(null) %}
-                  {% for course in courses %}
+                {% if order.targetType == "course" and course|default(null) %}
                     <a href="{{ path('course_show', {id:course.id}) }}">
                       <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}"alt="收费">
                     </a>
-                  {% endfor %}
                 {% endif %}
                 {% if order.targetType == "vip" %}
                   <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
@@ -86,8 +84,8 @@
               </div>
              <a 
                 href="javascript:;"
-                {% if targetType == "course" and courses|default(null) %}
-                  data-goto="{{ path('course_show', {id:courses[0].id}) }}" 
+                {% if targetType == "course" and course|default(null) %}
+                  data-goto="{{ path('course_show', {id:course.id}) }}" 
                 {% elseif targetType == "vip" %}
                   data-goto="{{ path('vip_renew') }}"
                 {% elseif targetType == "classroom" %}

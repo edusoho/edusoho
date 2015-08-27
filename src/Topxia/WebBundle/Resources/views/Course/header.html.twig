@@ -82,10 +82,10 @@
               </ul>
             </div>
 
-            {% if course.status != 'published' %}
-              <div class="btn-group">
-                <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_manage_publish', {id:course.id}) }}">发布课程</button>
-              </div>
+            {% if course.status != 'published'%}
+                <div class="btn-group">
+                  <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_manage_publish', {id:course.id}) }}">发布课程</button>
+                </div>
             {% endif  %}
 
           {% endif %}
