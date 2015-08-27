@@ -5,7 +5,7 @@
 		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐课程">
           		</list-empty-view>
 		<ul class="ui-list ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="course in liveRecommedCourses" ng-href="#/course/{{ liveRecommedCourse.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    <li class="ui-border-t" ng-repeat="course in liveRecommedCourses" ng-href="#/course/{{ course.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="liveRecommedCourses.length > 0">
@@ -19,7 +19,7 @@
 		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
           		</list-empty-view>
 		<ul class="ui-list ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="course in liveLatestCourses" ng-href="#/course/{{ liveLatestCourse.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    <li class="ui-border-t" ng-repeat="course in liveLatestCourses" ng-href="#/course/{{ course.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="liveLatestCourses.length > 0">

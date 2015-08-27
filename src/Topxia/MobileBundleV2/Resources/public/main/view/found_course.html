@@ -11,7 +11,7 @@
 	<div class="course-card">
 		<h4><span class="circle-label"></span>推荐</h4>
 		<ul class="ui-list ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="course in recommedCourses" ng-href="#/course/{{ recommendCourse.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    <li class="ui-border-t" ng-repeat="course in recommedCourses" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="recommedCourses.length > 0">
@@ -24,7 +24,7 @@
 		<list-empty-view data="latestCourses" title="暂时没有最新课程">
         </list-empty-view>
 		<ul class="ui-list ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="course in latestCourses" ng-href="#/course/{{ latestCourse.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    <li class="ui-border-t" ng-repeat="course in latestCourses" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="latestCourses.length > 0">
