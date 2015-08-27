@@ -361,7 +361,7 @@ class PayCenterController extends BaseController
             $fields['unit'] = $order['data']['unitType'];
             $fields['duration'] = $order['data']['duration'];
             $fields['defaultBuyMonth'] = $defaultBuyMonth;
-            $fields['type'] = $order['data']['buyType'];   
+            $fields['buyType'] = $order['data']['buyType'];   
         }
         $processor = OrderProcessorFactory::create($order['targetType']);
         $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
