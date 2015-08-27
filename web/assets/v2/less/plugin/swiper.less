@@ -76,8 +76,12 @@ Basic Swiper Styles
 }
 
 .swiper-hidden {
-    visibility: hidden;
-    width: 0;
+    visibility: hidden !important;
+    height: 0 !important;
+    &:nth-child(1) {
+        visibility: visible !important;
+        height: 100% !important;
+    }
 }
 
 /* IE10 Windows Phone 8 Fixes */

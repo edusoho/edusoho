@@ -909,6 +909,7 @@ class ClassroomController extends BaseController
             'users' => $users,
             'classrooms' => $classrooms,
         ));
+
     }
 
     protected function getEnabledPayments()

@@ -37,15 +37,19 @@ define(function(require, exports, module) {
 
 
     $(".es-bar .bar-menu-top li").click(function(){
+
         var $this = $(this);
+
 
         if($("#notLogin").length>0){
             isNotLogin();
             return;
         }
+
         if($this.find(".dot")) {
           $this.find(".dot").remove();  
         }
+
         if(!$this.hasClass('active')) {
             $this.siblings(".active").removeClass('active').end().addClass('active').parents(".es-bar").animate({
                 right: '0'
@@ -120,7 +124,19 @@ define(function(require, exports, module) {
 
     // 回到顶端
     var goTop = function() {
-        $(".go-top").click(function() {
+        var $gotop = $(".go-top");
+
+        $(window).scroll(function(event) {
+            var scrollTop = $(window).scrollTop();
+
+            if(scrollTop>=300) {
+                $gotop.addClass('show');
+
+            }else if($gotop.hasClass('show')) {
+                $gotop.removeClass('show');
+            }
+        });
+        $gotop.click(function() {
             return $("body,html").animate({
                 scrollTop: 0
             }, 300), !1

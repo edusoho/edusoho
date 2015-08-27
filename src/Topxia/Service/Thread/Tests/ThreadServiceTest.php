@@ -398,7 +398,7 @@ class ThreadServiceTest extends BaseTestCase
     }
     public function testGetPostPostionInArticle()    
     {  
-                $user = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -410,10 +410,9 @@ class ThreadServiceTest extends BaseTestCase
           'categoryId'=> '1',
           'source' => 'source',
           'sourceUrl' => ' ',
-          'picture' => 'asdf',
           'status' => 'published',
           'userId' => $user['id'],
-          'publishedTime' => time(),
+          'publishedTime' => 'now',
           'tags' => '1',
         );
         $article = $this->getArticleService()->createArticle($article);
@@ -881,7 +880,6 @@ class ThreadServiceTest extends BaseTestCase
         $coures = $this->getCourseService()->getCourse($coures['id']);
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
-        $this->getClassroomService()->updateClassroomTeachers($classroom['id']);
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'],array($coures['id']));
         $classroom = $this->getClassroomService()->getClassroom($classroom['id']);
         $enabled = $this->getClassroomService()->isCourseInClassroom($coures['id'], $classroom['id']);

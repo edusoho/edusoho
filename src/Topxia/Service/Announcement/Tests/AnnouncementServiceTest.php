@@ -14,7 +14,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetId' => '1',
         	'content' => 'test_announcement',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -29,7 +30,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetId' => '1',
         	'content' => 'test_announcement',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -48,7 +50,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetId' => '1',
         	'content' => 'test_announcement1',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
         );
 
         $announcementInfo2 = array(
@@ -56,7 +59,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetId' => '1',
         	'content' => 'test_announcement2',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
         );
 
         $announcement1 = $this->getAnnouncementService()->createAnnouncement($announcementInfo1);
@@ -74,7 +78,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetId' => '1',
         	'content' => 'test_deleteAnnouncement',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -91,7 +96,8 @@ class AnnouncementServiceTest extends BaseTestCase
         	'targetId' => '1',
         	'content' => 'test_updateAnnouncement',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
         );
 
         $createdAnnouncement = $this->getAnnouncementService()->createAnnouncement($announcementInfo);
@@ -100,7 +106,9 @@ class AnnouncementServiceTest extends BaseTestCase
             'targetId' => '1',
             'content' => 'update_info',
             'startTime'=>time(),
-            'endTime'=>time()+3600*1000);
+            'endTime'=>time()+3600*1000,
+            'url'=> 'http://www.baidu.com'
+        );
         $this->getAnnouncementService()->updateAnnouncement($createdAnnouncement['id'], $updateInfo);
         
         $getAnnouncement = $this->getAnnouncementService()->getAnnouncement($createdAnnouncement['id']);
