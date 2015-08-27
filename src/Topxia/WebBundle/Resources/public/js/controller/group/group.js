@@ -193,6 +193,11 @@
 
                     var postId = $(this).attr('postId');
                     $.post($(this).data('url'), "", function(html) {
+
+                        $("body,html").animate({
+                            scrollTop: $("#post-"+postId).offset().top
+                        }, 300), !1
+
                         $('.reply-post-list-' + postId).replaceWith(html);
 
                     })
