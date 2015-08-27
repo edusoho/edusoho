@@ -21,31 +21,8 @@
   <div class="course-card" style="margin-bottom: 16px;" ng-if="searchCourse.data.length > 0">
     <h4><span class="circle-label"></span>课程</h4>
     <ul class="ui-list ui-border-tb">
-        <li class="ui-border-t" ng-repeat="recommendCourse in searchCourse.data" ng-href="#/course/{{ recommendCourse.id  }}">
-            <div class="ui-list-img">
-                <img ng-src="{{ recommendCourse.middlePicture }}" img-error="course" />
-                  <span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
-                  <span class="discount-label-bottom"></span>
-                  <span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时<br>免费</span>
-                  <span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时<br>打折</span>
-                  </span>
-
-            </div>
-            <div class="ui-list-info">
-                <h2 class="ui-nowrap ui-list-title">{{ recommendCourse.title }}</h2>
-                <p class="bottom price-body">
-                  <span class="origin-price">
-                        {{ recommendCourse.price | formatPrice }}
-                        <s class="discount-color" ng-if="recommendCourse.discountId > 0">
-                          {{ recommendCourse.originPrice | formatPrice }}
-                        </s>
-                  </span>
-
-        <span class="right">
-              {{ recommendCourse.studentNum }}人在学
-        </span>
-                </p>
-            </div>
+        <li class="ui-border-t" ng-repeat="course in searchCourse.data" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+            
         </li>
     </ul>
     <div class="ui-btn-group" ng-if="searchCourse.data.length < searchCourse.total">
@@ -56,25 +33,8 @@
   <div class="course-card classroom-card" ng-if="searchClassRoom.data.length > 0">
     <h4><span class="circle-label"></span>班级</h4>
     <ul class="ui-list ui-border-tb">
-          <li class="ui-border-t" ng-repeat="classRoom in searchClassRoom.data" ng-href="#/classroom/{{ classRoom.id }}">
-              <div class="ui-list-img">
-                  <img ng-src="{{ classRoom.middlePicture }}" img-error="classroom" />
-                    <span class="discount-label" ng-class="course.discount == 0 ? 'free' : 'rebate' " ng-if="classRoom.discountId > 0">
-                            <span class="discount-label-bottom"></span>
-                            <span class="discount-label-content" ng-if="classRoom.discount == 0">限时<br>免费</span>
-                            <span class="discount-label-content" ng-if="classRoom.discount > 0">限时<br>打折</span>
-                    </span>
-                    
-              </div>
-              <div class="ui-list-info">
-                  <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
-                  <p class="bottom price-body">
-                      <span class="origin-price">
-                        {{ classRoom.price | formatPrice }}
-                      </span>
-                  </p>
-                  <p class="price-body">{{ classRoom.studentNum }}人在学</p>
-              </div>
+          <li class="ui-border-t" ng-repeat="classRoom in searchClassRoom.data" ng-href="#/classroom/{{ classRoom.id }}" ng-include=" 'view/classroom_list_item.html' | coverIncludePath ">
+              
           </li>
     </ul>
     <div class="ui-btn-group" ng-if="searchClassRoom.data.length < searchClassRoom.total">

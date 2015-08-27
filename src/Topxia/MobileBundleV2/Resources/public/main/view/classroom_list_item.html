@@ -14,7 +14,8 @@
 		      {{ classRoom.price | formatPrice }}
 		  </span>
       <span class="origin-price" ng-if="classRoom.priceType == 'Coin' ">
-          {{ classRoom.coinPrice | formatCoinPrice : classRoom.coinName }}
+          {{ classRoom.coinPrice | formatCoinPrice }}
+          <small>{{ classRoom.coinName }}</small>
       </span>
     </p>
     <p class="price-body">{{ classRoom.studentNum }}人在学</p>

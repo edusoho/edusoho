@@ -21,7 +21,8 @@
                     {{ classRoom.price | formatPrice }}
                 </span>
                 <span class="price-block" ng-if="classRoom.priceType == 'Coin'">
-                    {{ classRoom.coinPrice | formatCoinPrice : classRoom.coinName }}
+                    {{ classRoom.coinPrice | formatCoinPrice }}
+                    <small>{{ classRoom.coinName }}</small>
                 </span>
             </p>
         </div>

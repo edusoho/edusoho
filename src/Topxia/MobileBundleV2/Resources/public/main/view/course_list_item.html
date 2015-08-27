@@ -17,7 +17,8 @@
 		      </s>
 		</span>
 		<span class="origin-price" ng-if="course.priceType == 'Coin' ">
-		      {{ course.coinPrice | formatCoinPrice : course.coinName }}
+		      {{ course.coinPrice | formatCoinPrice }}
+		      <small>{{ course.coinName }}</small>
 		      <s class="discount-color" ng-if="course.discountId > 0">
 		      	{{ course.originCoinPrice | formatCoinPrice :course.coinName }}
 		      </s>

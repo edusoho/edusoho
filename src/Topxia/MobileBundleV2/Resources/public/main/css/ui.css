@@ -1163,6 +1163,10 @@ a {
   color: #37b97d;
 }
 
+.ui-course .price-block>small {
+  font-size: 13px;
+}
+
 .ui-course .price-block {
   display: inline-block;
   width: 100px;

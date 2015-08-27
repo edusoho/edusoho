@@ -110,6 +110,9 @@ filter('formatCoinPrice', ['$rootScope', function($rootScope){
 
 	return function(price, coinName) {
 		if (price) {
+			if (!coinName) {
+				coinName = "";
+			}
 			price = parseFloat(price);
 			return price <= 0 ? "免费" : price.toFixed(2) + coinName;
 		}
