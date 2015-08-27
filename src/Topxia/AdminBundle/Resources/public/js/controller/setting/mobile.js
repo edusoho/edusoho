@@ -209,14 +209,14 @@ define(function(require, exports, module) {
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传applogo失败，请重试！')
+                Notify.danger('上传app图标失败，请重试！')
             },
             success: function(response) {
                 response = $.parseJSON(response);
                 $("#site-applogo-container").html('<img src="' + response.url + '">');
                 $form.find('[name=applogo]').val(response.path);
                 $("#site-applogo-remove").show();
-                Notify.success('上传applogo成功！');
+                Notify.success('上传app图标成功！');
             }
         });
 
@@ -227,9 +227,9 @@ define(function(require, exports, module) {
                 $("#site-applogo-container").html('');
                 $form.find('[name=applogo]').val('');
                 $btn.hide();
-                Notify.success('删除网校applogo成功！');
+                Notify.success('删除网校app图标成功！');
             }).error(function(){
-                Notify.danger('删除网校applogo失败！');
+                Notify.danger('删除网校app图标失败！');
             });
         });
 
@@ -242,14 +242,14 @@ define(function(require, exports, module) {
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
             accept: 'image/*',
             error: function(file) {
-                Notify.danger('上传appcover失败，请重试！')
+                Notify.danger('上传app封面失败，请重试！')
             },
             success: function(response) {
                 response = $.parseJSON(response);
                 $("#site-appcover-container").html('<img src="' + response.url + '">');
                 $form.find('[name=appcover]').val(response.path);
                 $("#site-appcover-remove").show();
-                Notify.success('上传appcover成功！');
+                Notify.success('上传app封面成功！');
             }
         });
 
@@ -260,9 +260,9 @@ define(function(require, exports, module) {
                 $("#site-appcover-container").html('');
                 $form.find('[name=appcover]').val('');
                 $btn.hide();
-                Notify.success('删除appcover成功！');
+                Notify.success('删除app封面成功！');
             }).error(function(){
-                Notify.danger('删除appcover失败！');
+                Notify.danger('删除app封面失败！');
             });
         });
 
