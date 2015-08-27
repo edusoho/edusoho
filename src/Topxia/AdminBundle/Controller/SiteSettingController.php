@@ -73,7 +73,7 @@ class SiteSettingController extends BaseController
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
-            if(isset($$consult['webchatURI'])){
+            if(!empty($$consult['webchatURI'])){
                 $consult['webchatURI'] = $consult['webchatURI']."?time=".time();
             }
             $this->getSettingService()->set('consult', $consult);
