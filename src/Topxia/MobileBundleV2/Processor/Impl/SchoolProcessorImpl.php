@@ -275,6 +275,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getHotCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => 'normal',
             "recommended"=>0
@@ -285,6 +286,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getLiveRecommendCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "live",
             "recommended"=>1
@@ -295,6 +297,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getRecommendCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "normal",
             "recommended"=>1
@@ -305,6 +308,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getLiveLatestCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "live"
         );
@@ -314,6 +318,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getLatestCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "normal"
         );

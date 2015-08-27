@@ -977,6 +977,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if ($categoryId !=0 ) {
             $conditions['categoryId'] = $categoryId;
         }
+        
         $conditions['title'] = $search;
         
         if (empty($tagId)) {
@@ -1327,6 +1328,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = $this->getParam("start", 0);
         $limit = $this->getParam("limit", 10);
         $condition = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => 'live'
         );
