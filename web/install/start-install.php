@@ -2,7 +2,7 @@
 
 use Composer\Autoload\ClassLoader;
 
-require __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/../../vendor2/autoload.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 $twig = new Twig_Environment($loader, array(

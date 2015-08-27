@@ -6,7 +6,9 @@
     .border-radius;
     .es-box-shadow;
     background-color: #fff;
-    .es-transup;
+    @media (min-width: @screen-md-min) {
+      .es-transup;
+    }
     // 用于近期直播
     &.course-default {
       background-color: @gray-lighter;

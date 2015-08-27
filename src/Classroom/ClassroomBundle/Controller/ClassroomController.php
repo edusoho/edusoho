@@ -386,7 +386,7 @@ class ClassroomController extends BaseController
 
     public function latestMembersBlockAction($classroom, $count = 10)
     {
-        $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 12);
+        $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 20);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
         return $this->render('ClassroomBundle:Classroom:latest-members-block.html.twig', array(
