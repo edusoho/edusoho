@@ -67,7 +67,7 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
         return;
       }
 
-      if (lesson.type == "flash" || "mediaSource" == lesson.mediaSource) {
+      if (lesson.type == "flash" || "qqvideo" == lesson.mediaSource) {
         alert("客户端暂不支持该课时类型，敬请期待新版");
         return;
       }
