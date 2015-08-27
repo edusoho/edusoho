@@ -54,7 +54,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
         $api = CloudAPIFactory::create();
         $resumed = $api->post("/files/{$hash}/resume_upload", $params);
-        if ($resumed['resumed'] !== 'ok') {
+        if (empty($resumed['resumed']) || ($resumed['resumed'] !== 'ok')) {
             return null;
         }
 
