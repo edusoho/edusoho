@@ -225,10 +225,11 @@ class MobileBaseController extends BaseController
         if ($coinEnabled && isset($coinSetting["price_type"])) {
             $priceType = $coinSetting["price_type"];
         }
+        $coinName = isset($coinSetting["coin_name"]) ? $coinSetting["coin_name"] : "虚拟币";
 
         $self = $this;
         $container = $this->container;
-        return array_map(function($course) use ($self, $container, $teachers, $priceType) {
+        return array_map(function($course) use ($self, $container, $teachers, $priceType, $coinName) {
             $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
             $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
@@ -243,6 +244,7 @@ class MobileBaseController extends BaseController
             }
             unset($course['teacherIds']);
             $course["priceType"] = $priceType;
+            $course['coinName'] = $coinName;
             return $course;
         }, $courses);
     }
