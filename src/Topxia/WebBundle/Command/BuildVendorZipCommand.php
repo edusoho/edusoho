@@ -43,7 +43,7 @@ class BuildVendorZipCommand extends BaseCommand
 
             foreach ($dirs as $dir) {
                 $this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
-                if ($i == 8) {
+                if ($i == 7) {
                     $this->filesystem->remove("{$this->distDirectory}/vendor2/{$dir}/Intl");
                 }
             }
