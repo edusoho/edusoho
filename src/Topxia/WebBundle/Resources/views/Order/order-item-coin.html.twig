@@ -1,3 +1,10 @@
+{% if targetType == 'classroom'%}
+  {% set maxRate = classroom.maxRate %}
+{% elseif targetType == 'course' %}
+  {% set maxRate = course.maxRate %}
+{% else %}
+  {% set maxRate = level.maxRate %}
+{% endif %}
 <div class="order-item clearfix">
   <div class="order-item-title" style="width:30%">
     <i class="es-icon es-icon-money"></i>
@@ -9,7 +16,7 @@
       {% if hasPayPassword %}
       本次使用
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
-      <input id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ min(coinPayAmount|default(0),maxCoin|default(0))}}" maxlength="">
+      <input  {% if maxRate == 0%}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ min(coinPayAmount|default(0),maxCoin|default(0))}}" maxlength="">
       {{setting("coin.coin_name")}}
       {% endif %}
       <span class="coin-detail">
