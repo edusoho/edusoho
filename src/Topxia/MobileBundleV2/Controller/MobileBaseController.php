@@ -219,9 +219,16 @@ class MobileBaseController extends BaseController
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         $teachers = $this->simplifyUsers($teachers);
 
+        $priceType = "RMB";
+        $coinSetting = $this->setting("coin");
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+        if ($coinEnabled && isset($coinSetting["price_type"])) {
+            $priceType = $coinSetting["price_type"];
+        }
+
         $self = $this;
         $container = $this->container;
-        return array_map(function($course) use ($self, $container, $teachers) {
+        return array_map(function($course) use ($self, $container, $teachers, $priceType) {
             $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
             $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
@@ -235,7 +242,7 @@ class MobileBaseController extends BaseController
                 }
             }
             unset($course['teacherIds']);
-
+            $course["priceType"] = $priceType;
             return $course;
         }, $courses);
     }
