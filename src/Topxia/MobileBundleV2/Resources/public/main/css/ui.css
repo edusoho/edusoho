@@ -328,7 +328,7 @@ a {
   padding: 0;
 }
 
-.ui-bar .ui-btn {
+.ui-bar .ui-bar-bg .ui-btn {
   font-size: 20px;
 }
 
@@ -374,8 +374,9 @@ a {
 /* ui-bar */
 
 /* ui-button */
-.ui-btn.full {
 
+.ui-btn.btn-gray-light {
+  color: #999;
 }
 
 .ui-btn:before, .ui-btn-lg:before, .ui-btn-s:before {
@@ -1310,13 +1311,10 @@ a {
   height: 42px;
 }
 
-.ui-course-tool .btn-outline{
-  color: #999;
-}
-
-.ui-course-tool .iconfont{
+.ui-course-tool .ui-btn.iconfont{
   font-size: 24px;
 }
+
 .ui-course-tool .course-favorited {
   color: #F2263D;
 }
