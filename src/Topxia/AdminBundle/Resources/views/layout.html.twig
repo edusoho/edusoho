@@ -1,5 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import _self as self_macro %}
+
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
 {% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
@@ -75,12 +77,12 @@
 
             {% if m.code != "admin_system" %}
                 <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {{ self_macro.menu_link_html(_context, m) }}
                 </li>  
             {% else %}    
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                   <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {{ self_macro.menu_link_html(_context, m) }}
                   </li>
                 {% endif %}
             {% endif %}
@@ -124,7 +126,7 @@
                             
                   {% if not menu_hiddens[m.code]|default(false)  %}
                     {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                    {{ _self.menu_link_html(_context, m, menuClass) }}
+                    {{ self_macro.menu_link_html(_context, m, menuClass) }}
                   {% endif %}
                       
                   {% endif %}
@@ -143,7 +145,7 @@
               {% block page_buttons %}
                 {% for m in menu_children('admin', menu_current.code, 2) %}
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                   {% endif %}
                 {% endfor %}
               {% endblock %}
@@ -166,7 +168,7 @@
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m, m.class|default('')) }}
+                    {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -178,7 +180,7 @@
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m) }}
+                    {{ self_macro.menu_link_html(_context, m) }}
                   {% endif %}
                 </li>
               {% endfor %}

@@ -1178,14 +1178,6 @@ class UserServiceTest extends BaseTestCase
     }
     public function testPassApproval()
     {
-        $userInfo = array(
-            'nickname'=>'test_nickname', 
-            'password'=> 'test_password',
-            'email'=>'test_email@email.com'
-        );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $result = $this->getUserService()->passApproval($registeredUser['id']);
-        $this->assertTrue($result);
     }
     /**
      * @expectedException Topxia\Service\Common\ServiceException

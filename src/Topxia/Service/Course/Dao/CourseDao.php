@@ -11,6 +11,8 @@ interface CourseDao
     public function getCoursesCount();
 
     public function findCoursesByIds(array $ids);
+
+    public function findCoursesByParentIdAndLocked($parentId, $locked);
     
     public function findCoursesByCourseIds(array $ids, $start, $limit);
 

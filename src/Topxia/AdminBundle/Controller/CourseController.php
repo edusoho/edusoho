@@ -195,7 +195,6 @@ class CourseController extends BaseController
     public function cancelRecommendAction(Request $request, $id,$target)
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
-
         if($target == 'recommend_list'){
         return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
             'request' => $request
