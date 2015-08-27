@@ -651,6 +651,10 @@ a {
   font-size: 18px ! important;
 }
 
+.ui-classroom.ui-course-tool {
+  z-index: 11;
+}
+
 /* ui-classroom */
 
 /* classroom-card */
