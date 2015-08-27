@@ -73,7 +73,9 @@ class SiteSettingController extends BaseController
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
-            $consult['webchatURI'] = $consult['webchatURI']."?time=".time();
+            if(isset($$consult['webchatURI'])){
+                $consult['webchatURI'] = $consult['webchatURI']."?time=".time();
+            }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
             $this->setFlashMessage('success', 'QQ客服设置已保存！');
