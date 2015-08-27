@@ -16,7 +16,7 @@
       {% if hasPayPassword %}
       本次使用
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
-      <input  {% if maxRate == 0%}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ (min(coinPayAmount|default(0),maxCoin|default(0)))|number_format('2','.',',')}}" maxlength="">
+      <input  {% if maxRate == 0%}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ (min(coinPayAmount|default(0),maxCoin|default(0)))}}" maxlength="">
       {{setting("coin.coin_name")}}
       {% endif %}
       <span class="coin-detail">
@@ -48,7 +48,7 @@
       {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
     </span>
     {% if priceType|default("RMB") == "RMB" %}
-      <p style="font-size:13px;">(本订单最高可以使用<span id= "maxCoin" role="maxCoin">{{maxCoin|number_format(2, '.')|default(0)}}</span>{{setting("coin.coin_name")}})</p>
+      <p style="font-size:13px;">(本订单最高可以使用<span id= "maxCoin" role="maxCoin">{{maxCoin|default(0)}}</span>{{setting("coin.coin_name")}})</p>
     {% endif %}
   </div>
 

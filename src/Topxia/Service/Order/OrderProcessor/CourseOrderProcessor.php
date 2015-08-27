@@ -56,7 +56,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $course["coinPrice"];
         } else if($priceType == "RMB") {
             $totalPrice = $course["price"];
-            $maxCoin = $course['maxRate'] * $course['originPrice'] / 100;
+            $maxCoin = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100);
         }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
