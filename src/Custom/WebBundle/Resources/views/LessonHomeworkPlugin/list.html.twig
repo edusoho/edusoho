@@ -1,0 +1,55 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+
+<h5>课后作业</h5>
+<div class="lesson-about">
+    {% if homework %}
+        共{{ homework.itemCount }}个作业题
+        {% if homeworkResult %}
+            {% if homeworkResult.status == 'reviewing' or homeworkResult.status == 'pairReviewing' %}
+                <span class="text-muted">   作业批改中....</span>
+            {% elseif homeworkResult.status == 'finished' %}
+                <a href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id,userId:app.user.id}) }}"
+                   class="btn btn-primary btn-sm mlm" target="_blank">查看批改结果</a>
+            {% else %}
+                {% if homework.pairReview and now > homework.completeTime %}
+                    <a href="" class="btn btn-primary btn-sm mlm" target="_blank" disabled="true">已经截止</a>
+                {% elseif homeworkItemsResult|default(null) %}
+                    <a href="{{ path('course_homework_continue',{courseId:course.id,homeworkId:homework.id,resultId:homeworkResult.id}) }}"
+                       class="btn btn-primary btn-sm mlm" target="_blank">继续做题</a>
+                {% else %}
+                    <a href="{{ path('course_homework_start_do',{courseId:course.id,homeworkId:homework.id}) }}"
+                       class="btn btn-primary btn-sm mlm" target="_blank">开始做题</a>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if homework.pairReview and now > homework.completeTime %}
+                <a href="" class="btn btn-primary btn-sm mlm" target="_blank" disabled="true">已经截止</a>
+            {% else %}
+                <a href="{{ path('course_homework_start_do',{courseId:course.id,homeworkId:homework.id}) }}"
+                   class="btn btn-primary btn-sm mlm" target="_blank">开始做题</a>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        此课时暂无作业
+    {% endif %}
+</div>
+<div class="lesson-about">
+    {% if homework %}
+        {% if homework.pairReview %}
+            <p class="text-info">作业提交截止日期 : {{ homework.completeTime|date("Y-m-d") }}</p>
+            <p class="text-info">作业互评时间 : {{ homework.completeTime|date("Y-m-d") }}
+                -- {{ homework.reviewEndTime|date("Y-m-d") }}</p>
+        {% endif %}
+    {% endif %}
+</div>
+<h5>课时练习</h5>
+
+<div class="lesson-about">
+    {% if exercise %}
+        　　　<a href="{{ path('course_exercise_start_do',{courseId:course.id,exerciseId:exercise.id}) }}"
+              class="btn btn-primary btn-sm" target="_blank">来{{ exercise.itemCount }}题</a>
+    {% else %}
+        此课时暂无练习
+    {% endif %}
+</div>

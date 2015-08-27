@@ -88,6 +88,7 @@
 	width: 100%;
 	position: absolute;
 	bottom: -31px;
+	height: 11px;
 }
 /*全部课程页*/
 .course-list{
@@ -115,6 +116,7 @@
 }
 .course-detail{
 	padding: 18px 15px 15px;
+	margin-top: 0;
 }
 .score{
 	span{
@@ -163,6 +165,42 @@ label{
 		}
 	}
 }
+
+//作业
+.question-set-rule{
+	ol{
+		li{
+			list-style-type: decimal;
+		}
+	}
+}
+.homework-question-result{
+	float: none;
+}
+.question-set-main{
+	.form-group{
+		margin-top: 15px;
+	}
+	.form-grade{
+		width: 52px;
+		&:focus{
+			outline: none;
+		}
+	}
+}
+.evaluate-time{
+	margin:10px;
+	padding: 10px;
+	border:1px solid #000;
+	font-size: 12px;
+	ul{
+		padding: 0;
+		li{
+			color:#ff0000;
+		}
+	}
+}
+
 .course-list {
 	.course-item{
 		.metas{
@@ -170,5 +208,20 @@ label{
 				  padding: 1px 11px 1px 11px;
 			}
 		}
-		} 
+	} 
+}
+.student-comment{
+	margin-top:20px;
+	p{
+		margin:10px 0;
 	}
+}
+/*作业互评*/
+.mc-form-group{
+	.mc-label,.mc-controls{display: inline-block;}
+}
+.mc-heading{
+	p{
+		display: inline-block;
+	}
+}

@@ -1,0 +1,16 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+    {% include 'CustomWebBundle:Question:question-header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+
+      {% include 'CustomWebBundle:Question:question-fill-answer.html.twig' %}
+
+      {% include 'CustomWebBundle:Question:question-review-edit.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

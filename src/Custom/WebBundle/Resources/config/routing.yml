@@ -1,7 +1,3 @@
-my_teaching_courses:
-    pattern: /my/teaching/courses/{filter}
-    defaults: { _controller: CustomWebBundle:MyTeaching:courses, filter:'normal' }
-
 course_create:
     pattern:  /course/create
     defaults: { _controller: CustomWebBundle:Course:create }
@@ -34,6 +30,34 @@ course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: CustomWebBundle:CourseLessonManage:index }
 
+course_homework_do:
+    pattern: /course/{courseId}/homework/{homeworkId}/do/{resultId}
+    defaults: { _controller: CustomWebBundle:CourseHomework:do }
+
+course_homework_continue:
+    pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
+    defaults: { _controller: CustomWebBundle:CourseHomework:continue }
+
+course_homework_preview:
+    pattern: /course/{courseId}/homework/{homeworkId}/preview
+    defaults: { _controller: CustomWebBundle:CourseHomework:preview }
+
+course_homework_submit:
+    pattern: /course/{courseId}/homework/{homeworkId}/submit
+    defaults: { _controller: CustomWebBundle:CourseHomework:submit }
+
+course_homework_check_list:
+    pattern: /course/{courseId}/check/homework/{status}/list
+    defaults: { _controller: CustomWebBundle:CourseHomework:checkList }
+
+course_homework_result:
+    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}/{userId}
+    defaults: { _controller: CustomWebBundle:CourseHomework:result }
+
+my_teaching_homework_list:
+    pattern: /my/teaching/homework/list
+    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:teachingList }
+
 user_show: 
     pattern:  /user/{id}
     defaults: { _controller: CustomWebBundle:User:show }
@@ -46,13 +70,29 @@ user_favorited:
     pattern:  /user/{id}/favorited
     defaults: { _controller: CustomWebBundle:User:favorited }
 
+my_courses_learning:
+    pattern: /my/courses/learning
+    defaults: { _controller: CustomWebBundle:MyCourse:learning }
+
 my_homework_list:
     pattern: /my/homework/list
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
 
+course_lesson_plugin_homework_list:
+    pattern:  /lessonplugin/homework/list
+    defaults: { _controller: CustomWebBundle:LessonHomeworkPlugin:list }
+
+my_teaching_courses:
+    pattern: /my/teaching/courses/{filter}
+    defaults: { _controller: CustomWebBundle:MyTeaching:courses, filter:'normal' }
+
 course_manage_lesson_homework_create:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
+
+course_manage_lesson_homework_edit:
+    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
+    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:edit }
 
 search:
     pattern:  /search
@@ -66,6 +106,10 @@ course_materials:
     pattern:  /course/{id}/material/
     defaults: { _controller: CustomWebBundle:CourseMaterial:index }
 
+course_homeworks:
+    pattern:  /course/{id}/homeworks/
+    defaults: { _controller: CustomWebBundle:Homework:index }
+
 course_review_list:
     pattern:  /course/{id}/reviews/
     defaults: { _controller: CustomWebBundle:CourseReview:index }
@@ -77,3 +121,24 @@ course_notes:
 course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: CustomWebBundle:CourseInfo:index }
+
+homework_pair_review_randomize:
+    pattern:  /homeworks/{homeworkId}/pair_reviews/randomize
+    defaults: { _controller: CustomWebBundle:HomeworkPairReview:randomize }
+
+homework_pair_review_create:
+    pattern:  /homeworks_results/{homeworkResultId}/pair_reviews/create
+    defaults: { _controller: CustomWebBundle:HomeworkPairReview:create }
+    methods: [POST]
+
+homework_review_create:
+    pattern: /homework_results/{homeworkResultId}/reviews/create
+    defaults: { _controller: CustomWebBundle:HomeworkReview:create }
+
+# course_homework_check:
+#     pattern: /course/{courseId}/homework/{homeworkId}/check/{userId}
+#     defaults: { _controller: CustomWebBundle:HomeworkReview:create }
+
+homework_review_check:
+    pattern: /homework_results/{homeworkResultId}/reviews/check
+    defaults: { _controller: CustomWebBundle:HomeworkReview:check }

@@ -1,0 +1,45 @@
+.homework-time{
+	.homework-content{
+		display: inline-block;
+		
+		p{
+			font-size: 12px;
+			padding-left: 40px;
+		}
+		.red{
+			color: #ff0000;
+		}
+	}
+	.homework-btn{
+		float: right;
+    margin-top: 40px;
+     @media (max-width: @screen-xs-max) {
+     	float:none;
+     	margin-top: 0;
+     	margin-left: 40px;
+
+     }
+		a{
+			padding: 4px  6px;
+			border-radius:3px;
+			color: #fff;
+		}
+		.green{
+			background: @bg-primary;
+		}
+		.gary{
+			background: @gray;
+			cursor: default;
+		}
+		.btn-start,.btn-comment{
+			margin-bottom: 10px;
+		}
+	}
+}
+.enter-comment{
+	margin-top: 20px;
+	.t-comment{
+		width: 100%;
+		outline: none;
+	}
+}

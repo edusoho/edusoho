@@ -21,17 +21,16 @@ class CourseManageController extends BaseCourseManageController
 {
 	public function indexAction(Request $request, $id)
 	{
-        return $this->forward('CustomWebBundle:CourseManage:base',  array('id' => $id));
+          return $this->forward('CustomWebBundle:CourseManage:base',  array('id' => $id));
 	}
 
 	public function baseAction(Request $request, $id)
 	{
-        $course = $this->getCourseService()->tryManageCourse($id);
-        $courseSetting = $this->getSettingService()->get('course', array());
+            $course = $this->getCourseService()->tryManageCourse($id);
+            $courseSetting = $this->getSettingService()->get('course', array());
 	    if($request->getMethod() == 'POST'){
             $data = $request->request->all();
             if($course['type']=='periodic'){
-                var_dump($course['type']);
                 if($course['rootId']==0)
                     $data['rootId'] = intval($id);
                 if(!empty($data['startTime']))

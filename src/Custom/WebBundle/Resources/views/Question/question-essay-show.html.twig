@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+	{% include 'CustomWebBundle:Question:question-header.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    {% include 'CustomWebBundle:Question:question-essay-answer.html.twig' %}
+{# 	{% if itemResult.teacherSay|default(null) %}
+		<div  class="question-eassy-form-control question-teacher-say-input">
+			<div class="teacher-say-text">老师评语:</div>
+			{{ itemResult.teacherSay }}
+		</div> 
+	{% endif %} #}
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
