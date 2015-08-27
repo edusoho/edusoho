@@ -671,14 +671,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
 
-        return $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
+        /*$testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
             'score' => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
             'checkTeacherId' => $teacherId,
             'checkedTime' => time(),
             'teacherSay' => $teacherSay
-        ));
+        ));*/
+        $smsType = 'sms_testpaper_check';
+        if($this->getSmsService()->isOpen($smsType)){
+            $this->dispatchEvent(
+                'testpaper.check', 
+                new ServiceEvent($testpaperResult)
+            );
+        }
+
+        return $testpaperResult;
     }
 
     public function submitTestpaperAnswer($id, $answers)
@@ -998,4 +1007,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getSmsService()
+    {
+        return $this->createService('Sms.SmsService');
+    }
 }

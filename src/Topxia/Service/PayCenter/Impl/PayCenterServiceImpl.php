@@ -82,9 +82,15 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	        if ($order['status'] == 'paid' && $processor) {
 	            $processor->doPaySuccess($success, $order);
 	        }
+
 	        if($lock){
 	        	$connection->commit();
 	    	}
+
+	    	if ($success && ($this->getSmsService()->isOpen('sms_order_pay_success'))) {
+				$this->dispatchEvent("order.pay.success", $order);
+	    	}
+	    	
 	        return array($success, $order);
         }catch (\Exception $e) {
         	if($lock){
@@ -256,5 +262,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     protected function getCouponService()
     {
         return $this->createService('Coupon:Coupon.CouponService');
+    }
+
+    protected function getSmsService()
+    {   
+        return $this->createService('Sms.SmsService');
     }
 }

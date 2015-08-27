@@ -111,12 +111,9 @@ class EduCloudController extends BaseController
                 'sms_live_lesson_publish' => 'off',
                 'sms_live_play_one_day' => 'off',
                 'sms_live_play_one_hour' => 'off',
-                'sms_homework_correct' => 'off',
-                'sms_testpaper_correct' => 'off',
-                'sms_course_buy_receipt' => 'off',
-                'sms_classroom_buy_receipt' => 'off',
-                'sms_vip_buy_receipt' => 'off',
-                'sms_coin_buy_receipt' => 'off',
+                'sms_homework_check' => 'off',
+                'sms_testpaper_check' => 'off',
+                'sms_order_pay_success' => 'off',
 
             );
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
