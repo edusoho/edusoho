@@ -135,7 +135,7 @@ a {
 
 /** ui-dialog **/
 .ui-dialog.full {
-  background: rgba(0,0,0,0);
+  background: #fff;
 }
 
 .ui-dialog.full .ui-dialog-cnt{
@@ -644,11 +644,15 @@ a {
 }
 
 .ui-classroom .course-price {
-  width: 15%;
-  font-size: 18px ! important;
-  display: inline-block;
+  right: 8px;
   position: absolute;
   text-align: center;
+  display: inline-block;
+  font-size: 18px ! important;
+}
+
+.ui-classroom.ui-course-tool {
+  z-index: 11;
 }
 
 /* ui-classroom */
@@ -1157,6 +1161,10 @@ a {
 .ui-course .course-price {
   font-size: 24px;
   color: #37b97d;
+}
+
+.ui-course .price-block>small {
+  font-size: 13px;
 }
 
 .ui-course .price-block {

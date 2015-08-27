@@ -11,32 +11,7 @@
 	<div class="course-card">
 		<h4><span class="circle-label"></span>推荐</h4>
 		<ul class="ui-list ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="recommendCourse in recommedCourses" ng-href="#/course/{{ recommendCourse.id  }}">
-		        <div class="ui-list-img">
-		        		<img ng-src="{{ recommendCourse.middlePicture }}" img-error="course" />
-		            	<span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
-					      	<span class="discount-label-bottom"></span>
-					      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时<br>免费</span>
-					      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时<br>打折</span>
-			            </span>
-
-		        </div>
-		        <div class="ui-list-info">
-		            <h2 class="ui-nowrap ui-list-title">{{ recommendCourse.title }}</h2>
-		            <p class="bottom price-body">
-		            	<span class="origin-price">
-									      {{ recommendCourse.price | formatPrice }}
-									      <s class="discount-color" ng-if="recommendCourse.discountId > 0">
-									      	{{ recommendCourse.originPrice | formatPrice }}
-									      </s>
-									</span>
-
-				<span class="right">
-					<!-- <i class="iconfont icon-person"></i> -->
-				      {{ recommendCourse.studentNum }}人在学
-				</span>
-		            </p>
-		        </div>
+		    <li class="ui-border-t" ng-repeat="course in recommedCourses" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="recommedCourses.length > 0">
@@ -49,30 +24,7 @@
 		<list-empty-view data="latestCourses" title="暂时没有最新课程">
         </list-empty-view>
 		<ul class="ui-list ui-border-tb">
-		    <li class="ui-border-t" ng-repeat="latestCourse in latestCourses" ng-href="#/course/{{ latestCourse.id  }}">
-		        <div class="ui-list-img">
-		        	<img ng-src="{{ latestCourse.middlePicture }}" img-error="course" />
-		            <span class="discount-label" ng-class="recommendCourse.discount == 0 ? 'free' : 'rebate' " ng-if="recommendCourse.discountId > 0">
-				      	<span class="discount-label-bottom"></span>
-				      	<span class="discount-label-content" ng-if="recommendCourse.discount == 0">限时<br>免费</span>
-				      	<span class="discount-label-content" ng-if="recommendCourse.discount > 0">限时<br>打折</span>
-					</span>
-		        </div>
-		        <div class="ui-list-info">
-		            <h2 class="ui-nowrap ui-list-title">{{ latestCourse.title }}</h2>
-		            <p class="bottom price-body">
-		            	<span class="origin-price">
-				      {{ latestCourse.price | formatPrice }}
-				      <s class="discount-color" ng-if="latestCourse.discountId > 0">
-				      	{{ latestCourse.originPrice | formatPrice }}
-				      </s>
-				</span>
-
-				<span class="right">
-				      {{ latestCourse.studentNum }}人在学
-				</span>
-		            </p>
-		        </div>
+		    <li class="ui-border-t" ng-repeat="course in latestCourses" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="latestCourses.length > 0">

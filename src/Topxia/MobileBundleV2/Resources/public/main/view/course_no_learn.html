@@ -15,7 +15,13 @@
         <div class="item-body">
             <p class="course-title">{{ course.title }}</p>
             <p class="course-price">
-                <span class="price-block">{{ course.price | formatPrice }}</span>
+                <span class="price-block" ng-if="course.priceType != 'Coin'">
+                    {{ course.price | formatPrice }}
+                </span>
+                <span class="price-block" ng-if="course.priceType == 'Coin'">
+                    {{ course.coinPrice | formatCoinPrice }}
+                    <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
+                </span>
                 <span ng-if="discount" class="discount-type discount">
 	    			{{ discount.type | coverDiscount : course.discount }}</span>
                 <span ng-if="discount" class="discount-type type">{{ discount.name }}</span>

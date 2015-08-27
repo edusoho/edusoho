@@ -154,6 +154,8 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 {	
 	var self = this;
 	this.__proto__ = new BasePayController();
+
+	$scope.priceType = "RMB";
 	$scope.payMode = "alipay";
 
 	this.loadOrder = function() {
@@ -163,6 +165,10 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		}, function(data) {
 			$scope.data = data;
 			$scope.coin = data.coin;
+			if (data.coin && data.coin.priceType) {
+				$scope.priceType = data.coin.priceType;
+				$scope.payMode = "Coin" == $scope.priceType ? "coin" : "alipay";
+			}
 			self.changePrice($scope.payMode);
 			$scope.orderLabel = self.getOrderLabel($stateParams.targetType);
 		});
@@ -187,12 +193,11 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 
 	this.changePrice = function(payMode) {
 		var price = $scope.data.orderInfo.price;
-		if (payMode == "coin" && $scope.coin) {
-			$scope.payPrice = price * $scope.coin.cashRate;
-		} else {
-			var couponPrice = $scope.coupon ? $scope.coupon.decreaseAmount : 0;
-			$scope.payPrice = price > couponPrice ? price - couponPrice : 0;
+		if ($scope.coin && "Coin" != $scope.priceType && payMode == "coin") {
+			price = price * $scope.coin.cashRate;
 		}
+		var couponPrice = $scope.coupon ? $scope.coupon.decreaseAmount : 0;
+		$scope.payPrice = price > couponPrice ? price - couponPrice : 0;
 	}
 
 	$scope.selectCoupon = function() {
@@ -202,6 +207,10 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 	}
 
 	$scope.changePayMode = function() {
+		if ("Coin" == $scope.priceType) {
+			return;
+		}
+
 		if ($scope.payMode == "coin") {
 			$scope.payMode = "alipay";
 		} else {

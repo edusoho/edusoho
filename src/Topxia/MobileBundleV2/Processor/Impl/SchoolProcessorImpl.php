@@ -253,7 +253,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
 
-        $courseIds = explode(",", $mobile['courseIds']);
+        $courseIds = explode(",", isset($mobile['courseIds']) ? $mobile['courseIds'] : "");
         $courses = $this->controller->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses,'id');
         $sortedCourses = array();
@@ -275,6 +275,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getHotCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => 'normal',
             "recommended"=>0
@@ -285,6 +286,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getLiveRecommendCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "live",
             "recommended"=>1
@@ -295,6 +297,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getRecommendCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "normal",
             "recommended"=>1
@@ -305,6 +308,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getLiveLatestCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "live"
         );
@@ -314,6 +318,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     public function getLatestCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => "normal"
         );

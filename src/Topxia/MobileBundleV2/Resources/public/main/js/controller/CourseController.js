@@ -195,8 +195,11 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     var self = this;
 
     this.goToPay = function() {
-      if ($scope.course.price <= 0) {
-        self.payCourse($scope.course.price, "course", $stateParams.courseId);
+      var course = $scope.course;
+      var priceType = course.priceType;
+      var price = "Coin" == priceType ? course.coinPrice : course.price;
+      if (price <= 0) {
+        self.payCourse(price, "course", $stateParams.courseId);
       } else {
         $state.go("coursePay", { targetId : $scope.course.id, targetType : 'course' });
       }
@@ -397,8 +400,11 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
 
     $scope.signDate = new Date();
     this.goToPay = function() {
-      if ($scope.classRoom.price <= 0) {
-        self.payCourse($scope.classRoom.price, "classroom", $stateParams.classRoomId);
+      var classRoom = $scope.classRoom;
+      var priceType = classRoom.priceType;
+      var price = "Coin" == priceType ? classRoom.coinPrice : classRoom.price;
+      if (price <= 0) {
+        self.payCourse(price, "classroom", $stateParams.classRoomId);
       } else {
         $state.go("coursePay", { targetId : $scope.classRoom.id, targetType : 'classroom' });
       }

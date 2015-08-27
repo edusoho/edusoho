@@ -17,7 +17,13 @@
         <div class="item-body">
             <p class="course-title">{{ classRoom.title }}</p>
             <p class="course-price" ng-if="!member">
-                <span class="price-block">{{ classRoom.price | formatPrice }}</span>
+                <span class="price-block" ng-if="classRoom.priceType != 'Coin'">
+                    {{ classRoom.price | formatPrice }}
+                </span>
+                <span class="price-block" ng-if="classRoom.priceType == 'Coin'">
+                    {{ classRoom.coinPrice | formatCoinPrice }}
+                    <small ng-if="classRoom.coinPrice > 0">{{ classRoom.coinName }}</small>
+                </span>
             </p>
         </div>
         <div class="service-body ui-border-t" ng-if="classRoom.service.length > 0" ui-service-panel>
