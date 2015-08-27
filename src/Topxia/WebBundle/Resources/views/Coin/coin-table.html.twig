@@ -5,12 +5,12 @@
       <table class="table table-striped">
         <thead>
         <tr>
-          <th>名称</th>
-          <th>创建时间</th>
-          <th>状态</th>
-          <th>价格<small class="text-muted">(元)</small></th>
-          <th>购买者</th>
-          <th>支付方式</th>
+          <th>{{'名称'|trans}}</th>
+          <th>{{'创建时间'|trans}}</th>
+          <th>{{'状态'|trans}}</th>
+          <th>{{'价格'|trans}}<small class="text-muted">({{'元'|trans}})</small></th>
+          <th>{{'购买者'|trans}}</th>
+          <th>{{'支付方式'|trans}}</th>
           
           {# <th>查看</th> #}
         </tr>
@@ -20,7 +20,7 @@
        <tr style="word-break: break-all;word-wrap: break-word;">
           <td ><strong>{{order.title}}</strong>
             <br>
-            <span class="text-muted text-sm">订单号：{{order.sn}}</span>
+            <span class="text-muted text-sm">{{'订单号：'|trans}}{{order.sn}}</span>
           </td>
            <td>
             <span class="text-muted text-sm">{{order.createdTime|date('Y-m-d H:i:s')}}</span>
@@ -54,7 +54,7 @@
 <div class="well" style="text-align:center;">
 
 
-虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
+{{'虚拟币未开启，请先在'|trans}}<a href="{{ path('admin_coin_model') }}"> {{'系统'|trans}}-{{'账务设置'|trans}}-{{'虚拟币'|trans}}-{{'使用方式'|trans}}  </a>{{'中设置开启'|trans}}
 
 </div>
 {% endif %}
