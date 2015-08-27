@@ -116,7 +116,8 @@ class ClassroomAdminController extends BaseController
 
             $classroom = array(
                 'title' => $myClassroom['title'],
-                'private' => $myClassroom['private'],
+                'showable' => $myClassroom['showable'],
+                'buyable' => $myClassroom['buyable']
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
