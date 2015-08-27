@@ -556,6 +556,7 @@ class CourseController extends CourseBaseController
 			$canExit = false;
 		}
 
+		$classroom = $this->getClassroomService()->findCoursesByCoursesIds(array($course['id'])) ?: array();
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -565,7 +566,8 @@ class CourseController extends CourseBaseController
 			'manage' => $manage,
 			'isNonExpired' => $isNonExpired,
 			'vipChecked' => $vipChecked,
-			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
+			'isAdmin' => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN'),
+			'classroom'=>$classroom
 		));
 	}
 
