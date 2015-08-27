@@ -15,7 +15,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         return array(
             'course.lesson.create' => array('onCourseLessonCreate', 0),
             'course.lesson.delete' => array('onCourseLessonDelete', 0),
-            'course.lesson.update'=> 'onCourseLessonUpdate',
+            'course.lesson.update' => 'onCourseLessonUpdate',
+            'course.lesson.publish' => 'onCourseLessonPublish',
+            'course.lesson.unpublish' =>'onCourseLessonUnpublish',
             'course.lesson_start' => 'onLessonStart',
             'course.lesson_finish' =>'onLessonFinish',
             'course.lesson.replay'=>'onCourseLessonReplay'
@@ -107,14 +109,21 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
-            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
-            foreach ($courseIds as $key=>$courseId) {
-                $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
-            } 
-        }
+        $this->lessonUpdate();
+    }
+
+    public function onCourseLessonPublish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $this->lessonUpdate();
+    }
+
+    public function onCourseLessonUnpublish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $return = $this->lessonUpdate();
+        var_dump($return);
+        exit();
     }
 
     public function onLessonStart(ServiceEvent $event)
@@ -165,6 +174,19 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
     }
 
+
+    protected function lessonUpdate($lesson)
+    {
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
+            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            foreach ($courseIds as $key=>$courseId) {
+                $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
+            } 
+        }
+        return true;
+    }
 
     protected function simplifyCousrse($course)
     {
