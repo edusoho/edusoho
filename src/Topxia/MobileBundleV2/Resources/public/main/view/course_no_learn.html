@@ -23,11 +23,19 @@
                     <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
                 </span>
                 <span ng-if="discount" class="discount-type discount">
-	    			{{ discount.type | coverDiscount : course.discount }}</span>
-                <span ng-if="discount" class="discount-type type">{{ discount.name }}</span>
+	    			{{ discount.type | coverDiscount : course.discount }}
+                </span>
+                <span ng-if="discount" class="discount-type type">
+                    {{ discount.name }}
+                </span>
             </p>
             <p ng-if="discount" class="discount-body">
-                <s class="price-block">{{ course.originPrice | formatPrice }}</s>
+                <s class="price-block" ng-if="course.priceType != 'Coin'">
+                    {{ course.originPrice | formatPrice }}
+                </s>
+                <s class="price-block" ng-if="course.priceType == 'Coin'">
+                    {{ course.originCoinPrice | formatPrice }}
+                </s>
                 <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
             </p>
         </div>
