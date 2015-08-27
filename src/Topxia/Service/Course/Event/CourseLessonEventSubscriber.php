@@ -98,10 +98,12 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             foreach ($courseIds as $courseId) {
                 $this->getCourseService()->editCourse($courseId, array("lessonNum"=>$course['lessonNum']));
             }
-
-            foreach ($lessonIds as $lessonId) {
+            if($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated'){
+               foreach ($lessonIds as $lessonId) {
                  $this->getCourseService()->deleteLessonReplayByLessonId($lessonId);
+                } 
             }
+            
 
         }
     }

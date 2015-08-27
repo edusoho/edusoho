@@ -2165,6 +2165,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
 
+
     /**
      *　同步课程数据
      */
@@ -2331,6 +2332,16 @@ class CourseServiceTest extends BaseTestCase
         $count = $this->getCourseService()->searchMemberCount(array('courseId'=>1));
         $this->assertEquals(1, $count);
     }
+
+    public function testDeleteMemberByCourseId()
+    {
+        $member = array('courseId'=>1);
+        $member = $this->getCourseService()->createMember($member);
+        $count  = $this->getCourseService()->deleteMemberByCourseId(1);
+        $this->assertEquals(1, $count);
+    }
+
+
 
     public function testDeleteMemberByCourseIdAndUserId()
     {

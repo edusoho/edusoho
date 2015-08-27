@@ -2047,6 +2047,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId, $userId);
 	}
 
+	public function deleteMemberByCourseId($courseId)
+	{
+		return $this->getMemberDao()->deleteMembersByCourseId($courseId);
+	}
+
 	public function becomeStudent($courseId, $userId, $info = array())
 	{
 		$course = $this->getCourse($courseId);
