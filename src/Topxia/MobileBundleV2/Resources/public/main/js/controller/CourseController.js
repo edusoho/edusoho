@@ -158,7 +158,7 @@ function BaseToolController($scope, OrderService, cordovaUtil)
     callback();
   }
 
-  this.joinCourse = function(callback) {
+  this.join = function(callback) {
       if ($scope.user == null) {
         cordovaUtil.openWebView(app.rootPath + "#/login/course");
         return;
@@ -273,7 +273,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     }
 
     $scope.joinCourse = function() {
-      self.joinCourse(function() {
+      self.join(function() {
         self.getModifyUserInfo(function() {
           self.goToPay();
         });
@@ -421,8 +421,8 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
       });
     }
 
-    $scope.joinCourse = function() {
-      self.joinCourse(function() {
+    $scope.joinClassroom = function() {
+      self.join(function() {
         self.goToPay();
       });
     }

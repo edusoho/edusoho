@@ -111,41 +111,18 @@
         </ul>
     </div>
 </div>
-<div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-if="!course.source" ng-controller="CourseToolController">
-    <button class="ui-btn btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
-    </button>
-    <button ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="ui-btn btn-outline btn-col-15 iconfont icon-heart">
-    </button>
-    <button class="ui-btn btn-green" ng-class="course.vipLevelId <= 0 ? 'btn-col-60' : 'btn-col-25' " ng-click="joinCourse()">
-        立即加入
-    </button>
-    <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="vipLeand()" ng-if="course.vipLevelId > 0 ">
-        {{ getVipTitle(course.vipLevelId) }}免费学
-    </button>
+<div ng-if="!course.source" ng-controller="CourseToolController">
+    <div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);">
+        <button class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
+        </button>
+        <button ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-heart">
+        </button>
+        <button class="ui-btn btn-green" ng-class="course.vipLevelId <= 0 ? 'btn-col-60' : 'btn-col-25' " ng-click="joinCourse()">
+            立即加入
+        </button>
+        <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="vipLeand()" ng-if="course.vipLevelId > 0 ">
+            {{ getVipTitle(course.vipLevelId) }}免费学
+        </button>
+    </div>
+    <div ng-include=" 'view/modify_userinfo.html' | coverIncludePath "></div>
 </div>
-<div class="ui-dialog ui-coupon full">
-    <div class="ui-dialog-bg">
-        <div class="ui-dialog-bgcontent"></div>
-    </div>
-    <div class="ui-dialog-cnt">
-        <div class="ui-bar" ui-bar>
-            <div class="ui-bar-bg">
-                <button class="ui-btn btn-outline iconfont icon-fanhui" back="close"></button>
-                <h3 class="title">加入学习</h3>
-                <button class="ui-btn bar-tool btn-outline small" ng-click="updateModifyInfo()">确认</button>
-            </div>
-        </div>
-        <div class="ui-form ui-border-t">
-            <div class="ui-form-item ui-border-b ui-list-divider">
-                温情提示：请填写相关认证资料
-            </div>
-            <div class="ui-form-item ui-border-b" ng-repeat="modifyInfo in modifyInfos">
-                <label>
-                    {{ modifyInfo.title }}
-                </label>
-                <input type="text" ng-model="modifyInfo.content" placeholder="{{ modifyInfo.title }}">
-                <a class="ui-icon-close" ng-click="modifyInfo.content = '' ">
-                </a>
-            </div>
-        </div>
-    </div>

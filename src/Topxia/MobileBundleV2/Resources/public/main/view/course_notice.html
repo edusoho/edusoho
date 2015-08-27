@@ -1,7 +1,7 @@
 <div class="ui-bar" ui-bar>
     <div class="ui-bar-bg">
       <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
-      <h3 class="title">{{ titleType }}消息</h3>
+      <h3 class="title">{{ titleType }}公告</h3>
     </div>
 </div>
 
@@ -19,9 +19,9 @@
           </div>
       </li>
   </ul>
-  <list-empty-view data="notices" title="暂时没有{{ titleType }}消息">
+  <list-empty-view data="notices" title="暂时没有{{ titleType }}公告">
   </list-empty-view>
   <div class="ui-tips ui-tips-info" ng-click="loadMore()" ng-show="showLoadMore">
-      <p>查看更早消息</p>
+      <p>查看更早公告</p>
   </div>
 </div>
