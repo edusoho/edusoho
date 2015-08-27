@@ -14,12 +14,22 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     	$this->getCourseDao()->getConnection()->beginTransaction();
     	try{
     		$course = $this->getCourseService()->getCourse($courseId);
+
+            $deleteQuestions = $this->deleteQuestions($course['id']);
+            
+            $this->getCourseDao()->getConnection()->commit();
+
     	} catch (\Exception $e) {
 
     		$this->getCourseDao()->getConnection()->rollback();
             
             throw $e;
     	}
+    }
+
+    protected function deleteQuestions($courseId)
+    {
+        $this->getQuestionDao()->deleteQuestionsByCourseId();
     }
 
     protected function getCourseService()
@@ -32,8 +42,18 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createDao('Classroom:Classroom.ClassroomDao');
     }
 
+    protected function getQuestionDao()
+    {
+        return $this->createDao('Question.QuestionDao');
+    }
+
     protected function getCourseDao()
     {
         return $this->createDao('Course.CourseDao');
+    }
+
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform.AppService');
     }
 }

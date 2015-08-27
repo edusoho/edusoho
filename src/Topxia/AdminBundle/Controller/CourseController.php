@@ -120,12 +120,17 @@ class CourseController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {   
-        $childCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($id,1);
-         if($childCourse){
-            return $this->createJsonResponse(false);
+        $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($id,1);
+        if($subCourse){
+            return $this->createJsonResponse('Have sub courses');
         } else {
-           $result = $this->getCourseDeleteService()->delete($id);
-           return $this->createJsonResponse(true);
+           $course = $this->getCourseService()->getCourse($id);
+           if($course['status'] == 'closed' && $course['parentId']>0){
+                $result = $this->getCourseDeleteService()->delete($id);
+                return $this->createJsonResponse(true);
+           }else{
+                return $this->createJsonResponse('not remove classroom course');
+           }
         }
     }
 

@@ -41,10 +41,12 @@ define(function(require, exports, module) {
 
 			var $tr = $(this).parents('tr');
 			$.post($(this).data('url'), function(data){
-				if(data){
-					$tr.remove();
+				if(data == 'Have sub courses'){
+					Notify.danger('关联子课程,请先删除子课程');
+				}else if(data == 'not remove classroom course'){
+					Notify.danger('当前课程未移除,请先移除班级课程');
 				}else{
-					Notify.danger('关联子课程,请先删除子课程');	
+					$tr.remove();	
 				}
 			});
 
