@@ -58,7 +58,7 @@
           {% if emptyCourseNum > 0 %}
             {% for i in range(1, emptyCourseNum) %}
               <div class="col-lg-3 col-md-4 col-sm-6 visible-lg">
-                <div class="course-item course-empty">
+                <div class="course-item course-default">
                   <i class="es-icon es-icon-videocam"></i>
                   <br>
                   敬请期待
@@ -136,9 +136,9 @@
                     <div class="media-left">
                       <a href="{{ path('group_show',{id:group.id}) }}">
                         {% if group.logo %}
-                          <img class="group-avatar-md" src="{{file_path(group.logo)}}">
+                          <img class="avatar-square-md" src="{{file_path(group.logo)}}">
                         {% else %}
-                          <img class="group-avatar-md" src="{{asset('assets/img/default/group.png')}}">
+                          <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}">
                         {% endif %}
                       </a>
                     </div>

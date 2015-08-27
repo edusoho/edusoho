@@ -18,7 +18,7 @@
       <input style="display:none">{# Prevent autocompleting #}
       <input type="password" style="display:none">{# Prevent autocompleting #}
       {% if not hasPayPassword %}
-      <div  class="alert alert-warning alert-xs">
+      <div  class="alert alert-warning alert-xs mtm">
           为了保障账户资金安全，请先
         <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">设置支付密码</a>
       </div>
