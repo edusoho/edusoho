@@ -56,10 +56,6 @@
         <p class="mtl"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
       {% endif %}
     </div>
-    {% if consult.webchatURI is not empty %}
-      <div id="bar-weixin-content">
-        <img class="img-responsive" style="margin: 0 auto" src="{{ asset(consult.webchatURI) }}" alt="">
-      </div>
-    {% endif %}
+    
   </div>
 {% endif %}

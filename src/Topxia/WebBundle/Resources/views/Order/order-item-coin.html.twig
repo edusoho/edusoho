@@ -1,5 +1,5 @@
 <div class="order-item clearfix">
-  <div class="order-item-title">
+  <div class="order-item-title" style="width:30%">
     <i class="es-icon es-icon-money"></i>
     <span class="title">{{ setting("coin.coin_name") }}</span>
     <span>（1元 = {{cashRate}}{{setting("coin.coin_name")}}）</span>
@@ -9,7 +9,7 @@
       {% if hasPayPassword %}
       本次使用
       <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
-      <input id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{coinPayAmount|default(0)}}" maxlength="">
+      <input id="coinPayAmount" class="form-control text-center width-input-small" role="coinNum" type="text" name="coinPayAmount" value="{{ min(coinPayAmount|default(0),maxCoin|default(0))}}" maxlength="">
       {{setting("coin.coin_name")}}
       {% endif %}
       <span class="coin-detail">
@@ -33,12 +33,17 @@
       {% endif %}
     </div>
   </div>
-  <div class="order-item-price">
+  <div class="order-item-price" style="width:25%">
     <span class="mrs">抵扣</span>
      {% if priceType|default("RMB") == "RMB" %}<span>￥</span>{% endif %}
     <span role="cash-discount" style="font-size: 24px"></span>
     <span>
       {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
     </span>
+    {% if priceType|default("RMB") == "RMB" %}
+      <p style="font-size:13px;">(本订单最高可以使用<span id= "maxCoin" role="maxCoin">{{maxCoin|default(0)}}</span>{{setting("coin.coin_name")}})</p>
+    {% endif %}
   </div>
+
+  
 </div>   

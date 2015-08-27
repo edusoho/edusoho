@@ -196,9 +196,9 @@ class BuildCommand extends BaseCommand
 
 	public function buildVendorDirectory()
 	{
-		$this->output->writeln('build vendor/ .');
-		$this->filesystem->mkdir("{$this->distDirectory}/vendor");
-		$this->filesystem->copy("{$this->rootDirectory}/vendor/autoload.php", "{$this->distDirectory}/vendor/autoload.php");
+		$this->output->writeln('build vendor2/ .');
+		$this->filesystem->mkdir("{$this->distDirectory}/vendor2");
+		$this->filesystem->copy("{$this->rootDirectory}/vendor2/autoload.php", "{$this->distDirectory}/vendor2/autoload.php");
 
 		$directories = array(
 			'composer',
@@ -226,7 +226,7 @@ class BuildCommand extends BaseCommand
 			'sensio/generator-bundle',
 			'swiftmailer/swiftmailer/lib',
 			'symfony/assetic-bundle',
-			'symfony/icu',
+			//'symfony/icu',
 			'symfony/monolog-bundle',
 			'symfony/swiftmailer-bundle',
 			'symfony/symfony/src',
@@ -237,13 +237,13 @@ class BuildCommand extends BaseCommand
 		);
 
 		foreach ($directories as $dir) {
-			$this->filesystem->mirror("{$this->rootDirectory}/vendor/{$dir}", "{$this->distDirectory}/vendor/{$dir}");
+			$this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
 		}
 
-		$this->filesystem->remove("{$this->distDirectory}/vendor/composer/installed.json");
+		$this->filesystem->remove("{$this->distDirectory}/vendor2/composer/installed.json");
 
 		$finder = new Finder();
-		$finder->directories()->in("{$this->distDirectory}/vendor");
+		$finder->directories()->in("{$this->distDirectory}/vendor2");
 
 		$toDeletes = array();
 		foreach ($finder as $dir) {
@@ -254,13 +254,13 @@ class BuildCommand extends BaseCommand
 
 		$this->filesystem->remove($toDeletes);
 
-		$this->cleanIcuVendor();
+		//$this->cleanIcuVendor();
 
 	}
 
 	private function cleanIcuVendor()
 	{
-		$icuBase = "{$this->distDirectory}/vendor/symfony/icu/Symfony/Component/Icu/Resources/data";
+		$icuBase = "{$this->distDirectory}/vendor2/symfony/icu/Symfony/Component/Icu/Resources/data";
 		$whileFiles = array(
 			'svn-info.txt',
 			'version.txt',
@@ -344,7 +344,7 @@ class BuildCommand extends BaseCommand
 	{
 		$this->output->writeln('build fix PdoSessionHandler .');
 
-		$targetPath = "{$this->distDirectory}/vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php";
+		$targetPath = "{$this->distDirectory}/vendor2/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php";
 		$sourcePath = __DIR__ . "/Fixtures/PdoSessionHandler.php";
 		$this->filesystem->copy($sourcePath, $targetPath, true);
 	}
