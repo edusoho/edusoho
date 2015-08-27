@@ -105,6 +105,16 @@ filter('formatPrice', ['$rootScope', function($rootScope){
 		return price;
 	}
 }]).
+filter('formatCoinPrice', ['$rootScope', function($rootScope){
+
+	return function(price, coinName) {
+		if (price) {
+			price = parseFloat(price);
+			return price <= 0 ? "免费" : price.toFixed(2) + coinName;
+		}
+		return price;
+	}
+}]).
 filter('coverLearnProsser', ['$rootScope', function($rootScope){
 
 	return function(course) {
