@@ -86,8 +86,8 @@
               </div>
              <a 
                 href="javascript:;"
-                {% if targetType == "course" and courses|default(null) %}
-                  data-goto="{{ path('course_show', {id:courses[0].id}) }}" 
+                {% if targetType == "course" and course|default(null) %}
+                  data-goto="{{ path('course_show', {id:course.id}) }}" 
                 {% elseif targetType == "vip" %}
                   data-goto="{{ path('vip_renew') }}"
                 {% elseif targetType == "classroom" %}

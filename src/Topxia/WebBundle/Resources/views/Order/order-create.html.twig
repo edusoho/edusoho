@@ -76,8 +76,8 @@
             <div class="form-group pay clearfix">
               <div class="pull-right controls">
                 <a 
-                  {% if targetType == "course" and courses|default(null) %}
-                    href="{{ path('course_show', {id:courses[0].id}) }}" 
+                  {% if targetType == "course" and course|default(null) %}
+                    href="{{ path('course_show', {id:course.id}) }}" 
                   {% elseif targetType == "vip" %}
                     href="{{ path('vip_renew') }}"
                   {% elseif targetType == "classroom" %}
