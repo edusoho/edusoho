@@ -174,6 +174,15 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
+    public function findQuestionsByCourseId($courseId)
+    {   
+        if((int)$courseId){
+            $target = 'course-'.$courseId;
+        }
+        $sql ="SELECT * FROM {$this->table} WHERE target LIKE '%{$target}%'";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     public function updateQuestionCountByIds($ids, $status)
     {
         if(empty($ids)){ 

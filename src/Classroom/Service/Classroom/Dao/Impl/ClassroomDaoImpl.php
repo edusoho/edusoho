@@ -135,19 +135,6 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
-    public function waveDownClassroom($id, $field, $diff)
-    {
-        $fields = array('hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'noteNum');
-        if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
-        }
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} - ? WHERE id = ? LIMIT 1";
-
-        $this->clearCached();
-
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
-    }
-
     public function deleteClassroom($id)
     {
         $this->clearCached();

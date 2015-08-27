@@ -568,7 +568,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getCourseService()->deleteMemberByCourseId($courseId);
                     $this->getCourseService()->closeCourse($courseId,'classroom');
                     $course = $this->getCourseService()->getCourse($courseId);
-                    $this->getClassroomDao()->waveDownClassroom($classroomId, 'noteNum', $course['noteNum']);
+                    $this->getClassroomDao()->waveClassroom($classroomId, 'noteNum', "-{$course['noteNum']}");
                 }
 
                 $courses = $this->findActiveCoursesByClassroomId($classroomId);

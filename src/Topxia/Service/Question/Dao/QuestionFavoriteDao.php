@@ -17,4 +17,6 @@ interface QuestionFavoriteDao
     public function findFavoriteQuestionsCountByUserId ($id);
 
     public function findAllFavoriteQuestionsByUserId ($id);
+
+    //public function findFavoriteQuestionsByCourseId ($courseId);
 }

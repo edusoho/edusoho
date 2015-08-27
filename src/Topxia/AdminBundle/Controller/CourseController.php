@@ -125,7 +125,7 @@ class CourseController extends BaseController
             return $this->createJsonResponse('Have sub courses');
         } else {
            $course = $this->getCourseService()->getCourse($id);
-           if($course['status'] == 'closed' && $course['parentId']>0){
+           if($course['status'] == 'closed'){
                 $result = $this->getCourseDeleteService()->delete($id);
                 return $this->createJsonResponse(true);
            }else{
