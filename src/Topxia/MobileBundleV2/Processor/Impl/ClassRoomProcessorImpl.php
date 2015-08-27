@@ -439,10 +439,11 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 			return array();
 		}
 
+        $coinSetting = $this->controller->getCoinSetting();
 		$self = $this->controller;
 		$container = $this->getContainer();
 
-		return array_map(function($classroom) use ($self, $container, $isList) {
+		return array_map(function($classroom) use ($self, $container, $isList, $coinSetting) {
 
 			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
             $classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
@@ -463,6 +464,13 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
                     $classroom['service'] = $service;
                 }
             }
+
+            if (!empty($coinSetting)) {
+                $classroom["priceType"] = $coinSetting["priceType"];
+                $classroom["coinName"] = $coinSetting["name"];
+                $classroom["coinPrice"] = (string)((float)$classroom["price"] * (float)$coinSetting["cashRate"]);
+            }
+            
 			return $classroom;
 		}, $classrooms);
 	}
