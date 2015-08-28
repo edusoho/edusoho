@@ -519,8 +519,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
                 return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
             }
-            if (($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1')
-                &&($this->getEduCloudService()->getCloudSmsKey('sms_registration') == 'on')) {
+            if ($this->controller->setting('cloud_sms.sms_enabled') == '1')
+                &&($this->controller->setting('cloud_sms.sms_registration') == 'on')) {
                 $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
                 list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
                 if ($result) {
