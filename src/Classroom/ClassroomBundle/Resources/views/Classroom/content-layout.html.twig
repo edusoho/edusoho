@@ -26,15 +26,16 @@
         {{ render(controller('ClassroomBundle:Classroom:signPage',{classroomId:classroom.id})) }}
       {% endif %}
 
+      {% if is_plugin_installed('ClassroomPlan') %}
+        {{ render(controller('ClassroomPlanBundle:ClassroomPlan:todayUserTaskBlock',{classroomId:classroom.id})) }}
+      {% endif %}
+      
       {{ render(controller('ClassroomBundle:Classroom:teachersBlock',{classroom:classroom})) }}
 
       {{ render(controller('ClassroomBundle:Classroom:latestMembersBlock',{classroom:classroom})) }}
 
       {{ render(controller('ClassroomBundle:Classroom:classroomStatusBlock',{classroom:classroom})) }}
-
-      {% if is_plugin_installed('ClassroomPlan') %}
-        {{ render(controller('ClassroomPlanBundle:ClassroomPlan:todayUserTaskBlock',{classroomId:classroom.id})) }}
-      {% endif %}
+      
     {% endblock %}
   </aside>
 
