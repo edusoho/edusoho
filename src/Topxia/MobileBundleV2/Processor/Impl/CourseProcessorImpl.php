@@ -431,12 +431,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $noteInfos[$i]["createdTime"] = date('c', $note['createdTime']);
             $noteInfos[$i]["lessonTitle"] = $lessons[$note["lessonId"]]["title"];
         }
-        return array(
-            "start" => $start,
-            "limit" => $limit,
-            "total" => $total,
-            'data' => $noteInfos
-        );
+        return $noteInfos;
     }
     
     public function getOneNote()
