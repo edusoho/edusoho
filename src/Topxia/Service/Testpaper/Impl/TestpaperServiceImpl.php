@@ -679,13 +679,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'checkedTime' => time(),
             'teacherSay' => $teacherSay
         ));*/
-        $smsType = 'sms_testpaper_check';
-        if($this->getSmsService()->isOpen($smsType)){
-            $this->dispatchEvent(
-                'testpaper.check', 
-                new ServiceEvent($testpaperResult)
-            );
-        }
+        $this->dispatchEvent(
+            'testpaper.check', 
+            new ServiceEvent($testpaperResult)
+        );
 
         return $testpaperResult;
     }

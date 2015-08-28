@@ -35,11 +35,13 @@ class SmsEventSubscriber implements EventSubscriberInterface
     {
         $testpaperResult = $event->getSubject();
         $smsType = 'sms_testpaper_check';
-        $userId = $testpaperResult['userId'];
-        $user = $this->getUserService()->getUser($userId);
-        if ((isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) != 0))) {
-            $to = $user['verifiedMobile'];
-            $this->getSmsService()->smsSend($smsType, $to, array($userId));
+        if ($this->getSmsService()->isOpen($smsType)) {
+            $userId = $testpaperResult['userId'];
+            $user = $this->getUserService()->getUser($userId);
+            if ((isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) != 0))) {
+                $to = $user['verifiedMobile'];
+                $this->getSmsService()->smsSend($smsType, $to, array($userId));
+            }
         }
     }
 
