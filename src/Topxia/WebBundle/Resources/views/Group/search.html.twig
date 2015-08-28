@@ -4,36 +4,27 @@
 
   <div class="panel panel-default panel-lg">
     <div class="panel-heading">
-
-      <div class="row">
-        <div class="col-sm-8"><h1>小组搜索</h1></div>
-        <div class="col-sm-4">
-          <form class="form-inline pull-right" action="{{path('group_search_group')}}" method="get">
-            <div class="form-group">
-              <div class="input-group group-search es-box-shadow">
-                <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit">
-                    <span class="glyphicon glyphicon-search"></span>
-                  </button>
-                </span>
-
-              </div>
-            </div>
-          </form>
+      <h2 class="panel-title">小组搜索</h2>
+      <form class="form-inline more hidden-xs" action="{{path('group_search_group')}}" method="get">
+        <div class="form-group">
+          <div class="input-group group-search">
+            <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
+          </div>
         </div>
-      </div>
-
+      </form>
     </div>
 
     <div class="panel-body">
       {% if groups %}
       <div class="row">
         {% for group in groups %}
-          <div class="col-md-3">
-
+          <div class="col-md-3 col-sm-4">
             {% include 'TopxiaWebBundle:Group:group-media-small.html.twig'  %}
-            
           </div>
         {% endfor %}
       </div>
