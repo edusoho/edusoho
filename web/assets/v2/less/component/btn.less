@@ -4,20 +4,17 @@
   .es-transition;
   &:hover,
   &:focus,
+  &.focus,
   &.active {
     .es-transition;
+    text-decoration: none;
   }
   &.btn-lg {
     font-size: 14px;
   }
-  &.active {
-    .box-shadow(none);
-  }
-  // 用于图标按钮
-  &.btn-mini {
-    padding: 0 3px;
-    line-height: 1.42857143;
-  }
+  // &.active {
+  //   .box-shadow(none);
+  // }
   >i {
     font-size: 14px;
   }
@@ -26,75 +23,88 @@
 .btn-link {
   color: @gray-darker;
   &:hover, 
-  &:focus {
+  &:focus,
+  &.focus, {
     color: @brand-primary;
     text-decoration: none;
   }
 }
 
-.btn.btn-default {
+.btn-default {
   color: @gray-dark;
-  background-color: @gray-lighter;
-  border-color: darken(@gray-lighter,10%);
+  background-color: #f5f5f5;
+  border-color: darken(#f5f5f5,10%);
   &:hover,
   &:focus,
+  &.focus,
   &.active {
-    background-color: darken(@gray-lighter,5%);
+    color: @gray-dark;
+    background-color: darken(#f5f5f5,8%);
   }
 }
 
-.btn.btn-primary {
+.btn-primary {
   border-color: darken(@brand-primary,10%);
   background-color: @brand-primary;
   color: #fff;
   &:hover,
   &:focus,
+  &.focus,
   &.active {
-    background-color: darken(@brand-primary,5%);
+    color: #fff;
+    background-color: darken(@brand-primary,8%);
   }
 }
 
-.btn.btn-success {
+.btn-success {
   border-color: darken(@brand-success,10%);
   background-color: @brand-success;
   color: #fff;
   &:hover,
   &:focus,
+  &.focus,
   &.active {
-    background-color: darken(@brand-success,5%);
+    color: #fff;
+    background-color: darken(@brand-success,8%);
   }
 }
 
-.btn.btn-info {
+.btn-info {
   border-color: darken(@brand-info,10%);
   background-color: @brand-info;
   color: #fff;
   &:hover,
   &:focus,
+  &.focus,
   &.active {
-    background-color: darken(@brand-info,5%);
+    color: #fff;
+    background-color: darken(@brand-info,8%);
   }
 }
 
-.btn.btn-warning {
+.btn-warning {
   border-color: darken(@brand-warning,10%);
   background-color: @brand-warning;
   color: #fff;
   &:hover,
   &:focus,
+  &.focus,
   &.active {
-    background-color: darken(@brand-warning,5%);
+    color: #fff;
+    background-color: darken(@brand-warning,8%);
   }
 }
 
-.btn.btn-danger {
+.btn-danger {
   border-color: darken(@brand-danger,10%);
   background-color: @brand-danger;
   color: #fff;
   &:hover,
   &:focus,
+  &.focus,
   &.active {
-    background-color: darken(@brand-danger,5%);
+    color: #fff;
+    background-color: darken(@brand-danger,8%);
   }
 }
 

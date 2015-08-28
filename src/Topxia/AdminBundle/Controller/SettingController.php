@@ -10,6 +10,8 @@ use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
+
 
 class SettingController extends BaseController
 {
@@ -23,6 +25,10 @@ class SettingController extends BaseController
             'enabled' => 0, // 网校状态
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
+            'appname' => '',
+            'appabout' =>'',
+            'applogo' =>'',
+            'appcover' =>'',
             'notice' => '', //公告
             'splash1' => '', // 启动图1
             'splash2' => '', // 启动图2
@@ -34,6 +40,7 @@ class SettingController extends BaseController
         $mobile = array_merge($default, $settingMobile);
         if ($request->getMethod() == 'POST') {
             $settingMobile = $request->request->all();
+
             $mobile = array_merge($settingMobile,$operationMobile,$courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
@@ -45,8 +52,11 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
+            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
         ));
     }
 
