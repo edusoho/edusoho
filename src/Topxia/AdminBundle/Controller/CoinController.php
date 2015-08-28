@@ -160,7 +160,8 @@ class CoinController extends BaseController
             }else{
                 $coinSettings['price_type']="Coin";
                 $coinSettings['cash_model']="currency";
-                if (isset($data['course-cash'])){
+                if (isset($data['item-cash'])){
+                    $data['course-cash'] = $data['item-cash'];
                     $this->updateCoursesCoinPrice($data["course-cash"]);
                 }
             }
