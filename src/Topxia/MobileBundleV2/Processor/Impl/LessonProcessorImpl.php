@@ -257,7 +257,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		$lessons = $this->filterLessons($lessons, $files);
 		return array(
 			"lessons"=>array_values($lessons),
-			"learnStatuses"=>empty($learnStatuses) ? array("0"=>"") : $learnStatuses
+			"learnStatuses"=>empty($learnStatuses) ? array("0"=>"learning") : $learnStatuses
 			);
 	}
 
