@@ -76,7 +76,9 @@ filter('lessonType', function() {
 			var currentTime = new Date().getTime();
 
 			if (startTime > currentTime) {
-				returnStr = new Date(startTime).Format("MM月dd号 hh:mm");;
+				var showDate = new Date();
+				showDate.setTime(startTime);
+				returnStr = showDate.Format("MM月dd号 hh:mm");;
 			} else if (startTime <= currentTime && endTime >= currentTime) {
 				returnStr = "<div class='ui-label' >直播中</div>";
 			}else if (endTime < currentTime) {
