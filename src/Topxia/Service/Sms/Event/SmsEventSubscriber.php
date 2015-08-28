@@ -15,16 +15,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         return array(
             'testpaper.check' => 'onTestpaperCheck',
             'order.pay.success' => 'onOrderPaySuccess',
-            'course.note.update' => 'onCourseNoteUpdate',
-            'course.note.delete' => 'onCourseNoteDelete',
-            'course.note.liked' => 'onCourseNoteLike',
-            'course.note.cancelLike' => 'onCourseNoteCancelLike',
-            'course.update' => 'onCourseUpdate',
-            'course.teacher.update' => array('onCourseTeacherUpdate', 0),
-            'material.create' => 'onMaterialCreate',
-            'material.delete' => 'onMaterialDelete',
-            'chapter.create' => 'onChapterCreate',
-            'chapter.delete' => 'onChapterDelete',
+            'course.lesson.publish' => 'onCourseLessonPublish',
             'chapter.update' => 'onChapterUpdate',
             'course.member.create' => 'onCourseMemberCreate',
             'course.member.delete' => 'onCourseMemberDelete'
@@ -33,9 +24,9 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
     public function onTestpaperCheck(ServiceEvent $event)
     {
-        $testpaperResult = $event->getSubject();
         $smsType = 'sms_testpaper_check';
-        if ($this->getSmsService()->isOpen($smsType)) {
+        if($this->getSmsService()->isOpen($smsType)){
+            $testpaperResult = $event->getSubject();
             $userId = $testpaperResult['userId'];
             $user = $this->getUserService()->getUser($userId);
             if ((isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) != 0))) {
@@ -61,27 +52,10 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseNoteUpdate(ServiceEvent $event)
+    public function onCourseLessonPublish(ServiceEvent $event)
     {
-        $note = $event->getSubject();
-        $preStatus = $event->getArgument('preStatus');
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
-        $course = $this->getCourseService()->getCourse($note['courseId']);
-        if ($classroom && $note['status'] && !$preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
-        }
-
-        if ($classroom && !$note['status'] && $preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
-        }
-
-        if ($course && $note['status'] && !$preStatus) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
-        }
-
-        if ($course && !$note['status'] && $preStatus) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
-        }
+        $lesson = $event->getSubject();
+        $smsType = 'sms_order_pay_success';
 
     }
 

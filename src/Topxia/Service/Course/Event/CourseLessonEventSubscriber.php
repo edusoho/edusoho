@@ -111,21 +111,19 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $this->lessonUpdate();
+        $this->lessonUpdate($lesson);
     }
 
     public function onCourseLessonPublish(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $this->lessonUpdate();
+        $this->lessonUpdate($lesson);
     }
 
     public function onCourseLessonUnpublish(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $return = $this->lessonUpdate();
-        var_dump($return);
-        exit();
+        $this->lessonUpdate($lesson);
     }
 
     public function onLessonStart(ServiceEvent $event)
