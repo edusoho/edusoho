@@ -404,60 +404,21 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     public function smsSend()
     {
         $phoneNumber = $this->getParam('phoneNumber');
-        if ($this->request->getMethod() == 'POST') {
-            if ($this->getCloudSmsKey('sms_enabled') != '1') {
-                return $this->createErrorResponse('', "短信服务被管理员关闭了");
-            }
-
-            $currentUser = $this->getUserService()->getCurrentUser();
-            $currentTime = time();
-
-            $smsType = 'sms_registration';
-            $this->checkSmsType($smsType, $currentUser);
-
-            $targetSession = $this->request->getSession()->get($smsType);
-            $smsLastTime = $targetSession['sms_last_time'];
-            $allowedTime = 120;
-
-            if (!$this->checkLastTime($smsLastTime, $currentTime, $allowedTime)) {
-                return $this->createErrorResponse('send_frequently', "请等待120秒再申请");
-            }
-
-            if (!$this->checkPhoneNum($phoneNumber)) {
-                return $this->createErrorResponse('phone_invalid', "手机号格式错误");
-            }
-
-            if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
-                return $this->createErrorResponse('phone_exist', "该手机号码已被其他用户绑定");
-            }
-            
-            $smsCode = $this->generateSmsCode();
-            try {
-                $result = $this->getEduCloudService()->sendSms($phoneNumber, $smsCode, $smsType);
-                if (isset($result['error'])) {
-                    return $this->createErrorResponse('send_error', "发送失败, {$result['error']}");
-                }
-            } catch (\RuntimeException $e) {
-                $message = $e->getMessage();
-                return $this->createErrorResponse('send_error', "发送失败, {$message}");
-            }
-
-            $result['to'] = $phoneNumber;
-            $result['smsCode'] = $smsCode;
-            $result['userId'] = $currentUser['id'];
-            if ($currentUser['id'] != 0) {
-                $result['nickname'] = $currentUser['nickname'];
-            }
-            $this->getLogService()->info('sms', $smsType, "userId:{$currentUser['id']},对{$phoneNumber}发送用于{$smsType}的验证短信{$smsCode}", $result);
-            $currentTime = time();
-            $this->request->getSession()->set($smsType, array(
-                'to' => $phoneNumber,
-                'sms_code' => $smsCode,
-                'sms_last_time' => $currentTime
+        try {
+            $response = $this->controller->forward('TopxiaWebBundle:EduCloud:smsSend', array(
+                'to'  => $phoneNumber,
+                'sms_type' => 'sms_registration'
             ));
+            $content = $response->getContent();
+            if ($content && isset($content["error"])) {
+                return $this->createErrorResponse('error', $content["error"]);
+            }
             return array('code'=>'200', 'msg' => "发送成功");
-            //return $this->createMetaAndData($smsCode, 200, "发送成功");
+            
+        } catch (Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
         }
+
         return $this->createErrorResponse('', "GET method");
     }
 
@@ -502,8 +463,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             throw new \RuntimeException('用户未登陆');
         }
 
-        if ($this->getCloudSmsKey($smsType) != 'on') {
-            throw new \RuntimeException('网站未开启短信验证');
+        if ($this->getCloudSmsKey("cloud_sms.{$smsType}") != 'on') {
+            throw new \RuntimeException('网站未开启该使用场景短信验证');
         }
     }
 
