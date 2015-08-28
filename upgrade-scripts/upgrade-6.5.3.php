@@ -72,6 +72,133 @@ use Symfony\Component\Yaml\Yaml;
         
     }
 
+    public function execute()
+    {
+        $block = $this->getBlockService()->getBlockByCode("jianmo:bottom_info");
+        if (empty($block)) {
+            $this->getBlockService()->createBlock(array(
+            "code" => "jianmo:bottom_info",
+            "title" => "默认主题: 首页底部.链接区域 ",
+            'category' => 'jianmo',
+            "content" => '
+            <div class="col-md-8 footer-main clearfix">
+              <div class="link-item ">
+              <h3>我是学生</h3>
+                <ul>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/347/learn#lesson/673" target="_blank">如何注册</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/347/learn#lesson/705" target="_blank">如何学习</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/347/learn#lesson/811" target="_blank">如何互动</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="link-item ">
+              <h3>我是老师</h3>
+                <ul>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/22" target="_blank">发布课程</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/147" target="_blank">使用题库</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/372" target="_blank">教学资料库</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="link-item ">
+                <h3>我是管理员</h3>
+                <ul>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/340" target="_blank">系统设置</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/341" target="_blank">课程设置</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/343" target="_blank">用户管理</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="link-item hidden-xs">
+                <h3>商业应用</h3>
+                <ul>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/232/learn#lesson/358" target="_blank">会员专区</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/232/learn#lesson/467" target="_blank">题库增强版</a>
+                  </li>
+                  <li>
+                    <a href="http://www.qiqiuyu.com/course/380" target="_blank">用户导入导出</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="link-item hidden-xs">
+                <h3>关于我们</h3>
+                <ul>
+                    <li>
+                      <a href="http://www.edusoho.com/" target="_blank">ES官网</a>
+                    </li>
+                    <li>
+                      <a href="http://weibo.com/qiqiuyu/profile?rightmod=1&amp;wvr=6&amp;mod=personinfo" target="_blank">官方微博</a>
+                    </li>
+                    <li>
+                      <a href="http://www.edusoho.com/abouts/joinus" target="_blank">加入我们</a>
+                    </li>
+                </ul>
+              </div>
+
+            </div>
+
+            <div class="col-md-4 footer-logo hidden-sm hidden-xs">
+              <a class="" href="http://www.edusoho.com" target="_blank"><img src="/assets/v2/img/bottom_logo.png?6.1.3" alt="建议图片大小为233*64"></a>
+              <div class="footer-sns">
+                <a href="http://weibo.com/edusoho" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
+                <a class="qrcode-popover top">
+                  <i class="es-icon es-icon-weixin"></i>
+                  <div class="qrcode-content">
+                    <img src="/assets/img/default/weixin.png?6.1.3" alt="">  
+                  </div>
+                </a>
+                <a class="qrcode-popover top">
+                  <i class="es-icon es-icon-apple"></i>
+                  <div class="qrcode-content">
+                    <img src="/assets/img/default/apple.png?6.1.3" alt=""> 
+                  </div>
+                </a>
+                  <a class="qrcode-popover top">
+                  <i class="es-icon es-icon-android"></i>
+                  <div class="qrcode-content">
+                    <img src="/assets/img/default/android.png?6.1.3" alt=""> 
+                  </div>
+                </a>
+              </div>
+            </div>
+            ',
+            ));
+        } else {
+            $meta = $block['meta'];
+            $data = $block['data'];
+            global $kernel;
+            $html = BlockToolkit::render($block, $kernel->getContainer());
+            $block = $this->getBlockService()->updateBlock($block['id'], array(
+                'data' => $data,
+                'meta' => $meta,
+                'content' => $html
+            ));
+        }
+    }
+
+
     protected function isFieldExist($table, $filedName)
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
@@ -98,11 +225,15 @@ use Symfony\Component\Yaml\Yaml;
     
     
 
-     private function getSettingService()
-     {
-         return ServiceKernel::instance()->createService('System.SettingService');
-     }
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
+    }
 
+    private function getBlockService()
+    {
+        return ServiceKernel::instance()->createService('Content.BlockService');
+    }
 
  }
 
