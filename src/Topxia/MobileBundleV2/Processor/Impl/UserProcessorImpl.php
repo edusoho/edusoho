@@ -405,13 +405,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         $phoneNumber = $this->getParam('phoneNumber');
         try {
-            $response = $this->controller->forward('TopxiaWebBundle:EduCloud:smsSend', array(
-                'to'  => $phoneNumber,
-                'sms_type' => 'sms_registration'
-            ));
+            $this->request->request->set('to', $phoneNumber);
+            $this->request->request->set('sms_type', 'sms_registration');
+            $response = $this->controller->forward('TopxiaWebBundle:EduCloud:smsSend', array());
             $content = $response->getContent();
-            if ($content && isset($content["error"])) {
-                return $this->createErrorResponse('error', $content["error"]);
+            $content = json_decode($content);
+            if (!empty($content) && isset($content->error)) {
+                return $this->createErrorResponse('error', $content->error);
             }
             return array('code'=>'200', 'msg' => "发送成功");
             
