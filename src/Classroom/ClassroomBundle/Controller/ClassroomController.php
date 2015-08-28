@@ -386,7 +386,7 @@ class ClassroomController extends BaseController
 
     public function latestMembersBlockAction($classroom, $count = 10)
     {
-        $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 12);
+        $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 20);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
         return $this->render('ClassroomBundle:Classroom:latest-members-block.html.twig', array(
@@ -472,7 +472,7 @@ class ClassroomController extends BaseController
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
-        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && $member['role'] == "auditor")) {
+        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && array_intersect(array('auditor'),$member['role']))) {
             $this->getSignService()->userSign($user['id'], 'classroom_sign', $classroomId);
 
             $userSignStatistics = $this->getSignService()->getSignUserStatistics($user->id, 'classroom_sign', $classroomId);
@@ -904,6 +904,7 @@ class ClassroomController extends BaseController
             'users' => $users,
             'classrooms' => $classrooms,
         ));
+
     }
 
     protected function getEnabledPayments()
@@ -916,7 +917,7 @@ class ClassroomController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay');
+        $payNames = array('alipay','wxpay');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(

@@ -15,7 +15,7 @@ class Version20150716162756 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
     	$this->addsql("ALTER TABLE `classroom_member` CHANGE `role` `role` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'auditor' COMMENT '角色'");
     	if (!$this->isFieldExist('classroom', 'assistantIds')) {
-            $this->addsql("ALTER TABLE `classroom` ADD `assistantIds` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `teacherIds`");
+            $this->addsql("ALTER TABLE `classroom` ADD `assistantIds` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '助教Ids' AFTER `teacherIds`");
         }
         $this->addsql("UPDATE `classroom_member` SET `role` = concat('|',role,'|') WHERE `role` NOT LIKE '%|%'");
         $this->addsql("UPDATE `classroom_member` SET `role` = '|assistant|student|' WHERE `role` = '|studentAssistant|'");

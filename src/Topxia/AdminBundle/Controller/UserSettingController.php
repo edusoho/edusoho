@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class UserSettingController extends BaseController
@@ -445,8 +444,7 @@ class UserSettingController extends BaseController
             } elseif ($type == 'update' and $fieldInfo['enabled']) {
                 $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
                 $courseSetting['userinfoFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
-            }
-            
+            }        
         }
 
         $this->getSettingService()->set('auth', $auth);

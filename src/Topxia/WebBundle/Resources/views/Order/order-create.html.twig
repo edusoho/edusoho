@@ -30,6 +30,7 @@
           	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
             data-price-type = "{{priceType|default('RMB')}}"/>
             <input type="hidden" name="targetType" value="{{targetType}}"/>
+            <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
             <input type="hidden" name="targetId" value="{{targetId}}"/>
             <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
             <input type="hidden" name="shouldPayMoney" value=""/>
@@ -37,7 +38,7 @@
             <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             <div class="order-detail-bg">
-            {% if targetType == "course" and courses|default(null) %}
+            {% if targetType == "course" and course|default(null) %}
               {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
             {% endif %}
             {% if targetType == "vip" %}
@@ -76,8 +77,8 @@
             <div class="form-group pay clearfix">
               <div class="pull-right controls">
                 <a 
-                  {% if targetType == "course" and courses|default(null) %}
-                    href="{{ path('course_show', {id:courses[0].id}) }}" 
+                  {% if targetType == "course" and course|default(null) %}
+                    href="{{ path('course_show', {id:course.id}) }}" 
                   {% elseif targetType == "vip" %}
                     href="{{ path('vip_renew') }}"
                   {% elseif targetType == "classroom" %}
