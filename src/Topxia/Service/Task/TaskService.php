@@ -8,6 +8,8 @@ interface TaskService
 
     public function getActiveTaskBy($userId, $taskType, $targetId, $targetType);
 
+    public function findUserTasksByBatchIdAndTasktype($userId, $batchId, $taskType);
+
     public function addTask(array $fields);
 
     public function updateTask($id, array $fields);

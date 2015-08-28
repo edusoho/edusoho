@@ -27,6 +27,13 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
     }
 
+    public function findUserTasksByBatchIdAndTasktype($userId, $batchId, $taskType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `batchId`=?";
+        $tasks = $this->getConnection()->fetchAll($sql, array($userId, $taskType, $batchId));
+        return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
+    }
+
     public function addTask(array $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
