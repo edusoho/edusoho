@@ -543,7 +543,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         
         $token = $this->controller->createToken($user, $this->request);
-        if (!$empty($user) && !isset($user["currentIp"])) {
+        if (!empty($user) && !isset($user["currentIp"])) {
             $user["currentIp"] = "127.0.0.1";
         }
         $this->log("user_regist", "用户注册", array( "user" => $user));
