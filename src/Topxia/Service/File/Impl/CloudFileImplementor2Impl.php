@@ -15,7 +15,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $cloudFile = $api->get("/files/{$file['globalId']}");
 
         $file['hashId'] = $cloudFile['storageKey'];
-        $file['size'] = $cloudFile['size'];
+        $file['fileSize'] = $cloudFile['size'];
 
         $statusMap = array(
             'none' => 'none',
@@ -46,7 +46,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $params = array(
             'bucket' => $file['bucket'],
             'fileName' => $file['filename'],
-            'fileSize' => $file['size'],
+            'fileSize' => $file['fileSize'],
             'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
             'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
             'extras' => empty($file['extras']) ? '' : $file['extras'],
@@ -69,7 +69,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $pos = strrpos($file['filename'], '.');
         $file['ext'] = empty( $pos ) ? '' : substr($file['filename'], $pos+1);
 
-        $file['size'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
+        $file['fileSize'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
         $file['status'] = 'uploading';
         $file['targetId'] = $params['targetId'];
         $file['targetType'] = $params['targetType'];
@@ -96,7 +96,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'outerId' => $file['id'],
             'bucket' => $file['bucket'],
             'fileName' => $file['filename'],
-            'fileSize' => $file['size'],
+            'fileSize' => $file['fileSize'],
             'hash' => $file['hash'],
             'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
             'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
