@@ -257,7 +257,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		$lessons = $this->filterLessons($lessons, $files);
 		return array(
 			"lessons"=>array_values($lessons),
-			"learnStatuses"=>empty($learnStatuses) ? null : $learnStatuses
+			"learnStatuses"=>empty($learnStatuses) ? array("-1"=>"learning") : $learnStatuses
 			);
 	}
 
@@ -664,8 +664,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		return array_map(function($lesson) use ($files) {
             		$lesson['content'] = "";
                                  if (isset($lesson["mediaId"])) {
-                                    $lesson['endTime'] = date('c', $lesson['endTime']);
-                                    $lesson['startTime'] = date('c', $lesson['startTime']);
                                     $lesson["uploadFile"] = isset($files[$lesson["mediaId"]]) ? $files[$lesson["mediaId"]] : null;
                                  }
                                  

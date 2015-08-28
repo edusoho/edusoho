@@ -71,12 +71,14 @@ filter('lessonType', function() {
 	return function(lesson) {
 		if (lesson.type == "live") {
 			var returnStr = "";
-			var startTime = new Date(lesson.startTime).getTime();
-			var endTime = new Date(lesson.endTime).getTime();
+			var startTime = lesson.startTime * 1000;
+			var endTime = lesson.endTime * 1000;
 			var currentTime = new Date().getTime();
 
 			if (startTime > currentTime) {
-				returnStr = new Date(startTime).Format("MM月dd号 hh:mm");;
+				var showDate = new Date();
+				showDate.setTime(startTime);
+				returnStr = showDate.Format("MM月dd号 hh:mm");;
 			} else if (startTime <= currentTime && endTime >= currentTime) {
 				returnStr = "<div class='ui-label' >直播中</div>";
 			}else if (endTime < currentTime) {
