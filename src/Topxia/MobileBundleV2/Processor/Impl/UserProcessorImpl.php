@@ -529,6 +529,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                         'nickname' => $nickname,
                         'password' => $password
                     ));
+
                     $this->clearSmsSession($this->request, 'sms_registration');
                 } else {
                     return $this->createErrorResponse('sms_invalid', '手机短信验证错误，请重新注册');
@@ -542,6 +543,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         
         $token = $this->controller->createToken($user, $this->request);
+        if (!$empty($user) && !isset($user["currentIp"])) {
+            $user["currentIp"] = "127.0.0.1";
+        }
         $this->log("user_regist", "用户注册", array( "user" => $user));
 
         return array (
