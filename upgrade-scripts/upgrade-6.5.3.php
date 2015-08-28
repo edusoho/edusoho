@@ -13,6 +13,7 @@ use Symfony\Component\Yaml\Yaml;
          try {
              $this->updateConfig();
              $this->updateScheme();
+             $this->updateBlocks();
              $this->getConnection()->commit();
          } catch (\Exception $e) {
              $this->getConnection()->rollback();
@@ -72,7 +73,7 @@ use Symfony\Component\Yaml\Yaml;
         
     }
 
-    public function execute()
+    public function updateBlocks()
     {
         $block = $this->getBlockService()->getBlockByCode("jianmo:bottom_info");
         if (empty($block)) {
