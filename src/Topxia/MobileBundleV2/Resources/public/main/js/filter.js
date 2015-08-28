@@ -71,8 +71,8 @@ filter('lessonType', function() {
 	return function(lesson) {
 		if (lesson.type == "live") {
 			var returnStr = "";
-			var startTime = new Date(lesson.startTime).getTime();
-			var endTime = new Date(lesson.endTime).getTime();
+			var startTime = lesson.startTime * 1000;
+			var endTime = lesson.endTime * 1000;
 			var currentTime = new Date().getTime();
 
 			if (startTime > currentTime) {
