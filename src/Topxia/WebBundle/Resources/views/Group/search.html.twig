@@ -2,7 +2,7 @@
 {% block title %}搜索 - {{ parent() }}{% endblock %}
 {% block content %}
 
-  <div class="panel panel-default panel-lg">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h2 class="panel-title">小组搜索</h2>
       <form class="form-inline more hidden-xs" action="{{path('group_search_group')}}" method="get">
@@ -28,8 +28,9 @@
           </div>
         {% endfor %}
       </div>
-
-      {{ web_macro.paginator(paginator) }}
+      <div class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </div>
       {% else %}
       <div class="empty">暂无小组信息</div>
       {% endif %}

@@ -101,8 +101,9 @@
       <div class="panel-heading">我在小组</div>
       <div class="panel-body">
         <div class="media group-item">
-          {{ web_macro.user_avatar(user, 'pull-left media-object media-object-small') }}
-
+          <div class="media-left">
+            {{ web_macro.user_avatar(user, '') }}
+          </div>
           <div class="media-body">
             <p>{{ web_macro.user_link(user , 'link-muted') }}
 
