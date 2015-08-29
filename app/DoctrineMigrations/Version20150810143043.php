@@ -43,7 +43,7 @@ class Version20150810143043 extends AbstractMigration
         $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` float(10,1) unsigned  COMMENT '同学评分(互评成绩)';");
         $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` float(10,1) unsigned  COMMENT '老师评分';");
         $this->addSql("ALTER TABLE `homework_result` ADD `pairReviews` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评数量';");
-        $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','editing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
+        $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
         $this->addSql("ALTER TABLE `homework` ADD `fullScore` float(10,1) unsigned  COMMENT '总分';");
         $this->addSql("ALTER TABLE `homework` ADD `completeTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业完成时间';");
         $this->addSql("ALTER TABLE `homework` ADD `reviewEndTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评结束时间';");

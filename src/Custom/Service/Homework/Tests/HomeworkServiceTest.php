@@ -53,7 +53,7 @@ class HomeworkServiceTest extends BaseTestCase
     public function testRandomizeHomeworkResultForPairReview(){
         $sam=$this->getUserService()->register(
             array(
-                'nickname'=>'sam', 
+                'nickname'=>'sam',
                 'password'=> '123456',
                 'email'=>'sam@geewang.com'
             )
@@ -62,7 +62,7 @@ class HomeworkServiceTest extends BaseTestCase
 
         $zoya=$this->getUserService()->register(
             array(
-                'nickname'=>'zoya', 
+                'nickname'=>'zoya',
                 'password'=> '123456',
                 'email'=>'zoya@geewang.com'
             )
@@ -71,7 +71,7 @@ class HomeworkServiceTest extends BaseTestCase
 
         $tom=$this->getUserService()->register(
             array(
-                'nickname'=>'tom', 
+                'nickname'=>'tom',
                 'password'=> '123456',
                 'email'=>'tom@geewang.com'
             )
@@ -80,7 +80,7 @@ class HomeworkServiceTest extends BaseTestCase
 
         $bill=$this->getUserService()->register(
             array(
-                'nickname'=>'bill', 
+                'nickname'=>'bill',
                 'password'=> '123456',
                 'email'=>'bill@geewang.com'
             )
@@ -199,7 +199,8 @@ class HomeworkServiceTest extends BaseTestCase
         ));
         $this -> assertNotNull($homeworkResult4);
         $this->getHomeworkService()->createHomeworkPairReview($homeworkResult4['id'],$tom['id'], array(
-            'score'=>3
+            'score'=>3,
+            'items'=>array()
         ));
 
         //bill自己的作业
@@ -221,6 +222,46 @@ class HomeworkServiceTest extends BaseTestCase
         $result = $this->getHomeworkService()->randomizeHomeworkResultForPairReview($homework1['id'], $bill['id']);
         $this->assertNotNull($result);
         $this ->assertContains($result['id'], array($homeworkResult2['id'], $homeworkResult3['id']));
+    }
+
+    public function testCreateHomeworkReview(){
+        $user=$this->getServiceKernel()->getCurrentUser();
+        $homework1=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('-1 hours', time()),'pairReview'=>true));
+        $result1=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'editing'));
+        $result1Item1=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>1,
+            'homeworkResultId'=>$result1['id'],
+        ));
+        $this->assertNull($result1Item1['score']);
+        $result1Item2=$this->getResultItemDao()->addItemResult(array(
+            'itemId'=>2,
+            'homeworkResultId'=>$result1['id'],
+        ));
+
+        $review = $this->getHomeworkService()->createHomeworkReview($result1['id'], $user->id, array(
+            'category' => 'teacher',
+            'items' => array(
+                array(
+                    'homeworkItemResultId' => $result1Item1['id'],
+                    'score' => 5,
+                    'review' => 'review TEst'
+                ),
+                array(
+                    'homeworkItemResultId' => $result1Item2['id'],
+                    'score' => 3,
+                    'review' => 'review 55555'
+                )
+            )
+        ));
+        $this->assertNotNull($review);
+        $this->assertNotNull($review['id']);
+        $i1 = $this->getHomeworkService()->loadHomeworkResultItem($result1Item1['id']);
+        $this->assertNotNull($i1);
+
+        $this->assertEquals(5,$i1['score']);
+        $items=$this->getHomeworkService()->getIndexedReviewItems($result1['id']);
+        $this->assertEquals('review TEst',$items[$result1Item1['id']]['teacher'][0]['review']);
+
     }
 
     public function testForwardHomeworkStatusForEditingHomeworks(){
