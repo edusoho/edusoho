@@ -322,7 +322,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         );
 
         foreach ($notifications as &$notification) {
-            $notification['createdTime'] = date('c', $notification['createdTime']);
             $notification["message"] = $this->coverNotifyContent($notification);
             unset($notification);
         }
