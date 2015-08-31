@@ -7,7 +7,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\Component\Payment\Payment;
-
+ use Topxia\Service\Common\ServiceEvent;
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
 	public function closeTrade($order)
@@ -87,8 +87,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	        	$connection->commit();
 	    	}
 
-	    	if ($success && ($this->getSmsService()->isOpen('sms_order_pay_success'))) {
-				$this->dispatchEvent("order.pay.success", $order);
+	    	if ($success) {
+				$this->dispatchEvent("order.pay.success", 
+					new ServiceEvent($order,array('targetType'=>$order["targetType"]))
+				);
 	    	}
 	    	
 	        return array($success, $order);

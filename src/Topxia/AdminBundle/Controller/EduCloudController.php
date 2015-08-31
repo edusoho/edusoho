@@ -114,8 +114,22 @@ class EduCloudController extends BaseController
                 'sms_homework_check' => 'off',
                 'sms_testpaper_check' => 'off',
                 'sms_order_pay_success' => 'off',
-
+                'sms_course_buy' => 'off',
+                'sms_classroom_buy' => 'off',
+                'sms_vip_buy' => 'off',
+                'sms_coin_buy' => 'off',
             );
+            if ($dataUserPosted['sms_order_pay_success'] == 1) {
+                $dataUserPosted['sms_course_buy'] = 1;
+                $dataUserPosted['sms_classroom_buy'] = 1;
+                $dataUserPosted['sms_vip_buy'] = 1;
+                $dataUserPosted['sms_coin_buy'] = 1;
+            } else {
+                $dataUserPosted['sms_course_buy'] = 0;
+                $dataUserPosted['sms_classroom_buy'] = 0;
+                $dataUserPosted['sms_vip_buy'] = 0;
+                $dataUserPosted['sms_coin_buy'] = 0;
+            }
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
             $dataUserPosted = array_merge($dataUserPosted, $schoolNames);

@@ -39,6 +39,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
     public function onOrderPaySuccess(ServiceEvent $event)
     {
         $order = $event->getSubject();
+        $targetType = $event->getArgument('targetType');
         $smsType = 'sms_order_pay_success';
         $userId = $order['userId'];
         $user = $this->getUserService()->getUser($userId);
