@@ -35,6 +35,16 @@ class AppController extends BaseController
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
             $articles = $eduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
+
+            if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+                $trial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
+                $result = json_decode($trial,true);
+
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'articles' => $articles,
+                    'trial' => $result['content'],
+                ));
+            }
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                 'articles' => $articles,
             ));
