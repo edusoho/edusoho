@@ -32,7 +32,7 @@ class BuildVendorZipCommand extends BaseCommand
             3 => array('endroid', ),
             4 => array('kriswallsmith', 'monolog', 'phpoffice'),
             5 => array('pimple', 'psr', 'sensio', 'sensiolabs', 'silex', 'swiftmailer', 'symfony/assetic-bundle', 'symfony/monolog-bundle', 'symfony/swiftmailer-bundle', 'twig', 'symfony/symfony/src/Symfony/Bridge', 'symfony/symfony/src/Symfony/Bundle'),
-            6 => array('symfony/symfony/src/Symfony/Component/Intl'),
+            6 => array('symfony/symfony/src/Symfony/Component/Intl', 'symfony/symfony/src/Symfony/Component/HttpKernel', 'symfony/symfony/src/Symfony/Component/Security', 'symfony/symfony/src/Symfony/Component/Form'),
             7 => array('symfony/symfony/src/Symfony/Component'),
         );
 
@@ -45,6 +45,9 @@ class BuildVendorZipCommand extends BaseCommand
                 $this->filesystem->mirror("{$this->rootDirectory}/vendor2/{$dir}", "{$this->distDirectory}/vendor2/{$dir}");
                 if ($i == 7) {
                     $this->filesystem->remove("{$this->distDirectory}/vendor2/{$dir}/Intl");
+                    $this->filesystem->remove("{$this->distDirectory}/vendor2/{$dir}/HttpKernel");
+                    $this->filesystem->remove("{$this->distDirectory}/vendor2/{$dir}/Security");
+                    $this->filesystem->remove("{$this->distDirectory}/vendor2/{$dir}/Form");
                 }
             }
 
