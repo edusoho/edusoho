@@ -41,6 +41,8 @@ class LessonController extends BaseController
         if(!empty($classrooms) && count($classrooms)>0){
             $keys = array_keys($classrooms);
             $classroom = $this->getClassroomService()->getClassroom($keys[0]);
+        }else{
+            $classroom = array();
         }
 
         return $this->render('ClassroomBundle:Classroom:hint-modal.html.twig', array(
