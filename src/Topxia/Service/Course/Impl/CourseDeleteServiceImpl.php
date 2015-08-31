@@ -36,8 +36,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $questionLog = "删除课程《{$course['title']}》(#{$course['id']})的问题　{$stem}";
             $this->getLogService()->info('question', 'delete', $questionLog);
         }
-
-        //$questionsFavorite = $this->getQuestionFavoriteDao()->
     }
 
     protected function getCourseService()
