@@ -6,7 +6,7 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
 
-    const API_VERSIN_RANGE = '2.3.2';
+    const API_VERSIN_RANGE = '3.0.0';
     public $formData;
     public $controller;
     public $request;
