@@ -25,7 +25,7 @@ define(function(require, exports, module) {
             accept.extensions = this.get('accept')['extensions'].join(',');
             accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
 
-            console.log(accept);
+            console.log('accept:', accept);
             var defaults = {
 
                 dnd: this.element.find('.balloon-uploader-body'),
@@ -136,14 +136,16 @@ define(function(require, exports, module) {
                 docx: 'document',
                 pdf: 'document',
                 ppt: 'ppt',
-                pptx: 'ppt'
+                pptx: 'ppt',
+                mp3: 'audio'
             };
             file
 
             var paramsDefault = {
                 'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'},
                 'document' : {},
-                'ppt' : {}
+                'ppt' : {},
+                'audio' : {}
             }
 
             var params = {};

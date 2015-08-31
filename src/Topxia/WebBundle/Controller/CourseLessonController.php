@@ -208,7 +208,7 @@ class CourseLessonController extends BaseController
                     }
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                        if (isset($file['convertParams']['convertor']) && ( in_array($file['convertParams']['convertor'], array('HLSEncryptedVideo', 'audio')) )) {
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                 'data' => $file['id'], 
                                 'times' => 3, 

@@ -335,7 +335,7 @@ class UploadFileController extends BaseController
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
-            $file['size'] = FileToolkit::formatFileSize($file['size']);
+            $file['fileSize'] = FileToolkit::formatFileSize($file['fileSize']);
 
             // Delete some file attributes to redunce the json response size
             unset($file['hashId']);
