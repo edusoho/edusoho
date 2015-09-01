@@ -241,8 +241,10 @@ class CourseLessonController extends BaseController
                         }
 
                         if ($key) {
-                            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                            $json['mediaUri'] = $url['url'];
+
+                            $api = CloudAPIFactory::create();
+                            $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
+                            $json['mediaUri'] = $result['url'];
                         } else {
                             $json['mediaUri'] = '';
                         }

@@ -28,6 +28,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    public function getFileByGlobalId($globalId)
+    {
+        $file = $this->getUploadFileDao()->getFileByGlobalId($globalId);
+        if (empty($file)) {
+            return null;
+        }
+
+        return $this->getFileImplementor($file)->getFile($file);
+    }
+
     public function initUpload($params)
     {
     	$user = $this->getCurrentUser();
@@ -74,14 +84,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function finishedUpload($params)
     {
-        $file = $this->getUploadFileDao()->getFileByGlobalId($params['globalId']);
+        $file = $this->getFileByGlobalId($params['globalId']);
         if (empty($file['globalId'])) {
             throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
         }
 
+        $convertStatus = empty($file['convertParams']) ? 'none' : 'waiting';
+
     	$file = $this->getUploadFileDao()->updateFile($file['id'], array(
             'status' => 'ok',
-            'convertStatus' => 'waiting',
+            'convertStatus' => $convertStatus,
         ));
     }
 
