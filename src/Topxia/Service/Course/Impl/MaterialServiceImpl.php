@@ -37,20 +37,20 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['title'] = empty($material['description']) ? $material['link'] : $material['description'];
         } else {
             $fields['fileId'] = (int) $material['fileId'];
-    		$file = $this->getUploadFileService()->getFile($material['fileId']);
+    		$file = $this->getUploadFileService()->getThinFile($material['fileId']);
     		if (empty($file)) {
     			throw $this->createServiceException('文件不存在，上传资料失败！');
     		}
             $fields['link'] = '';
             $fields['title'] = $file['filename'];
-            $fields['fileSize'] = $file['size'];
+            $fields['fileSize'] = $file['fileSize'];
         }
 
 		$material =  $this->getMaterialDao()->addMaterial($fields);
 
 		// Increase the linked file usage count, if there's a linked file used by this material.
 		if(!empty($material['fileId'])){
-			$this->getUploadFileService()->increaseFileUsedCount(array($material['fileId']));
+			$this->getUploadFileService()->increaseFileUsedCount($material['fileId']);
 		}
 
 		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
@@ -75,8 +75,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		$this->getMaterialDao()->deleteMaterial($materialId);
 		$this->dispatchEvent("material.delete",$material);
 		// Decrease the linked file usage count, if there's a linked file used by this material.
-		if(!empty($material['fileId'])){
-			$this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
+		if(!empty($material['fileId'])) {
+			$this->getUploadFileService()->decreaseFileUsedCount($material['fileId']);
 		}
 
 		if($material['lessonId']){
@@ -102,10 +102,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		$fileIds = ArrayToolkit::column($materials, "fileId");
 
-		// Decrease the linked matrial file usage count, if there are linked materials used by this lesson.
-		if(!empty($fileIds)){
-			$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
-		}
+        foreach ($fileIds as $fileId) {
+            $this->getUploadFileService()->decreaseFileUsedCount($fileId);
+        }
 
 		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId);
 	}
@@ -116,10 +115,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		$fileIds = ArrayToolkit::column($materials, "fileId");
 
-		// Decrease the linked material file usage count, if there are linked materials used by this course.
-		if(!empty($fileIds)){
-			$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
-		}
+        foreach ($fileIds as $fileId) {
+            $this->getUploadFileService()->decreaseFileUsedCount($fileId);
+        }
 
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
 	}
@@ -171,7 +169,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return $this->createService('File.UploadFileServic2');
     }
 
 }
