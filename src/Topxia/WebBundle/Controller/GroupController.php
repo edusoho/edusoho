@@ -337,7 +337,7 @@ class GroupController extends BaseController
         }
 
         $recentlyJoinMember=$this->getGroupService()->searchMembers(array('groupId'=>$id),
-            array('createdTime','DESC'),0,12);
+            array('createdTime','DESC'),0,20);
 
         $memberIds = ArrayToolkit::column($recentlyJoinMember, 'userId');
 
