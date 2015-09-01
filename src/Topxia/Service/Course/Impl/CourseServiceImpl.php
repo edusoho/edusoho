@@ -786,11 +786,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
 	}
 
-	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
-	{
-		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
-	}
-
 	public function setCoursePrice($courseId, $currency, $price)
 	{
 		if (!in_array($currency, array('coin', 'default'))) {

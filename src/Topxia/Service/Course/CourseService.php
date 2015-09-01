@@ -88,8 +88,6 @@ interface CourseService
 	
 	public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 
-	public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
-
 	public function setCoursePrice($courseId, $currency, $price);
 
 	public function setCoursesPriceWithDiscount($discountId);
