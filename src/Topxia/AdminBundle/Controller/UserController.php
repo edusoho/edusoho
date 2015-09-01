@@ -309,8 +309,6 @@ class UserController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
-
-            $options = $request->request->all();
             $this->getUserService()->changeAvatar($id, $options["images"]);
 
             return $this->createJsonResponse(true);
