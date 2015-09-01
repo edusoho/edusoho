@@ -20,6 +20,13 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
     }
 
+    public function getTaskBy($userId, $taskType, $targetId, $targetType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? LIMIT 1";
+        $task = $this->getConnection()->fetchAssoc($sql, array($userId, $taskType, $targetId, $targetType));
+        return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
+    }
+
     public function getActiveTaskBy($userId, $taskType, $targetId, $targetType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? AND `status`='active' LIMIT 1";

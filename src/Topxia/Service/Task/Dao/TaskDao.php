@@ -6,6 +6,8 @@ interface TaskDao {
 
 	public function getTask($id);
 
+	public function getTaskBy($userId, $taskType, $targetId, $targetType);
+
 	public function getActiveTaskBy($userId, $taskType, $targetId, $targetType);
 
 	public function findUserTasksByBatchIdAndTasktype($userId, $batchId, $taskType);
