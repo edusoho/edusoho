@@ -11,6 +11,7 @@
 /files
 /app/config/uc_client_config.php
 /app/config/windid_client_config.php
+/app/data/api_server.json
 /app/data/udisk/*
 /app/data/private_files/*
 /app/data/backup/*
@@ -53,4 +54,5 @@ web/assets/img/default/video.png
 .buildpath
 .phpintel*
 /src/Tests/*
-/web/assets/v2/bootstrap/less
+/app/data/api_server.json
+/installFiles

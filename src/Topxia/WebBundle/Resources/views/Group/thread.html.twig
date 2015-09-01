@@ -1,8 +1,8 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
-{% block title %}{{threadMain.title}} - {{ parent() }}{% endblock %}
-{% block keywords %}{{threadMain.title|plain_text(15)}} {{ setting('site.name') }} {% endblock %}
-{% block description %}{{threadMain.content|plain_text(150)}}{% endblock %}
+{% block title %}{{threadMain.title}} - {{ groupinfo.title }} {{ parent() }}{% endblock %}
+{% block keywords %}{{groupinfo.title}}{% endblock %}
+{% block description %}{{threadMainContent|plain_text(100)}}{% endblock %}
 {% block group_main %}
 <style>
 .ke-icon-accessory {
@@ -321,7 +321,7 @@
     </div>
   </div>
   {% endif %}
-  <div class="panel panel-default panel-border">
+  <div class="panel panel-default">
     <div class="panel-heading">发表回复</div>
     <div class="panel-body">
 

@@ -64,6 +64,12 @@ class CloudController extends BaseController
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
+    public function docAction(Request $request)
+    {
+        $params = array( 'type' => 'doc' );
+        return $this->redirectUrl('edu_cloud_show', $params);
+    }
+
     public function liveAction(Request $request)
     {
         $params = array( 'type' => 'live' );

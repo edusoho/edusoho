@@ -167,7 +167,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundUser);
     }
 
-    public function testGetUserByLoginField()//*
+    public function testGetUserByLoginField()
     {
         $userInfo = array(
             'nickname'=>'test_nickname', 
@@ -240,7 +240,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUsers);
     }
 
-    public function testSearchUsers()//**
+    public function testSearchUsers()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
@@ -497,13 +497,19 @@ class UserServiceTest extends BaseTestCase
     }
 
     // public function testChangeAvatar()//*
-    // {
+    // {var_dump(500);
     //     $userInfo = array(
     //         'nickname'=>'test_nickname', 
     //         'password'=> 'test_password',
     //         'email'=>'test_email@email.com'
     //     );
     //     $registeredUser = $this->getUserService()->register($userInfo);
+    //     $data = array(
+    //         'id'=>'1',
+    //         'type'=>'jpg',
+    //     );
+    //     $a = $this->getUserService()->changeAvatar($registeredUser['id'],$data);
+    //     var_dump($a);
     // }
 
 
@@ -646,7 +652,7 @@ class UserServiceTest extends BaseTestCase
         $result = $this->getUserService()->changeMobile($registeredUser['id'],'');
         }
 
-    public function testGetUserSecureQuestionsByUserId()//*????????????
+    public function testGetUserSecureQuestionsByUserId()
     {
       $userInfo = array(
             'nickname'=>'test_nickname', 
@@ -655,12 +661,20 @@ class UserServiceTest extends BaseTestCase
             'verifiedMobile'=>'13777868634'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $fieldsWithQuestionTypesAndUnHashedAnswers = 'hello';
-        $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'],$fieldsWithQuestionTypesAndUnHashedAnswers);
-        $a = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
+        $fields = array(  
+                    'securityQuestion1'  =>  'question-1',
+                    'securityAnswer1' =>  'answer-1',
+                    'securityQuestion2'  => 'question-2',
+                    'securityAnswer2' => 'answer-2',
+                    'securityQuestion3'  => 'question-3',
+                    'securityAnswer3' => 'answer-3',
+                );  
+        $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'],$fields);
+        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
+        $this->assertEquals(3,count($result));
     }
 
-    public function testAddUserSecureQuestionsWithUnHashedAnswers()//*????????????????
+    public function testAddUserSecureQuestionsWithUnHashedAnswers()
     {
         $userInfo = array(
             'nickname'=>'test_nickname', 
@@ -669,18 +683,27 @@ class UserServiceTest extends BaseTestCase
             'verifiedMobile'=>'13777868634'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $fieldsWithQuestionTypesAndUnHashedAnswers = 'hello';
-        $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'],$fieldsWithQuestionTypesAndUnHashedAnswers);
+         $fields = array(  
+                    'securityQuestion1'  =>  'question-1',
+                    'securityAnswer1' =>  'answer-1',
+                    'securityQuestion2'  => 'question-2',
+                    'securityAnswer2' => 'answer-2',
+                    'securityQuestion3'  => 'question-3',
+                    'securityAnswer3' => 'answer-3',
+                );  
+        $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'],$fields);
+        $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
+        $this->assertEquals(3,count($result));
     }
 
-    // public function testVerifyInSaltOut()//*
-    // {
-    //     $in = 'test';
-    //     $out = 'xw4L6lqFZ9b43YFhZKn73sOgZpK52o/GE60emMO4AUo=';
-    //     $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-    //     $a = $this->getUserService()->verifyInSaltOut($in,$salt,$out);
-    //     var_dump($a);
-    // }
+    public function testVerifyInSaltOut()
+    {
+        $in = 'test';
+        $out = 'xw4L6lqFZ9b43YFhZKn73sOgZpK52o/GE60emMO4AUo=';
+        $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $result= $this->getUserService()->verifyInSaltOut($in,$salt,$out);
+        $this->assertFalse($result);
+    }
 
     public function testVerifyPasswordOne()
     {
@@ -696,91 +719,143 @@ class UserServiceTest extends BaseTestCase
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */ 
-    // public function testVerifyPayPasswordTwice()//*
-    // {
+    public function testVerifyPayPasswordTwice()
+    {
+        $registeredUser = null;
+        $this->assertFalse($this->getUserService()->verifyPassword($registeredUser['id'], 'password'));
+    }
 
-    // }
+    public function testParseRegistration()
+    {
+        $auth["register_mode"] = "email_or_mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['emailOrMobile'] = '627099747@qq.com'; 
+        $result = $this->getUserService()->parseRegistration($registration);
+        $this->assertEquals('627099747@qq.com',$result['emailOrMobile']);
+    }
 
-    // public function testParseRegistrationOne()
-    // {
+    public function testParseRegistrationTwice()
+    {
+        $auth["register_mode"] = "email_or_mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['emailOrMobile'] = '13777777976'; 
+        $result = $this->getUserService()->parseRegistration($registration);
+        $this->assertEquals('13777777976',$result['mobile']);
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */ 
+    public function testParseRegistrationThird()
+    {
+        $auth["register_mode"] = "email_or_mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['emailOrMobile'] = ''; 
+        $this->getUserService()->parseRegistration($registration);
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */ 
+    public function testParseRegistrationForth()
+    {
+        $auth["register_mode"] = "email_or_mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['emailOrMobile'] = 'x'; 
+        $this->getUserService()->parseRegistration($registration);
+    }
 
-    // }
-    // /**
-    //  * @expectedException Topxia\Service\Common\ServiceException
-    //  */ 
-    // public function testParseRegistrationTwice()
-    // {
+    public function testParseRegistrationFifth()
+    {
+        $auth["register_mode"] = "mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['mobile'] = '13777822976'; 
+        $result = $this->getUserService()->parseRegistration($registration);
+        $this->assertEquals('13777822976',$result['mobile']);
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */ 
+    public function testParseRegistrationSixth()
+    {
+        $auth["register_mode"] = "mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['mobile'] = 'z'; 
+        $this->getUserService()->parseRegistration($registration);
+    }
 
-    // }
-    // /**
-    //  * @expectedException Topxia\Service\Common\ServiceException
-    //  */ 
-    // public function testParseRegistrationThird()
-    // {
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */ 
+    public function testParseRegistrationSeventh()
+    {
+        $auth["register_mode"] = "mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $registration['mobile'] = 'x'; 
+        $this->getUserService()->parseRegistration($registration);
+    }
 
-    // }
-    // /**
-    //  * @expectedException Topxia\Service\Common\ServiceException
-    //  */ 
-    // public function testParseRegistrationForth()
-    // {
+    public function testParseRegistrationEighth()
+    {
+        $auth["register_mode"] = "";
+        $this->getSettingService()->set('auth',$auth);
+        $registration = null; 
+        $this->getUserService()->parseRegistration($registration);
+    }
 
-    // }
-    // /**
-    //  * @expectedException Topxia\Service\Common\ServiceException
-    //  */ 
-    // public function testParseRegistrationFifth()
-    // {
+    public function testIsMobileRegisterMode()
+    {
+        $auth["register_mode"] = "mobile";
+        $this->getSettingService()->set('auth',$auth);
+        $result = $this->getUserService()->IsMobileRegisterMode();
+        $this->assertTrue($result);
+    }
 
-    // }
+    public function testGenerateNickname()
+    {
+        $userInfo = array(
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $nickname = $this->getUserService()->generateNickname($userInfo);
+        $this->assertNotNull($nickname);
+    }
 
-    // public function testIsMobileRegisterMode()//*
-    // {
-
-    // }
-
-
-    // public function testGetRandomChar()//*
-    // {
-
-    // }
-
-    // public function testGenerateNickname()//*
-    // {
-
-    // }
-
-    // public function testGenerateEmail()
-    // {
-
-    // }
+    public function testGenerateEmail()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname',
+            'password'=> 'test_password',
+        );
+        $email = $this->getUserService()->generateEmail($userInfo);
+        $this->assertNotNull($email);
+    }
 
     // public function testImportUpdateEmail()
     // {
-
+       
+    //     // $user1 = $this->createUser('user1');
+    //     // $user2 = $this->createUser('user2');
+    //     // $user3 = $this->createUser('user3');
+    //     // $users = array($user1,$user2,$user3);
+    //     // $this->getUserService()->importUpdateEmail($users);
     // }
 
-
-    // public function testRegister()
-    // {
-
-    // }
-    public function testSetupAccount()//******
+    public function testSetupAccount()
     {
         $userInfo = array(
             'nickname'=>'test_nickname', 
             'password'=> 'test_password',
-            'email'=>'test_email@email.com'
+            'email'=>'test_email@email.com',
+            'token'=> array('userId'=>999, 'token'=>'token', 'expiredTime'=>strtotime('+1 day'))
         );
-        $registeredUser = $this->getUserService()->register($userInfo);
-        $registeredUser['setup'] = '0';
+        $registeredUser = $this->getUserService()->register($userInfo, 'weibo');
+        $this->assertEquals('0',$registeredUser['setup']);
         $result = $this->getUserService()->setupAccount($registeredUser['id']);
-
+        $this->assertEquals('1',$result['setup']);
     }
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testSetupAccountTwice()//******
+    public function testSetupAccountTwice()
     {
         $user = null;
         $result = $this->getUserService()->setupAccount($user['id']);
@@ -789,7 +864,7 @@ class UserServiceTest extends BaseTestCase
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testSetupAccountThird()//******
+    public function testSetupAccountThird()
     {
         $userInfo = array(
             'nickname'=>'test_nickname', 
@@ -819,7 +894,6 @@ class UserServiceTest extends BaseTestCase
      */
     public function testChangePasswordWithNotExistUserId()
     {
-
         $this->getUserService()->changePassword(999, 'new_password');
     }
     
@@ -827,7 +901,7 @@ class UserServiceTest extends BaseTestCase
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testVerifyPasswordTwice()//*
+    public function testVerifyPasswordTwice()
     {
         $registeredUser = null;
         $this->getUserService()->verifyPassword($registeredUser['id'], 'password');
@@ -1077,16 +1151,19 @@ class UserServiceTest extends BaseTestCase
             'email'=>'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-
+        $result = $this->getUserService()->getLastestApprovalByUserIdAndStatus($registeredUser['id'],'approving');
+        $this->assertFalse($result);
     }
-    public function testfindUserApprovalsByUserIds()//*
+    public function testfindUserApprovalsByUserIds()
     {
-
+        $users = array();
+        $result = $this->getUserService()->findUserApprovalsByUserIds($users);
+        $this->assertEquals(0,count($result));
     }
-    public function testApplyUserApproval()
-    {
+    // public function testApplyUserApproval()//*
+    // {
 
-    }
+    // }
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
@@ -1101,7 +1178,6 @@ class UserServiceTest extends BaseTestCase
     }
     public function testPassApproval()
     {
-
     }
     /**
      * @expectedException Topxia\Service\Common\ServiceException
@@ -1114,7 +1190,14 @@ class UserServiceTest extends BaseTestCase
     }
     public function testRejectApproval()
     {
-
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $result = $this->getUserService()->rejectApproval($registeredUser['id']);
+        $this->assertTrue($result);
     }
     /**
      * @expectedException Topxia\Service\Common\ServiceException
@@ -1125,10 +1208,11 @@ class UserServiceTest extends BaseTestCase
          $this->getUserService()->rejectApproval($user['id'],$note);
     }
 
-    public function testDropFieldData()
-    {
-
-    }
+    // public function testDropFieldData()
+    // {
+    //     $fieldName = null; 
+    //     $this->getUserService()->dropFieldData($fie);
+    // }
 
     public function testRememberLoginSessionIdOne()
     {
@@ -1154,7 +1238,7 @@ class UserServiceTest extends BaseTestCase
 
     }
 
-    public function testAnalysisRegisterDataByTime()//*
+    public function testAnalysisRegisterDataByTime()
     {
         $time1 = time();
         $user1 = $this->createUser('user1');
@@ -1166,7 +1250,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertGreaterThanOrEqual('3',$result['count']);
     }
 
-    public function testAnalysisUserSumByTime()//*
+    public function testAnalysisUserSumByTime()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
@@ -1506,11 +1590,18 @@ class UserServiceTest extends BaseTestCase
         $this->assertNull($foundPasswordResetToken);
     }
 
-    // public function testSearchTokenCount()//*
-    // {
-    //     $conditions = null;
-    //     $this->getUserService()->searchTokenCount($conditions);
-    // }
+    public function testSearchTokenCount()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $emailVerifyToken = $this->getUserService()->makeToken('email-verify', $registeredUser['id'], 1371801141, 'data');
+        $result = $this->getUserService()->searchTokenCount(array('type'=>'email-verify'));
+        $this->assertEquals('1',$result);
+    }
     /**
      *  token
      */
@@ -1654,7 +1745,7 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->cancelPromoteUser($user);
     }
 
-    public function testFindLatestPromotedTeacher()//*
+    public function testFindLatestPromotedTeacher()
     {
         $userInfo = array(
             'nickname'=>'test_nickname', 
@@ -1670,31 +1761,49 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals($registeredUser['id'],$result['id']);
     }
 
-    // public function testWaveUserCounter()
-    // {
+    public function testWaveUserCounter()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $this->getUserService()->waveUserCounter($registeredUser['id'], 'newNotificationNum', 1);
+        $foundUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals('1',$foundUser['newNotificationNum']);
+    }
 
-    // }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testWaveUserCounterTwice()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $this->getUserService()->waveUserCounter($registeredUser['id'], 'newMessageNum', 'ss');
+    }
 
-    // *
-    //  * @expectedException Topxia\Service\Common\ServiceException
-     
-    // public function testWaveUserCounterTwice()
-    // {
+    public function testClearUserCounter()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $this->getUserService()->waveUserCounter($registeredUser['id'], 'newMessageNum', 1);
+        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals('1',$registeredUser['newMessageNum']);
+        $this->getUserService()->clearUserCounter($registeredUser['id'],'newMessageNum');
+        $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
+        $this->assertEquals('0',$registeredUser['newMessageNum']);
 
-    // }
-
-    // public function testClearUserCounter()
-    // {
-    //     $userInfo = array(
-    //         'nickname'=>'test_nickname', 
-    //         'password'=> 'test_password',
-    //         'email'=>'test_email@email.com'
-    //     );
-    //     $registeredUser = $this->getUserService()->register($userInfo);
-    //     $name = null;
-    //     $a = $this->getUserService()->clearUserCounter($registeredUser['id'],$name);
-    //     var_dump($a);
-    // }
+    }
 
     /**
      *  lock
@@ -1724,24 +1833,43 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->markLoginInfo();
     }
 
-    // public function testMarkLoginFailed()
-    // {
-    //     $user1 = $this->createUser('user1');
-    //     $ip = '127.0.0.1';
-    //     $a = $this->getUserService()->markLoginFailed($user1,$ip);
-    //     var_dump($a);
-    // }
+    public function testMarkLoginFailed()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $ip = '127.0.0.1';
+        $result = $this->getUserService()->markLoginFailed($registeredUser['id'],$ip);
+        $this->assertNotNull($result);
+    }
 
-    // public function testMarkLoginSuccess()
-    // {
-    //     $user1 = $this->createUser('user1');
-    //     $ip = '152.0.1';
-    //     $a = $this->getUserService()->markLoginSuccess($user1,$ip);
-    // }
+    public function testMarkLoginSuccess()
+    {
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $ip = '152.0.1';
+        $result = $this->getUserService()->markLoginSuccess($registeredUser['id'],$ip);
+        $this->assertNull($result);
+    }
 
     public function testCheckLoginForbidden()
     {
-
+        $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $ip = '152.0.1';
+        $result = $this->getUserService()->checkLoginForbidden($registeredUser['id'],$ip);
+        $this->assertEquals('ok',$result['status']);
     }
     /**
      *  bind
@@ -1942,7 +2070,7 @@ class UserServiceTest extends BaseTestCase
      *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testFindBindsByUserIdTwice()//*
+    public function testFindBindsByUserIdTwice()
     {
         $user = null;
         $this->getUserService()->findBindsByUserId($user['id']);
@@ -1990,7 +2118,7 @@ class UserServiceTest extends BaseTestCase
      *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testUnBindUserByTypeAndToIdTwice()//*
+    public function testUnBindUserByTypeAndToIdTwice()
     {
         $type = null;
         $user = null;
@@ -2001,7 +2129,7 @@ class UserServiceTest extends BaseTestCase
      *  bind
      * @expectedException Topxia\Service\Common\ServiceException
      */
-    public function testUnBindUserByTypeAndToIdThird()//*
+    public function testUnBindUserByTypeAndToIdThird()
     {
         $type = null;
         $userInfo = array(
@@ -2014,9 +2142,17 @@ class UserServiceTest extends BaseTestCase
     }
 
 
-    public function testGetUserBindByTypeAndFromId()//*
+    public function testGetUserBindByTypeAndFromId()
     {
-
+                $userInfo = array(
+            'nickname'=>'test_nickname', 
+            'password'=> 'test_password',
+            'email'=>'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $this->getUserService()->bindUser('qq',123123123, $registeredUser['id'], array('token'=>'token', 'expiredTime'=>strtotime('+1 day')));
+        $foundBind = $this->getUserService()->getUserBindByTypeAndFromId('qq', 123123123);
+        $this->assertEquals('qq',$foundBind['type']);
     }
 
      /**
@@ -2082,6 +2218,11 @@ class UserServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

@@ -130,9 +130,13 @@ class UserController extends BaseController
     protected function getRegisterData($formData, $clientIp){
         if(isset($formData['email'])){
             $userData['email'] = $formData['email'];
+            //$userData['emailVerified'] = 1;
         }
         if(isset($formData['emailOrMobile'])){
             $userData['emailOrMobile'] = $formData['emailOrMobile'];
+            /*if (SimpleValidator::email($formData['emailOrMobile'])) {
+                $userData['emailVerified'] = 1;
+            }*/
         }
         if(isset($formData['mobile'])){
             $userData['mobile'] = $formData['mobile'];
@@ -141,6 +145,7 @@ class UserController extends BaseController
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
         $userData['type'] = $formData['type'];
+        
         return $userData;
     }
 
@@ -236,7 +241,8 @@ class UserController extends BaseController
 
             $user = $this->getUserService()->getUser($id);
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $user,
+                'user' => $user,
+                'profile' => $this->getUserService()->getUserProfile($id)
             ));
         }
         $default = $this->getSettingService()->get('default', array());     
@@ -327,6 +333,7 @@ class UserController extends BaseController
         $this->getUserService()->lockUser($id);
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
+            'profile' => $this->getUserService()->getUserProfile($id)
         ));
     }
 
@@ -336,6 +343,7 @@ class UserController extends BaseController
 
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
+            'profile' => $this->getUserService()->getUserProfile($id)
         ));
     }
 

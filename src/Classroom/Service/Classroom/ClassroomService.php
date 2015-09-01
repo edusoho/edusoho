@@ -14,6 +14,8 @@ interface ClassroomService
 
     public function findAssistants($classroomId);
 
+    public function findTeachers($classroomId);
+
     public function canManageClassroom($id);
 
     public function tryManageClassroom($id);
@@ -88,7 +90,7 @@ interface ClassroomService
 
     public function isClassroomAuditor($classroomId, $studentId);
 
-    public function isClassroomAssistent($classroomId, $userId);
+    public function isClassroomAssistant($classroomId, $userId);
 
     public function isClassroomHeadTeacher($classroomId, $userId);
 

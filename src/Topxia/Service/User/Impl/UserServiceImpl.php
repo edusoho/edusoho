@@ -324,9 +324,11 @@ class UserServiceImpl extends BaseService implements UserService
             if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
                 if (SimpleValidator::email($registration['emailOrMobile'])) {
                     $registration['email'] = $registration['emailOrMobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
                 } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
                     $registration['mobile'] = $registration['emailOrMobile'];
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
                     throw $this->createServiceException('emailOrMobile error!');
                 }
@@ -338,6 +340,7 @@ class UserServiceImpl extends BaseService implements UserService
                 if (SimpleValidator::mobile($registration['mobile'])) {
                     $registration['mobile'] = $registration['mobile'];
                     $registration['verifiedMobile'] = $registration['mobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_mobile';
                 } else {
                     throw $this->createServiceException('mobile error!');
                 }
@@ -345,6 +348,7 @@ class UserServiceImpl extends BaseService implements UserService
                 throw $this ->createServiceException('参数不正确，手机不能为空。');
             }
         }else{
+            $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
             return $registration;
         }
 
@@ -396,19 +400,12 @@ class UserServiceImpl extends BaseService implements UserService
         }
         
         $user['email'] = $registration['email'];
+        $user['emailVerified'] = isset($registration['emailVerified']) ? $registration['emailVerified'] : 0;
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
         $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
-        if ($type == 'default' && (!isset($registration['type']) or $registration['type'] != 'import')) {
-            if (isset($registration['verifiedMobile'])) {
-                $user['type'] = 'web_mobile';
-            } else {
-                $user['type'] = 'web_email';
-            }
-        }
-        
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
@@ -721,7 +718,11 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     public function getUserBindByTypeAndFromId($type, $fromId)
-    {
+    {   
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $type = 'weixin';
+        }
+
         return $this->getUserBindDao()->getBindByTypeAndFromId($type, $fromId);
     }
 
@@ -737,6 +738,10 @@ class UserServiceImpl extends BaseService implements UserService
 
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
+        }
+
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $type = 'weixin';
         }
 
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
@@ -755,6 +760,11 @@ class UserServiceImpl extends BaseService implements UserService
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
         }
+
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $type = 'weixin';
+        }
+
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,
             'fromId' => $fromId,
@@ -1110,6 +1120,14 @@ class UserServiceImpl extends BaseService implements UserService
         );
         
         $currentUser = $this->getCurrentUser();
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
+            array(
+            'userId'=> $user['id'],
+            'note'=> $note,
+            //'status' => 'approved',
+            'operatorId' => $currentUser['id'])
+        );
+
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
         $message = array(
             'note' => $note ? $note : '',
@@ -1130,8 +1148,9 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime' => time(),
         ));
 
+        $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'],'approved');
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->addApproval(
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
             array(
             'userId'=> $user['id'],
             'note'=> $note,
