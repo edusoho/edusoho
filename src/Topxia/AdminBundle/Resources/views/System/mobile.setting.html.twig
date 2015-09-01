@@ -7,12 +7,14 @@
 
 {% block main %}
 <style>
-#mobile-splash1-container img , 
-#mobile-splash2-container img , 
-#mobile-splash3-container img , 
-#mobile-splash4-container img , 
+#mobile-splash1-container img ,
+#mobile-splash2-container img ,
+#mobile-splash3-container img ,
+#mobile-splash4-container img ,
 #mobile-splash5-container img ,
-#mobile-logo-container img 
+#mobile-logo-container img ,
+#site-appcover-container img,
+#site-applogo-container img
 {max-width: 80%; margin-bottom: 10px;}
 </style>
 
@@ -105,7 +107,7 @@
           <label for="appcover">APP封面</label>
         </div>
         <div class="col-md-8 controls">
-         <div id="site-appcover-container" class="mbl">{% if mobile.appcover %}<img class="img-responsive" src="{{ asset(mobile.appcover) }}">{% endif %}</div>
+         <div id="site-appcover-container" class="mbl">{% if mobile.appcover %}<img src="{{ asset(mobile.appcover) }}">{% endif %}</div>
           <button class="btn btn-default btn-sm" id="site-appcover-upload" type="button" 
           data-url="{{ path('admin_setting_mobile_picture_upload', {type:'appcover'}) }}">上传</button>
           <button class="btn btn-default btn-sm" id="site-appcover-remove" type="button" 
