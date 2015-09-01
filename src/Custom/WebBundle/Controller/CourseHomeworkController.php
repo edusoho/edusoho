@@ -61,6 +61,8 @@ class CourseHomeworkController extends BaseCourseHomeworkController
 
         $itemSetResult = $this->getHomeworkService()->getItemSetResultByHomeworkIdAndUserId($homework['id'], $this->getCurrentuser()->id);
         $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $this->getCurrentUser()->id);
+
+//print_r($itemSetResult);
         return $this->render('CustomWebBundle:CourseHomework:do.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
@@ -187,6 +189,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         $homeworkResult = $this->getHomeworkService()->getResultByLessonIdAndUserId($homework['lessonId'], $userId);
 
         $reviewItems = ('finished'==$homeworkResult['status']) ? $this->getHomeworkService()->getIndexedReviewItems($homeworkResult['id']) : null;
+
         return $this->render('CustomWebBundle:CourseHomework:result.html.twig', array(
             'homework' => $homework,
             'itemSetResult' => $itemSetResult,
@@ -195,6 +198,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
             'teacherSay' => $homeworkResult['teacherSay'],
             'userId' => $homeworkResult['userId'],
             'homeworkResult' => $homeworkResult,
+            'reviewItems' => $reviewItems,
             'view' => 'show'
         ));
     }

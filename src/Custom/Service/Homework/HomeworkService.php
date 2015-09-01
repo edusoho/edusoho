@@ -128,8 +128,8 @@ interface HomeworkService
      * 获取经过索引的作业点评明细记录.
      * @param homeworkResultId 作业答题id.
      * @return 索引后的点评明细记录，结构如： 
-     *      [
-     *           {
+     *      ['1' =>
+     *           [{
      *               'teacher': [
      *                   {id: 1, score: 10, review: 'good'}....
      *               ]
@@ -137,7 +137,11 @@ interface HomeworkService
      *               'student':[
      *                   {id: 2,score: 2, review: 'bad'}....
      *               ]
-     *           }
+     *           }],
+     *      '2'=>
+     *          [{
+     *              ........
+     *          }]
      *      ]
     **/
     public function getIndexedReviewItems($homeworkResultId);

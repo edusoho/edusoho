@@ -59,7 +59,7 @@
                             </td>
 
                             <td>
-                                {% if status == 'reviewing' %}
+                                {% if status == 'reviewing' or status == 'pairReviewing' %}
                                     <a href="{{ path('homework_review_create', {homeworkResultId:homeworkResult.id}) }}"
                                        class="btn btn-default btn-sm pull-right">批改</a>
                                 {% else %}

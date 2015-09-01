@@ -70,6 +70,10 @@ user_favorited:
     pattern:  /user/{id}/favorited
     defaults: { _controller: CustomWebBundle:User:favorited }
 
+user_teach:
+    pattern:  /user/{id}/teach
+    defaults: { _controller: CustomWebBundle:User:teach }
+
 my_courses_learning:
     pattern: /my/courses/learning
     defaults: { _controller: CustomWebBundle:MyCourse:learning }

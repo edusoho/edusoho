@@ -5,9 +5,7 @@
 {% endblock %}
 
 {% block body %}
-	{% if itemResult.answer|default(null) %}
-	  {% set answerChoiceIndex = itemResult.answer %}
-	{% endif %}
+	{% set answerChoiceIndex = itemResult.answer|default(null) %}
 
 	<div class="question-choices-inputs">
 		<label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1" {% if 1 in  answerChoiceIndex|default(null) %}checked{% endif %}> 正确</label>

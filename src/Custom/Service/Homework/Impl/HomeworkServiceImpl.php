@@ -105,7 +105,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         }
 
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
-        $homeworkitemResult['status'] = $homework['pairReview'] ? (time() >= $homework['completeTime'] ? 'pairReviewing' : 'editing') : 'reviewing';
+        $homeworkitemResult['status'] = $homework['pairReview'] ? 'pairReviewing' : 'reviewing';
         $homeworkitemResult['updatedTime'] = time();
 
         $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
@@ -162,7 +162,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $item=$this ->getReviewItemDao()->create($item);
 
             //老师的分数为该提的最终得分
-            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            if('teacher'==$homeworkReview['category']){
+                $this->getResultItemDao()->updateItemResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            }
             array_push($reviewItems,$item);
         }
         return $reviewItems;
@@ -374,7 +376,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     private function getUserService(){
-        return $this->createService('User:UserService');
+        return $this->createService('User.UserService');
     }
 
     private function filterHomeworkFields($fields, $mode)
@@ -436,8 +438,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     private function addHomeworkItems($homeworkId, $excludeIds)
     {
         $homeworkItems = array();
-        $homeworkItemsSub = array();
-        $includeItemsSubIds = array();
         $index = 1;
 
         $fullScore=0;
@@ -449,8 +449,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                 $items['homeworkId'] = $homeworkId;
                 $items['parentId'] = 0;
                 $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
-
-                $fullScore +=$question['score'];
             }
 
             $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
@@ -464,6 +462,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                     $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
                     $fullScore += $question['score'];
                 }
+            }else{
+                if(!empty($question)){
+                    $fullScore +=$question['score'];    
+                }
             }
         }
 
@@ -471,8 +473,37 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     }
 
     public function getIndexedReviewItems($homeworkResultId){
-        // $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
-        // $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
-        // $users=$this->getUserService()->findUsersByIds();
+        $indexed=array();
+        $reviews=$this->getReviewDao()->findReviewsByResultId($homeworkResultId);
+        if(!empty($reviews)){
+            $reviews=$this->loadReviewAssociations($reviews);
+            $indexedReviews=ArrayToolkit::index($reviews, 'id');
+            
+            $items=$this->getReviewItemDao()->findItemsByResultId($homeworkResultId);
+
+            foreach($items as $item){
+                $item['homeworkReview'] = $indexedReviews[$item['homeworkReviewId']];
+                if(!array_key_exists($item['homeworkItemResultId'],  $indexed)){
+                    $indexed[$item['homeworkItemResultId']] = array();
+                }
+                if(!array_key_exists($item['homeworkReview']['category'], $indexed[$item['homeworkItemResultId']])){
+                    $indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']] = array();
+                }
+                array_push($indexed[$item['homeworkItemResultId']][$item['homeworkReview']['category']], $item);
+            }
+        }
+        
+        return $indexed;
+    }
+
+    private function loadReviewAssociations($reviews){
+        $userIds=ArrayToolKit::column($reviews, "userId");
+        $users=$this->getUserService()->findUsersByIds($userIds);
+        $indexedUsers=ArrayToolkit::index($users, 'id');
+        foreach($reviews as $i=>$review){
+            $review['user'] = $indexedUsers[$review['userId']];
+            $reviews[$i] = $review;
+        }
+        return $reviews;
     }
 }

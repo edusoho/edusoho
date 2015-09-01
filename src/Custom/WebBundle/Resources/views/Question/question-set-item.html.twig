@@ -18,14 +18,25 @@
         {% set itemResult = item.itemResult|default(null) %}
         {% if question %}
             {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ ('preview'==view ? 'doing' : view) ~ '.html.twig' %}
-            {% if 'finished'==homeworkResult.status %}
-              <span>得分: {{itemResult.score | default(0)}}分</span>
+            {% if view!='preview' and 'finished'==homeworkResult.status %}
+              <span>得分: {{itemResult.score| round | default(0)}}分</span>
               {% if 'essay'==question.type %}
-                <div class="student-comment alert alert-success">
-                  学生点评：
-                  <p>学员A：very goog</p>
-                  <p>学员B：very goog</p>
-                </div>
+                    {% if not (reviewItems is empty) and (reviewItems[itemResult.id].teacher is defined) %}
+                        <div class="teacher-comment alert alert-success">
+                            老师点评：
+                            {% for item in reviewItems[itemResult.id].teacher %}
+                                {{ item.review}}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if not (reviewItems is empty) and (reviewItems[itemResult.id].student is defined) %}
+                        <div class="student-comment alert alert-success">
+                        学生点评：
+                            {% for item in reviewItems[itemResult.id].student %}
+                                <p>{{item.homeworkReview.user.nickname}}：{{ item.review}}</p>
+                            {% endfor %}
+                            </div>
+                    {% endif %}
               {% endif %}
             {% endif %}
         {% else %}

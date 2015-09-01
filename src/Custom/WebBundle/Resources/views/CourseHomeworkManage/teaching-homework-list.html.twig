@@ -35,7 +35,7 @@
             </div>
           </td>
           <td>
-            {% if status == 'reviewing' %}
+            {% if status == 'reviewing' or status=='pairReviewing' %}
               <a href="{{ path('homework_review_create', {homeworkResultId:homeworkResult.id,source:source|default('course'),targetId:targetId|default(0) }) }}" class="btn btn-default btn-sm">批改</a>
             {% else %}
               <a class="btn btn-default btn-sm"  href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homeworkResult.homeworkId,resultId:homeworkResult.id, userId:userId }) }}" target="_blank" >查看</a>
