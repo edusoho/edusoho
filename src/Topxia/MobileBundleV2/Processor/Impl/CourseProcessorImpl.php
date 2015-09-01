@@ -853,7 +853,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $user     = $this->controller->getUserByToken($this->request);
         $courseId = $this->getParam("courseId");
         $course   = $this->controller->getCourseService()->getCourse($courseId);
-        
+
         if (empty($course)) {
             return $this->createErrorResponse('not_found', "课程不存在");
         }

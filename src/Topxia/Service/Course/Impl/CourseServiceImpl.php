@@ -598,10 +598,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($id);
 
 		if(!empty($lessons)){
-			$fileIds = ArrayToolkit::column($lessons, "mediaId");
-
-			if(!empty($fileIds)){
-				$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+			$fileId = ArrayToolkit::column($lessons, "mediaId");
+			if(!empty($fileId)){
+				$this->getUploadFileService()->decreaseFileUsedCount($fileId);
 			}
 		}
 
@@ -1036,7 +1035,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// Increase the linked file usage count, if there's a linked file used by this lesson.
 		if(!empty($lesson['mediaId'])){
-			$this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+			$this->getUploadFileService()->increaseFileUsedCount($lesson['mediaId']);
 		}
 
 		$this->updateCourseCounter($course['id'], array(
@@ -1076,7 +1075,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				if (empty($media['id'])) {
 					throw $this->createServiceException("media id参数不正确，添加/编辑课时失败！");
 				}
-				$file = $this->getUploadFileService()->getFile($media['id']);
+				$file = $this->getUploadFileService()->getThinFile($media['id']);
 				if (empty($file)) {
 					throw $this->createServiceException('文件不存在，添加/编辑课时失败！');
 				}
@@ -1191,12 +1190,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($fields['mediaId'] != $lesson['mediaId']){
 			// Incease the link count of the new selected lesson file
 			if(!empty($fields['mediaId'])){
-				$this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
+				$this->getUploadFileService()->increaseFileUsedCount($fields['mediaId']);
 			}
 
 			// Decrease the link count of the original lesson file
 			if(!empty($lesson['mediaId'])){
-				$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+				$this->getUploadFileService()->decreaseFileUsedCount($lesson['mediaId']);
 			}
 		}
 
@@ -1251,7 +1250,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
 		if(!empty($lesson['mediaId'])){
-			$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+			$this->getUploadFileService()->decreaseFileUsedCount($lesson['mediaId']);
 		}
 
 		// Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
@@ -1441,7 +1440,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$file = array();
 		if (!empty($createLessonView['fileId'])) {
-			$file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
+			$file = $this->getUploadFileService()->getThinFile($createLessonView['fileId']);
 		}
 
 		$createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
@@ -2633,7 +2632,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return $this->createService('File.UploadFileService2');
     }
 
     protected function getMessageService(){
