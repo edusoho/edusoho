@@ -64,7 +64,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         if (empty($homework)) {
             throw $this->createServiceException('作业不存在，更新作业失败！');
         }
-        if ($fields['pairReview'] == 1) {
+        if (!empty($fields['pairReview']) and $fields['pairReview'] == 1) {
             $fields['completeTime'] = strtotime($fields['completeTime']);
             $fields['reviewEndTime'] = strtotime($fields['reviewEndTime']);
         } else {

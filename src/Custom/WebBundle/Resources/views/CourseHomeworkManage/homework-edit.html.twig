@@ -32,17 +32,19 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="col-md-2 control-label"><label>启用作业互评</label></div>
-                    <div class="col-md-7 controls radios">
-                        <input type="radio" id="comment_true" name="comment" required="required" value="1"
-                                {% if homework.pairReview == 1 %} checked="checked" {% endif %}>
-                        <label for="comment_true" class="required">是</label>
-                        <input type="radio" id="comment_false" name="comment" required="required" value="0"
-                                {% if homework.pairReview == 0 %} checked="checked" {% endif %}>
-                        <label for="comment_false" class="required">否</label>
+                {% if 'periodic'==course.type %}
+                    <div class="form-group">
+                        <div class="col-md-2 control-label"><label>启用作业互评</label></div>
+                        <div class="col-md-7 controls radios">
+                            <input type="radio" id="comment_true" name="comment" required="required" value="1"
+                                    {% if homework.pairReview == 1 %} checked="checked" {% endif %}>
+                            <label for="comment_true" class="required">是</label>
+                            <input type="radio" id="comment_false" name="comment" required="required" value="0"
+                                    {% if homework.pairReview == 0 %} checked="checked" {% endif %}>
+                            <label for="comment_false" class="required">否</label>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
 
                 <div class="form-group" id="completeTimeGroup" style="display:none">
                     <div class="col-md-2 control-label">
