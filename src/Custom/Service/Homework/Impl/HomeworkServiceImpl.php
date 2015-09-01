@@ -88,15 +88,15 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $homeworks;
     }
 
-    public function submitHomework($id, $homework_result)
+    public function submitHomework($homework_result,$userId)
     {
-        $homework = $this->getHomeworkDao()->getHomework($id);
+        $homework = $this->getHomeworkDao()->getHomework($homework_result['homeworkId']);
 
-        $this->addItemResult($id, $homework_result);
+        $this->addItemResult($homework_result['homeworkId'], $userId, $homework_result);
         //reviewing
         $rightItemCount = 0;
 
-        $homeworkItemsRusults = $this->getResultItemDao()->findItemResultsbyHomeworkId($id);
+        $homeworkItemsRusults = $this->getResultItemDao()->findItemResultsbyHomeworkId($homework_result['homeworkId']);
 
         foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
             if ($homeworkItemRusult['status'] == 'right') {
@@ -108,7 +108,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $homeworkitemResult['status'] = $homework['pairReview'] ? 'pairReviewing' : 'reviewing';
         $homeworkitemResult['updatedTime'] = time();
 
-        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($homework_result['homeworkId'], $userId);
         $result = $this->getResultDao()->updateResult($homeworkResult['id'], $homeworkitemResult);
 
         return $result;
@@ -340,7 +340,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         //作业结束时间到来之后，把作业状态改为互评中
         $results=$this->getResultDao()->findSubmitableResults();
         foreach($results as $result){
-            $this->submitHomework($result['homeworkId'], array('id'=>$result['id']));       
+            $this->submitHomework($result, $result['userId']);       
         }
 
         //作业互评时间结束后计算评分
@@ -451,23 +451,19 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $fields;
     }
 
-    private function addItemResult($id, $homework)
+    private function addItemResult($id, $userId, $homework)
     {
 
-        $homeworkResult = $this->getResultByHomeworkIdAndUserId($id, $this->getCurrentUser()->id);
+        $homeworkResult = $this->getResultByHomeworkIdAndUserId($id, $userId);
         $homeworkItems = $this->findItemsByHomeworkId($id);
         $itemResult = array();
         $homeworkitemResult = array();
 
         foreach ($homeworkItems as $key => $homeworkItem) {
             if (!empty($homework[$homeworkItem['questionId']])) {
-
                 if (!empty($homework[$homeworkItem['questionId']]['answer'])) {
-
                     $answer = $homework[$homeworkItem['questionId']]['answer'];
-
                     $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $answer);
-
                     $status = $result['status'];
                 } else {
                     $answer = null;
@@ -477,16 +473,24 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             } else {
                 $answer = null;
                 $status = "noAnswer";
-
             }
-            $itemResult['itemId'] = $homeworkItem['id'];
-            $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
-            $itemResult['homeworkResultId'] = $homeworkResult['id'];
-            $itemResult['questionId'] = $homeworkItem['questionId'];
-            $itemResult['userId'] = $this->getCurrentUser()->id;
-            $itemResult['status'] = $status;
-            $itemResult['answer'] = $answer;
-            $this->getResultItemDao()->addItemResult($itemResult);
+
+            $existing=$this->getResultItemDao()->getItemResultByResultIdAndQuestionId($id,$homeworkItem['questionId']);
+            if(empty($existing)){
+                $itemResult['itemId'] = $homeworkItem['id'];
+                $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
+                $itemResult['homeworkResultId'] = $homeworkResult['id'];
+                $itemResult['questionId'] = $homeworkItem['questionId'];
+                $itemResult['userId'] = $userId;
+                $itemResult['status'] = $status;
+                $itemResult['answer'] = $answer;
+                $this->getResultItemDao()->addItemResult($itemResult);                
+            }else{
+                $this->gerResultItemDao()->updateItemResult($existing['id'],array(
+                    'answer'=>$answer,
+                    'status'=>$status
+                ));
+            }
         }
     }
 

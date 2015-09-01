@@ -41,11 +41,11 @@ interface HomeworkService
 
     /**
      * 提交作业
-     * @param $id
      * @param $homework_result
+     * @param userId 学员id.
      * @return mixed
      */
-    public function submitHomework($id, $homework_result);
+    public function submitHomework($homework_result,$userId);
 
     /**
      * 根据courseId和userIdeas查找homework_result

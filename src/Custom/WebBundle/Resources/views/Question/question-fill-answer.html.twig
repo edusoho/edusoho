@@ -1,17 +1,19 @@
 <div class="homework-question-fill">
    <ul>
+    {% set answers=itemResult.answer|default('')|split(",") %}
+
     {% for index,rightAnswer in question.answer %}
       <li>
         填空({{index+1}})： 
-        {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
-            回答是<strong class="question-text-danger">{{ itemResult.answer[index]|default('') }}</strong>。
+        {% if answers[index] or answers[index] is same as(0) or answers[index] is same as('0') %}
+            回答是<strong class="question-text-danger">{{ answers[index]|default('') }}</strong>。
         {% else %}
             未回答
         {% endif %}
 
         正确答案是<strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>，
 
-        {% if itemResult.answer[index]|default(null) in rightAnswer %}
+        {% if answers[index]|default(null) in rightAnswer %}
             <span class="glyphicon glyphicon-ok question-text-success"></span>答对了
         {% else %}
             <span class="glyphicon glyphicon-remove question-text-danger"></span>答错了
