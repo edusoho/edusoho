@@ -78,6 +78,14 @@ interface HomeworkService
     public function loadHomeworkResult($homeworkResultId);
 
     /**
+     * 更新一个作业答卷答题内容.
+     * @param homeworkResult，作业答卷
+     * @param items 答题字段
+     * @return 答卷
+    **/
+    public function updateHomeworkResultItems($homeworkResult,array $items);
+
+    /**
      * 更新一个作业答卷.
      * @param homeworkResultId作业答卷id .
      * @param fields 更新字段.

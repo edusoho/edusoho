@@ -233,6 +233,61 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $homeworkResult;
     }
 
+    public function updateHomeworkResultItems($homeworkResult, array $items){
+        $homework = $this->loadHomework($homeworkResult['homeworkId']);
+
+        foreach ($items as $questionId => $value) {
+            if(array_key_exists('answer',$value)){
+                $answer = $value['answer'];
+                if (count($answer) > 1) {
+                    $answer = implode(",", $answer);
+                } else {
+                    $answer = $answer[0];
+                }
+                $itemResult = $this->getResultItemDao()->getItemResultByResultIdAndQuestionId($homeworkResult['id'],$questionId);
+                $this->getResultItemDao()->updateItemResult($itemResult['id'],array('answer'=>$answer));
+            }        
+        }
+        return $homeworkResult;
+    }
+
+    protected function addHomeworkResultItem($id,$homework){
+        
+        $homeworkItems = $this->findItemsByHomeworkId($id);
+        $itemResult = array();
+        $homeworkitemResult = array();
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+            if (!empty($homework[$homeworkItem['questionId']])) {
+
+                if (!empty($homework[$homeworkItem['questionId']]['answer'])) {
+
+                    $answer = $homework[$homeworkItem['questionId']]['answer'];
+
+                    $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $answer);
+                    
+                    $status = $result['status'];
+                } else {
+                    $answer = null;
+                    $status = "noAnswer";
+                }
+
+            } else {
+                $answer = null;
+                $status = "noAnswer";
+
+            }
+            $itemResult['itemId'] = $homeworkItem['id'];
+            $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
+            $itemResult['homeworkResultId'] = $homeworkResult['id'];
+            $itemResult['questionId'] = $homeworkItem['questionId'];
+            $itemResult['userId'] = $this->getCurrentUser()->id;
+            $itemResult['status'] = $status;
+            $itemResult['answer'] = $answer;
+            $this->getResultItemDao()->addItemResult($itemResult);
+        }
+    }
+
     public function updateHomeworkResult($homeworkResultId, array $fields)
     {
         return $this->getResultDao()->updateResult($homeworkResultId, $fields);

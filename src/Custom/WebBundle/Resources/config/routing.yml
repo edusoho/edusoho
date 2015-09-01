@@ -146,3 +146,12 @@ homework_review_create:
 homework_review_check:
     pattern: /homework_results/{homeworkResultId}/reviews/check
     defaults: { _controller: CustomWebBundle:HomeworkReview:check }
+
+order_show:
+    pattern:  /order/show
+    defaults: { _controller: CustomWebBundle:Order:show }
+
+course_become_use_member:
+    pattern:  /course/{id}/become_use_member
+    defaults: { _controller: CustomWebBundle:Course:becomeUseMember }
+    methods: [POST]
