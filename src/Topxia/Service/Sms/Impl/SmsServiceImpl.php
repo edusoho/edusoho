@@ -20,9 +20,15 @@ class SmsServiceImpl extends BaseService implements SmsService
         return false;
     }
 
-    public function smsSend($smsType, $to, $userIds, $parameters=array())
+    public function smsSend($smsType, $userIds, $parameters=array())
     {
         $smsCode = $this->generateSmsCode();
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $to = '';
+        if (!empty($users)) {
+            $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
+            $to = implode(',', $verifiedMobiles);
+        }
         try {
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'verify' => $smsCode, 'category' => $smsType, 'parameters' => $parameters));
@@ -31,7 +37,6 @@ class SmsServiceImpl extends BaseService implements SmsService
             }
         $result['to'] = $to;
         $result['smsCode'] = $smsCode;
-        $users = $this->getUserService()->findUsersByIds($userIds);
         foreach ($users as $user) {
             $result['userId'] = $user['id'];
             $result['nickname'] = $user['nickname'];
