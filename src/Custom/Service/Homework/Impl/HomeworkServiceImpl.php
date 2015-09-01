@@ -162,7 +162,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
             $item=$this ->getReviewItemDao()->create($item);
 
             //老师的分数为该提的最终得分
-            $this->getResultDao()->updateResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            if('teacher'==$homeworkReview['category']){
+                $this->getResultItemDao()->updateItemResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+            }
             array_push($reviewItems,$item);
         }
         return $reviewItems;
@@ -436,8 +438,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     private function addHomeworkItems($homeworkId, $excludeIds)
     {
         $homeworkItems = array();
-        $homeworkItemsSub = array();
-        $includeItemsSubIds = array();
         $index = 1;
 
         $fullScore=0;
@@ -449,8 +449,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                 $items['homeworkId'] = $homeworkId;
                 $items['parentId'] = 0;
                 $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
-
-                $fullScore +=$question['score'];
             }
 
             $questions = $this->getQuestionService()->findQuestionsByParentId($excludeId);
@@ -463,6 +461,10 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                     $items['parentId'] = $question['parentId'];
                     $homeworkItems[] = $this->getHomeworkItemDao()->addItem($items);
                     $fullScore += $question['score'];
+                }
+            }else{
+                if(!empty($question)){
+                    $fullScore +=$question['score'];    
                 }
             }
         }
@@ -497,7 +499,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
     private function loadReviewAssociations($reviews){
         $userIds=ArrayToolKit::column($reviews, "userId");
         $users=$this->getUserService()->findUsersByIds($userIds);
-        $users=ArrayToolkit::index($users, 'id');
         $indexedUsers=ArrayToolkit::index($users, 'id');
         foreach($reviews as $i=>$review){
             $review['user'] = $indexedUsers[$review['userId']];

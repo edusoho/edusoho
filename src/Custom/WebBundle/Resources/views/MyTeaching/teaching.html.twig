@@ -56,7 +56,7 @@
                 {% endif  %}
 
                 {% if course.type == 'periodic' %}
-                    <span class="label label-success live-label">第{{ course.periods }}周期</span>
+                    <span class="label label-success live-label">第{{ course.periods }}期</span>
                 {% endif  %}
 
                 {% if filter == 'classroom' %} 
@@ -73,7 +73,7 @@
                 {% if "now"|date('U') >= course.startTime %}
                   <a class="week-reminder"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
                 {% else %}
-                  <a class="time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y年m月d号')}}开课</a>
+                  <a class="time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
                 {% endif %}
               {% endif %}
               {#    <a class="week-reminder"><i class="iconfont icon-time"></i>2015年10月1号开课</a> #}

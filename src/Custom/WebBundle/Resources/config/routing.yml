@@ -38,10 +38,6 @@ course_homework_continue:
     pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
     defaults: { _controller: CustomWebBundle:CourseHomework:continue }
 
-course_homework_continue:
-    pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
-    defaults: { _controller: CustomWebBundle:CourseHomework:continue }
-
 course_homework_preview:
     pattern: /course/{courseId}/homework/{homeworkId}/preview
     defaults: { _controller: CustomWebBundle:CourseHomework:preview }
@@ -73,6 +69,10 @@ user_learn:
 user_favorited: 
     pattern:  /user/{id}/favorited
     defaults: { _controller: CustomWebBundle:User:favorited }
+
+user_teach:
+    pattern:  /user/{id}/teach
+    defaults: { _controller: CustomWebBundle:User:teach }
 
 my_courses_learning:
     pattern: /my/courses/learning
