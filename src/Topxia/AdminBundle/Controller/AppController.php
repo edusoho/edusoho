@@ -38,15 +38,18 @@ class AppController extends BaseController
 
             if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
                 $trial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
-                $result = json_decode($trial,true);
-
+                $TrialHtml = json_decode($trial,true);
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                     'articles' => $articles,
-                    'trial' => $result['content'],
+                    'trial' => $TrialHtml['content'],
                 ));
             }
+            $unTrial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
+            $unTrialHtml = json_decode($unTrial,true);
+            $flag = "canNotTrial";
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                 'articles' => $articles,
+                'untrial' => $unTrialHtml['content'],
             ));
         }
 
@@ -185,7 +188,9 @@ class AppController extends BaseController
         }
 
         $showType=$request->query->get("showType");
-
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            return $this->redirect($this->generateUrl('admin_app_installed', array('postStatus' => 'all','canTrial' => "yes")));
+        }
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
@@ -256,6 +261,17 @@ class AppController extends BaseController
             }elseif ($value['type'] == 'plugin' || $value['type'] == 'app') {
                 $plugin[] = $value;
             }
+        }
+
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
+                'apps' => $apps,
+                'theme' => $theme,
+                'plugin' => $plugin,
+                'type' => $postStatus,
+                'appMeta' => $appMeta,
+                'canTrial' => "yes",
+            ));
         }
 
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
