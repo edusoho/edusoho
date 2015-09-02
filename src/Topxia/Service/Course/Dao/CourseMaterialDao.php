@@ -11,6 +11,8 @@ interface CourseMaterialDao
 
     public function findMaterialsByLessonId($lessonId, $start, $limit);
 
+    public function findCourseMaterialsByCourseId($courseId);
+
     public function getMaterialCountByCourseId($courseId);
 
     public function addMaterial($material);

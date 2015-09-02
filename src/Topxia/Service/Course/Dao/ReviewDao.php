@@ -24,4 +24,5 @@ interface ReviewDao
 
     public function deleteReview($id);
 
+    public function findCourseReviewsByCourseId($courseId);
 }

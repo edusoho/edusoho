@@ -44,6 +44,17 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId));
 	}
 
+	public function findCourseLessonReplaysByCourseId($courseId)
+	{
+		$sql ="SELECT * FROM {$this->getTablename()} WHERE courseId=? ";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
+	}
+
+	public function deleteCourseLessonReplay($id)
+	{
+		return $this->getConnection()->delete($this->getTablename(), array('id' => $id));
+	}
+
 	protected function getTablename()
     {
         return self::TABLENAME;

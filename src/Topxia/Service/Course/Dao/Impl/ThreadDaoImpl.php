@@ -153,4 +153,10 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
 	}
 
+	public function findCourseThreadsByCourseId($courseId)
+	{
+		$sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
+	}
+
 }

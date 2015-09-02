@@ -24,4 +24,6 @@ interface CourseNoteDao
     public function findNotesByUserIdAndCourseId($userId, $courseId);
 
     public function getNoteCountByUserIdAndCourseId($userId, $courseId);
+
+    public function findNotesByCourseId($courseId);
 }

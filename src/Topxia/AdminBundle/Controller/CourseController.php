@@ -128,6 +128,9 @@ class CourseController extends BaseController
            if($course['status'] == 'closed'){
                 $result = $this->getCourseDeleteService()->delete($id);
                 return $this->createJsonResponse(true);
+           }else if($course['status'] == 'draft'){
+                $result = $this->getCourseService()->deleteCourse($id);
+                return $this->createJsonResponse(true);
            }else{
                 return $this->createJsonResponse('not remove classroom course');
            }

@@ -191,5 +191,9 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
         return $this->getConnection()->fetchColumn($sql, array($id));
     }
 
-    
+    public function deleteTestpaperItemResultByTestpaperId($testpaperId)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE testId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($testpaperId));
+    }
 }

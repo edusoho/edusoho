@@ -49,4 +49,10 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function findCourseFavoritesByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
+    }
+
 }

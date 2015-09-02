@@ -14,4 +14,6 @@ interface AnnouncementDao
     public function deleteAnnouncement($id);
 
     public function updateAnnouncement($id, $fields);
+
+    public function findAnnouncementsByTargetTypeAndTargetId($targetType,$targetId);
 }

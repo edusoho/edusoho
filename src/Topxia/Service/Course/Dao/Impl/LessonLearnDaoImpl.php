@@ -147,4 +147,15 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>=? AND `finishedTime`<=? AND `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
     }
+
+    public function findLearnsByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
+    }
+
+    public function deleteLearn($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
 }

@@ -23,4 +23,6 @@ interface TestpaperItemResultDao
     public function findWrongResultByUserId($id, $start, $limit);
 
     public function findWrongResultCountByUserId ($id);
+
+    public function deleteTestpaperItemResultByTestpaperId($testpaperId);
 }

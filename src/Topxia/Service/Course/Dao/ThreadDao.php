@@ -32,4 +32,6 @@ interface ThreadDao
 
 	public function waveThread($id, $field, $diff);
 
+	public function findCourseThreadsByCourseId($courseId);
+
 }

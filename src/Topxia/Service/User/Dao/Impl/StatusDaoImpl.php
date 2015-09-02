@@ -108,4 +108,10 @@ class StatusDaoImpl extends BaseDao implements StatusDao
             'objectId'=>$objectId
             ));
     }
+
+    public function findStatusByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
+    }
 }
