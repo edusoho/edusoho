@@ -160,11 +160,11 @@ directive('uiTab', function ($parse) {
     }
   }
 }).
-directive('imgError', function() {
+directive('imgError', function($timeout) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
-            return { 
+            return {
                 post: function postLink(scope, element, attributes) {
                   var errorSrc = "";
                   switch (attributes.imgError) {
@@ -185,6 +185,11 @@ directive('imgError', function() {
                   element.on("error", function(e) {
                     element.attr("src", errorSrc);
                   });
+
+                  element.attr('src', errorSrc);
+                  $timeout(function() {
+                    element.attr('src', attributes.ngSrc);
+                  }, 100);
                 }
             };
     }
