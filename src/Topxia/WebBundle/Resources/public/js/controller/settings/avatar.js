@@ -15,12 +15,13 @@ define(function(require, exports, module) {
         });
 
         $('.use-partner-avatar').on('click', function(){
-            var goto = $(this).data('goto');
-            $.post($(this).data('url'), function(){
+            var $this = $(this);
+            var goto = $this.data('goto');
+
+            $.post($this.data('url'), {imgUrl:$this.data('imgUrl')},function(){
                 window.location.href = goto;
             });
         });
-
     };
 
 });
