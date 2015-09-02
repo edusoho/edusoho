@@ -38,10 +38,10 @@ class AppController extends BaseController
 
             if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
                 $trial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
-                $TrialHtml = json_decode($trial,true);
+                $trialHtml = json_decode($trial,true);
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                     'articles' => $articles,
-                    'trial' => $TrialHtml['content'],
+                    'trial' => $trialHtml['content'],
                 ));
             }
             $unTrial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
@@ -107,6 +107,14 @@ class AppController extends BaseController
 
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
+
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            $trial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
+            $trialHtml = json_decode($trial,true);
+            $canTrial = "yes";
+        } else {
+            $canTrial = "no";
+        }
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
             'packageDate' =>$packageDate,
@@ -127,7 +135,9 @@ class AppController extends BaseController
             'info' => $info,
             'isBinded' => $isBinded,
             'email' => $email,
-            'tlp' => $tlp
+            'tlp' => $tlp,
+            'canTrial' => $canTrial,
+            'trialhtml' => (isset($trialHtml['content'])) ? $trialHtml['content'] : null,
         ));
     }
 

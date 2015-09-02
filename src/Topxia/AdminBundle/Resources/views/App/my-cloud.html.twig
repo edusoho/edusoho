@@ -20,7 +20,7 @@
 
         </ul> 
       {% endif %}
-
+      {% if canTrial is defined and canTrial == "no" %}
         <div class="eduyun-main">
 
           <!--个人资料-->
@@ -103,6 +103,12 @@
           </fieldset>
           
         </div>
+      {% endif %}
 
+      {% if canTrial is defined and canTrial == "yes" %}
+        {% if trialhtml is not null %}
+          {{ trialhtml|raw }}
+        {% endif %}}
+      {% endif %}
 
 {% endblock %}
