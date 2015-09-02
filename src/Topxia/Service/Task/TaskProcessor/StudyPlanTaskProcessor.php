@@ -51,9 +51,12 @@ class StudyPlanTaskProcessor implements TaskProcessor
         $getTask = $this->getTaskService()->getActiveTaskBy($userId, 'studyplan', $targetObject['id'], $targetObject['type']);
 
         if ($getTask) {
-            $updateInfo = array('status'=>'completed', 'completedTime'=>time());
+            $canFinished = $this->_canFinished($getTask, $targetObject);
 
-            return $this->getTaskService()->updateTask($getTask['id'], $updateInfo);
+            if ($canFinished) {
+                $updateInfo = array('status'=>'completed', 'completedTime'=>time());
+                return $this->getTaskService()->updateTask($getTask['id'], $updateInfo);
+            }
         }
 
         return array();
@@ -154,11 +157,11 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     }
                 } 
                 else if ($planTask['type'] == 'homework') {
-                    $info = $this->_getUserHomeworkPassed($planTask['objectId'], $userId);
+                    $info = $this->_getUserHomeworkPassed($planTask['objectId'], $userId, $plan);
                     $taskInfo = array_merge($taskInfo, $info);
                 } 
                 else if ($planTask['type'] == 'testpaper') {
-                    $info = $this->_getUserTestpaperPassed($planTask['objectId'], $userId);
+                    $info = $this->_getUserTestpaperPassed($planTask['objectId'], $userId, $plan);
                     $taskInfo = array_merge($taskInfo, $info);
                 }
 
@@ -203,9 +206,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
             
     }
 
-    private function _getUserHomeworkPassed($homeworkId, $userId)
+    private function _getUserHomeworkPassed($homeworkId, $userId, $plan)
     {
-        $taskInfo['required'] = 1;
+        $taskInfo['required'] = $plan['requirePass'] ? 1 : 0 ;
         $homeworkconditions = array(
             'homeworkId' => $homeworkId,
             'userId' => $userId,
@@ -222,9 +225,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
     }
 
-    private function _getUserTestpaperPassed($testId, $userId)
+    private function _getUserTestpaperPassed($testId, $userId, $plan)
     {
-        $taskInfo['required'] = 1;
+        $taskInfo['required'] = $plan['requirePass'] ? 1 : 0 ;
         $testConditions = array(
             'testId' => $testId,
             'userId' => $userId,
@@ -239,6 +242,18 @@ class StudyPlanTaskProcessor implements TaskProcessor
         }
 
         return $taskInfo;
+    }
+
+    private function _canFinished($task, $targetObject)
+    {
+        $canFinished = true;
+        if ($task['required'] && ($targetObject['targetType'] == 'homework' || $targetObject['targetType'] == 'testpaper')) {
+            if ($targetObject['passedStatus'] == 'unpassed' || $targetObject['passedStatus'] == 'none') {
+                $canFinished = false;
+            }
+        } 
+        
+        return $canFinished;
     }
 
     protected function getTaskService()
