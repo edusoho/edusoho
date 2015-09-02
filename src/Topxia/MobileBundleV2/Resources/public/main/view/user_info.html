@@ -1,0 +1,76 @@
+<div class="ui-bar transparent" ng-class="uiBarTransparent ? 'transparent' : '' " ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">用户信息</h3>
+    </div>
+</div>
+<div class="ui-details ui-scroller" ui-scroll data="userinfo" on-scroll="changeTabStatus(headTop, scrollTop)">
+    <ul class="ui-list transparent ui-details-panel ui-details-head">
+    	<li>
+    		<div class="ui-details-avatar">
+    			   <div class="ui-avatar-lg">
+		            <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" img-error="avatar" />
+		        </div>
+		        <h4 class="ui-nowrap">{{ userinfo.nickname }}</h4>
+		        <p class="ui-nowrap">{{ userinfo.signature }}</p>
+		        <button class="ui-btn btn-green" ng-click="changeFollowUser()" ng-if="isFollower != null ">
+			        {{ isFollower ? "已关注" : "+关注" }}
+		        </button>
+    		</div>
+      </li>
+    </ul>
+
+    <div class="ui-panel">
+	    <div class="ui-border-b ui-details-panel ui-vip">
+		    	<ul class="ui-list ui-border-b">
+		    		<li>
+		    			<ul class="ui-grid-trisect">
+						<li>
+							<h4>{{ userinfo.following }}</h4>
+							<p>关注</p>
+						</li>
+						<li>
+							<h4>{{ userinfo.follower }}</h4>
+							<p>粉丝</p>
+						</li>
+						<li>
+							<h4>{{ courses.length }}</h4>
+							<p>课程</p>
+						</li>
+				    	</ul>
+		    		</li>
+
+		    		<li class="vip-price-line">
+			        	<span>个人介绍</span>
+			    	</li>
+		    	</ul>
+		    	<div class="ui-btn-wrap">
+			    <h4 ng-bind-html="userinfo.about"></h4>
+			</div>
+	    </div>
+
+	    <div class="course-card ui-border-t" style="margin-top : 16px;">
+			<h4>{{ isTeacher ? '在教课程' : '在学课程' }}</h4>
+			<list-empty-view data="courses" title="暂时没有{{ isTeacher ? '在教课程' : '在学课程' }}">
+      </list-empty-view>
+			<ul class="ui-list ui-border-tb">
+			    <li class="ui-border-t" ng-repeat="course in courses" ui-sref="course({ courseId : course.id })">
+			        <div class="ui-list-img">
+			            <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course"/>
+			        </div>
+			        <div class="ui-list-info">
+			            <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+			            <p class="bottom price-body">
+			            	<span class="origin-price">
+										      {{ course.price | formatPrice }}
+										      <s class="discount-color" ng-if="course.discountId > 0">
+										      	{{ course.originPrice | formatPrice }}
+										      </s>
+										</span>
+			            </p>
+			        </div>
+			    </li>
+			</ul>
+	    </div>
+	</div>
+</div>
