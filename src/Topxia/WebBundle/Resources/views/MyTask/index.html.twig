@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的任务 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-task' %}
+
+{% do load_script('classroomplanbundle/controller/classroomplan/fullcalendar') %}
+
+{% block main %}
+<style>
+
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family:"Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+</style>
+<div class="panel panel-default panel-col">
+      <div class="panel-heading">我的任务日历</span></div>
+      <div class="panel-body" >
+      <div id="calendar"></div>
+
+      </div>
+</div>
+{% endblock %}
