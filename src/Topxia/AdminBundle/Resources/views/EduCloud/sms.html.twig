@@ -6,9 +6,9 @@
 {% set script_controller = 'educloud/sms-setting' %}
 
 {% block main %}
-	{% if canTrial is not defined %}
+	
 	  {{ web_macro.flash_messages() }}
-
+{% if canTrial is not defined %}
 	  {% if not smsStatus or smsStatus.status == 'error' %}
 		  <div class="panel panel-default">
 				<table class="table table-striped table-hover" style="word-break:break-all;">

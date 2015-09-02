@@ -189,7 +189,7 @@ class AppController extends BaseController
 
         $showType=$request->query->get("showType");
         if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
-            return $this->redirect($this->generateUrl('admin_app_installed', array('postStatus' => 'all','canTrial' => "yes")));
+            $canTrial = "appCanTrial";
         }
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
             'apps' => $apps,
@@ -197,7 +197,8 @@ class AppController extends BaseController
             'allApp' => $app,
             'installedApps' => $installedApps,
             'type' => $postStatus,
-            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null
+            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null,
+            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
@@ -264,14 +265,7 @@ class AppController extends BaseController
         }
 
         if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
-            return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
-                'apps' => $apps,
-                'theme' => $theme,
-                'plugin' => $plugin,
-                'type' => $postStatus,
-                'appMeta' => $appMeta,
-                'canTrial' => "yes",
-            ));
+            $canTrial = "appCanTrial";
         }
 
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
@@ -280,6 +274,7 @@ class AppController extends BaseController
             'plugin' => $plugin,
             'type' => $postStatus,
             'appMeta' => $appMeta,
+            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
@@ -299,10 +294,13 @@ class AppController extends BaseController
             return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
         }
         $version = $this->getAppService()->getMainVersion();
-
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            $canTrial = "appCanTrial";
+        }
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
             'version' => $version,
+            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
@@ -328,10 +326,14 @@ class AppController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
 
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            $canTrial = "appCanTrial";
+        }
         return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
             'logs' => $logs,
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
