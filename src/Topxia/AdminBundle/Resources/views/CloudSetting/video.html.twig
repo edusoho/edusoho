@@ -8,12 +8,12 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
-  <!-- 这里的样式需要重新设计，比如那句话的position，还有前面两条是readOnly掉，还是直接删掉 -->
   {% if trial is defined %}
     <div class="row form-group">
       <div class="help-block">
+        </br></br>
+        <p style = "text-align:center;font-size:16px">视频托管服务由EduSoho教育云提供 <a href="http://open.edusoho.com/show/cloud/video" target="_blank">了解详情</a></p>
         </br>
-        <h3 align="center">视频托管服务由EduSoho教育云提供 <a href="http://open.edusoho.com/show/cloud/video" target="_blank">了解详情</a></h4>
       </div>
     </div>
   {% endif %}

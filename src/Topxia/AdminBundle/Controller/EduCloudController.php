@@ -54,7 +54,13 @@ class EduCloudController extends BaseController
         
         try {
             $smsStatus = $this->handleSmsSetting($request);
-
+            if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+                $canTrial = "canTrial";
+                return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
+                    'smsStatus' => $smsStatus,
+                    'canTrial' => $canTrial,
+                ));
+            }
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'smsStatus' => $smsStatus,
             ));
