@@ -283,9 +283,13 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailer);
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            $canTrial = "emailTrial";
+        }
 
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
+            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
