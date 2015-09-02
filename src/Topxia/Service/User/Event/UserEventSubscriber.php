@@ -53,6 +53,11 @@ class UserEventSubscriber implements EventSubscriberInterface
 
     }
 
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
+    }
+
     protected function getWelcomeBody($user)
     {
         $site = $this->getSettingService()->get('site', array());
@@ -61,11 +66,6 @@ class UserEventSubscriber implements EventSubscriberInterface
         $welcomeBody = $this->getSettingService()->get('auth.welcome_body', '注册欢迎的内容');
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
         return $welcomeBody;
-    }
-
-    protected function getStatusService()
-    {
-        return ServiceKernel::instance()->createService('User.StatusService');
     }
 
     protected function getSettingService()
