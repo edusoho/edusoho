@@ -593,10 +593,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
 
-        if ($this->getAppService()->findInstallApp('ClassroomPlan') && $testpaperResult['passedStatus'] == 'passed') {
+        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
             $this->dispatchEvent(
                 'task.finished', 
-                new ServiceEvent(array('id'=>$testpaper['id'],'type'=>'testpaper'), 
+                new ServiceEvent(array('id'=>$testpaper['id'],'type'=>'testpaper','passedStatus'=>$testpaperResult['passedStatus']), 
                     array('taskType'=>'studyPlan', 'userId'=>$userId))
             );
         }
@@ -687,10 +687,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'passedStatus' => $passedStatus
         ));
 
-        if ($this->getAppService()->findInstallApp('ClassroomPlan') && $passedStatus == 'passed') {
+        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
             $this->dispatchEvent(
                 'task.finished', 
-                new ServiceEvent(array('id'=>$testpaperResult['testId'],'type'=>'testpaper'), 
+                new ServiceEvent(array('id'=>$testpaperResult['testId'],'type'=>'testpaper','passedStatus'=>$passedStatus), 
                     array('taskType'=>'studyPlan', 'userId'=>$testpaperResult['userId']))
             );
         }
