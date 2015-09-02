@@ -1,0 +1,34 @@
+<div class="top-tab-header ui-found-course" ng-controller="FoundCourseController">
+    
+    	<div class="ui-slider course-slider" slider="course-slider" ui-slider-box="banners">
+	    <ul class="ui-slider-content">
+	        <li ng-repeat="banner in banners" ng-click="bannerClick(banner)">
+	        	<span style="background-image:url({{ banner.url }})"></span>
+	        </li>
+	    </ul>
+	</div>
+
+	<div class="course-card">
+		<h4><span class="circle-label"></span>推荐</h4>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="course in recommedCourses" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="recommedCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		</div>
+	</div>
+
+	<div class="course-card">
+		<h4><span class="circle-label"></span>最新</h4>
+		<list-empty-view data="latestCourses" title="暂时没有最新课程">
+        </list-empty-view>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="course in latestCourses" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="latestCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		</div>
+	</div>
+</div>

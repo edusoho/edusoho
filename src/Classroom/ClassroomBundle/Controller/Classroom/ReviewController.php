@@ -48,19 +48,21 @@ class ReviewController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
         $review = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
-
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
+
         if(!$classroom){
             $classroomDescription = array();
         }
         else{
-        $classroomDescription = $classroom['about'];
-        $classroomDescription = strip_tags($classroomDescription,'');
-        $classroomDescription = preg_replace("/ /","",$classroomDescription);
-        } 
+            $classroomDescription = $classroom['about'];
+            $classroomDescription = strip_tags($classroomDescription,'');
+            $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        }
+
         return $this->render("ClassroomBundle:Classroom\Review:list.html.twig", array(
             'classroom' => $classroom,
             'courses' => $courses,
@@ -72,7 +74,8 @@ class ReviewController extends BaseController
             'users' => $reviewUsers,
             'member' => $member,
             'layout' => $layout,
-            'classroomDescription' => $classroomDescription
+            'classroomDescription' => $classroomDescription,
+            'canReview' => $this->isClassroomMember($classroom,$user['id']),
         ));
     }
 
@@ -86,6 +89,18 @@ class ReviewController extends BaseController
         $this->getClassroomReviewService()->saveReview($fields);
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function isClassroomMember($classroom, $userId)
+    {
+        if ($classroom['id']) {
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
+            if (!empty($member) && array_intersect(array('student', 'teacher', 'headTeacher', 'assistant'), $member['role'])) {
+                return 1;
+            }
+        }
+
+        return 0; 
     }
 
     private function getClassroomService()

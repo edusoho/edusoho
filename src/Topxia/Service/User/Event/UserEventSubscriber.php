@@ -2,8 +2,14 @@
 namespace Topxia\Service\User\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use Topxia\Common\StringToolkit;
+use Topxia\WebBundle\Util\TargetHelper;
+
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\EdusohoTuiClient;
+
 
 class UserEventSubscriber implements EventSubscriberInterface
 {
@@ -11,13 +17,64 @@ class UserEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'user.service.registered' => 'sendRegisterMessage',
+            'user.service.registered' => 'onUserRegistered',
+            'user.service.follow' => 'onUserFollowed',
+            'user.service.unfollow' => 'onUserUnfollowed'
         );
     }
 
-    public function  sendRegisterMessage(ServiceEvent $event)
+
+    public function onUserRegistered(ServiceEvent $event)
     {
         $user = $event->getSubject();
+        $tuiClient = new EdusohoTuiClient();
+        $result = $tuiClient->addStudent($user);
+        $this->sendRegisterMessage($user);
+    }
+
+    public function onUserFollowed(ServiceEvent $event)
+    {
+        $friend = $event->getSubject();
+        $user = $this->getUserService()->getUser($friend['fromId']);
+
+        $message = array(
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'opration' => 'follow'
+        );
+        $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
+
+        $message = array(
+            'fromId' => $friend['fromId'],
+            'toId' => $friend['toId'],
+            'type' => 'text',
+            'title' => '好友添加',
+            'content' => $user['nickname'].'添加你为好友',
+            'custom' => json_encode(array(
+                'fromId' => $friend['fromId'],
+                'nickname' => $user['nickname'],
+                'typeBusiness' => 'verified'
+            ))
+        );
+        $tuiClient = new EdusohoTuiClient();
+        $result = $tuiClient->sendMessage($message);
+    }
+
+    public function onUserUnfollowed(ServiceEvent $event)
+    {
+        $friend = $event->getSubject();
+        $user = $this->getUserService()->getUser($friend['fromId']);
+
+        $message = array(
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'opration' => 'unfollow'
+        );
+        $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
+    }
+
+    private function  sendRegisterMessage($user)
+    {
         $senderUser = array();
         $auth = $this->getSettingService()->get('auth', array());
 
@@ -53,11 +110,6 @@ class UserEventSubscriber implements EventSubscriberInterface
 
     }
 
-    protected function getWebExtension()
-    {
-        return $this->container->get('topxia.twig.web_extension');
-    }
-
     protected function getWelcomeBody($user)
     {
         $site = $this->getSettingService()->get('site', array());
@@ -78,9 +130,19 @@ class UserEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('User.MessageService');
     }
 
-    protected function getUserService()
+    private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User.NotificationService');
+    }
+
+     protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 
 }
