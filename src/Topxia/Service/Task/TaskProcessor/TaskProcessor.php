@@ -8,4 +8,6 @@ interface TaskProcessor
 	public function updateUserTasks($userId, $batchId);
 
 	public function finishTask(array $targetObject, $userId);
+
+	public function canFinish($targetId, $userId);
 }
