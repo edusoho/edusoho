@@ -66,7 +66,7 @@ use Symfony\Component\Yaml\Yaml;
                  `blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COMMENT='黑名单表';
+                ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='黑名单表';
             ");
         }
 
