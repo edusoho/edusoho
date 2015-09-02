@@ -29,6 +29,12 @@ class CloudSettingController extends BaseController
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            $canTrial = "canTrial";
+            return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
+                'canTrial' => $canTrial,
+            ));
+        }
         return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
         ));
     }
