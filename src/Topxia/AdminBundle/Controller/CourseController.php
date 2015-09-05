@@ -191,12 +191,20 @@ class CourseController extends BaseController
         ));
     }
 
-    public function cancelRecommendAction(Request $request, $id)
+
+    public function cancelRecommendAction(Request $request, $id,$target)
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
-
+        if($target == 'recommend_list'){
+        return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
+            'request' => $request
+        ));
+        }
+        if($target == 'normal_index'){
         return $this->renderCourseTr($id,$request);
+        }
     }
+
 
     public function recommendListAction(Request $request)
     {
@@ -363,7 +371,6 @@ class CourseController extends BaseController
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
-
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),

@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class UserSettingController extends BaseController
@@ -268,6 +267,11 @@ class UserSettingController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
         $auth = $this->getSettingService()->get('auth', array());
+        if (isset($auth['registerFieldNameArray'])) {
+            if (!in_array('weixin', $auth['registerFieldNameArray']) ) {
+                $auth['registerFieldNameArray'] = array_merge($auth['registerFieldNameArray'], array('qq','weixin','weibo'));
+            }
+        }
 
         $userPartner = $this->getSettingService()->get('user_partner', array());
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -426,7 +430,7 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' && $fieldInfo['enabled']) {
                 $auth['registerFieldNameArray'][] = $fieldInfo['fieldName'];
-                array_unique($auth['registerFieldNameArray']);
+                $auth['registerFieldNameArray'] = array_unique($auth['registerFieldNameArray']);
             }
         }
 
@@ -439,9 +443,8 @@ class UserSettingController extends BaseController
                 }
             } elseif ($type == 'update' and $fieldInfo['enabled']) {
                 $courseSetting['userinfoFieldNameArray'][] = $fieldInfo['fieldName'];
-                array_unique($courseSetting['userinfoFieldNameArray']);
-            }
-            
+                $courseSetting['userinfoFieldNameArray'] = array_unique($courseSetting['userinfoFieldNameArray']);
+            }        
         }
 
         $this->getSettingService()->set('auth', $auth);

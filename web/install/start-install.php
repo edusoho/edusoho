@@ -2,7 +2,7 @@
 
 use Composer\Autoload\ClassLoader;
 
-require __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/../../vendor2/autoload.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 $twig = new Twig_Environment($loader, array(
@@ -437,7 +437,7 @@ class SystemInit
             'logo'=>'',
             'seo_keywords'=>'',
             'seo_description'=>'',
-            'master_email'=> $settings['admin']['email'],
+            'master_email'=> $settings['email'],
             'icp'=>'',
             'analytics'=>'',
             'status'=>'open',

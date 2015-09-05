@@ -9,6 +9,11 @@
 // 临时文件，存放老的样式，随时会删除
 @import "temp.less";
 
+// 共通
+@import "common.less";
+@import "header.less";
+@import "footer.less";
+
 // 常用class
 @import "mixins.less";
 
@@ -21,22 +26,6 @@
 @import "plugin/materiallib.less";    //教学资料库
 @import "plugin/sortable.less";      //拖动排序
 @import "plugin/homework.less";      //作业练习
-
-
-// 共通
-@import "common.less";
-@import "header.less";
-@import "footer.less";
-
-
-// 模块---------------------------------------------------------------//
-@import "module/class-serve.less";    // 班级服务
-@import "module/course.less";         // 课程
-@import "module/banner.less";         // banner
-@import "module/nav-filter.less";     // 条件过滤
-@import "module/topic.less";          // 话题
-@import "module/note.less";           // 笔记
-@import "module/es-bar.less";         // 侧边栏快捷操作
 
 
 // 组件---------------------------------------------------------------//
@@ -60,28 +49,37 @@
 @import "component/progress.less";      // 进度条
 @import "component/label.less";         // label
 @import "component/score.less";         // score
-@import "component/card.less";          // 名片
 @import "component/list-group.less";    // list-group
 @import "component/sidenav.less";       // sidenav
 @import "component/nav-pills.less";     // nav-pills
 @import "component/es-tag.less";        // es-tag
 @import "component/es-piece.less";      // es-piece
 @import "component/user-avatar-list.less"; // 头像列表
-@import "component/class-sigin.less";   // 签到
 @import "component/popover.less";       // popover
 @import "component/modal.less";         // modal
 @import "component/nav.less";           // nav
 @import "component/course-price.less";  // 课程价格
 @import "component/table.less";         // 表格
 @import "component/qrcode.less";        // 二维码
+@import "component/qrcode-popover.less";// hover二维码
 
 
+// 模块---------------------------------------------------------------//
+@import "module/class-serve.less";    // 班级服务
+@import "module/course.less";         // 课程
+@import "module/banner.less";         // banner
+@import "module/nav-filter.less";     // 条件过滤
+@import "module/topic.less";          // 话题
+@import "module/note.less";           // 笔记
+@import "module/es-bar.less";         // 侧边栏快捷操作
+@import "module/card.less";           // 名片
+@import "module/class-sigin.less";    // 签到
+@import "module/nav-flow.less";       // 流程导航
 
 
 // 页面---------------------------------------------------------------//
 @import "page/index.less";                //首页
 @import "page/article.less";              //资讯
-@import "page/article-cat.less";          //资讯分类页
 @import "page/article-detail.less";       //资讯详情页
 @import "page/course-detail.less";        //课程页
 @import "page/course-list.less";          //课程选课页
@@ -97,8 +95,10 @@
 @import "page/course-manage.less";        //课程管理
 @import "page/question.less";             //问题
 @import "page/pay-center.less";           //支付中心
+@import "page/pay-state.less";            //支付状态
 @import "page/login.less";                //登录页
 @import "page/mobile.less";               //app下载页
+@import "page/coin.less";                 //账户 
 // @import "page/settings.less"              //用户设置页
 // @import "page/user.less"                  //用户主页
 // @import "page/live.less";                 //直播课程页
@@ -106,6 +106,4 @@
 // @import "page/resigister.less";           //注册页
 // @import "page/page.less";                 //单页
 // @import "page/message.less";              //私信
-// @import "page/notification.less";         //通知
-@import "page/coin.less";                 //账户  
-              
+// @import "page/notification.less";         //通知              

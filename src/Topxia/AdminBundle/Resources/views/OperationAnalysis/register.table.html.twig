@@ -13,13 +13,25 @@
             {% for data in registerDetail %}
               <tr>
                 <td>{{data.nickname}}</td>
-                <td>{{data.email}}</td>
-                <td>{% if data.type=="default" %}{{'网站注册'|trans}}
+                <td>
+                    {% set emailArr = data.email|split('@') %}
+                    {% if emailArr[1] != 'edusoho.net' %}
+                      {{ data.email }}
+                    {% else %}
+                      {{'暂无'|trans}}
+                    {% endif %}
+                </td>
+                <td>
+                  {% if data.type=="default" %}{{'网站注册'|trans}}
+                  {% elseif data.type=="web_mobile" %}{{'网站手机注册'|trans}}
+                  {% elseif data.type=="web_email" %}{{'网站邮箱注册'|trans}}
                   {% elseif data.type=="weibo" %}{{'新浪微博'|trans}}
                   {% elseif data.type=="qq" %}QQ
                   {% elseif data.type=="renren" %}{{'人人'|trans}}
                   {% elseif data.type=="discuz" %}discuz
                   {% elseif data.type=="phpwind" %}phpwind
+                  {% elseif data.type=="weixinweb" or data.type=="weixinmob" or data.type=="weixin" %}{{'微信'|trans}}
+                  {% elseif data.type=="import" %}{{'手动导入'|trans}}
                   {% else %}{{'其他'|trans}}
                   {% endif %}</td>
                 <td>{{data.createdIp}}</td>

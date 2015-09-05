@@ -8,7 +8,7 @@
     border-bottom: 1px solid #111;
   }
   .copyright {
-    background: @gray-darker;
+    background: #212121;
     border-top: 1px solid #444;
     text-align: center;
     padding: 20px 0;
@@ -74,52 +74,7 @@
     >a {
       display: inline-block;
     }
-    .icon-sns {
-      position: relative;
-      &:hover {
-        .sns-popover {
-          display: block \9;
-          .es-transform(1,1);
-          .opacity(1);
-        }
-      }
-    }
-    .sns-popover {
-      position: absolute;
-      left: -65px;
-      top: -205px;
-      padding: 5px;
-      z-index: 1;
-      background: #fff;
-      display: none \9;
-      .opacity(0);
-      .es-transform(0,0);
-      transform-origin: 50% 100%;
-      -webkit-transform-origin: 50% 100%;
-      -moz-transform-origin: 50% 100%;
-      -o-transform-origin: 50% 100%;
-      .es-transition;
-      -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.5);
-      -moz-box-shadow: 0 2px 3px rgba(0,0,0,.5);
-      box-shadow: 0 2px 3px rgba(0,0,0,.5);
-      &:after {
-        top: 100%;
-        left: 50%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-        border-top-color: #fff;
-        border-width: 13px;
-        margin-left: -13px;
-      }
-      img {
-        width: 180px;
-        height: 180px;
-      }
-    }
+
     i {
       display: block;
       width: 40px;
@@ -178,3 +133,4 @@
     }
   }
 }
+    

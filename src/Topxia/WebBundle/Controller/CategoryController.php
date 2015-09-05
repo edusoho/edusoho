@@ -20,6 +20,7 @@ class CategoryController extends BaseController
     public function treeNavAction(Request $request, $category, $path, $fliter = 'ALL', $orderBy = 'latest')
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
+        
         return $this->render("TopxiaWebBundle:Category:explore-nav.html.twig", array(
             'rootCategories' => $rootCategories,
             'categories' => $categories,

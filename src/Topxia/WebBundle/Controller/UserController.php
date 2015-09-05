@@ -19,7 +19,6 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user' => $user,
             'isFollowed' => $isFollowed,
@@ -29,6 +28,10 @@ class UserController extends BaseController
     public function showAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
 
         if(in_array('ROLE_TEACHER', $user['roles'])) {
             return $this->_teachAction($user);
@@ -40,18 +43,30 @@ class UserController extends BaseController
     public function learnAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         return $this->_learnAction($user);
     }
 
     public function teachAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         return $this->_teachAction($user);
     }
 
     public function learningAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         $classrooms=array();
 
         $studentClassrooms=$this->getClassroomService()->searchMembers(array('role'=>'student','userId'=>$user['id']),array('createdTime','desc'),0,9999);
@@ -86,7 +101,10 @@ class UserController extends BaseController
     public function teachingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         $conditions = array(
             'roles'=>array('teacher', 'headTeacher'),
             'userId'=>$user['id']
@@ -125,6 +143,10 @@ class UserController extends BaseController
     public function favoritedAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserFavoritedCourseCount($user['id']),
@@ -148,7 +170,10 @@ class UserController extends BaseController
     public function groupAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
-
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         $admins=$this->getGroupService()->searchMembers(array('userId'=>$user['id'],'role'=>'admin'),
             array('createdTime',"DESC"),0,1000
             );
@@ -184,8 +209,11 @@ class UserController extends BaseController
     public function followingAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         $followings = $this->getUserService()->findAllUserFollowing($user['id']);
-
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user' => $user,
             'friends' => $followings,
@@ -197,6 +225,10 @@ class UserController extends BaseController
     public function followerAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about']= strip_tags($userProfile['about'],'');
+        $userProfile['about'] = preg_replace("/ /","",$userProfile['about']);  
+        $user = array_merge($user, $userProfile);
         $followers=$this->getUserService()->findAllUserFollower($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
@@ -299,6 +331,8 @@ class UserController extends BaseController
             return $this->createMessageResponse('error', '请先登录！');
         }
 
+        $goto = $this->getTargetPath($request);
+
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
 
@@ -322,11 +356,14 @@ class UserController extends BaseController
             if (isset($formData['email']) && !empty($formData['email'])) {
                 $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
                 $this->authenticateUser($this->getUserService()->getUser($user['id']));
+                if (!$user['setup']) {
+                    $this->getUserService()->setupAccount($user['id']);
+                }
             }
 
             $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($goto);
         }
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
@@ -336,7 +373,42 @@ class UserController extends BaseController
         return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
             'userFields' => $userFields,
             'user' => $userInfo,
+            'goto' => $goto
         ));
+    }
+
+    protected function getTargetPath($request)
+    {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } else if ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        if ($targetPath == $this->generateUrl('login')) {
+            return $this->generateUrl('homepage');
+        }
+
+        $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout')) {
+            return $this->generateUrl('homepage');
+        }
+
+        if ($url[0] == $this->generateUrl('password_reset_update')) {
+            $targetPath = $this->generateUrl('homepage');
+        }
+
+        if ($url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinmob')) or 
+            $url[0] == $this->generateUrl('login_bind_callback', array('type'=>'weixinweb'))
+            ) 
+        {
+            $targetPath = $this->generateUrl('homepage');
+        }
+
+        return $targetPath;
     }
 
     protected function getUserService()
@@ -413,7 +485,6 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         return $this->render('TopxiaWebBundle:User:courses.html.twig', array(
             'user' => $user,
             'courses' => $courses,

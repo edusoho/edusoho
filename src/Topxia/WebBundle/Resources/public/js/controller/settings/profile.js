@@ -12,14 +12,14 @@
             filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
         });
 
-        $('.text').each(function() {
-            var id = $(this).attr('id');
-            CKEDITOR.replace(id, {
-                toolbar: 'Simple',
-                filebrowserImageUploadUrl: $(this).data('imageUploadUrl'),
-                height: 100
-            });
-        });
+        // $('.text').each(function() {
+        //     var id = $(this).attr('id');
+        //     CKEDITOR.replace(id, {
+        //         toolbar: 'Simple',
+        //         filebrowserImageUploadUrl: $(this).data('imageUploadUrl'),
+        //         height: 100
+        //     });
+        // });
 
         $(".date").datetimepicker({
             language: 'zh-CN',

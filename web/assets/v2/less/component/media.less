@@ -1,6 +1,6 @@
 .media-list {
   .media {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid @gray-lighter;
     padding-bottom: 15px;
     &:last-child {
       border-bottom: none;
@@ -16,6 +16,10 @@
     text-align: center;
     color: #999;
   }
+}
+
+.media-body {
+  word-break: break-all;
 }
 
 // 即将弃用
@@ -77,12 +81,12 @@
     &:last-child {
       border-bottom: none;
     }
-    &:nth-child(1) .num,
-    &:nth-child(2) .num,
-    &:nth-child(3) .num {
-      border-color: @brand-primary;
-      color: @brand-primary;
-    }
+    // &:nth-child(1) .num,
+    // &:nth-child(2) .num,
+    // &:nth-child(3) .num {
+    //   border-color: @brand-primary;
+    //   color: @brand-primary;
+    // }
   }
 }
 
@@ -97,9 +101,10 @@
     p {
       margin: 0;
       font-size: 12px;
-      color: #e2e2e2;
+      color: @gray-light;
       margin-top: 2px;
       a {
+        color: @brand-primary;
         margin-right: 10px;
       }
     }
@@ -110,9 +115,12 @@
         height: 20px;
         display: inline-block;
         line-height: 20px;
-      }
-      a:hover {
-        color: @brand-primary;
+        overflow: hidden;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
       }
     }
   }
@@ -236,18 +244,19 @@
   &:first-child {
     margin-top: 15px;
   }
-  .media-left {
-    margin-left: 10px;
-  }
   .title {
     height: 20px;
     overflow: hidden;
-    margin-bottom: 10px;
+    margin: 5px 0;
   }
   .metas {
-    color: @gray;
+    color: @gray-medium;
+    span {
+      margin-right: 10px;
+    }
     i {
       margin-right: 5px;
+      font-size: 14px;
     }
   }
 }
@@ -283,7 +292,8 @@
   .date {
     position: absolute;
     right: 0px;
-    top: 15px;
+    top: 9px;
+    font-size: 16px;
     color: @gray-light;
   }
 }

@@ -4,13 +4,14 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Respose;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class EduCloudController extends BaseController
 {
     public function smsSendAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            if ($this->getCloudSmsKey('sms_enabled') != '1') {
+            if ($this->setting('cloud_sms.sms_enabled') != '1') {
                 return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
             }
 
@@ -73,7 +74,9 @@ class EduCloudController extends BaseController
 
             $smsCode = $this->generateSmsCode();
             try {
-                $result = $this->getEduCloudService()->sendSms($to, $smsCode, $smsType);
+                $api = CloudAPIFactory::create('leaf');
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'verify' => $smsCode, 'category' => $smsType));
+
                 if (isset($result['error'])) {
                     return $this->createJsonResponse(array('error' => "发送失败, {$result['error']}"));
                 }
@@ -169,23 +172,9 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('用户未登录');
         }
 
-        if ($this->getCloudSmsKey($smsType) != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
+        if ( $this->setting("cloud_sms.{$smsType}") != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
-    }
-
-    protected function getCloudSmsKey($key)
-    {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
-        if (isset($setting[$key])){
-            return $setting[$key];
-        }
-        return null;
-    }
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
     }
 
     protected function getLogService()

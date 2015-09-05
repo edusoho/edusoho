@@ -4,7 +4,7 @@
                     {% set capacity = live.capacity|default(null) %}
                     {% set expire = live.expire|default(null) %}
 
-                  <h4 class="eduyun-title">云直播
+                  <h4 class="eduyun-title">{{'云直播'|trans}}
                     {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
                   </h4>
                    <!--未购买-->
@@ -13,9 +13,9 @@
                         <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">这里</a>了解详情
                       </div>
                     {% else %}
-                      <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
+                      <p class="text-muted">{{'教室容量：'|trans}}{{capacity|default(0)}}{{'人'|trans}}</p>
                       {% if expire and expire > 0  %}
-                        <p class="text-muted">有效期至：{{expire|date("Y-m-d")}}</p>
+                        <p class="text-muted">{{'有效期至：'|trans}}{{expire|date("Y-m-d")}}</p>
                     
                         {% if liveDate == 0 %}
                               <p class="text-danger text-sm">云直播服务将于明天过期</p>

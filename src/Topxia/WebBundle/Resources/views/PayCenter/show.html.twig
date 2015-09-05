@@ -6,22 +6,57 @@
 {% endblock %}
 {% block content %}
 <div class="container order-pay pay-center">
-  <div class="row">
-    <div class="col-md-10 col-md-offset-1 ptl">
-      <div class="panel panel-default panel-page">
-        <div class="panel-heading"><h4>收银台</h4></div>
-        <hr/>
-        <div class="panel-body">
-          <div class="alert alert-success">
-            <span class="pull-right"><span style="color:#f60; font-size: 24px;">{{order.amount}}</span> 元</span>
-            <p> 订单已提交，请在４８小时内完成支付！<small class="text-muted">逾期订单将被取消。</small></p>
-            <p class="">
-              <small>订单号：{{order.sn}}</small>
-              <small class="mll">订单名称：{{ order.title }}</small>
-            </p>
+      <div class="order-nav hidden-xs clearfix ">
+        <div >
+          确认订单 <b></b>
+        </div>
+        <div class="on">
+          <span></span>
+          订单支付 <b></b>
+        </div>
+        <div>
+          <span></span>
+          订单完成
+        </div>
+      </div>
+      <div class="es-section">
+        <div class="order-pay-heading">收银台</div>
+        <div class="order-pay-body">
+          <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            订单已提交，请在４８小时内完成支付！逾期订单将被取消。
           </div>
-          
-          <form method="post" action="{{path('pay_center_pay')}}">
+          <div class="order-detail-bg   checkout">
+            <div class="order-detail  clearfix">
+              <div class="order-img hidden-xs">
+                {% if order.targetType == "course" and course|default(null) %}
+                    <a href="{{ path('course_show', {id:course.id}) }}">
+                      <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}"alt="收费">
+                    </a>
+                {% endif %}
+                {% if order.targetType == "vip" %}
+                  <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                    <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}"alt="收费">
+                  </a>
+                {% endif %}
+                {% if order.targetType == "classroom" %}
+                  <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                    <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="收费">
+                  </a>
+                {% endif %}
+              </div>
+              <div class="order-info">
+                <p>订单名称：{{ order.title }}</p>
+                <p>订单号：{{order.sn}}</p>
+                <p>
+                  订单价格：<span class="pay-rmb">￥{{order.amount}}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <form class="paystyle"  method="post" action="{{path('pay_center_pay')}}">
             <input type="hidden" name="orderId" value="{{order.id}}"/>
             {% for payment,options in payments %}
               {% if loop.index == 1 %}
@@ -30,24 +65,38 @@
             {% endfor %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
               
-          	<div class="form-group">
+          	<div class="form-group order-detail-bg ">
               <div class="pay-type-lable">支付方式</div>
               {% for payment, options in payments %}
-              <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
-                {% set picture = 'assets/img/order/'~payment~'.png' %}
-                <img src="{{ asset(picture) }}" width="100px"/>
-                <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
-              </div>
+                <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
+                  {% set picture = 'assets/img/order/'~payment~'.png' %}
+                  <img src="{{ asset(picture) }}" />
+                  <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
+                </div>
+              {% else %}
+                <div class="pay-type-lable text-warning ">支付方式未开启，请联系管理员。</div>
               {% endfor %}
             </div>
-            <hr/>
-            <div class="form-group pay pay-amount">
-              <button class="pay-button btn btn-fat btn-primary btn-lg"  type="submit">去支付</button>
+            <div class="form-group pay pay-amount ">
+              <div class="total-price">
+                应付金额：
+                <span role="pay-rmb" class="pay-rmb">￥{{order.amount}}</span>
+              </div>
+             <a 
+                href="javascript:;"
+                {% if targetType == "course" and course|default(null) %}
+                  data-goto="{{ path('course_show', {id:course.id}) }}" 
+                {% elseif targetType == "vip" %}
+                  data-goto="{{ path('vip_renew') }}"
+                {% elseif targetType == "classroom" %}
+                  data-goto="{{ path('classroom_show', {id:classroom.id}) }}"
+                {% endif %}
+                 class=" link-light  mrl " data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消
+              </a>
+              <button class="pay-button btn btn-primary btn-high"  type="submit">确认支付</button>
             </div>
           </form>
         </div>
       </div>
-    </div>
-  </div>
 </div>
 {% endblock %}
