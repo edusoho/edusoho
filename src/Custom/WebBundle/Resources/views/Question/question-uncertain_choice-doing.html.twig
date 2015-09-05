@@ -7,15 +7,13 @@
 {% block body %}
 	{% include 'TopxiaWebBundle:Question:question-choice-options.html.twig' %}
 
-	{% if itemResult.answer|default(null) %}
-	  {% set answerChoiceIndex = itemResult.answer %}
-	{% endif %}
+	{% set answerChoiceIndex = itemResult.answer|default(-1) %}
 
 	<div class="question-choices-inputs">
 		{% for key, choice in question.metas.choices %}
 			{% set choiceIndex = (65+key)|chr %}
 			  <label class="checkbox-inline">
-			    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}> {{ choiceIndex }}
+			    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if (key==answerChoiceIndex) or (key in answerChoiceIndex) %}checked{% endif %}> {{ choiceIndex }}
 			  </label>
 		{% endfor %}
 	</div>

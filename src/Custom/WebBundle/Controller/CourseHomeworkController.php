@@ -84,7 +84,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
             if ($homework['pairReview'] and intval($homework['completeTime']) < time()) {
                 return $this->createMessageResponse('error',"已经超过作业提交截止时间，提交作业失败！");
             }
-            $res = $this->getHomeworkService()->submitHomework($homeworkId, $data);
+            $res = $this->getHomeworkService()->submitHomework($data,$this->getCurrentUser()->id);
             $course = $this->getCourseService()->getCourse($courseId);
             $lesson = $this->getCourseService()->getCourseLesson($courseId, $res['lessonId']);
             $this->getHomeworkService()->finishHomework($course, $lesson, $courseId, $homeworkId);

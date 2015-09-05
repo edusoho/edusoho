@@ -256,9 +256,9 @@ class HomeworkServiceTest extends BaseTestCase
         $user=$this->getServiceKernel()->getCurrentUser();
         $homework1=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('-1 hours', time()),'pairReview'=>true));
         $homework2=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('+1 hours', time()),'pairReview'=>true));
-        $result1=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'editing'));
+        $result1=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'doing'));
         $result2=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'finished'));
-        $result3=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework2['id'],'status'=>'editing'));
+        $result3=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework2['id'],'status'=>'doing'));
 
         $this->getHomeworkService()->forwardHomeworkStatus();
         $l1=$this->getResultDao()->getResult($result1['id']);
@@ -266,7 +266,7 @@ class HomeworkServiceTest extends BaseTestCase
         $l2=$this->getResultDao()->getResult($result2['id']);
         $this->assertEquals('finished',$l2['status']);
         $l3=$this->getResultDao()->getResult($result3['id']);
-        $this->assertEquals('editing',$l3['status']);
+        $this->assertEquals('doing',$l3['status']);
     }
 
     public function testForwardHomeworkStatusForFinishingHomeworks(){

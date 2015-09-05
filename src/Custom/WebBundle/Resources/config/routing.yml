@@ -70,6 +70,10 @@ user_favorited:
     pattern:  /user/{id}/favorited
     defaults: { _controller: CustomWebBundle:User:favorited }
 
+user_teach:
+    pattern:  /user/{id}/teach
+    defaults: { _controller: CustomWebBundle:User:teach }
+
 my_courses_learning:
     pattern: /my/courses/learning
     defaults: { _controller: CustomWebBundle:MyCourse:learning }
@@ -142,3 +146,12 @@ homework_review_create:
 homework_review_check:
     pattern: /homework_results/{homeworkResultId}/reviews/check
     defaults: { _controller: CustomWebBundle:HomeworkReview:check }
+
+order_show:
+    pattern:  /order/show
+    defaults: { _controller: CustomWebBundle:Order:show }
+
+course_become_use_member:
+    pattern:  /course/{id}/become_use_member
+    defaults: { _controller: CustomWebBundle:Course:becomeUseMember }
+    methods: [POST]

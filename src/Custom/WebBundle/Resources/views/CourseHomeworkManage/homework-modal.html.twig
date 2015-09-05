@@ -31,7 +31,7 @@
                                   class="form-control">{{ homework.description|default('') }}</textarea>
                     </div>
                 </div>
-
+                {% if 'periodic'==course.type %}
                 <div class="form-group">
                     <div class="col-md-2 control-label"><label>启用作业互评</label></div>
                     <div class="col-md-7 controls radios">
@@ -42,6 +42,7 @@
                         <label for="comment_false" class="required">否</label>
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="form-group" id="completeTimeGroup" style="display:none">
                     <div class="col-md-2 control-label">

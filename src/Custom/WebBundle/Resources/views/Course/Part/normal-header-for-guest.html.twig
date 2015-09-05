@@ -1,7 +1,7 @@
 {% extends 'CustomWebBundle:Course:Part/normal-header-layout.html.twig' %}
 {% set layoutClass = 'course-detail-header' %}
-
 {% block content %}
+  {{ web_macro.flash_messages() }}
   {{ header_macro.picture(course) }}
    <ul class="course-data clearfix">
       {{ header_macro.favorite_btn(course, hasFavorited) }}

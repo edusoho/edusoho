@@ -50,6 +50,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			'maxStudentNum' => 0,
 			'watchLimit' => 0,
 			'approval' => 0,
+			'maxStudentNum'=>0,
 		));
 
 		if (!empty($fields['about'])) {
