@@ -104,6 +104,7 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('crontab_next_executed_time', array($this, 'getNextExecutedTime')),
              new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
+             new \Twig_SimpleFunction('upgrade_locked', array($this, 'upgradeLocked')),
         );
     }
     public function getParametersFromUrl($url)
@@ -127,6 +128,12 @@ class WebExtension extends \Twig_Extension
             return null;
         }
         return  $parameters;
+    }
+
+    public function upgradeLocked()
+    {
+        $filePath = realpath($this->container->getParameter('kernel.root_dir') . "/../app/data/upgrade.lock");
+        return file_exists($filePath);
     }
 
     public function spaceToNbsp($content)
