@@ -102,7 +102,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
-        $maxCoin = $classroom['price'] * $classroom['maxRate'] / 100;
+        $maxCoin = NumberToolkit::roundUp($classroom['price'] * $classroom['maxRate'] / 100);
 
         if ($priceType == "Coin") {
             $maxCoin = $coinPayAmount;

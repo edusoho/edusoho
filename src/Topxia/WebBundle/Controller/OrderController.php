@@ -104,7 +104,7 @@ class OrderController extends BaseController
 
         $targetType = $fields["targetType"];
         $targetId = $fields["targetId"];
-
+        $maxRate = $fields["maxRate"];
         $priceType = "RMB";
         $coinSetting = $this->setting("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
@@ -117,7 +117,7 @@ class OrderController extends BaseController
         }
 
         $processor = OrderProcessorFactory::create($targetType);
-        $orderInfo = $processor->getOrderInfo($targetId, $fields);
+
         try {
             if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
                 $fields["couponCode"] = "";
@@ -138,7 +138,7 @@ class OrderController extends BaseController
             }
 
             //虚拟币抵扣率比较
-            if (isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * 100) > intval($orderInfo['maxCoin'] * 100))) {
+            if (isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
                 return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
             }
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
@@ -158,8 +158,6 @@ class OrderController extends BaseController
                 'coupon' => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
             );
-
-            
             
             $order = $processor->createOrder($orderFileds, $fields);
 

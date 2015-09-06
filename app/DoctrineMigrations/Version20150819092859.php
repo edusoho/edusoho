@@ -21,6 +21,10 @@ class Version20150819092859 extends AbstractMigration
             $this->addSql("ALTER TABLE `classroom` ADD `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比';");
         }
 
+        if (($this->isTableExist('vip_level'))&&(!$this->isFieldExist('vip_level', 'maxRate'))) {
+            $this->addSql("ALTER TABLE `vip_level` ADD `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比';");
+        }
+
     }
 
     public function down(Schema $schema)
@@ -34,6 +38,13 @@ class Version20150819092859 extends AbstractMigration
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->connection->fetchAssoc($sql);
 
+        return empty($result) ? false : true;
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->connection->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 }
