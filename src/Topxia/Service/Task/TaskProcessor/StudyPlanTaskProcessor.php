@@ -268,7 +268,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
     private function _canFinished($task, $targetObject)
     {
         $canFinished = true;
-        if ($task['required'] && ($targetObject['targetType'] == 'homework' || $targetObject['targetType'] == 'testpaper')) {
+        if ($task['required'] && ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper')) {
             if ($targetObject['passedStatus'] == 'unpassed' || $targetObject['passedStatus'] == 'none') {
                 $canFinished = false;
             }
