@@ -9,5 +9,5 @@ interface TaskProcessor
 
 	public function finishTask(array $targetObject, $userId);
 
-	public function canFinish($targetId, $userId);
+	public function canFinish($targetId, $targetType, $userId);
 }
