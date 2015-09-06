@@ -229,6 +229,8 @@ class CourseLessonController extends BaseController
                         $json['mediaHLSUri'] = $url['url'];
                     } elseif ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
+                    } elseif ($file['type'] == 'document') {
+                        $json['mediaUri'] = $this->generateUrl('course_lesson_document', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                             $key = $file['metas']['hd']['key'];

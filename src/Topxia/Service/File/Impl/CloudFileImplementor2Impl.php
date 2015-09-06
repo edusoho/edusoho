@@ -34,7 +34,16 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             );
             $file['metas2'] = $cloudFile['metas']['levels'];
         } elseif ($file['type'] == 'ppt') {
-            
+            $file['convertParams'] = array(
+                'convertor' => $cloudFile['processParams']['output'],
+            );
+            $file['metas2'] = $cloudFile['metas'];
+
+        } elseif ($file['type'] == 'document') {
+            $file['convertParams'] = array(
+                'convertor' => $cloudFile['processParams']['output'],
+            );
+            $file['metas2'] = $cloudFile['metas'];
         } elseif ($file['type'] == 'audio') {
             $file['convertParams'] = array(
                 'convertor' => $cloudFile['processParams']['output'],
