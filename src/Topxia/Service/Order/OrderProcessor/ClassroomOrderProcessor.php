@@ -102,6 +102,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
+        if ($priceType == "Coin") {
+            $maxCoin = $coinPayAmount;
+        } else {
+            $maxCoin = NumberToolkit::roundUp($classroom['price'] * $classroom['maxRate'] / 100 * $cashRate);       
+        }
+
         $totalPrice = NumberToolkit::roundUp($totalPrice);
 
         return array(
@@ -119,10 +125,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             'account' => $account,
             'hasPayPassword' => $hasPayPassword,
             'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin,
         );
 	}
 
-    private function calculateUserLearnProgress($course, $member)
+    protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
             return '0%';
@@ -231,7 +238,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         );
 	}
 
-    private function getPaidCourses($currentUser, $courseIds){
+    protected function getPaidCourses($currentUser, $courseIds){
         $courseMembers = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
         $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
         $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
@@ -254,7 +261,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return ;
     }
 
-    private function afterDiscountPrice($course, $priceType)
+    protected function afterDiscountPrice($course, $priceType)
     {
         $coursePrice = 0;
         if($priceType == "RMB") {
@@ -265,7 +272,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $coursePrice;
     }
 
-    private function getCoursesTotalPrice($courses, $priceType)
+    protected function getCoursesTotalPrice($courses, $priceType)
     {
         $coursesTotalPrice = 0;
         foreach ($courses as $key => $course) {

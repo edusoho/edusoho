@@ -65,6 +65,12 @@ class UploadFileController extends BaseController
         }
 
         $conditions = $request->query->all();
+        if(array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])){
+            $course = $this->getCourseService()->getCourse($conditions['targetId']);
+            if($course['parentId']>0 && $course['locked'] == 1 ){
+                $conditions['targetId'] = $course['parentId'];
+            }
+        }
 
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
         
@@ -95,7 +101,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($params);
     }
 
-    private function cloudCallBack(Request $request)
+    protected function cloudCallBack(Request $request)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -151,7 +157,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file['metas2']);
     }
 
-    private function cloudConvertCallback2(Request $request)
+    protected function cloudConvertCallback2(Request $request)
     {
         $result = $request->getContent();
         $result = preg_replace_callback(
@@ -300,7 +306,7 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
@@ -320,12 +326,12 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function createFilesJsonResponse($files)
+    protected function createFilesJsonResponse($files)
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);

@@ -1,46 +1,18 @@
 define(function (require, exports, module) {
 
-    bindCardEvent('.js-card-content');
-    $(".js-user-card").on("mouseenter", function () {
-        var _this = $(this);
-        var userId = _this.data('userId');
-        var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
+    if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+        bindCardEvent('.js-card-content');
+        $(".js-user-card").on("mouseenter", function () {
 
-        var timer = setTimeout(function(){
 
-            if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
-                
+            var _this = $(this);
+            var userId = _this.data('userId');
+            var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
 
-                $.ajax ({
-                    type:"GET",
-                    url: _this.data('cardUrl'),
-                    dataType: "html",
-                    beforeSend: beforeSend,
-                    success: callback
-
-                });
-
-                    
-                function beforeSend () {
-
-                    _this.popover({
-                        trigger: 'manual',
-                        placement: 'auto top',
-                        html: 'true',
-                        content: function(){
-                            return loadingHtml;
-                        },
-                        template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
-                        container: 'body',
-                        animation: true
-                    });
-
-                    // _this.popover("show");
-
-                };
+            var timer = setTimeout(function(){
 
                 function callback(html) {
-
+                        
                     _this.popover('destroy');
 
                     if ($('#user-card-' + userId).length == 0) {
@@ -71,36 +43,68 @@ define(function (require, exports, module) {
                     $(".popover").on("mouseleave", function () {
                         $(_this).popover('hide');
                     });
+                    
                 };
 
-            } else {
-                _this.popover("show");
-            }
-           
-            bindMsgBtn($('.es-card'), _this);
+                if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
+                    
+                    function beforeSend () {
 
-        },300);
+                        _this.popover({
+                            trigger: 'manual',
+                            placement: 'auto top',
+                            html: 'true',
+                            content: function(){
+                                return loadingHtml;
+                            },
+                            template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
+                            container: 'body',
+                            animation: true
+                        });
 
-        _this.data('timerId', timer);
+                        // _this.popover("show");
+
+                    };
+
+                    $.ajax ({
+                        type:"GET",
+                        url: _this.data('cardUrl'),
+                        dataType: "html",
+                        beforeSend: beforeSend,
+                        success: callback
+                    });
+
+                } else {
+                    var html = $('#user-card-' + userId).clone();
+                    callback(html);
+                    // _this.popover("show");
+                }
+               
+                bindMsgBtn($('.es-card'), _this);
 
 
-    }).on("mouseleave", function () {
- 
-        var _this = $(this);
-  
-        setTimeout(function () {
-   
-            if (!$(".popover:hover").length) {
-   
-                _this.popover("hide")
-   
-           }
-   
-       }, 100);
+            },300);
 
-        clearTimeout(_this.data('timerId'));
+            _this.data('timerId', timer);
 
-    });
+        }).on("mouseleave", function () {
+     
+            var _this = $(this);
+      
+            setTimeout(function () {
+       
+                if (!$(".popover:hover").length) {
+       
+                    _this.popover("hide");
+       
+               }
+       
+           }, 100);
+
+            clearTimeout(_this.data('timerId'));
+
+        });
+    }
 
     
     function bindCardEvent(selector)

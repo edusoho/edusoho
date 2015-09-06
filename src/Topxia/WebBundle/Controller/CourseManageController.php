@@ -9,7 +9,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Util\LiveClientFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -19,7 +18,11 @@ use Imagine\Image\ImageInterface;
 class CourseManageController extends BaseController
 {
 	public function indexAction(Request $request, $id)
-	{
+	{      
+        $course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['locked'] == '1') {
+            return $this->redirect($this->generateUrl('course_manage_course_sync',array('id' => $id,'type'=>'base')));
+        }
         return $this->forward('TopxiaWebBundle:CourseManage:base',  array('id' => $id));
 	}
 
@@ -35,18 +38,11 @@ class CourseManageController extends BaseController
         }
 
         $tags = $this->getTagService()->findTagsByIds($course['tags']);
-        if ($course['type'] == 'live') {
-            $client = LiveClientFactory::createClient();
-            $liveCapacity = $client->getCapacity();
-        } else {
-            $liveCapacity = null;
-        }
         $default = $this->getSettingService()->get('default', array());
+
 		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
 			'course' => $course,
             'tags' => ArrayToolkit::column($tags, 'name'),
-            'liveCapacity' => empty($liveCapacity['capacity']) ? 0 : $liveCapacity['capacity'],
-            'liveProvider' => empty($liveCapacity['code']) ? 0 : $liveCapacity['code'],
             'default'=> $default
 		));
 	}
@@ -233,7 +229,141 @@ class CourseManageController extends BaseController
         ));
     }
 
-    private function makeLevelChoices($levels)
+    public function orderAction(Request $request, $id)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+
+        $courseSetting = $this->setting("course");
+        if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
+            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+        }
+
+        $conditions = $request->query->all();
+        $type = 'course';
+        $conditions['targetType'] = $type;
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+        $conditions['targetId'] = $id;
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount($conditions),
+            10
+        );
+
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+
+        foreach ($orders as $index => $expiredOrderToBeUpdated ){
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
+               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+               $orders[$index]['status'] = 'cancelled';
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:CourseManage:course-order.html.twig', array(
+            'course' =>$course,
+            'request' =>$request,
+            'orders' => $orders,
+            'users' => $users,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function orderExportCsvAction(Request $request, $id)
+    {
+        $this->getCourseService()->tryManageCourse($id);
+
+        $courseSetting = $this->setting("course");
+        if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
+            throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
+        }
+
+        $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
+        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
+
+        $conditions = $request->query->all();
+
+        $type = 'course';
+        $conditions['targetType'] = $type;
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+        }
+        $conditions['targetId'] = $id;
+
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+        }
+
+        $orders = $this->getOrderService()->searchOrders(
+            $conditions,
+            'latest',
+            0,
+            PHP_INT_MAX
+        );
+
+        $userinfoFields = array('sn','createdTime','status','targetType','amount','payment','paidTime');
+
+        $studentUserIds = ArrayToolkit::column($orders, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');    
+
+        $course = $this->getCourseService()->getCourse($id);
+
+        $str = "订单号,名称,创建时间,状态,实际付款,购买者,支付方式,支付时间";
+
+        $str.="\r\n";
+
+        $results = array();
+        foreach ($orders as $key => $orders) {
+            $column = "";
+            $column .= $orders['sn'].",";
+            $column .= $orders['title'].",";
+            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $column .= $status[$orders['status']].",";
+            $column .= $orders['amount'].",";
+            $column .= $users[$orders['userId']]['nickname'].",";
+            $column .= $payment[$orders['payment']].",";
+
+            if ($orders['paidTime'] == 0 ) {
+                $column .= "-".",";
+            }else{
+                $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            }
+
+            $results[] = $column;
+        }
+
+        $str .= implode("\r\n",$results);
+        $str = chr(239) . chr(187) . chr(191) . $str;
+        
+        $filename = sprintf("course-%s-orders-(%s).csv", $course['title'], date('Y-n-d'));
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+    }
+
+    protected function makeLevelChoices($levels)
     {
         $choices = array();
         foreach ($levels as $level) {
@@ -272,6 +402,7 @@ class CourseManageController extends BaseController
         }
 
         $teacherMembers = $this->getCourseService()->findCourseTeachers($id);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
 
         $teachers = array();
@@ -286,7 +417,6 @@ class CourseManageController extends BaseController
         		'isVisible' => $member['isVisible'] ? true : false,
     		);
         }
-
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course' => $course,
             'teachers' => $teachers
@@ -317,47 +447,139 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
-    private function getCourseService()
+    #课程同步
+    public function courseSyncAction(Request $request,$id,$type)
+    {
+        $courseId = $id;
+        $course = $this->getCourseService()->getCourse($courseId);
+        $parentCourse = $this->getCourseService()->getCourse($course['parentId']);
+        $type = $type;
+        $title = '';
+        $url = '';
+        switch ($type) {
+            case 'base':
+                $title = '基本信息';
+                $url= 'course_manage_base';
+                break;
+            case 'detail':
+                $title = '详细信息';
+                $url= 'course_manage_detail';
+                break;
+            case 'picture':
+                $title = '课程图片';
+                $url= 'course_manage_picture';
+                break;
+            case 'lesson':
+                $title = '课时管理';
+                $url= 'course_manage_lesson';
+                break;
+            case 'files':
+                $title = '文件管理';
+                $url = 'course_manage_files';
+                break;
+            case 'replay':
+                $title = '录播管理';
+                $url = 'live_course_manage_replay';
+                break;
+            case 'price':
+                $title = '价格设置';
+                $url= 'course_manage_price';
+                break;
+            case 'teachers':
+                $title = '教师设置';
+                $url= 'course_manage_teachers';
+                break;
+            case 'question':
+                $title = '题目管理';
+                $url= 'course_manage_question';
+                break;
+            case 'question_plumber':
+                $title = '题目导入/导出';
+                $url = 'course_question_plumber';
+                break;
+            case 'testpaper':
+                $title = '试卷管理';
+                $url= 'course_manage_testpaper';
+                break;
+            default:
+                $title = '未知页面';
+                $url= '';
+                break;
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        return $this->render('TopxiaWebBundle:CourseManage:courseSync.html.twig',array(
+        'course'=>$course,
+        'type'=>$type,
+        'title'=>$title,
+        'url'=>$url,
+        'parentCourse' =>$parentCourse
+        ));
+    }
+
+    public function courseSyncEditAction(Request $request)
+    {
+        $courseId = $request->query->get('courseId');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $type = $request->query->get('type');
+        $url = $request->query->get('url');
+        if ($request->getMethod() == 'POST'){
+            $courseId = $request->request->get('courseId');
+            $url = $request->request->get('url');
+            $course = $this->getCourseService()->getCourse($courseId);
+            if($course['locked'] == 1) {
+              $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
+            }
+          return $this->createJsonResponse($url);
+        }
+        return $this->render('TopxiaWebBundle:CourseManage:courseSyncEdit.html.twig',array(
+        'course'=>$course,
+        'type'=>$type,
+        'url'=>$url
+        ));
+    }
+
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getLevelService()
+    protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function getWebExtension()
+    protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }
     
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    private function getNoteService()
+    protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     } 
@@ -366,10 +588,19 @@ class CourseManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
     protected function getDiscountService()
     {
         return $this->getServiceKernel()->createService('Discount:Discount.DiscountService');
     }
 
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
 
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
 }

@@ -48,6 +48,12 @@ class TokenDaoImpl extends BaseDao implements TokenDao
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
 
+    public function deleteTokensByExpiredTime($expiredTime, $limit)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
+        return $this->getConnection()->executeQuery($sql, array($expiredTime));
+    }
+
     public function waveRemainedTimes($id, $diff)
     {
         $sql = "UPDATE {$this->table} SET remainedTimes = remainedTimes + ? WHERE id = ? LIMIT 1";
@@ -61,7 +67,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         return $builder->execute()->fetchColumn(0);
 	}
 
-	private function _createSearchQueryBuilder($conditions)
+	protected function _createSearchQueryBuilder($conditions)
 	{
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user_token')

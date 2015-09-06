@@ -1,40 +1,25 @@
 {% if classrooms %}
-  <section class="recommend-class">
-    <div class="container">
-      <div class="class-label hidden-xs hidden-sm">推荐班级</div>
-      <div class="recommend-class-list">
-        <div class="swiper-container">
-          <div class="swiper-wrapper">
-
-            {% for classroom in classrooms %}
-              <div class="swiper-slide">
-                <div class="class-item">
-                  <a href="{{ path('classroom_show', {id:classroom.id}) }}">
-                    <img class="img-responsive" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt="{{ classroom.title }}">
-                    <h3>{{ classroom.title }}</h3>
-                    <div class="image-overlay"></div>
-                    {% if classroom.belogCourse|default(false) %}
-                      <div class="class-belong hidden-xs hidden-sm">所属班级</div>
-                    {% endif %}
-                  </a>
-                </div>
-              </div>
-            {% endfor %}
-
-            {% set emptyClassroomNum = 4 - classrooms|length %}
-            {% if emptyClassroomNum > 0 %}
-              {% for i in range(1, emptyClassroomNum) %}
-                <div class="swiper-slide">
-                  <div class="class-item item-default">
-                    <img class="img-responsive" src="{{ asset('assets/v2/img/class_default.png') }}" alt="班级默认图片">
-                  </div>
-                </div>
-              {% endfor %}
-            {% endif %}
-          </div>
+  <div class="panel panel-default panel-class hidden-sm" id="panel-class">
+    <div class="panel-heading">
+      <a href="{{path('classroom_explore')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+      <h3 class="panel-title">
+        <i class="es-icon es-icon-locallibrary"></i>
+        推荐{{ setting('classroom.name')|default('班级') }}
+      </h3>
+    </div>
+    <div class="panel-body">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {% for classroom in classrooms %}
+            <div class="swiper-slide swiper-hidden">
+              <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+              </a>
+              <h5 style="margin-bottom:0"><a class="link-dark text-overflow" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h5>
+            </div>
+          {% endfor %}
         </div>
-
-        {% if classrooms|length > 4 %}
+        {% if classrooms|length > 1 %}
           <a href="javascipt:;" class="arrow-prev">
             <i class="es-icon es-icon-chevronleft"></i>
           </a>
@@ -42,8 +27,8 @@
             <i class="es-icon es-icon-chevronright"></i>
           </a>
         {% endif %}
-
       </div>
     </div>
-  </section>
+  </div>
+  {% do load_script('course/recommend-classroom') %}
 {% endif %}

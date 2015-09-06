@@ -24,6 +24,13 @@ class CourseFileManageController extends BaseController
             'targetId'=>$course['id']
         );
 
+        if(array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])){
+            $course = $this->getCourseService()->getCourse($conditions['targetId']);
+            if($course['parentId']>0 && $course['locked'] == 1 ){
+                $conditions['targetId'] = $course['parentId'];
+            }
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
@@ -70,13 +77,15 @@ class CourseFileManageController extends BaseController
 
     public function showAction(Request $request, $id, $fileId)
     {
-        if($id != 0){
-	        $course = $this->getCourseService()->tryManageCourse($id);
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if($id != $file["targetId"]){
             throw $this->createNotFoundException();
         }
 
@@ -172,27 +181,27 @@ class CourseFileManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getMaterialService()
+    protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
-    private function createPrivateFileDownloadResponse(Request $request, $file)
+    protected function createPrivateFileDownloadResponse(Request $request, $file)
     {
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);

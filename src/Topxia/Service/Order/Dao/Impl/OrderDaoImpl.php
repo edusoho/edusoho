@@ -42,6 +42,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->createSerializer()->unserializes($orders, $this->serializeFields);
     }
 
+    public function findOrdersBySns(array $sns)
+    {
+        if(empty($sns)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($sns) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE sn IN ({$marks});";
+        $orders = $this->getConnection()->fetchAll($sql, $sns);
+        return $this->createSerializer()->unserializes($orders, $this->serializeFields);
+    }
+
     public function addOrder($order)
     {
         $order = $this->createSerializer()->serialize($order, $this->serializeFields);
@@ -73,14 +85,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
 
     public function searchBill($conditions, $orderBy, $start, $limit)
     {
-        if (!isset($conditions['startTime'])) $conditions['startTime'] = 0;
+        if (!isset($conditions['startTime'])){
+            $conditions['startTime'] = 0;
+        }
         $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
 
     public function countUserBillNum($conditions)
     {
-        if (!isset($conditions['startTime'])) $conditions['startTime'] = 0;
+        if (!isset($conditions['startTime'])){
+            $conditions['startTime'] = 0;
+        }
         $sql = "SELECT count(*) FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ";
         return $this->getConnection()->fetchColumn($sql, array());
     }    
@@ -105,7 +121,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql, array_merge(array($startTime, $endTime), $courseId));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if(isset($conditions["title"])) {
             $conditions["title"] = '%' . $conditions["title"] . "%";

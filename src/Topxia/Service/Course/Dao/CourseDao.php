@@ -11,12 +11,14 @@ interface CourseDao
     public function getCoursesCount();
 
     public function findCoursesByIds(array $ids);
+
+    public function findCoursesByParentIdAndLocked($parentId, $locked);
     
     public function findCoursesByCourseIds(array $ids, $start, $limit);
 
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
 
-    public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
+    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
     public function searchCourses($conditions, $orderBy, $start, $limit);
 

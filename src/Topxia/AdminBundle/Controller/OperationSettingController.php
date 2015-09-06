@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class OperationSettingController extends BaseController
@@ -49,7 +48,7 @@ class OperationSettingController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -79,7 +78,7 @@ class OperationSettingController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }

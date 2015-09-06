@@ -23,10 +23,27 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function findLessonsByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
+    {
+        if(empty($courseIds)){
+            return array();
+        }
+       
+       $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+       
+       $parmaters = array_merge(array($parentId), $courseIds);
+             
+       $sql = "SELECT * FROM {$this->table} WHERE  parentId = ? AND courseId IN ({$marks})";
+       
+       return $this->getConnection()->fetchAll($sql,$parmaters); 
     }
 
     public function findLessonsByTypeAndMediaId($type, $mediaId)
@@ -162,7 +179,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchColumn($sql, $lessonIds);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -180,8 +197,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
-            ->andWhere('courseId IN ( :courseIds )');;
-
+            ->andWhere('courseId IN ( :courseIds )');
+        if(isset($conditions['notLearnedIds'])){
+            $builder->andWhere('id NOT IN ( :notLearnedIds)');
+        }
         return $builder;
     }
 

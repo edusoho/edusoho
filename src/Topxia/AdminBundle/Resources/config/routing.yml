@@ -151,6 +151,10 @@ admin_user_create_email_check:
     pattern:  /user/create/email/check
     defaults: { _controller: TopxiaAdminBundle:User:emailCheck }
 
+admin_user_create_mobile_check:
+    pattern:  /user/create/mobile/check
+    defaults: { _controller: TopxiaAdminBundle:User:mobileCheck }
+
 admin_user_create_email_or_mobile_check:
     pattern:  /user/create/email_or_mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:emailOrMobileCheck }
@@ -311,7 +315,7 @@ admin_course_recommend:
     defaults: { _controller: TopxiaAdminBundle:Course:recommend }
 
 admin_course_cancel_recommend:
-    pattern: /course/{id}/recommend/cancel
+    pattern: /course/{id}/recommend/cancel/{target}
     defaults: { _controller: TopxiaAdminBundle:Course:cancelRecommend }
     methods: [POST]
 
@@ -587,6 +591,10 @@ admin_setting_consult_setting:
     pattern:  /setting/consult-setting
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultSetting }
 
+admin_setting_es_bar:
+    pattern:  /setting/es-bar
+    defaults: { _controller: TopxiaAdminBundle:SiteSetting:esBarSetting }
+
 admin_setting_consult_upload:
     pattern:  /setting/consult-upload
     defaults: { _controller: TopxiaAdminBundle:SiteSetting:consultUpload }
@@ -653,6 +661,10 @@ admin_logs_prod:
     pattern:  /setting/logs/prod
     defaults: { _controller: TopxiaAdminBundle:Log:prod }
 
+admin_cloud_access:
+    pattern:  /cloud/access
+    defaults: { _controller: TopxiaAdminBundle:Cloud:access }
+
 admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
@@ -665,9 +677,37 @@ admin_cloud_detail:
     pattern:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
 
+admin_cloud_buy:
+    pattern:  /cloud/{type}/buy
+    defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
+
+admin_cloud_tlp:
+    pattern:  /cloud/tlp
+    defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
+
+admin_cloud_video:
+    pattern:  /cloud/video
+    defaults: { _controller: TopxiaAdminBundle:Cloud:video }
+
+admin_cloud_doc:
+    pattern:  /cloud/doc
+    defaults: { _controller: TopxiaAdminBundle:Cloud:doc }
+
+admin_cloud_live:
+    pattern:  /cloud/live
+    defaults: { _controller: TopxiaAdminBundle:Cloud:live }
+
 admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
+
+admin_cloud_video_upgrade:
+    pattern:  /cloud/video/upgrade
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
+
+admin_cloud_video_renew:
+    pattern:  /cloud/video/renew
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
 
 admin_customer_service:
     pattern: /customer/service
@@ -1164,6 +1204,18 @@ admin_bill:
     pattern: /coin/bill
     defaults: { _controller: TopxiaAdminBundle:Coin:cashBill }
 
+admin_bill_export_csv:
+    pattern: /coin/bill/export/{cashType}
+    defaults: { _controller: TopxiaAdminBundle:Coin:exportCsv}
+
+admin_order_manage_export_csv:
+    pattern: /order/manage/export/{targetType}
+    defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
+
+admin_order_manage_export_coin_csv:  
+    pattern: /order/manage/coin
+    defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
+
 admin_coin_user_records:
     path:     /coin/records/user
     defaults: { _controller: TopxiaAdminBundle:Coin:userRecords }
@@ -1175,6 +1227,10 @@ admin_coin_flow_detail:
 admin_coin_model:
     path:     /setting/coin/model
     defaults: { _controller: TopxiaAdminBundle:Coin:model }
+
+admin_coin_model_ajax:
+    path: /setting/coin/model/ajax
+    defaults: { _controller: TopxiaAdminBundle:Coin:tableAjax}
 
 admin_coin_model_save:
     path:     /coin/model/save

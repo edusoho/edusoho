@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
 
 class CourseSettingController extends BaseController
@@ -29,9 +29,11 @@ class CourseSettingController extends BaseController
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
             'student_download_media' => '0',
+            'explore_default_orderBy' => 'latest',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'coursesPrice' => '0',
@@ -138,7 +140,7 @@ class CourseSettingController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
         $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
         $default = array(
@@ -197,7 +199,7 @@ class CourseSettingController extends BaseController
         return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
     }
     
-    private function getCourseDefaultSet()
+    protected function getCourseDefaultSet()
     {
         $default = array(
             'defaultCoursePicture' => 0,
@@ -213,7 +215,7 @@ class CourseSettingController extends BaseController
         return $default;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

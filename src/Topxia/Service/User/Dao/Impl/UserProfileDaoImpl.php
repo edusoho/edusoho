@@ -32,7 +32,9 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
     public function findProfilesByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
@@ -82,5 +84,50 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
         $sql="UPDATE {$this->table} set {$fieldName} =null ";
         return $this->getConnection()->exec($sql);
+    }
+
+    public function searchProfiles($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createProfileQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function searchProfileCount($conditions)
+    {
+        $builder = $this->createProfileQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    private function createProfileQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions,function($v){
+            if($v === 0){
+                return true;
+            }
+                
+            if(empty($v)){
+                return false;
+            }
+            return true;
+        });
+
+        if (isset($conditions['mobile'])) {
+            $conditions['mobile'] = "{$conditions['mobile']}%";
+        }
+
+        if (isset($conditions['qq'])) {
+            $conditions['qq'] = "{$conditions['qq']}%";
+        }
+
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'user_profile')
+            ->andWhere('mobile LIKE :mobile')
+            ->andWhere('qq LIKE :qq');
     }
 }

@@ -53,7 +53,9 @@ class AnalysisController extends BaseController
 
 
         $registerStartData=$this->getUserService()->searchUsers(array(),array('createdTime', 'ASC'),0,1);
-        if($registerStartData) $registerStartDate=date("Y-m-d",$registerStartData[0]['createdTime']);
+        if($registerStartData){
+            $registerStartDate=date("Y-m-d",$registerStartData[0]['createdTime']);
+        }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:register.html.twig",array(
@@ -163,7 +165,9 @@ class AnalysisController extends BaseController
 
         $courseSumStartData=$this->getCourseService()->searchCourses(array(),'createdTimeByAsc',0,1);
 
-        if($courseSumStartData) $courseSumStartDate=date("Y-m-d",$courseSumStartData[0]['createdTime']);
+        if($courseSumStartData){
+            $courseSumStartDate=date("Y-m-d",$courseSumStartData[0]['createdTime']);
+        }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:course-sum.html.twig",array(
@@ -206,12 +210,12 @@ class AnalysisController extends BaseController
               $paginator->getPerPageCount()
          );
 
-        $LoginData="";
+        $loginData="";
 
         if($tab=="trend"){
-            $LoginData=$this->getLogService()->analysisLoginDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $loginData=$this->getLogService()->analysisLoginDataByTime($timeRange['startTime'],$timeRange['endTime']);
     
-            $data=$this->fillAnalysisData($condition,$LoginData);           
+            $data=$this->fillAnalysisData($condition,$loginData);
         }
 
         $userIds = ArrayToolkit::column($loginDetail, 'userId');
@@ -220,7 +224,9 @@ class AnalysisController extends BaseController
 
         $loginStartData=$this->getLogService()->searchLogs(array('action'=>"login_success"),'createdByAsc',0,1);
 
-        if($loginStartData) $loginStartDate=date("Y-m-d",$loginStartData[0]['createdTime']);
+        if($loginStartData){
+            $loginStartDate=date("Y-m-d",$loginStartData[0]['createdTime']);
+        }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:login.html.twig",array(
@@ -279,7 +285,9 @@ class AnalysisController extends BaseController
 
         $courseStartData=$this->getCourseService()->searchCourses(array(),'createdTimeByAsc',0,1);
 
-        if($courseStartData) $courseStartDate=date("Y-m-d",$courseStartData[0]['createdTime']);
+        if($courseStartData){
+            $courseStartDate=date("Y-m-d",$courseStartData[0]['createdTime']);
+        }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:course.html.twig",array(
@@ -342,7 +350,9 @@ class AnalysisController extends BaseController
 
         $lessonStartData=$this->getCourseService()->searchLessons(array(),array('createdTime',"asc"),0,1);
 
-        if($lessonStartData) $lessonStartDate=date("Y-m-d",$lessonStartData[0]['createdTime']);
+        if($lessonStartData){
+            $lessonStartDate=date("Y-m-d",$lessonStartData[0]['createdTime']);
+        }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:lesson.html.twig",array(
@@ -378,26 +388,26 @@ class AnalysisController extends BaseController
              20
         );
 
-        $JoinLessonDetail=$this->getOrderService()->searchOrders(
+        $joinLessonDetail=$this->getOrderService()->searchOrders(
             array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid"),
             "latest",
               $paginator->getOffsetCount(),
               $paginator->getPerPageCount()
          );
 
-        $JoinLessonData="";
+        $joinLessonData="";
 
         if($tab=="trend"){
-            $JoinLessonData=$this->getOrderService()->analysisCourseOrderDataByTimeAndStatus($timeRange['startTime'],$timeRange['endTime'],"paid");
+            $joinLessonData=$this->getOrderService()->analysisCourseOrderDataByTimeAndStatus($timeRange['startTime'],$timeRange['endTime'],"paid");
     
-            $data=$this->fillAnalysisData($condition,$JoinLessonData);          
+            $data=$this->fillAnalysisData($condition,$joinLessonData);          
         }
 
-        $courseIds = ArrayToolkit::column($JoinLessonDetail, 'targetId');
+        $courseIds = ArrayToolkit::column($joinLessonDetail, 'targetId');
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
-        $userIds = ArrayToolkit::column($JoinLessonDetail, 'userId');
+        $userIds = ArrayToolkit::column($joinLessonDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
  
@@ -409,7 +419,7 @@ class AnalysisController extends BaseController
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:join-lesson.html.twig",array(
-            'JoinLessonDetail'=>$JoinLessonDetail,
+            'JoinLessonDetail'=>$joinLessonDetail,
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
@@ -598,7 +608,9 @@ class AnalysisController extends BaseController
 
         $finishedLessonStartData=$this->getCourseService()->searchLearns(array("status"=>"finished"),array("finishedTime","ASC"),0,1);
 
-        if($finishedLessonStartData) $finishedLessonStartDate=date("Y-m-d",$finishedLessonStartData[0]['finishedTime']);
+        if($finishedLessonStartData){
+            $finishedLessonStartDate=date("Y-m-d",$finishedLessonStartData[0]['finishedTime']);
+        }
         
         $dataInfo=$this->getDataInfo($condition,$timeRange);
         return $this->render("TopxiaAdminBundle:OperationAnalysis:finished-lesson.html.twig",array(
@@ -1004,7 +1016,7 @@ class AnalysisController extends BaseController
         ));
     }
 
-    private function fillAnalysisUserSum($condition,$currentData)
+    protected function fillAnalysisUserSum($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
         $currentData=ArrayToolkit::index($currentData,'date');
@@ -1033,7 +1045,7 @@ class AnalysisController extends BaseController
         return json_encode($zeroData);
     }
 
-    private function fillAnalysisCourseSum($condition,$currentData)
+    protected function fillAnalysisCourseSum($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
         $currentData=ArrayToolkit::index($currentData,'date');
@@ -1064,7 +1076,7 @@ class AnalysisController extends BaseController
         return json_encode($zeroData);
     }
 
-    private function fillAnalysisData($condition,$currentData)
+    protected function fillAnalysisData($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
 
@@ -1085,7 +1097,7 @@ class AnalysisController extends BaseController
         return json_encode($data);
     }
 
-    private function getDatesByCondition($condition)
+    protected function getDatesByCondition($condition)
     {   
         $timeRange=$this->getTimeRange($condition);
 
@@ -1094,7 +1106,7 @@ class AnalysisController extends BaseController
         return $dates;
     }
 
-    private function getDataInfo($condition,$timeRange)
+    protected function getDataInfo($condition,$timeRange)
     {
         return array(            
             'startTime'=>date("Y-m-d",$timeRange['startTime']),
@@ -1108,18 +1120,20 @@ class AnalysisController extends BaseController
             'analysisDateType'=>$condition["analysisDateType"],);
     }
 
-    private function getTimeRange($fields)
+    protected function getTimeRange($fields)
     {
         if(isset($fields['startTime'])&&isset($fields['endTime'])&&$fields['startTime']!=""&&$fields['endTime']!="")
         {   
-            if($fields['startTime']>$fields['endTime']) return false;
+            if($fields['startTime']>$fields['endTime']){
+                return false;
+            }
             return array('startTime'=>strtotime($fields['startTime']),'endTime'=>(strtotime($fields['endTime'])+24*3600));
         }
 
         return array('startTime'=>strtotime(date("Y-m",time())),'endTime'=>strtotime(date("Y-m-d",time()+24*3600)));
     }
 
-    private function makeDateRange($startTime, $endTime)
+    protected function makeDateRange($startTime, $endTime)
     {
         $dates = array();
 
@@ -1141,17 +1155,17 @@ class AnalysisController extends BaseController
         return $this->getServiceKernel()->createService('System.LogService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-     }
+    }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }

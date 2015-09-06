@@ -149,6 +149,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
     public function deleteArticle($id)
     {
+        $this->getConnection()->delete('thread_post',array('targetId' => $id , 'targetType'=>'article'));
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
@@ -172,7 +173,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->fetchAll($sql, $tagArray);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 

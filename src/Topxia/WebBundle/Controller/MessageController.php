@@ -15,7 +15,7 @@ class MessageController extends BaseController
     public function indexAction (Request $request)
     {
         $user = $this->getCurrentUser();
-        
+        $this->getMessageService()->pullMessagesFromApi();
         $paginator = new Paginator(
             $request,
             $this->getMessageService()->getUserConversationCount($user->id),
@@ -30,7 +30,7 @@ class MessageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($conversations, 'fromId'));
 
         $this->getMessageService()->clearUserNewMessageCounter($user['id']);
-
+        $user->clearMessageNum();
         return $this->render('TopxiaWebBundle:Message:index.html.twig', array(
             'conversations' => $conversations,
             'users' => $users,
@@ -216,7 +216,7 @@ class MessageController extends BaseController
         return new JsonResponse($data);
     }
 
-    private function getWebExtension()
+    protected function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }

@@ -67,7 +67,8 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                         'name' => '入账',
                         'orderSn' => $order['sn'],
                         'category' => 'outflow',
-                        'note' => ''
+                        'note' => '',
+                        'payment' => $order['payment']
                     );
 
                     $rmbInFlow = $this->getCashService()->inflowByRmb($inFlow);
@@ -129,7 +130,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return $this->getOrderDao()->analysisAmount($conditions);
     }
 
-    private function _createLog($orderId, $type, $message = '', array $data = array())
+    protected function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();
 

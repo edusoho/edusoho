@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {   
@@ -361,7 +361,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         $task['callbackUrl'] = $convertCallback;
 
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $result = $api->post('/processes', $task);
         if (empty($result['taskNo'])) {
             return null;
@@ -375,14 +375,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
-    private function getFileFullName($file)
+    protected function getFileFullName($file)
     {
         $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);
         $filename .= "{$file['hashId']}.{$file['ext']}";
         return $diskDirectory.$filename; 
     }
 
-    private function getVideoWatermarkImages()
+    protected function getVideoWatermarkImages()
     {
         $setting = $this->getSettingService()->get('storage',array());
         if (empty($setting['video_embed_watermark_image']) || ($setting['video_watermark'] != 2)) {
@@ -404,7 +404,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
 
 
-    private function getFilePath($targetType,$targetId)
+    protected function getFilePath($targetType,$targetId)
     {
         $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
         $subDir = DIRECTORY_SEPARATOR.$file['targetType'].DIRECTORY_SEPARATOR;
@@ -412,7 +412,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $diskDirectory.$subDir;    	
     }
 
-    private function encodeMetas($metas)
+    protected function encodeMetas($metas)
     {
         if(empty($metas) || !is_array($metas)) {
             $metas = array();
@@ -420,7 +420,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return json_encode($metas);
     }
 
-    private function decodeMetas($metas)
+    protected function decodeMetas($metas)
     {
         if (empty($metas)) {
             return array();
@@ -428,7 +428,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return json_decode($metas, true);
     }
 
-    private function getCloudClient()
+    protected function getCloudClient()
     {
         if(empty($this->cloudClient)) {
             $factory = new CloudClientFactory();
@@ -437,30 +437,20 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->cloudClient;
     }
 
-    private function getConvertor($name)
+    protected function getConvertor($name)
     {
         $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
     }
 
-    private function getUploadFileDao()
+    protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
-    }
-
-    protected function createAPIClient()
-    {
-        $settings = $this->getSettingService()->get('storage', array());
-        return new CloudAPI(array(
-            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
-        ));
     }
 
 }
@@ -549,7 +539,7 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         return $file;
     }
 
-    private function generateKey ($length = 0 )
+    protected function generateKey ($length = 0 )
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 

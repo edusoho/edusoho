@@ -327,6 +327,10 @@ class GroupThreadController extends BaseController
 
         $files=$this->getFileService()->getFilesByIds($fileIds);
 
+        $threadMainContent = strip_tags($threadMain['content'],'');
+
+        $threadMainContent = preg_replace("/ /","",$threadMainContent); 
+        
         return $this->render('TopxiaWebBundle:Group:thread.html.twig',array(
             'groupinfo' => $group,
             'isCollected' => $isCollected,
@@ -349,6 +353,7 @@ class GroupThreadController extends BaseController
             'files'=>$files,
             'postFiles'=>$postFiles,
             'postAttachs'=>$postAttachs,
+            'threadMainContent' =>$threadMainContent,
             'is_groupmember' => $this->getGroupMemberRole($id)));
     }
 
@@ -397,10 +402,11 @@ class GroupThreadController extends BaseController
 
         if($goods['coin'] > 0 && $user['id']!=$file['userId']){
 
-            $Trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user['id'],$goods['id']);
-            if(!$Trade) 
+            $trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user['id'],$goods['id']);
+            if(!$trade) {
+                return $this->createMessageResponse('info','您未购买该附件!');
+            }
 
-            return $this->createMessageResponse('info','您未购买该附件!');
         }
 
         $file=$this->getFileService()->getFile($goods['fileId']); 
@@ -439,10 +445,11 @@ class GroupThreadController extends BaseController
 
         $attach=$this->getThreadService()->getGoods($attachId);
 
-        if(isset($account['cash']))
+        if(isset($account['cash'])){
             $account['cash']=intval($account['cash']);
+        }
 
-        $Trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user->id,$attach['id']);
+        $trade=$this->getThreadService()->getTradeByUserIdAndGoodsId($user->id,$attach['id']);
 
         if($request->getMethod()=="POST"){
 
@@ -454,7 +461,7 @@ class GroupThreadController extends BaseController
                     
                 }
 
-                if(empty($Trade)){
+                if(empty($trade)){
 
                     $this->getCashAccountService()->reward($attach['coin'],'下载附件<'.$attach['title'].'>',$user->id,'cut');
 
@@ -465,8 +472,9 @@ class GroupThreadController extends BaseController
                     $this->getThreadService()->addTrade($data);
 
                     $reward=$attach['coin']*0.5;
-                    if(intval($reward)<1)
-                    $reward=1;
+                    if(intval($reward)<1){
+                        $reward=1;
+                    }
                     $file=$this->getFileService()->getFile($attach['fileId']);
                     
                     $this->getCashAccountService()->reward(intval($reward),'您发表的附件<'.$attach['title'].'>被购买下载！',$file['userId']);
@@ -478,7 +486,7 @@ class GroupThreadController extends BaseController
         return $this->render('TopxiaWebBundle:Group:buy-attach-modal.html.twig',array(
             'account'=>$account,
             'attach'=>$attach,
-            'Trade'=>$Trade,
+            'Trade'=>$trade,
             'attachId'=>$attachId,
             ));
     }
@@ -545,8 +553,7 @@ class GroupThreadController extends BaseController
                     $message);
             }
 
-            return new Response($url);
-
+            return $this->createJsonResponse(true);
     }
     
     public function searchResultAction(Request $request,$id)
@@ -664,8 +671,9 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
         $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
-        if(isset($account['cash']))
+        if(isset($account['cash'])){
             $account['cash']=intval($account['cash']);
+        }
 
         if($request->getMethod()=="POST"){
 
@@ -766,8 +774,9 @@ class GroupThreadController extends BaseController
         $user=$this->getCurrentUser();
         $account=$this->getCashAccountService()->getAccountByUserId($user->id,true);
 
-        if(isset($account['cash']))
+        if(isset($account['cash'])){
             $account['cash']=intval($account['cash']);
+        }
 
         $need=$this->getThreadService()->sumGoodsCoinsByThreadId($threadId);
         if($request->getMethod()=="POST"){
@@ -787,8 +796,9 @@ class GroupThreadController extends BaseController
             $this->getThreadService()->addTrade(array('threadId'=>$threadId,'userId'=>$user->id,'createdTime'=>time()));
             
             $reward=$need*0.5;
-            if(intval($reward)<1)
-            $reward=1;
+            if(intval($reward)<1){
+                $reward=1;
+            }
 
             $this->getCashAccountService()->reward(intval($reward),'您发表的话题<'.$thread['title'].'>的隐藏内容被查看！',$thread['userId']);
 
@@ -801,7 +811,7 @@ class GroupThreadController extends BaseController
             ));
     }
 
-    private function postAction($threadId,$action)
+    protected function postAction($threadId,$action)
     {
         $thread=$this->getThreadService()->getThread($threadId);
         $groupMemberRole=$this->getGroupMemberRole($thread['groupId']);
@@ -840,10 +850,12 @@ class GroupThreadController extends BaseController
             'threadId'=>$threadId,
         )));
     }
-    private function getPost($postId,$threadId,$id)
+    protected function getPost($postId,$threadId,$id)
     {   
         $post=$this->getThreadService()->getPost($postId);
-        if($post['postId']!=0)$postId=$post['postId'];
+        if($post['postId']!=0){
+            $postId=$post['postId'];
+        }
         $count=$this->getThreadService()->searchPostsCount(array('threadId'=>$threadId,'status'=>'open','id'=>$postId,'postId'=>0));
 
         $page= $this->getPostPage($postId, $threadId);
@@ -879,9 +891,9 @@ class GroupThreadController extends BaseController
         
             sscanf($value,"%[^#]#[hide=reply]%[^$$]",$replyContent,$replyHideContent);
             
-            $Trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
+            $trade=$this->getThreadService()->getTradeByUserIdAndThreadId($user->id,$thread['id']);
 
-            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($Trade) ){
+            if($role == 2 || $role ==3 || $user['id'] == $thread['userId'] || !empty($trade) ){
 
                 if($coin){
 
@@ -922,8 +934,9 @@ class GroupThreadController extends BaseController
                 
             }
 
-            if($replyHideContent)
-            $context.=$this->replyCanSee($role,$thread,$content,$replyHideContent);
+            if($replyHideContent){
+                $context.=$this->replyCanSee($role,$thread,$content,$replyHideContent);
+            }
 
             unset($coin);
             unset($content);
@@ -932,8 +945,10 @@ class GroupThreadController extends BaseController
             unset($replyContent);
         }
         
-        if($context)
-        $thread['content']=$context;
+        if($context){
+            $thread['content']=$context;
+        }
+        
         $thread['count']=$count;
 
         $thread['content']=str_replace("<!--></>", "#", $thread['content']);
@@ -941,7 +956,7 @@ class GroupThreadController extends BaseController
         
     }
 
-    private function replyCanSee($role,$thread,$content,$replyHideContent)
+    protected function replyCanSee($role,$thread,$content,$replyHideContent)
     {   
         $context="";
         $user=$this->getCurrentUser();
@@ -1005,7 +1020,7 @@ class GroupThreadController extends BaseController
         return new Response(json_encode($record));
     }
 
-    private function isFeatureEnabled($feature)
+    protected function isFeatureEnabled($feature)
     {         
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();         
         return in_array($feature, $features);     
@@ -1016,7 +1031,7 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
@@ -1024,12 +1039,12 @@ class GroupThreadController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
-    private function getGroupService() 
+    protected function getGroupService() 
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-    private function getPostSearchFilters($request)
+    protected function getPostSearchFilters($request)
     {
         $filters=array();
 
@@ -1049,20 +1064,27 @@ class GroupThreadController extends BaseController
 
         return $filters;
     }
-    private function getPostCondition($filters,$ownId,$threadId)
+    protected function getPostCondition($filters,$ownId,$threadId)
     {
-        if($filters=='all') return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+        if($filters=='all'){
+            return array('threadId'=>$threadId,'status'=>'open','postId'=>0);
+        }
 
-        if($filters=='onlyOwner') return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
-
+        if($filters=='onlyOwner'){
+            return array('threadId'=>$threadId,'status'=>'open','userId'=>$ownId,'postId'=>0);
+        }
         return false;
 
     }
-    private function getPostOrderBy($sort)
+    protected function getPostOrderBy($sort)
     {
-        if($sort=='asc') return array('createdTime','asc');
+        if($sort=='asc'){
+            return array('createdTime','asc');
+        }
 
-        if($sort=='desc') return array('createdTime','desc');
+        if($sort=='desc'){
+            return array('createdTime','desc');
+        }
     }
 
     protected function getSettingService()
@@ -1075,7 +1097,7 @@ class GroupThreadController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-     private function filterSort($sort)
+     protected function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
@@ -1115,38 +1137,54 @@ class GroupThreadController extends BaseController
         return $orderBys;
     }
 
-    private function getGroupMemberRole($groupId)
+    protected function getGroupMemberRole($groupId)
     {
        $user = $this->getCurrentUser();
 
-       if (!$user['id']) return 0;
+       if (!$user['id']){
+        return 0;
+       }
 
-       if ($this->getGroupService()->isOwner($groupId, $user['id'])) return 2;
+       if ($this->getGroupService()->isOwner($groupId, $user['id'])){
+        return 2;
+       }
 
-       if ($this->getGroupService()->isAdmin($groupId, $user['id'])) return 3;
+       if ($this->getGroupService()->isAdmin($groupId, $user['id'])){
+        return 3;
+       }
 
-       if ($this->getGroupService()->isMember($groupId, $user['id'])) return 1;
+       if ($this->getGroupService()->isMember($groupId, $user['id'])){
+        return 1;
+       }
 
        return 0;
     }
 
-    private function checkManagePermission($id,$thread)
+    protected function checkManagePermission($id,$thread)
     {   
         $user=$this->getCurrentUser();
 
-        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true) return true;
-        if($this->getGroupService()->isOwner($id, $user['id'])) return true;
-        if($this->getGroupService()->isAdmin($id, $user['id'])) return true;
-        if($thread['userId']==$user['id']) return true;
+        if($this->get('security.context')->isGranted('ROLE_ADMIN')==true){
+            return true;
+        }
+        if($this->getGroupService()->isOwner($id, $user['id'])){
+            return true;
+        }
+        if($this->getGroupService()->isAdmin($id, $user['id'])){
+            return true;
+        }
+        if($thread['userId']==$user['id']){
+            return true;
+        }
         return false;
     }
 
-    private function getCashService()
+    protected function getCashService()
     {
         return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
-    private function getCashAccountService()
+    protected function getCashAccountService()
     {
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }

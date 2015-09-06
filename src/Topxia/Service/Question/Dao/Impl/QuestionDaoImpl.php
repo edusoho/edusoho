@@ -38,6 +38,13 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget)
+    {
+
+        $sql ="SELECT * FROM {$this->table} WHERE pId = ? AND target IN {$lockedTarget}";
+        return $this->getConnection()->fetchAll($sql, array($pId));
+    }
+
     //@todo:sql
     public function findQuestionsbyTypes($types, $start, $limit)
     {
@@ -207,7 +214,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchAll($sql, $sqlConditions);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function($value) {
             if ($value === '' || is_null($value)) {

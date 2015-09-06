@@ -3,7 +3,7 @@ namespace Topxia\Service\CloudPlatform\Client;
 
 use Psr\Log\LoggerInterface;
 
-class CloudAPI
+class CloudAPI extends AbstractCloudAPI
 {
     const VERSION = 'v1';
 
@@ -13,11 +13,11 @@ class CloudAPI
 
     protected $timeout = 60;
 
-    private $apiUrl = 'http://api.edusoho.net';
+    protected $apiUrl = 'http://api.edusoho.net';
 
-    private $debug = false;
+    protected $debug = false;
 
-    private $logger = null;
+    protected $logger = null;
 
     public function __construct(array $options)
     {
@@ -61,12 +61,11 @@ class CloudAPI
         return $this;
     }
 
-    private function _request($method, $uri, $params, $headers)
+    protected function _request($method, $uri, $params, $headers)
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl . '/' . self::VERSION . $uri;
-
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';
@@ -114,10 +113,8 @@ class CloudAPI
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_BODY {$body}");
 
         curl_close($curl);
-
         $result = json_decode($body, true);
-
-        if (empty($result)) {
+        if ($result === null) {
             $context = array(
                 'CURLINFO' => $curlinfo,
                 'HEADER' => $header,
@@ -130,7 +127,7 @@ class CloudAPI
         return $result;
     }
 
-    private function _makeAuthToken($url, $params)
+    protected function _makeAuthToken($url, $params)
     {
         $matched = preg_match('/:\/\/.*?(\/.*)$/', $url, $matches);
         if (!$matched) {
@@ -143,5 +140,4 @@ class CloudAPI
 
         return "{$this->accessKey}:{$hash}";
     }
-
 }

@@ -219,7 +219,7 @@ class ServiceKernel
         return $this->_moduleConfig[$key];
     }
 
-    private function getClassName($type, $name)
+    protected function getClassName($type, $name)
     {
         $classMap = $this->getClassMap($type);
 
@@ -242,7 +242,7 @@ class ServiceKernel
         return $namespace . '\\' . $module. '\\Impl\\' . $className . 'Impl';
     }
 
-    private function getClassMap($type)
+    protected function getClassMap($type)
     {
         if (isset($this->classMaps[$type])) {
             return $this->classMaps[$type];

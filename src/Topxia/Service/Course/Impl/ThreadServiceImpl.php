@@ -14,7 +14,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread)) {
 			return null;
 		}
-		return $thread['courseId'] == $courseId ? $thread : null;
+		return $thread;
 	}
 
 	public function findThreadsByType($courseId, $type, $sort, $start, $limit)
@@ -74,7 +74,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $this->getThreadDao()->searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
 	}
 	
-	private function filterSort($sort)
+	protected function filterSort($sort)
 	{
 		switch ($sort) {
 			case 'created':
@@ -111,7 +111,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		return $orderBys;
 	}
 
-	private function prepareThreadSearchConditions($conditions)
+	protected function prepareThreadSearchConditions($conditions)
 	{
 
 		if(empty($conditions['type'])) {
@@ -206,7 +206,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($courseId);
+		($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($thread['courseId']);
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
 		if (empty($fields)) {
@@ -328,7 +328,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
-		if (empty($post) || $post['courseId'] != $courseId) {
+		if (empty($post)) {
 			return null;
 		}
 		return $post;
@@ -405,32 +405,32 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
 	}
 
-	private function getThreadDao()
+	protected function getThreadDao()
 	{
 		return $this->createDao('Course.ThreadDao');
 	}
 
-	private function getThreadPostDao()
+	protected function getThreadPostDao()
 	{
 		return $this->createDao('Course.ThreadPostDao');
 	}
 
-	private function getCourseService()
+	protected function getCourseService()
 	{
 		return $this->createService('Course.CourseService');
 	}
 
-	private function getUserService()
+	protected function getUserService()
     {
       	return $this->createService('User.UserService');
     }
 
-	private function getNotifiactionService()
+	protected function getNotifiactionService()
     {
       	return $this->createService('User.NotificationService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
     	return $this->createService('System.LogService');
     }

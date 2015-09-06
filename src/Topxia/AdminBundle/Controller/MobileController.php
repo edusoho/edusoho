@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class MobileController extends BaseController
@@ -150,7 +149,7 @@ class MobileController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-   private function getCourseService()
+   protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

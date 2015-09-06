@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DeveloperSettingController extends BaseController
 {
@@ -22,6 +22,7 @@ class DeveloperSettingController extends BaseController
             'debug' => '0',
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_api_failover' => '0',
             'hls_encrypted' => '1',
         );
 
@@ -34,6 +35,11 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('developer', $developerSetting);
 
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+
+            $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/api_server.json';
+            $fileSystem = new Filesystem();
+            $fileSystem->remove($serverConfigFile);
+
             $this->setFlashMessage('success', '开发者已保存！');
         }
 
@@ -86,35 +92,35 @@ class DeveloperSettingController extends BaseController
     {
         $result = '';
         $level = 0;
-        $in_quotes = false;
-        $in_escape = false;
-        $ends_line_level = NULL;
-        $json_length = strlen( $json );
+        $inQuotes = false;
+        $inEscape = false;
+        $endsLineLevel = NULL;
+        $jsonLength = strlen( $json );
 
-        for( $i = 0; $i < $json_length; $i++ ) {
+        for( $i = 0; $i < $jsonLength; $i++ ) {
             $char = $json[$i];
-            $new_line_level = NULL;
+            $newLineLevel = NULL;
             $post = "";
-            if( $ends_line_level !== NULL ) {
-                $new_line_level = $ends_line_level;
-                $ends_line_level = NULL;
+            if( $endsLineLevel !== NULL ) {
+                $newLineLevel = $endsLineLevel;
+                $endsLineLevel = NULL;
             }
-            if ( $in_escape ) {
-                $in_escape = false;
+            if ( $inEscape ) {
+                $inEscape = false;
             } else if( $char === '"' ) {
-                $in_quotes = !$in_quotes;
-            } else if( ! $in_quotes ) {
+                $inQuotes = !$inQuotes;
+            } else if( ! $inQuotes ) {
                 switch( $char ) {
                     case '}': case ']':
                         $level--;
-                        $ends_line_level = NULL;
-                        $new_line_level = $level;
+                        $endsLineLevel = NULL;
+                        $newLineLevel = $level;
                         break;
 
                     case '{': case '[':
                         $level++;
                     case ',':
-                        $ends_line_level = $level;
+                        $endsLineLevel = $level;
                         break;
 
                     case ':':
@@ -123,15 +129,15 @@ class DeveloperSettingController extends BaseController
 
                     case " ": case "\t": case "\n": case "\r":
                         $char = "";
-                        $ends_line_level = $new_line_level;
-                        $new_line_level = NULL;
+                        $endsLineLevel = $newLineLevel;
+                        $newLineLevel = NULL;
                         break;
                 }
             } else if ( $char === '\\' ) {
-                $in_escape = true;
+                $inEscape = true;
             }
-            if( $new_line_level !== NULL ) {
-                $result .= "\n".str_repeat( "\t", $new_line_level );
+            if( $newLineLevel !== NULL ) {
+                $result .= "\n".str_repeat( "\t", $newLineLevel );
             }
             $result .= $char.$post;
         }

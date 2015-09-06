@@ -69,8 +69,10 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 throw $this->createServiceException('创建订单失败！');
             }
 
-            // 免费班级，就直接将订单置为已购买
-            if (intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon'])) {
+            // 免费班级或VIP会员，就直接将订单置为已购买
+            if ((intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 
+                && empty($order['coupon'])) || !empty($info["becomeUseMember"])) 
+            {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
                     'sn' => $order['sn'],
                     'status' => 'success',
@@ -130,7 +132,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $setting = $this->getSettingService()->get('refund');
             $message = ( empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
             if ($message) {
-                $classroom = $this->getClassroomService()->getCourse($order["targetId"]);
+                $classroom = $this->getClassroomService()->getClassroom($order["targetId"]);
                 $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
                 $variables = array(
                     'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
@@ -197,5 +199,10 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->createService('User.NotificationService');
     }
 }

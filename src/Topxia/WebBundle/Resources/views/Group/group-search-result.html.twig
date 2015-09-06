@@ -10,7 +10,7 @@
         <div class="col-sm-8"><h1>话题搜索</h1></div>
         <div class="col-sm-4">
              <form action="{{path('group_search',{id:groupinfo.id})}}" method="get">
-              <div class="input-group group-search">
+              <div class="input-group group-search es-box-shadow">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
                 <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
                 <span class="input-group-btn">

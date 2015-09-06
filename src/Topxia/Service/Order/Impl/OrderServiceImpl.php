@@ -25,6 +25,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return ArrayToolkit::index($orders, 'id');
     }
 
+    public function findOrdersBySns(array $sns)
+    {
+        $orders = $this->getOrderDao()->findOrdersBySns($sns);
+        return ArrayToolkit::index($orders, 'id');
+    }
+
     public function createOrder($order)
     {
         if (!ArrayToolkit::requireds($order, array('userId', 'title',  'amount', 'targetType', 'targetId', 'payment'))) {
@@ -94,11 +100,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         if (empty($order)) {
             throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
         }
-
+        
         if ($payData['status'] == 'success') {
             // 避免浮点数比较大小可能带来的问题，转成整数再比较。
             if (intval($payData['amount']*100) !== intval($order['amount']*100)) {
-                $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', array($order['sn'], $order['price'], $payData['amount']));
+                $message = sprintf('订单(%s)的金额(%s)与实际支付的金额(%s)不一致，支付失败。', $order['sn'], $order['amount'], $payData['amount']);
                 $this->_createLog($order['id'], 'pay_error', $message, $payData);
                 throw $this->createServiceException($message);
             }
@@ -175,7 +181,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
     }
 
-    private function generateOrderSn($order)
+    protected function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
         return  $prefix . date('YmdHis', time()) . mt_rand(10000,99999);
@@ -190,7 +196,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->_createLog($orderId, $type, $message, $data);
     }
 
-    private function _createLog($orderId, $type, $message = '', array $data = array())
+    protected function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();
 
@@ -207,7 +213,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->addLog($log);
     }
 
-    public function cancelOrder($id, $message, $data = array())
+    public function cancelOrder($id, $message='', $data = array())
     {
         $order = $this->getOrder($id);
         if (empty($order)) {
@@ -494,7 +500,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->searchOrderCount($conditions);
     }
 
-    private function _prepareSearchConditions($conditions)
+    protected function _prepareSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
         
@@ -572,42 +578,42 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getOrderRefundDao()
+    protected function getOrderRefundDao()
     {
         return $this->createDao('Order.OrderRefundDao');
     }
 
-    private function getOrderDao()
+    protected function getOrderDao()
     {
         return $this->createDao('Order.OrderDao');
     }
 
-    private function getOrderLogDao()
+    protected function getOrderLogDao()
     {
         return $this->createDao('Order.OrderLogDao');
     }
 
-    private function getCouponService()
+    protected function getCouponService()
     {
         return $this->createService('Coupon:Coupon.CouponService');
     }
 
-    private function getPayCenterService()
+    protected function getPayCenterService()
     {
         return $this->createService('PayCenter.PayCenterService');
     }

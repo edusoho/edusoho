@@ -8,6 +8,7 @@ use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\SmsToolkit;
 
 use Imagine\Gd\Imagine;
@@ -39,13 +40,7 @@ class SettingsController extends BaseController
 		}
 
 		$fields=$this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
-		for($i=0;$i<count($fields);$i++){
-			if(strstr($fields[$i]['fieldName'], "textField")) $fields[$i]['type']="text";
-			if(strstr($fields[$i]['fieldName'], "varcharField")) $fields[$i]['type']="varchar";
-			if(strstr($fields[$i]['fieldName'], "intField")) $fields[$i]['type']="int";
-			if(strstr($fields[$i]['fieldName'], "floatField")) $fields[$i]['type']="float";
-			if(strstr($fields[$i]['fieldName'], "dateField")) $fields[$i]['type']="date";
-		}
+		
 		
 		if (array_key_exists('idcard',$profile) && $profile['idcard']=="0") {
 			$profile['idcard'] = "";
@@ -85,9 +80,9 @@ class SettingsController extends BaseController
 	{
 		$user = $this->getCurrentUser();
 		
-		$is_nickname = $this->getSettingService()->get('user_partner');
+		$isNickname = $this->getSettingService()->get('user_partner');
 
-		if($is_nickname['nickname_enabled'] == 0){
+		if($isNickname['nickname_enabled'] == 0){
 			return $this->redirect($this->generateUrl('settings'));
 		}
 
@@ -95,7 +90,7 @@ class SettingsController extends BaseController
 
 			$nickname = $request->request->get('nickname');
 			$this->getAuthService()->changeNickname($user['id'], $nickname);
-			$this->setFlashMessage('success', '昵称修改成功！');
+			$this->setFlashMessage('success', '用户名修改成功！');
 			return $this->redirect($this->generateUrl('settings'));
 		}
 		return $this->render('TopxiaWebBundle:Settings:nickname.html.twig',array(
@@ -115,7 +110,7 @@ class SettingsController extends BaseController
 		if ($result == 'success'){
 			$response = array('success' => true, 'message' => '');
 		} else {
-			$response = array('success' => false, 'message' => '昵称已存在');
+			$response = array('success' => false, 'message' => $message);
 		}
 	
 		return $this->createJsonResponse($response);
@@ -184,12 +179,51 @@ class SettingsController extends BaseController
 			$this->setFlashMessage('danger', '获取论坛头像失败或超时，请重试！');
 			return $this->createJsonResponse(true);
 		}
+		$imgUrl = $request->request->get('imgUrl');
+		$file = new File($this->downloadImg($imgUrl));
 
-		$avatarPath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
+		$groupCode = "tmp";
+		$imgs = array(
+			'large' => array("200","200"),
+			'medium' => array("120","120"),
+			'small' => array("48","48")
+		);
+		$options = array(
+			'x' => "0",
+			'y' => "0",
+			'x2' => "200",
+			'y2' => "200",
+			'w' => "200",
+			'h' => "200",
+			'width' => "200",
+			'height' => "200",
+			'imgs' => $imgs
+		);
+		if(empty($options['group'])){
+            $options['group'] = "default";
+        }
+		$record = $this->getFileService()->uploadFile($groupCode, $file);
+		$parsed = $this->getFileService()->parseFileUri($record['uri']);
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
 
-		file_put_contents($avatarPath, $avatar);
+        $fields = array();
+        foreach ($filePaths as $key => $value) {
+            $file = $this->getFileService()->uploadFile($options["group"], new File($value));
+            $fields[] = array(
+                "type" => $key,
+                "id" => $file['id']
+            );
+        }
 
-		$this->getUserService()->changeAvatar($currentUser['id'], $avatarPath, array('x'=>0, 'y'=>0, 'width'=>200, 'height' => 200));
+        if(isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+            $fields[] = array(
+                "type" => "origin",
+                "id" => $record['id']
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record["uri"]);
+        }
+        $this->getUserService()->changeAvatar($currentUser["id"],$fields);
 
 		return $this->createJsonResponse(true);
 	}
@@ -333,7 +367,7 @@ class SettingsController extends BaseController
 		)); 
 	} 
 
-	private function setPayPasswordPage($request, $userId)
+	protected function setPayPasswordPage($request, $userId)
 	{
 		$token = $this->getUserService()->makeToken('pay-password-reset',$userId,strtotime('+1 day'));
 		$request->request->set('token',$token);
@@ -342,7 +376,7 @@ class SettingsController extends BaseController
         ));
 	}
 
-	private function updatePayPasswordReturn($form, $token)
+	protected function updatePayPasswordReturn($form, $token)
 	{
         return $this->render('TopxiaWebBundle:Settings:update-pay-password-from-email-or-secure-questions.html.twig', array(
 	        'form' => $form->createView(),
@@ -386,7 +420,7 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
 	}
 
-	private function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
+	protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
 	{
 		$questionNum = rand(0,2);
 		$question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
@@ -406,8 +440,8 @@ class SettingsController extends BaseController
         $verifiedMobile = $user['verifiedMobile'];
         $hasVerifiedMobile = (isset($verifiedMobile ))&&(strlen($verifiedMobile)>0);
         $canSmsFind = ($hasVerifiedMobile) && 
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_enabled') == '1') &&
-        			  ($this->getEduCloudService()->getCloudSmsKey('sms_forget_pay_password') == 'on');
+        			  ($this->setting('cloud_sms.sms_enabled') == '1') &&
+        			  ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
 		if ((!$hasSecurityQuestions)&&($canSmsFind)) {
 			return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -442,9 +476,10 @@ class SettingsController extends BaseController
 
 	public function findPayPasswordBySmsAction(Request $request)
 	{
-		$eduCloudService = $this->getEduCloudService();
 		$scenario = "sms_forget_pay_password";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+
+		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
+
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }		
 
@@ -484,9 +519,11 @@ class SettingsController extends BaseController
 		));
 	}
 
-	private function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
+	protected function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
 	{
-		$question1 = null;$question2 = null;$question3 = null;
+		$question1 = null;
+		$question2 = null;
+		$question3 = null;
 		if ($hasSecurityQuestions){
 			$question1 = $userSecureQuestions[0]['securityQuestionCode'];
 			$question2 = $userSecureQuestions[1]['securityQuestionCode'];
@@ -539,7 +576,7 @@ class SettingsController extends BaseController
 		return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
 	}
 
-	private function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
+	protected function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
 	{
 		return $this->render('TopxiaWebBundle:Settings:bind-mobile.html.twig', array(
 			'hasVerifiedMobile' => $hasVerifiedMobile,
@@ -550,7 +587,6 @@ class SettingsController extends BaseController
 
 	public function bindMobileAction(Request $request)
 	{
-		$eduCloudService = $this->getEduCloudService();
 		$currentUser = $this->getCurrentUser()->toArray();
 		$verifiedMobile = '';
 		$hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
@@ -560,7 +596,8 @@ class SettingsController extends BaseController
 		$setMobileResult = 'none';
 
 		$scenario = "sms_bind";
-		if ($eduCloudService->getCloudSmsKey('sms_enabled') != '1'  || $eduCloudService->getCloudSmsKey($scenario) != 'on') {
+
+		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
 			return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array()); 
         }
 
@@ -733,6 +770,9 @@ class SettingsController extends BaseController
 		$clients = OAuthClientFactory::clients();
 		$userBinds = $this->getUserService()->findBindsByUserId($user->id) ?  : array();
 		foreach($userBinds as $userBind) {
+			if ($userBind['type'] == 'weixin') {
+				$userBind['type'] = 'weixinweb';
+			}
 			$clients[$userBind['type']]['status'] = 'bind';
 		}
 		return $this->render('TopxiaWebBundle:Settings:binds.html.twig', array(
@@ -838,7 +878,7 @@ class SettingsController extends BaseController
 		return $this->createJsonResponse($response);
 	}
 
-	private function checkBindsName($type) 
+	protected function checkBindsName($type) 
 	{
 		$types = array_keys(OAuthClientFactory::clients());
 		if (!in_array($type, $types)) {
@@ -846,7 +886,7 @@ class SettingsController extends BaseController
 		}
 	}
 
-	private function getFileService()
+	protected function getFileService()
 	{
 		return $this->getServiceKernel()->createService('Content.FileService');
 	}
@@ -874,7 +914,7 @@ class SettingsController extends BaseController
 		return $response;
 	}
 
-	private function createOAuthClient($type)
+	protected function createOAuthClient($type)
 	{
 		$settings = $this->setting('login_bind');        
 
@@ -896,7 +936,7 @@ class SettingsController extends BaseController
 		return $client;
 	}
 
-	private function getAuthService()
+	protected function getAuthService()
 	{
 		return $this->getServiceKernel()->createService('User.AuthService');
 	}
@@ -909,11 +949,24 @@ class SettingsController extends BaseController
 	protected function getUserFieldService()
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
-	}
+	}	
 
-    protected function getEduCloudService()
+    protected function downloadImg($url)
     {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }	
+    	$currentUser = $this->getCurrentUser();
+        $filename = md5($url) . '_' . time();
+        $filePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
+
+        $fp = fopen($filePath, 'w');
+        $img = fopen($url,'r');
+        stream_get_meta_data($img);
+        while (!feof($img)) {
+        	$result.=fgets($img,1024);
+        }
+        fclose($img);
+        fwrite($fp, $result);
+        fclose($fp);
+        return $filePath;
+    }
 
 }

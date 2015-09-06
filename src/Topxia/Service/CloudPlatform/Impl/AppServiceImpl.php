@@ -140,7 +140,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppLogDao()->findLogCount();
     }
 
-    private function createPackageUpdateLog($package, $status='SUCCESS', $message='')
+    protected function createPackageUpdateLog($package, $status='SUCCESS', $message='')
     {
         $result = array(
             'code'=>$package['product']['code'],
@@ -417,7 +417,7 @@ class AppServiceImpl extends BaseService implements AppService
         return $result['errors'];
     }
 
-    public function beginPackageUpdate($packageId, $type)
+    public function beginPackageUpdate($packageId, $type, $index = 0)
     {
         $errors = array();
         $package = $packageDir = null;
@@ -431,25 +431,30 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $e->getMessage();
             goto last;
         }
+        if (empty($index)) {
 
-        try {
-            $this->_deleteFilesForPackageUpdate($package, $packageDir);
-        } catch(\Exception $e) {
-            $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
+            try {
+                $this->_deleteFilesForPackageUpdate($package, $packageDir);
+            } catch(\Exception $e) {
+                $errors[] = "删除文件时发生了错误：{$e->getMessage()}";
+                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+                goto last;
+            }
+
+            try {
+                $this->_replaceFileForPackageUpdate($package, $packageDir);
+            } catch (\Exception $e) {
+                $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
+                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+                goto last;
+            }
         }
 
         try {
-            $this->_replaceFileForPackageUpdate($package, $packageDir);
-        } catch (\Exception $e) {
-            $errors[] = "复制升级文件时发生了错误：{$e->getMessage()}";
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
-        }
-
-        try {
-            $this->_execScriptForPackageUpdate($package, $packageDir, $type);
+            $info = $this->_execScriptForPackageUpdate($package, $packageDir, $type, $index);
+            if (isset($info['index'])) {
+                goto last;
+            }
         } catch (\Exception $e) {
             $errors[] = "执行升级/安装脚本时发生了错误：{$e->getMessage()}";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
@@ -474,7 +479,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         last:
         $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
-        return $errors;
+        return empty($info) ? $errors : $info;
     }
 
     public function repairProblem($token)
@@ -521,14 +526,14 @@ class AppServiceImpl extends BaseService implements AppService
         return $this->getAppDao()->updateApp($id, array('version' => $version));
     }
 
-    public function getLoginToken()
+    public function getTokenLoginUrl($routingName, $params)
     {
         $appClient = $this->createAppClient();
-        $result = $appClient->getLoginToken();
+        $result = $appClient->getTokenLoginUrl($routingName, $params);
         return $result;
     }
 
-    private function _replaceFileForPackageUpdate($package, $packageDir)
+    protected function _replaceFileForPackageUpdate($package, $packageDir)
     {
         $filesystem = new Filesystem();
         $filesystem->mirror("{$packageDir}/source",  $this->getPackageRootDirectory($package, $packageDir) , null, array(
@@ -537,7 +542,7 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
-    private function _execScriptForPackageUpdate($package, $packageDir, $type)
+    protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return ;
@@ -551,11 +556,13 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         if(method_exists($upgrade, 'update')){
-            $upgrade->update();
+            $info = $upgrade->update($index);
+            return empty($info) ? array() : $info;
         }
+        return array();
     }
 
-    private function _deleteFilesForPackageUpdate($package, $packageDir)
+    protected function _deleteFilesForPackageUpdate($package, $packageDir)
     {
         if (!file_exists($packageDir . '/delete')) {
             return ;
@@ -572,7 +579,7 @@ class AppServiceImpl extends BaseService implements AppService
         fclose($fh);
     }
 
-    private function _submitRunLogForPackageUpdate($message, $package, $errors)
+    protected function _submitRunLogForPackageUpdate($message, $package, $errors)
     {
         $this->createAppClient()->submitRunLog(array(
             'level' => empty($errors) ? 'info' : 'error',
@@ -585,7 +592,7 @@ class AppServiceImpl extends BaseService implements AppService
         ));
     }
 
-    private function unzipPackageFile($filepath, $unzipDir)
+    protected function unzipPackageFile($filepath, $unzipDir)
     {
         $filesystem = new Filesystem();
 
@@ -611,7 +618,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
     }
 
-    private function getPackageRootDirectory($package, $packageDir) 
+    protected function getPackageRootDirectory($package, $packageDir) 
     {
         if ($package['product']['code'] == 'MAIN') {
             return $this->getSystemRootDirectory();
@@ -624,28 +631,28 @@ class AppServiceImpl extends BaseService implements AppService
         return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
     }
 
-    private function getSystemRootDirectory()
+    protected function getSystemRootDirectory()
     {
         return dirname($this->getKernel()->getParameter('kernel.root_dir'));
     }
 
-    private function getDownloadDirectory()
+    protected function getDownloadDirectory()
     {
         return $this->getKernel()->getParameter('topxia.disk.update_dir');
     }
 
-    private function getBackUpDirectory()
+    protected function getBackUpDirectory()
     {
         return $this->getKernel()->getParameter('topxia.disk.backup_dir');
     }
 
 
-    private function makePackageFileUnzipDir($package)
+    protected function makePackageFileUnzipDir($package)
     {
         return $this->getDownloadDirectory(). '/' . $package['fileName'];
     }   
 
-    private function addEduSohoMainApp()
+    protected function addEduSohoMainApp()
     {
         $app = array(
             'code' => 'MAIN',
@@ -662,7 +669,7 @@ class AppServiceImpl extends BaseService implements AppService
         $this->getAppDao()->addApp($app);
     }
 
-    private function updateAppForPackageUpdate($package, $packageDir)
+    protected function updateAppForPackageUpdate($package, $packageDir)
     {
         $newApp = array(
             'code' => $package['product']['code'],
@@ -693,17 +700,17 @@ class AppServiceImpl extends BaseService implements AppService
     }
 
 
-    private function getAppDao ()
+    protected function getAppDao ()
     {
         return $this->createDao('CloudPlatform.CloudAppDao');
     }
 
-    private function getAppLogDao ()
+    protected function getAppLogDao ()
     {
         return $this->createDao('CloudPlatform.CloudAppLogDao');
     }
 
-    private function createAppClient()
+    protected function createAppClient()
     {
         if (!isset($this->client)) {
             $cloud = $this->getSettingService()->get('storage', array());

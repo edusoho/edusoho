@@ -52,7 +52,9 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function findUsersByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         
@@ -77,7 +79,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createUserQueryBuilder($conditions)
+    protected function createUserQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions,function($v){
             if($v === 0){
@@ -103,6 +105,11 @@ class UserDaoImpl extends BaseDao implements UserDao
             unset($conditions['keyword']);
         }
 
+        if (isset($conditions['keywordUserType'])) {
+            $conditions['type'] = "%{$conditions['keywordUserType']}%";
+            unset($conditions['keywordUserType']);
+        }
+
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
@@ -123,6 +130,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
             ->andWhere('verifiedMobile = :verifiedMobile')
+            ->andWhere('type LIKE :type')
             ->andWhere('id NOT IN ( :excludeIds )');
     }
 

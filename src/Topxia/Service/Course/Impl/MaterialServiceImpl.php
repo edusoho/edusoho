@@ -55,17 +55,25 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
 
+		$this->dispatchEvent("material.create",$material);
+
 		return $material;
+	}
+
+	public function createMaterial($fields)
+	{
+		return $this->getMaterialDao()->addMaterial($fields);
 	}
 
 	public function deleteMaterial($courseId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
+
 		if (empty($material) || $material['courseId'] != $courseId) {
 			throw $this->createNotFoundException('课程资料不存在，删除失败。');
 		}
 		$this->getMaterialDao()->deleteMaterial($materialId);
-
+		$this->dispatchEvent("material.delete",$material);
 		// Decrease the linked file usage count, if there's a linked file used by this material.
 		if(!empty($material['fileId'])){
 			$this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
@@ -75,6 +83,17 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		   $count = $this->getMaterialDao()->getLessonMaterialCount($courseId,$material['lessonId']);
 		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
 		}
+	}
+
+
+	public function findMaterialsByPIdAndLockedCourseIds($pId, $courseIds)
+	{
+		return $this->getMaterialDao()->findMaterialsByPIdAndLockedCourseIds($pId, $courseIds);
+	}
+
+	public function deleteMaterialByMaterialId($materialId)
+	{
+		return $this->getMaterialDao()->deleteMaterial($materialId);
 	}
 
 	public function deleteMaterialsByLessonId($lessonId)
@@ -135,22 +154,22 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	}
 
 
-    private function getMaterialDao()
+    protected function getMaterialDao()
     {
     	return $this->createDao('Course.CourseMaterialDao');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
     	return $this->createService('Course.CourseService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
     	return $this->createService('Content.FileService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
     }

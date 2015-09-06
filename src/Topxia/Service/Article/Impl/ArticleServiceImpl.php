@@ -310,7 +310,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
     }
 
-    private function filterArticleFields($fields, $mode = 'update')
+    protected function filterArticleFields($fields, $mode = 'update')
     {
         $article = array();
 
@@ -333,6 +333,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         if (!empty($fields['tags']) && !is_array($fields['tags'])) {
             $fields['tags'] = explode(",", $fields['tags']);
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
+        }else{
+            $article['tagIds'] = array();
         }
 
         if ($mode == 'add') {
@@ -345,7 +347,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $article;
     }
 
-    private function prepareSearchConditions($conditions)
+    protected function prepareSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
 
@@ -359,7 +361,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $conditions;
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
 
@@ -395,32 +397,32 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $orderBys;
     }
 
-    private function getArticleDao()
+    protected function getArticleDao()
     {
         return $this->createDao('Article.ArticleDao');
     }
 
-    private function getArticleLikeDao()
+    protected function getArticleLikeDao()
     {
         return $this->createDao('Article.ArticleLikeDao');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->createService('Article.CategoryService');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->createService('Content.FileService');
     }
 
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
     }

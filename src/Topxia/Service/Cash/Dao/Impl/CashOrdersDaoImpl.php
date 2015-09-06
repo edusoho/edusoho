@@ -66,7 +66,7 @@ class CashOrdersDaoImpl extends BaseDao implements CashOrdersDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createOrderQueryBuilder($conditions)
+    protected function createOrderQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)
@@ -75,6 +75,8 @@ class CashOrdersDaoImpl extends BaseDao implements CashOrdersDao
             ->andWhere('userId = :userId')
             ->andWhere('payment = :payment')
             ->andWhere('title = :title')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime < :endTime')
             ->andWhere('sn = :sn');
     }
 

@@ -76,7 +76,7 @@ class CourseController extends BaseController
         ));
     }
 
-    private function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
+    protected function searchFuncUsedBySearchActionAndSearchToFillBannerAction(Request $request, $twigToRender)
     {
         $key = $request->request->get("key");
 
@@ -191,12 +191,20 @@ class CourseController extends BaseController
         ));
     }
 
-    public function cancelRecommendAction(Request $request, $id)
+
+    public function cancelRecommendAction(Request $request, $id,$target)
     {
         $course = $this->getCourseService()->cancelRecommendCourse($id);
-
+        if($target == 'recommend_list'){
+        return $this->forward('TopxiaAdminBundle:Course:recommendList', array(
+            'request' => $request
+        ));
+        }
+        if($target == 'normal_index'){
         return $this->renderCourseTr($id,$request);
+        }
     }
+
 
     public function recommendListAction(Request $request)
     {
@@ -315,6 +323,19 @@ class CourseController extends BaseController
     public function chooserAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions["parentId"] = 0;
+        if(isset($conditions["categoryId"]) && $conditions["categoryId"]==""){
+            unset($conditions["categoryId"]);
+        }
+        if(isset($conditions["status"]) && $conditions["status"]==""){
+            unset($conditions["status"]);
+        }
+        if(isset($conditions["title"]) && $conditions["title"]==""){
+            unset($conditions["title"]);
+        }
+        if(isset($conditions["creator"]) && $conditions["creator"]==""){
+            unset($conditions["creator"]);
+        }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
@@ -340,17 +361,16 @@ class CourseController extends BaseController
         ));
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function renderCourseTr($courseId,$request)
+    protected function renderCourseTr($courseId,$request)
     {
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
-
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
@@ -360,22 +380,22 @@ class CourseController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCourseCopyService()
+    protected function getCourseCopyService()
     {
         return $this->getServiceKernel()->createService('Course.CourseCopyService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
@@ -385,7 +405,7 @@ class CourseController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getClassroomService()
+    protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }

@@ -40,6 +40,9 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             if (empty($course)) {
                 throw $this->createServiceException('课程不存在，操作失败。');
             }
+            if ($course['approval'] && $user['approvalStatus'] != 'approved') {
+                throw $this->createServiceException('该课程需要实名认证，你还没有实名认证，不可购买。');
+            }
 
             $order = array();
 
@@ -88,8 +91,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 throw $this->createServiceException('创建课程订单失败！');
             }
 
-            // 免费课程，就直接将订单置为已购买
-            if (intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon'])) {
+            // 免费课程或VIP用户，就直接将订单置为已购买
+            if ((intval($order['amount']*100) == 0 && intval($order['coinAmount']*100) == 0 && empty($order['coupon']))||!empty($info["becomeUseMember"])) {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
                     'sn' => $order['sn'],
                     'status' => 'success', 
@@ -233,7 +236,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return $this->createService('System.SettingService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->createService('User.NotificationService');
     }

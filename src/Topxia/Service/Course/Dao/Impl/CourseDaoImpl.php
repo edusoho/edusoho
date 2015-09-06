@@ -36,6 +36,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        if(empty($parentId)){
+            return array();
+        }
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
+        return $this->getConnection()->fetchAll($sql, array($parentId,$locked));
+    }
+
     public function findCoursesByCourseIds(array $ids, $start, $limit)
     {
         if(empty($ids)){
@@ -69,13 +78,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array($status));
     }
 
-    public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         if(empty($tagIds)){
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? AND ";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE parentId = 0 AND status = ? AND (";
 
         foreach ($tagIds as $key => $tagId) {
             if ($key > 0 ) {
@@ -85,7 +94,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
-        $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+        $sql .= ") ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
         
         return $this->getConnection()->fetchAll($sql, array($status));
 
@@ -114,6 +123,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
+
         $affected = $this->getConnection()->insert(self::TABLENAME, $course);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
@@ -126,7 +136,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }
-
+    
     public function deleteCourse($id)
     {
         return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
@@ -150,7 +160,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($discountId));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -210,7 +220,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('parentId > :parentId_GT')
             ->andWhere('parentId IN ( :parentIds )')
             ->andWhere('id NOT IN ( :excludeIds )')
-            ->andWhere('id IN ( :courseIds )');
+            ->andWhere('id IN ( :courseIds )')
+            ->andWhere('locked = :locked');
 
         return $builder;
     }
@@ -235,7 +246,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
          return $this->getConnection()->fetchAll($sql);
     }
 
-    private function getTablename()
+    protected function getTablename()
     {
         return self::TABLENAME;
     }

@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
@@ -125,8 +126,10 @@ class DefaultController extends BaseController
 
         $unInstallAppCount=count($appsAll)-count($installedApps);
 
-        $app_count=count($apps);
-        if(isset($apps['error'])) $error="error";
+        $appCount=count($apps);
+        if(isset($apps['error'])){
+            $error="error";
+        }
 
         $mainAppUpgrade = null;
         foreach ($apps as $key => $value) {
@@ -134,14 +137,15 @@ class DefaultController extends BaseController
                 $mainAppUpgrade = $value;
             }
         }
-        
-        $liveCourseStatus = $this->getEduCloudService()->getLiveCourseStatus();
 
+        $api = CloudAPIFactory::create('leaf');
+        $liveCourseStatus = $api->get('/lives/account');
+        
         return $this->render('TopxiaAdminBundle:Default:system.status.html.twig',array(
             "apps"=>$apps,
             "error"=>$error,
             "mainAppUpgrade"=>$mainAppUpgrade,
-            "app_count"=>$app_count,
+            "app_count"=>$appCount,
             "unInstallAppCount"=>$unInstallAppCount,
             "liveCourseStatus" => $liveCourseStatus
         ));
@@ -376,11 +380,6 @@ class DefaultController extends BaseController
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }
-
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -396,12 +395,12 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }

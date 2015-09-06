@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveCourseLessonManageController extends BaseController
 {
@@ -33,7 +33,7 @@ class LiveCourseLessonManageController extends BaseController
 	            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
 	        }
 
-			$client = LiveClientFactory::createClient();
+			$client = new EdusohoLiveClient();
 			$live = $client->createLive(array(
 				'summary' => $liveLesson['summary'],
 				'title' => $liveLesson['title'],
@@ -108,7 +108,7 @@ class LiveCourseLessonManageController extends BaseController
 				$liveParams['endTime'] = (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength']*60) . '';
 			}
 
-			$client = LiveClientFactory::createClient();
+			$client = new EdusohoLiveClient();
 			$live = $client->updateLive($liveParams);
 
 			$liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
@@ -161,33 +161,12 @@ class LiveCourseLessonManageController extends BaseController
 		return $this->createJsonResponse($leftCapacity);
 	}
 
-	private function reservationLesson($liveLesson, $reservationIds)
-	{
-		if ($this->isPluginInstalled("LiveReservation") && !empty($reservationIds)) {
-			$reservationLessonInfo = array(
-				'lessonId' => $liveLesson['id'],
-				'reservationIds' => $reservationIds,
-				'status' => 'unpublished'
-			);
-
-			$reservationLesson = $this->getReservationService()->findReservationUserByLessonId($liveLesson['id']);
-
-			if ($reservationLesson) {
-				$this->getReservationService()->updateReservationLesson($reservationLessonInfo, $reservationLesson['id']);
-			} else {
-				$this->getReservationService()->addReservationLesson($reservationLessonInfo);
-			}
-		}
-
-		return true;
-	}
-
-	private function getCourseService()
+	protected function getCourseService()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 
-	private function getSettingService()
+	protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

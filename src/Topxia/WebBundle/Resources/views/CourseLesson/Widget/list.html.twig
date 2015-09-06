@@ -1,4 +1,5 @@
 {% set learnStatuses = learnStatuses|default([]) %}
+{% set previewUrl = previewUrl|default(null) %}
 {% if items %}
   <ul class="period-list" id="course-item-list">
   {% for id, item in items %}

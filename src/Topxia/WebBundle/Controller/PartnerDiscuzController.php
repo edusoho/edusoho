@@ -28,7 +28,7 @@ class PartnerDiscuzController extends BaseController
         if(empty($get)) {
             return new Response('Invalid Request');
         }
-        $action = $get['action'];
+        // $action = $get['action'];
 
         $this->requireClientFile('lib/xml.class.php');
 
@@ -44,13 +44,13 @@ class PartnerDiscuzController extends BaseController
         return new Response($result);
     }
 
-    private function doTest($request, $get, $post)
+    protected function doTest($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
 
-    private function doDeleteuser($request, $get, $post)
+    protected function doDeleteuser($request, $get, $post)
     {
         $uids = $get['ids'];
         !API_DELETEUSER && exit(API_RETURN_FORBIDDEN);
@@ -58,7 +58,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doRenameuser($request, $get, $post)
+    protected function doRenameuser($request, $get, $post)
     {
         if (UC_CHARSET == 'gbk') {
             $get['newusername'] = iconv('gb2312','UTF-8',$get['newusername']);
@@ -71,12 +71,12 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doGettag($request, $get, $post)
+    protected function doGettag($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doSynlogin($request, $get, $post)
+    protected function doSynlogin($request, $get, $post)
     {
         if(!API_SYNLOGIN) {
             return API_RETURN_FORBIDDEN;
@@ -117,7 +117,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doSynlogout($request, $get, $post)
+    protected function doSynlogout($request, $get, $post)
     {
         if(!API_SYNLOGOUT) {
             return API_RETURN_FORBIDDEN;
@@ -128,12 +128,12 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatepw($request, $get, $post)
+    protected function doUpdatepw($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatebadwords($request, $get, $post)
+    protected function doUpdatebadwords($request, $get, $post)
     {
         if(!API_UPDATEBADWORDS) {
             return API_RETURN_FORBIDDEN;
@@ -151,7 +151,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatehosts($request, $get, $post)
+    protected function doUpdatehosts($request, $get, $post)
     {
         if(!API_UPDATEHOSTS) {
             return API_RETURN_FORBIDDEN;
@@ -162,7 +162,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdateapps($request, $get, $post)
+    protected function doUpdateapps($request, $get, $post)
     {
         if(!API_UPDATEAPPS) {
             return API_RETURN_FORBIDDEN;
@@ -183,7 +183,7 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdateclient($request, $get, $post)
+    protected function doUpdateclient($request, $get, $post)
     {
         if(!API_UPDATECLIENT) {
             return API_RETURN_FORBIDDEN;
@@ -196,22 +196,22 @@ class PartnerDiscuzController extends BaseController
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatecredit($request, $get, $post)
+    protected function doUpdatecredit($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doGetcreditsettings($request, $get, $post)
+    protected function doGetcreditsettings($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function doUpdatecreditsettings($request, $get, $post)
+    protected function doUpdatecreditsettings($request, $get, $post)
     {
         return API_RETURN_SUCCEED;
     }
 
-    private function initUcenter()
+    protected function initUcenter()
     {
         define('UC_CLIENT_VERSION', '1.6.0');
         define('UC_CLIENT_RELEASE', '20110501');
@@ -242,13 +242,13 @@ class PartnerDiscuzController extends BaseController
         $this->requireClientFile('client.php');
     }
 
-    private function requireClientFile($path)
+    protected function requireClientFile($path)
     {
         $clientDirectory = realpath($this->container->getParameter('kernel.root_dir') . '/../vendor_user/uc_client');
         require_once $clientDirectory . '/' . $path;
     }
 
-    private function writeCacheFile($filename, $content)
+    protected function writeCacheFile($filename, $content)
     {
         $cacheDirectory = $this->container->getParameter('kernel.root_dir') . '/data/discuz/';
 
@@ -262,7 +262,7 @@ class PartnerDiscuzController extends BaseController
         fclose($fp);
     }
 
-    private function stripslashes($string) {
+    protected function stripslashes($string) {
         if(is_array($string)) {
             foreach($string as $key => $val) {
                 $string[$key] = $this->stripslashes($val);
@@ -271,6 +271,11 @@ class PartnerDiscuzController extends BaseController
             $string = stripslashes($string);
         }
         return $string;
+    }
+
+    private function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 
 }

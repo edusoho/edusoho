@@ -9,7 +9,6 @@ use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\CourseType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
 
 abstract class CourseBaseController extends BaseController
 {

@@ -1,13 +1,18 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
-{% block keywords %}{{groupinfo.title}}小组 {{ setting('site.name') }}{% endblock %}
-{% block description %}{{groupinfo.about|plain_text(150)}}{% endblock %}
+{% block title %}{{groupinfo.title}}小组 {{ parent() }}{% endblock %}
+{% block keywords %}{{groupinfo.title}}{% endblock %}
+{% block description %}{{groupAbout|default('')|plain_text(100)}}{% endblock %}
 {% set groupNav = 'index' %}
 
 {% block group_main %}
+  
   <div class="panel panel-default">
     <div class="panel-body">
+      <ol class="breadcrumb">
+        <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
+        <li class="active">{{groupinfo.title}}</li>
+      </ol>
       <ul class="nav nav-tabs">
         <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
         <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
@@ -82,8 +87,8 @@
 {% endblock %}
 
 {% block group_side %}
-  <form action="{{path('group_search',{id:groupinfo.id})}}" method="get">
-  <div class="input-group group-search">
+  <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
+  <div class="input-group group-search es-box-shadow">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
     <span class="input-group-btn">

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Component\Payment\Payment;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\Common\SmsToolkit;
+use Topxia\Common\ArrayToolkit;
 
 class OrderController extends BaseController
 {
@@ -82,11 +83,9 @@ class OrderController extends BaseController
     public function createAction(Request $request)
     {
         $fields = $request->request->all(); 
-
         if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
-            $eduCloudService = $this->getEduCloudService();
             $scenario = "sms_user_pay";
-            if ($eduCloudService->getCloudSmsKey('sms_enabled') == '1'  && $eduCloudService->getCloudSmsKey($scenario) == 'on') {
+            if ($this->setting('cloud_sms.sms_enabled') == '1'  && $this->setting("cloud_sms.{$scenario}") == 'on') {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
                 if (!$result) {
                     return $this->createMessageResponse('error', '短信验证失败。');
@@ -105,7 +104,7 @@ class OrderController extends BaseController
 
         $targetType = $fields["targetType"];
         $targetId = $fields["targetId"];
-
+        $maxRate = $fields["maxRate"];
         $priceType = "RMB";
         $coinSetting = $this->setting("coin");
         $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
@@ -138,6 +137,10 @@ class OrderController extends BaseController
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
+            //虚拟币抵扣率比较
+            if (isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
+                return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
+            }
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
                 $coupon = $fields["couponCode"];
                 $couponDiscount = $couponResult["decreaseAmount"];
@@ -155,7 +158,7 @@ class OrderController extends BaseController
                 'coupon' => empty($coupon) ? '' : $coupon,
                 'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
             );
-
+            
             $order = $processor->createOrder($orderFileds, $fields);
 
             if($order["status"] == "paid") {
@@ -169,6 +172,24 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', $e->getMessage());
         }
 
+    }
+
+    public function detailAction(Request $request, $id)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+
+        $user = $this->getUserService()->getUser($order['userId']);
+
+        $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
+        
+        return $this->render('TopxiaWebBundle:Order:detail-modal.html.twig', array(
+            'order'=>$order,
+            'user'=>$user,
+            'orderLogs'=>$orderLogs,
+            'users' => $users
+        ));
     }
 
     public function couponCheckAction (Request $request, $type, $id)
@@ -216,9 +237,5 @@ class OrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }   
+    
 }

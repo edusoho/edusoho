@@ -102,7 +102,12 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
     public function searchTestpaperResults($conditions, $sort, $start, $limit)
     {
-
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($sort[0],$sort[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll()? : array() ;
     }
 
     public function searchTestpaperResultsCount($conditions)
@@ -142,13 +147,21 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('testId = :testId');
+            ->from($this->table, 'testpaper_result')
+            ->andWhere('id = :id')
+            ->andWhere('paperName = :paperName')
+            ->andWhere('testId = :testId')
+            ->andWhere('userId = :userId')
+            ->andWhere('score = :score')
+            ->andWhere('objectiveScore = :objectiveScore')
+            ->andWhere('subjectiveScore = :subjectiveScore')
+            ->andWhere('rightItemCount = :rightItemCount')
+            ->andWhere('status = :status');
             
         return $builder;
     }

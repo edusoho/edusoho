@@ -2,7 +2,7 @@
 
 use Composer\Autoload\ClassLoader;
 
-require __DIR__.'/../../vendor/autoload.php';
+require __DIR__.'/../../vendor2/autoload.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
 $twig = new Twig_Environment($loader, array(
@@ -414,7 +414,7 @@ class SystemInit
             'logo'=>'',
             'seo_keywords'=>'',
             'seo_description'=>'',
-            'master_email'=> $settings['admin']['email'],
+            'master_email'=> $settings['email'],
             'icp'=>'',
             'analytics'=>'',
             'status'=>'open',
@@ -699,13 +699,25 @@ EOD;
             'title'=>'我的账户Banner'
         ));
 
-        $content = <<<'EOD'
-<br><div class="col-md-12">  
-<a href="#"><img src="/assets/img/placeholder/banner-wallet.png" style="width: 100%;"/></a>
-<br><br></div>
-EOD;
-        $this->getBlockService()->updateContent($block['id'], $content);
+        $this->getCrontabService()->createJob(array(
+            'name'=>'DeleteExpiredTokenJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
 
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteSessionJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobParams'=>'',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+
+        $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     public function initLockFile()

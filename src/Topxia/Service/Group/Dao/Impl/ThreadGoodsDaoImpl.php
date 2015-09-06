@@ -19,11 +19,11 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addGoods($Goods)
+    public function addGoods($goods)
     {
-        $Goods = $this->createSerializer()->serialize($Goods, $this->serializeFields);
+        $goods = $this->createSerializer()->serialize($goods, $this->serializeFields);
 
-        $affected = $this->getConnection()->insert($this->table, $Goods);
+        $affected = $this->getConnection()->insert($this->table, $goods);
         if ($affected <= 0) {
 
             throw $this->createDaoException('Insert ThreadGoods error.');
@@ -87,7 +87,7 @@ class ThreadGoodsDaoImpl extends BaseDao implements ThreadGoodsDao
         return $builder->execute()->fetchAll() ? : array();  
     }
 
-    private function createQueryBuilder($conditions)
+    protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)

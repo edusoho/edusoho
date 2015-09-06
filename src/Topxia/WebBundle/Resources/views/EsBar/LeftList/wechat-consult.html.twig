@@ -1,0 +1,9 @@
+{% set consult = setting('consult') %}
+{% if consult.webchatURI is not empty %}
+  <li class="bar-weixin-btn qrcode-popover left">
+    <a><i class="es-icon es-icon-weixin"></i></a>
+    <div class="qrcode-content">
+      <img src="{{ asset(consult.webchatURI) }}" alt=""> 
+    </div>
+  </li>
+{% endif %}

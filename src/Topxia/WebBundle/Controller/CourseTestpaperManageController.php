@@ -68,7 +68,6 @@ class CourseTestpaperManageController extends BaseController
         $conditions["courseId"] = $course["id"];
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, "type");
-
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
@@ -201,7 +200,7 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
-    private function getTestpaperWithException($course, $testpaperId)
+    protected function getTestpaperWithException($course, $testpaperId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper)) {
@@ -266,7 +265,7 @@ class CourseTestpaperManageController extends BaseController
             'items' => ArrayToolkit::group($items, 'questionType'),
             'subItems' => $subItems,
             'questions' => $questions,
-            'targets' => $targets,
+            'targets' => $targets
         ));
     }
 
@@ -298,12 +297,16 @@ class CourseTestpaperManageController extends BaseController
             );
         }
 
-
+        $conditions["types"] = ArrayToolkit::column($types,"key");
+        $conditions["courseId"] = $course["id"];
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $questionNums = ArrayToolkit::index($questionNums, "type");
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items-reset.html.twig', array(
             'course'    => $course,
             'testpaper' => $testpaper,
             'ranges' => $this->getQuestionRanges($course),
             'types' => $types,
+            'questionNums' => $questionNums
         ));
     }
 
@@ -392,7 +395,7 @@ class CourseTestpaperManageController extends BaseController
 
 
 
-    private function getQuestionRanges($course, $includeCourse = false)
+    protected function getQuestionRanges($course, $includeCourse = false)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $ranges = array();
@@ -411,17 +414,17 @@ class CourseTestpaperManageController extends BaseController
         return $ranges;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }

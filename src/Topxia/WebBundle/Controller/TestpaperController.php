@@ -22,9 +22,8 @@ class TestpaperController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
-
+        $testpapersTargets = ArrayToolkit::column($testpaperResults,'target');
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
         $testpapers = ArrayToolkit::index($testpapers, 'id');
 
@@ -34,7 +33,16 @@ class TestpaperController extends BaseController
             $course = explode('-', $course[0]);
             return $course[1];
         }, $targets);
+        $lessonIds = array_map(function($target){
+            $lesson = explode('/', $target);
+            $lesson = explode('-', $lesson[1]);
+            return $lesson[1];
+        }, $testpapersTargets);
 
+        foreach ($testpaperResults as $ke => &$value) {
+               $value['lessonId'] =  $lessonIds[$ke];
+        }
+  
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
@@ -230,6 +238,8 @@ class TestpaperController extends BaseController
             'id' => $id,
             'total' => $total,
             'student' => $student,
+            'source' => $request->query->get('source','course'),
+            'targetId' => $request->query->get('targetId',0)
         ));
     }
 
@@ -420,7 +430,7 @@ class TestpaperController extends BaseController
     }
 
 
-    private function makeTestpaperTotal ($testpaper, $items)
+    protected function makeTestpaperTotal ($testpaper, $items)
     {
         $total = array();
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
@@ -621,17 +631,17 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getCourseService ()
+    protected function getCourseService ()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -641,7 +651,7 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

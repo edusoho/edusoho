@@ -43,17 +43,18 @@ class UserLoginTokenListener
         $route = $request->get('_route');
 
         if (  $auth 
-             && array_key_exists('email_enabled',$auth) 
-            	&& $user["createdTime"] > $auth["setting_time"] 
-             && $user["emailVerified"] == 0 
-            	&& ($user['type'] == 'default'||$user['type'] == 'discuz'||$user['type'] == 'phpwind')
-            	&& ($auth['email_enabled'] == 'opened'  &&  empty($user['verifiedMobile']))
-             && (isset($route))
-             && ($route != '')
-             && ($route != 'register_email_verify')
-             && ($route != 'register_submited')
-             && ($route != 'register')
-             && ($request->getMethod() !=  'POST') 
+            && $auth['register_mode'] != 'mobile' 
+            && array_key_exists('email_enabled',$auth) 
+            && $user["createdTime"] > $auth["setting_time"] 
+            && $user["emailVerified"] == 0 
+            && ($user['type'] == 'default'||$user['type'] == 'web_email'||$user['type'] == 'web_mobile'||$user['type'] == 'discuz'||$user['type'] == 'phpwind')
+            && ($auth['email_enabled'] == 'opened'  &&  empty($user['verifiedMobile']))
+            && (isset($route))
+            && ($route != '')
+            && ($route != 'register_email_verify')
+            && ($route != 'register_submited')
+            && ($route != 'register')
+            && ($request->getMethod() !=  'POST') 
             )
         {
                 $request->getSession()->invalidate();
@@ -108,5 +109,10 @@ class UserLoginTokenListener
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    protected function getAuthService()
+    {
+        return ServiceKernel::instance()->createService('User.AuthService');
     }
 }
