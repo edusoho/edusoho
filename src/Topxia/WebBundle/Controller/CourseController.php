@@ -245,6 +245,18 @@ class CourseController extends CourseBaseController
 	public function showAction(Request $request, $id)
 	{
 		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
+		if($course['parentId'])
+		{
+			$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+			$classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+			if($classroom['showable'])
+			{
+				if(empty($member))
+				{
+					return $this->createMessageResponse('error', '抱歉您无法访问');
+				}
+			}
+		}
 		if(empty($member)) {
 			$user = $this->getCurrentUser();
 			$member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
@@ -254,7 +266,6 @@ class CourseController extends CourseBaseController
 		}
 
 		$this->getCourseService()->hitCourse($id);
-
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
         $courseAbout = $course['about'];
