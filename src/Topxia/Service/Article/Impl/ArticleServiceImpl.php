@@ -93,7 +93,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function createArticle($article)
     {
         if (empty($article)) {
-            $this->createServiceException("文章内容为空，创建文章失败！");
+           throw $this->createServiceException("文章内容为空，创建文章失败！");
         }
 
         $article = $this->filterArticleFields($article, 'add');
