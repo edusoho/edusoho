@@ -490,14 +490,14 @@ class AppServiceImpl extends BaseService implements AppService
     public function lockSite()
     {
         $developer = $this->getSettingService()->get('developer', array());
-        $developer["lockSite"] = 1;
+        $developer["siteLocked"] = 1;
         $this->getSettingService()->set('developer', $developer);
     }
 
     public function unlockSite()
     {
         $developer = $this->getSettingService()->get('developer', array());
-        $developer["lockSite"] = 0;
+        $developer["siteLocked"] = 0;
         $this->getSettingService()->set('developer', $developer);   
     }
 

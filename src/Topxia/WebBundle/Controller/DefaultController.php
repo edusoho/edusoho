@@ -53,6 +53,11 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function siteLockedAction(Request $request)
+    {
+        return $this->render('TopxiaWebBundle:Default:site_locked.html.twig', array());
+    }
+
     public function userlearningAction()
     {
         $user = $this->getCurrentUser();

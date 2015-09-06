@@ -43,6 +43,7 @@ src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
 /app/data/install.lock
 /app/data/dev.lock
+/app/data/upgrade.lock
 app/data/plugin_installed.php
 /web/themes/*
 !/web/themes/autumn
