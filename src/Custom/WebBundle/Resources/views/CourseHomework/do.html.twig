@@ -81,7 +81,7 @@
                             答题卡
                             {% if not (now > homework.completeTime and homework.pairReview) %}
                                 <button class="btn btn-default btn-sm pull-right" id="homework-save-btn"
-                                        data-url="{{ path('course_homework_save',{courseId:course.id,homeworkId:homework.id}) }}">
+                                        data-url="{{ path('homework_save',{homeworkResultId: homeworkResult.id}) }}">
                                     下次再做
                                 </button>
                             {% endif %}
@@ -111,7 +111,7 @@
                             {% elseif view == 'show' %}
                             {% else %}
                                 <button id="homework-finish-btn" class="btn btn-success btn-block"
-                                        data-url="{{ path('course_homework_save',{courseId:course.id,homeworkId:homework.id}) }}"
+                                        data-url="{{ path(('periodic'==course.type ? 'course_homework_save' : 'course_homework_submit'),{courseId:course.id,homeworkId:homework.id}) }}"
                                         data-saving-text="正在保存...">提交作业
                                 </button>
                             {% endif %}

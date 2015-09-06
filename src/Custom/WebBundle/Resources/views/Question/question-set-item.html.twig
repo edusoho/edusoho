@@ -16,7 +16,7 @@
     <div class="question-set-item-main">
         {% set question = item.question %}
         {% set itemResult = item.itemResult|default(null) %}
-        {% if question %}
+        {% if question%}
             {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ ('preview'==view ? 'doing' : view) ~ '.html.twig' %}
             {% if view!='preview' and 'finished'==homeworkResult.status %}
               <span>得分: {{itemResult.score| round | default(0)}}分</span>

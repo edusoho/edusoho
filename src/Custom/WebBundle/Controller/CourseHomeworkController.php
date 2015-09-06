@@ -41,6 +41,18 @@ class CourseHomeworkController extends BaseCourseHomeworkController
         ));
     }
 
+    public function saveHomeworkResultAction(Request $request, $homeworkResultId)
+    {
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $items = !empty($data['data']) ? $data['data'] : array();
+            $res = $this->getHomeworkService()->saveHomeworkResultItems($homeworkResultId,$items);
+            if ($res && !empty($res['lessonId'])) {
+               return $this->createJsonResponse(array('courseId' => $res['courseId'],'lessonId' => $res['lessonId']));
+            }
+        }
+    }
+
     public function continueAction(Request $request, $courseId, $homeworkId, $resultId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
@@ -85,9 +97,7 @@ class CourseHomeworkController extends BaseCourseHomeworkController
                 return $this->createMessageResponse('error',"已经超过作业提交截止时间，提交作业失败！");
             }
             $res = $this->getHomeworkService()->submitHomework($data,$this->getCurrentUser()->id);
-            $course = $this->getCourseService()->getCourse($courseId);
-            $lesson = $this->getCourseService()->getCourseLesson($courseId, $res['lessonId']);
-            $this->getHomeworkService()->finishHomework($course, $lesson, $courseId, $homeworkId);
+
             if (!empty($res) && !empty($res['lessonId'])) {
                 return $this->createJsonResponse(array('courseId' => $courseId, 'lessonId' => $res['lessonId']));
             } else {

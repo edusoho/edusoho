@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 var reviewItem={};
                 reviewItem.homeworkItemResultId=field.data('itemId');
                 reviewItem.score=field.val();
-                var selector=$('[name=review\\['+reviewItem.id+'\\]]');
+                var selector=$('[name=review\\['+reviewItem.homeworkItemResultId+'\\]]');
                 if(selector.length>0){
                     reviewItem.review = selector.val();
                 }
