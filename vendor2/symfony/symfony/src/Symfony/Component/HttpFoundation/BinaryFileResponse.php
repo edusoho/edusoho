@@ -189,6 +189,10 @@ class BinaryFileResponse extends Response
                     $mapping = explode('=', $mapping, 2);
 
                     if (2 == count($mapping)) {
+
+                        //$pathPrefix = trim($mapping[0]);
+                        //$location = trim($mapping[1]);
+
                         $location = trim($mapping[0]);
                         $pathPrefix = trim($mapping[1]);
 
