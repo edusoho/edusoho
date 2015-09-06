@@ -163,5 +163,22 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
+  <div class="modal" id="classroom-plan-modal" style="display:none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">学习计划提示</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger">很遗憾，你之前的学习任务还没有学完，赶快去学习吧～～</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">回课程主页</a>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
 {% endblock %}
 

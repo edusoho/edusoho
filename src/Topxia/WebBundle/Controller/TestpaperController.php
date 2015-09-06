@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Task\TaskProcessor\TaskProcessorFactory;
 
 class TestpaperController extends BaseController
 {
@@ -82,6 +83,16 @@ class TestpaperController extends BaseController
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
+        }
+
+        //学习计划任务
+        if ($this->getAppService()->findInstallApp('classroomPlan')) {
+            $taskProcessor = $this->getTaskProcessor('studyPlan');
+            $canFinish = $taskProcessor->canFinish($testId, 'testpaper', $userId);
+
+            if (!$canFinish) {
+                return $this->createMessageResponse('info','在该任务之前，还有学习任务没有完成哦！');
+            }
         }
 
         $testpaperResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testId, $userId);
@@ -654,6 +665,16 @@ class TestpaperController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getTaskProcessor($taskType)
+    {
+        return TaskProcessorFactory::create($taskType);
     }
 
 }

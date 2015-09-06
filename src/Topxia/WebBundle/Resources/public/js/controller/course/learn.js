@@ -96,6 +96,11 @@ define(function(require, exports, module) {
 
                 var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
                 $.post(url, function(response) {
+                    if (!response) {
+                        $('#classroom-plan-modal').modal('show');
+                        return false;
+                    }
+
                     if (response.isLearned) {
                         $('#course-learned-modal').modal('show');
                     }
@@ -159,6 +164,10 @@ define(function(require, exports, module) {
             this._toolbar.on('lessons_ready', function(lessons){
                 that._lessons = lessons;
                 that._showOrHideNavBtn();
+                
+                if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
+                    $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
+                }
             });
         },
 
