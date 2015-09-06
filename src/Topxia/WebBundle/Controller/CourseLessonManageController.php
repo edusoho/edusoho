@@ -125,11 +125,11 @@ class CourseLessonManageController extends BaseController
 				$file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
 				if($file['type']=="document" && $file['convertStatus'] == "none" ){
-
-		            $convertHash = $this->getUploadFileService()->reconvertFile(
-		                $file['id'],
-		                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-		            );
+					// @todo fixme
+		            // $convertHash = $this->getUploadFileService()->reconvertFile(
+		            //     $file['id'],
+		            //     $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+		            // );
 				}
 
 				$lesson['mediaStatus'] = $file['convertStatus'];
