@@ -120,8 +120,8 @@ class StudyPlanTaskProcessor implements TaskProcessor
                 $taskInfo['meta']['classroomId'] = $plan['classroomId'];
                 $taskInfo['meta']['courseId'] = $planTask['courseId'];
                 $taskInfo['meta']['phaseId'] = $planTask['phaseId'];
-                $taskInfo['meta']['LessonId'] = $planTask['meta']['lessonId'];
-                $taskInfo['meta']['LessonTitle'] = $planTask['meta']['lessonTitle'];
+                $taskInfo['meta']['lessonId'] = $planTask['meta']['lessonId'];
+                $taskInfo['meta']['lessonTitle'] = $planTask['meta']['lessonTitle'];
                 $taskInfo['status'] = 'active';
 
                 $perDayStudyTime += $planTask['suggestHours'];
