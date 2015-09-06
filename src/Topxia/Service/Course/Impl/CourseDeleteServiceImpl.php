@@ -89,6 +89,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getTestpaperItemResultDao()->deleteTestpaperItemResultByTestpaperId($testpaper['id']);
             $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testpaper['id']);
             $this->getTestpaperDao()->deleteTestpaper($testpaper['id']);
+            //删除完成试卷动态
+            $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_testpaper','testpaper',$testpaper['id']);
             $testpaperLog = "删除课程《{$course['title']}》(#{$course['id']})的试卷　{$testpaper['name']}";
             $this->getLogService()->info('testpaper', 'delete', $testpaperLog);
         }
@@ -147,9 +149,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $LessonReplays = $this->getCourseLessonReplayDao()->findCourseLessonReplaysByCourseId($course['id']);
         foreach ($LessonReplays as  $LessonReplay) {
-            $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($courseLessonReplay['id']); 
-            $courseLessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播　{$courseLessonReplay['title']}";
-            $this->getLogService()->info('courseLessonReplay', 'delete', $courseLessonReplayLog);
+            $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($LessonReplay['id']); 
+            $LessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播　{$LessonReplay['title']}";
+            $this->getLogService()->info('LessonReplay', 'delete', $LessonReplayLog);
         }
     }
 
@@ -169,6 +171,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getHomeworkItemResultDao()->deleteItemResultsByHomeworkId($homework['id']);
             $this->getHomeworkItemDao()->deleteItemsByHomeworkId($homework['id']);
             $this->getHomeworkDao()->deleteHomework($homework['id']);
+            //删除完成作业动态
+            $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_homework','homework',$homework['id']);
         }
         $homeworkLog = "删除课程《{$course['title']}》(#{$course['id']})的作业";
         $this->getLogService()->info('homework', 'delete', $homeworkLog);
@@ -182,6 +186,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
             $this->getExerciseItemDao()->deleteItemByExerciseId($exercise['id']);
             $this->getExerciseDao()->deleteExercise($exercise['id']);
+            //删除完成练习的动态
+            $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_exercise','exercise',$exercise['id']);
         }
         $exerciseLog = "删除课程《{$course['title']}》(#{$course['id']})的练习";
         $this->getLogService()->info('exercise', 'delete', $exerciseLog);
@@ -241,7 +247,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteStatuses($course)
     {
-        $statuses = $this->getStatusDao()->findStatusByCourseId($course['id']);
+        $statuses = $this->getStatusDao()->findStatusesByCourseId($course['id']);
         foreach ($statuses as $status) {
            $this->getStatusDao()->deleteStatus($status['id']);
         }

@@ -22,5 +22,7 @@ interface StatusDao
 
     public function deleteStatusesByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId);
 
-    public function findStatusByCourseId($courseId);
+    public function deleteStatusesByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId);
+
+    public function findStatusesByCourseId($courseId);
 }

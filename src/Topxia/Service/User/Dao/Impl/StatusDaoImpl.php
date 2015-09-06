@@ -109,7 +109,17 @@ class StatusDaoImpl extends BaseDao implements StatusDao
             ));
     }
 
-    public function findStatusByCourseId($courseId)
+    public function deleteStatusesByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
+    {
+        return $this->getConnection()->delete($this->table, array(
+            'courseId' => $courseId,
+            'type' =>$type,
+            'objectType'=>$objectType,
+            'objectId'=>$objectId
+            ));
+    }
+
+    public function findStatusesByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
         return $this->getConnection()->fetchAll($sql, array($courseId));

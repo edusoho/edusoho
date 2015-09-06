@@ -46,6 +46,7 @@ define(function(require, exports, module) {
 				}else if(data == 'not remove classroom course'){
 					Notify.danger('当前课程未移除,请先移除班级课程');
 				}else{
+					Notify.success('课程删除成功');
 					$tr.remove();	
 				}
 			});
