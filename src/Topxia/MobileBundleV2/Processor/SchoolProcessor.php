@@ -8,10 +8,16 @@ interface SchoolProcessor
 	public function getSchoolBanner();
 	public function getSchoolAnnouncement();
 	public function getRecommendCourses();
+	public function getLiveRecommendCourses();
+	public function getHotCourses();
+
 	public function getLatestCourses();
+	public function getLiveLatestCourses();
 	public function getWeekRecommendCourses();
 	public function getUserterms();
 	public function getSchoolInfo();
+
+	public function getSchoolProfile();
 
 	public function sendSuggestion();
 
@@ -30,4 +36,10 @@ interface SchoolProcessor
 	public function loginSchoolWithSite();
 
 	public function getSchoolApps();
+
+	public function getSchoolPlugins();
+
+	public function getSchoolVipList();
+
+	public function getVipPayInfo();
 }
