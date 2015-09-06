@@ -8,6 +8,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\Task\TaskProcessor\TaskProcessorFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -545,6 +546,17 @@ class CourseLessonController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        if ($this->getAppService()->findInstallApp('classroomPlan')) {
+            $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+            $taskProcessor = $this->getTaskProcessor('studyPlan');
+            $targetId = $lesson['type'] == 'testpaper' ? $lesson['mediaId'] : $lessonId;
+            $canFinish = $taskProcessor->canFinish($targetId, $lesson['type'], $user['id']);
+            if (!$canFinish) {
+                return $this->createJsonResponse(false);
+            }
+        }
+       
+
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
@@ -716,5 +728,10 @@ class CourseLessonController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getTaskProcessor($taskType)
+    {
+        return TaskProcessorFactory::create($taskType);
     }
 }

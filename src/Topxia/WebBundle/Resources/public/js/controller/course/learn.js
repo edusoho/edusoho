@@ -96,6 +96,11 @@ define(function(require, exports, module) {
 
                 var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
                 $.post(url, function(response) {
+                    if (!response) {
+                        $('#classroom-plan-modal').modal('show');
+                        return false;
+                    }
+
                     if (response.isLearned) {
                         $('#course-learned-modal').modal('show');
                     }
