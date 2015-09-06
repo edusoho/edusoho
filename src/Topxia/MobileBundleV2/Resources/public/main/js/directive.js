@@ -175,18 +175,19 @@ directive('imgError', function($timeout) {
                       errorSrc = app.viewFloder  + "img/default_course.jpg";
                       break;
                     case "vip":
-                      errorSrc = app.viewFloder  + "img/vip_default.jpg";
+                      errorSrc = app.viewFloder  + "img/vip_default.png";
                       break;
                     case "classroom":
                       errorSrc = app.viewFloder  + "img/default_class.jpg";
                       break;
                   }
-
+                  
+                  element.attr('src', errorSrc);
                   element.on("error", function(e) {
                     element.attr("src", errorSrc);
+                    element.on("error", null);
                   });
 
-                  element.attr('src', errorSrc);
                   $timeout(function() {
                     element.attr('src', attributes.ngSrc);
                   }, 100);
