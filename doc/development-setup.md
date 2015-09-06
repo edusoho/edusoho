@@ -22,11 +22,15 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
 ## 创建数据库
 
   * 进入MySQL命令行：
-        mysql -uroot -p
+    ````
+    mysql -uroot -p
+    ````
 
   * 在mysql命令行下，创建数据库：
-        mysql> CREATE DATABASE `edusoho` DEFAULT CHARACTER SET utf8 ; 
-        mysql> exit;
+    ````
+    mysql> CREATE DATABASE `edusoho` DEFAULT CHARACTER SET utf8 ; 
+    mysql> exit;
+    ````
 
 
 ## 初始化程序基础数据
