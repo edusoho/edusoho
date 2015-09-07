@@ -30,21 +30,21 @@ class AppController extends BaseController
 
         $content = $api->get("/users/{$api->getAccessKey()}/overview");
         $info = $api->get('/me');
-
+http://open.edusoho.com/
         $eduSohoOpenClient = new EduSohoOpenClient();
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
             $articles = $eduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
 
             if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
-                $trial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
+                $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
                 $trialHtml = json_decode($trial,true);
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                     'articles' => $articles,
                     'trial' => $trialHtml['content'],
                 ));
             }
-            $unTrial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
+            $unTrial = file_get_contents('api/v1/block/cloud_guide');
             $unTrialHtml = json_decode($unTrial,true);
             $flag = "canNotTrial";
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
@@ -109,7 +109,7 @@ class AppController extends BaseController
         $notices = json_decode($notices, true);
 
         if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
-            $trial = file_get_contents('http://115.29.78.158:99/api/v1/block/experience');
+            $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
             $trialHtml = json_decode($trial,true);
             $canTrial = "yes";
         } else {
