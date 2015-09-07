@@ -15,9 +15,11 @@ class CourseReviewController extends CourseBaseController
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            if($classroom['showable']){
-                if(empty($member)){
-                    return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级课程，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            $user = $this->getCurrentUser();
+            $classroomMember = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+            if(!$this->getUserService()->hasAdminRoles($user['id'])){ 
+                if($classroom['showable'] && (!$classroomMember || ($classroomMember && $classroomMember['locked']))){
+                        return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
                 }
             }
         }
