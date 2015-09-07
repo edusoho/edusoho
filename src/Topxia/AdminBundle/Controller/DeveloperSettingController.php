@@ -22,6 +22,7 @@ class DeveloperSettingController extends BaseController
             'debug' => '0',
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
             'cloud_api_failover' => '0',
             'hls_encrypted' => '1',
         );
@@ -31,6 +32,7 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
             $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
