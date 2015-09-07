@@ -21,20 +21,16 @@
     sudo brew tap homebrew/dupes 
     sudo brew tap josegonzalez/homebrew-php 
 
-五、删除mac自带的php 
+五、安装php 
 
-    sudo apachectl stop 
-    sudo rm -rf /etc/apache2/ 
-    sudo rm -rf /usr/libexec/apache2/ 
-    sudo rm -rf /usr/php 
-    sudo rm -rf /usr/bin/php 
-    sudo rm -rf /usr/bin/php-config 
-    sudo rm -rf /usr/bin/phpize 
-    sudo rm -rf /usr/share/man/man*/php* 
+    sudo brew install php55 --with-intl --with-mcrypt --with-mysqlnd_ms
 
-六、安装php 
+六、使用新安装的PHP
 
-    sudo brew install php55 --with-debug --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear php5 --with-cli --with-curl --with-fpm --with-intl --with-mcrypt --with-mysqlnd_ms --with-gd
+    echo 'export PATH="$(brew --prefix php55)/bin:$PATH"' >> ~/.bash_profile #for php
+    echo 'export PATH="$(brew --prefix php55)/sbin:$PATH"' >> ~/.bash_profile #for php-fpm 
+    echo 'export PATH="/usr/local/bin:/usr/local/sbib:$PATH"' >> ~/.bash_profile #for other brew install soft
+    source ~/.bash_profile
 
 ## 下载EduSoho源码
 

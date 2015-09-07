@@ -27,6 +27,32 @@ class ServiceKernel
 
     protected $classMaps = array();
 
+    public function getRedis($group = 'default')
+    {
+        $redisPool = $this->getRedisPool();
+        if($redisPool) {
+            return $redisPool->getRedis($group);
+        }
+        return false;
+    }
+
+    protected function getRedisPool()
+    {
+        if (isset($this->redisPool)) {
+            return $this->redisPool;
+        }
+
+        $redisConfigFile = $this->getParameter('kernel.root_dir') . '/config/redis.php';
+
+        if(file_exists($redisConfigFile)){
+            $redisConfig = include $redisConfigFile;
+            $this->redisPool = RedisPool::init($redisConfig);
+            return $this->redisPool;
+        }
+
+        return false;
+    }
+
     public static function create($environment, $debug)
     {
         if (self::$_instance) {
@@ -191,6 +217,8 @@ class ServiceKernel
             $class = $this->getClassName('dao', $name);
             $dao = new $class();
             $dao->setConnection($this->getConnection());
+            $dao->setRedis($this->getRedis());
+
             $this->pool[$name] = $dao;
         }
         return $this->pool[$name];

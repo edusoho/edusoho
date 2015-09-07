@@ -11,14 +11,22 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function getLesson($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
     }
 
     public function getLessonByCourseIdAndNumber($courseId, $number)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND number = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId, $number)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $this->getConnection()->fetchAssoc($sql, array($courseId, $number)) ? : null;
+        });
     }
 
     public function findLessonsByIds(array $ids)
@@ -48,8 +56,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function findLessonsByTypeAndMediaId($type, $mediaId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? AND mediaId = ?";
-        return $this->getConnection()->fetchAll($sql, array($type, $mediaId));
+        $that = $this;
+
+        return $this->fetchCached("type:{$type}:mediaId:{$mediaId}", $type, $mediaId, function ($type, $mediaId) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE type = ? AND mediaId = ?";
+            return $this->getConnection()->fetchAll($sql, array($type, $mediaId));
+        });
     }
 
     public function findMinStartTimeByCourseId($courseId)
@@ -60,8 +72,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function findLessonsByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY seq ASC";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY seq ASC";
+            return $this->getConnection()->fetchAll($sql, array($courseId));
+        });
     }
 
     public function findLessonIdsByCourseId($courseId)
@@ -133,13 +149,18 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function findLessonsByChapterId($chapterId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE chapterId = ? ORDER BY seq ASC";
-        return $this->getConnection()->fetchAll($sql, array($chapterId));
+        $that = $this;
+
+        return $this->fetchCached("chapterId:{$chapterId}", $chapterId, function ($chapterId) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE chapterId = ? ORDER BY seq ASC";
+            return $this->getConnection()->fetchAll($sql, array($chapterId));
+        });
     }
 
     public function addLesson($lesson)
     {
         $affected = $this->getConnection()->insert($this->table, $lesson);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course lesson error.');
         }
@@ -149,18 +170,23 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     public function updateLesson($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getLesson($id);
     }
 
     public function deleteLessonsByCourseId($courseId)
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($courseId));
+        $result = $this->getConnection()->executeUpdate($sql, array($courseId));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteLesson($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function sumLessonGiveCreditByCourseId($courseId)
@@ -212,9 +238,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function analysisLessonDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-
-            return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
+        $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
 }

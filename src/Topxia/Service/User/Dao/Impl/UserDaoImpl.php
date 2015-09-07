@@ -13,29 +13,45 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function getUser($id, $lock = false)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        if ($lock) {
-            $sql .= " FOR UPDATE";
-        }
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, $lock, function ($id, $lock) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+            if ($lock) {
+                $sql .= " FOR UPDATE";
+            }
+            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
     }
 
     public function findUserByEmail($email)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($email));
+        $that = $this;
+
+        return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";
+            return $this->getConnection()->fetchAssoc($sql, array($email));
+        });
     }
 
     public function findUserByNickname($nickname)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($nickname));
+        $that = $this;
+
+        return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
+            return $this->getConnection()->fetchAssoc($sql, array($nickname));
+        });
     }
 
     public function findUserByVerifiedMobile($mobile)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($mobile));
+        $that = $this;
+
+        return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
+            $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
+            return $this->getConnection()->fetchAssoc($sql, array($mobile));
+        });
     }
 
     public function findUsersByNicknames(array $nicknames)
@@ -137,6 +153,7 @@ class UserDaoImpl extends BaseDao implements UserDao
     public function addUser($user)
     {
         $affected = $this->getConnection()->insert($this->table, $user);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert user error.');
         }
@@ -146,6 +163,7 @@ class UserDaoImpl extends BaseDao implements UserDao
     public function updateUser($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getUser($id);
     }
 
@@ -156,7 +174,10 @@ class UserDaoImpl extends BaseDao implements UserDao
             throw $this->createDaoException('counter name error');
         }
         $sql = "UPDATE {$this->table} SET {$name} = {$name} + ? WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($number, $id));
+
+        $result = $this->getConnection()->executeQuery($sql, array($number, $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function clearCounterById($id, $name)
@@ -166,7 +187,9 @@ class UserDaoImpl extends BaseDao implements UserDao
             throw $this->createDaoException('counter name error');
         }
         $sql = "UPDATE {$this->table} SET {$name} = 0 WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($id));
+        $result = $this->getConnection()->executeQuery($sql, array($id));
+        $this->clearCached();
+        return $result;
     }
 
     public function analysisRegisterDataByTime($startTime,$endTime)

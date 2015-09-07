@@ -22,15 +22,15 @@ class KernelControllerListener
             return ;
         }
 
-    	$currentUser = ServiceKernel::instance()->createService('User.UserService')->getCurrentUser();
-    	if($currentUser->isAdmin()){
-    		return;
-    	} else if($this->getWebExtension()->upgradeLocked()) {
-    		$event->setController(function(){
-    			$url = $this->container->get('router')->generate('site_locked', array());
-    			return new RedirectResponse($url);
-    		});
-    	}
+    	// $currentUser = ServiceKernel::instance()->createService('User.UserService')->getCurrentUser();
+    	// if($currentUser->isAdmin()){
+    	// 	return;
+    	// } else if($this->getWebExtension()->upgradeLocked()) {
+    	// 	$event->setController(function(){
+    	// 		$url = $this->container->get('router')->generate('site_locked', array());
+    	// 		return new RedirectResponse($url);
+    	// 	});
+    	// }
     }
 
     private function getWebExtension()

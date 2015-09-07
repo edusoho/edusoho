@@ -10,14 +10,22 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function getCourse($id)
     {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
+            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
     }
 
     public function getLessonByCourseIdAndNumber($courseId, $number)
     {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
-        return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
+            $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ? : null;
+        });
     }
 
     public function getCoursesCount()
@@ -38,11 +46,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
-        if(empty($parentId)){
-            return array();
-        }
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
-        return $this->getConnection()->fetchAll($sql, array($parentId,$locked));
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
+            if(empty($parentId)){
+                return array();
+            }
+            $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
+            return $this->getConnection()->fetchAll($sql, array($parentId,$locked));
+        });
     }
 
     public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -123,8 +135,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
-
         $affected = $this->getConnection()->insert(self::TABLENAME, $course);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
         }
@@ -134,12 +146,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function updateCourse($id, $fields)
     {
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getCourse($id);
     }
     
     public function deleteCourse($id)
     {
-        return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+        $result = $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function waveCourse($id,$field,$diff)
@@ -151,13 +166,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
         $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
         
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $this->clearCached();
+
+        return $result;
     }
 
     public function clearCourseDiscountPrice($discountId)
     {
         $sql = "UPDATE course SET price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
-        return $this->getConnection()->executeQuery($sql, array($discountId));
+        $result = $this->getConnection()->executeQuery($sql, array($discountId));
+        $this->clearCached();
+        return $result;
     }
 
     protected function _createSearchQueryBuilder($conditions)
@@ -228,9 +248,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-
-            return $this->getConnection()->fetchAll($sql);
+        $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql);
     }
 
     public function findCoursesCountByLessThanCreatedTime($endTime)
@@ -242,8 +261,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseSumByTime($endTime)
     {
-         $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
-         return $this->getConnection()->fetchAll($sql);
+        $sql="SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime  )  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
+        return $this->getConnection()->fetchAll($sql);
     }
 
     protected function getTablename()
