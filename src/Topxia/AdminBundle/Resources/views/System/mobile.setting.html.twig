@@ -34,10 +34,10 @@
 
   <div class="form-group {% if mobile.enabled|default(0) != 1 %}hidden {% endif %}">
     <div class="col-md-2 control-label">
-      <label >是否开启新版</label>
+      <label >版本选择</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('ver', {1:'开启', 0:'关闭'}, mobile.ver) }}
+      {{ radios('ver', {1:'新版', 0:'旧版'}, mobile.ver) }}
     </div>
   </div>
   
