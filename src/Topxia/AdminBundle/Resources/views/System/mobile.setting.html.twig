@@ -32,6 +32,15 @@
     </div>
   </div>
 
+  <div class="form-group {% if mobile.enabled|default(0) != 1 %}hidden {% endif %}">
+    <div class="col-md-2 control-label">
+      <label >是否开启新版</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('ver', {1:'开启', 0:'关闭'}, mobile.ver) }}
+    </div>
+  </div>
+  
   <div class="form-group">
     <div class="col-md-2 control-label">
       <label for="mobile_about">网校简介</label>
