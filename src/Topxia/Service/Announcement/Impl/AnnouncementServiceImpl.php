@@ -4,7 +4,6 @@ namespace Topxia\Service\Announcement\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Announcement\AnnouncementService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
@@ -51,7 +50,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 		$announcement['createdTime'] = time();
 
         $announcement = $this->getAnnouncementDao()->addAnnouncement($announcement);
-        $this->getDispatcher()->dispatch('announcement.service.create', new ServiceEvent($announcement));
+        $this->getDispatcher()->dispatch('announcement.create', $announcement);
         return $announcement;
 	}
 
