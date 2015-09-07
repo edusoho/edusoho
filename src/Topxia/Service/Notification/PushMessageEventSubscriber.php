@@ -190,8 +190,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onDiscountStart(ServiceEvent $event)
     {
-        $subject = $event->getSubject();
-        file_put_contents('/tmp/push_message', json_encode($subject));
+        $discount = $event->getSubject();
+
+        $from = array('type' => 'school');
+        $to = array('type' => 'school');
+        $body = array('type' => 'discount.start');
+
+        $this->push('公告', $discount['name'], $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)
