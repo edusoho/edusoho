@@ -793,6 +793,12 @@ class CourseController extends CourseBaseController
 		));
 	}
 
+	public function memberIdsAction(Request $request, $id)
+	{
+		$ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+		return $this->createJsonResponse($ids);
+	}
+
 	protected function getUserService()
 	{
 		return $this->getServiceKernel()->createService('User.UserService');

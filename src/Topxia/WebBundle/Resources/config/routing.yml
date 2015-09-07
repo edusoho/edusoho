@@ -295,6 +295,10 @@ course_become_use_member:
     defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
     methods: [POST]
 
+course_member_ids:
+    pattern:  /course/{id}/member_ids
+    defaults: { _controller: TopxiaWebBundle:Course:memberIds }
+
 course_rebuy:
     pattern:  /course/{courseId}/course_rebuy
     defaults: { _controller: TopxiaWebBundle:Course:rebuy }
