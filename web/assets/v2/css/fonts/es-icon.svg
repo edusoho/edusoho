@@ -2,8 +2,8 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-Created by FontForge 20120731 at Wed Aug  5 14:49:03 2015
-By Ads
+Created by FontForge 20120731 at Mon Sep  7 16:42:40 2015
+ By Ads
 </metadata>
 <defs>
 <font id="es-icon" horiz-adv-x="1024" >
@@ -19,8 +19,7 @@ By Ads
     bbox="0 -212.087 1024 812"
     underline-thickness="50"
     underline-position="-100"
-    unicode-range="U+0078-E68C"
-    unicode-range="U+0078-E68B"
+    unicode-range="U+0078-E690"
   />
 <missing-glyph horiz-adv-x="374" 
 d="M34 0v682h272v-682h-272zM68 34h204v614h-204v-614z" />
@@ -307,9 +306,6 @@ d="M893 554h-84v-381h-551v-85q0 -19 12 -30.5t31 -11.5h465l170 -170v635q0 7 -1.5 
 d="M316 462l196 -196l196 196l60 -61l-256 -256l-256 256z" />
     <glyph glyph-name="uniE664" unicode="&#xe664;" 
 d="M316 154l196 196l196 -196l60 61l-256 256l-256 -256z" />
-    <glyph glyph-name="uniE665" unicode="&#xe665;" 
-d="M256 385q-35 0 -60 -25t-25 -60t25 -60t60 -25q17 0 33 6.5t27.5 18t18 27.5t6.5 33t-6.5 33t-18 27.5t-27.5 18t-33 6.5zM768 385q-35 0 -60 -25t-25 -60t25 -60t60 -25t60 25t25 60q0 17 -6.5 33t-18 27.5t-27.5 18t-33 6.5zM512 385q-35 0 -60 -25t-25 -60t25 -60
-t60 -25t60 25t25 60q0 17 -6.5 33t-18 27.5t-27.5 18t-33 6.5z" />
     <glyph glyph-name="uniE666" unicode="&#xe666;" 
 d="M852 319h-309v309q0 13 -9 22t-22 9q-8 0 -15.5 -4t-11.5 -11.5t-4 -15.5v-309h-309q-6 0 -12 -2.5t-10 -6.5t-6.5 -10t-2.5 -12q0 -13 9 -22t22 -9h309v-309q0 -13 9 -22t22 -9t22 9t9 22v309h309q13 0 22 9t9 22q0 8 -4 15.5t-11.5 11.5t-15.5 4z" />
     <glyph glyph-name="uniE667" unicode="&#xe667;" 
@@ -413,5 +409,8 @@ d="M512 727q-87 0 -166 -34t-136 -91t-91 -136t-34 -166q0 -116 57.5 -214t155.5 -15
     <glyph glyph-name="uniE68C" unicode="&#xe68c;" 
 d="M128 428h171v171h-171v-171zM128 215h171v170h-171v-170zM341 215h171v170h-171v-170zM555 215h170v170h-170v-170zM341 428h171v171h-171v-171zM555 599v-171h170v171h-170zM768 215h171v170h-171v-170zM128 1h171v171h-171v-171zM341 1h171v171h-171v-171zM555 1h170
 v171h-170v-171zM768 1h171v171h-171v-171zM768 599v-171h171v171h-171z" />
+    <glyph glyph-name="uniE690" unicode="&#xe690;" 
+d="M148.5 426q-60.5 0 -103.5 -43t-43 -103.5t43 -103.5t103.5 -43t103.5 43t43 103.5t-43 103.5t-103.5 43zM512 426q-40 0 -73.5 -19.5t-53.5 -53.5t-20 -74q0 -60 43 -103t104 -43t104 43t43 103.5t-43 103.5t-104 43zM875 426q-60 0 -103 -43t-43 -103.5t43 -103.5
+t103.5 -43t103.5 43t43 103q0 24 -7.5 46.5t-21 40.5t-31.5 31.5t-40.5 21t-46.5 7.5z" />
   </font>
 </defs></svg>

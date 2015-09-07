@@ -24,6 +24,7 @@
 .es-icon-angledoubleright:before { content: "\e67d"; }
 .es-icon-angledoubleleft:before { content: "\e67e"; }
 .es-icon-playcircleoutline:before { content: "\e66d"; }
+.es-icon-morehoriz:before { content: "\e690"; }
 .es-icon-portrait:before { content: "\e65e"; }
 .es-icon-accesstime:before { content: "\e658"; }
 .es-icon-accountcircle:before { content: "\e668"; }
@@ -45,7 +46,6 @@
 .es-icon-livehelp:before { content: "\e680"; }
 .es-icon-locallibrary:before { content: "\e66e"; }
 .es-icon-loyalty:before { content: "\e65c"; }
-.es-icon-morehoriz:before { content: "\e665"; }
 .es-icon-mylibrarybooks:before { content: "\e67a"; }
 .es-icon-mylocation:before { content: "\e669"; }
 .es-icon-phone:before { content: "\e676"; }
@@ -156,4 +156,3 @@
 .es-icon-lock1:before { content: "\e689"; }
 .es-icon-iccheckcircleblack24px:before { content: "\e68b"; }
 .es-icon-viewcomfy:before { content: "\e68c"; }
-
