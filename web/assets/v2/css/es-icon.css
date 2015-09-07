@@ -24,7 +24,6 @@
 .es-icon-angledoubleright:before { content: "\e67d"; }
 .es-icon-angledoubleleft:before { content: "\e67e"; }
 .es-icon-playcircleoutline:before { content: "\e66d"; }
-.es-icon-morehoriz:before { content: "\e690"; }
 .es-icon-portrait:before { content: "\e65e"; }
 .es-icon-accesstime:before { content: "\e658"; }
 .es-icon-accountcircle:before { content: "\e668"; }
@@ -143,6 +142,7 @@
 .es-icon-check:before { content: "\e60c"; }
 .es-icon-doing:before { content: "\e648"; }
 .es-icon-icattachfileblack24px:before { content: "\e681"; }
+.es-icon-morehoriz:before { content: "\e665"; }
 .es-icon-introduction1:before { content: "\e673"; }
 .es-icon-introduction2:before { content: "\e674"; }
 .es-icon-introduction3:before { content: "\e675"; }
