@@ -43,10 +43,7 @@
       margin-bottom: 20px;
       font-size: 70px;
       color: #fff;
-      .webfont();
       opacity:0;
-      @opacity-ie: 100;
-      filter: ~"alpha(opacity=@{opacity-ie})";
       span {
         display: block;
       }
@@ -76,8 +73,6 @@
       color: @brand-primary;
       font-size: 22px;
       opacity:0;
-      @opacity-ie: 100;
-      filter: ~"alpha(opacity=@{opacity-ie})";
       span {
         margin-right: 20px;
       }
@@ -101,8 +96,6 @@
       right: 0;
       max-width: 70%;
       opacity: 0;
-      @opacity-ie: 100;
-      filter: ~"alpha(opacity=@{opacity-ie})";
       @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
         width: 550px;
       }
