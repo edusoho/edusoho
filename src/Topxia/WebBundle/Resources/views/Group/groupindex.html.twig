@@ -88,7 +88,7 @@
 
 {% block group_side %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
-  <div class="input-group group-search es-box-shadow">
+  <div class="input-group group-search">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
     <span class="input-group-btn">
@@ -101,8 +101,9 @@
       <div class="panel-heading">我在小组</div>
       <div class="panel-body">
         <div class="media group-item">
-          {{ web_macro.user_avatar(user, 'pull-left media-object media-object-small') }}
-
+          <div class="media-left">
+            {{ web_macro.user_avatar(user, '') }}
+          </div>
           <div class="media-body">
             <p>{{ web_macro.user_link(user , 'link-muted') }}
 
