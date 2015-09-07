@@ -108,7 +108,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $that = $this;
 
-        return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:parentId:0", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
+        return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:parentId:0:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
             $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
             $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
             $sql.= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
@@ -149,8 +149,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
-            $this->filterStartLimit($start, $limit);
-
             $sql  = "SELECT m.* FROM {$this->table} m ";
             $sql.= ' JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
             $sql .= " AND m.role =  ? AND m.courseId = c.id ";

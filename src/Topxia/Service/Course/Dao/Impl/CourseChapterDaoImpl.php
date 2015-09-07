@@ -53,7 +53,7 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
     {
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}:type:{$type}:parentId:{$parentId}", $courseId, $type, $parentId, function ($courseId, $type, $parentId) use ($that) {
+        return $this->fetchCached("courseId:{$courseId}:type:{$type}:parentId:{$parentId}:count", $courseId, $type, $parentId, function ($courseId, $type, $parentId) use ($that) {
             $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ? AND parentId = ?";
             return $this->getConnection()->fetchColumn($sql, array($courseId, $type, $parentId));
         });
