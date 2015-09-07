@@ -47,21 +47,21 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label >是否开放展示</label>
+          <label >班级展示</label>
         </div>
         <div class="col-md-8 controls radios">
-          {{ radios('showable', {'0':'是', '1':'否'}, classroom.showable|default('0') ) }}
-          <div class="help-block">选择“否”，将不允许自行加入，适用于封闭教学</div>
+          {{ radios('showable', {'0':'开启', '1':'关闭'}, classroom.showable|default('0') ) }}
+          <div class="help-block">关闭后，班级将彻底隐藏，无法在前台查看到。</div>
         </div>
 
       </div>
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label >是否开放购买</label>
+          <label >班级购买</label>
         </div>
         <div class="col-md-8 controls radios">
-          {{ radios('buyable', {'0':'是', '1':'否'}, classroom.buyable|default('0') ) }}
-          <div class="help-block">选择“否”，将不允许自行加入，适用于封闭教学</div>
+          {{ radios('buyable', {'0':'开启', '1':'关闭'}, classroom.buyable|default('0') ) }}
+          <div class="help-block">关闭后班级将无法在线购买加入。</div>
         </div>
 
       </div>

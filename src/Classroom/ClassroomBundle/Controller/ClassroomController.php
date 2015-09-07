@@ -564,6 +564,10 @@ class ClassroomController extends BaseController
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
+        
+        if($classroom['buyable']){
+            return $this->createMessageResponse('info', '非常抱歉，该班级不允许加入，如有需要请联系客服','',3,$this->generateUrl('homepage')); 
+        }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
             $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
