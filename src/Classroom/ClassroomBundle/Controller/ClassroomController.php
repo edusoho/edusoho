@@ -290,7 +290,7 @@ class ClassroomController extends BaseController
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if($classroom['showable']){
             if(empty($member)){
-                return $this->createMessageResponse('error', '无权限访问'); 
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage')); 
             }
         }
         if(!$classroom){
