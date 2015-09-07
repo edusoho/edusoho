@@ -671,7 +671,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
 
-        return $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
+        $result = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
             'score' => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
@@ -679,6 +679,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'checkedTime' => time(),
             'teacherSay' => $teacherSay
         ));
+
+        $this->dispatchEvent('testpaper.reviewed', $result);
+
+        return $result;
     }
 
     public function submitTestpaperAnswer($id, $answers)

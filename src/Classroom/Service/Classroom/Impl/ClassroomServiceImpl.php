@@ -1267,9 +1267,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $id,
             'courseId' => $courseId,
             'parentCourseId' => $course['parentId'],
-            );
+        );
 
-        $this->getClassroomCourseDao()->addCourse($classroomCourse);
+        $classroomCourse = $this->getClassroomCourseDao()->addCourse($classroomCourse);
+
+        $this->dispatchEvent('classroom.put_course', $classroomCourse);
     }
 
     public function getFileService()
