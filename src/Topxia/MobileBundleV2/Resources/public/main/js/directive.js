@@ -209,7 +209,7 @@ directive('ngImgShow', function() {
             esNativeCore.showImages(this.alt, imageArray);
           });
         });
-      }, 100);   
+      }, 200);   
     }
   }
 }).
