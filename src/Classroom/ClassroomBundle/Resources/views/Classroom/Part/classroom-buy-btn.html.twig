@@ -2,8 +2,12 @@
   {% if checkMemberLevelResult == 'ok' %}
     <a  class="btn btn-primary btn-lg"  href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
   {% else %}
-    <a class="btn btn-link" href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy', {id:classroom.id}) }}">加入购买</a>
-    <a class="btn btn-primary btn-lg" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">进去逛逛</a>
+    {% if classroom.buyable == 1 %}
+      <a class="btn btn-link" href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy', {id:classroom.id}) }}">加入购买</a>
+      <a class="btn btn-primary btn-lg" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">进去逛逛</a>
+      {% else %}
+      <button type="button" style="pointer-events:auto" class="btn btn-warning disabled" data-toggle="tooltip" data-placement="top" title="该班级无法在线购买，若需帮助请联系客服">无法购买</button>
+    {% endif %}
   {% endif %}
 {% else %}
   {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
