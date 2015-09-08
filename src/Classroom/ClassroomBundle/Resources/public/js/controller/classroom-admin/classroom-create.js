@@ -4,24 +4,26 @@ define(function(require, exports, module) {
         if($("#create-classroom").val() != ''){
             if($("#showable-open").data('showable')==1){
                 $("#showable-open").attr('checked','checked');
+                if($("#buyable-open").data('buyable')==1){
+                    $("#buyable-open").attr('checked','checked');
+                }
             }
             else{
                 $("#showable-close").attr('checked','checked');
-            }
-            if($("#buyable-open").data('buyable')==1){
-                $("#buyable-open").attr('checked','checked');
-            }
-            else{
-                $("#buyable-close").attr('checked','checked');
+                if($("#buyable-open").data('buyable')==1){
+                    $("#buyable-open").attr('checked','checked');
+                }
+                else{
+                    $("#buyable-close").attr('checked','checked');
+                }
+                $("#buyable").attr('hidden','hidden');
             }
         }
         $("#showable-close").click(function(){
-            $("#buyable-open").attr('disabled','disabled');
-            $("#buyable-close").attr('disabled','disabled');
+            $("#buyable").attr('hidden','hidden');
         })
         $("#showable-open").click(function(){
-            $("#buyable-open").removeAttr('disabled');
-            $("#buyable-close").removeAttr('disabled');
+            $("#buyable").removeAttr('hidden');
         })
 	}
 });
