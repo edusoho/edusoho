@@ -33,14 +33,14 @@
       <ul class="nav user-nav">
         {% if app.user %}
         <li class="user-avatar-li nav-hover">
-          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+          <a class="dropdown-toggle">
             <img class="avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>个人主页</a></li>
             <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
-            <li class="visible-xs">
+            <li class="hidden-lg">
               <a href="{{ path('my') }}">
                 <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}我的教学{% else %}我的学习{% endif %}
               </a>
@@ -54,7 +54,7 @@
             <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
           </ul>
         </li>
-        <li class="hidden-xs">
+        <li class="visible-lg">
           <a href="{{ path('my') }}">
             {% if 'ROLE_TEACHER' in app.user.roles %}
               我的教学
@@ -64,11 +64,15 @@
           </a>
         </li>
         <li class="visible-lg nav-hover">
-          {% if app.user.newNotificationNum > 0 or app.user.newMessageNum > 0 %}
-            <a class="hasmessage" href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
+
+          {% if setting('esBar.enabled', 0) and app.user.newMessageNum > 0 %}
+            <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
+          {% elseif ( not setting('esBar.enabled', 0)) and ( app.user.newNotificationNum > 0 or app.user.newMessageNum > 0) %}
+            <a class="hasmessage"><i class="es-icon es-icon-mail"></i><span class="dot"></span></a>
           {% else %}
-            <a href="javascript:;" data-toggle="dropdown" role="button" aria-expanded="false"><i class="es-icon es-icon-mail"></i></a>
+            <a><i class="es-icon es-icon-mail"></i></a>
           {% endif %}
+
           <ul class="dropdown-menu" role="menu">
             {% if not setting('esBar.enabled', 0) %}
               <li>
@@ -88,7 +92,7 @@
         </li>
         {% else %}
         <li class="user-avatar-li nav-hover visible-xs">
-          <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+          <a href="javascript:;" class="dropdown-toggle">
             <img class="avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">

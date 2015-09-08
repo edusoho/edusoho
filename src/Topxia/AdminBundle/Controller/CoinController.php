@@ -108,7 +108,7 @@ class CoinController extends BaseController
             
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig',array(
                 'set' => $set,
-                'courses'=>$courses
+                'items'=>$courses
             ));
 
         }
@@ -124,25 +124,44 @@ class CoinController extends BaseController
         ));
     }
 
+    public function tableAjaxAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $type = $conditions['type'];
+        $set = $conditions['set'];
+        if ($type == 'course') {
+            $items = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00','parentId' => 0), 'latest', 0 ,99999);
+        } elseif ($type == 'classroom') {
+            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime','desc'), 0, 99999);
+        } elseif ($type == 'vip') {
+            $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, 99999);
+        }
+        return $this->render('TopxiaAdminBundle:Coin:coin-table-setting.html.twig',array(
+            'type' => $conditions['type'],
+            'items' => $items,
+            'set' => $set,
+        ));
+    }
+
     public function modelSaveAction(Request $request)
     {   
         $coinSettings = $this->getSettingService()->get('coin',array());
         if($request->getMethod()=="POST"){
             $data=$request->request->all();
-
             $coinSettings['coin_enabled']=1;
             $coinSettings['cash_rate']=$data['cash_rate'];
             
             if($data['cash_model']=="deduction"){
                 $coinSettings['price_type']="RMB";
                 $coinSettings['cash_model']="deduction";
-                if (isset($data['course-rmb'])){
-                    $this->updateCoursesPrice($data['course-rmb'],$data['cash_rate']);
+                if (isset($data['item-rate'])){
+                    $this->updateMaxRate($data);
                 }
             }else{
                 $coinSettings['price_type']="Coin";
                 $coinSettings['cash_model']="currency";
-                if (isset($data['course-cash'])){
+                if (isset($data['item-cash'])){
+                    $data['course-cash'] = $data['item-cash'];
                     $this->updateCoursesCoinPrice($data["course-cash"]);
                 }
             }
@@ -154,10 +173,22 @@ class CoinController extends BaseController
         return $this->redirect($this->generateUrl('admin_coin_model'));
     }
 
-    protected function updateCoursesPrice($data)
+    protected function updateMaxRate($data)
     {   
-        foreach ($data as $key => $value) {
-            $this->getCourseService()->setCoursePrice($key, 'default', $value);
+        $type = $data['type'];
+        $data = $data['item-rate']; 
+        if ($type == 'course') {
+            foreach ($data as $key => $value) {
+                $this->getCourseService()->updateCourse($key, array('maxRate'=> $value));
+            }
+        } elseif ($type == 'classroom') {
+            foreach ($data as $key => $value) {
+                $this->getClassroomService()->updateClassroom($key, array('maxRate'=> $value));
+            }
+        } elseif ($type == 'vip') {
+            foreach ($data as $key => $value) {
+                $this->getLevelService()->updateLevel($key, array('maxRate'=> $value));
+            }
         }
     }
 
@@ -578,40 +609,6 @@ class CoinController extends BaseController
         ));
     }
 
-    public function avatarCropAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-        $filename = $request->query->get('file');
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        if($request->getMethod() == 'POST') {
-            $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
-            return $this->redirect($this->generateUrl('settings_avatar'));
-        }
-
-        try {
-            $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = 'tmp/' . $filename;
-
-        return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
-            'pictureUrl' => $pictureUrl,
-            'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
-        ));
-    }
-
     public function cashBillAction(Request $request)
     {
         if($request->get('nickname')){
@@ -958,5 +955,15 @@ class CoinController extends BaseController
     protected function getLogService() 
     {
         return $this->getServiceKernel()->createService('System.LogService');
+    }
+
+    protected function getClassroomService() 
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+        protected function getVipService() 
+    {
+        return $this->getServiceKernel()->createService('Vip.VipService');
     }
 }

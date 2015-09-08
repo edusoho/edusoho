@@ -1,0 +1,29 @@
+<div class="top-tab-header ui-found-course" ng-controller="FoundLiveController">
+
+	<div class="course-card">
+		<h4><span class="circle-label"></span>推荐</h4>
+		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐课程">
+          		</list-empty-view>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="course in liveRecommedCourses" ng-href="#/course/{{ course.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="liveRecommedCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		</div>
+	</div>
+
+	<div class="course-card">
+		<h4><span class="circle-label"></span>最新</h4>
+
+		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
+          		</list-empty-view>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="course in liveLatestCourses" ng-href="#/course/{{ course.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="liveLatestCourses.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		</div>
+	</div>
+</div>

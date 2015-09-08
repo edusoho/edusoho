@@ -3,7 +3,9 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Util\CloudClientFactory;
 
@@ -214,6 +216,29 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         		return "learning";
     	}
 
+           public function getCourseDownLessons()
+           {
+                $token = $this->controller->getUserToken($this->request);
+                $user = $this->controller->getUser();
+                $courseId = $this->getParam("courseId");
+
+                $course  = $this->controller->getCourseService()->getCourse($courseId);
+                $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+                $lessons = $this->controller->filterItems($lessons);
+                if ($user->isLogin()) {
+                    $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+                } else {
+                    $learnStatuses = null;
+                }
+
+                $files = $this->getUploadFiles($courseId);
+                $lessons = $this->filterLessons($lessons, $files);
+                return array(
+                    "lessons"=>array_values($lessons),
+                    "course"=>$this->controller->filterCourse($course)
+                    );
+           }
+
 	public function getCourseLessons()
 	{
 		$token = $this->controller->getUserToken($this->request);
@@ -225,14 +250,14 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 		if ($user->isLogin()) {
 			$learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
 		} else {
-			$learnStatuses = array();
+			$learnStatuses = null;
 		}
 
                       $files = $this->getUploadFiles($courseId);
 		$lessons = $this->filterLessons($lessons, $files);
 		return array(
 			"lessons"=>array_values($lessons),
-			"learnStatuses"=>$learnStatuses
+			"learnStatuses"=>empty($learnStatuses) ? array("-1"=>"learning") : $learnStatuses
 			);
 	}
 
@@ -448,14 +473,14 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                         if ($key) {
                             $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                            $lesson['mediaUri'] = $url['url'];
+                            $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
                         } else {
                             $lesson['mediaUri'] = '';
                         }
 
                     }
                 } else {
-                    $lesson['mediaUri'] = $this->controller->generateUrl('mapi_course_lesson_media', array('courseId'=>$lesson['courseId'], 'lessonId' => $lesson['id'], 'token' => empty($token) ? '' : $token['token']), true);
+                    $lesson['mediaUri'] = $this->request->getSchemeAndHttpHost() . "/mapi_v2/Lesson/getLocalVideo?targetId={$file['id']}&token={$token['token']}";
                 }
             } else {
                 $lesson['mediaUri'] = '';
@@ -481,6 +506,30 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
 	}
 
+            public function getLocalVideo()
+            {
+                $fileId = $this->getParam("targetId");
+                $user = $this->controller->getuserByToken($this->request);
+                if (!$user->isLogin()) {
+                    return $this->createErrorResponse('not_login', "您尚未登录！");
+                }
+
+                $file = $this->getUploadFileService()->getFile($fileId);
+                if (empty($file)) {
+                    return $this->createErrorResponse('error', "视频文件不存在!");
+                }
+
+                $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+                $response->trustXSendfileTypeHeader();
+                $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+                if ($mimeType) {
+                    $response->headers->set('Content-Type', $mimeType);
+                }
+
+                return $response;
+
+            }
+
 	private function getPPTLesson($lesson)
 	{
 		$file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
@@ -501,6 +550,10 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         		$client = $factory->createClient();
 
         		$ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
+                
+                if (isset($ppt["error"])) {
+                    $ppt = array();
+                }
         		$lesson['content'] = $ppt;
 
         		return $lesson;

@@ -115,19 +115,20 @@
   }
   .nav-mobile {
     position: absolute;
-    left: -250px;
+    left: 0;
     top: 0;
     bottom: 0;
     width: 250px;
     overflow-x: hidden;
     overflow-y: auto;
     background: #3f3f3f;
-    visibility: hidden;
-    .es-transition;
-    &.active {
-      visibility: visible;
-      .es-transition;
-    }
+    -webkit-transform: translate3d(-100%, 0, 0);
+    -moz-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    // .es-transition;
+    // &.active {
+    //   .es-transition;
+    // }
   }
   .nav { 
     float: none;
@@ -214,6 +215,9 @@
   position: absolute;
   top: 0;
   right: 20px;
+  @media(max-width: @screen-xs-max) {
+    right: 5px;
+  }
   &.left {
     @media(min-width: @screen-sm-min) {
       right: 50px;

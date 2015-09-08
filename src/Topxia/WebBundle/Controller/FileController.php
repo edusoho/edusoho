@@ -39,7 +39,6 @@ class FileController extends BaseController
     {
 
         $options = $request->request->all();
-
         if(empty($options['group'])){
             $options['group'] = "default";
         }

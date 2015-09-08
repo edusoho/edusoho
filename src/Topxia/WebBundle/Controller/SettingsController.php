@@ -8,6 +8,7 @@ use Topxia\WebBundle\Form\TeacherProfileType;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\SmsToolkit;
 
 use Imagine\Gd\Imagine;
@@ -178,12 +179,51 @@ class SettingsController extends BaseController
 			$this->setFlashMessage('danger', '获取论坛头像失败或超时，请重试！');
 			return $this->createJsonResponse(true);
 		}
+		$imgUrl = $request->request->get('imgUrl');
+		$file = new File($this->downloadImg($imgUrl));
 
-		$avatarPath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
+		$groupCode = "tmp";
+		$imgs = array(
+			'large' => array("200","200"),
+			'medium' => array("120","120"),
+			'small' => array("48","48")
+		);
+		$options = array(
+			'x' => "0",
+			'y' => "0",
+			'x2' => "200",
+			'y2' => "200",
+			'w' => "200",
+			'h' => "200",
+			'width' => "200",
+			'height' => "200",
+			'imgs' => $imgs
+		);
+		if(empty($options['group'])){
+            $options['group'] = "default";
+        }
+		$record = $this->getFileService()->uploadFile($groupCode, $file);
+		$parsed = $this->getFileService()->parseFileUri($record['uri']);
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
 
-		file_put_contents($avatarPath, $avatar);
+        $fields = array();
+        foreach ($filePaths as $key => $value) {
+            $file = $this->getFileService()->uploadFile($options["group"], new File($value));
+            $fields[] = array(
+                "type" => $key,
+                "id" => $file['id']
+            );
+        }
 
-		$this->getUserService()->changeAvatar($currentUser['id'], $avatarPath, array('x'=>0, 'y'=>0, 'width'=>200, 'height' => 200));
+        if(isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+            $fields[] = array(
+                "type" => "origin",
+                "id" => $record['id']
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record["uri"]);
+        }
+        $this->getUserService()->changeAvatar($currentUser["id"],$fields);
 
 		return $this->createJsonResponse(true);
 	}
@@ -436,7 +476,6 @@ class SettingsController extends BaseController
 
 	public function findPayPasswordBySmsAction(Request $request)
 	{
-
 		$scenario = "sms_forget_pay_password";
 
 		if ($this->setting('cloud_sms.sms_enabled') != '1'  || $this->setting("cloud_sms.{$scenario}") != 'on') {
@@ -911,5 +950,23 @@ class SettingsController extends BaseController
 	{
 		return $this->getServiceKernel()->createService('User.UserFieldService');
 	}	
+
+    protected function downloadImg($url)
+    {
+    	$currentUser = $this->getCurrentUser();
+        $filename = md5($url) . '_' . time();
+        $filePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
+
+        $fp = fopen($filePath, 'w');
+        $img = fopen($url,'r');
+        stream_get_meta_data($img);
+        while (!feof($img)) {
+        	$result.=fgets($img,1024);
+        }
+        fclose($img);
+        fwrite($fp, $result);
+        fclose($fp);
+        return $filePath;
+    }
 
 }
