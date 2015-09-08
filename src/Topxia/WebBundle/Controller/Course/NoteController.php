@@ -43,6 +43,12 @@ class NoteController extends CourseBaseController
     public function showListAction(Request $request, $courseId)
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
+        if($course['parentId']){
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级课程，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            }
+        }
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
         return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(
             'course' => $course,
@@ -157,6 +163,11 @@ class NoteController extends CourseBaseController
     protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
 }
