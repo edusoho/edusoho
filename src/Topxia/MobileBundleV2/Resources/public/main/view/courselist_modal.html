@@ -1,0 +1,35 @@
+<div class="modal courselist-modal">
+  
+	  <ion-tabs class="tabs-green tabs-top tabs-background-positive tabs-color-light">
+	  <div class="splice-line"></div>
+	  <ion-tab title="全部分类">
+	    	<ion-nav-view name="courselist-type">
+	    		<ion-view>
+		    		<ion-content class="courselist-content">
+					<div class="list">
+						<a class="item " ng-click="selectType(item.type)" ng-repeat="item in courseListTypes">
+							{{ item.name }}
+						</a>
+					</div>
+		    		</ion-content>
+			</ion-view>
+		</ion-nav-view>
+	  </ion-tab>
+
+	  <ion-tab title="综合排序">
+	    	<ion-nav-view name="courselist-sort">
+	    		<ion-view>
+		    		<ion-content class="courselist-content">
+					<div class="list">
+						<a class="item " ng-click="selectSort(item.type)" ng-repeat="item in courseListSorts">
+							{{ item.name }}
+						</a>
+					</div>
+		    		</ion-content>
+			</ion-view>
+		</ion-nav-view>
+	  </ion-tab>
+
+	</ion-tabs>
+
+</div>

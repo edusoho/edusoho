@@ -14,7 +14,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		if (empty($thread)) {
 			return null;
 		}
-		return $thread['courseId'] == $courseId ? $thread : null;
+		return $thread;
 	}
 
 	public function findThreadsByType($courseId, $type, $sort, $start, $limit)
@@ -206,7 +206,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$user = $this->getCurrentUser();
-		($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($courseId);
+		($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($thread['courseId']);
 
 		$fields = ArrayToolkit::parts($fields, array('title', 'content'));
 		if (empty($fields)) {
@@ -328,7 +328,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 	public function getPost($courseId, $id)
 	{
 		$post = $this->getThreadPostDao()->getPost($id);
-		if (empty($post) || $post['courseId'] != $courseId) {
+		if (empty($post)) {
 			return null;
 		}
 		return $post;
