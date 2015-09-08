@@ -51,10 +51,21 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
         if (!empty($courseIds)){
             $lesson ['parentId'] = $lesson ['id'];
+            if($lesson['type'] == 'testpaper'){
+                $lockedTarget = '';
+                foreach ($courseIds as $courseId) {
+                    $lockedTarget .= "'course-".$courseId."',";
+                }
+                $lockedTarget = "(".trim($lockedTarget,',').")";
+                $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($lesson['mediaId'],$lockedTarget),'id');
+            }
             unset($lesson ['id'],$lesson['courseId']);
-            foreach ($courseIds as $courseId)
+            foreach ($courseIds as $key=>$courseId)
             {   
                 $lesson['courseId'] = $courseId;
+                if($lesson['type'] == 'testpaper'){
+                    $lesson['mediaId'] = $testpaperIds[$key];
+                }
                 $this->getCourseService()->addLesson($lesson);
             }
         }
@@ -113,6 +124,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
             unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            if($lesson['type'] == 'testpaper'){
+                unset($lesson['mediaId']);
+            }
             foreach ($courseIds as $key=>$courseId) {
                 $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
             } 
@@ -205,5 +219,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
     }
 }
