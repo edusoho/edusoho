@@ -74,6 +74,9 @@ class ClassroomThreadController extends BaseController
     public function updateAction(Request $request, $classroomId, $threadId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if(!$this->getClassroomService()->canLookClassroom($classroomId)){ 
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            }
         $thread = $this->getThreadService()->getThread($threadId);
 
         $user = $this->getCurrentUser();
