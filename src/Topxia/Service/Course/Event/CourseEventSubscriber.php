@@ -38,8 +38,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            if(array_key_exists('showable',$classroom)) {
-                $private = $classroom['showable'];
+            if(array_key_exists('showable',$classroom) &&$classroom['showable']==1) {
+                $private = 0;
             }else{
                 $private = 1;
             }
@@ -51,7 +51,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'objectType' => 'course',
             'objectId' => $course['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
-            'private' => $classroom['showable'] == 1 ? 0 : 1,
+            'private' => $private == 0 ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
@@ -65,8 +65,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            if(array_key_exists('showable',$classroom)) {
-                $private = $classroom['showable'];
+            if(array_key_exists('showable',$classroom) && $classroom['showable']==1) {
+                $private = 0;
             }else{
                 $private = 1;
             }
@@ -77,7 +77,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'objectType' => 'course',
             'objectId' => $course['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
-            'private' => $classroom['showable'] == 1 ? 0 : 1,
+            'private' => $private == 0 ? 0 : 1,
             'properties' => array(
             'course' => $this->simplifyCousrse($course),
             ),
