@@ -197,7 +197,7 @@ class CourseController extends CourseBaseController
 		list($course, $member) = $this->buildCourseLayoutData($request, $id);
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
-            if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
             	return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
         	}
         }
