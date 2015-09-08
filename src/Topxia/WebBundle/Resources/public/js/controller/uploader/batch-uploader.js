@@ -93,6 +93,7 @@ define(function(require, exports, module) {
 
             uploader.on('beforeFileQueued', function(file) {
                 console.log('beforeFileQueued');
+                console.log(file, self);
                 file.uploaderWidget = self;
             });
 
@@ -106,9 +107,7 @@ define(function(require, exports, module) {
                 console.log('uploadAccept', object, ret);
                 var key = 'file_' + object.file.globalId + '_' + object.file.hash;
                 store.set(key, object.chunk);
-
             });
-
 
             uploader.on('uploadStart', function(file) {
                 console.log('uploadStart');

@@ -26,32 +26,38 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         );
         $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
 
-        if ($file['type'] == 'video') {
-            $file['convertParams'] = array(
-                'convertor' => $cloudFile['processParams']['output'],
-                'videoQuality' => $cloudFile['processParams']['videoQuality'],
-                'audioQuality' => $cloudFile['processParams']['audioQuality'],
-            );
-            $file['metas2'] = $cloudFile['metas']['levels'];
-        } elseif ($file['type'] == 'ppt') {
-            $file['convertParams'] = array(
-                'convertor' => $cloudFile['processParams']['output'],
-            );
-            $file['metas2'] = $cloudFile['metas'];
+        if (empty($cloudFile['processParams']['output'])) {
+            $file['convertParams'] = array();
+            $file['metas2'] = array();
+        } else {
+            if ($file['type'] == 'video') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                    'videoQuality' => $cloudFile['processParams']['videoQuality'],
+                    'audioQuality' => $cloudFile['processParams']['audioQuality'],
+                );
+                $file['metas2'] = $cloudFile['metas']['levels'];
 
-        } elseif ($file['type'] == 'document') {
-            $file['convertParams'] = array(
-                'convertor' => $cloudFile['processParams']['output'],
-            );
-            $file['metas2'] = $cloudFile['metas'];
-        } elseif ($file['type'] == 'audio') {
-            $file['convertParams'] = array(
-                'convertor' => $cloudFile['processParams']['output'],
-                'videoQuality' => 'normal',
-                'audioQuality' => 'normal',
-            );
-            $file['metas2'] = $cloudFile['metas']['levels'];
+            } elseif ($file['type'] == 'ppt') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                );
+                $file['metas2'] = $cloudFile['metas'];
+            } elseif ($file['type'] == 'document') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                );
+                $file['metas2'] = $cloudFile['metas'];
+            } elseif ($file['type'] == 'audio') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                    'videoQuality' => 'normal',
+                    'audioQuality' => 'normal',
+                );
+                $file['metas2'] = $cloudFile['metas']['levels'];
+            }
         }
+
         // echo "<pre>";var_dump($cloudFile, $file); echo "</pre>";exit();
 
         return $file;
