@@ -7,6 +7,7 @@ use Topxia\Service\Course\Dao\CourseDao;
 
 class CourseDaoImpl extends BaseDao implements CourseDao
 {
+    protected $table = "course";
 
     public function getCourse($id)
     {
@@ -167,7 +168,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
         
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
-        $this->clearCached();
 
         return $result;
     }
@@ -267,6 +267,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     protected function getTablename()
     {
-        return self::TABLENAME;
+        return $this->table;
     }
 }
