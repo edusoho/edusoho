@@ -9,13 +9,19 @@ class ResultItemDaoImpl extends BaseResultItemDao implements ResultItemDao
 {
     public function findItemsByResultId($resultId){
         $sql = "SELECT * FROM {$this->table} WHERE homeworkResultId = ?";
-        return $this->getConnection()->fetchAll($sql, array($resultId)) ? : null;
+        $items= $this->getConnection()->fetchAll($sql, array($resultId));
+
+        return $this->createSerializer()->unserializes($items, array(
+	        'answer' => 'json',
+	    )) ? : null;
     }
 
     public function findItemResultsbyUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = {$userId} ;";
-
-        return $this->getConnection()->fetchAll($sql, array($userId));
+        $items = $this->getConnection()->fetchAll($sql, array($userId));
+        return $this->createSerializer()->unserializes($items, array(
+	        'answer' => 'json',
+	    )) ? : null;
     }
 }

@@ -257,6 +257,15 @@ class HomeworkServiceTest extends BaseTestCase
         $homework1=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('-1 hours', time()),'pairReview'=>true));
         $homework2=$this->getHomeworkDao()->addHomework(array('completeTime'=>strtotime('+1 hours', time()),'pairReview'=>true));
         $result1=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'doing'));
+        // $result1Item1=$this->getResultItemDao()->addItemResult(array(
+        //     'itemId'=>1,
+        //     'homeworkResultId'=>$result1['id'],
+        // ));
+        // $result1Item2=$this->getResultItemDao()->addItemResult(array(
+        //     'itemId'=>2,
+        //     'questionId'=>2,
+        //     'homeworkResultId'=>$result1['id'],
+        // ));
         $result2=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework1['id'],'status'=>'finished'));
         $result3=$this->getResultDao()->addResult(array('userId'=>$user->id,'homeworkId'=>$homework2['id'],'status'=>'doing'));
 
@@ -390,6 +399,317 @@ class HomeworkServiceTest extends BaseTestCase
         $this->assertEquals('finished',$l3['status']);
     }
 
+    public function testSaveHomeworkResultItems(){
+        $user=$this->getServiceKernel()->getCurrentUser();
+        $q1=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'fill',
+            'stem' => 'fill 1 [[aaa|bbb|ccc]], fill 2 [[ddd|eee|fff]].',
+            'target' => 'course-1',
+            'score'=>5,
+            'answer'=> array(
+                array('aaa','bbb','ccc'),
+                array('ddd','eee','fff')
+            )
+        ));
+        $this->assertNotNull($q1);
+
+        $q2=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'determine',
+            'stem' => 'test determine question 1.',
+            'answer' => array(1),
+            'score'=>3,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q2);
+
+        $q3=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'score'=>4,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q3);
+
+        $q4=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'choice',
+            'stem' => 'test choice question 1.',
+            'metas' => array(
+                'choices' => array(
+                    'question 1 -> choice 1',
+                    'question 1 -> choice 2',
+                    'question 1 -> choice 3',
+                    'question 1 -> choice 4',
+                )
+            ),
+            'answer' => array(0, 1, 2, 3),
+            'score'=>8,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q4);
+
+        $q5=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'single_choice',
+            'stem' => 'test single choice question 1.',
+            'metas' => array(
+                'choices' => array(
+                    'question 1 -> choice 1',
+                    'question 1 -> choice 2',
+                    'question 1 -> choice 3',
+                    'question 1 -> choice 4',
+                )
+            ),
+            'answer' => array(1),
+            'score'=>9,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q5);
+
+
+        $c1=$this->getCourseDao()->addCourse(array(
+            'title'=>'course1',
+            'type'=>'periodic'
+        ));
+        $this->assertNotNull($c1);
+        $l1=$this->getLessonDao()->addLesson(array(
+            'courseId'=>$c1['id']
+        ));
+        $this->assertNotNull($l1);
+        $h1=$this->getHomeworkDao()->addHomework(array(
+            'courseId' => $c1['id'],
+            'lessonId' => $l1['id'],
+            'minReviews' => 5,
+            'pairReview' =>true,
+            'completeTime' => strtotime('-1 hours',time()),
+            'reviewEndTime' => strtotime('+10 hours',time()),
+            'description'=>'helo'
+        ));
+        $this->assertNotNull($h1);
+        $h1i1=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>0,
+            'questionId'=>$q1['id'],            
+        ));
+        $this->assertNotNull($h1i1);
+        $h1i2=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>1,
+            'questionId'=>$q2['id'],
+        ));
+        $this->assertNotNull($h1i2);
+        $h1i3=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>2,
+            'questionId'=>$q3['id'],
+        ));
+        $this->assertNotNull($h1i3);
+        $h1i4=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>3,
+            'questionId'=>$q4['id'],
+        ));
+        $this->assertNotNull($h1i4);
+        $h1i5=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>4,
+            'questionId'=>$q5['id'],
+        ));
+        $this->assertNotNull($h1i5);
+
+        $h1r1 = $this->getResultDao()->addResult(array(
+            'homeworkId' =>$h1['id'],
+            'courseId' =>$c1['id'],
+            'lessonId' =>$l1['id'],
+            'userId' =>$user->id,
+            'status' =>'doing'
+        ));
+        $this->assertNotNull($h1r1);
+
+        $this->getHomeworkService()->saveHomeworkResultItems($h1r1['id'], array(
+            array(
+                'questionId' => $q1['id'],
+                'answer'=>array('fail','eee')
+            ),
+            array(
+                'questionId' => $q2['id'],
+                'answer'=> array(1)
+            ),
+            array(
+                'questionId' => $q3['id'],
+                'answer'=> array('answer')
+            ),
+            array(
+                'questionId' => $q4['id'],
+                'answer' =>array(0,1)
+            ),
+            array(
+                'questionId' => $q5['id'],
+                'answer' =>array(1)
+            )
+        ));
+        $loadedResultItems=$this->getHomeworkService()->findItemResultsbyHomeworkIdAndUserId($h1['id'], $user->id);
+        $this->assertEquals(count($loadedResultItems),5);
+        $this->assertNotNull($loadedResultItems[0]['answer']);
+        $this->assertContains('fail',$loadedResultItems[0]['answer']);
+        $this->assertEquals('none', $loadedResultItems[0]['status']);
+    }
+
+    public function testSubmitHomeworkResult(){
+        $user=$this->getServiceKernel()->getCurrentUser();
+        $q1=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'fill',
+            'stem' => 'fill 1 [[aaa|bbb|ccc]], fill 2 [[ddd|eee|fff]].',
+            'target' => 'course-1',
+            'score'=>5,
+            'answer'=> array(
+                array('aaa','bbb','ccc'),
+                array('ddd','eee','fff')
+            )
+        ));
+        $this->assertNotNull($q1);
+
+        $q2=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'determine',
+            'stem' => 'test determine question 1.',
+            'answer' => array(1),
+            'score'=>3,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q2);
+
+        $q3=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'essay',
+            'stem' => 'question.',
+            'answer' => array('answer'),
+            'score'=>4,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q3);
+
+        $q4=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'choice',
+            'stem' => 'test choice question 1.',
+            'metas' => array(
+                'choices' => array(
+                    'question 1 -> choice 1',
+                    'question 1 -> choice 2',
+                    'question 1 -> choice 3',
+                    'question 1 -> choice 4',
+                )
+            ),
+            'answer' => array(0, 1, 2, 3),
+            'score'=>8,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q4);
+
+        $q5=$this->getQuestionDao()->addQuestion(array(
+            'type' => 'single_choice',
+            'stem' => 'test single choice question 1.',
+            'metas' => array(
+                'choices' => array(
+                    'question 1 -> choice 1',
+                    'question 1 -> choice 2',
+                    'question 1 -> choice 3',
+                    'question 1 -> choice 4',
+                )
+            ),
+            'answer' => array(1),
+            'score'=>9,
+            'target' => 'course-1',
+        ));
+        $this->assertNotNull($q5);
+
+
+        $c1=$this->getCourseDao()->addCourse(array(
+            'title'=>'course1',
+            'type'=>'periodic'
+        ));
+        $this->assertNotNull($c1);
+        $l1=$this->getLessonDao()->addLesson(array(
+            'courseId'=>$c1['id']
+        ));
+        $this->assertNotNull($l1);
+        $h1=$this->getHomeworkDao()->addHomework(array(
+            'courseId' => $c1['id'],
+            'lessonId' => $l1['id'],
+            'minReviews' => 5,
+            'pairReview' =>true,
+            'completeTime' => strtotime('-1 hours',time()),
+            'reviewEndTime' => strtotime('+10 hours',time()),
+            'description'=>'helo'
+        ));
+        $this->assertNotNull($h1);
+        $h1i1=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>0,
+            'questionId'=>$q1['id'],            
+        ));
+        $this->assertNotNull($h1i1);
+        $h1i2=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>1,
+            'questionId'=>$q2['id'],
+        ));
+        $this->assertNotNull($h1i2);
+        $h1i3=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>2,
+            'questionId'=>$q3['id'],
+        ));
+        $this->assertNotNull($h1i3);
+        $h1i4=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>3,
+            'questionId'=>$q4['id'],
+        ));
+        $this->assertNotNull($h1i4);
+        $h1i5=$this->getHomeworkItemDao()->addItem(array(
+            'homeworkId'=>$h1['id'],
+            'seq'=>4,
+            'questionId'=>$q5['id'],
+        ));
+        $this->assertNotNull($h1i5);
+
+        $h1r1 = $this->getResultDao()->addResult(array(
+            'homeworkId' =>$h1['id'],
+            'courseId' =>$c1['id'],
+            'lessonId' =>$l1['id'],
+            'userId' =>$user->id,
+            'status' =>'doing'
+        ));
+        $this->assertNotNull($h1r1);
+        $this->assertEquals($h1r1['status'],'doing');
+
+        $this->getHomeworkService()->submitHomework(array(
+            'id' => $h1r1['id'],
+            'items' => array(
+                $q1['id'] =>array(
+                    'answer'=>array('fail','eee')
+                ),
+                $q2['id'] =>array(
+                    'answer'=> array(1)
+                ),
+                $q3['id'] =>array(
+                    'answer'=> array('answer')
+                ),
+                $q4['id'] => array(
+                    'answer' =>array(0,1)
+                ),
+                $q5['id'] => array(
+                    'answer' =>array(1)
+                )
+            )
+        ), $user->id);
+        $loadedH1r1=$this->getHomeworkService()->loadHomeworkResult($h1r1['id']);
+        $this->assertEquals($loadedH1r1['status'],'pairReviewing');
+        $loadedResultItems=$this->getHomeworkService()->findItemResultsbyHomeworkIdAndUserId($h1['id'], $user->id);
+        $this->assertEquals(count($loadedResultItems),5);
+        $this->assertNotNull($loadedResultItems[0]['answer']);
+        $this->assertContains('fail',$loadedResultItems[0]['answer']);
+        $this->assertEquals('partRight', $loadedResultItems[0]['status']);
+    }
+
     protected function getUserService(){
         return $this->getServiceKernel()->createService('Topxia:User.UserService');
     }
@@ -406,12 +726,24 @@ class HomeworkServiceTest extends BaseTestCase
         return $this->getServiceKernel()->createService('Custom:Course.CourseService');
     }
 
+    protected function getCourseDao(){
+        return $this->getServiceKernel()->createDao('Topxia:Course.CourseDao');
+    }
+
+    protected function getLessonDao(){
+        return $this->getServiceKernel()->createDao('Topxia:Course.LessonDao');
+    }
+
     protected function getQuestionService(){
         return $this->getServiceKernel()->createService('Topxia:Question.QuestionService');
     }
 
     protected function getHomeworkDao(){
         return $this->getServiceKernel()->createDao('Homework:Homework.HomeworkDao');
+    }
+
+    protected function getHomeworkItemDao(){
+        return $this->getServiceKernel()->createDao('Homework:Homework.HomeworkItemDao');
     }
 
     protected function getResultDao(){
@@ -428,5 +760,9 @@ class HomeworkServiceTest extends BaseTestCase
 
     protected function getReviewItemDao(){
         return $this->getServiceKernel()->createDao('Custom:Homework.ReviewItemDao');
+    }
+
+    protected function getQuestionDao(){
+        return $this->getServiceKernel()->createDao('Topxia:Question.QuestionDao');
     }
 }

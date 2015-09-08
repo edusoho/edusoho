@@ -40,7 +40,15 @@ interface HomeworkService
     public function updateHomework($id, $fields);
 
     /**
-     * 提交作业
+     * 保存作业.
+     * @param homeworkResultId, 作业答卷id.
+     * @param resultItems 答题列表.
+     * @return 保存后的作业答卷.
+    **/
+    public function saveHomeworkResultItems($homeworkResultId,$resultItems);
+
+    /**
+     * 提交作业.
      * @param $homework_result
      * @param userId 学员id.
      * @return mixed

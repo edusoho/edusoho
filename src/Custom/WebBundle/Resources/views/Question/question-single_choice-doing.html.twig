@@ -2,7 +2,7 @@
 
 {% block body %}
     {% include 'CustomWebBundle:Question:question-choice-options.html.twig' %}
-    {% set answerChoiceIndex = (itemResult.answer|default(-1)) %}
+    {% set answerChoiceIndex = (itemResult.answer[0]|default(-1)) %}
     <div class="question-choices-inputs">
         {% for key, choice in question.metas.choices %}
             {% set choiceIndex = (65+key)|chr %}

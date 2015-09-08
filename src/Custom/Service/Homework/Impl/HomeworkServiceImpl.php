@@ -88,16 +88,76 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $homeworks;
     }
 
+    public function saveHomeworkResultItems($homeworkResultId, $resultItems)
+    {
+        $map = ArrayToolkit::index($resultItems,'questionId');
+
+        $homeworkResult = $this->loadHomeworkResult($homeworkResultId);
+        $homeworkItems = $this->findItemsByHomeworkId($homeworkResult['homeworkId']);
+        $homeworkResult['items'] = array();
+
+        foreach ($homeworkItems as $key => $homeworkItem) {
+            $questionId=$homeworkItem['questionId'];
+
+            $itemResult= $this->saveHomeworkResultItem($homeworkItem, $homeworkResult['userId'], $homeworkResultId, array(
+                'answer' => (array_key_exists($questionId, $map) and array_key_exists('answer', $map[$questionId])) ? $map[$questionId]['answer'] : null
+            ));
+            array_push($homeworkResult['items'], $itemResult);                
+        }
+
+        return $homeworkResult;
+    }
+
+    private function saveHomeworkResultItem($homeworkItem, $userId, $homeworkResultId, $fields){
+        $item=$this->getResultItemDao()->getItemResultByResultIdAndQuestionId($homeworkResultId,$homeworkItem['questionId']);
+        if(empty($item)){
+            $fields['homeworkResultId'] = $homeworkResultId;
+            $fields['itemId']= $homeworkItem['id'];
+            $fields['homeworkId'] = $homeworkItem['homeworkId'];
+            $fields['questionId'] = $homeworkItem['questionId'];
+            $fields['userId'] = $userId;
+
+            $item=$this->getResultItemDao()->addItemResult($fields);
+        }else{
+            $this->getResultItemDao()->updateItemResult($item['id'], $fields);
+            $item = $this->loadHomeworkResultItem($item['id']);
+        }
+        return $item;
+    }
+
+    private function judgeHomeworkResultItem($homeworkItem, $resultItem){
+        $ret=array('answer'=>null,'status'=>'noAnswer');
+        if($resultItem!=null){
+            $ret['answer']= (array_key_exists('answer',$resultItem) ? $resultItem['answer'] : null);
+            $ret['status']="noAnswer";
+            if(!empty($ret['answer'])){
+                $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $ret['answer']);
+                $ret['status'] = $result['status'];
+            }
+            
+        }
+        return $ret;
+    }
+
     public function submitHomework($homework_result,$userId)
     {
-        $homework = $this->getHomeworkDao()->getHomework($homework_result['homeworkId']);
+        $homeworkResult = $this->loadHomeworkResult($homework_result['id']);
+        $homework = $this->loadHomework($homeworkResult['homeworkId']);
+        $homeworkItems = $this->findItemsByHomeworkId($homeworkResult['homeworkId']);
+        $resultItems=$homework_result['items'];
+        $homeworkResult['items'] = array();
 
-        $this->addItemResult($homework_result['homeworkId'], $userId, $homework_result);
-        //reviewing
+        foreach ($homeworkItems as $key => $homeworkItem) {
+            $questionId=$homeworkItem['questionId'];
+
+            $fields = $this->judgeHomeworkResultItem($homeworkItem, $resultItems[$questionId]);
+            $fields['answer'] = $resultItems[$questionId]['answer'];
+            $itemResult= $this->saveHomeworkResultItem($homeworkItem, $userId, $homeworkResult['id'], $fields);
+            array_push($homeworkResult['items'], $itemResult);
+        }
+
         $rightItemCount = 0;
-
-        $homeworkItemsRusults = $this->getResultItemDao()->findItemResultsbyHomeworkId($homework_result['homeworkId']);
-
+        $homeworkItemsRusults = $this->getResultItemDao()->findItemResultsbyHomeworkId($homeworkResult['homeworkId']);
         foreach ($homeworkItemsRusults as $key => $homeworkItemRusult) {
             if ($homeworkItemRusult['status'] == 'right') {
                 $rightItemCount++;
@@ -107,9 +167,11 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $homeworkitemResult['rightItemCount'] = $rightItemCount;
         $homeworkitemResult['status'] = $homework['pairReview'] ? 'pairReviewing' : 'reviewing';
         $homeworkitemResult['updatedTime'] = time();
-
-        $homeworkResult = $this->getResultDao()->getResultByHomeworkIdAndUserId($homework_result['homeworkId'], $userId);
         $result = $this->getResultDao()->updateResult($homeworkResult['id'], $homeworkitemResult);
+
+        // $course = $this->getCourseService()->getCourse($homework['courseId']);
+        // $lesson = $this->getCourseService()->getCourseLesson($homework['courseId'], $homework['lessonId']);
+        // $this -> finishHomework($course, $lesson, $homework['courseId'], $homework['id']);
 
         return $result;
     }
@@ -163,7 +225,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
 
             //老师的分数为该提的最终得分
             if('teacher'==$homeworkReview['category']){
-                $this->getResultItemDao()->updateItemResult($item['homeworkItemResultId'],array('score'=>$item['score']));
+                $this->getResultItemDao()->updateItemResult($item['homeworkItemResultId'],array(
+                    'score'=>$item['score']
+                ));
             }
             array_push($reviewItems,$item);
         }
@@ -251,43 +315,6 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $homeworkResult;
     }
 
-    protected function addHomeworkResultItem($id,$homework){
-        
-        $homeworkItems = $this->findItemsByHomeworkId($id);
-        $itemResult = array();
-        $homeworkitemResult = array();
-
-        foreach ($homeworkItems as $key => $homeworkItem) {
-            if (!empty($homework[$homeworkItem['questionId']])) {
-
-                if (!empty($homework[$homeworkItem['questionId']]['answer'])) {
-
-                    $answer = $homework[$homeworkItem['questionId']]['answer'];
-
-                    $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $answer);
-                    
-                    $status = $result['status'];
-                } else {
-                    $answer = null;
-                    $status = "noAnswer";
-                }
-
-            } else {
-                $answer = null;
-                $status = "noAnswer";
-
-            }
-            $itemResult['itemId'] = $homeworkItem['id'];
-            $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
-            $itemResult['homeworkResultId'] = $homeworkResult['id'];
-            $itemResult['questionId'] = $homeworkItem['questionId'];
-            $itemResult['userId'] = $this->getCurrentUser()->id;
-            $itemResult['status'] = $status;
-            $itemResult['answer'] = $answer;
-            $this->getResultItemDao()->addItemResult($itemResult);
-        }
-    }
-
     public function updateHomeworkResult($homeworkResultId, array $fields)
     {
         return $this->getResultDao()->updateResult($homeworkResultId, $fields);
@@ -340,6 +367,12 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         //作业结束时间到来之后，把作业状态改为互评中
         $results=$this->getResultDao()->findSubmitableResults();
         foreach($results as $result){
+            $resultItems=$this->getResultItemDao()-> findItemsByResultId($result['id']);
+            if( !empty($resultItems)){
+                $result['items'] = ArrayToolkit::index($resultItems,"questionId");
+            }else{
+                $result['items'] = array();
+            }
             $this->submitHomework($result, $result['userId']);       
         }
 
@@ -451,7 +484,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         return $fields;
     }
 
-    private function addItemResult($id, $userId, $homework)
+    private function addItemResult($id, $userId, $items)
     {
 
         $homeworkResult = $this->getResultByHomeworkIdAndUserId($id, $userId);
@@ -460,9 +493,9 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
         $homeworkitemResult = array();
 
         foreach ($homeworkItems as $key => $homeworkItem) {
-            if (!empty($homework[$homeworkItem['questionId']])) {
-                if (!empty($homework[$homeworkItem['questionId']]['answer'])) {
-                    $answer = $homework[$homeworkItem['questionId']]['answer'];
+            if (!empty($items[$homeworkItem['questionId']])) {
+                if (!empty($items[$homeworkItem['questionId']]['answer'])) {
+                    $answer = $items[$homeworkItem['questionId']]['answer'];
                     $result = $this->getQuestionService()->judgeQuestion($homeworkItem['questionId'], $answer);
                     $status = $result['status'];
                 } else {
@@ -475,7 +508,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                 $status = "noAnswer";
             }
 
-            $existing=$this->getResultItemDao()->getItemResultByResultIdAndQuestionId($id,$homeworkItem['questionId']);
+            $existing=$this->getResultItemDao()->getItemResultByResultIdAndQuestionId($homeworkResult['id'],$homeworkItem['questionId']);
             if(empty($existing)){
                 $itemResult['itemId'] = $homeworkItem['id'];
                 $itemResult['homeworkId'] = $homeworkItem['homeworkId'];
@@ -486,7 +519,7 @@ class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkSer
                 $itemResult['answer'] = $answer;
                 $this->getResultItemDao()->addItemResult($itemResult);                
             }else{
-                $this->gerResultItemDao()->updateItemResult($existing['id'],array(
+                $this->getResultItemDao()->updateItemResult($existing['id'],array(
                     'answer'=>$answer,
                     'status'=>$status
                 ));

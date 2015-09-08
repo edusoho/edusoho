@@ -155,3 +155,7 @@ course_become_use_member:
     pattern:  /course/{id}/become_use_member
     defaults: { _controller: CustomWebBundle:Course:becomeUseMember }
     methods: [POST]
+
+homework_save:
+    pattern: /homework_results/{homeworkResultId}/save
+    defaults: { _controller: CustomWebBundle:CourseHomework:saveHomeworkResult }

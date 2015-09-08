@@ -1,6 +1,6 @@
 <div class="homework-question-fill">
    <ul>
-    {% set answers=itemResult.answer|default('')|split(",") %}
+    {% set answers=itemResult.answer|default([]) %}
 
     {% for index,rightAnswer in question.answer %}
       <li>
