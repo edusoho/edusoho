@@ -1009,6 +1009,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if($classroom['showable'] &&  !$member['locked']){ 
             return true;
         }
+        if (!$user->isLogin()) {
+            return false;
+        }
 
         return false;
     }
