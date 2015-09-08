@@ -31,7 +31,7 @@ class MenuExtension extends \Twig_Extension
             new \Twig_SimpleFunction('menu_children', array($this, 'getMenuChildren')),
             new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
             new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('menu_black_list', array($this, 'inMenuBlackList')),
+            new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist')),
         );
     }
 
@@ -51,12 +51,12 @@ class MenuExtension extends \Twig_Extension
         return $this->container->get('router')->generate($route, $params);
     }
 
-    public function inMenuBlackList($code = '')
+    public function inMenuBlacklist($code = '')
     {
         if(empty($code)){
             return false;
         }
-        $filename = __DIR__ . '/../../../../../app/config/menublacklist.yml';
+        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
         $yaml = new Yaml();
         if(!file_exists($filename)){
             $file = fopen($filename, 'w+');
