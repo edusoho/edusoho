@@ -39,11 +39,13 @@
 
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_truename">姓名</label>
-						{% if profile.truename %}
+						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="control-text">{{ profile.truename }}</div>
             {% else %}
-              <input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">              
-              <div class="help-block" style="display:none;"></div>
+            	<div class="col-md-7 controls radios">
+              	<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">              
+              	<div class="help-block" style="display:none;"></div>
+            	</div>
             {% endif %}
 					</div>
 
@@ -84,7 +86,7 @@
 
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_idcard">身份证号</label>
-						{% if profile.idcard %}
+						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
               <div class="col-md-7 controls">
                 <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
               </div>
