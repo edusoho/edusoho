@@ -176,7 +176,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         }
         $marks = str_repeat('?,', count($lessonIds) - 1) . '?';
         $sql ="SELECT SUM(giveCredit) FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchColumn($sql, $lessonIds);
+        return $this->getConnection()->fetchColumn($sql, $lessonIds) ? : 0;
     }
 
     protected function _createSearchQueryBuilder($conditions)
