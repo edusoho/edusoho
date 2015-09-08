@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div class="form-group {% if mobile.enabled|default(0) != 1 %}hidden {% endif %}">
+  <div class="form-group {% if mobile.enabled|default(0) != 1 and hasMobile %}hidden {% endif %}">
     <div class="col-md-2 control-label">
       <label >版本选择</label>
     </div>
@@ -74,7 +74,7 @@
     </div>
   </div>
 
-{% if mobileCode != 'edusoho' %}
+{% if mobileCode != 'edusoho' and mobileCode != 'edusohov3' %}
   <fieldset>
     <legend>定制APP设置项</legend>
       <div class="form-group">

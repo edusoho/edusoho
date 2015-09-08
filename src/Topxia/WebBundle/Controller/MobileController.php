@@ -30,7 +30,7 @@ class MobileController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if($mobile['ver']){
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
             $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
         }else{
             $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
