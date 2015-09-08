@@ -199,12 +199,12 @@
 				{% if hasSchoolName %}
 					<div class="form-group">
 						<div class="controls col-md-offset-3 col-md-8">
-			      	<button type="submit" class="btn btn-primary">提交</button>
-			    	</div>
-		    	</div>
-		    {% endif %}
-	    	<input type="hidden" name="register-mode" value="{{ setting('auth.register_mode')}}">
-	  		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+			      			<button type="submit" class="btn btn-primary">提交</button>
+			    		</div>
+		    		</div>
+		    	{% endif %}
+	    		<input type="hidden" name="register-mode" value="{{ setting('auth.register_mode')}}">
+	  			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 			</form>
 		{% endif %}
@@ -218,13 +218,6 @@
         		<p style = "text-align: center;font-size:16px">
         		当前版本为试用版，不能进行更多操作。如需购买正式版，请联系销售人员。电话(0571-28022356) 或<a href="http://open.edusoho.com/show/cloud/video" target="_blank">QQ</a></p>
         		</br></br>
-
-<script charset="utf-8" type="text/javascript" src="http://wpa.b.qq.com/cgi/wpa.php?key=XzgwMDAyMzg2MF8zMTUxMzZfODAwMDIzODYwXw"></script>
-        		<div id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><img class="img-service" src="/images/qq.png"></div>
-  <script type="text/javascript">
-      BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
-  </script>
-
       		</div>
     	</div>
     	<hr>
