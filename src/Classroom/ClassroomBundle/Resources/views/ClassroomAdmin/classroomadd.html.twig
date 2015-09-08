@@ -3,7 +3,7 @@
 {% block title %}创建班级 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'classroombundle/controller/classroom-admin/create' %}
-{% set script_controller = 'classroombundle/controller/classroom-admin/classroom-create' %}
+{% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
 
 
 {% block content %}
@@ -30,7 +30,7 @@
             <div class="col-md-3 control-label">
               <label >班级展示</label>
             </div>
-            <div class="col-md-8 controls radios">
+            <div id="create-classroom"  class="col-md-8 controls radios">
               <label>
               <input id="showable-open" type="radio" name="showable" value="1" checked="checked" > 开启
               </label>
