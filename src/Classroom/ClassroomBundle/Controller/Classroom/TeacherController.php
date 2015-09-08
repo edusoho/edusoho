@@ -38,10 +38,8 @@ class TeacherController extends BaseController
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if(!$this->getUserService()->hasAdminRoles($user['id'])){ 
-            if($classroom['showable'] && (!$member || ($member && $member['locked']))){
-                    return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
-            }
+        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
         }
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {

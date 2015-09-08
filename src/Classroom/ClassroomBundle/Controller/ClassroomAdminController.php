@@ -113,7 +113,9 @@ class ClassroomAdminController extends BaseController
 
                 return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
             }
-
+            if(!array_key_exists('buyable',$myClassroom)){
+                $myClassroom['buyable'] = 0;
+            }
             $classroom = array(
                 'title' => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],

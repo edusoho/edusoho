@@ -45,13 +45,8 @@ class NoteController extends CourseBaseController
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
-            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-            $user = $this->getCurrentUser();
-            $classroomMember = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-            if(!$this->getUserService()->hasAdminRoles($user['id'])){ 
-                if($classroom['showable'] && (!$classroomMember || ($classroomMember && $classroomMember['locked']))){
-                        return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
-                }
+            if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级课程，如有需要请联系客服','',3,$this->generateUrl('homepage'));
             }
         }
         $lessons = $this->getCourseService()->getCourseLessons($courseId);

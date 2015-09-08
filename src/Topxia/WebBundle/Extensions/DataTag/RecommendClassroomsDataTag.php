@@ -22,7 +22,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         
         $conditions = array(
             'status' => 'published',
-            'showable' => 0
+            'showable' => 1
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(

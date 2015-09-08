@@ -107,14 +107,14 @@ class CourseController extends BaseController
         $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
         $conditions = array(
             'categoryIds' => array($course['categoryId']),
-            'showable' => 0
+            'showable' => 1
             );
         if ($course['categoryId'] > 0) {
             $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 8));
         }
         $conditions = array(
             'recommended' => 1,
-            'showable' => 0, 
+            'showable' => 1, 
             'status'=>'published'
             );
 

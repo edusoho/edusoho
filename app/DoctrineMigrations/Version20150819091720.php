@@ -16,10 +16,10 @@ class Version20150819091720 extends AbstractMigration
     public function up(Schema $schema)
     {
         if (!$this->isFieldExist('classroom', 'showable')) {
-            $this->addsql("ALTER TABLE classroom ADD showable tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放展示';");
+            $this->addsql("ALTER TABLE classroom ADD showable tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示';");
         }
         if (!$this->isFieldExist('classroom', 'buyable')) {
-        $this->addsql("ALTER TABLE classroom ADD buyable tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开放购买';");
+        $this->addsql("ALTER TABLE classroom ADD buyable tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买';");
         }
     }
 

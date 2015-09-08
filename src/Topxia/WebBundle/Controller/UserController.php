@@ -77,7 +77,7 @@ class UserController extends BaseController
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
         $conditions = array(
             'status'=>'published',
-            'showable'=>'0',
+            'showable'=>'1',
             'classroomIds' => $classroomIds
         );
         $classrooms=$this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
@@ -117,7 +117,7 @@ class UserController extends BaseController
         $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
         $conditions = array(
             'status'=>'published',
-            'showable'=>'0',
+            'showable'=>'1',
             'classroomIds' => $classroomIds
         );
 
