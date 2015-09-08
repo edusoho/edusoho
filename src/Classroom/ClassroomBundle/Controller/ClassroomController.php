@@ -402,9 +402,6 @@ class ClassroomController extends BaseController
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
 
-        $conditions = array(
-            'private' => 0,
-        );
 
         $learns = array();
         if ($courses) {

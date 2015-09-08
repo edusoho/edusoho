@@ -137,12 +137,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom) && $classroom['showable']==1) {
+                $private = 0;
+            }else{
+                $private = 1;
+            }
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'start_learn_lesson',
             'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $private == 0 ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -154,12 +164,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom) && $classroom['showable']== 1) {
+                $private = 0;
+            }else{
+                $private = 1;
+            }
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'learned_lesson',
             'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $private == 0 ? 0 : 1,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
