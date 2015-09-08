@@ -6,6 +6,8 @@ define(function(require, exports, module) {
                 $("#showable-open").attr('checked','checked');
                 if($("#buyable-open").data('buyable')==1){
                     $("#buyable-open").attr('checked','checked');
+                }else{
+                    $("#buyable-close").attr('checked','checked');
                 }
             }
             else{
