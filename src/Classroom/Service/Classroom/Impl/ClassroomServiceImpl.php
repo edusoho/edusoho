@@ -997,9 +997,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return false;
-        }
 
         if ($user->isAdmin()) {
             return true;
