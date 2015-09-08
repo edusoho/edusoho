@@ -32,11 +32,19 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         //TODO need to use targetHelper class for consistency
         $target = explode('-', $testpaper['target']);
         $course = $this->getCourseService()->getCourse($target[1]);
+        $showable = 0;
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
+                $showable = 0;
+            } 
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'finished_testpaper',
             'objectType' => 'testpaper',
             'objectId' => $testpaper['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $showable == 0 ? 1 : 0,
             'properties' => array(
                 'testpaper' => $this->simplifyTestpaper($testpaper),
                 'result' => $this->simplifyTestpaperResult($testpaperResult),
@@ -267,5 +275,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     protected function getTestpaperService()
     {
         return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 }

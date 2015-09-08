@@ -35,6 +35,15 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseJoin(ServiceEvent $event)
     {
         $course = $event->getSubject();
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom)) {
+                $private = $classroom['showable'];
+            }else{
+                $private = 1;
+            }
+        }
         $userId = $event->getArgument('userId');
         $this->getStatusService()->publishStatus(array(
             'type' => 'become_student',
@@ -42,6 +51,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'objectType' => 'course',
             'objectId' => $course['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $classroom['showable'] == 1 ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
@@ -52,12 +62,22 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseFavorite(ServiceEvent $event)
     {
         $course = $event->getSubject();
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom)) {
+                $private = $classroom['showable'];
+            }else{
+                $private = 1;
+            }
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'favorite_course',
             'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
             'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $classroom['showable'] == 1 ? 0 : 1,
             'properties' => array(
             'course' => $this->simplifyCousrse($course),
             ),
