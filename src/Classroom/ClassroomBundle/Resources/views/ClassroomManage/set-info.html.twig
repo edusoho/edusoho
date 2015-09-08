@@ -2,6 +2,7 @@
 
 {% set side_nav = 'base' %}
 {% set script_controller = 'classroombundle/controller/classroom/set-info' %}
+{% set script_controller = 'classroombundle/controller/classroom-admin/classroom-create' %}
 
 {% block title %}基本信息 - {{ parent() }}{% endblock %}
 
@@ -50,7 +51,12 @@
           <label >班级展示</label>
         </div>
         <div class="col-md-8 controls radios">
-          {{ radios('showable', {'0':'开启', '1':'关闭'}, classroom.showable|default('0') ) }}
+          <label>
+          <input id="showable-open" type="radio" name="showable" value="0" checked="checked" > 开启
+          </label>
+          <label>
+            <input id="showable-close" type="radio" name="showable" value="1"> 关闭
+          </label>
           <div class="help-block">关闭后，班级将彻底隐藏，无法在前台查看到。</div>
         </div>
 
@@ -60,7 +66,12 @@
           <label >班级购买</label>
         </div>
         <div class="col-md-8 controls radios">
-          {{ radios('buyable', {'0':'开启', '1':'关闭'}, classroom.buyable|default('0') ) }}
+          <label>
+          <input id="buyable-open" type="radio" name="buyable" value="0" checked="checked" > 开启
+          </label>
+          <label>
+            <input id="buyable-close" type="radio" name="buyable" value="1"> 关闭
+          </label>
           <div class="help-block">关闭后班级将无法在线购买加入。</div>
         </div>
 
