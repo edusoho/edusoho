@@ -57,10 +57,10 @@ class MenuExtension extends \Twig_Extension
             return false;
         }
         $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
-        $yaml = new Yaml();
         if(!file_exists($filename)){
             return false;
         }
+        $yaml = new Yaml();
         $blackList = $yaml->parse(file_get_contents($filename));
         return in_array($code, $blackList);
     }
