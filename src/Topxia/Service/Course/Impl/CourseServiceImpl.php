@@ -1055,10 +1055,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"lesson"=>$lesson
 		));
 
-		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-			$this->dispatchEvent('studyplan.course.update', new ServiceEvent($lesson));
-		}
-
+		
 		return $lesson;
 	}
 
@@ -1214,6 +1211,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 		$this->dispatchEvent("course.lesson.update",$updatedLesson);
 
+		if ($this->getAppService()->findInstallApp('ClassroomPlan') && $updatedLesson['status'] == 'published') {
+            $this->dispatchEvent('studyplan.task.update', new ServiceEvent($updatedLesson));
+        }
+
 		return $updatedLesson;
 	}
 
@@ -1275,7 +1276,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $this->dispatchEvent('studyplan.course.update', new ServiceEvent($lesson));
+            $this->dispatchEvent('studyplan.task.delete', new ServiceEvent($lesson));
         }
 	}
 
@@ -1325,6 +1326,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
 
 		$this->dispatchEvent("course.lesson.update",$publishLesson);
+
+		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
+			$this->dispatchEvent('studyplan.course.update', new ServiceEvent($publishLesson));
+		}
+
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
@@ -1339,6 +1345,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
 		$this->dispatchEvent("course.lesson.update",$unpublishLesson);
+
+		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
+			$this->dispatchEvent('studyplan.task.delete', new ServiceEvent($unpublishLesson));
+		}
 	}
 
 	public function getNextLessonNumber($courseId)
