@@ -229,7 +229,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
             case 'global':
-                $target['title'] = '网站公告';
+                $target['title'] = '网校公告';
                 $target['image'] = '';
             default:
                 # code...
