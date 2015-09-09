@@ -80,16 +80,13 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     { 
         $result = CloudAPIFactory::create('leaf')->get('/me');
-        $filename = null;
-        $yaml = null;
         if($result['thirdCopyright'] == '1'){
             $this->addMenuCodeToBlackList(array('admin_app', 'cloud_notice', 'system_status'));
         }
 
         if($result['copyright'] == '1'){
             $this->addMenuCodeToBlackList(array('cloud_notice'));   
-        }
-        
+        }       
 
         return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
