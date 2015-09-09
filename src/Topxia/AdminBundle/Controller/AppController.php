@@ -44,7 +44,7 @@ http://open.edusoho.com/
                     'trial' => $trialHtml['content'],
                 ));
             }
-            $unTrial = file_get_contents('api/v1/block/cloud_guide');
+            $unTrial = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
             $unTrialHtml = json_decode($unTrial,true);
             $flag = "canNotTrial";
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
