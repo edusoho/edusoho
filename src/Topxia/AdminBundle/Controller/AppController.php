@@ -30,7 +30,7 @@ class AppController extends BaseController
 
         $content = $api->get("/users/{$api->getAccessKey()}/overview");
         $info = $api->get('/me');
-http://open.edusoho.com/
+
         $eduSohoOpenClient = new EduSohoOpenClient();
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
             $articles = $eduSohoOpenClient->getArticles();
