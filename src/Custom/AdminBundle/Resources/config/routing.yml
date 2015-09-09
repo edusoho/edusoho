@@ -1,16 +1,7 @@
-custom_admin_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: CustomAdminBundle:Default:index }
-
-
-admin_course:
-    pattern:  /course/{filter}/index
-    defaults: { _controller: CustomAdminBundle:Course:index, filter:'normal' }
-
 admin_course_next_round:
     pattern: /course/{id}/nextRound
-    defaults: { _controller: CustomAdminBundle:Course:nextRound }
+    defaults: { _controller: CustomAdminBundle:RoundCourse:nextRound }
 
 admin_course_rounding:
     pattern: /course/{id}/rounding
-    defaults: { _controller: CustomAdminBundle:Course:rounding }
+    defaults: { _controller: CustomAdminBundle:RoundCourse:rounding }
