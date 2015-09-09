@@ -3,7 +3,6 @@
 /*
  * This file is part of the Symfony package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,12 +13,11 @@ namespace Topxia\WebBundle\Handler;
 /**
  * RedisSessionHandler.
  *
- * @author Drak <drak@zikula.org>
  */
 class RedisSessionHandler implements \SessionHandlerInterface
 {
     /**
-     * @var \Memcache Memcache driver.
+     * @var \Redis driver.
      */
     private $redis;
 
@@ -37,15 +35,15 @@ class RedisSessionHandler implements \SessionHandlerInterface
      * Constructor.
      *
      * List of available options:
-     *  * prefix: The prefix to use for the memcache keys in order to avoid collision
+     *  * prefix: The prefix to use for the redis keys in order to avoid collision
      *  * expiretime: The time to live in seconds
      *
-     * @param \Memcache $memcache A \Memcache instance
-     * @param array     $options  An associative array of Memcache options
+     * @param \Redis $redis A \Redis instance
+     * @param array     $options  An associative array of Redis options
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct(\Memcache $memcache, array $options = array())
+    public function __construct($redis, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -53,8 +51,8 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
 
-        $this->memcache = $memcache;
-        $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
+        $this->redis = $redis;
+        $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 2*60*60;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';
     }
 
@@ -71,7 +69,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function close()
     {
-        return $this->memcache->close();
+        return $this->redis->close();
     }
 
     /**
@@ -79,7 +77,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        return $this->memcache->get($this->prefix.$sessionId) ?: '';
+        return $this->redis->get($this->prefix.':'.$sessionId) ?: '';
     }
 
     /**
@@ -87,7 +85,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        return $this->memcache->set($this->prefix.$sessionId, $data, 0, time() + $this->ttl);
+        return $this->redis->setex($this->prefix.':'.$sessionId, $this->ttl, $data);
     }
 
     /**
@@ -95,7 +93,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        return $this->memcache->delete($this->prefix.$sessionId);
+        return $this->redis->delete($this->prefix.':'.$sessionId);
     }
 
     /**
