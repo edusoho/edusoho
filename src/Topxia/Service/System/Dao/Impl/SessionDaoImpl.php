@@ -7,7 +7,7 @@ use Topxia\Service\System\Dao\SessionDao;
 
 class SessionDaoImpl extends BaseDao implements SessionDao
 {
-	protected $table = "session2";
+	protected $table = "sessions";
 
 	public function get($id)
 	{
@@ -17,7 +17,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 
 	public function getSessionByUserId($userId)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE session_user_id = ? LIMIT 1";
+		$sql = "SELECT * FROM {$this->table} WHERE sess_user_id = ? LIMIT 1";
 		return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
 	}
 
@@ -28,24 +28,25 @@ class SessionDaoImpl extends BaseDao implements SessionDao
 
 	public function deleteSessionByUserId($userId)
 	{
-		return $this->getConnection()->delete($this->table, array('session_user_id' => $userId));
+		return $this->getConnection()->delete($this->table, array('sess_user_id' => $userId));
 	}
 
 	public function getOnlineCount($retentionTime)
 	{
-		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now()) - ?) AND (unix_timestamp(now()));";
+		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= (unix_timestamp(now()) - ?);";
+		//$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  BETWEEN (unix_timestamp(now()) - ?) AND (unix_timestamp(now()));";
 		return $this->getConnection()->fetchColumn($sql, array($retentionTime)) ? : null;
 	}
 
 	public function getLoginCount($retentionTime)
 	{
-		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `session_time` BETWEEN (unix_timestamp(now())-?) AND (unix_timestamp(now())) AND `user_id` > 0";
+		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= (unix_timestamp(now())-?) AND `sess_user_id` > 0";
 		return $this->getConnection()->fetchColumn($sql, array($retentionTime)) ? : null;	
 	}
 
 	public function findSessionsBySessionTime($sessionTime, $limit)
 	{
-		$sql = "SELECT * FROM {$this->table} WHERE `session_time` < ? LIMIT {$limit};";
+		$sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
 		return $this->getConnection()->fetchAll($sql, array($sessionTime));
 	}
 
@@ -55,7 +56,7 @@ class SessionDaoImpl extends BaseDao implements SessionDao
             return 0;
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-		$sql = "DELETE FROM {$this->table} WHERE `session_id` in ( {$marks} );";
+		$sql = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
 
 		return $this->getConnection()->executeUpdate($sql, $ids);
 	}

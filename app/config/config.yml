@@ -85,10 +85,12 @@ swiftmailer:
 
 parameters:
     session.handler.pdo.options:
-        db_table:    session2
-        db_id_col:   session_id
-        db_data_col: session_value
-        db_time_col: session_time
+         db_table:    sessions
+         db_id_col:   sess_id
+         db_data_col: sess_data
+         db_time_col: sess_time
+         db_lifetime_col: sess_lifetime
+         db_user_id_col: sess_user_id
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
     topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
