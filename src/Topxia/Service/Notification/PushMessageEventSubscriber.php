@@ -94,7 +94,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $announcement = $event->getSubject();
 
         $target = $this->getTarget($announcement['targetType'], $announcement['targetId']);
-
         $from = array(
             'type' => $target['type'],
             'id' => $target['id'],
@@ -229,6 +228,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $classroom = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
+            case 'global':
+                $target['title'] = '网站公告';
+                $target['image'] = '';
             default:
                 # code...
                 break;
