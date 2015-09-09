@@ -34,4 +34,6 @@ interface UserDao
 
 	public function findUsersCountByLessThanCreatedTime($endTime);
 
+	public function findUserHasVerifiedMobileCount();
+
 }

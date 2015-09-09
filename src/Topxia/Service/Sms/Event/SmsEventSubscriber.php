@@ -43,8 +43,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $parameters = array();
             if ((isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) != 0))) {
                 $parameters['order_title'] = $order['title'];
-                $parameters['payment'] = ($order['payment'] == 'wxpay'?'微信支付':'支付宝');
-                $parameters['amount'] = $order['amount'];
+                $parameters['totalPrice'] = $order['totalPrice'];
                 $this->getSmsService()->smsSend($smsType, array($userId), $parameters);
             }
         }

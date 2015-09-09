@@ -121,16 +121,26 @@
           <li class="divider"></li>
         {% endif %}
 
-        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+        {% if lesson.status == 'unpublished' %}
+        <li>
           <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle prs"></span>发布
           </a>
         </li>
-
-        <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
+        <li>
+          <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除
+          </a>
+        </li>
+        {% else %}
+        <li>
           <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle prs"></span>取消发布
           </a>
         </li>
-        <li><a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a></li>
+        <li>
+          <a href="javascript:" title="发送发布班级({{lesson.title}})通知短信" data-url="{{path('publish_sms_show',{targetType:'lesson',id:lesson.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信
+          </a>
+        </li>
+      {% endif %}
+
       </ul>
     </span>
   </div>

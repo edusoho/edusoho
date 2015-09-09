@@ -102,7 +102,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime)
 	{
-	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
+	    return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
 	}
 
 	public function analysisCourseSumByTime($endTime)
@@ -1926,6 +1926,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseStudentCount($courseId)
 	{
 		return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+	}
+
+	public function getHasVerifiedMobileStudentsCountByCourseId($courseId)
+	{
+		return $this->getMemberDao()->findMemberCountByCourseIdAndHasVerifiedMobile($courseId);
 	}
 
 	public function findCourseTeachers($courseId)

@@ -114,7 +114,9 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
-        return  $this->createDynamicQueryBuilder($conditions)
+        $conditions['verifiedMobileNull'] = "";
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
@@ -132,6 +134,11 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('verifiedMobile = :verifiedMobile')
             ->andWhere('type LIKE :type')
             ->andWhere('id NOT IN ( :excludeIds )');
+
+        if (array_key_exists('hasVerifiedMobile', $conditions)) {
+            $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
+        }
+        return $builder;
     }
 
     public function addUser($user)
@@ -187,4 +194,9 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchColumn($sql, array($endTime));
     }
 
+    public function findUserHasVerifiedMobileCount()
+    {
+        $sql="SELECT count(id) as count From `{$this->table}` WHERE `verifiedMobile` != '' ";
+        return $this->getConnection()->fetchColumn($sql);
+    }
 }

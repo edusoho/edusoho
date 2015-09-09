@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\CurlToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -12,7 +13,7 @@ use Topxia\Common\Paginator;
 class DefaultController extends BaseController
 {
 
-    public function indexAction ()
+    public function indexAction (Request $request)
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         

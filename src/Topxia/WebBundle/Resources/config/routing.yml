@@ -1824,6 +1824,17 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+publish_sms_show:
+    pattern:  /publish/sms_show/{targetType}/{id}
+    defaults: { _controller: TopxiaWebBundle:Sms:show}
+
+publish_sms_send:
+    pattern:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: TopxiaWebBundle:Sms:send}
+
+generate_short_link:
+    pattern:  /generate/short/link
+    defaults: { _controller: TopxiaWebBundle:Sms:changeLink}
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

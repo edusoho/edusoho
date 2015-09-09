@@ -1208,6 +1208,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $dayUserTotals;
     }
 
+    public function findUserHasVerifiedMobileCount()
+    {
+        return $this->getUserDao()->findUserHasVerifiedMobileCount();
+    }
+
     public function parseAts($text)
     {
         preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $text, $matches);

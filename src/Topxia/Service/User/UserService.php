@@ -222,5 +222,8 @@ interface UserService
      * 解析文本中@(提)到的用户
      */
     public function parseAts($text);
-
+    /**
+    *获得所有手机验证的用户个数
+    */
+    public function findUserHasVerifiedMobileCount();
 }

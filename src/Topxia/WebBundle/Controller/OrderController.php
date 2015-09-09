@@ -159,7 +159,7 @@ class OrderController extends BaseController
             
             
             $order = $processor->createOrder($orderFileds, $fields);
-
+            
             if($order["status"] == "paid") {
                 return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order["targetId"])));
             }

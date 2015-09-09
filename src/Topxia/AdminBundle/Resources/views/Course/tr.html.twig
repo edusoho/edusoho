@@ -85,6 +85,7 @@
 
         {% if course.status == 'published' %}
           <li><a class="close-course" href="javascript:" data-url="{{ path('admin_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>
+          <li><a href="javascript:" title="发送发布课程({{course.title}})通知短信" data-url="{{path('publish_sms_show',{targetType:'course',id:course.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
         {% endif %}
 
         {% if course.status != 'published' %}

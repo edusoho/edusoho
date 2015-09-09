@@ -79,6 +79,8 @@
        {% if classroom.status=='published'%}
        <li><a href="javascript:" class="close-classroom" title="关闭班级({{classroom.title}})" data-url="{{path('admin_classroom_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭班级</a></li>
 
+       <li><a href="javascript:" title="发送发布班级({{classroom.title}})通知短信" data-url="{{path('publish_sms_show',{targetType:'classroom',id:classroom.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
+
        {% else %}
        <li><a href="javascript:" class="open-classroom" title="发布班级({{classroom.title}})" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>发布班级</a></li>
 

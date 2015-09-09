@@ -27,16 +27,18 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			return array(false, array());
 		}
 
+		$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
+
+		if($order["status"] == "paid"){
+			$this->dispatchEvent("order.pay.success", 
+				new ServiceEvent($order,array('targetType'=>$order["targetType"]))
+			);
+			return array(true, $order);
+		}
+
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
-
-			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
-
-			if($order["status"] == "paid"){
-				$connection->rollback();
-				return array(true, $order);
-			}
 
 			if($order["status"] == "created"){
 				$outflow = $this->proccessCashFlow($order);
@@ -53,6 +55,12 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			}
 
             $connection->commit();
+            
+            if ($success) {
+				$this->dispatchEvent("order.pay.success", 
+					new ServiceEvent($order,array('targetType'=>$order["targetType"]))
+				);
+	    	}
             return array($success, $order);
 		} catch (\Exception $e) {
             $connection->rollback();
@@ -85,12 +93,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
 	        if($lock){
 	        	$connection->commit();
-	    	}
-
-	    	if ($success) {
-				$this->dispatchEvent("order.pay.success", 
-					new ServiceEvent($order,array('targetType'=>$order["targetType"]))
-				);
 	    	}
 	    	
 	        return array($success, $order);

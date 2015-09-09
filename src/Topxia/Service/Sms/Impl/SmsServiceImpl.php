@@ -22,6 +22,10 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     public function smsSend($smsType, $userIds, $parameters=array())
     {
+        if ($this->isOpen($smsType)) {
+            throw new Exception("云短信相关设置未开启!");
+            
+        }
         $smsCode = $this->generateSmsCode();
         $users = $this->getUserService()->findUsersByIds($userIds);
         $to = '';

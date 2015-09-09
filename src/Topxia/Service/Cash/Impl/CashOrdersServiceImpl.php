@@ -87,12 +87,6 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
                     $success = true;
 
-                    if ($success && ($this->getSmsService()->isOpen('sms_order_pay_success'))) {
-                        $this->dispatchEvent("order.pay.success", 
-                            new ServiceEvent($order,array('targetType'=>'coin'))
-                        );
-                    }
-
                 } else {
                     $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
                 }
@@ -110,6 +104,10 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
         $order = $this->getOrderDao()->getOrder($order['id']);
 
+        $this->dispatchEvent("order.pay.success", 
+            new ServiceEvent($order,array('targetType'=>'coin'))
+        );
+        
         return array($success, $order);
     }
 
