@@ -43,7 +43,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct($redis, array $options = array())
+    public function __construct($redisFactory, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -51,7 +51,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
 
-        $this->redis = $redis;
+        $this->redis = $redisFactory->getRedis();
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 2*60*60;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';
     }
