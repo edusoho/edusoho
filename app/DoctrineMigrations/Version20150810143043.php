@@ -38,23 +38,36 @@ class Version20150810143043 extends AbstractMigration
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0',       
                 PRIMARY KEY  (`id`)
             ) comment='答题评分' ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
-        $this->addSql("ALTER TABLE `homework_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
-        $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` float(10,1) unsigned  COMMENT '同学评分(互评成绩)';");
-        $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` float(10,1) unsigned  COMMENT '老师评分';");
-        $this->addSql("ALTER TABLE `homework_result` ADD `pairReviews` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评数量';");
-        $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
-        $this->addSql("ALTER TABLE `homework_item_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
-        $this->addSql("ALTER TABLE `homework` ADD `fullScore` float(10,1) unsigned  COMMENT '总分';");
-        $this->addSql("ALTER TABLE `homework` ADD `completeTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业完成时间';");
-        $this->addSql("ALTER TABLE `homework` ADD `reviewEndTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评结束时间';");
-        $this->addSql("ALTER TABLE `homework` ADD `pairReview` boolean NOT NULL DEFAULT  false COMMENT '是否启用互评';");
-        $this->addSql("ALTER TABLE `homework` ADD `completePercent` float(5,1)  NOT NULL DEFAULT 0 COMMENT '作业成绩占比:完成互评的';");
-        $this->addSql("ALTER TABLE `homework` ADD `partPercent` float(5,1)  NOT NULL  DEFAULT 0 COMMENT '作业成绩占比:部分互评的';");
-        $this->addSql("ALTER TABLE `homework` ADD `zeroPercent` float(5,1) NOT NULL DEFAULT 0 COMMENT '作业成绩占比:没有参与互评的';");
-        $this->addSql("ALTER TABLE `homework` ADD `minReviews` int(10) NOT NULL DEFAULT 0 COMMENT '最少互评人数';");
-      
+        if($this->isTableExist('homework_result')){
+            $this->addSql("ALTER TABLE `homework_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
+            $this->addSql("ALTER TABLE `homework_result` ADD `studentScore` float(10,1) unsigned  COMMENT '同学评分(互评成绩)';");
+            $this->addSql("ALTER TABLE `homework_result` ADD `teacherScore` float(10,1) unsigned  COMMENT '老师评分';");
+            $this->addSql("ALTER TABLE `homework_result` ADD `pairReviews` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评数量';");
+            $this->addSql("ALTER TABLE `homework_result` CHANGE `status` `status` ENUM('doing','pairReviewing','reviewing','finished') NOT NULL COMMENT '状态';");
+        }
+        if($this->isTableExist('homework_item_result')){
+            $this->addSql("ALTER TABLE `homework_item_result` ADD `score` float(10,1) unsigned  COMMENT '最终得分';");
+        }
+        if($this->isTableExist('homework')){
+            $this->addSql("ALTER TABLE `homework` ADD `fullScore` float(10,1) unsigned  COMMENT '总分';");
+            $this->addSql("ALTER TABLE `homework` ADD `completeTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '作业完成时间';");
+            $this->addSql("ALTER TABLE `homework` ADD `reviewEndTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '互评结束时间';");
+            $this->addSql("ALTER TABLE `homework` ADD `pairReview` boolean NOT NULL DEFAULT  false COMMENT '是否启用互评';");
+            $this->addSql("ALTER TABLE `homework` ADD `completePercent` float(5,1)  NOT NULL DEFAULT 0 COMMENT '作业成绩占比:完成互评的';");
+            $this->addSql("ALTER TABLE `homework` ADD `partPercent` float(5,1)  NOT NULL  DEFAULT 0 COMMENT '作业成绩占比:部分互评的';");
+            $this->addSql("ALTER TABLE `homework` ADD `zeroPercent` float(5,1) NOT NULL DEFAULT 0 COMMENT '作业成绩占比:没有参与互评的';");
+            $this->addSql("ALTER TABLE `homework` ADD `minReviews` int(10) NOT NULL DEFAULT 0 COMMENT '最少互评人数';");
+
+        }
         $this->addSql("ALTER TABLE `crontab_job` CHANGE COLUMN `cycle` `cycle` ENUM('once','everyminute','everyhour','everyday','everymonth') NOT NULL DEFAULT 'once' COMMENT '任务执行周期' ;");
         $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('ForwardHomeworkStatusJob', 'everyminute', '0', 'Custom\\Service\\Homework\\Job\\ForwardHomeworkStatusJob', '', '0', '0', '0', '0', '0');");
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->connection->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 
     /**
