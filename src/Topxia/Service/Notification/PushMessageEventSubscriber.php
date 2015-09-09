@@ -211,8 +211,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
          CloudAPIFactory::create('tui')->post('/message/send', $message);
-
-        file_put_contents('/tmp/push_message', json_encode($message, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE). "\n\n", FILE_APPEND);
     }
 
     protected function getTarget($type, $id)
