@@ -229,7 +229,8 @@ class UserController extends BaseController
 
             $user = $this->getUserService()->getUser($id);
             return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
-            'user' => $user,
+                'user' => $user,
+                'profile' => $this->getUserService()->getUserProfile($id)
             ));
         }
         $default = $this->getSettingService()->get('default', array());     
@@ -296,8 +297,6 @@ class UserController extends BaseController
 
         if($request->getMethod() == 'POST') {
             $options = $request->request->all();
-
-            $options = $request->request->all();
             $this->getUserService()->changeAvatar($id, $options["images"]);
 
             return $this->createJsonResponse(true);
@@ -320,6 +319,7 @@ class UserController extends BaseController
         $this->getUserService()->lockUser($id);
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
+            'profile' => $this->getUserService()->getUserProfile($id)
         ));
     }
 
@@ -329,6 +329,7 @@ class UserController extends BaseController
 
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user' => $this->getUserService()->getUser($id),
+            'profile' => $this->getUserService()->getUserProfile($id)
         ));
     }
 

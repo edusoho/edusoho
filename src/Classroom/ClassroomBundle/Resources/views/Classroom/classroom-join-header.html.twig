@@ -1,6 +1,5 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
-
-<section class="class-header after {% if member.role == 'auditor'%} auditor{% endif %}">
+<section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
   
     <ol class="breadcrumb">
@@ -62,8 +61,8 @@
         </div>
         <div class="class-operation">
           <ul class='class-data clearfix 
-          {% if not (member.role != "teacher" and member.role != "headTeacher") %}
-          two-col
+          {% if classroom_permit(classroom.id, 'Take', true) %}
+          three-col
           {% endif %}
           '>
             <li>
@@ -79,10 +78,10 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
-            {% if member.role == "student" or member.role == "auditor" %}
+            {% if classroom_permit(classroom.id, 'Take', true) %}
               <li>
                 <a type="button" 
-                {% if  member.role == "student" and member.orderId > 0 %}
+                {% if  'student' in member.role and member.orderId > 0 %}
                 href="#modal" 
                 data-toggle="modal" 
                 data-url="{{path('order_refund', {id:classroom.id, targetType:'classroom'})}}"
@@ -96,7 +95,7 @@
               </li>
             {% endif %}
           </ul>
-          {% if member.role == 'auditor'%}
+          {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
               您现在是<span class="color-warning">旁听生</span>，不能完整学习<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务"></i><br>
               
@@ -109,13 +108,12 @@
             </div>
           {% endif %}
         </div>
-        
-      {% if canManage %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default btn-mini setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+      {% if classroom_permit(classroom.id, 'Manage') %}
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
-      {% elseif canHandle %}
-        <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+      {% elseif classroom_permit(classroom.id, 'Handle') %}
+        <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="btn btn-default setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}

@@ -1,0 +1,38 @@
+<ion-side-menus>
+
+ <ion-side-menu-content>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+</ion-side-menu-content>
+
+<ion-side-menu side="left">
+
+    <ion-content>
+      <ul class="list">
+        <a class="item item-avatar" ng-click="showUserInfo()">
+            <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
+            <h3>{{ user.nickname }}</h3>
+            <p>{{ user.nickname }}</p>
+        </a>
+        <a class="item item-icon-left" menu-toggle="left" ng-click="showMyLearn()">
+            <i class="icon iconfont icon-school"></i>
+            我的学习
+        </a>
+        <a class="item item-icon-left" menu-toggle="left" ng-click="showMyFavorite()">
+            <i class="icon iconfont icon-search"></i>
+            我的收藏
+        </a>
+        <a class="item item-icon-left" menu-toggle="left" ng-click="showMyGroup()">
+            <i class="icon iconfont icon-send"></i>
+            我的发表
+        </a>
+        <a class="item item-icon-left" hmenu-toggle="left">
+            <i class="icon iconfont icon-setting"></i>
+            设置
+        </a>
+
+      </ul>
+    </ion-content>
+
+  </ion-side-menu>
+
+</ion-side-menus>

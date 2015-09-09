@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\BlockToolkit;
 
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+
 class InitCommand extends BaseCommand
 {
 
@@ -22,6 +25,8 @@ class InitCommand extends BaseCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$output->writeln('<info>开始初始化系统</info>');
+
+        $this->installAssets($output);
 		$this->initServiceKernel();
 
 		$user = $this->initAdminUser($output);
@@ -45,6 +50,15 @@ class InitCommand extends BaseCommand
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
+
+    private function installAssets($output)
+    {
+        $command = new AssetsInstallCommand();
+        $command->setContainer($this->getContainer());
+        $subInput = new StringInput('--symlink --relative');
+        $command->run($subInput, $output);
+        $output->writeln('<info>installAssets成功</info>');
+    }
 
 	private function initRefundSetting($output)
 	{

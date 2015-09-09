@@ -43,11 +43,12 @@ class KernelResponseListener
                 '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist',
                 '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
                 '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
-                '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout'
+                '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
+                '/login/weixinmob', '/login/bind/weixinmob/existbind'
             );
 
             if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin')
-                or strstr($request->getPathInfo(),'/register/submited')) 
+                or strstr($request->getPathInfo(),'/register/submited') or strstr($request->getPathInfo(), '/mapi_v2')) 
             {
                 return ;
             }
@@ -55,7 +56,9 @@ class KernelResponseListener
             $isFillUserInfo = $this->checkUserinfoFieldsFill($currentUser);
 
             if (!$isFillUserInfo) {
-                $url = $this->container->get('router')->generate('login_after_fill_userinfo');
+
+                $url = $this->container->get('router')->generate('login_after_fill_userinfo', array('goto' => $request->getPathInfo()));
+
                 $response = new RedirectResponse($url);
                 $event->setResponse($response);
                 return ;

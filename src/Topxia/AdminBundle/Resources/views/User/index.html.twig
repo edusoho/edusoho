@@ -56,7 +56,7 @@
   </thead>
   <tbody>
     {% for user in users %}
-      {% include 'TopxiaAdminBundle:User:user-table-tr.html.twig' with {user:user,profiles:profiles} %}
+      {% include 'TopxiaAdminBundle:User:user-table-tr.html.twig' with {user:user,profile:profiles[user.id]} %}
     {% endfor %}
   </tbody>
 </table>

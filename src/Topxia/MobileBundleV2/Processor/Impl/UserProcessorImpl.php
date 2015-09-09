@@ -7,6 +7,11 @@ use Topxia\Common\SimpleValidator;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\MessageReplyType;
+use Symfony\Component\HttpFoundation\Cookie;
+use Topxia\Common\SmsToolkit;
+use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\File\File;
+use Topxia\MobileBundleV2\Processor\XingeApp;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -16,6 +21,131 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $this->formData;
     }
     
+    public function uploadAvatar()
+    {
+        $groupCode = 'tmp';
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $file = $this->request->files->get('file');
+        if (empty($file)) {
+            return $this->createErrorResponse('error', "没有选择上传文件!");
+        }
+        if (!FileToolkit::isImageFile($file)) {
+            return $this->createErrorResponse('error', "您上传的不是图片文件，请重新上传。");
+        }
+
+        $record = $this->getFileService()->uploadFile($groupCode, $file);
+        if (empty($record)) {
+            return $this->createErrorResponse('error', "上传失败 ～请重新尝试!");
+        }
+
+        $host = $this->request->getSchemeAndHttpHost();
+        $record['url'] = $host . $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['createdTime'] = date('c', $record['createdTime']);
+        unset($record['uri']);
+        return $record;
+    }
+
+    public function updateUserProfile()
+    {
+        $user = $this->controller->getUserByToken($this->request);
+        if (empty($user)) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+
+        $profile = $this->request->request->get('profile');
+        
+        try {
+            $fileId = $this->getParam("fileId", 0);
+            $this->updateNickname($user, $profile['nickname']);
+            $this->updateUserAvatar($user, $fileId);
+            $this->getUserService()->updateUserProfile($user['id'], $profile);
+
+            $user = $this->getUserService()->getUser($user['id']);
+            return $this->controller->filterUser($user);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+    }
+
+    private function createImgCropOptions($naturalSize, $scaledSize)
+    {
+        $options = array();
+
+        $options['x'] = 0;
+        $options['y'] = 0;
+        $options['x2'] = $scaledSize->getWidth();
+        $options['y2'] = $scaledSize->getHeight();
+        $options['w'] = $naturalSize->getWidth();
+        $options['h'] = $naturalSize->getHeight();
+
+        $options['imgs'] = array();
+        $options['imgs']['large'] = array(200, 200);
+        $options['imgs']['medium'] = array(120, 120);
+        $options['imgs']['small'] = array(48, 48);
+        $options['width'] = $naturalSize->getWidth();
+        $options['height'] = $naturalSize->getHeight();
+
+        return $options;
+    }
+
+    private function updateUserAvatar($user, $fileId)
+    {
+        if(empty($fileId)) {
+            return;
+        }
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        
+        $options = $this->createImgCropOptions($naturalSize, $scaledSize);
+        $record = $this->getFileService()->getFile($fileId);
+        if(empty($record)) {
+            throw new \RuntimeException("Error file not exists");
+        }
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
+
+        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
+
+        $fields = array();
+        foreach ($filePaths as $key => $value) {
+            $file = $this->getFileService()->uploadFile("user", new File($value));
+            $fields[] = array(
+                "type" => $key,
+                "id" => $file['id']
+            );
+        }
+
+        if(isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+            $fields[] = array(
+                "type" => "origin",
+                "id" => $record['id']
+            );
+        } else {
+            $this->getFileService()->deleteFileByUri($record["uri"]);
+        }
+
+        if (empty($fields)) {
+            throw new \RuntimeException("Error uplaod avatar");
+        }
+        $this->getUserService()->changeAvatar($user['id'], $fields);
+    }
+
+    private function updateNickname($user, $nickname)
+    {
+        $isNickname = $this->getSettingService()->get('user_partner');
+        $oldNickname = $user['nickname'];
+        if ($oldNickname == $nickname) {
+            return;
+        }
+        if($isNickname['nickname_enabled'] == 0){
+            throw new \RuntimeException("网校设置不能修改昵称!");
+        }
+
+        $this->getAuthService()->changeNickname($user['id'], $nickname);
+    }
+
     public function getUserCoin()
     {
         $user = $this->controller->getUserByToken($this->request);
@@ -192,7 +322,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         );
 
         foreach ($notifications as &$notification) {
-            $notification['createdTime'] = date('c', $notification['createdTime']);
             $notification["message"] = $this->coverNotifyContent($notification);
             unset($notification);
         }
@@ -218,6 +347,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if ($className == "notification-footer") {
                 return "<br><br><font color=#CFCFCF><fontsize>" . $content . "</fontsize></font>";
             }
+            return $content;
             
         }, $message);
 
@@ -243,7 +373,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $token = $this->controller->getToken($this->request);
         if (! empty($token)) {
             $user = $this->controller->getUserByToken($this->request);
-            $this->log("user_logout", "用户退出",  array(
+            $this->log("user_logout", "用户退出", array(
                 "userToken" => $user)
             );
         }
@@ -270,56 +400,223 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $userProfile;
     }
 
+    public function smsSend()
+    {
+        $phoneNumber = $this->getParam('phoneNumber');
+        try {
+            $this->request->request->set('to', $phoneNumber);
+            $this->request->request->set('sms_type', 'sms_registration');
+            $response = $this->controller->forward('TopxiaWebBundle:EduCloud:smsSend', array());
+            $content = $response->getContent();
+            $content = json_decode($content);
+            if (!empty($content) && isset($content->error)) {
+                return $this->createErrorResponse('error', $content->error);
+            }
+            return array('code'=>'200', 'msg' => "发送成功");
+            
+        } catch (Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+
+        return $this->createErrorResponse('', "GET method");
+    }
+
+    private function generateSmsCode($length = 6)
+    {
+        $code = rand(0, 9);
+        for ($i = 1; $i < $length; $i++) {
+            $code = $code . rand(0, 9);
+        }
+
+        return $code;
+    }
+
+    private function checkPhoneNum($num)
+    {
+        return preg_match("/^1\d{10}$/", $num);
+    }
+
+    private function checkLastTime($smsLastTime, $currentTime, $allowedTime = 120)
+    {
+        if (!((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime))) {
+            return false;
+        }
+        return true;
+    }
+
+    private function getCloudSmsKey($key)
+    {
+        $setting = $this->getSettingService()->get('cloud_sms', array());
+        if (isset($setting[$key])){
+            return $setting[$key];
+        }
+        return null;
+    }
+
+    private function checkSmsType($smsType, $user)
+    {
+        if (!in_array($smsType, array('sms_bind','sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
+            throw new \RuntimeException('不存在的sms Type');
+        }
+
+        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
+            throw new \RuntimeException('用户未登陆');
+        }
+
+        if ($this->getCloudSmsKey("cloud_sms.{$smsType}") != 'on') {
+            throw new \RuntimeException('网站未开启该使用场景短信验证');
+        }
+    }
+
     public function regist()
     {
         $email = $this->getParam('email');
-        $nickname = $this->getParam('nickname');
         $password = $this->getParam('password');
+        $nickname = $this->getParam('nickname');
+        $phoneNumber = $this->getParam('phone');
+        $smsCode = $this->getParam('smsCode');
+
+        $result = array('meta' => null);
 
         $auth = $this->getSettingService()->get('auth', array());
-        if(isset($auth['register_mode']) && $auth['register_mode'] == 'closed' )
-        {
-            return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
+        if (isset($auth['register_mode']) && $auth['register_mode'] == 'closed') {
+            return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');;
         }
+
+        if (!$nickname) {
+            $nickname = "ES" . time();
+            while (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+                $nickname = "ES". time();
+            }
+        } else {
+            if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
+                return $this->createErrorResponse('nickname_exist', '该昵称已被注册');
+            }
+        }
+
+        $user = null;
+
+        if (!empty($email)) {
+            if (!SimpleValidator::email($email)) {
+                return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
+            }
+            if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
+                return $this->createErrorResponse('email_exist', '该邮箱已被注册');
+            }
+            if (!SimpleValidator::password($password)) {
+                return $this->createErrorResponse('password_invalid', '密码格式不正确');
+            }
+            $registTypeName = $auth['register_mode'] == "email" ? "email" : "emailOrMobile";
+            $user = $this->controller->getAuthService()->register(array(
+                $registTypeName => $email,
+                'nickname' => $nickname,
+                'password' => $password
+            ));
+        } else {
+            if (!$this->checkPhoneNum($phoneNumber)) {
+                return $this->createErrorResponse('phone_invalid', '手机号格式不正确');
+            }
+            if (!$this->getUserService()->isMobileUnique($phoneNumber)) {
+                return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
+            }
+            if ($this->controller->setting('cloud_sms.sms_enabled') == '1'
+                && $this->controller->setting('cloud_sms.sms_registration', 'on') == 'on') {
+                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
+                if ($result) {
+                    $user = $this->controller->getAuthService()->register(array(
+                        'emailOrMobile' => $sessionField['to'],
+                        'nickname' => $nickname,
+                        'password' => $password
+                    ));
+
+                    $this->clearSmsSession($this->request, 'sms_registration');
+                } else {
+                    return $this->createErrorResponse('sms_invalid', '手机短信验证错误，请重新注册');
+                }
+            }
+        }
+
+
+        if ($nickname && !SimpleValidator::nickname($nickname)) {
+            return $this->createErrorResponse('nickname_invalid', '昵称格式不正确');
+        }
+
+
         
-        if (!SimpleValidator::email($email)) {
-            return $this->createErrorResponse('email_invalid', '邮箱地址格式不正确');
-        }
-
-        if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse('nickname_invalid', '用户名格式不正确');
-        }
-
-        if (!SimpleValidator::password($password)) {
-            return $this->createErrorResponse('password_invalid', '密码格式不正确');
-        }
-
-        if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
-            return $this->createErrorResponse('email_exist', '该邮箱已被注册');
-        }
-
-        if (!$this->controller->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse('nickname_exist', '该用户名已被注册');
-        }
-
-        $user = $this->controller->getAuthService()->register(array(
-            'email' => $email,
-            'nickname' => $nickname,
-            'password' => $password,
-        ));
-
         $token = $this->controller->createToken($user, $this->request);
-        $this->log("user_regist", "用户注册",  array(
-                "user" => $user)
-            );
+        if (!empty($user) && !isset($user["currentIp"])) {
+            $user["currentIp"] = "127.0.0.1";
+        }
+        $this->log("user_regist", "用户注册", array( "user" => $user));
+
         return array (
             'user' => $this->controller->filterUser($user),
             'token' => $token
         );
     }
 
-    public function loginWithToken()
+    private function smsCheck($request, $mobileInfo, $scenario)
     {
+        $sessionField = $request->getSession()->get($scenario);
+        $sessionField['sms_type'] = $scenario;
+
+        $requestField['sms_code'] = $mobileInfo['sms_code'];
+        $requestField['mobile'] = $mobileInfo['mobile'];
+
+        $result = $this->checkSms($sessionField, $requestField, $scenario);
+        return array($result, $sessionField);
+    }
+
+    private function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
+    {
+        $smsType = $sessionField['sms_type'];
+        if ((strlen($smsType) == 0) || (strlen($scenario) == 0)) {
+            return false;
+        }
+        if ($smsType != $scenario) {
+            return false;
+        }
+
+        $currentTime = time();
+        $smsLastTime = $sessionField['sms_last_time'];
+        if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
+            return false;
+        }
+
+        $smsCode = $sessionField['sms_code'];
+        $smsCodePosted = $requestField['sms_code'];
+        if ((strlen($smsCodePosted) == 0) || (strlen($smsCode) == 0)) {
+            return false;
+        }
+
+        if ($smsCode != $smsCodePosted) {
+            return false;
+        }
+
+        $toMobile = $sessionField['to'];
+        $mobile = $requestField['mobile'];
+        if ((strlen($toMobile) == 0) || (strlen($mobile) == 0)) {
+            return false;
+        }
+        if ($toMobile != $mobile) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function clearSmsSession($request, $scenario)
+    {
+        $request->getSession()->set($scenario, array(
+            'to' => '',
+            'sms_code' => '',
+            'sms_last_time' => '',
+            'sms_type' => ''
+        ));
+    }
+
+    public function loginWithToken(){
         $version = $this->request->query->get('version', 1);
         $mobile = $this->controller->getSettingService()->get('mobile', array());
         if (empty($mobile['enabled'])) {
@@ -362,7 +659,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $username = $this->getParam('_username');
         $password = $this->getParam('_password');
         $user  = $this->loadUserByUsername($this->request, $username);
-        
         if (empty($user)) {
             return $this->createErrorResponse('username_error', '用户帐号不存在');
         }
@@ -376,7 +672,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
         $userProfile = $this->filterUserProfile($userProfile);
         $user = array_merge($user, $userProfile);
-        
+
+        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
+            "username" => $username
+        ));
+
         $result = array(
             'token' => $token,
             'user' => $this->controller->filterUser($user)
@@ -385,6 +685,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
             "username" => $username
         ));
+
         return $result;
     }
     
@@ -392,6 +693,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
             $user = $this->controller->getUserService()->getUserByEmail($username);
+        } else if ($this->checkPhoneNum($username)) {
+            $user = $this->controller->getUserService()->getUserByVerifiedMobile($username);
         } else {
             $user = $this->controller->getUserService()->getUserByNickname($username);
         }
@@ -452,7 +755,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $toId = $this->getParam('toId');
         $followingIds = array($toId);
         $result = $this->controller->getUserService()->filterFollowingIds($userId, $followingIds);
-        if(empty($result)){
+
+        if(!$result || empty($result)){
             return false;
         }else{
             return true;
@@ -463,9 +767,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = $this->controller->getUserByToken($this->request);
         $toId = $this->getParam('toId');
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
-        $result = $this->controller->getUserService()->follow($user['id'], $toId);
+        
+        try {
+            $result = $this->controller->getUserService()->follow($user['id'], $toId);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
 
         $message = array('userId' => $user['id'],
                 'userName' => $user['nickname'],
@@ -479,11 +788,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = $this->controller->getUserByToken($this->request);
         $toId = $this->getParam('toId');
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
+            return $this->createErrorResponse('not_login', "您尚未登录，无法获取信息数据");
         }
 
-        $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
-
+        try {
+            $result = $this->controller->getUserService()->unFollow($user['id'], $toId);
+        } catch(\Exception $e) {
+            return $this->createErrorResponse('error', $e->getMessage());
+        }
+        
         $message = array('userId' => $user['id'],
                 'userName' => $user['nickname'],
                 'opration' => 'unfollow');
@@ -779,4 +1092,22 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         return $result;
     }
     
+    public function getCourseTeachers()
+    {
+        $courseId = $this->getParam("courseId");
+        $course   = $this->controller->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return $this->createErrorResponse('not_found', "课程不存在");
+        }
+
+        $users = $this->controller->getUserService()->findUsersByIds($course['teacherIds']);
+
+        return array_values($this->filterUsersFiled($users));
+    }
+
+    protected function getAuthService()
+    {
+        return $this->controller->getService('User.AuthService');
+    }
+
 }

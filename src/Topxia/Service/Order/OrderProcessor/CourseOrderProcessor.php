@@ -47,7 +47,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 				'targetId' => $targetId,
             	'targetType' => "course",
 
-				'courses' => empty($course) ? null : array($course),
+				'course' => empty($course) ? null : $course,
 				'users' => $users,
         	);
         }
@@ -56,14 +56,15 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $course["coinPrice"];
         } else if($priceType == "RMB") {
             $totalPrice = $course["price"];
-        }
+            $maxCoin = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);        }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
-
+        if (!isset($maxCoin)) {
+            $maxCoin = $coinPayAmount;
+        }
         return array(
-            'courses' => empty($course) ? null : array($course),
+            'course' => empty($course) ? null : $course,
             'users' => empty($users) ? null : $users,
-            
             'totalPrice' => $totalPrice,
             'targetId' => $targetId,
             'targetType' => "course",
@@ -72,6 +73,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             'account' => $account,
             'hasPayPassword' => $hasPayPassword,
             'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin,
         );
 	}
 

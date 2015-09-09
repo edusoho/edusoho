@@ -98,7 +98,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
     protected function canBuildWithQuestions($options, $questions)
     {
         $missing = array();
-
+        
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
             if ($needCount == 0) {
@@ -136,7 +136,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
     protected function getQuestions($options)
     {
         $conditions = array();
-
+        $options['ranges']=array_filter($options['ranges']);
         if (!empty($options['ranges'])) {
             $conditions['targets'] = $options['ranges'];
         } else {
@@ -146,7 +146,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         $conditions['parentId'] = 0;
 
         $total = $this->getQuestionService()->searchQuestionsCount($conditions);
-
+        
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
