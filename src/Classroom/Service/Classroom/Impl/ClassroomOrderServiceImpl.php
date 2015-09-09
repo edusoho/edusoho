@@ -37,7 +37,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 throw $this->createServiceException('班级不存在，创建课程订单失败。');
             }
 
-            if ($classroom['private'] == 1) {
+            if ($classroom['showable'] == 1) {
                 throw $this->createServiceException('该班级是封闭班级，学员不能自行加入！');
             }
 
