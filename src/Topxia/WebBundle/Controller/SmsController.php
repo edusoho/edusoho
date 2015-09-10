@@ -31,9 +31,16 @@ class SmsController extends BaseController
             $lesson = $this->getCourseService()->getLesson($id);
             $item = $this->getCourseService()->getCourse($lesson['courseId']);
             $item['lesson_title'] = $lesson['title'];
-            $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileStudentsCountByCourseId($lesson['courseId']);
             $url = $this->generateUrl('course_learn',array('id' => $lesson['courseId']));
             $url .= '#lesson/'.$lesson['id'];
+            $course = $this->getCourseService()->getCourse($lesson['courseId']);
+            if ($course['parentId'] ) {
+                $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                if ($classroom) {
+                    $verifiedMobileUserNum = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
+            } else {
+                $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileStudentsCountByCourseId($lesson['courseId']);
+            }
         }
 
         return $this->render('TopxiaWebBundle:Sms:smsSend.html.twig',array(
@@ -47,6 +54,9 @@ class SmsController extends BaseController
 
     public function sendAction(Request $request, $targetType, $id)
     {
+        if ( $this->getSmsService()->isOpen($smsType) ) {
+            throw new RuntimeException("请先开启相关设置!");
+        }
         $index = $request->query->get('index');
         $url = $request->query->get('url');
         $count = $request->query->get('count');
@@ -71,7 +81,14 @@ class SmsController extends BaseController
             }
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
             $parameters['course_title'] = '《'.$course['title'].'》';
-            $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
+            if ($course['parentId'] ) {
+                    $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                    if ($classroom) {
+                        $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'),0,$count);
+                    }
+                } else {
+                    $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
+                }
             $index = $count;
         }
         $parameters['url'] = $url;
@@ -86,11 +103,9 @@ class SmsController extends BaseController
             }
             if (!empty($users)) {
                 $userIds = ArrayToolkit::column($users, 'userId');
-            }
-
-            if ( $this->getSmsService()->isOpen($smsType) ) {
                 $this->getSmsService()->smsSend($smsType, $userIds, $parameters);
             }
+
         }
 
         if ($count > $index + 1000 ) {

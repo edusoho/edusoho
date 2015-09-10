@@ -56,33 +56,30 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $lesson = $event->getSubject();
         $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
         $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
-        if ( $lesson['type'] == 'live' && ($dayIsOpen || $hourIsOpen) ) {
-            $parameters = array();
-            $parameters['lesson_title'] = $lesson['title'];
-            $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
-            if (!empty($students)) {
-                $studentIds = ArrayToolkit::column($students, 'userId');
-                $users = $this->getUserService()->findUsersByIds($studentIds);
-                $to = '';
-                foreach ($users as $key => $value ) {
-                    if (empty($value['verifiedMobile'])) {
-                        unset($users[$key]);
-                    }
-                }
-                if (!empty($users)) {
-                    $userId = ArrayToolkit::column($users, 'userId');
-                }
-
-                if ($dayIsOpen) {
-                    $parameters['startTime'] = $lesson['startTime'] - 24 * 3600;
-                    $this->getSmsService()->smsSend($dayIsOpen, $userId, $parameters);
-                }
-
-                if ($hourIsOpen) {
-                    $parameters['startTime'] = $lesson['startTime'] - 3600;
-                    $this->getSmsService()->smsSend($hourIsOpen, $userId, $parameters);
-                }
+        if ($lesson['type'] == 'live' && ($dayIsOpen || $hourIsOpen)) {
+            if ($dayIsOpen && $lesson['startTime'] >= (time() + 24*60*60)) {
+                $startJob = array(
+                'name' => "直播短信一天定时",
+                'cycle' => 'once',
+                'time' => $lesson['startTime']-time() - 24*60*60,
+                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneDayJob',
+                'targetType' => 'lesson',
+                'targetId' => $lesson['id']
+                );
+                $startJob = $this->getCrontabService()->createJob($startJob);
             }
+
+            if ($hourIsOpen && $lesson['startTime'] >= (time() + 60*60)) {
+                $startJob = array(
+                'name' => "直播短信一小时定时",
+                'cycle' => 'once',
+                'time' => $lesson['startTime']-time() - 60*60,
+                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneHourJob',
+                'targetType' => 'lesson',
+                'targetId' => $lesson['id']
+                );
+                $startJob = $this->getCrontabService()->createJob($startJob);
+            }     
         }
     }
 
@@ -99,6 +96,11 @@ class SmsEventSubscriber implements EventSubscriberInterface
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createDao('Crontab.CrontabService');
     }
 
 }

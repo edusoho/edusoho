@@ -52,6 +52,9 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
 
             $jobInstance = new $job['jobClass']();
+            $job['jobParams']['targetType'] = $job['targetType'];
+            $job['jobParams']['targetId'] = $job['targetId'];
+
             $jobInstance->execute($job['jobParams']);
 
             if ($job['cycle'] == 'once') {
