@@ -2,37 +2,12 @@
 
 {% block title %}我的任务 - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('bundles/classroomplan/js/controller/classroomplan/fullcalendar/fullcalendar.css') }}" rel="stylesheet" />
-  <link href="{{ asset('bundles/classroomplan/js/controller/classroomplan/fullcalendar/fullcalendar.print.css') }}" rel="stylesheet" media='print' />
-{% endblock %}
-
 {% set side_nav = 'my-task' %}
 
-{% do load_script('classroomplanbundle/controller/classroomplan/fullcalendar') %}
-
 {% block main %}
-<style>
 
-  .panel-body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family:"Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-    font-size: 14px;
-  }
-
-  #calendar {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-</style>
 <div class="panel panel-default panel-col">
     <div class="panel-heading">我的任务日历</span></div>
-    <div class="panel-body" >
-        <div id="calendar"></div>
-
-    </div>
+     {% include 'TopxiaWebBundle:MyTask:task-calendar.html.twig' %}
 </div>
 {% endblock %}
