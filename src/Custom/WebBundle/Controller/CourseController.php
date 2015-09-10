@@ -67,7 +67,7 @@ class CourseController extends BaseController
         $this->checkId($id);
         $course = $this->getCourseService()->getCourse($id);
 
-        return $this->render('CustomWebBundle:Course:next-round.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:next-round.html.twig', array(
                 'course' => $course,
         ));
     }
