@@ -14,8 +14,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         });
     }
 
@@ -34,8 +34,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ? : null;
         });
     }
 
@@ -44,8 +44,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:userId:{$userId}:isLearned:1", $courseId, $userId, function ($courseId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND userId = ? AND isLearned = 1";
-            return $this->getConnection()->fetchAll($sql, array($courseId, $userId));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
+            return $that->getConnection()->fetchAll($sql, array($courseId, $userId));
         });
     }
 
@@ -94,13 +94,13 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
-            $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+            $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
             $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
             $sql.= " AND m.role =  ? AND m.courseId = c.id ";
             if($onlyPublished){
                 $sql.= " AND c.status = 'published' ";
             }
-            return $this->getConnection()->fetchColumn($sql,array($userId, $role));
+            return $that->getConnection()->fetchColumn($sql,array($userId, $role));
         });
     }
 
@@ -109,13 +109,13 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}:parentId:0:count", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
-            $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+            $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
             $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
             $sql.= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
             if($onlyPublished){
                 $sql.= " AND c.status = 'published' ";
             }
-            return $this->getConnection()->fetchColumn($sql,array($userId, $role));
+            return $that->getConnection()->fetchColumn($sql,array($userId, $role));
         });
     }
 
@@ -124,11 +124,11 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:type:{$type}:isLearned:{$isLearned}", $userId, $role, $type, $isLearned, function ($userId, $role, $type, $isLearned) use ($that) {
-            $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+            $sql = "SELECT COUNT( m.courseId ) FROM {$that->getTable()} m ";
             $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
             $sql.= " AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?";
 
-            return $this->getConnection()->fetchColumn($sql,array($userId, $type, $isLearned, $role));
+            return $that->getConnection()->fetchColumn($sql,array($userId, $type, $isLearned, $role));
         });
     }
 
@@ -149,7 +149,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:onlyPublished:{$onlyPublished}", $userId, $role, $onlyPublished, function ($userId, $role, $onlyPublished) use ($that) {
-            $sql  = "SELECT m.* FROM {$this->table} m ";
+            $sql  = "SELECT m.* FROM {$that->getTable()} m ";
             $sql.= ' JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
             $sql .= " AND m.role =  ? AND m.courseId = c.id ";
             if($onlyPublished){
@@ -158,7 +158,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
             // $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
-            return $this->getConnection()->fetchAll($sql, array($userId, $role));
+            return $that->getConnection()->fetchAll($sql, array($userId, $role));
         });
     }
 
@@ -167,8 +167,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:role:{$role}:isLearned:{$isLearned}:count", $userId, $role, $isLearned, function ($userId, $role, $isLearned) use ($that) {
-            $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND role = ? AND isLearned = ?";
-            return $this->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  userId = ? AND role = ? AND isLearned = ?";
+            return $that->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
         });
     }
 
@@ -193,8 +193,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:role:{$role}:count", $courseId, $role, function ($courseId, $role) use ($that) {
-            $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND role = ?";
-            return $this->getConnection()->fetchColumn($sql, array($courseId, $role));
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  courseId = ? AND role = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId, $role));
         });
     }
 
@@ -285,8 +285,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}", $userId, function ($userId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
-            return $this->getConnection()->fetchAll($sql, array($userId));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND role = 'student' AND deadlineNotified=0 AND deadline>0 LIMIT 0,10";
+            return $that->getConnection()->fetchAll($sql, array($userId));
         });
     }
 

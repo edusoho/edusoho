@@ -14,8 +14,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         });
 	}
 
@@ -24,8 +24,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:lessonId:{$lessonId}", $userId, $lessonId, function ($userId, $lessonId) use ($that) {
-            $sql ="SELECT * FROM {$this->table} WHERE userId=? AND lessonId=?";
-            return $this->getConnection()->fetchAssoc($sql, array($userId, $lessonId)) ? : null;
+            $sql ="SELECT * FROM {$that->getTable()} WHERE userId=? AND lessonId=?";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $lessonId)) ? : null;
         });
 	}
 
@@ -34,8 +34,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
-            $sql ="SELECT * FROM {$this->table} WHERE userId=? AND courseId=?";
-            return $this->getConnection()->fetchAll($sql, array($userId, $courseId)) ? : array();
+            $sql ="SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $courseId)) ? : array();
         });
 	}
 
@@ -44,8 +44,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:status:{$status}", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
-            $sql ="SELECT * FROM {$this->table} WHERE userId=? AND courseId=? AND status = ?";
-            return $this->getConnection()->fetchAll($sql, array($userId, $courseId, $status)) ? : array();
+            $sql ="SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=? AND status = ?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $courseId, $status)) ? : array();
         });
 	}
 
@@ -54,8 +54,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         $that = $this;
 
         return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:status:{$status}:count", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
-            $sql ="SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND courseId = ? AND status = ?";
-            return $this->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
+            $sql ="SELECT COUNT(*) FROM {$that->getTable()} WHERE userId = ? AND courseId = ? AND status = ?";
+            return $that->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
         });
 	}
 

@@ -14,8 +14,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         });
     }
 
@@ -34,8 +34,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime ASC";
-            return $this->getConnection()->fetchAll($sql, array($courseId));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? ORDER BY createdTime ASC";
+            return $that->getConnection()->fetchAll($sql, array($courseId));
         });
     }
 
@@ -44,8 +44,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:type:{$type}:count", $courseId, $type, function ($courseId, $type) use ($that) {
-            $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ?";
-            return $this->getConnection()->fetchColumn($sql, array($courseId, $type));
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  courseId = ? AND type = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId, $type));
         });
     }
 
@@ -54,8 +54,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:type:{$type}:parentId:{$parentId}:count", $courseId, $type, $parentId, function ($courseId, $type, $parentId) use ($that) {
-            $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ? AND parentId = ?";
-            return $this->getConnection()->fetchColumn($sql, array($courseId, $type, $parentId));
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  courseId = ? AND type = ? AND parentId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId, $type, $parentId));
         });
     }
 
@@ -64,8 +64,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:type:{$type}", $courseId, $type, function ($courseId, $type) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($courseId, $type)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $type)) ? : null;
         });
     }
 
@@ -74,8 +74,8 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:last", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE  courseId = ? ORDER BY seq DESC LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($courseId)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE  courseId = ? ORDER BY seq DESC LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId)) ? : null;
         });
     }
 

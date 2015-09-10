@@ -14,8 +14,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            $sql = "SELECT * FROM {$that->getTablename()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         });
     }
 
@@ -24,8 +24,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
-            $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
-            return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ? : null;
+            $sql = "SELECT * FROM {$that->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $that->getConnection()->fetchAll($sql, array($courseId, $number)) ? : null;
         });
     }
 
@@ -53,8 +53,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             if(empty($parentId)){
                 return array();
             }
-            $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
-            return $this->getConnection()->fetchAll($sql, array($parentId,$locked));
+            $sql = "SELECT * FROM {$that->getTablename()} WHERE parentId = ? AND locked = ?";
+            return $that->getConnection()->fetchAll($sql, array($parentId,$locked));
         });
     }
 

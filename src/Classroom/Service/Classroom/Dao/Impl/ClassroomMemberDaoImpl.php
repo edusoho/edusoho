@@ -8,13 +8,18 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 {
     protected $table = 'classroom_member';
 
+    public function getTable()
+    {
+        return $this->table;
+    }
+
     public function getMember($id)
     {
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         });
     }
 
@@ -34,8 +39,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:role:student:count", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
-            return $this->getConnection()->fetchColumn($sql, array($classroomId));
+            $sql = "SELECT count(*) FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
+            return $that->getConnection()->fetchColumn($sql, array($classroomId));
         });
     }
 
@@ -44,8 +49,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:role:auditor:count", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
-            return $this->getConnection()->fetchColumn($sql, array($classroomId));
+            $sql = "SELECT count(*) FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
+            return $that->getConnection()->fetchColumn($sql, array($classroomId));
         });
     }
 
@@ -61,8 +66,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:role:auditor", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
-            return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
         });
     }
 
@@ -71,8 +76,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:role:teacher", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
-            return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
         });
     }
 
@@ -112,8 +117,8 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:userId:{$userId}", $classroomId, $userId, function ($classroomId, $userId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($userId, $classroomId)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND classroomId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $classroomId)) ?: null;
         });
     }
 

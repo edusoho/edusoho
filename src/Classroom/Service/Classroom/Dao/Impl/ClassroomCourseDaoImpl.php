@@ -7,7 +7,12 @@ use Classroom\Service\Classroom\Dao\ClassroomCourseDao;
 class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
 {
 
-    public $table = 'classroom_courses';
+    protected $table = 'classroom_courses';
+
+    public function getTable()
+    {
+        return $this->table;
+    }
 
     private $serializeFields = array(
         'tagIds' => 'json',
@@ -51,8 +56,8 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->table} where id=? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         });
     }
 
@@ -61,8 +66,8 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT classroomId FROM {$that->table} where courseId=?";
-            return  $this->getConnection()->fetchAll($sql, array($courseId));
+            $sql = "SELECT classroomId FROM {$that->getTable()} where courseId=?";
+            return  $that->getConnection()->fetchAll($sql, array($courseId));
         });
     }
 
@@ -71,8 +76,8 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:limit:1", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT classroomId FROM {$that->table} where courseId = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($courseId)) ?: null;
+            $sql = "SELECT classroomId FROM {$that->getTable()} where courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId)) ?: null;
         });
     }
 
@@ -81,8 +86,8 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:courseId:{$courseId}", $classroomId, $courseId, function ($classroomId, $courseId) use ($that) {
-            $sql = "SELECT * FROM {$that->table} where classroomId = ? AND courseId = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} where classroomId = ? AND courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
         });
     }
 
@@ -130,8 +135,8 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE classroomId = ? ORDER BY seq ASC;";
-            return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? ORDER BY seq ASC;";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
         });
     }
 
@@ -140,8 +145,8 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $that = $this;
 
         return $this->fetchCached("classroomId:{$classroomId}:disabled:0", $classroomId, function ($classroomId) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
-            return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
         });
     }
 

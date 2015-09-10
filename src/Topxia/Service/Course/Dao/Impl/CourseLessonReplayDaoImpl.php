@@ -22,8 +22,8 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-			$sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
-    	    return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+			$sql = "SELECT * FROM {$that->getTablename()} WHERE id = ? LIMIT 1";
+    	    return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     	});
 	}
 
@@ -39,8 +39,8 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 		$that = $this;
 
         return $this->fetchCached("lessonId:{$lessonId}", $lessonId, function ($lessonId) use ($that) {
-	        $sql ="SELECT * FROM {$this->getTablename()} WHERE lessonId = ? ORDER BY replayId ASC";
-	        return $this->getConnection()->fetchAll($sql, array($lessonId));
+	        $sql ="SELECT * FROM {$that->getTablename()} WHERE lessonId = ? ORDER BY replayId ASC";
+	        return $that->getConnection()->fetchAll($sql, array($lessonId));
 	    });
 	}
 
@@ -56,8 +56,8 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 		$that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}", $courseId, $lessonId, function ($courseId, $lessonId) use ($that) {
-			$sql ="SELECT * FROM {$this->getTablename()} WHERE courseId=? AND lessonId = ? ";
-	        return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId));
+			$sql ="SELECT * FROM {$that->getTablename()} WHERE courseId=? AND lessonId = ? ";
+	        return $that->getConnection()->fetchAssoc($sql, array($courseId,$lessonId));
 	    });
 	}
 

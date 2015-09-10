@@ -18,7 +18,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $that = $this;
 
-        return $this->fetchCached('id', $id, function ($id) use ($that) {
+        return $this->fetchCached('id:{$id}', $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             $thread = $that->getConnection()->fetchAssoc($sql, array($id));
 

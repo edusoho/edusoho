@@ -14,8 +14,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         });
     }
 
@@ -24,8 +24,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND number = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($courseId, $number)) ? : null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $number)) ? : null;
         });
     }
 
@@ -35,8 +35,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             return array();
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        $sql ="SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+        return $that->getConnection()->fetchAll($sql, $ids);
     }
 
     public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
@@ -59,8 +59,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $that = $this;
 
         return $this->fetchCached("type:{$type}:mediaId:{$mediaId}", $type, $mediaId, function ($type, $mediaId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE type = ? AND mediaId = ?";
-            return $this->getConnection()->fetchAll($sql, array($type, $mediaId));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? AND mediaId = ?";
+            return $that->getConnection()->fetchAll($sql, array($type, $mediaId));
         });
     }
 
@@ -75,8 +75,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY seq ASC";
-            return $this->getConnection()->fetchAll($sql, array($courseId));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? ORDER BY seq ASC";
+            return $that->getConnection()->fetchAll($sql, array($courseId));
         });
     }
 
@@ -152,8 +152,8 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $that = $this;
 
         return $this->fetchCached("chapterId:{$chapterId}", $chapterId, function ($chapterId) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE chapterId = ? ORDER BY seq ASC";
-            return $this->getConnection()->fetchAll($sql, array($chapterId));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE chapterId = ? ORDER BY seq ASC";
+            return $that->getConnection()->fetchAll($sql, array($chapterId));
         });
     }
 

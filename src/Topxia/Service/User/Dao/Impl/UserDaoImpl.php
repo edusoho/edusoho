@@ -9,18 +9,18 @@ use PDO;
 
 class UserDaoImpl extends BaseDao implements UserDao
 {
-    public $table = 'user';
+    protected $table = 'user';
 
     public function getUser($id, $lock = false)
     {
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, $lock, function ($id, $lock) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE id = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             if ($lock) {
                 $sql .= " FOR UPDATE";
             }
-            return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
         });
     }
 
@@ -29,8 +29,8 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE email = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($email));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($email));
         });
     }
 
@@ -39,8 +39,8 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE nickname = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($nickname));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE nickname = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($nickname));
         });
     }
 
@@ -49,8 +49,8 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
-            $sql = "SELECT * FROM {$that->table} WHERE verifiedMobile = ? LIMIT 1";
-            return $this->getConnection()->fetchAssoc($sql, array($mobile));
+            $sql = "SELECT * FROM {$that->getTable()} WHERE verifiedMobile = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($mobile));
         });
     }
 
