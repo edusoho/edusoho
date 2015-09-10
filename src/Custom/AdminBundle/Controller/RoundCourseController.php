@@ -17,7 +17,7 @@ class RoundCourseController extends BaseController
     {
         $this->checkId($id);
         $course = $this->getCourseService()->getCourse($id);
-        return $this->render('CustomAdminBundle:Course:next-round.html.twig', array(
+        return $this->render('TopxiaAdminBundle:Course:next-round.html.twig', array(
             'course' => $course,
         ));
     }
