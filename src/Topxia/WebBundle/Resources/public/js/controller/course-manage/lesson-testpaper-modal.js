@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             });
         };
 
-        var getItemsTable = function(testpaperId, showSuggestHours=true) {
+        var getItemsTable = function(testpaperId, showSuggestHours) {
             $.post($('#lesson-mediaId-field').data('url'), {testpaperId:testpaperId},function(html){
                 $("#questionItemShowTable").html(html);
                 $("#questionItemShowDiv").show();
@@ -50,7 +50,7 @@ define(function(require, exports, module) {
             var mediaId = $('#lesson-mediaId-field').find('option:selected').val();
             if (mediaId != '') {
                 $('#lesson-title-field').val($('#lesson-mediaId-field').find('option:selected').text());
-                getItemsTable(mediaId);
+                getItemsTable(mediaId, true);
             } else {
                 $('#lesson-title-field').val('');
             }
