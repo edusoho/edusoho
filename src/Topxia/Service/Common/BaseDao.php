@@ -16,6 +16,8 @@ abstract class BaseDao
 
     protected $dataCache = array();
 
+    protected $redis;
+
     protected function wave ($id, $fields) 
     {
         $sql = "UPDATE {$this->getTable()} SET ";
@@ -49,25 +51,75 @@ abstract class BaseDao
         $this->connection = $connection;
     }
 
+    public function getRedis()
+    {
+        return $this->redis;
+    }
+
+    public function setRedis($redis)
+    {
+        $this->redis = $redis;
+    }
+
     protected function fetchCached()
     {
         $args = func_get_args();
         $callback = array_pop($args);
 
-        $key = implode(':', $args);
+        $key = "{$this->table}:v{$this->getTableVersion()}:".array_shift($args);
+        
         if (isset($this->dataCached[$key])) {
             return $this->dataCached[$key];
         }
 
-        array_shift($args);
+
+        $redis = $this->getRedis();
+        if($redis){
+            $data = $redis->get($key);
+            if($data) {
+                $this->dataCached[$key] = $data;
+                return $data; 
+            }
+        }
+
         $this->dataCached[$key] = call_user_func_array($callback, $args);
 
+        if($redis){
+            $redis->setex($key, 2*60*60, $this->dataCached[$key]);
+        }
+
         return $this->dataCached[$key];
+    }
+
+    protected function getTableVersion()
+    {
+        $redis = $this->getRedis();
+        if(!$redis) {
+            return 0;
+        }
+
+        $version = 0;
+        if (isset($this->dataCached['version'])) {
+            $version = $this->dataCached['version'];
+        }
+        if($version == 0) {
+            $version = $redis->get("{$this->table}:version");
+            if(!$version){
+                $version = 1;
+                $redis->incrBy("{$this->table}:version", $version);
+            }
+            $this->dataCached["version"] = $version;
+        }
+        return $version;
     }
 
     protected function clearCached()
     {
         $this->dataCached = array();
+        $redis = $this->getRedis();
+        if($redis) {
+            $redis->incr("{$this->table}:version");
+        }
     }
 
     protected function createDaoException($message = null, $code = 0) 

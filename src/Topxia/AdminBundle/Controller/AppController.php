@@ -276,7 +276,7 @@ class AppController extends BaseController
 
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
-            'version' => $version,
+            'version' => $version
         ));
     }
 

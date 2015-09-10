@@ -9,6 +9,11 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
 
     protected $table = 'classroom_courses';
 
+    public function getTable()
+    {
+        return $this->table;
+    }
+
     private $serializeFields = array(
         'tagIds' => 'json',
     );
@@ -18,6 +23,7 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
         $course = $this->createSerializer()->serialize($course, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $course);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert classroom_courses error.');
         }
@@ -28,60 +34,74 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
     public function update($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-
+        $this->clearCached();
         return $this->getCourse($id);
     }
 
     public function updateByParam($params, $fields)
     {
         $this->getConnection()->update($this->table, $fields, $params);
+        $this->clearCached();
     }
 
     public function deleteCourseByClassroomIdAndCourseId($classroomId, $courseId)
     {
-        return $this->getConnection()->delete($this->table, array('classroomId' => $classroomId, 'courseId' => $courseId));
+        $result = $this->getConnection()->delete($this->table, array('classroomId' => $classroomId, 'courseId' => $courseId));
+        $this->clearCached();
+        return $result;
     }
 
     public function getCourse($id)
     {
-        $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        });
     }
 
     public function findClassroomIdsByCourseId($courseId)
     {
-        $sql = "SELECT classroomId FROM {$this->table} where courseId=?";
+        $that = $this;
 
-        return  $this->getConnection()->fetchAll($sql, array($courseId));
+        return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT classroomId FROM {$that->getTable()} where courseId=?";
+            return  $that->getConnection()->fetchAll($sql, array($courseId));
+        });
     }
 
     public function findClassroomByCourseId($courseId)
     {
-        $sql = "SELECT classroomId FROM {$this->table} where courseId = ? LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchAssoc($sql, array($courseId)) ?: null;
+        return $this->fetchCached("courseId:{$courseId}:limit:1", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT classroomId FROM {$that->getTable()} where courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId)) ?: null;
+        });
     }
 
     public function findClassroomCourse($classroomId, $courseId)
     {
-        $sql = "SELECT * FROM {$this->table} where classroomId = ? AND courseId = ? LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
+        return $this->fetchCached("classroomId:{$classroomId}:courseId:{$courseId}", $classroomId, $courseId, function ($classroomId, $courseId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} where classroomId = ? AND courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
+        });
     }
 
     public function getCourseByClassroomIdAndCourseId($classroomId, $courseId)
     {
-        $sql = "SELECT * FROM {$this->table} where classroomId=? AND courseId=? LIMIT 1";
-
-        return $this->getConnection()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
+        return $this->findClassroomCourse($classroomId, $courseId);
     }
 
     public function deleteCoursesByClassroomId($classroomId)
     {
         $sql = "DELETE FROM {$this->table} WHERE classroomId = ?";
-
-        return $this->getConnection()->executeUpdate($sql, array($classroomId));
+        $result = $this->getConnection()->executeUpdate($sql, array($classroomId));
+        $this->clearCached();
+        return $result;
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
@@ -112,16 +132,22 @@ class ClassroomCourseDaoImpl extends BaseDao implements ClassroomCourseDao
 
     public function findCoursesByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? ORDER BY seq ASC;";
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        return $this->fetchCached("classroomId:{$classroomId}", $classroomId, function ($classroomId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? ORDER BY seq ASC;";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        });
     }
 
     public function findActiveCoursesByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        return $this->fetchCached("classroomId:{$classroomId}:disabled:0", $classroomId, function ($classroomId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        });
     }
 
     public function findCoursesByCoursesIds($courseIds)

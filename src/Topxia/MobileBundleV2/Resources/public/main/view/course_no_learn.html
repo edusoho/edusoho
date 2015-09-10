@@ -125,7 +125,7 @@
         </ul>
     </div>
 </div>
-<div ng-if="!course.source" ng-controller="CourseToolController">
+<div ng-if="0 == course.parentId" ng-controller="CourseToolController">
     <div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);">
         <button class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
         </button>

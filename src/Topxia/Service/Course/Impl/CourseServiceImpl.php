@@ -2071,6 +2071,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId, $userId);
 	}
 
+	public function deleteMemberByCourseIdAndRole($courseId,$role)
+	{
+		return $this->getMemberDao()->deleteMemberByCourseIdAndRole($courseId,$role);
+	}
+
 	public function deleteMemberByCourseId($courseId)
 	{
 		return $this->getMemberDao()->deleteMembersByCourseId($courseId);
@@ -2186,6 +2191,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'joinedType' => 'classroom'
 		);
 		$isMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId,$userId);
+		if ($isMember) {
+				return array();
+		}
 		$member = $this->getMemberDao()->addMember($fields);
 		$fields = array(
 			'studentNum'=> $this->getCourseStudentCount($courseId),

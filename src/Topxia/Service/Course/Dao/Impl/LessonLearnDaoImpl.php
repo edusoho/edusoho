@@ -11,32 +11,52 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
 	public function getLearn($id)
 	{
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
 	}
 
 	public function getLearnByUserIdAndLessonId($userId, $lessonId)
 	{
-        $sql ="SELECT * FROM {$this->table} WHERE userId=? AND lessonId=?";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $lessonId)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:lessonId:{$lessonId}", $userId, $lessonId, function ($userId, $lessonId) use ($that) {
+            $sql ="SELECT * FROM {$that->getTable()} WHERE userId=? AND lessonId=?";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $lessonId)) ? : null;
+        });
 	}
 
 	public function findLearnsByUserIdAndCourseId($userId, $courseId)
 	{
-        $sql ="SELECT * FROM {$this->table} WHERE userId=? AND courseId=?";
-        return $this->getConnection()->fetchAll($sql, array($userId, $courseId)) ? : array();
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
+            $sql ="SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $courseId)) ? : array();
+        });
 	}
 
 	public function findLearnsByUserIdAndCourseIdAndStatus($userId, $courseId, $status)
 	{
-        $sql ="SELECT * FROM {$this->table} WHERE userId=? AND courseId=? AND status = ?";
-        return $this->getConnection()->fetchAll($sql, array($userId, $courseId, $status)) ? : array();
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:status:{$status}", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
+            $sql ="SELECT * FROM {$that->getTable()} WHERE userId=? AND courseId=? AND status = ?";
+            return $that->getConnection()->fetchAll($sql, array($userId, $courseId, $status)) ? : array();
+        });
 	}
 
 	public function getLearnCountByUserIdAndCourseIdAndStatus($userId, $courseId, $status)
 	{
-        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND courseId = ? AND status = ?";
-        return $this->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}:status:{$status}:count", $userId, $courseId, $status, function ($userId, $courseId, $status) use ($that) {
+            $sql ="SELECT COUNT(*) FROM {$that->getTable()} WHERE userId = ? AND courseId = ? AND status = ?";
+            return $that->getConnection()->fetchColumn($sql, array($userId, $courseId, $status));
+        });
 	}
 
     public function findLearnsByLessonId($lessonId, $start, $limit)
@@ -62,6 +82,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 	public function addLearn($learn)
 	{
         $affected = $this->getConnection()->insert($this->table, $learn);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert learn error.');
         }
@@ -71,13 +92,16 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 	public function updateLearn($id, $fields)
 	{
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getLearn($id);
 	}
 
     public function deleteLearnsByLessonId($lessonId)
     {
         $sql = "DELETE FROM {$this->table} WHERE lessonId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($lessonId));
+        $result = $this->getConnection()->executeUpdate($sql, array($lessonId));
+        $this->clearCached();
+        return $result;
     }
 
     public function searchLearnCount($conditions)

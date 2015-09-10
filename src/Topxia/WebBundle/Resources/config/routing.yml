@@ -2,6 +2,10 @@ homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+site_locked:
+    pattern:  /site_locked
+    defaults: { _controller: TopxiaWebBundle:Default:siteLocked }
+
 homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }

@@ -27,6 +27,16 @@ class ServiceKernel
 
     protected $classMaps = array();
 
+    public function getRedis($group = 'default')
+    {
+        $redisFactory = RedisFactory::instance($this);
+        $redis = $redisFactory->getRedis($group);
+        if($redis) {
+            return $redis;
+        }
+        return false;
+    }
+
     public static function create($environment, $debug)
     {
         if (self::$_instance) {
@@ -191,6 +201,8 @@ class ServiceKernel
             $class = $this->getClassName('dao', $name);
             $dao = new $class();
             $dao->setConnection($this->getConnection());
+            $dao->setRedis($this->getRedis());
+
             $this->pool[$name] = $dao;
         }
         return $this->pool[$name];

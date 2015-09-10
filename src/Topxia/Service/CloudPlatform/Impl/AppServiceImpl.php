@@ -431,6 +431,9 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = $e->getMessage();
             goto last;
         }
+
+        $this->lockSite();
+
         if (empty($index)) {
 
             try {
@@ -477,9 +480,25 @@ class AppServiceImpl extends BaseService implements AppService
             PluginUtil::refresh();
         }
 
+        $this->unlockSite();
+
         last:
         $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
         return empty($info) ? $errors : $info;
+    }
+
+    public function lockSite()
+    {
+        $developer = $this->getSettingService()->get('developer', array());
+        $developer["siteLocked"] = 1;
+        $this->getSettingService()->set('developer', $developer);
+    }
+
+    public function unlockSite()
+    {
+        $developer = $this->getSettingService()->get('developer', array());
+        $developer["siteLocked"] = 0;
+        $this->getSettingService()->set('developer', $developer);   
     }
 
     public function repairProblem($token)

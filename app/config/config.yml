@@ -16,11 +16,11 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.5.5
+        assets_version: 6.6.2
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.native_file
+        handler_id:     session.handler.redis
     fragments:       ~
 
 # Twig Configuration
@@ -72,11 +72,11 @@ doctrine:
         auto_mapping: true
 
 # Swiftmailer Configuration
-swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
+# swiftmailer:
+#     transport: %mailer_transport%
+#     host:      %mailer_host%
+#     username:  %mailer_user%
+#     password:  %mailer_password%
     #spool:     { type: memory }
 
 #jms_security_extra:
@@ -114,6 +114,18 @@ services:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
         arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
 
+    session.handler.redis.factory:
+        class: Topxia\Service\Common\RedisFactory
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
+
+    session.handler.redis:
+        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        arguments: [@session.handler.redis.factory]
+
+
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
         arguments:    [@service_container]
@@ -125,12 +137,18 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
-    
+
     kernel.listener.kernel_response_listener:
         class: Topxia\WebBundle\Listener\KernelResponseListener
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    kernel.listener.kernel_controller_listener:
+        class: Topxia\WebBundle\Listener\KernelControllerListener
+        arguments:    [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
 
     topxia.twig.web_extension:
         class: Topxia\WebBundle\Twig\Extension\WebExtension
