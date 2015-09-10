@@ -137,12 +137,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');
-        if($course['status'] == 'published'){
-            $private =0;
-        }
-        else{
-            $private =1;
-        }
+        $private = $course['status'] == 'published' ? 0 :1;
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -157,7 +152,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
-            'private' => $private == 0 ? 0 : 1,
+            'private' => $private,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -169,12 +164,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');
-        if($course['status'] == 'published'){
-            $private =0;
-        }
-        else{
-            $private =1;
-        }
+        $private = $course['status'] == 'published' ? 0 :1;
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -189,7 +179,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
-            'private' => $private == 0 ? 0 : 1,
+            'private' => $private,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),

@@ -35,12 +35,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseJoin(ServiceEvent $event)
     {
         $course = $event->getSubject();
-        if($course['status'] == 'published'){
-            $private =0;
-        }
-        else{
-            $private =1;
-        }
+        $private = $course['status'] == 'published' ? 0 :1;
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -56,7 +51,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'private' => $private == 0 ? 0 : 1,
+            'private' => $private,
             'userId' => $userId,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
@@ -67,12 +62,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseFavorite(ServiceEvent $event)
     {
         $course = $event->getSubject();
-        if($course['status'] == 'published'){
-            $private =0;
-        }
-        else{
-            $private =1;
-        }
+        $private = $course['status'] == 'published' ? 0 :1;
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -87,7 +77,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'private' => $private == 0 ? 0 : 1,
+            'private' => $private,
             'properties' => array(
             'course' => $this->simplifyCousrse($course),
             ),
