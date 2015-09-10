@@ -1,5 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-  {% if notices and remainDays == null %}
+  {% if notices and canTrial == null %}
   <div class="col-md-12">
     <div class="main-system-alert">
       <h2> 站长公告</h2>
@@ -15,7 +15,9 @@
     <div class="main-system-alert">
       <h2>提醒</h2>
         <ul class="alert-list">
-          欢迎使⽤用,您的免费体验将于2015年09⽉月30⽇日到期,剩余14天。
+          <li class="glyphicon glyphicon-bell" style="color:#fed032;font-size:16px;">
+              欢迎使⽤,您的免费体验将于2015年09⽉月30⽇日到期,剩余{{remainDays}}天。
+          </li>
         </ul>
     </div>
   </div>
