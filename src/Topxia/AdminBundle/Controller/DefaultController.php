@@ -105,7 +105,7 @@ class DefaultController extends BaseController
 
         return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
             "notices" => $notices,
-            "remainDays" => (isset($result)) ? $result['remainDays'] : null,
+            "remainDays" => (isset($result)) ? $result['remainDays'] : 1,
             "canTrial" => (isset($canTrial)) ? $canTrial : null,
         ));
     }
