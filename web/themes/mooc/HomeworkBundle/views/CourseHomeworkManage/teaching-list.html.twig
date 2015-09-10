@@ -1,0 +1,32 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}作业批改 - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-teaching-homework-check' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">作业批改</div>
+    <div class="panel-body">
+      <ul class="nav nav-tabs">
+        <li {% if status == 'reviewing' %} class="active"{% endif %}>
+          <a href="{{ url('my_teaching_homework_list', {status:'reviewing'}) }}">未批改
+            <span class="badge">{{ reviewingCount|default(0) }}</span>
+          </a>
+        </li>
+
+        <li {% if status == 'finished' %} class="active"{% endif %}>
+          <a href="{{ url('my_teaching_homework_list', {status:'finished'}) }}">已批改
+            <span class="badge">{{ finishedCount|default(0) }}</span>
+          </a>
+        </li>
+
+        <li {% if status == 'pairReviewing' %} class="active"{% endif %}>
+          <a href="{{ url('my_teaching_homework_list', {status:'pairReviewing'}) }}">互评中
+            <span class="badge">{{ pairReviewingCount|default(0) }}</span>
+          </a>
+        </li>
+      </ul>
+      {% include 'CustomWebBundle:CourseHomeworkManage:teaching-homework-list.html.twig' %}
+    </div>
+  </div>
+{% endblock %}

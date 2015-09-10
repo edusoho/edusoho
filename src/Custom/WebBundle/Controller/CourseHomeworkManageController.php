@@ -185,7 +185,7 @@ class CourseHomeworkManageController extends BaseManageController
         $usersIds = ArrayToolkit::column($homeworksResults, 'userId');
         $users = $this->getUserService()->findUsersByIds($usersIds);
 
-        return $this->render('CustomWebBundle:CourseHomeworkManage:teaching-list.html.twig', array(
+        return $this->render('HomeworkBundle:CourseHomeworkManage:teaching-list.html.twig', array(
             'status' => $status,
             'users' => $users,
             'homeworksResults' => $homeworksResults,

@@ -8,61 +8,66 @@
 {% block description %}{{ course.about }}{% endblock %}
 
 {% set bodyClass = '' %}
-{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}	
+{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}  
 
-{% block content %}	
-	{{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
-	<div class="course-about clearfix">
-	  <div class="course-about-main">
+{% block content %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+  <div class="course-about clearfix">
+    <div class="course-about-main">
       {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
       <div class="course-detail">
-      	{% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
         {% block course_main %}{% endblock %}
       </div>
     </div>
     <div class="course-about-sidebar">
-    	{% block course_sidebar %}
-        <div class="es-panel open-class">
-          <div class="panel-heading clearfix dropdown">
-            <a href="javascript:;" class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">第三次开课<i class="iconfont icon-xiala"></i></a>
-            <ul class="dropdown-menu open-class-dropdown">
-                <li><a href="javascript:;">第一次开课</a></li>
-                <li><a href="javascript:;">第二次开课</a></li>
-            </ul>
+      {% block course_sidebar %}
+        {% if 'periodic'==course.type %}
+          <div class="es-panel open-class">
+            <div class="panel-heading clearfix dropdown">
+              <a href="javascript:;" class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">第{{ course.periods | num2chinese }}次开课
+                <i class="iconfont icon-xiala"></i>
+              </a>
+              {{ render(controller('CustomWebBundle:Part/Course:otherPeriods',{course: course})) }}
+            </div>
+
+            <div class="panel-body">
+              <ul>
+                <li class="first gray">
+                  {% if "now"|date('U') > course.endTime %}
+                    <p>本次开课</p>
+                    <p><span>已结束</span></p>
+                  {% elseif "now"|date('U') >= course.startTime %}
+                    <p>课程已进行至</p>
+                    <p><span>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</p>
+                  {% else %}
+                    <p>距离开课</p>
+                    <p><span>{{ course.startTime | remain_time }}</span></p>
+                    {#<p><span>{{ ((course.startTime-'now' | date('U'))/86400) | round(0, 'ceil') }}</span>天</p>#}
+                  {% endif %}
+                </li>
+                <li class="last">
+                  <p>开课：{{course.startTime | date('m月d日 H:i')}}</p>
+                  <p>结束：{{course.endTime | date('m月d日 H:i')}}</p>
+                </li>
+              </ul>
+              {% if course.certi %}
+                {# <p class="red gray">获得证书 ></p> #}
+                <p class="red"><i class="iconfont icon-xunzhang"></i></p>
+              {% endif %}
+            </div>
           </div>
-           <div class="panel-body">
-            <ul>
-              <li class="first gray">
-              {#   <p>距离开课</p>
-                <p><span>6</span>天</p> 
-                <p>
-                  课程已进行至
-                </p>
-                <p><span>1</span>/8周</p>#}
-                <p>
-                  本次开课
-                </p>
-                <p><span>已结束</span></p>
-              </li>
-              <li class="last">
-                <p>开课：7月29日 12：00</p>
-                <p>结束：7月29日 12：00</p>
-              </li>
-            </ul>
-            {# <p class="red">获得证书 ></p> #}
-            <p class="red gray"><i class="iconfont icon-xunzhang"></i>已结束</p>
-           </div>
-        </div>
-    		<div class="es-panel teacher-column">
+        {% endif %}
+        <div class="es-panel teacher-column">
           <div class="panel-heading clearfix">任课老师<span class="teacher-icon"></span></div>
           <div class="panel-body">
             <ul>
-               {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
+              {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
             </ul>
           </div>
         </div>
-     		{{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
-     	{% endblock %}	
+        {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+      {% endblock %}
     </div>
-	</div>
-{% endblock %}	
+  </div>
+{% endblock %} 

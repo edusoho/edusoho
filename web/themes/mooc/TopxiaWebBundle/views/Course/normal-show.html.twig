@@ -1,8 +1,8 @@
-{% extends 'CustomWebBundle:Course:normal-layout.html.twig' %}
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
 
 {% set tab = 'overview' %}
 
-{% do load_script('customwebbundle/controller/course/show') %}
+{% do load_script('theme/course/show') %}
 
 {% block course_main %}
 
@@ -30,9 +30,9 @@
           <div class="piece-body">
             <ul class="piece-body-list">
               {% for goal in course.goals %}
-              <li>
-                <i class="es-icon es-icon-chevronright"></i> {{ goal }}
-              </li>
+                <li>
+                  <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+                </li>
               {% endfor %}
             </ul>
           </div>
@@ -47,9 +47,9 @@
           <div class="piece-body">
             <ul class="piece-body-list">
               {% for audience in course.audiences %}
-              <li>
-                <i class="es-icon es-icon-chevronright"></i> {{ audience }}
-              </li>
+                <li>
+                  <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+                </li>
               {% endfor %}
             </ul>
           </div>
@@ -60,11 +60,11 @@
     <div class="es-piece">
       <div class="piece-header">课时列表</div>
       <div class="piece-body">
-        {{ render(controller('CustomWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
-        
+        {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
+
       </div>
     </div>
-    
+
   </div>
 
 {% endblock %}

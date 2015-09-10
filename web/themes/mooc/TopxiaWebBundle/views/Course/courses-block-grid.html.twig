@@ -1,9 +1,9 @@
 <style>
-.classroomPicture{
+  .classroomPicture{
 
-  width: 24px;
-  height: 24px;
-}
+    width: 24px;
+    height: 24px;
+  }
 </style>
 {% set mode = mode|default('default') %}
 <ul class="course-grids">
@@ -11,26 +11,26 @@
     <li class="course-grid">
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
         <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
-          {% if course.status == 'draft' %}
-            <span class="label  label-warning course-status">未发布</span>
-          {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">已关闭</span>
+        {% if course.status == 'draft' %}
+          <span class="label  label-warning course-status">未发布</span>
+        {% elseif course.status == 'closed' %}
+          <span class="label label-danger course-status">已关闭</span>
+        {% endif %}
+        {% if course.status != 'closed' %}
+          {% if course.serializeMode=='serialize' %}
+            <span class="label label-success series-mode-label">更新中</span>
+          {% elseif course.serializeMode=='finished' %}
+            <span class="label label-warning series-mode-label">已完结</span>
           {% endif %}
-          {% if course.status != 'closed' %} 
-            {% if course.serializeMode=='serialize' %}
-              <span class="label label-success series-mode-label">更新中</span>
-            {% elseif course.serializeMode=='finished' %}
-              <span class="label label-warning series-mode-label">已完结</span>
-            {% endif %}
+        {% endif %}
+        {% if course.type == 'live' %}
+          {% set lesson = course['lesson']|default(null) %}
+          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+            <span class="label label-warning series-mode-label">正在直播中</span>
+          {% else %}
+            <span class="label label-success series-mode-label">直播</span>
           {% endif %}
-          {% if course.type == 'live' %}
-            {% set lesson = course['lesson']|default(null) %}
-            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-              <span class="label label-warning series-mode-label">正在直播中</span>
-            {% else %}
-              <span class="label label-success series-mode-label">直播</span>
-            {% endif %}
-          {% endif %}
+        {% endif %}
 
         <span class="title">{{ course.title }}</span>
         {% if mode in ['default', 'teach'] %}
@@ -49,14 +49,14 @@
             <span class="price-col">
               <span class="meta-label">价格</span>
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
+                <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
               {% else %}
-              <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+                <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
               {% endif %}
             </span>
 
             {% if setting('course.show_student_num_enabled', '1') == 1 %}
-            <span class="student-col">
+              <span class="student-col">
               <span class="meta-label">{{setting('default.user_name', '学员')}}</span>
               <span class="student-num">{{ course.studentNum }}人</span>
             </span>
@@ -94,14 +94,14 @@
           <div class="learn-status">
 
             {% if setting('classroom.enabled')|default(0) %}
-              <div class="mbm"> 
-              {% if course.classroomCount > 0 %}
-                {% set classroom = course.classroom %}
-                <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
-                {% if course.classroomCount > 1 %}
-                等
-                {% endif %}</span>
-              {% endif %}
+              <div class="mbm">
+                {% if course.classroomCount > 0 %}
+                  {% set classroom = course.classroom %}
+                  <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
+                  {% if course.classroomCount > 1 %}
+                    等
+                  {% endif %}</span>
+                {% endif %}
               </div>
             {% endif %}
 
@@ -129,7 +129,7 @@
             <span class="label  label-warning course-status">未发布</span>
           {% elseif course.status == 'closed' %}
             <span class="label label-danger course-status">已关闭</span>
-          {% endif %}       
+          {% endif %}
         {% endif %}
 
         {% if mode == 'teach' %}

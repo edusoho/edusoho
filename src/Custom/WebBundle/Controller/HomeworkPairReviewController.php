@@ -4,10 +4,6 @@ namespace Custom\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
-use Topxia\WebBundle\Controller\BaseController;
 
 /**
  * 作业互评控制器.
@@ -15,12 +11,14 @@ use Topxia\WebBundle\Controller\BaseController;
 class HomeworkPairReviewController extends BaseController
 {
     /**
-     * 随机显示一个作业答卷互评界面.
-     * @param request
-     * @param homeworkId , 作业id.
-    **/
+     * 随机显示一个作业答卷互评界面
+     * @param Request $request
+     * @param $homeworkId
+     * @return \Symfony\Component\HttpFoundation\Response|\Topxia\WebBundle\Controller\Response
+     */
     public function randomizeAction(Request $request, $homeworkId)
     {
+        $this->checkId($homeworkId);
         $userId=$this -> getCurrentUser() -> id;
         $homeworkResult = $this -> getHomeworkService() -> randomizeHomeworkResultForPairReview($homeworkId, $userId);
 
@@ -41,12 +39,13 @@ class HomeworkPairReviewController extends BaseController
     }
 
     /**
-     * 作业答卷互评提交界面.
-     * @param request
-     * @param homeworkResultId , 作业答卷id.
-    **/
+     * @param Request $request
+     * @param $homeworkResultId
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function createAction(Request $request, $homeworkResultId)
     {
+        $this->checkId($homeworkResultId);
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $fields = empty($fields['data']) ? "" : $fields['data'];
