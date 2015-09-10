@@ -61,7 +61,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 	    });
 	}
 
-	protected function getTablename()
+	public function getTablename()
     {
         return self::TABLENAME;
     }
