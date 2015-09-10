@@ -61,7 +61,6 @@ class CourseController extends BaseController
         ));
     }
 
-
     public function nextRoundAction(Request $request, $id)
     {
         $this->checkId($id);
@@ -88,6 +87,11 @@ class CourseController extends BaseController
     protected function getNextRoundService()
     {
         return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
+    }
+
+    public function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }
