@@ -3,13 +3,10 @@
 namespace Custom\Service\Course\Impl;
 
 use Topxia\Service\Course\Impl\CourseServiceImpl as BaseCourseServiceImpl;
-use Custom\Service\Course\CourseService;
-use Custom\Service\Course\Enum\LessonPermissions;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
 
-class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
+class CourseServiceImpl extends BaseCourseServiceImpl
 {
 	public function customUpdateCourse($id, $fields)
 	{

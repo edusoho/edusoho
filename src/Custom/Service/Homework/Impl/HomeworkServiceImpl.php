@@ -4,7 +4,6 @@ namespace Custom\Service\Homework\Impl;
 
 use Homework\Service\Homework\Impl\HomeworkServiceImpl as BaseHomeworkServiceImpl;
 use Symfony\Component\Validator\Constraints\Date;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
 class HomeworkServiceImpl extends BaseHomeworkServiceImpl

@@ -10,49 +10,9 @@ course_rounding:
     pattern: /course/{id}/rounding
     defaults: { _controller: CustomWebBundle:Course:rounding }
 
-course_homework_do:
-    pattern: /course/{courseId}/homework/{homeworkId}/do/{resultId}
-    defaults: { _controller: CustomWebBundle:CourseHomework:do }
-
-course_homework_continue:
-    pattern: /course/{courseId}/homework/{homeworkId}/continue/{resultId}
-    defaults: { _controller: CustomWebBundle:CourseHomework:continue }
-
-course_homework_preview:
-    pattern: /course/{courseId}/homework/{homeworkId}/preview
-    defaults: { _controller: CustomWebBundle:CourseHomework:preview }
-
-course_homework_submit:
-    pattern: /course/{courseId}/homework/{homeworkId}/submit
-    defaults: { _controller: CustomWebBundle:CourseHomework:submit }
-
-course_homework_check_list:
-    pattern: /course/{courseId}/check/homework/{status}/list
-    defaults: { _controller: CustomWebBundle:CourseHomework:checkList }
-
-course_homework_result:
-    pattern: /course/{courseId}/homework/{homeworkId}/result/{resultId}/{userId}
-    defaults: { _controller: CustomWebBundle:CourseHomework:result }
-
-my_teaching_homework_list:
-    pattern: /my/teaching/homework/list
-    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:teachingList }
-
-my_homework_list:
-    pattern: /my/homework/list
-    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:list }
-
 course_lesson_plugin_homework_list:
     pattern:  /lessonplugin/homework/list
     defaults: { _controller: CustomWebBundle:LessonHomeworkPlugin:list }
-
-course_manage_lesson_homework_create:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/create
-    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:create }
-
-course_manage_lesson_homework_edit:
-    pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
-    defaults: { _controller: CustomWebBundle:CourseHomeworkManage:edit }
 
 course_homeworks:
     pattern:  /course/{id}/homeworks/
@@ -82,7 +42,3 @@ homework_review_check:
 order_show:
     pattern:  /order/show
     defaults: { _controller: CustomWebBundle:Order:show }
-
-homework_save:
-    pattern: /homework_results/{homeworkResultId}/save
-    defaults: { _controller: CustomWebBundle:CourseHomework:saveHomeworkResult }

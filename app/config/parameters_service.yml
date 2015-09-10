@@ -1,0 +1,7 @@
+parameters:
+    topxia_services:
+        'Homework.HomeworkService': 'Custom\Serivce\Homework\Impl\HomeworkServiceImpl'
+        'Course.CourseService': 'Custom\Serivce\Course\Impl\CourseServiceImpl'
+
+    topxia_daos:
+        'Course.CourseDao': 'Custom\Serivce\Course\Dao\Impl\CourseServiceImpl'
