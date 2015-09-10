@@ -54,10 +54,6 @@ course_manage_lesson_homework_edit:
     pattern: /course/{courseId}/manage/lesson/{lessonId}/homework/{homeworkId}/edit
     defaults: { _controller: CustomWebBundle:CourseHomeworkManage:edit }
 
-search:
-    pattern:  /search
-    defaults: { _controller: CustomWebBundle:Search:index }
-
 course_homeworks:
     pattern:  /course/{id}/homeworks/
     defaults: { _controller: CustomWebBundle:Homework:index }
