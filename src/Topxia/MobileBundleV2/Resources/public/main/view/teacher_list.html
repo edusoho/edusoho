@@ -6,7 +6,7 @@
 </div>
 
 <div class="top-header" ng-init="loadUsers()">
-	<ul class="ui-list ui-list-text ui-list-active">  
+	<ul class="ui-list ui-list-text">  
 		<li class="ui-border-t" ng-repeat="user in users" ui-sref="userInfo({ userId : user.id })">
 	        <div class="ui-avatar-s">
 	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar"/>
