@@ -1,5 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-  {% if notices and canTrial == null %}
+  {% if notices and canTrial is null %}
   <div class="col-md-12">
     <div class="main-system-alert">
       <h2> 站长公告</h2>
@@ -11,16 +11,14 @@
     </div>
   </div>
   {% else %}
-  <div class="col-md-12">
-    <div class="main-system-alert">
-      <h2>提醒</h2>
-        <ul class="alert-list">
-          <li class="glyphicon glyphicon-bell" style="color:#fed032;font-size:16px;">
-              欢迎使⽤,您的免费体验将于2015年 09 ⽉ 20⽇ 到期,剩余10天。
-          </li>
-        </ul>
+  <div class="row form-group">
+    <div class="help-block">
+
+      <p style = "text-align: left;font-size:18px">&nbsp&nbsp欢迎使⽤,您的免费试用将于<span style="color:#fed032;"> {{trialTime.endTime|date("Y年m月d日")}} </span>到期,剩余<span style="color:#fed032;"> {{trialTime.remainDays}}</span> 天。</p>
+      </br>
     </div>
   </div>
+
 
   {% endif %}
 

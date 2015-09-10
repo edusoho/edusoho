@@ -100,13 +100,13 @@ class DefaultController extends BaseController
         if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
             $canTrial = "canGetDays";
             $domain = $this->generateUrl('homepage',array(),true);
-            // $result = $api->get('/trial/13562490565/remainDays',array('domain' => $domain));
-            $result['remainDays'] = 10;
+            $result = $api->get('/trial/remainDays',array('domain' => $domain));
+
         }
 
         return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
             "notices" => $notices,
-            "remainDays" => (isset($result)) ? $result['remainDays'] : 1,
+            "trialTime" => (isset($result)) ? $result : null,
             "canTrial" => (isset($canTrial)) ? $canTrial : null,
         ));
     }
