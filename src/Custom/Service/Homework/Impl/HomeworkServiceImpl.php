@@ -2,13 +2,12 @@
 
 namespace Custom\Service\Homework\Impl;
 
-use Custom\Service\Homework\HomeworkService;
 use Homework\Service\Homework\Impl\HomeworkServiceImpl as BaseHomeworkServiceImpl;
 use Symfony\Component\Validator\Constraints\Date;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
-class HomeworkServiceImpl extends BaseHomeworkServiceImpl implements HomeworkService
+class HomeworkServiceImpl extends BaseHomeworkServiceImpl
 {
     public function createHomework($courseId, $lessonId, $fields)
     {
