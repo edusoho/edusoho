@@ -609,40 +609,6 @@ class CoinController extends BaseController
         ));
     }
 
-    public function avatarCropAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-        $filename = $request->query->get('file');
-        $filename = str_replace('!', '.', $filename);
-        $filename = str_replace(array('..' , '/', '\\'), '', $filename);
-
-        $pictureFilePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $filename;
-
-        if($request->getMethod() == 'POST') {
-            $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $pictureFilePath, $options);
-            return $this->redirect($this->generateUrl('settings_avatar'));
-        }
-
-        try {
-            $imagine = new Imagine();
-            $image = $imagine->open($pictureFilePath);
-        } catch (\Exception $e) {
-            @unlink($pictureFilePath);
-            return $this->createMessageResponse('error', '该文件为非图片格式文件，请重新上传。');
-        }
-
-        $naturalSize = $image->getSize();
-        $scaledSize = $naturalSize->widen(270)->heighten(270);
-        $pictureUrl = 'tmp/' . $filename;
-
-        return $this->render('TopxiaWebBundle:Settings:avatar-crop.html.twig', array(
-            'pictureUrl' => $pictureUrl,
-            'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
-        ));
-    }
-
     public function cashBillAction(Request $request)
     {
         if($request->get('nickname')){

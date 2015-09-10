@@ -75,9 +75,12 @@ class UserController extends BaseController
         $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
-
-        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
-
+        $conditions = array(
+            'status'=>'published',
+            'showable'=>'1',
+            'classroomIds' => $classroomIds
+        );
+        $classrooms=$this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
         foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
@@ -114,7 +117,7 @@ class UserController extends BaseController
         $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
         $conditions = array(
             'status'=>'published',
-            'private'=>'0',
+            'showable'=>'1',
             'classroomIds' => $classroomIds
         );
 
@@ -258,11 +261,6 @@ class UserController extends BaseController
 
         $this->getUserService()->unFollow($user['id'], $id);
 
-        $message = array('userId' => $user['id'],
-                'userName' => $user['nickname'],
-                'opration' => 'unfollow');
-        $this->getNotificationService()->notify($id, 'user-follow', $message);
-
         return $this->createJsonResponse(true);
     }
 
@@ -273,11 +271,6 @@ class UserController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $this->getUserService()->follow($user['id'], $id);
-
-        $message = array('userId' => $user['id'],
-                'userName' => $user['nickname'],
-                'opration' => 'follow');
-        $this->getNotificationService()->notify($id, 'user-follow', $message);
 
         return $this->createJsonResponse(true);
     }

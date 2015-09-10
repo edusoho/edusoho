@@ -7,8 +7,13 @@ interface CourseProcessor
 	public function getCourses();
 	public function getLearningCourse();
 	public function getLearningCourseWithoutToken();
+
+	public function getUserTeachCourse();
 	public function getLearnedCourse();
-	public function getFavoriteCoruse();
+	public function getFavoriteCourse();
+
+	public function getFavoriteLiveCourse();
+	public function getFavoriteNormalCourse();
 
 	/**
 	* tagId    	标签id 
@@ -18,13 +23,12 @@ interface CourseProcessor
 	public function searchCourse();
 	
 	public function getCourse();
+	public function getCourseReviewInfo();
 	public function getReviews();
 
 	public function favoriteCourse();
 	public function unFavoriteCourse();
 	public function getTeacherCourses();
-
-	public function getCourseNotice();
 
 	/**
 	*获取课程公告列表
@@ -139,5 +143,9 @@ interface CourseProcessor
 	public function getLiveCourses();
 
 	public function getAllLiveCourses();
+
+	public function getModifyInfo();
+
+	public function updateModifyInfo();
 
 }
