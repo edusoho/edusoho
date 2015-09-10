@@ -7,27 +7,38 @@ use Symfony\Component\Finder\Finder;
 class RedisFactory
 {
 	private $container;
-	private $redisPool;
+	private static $instance;
+    private $redis;
 
-	public function __construct($container)
-	{
-		$this->container = $container;
+    private function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    public static function instance($container)
+    {
+        if(empty(self::$instance)) {
+            self::$instance = new RedisFactory($container);
+        }
+        return self::$instance;
 	}
 
 	public function getRedis($group = 'default')
     {
-        $redisPool = $this->getRedisPool();
-        if($redisPool) {
-            return $redisPool->getRedis($group);
+        if(empty($this->redis)){
+            $redisPool = $this->getRedisPool();
+            if($redisPool) {
+                $this->redis = $redisPool->getRedis($group);
+                return $this->redis;
+            }
+            return false;
         }
-        return false;
+
+        return $this->redis;
     }
 
     private function getRedisPool()
     {
-        if (isset($this->redisPool)) {
-            return $this->redisPool;
-        }
 
         $redisConfigFile = $this->container->getParameter('kernel.root_dir') . '/config/redis.php';
 

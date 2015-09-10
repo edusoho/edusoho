@@ -29,7 +29,7 @@ class ServiceKernel
 
     public function getRedis($group = 'default')
     {
-        $redisFactory = new RedisFactory($this);
+        $redisFactory = RedisFactory::instance($this);
         $redis = $redisFactory->getRedis($group);
         if($redis) {
             return $redis;

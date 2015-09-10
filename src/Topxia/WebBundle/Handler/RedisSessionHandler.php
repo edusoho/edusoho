@@ -50,7 +50,6 @@ class RedisSessionHandler implements \SessionHandlerInterface
                 'The following options are not supported "%s"', implode(', ', $diff)
             ));
         }
-
         $this->redis = $redisFactory->getRedis();
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 2*60*60;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';

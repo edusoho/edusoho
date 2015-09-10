@@ -116,7 +116,10 @@ services:
 
     session.handler.redis.factory:
         class: Topxia\Service\Common\RedisFactory
-        arguments:    [@service_container]
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
 
     session.handler.redis:
         class:     Topxia\WebBundle\Handler\RedisSessionHandler
