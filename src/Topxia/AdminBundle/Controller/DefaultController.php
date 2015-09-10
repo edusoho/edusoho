@@ -99,8 +99,10 @@ class DefaultController extends BaseController
         $api = CloudAPIFactory::create('root');
         if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
             $canTrial = "canGetDays";
-            $domain = $this->generateUrl('homepage',array(),true);
-            $result = $api->get('/trial/13562490565/remainDays',array('domain' => $domain));
+            // $domain = $this->generateUrl('homepage',array(),true);
+            // $result = $api->get('/trial/13562490565/remainDays',array('domain' => $domain));
+            $result = $api->get('/trial/13562490565/remainDays',array('domain' => "eeede"));
+
         }
 
         return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
