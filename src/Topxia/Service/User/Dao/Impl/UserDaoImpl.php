@@ -16,7 +16,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, $lock, function ($id, $lock) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->table} WHERE id = ? LIMIT 1";
             if ($lock) {
                 $sql .= " FOR UPDATE";
             }
@@ -29,7 +29,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->table} WHERE email = ? LIMIT 1";
             return $this->getConnection()->fetchAssoc($sql, array($email));
         });
     }
@@ -39,7 +39,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->table} WHERE nickname = ? LIMIT 1";
             return $this->getConnection()->fetchAssoc($sql, array($nickname));
         });
     }
@@ -49,7 +49,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         $that = $this;
 
         return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
-            $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->table} WHERE verifiedMobile = ? LIMIT 1";
             return $this->getConnection()->fetchAssoc($sql, array($mobile));
         });
     }
