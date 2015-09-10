@@ -371,11 +371,21 @@ class CourseController extends BaseController
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
+        $classrooms = array();
+        if($fields['filter'] == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course' => $course,
             'default' => $default,
+            'classrooms'=> $classrooms,
             'filter' => $fields["filter"]
         ));
     }
