@@ -35,6 +35,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseJoin(ServiceEvent $event)
     {
         $course = $event->getSubject();
+        if($course['status'] == 'published'){
+            $private =0;
+        }
+        else{
+            $private =1;
+        }
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -50,7 +56,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'private' => $course['status'] == 'published' ? 0 : 1,
             'private' => $private == 0 ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
@@ -62,6 +67,12 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseFavorite(ServiceEvent $event)
     {
         $course = $event->getSubject();
+        if($course['status'] == 'published'){
+            $private =0;
+        }
+        else{
+            $private =1;
+        }
         if($course['parentId']){ 
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -76,7 +87,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'courseId' => $course['id'],
             'objectType' => 'course',
             'objectId' => $course['id'],
-            'private' => $course['status'] == 'published' ? 0 : 1,
             'private' => $private == 0 ? 0 : 1,
             'properties' => array(
             'course' => $this->simplifyCousrse($course),
