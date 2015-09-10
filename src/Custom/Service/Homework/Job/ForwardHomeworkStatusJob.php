@@ -13,7 +13,7 @@ class ForwardHomeworkStatusJob implements Job
 
     protected function getHomeworkService()
     {
-        return $this->getServiceKernel()->createService('Custom:Homework.HomeworkService');
+        return $this->getServiceKernel()->createService('Homework.HomeworkService');
     }
 
     protected function getServiceKernel()

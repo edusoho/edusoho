@@ -18,15 +18,6 @@ course_homeworks:
     pattern:  /course/{id}/homeworks/
     defaults: { _controller: CustomWebBundle:Homework:index }
 
-homework_pair_review_randomize:
-    pattern:  /homeworks/{homeworkId}/pair_reviews/randomize
-    defaults: { _controller: CustomWebBundle:HomeworkPairReview:randomize }
-
-homework_pair_review_create:
-    pattern:  /homeworks_results/{homeworkResultId}/pair_reviews/create
-    defaults: { _controller: CustomWebBundle:HomeworkPairReview:create }
-    methods: [POST]
-
 homework_review_create:
     pattern: /homework_results/{homeworkResultId}/reviews/create
     defaults: { _controller: CustomWebBundle:HomeworkReview:create }

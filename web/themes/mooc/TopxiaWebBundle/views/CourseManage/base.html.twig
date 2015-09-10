@@ -88,7 +88,7 @@ locationUrl: path('location_all')
               <label for="endTime">学员上限</label>
             </div>
             <div class="col-md-8 controls" style="z-index:2000;">
-              <input type="text" id="max_student_num"  name="maxStudentNum" required="required" class="form-control width-input width-input-large" value="{{course.studentsLimit|default(0)}}">
+              <input type="text" id="max_student_num"  name="maxStudentNum" required="required" class="form-control width-input width-input-large" value="{{course.maxStudentNum|default(0)}}">
               <div class="help-block">允许加入该课程的学员人数上限，0表示不限制。</div>
             </div>
           </div>

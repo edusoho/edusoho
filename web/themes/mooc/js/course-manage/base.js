@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        require('../../../../topxiaweb/js/controller/course-manage/header').run();
+        require('/bundles/topxiaweb/js/controller/course-manage/header').run();
 
         $('#course_tags').select2({
 
