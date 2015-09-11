@@ -26,8 +26,7 @@
                       <a href="{{ path('course_show', {id:lastcourses.id}) }}" class="pull-left">{{ lastcourses.title | plain_text(9) }}</a>
                     {% if lastcourses.teachers %}
                               {% for teacher in lastcourses.teachers %}
-                                {% if loop.index <= 5%}
-
+                                {% if loop.index <= 1 %}
                                    <a href="{{ path('user_show', {id:teacher.id}) }}" class="pull-right">{{ teacher.nickname }}</a>
                                  {% endif %}
                               {% endfor %}
