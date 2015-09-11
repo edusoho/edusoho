@@ -10,6 +10,10 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Symfony\Component\Security\Core\SecurityContext;
+
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+
 /**
  * RedisSessionHandler.
  *
@@ -32,6 +36,11 @@ class RedisSessionHandler implements \SessionHandlerInterface
     private $prefix;
 
     /**
+     * @var SecurityContext
+     */
+    private $context;
+
+    /**
      * Constructor.
      *
      * List of available options:
@@ -43,7 +52,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      *
      * @throws \InvalidArgumentException When unsupported options are passed
      */
-    public function __construct($redisFactory, array $options = array())
+    public function __construct($redisFactory, SecurityContext $context, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(
@@ -52,7 +61,9 @@ class RedisSessionHandler implements \SessionHandlerInterface
         }
         $this->redis = $redisFactory->getRedis();
         $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 2*60*60;
-        $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'sf2s';
+        $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
+
+        $this->context = $context;
     }
 
     /**
@@ -76,7 +87,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        return $this->redis->get($this->prefix.':'.$sessionId) ?: '';
+        return $this->redis->get($this->prefix.':online:'.$sessionId) ?: '';
     }
 
     /**
@@ -84,7 +95,11 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        return $this->redis->setex($this->prefix.':'.$sessionId, $this->ttl, $data);
+        if($this->getCurrentUserId() > 0){
+            $this->redis->setex($this->prefix.':logined:'.$sessionId, $this->ttl, $data);
+        }
+
+        return $this->redis->setex($this->prefix.':online:'.$sessionId, $this->ttl, $data);
     }
 
     /**
@@ -92,7 +107,8 @@ class RedisSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        return $this->redis->delete($this->prefix.':'.$sessionId);
+        $this->redis->delete($this->prefix.':logined:'.$sessionId);
+        return $this->redis->delete($this->prefix.':online:'.$sessionId);
     }
 
     /**
@@ -102,5 +118,18 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         // not required here because memcache will auto expire the records anyhow.
         return true;
+    }
+
+    private function getCurrentUserId()
+    {
+        $token = $this->context->getToken();
+
+        if (empty($token) || ($token instanceof AnonymousToken) || !$token->getUser()) {
+            $userId = 0;
+        } else {
+            $userId = $token->getUser()->getId();
+        }
+
+        return $userId;
     }
 }

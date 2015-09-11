@@ -26,10 +26,10 @@
         <span class="nickname clearfix">
           <a class="text-muted" href=""><i class="fa fa-user"></i>                        
             {% set user = users[course.teacherIds|first]|default(null) %}
-      {% if user %}
-  {{ user.nickname }}
-      {% endif %}
-		  </a>
+            {% if user %}
+              {{ user.nickname }}
+            {% endif %}
+    		  </a>
         </span>
     </div>
   </li>
