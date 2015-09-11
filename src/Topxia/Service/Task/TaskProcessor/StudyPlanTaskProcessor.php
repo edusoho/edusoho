@@ -72,7 +72,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                 'taskType' => 'studyplan',
                 'batchId' => $userTask['batchId'],
                 'status' => 'active',
-                'taskIdLessThan' => $userTask['id']
+                'taskEndTimeLessThan' => $userTask['taskStartTime']
             ));
 
             if ($beforeActiveUserTaskCount > 0) {
