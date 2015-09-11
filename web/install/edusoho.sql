@@ -245,6 +245,8 @@ CREATE TABLE `course` (
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
   `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
+  `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -273,6 +275,7 @@ CREATE TABLE `course_chapter` (
   `seq` int(10) unsigned NOT NULL COMMENT '章节序号',
   `title` varchar(255) NOT NULL COMMENT '章节名称',
   `createdTime` int(10) unsigned NOT NULL COMMENT '章节创建时间',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -332,6 +335,7 @@ CREATE TABLE `course_lesson` (
   `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `parentId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -394,6 +398,7 @@ CREATE TABLE `course_material` (
   `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -769,6 +774,7 @@ CREATE TABLE `question` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='问题表';
 
@@ -868,6 +874,7 @@ CREATE TABLE `testpaper` (
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改人',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   `metas` text COMMENT '题型排序',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -896,6 +903,7 @@ CREATE TABLE `testpaper_item_result` (
   `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
   `answer` text COMMENT '回答',
   `teacherSay` text COMMENT '老师评价',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
   PRIMARY KEY (`id`),
   KEY `testPaperResultId` (`testPaperResultId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -1433,6 +1441,7 @@ CREATE TABLE `classroom` (
   `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `rating` FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '排行数值',
   `ratingNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '投票人数',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1458,7 +1467,7 @@ CREATE TABLE `classroom_member` (
   `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
   `remark` text COMMENT '备注',
-  `role` VARCHAR(255) NOT NULL DEFAULT '|auditor|' COMMENT '角色',
+  `role` VARCHAR(255) NOT NULL DEFAULT 'auditor' COMMENT '角色',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
