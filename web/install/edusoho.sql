@@ -245,8 +245,8 @@ CREATE TABLE `course` (
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
   `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
-  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -529,7 +529,6 @@ CREATE TABLE `friend` (
   `toId` int(10) unsigned NOT NULL COMMENT '被关注人ID',
   `pair` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否为互加好友',
   `createdTime` int(10) unsigned NOT NULL COMMENT '关注时间',
-  `pair` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否为互加好友' AFTER `toId`,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -626,23 +625,22 @@ CREATE TABLE `message` (
   `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
   `content` text NOT NULL COMMENT '私信内容',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '私信发送时间',
-  `type` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型' AFTER `id`,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `message_conversation`;
 CREATE TABLE `message_conversation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '会话Id',
-  `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型',
   `fromId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发信人Id',
   `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
   `messageNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '此对话的信息条数',
   `latestMessageUserId` int(10) unsigned DEFAULT NULL COMMENT '最后发信人ID',
   `latestMessageTime` int(10) unsigned NOT NULL COMMENT '最后发信时间',
   `latestMessageContent` text NOT NULL COMMENT '最后发信内容',
+  `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型',
   `unreadNum` int(10) unsigned NOT NULL COMMENT '未读数量',
   `createdTime` int(10) unsigned NOT NULL COMMENT '会话创建时间',
-  `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型' AFTER `latestMessageContent`,
+  
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -894,7 +892,6 @@ CREATE TABLE `testpaper_item` (
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父题ID',
   `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分值',
   `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '漏选得分',
-  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -1515,10 +1512,10 @@ PRIMARY KEY (`id`)
 
 DROP TABLE IF EXISTS `blacklist`;
 CREATE TABLE `blacklist` (
- `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
- `userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
- `blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
- `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
- PRIMARY KEY (`id`)
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+`userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
+`blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
+`createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
+PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
 
