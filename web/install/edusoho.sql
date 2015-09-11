@@ -245,8 +245,8 @@ CREATE TABLE `course` (
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
   `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
-  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -907,6 +907,7 @@ CREATE TABLE `testpaper_item_result` (
   `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
   `answer` text COMMENT '回答',
   `teacherSay` text COMMENT '老师评价',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
   PRIMARY KEY (`id`),
   KEY `testPaperResultId` (`testPaperResultId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -1472,7 +1473,7 @@ CREATE TABLE `classroom_member` (
   `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
   `remark` text COMMENT '备注',
-  `role` VARCHAR(255) NOT NULL DEFAULT '|auditor|' COMMENT '角色',
+  `role` VARCHAR(255) NOT NULL DEFAULT 'auditor' COMMENT '角色',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
