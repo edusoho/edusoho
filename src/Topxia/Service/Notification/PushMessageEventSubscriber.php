@@ -14,7 +14,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'testpaper.reviewed' => 'onTestPaperReviewed',
-            //'course.lesson.create' => 'onLessonCreate',
+            'course.lesson.pubilsh' => 'onLessonPubilsh',
             'course.publish' => 'onCoursePublish',
             'course.close' => 'onCourseClose',
             'announcement.create' => 'onAnnouncementCreate',
@@ -51,6 +51,23 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $this->push($target['title'], "试卷《{$result['paperName']}》批阅完成！", $from, $to, $body);
+    }
+
+    public function onLessonPubilsh(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        $from = array(
+            'type' => 'course',
+            'id' => $course['id'],
+            'image' => $this->getFileUrl($course['smallPicture']),
+        );
+
+        $to = array('type' => 'course', 'id' => $course['id']);
+
+        $body = array('type' => 'lesson.publish','lessonId' => $lesson['id']);
+
+        return $this->push($lesson['title'], '课时已发布!', $from, $to, $body);
     }
 
     public function onCoursePublish(ServiceEvent $event)
@@ -109,7 +126,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'announcement.create'
         );
 
-        return $this->push($target['title'], $announcement['content'], $from, $to, $body);
+        $result = $this->push($target['title'], $announcement['content'], $from, $to, $body);
+        return $result;
     }
 
     public function onClassroomJoin(ServiceEvent $event)
@@ -210,7 +228,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             )
         );
 
-         CloudAPIFactory::create('tui')->post('/message/send', $message);
+        $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
     }
 
     protected function getTarget($type, $id)
