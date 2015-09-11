@@ -2,13 +2,13 @@
 
 {% set tab = 'overview' %}
 
-{% do load_script('course/show') %}
+{% do load_script('theme/course/show') %}
 
 {% block course_main %}
 
   <div class="course-detail-content">
 
-    {% if not member %}
+    {% if not member or ('periodic'==course.type and "now"|date('U') < course.startTime)%}
       <div class="es-piece">
         <div class="piece-header">
           课程介绍
@@ -30,9 +30,9 @@
           <div class="piece-body">
             <ul class="piece-body-list">
               {% for goal in course.goals %}
-              <li>
-                <i class="es-icon es-icon-chevronright"></i> {{ goal }}
-              </li>
+                <li>
+                  <i class="es-icon es-icon-chevronright"></i> {{ goal }}
+                </li>
               {% endfor %}
             </ul>
           </div>
@@ -47,9 +47,9 @@
           <div class="piece-body">
             <ul class="piece-body-list">
               {% for audience in course.audiences %}
-              <li>
-                <i class="es-icon es-icon-chevronright"></i> {{ audience }}
-              </li>
+                <li>
+                  <i class="es-icon es-icon-chevronright"></i> {{ audience }}
+                </li>
               {% endfor %}
             </ul>
           </div>

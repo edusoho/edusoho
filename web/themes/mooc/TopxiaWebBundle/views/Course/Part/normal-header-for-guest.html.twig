@@ -1,33 +1,99 @@
 {% extends 'TopxiaWebBundle:Course:Part/normal-header-layout.html.twig' %}
-
 {% set layoutClass = 'course-detail-header' %}
 {% block content %}
-	{{ header_macro.picture(course) }}
-	 <ul class="course-data clearfix">
-	 		{{ header_macro.favorite_btn(course, hasFavorited) }}
+  {{ web_macro.flash_messages() }}
+  {{ header_macro.picture(course) }}
+   <ul class="course-data clearfix">
+      {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
-	 </ul>
-	{{ header_macro.info(course, member) }}
-	<div class="pull-rights">
+      {% if member and not member.fake|default(false) and member.role == 'student' and member.joinedType == 'course' %}
+        <li>
+          {% if member.orderId  %}
+            <a href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
+              <p><i class="es-icon es-icon-exit"></i><p>
+            </a>
+          {% else %}
+            <a id="exit-course-learning" class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}" {% if member.role != 'student' %} disabled {% endif %}>
+              <p><i class="es-icon es-icon-exit"></i><p>
+            </a>
+          {% endif %}
+        </li>
+      {% endif %}
+   </ul>
+  {{ header_macro.info(course, member) }}
+  <div class="pull-rights">
     <div class="score">
         {{ web_macro.star(course.rating) }}
         <span>( {{ course.ratingNum }}人 )</span>
       </div>
     <div class="study clearfix">
-      <a class="btn btn-study" 
-      {% if setting("course.buy_fill_userinfo")|default(false) %}
-         href="#modal" data-toggle="modal" data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+      {% set needToPay=((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0)) %}
+      {% set userNotReady = setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
+      {% set courseNotPublishedOrAlreadyFull = course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      {% if 'periodic'==course.type %}
+        {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
+        {% set courseStarted=("now"|date('U') >= course.startTime) %}
+        {% if courseFinished %}
+          <a class="btn btn-study little-gray">已结束</a>
+        {% elseif member and not courseStarted %}
+          <a class="btn btn-study gray">{{ 'student'==member.role ? "已报名," : ""}}等待开课</a>
+        {% else %}
+          {% if userVipStatus=='ok' %}
+            <a class="btn btn-study" id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}">{{courseStarted ? '加入学习' : '报名参加'}}</a>
+          {% else %}
+            {% if needToPay %}
+              <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}" >{{ courseStarted ? '购买课程' : '报名参加' }}</a>
+            {% else %}
+              <a class="btn btn-study" href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}">{{courseStarted ? '加入学习' : '报名参加'}}</a>
+            {% endif %}
+          {% endif %}
+        {% endif %}
       {% else %}
-          href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-      {% endif %}>
-        加入学习
-      </a> 
+        <a class="btn btn-study" 
+          {% if userNotReady %}
+            href="#modal" 
+            data-toggle="modal" 
+            data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+          {% elseif userVipStatus == 'ok' %}
+            id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
+          {% else %}
+            href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+          {% endif %}
+          {% if courseNotPublishedOrAlreadyFull %}
+            disabled="disabled"
+          {% endif %}
+        >
+          {% if needToPay %}
+            {{ userVipStatus=='ok' ? "加入学习" : "购买课程" }}
+          {% else %}
+            加入学习
+          {% endif %}
+        </a>
+      {% endif %}
+    </a>
       {#多重情况
-       	<a class="btn btn-study">报名参加</a> 
+        <a class="btn btn-study">报名参加</a> 
         <a class="btn btn-study">继续学习</a> 
         <a class="btn btn-study gray">已报名,等待参加</a>
         <a class="btn btn-study little-gray">已结束</a> 
       #}
+      {#  <div class="sns clearfix" id="es-sns">
+            <span class="collect">
+              <a class="tooltop" id="favorite-btn" href="javascript:;" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="收藏课程" data-placement="top">
+                <span class="collect-icon"></span>
+              </a>
+            </span>
+            
+            <span class="collect active">
+              <a class="tooltop" id="unfavorite-btn" href="javascript:;" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %} data-role="tooltip" title="已收藏" data-placement="top">
+                <span class="collect-icon"></span>
+              </a>
+            </span>
+
+            <span class="es-share dropdown tooltop" data-bdText="{{setting('default.groupShareContent')}}" data-role="tooltip" title="分享到" data-placement="top">
+              <span class="icon-share"></span>
+            </span>
+          </div>#}
         </div> 
       </div>
-{% endblock %}	
+{% endblock %} 

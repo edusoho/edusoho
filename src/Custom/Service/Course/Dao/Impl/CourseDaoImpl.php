@@ -4,7 +4,6 @@ namespace Custom\Service\Course\Dao\Impl;
 
 use Custom\Service\Course\Dao\CourseDao;
 use Topxia\Service\Course\Dao\Impl\CourseDaoImpl as BaseCourseDao;
-use Custom\Service\File\Dao\UploadFileDao;
 
 class CourseDaoImpl extends BaseCourseDao implements CourseDao
 {

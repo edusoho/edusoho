@@ -1,6 +1,6 @@
 {% for teacher in teachers %}
-{% set user = data('UserandProfiles',{userId:teacher.id})%}  
- <li>
+  {% set user = data('UserandProfiles',{userId:teacher.id})%}
+  <li>
     <div class="teacher-top clearfix">
       <div class="avatar">
         <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}"></a>
@@ -12,4 +12,4 @@
       {{ user['profiles']['about'] | raw }}
     </div>
   </li>
-{% endfor %}  
+{% endfor %}
