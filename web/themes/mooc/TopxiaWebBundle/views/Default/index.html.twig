@@ -11,15 +11,17 @@
   {{ block_show('mooc:home_top_banner') }}
 {# {% endblock %} #}
 
-{# {% block container %} #}
-
+  {# {% block container %} #}
   {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
   {% if recommendCourses %}      
     <section class="es-section section-gray">
       <div class="container">
-        <div class="section-header clearfix">
-          <h4>推荐课程</h4>
-          <a href="{{ path('course_explore') }}" class="more">更多</a>
+        <div class="course-filter" id="course-filter">
+         推荐课程
+         <div class="course-sort btn-group">
+           <a href="javascript:;" class="btn btn-default js-course-filter" data-url="/course/search?categoryId=37&amp;orderBy=latest">最新</a>
+           <a href="javascript:;" class="btn btn-default js-course-filter" data-url="/course/search?categoryId=37&amp;orderBy=studentNum">热门</a>
+         </div>
         </div>
         <div class="section-bodyer">
           <div class="home-course-list row">
@@ -29,11 +31,17 @@
                 {% endif %}
             {% endfor %}
           </div>
+          <div class="text-center mvl">
+            <a href="/course/explore" class="btn btn-default btn-lg btn-section-more">
+              更多<i class="fa fa-angle-right mls"></i>
+            </a>
+          </div>
         </div>
       </div>
     </section>
   {% endif %}
 
+<!--   
   {% set latestCourses = data('LatestCourses',{ count:6 }) %}
   {% if latestCourses %}      
     <section class="es-section">
@@ -54,14 +62,51 @@
       </div>
     </section>
   {% endif %}
+ -->
+
+   <!-- 推荐班级 -->
+  {% set RecommendClassrooms = data('RecommendClassrooms',{'count':4})%}
+  {% if RecommendClassrooms %}
+    <section class="class-section">
+      <div class="container">
+        <div class="course-filter" id="course-filter">
+         推荐班级
+        </div>
+        <div class="recommend-class-list row">
+          {% for classroom in RecommendClassrooms %}
+          <div class="col-md-3 col-sm-6">
+            <div class="class-item">
+              <div class="class-bg-layer"></div>
+              <div class="class-item-bg">
+                <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                  {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                </a>
+                <h3>
+                  <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                </h3>
+                <a>学员({{classroom.studentNum + classroom.auditorNum }})</a>
+                <a>简介：{{classroom.about|raw}}</a>
+              </div>
+            </div>
+          </div>
+          {% set user = data('User', {userId:classroom.headTeacherId}) %}
+          <span>{{user.nickname}}</span>
+          <img class="img-responsive avatar-sm" src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">{% endfor %}</div>
+        <div class="text-center mvl">
+          <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
+            更多<i class="fa fa-angle-right mls"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  {% endif %}
 
   {% set teachers = data('RecommendTeachers',{'count':3}) %}
   {% if teachers %}
     <section class="es-section section-gray">
       <div class="container">
-        <div class="section-header clearfix">
-          <h4>名师风采</h4>
-          <a href="{{ path('teacher') }}" class="more">更多</a>
+        <div class="course-filter" id="course-filter">
+         名师风采
         </div>
         <div class="section-bodyer">
           <div class="home-teacher-list row">
@@ -70,6 +115,11 @@
                 {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
               </div>
             {% endfor %}
+          </div>
+          <div class="text-center mvl">
+            <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
+              更多 <i class="fa fa-angle-right mls"></i>
+            </a>
           </div>
         </div>
       </div>
