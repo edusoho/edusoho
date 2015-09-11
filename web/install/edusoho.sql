@@ -1444,12 +1444,9 @@ CREATE TABLE `classroom` (
   `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `rating` FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '排行数值',
   `ratingNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '投票人数',
-<<<<<<< HEAD
   `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
-=======
   `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示',
   `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买',
->>>>>>> 5dc17461101046550dd222473510fefb674ef9cc
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
