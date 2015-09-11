@@ -16,9 +16,13 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlock($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $block = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $block = $that->getConnection()->fetchAssoc($sql, array($id));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        });
     }
 
     public function searchBlockCount($condition)
@@ -63,6 +67,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     {
         $this->createSerializer()->serialize($block, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $block);
+        $this->clearCached();
         if ($affected <= 0) {
             throw $this->createDaoException('Insert block error.');
         }
@@ -71,14 +76,20 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function deleteBlock($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function getBlockByCode($code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = ?  LIMIT 1";
-        $block = $this->getConnection()->fetchAssoc($sql, array($code));
-        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ?  LIMIT 1";
+            $block = $that->getConnection()->fetchAssoc($sql, array($code));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        });
     }
 
     public function findBlocks($conditions, $orderBy,$start, $limit)
@@ -100,6 +111,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     {
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getBlock($id);
     }
 
