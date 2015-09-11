@@ -11,8 +11,12 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function getReview($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        });
     }
 
     public function findReviewsByCourseId($courseId, $start, $limit)
@@ -24,8 +28,12 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
 
     public function getReviewCountByCourseId($courseId)
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:count", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT COUNT(id) FROM {$that->getTable()} WHERE courseId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId));
+        });
     }
 
     public function addReview($review)
@@ -34,25 +42,35 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         if ($affected <= 0) {
             throw $this->createDaoException('Insert review error.');
         }
+        $this->clearCached();
         return $this->getReview($this->getConnection()->lastInsertId());
     }
 
     public function updateReview($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getReview($id);
     }
 
     public function getReviewByUserIdAndCourseId($userId, $courseId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND userId = ? LIMIT 1;";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("userId:{$userId}:courseId:{$courseId}", $userId, $courseId, function ($userId, $courseId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND userId = ? LIMIT 1;";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $userId)) ? : null;
+        });
     }
 
     public function getReviewRatingSumByCourseId($courseId)
     {
-        $sql = "SELECT sum(rating) FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:sum_rating", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT sum(rating) FROM {$that->getTable()} WHERE courseId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId));
+        });
     }
 
     public function searchReviewsCount($conditions)
@@ -76,7 +94,9 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
     public function deleteReview($id)
     {
         $sql = "DELETE FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeUpdate($sql, array($id));
+        $result = $this->getConnection()->executeUpdate($sql, array($id));
+        $this->clearCached();
+        return $result;
     }
 
     protected function createReviewSearchBuilder($conditions)
