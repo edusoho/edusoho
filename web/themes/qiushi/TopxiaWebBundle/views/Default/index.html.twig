@@ -3,7 +3,14 @@
 {% block top_content %}
   <!--首页幻灯片开始-->
 
-            {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
+  <style type="text/css">
+  .carousel-inner img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  </style>
+  {% set blocks = data('Blocks',{'codes':['qiushi:home_top_banner'] }) %}
   {% if blocks['qiushi:home_top_banner'] %}
   <div class="container jumbotron" style="position: relative;padding:0px!important">
 <div class="hidden-xs hidden-sm col-md-3 col-lg-3" style="position: absolute; top:0; right:15px; z-index:1;">

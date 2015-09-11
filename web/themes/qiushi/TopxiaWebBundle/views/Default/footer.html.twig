@@ -17,6 +17,7 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
       <div class="site-footer-links" >
+        <div class="text-center hidden-lg hidden-md">{{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}</div>
       {% include "TopxiaWebBundle::powered-by.html.twig" %}
         {% if setting('site.copyright') %}<p class="text-center">Copyright©2003-2013 <a href="/">{{ setting('site.copyright') }}</a> All Rights Reserve</p>{% endif %}
         {% if setting('site.icp') %} <p class="text-center"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></p>{% endif %}
