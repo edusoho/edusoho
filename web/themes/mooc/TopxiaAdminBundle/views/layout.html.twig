@@ -166,7 +166,7 @@
           <ul class="nav nav-tabs mbm">
             {% for m in tabMenus %}
               <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
-                {% if not menu_hiddens[m.code]|default(false) %}
+                {% if not menu_hiddens[m.code]|default(false) and not in_menu_blacklist(m.code)%}
                   {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
                 {% endif %}
               </li>
