@@ -549,8 +549,8 @@ class CourseLessonController extends BaseController
         if ($this->getAppService()->findInstallApp('classroomPlan')) {
             $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
             $taskProcessor = $this->getTaskProcessor('studyPlan');
-            $targetId = $lesson['type'] == 'testpaper' ? $lesson['mediaId'] : $lessonId;
-            $canFinish = $taskProcessor->canFinish($targetId, $lesson['type'], $user['id']);
+
+            $canFinish = $taskProcessor->canFinish($lessonId, $lesson['type'], $user['id']);
             if (!$canFinish) {
                 return $this->createJsonResponse(false);
             }
