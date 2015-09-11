@@ -169,75 +169,75 @@
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">身份验证
                   </td>
                   <td>手机绑定</td>
-                  <td>1</td>
+                  <td>
+                    1
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips1" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips1-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
-                  <td class="radios">
+                  <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="radio" name="sms_bind" value="1"
-                      {% if (setting('cloud_sms.sms_bind')|default('')) == '1' %}
-                        checked="checked"
-                      {% endif %}> 开启
-                    </label>
-                    <label>
-                        <input type="radio" name="sms_bind" value="0" 
-                        {% if (setting('cloud_sms.sms_bind')|default('')) != '1' %}
-                          checked="checked"
-                        {% endif %}> 关闭
+                      <input type="hidden" name="sms_bind" value="1" >默认开启
                     </label>
                   </td>
                   </td>
                 </tr>
                 <tr>
                   <td>登录密码重置</td>
-                  <td>2</td>
-                  <td class="radios">
+                  <td>
+                    2
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips2" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips2-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="radio" name="sms_forget_password" value="1"
-                      {% if (setting('cloud_sms.sms_forget_password')|default('')) == '1' %}
-                        checked="checked"
-                      {% endif %}> 开启
-                    </label>
-                    <label>
-                        <input type="radio" name="sms_forget_password" value="0" 
-                        {% if (setting('cloud_sms.sms_forget_password')|default('')) != '1' %}
-                          checked="checked"
-                        {% endif %}> 关闭
+                      <input type="hidden" name="sms_forget_password" value="1"> 默认开启
                     </label>
                   </td>
                 </tr>
                 <tr>
                   <td>支付密码重置</td>
-                  <td>3</td>
-                  <td class="radios">
+                  <td>
+                    3
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips3" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips3-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="radio" name="sms_forget_pay_password" value="1"
-                      {% if (setting('cloud_sms.sms_forget_pay_password')|default('')) == '1' %}
-                        checked="checked"
-                      {% endif %}> 开启
-                    </label>
-                    <label>
-                        <input type="radio" name="sms_forget_pay_password" value="0" 
-                        {% if (setting('cloud_sms.sms_forget_pay_password')|default('')) != '1' %}
-                          checked="checked"
-                        {% endif %}> 关闭
+                      <input type="hidden" name="sms_forget_pay_password" value="1"> 默认开启
                     </label>
                   </td>
                 </tr>
                 <tr>
                   <td>使用网站余额支付</td>
-                  <td>4</td>
-                  <td class="radios">
+                  <td>
+                    4
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips4" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips4-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="radio" name="sms_user_pay" value="1"
-                      {% if (setting('cloud_sms.sms_user_pay')|default('')) == '1' %}
-                        checked="checked"
-                      {% endif %}> 开启
-                    </label>
-                    <label>
-                        <input type="radio" name="sms_user_pay" value="0" 
-                        {% if (setting('cloud_sms.sms_user_pay')|default('')) != '1' %}
-                          checked="checked"
-                        {% endif %}> 关闭
+                      <input type="hidden" name="sms_user_pay" value="1"> 默认开启
                     </label>
                   </td>
                 </tr>
@@ -260,7 +260,16 @@
                   <td rowspan="9" style="text-align:center;vertical-align:middle;font-size:18px;">教务通知
                   </td>
                   <td>新班级发布</td>
-                  <td>5</td>
+                  <td>
+                    5
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips5" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips5-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】同学们，《班级名称》现已开始报名！链接地址”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;"> 
                   手动群发
                   </td>
@@ -281,7 +290,16 @@
                 </tr>
                 <tr>
                   <td>新课程发布</td>
-                  <td>6</td>
+                  <td>
+                    6
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips6" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips6-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】同学们，《课程名称》现已开始报名！链接地址”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_course_publish" value="1"
@@ -299,7 +317,16 @@
                 </tr>
                 <tr>
                   <td>新课时发布通知（普通课程）</td>
-                  <td>7</td>
+                  <td>
+                    7
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips7" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips7-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的《课程名称》－《课时名》已发布！链接地址”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_normal_lesson_publish" value="1"
@@ -317,7 +344,16 @@
                 </tr>
                 <tr>
                   <td>新课时发布通知（直播）</td>
-                  <td>8</td>
+                  <td>
+                    8
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips8" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips8-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】《课程名》－《课时名》将在［开播时间］开播！链接地址”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_live_lesson_publish" value="1"
@@ -353,7 +389,16 @@
                 </tr> #}
                 <tr>
                   <td>直播开播前通知（提前1天）</td>
-                  <td>9</td>
+                  <td>
+                    9
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips9" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips9-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】《课程名》－《课时名》将在［开播时间］开播！链接地址”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
                   自动群发
                   </td>
@@ -374,7 +419,16 @@
                 </tr>
                 <tr>
                   <td>直播开播前通知（提前1小时）</td>
-                  <td>10</td>
+                  <td>
+                    10
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips10" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips10-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】《课程名》－《课时名》将在［开播时间］开播！链接地址”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_live_play_one_hour" value="1"
@@ -392,7 +446,16 @@
                 </tr>
                 <tr>
                   <td>作业完成批阅</td>
-                  <td>11</td>
+                  <td>
+                    11
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips11" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips11-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的《课程名》-《课时名》的作业已被老师批阅，快来看看吧！”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td rowspan="2" style="text-align:center;vertical-align:middle;font-size:18px;"> 
                   自动单发
                   </td>
@@ -417,7 +480,16 @@
                 </tr>
                 <tr>
                   <td>试卷完成批阅</td>
-                  <td>12</td>
+                  <td>
+                    12
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips12" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips12-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您提交的试卷《课时名》已被老师批阅，快来看看吧”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td class="radios">
                     <label>
                       <input type="radio" name="sms_testpaper_check" value="1"
@@ -452,7 +524,16 @@
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">支付成功回执
                   </td>
                   <td>课程购买</td>
-                  <td>13</td>
+                  <td>
+                    13
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips13" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips13-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买《课程名称》，支付［订单金额］”<br>
+                      </div>
+                    </div>
+                  </td>
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
                   </td>
                   <td rowspan="4" class="radios" style="vertical-align:middle;">
@@ -472,15 +553,42 @@
                 </tr>
                 <tr>
                   <td>班级购买</td>
-                  <td>14</td>
+                  <td>
+                    14
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips14" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips14-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买《班级名称》，支付［订单金额］”<br>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <td>会员购买</td>
-                  <td>15</td>
+                  <td>
+                    15
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips15" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips15-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买《会员名称》，支付［订单金额］”<br>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <td>虚拟币充值</td>
-                  <td>16</td>
+                  <td>
+                    16
+                    <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips16" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                    <div id="article-property-tips16-html" style="display:none;">
+                      <div style="width:250px;font-size:14px;">
+                        <span style="color:blue;"> 短信内容:</span><br>
+                        “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买《虚拟币面值》《单位》，支付［订单金额］”<br>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
