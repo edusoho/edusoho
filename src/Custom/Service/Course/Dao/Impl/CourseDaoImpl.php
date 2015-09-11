@@ -2,9 +2,10 @@
 
 namespace Custom\Service\Course\Dao\Impl;
 
+use Custom\Service\Course\Dao\CourseDao;
 use Topxia\Service\Course\Dao\Impl\CourseDaoImpl as BaseCourseDao;
 
-class CourseDaoImpl extends BaseCourseDao
+class CourseDaoImpl extends BaseCourseDao implements CourseDao
 {
 	public function getPeriodicCoursesCount($rootId){
 		$sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE rootId = ?";
