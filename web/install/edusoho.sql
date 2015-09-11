@@ -245,13 +245,8 @@ CREATE TABLE `course` (
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
   `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
-<<<<<<< HEAD
-  `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
-  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
-=======
   `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
->>>>>>> master
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -1520,18 +1515,10 @@ PRIMARY KEY (`id`)
 
 DROP TABLE IF EXISTS `blacklist`;
 CREATE TABLE `blacklist` (
-<<<<<<< HEAD
-`id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-`userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
-`blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
-`createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
-PRIMARY KEY (`id`)
-=======
  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
  `userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
  `blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
  PRIMARY KEY (`id`)
->>>>>>> master
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
 
