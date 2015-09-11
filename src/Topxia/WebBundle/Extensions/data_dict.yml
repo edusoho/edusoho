@@ -160,6 +160,12 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
 
+jobCycle:
+    once: 一次
+    everyhour: 每小时
+    everyday: 每天
+    everymouth: 每月
+
 logLevel:
     info: 提示
     warning: 警告

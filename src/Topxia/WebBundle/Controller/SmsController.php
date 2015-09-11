@@ -38,8 +38,9 @@ class SmsController extends BaseController
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
                 if ($classroom) {
                     $verifiedMobileUserNum = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
-            } else {
-                $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileStudentsCountByCourseId($lesson['courseId']);
+                } else {
+                    $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileStudentsCountByCourseId($lesson['courseId']);
+                }
             }
         }
 

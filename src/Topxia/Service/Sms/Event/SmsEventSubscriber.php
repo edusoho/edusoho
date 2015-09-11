@@ -16,6 +16,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
             'testpaper.check' => 'onTestpaperCheck',
             'order.pay.success' => 'onOrderPaySuccess',
             'course.lesson.publish' => 'onCourseLessonPublish',
+            'course.lesson.updateStartTime' => 'onCourseLessonUpdateStartTime',
+            'course.lesson.delete' => 'onCourseLessonDelete',
         );
     }
 
@@ -51,9 +53,37 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonPublish(ServiceEvent $event)
     {
+        $lesson = $event->getSubject();
+        $this->createJob($lesson);
+    }
+
+    public function onCourseLessonUpdateStartTime(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+
+        $this->createJob($lesson);
+
+    }
+
+    public function onCourseLessonDelete(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+    }
+
+    protected function createJob($lesson)
+    {
         $daySmsType = 'sms_live_play_one_day';
         $hourSmsType = 'sms_live_play_one_hour';
-        $lesson = $event->getSubject();
         $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
         $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
         if ($lesson['type'] == 'live' && ($dayIsOpen || $hourIsOpen)) {
@@ -61,7 +91,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 $startJob = array(
                 'name' => "直播短信一天定时",
                 'cycle' => 'once',
-                'time' => $lesson['startTime']-time() - 24*60*60,
+                'time' => $lesson['startTime'] - 24*60*60,
                 'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneDayJob',
                 'targetType' => 'lesson',
                 'targetId' => $lesson['id']
@@ -73,7 +103,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 $startJob = array(
                 'name' => "直播短信一小时定时",
                 'cycle' => 'once',
-                'time' => $lesson['startTime']-time() - 60*60,
+                'time' => $lesson['startTime'] - 60*60,
                 'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneHourJob',
                 'targetType' => 'lesson',
                 'targetId' => $lesson['id']
@@ -82,6 +112,14 @@ class SmsEventSubscriber implements EventSubscriberInterface
             }     
         }
     }
+
+    protected function deleteJob($jobs)
+    {
+        foreach ($jobs as $key => $job) {
+            $this->getCrontabService()->deleteJob($job['id']);
+        }
+    }
+
 
     protected function getUserService()
     {
@@ -100,7 +138,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
     protected function getCrontabService()
     {
-        return $this->createDao('Crontab.CrontabService');
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 
 }

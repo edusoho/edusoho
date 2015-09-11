@@ -653,6 +653,9 @@ admin_optimize_remove_upload_files:
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
     methods: [POST]
 
+admin_jobs:
+    pattern: /setting/jobs
+    defaults: { _controller: TopxiaAdminBundle:Job:index }
 admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }

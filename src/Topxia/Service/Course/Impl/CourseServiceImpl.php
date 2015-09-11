@@ -1206,6 +1206,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 		$this->dispatchEvent("course.lesson.update",$updatedLesson);
+		if ($fields['startTime'] != $lesson['startTime']) {
+			$this->dispatchEvent('course.lesson.updateStartTime',$updatedLesson);
+		}
 
 		return $updatedLesson;
 	}

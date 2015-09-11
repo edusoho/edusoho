@@ -37,7 +37,7 @@ class SmsServiceImpl extends BaseService implements SmsService
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'verify' => $smsCode, 'category' => $smsType, 'parameters' => $parameters));
             } catch (\RuntimeException $e) {
-                throw new Exception("发送失败！", 1);
+                throw new RuntimeException("发送失败！", 1);
             }
         $result['to'] = $to;
         $result['smsCode'] = $smsCode;
