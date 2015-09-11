@@ -6,7 +6,9 @@
       <tr>
         <td>主系统</td>
         <td>
+          {% if not upgrade_locked() %}
           <a class="btn btn-xs btn-info pull-right" href="{{path("admin_app_upgrades")}}">立即更新</a>
+          {% endif %}
           <span class="glyphicon glyphicon-info-sign text-info"></span>
           最新版本:{{ mainAppUpgrade.package.toVersion }}
           当前版本: {{ constant('Topxia\\System::VERSION') }}
@@ -39,16 +41,42 @@
           {% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge" style="background-color:#cc0000;">
           {% if status|default(0) == 1 %}{{app_count - 1}}{% else %}
           {{app_count}}
-          {% endif %}</span> 个应用没有更新 <a class="btn btn-xs btn-info pull-right" href="{{path("admin_app_upgrades")}}">立即更新</a>
+          {% endif %}</span> 个应用没有更新 
+            {% if not upgrade_locked() %}
+            <a class="btn btn-xs btn-info pull-right" href="{{path("admin_app_upgrades")}}">立即更新</a>
+            {% endif %}
           {% endif %}
           {% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 所有应用都已是最新版本
       {% endif %}</td></tr>
 
-        <tr><td>新应用</td><td>{% if unInstallAppCount>0 %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge">{{unInstallAppCount}}</span> 个应用没有安装<a class="pull-right" href="{{path("admin_app_center",{postStatus : 'all'})}}">查看</a>{% else %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已安装了全部应用
-      {% endif %}</td></tr>
+        <tr>
+          <td>新应用</td>
+          <td>
+          {% if unInstallAppCount>0 %}
+            <span class="glyphicon glyphicon-info-sign text-info"></span> 还有 <span class="badge">{{unInstallAppCount}}</span> 个应用没有安装
+            {% if not upgrade_locked() %}
+            <a class="pull-right" href="{{path("admin_app_center",{postStatus : 'all'})}}">查看</a>
+            {% endif %}
+          {% else %}
+            <span class="glyphicon glyphicon-ok-sign text-success"></span> 已安装了全部应用
+          {% endif %}
+          </td>
+        </tr>
 
-        <tr><td>云视频</td><td>{% if setting("storage.cloud_bucket")!="" %}<span class="glyphicon glyphicon-ok-sign text-success"></span> 已开通{% if setting("storage.upload_mode") != 'cloud' %}(尚未启用)<a class="pull-right" href="{{path("admin_setting_cloud_video")}}">查看</a>{% endif %}{% else %}<span class="glyphicon glyphicon-info-sign text-info"></span> 还未开通<a class="pull-right" href="{{path("admin_setting_cloud_video")}}">查看</a>
-      {% endif %}</td></tr>
+        <tr>
+          <td>云视频</td>
+          <td>
+            {% if setting("storage.cloud_bucket")!="" %}
+              <span class="glyphicon glyphicon-ok-sign text-success"></span> 已开通
+              {% if setting("storage.upload_mode") != 'cloud' %}
+                (尚未启用)<a class="pull-right" href="{{path("admin_setting_cloud_video")}}">查看</a>
+              {% endif %}
+            {% else %}
+            <span class="glyphicon glyphicon-info-sign text-info"></span> 还未开通
+            <a class="pull-right" href="{{path("admin_setting_cloud_video")}}">查看</a>
+            {% endif %}
+          </td>
+        </tr>
       {% endif %}
         <tr>
           <td>直播</td>
