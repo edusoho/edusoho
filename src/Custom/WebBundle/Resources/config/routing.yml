@@ -10,25 +10,6 @@ course_rounding:
     pattern: /course/{id}/rounding
     defaults: { _controller: CustomWebBundle:Course:rounding }
 
-course_lesson_plugin_homework_list:
-    pattern:  /lessonplugin/homework/list
-    defaults: { _controller: CustomWebBundle:LessonHomeworkPlugin:list }
-
-course_homeworks:
-    pattern:  /course/{id}/homeworks/
-    defaults: { _controller: CustomWebBundle:Homework:index }
-
-homework_review_create:
-    pattern: /homework_results/{homeworkResultId}/reviews/create
-    defaults: { _controller: CustomWebBundle:HomeworkReview:create }
-
-# course_homework_check:
-#     pattern: /course/{courseId}/homework/{homeworkId}/check/{userId}
-#     defaults: { _controller: CustomWebBundle:HomeworkReview:create }
-
-homework_review_check:
-    pattern: /homework_results/{homeworkResultId}/reviews/check
-    defaults: { _controller: CustomWebBundle:HomeworkReview:check }
 
 order_show:
     pattern:  /order/show

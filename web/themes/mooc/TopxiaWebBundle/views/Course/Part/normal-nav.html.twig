@@ -12,7 +12,7 @@
       <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a href="{{ path('course_show', {id:course.id}) }}">课时</a></li>
       <li role="presentation" {% if tab == 'thread' %}class="active"{% endif %}><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
       <li role="presentation" {% if tab == 'material' %}class="active"{% endif %}><a href="{{ path('course_materials', {id:course.id}) }}">资料区</a></li>
-      <li role="presentation" {% if tab == 'homeworks' %}class="active"{% endif %}><a href="{{ path('course_homeworks', {id:course.id}) }}">作业</a></li>
+      {% if is_plugin_installed('Homework') %}<li role="presentation" {% if tab == 'homeworks' %}class="active"{% endif %}><a href="{{ path('course_homeworks', {id:course.id}) }}">作业</a></li>{% endif %}
       <li role="presentation" {% if tab == 'review' %}class="active"{% endif %}>
         <a href="{{ path('course_review_list', {id:course.id}) }}">评价{% if course.ratingNum %} <small class="text-muted">( {{ course.ratingNum }} )</small>{% endif %}</a>
       </li>
