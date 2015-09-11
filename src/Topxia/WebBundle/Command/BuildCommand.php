@@ -209,6 +209,7 @@ class BuildCommand extends BaseCommand
 			'doctrine/dbal/lib/Doctrine',
 			'doctrine/doctrine-bundle',
 			'doctrine/doctrine-migrations-bundle',
+			'doctrine/doctrine-cache-bundle',
 			'doctrine/inflector/lib',
 			'doctrine/lexer/lib',
 			'doctrine/migrations/lib',
