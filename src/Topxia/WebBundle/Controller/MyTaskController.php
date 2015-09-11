@@ -27,16 +27,15 @@ class MyTaskController extends BaseController
 						'testId'=>$task['targetId']));
 					break;
 					case  'text':
-					$tasksevents[$key]['url'] = $this->generateUrl('course_manage_do_test',array(
-						'testId'=>$task['targetId']));
+					$tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
+						'classroomId'=>$task['meta']['classroomId']
+						));
 					break;
-				}
-
-
-				
-				if($task['targetType'] = 'testpaper'){
-				$tasksevents[$key]['url'] = $this->generateUrl('course_manage_do_test',array(
-					'testId'=>$task['targetId']));
+					case 'document':
+					$tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
+						'classroomId'=>$task['meta']['classroomId']
+						));
+					break;
 				}
 			}
 		}
