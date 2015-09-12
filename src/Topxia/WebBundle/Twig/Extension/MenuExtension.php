@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Twig\Extension;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\MenuBuilder;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MenuExtension extends \Twig_Extension
 {
@@ -32,7 +33,19 @@ class MenuExtension extends \Twig_Extension
             new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
             new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist')),
+            new \Twig_SimpleFunction('hiddenmenus', array($this, 'hiddenmenu')),
         );
+    }
+
+    public function hiddenmenu()
+    {
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        if($result['thirdCopyright'] == '1'){
+        $this->addMenuCodeToBlackList(array('admin_app'));
+        }
+        if($result['thirdCopyright'] == '0'){
+        $this->removeMenuCodeToBlackList(array('admin_app'));
+        }  
     }
 
     public function getMenuPath($env, $context, $menu)
@@ -62,6 +75,8 @@ class MenuExtension extends \Twig_Extension
         }
         $yaml = new Yaml();
         $blackList = $yaml->parse(file_get_contents($filename));
+        if(empty($blackList))
+        $blackList = array();
         return in_array($code, $blackList);
     }
 
@@ -73,6 +88,67 @@ class MenuExtension extends \Twig_Extension
     public function getMenuBreadcrumb($position, $code)
     {
         return $this->createMenuBuilder($position)->getMenuBreadcrumb($code);
+    }
+
+    private function addMenuCodeToBlackList($codes = array())
+    {
+        $yaml = new Yaml();
+        if(!is_array($codes)){
+            return;
+        }
+        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
+        if(!file_exists($filename)){
+                $content = $yaml->dump($codes);
+                $file = fopen($filename,"w");
+                fwrite($file,$content);
+                fclose($file);
+        }else{
+            $blackList = $yaml->parse(file_get_contents($filename));
+            if(empty($blackList)) $blackList = array();
+            $addCodes = array_diff($codes, $blackList);
+            if(!empty($addCodes)){
+                foreach ($addCodes as $addCode) {
+                    array_push($blackList, $addCode);    
+                }
+                $content = $yaml->dump($blackList);
+                $file = fopen($filename,"w");
+                fwrite($file,$content);
+                fclose($file);
+            }
+        }
+    }
+
+    public function removeMenuCodeToBlackList($codes =array())
+    {
+        $yaml = new Yaml();
+        if(!is_array($codes)){
+            return;
+        }
+        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
+        if(!file_exists($filename)){
+            return;
+        }
+        else{
+            $blackList = $yaml->parse(file_get_contents($filename));
+            if(empty($blackList))
+            $blackList = array();
+            $diffCodes = array_diff($blackList,$codes);
+            $array = array();
+            if(!empty($diffCodes)){
+                foreach ($diffCodes as $diffcode) {
+                    array_push($array,$diffcode);
+                }
+                $content = $yaml->dump($array);
+                $file = fopen($filename,"w");
+                fputs($file,$content);
+                fclose($file);
+            }else{
+                return;
+            }
+        }
+
+
+
     }
 
     private function createMenuBuilder($position)

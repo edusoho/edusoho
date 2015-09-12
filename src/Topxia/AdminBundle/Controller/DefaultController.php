@@ -6,8 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Symfony\Component\Yaml\Yaml;
-
 
 class DefaultController extends BaseController
 {
@@ -81,14 +79,23 @@ class DefaultController extends BaseController
     { 
         $result = CloudAPIFactory::create('leaf')->get('/me');
         if($result['thirdCopyright'] == '1'){
-            $this->addMenuCodeToBlackList(array('admin_app', 'cloud_notice', 'system_status'));
+        //     $this->addMenuCodeToBlackList('cloud_notice', 'system_status');
+            $hidden = array(
+                'cloud_notice' => '1',
+                'system_status' => '1',
+            );
         }
 
         if($result['copyright'] == '1'){
-            $this->addMenuCodeToBlackList(array('cloud_notice'));   
+            // $this->addMenuCodeToBlackList(array('cloud_notice'));   
+            $hidden = array(
+                'cloud_notice' => '1'
+            );
         }       
 
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig',array(
+            'hidden' => $hidden
+        ));
     }
 
     public function getCloudNoticesAction(Request $request)
@@ -389,34 +396,6 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-    }
-
-    public function addMenuCodeToBlackList($codes = array())
-    {
-        $yaml = new Yaml();
-        if(!is_array($codes)){
-            return;
-        }
-        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
-        if(!file_exists($filename)){
-                $content = $yaml->dump($codes);
-                $file = fopen($filename,"w");
-                fwrite($file,$content);
-                fclose($file);
-        }else{
-            $blackList = $yaml->parse(file_get_contents($filename));
-            if(empty($blackList)) $blackList = array();
-            $addCodes = array_diff($codes, $blackList);
-            if(!empty($addCodes)){
-                foreach ($addCodes as $addCode) {
-                    array_push($blackList, $addCode);    
-                }
-                $content = $yaml->dump($blackList);
-                $file = fopen($filename,"w");
-                fwrite($file,$content);
-                fclose($file);
-            }
-        }
     }
 
     protected function getSettingService()
