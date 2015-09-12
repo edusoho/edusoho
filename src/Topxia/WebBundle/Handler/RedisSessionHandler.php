@@ -60,7 +60,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
         $this->redis = $redisFactory->getRedis();
-        $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 2*60*60;
+        $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 20*60;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
 
         $this->context = $context;
