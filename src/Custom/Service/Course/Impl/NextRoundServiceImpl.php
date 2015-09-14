@@ -17,8 +17,8 @@ class NextRoundServiceImpl extends BaseService implements NextRoundService
 {
     public function rounding($course, $link = false){
         if($course['rootId']) {        //是否第一周期课程
-            $i = $this->getCourseDao()->getPeriodicCoursesCount($course['rootId']);
-            $course['periods'] = intval($i + 2);
+            $countNotIncludeRoot = $this->getCourseDao()->getPeriodicCoursesCount($course['rootId']);
+            $course['periods'] = intval($countNotIncludeRoot + 2);
             $course['rootId'] = $course['rootId'];
         }else{
             $course['periods'] = 2;
