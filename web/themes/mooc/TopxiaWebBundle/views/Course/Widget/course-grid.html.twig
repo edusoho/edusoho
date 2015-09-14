@@ -10,8 +10,10 @@
   <div class="content">{{ course.about|plain_text(100) }}</div>
   <div class="metas">
     {% if 'periodic'== course.type %}
-      {% if "now"|date('U') >= course.startTime %}
-        <a class="pull-right week-reminder"><i class="iconfont icon-time"></i>{{ (course.startTime==0 or course.endTime==0) ? '-' : (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ (course.startTime==0 or course.endTime==0) ? '-' : ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+      {% if "now"|date('U') > course.endTime %}
+        <a class="pull-right time-reminder">已结束</a>
+      {% elseif "now"|date('U') >= course.startTime %}
+        <a class="pull-right week-reminder"><i class="iconfont icon-time"></i>{{ (course.startTime == 0 or course.endTime == 0) ? '-' : (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ (course.startTime==0 or course.endTime==0) ? '-' : ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
       {% else %}
         <a class="pull-right time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
       {% endif %}
