@@ -48,7 +48,7 @@
             <div class="col-md-2 control-label"><b>论坛头像</b></div>
             <div class="controls col-md-8 controls">
               <img src="{{ partnerAvatar }}" class="mrm">
-              <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings_avatar') }}">使用该头像</button>
+              <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings_avatar') }}" data-img-url="{{ partnerAvatar }}" >使用该头像</button>
             </div>
           </div>
         {% endif %}

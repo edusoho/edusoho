@@ -166,7 +166,7 @@
                 </h3>
               </div>
               <div class="panel-body">
-                {% set statuses = data('LatestStatuses', {mode:'simple', count: 4}) %}
+                {% set statuses = data('LatestStatuses', {mode:'simple', count: 4,private:0}) %}
 
                 {% for status in statuses %}
                   <div class="media media-dynamic">

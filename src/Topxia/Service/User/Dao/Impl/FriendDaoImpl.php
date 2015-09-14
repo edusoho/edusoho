@@ -31,6 +31,11 @@ class FriendDaoImpl extends BaseDao implements FriendDao
        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function updateFriendByFromIdAndToId($fromId, $toId, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('fromId' => $fromId,'toId' => $toId));
+    }
+
     public function getFriendByFromIdAndToId($fromId, $toId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId = ?";
@@ -85,5 +90,18 @@ class FriendDaoImpl extends BaseDao implements FriendDao
         $parmaters = array_merge(array($fromId), $toIds);
         $sql ="SELECT * FROM {$this->table} WHERE fromId = ? AND toId IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $parmaters);
+    }
+
+    public function findFriendsByUserId($userId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? and pair = 1 ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
+    public function findFriendCountByUserId($userId)
+    {
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE fromId = ? and pair = 1";
+        return $this->getConnection()->fetchColumn($sql, array($userId));
     }
 }

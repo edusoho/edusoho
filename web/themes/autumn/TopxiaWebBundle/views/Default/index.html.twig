@@ -377,7 +377,7 @@
       {% endif %}
 
       {# 学员动态 #}
-      {% set statuses = data('LatestStatuses', {mode:'simple', count: 5}) %}
+      {% set statuses = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
       {% if statuses %}
         <div class="panel panel-autumn panel-autumn-default status-side">
           <div class="panel-heading side-autumn-default">
