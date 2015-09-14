@@ -21,6 +21,7 @@ class MyTaskController extends BaseController
 				$tasksevents[$key]['title'] = $task['title'];
 				$tasksevents[$key]['start'] = date("Y-m-d H:i:s",$task['taskStartTime']);
 				$tasksevents[$key]['end'] = date("Y-m-d H:i:s",$task['taskEndTime']);
+				$tasksevents[$key]['id'] = $task['id'];
 				switch($task['targetType']){
 					case  'testpaper':
 					$tasksevents[$key]['url'] = $this->generateUrl('course_manage_do_test',array(
@@ -40,13 +41,13 @@ class MyTaskController extends BaseController
 			}
 		}
 		$jsontasks = json_encode($tasksevents);
-		if($user->isTeacher()){
 		return $this->render('TopxiaWebBundle:MyTask:index.html.twig', array(
             'user' => $user,
             'taskjson' => $jsontasks,
             ));
-		}
-		
+	}
+	public function updateAction(Request $request){
+		return "";
 	}
 	protected function getTaskService()
 	{

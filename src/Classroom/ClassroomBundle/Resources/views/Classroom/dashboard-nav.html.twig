@@ -14,6 +14,9 @@
     <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">话题 <small class="text-muted">{% if classroom.threadNum != 0 %}( {{classroom.threadNum}} ){% endif %}</small></a></li>
 
     <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">笔记 <small class="text-muted">{% if classroom.noteNum != 0 %}( {{ classroom.noteNum }} ){% endif %}</small></a></li>
+    {% if app.user.isTeacher() %}
+    <li role="presentation" class="{% if nav == 'classroomplan' %}active{% endif %}"><a  href="{{ path('classroom_teacher_plan', {classroomId:classroom.id}) }}">计划日历</a></li>
+    {% endif %}
   {% endif %}
 
     <li role="presentation" class="{% if nav == 'teachers' %}active{% endif %}"><a href="{{ path('classroom_teachers', {classroomId:classroom.id}) }}">师资</a></li>
