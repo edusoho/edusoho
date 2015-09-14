@@ -547,13 +547,13 @@ class CourseLessonController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($this->getAppService()->findInstallApp('classroomPlan')) {
-            $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-            $taskProcessor = $this->getTaskProcessor('studyPlan');
 
-            $canFinish = $taskProcessor->canFinish($lessonId, $lesson['type'], $user['id']);
-            if (!$canFinish) {
-                return $this->createJsonResponse(false);
+            $modalInfo = $this->getClassroomPlanService()->getFinishModalContent($this->container, $lessonId);
+            if ($modalInfo['canFinish']) {
+                $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
             }
+
+            return $this->createJsonResponse($modalInfo);
         }
        
 
@@ -733,5 +733,20 @@ class CourseLessonController extends BaseController
     protected function getTaskProcessor($taskType)
     {
         return TaskProcessorFactory::create($taskType);
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+    
+    protected function getClassroomPlanService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+    
+    protected function getClassroomPlanMemberService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
     }
 }
