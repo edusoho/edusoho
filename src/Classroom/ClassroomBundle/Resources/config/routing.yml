@@ -123,9 +123,6 @@ classroom_introductions:
     pattern:  /classroom/{id}/introduction
     defaults: { _controller: ClassroomBundle:Classroom:introduction }
 
-classroom_teacher_plan:
-    pattern: /classroom/{classroomId}/classroomplan
-    defaults: { _controller: ClassroomBundle:Classroom:teacherclassroomplan }
 # classroom_review_create:
 #     pattern:  /classroom/{id}/review/create
 #     defaults: { _controller: ClassroomBundle:Classroom:create }

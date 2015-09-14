@@ -907,59 +907,6 @@ class ClassroomController extends BaseController
 
     }
 
-    public function teacherclassroomplanAction(Request $request,$classroomId){
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
-        }
-        if(empty($classroom)){
-            return $this->createMessageResponse('error', '此班级不存在');
-        }
-        $conditions=array(
-            'userId' => $user['id'],
-            'status' => 'active'
-            );
-        $tasks = $this->getTaskService()->searchTasks($conditions,array('taskStartTime','DESC'),0,9999);
-        $tasksevents=array(array(
-            ));
-        if($tasks){
-            foreach($tasks as $key => $task){
-                $tasksevents[$key]['title'] = $task['title'];
-                $tasksevents[$key]['start'] = date("Y-m-d H:i:s",$task['taskStartTime']);
-                $tasksevents[$key]['end'] = date("Y-m-d H:i:s",$task['taskEndTime']);
-                $tasksevents[$key]['id'] = $task['id'];
-                switch($task['targetType']){
-                    case  'testpaper':
-                    $tasksevents[$key]['url'] = $this->generateUrl('course_manage_do_test',array(
-                        'testId'=>$task['targetId']));
-                    break;
-                    case  'text':
-                    $tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
-                        'classroomId'=>$task['meta']['classroomId']
-                        ));
-                    break;
-                    case 'document':
-                    $tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
-                        'classroomId'=>$task['meta']['classroomId']
-                        ));
-                    break;
-                }
-            }
-        }
-        $jsontasks = json_encode($tasksevents);
-        return $this->render('ClassroomBundle:Classroom:classroomplan.html.twig', array(
-            'user' => $user,
-            'taskjson' => $jsontasks,
-            'classroom' => $classroom,
-            'member' => $member,
-            ));
-    }
-
     protected function getEnabledPayments()
     {
         $enableds = array();
@@ -1063,10 +1010,5 @@ class ClassroomController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
 
-    }
-
-    protected function getTaskService()
-    {
-        return $this->getServiceKernel()->createService('Task.TaskService');
     }
 }
