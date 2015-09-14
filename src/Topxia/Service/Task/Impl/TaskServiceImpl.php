@@ -27,6 +27,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findUserTasksByBatchIdAndTasktype($userId, $batchId, $taskType);
     }
 
+    public function findUserCompletedTasks($userId, $batchId)
+    {
+        return $this->getTaskDao()->findUserCompletedTasks($userId, $batchId);
+    }
+
     public function addTask(array $fields)
     {
         return $this->getTaskDao()->addTask($fields);

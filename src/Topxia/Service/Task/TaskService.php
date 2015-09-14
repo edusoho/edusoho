@@ -12,6 +12,8 @@ interface TaskService
 
     public function findUserTasksByBatchIdAndTasktype($userId, $batchId, $taskType);
 
+    public function findUserCompletedTasks($userId, $batchId);
+
     public function addTask(array $fields);
 
     public function updateTask($id, array $fields);

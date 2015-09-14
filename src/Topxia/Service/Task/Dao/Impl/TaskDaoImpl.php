@@ -41,6 +41,13 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
     }
 
+    public function findUserCompletedTasks($userId, $batchId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `status`='completed' ORDER BY `compltedTime` ASC";
+        $tasks = $this->getConnection()->fetchAll($sql, array($userId, $batchId));
+        return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
+    }
+
     public function addTask(array $fields)
     {
         $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
@@ -102,6 +109,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
             ->andWhere('taskEndTime >= :taskEndTimeGreaterThan')
             ->andWhere('taskEndTime <= :taskEndTimeLessThan')
             ->andWhere('id < :taskIdLessThan')
+            ->andWhere('id > :taskIdGreaterThan')
             ->andWhere('batchId IN ( :batchIds )');
 
         return $builder;
