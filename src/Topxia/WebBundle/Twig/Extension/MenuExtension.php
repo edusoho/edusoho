@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
+use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\MenuBuilder;
 
@@ -30,6 +31,7 @@ class MenuExtension extends \Twig_Extension
             new \Twig_SimpleFunction('menu_children', array($this, 'getMenuChildren')),
             new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
             new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true)),
+            new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist')),
         );
     }
 
@@ -47,6 +49,20 @@ class MenuExtension extends \Twig_Extension
         }
 
         return $this->container->get('router')->generate($route, $params);
+    }
+
+    public function inMenuBlacklist($code = '')
+    {
+        if(empty($code)){
+            return false;
+        }
+        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
+        if(!file_exists($filename)){
+            return false;
+        }
+        $yaml = new Yaml();
+        $blackList = $yaml->parse(file_get_contents($filename));
+        return in_array($code, $blackList);
     }
 
     public function getMenuChildren($position, $code, $group = null)

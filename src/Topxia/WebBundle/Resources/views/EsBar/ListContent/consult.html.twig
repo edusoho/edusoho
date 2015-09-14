@@ -47,15 +47,20 @@
 
     <div id="bar-phone-content">
       {% if consult.worktime is not empty %}
-        <p class="mtl"><i class="es-icon es-icon-accesstime mrm"></i>工作时间： {{ consult.worktime }}</p>
+        <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>工作时间： {{ consult.worktime }}</p>
       {% endif %}
       {% for phone in consult.phone if phone.name is not empty %}
-        <p class="mtl"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}： {{ phone.number }}</p>
+        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}： {{ phone.number }}</p>
       {% endfor %}
       {% if consult.email is not empty %}
-        <p class="mtl"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
+        <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
       {% endif %}
     </div>
-    
+
+    {% if consult.webchatURI is not empty %}
+      <div id="bar-weixin-content">
+        <img width="110" class="img-responsive" src="{{ asset(consult.webchatURI) }}" alt="">
+      </div>
+    {% endif %}
   </div>
 {% endif %}
