@@ -6,6 +6,7 @@ package.json
 **/release/*
 /.idea
 /web/bundles/
+web/install/edusoho_init.sql
 /app/cache/*
 /app/config/parameters.yml
 /app/config/menu_blacklist.yml

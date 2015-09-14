@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\BlockToolkit;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DumpInitDataCommand extends BaseCommand
 {
@@ -51,6 +52,11 @@ class DumpInitDataCommand extends BaseCommand
 		exec($command);
 
 		$rootPath = __DIR__.'/../../../..';
+		$filesystem = new Filesystem();
+		if (!$filesystem->exists("{$rootPath}/installFiles")) {
+			$filesystem->mkdir("{$rootPath}/installFiles");
+		}
+
 		$command = "scp root@{$domain}:~/edusoho_init.{$time}.sql {$rootPath}/installFiles/edusoho_init.sql";
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
