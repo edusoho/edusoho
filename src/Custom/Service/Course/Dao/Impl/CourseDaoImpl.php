@@ -25,8 +25,8 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 		}*/
 		$now = time();
 		$table = "(select a.* from (
-	select b.*, {$now} - cast(b.startTime as signed) as maxTime, CASE b.rootId WHEN 0 or b.rootId is NULL THEN b.id ELSE b.rootId END as 'groupId' from course b order by maxTime desc) a
-group by groupId )";
+						select b.*, {$now} - cast(b.startTime as signed) as maxTime, CASE b.rootId WHEN 0 or b.rootId is NULL THEN b.id ELSE b.rootId END as 'groupId' from course b order by maxTime desc) a
+					group by groupId )";
 		$builder = parent::_createSearchQueryBuilder($conditions)
 			->from($table, 'course');
 
