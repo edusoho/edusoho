@@ -23,6 +23,7 @@ class BuildCommand extends BaseCommand
 		$output->writeln('<info>Start build.</info>');
 		$this->initBuild($input, $output);
 		$this->buildRootDirectory();
+		$this->buildApiDirectory();
 		$this->buildAppDirectory();
 		$this->buildDocDirectory();
 		$this->buildSrcDirectory();
@@ -81,6 +82,13 @@ class BuildCommand extends BaseCommand
 		$this->output->writeln('build / .');
 		$this->filesystem->copy("{$this->rootDirectory}/README.html", "{$this->distDirectory}/README.html");
 	}
+
+	private function buildApiDirectory()
+	{
+		$this->output->writeln('build api/ .');
+		$this->filesystem->mkdir("{$this->distDirectory}/api");
+		$this->filesystem->mirror("{$this->rootDirectory}/api", "{$this->distDirectory}/api");
+	}	
 
 	private function buildAppDirectory()
 	{
