@@ -75,9 +75,11 @@
           {% endif %}
 
           {% if m.code != "admin_system" %}
-            <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-              {{ self_macro.menu_link_html(_context, m) }}
-            </li>
+            {% if not in_menu_blacklist(m.code) %}
+              <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+                {{ self_macro.menu_link_html(_context, m) }}
+              </li>
+            {% endif %}
           {% else %}
             {% if is_granted('ROLE_SUPER_ADMIN') %}
               <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>

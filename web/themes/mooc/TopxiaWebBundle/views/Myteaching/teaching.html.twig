@@ -33,7 +33,7 @@
         <th >所属{{setting("classroom.name")|default("班级")}}</th>
         {% else %}
         <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
-        <th>价格(元)</th>
+
         {% endif %}
         <th>状态</th>
         <th>操作</th>
@@ -89,7 +89,7 @@
             </td>
             {% else %}
             <td>{{ course.studentNum }}</td>
-            <td>{{ course.price }}</td>
+
             {% endif %}
             <td>{{ dict_text('courseStatus:html', course.status) }}</td>
             <td>
