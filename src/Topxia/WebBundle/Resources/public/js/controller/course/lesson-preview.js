@@ -19,6 +19,10 @@ define(function(require, exports, module) {
                     html.push('<video id="lesson-video-player" class="video-js vjs-default-skin" width="100%" height="360px">');
                     html.push('</video>');
                     var videoPlayerDiv = $("#lesson-preview-video-player");
+                    if($("body").data("esCloudPlayer") != undefined) {
+                        $("body").data("esCloudPlayer").destroy();
+                    }
+
                     videoPlayerDiv.addClass("ballon-video-player");
                     videoPlayerDiv.html(html.join('\n'));
 
@@ -28,6 +32,7 @@ define(function(require, exports, module) {
                         watermark: videoPlayerDiv.data('watermark'),
                         url: videoPlayerDiv.data('hlsUrl')
                     });
+                    $("body").data("esCloudPlayer", esCloudPlayer);
                 } else {
                     $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
 
