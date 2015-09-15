@@ -70,8 +70,9 @@
                     <img src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">
                     <p>班主任：{{user.nickname}}</p>
                   {% endif %}
+                  <p>暂无班主任</p>
                 {% endif %}
-                <p>暂无班主任</p>
+
               </div>
               <div class="bottom">
                 <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">加入班级</a>
