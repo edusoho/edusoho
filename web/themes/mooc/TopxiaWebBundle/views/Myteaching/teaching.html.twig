@@ -70,10 +70,12 @@
             </td>
             <td>
               {% if 'periodic'== course.type %}
-                {% if "now"|date('U') >= course.startTime %}
-                  <a class="week-reminder"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+                {% if "now"|date('U') > course.endTime %}
+                  <a class="week-reminder gray-light-bg">已结束</a>
+                {% elseif "now"|date('U') >= course.startTime %}
+                  <a class="week-reminder primary-bg"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
                 {% else %}
-                  <a class="time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
+                  <a class="time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
                 {% endif %}
               {% endif %}
               {#    <a class="week-reminder"><i class="iconfont icon-time"></i>2015年10月1号开课</a> #}

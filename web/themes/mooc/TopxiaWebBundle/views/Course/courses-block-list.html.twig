@@ -51,11 +51,12 @@
 
           <div class="course-metas">
             {% if 'periodic'== course.type %}
-              {% if "now"|date('U') >= course.startTime %}
-                {#   <a class="week-reminder"><i class="iconfont icon-time"></i>1/9周</a> #}
-                <a class="week-reminder"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+              {% if "now"|date('U') > course.endTime %}
+                <a class="week-reminder gray-light-bg">已结束</a>
+              {% elseif "now"|date('U') >= course.startTime %}
+                <a class="week-reminder primary-bg"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
               {% else %}
-                <a class="time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}} 开课</a>
+                <a class="time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}} 开课</a>
               {% endif %}
             {% endif %}
 

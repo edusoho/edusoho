@@ -8,6 +8,15 @@
 .primary-color {
   color: #0fbe8a !important;
 }
+.ing-bg {
+  background-color: #59a8e8 !important;
+}
+.gray-light-bg {
+  background-color: #bfbfbf !important;
+}
+.primary-bg {
+  background-color: #0fbe8a !important;
+}
 .btn {
   border-radius: 20px;
 }
