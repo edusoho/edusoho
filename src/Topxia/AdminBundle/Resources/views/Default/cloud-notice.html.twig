@@ -14,8 +14,10 @@
   <div class="row form-group">
     <div class="help-block">
 
-      <p style = "text-align: left;font-size:18px">&nbsp&nbsp欢迎使用，试用将于<span style="color:#fed032;"> {{trialTime.endTime|date("Y年m月d日")}} </span>到期,剩余<span style="color:#fed032;"> {{trialTime.remainDays}}</span> 天。您可以联系销售人员购买授权版本，或者延长试用期限。
-      <img src="{{ asset('bundles/topxiaadmin/img/iconfont-dianhua.png') }}"> 0571-86819929 或 <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><img class="img-service" src="{{ asset('bundles/topxiaadmin/img/iconfont-qq.png') }}"></span>
+      <p style = "text-align: left;font-size:18px">&nbsp&nbsp欢迎使用，试用将于 <span style="color:#fed032;"> {% if trialTime.endTime is defined %}{{trialTime.endTime|date("Y年m月d日")}} {% else %} 未知时间{% endif %}</span> 到期,剩余 <span style="color:#fed032;">{% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}未知{% endif %}</span> 天。</p>
+      <p style = "text-align: left;font-size:18px">&nbsp
+      您可以联系销售人员购买授权版本，或者延长试用期限。
+      电话：0571-86819929 或 <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 。</a></span>
       </p>
       </br>
     </div>
@@ -23,4 +25,3 @@
 
 
   {% endif %}
-
