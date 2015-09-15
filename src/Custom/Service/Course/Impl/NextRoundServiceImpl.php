@@ -16,8 +16,11 @@ use Custom\Service\Course\NextRoundService;
 class NextRoundServiceImpl extends BaseService implements NextRoundService
 {
     public function rounding($course, $link = false){
-        $i = $this->getCourseDao()->getPeriodicCoursesCount($course['rootId']);
-        $course['periods'] = intval($i+1);
+
+        $periodicCount = $this->getCourseDao()->getPeriodicCoursesCount($course['rootId']);
+        $course['periods'] = intval($periodicCount + 1);
+        $course['rootId'] = $course['rootId'];
+
         return $this->copy($course, $link);
     }
 

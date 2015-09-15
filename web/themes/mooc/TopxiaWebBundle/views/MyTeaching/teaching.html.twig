@@ -33,7 +33,7 @@
         <th >所属{{setting("classroom.name")|default("班级")}}</th>
         {% else %}
         <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
-        <th>价格(元)</th>
+
         {% endif %}
         <th>状态</th>
         <th>操作</th>
@@ -71,11 +71,11 @@
             <td>
               {% if 'periodic'== course.type %}
                 {% if "now"|date('U') > course.endTime %}
-                  <a class="time-reminder">已结束</a>
+                  <a class="week-reminder gray-light-bg">已结束</a>
                 {% elseif "now"|date('U') >= course.startTime %}
-                  <a class="week-reminder"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+                  <a class="week-reminder primary-bg"><i class="iconfont icon-time"></i>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
                 {% else %}
-                  <a class="time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
+                  <a class="time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
                 {% endif %}
               {% endif %}
               {#    <a class="week-reminder"><i class="iconfont icon-time"></i>2015年10月1号开课</a> #}
@@ -89,7 +89,7 @@
             </td>
             {% else %}
             <td>{{ course.studentNum }}</td>
-            <td>{{ course.price }}</td>
+
             {% endif %}
             <td>{{ dict_text('courseStatus:html', course.status) }}</td>
             <td>

@@ -5,51 +5,85 @@
 
 {% set siteNav = '/' %}
 {% set bodyClass = 'indexpage' %}
-{% set script_controller = 'index' %} 
 
 {% block full_content %}
   {{ block_show('mooc:home_top_banner') }}
 {# {% endblock %} #}
 
-{# {% block container %} #}
-
+  {# {% block container %} #}
   {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
   {% if recommendCourses %}      
-    <section class="es-section section-gray">
+    <section class="es-section section-gray" id="course-list">
       <div class="container">
-        <div class="section-header clearfix">
-          <h4>推荐课程</h4>
-          <a href="{{ path('course_explore') }}" class="more">更多</a>
+        <div class="course-filter section-header" id="course-filter">
+         推荐课程
+          <div class="course-sort btn-group">
+            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'latest'}) }}">最新</a>
+            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'studentNum'}) }}">最热</a>
+          </div>
         </div>
         <div class="section-bodyer">
           <div class="home-course-list row">
-            {% for course in recommendCourses %}
-                {% if course %}
-                  {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {course:course} %}
-                {% endif %}
-            {% endfor %}
+            {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
+          </div>
+          <div class="text-center mvl">
+            <a href="{{ path('course_explore' ) }}" class="btn btn-gylight btn-md">
+              更多<i class="fa fa-angle-right mls"></i>
+            </a>
           </div>
         </div>
       </div>
     </section>
   {% endif %}
 
-  {% set latestCourses = data('LatestCourses',{ count:6 }) %}
-  {% if latestCourses %}      
-    <section class="es-section">
+   <!-- 推荐班级 -->
+  {% set RecommendClassrooms = data('RecommendClassrooms',{'count':2})%}
+  {% if RecommendClassrooms %}
+    <section class="class-section">
       <div class="container">
-        <div class="section-header clearfix">
-          <h4>最新课程</h4>
-          <a href="{{ path('course_explore') }}" class="more">更多</a>
+        <div class="section-header" id="course-filter">
+         推荐班级
         </div>
-        <div class="section-bodyer">
-          <div class="home-course-list row">
-            {% for course in latestCourses %}
-              {% if course %}
-                {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {course:course} %}
-              {% endif %}
-            {% endfor %}
+        <div class="recommend-class-list">
+          {% for classroom in RecommendClassrooms %}
+          <div class="class-list clearfix">
+            <div class="class-img">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+              </a>
+            </div>
+            <div class="class-info">
+              <p class="title text-overflow">
+                <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+              </p>
+              <p class="info hidden-xs hidden-sm">{{classroom.about|striptags}}</p>
+              <p class="num"> <i class="es-icon es-icon-people mrm"></i>
+                {{classroom.studentNum + classroom.auditorNum }}人
+                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">加入班级</a>
+              </p>
+            </div>
+            <div class="class-teacher hidden-xs hidden-sm">
+              <div class="top">
+                {% if classroom.headTeacherId %}
+                  {% set user = data('User', {userId:classroom.headTeacherId}) %}
+                  {% if user %}
+                    <img src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">
+                    <p>班主任：{{user.nickname}}</p>
+                  {% endif %}
+                {% endif %}
+                <p>暂无班主任</p>
+              </div>
+              <div class="bottom">
+                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">加入班级</a>
+              </div>
+            </div>
           </div>
+         {% endfor %}
+        </div>
+        <div class="text-center mvl">
+          <a href="{{ path('classroom_explore') }}" class="btn btn-gylight btn-md">
+            更多<i class="fa fa-angle-right mls"></i>
+          </a>
         </div>
       </div>
     </section>
@@ -59,9 +93,8 @@
   {% if teachers %}
     <section class="es-section section-gray">
       <div class="container">
-        <div class="section-header clearfix">
-          <h4>名师风采</h4>
-          <a href="{{ path('teacher') }}" class="more">更多</a>
+        <div class="section-header" id="course-filter">
+         名师风采
         </div>
         <div class="section-bodyer">
           <div class="home-teacher-list row">
@@ -70,6 +103,11 @@
                 {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
               </div>
             {% endfor %}
+          </div>
+          <div class="text-center mvl">
+            <a href="{{ path('classroom_explore') }}" class="btn btn-gylight btn-md">
+              更多 <i class="fa fa-angle-right mls"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -104,3 +142,4 @@
   </section>
 
 {% endblock %}
+{% do load_script('theme/default/index') %}

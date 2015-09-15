@@ -1,22 +1,31 @@
-<div class="col-md-4 col-sm-6">
-  <div class="course-item">
-    <div class="course-img">
-      <a href="{{ path('course_show', {id:course.id}) }}"> 
-       <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
-      </a>
-    </div>
-    <div class="course-caption">
-      <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
-      <div class="metas clearfix">
-        {% set teacher = course.teachers|first|default(null) %}
-        {% if teacher %}
-        <span class="teacher-name">{{ teacher.nickname }}</span>
-        {% endif %}
-        <span class="course-period">{{ course.lessonNum }}课时</span>
-        {% if course.showStudentNumType == 'opened' %}
-        <span class="student-mun">{{ course.studentNum }}人报名</span>
-        {% endif %}
+{% for course in courses %}
+  <div class="col-md-4 col-sm-6">
+    <div class="course-item">
+      <div class="course-img">
+        <a href="{{ path('course_show', {id:course.id}) }}">
+         <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
+        </a>
+      </div>
+      <div class="course-caption">
+        <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
+        <div class="metas clearfix">
+          {% set teacher = course.teachers|first|default(null) %}
+          {% if teacher %}
+          <span class="teacher-name">{{ teacher.nickname }}</span>
+          {% endif %}
+          <!-- <span class="course-period">{{ course.lessonNum }}课时</span> -->
+          {% if course.showStudentNumType == 'opened' %}
+          <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>{{ course.studentNum }}人</span>
+          {% endif %}
+
+          {% if course.type == 'periodic' %}
+            {% set now = 'now'|date('U') %}
+            {% if course.startTime <= now and course.endTime > now %}<span class="label label-primary label-sm">已开课</span>{% endif %}
+            {% if course.startTime > now %}<span class="label label-ing label-sm">报名中</span>{% endif %}
+            {% if course.startTime < now and course.endTime < now %}<span class="label label-gray-light label-sm">已结束</span>{% endif %}
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
+{% endfor %}

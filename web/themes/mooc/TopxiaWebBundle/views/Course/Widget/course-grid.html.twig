@@ -11,11 +11,11 @@
   <div class="metas">
     {% if 'periodic'== course.type %}
       {% if "now"|date('U') > course.endTime %}
-        <a class="pull-right time-reminder">已结束</a>
+        <a class="pull-right week-reminder gray-light-bg">已结束</a>
       {% elseif "now"|date('U') >= course.startTime %}
-        <a class="pull-right week-reminder"><i class="iconfont icon-time"></i>{{ (course.startTime == 0 or course.endTime == 0) ? '-' : (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ (course.startTime==0 or course.endTime==0) ? '-' : ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+        <a class="pull-right week-reminder  primary-bg"><i class="iconfont icon-time"></i>{{ (course.startTime==0 or course.endTime==0) ? '-' : (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ (course.startTime==0 or course.endTime==0) ? '-' : ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
       {% else %}
-        <a class="pull-right time-reminder"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
+        <a class="pull-right time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
       {% endif %}
     {% endif %}
     <span class="student-mun">已有<span>{{course.studentNum}}</span>人学习</span>
