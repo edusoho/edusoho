@@ -33,11 +33,11 @@ class MenuExtension extends \Twig_Extension
             new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
             new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist')),
-            new \Twig_SimpleFunction('hiddenmenus', array($this, 'hiddenmenu')),
+            new \Twig_SimpleFunction('hiddenMenus', array($this, 'hiddenMenu')),
         );
     }
 
-    public function hiddenmenu()
+    public function hiddenMenu()
     {
         $result = CloudAPIFactory::create('leaf')->get('/me');
         if($result['thirdCopyright'] == '1'){

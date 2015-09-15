@@ -79,15 +79,13 @@ class DefaultController extends BaseController
     { 
         $result = CloudAPIFactory::create('leaf')->get('/me');
         if($result['thirdCopyright'] == '1'){
-        //     $this->addMenuCodeToBlackList('cloud_notice', 'system_status');
             $hidden = array(
                 'cloud_notice' => '1',
                 'system_status' => '1',
             );
         }
 
-        if($result['copyright'] == '1'){
-            // $this->addMenuCodeToBlackList(array('cloud_notice'));   
+        if($result['copyright'] == '1'){  
             $hidden = array(
                 'cloud_notice' => '1'
             );

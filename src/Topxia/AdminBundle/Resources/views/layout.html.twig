@@ -10,7 +10,7 @@
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
 {% set menu_hiddens = setting('menu_hiddens', []) %}
-{% if hiddenmenus() %}{% endif %}
+{% if hiddenMenus() %}{% endif %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
