@@ -60,7 +60,7 @@
       <label>气球播放器</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('balloon_player', {1:'开启', 0:'关闭'}, developerSetting.balloon_player) }}
+      {{ radios('balloon_player', {1:'开启', 0:'关闭'}, developerSetting.balloon_player|default(0)) }}
     </div>
   </div>
 
