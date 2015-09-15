@@ -36,14 +36,7 @@
             <label for="">有效期</label><span>{{ course.expiryDay }}天</span>
           </p>
         {% endif %}
-        <p class="discount-price">
-          {% if course.discountId == 0 %}
-            <label>价格</label>
-          {% else %}
-            <label>折后价</label>
-          {% endif %}
-          {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
-        </p>
+
         {% if course.discountId > 0 %}
           <p class="old-price hidden-sm">
             <label>原价</label>

@@ -5,3 +5,9 @@ admin_periodic_course_add:
     router_params: {'flag': 'periodic'}
     group: 2
     blank: 1
+
+admin_app_center_show:
+    name: ES(慕课版)应用
+    parent: admin_app
+    router_name: admin_app_center
+    router_params: { postStatus : all }
