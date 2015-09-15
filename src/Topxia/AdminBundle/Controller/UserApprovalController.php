@@ -11,7 +11,7 @@ use Topxia\AdminBundle\Form\UserApprovalApproveType;
 class UserApprovalController extends BaseController
 {
 
-    public function approvingAction(Request $request)
+    public function approvalsAction(Request $request,$approvalStatus)
     {
         $fields = $request->query->all();
 
@@ -19,7 +19,7 @@ class UserApprovalController extends BaseController
             'roles'=>'',
             'keywordType'=>'',
             'keyword'=>'',
-            'approvalStatus' => 'approving'
+            'approvalStatus' => $approvalStatus
         );
 
         if(empty($fields)){
@@ -42,7 +42,7 @@ class UserApprovalController extends BaseController
         //在user表里筛选正在被实名认证的
         $userConditions = array(
             'userIds' => $userApprovingId,
-            'approvalStatus' => 'approving',
+            'approvalStatus' => $approvalStatus,
             );
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
@@ -69,99 +69,26 @@ class UserApprovalController extends BaseController
         } 
 
         //最终结果
-        $approvingUserids = ArrayToolkit::column($users, 'id');
-        $userProfiles = $this->getUserService()->searchApprovals(
-            $approvingUserids,
-            array('id','DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
-        $approvals = ArrayToolkit::index($approvals, 'userId');
-
-        return $this->render('TopxiaAdminBundle:User:approval.html.twig', array(
-        	'users' => $users,
-        	'paginator' => $paginator,
+        if($approvalStatus == 'approving'){
+            $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
+            $approvals = ArrayToolkit::index($approvals, 'userId');
+            return $this->render('TopxiaAdminBundle:User:approvals.html.twig', array(
+            'users' => $users,
+            'paginator' => $paginator,
             'approvals' => $approvals
-    	));
-    }
-    
-    public function approvedAction(Request $request)
-    {
-        $fields = $request->query->all();
-
-        $conditions = array(
-            'roles'=>'',
-            'keywordType'=>'',
-            'keyword'=>'',
-            'approvalStatus' => 'approved'
-        );
-
-        if(empty($fields)){
-            $fields = array();
+        ));
         }
-
-        $conditions = array_merge($conditions, $fields);
-
-        if(isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')){
-            //根据条件从user_approval表里查找数据
-            $profilecount = $this->getUserService()->searchApprovalsCount($conditions);
-            $profiles = $this->getUserService()->searchApprovals($conditions,array('id','DESC'),0,$profilecount);
-            $userProfilesid = ArrayToolkit::column($profiles, 'userId');
-        }else{
-            $usercount = $this->getUserService()->searchUserCount($conditions);
-            $profiles = $this->getUserService()->searchUsers($conditions,array('id','DESC'),0,$usercount);
-            $userProfilesid = ArrayToolkit::column($profiles, 'id');
-        }
-
-        //在user表里筛选通过实名认证的
-        $userConditions = array(
-            'userIds' => $userProfilesid,
-            'approvalStatus' => 'approved',
-            );
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
-        } 
-
-        $userApprovalcount = 0;
-        if(!empty($userProfilesid)){
-            $userApprovalcount = $this->getUserService()->searchUserCount($userConditions);    
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $userApprovalcount,
-            20
-        );
-        $users = array();
-        if(!empty($userProfilesid)){
-            $users = $this->getUserService()->searchUsers(
-                $userConditions,
-                array('id','DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        } 
-
-        //最终结果
-        $approvedUserids = ArrayToolkit::column($users, 'id');
-        $userProfiles = $this->getUserService()->searchUserProfiles(
-            $approvedUserids,
-            array('id','DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
+        if($approvalStatus == 'approved'){
             $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
             $userProfiles = ArrayToolkit::index($userProfiles, 'id');
-        return $this->render('TopxiaAdminBundle:User:approval.html.twig', array(
+            return $this->render('TopxiaAdminBundle:User:approvals.html.twig', array(
             'users' => $users,
             'paginator' => $paginator,
             'userProfiles' => $userProfiles
         ));
+        }
     }
+    
     public function approveAction(Request $request, $id)
     {
         list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);

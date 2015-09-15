@@ -916,13 +916,9 @@ admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
 
-admin_approval_approving:
-    pattern:  approvals/approving
-    defaults: { _controller: TopxiaAdminBundle:UserApproval:approving }
-
-admin_approval_approved:
-    pattern:  approvals/approved
-    defaults: { _controller: TopxiaAdminBundle:UserApproval:approved }
+admin_approval_approvals:
+    pattern:  approvals/{approvalStatus}
+    defaults: { _controller: TopxiaAdminBundle:UserApproval:approvals}
 
 admin_approval_approve:
     pattern:  approvals/{id}/approve

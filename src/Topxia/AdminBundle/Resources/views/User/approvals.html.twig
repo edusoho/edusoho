@@ -2,13 +2,13 @@
 
 {% set script_controller = 'user/approved' %}
 
-{% set menu = 'admin_approval_approving' %}
+{% set menu = 'admin_approval_approvals' %}
 {% set userProfiles = userProfiles|default(null) %}
 {% set approvals = approvals|default(null)  %}
 {% block main %}
 <div class="btn-group">
-  <a type="button" class="btn btn-default btn-sm {% if approvals %}btn-primary{% endif %}" href="{{ path('admin_approval_approving') }}">审核中</a>
-  <a type="button" class="btn btn-default btn-sm {% if userProfiles %}btn-primary{% endif %}" href="{{ path('admin_approval_approved') }}">审核成功</a>
+  <a type="button" class="btn btn-default btn-sm {% if approvals %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">审核中</a>
+  <a type="button" class="btn btn-default btn-sm {% if userProfiles %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
 </div>
 <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
  
