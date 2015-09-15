@@ -25,3 +25,7 @@ search:
 homepage:
     pattern:  /
     defaults: { _controller: CustomWebBundle:Default:index }
+
+homepage_recommend_courses:
+    pattern:  /recommend-courses
+    defaults: { _controller: CustomWebBundle:Default:recommedCourses}
