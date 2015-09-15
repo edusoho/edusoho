@@ -1,5 +1,9 @@
 <ul class="dropdown-menu open-class-dropdown">
-  {% for otherPeriod in otherPeriods %}
-    <li><a href="{{ path('course_show', {id:otherPeriod.id})}}">第{{ otherPeriod.periods | num2chinese }}次开课</a></li>
-  {% endfor %}
+  {% if otherPeriods %}
+    {% for otherPeriod in otherPeriods %}
+      <li><a href="{{ path('course_show', {id:otherPeriod.id})}}">第{{ otherPeriod.periods | num2chinese }}次开课</a></li>
+    {% endfor %}
+  {% else %}
+    <li><a href="javascript:;">暂无其他课程信息</a></li>
+  {% endif %}
 </ul>

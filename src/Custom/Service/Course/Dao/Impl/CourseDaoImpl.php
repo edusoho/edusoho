@@ -13,10 +13,21 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 	}
 
 	public function findOtherPeriods($course){
-		$rootId = ($course['rootId']==0 ? $course['id'] : $course['rootId']);
-		$sql ="SELECT * FROM {$this->getTablename()} WHERE rootId = {$rootId} and id != {$course['id']};";
+		$rootId = $course['rootId']==0 ? $course['id'] : $course['rootId'];
+		$sql ="SELECT * FROM {$this->getTablename()} WHERE rootId = {$rootId} and id != {$course['id']} and status= 'published';";
 		return $this->getConnection()->fetchAll($sql);
 	}
+
+	public function addCourse($course)
+	{
+		$course = parent::addCourse($course);
+		if($course['type'] == 'periodic' && $course['rootId'] == 0){
+			$fields = array('rootId' => $course['id']);
+			return parent::updateCourse($course['id'], $fields);
+		}
+		return $course;
+	}
+
 
 	protected function _createSearchQueryBuilder($conditions)
 	{
