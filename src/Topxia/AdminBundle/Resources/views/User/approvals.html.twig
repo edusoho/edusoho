@@ -3,12 +3,11 @@
 {% set script_controller = 'user/approved' %}
 
 {% set menu = 'admin_approval_approvals' %}
-{% set userProfiles = userProfiles|default(null) %}
-{% set approvals = approvals|default(null)  %}
+
 {% block main %}
 <div class="btn-group">
-  <a type="button" class="btn btn-default btn-sm {% if approvals %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">审核中</a>
-  <a type="button" class="btn btn-default btn-sm {% if userProfiles %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
+  <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approving' %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">审核中</a>
+  <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approved' %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
 </div>
 <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
  
@@ -47,17 +46,17 @@
     <tr id="user-table-tr-{{ user.id }}">
         <td>{{user.id }}</td>
         <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
-        {% if userProfiles %}
+        {% if approvalStatus == 'approved' %}
         <td>{{userProfiles[user.id].truename}}</td>
         <td>{{userProfiles[user.id].idcard}}</td>
-        {% elseif approvals %}
-        <td> {{approvals[user.id].truename}}</td>
-        <td> {{approvals[user.id].idcard}}</td>
+        {% elseif approvalStatus == 'approving' %}
+        <td> {{userProfiles[user.id].truename}}</td>
+        <td> {{userProfiles[user.id].idcard}}</td>
         {% endif %}
         <td>{{user.email}}</td>
         <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
         <td>
-            {% if userProfiles %}
+            {% if approvalStatus == 'approved'%}
             <div class="btn-group">
               <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}" class="btn btn-default btn-sm">查看</a>
 
@@ -69,7 +68,7 @@
                 <li><a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class ="btn cancel-approval">撤销</a></li>
               </ul>
             </div>
-            {% elseif approvals %}
+            {% elseif approvalStatus == 'approving' %}
             <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}" class="btn btn-default btn-sm">审核</a>
             {% endif %}
         </td>
@@ -80,9 +79,9 @@
 
 {{ web_macro.paginator(paginator) }}
 {% else %}
-  {% if userProfiles %}
+  {% if approvalStatus == 'approved' %}
   <div class="empty">暂无已经审核成功的实名认证用户</div>
-  {% elseif approvals %}
+  {% elseif approvalStatus == 'approving' %}
   <div class="empty">暂无需要审核中的实名认证用户</div>
   {% endif %}
 {% endif %}

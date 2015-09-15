@@ -39,7 +39,7 @@ class UserApprovalController extends BaseController
             $userApprovingId = ArrayToolkit::column($profiles,'id');
         }
 
-        //在user表里筛选正在被实名认证的
+        //在user表里筛选要求的实名认证状态
         $userConditions = array(
             'userIds' => $userApprovingId,
             'approvalStatus' => $approvalStatus,
@@ -69,24 +69,14 @@ class UserApprovalController extends BaseController
         } 
 
         //最终结果
-        if($approvalStatus == 'approving'){
-            $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
-            $approvals = ArrayToolkit::index($approvals, 'userId');
-            return $this->render('TopxiaAdminBundle:User:approvals.html.twig', array(
+        $userProfiles = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
+        $userProfiles = ArrayToolkit::index($userProfiles, 'userId');
+        return $this->render('TopxiaAdminBundle:User:approvals.html.twig', array(
             'users' => $users,
             'paginator' => $paginator,
-            'approvals' => $approvals
+            'userProfiles' => $userProfiles,
+            'approvalStatus' => $approvalStatus
         ));
-        }
-        if($approvalStatus == 'approved'){
-            $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
-            $userProfiles = ArrayToolkit::index($userProfiles, 'id');
-            return $this->render('TopxiaAdminBundle:User:approvals.html.twig', array(
-            'users' => $users,
-            'paginator' => $paginator,
-            'userProfiles' => $userProfiles
-        ));
-        }
     }
     
     public function approveAction(Request $request, $id)
