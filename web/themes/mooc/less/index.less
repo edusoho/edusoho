@@ -1,0 +1,97 @@
+.course-filter.section-header {
+  margin: 35px 0 50px 0;
+  min-height: 0;
+  .course-sort {
+    top: -3px;
+  }
+}
+
+.section-header {
+  margin: 35px 0 50px 0;
+  padding-left: 25px;
+  color: @title-color;
+  font-size: 20px;
+  border-left: 4px solid @bg-primary;
+}
+
+.recommend-class-list {
+  margin-bottom: 15px;
+  .class-list {
+    border: 1px solid #e6e6e6;
+    box-shadow: 0 2px 2px #edecec;
+    height: 322px;
+    margin-bottom: 30px;
+    @media(max-width: @screen-sm-max) {
+      height: auto;
+    }
+  }
+  
+  .class-img {
+    float: left;
+    width: 42%;
+    @media(max-width: @screen-sm-max) {
+      width: 100%;
+    }
+    img {
+      height: 320px;
+      width: 100%;
+    }
+  }
+  .class-info {
+    float: left;
+    width: 40%;
+    padding:50px;
+    height: 100%;
+    @media(max-width: @screen-sm-max) {
+      width: 100%;
+      height: auto;
+      padding: 20px;
+    }
+    .title {
+      max-width: 100%;
+      color: @black;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .info {
+      max-height: 136px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: @font-color;
+    }
+    .num {
+      color: #ff9600;
+      @media(max-width: @screen-sm-max) {
+        line-height: 35px;
+      }
+    }
+  }
+  .class-teacher {
+    width: 18%;
+    float: right;
+    height: 100%;
+    border-left: 1px solid #e6e6e6;
+    text-align: center;
+    .top {
+      height: 240px;
+      padding: 40px 0;
+      background-color: #f0f0f0;
+      font-size: 16px;
+      color: @black;
+      img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+        border-radius:50%;
+      }
+      p {
+        margin-bottom: 0;
+      }
+    }
+    .bottom {
+      height: 80px;
+      line-height: 80px;
+    }
+  }
+}

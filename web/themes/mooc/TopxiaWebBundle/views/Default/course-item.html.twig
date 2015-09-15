@@ -12,10 +12,13 @@
         {% if teacher %}
         <span class="teacher-name">{{ teacher.nickname }}</span>
         {% endif %}
-        <span class="course-period">{{ course.lessonNum }}课时</span>
+        <!-- <span class="course-period">{{ course.lessonNum }}课时</span> -->
         {% if course.showStudentNumType == 'opened' %}
         <span class="student-mun">{{ course.studentNum }}人报名</span>
         {% endif %}
+        <span class="label label-primary label-sm">已学习</span>
+        <!-- <span class="label label-ing label-sm">已学习</span>  -->
+        <!-- <span class="label label-gray-light label-sm">已学习</span>  -->
       </div>
     </div>
   </div>

@@ -14,14 +14,14 @@
   {# {% block container %} #}
   {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
   {% if recommendCourses %}      
-    <section class="es-section section-gray">
+    <section class="es-section section-gray" id="course-list">
       <div class="container">
-        <div class="course-filter" id="course-filter">
+        <div class="course-filter section-header" id="course-filter">
          推荐课程
-         <div class="course-sort btn-group">
-           <a href="javascript:;" class="btn btn-default js-course-filter" data-url="/course/search?categoryId=37&amp;orderBy=latest">最新</a>
-           <a href="javascript:;" class="btn btn-default js-course-filter" data-url="/course/search?categoryId=37&amp;orderBy=studentNum">热门</a>
-         </div>
+          <div class="course-sort btn-group">
+            <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default('all'), orderBy : 'latest'}) }}">最新</a>
+            <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default('all'), orderBy : 'studentNum'}) }}">最热</a>
+          </div>
         </div>
         <div class="section-bodyer">
           <div class="home-course-list row">
@@ -32,7 +32,7 @@
             {% endfor %}
           </div>
           <div class="text-center mvl">
-            <a href="/course/explore" class="btn btn-default btn-lg btn-section-more">
+            <a href="/course/explore" class="btn btn-gylight btn-md">
               更多<i class="fa fa-angle-right mls"></i>
             </a>
           </div>
@@ -41,59 +41,47 @@
     </section>
   {% endif %}
 
-<!--   
-  {% set latestCourses = data('LatestCourses',{ count:6 }) %}
-  {% if latestCourses %}      
-    <section class="es-section">
-      <div class="container">
-        <div class="section-header clearfix">
-          <h4>最新课程</h4>
-          <a href="{{ path('course_explore') }}" class="more">更多</a>
-        </div>
-        <div class="section-bodyer">
-          <div class="home-course-list row">
-            {% for course in latestCourses %}
-              {% if course %}
-                {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {course:course} %}
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </section>
-  {% endif %}
- -->
-
    <!-- 推荐班级 -->
   {% set RecommendClassrooms = data('RecommendClassrooms',{'count':4})%}
   {% if RecommendClassrooms %}
     <section class="class-section">
       <div class="container">
-        <div class="course-filter" id="course-filter">
+        <div class="section-header" id="course-filter">
          推荐班级
         </div>
-        <div class="recommend-class-list row">
+        <div class="recommend-class-list">
           {% for classroom in RecommendClassrooms %}
-          <div class="col-md-3 col-sm-6">
-            <div class="class-item">
-              <div class="class-bg-layer"></div>
-              <div class="class-item-bg">
-                <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                  {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
-                </a>
-                <h3>
-                  <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
-                </h3>
-                <a>学员({{classroom.studentNum + classroom.auditorNum }})</a>
-                <a>简介：{{classroom.about|raw}}</a>
+          <div class="class-list clearfix">
+            <div class="class-img">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+              </a>
+            </div>
+            <div class="class-info">
+              <p class="title text-overflow">
+                <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+              </p>
+              <p class="info hidden-xs hidden-sm">{{classroom.about|striptags}}</p>
+              <p class="num"> <i class="es-icon es-icon-people mrm"></i>
+                {{classroom.studentNum + classroom.auditorNum }}人
+                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">加入班级</a>
+              </p>
+            </div>
+            <div class="class-teacher hidden-xs hidden-sm">
+              <div class="top">
+                {% set user = data('User', {userId:classroom.headTeacherId}) %}
+                <img src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">          
+                <p>{{user.nickname}}</p>
+              </div>
+              <div class="bottom">
+                <a class="btn btn-primary btn-md">加入班级</a>
               </div>
             </div>
           </div>
-          {% set user = data('User', {userId:classroom.headTeacherId}) %}
-          <span>{{user.nickname}}</span>
-          <img class="img-responsive avatar-sm" src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">{% endfor %}</div>
+         {% endfor %}
+        </div>
         <div class="text-center mvl">
-          <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
+          <a href="{{ path('classroom_explore') }}" class="btn btn-gylight btn-md">
             更多<i class="fa fa-angle-right mls"></i>
           </a>
         </div>
@@ -105,7 +93,7 @@
   {% if teachers %}
     <section class="es-section section-gray">
       <div class="container">
-        <div class="course-filter" id="course-filter">
+        <div class="section-header" id="course-filter">
          名师风采
         </div>
         <div class="section-bodyer">
@@ -117,7 +105,7 @@
             {% endfor %}
           </div>
           <div class="text-center mvl">
-            <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
+            <a href="{{ path('classroom_explore') }}" class="btn btn-gylight btn-md">
               更多 <i class="fa fa-angle-right mls"></i>
             </a>
           </div>
