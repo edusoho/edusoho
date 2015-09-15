@@ -53,32 +53,32 @@ include __DIR__ . '/config/container.php';
 
 $app->before(function (Request $request) use ($app) {
 
-    // $whiteLists = include __DIR__ . '/whiteList.php';
-    // $whiteLists = $request->getMethod() == 'GET' ? $whiteLists['get'] : $whiteLists['post'];
-    // $inWhiteList = 0;
-    // foreach ($whiteLists as $whiteList) {
-    //     $path = $request->getPathInfo();
-    //     if (preg_match($whiteList, $request->getPathInfo())) {
-    //         $inWhiteList = 1;
-    //         break;
-    //     }
-    // }
-    // $token = $request->headers->get('Auth-Token', '');
-    // if (!$inWhiteList && empty($token)) {
-    //     throw createNotFoundException("AuthToken is not exist.");
-    // }
+    $whiteLists = include __DIR__ . '/whiteList.php';
+    $whiteLists = $request->getMethod() == 'GET' ? $whiteLists['get'] : $whiteLists['post'];
+    $inWhiteList = 0;
+    foreach ($whiteLists as $whiteList) {
+        $path = $request->getPathInfo();
+        if (preg_match($whiteList, $request->getPathInfo())) {
+            $inWhiteList = 1;
+            break;
+        }
+    }
+    $token = $request->headers->get('Auth-Token', '');
+    if (!$inWhiteList && empty($token)) {
+        throw createNotFoundException("AuthToken is not exist.");
+    }
     $userService = ServiceKernel::instance()->createService('User.UserService');
-    // $token = $userService->getToken('mobile_login', $token);
+    $token = $userService->getToken('mobile_login', $token);
 
-    // if (!$inWhiteList && empty($token['userId'])) {
-    //     throw createAccessDeniedException("AuthToken is invalid.");
-    // }
+    if (!$inWhiteList && empty($token['userId'])) {
+        throw createAccessDeniedException("AuthToken is invalid.");
+    }
 
-    // $user = $userService->getUser($token['userId']);
-    $user = $userService->getUser(1);
-    // if (!$inWhiteList && empty($user)) {
-    //     throw createNotFoundException("Auth user is not found.");
-    // }
+    $user = $userService->getUser($token['userId']);
+    // $user = $userService->getUser(1);
+    if (!$inWhiteList && empty($user)) {
+        throw createNotFoundException("Auth user is not found.");
+    }
     setCurrentUser($user);
 
 });
