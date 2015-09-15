@@ -1,4 +1,13 @@
 /* =========================== media =========================== */
+.ing-color {
+  color: #59a8e8 !important;
+}
+.gray-light {
+  color: #bfbfbf !important;
+}
+.primary-color {
+  color: #0fbe8a !important;
+}
 .btn {
   border-radius: 20px;
 }
@@ -2127,7 +2136,6 @@ input:focus {
   width: 39%;
   text-align: center;
   font-size: 13px;
-  color: #ff854a;
   border-right: 1px solid #e1e1e1;
 }
 .es-panel.open-class .panel-body .first span {

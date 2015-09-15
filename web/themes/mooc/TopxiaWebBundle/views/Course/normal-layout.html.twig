@@ -33,16 +33,16 @@
 
             <div class="panel-body">
               <ul>
-                <li class="first gray">
+                <li class="first">
                   {% if "now"|date('U') > course.endTime %}
-                    <p>本次开课</p>
-                    <p><span>已结束</span></p>
+                    <p class="gray-light">本次开课</p>
+                    <p class="gray-light"><span>已结束</span></p>
                   {% elseif "now"|date('U') >= course.startTime %}
-                    <p>课程已进行至</p>
-                    <p><span>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</p>
+                    <p class="primary-color">课程已进行至</p>
+                    <p class="primary-color"><span>{{ (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</p>
                   {% else %}
-                    <p>距离开课</p>
-                    <p><span>{{ course.startTime | remain_time }}</span></p>
+                    <p class="ing-color">距离开课</p>
+                    <p class="ing-color"><span>{{ course.startTime | remain_time }}</span></p>
                     {#<p><span>{{ ((course.startTime-'now' | date('U'))/86400) | round(0, 'ceil') }}</span>天</p>#}
                   {% endif %}
                 </li>

@@ -15,11 +15,11 @@
           {% endif %}
           <!-- <span class="course-period">{{ course.lessonNum }}课时</span> -->
           {% if course.showStudentNumType == 'opened' %}
-          <span class="student-mun">{{ course.studentNum }}人报名</span>
+          <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>{{ course.studentNum }}人</span>
           {% endif %}
-          <span class="label label-primary label-sm">已学习</span>
-          <!-- <span class="label label-ing label-sm">已学习</span>  -->
-          <!-- <span class="label label-gray-light label-sm">已学习</span>  -->
+          <span class="label label-primary label-sm">已开课</span>
+          <span class="label label-ing label-sm">报名中</span> 
+          <span class="label label-gray-light label-sm">已结束</span> 
         </div>
       </div>
     </div>
