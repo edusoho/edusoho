@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class ClassroomMembers extends BaseResource
 {
@@ -13,8 +14,14 @@ class ClassroomMembers extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
         $total = $this->getClassroomService()->searchMemberCount($conditions);
+        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
+
+        foreach ($members as &$member) {
+            $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+        }
 
         return $this->wrap($this->filter($members), $total);
     }
@@ -22,6 +29,11 @@ class ClassroomMembers extends BaseResource
     public function filter(&$res)
     {
         return $this->multicallFilter('ClassroomMember', $res);
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     protected function getClassroomService()

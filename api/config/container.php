@@ -9,6 +9,7 @@ $resources = array(
     'ClassroomMembers',
     'Classrooms',
     'MeChatroomes',
+    'User',
 );
 
 foreach ($resources as $res) {

@@ -14,6 +14,8 @@ class ClassroomMember extends BaseResource
 
     public function filter(&$res)
     {
+        unset($res['userId']);
+        $res['user'] = $this->callSimplify('User', $res['user']);
         $res['createdTime'] = date('c', $res['createdTime']);
         return $res;
     }

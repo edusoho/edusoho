@@ -29,7 +29,7 @@ class MeChatroomes extends BaseResource
                 'type' => 'classroom',
                 'id' => $classroom['id'],
                 'title' => $classroom['title'],
-                'picture' => $classroom['smallPicture'],
+                'picture' => $this->getFileUrl($classroom['smallPicture']),
             );
         }
 

@@ -22,9 +22,46 @@ abstract class BaseResource
         return $res;
     }
 
+    protected function callSimplify($name, &$res)
+    {
+        global $app;
+        return $app["res.{$name}"]->simplify($res);
+    }
+
+    protected function simplify($res)
+    {
+        return $res;
+    }
+
     protected function wrap($resources, $total)
     {
         return array('resources' => $resources, 'total' => $total);
+    }
+
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, $this->getFileUrl($url), $text);
+        }
+
+        return $text;
+    }
+
+    protected function getFileUrl($path)
+    {
+        if (empty($path)) {
+            return '';
+        }
+        $path = str_replace('public://', '', $path);
+        $path = str_replace('/files/', '', $path);
+        $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
+        return $path;
     }
 
     protected function getCurrentUser()
