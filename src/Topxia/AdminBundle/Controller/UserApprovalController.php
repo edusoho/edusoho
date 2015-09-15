@@ -45,8 +45,8 @@ class UserApprovalController extends BaseController
             'approvalStatus' => 'approving',
             );
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $userConditions['startApprovedTime'] = strtotime($conditions['startDateTime']);
-            $userConditions['endApprovedTime'] = strtotime($conditions['endDateTime']);
+            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
+            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
         }
 
         $userApprovalcount = 0;
@@ -121,8 +121,8 @@ class UserApprovalController extends BaseController
             'approvalStatus' => 'approved',
             );
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $userConditions['startApprovedTime'] = strtotime($conditions['startDateTime']);
-            $userConditions['endApprovedTime'] = strtotime($conditions['endDateTime']);
+            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
+            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
         } 
 
         $userApprovalcount = 0;
