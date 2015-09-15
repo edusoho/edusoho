@@ -58,13 +58,13 @@
     {% endif %}
 
     <div class="es-piece">
-      <div class="piece-header">课1111时列表</div>
+      <div class="piece-header">课时列表</div>
       <div class="piece-body">
         {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
-        
+
       </div>
     </div>
-    
+
   </div>
 
 {% endblock %}

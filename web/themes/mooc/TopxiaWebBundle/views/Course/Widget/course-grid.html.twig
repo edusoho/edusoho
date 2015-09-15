@@ -1,30 +1,37 @@
-    <div class="course-img">
-      <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"  /></a>
-    </div>
-    <div class="course-info">
-      <div class="title">
-        <a href="{{ path('course_show', {id:course.id}) }}">
-          {{course.title }}
-        </a>
-      </div>
-      <div class="content">{{ course.about|plain_text(100) }}</div>
-      <div class="metas">
-     {#   <a class="pull-right week-reminder"><i class="iconfont icon-time"></i>1/9周</a> #} 
-        <a class="pull-right time-reminder"><i class="iconfont icon-time"></i>2015年10月1号开课</a> 
-        <span class="student-mun">已有<span>{{course.studentNum}}</span>人学习</span>
-        <span class="star-{{(course.rating)|number_format }}"></span>
-
-      </div>
-    </div>
-    <div class="course-teacher">
-      {% set teacher = course.teacherIds|first|default(null) %}
-      {% if teacher %}
-        {% set teacher = data('User',{userId:teacher})%}
-        <div class="avatar">
-            <img src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
-          </a>
-        </div>
-        <div class="teacher-name"><a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a></div>
-        <div class="teacher-position hidden-sm">{{ teacher.title }}</div>
+<div class="course-img">
+  <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"  /></a>
+</div>
+<div class="course-info">
+  <div class="title">
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      {{course.title }}
+    </a>
+  </div>
+  <div class="content">{{ course.about|plain_text(100) }}</div>
+  <div class="metas">
+    {% if 'periodic'== course.type %}
+      {% if "now"|date('U') > course.endTime %}
+        <a class="pull-right week-reminder gray-light-bg">已结束</a>
+      {% elseif "now"|date('U') >= course.startTime %}
+        <a class="pull-right week-reminder  primary-bg"><i class="iconfont icon-time"></i>{{ (course.startTime==0 or course.endTime==0) ? '-' : (('now' |date('U') - course.startTime) / 604800) | round(0,'ceil') }}</span> / {{ (course.startTime==0 or course.endTime==0) ? '-' : ((course.endTime - course.startTime) / 604800) | round(0, 'ceil') }}周</a>
+      {% else %}
+        <a class="pull-right time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
       {% endif %}
+    {% endif %}
+    <span class="student-mun">已有<span>{{course.studentNum}}</span>人学习</span>
+    <span class="star-{{(course.rating)|number_format }}"></span>
+
+  </div>
+</div>
+<div class="course-teacher">
+  {% set teacher = course.teacherIds|first|default(null) %}
+  {% if teacher %}
+    {% set teacher = data('User',{userId:teacher})%}
+    <div class="avatar">
+      <img src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
+      </a>
     </div>
+    <div class="teacher-name"><a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a></div>
+    <div class="teacher-position hidden-sm">{{ teacher.title }}</div>
+  {% endif %}
+</div>

@@ -14,9 +14,5 @@
     <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
   </div>
   <div class="teacher-position">
-    {% if teacher.title %}
       {{ teacher.title }}
-    {% else %}
-      <span class="text-muted">请设置头衔</span>
-    {% endif %}
   </div>

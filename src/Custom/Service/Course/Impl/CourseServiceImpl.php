@@ -3,34 +3,13 @@
 namespace Custom\Service\Course\Impl;
 
 use Topxia\Service\Course\Impl\CourseServiceImpl as BaseCourseServiceImpl;
-use Custom\Service\Course\CourseService;
-use Custom\Service\Course\Enum\LessonPermissions;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Common\ArrayToolkit;
 
-
-class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
+class CourseServiceImpl extends BaseCourseServiceImpl
 {
-	public function customUpdateCourse($id, $fields)
+	protected function _filterCourseFields($fields)
 	{
-		$course = $this->getCourseDao()->getCourse($id);
-		if (empty($course)) {
-			throw $this->createServiceException('课程不存在，更新失败！');
-		}
 
-		$fields = $this->_customFilterCourseFields($fields);
-
-		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
-
-		$fields = CourseSerialize::serialize($fields);
-
-		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
-
-		return CourseSerialize::unserialize($updatedCourse);
-	}
-
-	protected function _customFilterCourseFields($fields)
-	{
 		$fields = ArrayToolkit::filter($fields, array(
 			'title' => '',
 			'subtitle' => '',
@@ -42,19 +21,26 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 			'goals' => array(),
 			'audiences' => array(),
 			'tags' => '',
-			'startTime' => 0,
-			'endTime'  => 0,
+			'startTime' => '',
+			'endTime'  => '',
 			'rootId' => 0,
 			'locationId' => 0,
 			'address' => '',
 			'maxStudentNum' => 0,
 			'watchLimit' => 0,
 			'approval' => 0,
-			'maxStudentNum'=>0,
 		));
 
 		if (!empty($fields['about'])) {
 			$fields['about'] = $this->purifyHtml($fields['about'],true);
+		}
+
+		if(!empty($fields['startTime'])){
+			$fields['startTime'] = strtotime($fields['startTime']);
+		}
+
+		if(!empty($fields['endTime'])){
+			$fields['endTime'] = strtotime($fields['endTime']);
 		}
 
 		if (!empty($fields['tags'])) {
@@ -64,6 +50,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
 				$item = (int) $item['id'];
 			});
 		}
+
 		return $fields;
 	}
 
@@ -99,11 +86,12 @@ class CourseServiceImpl extends BaseCourseServiceImpl implements CourseService
         return $lesson;
     }
 
-    public function getLesson($id)
+	public function getLesson($id)
     {
         $lesson = $this->getLessonDao()->getLesson($id);
         return LessonSerialize::unserialize($lesson);
     }
+
 }
 
 

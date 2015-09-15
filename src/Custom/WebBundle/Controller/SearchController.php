@@ -1,12 +1,19 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: retamia
+ * Date: 15/9/15
+ * Time: 09:16
+ */
+
 namespace Custom\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Controller\SearchController as SearchBaseController;
+use Topxia\Common\Paginator;
+use Topxia\WebBundle\Controller\SearchController as BaseSearchController;
 
-class SearchController extends SearchBaseController
+class SearchController extends BaseSearchController
 {
     public function indexAction(Request $request)
     {
@@ -16,11 +23,11 @@ class SearchController extends SearchBaseController
 
         $keywords = $request->query->get('q');
         $keywords=trim($keywords);
-        
+
         $vip = $this->getAppService()->findInstallApp('Vip');
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
-        
+
         $currentUserVipLevel = "";
         $vipLevelIds = "";
         if($isShowVipSearch){
@@ -32,21 +39,22 @@ class SearchController extends SearchBaseController
 
         $parentId = 0;
         $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
-        
+
         $categoryIds=array();
         foreach ($categories as $key => $category) {
             $categoryIds[$key] = $category['name'];
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $fliter = $request->query->get('fliter');       
+        $fliter = $request->query->get('fliter');
 
 
         $conditions = array(
             'status' => 'published',
             'title' => $keywords,
             'categoryId' => $categoryId,
-            'parentId' => 0
+            'parentId' => 0,
+            'table' => 'singleCourse'
         );
 
         if ($fliter == 'vip') {
@@ -71,7 +79,7 @@ class SearchController extends SearchBaseController
         );
 
 
-        return $this->render('CustomWebBundle:Search:index.html.twig', array(
+        return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
             'courses' => $courses,
             'paginator' => $paginator,
             'keywords' => $keywords,
@@ -82,4 +90,5 @@ class SearchController extends SearchBaseController
             'count' => $count,
         ));
     }
+
 }

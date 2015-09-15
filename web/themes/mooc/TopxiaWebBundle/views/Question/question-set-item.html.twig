@@ -1,27 +1,46 @@
-  <div class="question-set-item">
+<div class="question-set-item">
 
     <div class="question-set-item-side">
       <span class="question-set-item-seq">
       {% if item.parentId %}
-        {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}  
+          {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}
       {% else %}
-        {{ item.seq }}
+          {{ item.seq }}
       {% endif %}
       </span>
-      {% if item.score > 0 %}
-        <span class="question-set-item-score">{{ item.score }}</span>
-      {% endif %}
+        {% if item.score > 0 %}
+            <span class="question-set-item-score">{{ item.score }}</span>
+        {% endif %}
     </div>
 
     <div class="question-set-item-main">
-      {% set question = item.question %}
-      {% set itemResult = item.itemResult|default(null) %}
-      {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}
-      {% if question %}
-      {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
-      {% else %}
-      此题已删除。
-      {% endif %}
+        {% set question = item.question %}
+        {% set itemResult = item.itemResult|default(null) %}
+        {% if question%}
+            {% include 'CustomWebBundle:Question:question-' ~ question.type ~ '-' ~ ('preview'==view ? 'doing' : view) ~ '.html.twig' %}
+            {% if view!='preview' and 'finished'==homeworkResult.status %}
+              <span>得分: {{itemResult.score| round | default(0)}}分</span>
+              {% if 'essay'==question.type %}
+                    {% if not (reviewItems is empty) and (reviewItems[itemResult.id].teacher is defined) %}
+                        <div class="teacher-comment alert alert-success">
+                            老师点评：
+                            {% for item in reviewItems[itemResult.id].teacher %}
+                                {{ item.review}}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if not (reviewItems is empty) and (reviewItems[itemResult.id].student is defined) %}
+                        <div class="student-comment alert alert-success">
+                        学生点评：
+                            {% for item in reviewItems[itemResult.id].student %}
+                                <p>{{item.homeworkReview.user.nickname}}：{{ item.review}}</p>
+                            {% endfor %}
+                            </div>
+                    {% endif %}
+              {% endif %}
+            {% endif %}
+        {% else %}
+            此题已删除。
+        {% endif %}
     </div>
-
-  </div>
+</div>

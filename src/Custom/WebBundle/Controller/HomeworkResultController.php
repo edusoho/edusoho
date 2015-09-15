@@ -4,9 +4,7 @@ namespace Custom\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
+
 use Topxia\WebBundle\Controller\BaseController;
 
 /**

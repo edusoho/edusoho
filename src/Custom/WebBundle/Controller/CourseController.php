@@ -6,13 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Topxia\Common\Paginator;
-use Topxia\WebBundle\Form\CourseType;
-use Topxia\Service\Course\CourseService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
-use Topxia\WebBundle\Controller\CourseController as CourseBaseController;
+use Topxia\Service\Util\EdusohoLiveClient;
 
-class CourseController extends CourseBaseController
+
+class CourseController extends BaseController
 {
     public function createAction(Request $request)
     {
@@ -35,12 +32,12 @@ class CourseController extends CourseBaseController
             $courseSetting = $this->setting('course', array());
 
             if (!empty($courseSetting['live_course_enabled'])) {
-                $client = LiveClientFactory::createClient();
+                $client = new EdusohoLiveClient();
                 $capacity = $client->getCapacity();
             } else {
                 $capacity = array();
             }
-            
+
             if (empty($courseSetting['live_course_enabled'])) {
                 return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
             }
@@ -60,62 +57,33 @@ class CourseController extends CourseBaseController
             return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
         }
 
-        return $this->render('CustomWebBundle:Course:create.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
             'userProfile'=>$userProfile,
             'type'=>$type
         ));
     }
-    
-    public function showAction(Request $request, $id)
-    {
-        $user = $this->getCurrentUser();
-        list ($course, $member) = $this->buildCourseLayoutData($request, $id);
-        if(empty($member)) {
-            $user = $this->getCurrentUser();
-            $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
-            if(isset($member["id"])) {
-                $course['studentNum'] ++ ;
-            }
-        }
-
-        $this->getCourseService()->hitCourse($id);
-        $items = $this->getCourseService()->getCourseItems($course['id']);
-
-        return $this->render("CustomWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course' => $course,
-            'member' => $member,
-            'items' => $items,
-            'isTeacher' => $user->isTeacher(),
-        ));
-
-    }
 
     public function nextRoundAction(Request $request, $id)
     {
+        $this->checkId($id);
+
         $course = $this->getCourseService()->getCourse($id);
 
-        return $this->render('CustomWebBundle:Course:next-round.html.twig', array(
-                'course' => $course,
+        if($course['type'] != 'periodic'){
+            return $this->createMessageModalResponse('info', '非周期课程不可开设下一期', '周期课程', 3);
+        }
+
+        return $this->render('TopxiaWebBundle:Course:next-round.html.twig', array(
+            'course' => $course,
         ));
-    }
-
-    public function roundingAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
-        $conditions = $request->request->all();
-        $course['startTime'] = strtotime($conditions['startTime']);
-        $course['endTime'] = strtotime($conditions['endTime']);
-
-        $this->getNextRoundService()->rounding($course);
-
-        return $this->redirect($this->generateUrl('my_teaching_courses'));
     }
 
     public function exploreAction(Request $request, $category)
     {
         $conditions = $request->query->all();
-
+        $categoryArray = array();
         $conditions['code'] = $category;
+        $conditions['table'] = 'singleCourse';
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
             $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
@@ -174,8 +142,27 @@ class CourseController extends CourseBaseController
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         }
-
-        return $this->render('CustomWebBundle:Course:explore.html.twig', array(
+        if(!$categoryArray){
+            $categoryArrayDescription = array();
+        }
+        else{
+            $categoryArrayDescription = $categoryArray['description'];
+            $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+            $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
+        }
+        if(!$categoryArray){
+            $CategoryParent = '';
+        }
+        else{
+            if(!$categoryArray['parentId']){
+                $CategoryParent = '';
+            }
+            else{
+                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+            }
+        }
+        return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
             'courses' => $courses,
             'category' => $category,
             'fliter' => $fliter,
@@ -183,66 +170,40 @@ class CourseController extends CourseBaseController
             'paginator' => $paginator,
             'categories' => $categories,
             'consultDisplay' => true,
-            'path' => 'course_explore'
-
+            'path' => 'course_explore',
+            'categoryArray' => $categoryArray,
+            'group' => $group,
+            'categoryArrayDescription' => $categoryArrayDescription,
+            'CategoryParent' => $CategoryParent
         ));
     }
 
-	public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
-	{
-		$userIds = array();
-		foreach ($courses as $key => $course) {
-			$userIds = array_merge($userIds, $course['teacherIds']);
-
-			$classroomIds=$this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-
-			$courses[$key]['classroomCount']=count($classroomIds);
-
-			if(count($classroomIds)>0){
-				$classroom=$this->getClassroomService()->getClassroom($classroomIds[0]);
-				$courses[$key]['classroom']=$classroom;
-			}
-		}
-		
-		$users = $this->getUserService()->findUsersByIds($userIds);
-		
-		return $this->render("CustomWebBundle:Course:courses-block-{$view}.html.twig", array(
-			'courses' => $courses,
-			'users' => $users,
-			'classroomIds'=>$classroomIds,
-			'mode' => $mode,
-		));
-	}
-
-    public function becomeUseMemberAction(Request $request, $id)
+    public function roundingAction(Request $request, $id)
     {
-        if (!$this->setting('vip.enabled')) {
-            $this->createAccessDeniedException();
-        }
+        $this->checkId($id);
+        $course = $this->getCourseService()->getCourse($id);
+        $conditions = $request->request->all();
+        $course['startTime'] = strtotime($conditions['startTime']);
+        $course['endTime'] = strtotime($conditions['endTime']);
 
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
-        }
+        $this->getNextRoundService()->rounding($course);
 
-        $course=$this->getCourseService()->loadCourse($id);
-        if($course['maxStudentNum']<=$course['studentNum']){
-            return $this->createJsonResponse(array(
-                "success"=> false,
-                "message" => "该课程学员已满，无法加入"
-            ));
-        }
-
-        $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
-        return $this->createJsonResponse(array(
-            "success"=>true
-        ));
+        return $this->redirect($this->generateUrl('my_teaching_courses'));
     }
-
 
     protected function getNextRoundService()
     {
         return $this->getServiceKernel()->createService('Custom:Course.NextRoundService');
+    }
+
+    public function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
 }

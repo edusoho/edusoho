@@ -33,6 +33,17 @@ define(function(require, exports, module) {
         $("body").on("click",'.html-mask.active',function(e){
             removeNavMobile();
         });
+
+
+        $("#home-course-list").on('click','.js-course-filter',function(){
+             var $btn = $(this);
+             $.get($btn.data('url'),function(html){
+               $('#course-list').html(html);
+               Lazyload.init();
+               $(".tooltip").remove();
+               $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+            })
+        })
        
         
     }

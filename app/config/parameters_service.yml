@@ -1,0 +1,7 @@
+parameters:
+    topxia_services:
+        'Course.CourseService' : 'Custom\Service\Course\Impl\CourseServiceImpl'
+        'Crontab.CrontabService' : 'Custom\Service\Crontab\Impl\CrontabServiceImpl'
+
+    topxia_daos:
+        'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
