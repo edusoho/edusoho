@@ -12,16 +12,13 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 class HLSController extends BaseController
 {
 
-    public function playlistAction(Request $request, $id, $token, $levelParam)
+    public function playlistAction(Request $request, $id, $token)
     {
-
-        if(!empty($levelParam) && !in_array($levelParam, array('HD','SHD','SD'))){
-            throw $this->createNotFoundException();
-        }
-
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $levelParam = $request->query->get('levelParam', "");
+        $returnJson = $request->query->get('returnJson', false);
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -88,9 +85,20 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        $playlist = $api->get('/hls/playlist/json', array( 'streams' => $streams, 'qualities' => $qualities));
+        if($returnJson){
+            $playlist = $api->get('/hls/playlist/json', array( 'streams' => $streams, 'qualities' => $qualities));
+            return $this->createJsonResponse($playlist);
+        } else {
+            $playlist = $api->get('/hls/playlist', array( 'streams' => $streams, 'qualities' => $qualities));
+            if (empty($playlist['playlist'])) {
+                return $this->createMessageResponse('error', '生成视频播放列表失败！');
+            }
 
-        return $this->createJsonResponse($playlist);
+            return new Response($playlist['playlist'], 200, array(
+                'Content-Type' => 'application/vnd.apple.mpegurl',
+                'Content-Disposition' => 'inline; filename="playlist.m3u8"',
+            ));
+        }
     }
 
     public function streamAction(Request $request, $id, $level, $token)

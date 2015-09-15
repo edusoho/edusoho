@@ -311,11 +311,12 @@ class CourseLessonController extends BaseController
 
             $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
 
-            return $this->forward("TopxiaWebBundle:HLS:playlist",array(
+            return $this->redirect($this->generateUrl("hls_playlist",array(
                 'id' => $file['id'],
                 'token' => $token['token'],
-                'levelParam' => $request->query->get('level')
-            ));
+                'levelParam' => $request->query->get('level',''),
+                'returnJson' => true
+            )));
         }
     }
 

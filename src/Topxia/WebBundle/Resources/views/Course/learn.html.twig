@@ -14,8 +14,10 @@
 {% set bodyClass = 'lesson-dashboard-page' %}
 
 {% block stylesheets %}
-   {{ parent() }}
-   <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  {{ parent() }}
+  {% if setting("developer.balloon_player")|default(0) %}
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  {% endif %}
 {% endblock %}
 
 {% block header %}{% endblock %}
@@ -54,6 +56,7 @@
             data-fingerprint="{{ finger_print() }}"
           {% endif %}
             data-user-id="{{ app.user.id }}"
+            data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
         ></div>
         <div class="watermarkEmbedded" ></div>
 
