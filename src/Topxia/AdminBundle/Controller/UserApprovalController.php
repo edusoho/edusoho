@@ -36,7 +36,7 @@ class UserApprovalController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('approvalTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

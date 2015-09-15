@@ -22,7 +22,8 @@ class SettingController extends BaseController
         $settingMobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled' => 0, // 网校状态
+            'enabled' => 1, // 网校状态
+            'ver' => 1,//是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
             'appname' => '',
@@ -54,9 +55,18 @@ class SettingController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        }else{
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        }
+        
+        //是否拥有定制app
+        $hasMobile = $result['hasMobile'] ?$result['hasMobile']:0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
-            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
+            'mobileCode' => $mobileCode,
+            'hasMobile'=>$hasMobile
         ));
     }
 
