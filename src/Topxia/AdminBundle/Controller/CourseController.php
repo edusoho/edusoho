@@ -71,10 +71,7 @@ class CourseController extends BaseController
         }
 
         $default = $this->getSettingService()->get('default', array());
-//         foreach ($courses as $course) {
-//             var_dump($course['income']);
-//         }
-// exit();
+
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
             'conditions' => $conditions,
             'courses' => $courses,
