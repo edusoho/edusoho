@@ -17,4 +17,9 @@ class BaseController extends \Topxia\WebBundle\Controller\BaseController
             throw $this->createNotFoundException();
         }
     }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }
