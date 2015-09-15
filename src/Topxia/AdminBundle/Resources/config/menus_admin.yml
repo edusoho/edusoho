@@ -439,3 +439,13 @@ admin_course_review_tab:
     parent: admin_course_review
     router_name: admin_review
     group: 1
+admin_user_approvals_approving_tab:
+    name: 审核中
+    parent: admin_approval_approving
+    router_name: admin_approval_approving
+    group: 1
+admin_user_approvals_approved_tab:
+    name: 审核通过
+    parent: admin_approval_approving
+    router_name: admin_approval_approved
+    group: 1

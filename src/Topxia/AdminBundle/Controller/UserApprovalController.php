@@ -28,15 +28,51 @@ class UserApprovalController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
+        if(isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')){
+            //根据条件从user_approval表里查找数据
+            $approvalcount = $this->getUserService()->searchapprovalsCount($conditions);
+            $profiles = $this->getUserService()->searchapprovals($conditions,array('id','DESC'),0,$approvalcount);
+            $userApprovingId = ArrayToolkit::column($profiles, 'userId');
+        }else{
+            $usercount = $this->getUserService()->searchUserCount($conditions);
+            $profiles = $this->getUserService()->searchUsers($conditions,array('id','DESC'),0,$usercount);
+            $userApprovingId = ArrayToolkit::column($profiles,'id');
+        }
+
+        //在user表里筛选正在被实名认证的
+        $userConditions = array(
+            'userIds' => $userApprovingId,
+            'approvalStatus' => 'approving',
+            );
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $userConditions['startApprovedTime'] = strtotime($conditions['startDateTime']);
+            $userConditions['endApprovedTime'] = strtotime($conditions['endDateTime']);
+        }
+
+        $userApprovalcount = 0;
+        if(!empty($userApprovingId)){
+            $userApprovalcount = $this->getUserService()->searchUserCount($userConditions);    
+        }
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $userApprovalcount,
             20
         );
+        $users = array();
+        if(!empty($userApprovingId)){
+            $users = $this->getUserService()->searchUsers(
+                $userConditions,
+                array('id','DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        } 
 
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('approvalTime', 'DESC'),
+        //最终结果
+        $approvingUserids = ArrayToolkit::column($users, 'id');
+        $userProfiles = $this->getUserService()->searchapprovals(
+            $approvingUserids,
+            array('id','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -68,28 +104,64 @@ class UserApprovalController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
+        if(isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')){
+            //根据条件从user_approval表里查找数据
+            $profilecount = $this->getUserService()->searchapprovalsCount($conditions);
+            $profiles = $this->getUserService()->searchapprovals($conditions,array('id','DESC'),0,$profilecount);
+            $userProfilesid = ArrayToolkit::column($profiles, 'userId');
+        }else{
+            $usercount = $this->getUserService()->searchUserCount($conditions);
+            $profiles = $this->getUserService()->searchUsers($conditions,array('id','DESC'),0,$usercount);
+            $userProfilesid = ArrayToolkit::column($profiles, 'id');
+        }
+
+        //在user表里筛选通过实名认证的
+        $userConditions = array(
+            'userIds' => $userProfilesid,
+            'approvalStatus' => 'approved',
+            );
+        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
+            $userConditions['startApprovedTime'] = strtotime($conditions['startDateTime']);
+            $userConditions['endApprovedTime'] = strtotime($conditions['endDateTime']);
+        } 
+
+        $userApprovalcount = 0;
+        if(!empty($userProfilesid)){
+            $userApprovalcount = $this->getUserService()->searchUserCount($userConditions);    
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $userApprovalcount,
             20
         );
+        $users = array();
+        if(!empty($userProfilesid)){
+            $users = $this->getUserService()->searchUsers(
+                $userConditions,
+                array('id','DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        } 
 
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('approvalTime', 'DESC'),
+        //最终结果
+        $approvedUserids = ArrayToolkit::column($users, 'id');
+        $userProfiles = $this->getUserService()->searchUserProfiles(
+            $approvedUserids,
+            array('id','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
-        $userProfiles = ArrayToolkit::index($userProfiles, 'id');
+            $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
+            $userProfiles = ArrayToolkit::index($userProfiles, 'id');
         return $this->render('TopxiaAdminBundle:User:approved.html.twig', array(
             'users' => $users,
             'paginator' => $paginator,
             'userProfiles' => $userProfiles
         ));
     }
-
     public function approveAction(Request $request, $id)
     {
         list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);

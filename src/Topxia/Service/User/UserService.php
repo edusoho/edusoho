@@ -105,6 +105,10 @@ interface UserService
 
     public function searchUserProfileCount(array $conditions);
 
+    public function searchapprovals(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchapprovalsCount(array $conditions);
+
     public function changeUserRoles($id, array $roles);
 
     /**
