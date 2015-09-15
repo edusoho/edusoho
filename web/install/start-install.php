@@ -23,11 +23,11 @@ define("INSTALL_URI", "\/install\/start-install.php");
 
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
-$step =intval(empty($_GET['step']) ? 0 : $_GET['step']);
-
+$step = intval(empty($_GET['step']) ? 0 : $_GET['step']);
+$init_data = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
 $functionName = 'install_step' . $step;
 
-$functionName();
+$functionName($init_data);
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
@@ -48,7 +48,7 @@ function check_installed()
     }
 }
 
-function install_step0()
+function install_step0($init_data = 0)
 {
     check_installed();
 
@@ -56,7 +56,7 @@ function install_step0()
     echo $twig->render('step-0.html.twig', array('step' => 0));
 }
 
-function install_step1()
+function install_step1($init_data = 0)
 {
     check_installed();
     global $twig;
@@ -125,7 +125,7 @@ function install_step1()
     ));
 }
 
-function install_step2()
+function install_step2($init_data = 0)
 {
     check_installed();
     global $twig;
@@ -142,7 +142,7 @@ function install_step2()
             $error = _create_config($_POST);
         }
         if (empty($error)) {
-            header("Location: start-install.php?step=3");
+            header("Location: start-install.php?step=3&init_data=0");
             exit(); 
         }
     }
@@ -154,7 +154,7 @@ function install_step2()
     ));
 }
 
-function install_step3()
+function install_step3($init_data = 0)
 {
     check_installed();
     global $twig;
@@ -174,27 +174,33 @@ function install_step3()
 
         $init = new SystemInit();
         $admin = $init->initAdmin($_POST);
+
         $init->initSiteSettings($_POST);
-        $init->initRegisterSetting($admin);
-        $init->initMailerSetting($_POST['sitename']);
-        $init->initPaymentSetting();
-        $init->initStorageSetting();
-        $init->initTag();
-        $init->initCategory();
-        $init->initFile();
-        $init->initPages();
-        $init->initNavigations();
-        $init->initBlocks();
-        $init->initThemes();
-        $init->initRefundSetting();
-        $init->initArticleSetting();
-        $init->initDefaultSetting();
-        $init->initCrontabJob();
+        if (empty($init_data)) {
+            $init->initRegisterSetting($admin);
+            $init->initMailerSetting($_POST['sitename']);
+            $init->initPaymentSetting();
+            $init->initStorageSetting();
+            $init->initTag();
+            $init->initCategory();
+            $init->initFile();
+            $init->initPages();
+            $init->initNavigations();
+            $init->initBlocks();
+            $init->initThemes();
+            $init->initRefundSetting();
+            $init->initArticleSetting();
+            $init->initDefaultSetting();
+            $init->initCrontabJob();
+        } else {
+            $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
+        }
         $init->initLockFile();
 
         header("Location: start-install.php?step=4");
         exit();
     }
+
 
     echo $twig->render('step-3.html.twig', array(
         'step' => 3,
@@ -203,7 +209,7 @@ function install_step3()
     ));
 }
 
-function install_step4()
+function install_step4($init_data = 0)
 {
     global $twig;
     
@@ -228,7 +234,7 @@ function install_step4()
     ));
 }
 
-function install_step5()
+function install_step5($init_data = 0)
 {
     try {
         $filesystem = new Filesystem();
@@ -244,7 +250,7 @@ function install_step5()
 /**
  * 生产Key
  */
-function install_step999()
+function install_step999($init_data = 0)
 {
     if (empty($_COOKIE['nokey'])) {
         
@@ -298,7 +304,7 @@ function _create_database($config, $replace)
         }
 
         if(!empty($config["database_init"]) && $config["database_init"]==1) {
-            init_data($pdo,$config);
+            _init_data($pdo,$config);
         }
 
         return null;
@@ -308,7 +314,7 @@ function _create_database($config, $replace)
     }
 }
 
-function init_data($pdo, $config)
+function _init_data($pdo, $config)
 {
     $sql = file_get_contents('./edusoho_init.sql');
     $result = $pdo->exec($sql);
@@ -329,10 +335,9 @@ function init_data($pdo, $config)
 
     _create_config($config);
 
-    $init = new SystemInit();
-    $init->initLockFile();
+    // $init = new SystemInit();
 
-    header("Location: start-install.php?step=4");
+    header("Location: start-install.php?step=3&init_data=1");
     exit();
 }
 
@@ -796,15 +801,6 @@ EOD;
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
         ));
-
-        // $this->getCrontabService()->createJob(array(
-        //     'name'=>'DeleteSessionJob', 
-        //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
-        //     'jobParams'=>'',
-        //     'nextExcutedTime'=>time(),
-        //     'createdTime'=>time()
-        // ));
 
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
