@@ -10,7 +10,6 @@ course_rounding:
     pattern: /course/{id}/rounding
     defaults: { _controller: CustomWebBundle:Course:rounding }
 
-
 order_show:
     pattern:  /order/show
     defaults: { _controller: CustomWebBundle:Order:show }
