@@ -3,7 +3,6 @@ date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor2/autoload.php';
 
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -41,6 +40,7 @@ include __DIR__ . '/src/functions.php';
 
 
 $app = new Silex\Application();
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app['debug'] = true;
 
@@ -48,34 +48,37 @@ $app->view(function (array $result, Request $request) use ($app) {
     return new JsonResponse($result);
 });
 
+include __DIR__ . '/config/container.php';
+
 
 $app->before(function (Request $request) use ($app) {
 
-    $whiteLists = include __DIR__ . '/whiteList.php';
-    $whiteLists = $request->getMethod() == 'GET' ? $whiteLists['get'] : $whiteLists['post'];
-    $inWhiteList = 0;
-    foreach ($whiteLists as $whiteList) {
-        $path = $request->getPathInfo();
-        if (preg_match($whiteList, $request->getPathInfo())) {
-            $inWhiteList = 1;
-            break;
-        }
-    }
-    $token = $request->headers->get('Auth-Token', '');
-    if (!$inWhiteList && empty($token)) {
-        throw createNotFoundException("AuthToken is not exist.");
-    }
+    // $whiteLists = include __DIR__ . '/whiteList.php';
+    // $whiteLists = $request->getMethod() == 'GET' ? $whiteLists['get'] : $whiteLists['post'];
+    // $inWhiteList = 0;
+    // foreach ($whiteLists as $whiteList) {
+    //     $path = $request->getPathInfo();
+    //     if (preg_match($whiteList, $request->getPathInfo())) {
+    //         $inWhiteList = 1;
+    //         break;
+    //     }
+    // }
+    // $token = $request->headers->get('Auth-Token', '');
+    // if (!$inWhiteList && empty($token)) {
+    //     throw createNotFoundException("AuthToken is not exist.");
+    // }
     $userService = ServiceKernel::instance()->createService('User.UserService');
-    $token = $userService->getToken('mobile_login', $token);
+    // $token = $userService->getToken('mobile_login', $token);
 
-    if (!$inWhiteList && empty($token['userId'])) {
-        throw createAccessDeniedException("AuthToken is invalid.");
-    }
+    // if (!$inWhiteList && empty($token['userId'])) {
+    //     throw createAccessDeniedException("AuthToken is invalid.");
+    // }
 
-    $user = $userService->getUser($token['userId']);
-    if (!$inWhiteList && empty($user)) {
-        throw createNotFoundException("Auth user is not found.");
-    }
+    // $user = $userService->getUser($token['userId']);
+    $user = $userService->getUser(1);
+    // if (!$inWhiteList && empty($user)) {
+    //     throw createNotFoundException("Auth user is not found.");
+    // }
     setCurrentUser($user);
 
 });
@@ -87,13 +90,6 @@ $app->error(function (\Exception $e, $code) {
     );
 });
 
-$app->mount('/api/users', include __DIR__ . '/src/users.php' );
-$app->mount('/api/me', include __DIR__ . '/src/me.php' );
-$app->mount('/api/courses', include __DIR__ . '/src/courses.php' );
-$app->mount('/api/announcements', include __DIR__ . '/src/announcements.php' );
-$app->mount('/api/coursethreads', include __DIR__ . '/src/coursethreads.php' );
-$app->mount('/api/mobileschools', include __DIR__ . '/src/mobileschools.php' );
-$app->mount('/api/blacklists', include __DIR__ . '/src/blacklists.php' );
-$app->mount('/api/messages', include __DIR__ . '/src/messages.php' );
-$app->mount('/api/files', include __DIR__ . '/src/files.php' );
+include __DIR__ . '/config/routing.php';
+
 $app->run();
