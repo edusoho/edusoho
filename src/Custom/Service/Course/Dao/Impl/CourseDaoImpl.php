@@ -8,7 +8,7 @@ use Topxia\Service\Course\Dao\Impl\CourseDaoImpl as BaseCourseDao;
 class CourseDaoImpl extends BaseCourseDao implements CourseDao
 {
 	public function getPeriodicCoursesCount($rootId){
-		$sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE rootId = ?";
+		$sql = "SELECT MAX(`periods`) FROM {$this->getTablename()} WHERE rootId = ?";
 		return $this->getConnection()->fetchColumn($sql, array($rootId)) ? : null;
 	}
 
@@ -42,8 +42,8 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 		if(!empty($conditions['table']) && $conditions['table'] == 'singleCourse'){
 			$now = time();
 			$table = "(select a.* from (
-						select b.*, {$now} - cast(b.startTime as signed) as maxTime, CASE b.rootId WHEN 0 or b.rootId is NULL THEN b.id ELSE b.rootId END as 'groupId' from course b order by maxTime desc) a
-					group by groupId )";
+						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) a
+					group by rootId )";
 			$builder->from($table, 'course');
 		}
 
