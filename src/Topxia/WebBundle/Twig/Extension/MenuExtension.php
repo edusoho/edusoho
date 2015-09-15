@@ -75,8 +75,9 @@ class MenuExtension extends \Twig_Extension
         }
         $yaml = new Yaml();
         $blackList = $yaml->parse(file_get_contents($filename));
-        if(empty($blackList))
-        $blackList = array();
+        if(empty($blackList)){
+            $blackList = array();
+        }
         return in_array($code, $blackList);
     }
 
@@ -98,13 +99,15 @@ class MenuExtension extends \Twig_Extension
         }
         $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
         if(!file_exists($filename)){
-                $content = $yaml->dump($codes);
-                $file = fopen($filename,"w");
-                fwrite($file,$content);
-                fclose($file);
+            $content = $yaml->dump($codes);
+            $file = fopen($filename,"w");
+            fwrite($file,$content);
+            fclose($file);
         }else{
             $blackList = $yaml->parse(file_get_contents($filename));
-            if(empty($blackList)) $blackList = array();
+            if(empty($blackList)){
+                $blackList = array();
+            }
             $addCodes = array_diff($codes, $blackList);
             if(!empty($addCodes)){
                 foreach ($addCodes as $addCode) {
@@ -130,9 +133,11 @@ class MenuExtension extends \Twig_Extension
         }
         else{
             $blackList = $yaml->parse(file_get_contents($filename));
-            if(empty($blackList))
-            $blackList = array();
+            if(empty($blackList)){
+                $blackList = array();
+            }
             $diffCodes = array_diff($blackList,$codes);
+
             $array = array();
             if(!empty($diffCodes)){
                 foreach ($diffCodes as $diffcode) {
@@ -143,7 +148,9 @@ class MenuExtension extends \Twig_Extension
                 fputs($file,$content);
                 fclose($file);
             }else{
-                return;
+                $file = fopen($filename,"w");
+                fputs($file,null);
+                fclose($file);
             }
         }
 
