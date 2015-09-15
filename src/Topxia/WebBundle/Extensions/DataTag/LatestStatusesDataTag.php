@@ -23,10 +23,12 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {   
-        $conditions = array(
-            'private' => 0,
-        );
-
+        $conditions = array();
+        if(isset($arguments['private'])){
+            if($arguments['private'] == 0){
+                $conditions['private'] = 0;
+            }
+        }
         if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
             if ($arguments['objectType'] == 'course') {
                 $conditions['courseIds'] = array($arguments['objectId']);
