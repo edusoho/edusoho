@@ -64,10 +64,15 @@ class CourseController extends BaseController
     public function nextRoundAction(Request $request, $id)
     {
         $this->checkId($id);
+
         $course = $this->getCourseService()->getCourse($id);
 
+        if($course['type'] != 'periodic'){
+            return $this->createMessageModalResponse('info', '非周期课程不可开设下一期', '周期课程', 3);
+        }
+
         return $this->render('TopxiaWebBundle:Course:next-round.html.twig', array(
-                'course' => $course,
+            'course' => $course,
         ));
     }
 
