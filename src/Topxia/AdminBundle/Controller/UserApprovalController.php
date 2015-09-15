@@ -80,7 +80,7 @@ class UserApprovalController extends BaseController
         $approvals = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
         $approvals = ArrayToolkit::index($approvals, 'userId');
 
-        return $this->render('TopxiaAdminBundle:User:approving.html.twig', array(
+        return $this->render('TopxiaAdminBundle:User:approval.html.twig', array(
         	'users' => $users,
         	'paginator' => $paginator,
             'approvals' => $approvals
@@ -156,7 +156,7 @@ class UserApprovalController extends BaseController
 
             $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
             $userProfiles = ArrayToolkit::index($userProfiles, 'id');
-        return $this->render('TopxiaAdminBundle:User:approved.html.twig', array(
+        return $this->render('TopxiaAdminBundle:User:approval.html.twig', array(
             'users' => $users,
             'paginator' => $paginator,
             'userProfiles' => $userProfiles
