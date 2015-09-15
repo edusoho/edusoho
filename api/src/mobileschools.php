@@ -73,12 +73,24 @@ $api->get('/apps', function () {
     $site = ServiceKernel::instance()->createService('System.SettingService')->get('site');
     $apps[] = array(
         'id' => 1,
+        'code' => 'announcement',
         'name' => $site['name'],
         'title' => $site['slogan'],
         'about' => $mobile['about'],
         'avatar' => $mobile['logo'],
         'callback' => '/mobileschools/announcements'
     );
+
+    $apps[] = array(
+        'id' => 2,
+        'code' => 'news',
+        'name' => '资讯',
+        'title' => '',
+        'about' => '',
+        'avatar' => '',
+        'callback' => '',
+    );
+
     return $apps;
 });
 
