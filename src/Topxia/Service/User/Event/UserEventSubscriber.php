@@ -100,9 +100,10 @@ class UserEventSubscriber implements EventSubscriberInterface
             return true;
         }
 
-        if (strlen($welcomeBody) >= 1000) {
-            $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
-        }
+        // TODO 
+        //if (strlen($welcomeBody) >= 1000) {
+        //    $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
+        //}
 
         $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
         $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
@@ -115,7 +116,12 @@ class UserEventSubscriber implements EventSubscriberInterface
         $site = $this->getSettingService()->get('site', array());
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
-        $welcomeBody = $this->getSettingService()->get('auth.welcome_body', '注册欢迎的内容');
+
+        $auth = $this->getSettingService()->get('auth', array());
+        if(!empty($auth)&&isset($auth['welcome_body'])){
+            $welcomeBody = $auth['welcome_body'];
+        }
+
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
         return $welcomeBody;
     }
@@ -139,10 +145,10 @@ class UserEventSubscriber implements EventSubscriberInterface
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
     }
-
-     protected function getWebExtension()
-    {
-        return $this->container->get('topxia.twig.web_extension');
-    }
+    // undefined container, comment out 
+    //  protected function getWebExtension()
+    // {
+    //     return $this->container->get('topxia.twig.web_extension');
+    // }
 
 }

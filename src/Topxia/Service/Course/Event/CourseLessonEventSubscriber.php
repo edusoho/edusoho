@@ -50,10 +50,21 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         }
         if (!empty($courseIds)){
             $lesson ['parentId'] = $lesson ['id'];
+            if($lesson['type'] == 'testpaper'){
+                $lockedTarget = '';
+                foreach ($courseIds as $courseId) {
+                    $lockedTarget .= "'course-".$courseId."',";
+                }
+                $lockedTarget = "(".trim($lockedTarget,',').")";
+                $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($lesson['mediaId'],$lockedTarget),'id');
+            }
             unset($lesson ['id'],$lesson['courseId']);
-            foreach ($courseIds as $courseId)
+            foreach ($courseIds as $key=>$courseId)
             {   
                 $lesson['courseId'] = $courseId;
+                if($lesson['type'] == 'testpaper'){
+                    $lesson['mediaId'] = $testpaperIds[$key];
+                }
                 $this->getCourseService()->addLesson($lesson);
             }
         }
@@ -112,6 +123,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
             unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            if($lesson['type'] == 'testpaper'){
+                unset($lesson['mediaId']);
+            }
             foreach ($courseIds as $key=>$courseId) {
                 $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
             } 
@@ -122,12 +136,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');
+        $private = $course['status'] == 'published' ? 0 :1;
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom) && $classroom['showable']==1) {
+                $private = 0;
+            }else{
+                $private = 1;
+            }
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'start_learn_lesson',
             'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
-            'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $private,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -139,12 +163,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
         $course = $event->getArgument('course');
+        $private = $course['status'] == 'published' ? 0 :1;
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom) && $classroom['showable']== 1) {
+                $private = 0;
+            }else{
+                $private = 1;
+            }
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'learned_lesson',
             'courseId' => $course['id'],
             'objectType' => 'lesson',
             'objectId' => $lesson['id'],
-            'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $private,
             'properties' => array(
                 'course' => $this->simplifyCousrse($course),
                 'lesson' => $this->simplifyLesson($lesson),
@@ -204,5 +238,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
     }
 }

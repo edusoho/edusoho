@@ -2053,6 +2053,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId, $userId);
 	}
 
+	public function deleteMemberByCourseIdAndRole($courseId,$role)
+	{
+		return $this->getMemberDao()->deleteMemberByCourseIdAndRole($courseId,$role);
+	}
+
 	public function deleteMemberByCourseId($courseId)
 	{
 		return $this->getMemberDao()->deleteMembersByCourseId($courseId);
