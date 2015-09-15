@@ -238,6 +238,8 @@ class TestpaperController extends BaseController
             'id' => $id,
             'total' => $total,
             'student' => $student,
+            'source' => $request->query->get('source','course'),
+            'targetId' => $request->query->get('targetId',0)
         ));
     }
 

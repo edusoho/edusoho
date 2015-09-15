@@ -12,6 +12,7 @@
 /installFiles
 /app/config/uc_client_config.php
 /app/config/windid_client_config.php
+/app/data/api_server.json
 /app/data/udisk/*
 /app/data/private_files/*
 /app/data/backup/*
@@ -59,3 +60,4 @@ web/assets/img/default/video.png
 /web/assets/v2/bootstrap/less
 /web/install/edusoho_init.sql
 /app/data/api_server.json
+/installFiles

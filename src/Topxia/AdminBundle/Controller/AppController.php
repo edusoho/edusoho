@@ -9,8 +9,8 @@ use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
 
 use Topxia\Service\CloudPlatform\KeyApplier;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class AppController extends BaseController
 {
@@ -25,8 +25,11 @@ class AppController extends BaseController
 
     public function myCloudAction(Request $request)
     {
-        $content = $this->getEduCloudService()->getUserOverview();
-        $info = $this->getEduCloudService()->getAccountInfo();
+        // @apitodo 需改成leaf
+        $api = CloudAPIFactory::create('root');
+
+        $content = $api->get("/users/{$api->getAccessKey()}/overview");
+        $info = $api->get('/me');
 
         $eduSohoOpenClient = new EduSohoOpenClient();
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
@@ -42,8 +45,12 @@ class AppController extends BaseController
 
     public function myCloudOverviewAction(Request $request)
     {
-        $content = $this->getEduCloudService()->getUserOverview();
-        $info = $this->getEduCloudService()->getAccountInfo();
+        // @apitodo 需改成leaf
+        $api = CloudAPIFactory::create('root');
+
+        $content = $api->get("/users/{$api->getAccessKey()}/overview");
+        $info = $api->get('/me');
+
         if(isset($info['licenseDomains'])) {
 
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -72,7 +79,7 @@ class AppController extends BaseController
         $tlp = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0 ;
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
         $storageDate = isset($content['service']['storage']['expire']) ? ceil( ($content['service']['storage']['expire'] - strtotime($currentTime) ) /86400) : '' ;
-        $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],0,1) : '' ;
+        $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],-2) : '' ;
         $startYear = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],0,4) : '' ;
         $startMonth = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],-2) : '' ;
         $endYear = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'],0,4) : '' ;
@@ -315,10 +322,5 @@ class AppController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    protected function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }   
+    } 
 }

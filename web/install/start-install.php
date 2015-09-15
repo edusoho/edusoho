@@ -470,7 +470,7 @@ class SystemInit
             'logo'=>'',
             'seo_keywords'=>'',
             'seo_description'=>'',
-            'master_email'=> $settings['admin']['email'],
+            'master_email'=> $settings['email'],
             'icp'=>'',
             'analytics'=>'',
             'status'=>'open',

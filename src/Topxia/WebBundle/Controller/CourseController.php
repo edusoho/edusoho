@@ -8,7 +8,7 @@ use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\CourseType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 
 class CourseController extends CourseBaseController
 {
@@ -324,7 +324,7 @@ class CourseController extends CourseBaseController
 			$courseSetting = $this->setting('course', array());
 
 			if (!empty($courseSetting['live_course_enabled'])) {
-				$client = LiveClientFactory::createClient();
+				$client = new EdusohoLiveClient();
 				$capacity = $client->getCapacity();
 			} else {
 				$capacity = array();

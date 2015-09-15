@@ -132,7 +132,6 @@ class ClassroomController extends BaseController
         }
 
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
-
         return $this->render("ClassroomBundle:Classroom:my-classroom.html.twig", array(
             'classrooms' => $classrooms,
             'members' => $members,
@@ -167,7 +166,6 @@ class ClassroomController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
-
         $lessonNum = 0;
         $coinPrice = 0;
         $price = 0;
@@ -180,9 +178,6 @@ class ClassroomController extends BaseController
         }
 
         $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
-
-        $canManage = $this->getClassroomService()->canManageClassroom($classroomId);
-        $canHandle = $this->getClassroomService()->canHandleClassroom($classroomId);
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
         if ($member && !$member["locked"]) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
@@ -192,8 +187,6 @@ class ClassroomController extends BaseController
                 'coinPrice' => $coinPrice,
                 'price' => $price,
                 'member' => $member,
-                'canManage' => $canManage,
-                'canHandle' => $canHandle,
                 'checkMemberLevelResult' => $checkMemberLevelResult,
                 'classroomMemberLevel' => $classroomMemberLevel,
                 'coursesNum' => $coursesNum,
@@ -209,7 +202,6 @@ class ClassroomController extends BaseController
             'classroomMemberLevel' => $classroomMemberLevel,
             'coursesNum' => $coursesNum,
             'member' => $member,
-            'canManage' => $canManage,
             'canFreeJoin' => $canFreeJoin,
             'breadcrumbs' => $breadcrumbs
         ));
@@ -221,6 +213,7 @@ class ClassroomController extends BaseController
      */
     public function showAction(Request $request, $id)
     {
+
         $classroom = $this->getClassroomService()->getClassroom($id);
         $previewAs = "";
 
@@ -241,8 +234,9 @@ class ClassroomController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
+
         if ($member && $member["locked"] == "0") {
-            if ($member['role'] == 'student') {
+            if (in_array('student',$member['role'])) {
                 return $this->redirect($this->generateUrl('classroom_courses', array(
                     'classroomId' => $id,
                 )));
@@ -276,13 +270,12 @@ class ClassroomController extends BaseController
                 'noteNum' => 0,
                 'threadNum' => 0,
                 'remark' => '',
-                'role' => 'auditor',
+                'role' => array('auditor'),
                 'locked' => 0,
                 'createdTime' => 0,
             );
-
             if ($previewAs == 'member') {
-                $member['role'] = 'member';
+                $member['role'] = array('member');
             }
         }
 
@@ -313,12 +306,7 @@ class ClassroomController extends BaseController
 
     public function teachersBlockAction($classroom)
     {
-        if (empty($classroom['teacherIds'])) {
-            $classroomTeacherIds = array();
-        } else {
-            $classroomTeacherIds = $classroom['teacherIds'];
-        }
-
+        $classroomTeacherIds = $this->getClassroomService()->findTeachers($classroom['id']);
         $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
         $headTeacherprofiles = $this->getUserService()->getUserProfile($classroom['headTeacherId']);
@@ -484,7 +472,7 @@ class ClassroomController extends BaseController
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
-        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && $member['role'] == "auditor")) {
+        if ($this->getClassroomService()->canTakeClassroom($classroomId) || (isset($member) && array_intersect(array('auditor'),$member['role']))) {
             $this->getSignService()->userSign($user['id'], 'classroom_sign', $classroomId);
 
             $userSignStatistics = $this->getSignService()->getSignUserStatistics($user->id, 'classroom_sign', $classroomId);
@@ -546,8 +534,7 @@ class ClassroomController extends BaseController
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
-
-        if (!in_array($member["role"], array("auditor", "student"))) {
+        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
             throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
@@ -917,6 +904,7 @@ class ClassroomController extends BaseController
             'users' => $users,
             'classrooms' => $classrooms,
         ));
+
     }
 
     protected function getEnabledPayments()
