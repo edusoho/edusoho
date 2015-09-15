@@ -18,15 +18,13 @@
         <div class="course-filter section-header" id="course-filter">
          推荐课程
           <div class="course-sort btn-group">
-            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_category',{orderBy : 'latest'}) }}">最新</a>
-            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_category',{orderBy : 'studentNum'}) }}">最热</a>
+            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'latest'}) }}">最新</a>
+            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'studentNum'}) }}">最热</a>
           </div>
         </div>
         <div class="section-bodyer">
           <div class="home-course-list row">
-            {% for course in recommendCourses %}
-              {% include 'TopxiaWebBundle:Default:course-item.html.twig' %}
-            {% endfor %}
+            {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
           </div>
           <div class="text-center mvl">
             <a href="/course/explore" class="btn btn-gylight btn-md">
