@@ -26,7 +26,7 @@ class ClassroomController extends BaseController
     {
         $conditions = array(
             'status' => 'published',
-            'private' => 0,
+            'showable' => 1,
         );
 
         $categoryArray = array();
@@ -288,6 +288,9 @@ class ClassroomController extends BaseController
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+        }
         if(!$classroom){
             $classroomDescription = array();
         }
@@ -386,7 +389,7 @@ class ClassroomController extends BaseController
 
     public function latestMembersBlockAction($classroom, $count = 10)
     {
-        $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 12);
+        $students = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, 20);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
         return $this->render('ClassroomBundle:Classroom:latest-members-block.html.twig', array(
@@ -399,9 +402,6 @@ class ClassroomController extends BaseController
     {
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
 
-        $conditions = array(
-            'private' => 0,
-        );
 
         $learns = array();
         if ($courses) {
@@ -558,6 +558,10 @@ class ClassroomController extends BaseController
 
         if (empty($classroom)) {
             throw $this->createNotFoundException();
+        }
+        
+        if(!$classroom['buyable']){
+            return $this->createMessageResponse('info', '非常抱歉，该班级不允许加入，如有需要请联系客服','',3,$this->generateUrl('homepage')); 
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -917,7 +921,7 @@ class ClassroomController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay');
+        $payNames = array('alipay','wxpay');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(

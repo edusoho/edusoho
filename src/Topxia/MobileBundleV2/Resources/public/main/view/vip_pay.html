@@ -1,0 +1,49 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">开通会员</h3>
+    </div>
+</div>
+
+<div class="top-header ui-vippay ui-course-pay">
+	<div class="ui-form">
+	        <div class="ui-form-item ui-list-divider ui-border-b">
+	             选择开通时长
+	        </div>
+	        <div class="ui-form-item ui-vippay-item ui-border-b">
+	             <ul class="ui-grid-halve">
+					<li class="ui-border-r">
+						<a ng-click="showPopover($event)">
+							{{ selectedPayMode.title }}
+							<i class="iconfont icon-arrowdropdown"></i>
+						</a>
+						<ul class="ui-list ui-vippay-modal" ng-show="isShowPayMode">
+							<li class="ui-border-b" ng-repeat="payMode in payModes" ng-click="selectPayMode(payMode)">
+								{{ payMode.title }}
+							</li>
+						</ul>
+					</li>
+					<li>
+						    <a class="ui-vippay-btn iconfont icon-jian btn-gray" ng-click="sub()">    	
+						    </a>
+						    <a class="ui-vippay-btn btn-border">
+						     {{ selectedNum }}
+						    </a>
+						    <a class="ui-vippay-btn iconfont icon-jia btn-green" ng-click="add()">
+						    </a>
+					</li>
+				   </ul>
+	        </div>
+
+	        <div class="ui-btn-wrap">
+			<div class="pay-body">
+		  		需支付:<span class="pay-price">{{ totalPayPrice | formatPrice}}</span>
+		  	</div>
+		    
+			<button class="ui-btn-lg btn-yellow" ng-click="payVip()">
+	                去支付
+	           </button>
+		   </div>
+	        
+	</div>
+</div>

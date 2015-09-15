@@ -1,11 +1,9 @@
-<div class="order-detail  clearfix">
-  {% for course in courses %}
+<div class="order-detail clearfix">
   <div class="order-img hidden-xs">
     <a href="{{ path('course_show', {id:course.id}) }}">
       <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}"></a>
   </div>
   <div class="order-info text-overflow">{{ course.title }}</div>
-  {% endfor %}
   <div class="order-price">
     {% if priceType|default('RMB') == "RMB" %}
       <span class="pay-rmb">￥</span>

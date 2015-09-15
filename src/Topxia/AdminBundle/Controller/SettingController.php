@@ -10,6 +10,8 @@ use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
+
 
 class SettingController extends BaseController
 {
@@ -20,9 +22,14 @@ class SettingController extends BaseController
         $settingMobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled' => 0, // 网校状态
+            'enabled' => 1, // 网校状态
+            'ver' => 1,//是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
+            'appname' => '',
+            'appabout' =>'',
+            'applogo' =>'',
+            'appcover' =>'',
             'notice' => '', //公告
             'splash1' => '', // 启动图1
             'splash2' => '', // 启动图2
@@ -34,6 +41,7 @@ class SettingController extends BaseController
         $mobile = array_merge($default, $settingMobile);
         if ($request->getMethod() == 'POST') {
             $settingMobile = $request->request->all();
+
             $mobile = array_merge($settingMobile,$operationMobile,$courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
@@ -45,8 +53,20 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        }else{
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        }
+        
+        //是否拥有定制app
+        $hasMobile = $result['hasMobile'] ?$result['hasMobile']:0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
+            'mobileCode' => $mobileCode,
+            'hasMobile'=>$hasMobile
         ));
     }
 

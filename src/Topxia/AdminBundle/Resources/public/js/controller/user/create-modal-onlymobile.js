@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="nickname"]',
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
 
         validator.addItem({

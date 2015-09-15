@@ -39,6 +39,15 @@ define(function(require, exports, module) {
             });
         });
 
+        $("input[name='enabled']").on("click",function(){
+            $this = $(this);
+            if($this.val() == 1){
+                $this.parents('.form-group').next('.form-group').removeClass('hidden');
+            }else{
+                $this.parents('.form-group').next('.form-group').addClass('hidden');
+            }
+        })
+
         var uploader = new Uploader({
             trigger: '#mobile-splash2-upload',
             name: 'splash2',
@@ -198,6 +207,72 @@ define(function(require, exports, module) {
         CKEDITOR.replace('mobile_about', {
             toolbar: 'Simple',
             filebrowserImageUploadUrl: $('#mobile_about').data('imageUploadUrl')
+        });
+
+        //
+
+        var uploader = new Uploader({
+            trigger: '#site-applogo-upload',
+            name: 'applogo',
+            action: $('#site-applogo-upload').data('url'),
+            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+            accept: 'image/*',
+            error: function(file) {
+                Notify.danger('上传app图标失败，请重试！')
+            },
+            success: function(response) {
+                response = $.parseJSON(response);
+                $("#site-applogo-container").html('<img src="' + response.url + '">');
+                $form.find('[name=applogo]').val(response.path);
+                $("#site-applogo-remove").show();
+                Notify.success('上传app图标成功！');
+            }
+        });
+
+        $("#site-applogo-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
+            var $btn = $(this);
+            $.post($btn.data('url'), function(){
+                $("#site-applogo-container").html('');
+                $form.find('[name=applogo]').val('');
+                $btn.hide();
+                Notify.success('删除网校app图标成功！');
+            }).error(function(){
+                Notify.danger('删除网校app图标失败！');
+            });
+        });
+
+        //
+
+        var uploader = new Uploader({
+            trigger: '#site-appcover-upload',
+            name: 'appcover',
+            action: $('#site-appcover-upload').data('url'),
+            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+            accept: 'image/*',
+            error: function(file) {
+                Notify.danger('上传app封面失败，请重试！')
+            },
+            success: function(response) {
+                response = $.parseJSON(response);
+                $("#site-appcover-container").html('<img src="' + response.url + '">');
+                $form.find('[name=appcover]').val(response.path);
+                $("#site-appcover-remove").show();
+                Notify.success('上传app封面成功！');
+            }
+        });
+
+        $("#site-appcover-remove").on('click', function(){
+            if (!confirm('确认要删除吗？')) return false;
+            var $btn = $(this);
+            $.post($btn.data('url'), function(){
+                $("#site-appcover-container").html('');
+                $form.find('[name=appcover]').val('');
+                $btn.hide();
+                Notify.success('删除app封面成功！');
+            }).error(function(){
+                Notify.danger('删除app封面失败！');
+            });
         });
 
     };

@@ -6,7 +6,9 @@
     .border-radius;
     .es-box-shadow;
     background-color: #fff;
-    .es-transup;
+    @media (min-width: @screen-md-min) {
+      .es-transup;
+    }
     // 用于近期直播
     &.course-default {
       background-color: @gray-lighter;
@@ -16,7 +18,6 @@
       text-align: center;
       font-size: 24px;
       .box-shadow(none);
-      margin-bottom: 31px;
       &:hover {
         transform: translateY(0);
         -webkit-transform: translateY(0);
@@ -26,6 +27,8 @@
       }
       >i {
         font-size: 72px;
+        display: inline-block;
+        margin-bottom: 18px;
       }
     }
     .course-img {
@@ -70,15 +73,15 @@
       }
     }
     .title {
-      margin: 10px auto;
+      margin-top: 10px;
       padding: 0 10px;
       .text-overflow;
     }
     .metas {
       padding: 10px;
-      border-top: 1px solid #f1f1f1;
+      // border-top: 1px solid #f1f1f1;
       color: @gray-medium;
-      a { color: @gray-medium; }
+      // a { color: @gray-medium; }
       .num {
         margin-right: 10px;
       }
@@ -117,7 +120,6 @@
     }
     .btn-circle {
       z-index: 1;
-      line-height: 40px;
       background: @gray-light;
       border: none;
       color: #fff;
@@ -125,6 +127,9 @@
       -webkit-box-shadow: inset 0 0 4px rgba(113,113,113,.3);
       -moz-box-shadow: inset 0 0 4px rgba(113,113,113,.3);
       box-shadow: inset 0 0 4px rgba(113,113,113,.3);
+      >i {
+        line-height: 40px;
+      }
       &.btn-live {
         background: @brand-primary;
       }

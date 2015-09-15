@@ -474,6 +474,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'maxStudentNum' => 0,
 			'watchLimit' => 0,
 			'approval' => 0,
+			'maxRate' => 0,
 			'locked' =>0
 		));
 
@@ -2073,6 +2074,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->deleteMemberByCourseIdAndUserId($courseId, $userId);
 	}
 
+	public function deleteMemberByCourseIdAndRole($courseId,$role)
+	{
+		return $this->getMemberDao()->deleteMemberByCourseIdAndRole($courseId,$role);
+	}
+
 	public function deleteMemberByCourseId($courseId)
 	{
 		return $this->getMemberDao()->deleteMembersByCourseId($courseId);
@@ -2188,6 +2194,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'joinedType' => 'classroom'
 		);
 		$isMember = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId,$userId);
+		if ($isMember) {
+				return array();
+		}
 		$member = $this->getMemberDao()->addMember($fields);
 		$fields = array(
 			'studentNum'=> $this->getCourseStudentCount($courseId),
@@ -2559,7 +2568,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 		if ($classroom['classroomId']) {
 			$member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
-			if (!empty($member) && $member['role'] != 'auditor') {
+			if (!empty($member) && array_intersect(array('student', 'teacher', 'headTeacher', 'assistant'), $member['role'])) {
 				return true;
 			}
 		}
