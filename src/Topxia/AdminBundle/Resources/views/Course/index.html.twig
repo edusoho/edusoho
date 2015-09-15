@@ -21,11 +21,14 @@
           {{ select_options(dict('courseStatus'), app.request.query.get('status'), '课程状态') }}
         </select>
       </div>
+      {% if filter == 'normal' %}
       <div class="form-group">
         <select style="max-width:150px;" class="form-control" name="income">
-          {{ select_options({free:'免费课程',charge:'收费课程'}, app.request.get('income'), '营收状态') }}
+          {{ select_options({free:'免费课程',charge:'收费课程'}, app.request.get('income'), '收费状态') }}
         </select>
       </div>
+      {% endif %}
+
       <div class="form-group">
         <input class="form-control" type="text" placeholder="标题" name="title" value="{{ app.request.get('title') }}">
       </div>
