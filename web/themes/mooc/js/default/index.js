@@ -20,14 +20,14 @@ define(function(require, exports, module) {
         Lazyload.init();
 
         $("#course-list").on('click','.js-course-filter',function(){
-             var $btn = $(this);
-             $.get($btn.data('url'),function(html){
-               $('.home-course-list').html(html);
-               Lazyload.init();
-               $(".tooltip").remove();
-               $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+            var $btn = $(this);
+            $btn.addClass('active');
+            $btn.siblings('.active').removeClass('active');
+            $.get($btn.data('url'),function(html){
+                $('.home-course-list').html(html);
+                Lazyload.init();
             })
-        })
+        });
 
     
 

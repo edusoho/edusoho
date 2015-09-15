@@ -17,9 +17,13 @@
           {% if course.showStudentNumType == 'opened' %}
           <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>{{ course.studentNum }}人</span>
           {% endif %}
-          <span class="label label-primary label-sm">已开课</span>
-          <span class="label label-ing label-sm">报名中</span> 
-          <span class="label label-gray-light label-sm">已结束</span> 
+
+          {% if course.type == 'periodic' %}
+            {% set now = 'now'|date('U') %}
+            {% if course.startTime <= now and course.endTime > now %}<span class="label label-primary label-sm">已开课</span>{% endif %}
+            {% if course.startTime > now %}<span class="label label-ing label-sm">报名中</span>{% endif %}
+            {% if course.startTime < now and course.endTime < now %}<span class="label label-gray-light label-sm">已结束</span>{% endif %}
+          {% endif %}
         </div>
       </div>
     </div>
