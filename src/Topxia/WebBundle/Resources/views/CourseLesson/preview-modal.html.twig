@@ -5,7 +5,10 @@
 {% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
-
+  {% if setting("developer.balloon_player")|default(0) %}
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  {% endif %}
+  
 	{% if lesson.status == 'published' %}
 
 	  {% if lesson.mediaSource == 'iframe' %}
@@ -14,7 +17,15 @@
 		{% elseif lesson.type == 'video' %}
 			{% if lesson.mediaSource == 'self' %}
 				<div id="lesson-preview-video-player" 
-        data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ path('course_lesson_playlist',{courseId:lesson.courseId,lessonId:lesson.id,isPreview:1}) }}"
+          {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+          data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" 
+          {% endif %}
+          {% if setting('developer.balloon_player')|default(0) %}
+          data-hls-url="{{ path('course_lesson_playlist',{courseId:lesson.courseId,lessonId:lesson.id,isPreview:1}) }}"
+          {% else %}
+          data-hls-url="{{ hlsUrl }}"
+          {% endif %}
+          data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
