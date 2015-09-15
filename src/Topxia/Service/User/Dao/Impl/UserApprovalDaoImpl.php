@@ -57,7 +57,7 @@ class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function searchapprovalsCount($conditions)
+    public function searchApprovalsCount($conditions)
     {
         $builder = $this->createProfileQueryBuilder($conditions)
             ->select('COUNT(id)');

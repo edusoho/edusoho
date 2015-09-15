@@ -30,8 +30,8 @@ class UserApprovalController extends BaseController
 
         if(isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')){
             //根据条件从user_approval表里查找数据
-            $approvalcount = $this->getUserService()->searchapprovalsCount($conditions);
-            $profiles = $this->getUserService()->searchapprovals($conditions,array('id','DESC'),0,$approvalcount);
+            $approvalcount = $this->getUserService()->searchApprovalsCount($conditions);
+            $profiles = $this->getUserService()->searchApprovals($conditions,array('id','DESC'),0,$approvalcount);
             $userApprovingId = ArrayToolkit::column($profiles, 'userId');
         }else{
             $usercount = $this->getUserService()->searchUserCount($conditions);
@@ -70,7 +70,7 @@ class UserApprovalController extends BaseController
 
         //最终结果
         $approvingUserids = ArrayToolkit::column($users, 'id');
-        $userProfiles = $this->getUserService()->searchapprovals(
+        $userProfiles = $this->getUserService()->searchApprovals(
             $approvingUserids,
             array('id','DESC'),
             $paginator->getOffsetCount(),
@@ -106,8 +106,8 @@ class UserApprovalController extends BaseController
 
         if(isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')){
             //根据条件从user_approval表里查找数据
-            $profilecount = $this->getUserService()->searchapprovalsCount($conditions);
-            $profiles = $this->getUserService()->searchapprovals($conditions,array('id','DESC'),0,$profilecount);
+            $profilecount = $this->getUserService()->searchApprovalsCount($conditions);
+            $profiles = $this->getUserService()->searchApprovals($conditions,array('id','DESC'),0,$profilecount);
             $userProfilesid = ArrayToolkit::column($profiles, 'userId');
         }else{
             $usercount = $this->getUserService()->searchUserCount($conditions);
