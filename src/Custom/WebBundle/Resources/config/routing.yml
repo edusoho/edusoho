@@ -10,7 +10,18 @@ course_rounding:
     pattern: /course/{id}/rounding
     defaults: { _controller: CustomWebBundle:Course:rounding }
 
+course_explore:
+    pattern:  /mooc/course/explore/{category}
+    defaults: { _controller: CustomWebBundle:Course:explore, category:'' }
 
 order_show:
     pattern:  /order/show
     defaults: { _controller: CustomWebBundle:Order:show }
+
+search:
+    pattern:  /search
+    defaults: { _controller: CustomWebBundle:Search:index }
+
+homepage:
+    pattern:  /
+    defaults: { _controller: CustomWebBundle:Default:index }
