@@ -70,6 +70,7 @@
                     <img src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">
                     <p>班主任：{{user.nickname}}</p>
                   {% endif %}
+                {% else %}
                   <p>暂无班主任</p>
                 {% endif %}
 
