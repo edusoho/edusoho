@@ -33,6 +33,11 @@ define(function(require, exports, module) {
                         url: videoPlayerDiv.data('hlsUrl')
                     });
                     $("body").data("esCloudPlayer", esCloudPlayer);
+
+                    $('#modal').one('hidden.bs.modal', function () {
+                        esCloudPlayer.paused();
+                        esCloudPlayer.destroy();
+                    });
                 } else {
                     $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
 

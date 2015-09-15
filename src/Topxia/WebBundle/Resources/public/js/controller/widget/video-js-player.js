@@ -35,7 +35,7 @@ define(function(require, exports, module) {
 							xpos: 50,
 							ypos: 50,
 							xrepeat: 0,
-							opacity: 0.5,
+							opacity: 0.5
 						}
                  	});
         		}
@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 					autoplay: true,
 					preload: 'none',
 					language: 'zh-CN',
-					plugins: plugins,
+					plugins: plugins
                 });
 
                 player.ready(function() {
