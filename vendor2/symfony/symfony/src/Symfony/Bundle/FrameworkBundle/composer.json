@@ -1,0 +1,63 @@
+{
+    "name": "symfony/framework-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony FrameworkBundle",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/dependency-injection" : "~2.3",
+        "symfony/config" : "~2.3,>=2.3.12",
+        "symfony/event-dispatcher": "~2.1",
+        "symfony/http-foundation": "~2.3,>=2.3.19",
+        "symfony/http-kernel": "~2.3,>=2.3.22",
+        "symfony/filesystem": "~2.3",
+        "symfony/routing": "~2.3",
+        "symfony/stopwatch": "~2.3",
+        "symfony/templating": "~2.1",
+        "symfony/translation": "~2.3,>=2.3.19",
+        "doctrine/common": "~2.2"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~2.7",
+        "symfony/browser-kit": "~2.3",
+        "symfony/console": "~2.3",
+        "symfony/css-selector": "~2.0,>=2.0.5",
+        "symfony/dom-crawler": "~2.0,>=2.0.5",
+        "symfony/finder": "~2.0,>=2.0.5",
+        "symfony/intl": "~2.3",
+        "symfony/security": "~2.3",
+        "symfony/form": "~2.3.0,>=2.3.5",
+        "symfony/class-loader": "~2.1",
+        "symfony/process": "~2.0,>=2.0.5",
+        "symfony/validator": "~2.1",
+        "symfony/yaml": "~2.0,>=2.0.5"
+    },
+    "suggest": {
+        "symfony/console": "",
+        "symfony/finder": "",
+        "symfony/form": "",
+        "symfony/validator": ""
+    },
+    "autoload": {
+        "psr-0": { "Symfony\\Bundle\\FrameworkBundle\\": "" }
+    },
+    "target-dir": "Symfony/Bundle/FrameworkBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3-dev"
+        }
+    }
+}
