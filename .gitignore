@@ -64,7 +64,3 @@ web/assets/img/default/video.png
 /src/Tests/*
 /web/assets/v2/bootstrap/less
 /web/install/edusoho_init.sql
-/app/data/api_server.json
-/app/data/crontab_config.yml
-/app/data/api_server.json
-/installFiles
