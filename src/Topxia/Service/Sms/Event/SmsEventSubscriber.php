@@ -31,9 +31,9 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $lesson = $this->getCourseService()->getLesson($lessonId);
             $courseId = $homeworkResult['courseId'];
             $course = $this->getCourseService()->getCourse($courseId);
-            $parameters['lesson_title'] = '《'.$lesson['title'].'》';
+            $parameters['lesson_title'] = '《'.$lesson['title'].'》'.'的试卷';
             $parameters['course_title'] = '《'.$course['title'].'》';
-            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'作业批阅提醒';
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
             $userId = $testpaperResult['userId'];
             $user = $this->getUserService()->getUser($userId);
             if ((isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) != 0))) {
