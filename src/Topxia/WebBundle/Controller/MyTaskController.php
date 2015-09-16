@@ -2,8 +2,6 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 
 class MyTaskController extends BaseController
 {
@@ -22,24 +20,12 @@ class MyTaskController extends BaseController
 				$tasksevents[$key]['start'] = date("Y-m-d H:i:s",$task['taskStartTime']);
 				$tasksevents[$key]['end'] = date("Y-m-d H:i:s",$task['taskEndTime']);
 				$tasksevents[$key]['id'] = $task['id'];
-				switch($task['targetType']){
-					case  'testpaper':
-					$tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
-						'classroomId'=>$task['meta']['classroomId']
-						));
-					break;
-					case  'text':
-					$tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
-						'classroomId'=>$task['meta']['classroomId']
-						));
-					break;
-					case 'document':
-					$tasksevents[$key]['url'] = $this->generateUrl('classroom_courses',array(
-						'classroomId'=>$task['meta']['classroomId']
-						));
-					break;
-				}
-			}
+				if($task['taskType']=='studyplan'){
+						$tasksevents[$key]['url'] = $this->generateUrl('course_learn',array(
+							'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
+					}
+				}/*else{//其他扩展任务url
+				}*/
 		}else{
 			$tasksevents = array(array(
 			'title'=>'并没有任务',
