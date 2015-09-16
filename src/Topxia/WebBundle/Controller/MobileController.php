@@ -30,9 +30,16 @@ class MobileController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        }else{
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        }
+
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
-            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
+            'mobileCode' => $mobileCode,
+            'mobile' => $mobile
         ));
     }
 
@@ -52,7 +59,7 @@ class MobileController extends BaseController
     }
 
     public function downloadAction(Request $request)
-    {
+    {   
         $params = $request->query->all();
         $baseUrl = $request->getSchemeAndHttpHost();
         return $this->redirect($baseUrl . "/mapi_v2/School/getDownloadUrl?" . http_build_query($params));

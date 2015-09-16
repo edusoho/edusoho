@@ -57,8 +57,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function createTestpaper($fields)
     {
         $testpaper = $this->getTestpaperDao()->addTestpaper($this->filterTestpaperFields($fields, 'create'));
-        $items = $this->buildTestpaper($testpaper['id'], $fields);
-        $this->dispatchEvent("testpaper.create",new ServiceEvent($testpaper,array('items'=>$items)));
+        $this->dispatchEvent("testpaper.create",$testpaper);
+        $items = $this->buildTestpaper($testpaper['id'], $fields); 
         return array($testpaper, $items);
     }
 
@@ -180,7 +180,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testpaper['id']);
-
+        $this->dispatchEvent("testpaper.item.delete",array('testpaper'=>$testpaper,'item'=>''));
 
         $builder = TestpaperBuilderFactory::create($testpaper['pattern']);
 
@@ -194,7 +194,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = 0;
         $seq = 1;
-        foreach ($result['items'] as $item) {
+        foreach ($result['items'] as $key=>$item) {
             $questionType = QuestionTypeFactory::create($item['questionType']);
 
             $item['seq'] = $seq;
@@ -204,6 +204,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             }
 
             $items[] = $this->getTestpaperItemDao()->addItem($item);
+            $this->dispatchEvent("testpaper.item.create",array('testpaper'=>$testpaper,'item'=>$items[$key]));
             if ($item['parentId'] == 0 && !in_array($item['questionType'], $types)) {
                 $types[] = $item['questionType'];
             }
@@ -213,13 +214,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $metas['question_type_seq'] = $types;
         $metas['missScore'] = $options['missScores'];
 
-        $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
+        $testpaper = $this->getTestpaperDao()->updateTestpaper($testpaper['id'], array(
             'itemCount' => $seq -1,
             'score' => $totalScore,
             'metas' => $metas,
         ));
-
-        $this->dispatchEvent("testpaper.items.update",array('testpaper'=>$testpaper,'items'=>$items));
+        $this->dispatchEvent("testpaper.update",$testpaper);
         return $items;
     }
 
@@ -820,7 +820,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
                 $item['testId'] = $testpaperId;
                 $item = $this->getTestpaperItemDao()->addItem($item);
-                $this->dispatchEvent("testpaper.items.create",array('item'=>$item,'testpaper'=>$testpaper));
+                $this->dispatchEvent("testpaper.item.create",array('item'=>$item,'testpaper'=>$testpaper));
             } else {
                 
                 $existItem = $existItems[$item['questionId']];
@@ -828,7 +828,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $existItem['seq'] = $item['seq'];
                     $existItem['score'] = $item['score'];
                     $item = $this->getTestpaperItemDao()->updateItem($existItem['id'], $existItem);
-                    $this->dispatchEvent("testpaper.items.update",array('items'=>$item,'testpaper'=>$testpaper));
+                    $this->dispatchEvent("testpaper.item.update",array('item'=>$item,'testpaper'=>$testpaper));
                 } else {
                     $item = $existItem;
                 }
@@ -841,7 +841,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
         foreach ($existItems as $existItem) {
             $this->getTestpaperItemDao()->deleteItem($existItem['id']);
-            $this->dispatchEvent("testpaper.items.delete",array('testpaper'=>$testpaper,'existItem'=>$existItem));
+            $this->dispatchEvent("testpaper.item.delete",array('testpaper'=>$testpaper,'item'=>$existItem));
         }
 
 

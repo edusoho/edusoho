@@ -63,6 +63,8 @@
           <ul class='class-data clearfix 
           {% if classroom_permit(classroom.id, 'Take', true) %}
           three-col
+          {% else %}
+          two-col
           {% endif %}
           '>
             <li>
@@ -109,11 +111,11 @@
           {% endif %}
         </div>
       {% if classroom_permit(classroom.id, 'Manage') %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% elseif classroom_permit(classroom.id, 'Handle') %}
-        <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+        <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}" class="btn btn-default setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}

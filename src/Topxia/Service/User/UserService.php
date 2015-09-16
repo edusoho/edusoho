@@ -101,6 +101,10 @@ interface UserService
 
     public function getUserProfile($id);
 
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchUserProfileCount(array $conditions);
+
     public function changeUserRoles($id, array $roles);
 
     /**
@@ -162,6 +166,8 @@ interface UserService
 
     public function getUserBindByTypeAndUserId($type, $toId);
 
+    public function getUserBindByToken($token);
+
     public function findBindsByUserId($userId);
     
     public function unBindUserByTypeAndToId($type, $toId);
@@ -188,6 +194,10 @@ interface UserService
     
     //当前用户关注的人们
     public function findAllUserFollower($userId);
+
+    public function findFriends($userId, $start, $limit);
+
+    public function findFriendCount($userId);
 
     /**
      * 过滤得到用户关注中的用户ID列表

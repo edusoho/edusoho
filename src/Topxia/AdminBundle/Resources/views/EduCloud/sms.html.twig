@@ -114,33 +114,33 @@
                 <div class = "modal-header">
                    <h4>申请详情</h4>
                 </div>
-                <div class = "modal-body">                                
-          <table class="table table-striped order-table">
-              <tbody>
-                <tr> 
-                  <th style="text-align: center;" width="30%">短信内容</th>
-                  <td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效</td> 
-                </tr>
-                <tr> 
-                  <th style="text-align: center;" width="30%">审核时间</th>
-                  <td>
-                    审核需24小时
-                    {% if '' != (setting('cloud_sms.sms_school_name')|default('')) %}
-                      ，期间短信验证功能仍可以正常使用
-                    {% endif %}
-                  </td> 
-                </tr>
-                <tr> 
-                  <th style="text-align: center;" width="30%">短信价格</th> 
-                  <td>0.07元/条</td> 
-                </tr>
-                <tr> 
-                  <th style="text-align: center;" width="30%">审核状态</th> 
-                  <td> 审核中 </td> 
-                </tr>
-              </tbody>
-          </table>
-                </div>
+	              <div class = "modal-body">	                              
+									<table class="table table-striped order-table">
+							      <tbody>
+							      	<tr> 
+							      		<th style="text-align: center;" width="30%">短信内容</th>
+							      		<td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效</td> 
+							      	</tr>
+							      	<tr> 
+							      		<th style="text-align: center;" width="30%">审核时间</th>
+							      		<td>
+							      			审核需1到3个工作日
+							      			{% if '' != (setting('cloud_sms.sms_school_name')|default('')) %}
+							      			  ，期间短信验证功能仍可以正常使用
+							      			{% endif %}
+							      		</td> 
+							      	</tr>
+							      	<tr> 
+							      		<th style="text-align: center;" width="30%">短信价格</th> 
+							      		<td>0.07元/条</td> 
+							      	</tr>
+							      	<tr> 
+							      		<th style="text-align: center;" width="30%">审核状态</th> 
+							      		<td> 审核中 </td> 
+							      	</tr>
+							    	</tbody>
+									</table>
+	              </div>
                 <div class = "modal-footer">
                   <a class = "btn btn-primary" data-dismiss = "modal">关闭</a>
                 </div>
