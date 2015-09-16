@@ -22,7 +22,7 @@
 
 <div class="panel-body" >
 {% set url = path('my_task_calendar') %}
-    <input id='datajson'hidden='hidden' data-fullcalendarevents='{{taskjson}}' data-url='{{ url }}'></input>
+    <input id='datajson'hidden='hidden' data-fullcalendarevents='{{taskjson}}' data-url='{{ url }}'data-today='{{today}}'></input>
         <div id="calendar"></div>
 
     </div>
