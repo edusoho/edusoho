@@ -370,12 +370,7 @@ define(function(require, exports, module) {
                 } else {
                     if (lesson.type == 'video') {
                         if (lesson.mediaSource == 'self') {
-                            var lessonVideoDiv = $('#lesson-video-content');
-                            if(lessonVideoDiv.data("balloonPlayer")){
-                                $("#lesson-video-content").addClass("local-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-                            } else {
-                                $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-                            }
+                            $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
                             
                             if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
                                 Notify.warning('视频文件正在转换中，稍后完成后即可查看');
