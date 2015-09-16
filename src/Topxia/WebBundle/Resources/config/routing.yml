@@ -1763,6 +1763,11 @@ edu_cloud_sms_check:
     pattern:  /edu_cloud/sms_check/{type}
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
 
+edu_cloud_sms_send_callback:
+    pattern:  /edu_cloud/sms/callback/{targetType}/{targetId}
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
+    methods: [POST]
+
 settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }

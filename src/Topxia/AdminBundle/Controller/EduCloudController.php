@@ -130,6 +130,7 @@ class EduCloudController extends BaseController
                 $dataUserPosted['sms_vip_buy'] = 0;
                 $dataUserPosted['sms_coin_buy'] = 0;
             }
+            
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
             $dataUserPosted = array_merge($dataUserPosted, $schoolNames);

@@ -23,13 +23,21 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
     public function onTestpaperCheck(ServiceEvent $event)
     {
+        $parameters = array();
         $smsType = 'sms_testpaper_check';
         if($this->getSmsService()->isOpen($smsType)){
             $testpaperResult = $event->getSubject();
+            $lessonId = $homeworkResult['lessonId'];
+            $lesson = $this->getCourseService()->getLesson($lessonId);
+            $courseId = $homeworkResult['courseId'];
+            $course = $this->getCourseService()->getCourse($courseId);
+            $parameters['lesson_title'] = '《'.$lesson['title'].'》';
+            $parameters['course_title'] = '《'.$course['title'].'》';
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'作业批阅提醒';
             $userId = $testpaperResult['userId'];
             $user = $this->getUserService()->getUser($userId);
-            if ((isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) != 0))) {
-                $this->getSmsService()->smsSend($smsType, array($userId));
+            if ((isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) != 0))) {
+                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         }
     }
@@ -43,9 +51,10 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $userId = $order['userId'];
             $user = $this->getUserService()->getUser($userId);
             $parameters = array();
-            if ((isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) != 0))) {
-                $parameters['order_title'] = $order['title'];
-                $parameters['totalPrice'] = $order['totalPrice'];
+            $parameters['order_title'] = $order['title'];
+            $parameters['totalPrice'] = $order['totalPrice'];
+            $description = $parameters['order_title'].'成功回执';
+            if ((isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) != 0))) {
                 $this->getSmsService()->smsSend($smsType, array($userId), $parameters);
             }
         }

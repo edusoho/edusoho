@@ -3,6 +3,7 @@ namespace Topxia\Service\Sms\Job;
 
 use Topxia\Service\Crontab\Job;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 
 class smsSendOneDayJob implements Job
 {
@@ -14,40 +15,17 @@ class smsSendOneDayJob implements Job
         if ($dayIsOpen) {
             $targetType = $params['targetType'];
             $targetId = $params['targetId'];
-            if ($targetType == 'lesson') {
-                $lesson = $this->getCourseService()->getLesson($targetId);
-                $parameters['lesson_title'] = '《'.$lesson['title'].'》';
-                $parameters['startTime'] = date("Y-m-d h:i:s", $lesson['startTime'])
-                $course = $this->getCourseService()->getCourse($lesson['courseId']);
-                $parameters['course_title'] = '《'.$course['title'].'》';
-                if ($course['parentId'] ) {
-                    $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
-                    if ($classroom) {
-                        $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
-                        $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'),0,$count);
-                    }
-                } else {
-                    $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
-                }
-
-                if (!empty($students)) {
-                    $studentIds = ArrayToolkit::column($students, 'userId');
-                    $users = $this->getUserService()->findUsersByIds($studentIds);
-                    $to = '';
-                    foreach ($users as $key => $value ) {
-                        if (empty($value['verifiedMobile'])) {
-                            unset($users[$key]);
-                        }
-                    }
-                    if (!empty($users)) {
-                        $userIds = ArrayToolkit::column($users, 'userId');
-                        $this->getSmsService()->smsSend($daySmsType, $userIds, $parameters);
-                    }
-
-                }
-            }
+            $processor = SmsProcessorFactory::create($targetType);
+            $return = $processor->getUrls($targetId, $daySmsType);
+            $callbackUrls = $return['urls'];
+            $count = $return['count'];
+            try {
+                    $api = CloudAPIFactory::create('leaf');
+                    $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
+                } catch (\RuntimeException $e) {
+                    throw new RuntimeException("发送失败！");
+            }   
         }
-        
     }
 
     protected function getCourseService()

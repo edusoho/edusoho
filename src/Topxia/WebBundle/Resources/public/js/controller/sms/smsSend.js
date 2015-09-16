@@ -36,6 +36,8 @@ define(function(require, exports, module) {
 					url = url.replace(/url=(.*)+/g,'url='+response.url);
 					$("#smsSend-ready").hide();
 					$("#smsSend-form").show();
+                    $("#cancle-smsSend").show();
+                    $("#begin-smsSend").show();
 				};
 			});
 			changeUrl=function(){};

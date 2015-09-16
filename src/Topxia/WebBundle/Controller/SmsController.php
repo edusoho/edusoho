@@ -55,22 +55,25 @@ class SmsController extends BaseController
 
     public function sendAction(Request $request, $targetType, $id)
     {
+        $smsType = 'sms_'.$targetType.'publish';
         if ( $this->getSmsService()->isOpen($smsType) ) {
             throw new RuntimeException("请先开启相关设置!");
         }
         $index = $request->query->get('index');
+        $onceSendNum = 1000;
         $url = $request->query->get('url');
         $count = $request->query->get('count');
-        $smsType = 'sms_'.$targetType.'publish';
         $parameters = array();
         if ($targetType == 'classroom') {
             $classroom = $this->getClassroomService()->getClassroom($id);
             $parameters['clasroom_title'] = '《'.$classroom['title'].'》';
-            $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,1000);
+            $description = $parameters['clasroom_title'].'发布';
+            $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'course') {
             $course = $this->getCourseService()->getCourse($id);
             $parameters['course_title'] = '《'.$course['title'].'》';
-            $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,1000);
+            $description = $parameters['course_title'].'发布';
+            $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'lesson') {
             $lesson = $this->getCourseService()->getLesson($id);
             $parameters['lesson_title'] = '《'.$lesson['title'].'》';
@@ -82,6 +85,7 @@ class SmsController extends BaseController
             }
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
             $parameters['course_title'] = '《'.$course['title'].'》';
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
             if ($course['parentId'] ) {
                     $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
                     if ($classroom) {
@@ -94,23 +98,24 @@ class SmsController extends BaseController
         }
         $parameters['url'] = $url;
         if (!empty($students)) {
-            $studentIds = ArrayToolkit::column($students, 'userId');
+            $studentIds = ArrayToolkit::column($students, 'id');
             $users = $this->getUserService()->findUsersByIds($studentIds);
             $to = '';
             foreach ($users as $key => $value ) {
-                if (empty($value['verifiedMobile'])) {
+                if (strlen($value['verifiedMobile']) == 0) {
                     unset($users[$key]);
                 }
             }
             if (!empty($users)) {
-                $userIds = ArrayToolkit::column($users, 'userId');
-                $this->getSmsService()->smsSend($smsType, $userIds, $parameters);
+                $userIds = ArrayToolkit::column($users, 'id');
+                var_dump($parameters);
+                $this->getSmsService()->smsSend($smsType, $userIds, $description, $parameters);
             }
 
         }
 
-        if ($count > $index + 1000 ) {
-            return $this->createJsonResponse(array('index' => $index + 1000, 'process' => intval(($index + 1000) / $count * 100)));
+        if ($count > $index + $onceSendNum ) {
+            return $this->createJsonResponse(array('index' => $index + $onceSendNum, 'process' => intval(($index + $onceSendNum) / $count * 100)));
         }
         else {
             return $this->createJsonResponse(array('status' => 'success', 'process' => 100));

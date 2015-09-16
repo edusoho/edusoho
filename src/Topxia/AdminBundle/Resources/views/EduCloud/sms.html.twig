@@ -182,7 +182,7 @@
                   <td rowspan="4" style="text-align:center;vertical-align:middle;font-size:18px;">自动单发
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_bind" value="1" >默认开启
+                      <input type="hidden" name="sms_bind" value="on" >默认开启
                     </label>
                   </td>
                   </td>
@@ -201,7 +201,7 @@
                   </td>
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_forget_password" value="1"> 默认开启
+                      <input type="hidden" name="sms_forget_password" value="on"> 默认开启
                     </label>
                   </td>
                 </tr>
@@ -219,7 +219,7 @@
                   </td>
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_forget_pay_password" value="1"> 默认开启
+                      <input type="hidden" name="sms_forget_pay_password" value="on"> 默认开启
                     </label>
                   </td>
                 </tr>
@@ -237,7 +237,7 @@
                   </td>
                   <td class="radios" style="text-align:center;">
                     <label>
-                      <input type="hidden" name="sms_user_pay" value="1"> 默认开启
+                      <input type="hidden" name="sms_user_pay" value="on"> 默认开启
                     </label>
                   </td>
                 </tr>
@@ -275,14 +275,14 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_classroom_publish" value="1"
-                      {% if (setting('cloud_sms.sms_classroom_publish')|default('')) == '1' %}
+                      <input type="radio" name="sms_classroom_publish" value="on"
+                      {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_classroom_publish" value="0" 
-                        {% if (setting('cloud_sms.sms_classroom_publish')|default('')) != '1' %}
+                        <input type="radio" name="sms_classroom_publish" value="off" 
+                        {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -302,14 +302,14 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_course_publish" value="1"
-                      {% if (setting('cloud_sms.sms_course_publish')|default('')) == '1' %}
+                      <input type="radio" name="sms_course_publish" value="on"
+                      {% if (setting('cloud_sms.sms_course_publish')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_course_publish" value="0" 
-                        {% if (setting('cloud_sms.sms_course_publish')|default('')) != '1' %}
+                        <input type="radio" name="sms_course_publish" value="off" 
+                        {% if (setting('cloud_sms.sms_course_publish')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -329,14 +329,14 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_normal_lesson_publish" value="1"
-                      {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('')) == '1' %}
+                      <input type="radio" name="sms_normal_lesson_publish" value="on"
+                      {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_normal_lesson_publish" value="0" 
-                        {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('')) != '1' %}
+                        <input type="radio" name="sms_normal_lesson_publish" value="off" 
+                        {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -356,14 +356,14 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_live_lesson_publish" value="1"
-                      {% if (setting('cloud_sms.sms_live_lesson_publish')|default('')) == '1' %}
+                      <input type="radio" name="sms_live_lesson_publish" value="on"
+                      {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_live_lesson_publish" value="0" 
-                        {% if (setting('cloud_sms.sms_live_lesson_publish')|default('')) != '1' %}
+                        <input type="radio" name="sms_live_lesson_publish" value="off" 
+                        {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -374,14 +374,14 @@
                   <td>9</td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_user_pay" value="1"
-                      {% if (setting('cloud_sms.sms_user_pay')|default('')) == '1' %}
+                      <input type="radio" name="sms_user_pay" value="on"
+                      {% if (setting('cloud_sms.sms_user_pay')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_user_pay" value="0" 
-                        {% if (setting('cloud_sms.sms_user_pay')|default('')) != '1' %}
+                        <input type="radio" name="sms_user_pay" value="off" 
+                        {% if (setting('cloud_sms.sms_user_pay')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -404,14 +404,14 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_live_play_one_day" value="1"
-                      {% if (setting('cloud_sms.sms_live_play_one_day')|default('')) == '1' %}
+                      <input type="radio" name="sms_live_play_one_day" value="on"
+                      {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_live_play_one_day" value="0" 
-                        {% if (setting('cloud_sms.sms_live_play_one_day')|default('')) != '1' %}
+                        <input type="radio" name="sms_live_play_one_day" value="off" 
+                        {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -431,16 +431,16 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_live_play_one_hour" value="1"
-                      {% if (setting('cloud_sms.sms_live_play_one_hour')|default('')) == '1' %}
+                      <input type="radio" name="sms_live_play_one_hour" value="on"
+                      {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_live_play_one_hour" value="0" 
-                        {% if (setting('cloud_sms.sms_live_play_one_hour')|default('')) != '1' %}
-                          checked="checked"
-                        {% endif %}> 关闭
+                      <input type="radio" name="sms_live_play_one_hour" value="off"
+                      {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) != 'on' %}
+                        checked="checked"
+                      {% endif %}> 关闭
                     </label>
                   </td>
                 </tr>
@@ -462,16 +462,16 @@
                   <td class="radios">
                     {% if (is_plugin_installed('Homework')) %}
                       <label>
-                        <input type="radio" name="sms_homework_check" value="1"
-                        {% if (setting('cloud_sms.sms_homework_check')|default('')) == '1' %}
+                        <input type="radio" name="sms_homework_check" value="on"
+                        {% if (setting('cloud_sms.sms_homework_check')|default('off')) == 'on' %}
                           checked="checked"
                         {% endif %}> 开启
                       </label>
                       <label>
-                          <input type="radio" name="sms_homework_check" value="0" 
-                          {% if (setting('cloud_sms.sms_homework_check')|default('')) != '1' %}
-                            checked="checked"
-                          {% endif %}> 关闭
+                        <input type="radio" name="sms_homework_check" value="off" 
+                        {% if (setting('cloud_sms.sms_homework_check')|default('off')) != 'on' %}
+                          checked="checked"
+                        {% endif %}> 关闭
                       </label>
                     {% else %}
                       请先安装作业插件！
@@ -492,14 +492,14 @@
                   </td>
                   <td class="radios">
                     <label>
-                      <input type="radio" name="sms_testpaper_check" value="1"
-                      {% if (setting('cloud_sms.sms_testpaper_check')|default('')) == '1' %}
+                      <input type="radio" name="sms_testpaper_check" value="on"
+                      {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_testpaper_check" value="0" 
-                        {% if (setting('cloud_sms.sms_testpaper_check')|default('')) != '1' %}
+                        <input type="radio" name="sms_testpaper_check" value="off" 
+                        {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
@@ -538,14 +538,14 @@
                   </td>
                   <td rowspan="4" class="radios" style="vertical-align:middle;">
                     <label>
-                      <input type="radio" name="sms_order_pay_success" value="1"
-                      {% if (setting('cloud_sms.sms_order_pay_success')|default('')) == '1' %}
+                      <input type="radio" name="sms_order_pay_success" value="on"
+                      {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) == 'on' %}
                         checked="checked"
                       {% endif %}> 开启
                     </label>
                     <label>
-                        <input type="radio" name="sms_order_pay_success" value="0" 
-                        {% if (setting('cloud_sms.sms_order_pay_success')|default('')) != '1' %}
+                        <input type="radio" name="sms_order_pay_success" value="off" 
+                        {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) != 'on' %}
                           checked="checked"
                         {% endif %}> 关闭
                     </label>
