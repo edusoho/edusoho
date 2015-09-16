@@ -12,6 +12,23 @@ use Topxia\Service\Util\CloudClientFactory;
 class CourseLessonController extends BaseController
 {
 
+    public function playerAction(Request $request, $courseId, $lessonId = 0)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if($lesson["free"]) {
+            goto getPlayerView;
+        }
+
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        
+        getPlayerView:
+        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $lesson["mediaId"]));
+    }
+
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -125,14 +142,6 @@ class CourseLessonController extends BaseController
     public function showAction(Request $request, $courseId, $lessonId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
-        if(empty($member)) {
-            $user = $this->getCurrentUser();
-            $joinedByClassroomMember = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user->id);
-            if(isset($joinedByClassroomMember["id"])) {
-                $member = $joinedByClassroomMember;
-            }
-        }
         
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
@@ -292,6 +301,8 @@ class CourseLessonController extends BaseController
 
         return $this->createJsonResponse($json);
     }
+
+    
 
     public function playlistAction(Request $request, $courseId, $lessonId)
     {

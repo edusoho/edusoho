@@ -370,41 +370,18 @@ define(function(require, exports, module) {
                 } else {
                     if (lesson.type == 'video') {
                         if (lesson.mediaSource == 'self') {
-                            $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-                            
+
                             if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
                                 Notify.warning('视频文件正在转换中，稍后完成后即可查看');
                                 return ;
                             }
 
-                            var player = VideoJS("lesson-video-player", {
-                                techOrder: ['flash','html5']
-                            });
-                            var hasPlayerError = false;
+                            var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
 
-                            player.dimensions('100%', '100%');
-                            player.src(lesson.mediaUri);
-                            player.on('ended', function() {
-                                if (hasPlayerError) {
-                                    return ;
-                                }
-                                that._onFinishLearnLesson();
-                                player.currentTime(0);
-                                player.pause();
-                            });
+                            var html = '<iframe src='+playerUrl+' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+                            $("#lesson-video-content").html(html).show();
                             
-                            player.on('error', function(error){
-                                hasPlayerError = true;
-                                var message = '您的浏览器不能播放当前视频。';
-                                Notify.danger(message, 60);
-                            });
-                            $("#lesson-video-content").show();
-                            player.play();
-                            player.on('fullscreenchange', function(e) {
-                                if ($(e.target).hasClass('vjs-fullscreen')) {
-                                    $("#site-navbar").hide();
-                                }
-                            });
+                            
 
                             that.set('videoPlayer', player);
 

@@ -301,6 +301,11 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($info['format']['duration']);
     }
 
+    public function fileAction($id)
+    {
+        
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
