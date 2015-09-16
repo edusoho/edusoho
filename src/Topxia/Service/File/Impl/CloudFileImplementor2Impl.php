@@ -128,4 +128,13 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $api = CloudAPIFactory::create();
         return $api->post('/files/init_upload', $params);
     }
+
+    public function getDownloadFile($file)
+    {
+        $api = CloudAPIFactory::create();
+        $download = $api->get("/files/{$file['globalId']}/download");
+        $download['type'] = 'url';
+        return $download;
+    }
+
 }

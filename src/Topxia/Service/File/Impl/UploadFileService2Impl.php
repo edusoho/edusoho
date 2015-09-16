@@ -47,6 +47,28 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    public function searchFiles($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchFilesCount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getUploadFileDao()->searchFileCount($conditions);
+    }
+
+    public function getDownloadFile($id)
+    {
+        $file = $this->getUploadFileDao()->getFile($id);
+        if(empty($file)){
+            return array('error' => 'not_found', 'message' => '文件不存在，不能下载！');
+        }
+
+        return $this->getFileImplementor($file)->getDownloadFile($file);
+    }
+
     public function initUpload($params)
     {
     	$user = $this->getCurrentUser();
@@ -65,7 +87,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $file = $implementor->prepareUpload($params);
 
         $resumed = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
-        if ($resumed) {
+        $outterFile = $this->getUploadFileDao()->getFile($resumed['outerId']);
+        if ($resumed && $outterFile) {
             $this->getUploadFileDao()->updateFile($resumed['outerId'], array(
                 'filename' => $file['filename'],
                 'targetId' => $file['targetId'],
@@ -121,8 +144,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         } catch (\Exception $e) {
             $msg = $e->getMessage();
-
-            file_put_contents('/tmp/error', $msg);
         }
     }
 
@@ -141,6 +162,24 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function decreaseFileUsedCount($id)
     {
         $this->getUploadFileDao()->waveFileUsedCount($id, -1);
+    }
+
+    protected function _prepareSearchConditions($conditions)
+    {
+        $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
+
+        if (isset($conditions['source']) && ($conditions['source'] == 'shared') && !empty($conditions['currentUserId'])) {
+            $sharedUsers = $this->getUploadFileShareDao ()->findMySharingContacts ($conditions ['currentUserId']);
+            $sharedUserIds = ArrayToolkit::column ($sharedUsers, 'sourceUserId');
+            $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
+        }
+
+        if (!empty($conditions['currentUserId'])) {
+            $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], array($conditions['currentUserId']));
+            unset($conditions['currentUserId']);
+        }
+
+        return $conditions;
     }
 
     protected function getFileImplementor($file)

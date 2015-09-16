@@ -10,6 +10,12 @@ interface UploadFileService2
      */
     public function getThinFile($id);
 
+    public function searchFiles($conditions, $orderBy, $start, $limit);
+
+    public function searchFilesCount($conditions);
+
+    public function getDownloadFile($id);
+
 	public function initUpload($params);
 
 	public function finishedUpload($params);
