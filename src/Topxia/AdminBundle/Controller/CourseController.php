@@ -33,12 +33,24 @@ class CourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        if(isset($conditions["income"]) && $conditions["income"]=="free"){
-           $conditions['income_free'] = '0.00' ;
-        }
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
 
-        if(isset($conditions["income"]) && $conditions["income"]=="charge"){
-           $conditions['income_charge'] = '0.00' ;
+        if(isset($conditions["chargeStatus"]) && $conditions["chargeStatus"]=="free"){
+            if($coinEnable) {
+                $conditions['coinPrice'] = '0.00' ;
+            }
+            else {
+                $conditions['price'] = '0.00' ;
+            }  
+        }
+        if(isset($conditions["chargeStatus"]) && $conditions["chargeStatus"]=="charge"){
+            if($coinEnable) {
+                $conditions['coinPrice_GT'] = '0.00' ;
+            }
+            else{
+                $conditions['price_GT'] = '0.00' ;
+            }
         }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
