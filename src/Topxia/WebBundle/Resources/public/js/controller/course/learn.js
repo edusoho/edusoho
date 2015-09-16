@@ -370,7 +370,7 @@ define(function(require, exports, module) {
                 } else {
                     if (lesson.type == 'video') {
                         if (lesson.mediaSource == 'self') {
-
+                            var lessonVideoDiv = $('#lesson-video-content');
                             if(lessonVideoDiv.data("balloonPlayer")){
                                 $("#lesson-video-content").addClass("local-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
                             } else {
