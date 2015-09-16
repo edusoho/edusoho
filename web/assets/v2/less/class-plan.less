@@ -27,6 +27,40 @@
 
 .study-plan-list {
   margin-top: 50px;
+  .plan-item1 {
+    position: relative;
+    padding-left: 40px;
+    &:after {
+      position: absolute;
+      content: '';
+      left: 9px;
+      top: 20px;
+      bottom: -20px;
+      width: 2px;
+      background-color: @gray-light;
+    }
+    .plan-title {
+      margin-bottom: 20px;
+      font-size: 16px;
+      small {
+        margin-left: 20px;
+        color: @gray;
+      }
+    }
+    .plan-body {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .plan-number {
+      position: absolute;
+      top: 1px;
+      left: 0;
+      >i {
+        font-size: 20px;
+        color: @gray-light;
+      }
+    }
+  }
   .plan-item {
     position: relative;
     padding-left: 180px;
