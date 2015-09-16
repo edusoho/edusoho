@@ -15,7 +15,8 @@ class WxpayResponse extends Response
         $data['payment'] = 'wxpay';
         $data['sn'] = $params['out_trade_no'];
         $result = $this->confirmSellerSendGoods($data['sn']);
-        if ($return['return_code'] != 'SUCCESS' || $return['result_code'] != 'SUCCESS' || $return['trade_state'] != 'SUCCESS') {
+        $returnArray = $this->fromXml($returnXml);
+        if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException('微信支付失败');
         }
         if(in_array($params['trade_state'], array('SUCCESS'))) {
