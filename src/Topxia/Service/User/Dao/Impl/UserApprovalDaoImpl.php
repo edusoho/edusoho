@@ -45,4 +45,51 @@ class UserApprovalDaoImpl extends BaseDao implements UserApprovalDao
         $sql ="SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $userIds);
 	}
+
+	public function searchapprovals($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createProfileQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function searchApprovalsCount($conditions)
+    {
+        $builder = $this->createProfileQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+     private function createProfileQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions,function($v){
+            if($v === 0){
+                return true;
+            }
+                
+            if(empty($v)){
+                return false;
+            }
+            return true;
+        });
+
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
+             $conditions['truename'] = "%{$conditions['keyword']}%";
+        } 
+
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'idcard') {
+             $conditions['idcard'] = "%{$conditions['keyword']}%";
+        }     
+
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'user_approval')
+            ->andWhere('truename LIKE :truename')
+            ->andWhere('createTime >=:startTime')
+            ->andWhere('createTime <=:endTime')
+            ->andWhere('idcard LIKE :idcard');
+    }
 }

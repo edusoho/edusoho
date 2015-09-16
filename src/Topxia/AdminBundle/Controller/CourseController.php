@@ -11,6 +11,7 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        
         if($filter == 'normal' ){
             $conditions["parentId"] = 0;
         }
@@ -30,6 +31,14 @@ class CourseController extends BaseController
         }
         if(isset($conditions["creator"]) && $conditions["creator"]==""){
             unset($conditions["creator"]);
+        }
+
+        if(isset($conditions["income"]) && $conditions["income"]=="free"){
+           $conditions['income_free'] = '0.00' ;
+        }
+
+        if(isset($conditions["income"]) && $conditions["income"]=="charge"){
+           $conditions['income_charge'] = '0.00' ;
         }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);

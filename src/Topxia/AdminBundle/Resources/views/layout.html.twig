@@ -10,6 +10,7 @@
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
 {% set menu_hiddens = setting('menu_hiddens', []) %}
+{% if hiddenMenus() %}{% endif %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -65,9 +66,8 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          {% for m in menu_children('admin', 'admin', 1) %}
-
-            {% if m.code == "admin_app"%}
+           {% for m in menu_children('admin', 'admin', 1) %}
+            {% if m.code == "admin_app" %}
                {% if not is_granted('ROLE_SUPER_ADMIN') %}
                 {% set parameter = {'postStatus':'all'} %}
                 {% set m = m|array_merge({'router_params':parameter,'router_name':'admin_app_center'}) %}
@@ -75,9 +75,11 @@
             {% endif %}
 
             {% if m.code != "admin_system" %}
-                <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {% if not in_menu_blacklist(m.code) %}
+                <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
-                </li>  
+                </li>
+              {% endif %} 
             {% else %}    
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                   <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>

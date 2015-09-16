@@ -1,5 +1,15 @@
 <?php
-
+// 尚存在问题：
+// 1.vendor不存在导致升级检测失败报错
+// 2.topxia:build命令没有打包新的api目录，打包6.5.5时需要修改该命令
+// 3.执行打包命令需要在项目根目录下存在installFiles文件夹
+// 4.如果遇到要打版本不同的问题，检查
+// web/install/edusoho_init.sql中的cloud_app数据的版本，
+// systeminfo，
+// app/config/config.yml，
+// CHANGELOG各自的版本
+// 5.包太大可能导致上传脚本失败
+// 6.打包代码都在feature/install-data
 use Composer\Autoload\ClassLoader;
 
 require __DIR__.'/../../vendor2/autoload.php';
@@ -176,11 +186,11 @@ function install_step3()
         $init->initNavigations();
         $init->initBlocks();
         $init->initThemes();
-        $init->initLockFile();
         $init->initRefundSetting();
         $init->initArticleSetting();
         $init->initDefaultSetting();
         $init->initCrontabJob();
+        $init->initLockFile();
 
         header("Location: start-install.php?step=4");
         exit();
@@ -287,11 +297,43 @@ function _create_database($config, $replace)
             return "创建数据库表结构失败，请删除数据库后重试！";
         }
 
+        if(!empty($config["database_init"]) && $config["database_init"]==1) {
+            init_data($pdo,$config);
+        }
+
         return null;
 
     } catch (\PDOException $e) {
         return '数据库连接不上，请检查数据库服务器、用户名、密码是否正确!';
     }
+}
+
+function init_data($pdo, $config)
+{
+    $sql = file_get_contents('./edusoho_init.sql');
+    $result = $pdo->exec($sql);
+
+    $sql = "show tables";
+    $results = $pdo->query($sql)->fetchAll();
+    foreach ($results as $result) {
+        $table = $result["0"];
+        $countSql = "select count(*) from {$table}";
+        $sqlPdo = $pdo->query($countSql);
+        if(!empty($sqlPdo)) {
+            $count = $pdo->query($countSql)->fetchColumn(0);
+            if($count>0) {
+                $pdo->exec("alter table {$table} AUTO_INCREMENT={$count};");
+            }
+        }
+    }
+
+    _create_config($config);
+
+    $init = new SystemInit();
+    $init->initLockFile();
+
+    header("Location: start-install.php?step=4");
+    exit();
 }
 
 function _create_config($config)

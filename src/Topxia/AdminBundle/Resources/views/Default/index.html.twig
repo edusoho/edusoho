@@ -16,11 +16,12 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       </div>
     </div>
-
+{% if hidden.cloud_notice|default(null) != '1' %}
   <div class="col-md-12">
         {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
     </div>
-
+{% endif %}
+ 
 
  <div class="col-md-6">
   <div class="panel panel-default">
@@ -48,6 +49,7 @@
         </div>
       </div>
     </div> #}
+    {% if hidden.system_status|default(null) != '1' %}
     <div class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">
@@ -58,6 +60,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">

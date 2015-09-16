@@ -18,7 +18,7 @@ class SimpleValidator
     {
         
         $option = array_merge(
-            array('minLength' => 3, 'maxLength' => 20),
+            array('minLength' => 4, 'maxLength' => 18),
             $option
         );
 
