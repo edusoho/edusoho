@@ -2,6 +2,8 @@
 namespace Topxia\Component\Payment\Wxpay;
 
 use Topxia\Component\Payment\Response;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class WxpayResponse extends Response
 {    
