@@ -105,6 +105,12 @@ class WxpayResponse extends Response
         return $simxml->saveXML();
     }
 
+    private function fromXml($xml)
+    {
+        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
+        return $array;
+    }
+
     private function getNonceStr($length = 32) 
     {
         $chars = "abcdefghijklmnopqrstuvwxyz0123456789";  
