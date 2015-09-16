@@ -108,7 +108,6 @@ class SmsController extends BaseController
             }
             if (!empty($users)) {
                 $userIds = ArrayToolkit::column($users, 'id');
-                var_dump($parameters);
                 $this->getSmsService()->smsSend($smsType, $userIds, $description, $parameters);
             }
 
