@@ -43,7 +43,7 @@
         <input type="text" id="database-name-field" name="database_name" class="form-control" value="{{ post.database_name|default('edusoho') }}">
       </div>
     </div> 
-
+  
     <div class="form-group">
        <div class="controls col-sm-offset-4 col-sm-5">
          <div class="checkbox">
@@ -64,41 +64,78 @@
       </div>
     </div>
 
+    <div id="package-update-progress" class="package-update-progress" style="display:none;">
+      <div class="progress progress-striped active">
+        <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+      </div>
+      <div class="text-danger progress-text hidden"></div>
+    </div>
+
     <div class="actions">
       <button type="submit" id="create-database-btn" class="btn btn-primary btn-lg">创建数据库</button>
     </div>
 
   </form>
-
 {% endblock %}
 
 {% block bottom_scripts %}
 <script>
-  seajs.use(['jquery', 'bootstrap.validator'], function($, Validator){
+  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules','bootstrap'], function($, Validator){
     window.$ = $;
     var $form = $("#create-database-form");
-
     var validator = new Validator({
         element: $form,
-        autoSubmit: false,
-        onFormValidated: function(error, results, $form) {
-            if (error) {
-                return false;
-            }
-            
-            var checked = $form.find('[name=database_replace]').is(':checked');
-
-            if (checked) {
-              if (!confirm('覆盖数据库，会删除原有的数据。您真的要覆盖当前数据库吗？')) {
-                return false;
-              }
-            }
-
-            $form[0].submit();
-            $('#create-database-btn').button('submiting').addClass('disabled');
-
-        }        
+        autoSubmit: false
     });
+
+    validator.on('formValidated', function(error, msg, $form) {
+        if (error) {
+            return;
+        }
+        var checked = $form.find('[name=database_replace]').is(':checked');
+
+        if (checked) {
+            if (!confirm('覆盖数据库，会删除原有的数据。您真的要覆盖当前数据库吗？')) {
+                return false;
+            }
+        }
+
+        checked = $form.find('[name=database_init]').is(':checked');
+        if (checked) {
+            $('#package-update-progress').show();
+        }
+        $('#create-database-btn').addClass('disabled').html('正在创建数据库');
+        $('.progress-bar').css({width: '10%'});
+        exec('start-install.php?step=2', $form.serialize(), 10);
+    });
+
+    function exec (url, data, progress) {
+        progress = progress+9;
+        $.ajax(url, {
+            async: true,
+            data: data,
+            dataType: 'json',
+            type: 'POST'
+        }).done(function(response, textStatus, jqXHR) {
+            $('#create-database-btn').html('正在生成演示数据');
+            if (typeof(response.index) != 'undefined') {
+                $('.progress-bar').css({width: progress+'%'});
+
+                if (url.indexOf('index') < 0) {
+                    url = url+'&index='+response.index;
+                }
+                url = url.replace(/index=\d+/g,'index='+response.index);
+                exec(url, data, progress);
+            } else {
+                var checked = $form.find('[name=database_init]').is(':checked');
+                var init_data = checked ? 1 : 0;
+                window.location.href = 'start-install.php?step=3&init_data='+init_data;
+            }
+        }).fail(function(){
+            $('.progress-text').html('初始化数据出错!');
+        });
+    }
+    
 
     validator.addItem({
         element: '#database-host-field',

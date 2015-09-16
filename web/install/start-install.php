@@ -134,17 +134,17 @@ function install_step2($init_data = 0)
     $post = array();
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
         $post = $_POST;
-
-        $replace = empty($_POST['database_replace']) ? false : true;
-
-        $error = _create_database($_POST, $replace);
-        if (empty($error)) {
-            $error = _create_config($_POST);
-        }
-        if (empty($error)) {
+        $post['index'] = empty($_GET['index']) ? 0 : $_GET['index'];
+        $replace = empty($post['database_replace']) ? false : true;
+        $result = _create_database($post, $replace);
+        
+        if (empty($result)) {
+            $error = _create_config($post);
             header("Location: start-install.php?step=3&init_data=0");
-            exit(); 
+            exit();
         }
+        echo json_encode($result);
+        exit();
     }
 
     echo $twig->render('step-2.html.twig', array(
@@ -173,6 +173,9 @@ function install_step3($init_data = 0)
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 
         $init = new SystemInit();
+        if (!empty($init_data)) {
+            $connection->exec("delete from `user` where id=1;");
+        }
         $admin = $init->initAdmin($_POST);
 
         $init->initSiteSettings($_POST);
@@ -193,6 +196,7 @@ function install_step3($init_data = 0)
             $init->initDefaultSetting();
             $init->initCrontabJob();
         } else {
+            $init->deleteKey();
             $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
         }
         $init->initLockFile();
@@ -287,24 +291,43 @@ function _create_database($config, $replace)
 {
     try {
         $pdo = new PDO("mysql:host={$config['database_host']};port={$config['database_port']}", "{$config['database_user']}", "{$config['database_password']}");
-
         $pdo->exec("SET NAMES utf8");
 
-        $result = $pdo->exec("create database `{$config['database_name']}`;");
-        if (empty($result) and !$replace) {
-            return "数据库{$config['database_name']}已存在，创建失败，请删除或者勾选覆盖数据库之后再安装！";
+        //仅在第一次进来时初始化数据库表结构
+        if (empty($config['index'])) {
+            $result = $pdo->exec("create database `{$config['database_name']}`;");
+            if (empty($result) and !$replace) {
+                return "数据库{$config['database_name']}已存在，创建失败，请删除或者勾选覆盖数据库之后再安装！";
+            }
+
+            $pdo->exec("USE `{$config['database_name']}`;");
+
+            $sql = file_get_contents('./edusoho.sql');
+            $result = $pdo->exec($sql);
+            if ($result === false) {
+                return "创建数据库表结构失败，请删除数据库后重试！";
+            }
+
+            if (empty($config["database_init"])) {
+                _create_config($config);
+                return array('success' => true);
+            }
         }
 
-        $pdo->exec("USE `{$config['database_name']}`;");
-
-        $sql = file_get_contents('./edusoho.sql');
-        $result = $pdo->exec($sql);
-        if ($result === false) {
-            return "创建数据库表结构失败，请删除数据库后重试！";
-        }
-
+        //每次进来都执行一个演示数据初始化文件
         if(!empty($config["database_init"]) && $config["database_init"]==1) {
-            _init_data($pdo,$config);
+            $index = $config['index'];
+            if ($index > 0) {
+                $pdo->exec("USE `{$config['database_name']}`;");
+            }
+            _init_data($pdo, $config, $index);
+            $index++;
+            $filesystem = new Filesystem();
+            if ($index == 10) {
+                _init_auto_increment($pdo, $config);
+                return array('success' => true);
+            }
+            return array('index' => $index);
         }
 
         return null;
@@ -314,11 +337,14 @@ function _create_database($config, $replace)
     }
 }
 
-function _init_data($pdo, $config)
+function _init_data($pdo, $config, $index)
 {
-    $sql = file_get_contents('./edusoho_init.sql');
+    $sql = file_get_contents('./edusoho_init_'.$index.'.sql');
     $result = $pdo->exec($sql);
+}
 
+function _init_auto_increment($pdo, $config)
+{
     $sql = "show tables";
     $results = $pdo->query($sql)->fetchAll();
     foreach ($results as $result) {
@@ -332,13 +358,8 @@ function _init_data($pdo, $config)
             }
         }
     }
-
     _create_config($config);
 
-    // $init = new SystemInit();
-
-    header("Location: start-install.php?step=3&init_data=1");
-    exit();
 }
 
 function _create_config($config)
@@ -422,6 +443,17 @@ class SystemInit
         $settingService->set('default', $defaultSetting);
     }
 
+    public function deleteKey()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        if (!empty($settings['cloud_key_applied'])) {
+            unset($settings['cloud_access_key']);
+            unset($settings['cloud_secret_key']);
+            unset($settings['cloud_key_applied']);
+            $this->getSettingService()->set('storage', $settings);
+        }
+
+    }
     public function initKey()
     {
         $settings = $this->getSettingService()->get('storage', array());
@@ -787,7 +819,7 @@ EOD;
         $this->getCrontabService()->createJob(array(
             'name'=>'CancelOrderJob', 
             'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
+            'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
             'jobParams'=>'',
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
@@ -796,7 +828,7 @@ EOD;
         $this->getCrontabService()->createJob(array(
             'name'=>'DeleteExpiredTokenJob', 
             'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
             'jobParams'=>'',
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
