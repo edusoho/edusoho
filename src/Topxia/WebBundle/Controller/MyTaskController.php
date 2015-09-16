@@ -9,7 +9,6 @@ class MyTaskController extends BaseController
 		$user = $this->getCurrentUser();
 		$conditions=array(
 			'userId' => $user['id'],
-			'status' => 'active'
 			);
 		$tasks = $this->getTaskService()->searchTasks($conditions,array('taskStartTime','DESC'),0,9999);
 		$tasksevents=array(array(
@@ -24,7 +23,12 @@ class MyTaskController extends BaseController
 						$tasksevents[$key]['url'] = $this->generateUrl('course_learn',array(
 							'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
 					}
-				}/*else{//其他扩展任务url
+				if($task['status']=='completed'){
+					$tasksevents[$key]['color']='#46c37b';
+				}else{
+					$tasksevents[$key]['color']='#919191';
+				}
+			}/*else{//其他扩展任务url
 				}*/
 		}else{
 			$tasksevents = array(array(
@@ -37,6 +41,7 @@ class MyTaskController extends BaseController
 		return $this->render('TopxiaWebBundle:MyTask:index.html.twig', array(
             'user' => $user,
             'taskjson' => $jsontasks,
+            'today' =>date("Y-m-d",time()),
             ));
 	}
 	public function updateAction(Request $request){

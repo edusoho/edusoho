@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	//require('json');
 	exports.run = function() {
 		var datajson=$('#datajson').data('fullcalendarevents');
+		var today=$('#datajson').data('today');
 		$('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
@@ -15,8 +16,8 @@ define(function(require, exports, module) {
                 month: '月',
             },
 			lang:'zh-cn',
-			allDayDefault:true, 
-			defaultDate: '2015-09-10',
+			allDayDefault:true,
+			defaultDate: today,
 			businessHours: true, // display business hours
 			editable: false,
 			eventLimit: true,
