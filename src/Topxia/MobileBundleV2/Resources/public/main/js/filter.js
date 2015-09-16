@@ -60,14 +60,7 @@ filter('lessonLearnStatus', function(){
 	};
 }).
 filter('lessonType', function() {
-	var lessonType = {
-		text  : "图文",
-		video  : "视频",
-		audio  : "音频",
-		testpaper  : "考试",
-		document  : "文档",
-		ppt  : "PPT"
-	};
+
 	return function(lesson) {
 		if (lesson.type == "live") {
 			var returnStr = "";
@@ -90,7 +83,10 @@ filter('lessonType', function() {
 			}
 			return returnStr;
 		}
-		return "<div class='ui-label' >" + lessonType[lesson.type] + "</div>";
+		if (lesson.free == 1) {
+			return "<div class='ui-label'>免费</div>";
+		}
+		return "";
 	}
 }).
 filter('coverIncludePath', function() {

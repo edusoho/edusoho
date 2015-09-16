@@ -36,9 +36,8 @@ class CopyInstallFilesCommand extends BaseCommand
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 
-		chdir("build");
+		$command = "cd build \n tar -czf edusoho-{$version}.tar.gz edusoho/";
 
-		$command = "tar -czf edusoho-{$version}.tar.gz edusoho/";
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 

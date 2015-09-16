@@ -1,5 +1,15 @@
 <?php
-
+// 尚存在问题：
+// 1.vendor不存在导致升级检测失败报错
+// 2.topxia:build命令没有打包新的api目录，打包6.5.5时需要修改该命令
+// 3.执行打包命令需要在项目根目录下存在installFiles文件夹
+// 4.如果遇到要打版本不同的问题，检查
+// web/install/edusoho_init.sql中的cloud_app数据的版本，
+// systeminfo，
+// app/config/config.yml，
+// CHANGELOG各自的版本
+// 5.包太大可能导致上传脚本失败
+// 6.打包代码都在feature/install-data
 use Composer\Autoload\ClassLoader;
 
 require __DIR__.'/../../vendor2/autoload.php';

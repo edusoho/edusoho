@@ -14,9 +14,14 @@ course_explore:
     pattern:  /mooc/course/explore/{category}
     defaults: { _controller: CustomWebBundle:Course:explore, category:'' }
 
-order_show:
-    pattern:  /order/show
-    defaults: { _controller: CustomWebBundle:Order:show }
+classroom_courses_pick:
+    pattern: /classroom/{classroomId}/course/pick
+    defaults: { _controller: CustomWebBundle:Classroom\Course:pick }
+
+classroom_course_search:
+    pattern: /classroom/{classroomId}/course/search
+    defaults: { _controller: CustomWebBundle:Classroom\Course:search }
+
 
 search:
     pattern:  /search
