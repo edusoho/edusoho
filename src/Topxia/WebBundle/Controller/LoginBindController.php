@@ -286,17 +286,26 @@ class LoginBindController extends BaseController
         $oauthUser = $client->getUserInfo($token);
         $olduser = $this->getCurrentUser();
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
-        $data = $request->request->all();
-        $user = $this->getUserService()->getUserByEmail($data['email']);
+        $data = $request->request->all();       
+
+        $message = 'Email地址或手机号码输入错误';
+        if(SimpleValidator::email($data['emailOrMobile'])){
+           $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+           $message = '该Email地址尚未注册';
+        }else if(SimpleValidator::mobile($data['emailOrMobile'])){
+           $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+           $message = '该手机号码尚未注册';
+        }
+
         if (empty($user)) {
-            $response = array('success' => false, 'message' => '该Email地址尚未注册');
+            $response = array('success' => false, 'message' => $message);
         } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => '密码不正确，请重试！');
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
             $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
-            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token,1);
+            $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }
 
