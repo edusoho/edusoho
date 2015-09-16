@@ -6,9 +6,13 @@ interface TaskService
 {
     public function getTask($id);
 
+    public function getTaskBy($userId, $taskType, $targetId, $targetType);
+
     public function getActiveTaskBy($userId, $taskType, $targetId, $targetType);
 
     public function findUserTasksByBatchIdAndTasktype($userId, $batchId, $taskType);
+
+    public function findUserCompletedTasks($userId, $batchId);
 
     public function addTask(array $fields);
 

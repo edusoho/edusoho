@@ -20,6 +20,13 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
     }
 
+    public function getTaskBy($userId, $taskType, $targetId, $targetType)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? LIMIT 1";
+        $task = $this->getConnection()->fetchAssoc($sql, array($userId, $taskType, $targetId, $targetType));
+        return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
+    }
+
     public function getActiveTaskBy($userId, $taskType, $targetId, $targetType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? AND `status`='active' LIMIT 1";
@@ -31,6 +38,13 @@ class TaskDaoImpl extends BaseDao implements TaskDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `batchId`=?";
         $tasks = $this->getConnection()->fetchAll($sql, array($userId, $taskType, $batchId));
+        return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
+    }
+
+    public function findUserCompletedTasks($userId, $batchId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `status`='completed' ORDER BY `compltedTime` ASC";
+        $tasks = $this->getConnection()->fetchAll($sql, array($userId, $batchId));
         return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
     }
 
@@ -92,8 +106,10 @@ class TaskDaoImpl extends BaseDao implements TaskDao
             ->andWhere('userId = :userId')
             ->andWhere('taskStartTime >= :taskStartTimeGreaterThan')
             ->andWhere('taskStartTime < :taskStartTimeLessThan')
-            ->andWhere('taskEndTime >= :tasktaskEndTimeGreaterThan')
-            ->andWhere('taskEndTime <= :tasktaskEndTimeLessThan')
+            ->andWhere('taskEndTime >= :taskEndTimeGreaterThan')
+            ->andWhere('taskEndTime <= :taskEndTimeLessThan')
+            ->andWhere('id < :taskIdLessThan')
+            ->andWhere('id > :taskIdGreaterThan')
             ->andWhere('batchId IN ( :batchIds )');
 
         return $builder;

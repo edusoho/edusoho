@@ -1128,12 +1128,8 @@ my:
     defaults: { _controller: TopxiaWebBundle:MyCourse:index }
 
 my_task_calendar:
-    pattern: /my/task
-    defaults: { _controller: TopxiaWebBundle:MyTask:index }
-
-my_task_calendar_update:
-    pattern: /my/task/update
-    defaults: { _controller: TopxiaWebBundle:MyTask:update }
+   pattern: /my/task
+   defaults: { _controller: TopxiaWebBundle:MyTask:index }
 
 my_teaching_courses:
     pattern: /my/teaching/courses/{filter}
