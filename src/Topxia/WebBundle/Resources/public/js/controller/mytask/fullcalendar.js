@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                 month: '月',
             },
 			lang:'zh-cn',
-			allDayDefault:false, 
+			allDayDefault:true, 
 			defaultDate: '2015-09-10',
 			businessHours: true, // display business hours
 			editable: false,
