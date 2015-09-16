@@ -19,9 +19,9 @@ class WxpayResponse extends Response
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException('微信支付失败');
         }
-        if(in_array($params['trade_state'], array('SUCCESS'))) {
+        if(in_array($returnArray['trade_state'], array('SUCCESS'))) {
             $data['status'] = 'success';
-        } else if (in_array($params['trade_state'], array('CLOSED'))) {
+        } else if (in_array($returnArray['trade_state'], array('CLOSED'))) {
             $data['status'] = 'closed';
         } else {
             $data['status'] = 'unknown';
