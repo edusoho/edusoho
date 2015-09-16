@@ -33,8 +33,8 @@ class DefaultController extends BaseController
                 } catch (\RuntimeException $e) {
                     throw new RuntimeException("发送失败！");
             } 
-            var_dump($result);
-            exit(); 
+            /*var_dump($result);
+            exit(); */
         }
 
 
