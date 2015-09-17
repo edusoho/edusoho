@@ -37,7 +37,7 @@ define(function(require, exports, module) {
                     $.each(files, function(i, file){
                         html += '<li class="disk-browser-file-list-item clearfix" data-index="' + i + '">';
                         html += '<span class="filename">' + file.filename + '</span>';
-                        html += '<span class="filesize">' + file.size + '</span>';
+                        html += '<span class="filesize">' + file.fileSize + '</span>';
                         html += '<span class="filetime">' + file.updatedTime + '</span>';
                         html += '</li>';
                     });
