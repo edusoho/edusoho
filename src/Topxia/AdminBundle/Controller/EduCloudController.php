@@ -119,18 +119,18 @@ class EduCloudController extends BaseController
                 'sms_vip_buy' => 'off',
                 'sms_coin_buy' => 'off',
             );
-            if ($dataUserPosted['sms_order_pay_success'] == 1) {
-                $dataUserPosted['sms_course_buy'] = 1;
-                $dataUserPosted['sms_classroom_buy'] = 1;
-                $dataUserPosted['sms_vip_buy'] = 1;
-                $dataUserPosted['sms_coin_buy'] = 1;
+            if ($dataUserPosted['sms_order_pay_success'] == 'on') {
+                $dataUserPosted['sms_course_buy'] = 'on';
+                $dataUserPosted['sms_classroom_buy'] = 'on';
+                $dataUserPosted['sms_vip_buy'] = 'on';
+                $dataUserPosted['sms_coin_buy'] = 'on';
             } else {
-                $dataUserPosted['sms_course_buy'] = 0;
-                $dataUserPosted['sms_classroom_buy'] = 0;
-                $dataUserPosted['sms_vip_buy'] = 0;
-                $dataUserPosted['sms_coin_buy'] = 0;
+                $dataUserPosted['sms_course_buy'] = 'off';
+                $dataUserPosted['sms_classroom_buy'] = 'off';
+                $dataUserPosted['sms_vip_buy'] = 'off';
+                $dataUserPosted['sms_coin_buy'] = 'off';
             }
-            
+            $dataUserPosted['sms_user_pay'] = 'off';
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
             $dataUserPosted = array_merge($dataUserPosted, $schoolNames);
