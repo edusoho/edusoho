@@ -34,7 +34,7 @@ class CourseController extends BaseController
         }
 
         $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] ==1 && $coinSetting['cash_model']=='currency';
 
         if(isset($conditions["chargeStatus"]) && $conditions["chargeStatus"]=="free"){
             if($coinEnable) {
