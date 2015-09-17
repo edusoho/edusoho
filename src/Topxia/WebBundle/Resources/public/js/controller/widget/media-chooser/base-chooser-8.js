@@ -150,9 +150,7 @@ define(function(require, exports, module) {
         },
 
         _initUploader: function() {
-            if (this.uploader) {
-                return ;
-            }
+            this.destroy();
 
             var self = this;
             var $el = this.element.find('.balloon-uploader');

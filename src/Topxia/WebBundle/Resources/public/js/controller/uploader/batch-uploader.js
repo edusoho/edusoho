@@ -28,6 +28,7 @@ define(function(require, exports, module) {
             accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
 
             var defaults = {
+                // runtimeOrder: 'flash',
 
                 dnd: this.element.find('.balloon-uploader-body'),
                 accept: accept,
@@ -36,7 +37,7 @@ define(function(require, exports, module) {
                 resize: false,
 
                 // swf文件路径
-                swf: 'Uploader.swf',
+                swf: '/assets/libs/webuploader/0.1.5/Uploader.swf',
 
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
