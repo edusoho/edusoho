@@ -188,6 +188,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $from = array(
             'type' => 'news',
+            'id' => $article['id']
         );
 
         $to = array(
