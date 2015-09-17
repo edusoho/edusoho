@@ -26,6 +26,18 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         return $user ? $this->unserialize($user) : null;
     }
 
+    public function updateUserStaffNo($staffNo, $userId)
+    {
+        $user = $this->getUser($userId);
+
+        if(empty($user)){
+            throw $this->createServiceException('用户不存在，学号或教工号更新失败！');
+        }
+
+        $fields = array('staffNo' => $staffNo);
+        $this->getUserDao()->updateUser($user['id'], $fields);
+    }
+
     public function register($registration, $type = 'default')
     {
         if (!SimpleValidator::nickname($registration['nickname'])) {
