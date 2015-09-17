@@ -139,7 +139,6 @@ define(function(require, exports, module) {
         _initLinkPane: function() {
             var self = this;
 
-
             var validator = Validator.query('#course-material-form');
             if (!validator) {
                 validator = new Validator({
@@ -178,10 +177,11 @@ define(function(require, exports, module) {
         },
 
         _destoryUploader: function() {
-            // if (!this.uploader) {
-            //     return ;
-            // }
-            // this.uploader.destroy();
+            if (!this.uploader) {
+                return ;
+            }
+            this.uploader.destroy();
+            this.uploader = null;
         },
 
         _createUploader: function() {

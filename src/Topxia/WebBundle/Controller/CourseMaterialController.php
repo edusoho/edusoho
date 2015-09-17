@@ -68,13 +68,7 @@ class CourseMaterialController extends CourseBaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['storage'] == 'cloud') {
-            $factory = new CloudClientFactory();
-            $client = $factory->createClient();
-            $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-        } else {
-            return $this->createPrivateFileDownloadResponse($request, $file);
-        }
+        return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
     }
 
     public function deleteAction(Request $request, $id, $materialId)
