@@ -18,7 +18,7 @@
         <div class="course-filter section-header" id="course-filter">
          推荐课程
           <div class="course-sort btn-group">
-            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'latest'}) }}">最新</a>
+            <a href="javascript:;" class="btn btn-default active js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'latest'}) }}">最新</a>
             <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'studentNum'}) }}">最热</a>
           </div>
         </div>
@@ -39,7 +39,7 @@
    <!-- 推荐班级 -->
   {% set RecommendClassrooms = data('RecommendClassrooms',{'count':2})%}
   {% if RecommendClassrooms %}
-    <section class="class-section">
+    <section class="mooc-class-section">
       <div class="container">
         <div class="section-header" id="course-filter">
          推荐班级

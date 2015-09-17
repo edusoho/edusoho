@@ -717,7 +717,7 @@ input:focus {
   color: #999999;
 }
 .home-teacher-list {
-  margin-bottom: 35px;
+  margin-bottom: 10px;
 }
 .home-teacher-list .teacher-item .teacher-img {
   margin-top: 40px;
@@ -2682,8 +2682,12 @@ label {
   font-size: 20px;
   border-left: 4px solid #0fbe8a;
 }
+.mooc-class-section {
+  padding-bottom: 30px;
+  background-color: #fff;
+}
 .recommend-class-list {
-  margin-bottom: 15px;
+  margin-bottom: 45px;
 }
 .recommend-class-list .class-list {
   border: 1px solid #e6e6e6;
