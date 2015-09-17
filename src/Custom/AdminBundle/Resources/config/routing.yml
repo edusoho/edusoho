@@ -9,3 +9,7 @@ admin_course_rounding:
 admin_classroom_create:
     pattern:  /classroom/create
     defaults: { _controller: CustomAdminBundle:ClassroomAdmin:addClassroom }
+
+admin_school:
+    pattern:  /school
+    defaults: { _controller: CustomAdminBundle:School:index}

@@ -11,3 +11,8 @@ admin_app_center_show:
     parent: admin_app
     router_name: admin_app_center
     router_params: { postStatus : all }
+
+admin_school:
+    name: 学校管理
+    parent: admin_operation
+    router_name: admin_school
