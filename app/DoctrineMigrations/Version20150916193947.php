@@ -16,7 +16,7 @@ class Version20150916193947 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("UPDATE `category_group` SET `depth`=3 WHERE `id`=2");
+        $this->addSql("UPDATE `category_group` SET `depth`=3 WHERE `code`='course'");
     }
 
     /**
