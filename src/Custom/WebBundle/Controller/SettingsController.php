@@ -9,6 +9,7 @@
 namespace Custom\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\FileToolkit;
 use Topxia\WebBundle\Controller\SettingsController as BaseSettingsController;
 
 class SettingsController extends BaseSettingsController
@@ -51,4 +52,5 @@ class SettingsController extends BaseSettingsController
             'user' => $user
         ));
     }
+
 }
