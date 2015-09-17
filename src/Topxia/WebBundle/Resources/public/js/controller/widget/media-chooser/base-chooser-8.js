@@ -159,7 +159,8 @@ define(function(require, exports, module) {
             var uploader = new BatchUploader({
                 element: $el,
                 initUrl: $el.data('initUrl'),
-                finishUrl: $el.data('finishUrl')
+                finishUrl: $el.data('finishUrl'),
+                multi: false
             });
 
             uploader.on('file.uploaded', function(file, data){
@@ -173,11 +174,6 @@ define(function(require, exports, module) {
 
                 self.trigger("change", item);
             });
-
-            uploader.on('file.queued', function(file) {
-                this.uploader.upload();
-            });
-
 
             this.uploader = uploader;
         },

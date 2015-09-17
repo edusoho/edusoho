@@ -16,7 +16,8 @@ define(function(require, exports, module) {
             uploadUrl: null,
             accept: null,
             process: 'none',
-            uploadToken: null
+            uploadToken: null,
+            multi: true
         },
 
         setup: function() {
@@ -49,6 +50,10 @@ define(function(require, exports, module) {
                 }
             };
 
+            if (!this.get('multi')) {
+                defaults['fileNumLimit'] = 1;
+            }
+
             this._initUploaderHook();
             var uploader = this.uploader = WebUploader.create(defaults);
             this._registerUploaderEvent(uploader);
@@ -80,6 +85,11 @@ define(function(require, exports, module) {
             html += '</div>';
             html += '<div class="balloon-uploader-footer">';
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
+
+            if (this.get('multi')) {
+                html += '<div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> 开始上传</div>';
+            }
+
             html += '</div>';
 
             this.element.addClass('balloon-uploader');
@@ -103,6 +113,11 @@ define(function(require, exports, module) {
                 );
 
                 self.trigger('file.queued', file);
+
+                if (!self.get('multi')) {
+                    uploader.upload();
+                }
+
             });
 
             // 文件上传过程中创建进度条实时显示。
