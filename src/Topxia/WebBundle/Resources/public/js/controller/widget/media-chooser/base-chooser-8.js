@@ -40,17 +40,18 @@ define(function(require, exports, module) {
         open: function() {
             this.element.find(".file-chooser-bar").hide();
             this.element.find(".file-chooser-main").show();
+            this._initUploader();
             return this;
         },
 
         show: function() {
-            console.log('show chooser');
             this.element.show();
             this._initUploader();
             return this;
         },
 
         close: function() {
+            this.destroy();
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
             if (this.get('uploaderProgressbar')) {
@@ -60,6 +61,7 @@ define(function(require, exports, module) {
         },
 
         hide: function() {
+            this.destroy();
             this.element.hide();
             return this;
         },
@@ -152,7 +154,6 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            console.log('init pane');
             var self = this;
             var $el = this.element.find('.balloon-uploader');
             var uploader = new BatchUploader({
@@ -162,7 +163,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('file.uploaded', function(file, data){
-                console.log('file.uploaded', file, data);
                 var item = {
                     id: file.outerId,
                     status: 'waiting',
@@ -187,6 +187,7 @@ define(function(require, exports, module) {
                 return ;
             }
             this.uploader.destroy();
+            this.uploader = null;
         }
 
     });

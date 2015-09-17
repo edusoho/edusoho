@@ -210,7 +210,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('file.queued', function(file) {
-                console.log('yyyyyyyyyyyyyyyyyyyyyyyyyyy');
                 this.uploader.upload();
             });            
 

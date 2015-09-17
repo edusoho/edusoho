@@ -74,9 +74,6 @@ define(function(require, exports, module) {
             var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'400px\'></iframe>';
             $("#lesson-preview-doucment").html(html);
 
-            console.log($player.data('swfUri'));
-            console.log($player.data('pdfUri'));
-
             var player = new DocumentPlayer({
                 element: '#lesson-preview-doucment',
                 swfFileUrl: $player.data('swfUri'),

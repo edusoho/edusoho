@@ -10,9 +10,11 @@ define(function(require, exports, module) {
             finishUrl: $el.data('finishUrl')
         });
 
+
+        $el.parents('.modal').on('hidden.bs.modal', function(){
+            window.location.reload();
+        });
+
     };
-
-
-
 
 });

@@ -20,12 +20,12 @@ define(function(require, exports, module) {
         },
 
         setup: function() {
+            this._initUI();
             var accept = {};
             accept.title = '文件';
             accept.extensions = this.get('accept')['extensions'].join(',');
             accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
 
-            console.log('accept:', accept);
             var defaults = {
 
                 dnd: this.element.find('.balloon-uploader-body'),
@@ -56,6 +56,34 @@ define(function(require, exports, module) {
             this.element.find('.start-upload-btn').on('click', function(){
                 uploader.upload();
             });
+        },
+
+        destroy: function() {
+            if (this.uploader) {
+                this.uploader.destroy();
+            }
+            BatchUploader.superclass.destroy.call(this);
+        },
+
+        _initUI: function() {
+            var html = '';
+            html += '<div class="balloon-uploader-heading">上传文件</div>';
+            html += '<div class="balloon-uploader-body">';
+            html += '  <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>';
+            html += '  <div class="balloon-filelist">';
+            html += '    <div class="balloon-filelist-heading">';
+            html += '    <div class="file-name">文件名</div>';
+            html += '    <div class="file-size">大小</div>';
+            html += '    <div class="file-status">状态</div>';
+            html += '  </div>';
+            html += '  <ul></ul>';
+            html += '</div>';
+            html += '<div class="balloon-uploader-footer">';
+            html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
+            html += '</div>';
+
+            this.element.addClass('balloon-uploader');
+            this.element.html(html);
         },
 
         _registerUploaderEvent: function(uploader) {
@@ -92,29 +120,23 @@ define(function(require, exports, module) {
             });
 
             uploader.on('beforeFileQueued', function(file) {
-                console.log('beforeFileQueued');
-                console.log(file, self);
                 file.uploaderWidget = self;
             });
 
             uploader.on('uploadComplete', function(file) {
-                console.log('upload complete');
                 var key = 'file_' + file.globalId + '_' + file.hash;
                 store.remove('file_' + file.hash);
             });
 
             uploader.on('uploadAccept', function(object, ret) {
-                console.log('uploadAccept', object, ret);
                 var key = 'file_' + object.file.globalId + '_' + object.file.hash;
                 store.set(key, object.chunk);
             });
 
             uploader.on('uploadStart', function(file) {
-                console.log('uploadStart');
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers) {
-                console.log('uploadBeforeSend', object);
                 data.file_gid = object.file.gid;
                 data.chunk_number = object.chunk +1;
                 headers['Upload-Token'] = self.get('uploadToken');
@@ -158,10 +180,8 @@ define(function(require, exports, module) {
 
         _initUploaderHook: function() {
             if (hookRegisted) {
-                console.log('hookRegisted');
                 return ;
             } else {
-                console.log('hook not registed.');
             }
 
             hookRegisted = true;
@@ -186,7 +206,6 @@ define(function(require, exports, module) {
                         $.support.cors = true;
 
                         $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
-                            console.log('init',response);
                             file.gid = response.globalId;
                             file.globalId = response.globalId;
                             file.outerId = response.outerId;
@@ -218,7 +237,6 @@ define(function(require, exports, module) {
                 },
 
                 checkchunk: function(block) {
-                    console.log('checkchunk', block);
                     var deferred = WebUploader.Deferred();
 
                     var key = 'file_' + block.file.globalId + '_' + block.file.hash;
@@ -230,7 +248,6 @@ define(function(require, exports, module) {
                     }
 
                     if (!block.file.startUploading && block.chunk <= resumedChunk) {
-                        console.log('秒传');
                         deferred.reject();
                     } else {
                         block.file.startUploading = true;
@@ -242,7 +259,6 @@ define(function(require, exports, module) {
                 },
 
                 finishupload: function(file) {
-                    console.log('finish-upload', file);
                     store.remove('file_' + file.hash);
                     var deferred = WebUploader.Deferred();
 
@@ -256,7 +272,6 @@ define(function(require, exports, module) {
                     });
 
                     xhr.done(function( data, textStatus, xhr ) {
-                        console.log('finish command:', data);
                         $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                             deferred.resolve();
                             file.uploaderWidget.trigger('file.uploaded', file, data);
