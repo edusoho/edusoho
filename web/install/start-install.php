@@ -577,7 +577,7 @@ EOD;
         $group = $this->getCategoryService()->addGroup(array(
             'name' => '课程分类',
             'code' => 'course',
-            'depth' => 2,
+            'depth' => 3,
         ));
 
         $this->getCategoryService()->createCategory(array(
