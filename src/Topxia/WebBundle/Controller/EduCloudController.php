@@ -15,7 +15,6 @@ class EduCloudController extends BaseController
             if ($this->setting('cloud_sms.sms_enabled') != '1') {
                 return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
             }
-            $parameters = array();
             $currentUser = $this->getCurrentUser();
             $currentTime = time();
 
@@ -83,11 +82,10 @@ class EduCloudController extends BaseController
             }
 
             $smsCode = $this->generateSmsCode();
-            $parameters['verify'] = $smsCode;
             
             try {
                 $api = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, $parameters));
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
 
                 if (isset($result['error'])) {
                     return $this->createJsonResponse(array('error' => "发送失败, {$result['error']}"));
