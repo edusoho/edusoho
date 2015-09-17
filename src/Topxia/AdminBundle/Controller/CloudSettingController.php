@@ -93,6 +93,9 @@ class CloudSettingController extends BaseController
     
     public function keyUpdateAction(Request $request)
     {
+        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
+        }
         $settings = $this->getSettingService()->get('storage', array());
 
         if ($request->getMethod() == 'POST') {
