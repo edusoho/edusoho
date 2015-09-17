@@ -11,7 +11,7 @@ class FileWatchController extends BaseController
     public function indexAction(Request $request, $id)
     {
         return $this->render("TopxiaWebBundle:FileWatch:index.html.twig", array(
-            'player' => $player,
+            'player' => $this->getFilePlayer($file),
         ));
     }
 
