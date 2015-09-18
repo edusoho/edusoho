@@ -161,6 +161,7 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
             ->andWhere('objectiveScore = :objectiveScore')
             ->andWhere('subjectiveScore = :subjectiveScore')
             ->andWhere('rightItemCount = :rightItemCount')
+            ->andWhere('passedStatus = :passedStatus')
             ->andWhere('status = :status');
             
         return $builder;
