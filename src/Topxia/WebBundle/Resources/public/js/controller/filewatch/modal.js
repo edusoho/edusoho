@@ -1,8 +1,5 @@
 define(function(require, exports, module) {
-    var VideoJS = require('video-js'),
-        swfobject = require('swfobject');
-
-    require('mediaelementplayer');
+    var swfobject = require('swfobject');
 
     var MediaPlayer = require('topxiawebbundle/controller/widget/media-player4');
     var SlidePlayer = require('topxiawebbundle/controller/widget/slider-player');

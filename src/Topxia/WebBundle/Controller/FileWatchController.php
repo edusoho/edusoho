@@ -8,7 +8,7 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class FileWatchController extends BaseController
 {
-    public function indexAction(Request $request, $id)
+    public function indexAction(Request $request, $file)
     {
         return $this->render("TopxiaWebBundle:FileWatch:index.html.twig", array(
             'player' => $this->getFilePlayer($file),

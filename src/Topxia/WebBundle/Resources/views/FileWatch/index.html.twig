@@ -10,7 +10,7 @@
   <![endif]-->
 </head>
 <style>
-    #lesson-preview-video-player, #lesson-preview-flash, #lesson-preview-doucment, #lesson-preview-ppt-player {
+    #file-player {
         position: absolute;
         top:0;
         bottom: 0;
@@ -20,7 +20,7 @@
 </style>
 <body>
 
-{% do load_script('customwebbundle/controller/file/preview') %}
+{% do load_script('filewatch/modal') %}
 
 {% if player.error is defined %}
   {{ player.error }} : {{ player.message }}
