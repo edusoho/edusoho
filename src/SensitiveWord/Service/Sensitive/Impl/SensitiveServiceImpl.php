@@ -44,16 +44,17 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         }
         
         $currentUser = $this->getCurrentUser();
-        
+        $user = $this->getUserService()->getUser($currentUser->id);
         $env = $this->getEnvVariable();
         $banlog = array(
             'keywordId' => $bannedKeyword['id'],
             'keywordName' => $bannedKeyword['name'],
             'text' => $text,
-            'userId' => $currentUser ? $currentUser['id'] : 0,
-            'ip' => 0,
+            'userId' => $user ? $user['id'] : 0,
+            'ip' => empty($user['loginIp'])?0 : $user['loginIp'],
             'createdTime' => time() ,
         );
+
         
         $this->getBanlogDao()->addBanlog($banlog);
         
@@ -222,6 +223,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     protected function getSensitiveDao()
     {
         return $this->createDao('SensitiveWord:Sensitive.SensitiveDao');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
     
     protected function getBanlogDao()

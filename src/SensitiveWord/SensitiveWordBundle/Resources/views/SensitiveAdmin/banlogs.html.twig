@@ -12,6 +12,7 @@
 	      <th>屏蔽文本</th>
 	      <th>用户</th>
 	      <th>屏蔽时间</th>
+				<th>IP地址</th>
 	    </tr>
 	    </thead>
 	    <tbody>
@@ -26,6 +27,7 @@
 					    <td>{% if banlog.userId %}{{ users[banlog.userId].nickname }} {% else %} - {% endif %}</td>
 
 					    <td>{{ banlog.createdTime|date('Y-n-d H:i:s') }}</td>
+							<td>{{ banlog.ip }}</td>
 					</tr>
 		   {% endfor %}
 		</tbody>
