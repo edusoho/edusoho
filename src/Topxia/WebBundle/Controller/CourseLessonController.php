@@ -26,7 +26,11 @@ class CourseLessonController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         
         getPlayerView:
-        return $this->forward('TopxiaWebBundle:Player:show', array('id' => $lesson["mediaId"]));
+        return $this->forward('TopxiaWebBundle:Player:show', array(
+            'id' => $lesson["mediaId"],
+            'lessonId' => $lesson["id"],
+            'courseId' => $lesson["courseId"],
+        ));
     }
 
     public function previewAction(Request $request, $courseId, $lessonId = 0)
@@ -308,6 +312,8 @@ class CourseLessonController extends BaseController
     {
         $isPreview = $request->query->get('isPreview', 0);
 
+        $returnJson = $request->query->get('json', 0);
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
             throw $this->createNotFoundException();
@@ -326,7 +332,7 @@ class CourseLessonController extends BaseController
                 'id' => $file['id'],
                 'token' => $token['token'],
                 'levelParam' => $request->query->get('level',''),
-                'returnJson' => true
+                'returnJson' => $returnJson
             )));
         }
     }

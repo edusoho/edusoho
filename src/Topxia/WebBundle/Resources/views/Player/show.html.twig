@@ -1,37 +1,30 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<html>
+	<head>
+		{% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+		{% if setting("developer.balloon_player")|default(0) %}
+		    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+		 {% endif %}
+	</head>
+	<body>
+		<div id="lesson-video-content" 
+		data-course-id="{{courseId}}" 
+		data-user-id="{{app.user.id}}" 
+		data-media-id="{{file.id}}" 
+		data-lesson-id="{{lessonId}}" 
+		data-url="{{url}}"
+		data-player="{{player}}"
+		{% if file.storage == 'local' %}
+		class="lesson-content local-video-player "
+		{% elseif setting("developer.balloon_player")|default(0) %}
+		class="lesson-content ballon-video-player"
+		{% else  %}
+		class="lesson-content "
+		{% endif %}
+		></div>
 
-<div>test</div>
+		{% set script_controller = 'player/show' %}
 
-$("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-
-
-var player = VideoJS("lesson-video-player", {
-    techOrder: ['flash','html5']
-});
-var hasPlayerError = false;
-
-player.dimensions('100%', '100%');
-player.src(lesson.mediaUri);
-player.on('ended', function() {
-    if (hasPlayerError) {
-        return ;
-    }
-    that._onFinishLearnLesson();
-    player.currentTime(0);
-    player.pause();
-});
-
-player.on('error', function(error){
-    hasPlayerError = true;
-    var message = '您的浏览器不能播放当前视频。';
-    Notify.danger(message, 60);
-});
-$("#lesson-video-content").show();
-player.play();
-player.on('fullscreenchange', function(e) {
-    if ($(e.target).hasClass('vjs-fullscreen')) {
-        $("#site-navbar").hide();
-    }
-});
-
-{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+		{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+	</body>
+</html>
