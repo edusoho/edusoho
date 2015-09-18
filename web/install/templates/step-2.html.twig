@@ -6,7 +6,8 @@
   {% endif %}
 
   <form class="form-horizontal" id="create-database-form" method="post">
-
+    <div class="alert alert-danger bootstrap-notify-bar init-error" style="display:none;">
+    </div>
     <div class="form-group">
       <label for="database-host-field" class="col-sm-4 control-label">数据库服务器</label>
       <div class="controls col-sm-5">
@@ -92,6 +93,7 @@
         if (error) {
             return;
         }
+        $('.init-error').hide();
         var checked = $form.find('[name=database_replace]').is(':checked');
 
         if (checked) {
@@ -117,8 +119,8 @@
             dataType: 'json',
             type: 'POST'
         }).done(function(response, textStatus, jqXHR) {
-            $('#create-database-btn').html('正在生成演示数据');
             if (typeof(response.index) != 'undefined') {
+                $('#create-database-btn').html('正在生成演示数据');
                 $('.progress-bar').css({width: progress+'%'});
 
                 if (url.indexOf('index') < 0) {
@@ -126,13 +128,17 @@
                 }
                 url = url.replace(/index=\d+/g,'index='+response.index);
                 exec(url, data, progress);
-            } else {
+            } else if (typeof(response.success) != 'undefined') {
                 var checked = $form.find('[name=database_init]').is(':checked');
                 var init_data = checked ? 1 : 0;
                 window.location.href = 'start-install.php?step=3&init_data='+init_data;
+            } else {
+                $('.init-error').show().html(response);
+                $('.progress-bar').css({width: '0%'});
+                $('#create-database-btn').removeClass('disabled').html('创建数据库');
             }
         }).fail(function(){
-            $('.progress-text').html('初始化数据出错!');
+            Notify.danger('初始化数据出错!');
         });
     }
     

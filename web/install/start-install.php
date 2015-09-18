@@ -138,11 +138,6 @@ function install_step2($init_data = 0)
         $replace = empty($post['database_replace']) ? false : true;
         $result = _create_database($post, $replace);
         
-        if (empty($result)) {
-            $error = _create_config($post);
-            header("Location: start-install.php?step=3&init_data=0");
-            exit();
-        }
         echo json_encode($result);
         exit();
     }
