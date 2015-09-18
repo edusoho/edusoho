@@ -68,16 +68,16 @@ define(function(require, exports, module) {
                 flashvars.hls_maxbackbufferlength = 300;
             }
             
-            if (this.element.data('watermark') && $('#videoWatermarkEmbedded').val() !=1) {
+            if (this.get('watermark')) {
                 flashvars.plugin_watermake = app.config.cloud.video_player_watermark_plugin;
                 flashvars.watermake_namespace = 'watermake';
-                flashvars.watermake_url = this.element.data('watermark');
+                flashvars.watermake_url = this.get('watermark');
             }
 
-            if (this.element.data('fingerprint')) {
+            if (this.get('fingerprint')) {
                 flashvars.plugin_fingerprint = app.config.cloud.video_player_fingerprint_plugin;
                 flashvars.fingerprint_namespace = 'fingerprint';
-                flashvars.fingerprint_src = this.element.data('fingerprint');
+                flashvars.fingerprint_src = this.get('fingerprint');
             }
 
             var params = {

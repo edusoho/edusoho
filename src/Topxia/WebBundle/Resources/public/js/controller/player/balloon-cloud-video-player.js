@@ -32,8 +32,8 @@ define(function(require, exports, module) {
                     plugins = $.extend(plugins, {
                         watermark: {
                             file: self.get('watermark'),
-                            xpos: 50,
-                            ypos: 50,
+                            xpos: 100,
+                            ypos: 0,
                             xrepeat: 0,
                             opacity: 0.5
                         }

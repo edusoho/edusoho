@@ -14,6 +14,8 @@ define(function(require, exports, module) {
         var watchLimit = videoHtml.data('watchLimit');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+        var watermark = videoHtml.data('watermark');
+        var fingerprint = videoHtml.data('fingerprint');
 
         var html = "";
         if(fileType == 'video'){
@@ -28,13 +30,14 @@ define(function(require, exports, module) {
         videoHtml.html(html);
         videoHtml.show();
 
-
 		var playerFactory = new PlayerFactory();
 		var player = playerFactory.create(
 			videoHtml.data('player'),
 			{
 				element: '#lesson-player',
-				url: url
+				url: url,
+                fingerprint: fingerprint,
+                watermark: watermark
 			}
 		);
 
