@@ -163,9 +163,13 @@ uploader_process_callback:
     defaults: { _controller: TopxiaWebBundle:Uploader:processCallback }
     methods: [POST]
 
-uploader_echo:
-    pattern:  /uploader/echo
-    defaults: { _controller: TopxiaWebBundle:Uploader:echo }
+uploader_chunks_start:
+    pattern:  /uploader/chunks/start
+    defaults: { _controller: TopxiaWebBundle:Uploader:chunksStart }
+
+uploader_chunks_finish:
+    pattern:  /uploader/chunks/finish
+    defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
 
 uploadfile_upload:
     pattern:  /uploadfile/upload

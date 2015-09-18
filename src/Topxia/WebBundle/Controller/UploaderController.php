@@ -70,12 +70,64 @@ class UploaderController extends BaseController
         ));
     }
 
-    public function echoAction(Request $request)
+    public function chunksStartAction(Request $request)
     {
-        $this->getUploadFileService()->finishedUpload(1);
+        $headers = array(
+            'Upload-Token: ' . $request->headers->get('Upload-Token'),
+        );
 
-        exit();
+        $params = $request->request->all();
+
+        $result = $this->_post('http://file.escloud.com/chunks/start', $params, $headers);
+
+        return new Response($result);
+
     }
+
+    public function chunksFinishAction(Request $request)
+    {
+        $headers = array(
+            'Upload-Token: ' . $request->headers->get('Upload-Token'),
+        );
+
+        $params = $request->request->all();
+
+        $result = $this->_post('http://file.escloud.com/chunks/finish', $params, $headers);
+
+        return new Response($result);
+    }
+
+    protected function _post($url, $params, $headers)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 1);
+
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        $response = curl_exec($curl);
+        $curlinfo = curl_getinfo($curl);
+        $header = substr($response, 0, $curlinfo['header_size']);
+        $body = substr($response, $curlinfo['header_size']);
+
+        curl_close($curl);
+
+        $context = array(
+            'CURLINFO' => $curlinfo,
+            'HEADER' => $header,
+            'BODY' => $body,
+        );
+
+        return $body;
+    }
+
 
     protected function getUploadFileService()
     {
