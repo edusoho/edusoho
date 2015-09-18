@@ -30,8 +30,8 @@
     </li>
     {% if is_plugin_installed("ClassroomPlan") %}
       <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-      <a href="{{ path('classroom_manage_plan', {classroomId:classroom.id}) }}">学习计划</a>
-    </li> 
+        <a href="{{ path('classroom_manage_plan', {classroomId:classroom.id}) }}">学习计划</a>
+      </li>
     {% endif %}
   </ul>
 {% endif %}
