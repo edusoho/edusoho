@@ -9,13 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Topxia\System;
 use Topxia\Common\Paginator;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 
 class DefaultController extends BaseController
 {
 
-    public function indexAction (Request $request)
+    public function indexAction ()
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
@@ -54,10 +52,6 @@ class DefaultController extends BaseController
             'cashRate' => $cashRate,
             'orderBy' => $orderBy
         ));
-    }
-    protected function getSmsService()
-    {
-        return $this->getServiceKernel()->createService('Sms.SmsService');
     }
 
     public function userlearningAction()

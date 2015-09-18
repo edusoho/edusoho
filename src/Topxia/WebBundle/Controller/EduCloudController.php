@@ -140,7 +140,7 @@ class EduCloudController extends BaseController
 
             $setting['message'] = empty($data['reason']) ? '' : $data['reason'];
 
-            $setting['status'] = $data['acmstion'];
+            $setting['status'] = $data['action'];
 
             $this->getSettingService()->set('cloud_sms', $setting);
 
