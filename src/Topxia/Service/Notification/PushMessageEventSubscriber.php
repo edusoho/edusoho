@@ -67,7 +67,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'lesson.publish','lessonId' => $lesson['id'], 'lessonType' => $lesson['type']);
 
-        return $this->push($lesson['title'], '课时已发布!', $from, $to, $body);
+        return $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
     public function onCoursePublish(ServiceEvent $event)
