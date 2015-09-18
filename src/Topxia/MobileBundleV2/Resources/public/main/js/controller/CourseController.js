@@ -277,9 +277,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
 
     $scope.joinCourse = function() {
       self.join(function() {
-        self.getModifyUserInfo(function() {
-          self.goToPay();
-        });
+        self.goToPay();
       });
 
     }
