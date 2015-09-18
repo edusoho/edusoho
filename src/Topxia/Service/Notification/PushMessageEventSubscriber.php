@@ -196,7 +196,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'id' => $article['id'],
             'title' => $article['title'],
             'image' => $this->getFileUrl($article['thumb']),
-            'summary' => $this->plainText($article['body'], 50),
+            'content' => $this->plainText($article['body'], 50),
         );
 
         $this->push('资讯', '网校有新资讯!', $from, $to, $body);
