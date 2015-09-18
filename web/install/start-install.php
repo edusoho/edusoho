@@ -170,6 +170,7 @@ function install_step3($init_data = 0)
         $init = new SystemInit();
         if (!empty($init_data)) {
             $connection->exec("delete from `user` where id=1;");
+            $connection->exec("delete from `user_profile` where id=1;");
         }
         $admin = $init->initAdmin($_POST);
 
@@ -192,6 +193,7 @@ function install_step3($init_data = 0)
             $init->initCrontabJob();
         } else {
             $init->deleteKey();
+            $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
             $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
         }
         $init->initLockFile();
