@@ -36,8 +36,8 @@ define(function(require, exports, module) {
 
     Validator.addRule(
         'staff_no',
-        /\d{1,12}/,
-        "{{display}}长度为1到12位"
+        /\d$/,
+        "必须为数字"
     );
 
     exports.run = function() {
@@ -129,7 +129,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="staffNo"]',
             required: true,
-            rule: 'minlength{min:5} maxlength{max:12} remote',
+            rule: 'staff_no minlength{min:5} maxlength{max:12} remote',
         });
 
         validator.addItem({

@@ -8,7 +8,7 @@
 
 namespace Custom\Service\User\Impl;
 use Custom\Service\User\UserService;
-use Topxia\Common\SimpleValidator;
+use Custom\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\User\Impl\UserServiceImpl as BaseUserServiceImpl;
 
@@ -131,6 +131,41 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         $this->getDispatcher()->dispatch('user.service.registered', new ServiceEvent($user));
 
         return $user;
+    }
+
+    public function getUserByLoginField($keyword){
+        $function = $this->matchKeyword($keyword);
+        if(empty($function)) {
+            return null;
+        }
+        $user = $this->$function($keyword);
+
+
+        return $user;
+    }
+
+    /**
+     * @param $keyword 用户登录时输入的关键字
+     * @return 返回查询用户的函数名
+     */
+    public function matchKeyword($keyword)
+    {
+        if(SimpleValidator::email($keyword)) {
+            return 'getUserByEmail';
+        }else if(SimpleValidator::staffNo($keyword)){
+
+            if(strlen($keyword) != 11){
+                return 'getUserByStaffNo';
+            }
+
+            if(SimpleValidator::mobile($keyword)) {
+                return 'getUserByVerifiedMobile';
+            }else{
+                return 'getUserByStaffNo';
+            }
+        }else {
+            return 'getUserByNickname';
+        }
     }
 
     public function serialize(array $user)
