@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         var url = videoHtml.data('url');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
+        var fingerprintSrc = videoHtml.data('fingerprintSrc');
 
         var html = "";
         if(fileType == 'video'){
@@ -37,6 +38,7 @@ define(function(require, exports, module) {
 				element: '#lesson-player',
 				url: url,
                 fingerprint: fingerprint,
+                fingerprintSrc: fingerprintSrc,
                 watermark: watermark
 			}
 		);
@@ -57,18 +59,16 @@ define(function(require, exports, module) {
             project: 'PlayerProject',
             type: 'child'
         });
-
-        player.on('ended',function(){
-            messenger.sendToParent("ended", {"success":"true"});
-            DurationStorage.del(userId,mediaId);
-        })
-		
         messenger.sendToParent("inited", {});
 
         var counter = new Counter(player, courseId, lessonId, watchLimit);
-        counter.setTimerId(setInterval(function(){
-        	counter.execute()
-        }, 1000));
+        counter.setTimerId(
+            setInterval(
+                function(){
+        	       counter.execute()
+                }, 1000
+            )
+        );
 	};
 
 	var DurationStorage = {

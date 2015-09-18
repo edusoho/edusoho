@@ -166,17 +166,12 @@ define(function(require, exports, module) {
         _afterLoadLesson: function(lessonId) {
             var player, type;
 
-            if (this.get('audioPlayer')) {
-                player = this.get('audioPlayer');
-                type = "AudioPlayer";
-            }
-
             if (this._counter && this._counter.timerId) {
                 clearInterval(this._counter.timerId);
             }
 
             var self = this;
-            this._counter = new Counter(player, type, this.get('courseId'), lessonId, this.get('watchLimit'));
+            this._counter = new Counter(lessonId);
             this._counter.setTimerId(setInterval(function(){self._counter.execute()}, 1000));
         },
 
@@ -187,20 +182,16 @@ define(function(require, exports, module) {
             }
             this._toolbar.set('lessonId', id);
 
-            if (this.get('audioPlayer')) {
-                this.get('audioPlayer').remove();
-                this.set('audioPlayer', null);
-            }
-
             swfobject.removeSWF('lesson-swf-player');
 
             $('#lesson-iframe-content').empty();
+            $('#lesson-video-content').html("");
 
             this.element.find('[data-role=lesson-content]').hide();
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-                $('#lesson-video-content').html("");
+                
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
@@ -258,8 +249,10 @@ define(function(require, exports, module) {
                     }
 
                     var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
-                    var html = '<iframe src='+playerUrl+' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-                    $("#lesson-video-content").html(html).show();
+                    var html = '<iframe src=\''+playerUrl+'\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+
+                    $("#lesson-video-content").show();
+                    $("#lesson-video-content").html(html);
 
                     var messenger = new Messenger({
                         name: 'parent',
@@ -582,14 +575,9 @@ define(function(require, exports, module) {
     });
 
     var Counter = Class.create({
-        initialize: function(player, type, courseId, lessonId, watchLimit) {
-            this.player = player;
-            this.type = type;
-            this.courseId = courseId;
+        initialize: function(lessonId) {
             this.lessonId = lessonId;
             this.interval = 120;
-            this.watched = false;
-            this.watchLimit = watchLimit;
         },
 
         setTimerId: function(timerId) {
@@ -597,50 +585,23 @@ define(function(require, exports, module) {
         },
 
         execute: function(){
-            var posted = false;
-            if(this.player && this.type){
-                posted = this.addMediaPlayingCounter();
-            }
-            this.addLearningCounter(posted);
+            this.addLearningCounter();
         },
 
-        addLearningCounter: function(promptlyPost) {
+        addLearningCounter: function() {
             var learningCounter = Store.get("lesson_id_"+this.lessonId+"_learning_counter");
             if(!learningCounter){
                 learningCounter = 0;
             }
             learningCounter++;
 
-            if(promptlyPost || learningCounter >= this.interval){
+            if(learningCounter >= this.interval){
                 var url="../../course/"+this.lessonId+'/learn/time/'+learningCounter;
                 $.post(url);
                 learningCounter = 0;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_learning_counter", learningCounter);
-        }, 
-
-        addMediaPlayingCounter: function() {
-            var learningCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
-            if(!learningCounter){
-                learningCounter = 0;
-            }
-            var paused = this.player && this.type && this.type == "AudioPlayer" && this.player.media.paused;
-
-            var posted = false;
-            if(learningCounter >= this.interval || (learningCounter>0 && paused)){
-                var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
-                var self = this;
-                $.post(url, function(response) {}, 'json');
-                posted = true;
-                learningCounter = 0;
-            } else if(!paused) {
-                learningCounter++;
-            }
-
-            Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
-
-            return posted;
         }
     });
 

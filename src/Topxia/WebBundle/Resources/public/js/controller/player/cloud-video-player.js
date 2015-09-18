@@ -77,7 +77,7 @@ define(function(require, exports, module) {
             if (this.get('fingerprint')) {
                 flashvars.plugin_fingerprint = app.config.cloud.video_player_fingerprint_plugin;
                 flashvars.fingerprint_namespace = 'fingerprint';
-                flashvars.fingerprint_src = this.get('fingerprint');
+                flashvars.fingerprint_src = this.get('fingerprintSrc');
             }
 
             var params = {

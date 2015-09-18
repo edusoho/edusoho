@@ -21,6 +21,7 @@
           	{% endif %}
 	      	{% if setting('storage.video_fingerprint') and app.user %}
 	            data-fingerprint="{{ finger_print() }}"
+	            data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
 	        {% endif %}
 			{% if file.type == 'video' %}
 				{% if file.storage == 'local' %}
