@@ -12,7 +12,7 @@
       <input class="status-value" type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status }}">
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">海报布局</label>
+      <label class="col-sm-2 control-label">布局模式</label>
       <label class="checkbox-inline">
         <input class="layout-input" type="radio" value="limitWide"
                {% if data.layout == 'limitWide' %}checked{% endif %}> 限宽居中
@@ -44,7 +44,11 @@
           <label class="control-label img-mrl">{{ data.src }}</label>
           <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}"
              data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
-          <p class="text-success">限宽居中推荐图片尺寸1140px*450px,平铺居中图片推荐高度450px</p>
+          <p class="text-success">
+            [ 限宽居中 ] 图片推荐尺寸 宽：1140px，高：450px<br>
+            [ 平铺居中 ] 图片推荐尺寸 宽：1920px，高：600px<br>
+            建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+          </p>
           <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]"
                  id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
           <img class="img-responsive mtm img-mtl" src="{{ asset(data.src) }}" alt="">
