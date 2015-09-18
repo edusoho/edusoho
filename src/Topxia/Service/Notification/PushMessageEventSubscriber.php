@@ -175,7 +175,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'id' => $course['id'],
             'title' => $course['title'],
             'image' => $this->getFileUrl($course['smallPicture']),
-            'summary' => $course['about'],
+            'content' => $course['about'],
         );
 
         $this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
