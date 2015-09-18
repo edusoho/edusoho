@@ -36,11 +36,13 @@ class SmsServiceImpl extends BaseService implements SmsService
                 } catch (\RuntimeException $e) {
                     throw new \RuntimeException("发送失败！");
             }
+            $message = '对';
+            $result = $to;
             foreach ($users as $user) {
-                $result['userId'] = $user['id'];
-                $result['nickname'] = $user['nickname'];
-                $this->getLogService()->info('sms', $smsType, "userId:{$user['id']},对{$to}发送用于{$smsType}的通知短信", $result);     
+                $message .= 'userId: '.$user['id'].';nickname: '.$user['nickname'].';mobile: '.$user['verifiedMobile'].';';
             }
+            $message .= '发送用于'.$smsType.'的通知短信';
+            $this->getLogService()->info('sms', $smsType, $message, $result);     
         }
         return true;
     }
