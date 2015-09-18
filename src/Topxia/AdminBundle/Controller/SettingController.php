@@ -62,7 +62,7 @@ class SettingController extends BaseController
         }
         
         //是否拥有定制app
-        $hasMobile = $result['hasMobile'] ?$result['hasMobile']:0;
+        $hasMobile = !empty($result['hasMobile']) ?$result['hasMobile']:0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,
