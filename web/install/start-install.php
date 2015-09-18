@@ -318,7 +318,7 @@ function _create_database($config, $replace)
             _init_data($pdo, $config, $index);
             $index++;
             $filesystem = new Filesystem();
-            if ($index == 10) {
+            if (!$filesystem->exists('edusoho_init_'.$index.'.sql')) {
                 _init_auto_increment($pdo, $config);
                 return array('success' => true);
             }

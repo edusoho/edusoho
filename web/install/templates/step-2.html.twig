@@ -138,7 +138,9 @@
                 $('#create-database-btn').removeClass('disabled').html('创建数据库');
             }
         }).fail(function(){
-            Notify.danger('初始化数据出错!');
+            $('.init-error').show().html("创建数据库失败");
+            $('.progress-bar').css({width: '0%'});
+            $('#create-database-btn').removeClass('disabled').html('创建数据库');
         });
     }
     
