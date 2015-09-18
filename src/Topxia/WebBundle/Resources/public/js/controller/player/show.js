@@ -3,19 +3,31 @@ define(function(require, exports, module) {
 	var PlayerFactory = require('./player-factory');
 	var Store = require('store');
 	var Class = require('class');
+    var Messenger = require('./messenger');
 
 	exports.run = function() {
-
-		var playerDiv = $("#lesson-video-content").html('<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>');
-		$("#lesson-video-content").show();
-
         var videoHtml = $('#lesson-video-content');
         var userId = videoHtml.data("userId");
         var mediaId = videoHtml.data("mediaId");
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
         var watchLimit = videoHtml.data('watchLimit');
+        var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
+
+        var html = "";
+        if(fileType == 'video'){
+            html = '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
+        } else if(fileType == 'audio'){
+            html = '<audio id="lesson-player" width="500" height="50">';
+            html += '<source src="' + url + '" type="audio/mp3" />';
+            html += '</audio>';
+
+        }
+
+        videoHtml.html(html);
+        videoHtml.show();
+
 
 		var playerFactory = new PlayerFactory();
 		var player = playerFactory.create(
@@ -36,7 +48,19 @@ define(function(require, exports, module) {
         	player.setCurrentTime(DurationStorage.get(userId, mediaId));
 			player.play();
 		});
+
+        var messenger = new Messenger({
+            name: 'parent',
+            project: 'PlayerProject',
+            type: 'child'
+        });
+
+        player.on('ended',function(){
+            messenger.sendToParent("ended", {"success":"true"});
+        })
 		
+        messenger.sendToParent("inited", {});
+
         var counter = new Counter(player, courseId, lessonId, watchLimit);
         counter.setTimerId(setInterval(function(){
         	counter.execute()

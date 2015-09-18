@@ -38,6 +38,12 @@ class PlayerController extends BaseController
 	            'lessonId' => $lessonId,
 	        ), true);
 	        $player = "local-video-player";
+		} else if($file["type"] == 'audio'){
+			$url = $this->generateUrl('course_lesson_media', array(
+	            'courseId' => $courseId,
+	            'lessonId' => $lessonId,
+	        ), true);
+	        $player = "audio-player";
 		}
 
 

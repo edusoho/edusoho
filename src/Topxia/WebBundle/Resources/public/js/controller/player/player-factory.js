@@ -27,6 +27,10 @@ define(function(require, exports, module) {
                     var BalloonVideoPlayer = require('./balloon-cloud-video-player');
                     return new BalloonVideoPlayer(options);
                     break;
+                case "audio-player":
+                    var AudioPlayer = require('./audio-player');
+                    return new AudioPlayer(options);
+                    break;
             }
 
         },

@@ -7,21 +7,28 @@
 		 {% endif %}
 	</head>
 	<body>
-		<div id="lesson-video-content" 
-		data-course-id="{{courseId}}" 
-		data-user-id="{{app.user.id}}" 
-		data-media-id="{{file.id}}" 
-		data-lesson-id="{{lessonId}}" 
-		data-url="{{url}}"
-		data-player="{{player}}"
-		{% if file.storage == 'local' %}
-		class="lesson-content local-video-player "
-		{% elseif setting("developer.balloon_player")|default(0) %}
-		class="lesson-content ballon-video-player"
-		{% else  %}
-		class="lesson-content "
-		{% endif %}
-		></div>
+		<div class="lesson-dashboard ">
+			<div id="lesson-video-content" 
+			data-course-id="{{courseId}}" 
+			data-user-id="{{app.user.id}}" 
+			data-media-id="{{file.id}}" 
+			data-file-type="{{file.type}}" 
+			data-lesson-id="{{lessonId}}" 
+			data-url="{{url}}"
+			data-player="{{player}}"
+			{% if file.type == 'video' %}
+				{% if file.storage == 'local' %}
+				class="lesson-content local-video-player "
+				{% elseif setting("developer.balloon_player")|default(0) %}
+				class="lesson-content ballon-video-player"
+				{% else  %}
+				class="lesson-content "
+				{% endif %}
+			{% elseif file.type == 'audio' %}
+				class="lesson-content lesson-content-audio"
+			{% endif %}
+			></div>
+		</div>
 
 		{% set script_controller = 'player/show' %}
 
