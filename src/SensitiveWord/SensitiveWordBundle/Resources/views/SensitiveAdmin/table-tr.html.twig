@@ -1,0 +1,24 @@
+
+<tr id="keyword-table-tr-{{ keyword.id }}">
+    <td>{{ keyword.id }}</td>
+
+    <td>{{ keyword.name }}</td>
+
+    <td>{{ keyword.bannedNum }}</td>
+
+    <td>{{ keyword.createdTime|date('Y-n-d H:i:s') }}</td>
+
+
+    <td>
+
+  <div class="btn-group">
+
+  <button>
+  <a href="javascript:;" data-url="{{ path('admin_keyword_delete', {id:keyword.id}) }}" class="delete-btn">删除</a>
+  </button>
+
+
+
+  </div>
+ </td>
+</tr>

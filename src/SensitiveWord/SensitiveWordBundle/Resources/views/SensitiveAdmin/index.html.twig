@@ -1,0 +1,32 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_operation_keyword_set' %}
+
+
+{% set script_controller='sensitivebundle/controller/keyword/list' %}
+
+{% block main %}
+
+  {% if keywords %}
+    <table class="table table-striped table-hover" id="keyword-table">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th width="30%">关键词</th>
+        <th>屏蔽次数</th>
+        <th>添加时间</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for keyword in keywords %}
+        {% include 'SensitiveWordBundle:SensitiveAdmin:table-tr.html.twig' %}
+      {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <div class="empty">暂无关键字信息!</div>
+  {% endif %}
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

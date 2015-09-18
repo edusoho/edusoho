@@ -40,10 +40,10 @@ class MenuExtension extends \Twig_Extension
     public function hiddenMenu()
     {
         $result = CloudAPIFactory::create('leaf')->get('/me');
-        if($result['thirdCopyright'] == '1'){
+        if(!empty($result['thirdCopyright']) && $result['thirdCopyright']== '1'){
         $this->addMenuCodeToBlackList(array('admin_app'));
         }
-        if($result['thirdCopyright'] == '0'){
+        if(isset($result['thirdCopyright']) && $result['thirdCopyright'] == '0'){
         $this->removeMenuCodeToBlackList(array('admin_app'));
         }  
     }
