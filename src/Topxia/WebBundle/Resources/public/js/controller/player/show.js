@@ -57,6 +57,7 @@ define(function(require, exports, module) {
 
         player.on('ended',function(){
             messenger.sendToParent("ended", {"success":"true"});
+            DurationStorage.del(userId,mediaId);
         })
 		
         messenger.sendToParent("inited", {});

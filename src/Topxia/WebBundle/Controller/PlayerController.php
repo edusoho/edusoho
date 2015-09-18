@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Service\Util\CloudClientFactory;
 
 class PlayerController extends BaseController
 {
@@ -13,24 +14,28 @@ class PlayerController extends BaseController
 		}
 
 		if($file["storage"] == 'cloud' && $file["type"] == 'video') {
-			if($this->setting("developer.balloon_player", 0)){
-				$url = $this->generateUrl('course_lesson_playlist', array(
-		            'courseId' => $courseId,
-		            'lessonId' => $lessonId,
-		        ), true)."?json=1";
-		        $player = "balloon-cloud-video-player";
+			if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+				if($this->setting("developer.balloon_player", 0)){
+					$url = $this->generateUrl('course_lesson_playlist', array(
+			            'courseId' => $courseId,
+			            'lessonId' => $lessonId,
+			        ), true)."?json=1";
+			        $player = "balloon-cloud-video-player";
+				} else {
+					$token = $this->getTokenService()->makeToken('hls.playlist', array(
+			            'data' => $file['id'], 
+			            'times' => 3, 
+			            'duration' => 3600,
+			            'userId' => $this->getCurrentUser()->getId()
+			        ));
+			        $url = $this->generateUrl('hls_playlist', array(
+			            'id' => $file['id'],
+			            'token' => $token['token'],
+			        ), true);
+			        $player = "cloud-video-player";
+				}
 			} else {
-				$token = $this->getTokenService()->makeToken('hls.playlist', array(
-		            'data' => $file['id'], 
-		            'times' => 3, 
-		            'duration' => 3600,
-		            'userId' => $this->getCurrentUser()->getId()
-		        ));
-		        $url = $this->generateUrl('hls_playlist', array(
-		            'id' => $file['id'],
-		            'token' => $token['token'],
-		        ), true);
-		        $player = "cloud-video-player";
+
 			}
 		} else if($file["storage"] == 'local' && $file["type"] == 'video'){
 			$url = $this->generateUrl('course_lesson_media', array(
@@ -38,14 +43,32 @@ class PlayerController extends BaseController
 	            'lessonId' => $lessonId,
 	        ), true);
 	        $player = "local-video-player";
-		} else if($file["type"] == 'audio'){
+		} else if($file["storage"] == 'local' && $file["type"] == 'audio'){
 			$url = $this->generateUrl('course_lesson_media', array(
 	            'courseId' => $courseId,
 	            'lessonId' => $lessonId,
 	        ), true);
 	        $player = "audio-player";
-		}
+		} else if($file["storage"] == 'cloud' && $file["type"] == 'audio'){
+			if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+	            $key = $file['metas']['hd']['key'];
+	        } else {
+	            if ($file['type'] == 'video') {
+	                $key = null;
+	            } else {
+	                $key = $file['hashId'];
+	            }
+	        }
 
+	        $url = "";
+	        if ($key) {
+	        	$factory = new CloudClientFactory();
+	            $client = $factory->createClient();
+	            $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
+	            $url = $result["url"];
+	        }
+	        $player = "audio-player";
+		}
 
 		return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
 			'file' => $file,

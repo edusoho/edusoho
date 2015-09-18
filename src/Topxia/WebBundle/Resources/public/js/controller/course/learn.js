@@ -200,7 +200,7 @@ define(function(require, exports, module) {
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-
+                $('#lesson-video-content').html("");
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
@@ -275,28 +275,6 @@ define(function(require, exports, module) {
                     messenger.on("inited", function(){
                         clearInterval(that._counter.timerId);
                     });
-
-                } else if (lesson.type == 'audio') {
-
-                    var html = '<audio id="lesson-audio-player" width="500" height="50">';
-                    html += '<source src="' + lesson.mediaUri + '" type="audio/mp3" />';
-                    html += '</audio>';
-
-                    $("#lesson-audio-content").html(html);
-     
-                    var audioPlayer = new MediaElementPlayer('#lesson-audio-player', {
-                        mode:'auto_plugin',
-                        enablePluginDebug: false,
-                        enableAutosize:true,
-                        success: function(media) {
-                            media.addEventListener("ended", function() {
-                                that._onFinishLearnLesson();
-                            });
-                            media.play();
-                        }
-                    });
-                    that.set('audioPlayer', audioPlayer);
-                    $("#lesson-audio-content").show();
 
                 } else if (lesson.type == 'text' ) {
                     $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
@@ -602,50 +580,6 @@ define(function(require, exports, module) {
         }
 
     });
-
-    var DurationStorage = {
-        set: function(userId,mediaId,duration) {
-            var durations = Store.get("durations");
-            if(!durations || !(durations instanceof Array)){
-                durations = new Array();
-            }
-
-            var value = userId+"-"+mediaId+":"+duration;
-            if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+mediaId)>-1){
-                durations.splice(durations.length-1, durations.length);
-            }
-            if(durations.length>=20){
-                durations.shift();
-            }
-            durations.push(value);
-            Store.set("durations", durations);
-        },
-        get: function(userId,mediaId) {
-            var durationTmpArray = Store.get("durations");
-            if(durationTmpArray){
-                for(var i = 0; i<durationTmpArray.length; i++){
-                    var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
-                    if(index>-1){
-                        var key = durationTmpArray[i];
-                        return parseFloat(key.split(":")[1])-5;
-                    }
-                }
-            }
-            return 0;
-        },
-        del: function(userId,mediaId) {
-            var key = userId+"-"+mediaId;
-            var durationTmpArray = Store.get("durations");
-            for(var i = 0; i<durationTmpArray.length; i++){
-                var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
-                if(index>-1){
-                    durationTmpArray.splice(i,1);
-                }
-            }
-            Store.set("durations", durationTmpArray);
-        }
-    };
-
 
     var Counter = Class.create({
         initialize: function(player, type, courseId, lessonId, watchLimit) {
