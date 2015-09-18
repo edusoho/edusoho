@@ -373,39 +373,39 @@ define(function(require, exports, module) {
             }
 
             if (type == 'video') {
-                videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                videoChooser.show();
                 clearInterval(Timer);
             } else if (type == 'audio') {
-                audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                audioChooser.show();
                 clearInterval(Timer);
             } else if (type == 'ppt') {
-                pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                pptChooser.show();
                 clearInterval(Timer);
             } else if (type == 'document') {
-                documentChooser.show();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
                 flashChooser.hide();
+                documentChooser.show();
                 clearInterval(Timer);
             } else if (type == 'flash') {
-                flashChooser.show();
                 documentChooser.hide();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
+                flashChooser.show();
                 clearInterval(Timer);
             }
 

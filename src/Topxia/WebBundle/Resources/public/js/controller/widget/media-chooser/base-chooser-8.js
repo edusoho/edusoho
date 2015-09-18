@@ -11,7 +11,6 @@ define(function(require, exports, module) {
 
     var CourseFileBrowser = require('../file/file-browser');
 	
-
     var BaseChooser = Widget.extend({
         uploader: null,
 
@@ -34,43 +33,53 @@ define(function(require, exports, module) {
             if (choosed) {
                 this.trigger('change', choosed);
             }
+        },
 
+        show: function() {
+            this.element.show();
+
+            if (this.element.find(".file-chooser-main").css('display') == 'none') {
+                return this;
+            }
+
+            if (this.element.find(".file-chooser-tabs > li.active").length == 0) {
+                this.element.find(".file-chooser-uploader-tab").tab('show');
+            }
+
+            if (this.element.find(".file-chooser-uploader-tab").parent().hasClass('active')) {
+                this._createUploader();
+            }
+
+            return this;
+        },
+
+        hide: function() {
+            if (this.element.find(".file-chooser-uploader-tab").parent().hasClass('active')) {
+                this._destoryUploader();
+            }
+            this.element.hide();
+            return this;
         },
 
         open: function() {
             this.element.find(".file-chooser-bar").hide();
             this.element.find(".file-chooser-main").show();
-            this._initUploader();
-            return this;
-        },
-
-        show: function() {
-            this.element.show();
-            this._initUploader();
+            this.element.find(".file-chooser-tabs > li").removeClass('active');
+            this.element.find(".file-chooser-uploader-tab").tab('show');
             return this;
         },
 
         close: function() {
-            this.destroy();
+            this._destoryUploader();
+            this.element.find(".file-chooser-tabs > li.active").removeClass('active');
+
             this.element.find(".file-chooser-main").hide();
             this.element.find(".file-chooser-bar").show();
-            if (this.get('uploaderProgressbar')) {
-                this.get('uploaderProgressbar').reset().hide();
-            }
-            return this;
-        },
-
-        hide: function() {
-            this.destroy();
-            this.element.hide();
             return this;
         },
 
         isUploading: function() {
-            if (!this.get('uploaderProgressbar')) {
-                return false;
-            }
-            return this.get('uploaderProgressbar').isProgressing();
+
         },
 
         onChanged: function(item) {
@@ -93,24 +102,22 @@ define(function(require, exports, module) {
 
         _initTabs: function() {
             var self = this;
+
             this.$('.file-chooser-tabs [data-toggle="tab"]').on('show.bs.tab', function(e) {
                 if ($(e.target).hasClass('file-chooser-uploader-tab')) {
-                    if (self.get('uploaderProgressbar')) {
-                        self.get('uploaderProgressbar').reset().hide();
-                    }
-                    
+                    self._createUploader();
                 }
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
-                    if (self.isUploading()) {
-                        var result = confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
-                        if(result){
-                            self.get("uploadPanel").destroy();
-                        }
-                        return result;
-                    }
+                    // if (self.isUploading()) {
+                    //     return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                    // }
+                    self._destoryUploader();
                 }
+
             });
+
+
         },
 
         FileBrowser: function() {
@@ -149,8 +156,10 @@ define(function(require, exports, module) {
             });
         },
 
-        _initUploader: function() {
-            this.destroy();
+        _createUploader: function() {
+            if (this.uploader) {
+                return ;
+            }
 
             var self = this;
             var $el = this.element.find('.balloon-uploader');
@@ -176,7 +185,7 @@ define(function(require, exports, module) {
             this.uploader = uploader;
         },
 
-        destroy: function() {
+        _destoryUploader: function() {
             if (!this.uploader) {
                 return ;
             }

@@ -14,6 +14,7 @@ define(function(require, exports, module) {
             initUrl: null,
             finishUrl: null,
             uploadUrl: null,
+            uploadProxyUrl: null,
             accept: null,
             process: 'none',
             uploadToken: null,
@@ -28,7 +29,7 @@ define(function(require, exports, module) {
             accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
 
             var defaults = {
-                // runtimeOrder: 'flash',
+                runtimeOrder: 'html5,flash',
 
                 dnd: this.element.find('.balloon-uploader-body'),
                 accept: accept,
@@ -37,7 +38,7 @@ define(function(require, exports, module) {
                 resize: false,
 
                 // swf文件路径
-                swf: '/assets/libs/webuploader/0.1.5/Uploader.swf',
+                swf: CLOUD_FILE_SERVER + '/uploader.swf',
 
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -228,9 +229,10 @@ define(function(require, exports, module) {
 
                             file.uploaderWidget.set('uploadToken', response.postData.token);
                             file.uploaderWidget.set('uploadUrl', response.uploadUrl);
+                            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
                             file.uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
 
-                            var startUrl = response.uploadUrl + '/chunks/start';
+                            var startUrl = response.uploadProxyUrl + '/chunks/start';
                             var postData = {file_gid:file.globalId, file_size: file.size, file_name:file.name};
 
                             $.ajax(startUrl, {
@@ -278,7 +280,7 @@ define(function(require, exports, module) {
                     store.remove('file_' + file.hash);
                     var deferred = WebUploader.Deferred();
 
-                    var xhr = $.ajax(file.uploaderWidget.get('uploadUrl') + '/chunks/finish', {
+                    var xhr = $.ajax(file.uploaderWidget.get('uploadProxyUrl') + '/chunks/finish', {
                         type: 'POST',
                         data: {file_gid:file.gid},
                         dataType: 'json',

@@ -30,6 +30,8 @@ class UploaderController extends BaseController
 
         $result = $this->getUploadFileService()->initUpload($params);
 
+        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
+
         return $this->createJsonResponse($result);
     }
 
@@ -70,6 +72,11 @@ class UploaderController extends BaseController
         ));
     }
 
+    public function entryAction(Request $request)
+    {
+        return new Response('-_-');
+    }
+
     public function chunksStartAction(Request $request)
     {
         $headers = array(
@@ -78,7 +85,9 @@ class UploaderController extends BaseController
 
         $params = $request->request->all();
 
-        $result = $this->_post('http://file.escloud.com/chunks/start', $params, $headers);
+        $url = $this->setting('developer.cloud_file_server', '') . '/chunks/start';
+
+        $result = $this->_post($url, $params, $headers);
 
         return new Response($result);
 
@@ -92,7 +101,9 @@ class UploaderController extends BaseController
 
         $params = $request->request->all();
 
-        $result = $this->_post('http://file.escloud.com/chunks/finish', $params, $headers);
+        $url = $this->setting('developer.cloud_file_server', '') . '/chunks/finish';
+
+        $result = $this->_post($url, $params, $headers);
 
         return new Response($result);
     }
