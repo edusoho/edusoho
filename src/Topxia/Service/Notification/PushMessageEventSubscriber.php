@@ -44,10 +44,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array(
             'type' => 'testpaper.reviewed',
-            'resultId' => $result['id'],
-            'testpaperId' => $result['testId'],
-            'score' => $result['score'],
-            'teacherSay' => $result['teacherSay'],
+            'id' => $result['id']
         );
 
         $this->push($target['title'], "试卷《{$result['paperName']}》批阅完成！", $from, $to, $body);
@@ -65,7 +62,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $to = array('type' => 'course', 'id' => $course['id']);
 
-        $body = array('type' => 'lesson.publish','lessonId' => $lesson['id'], 'lessonType' => $lesson['type']);
+        $body = array('type' => 'lesson.publish','id' => $lesson['id'], 'lessonType' => $lesson['type']);
 
         return $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
@@ -174,8 +171,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'classroom.put_course',
             'id' => $course['id'],
             'title' => $course['title'],
+<<<<<<< HEAD
+            'image' => $this->getFileUrl($course['smallPicture'])
+=======
             'image' => $this->getFileUrl($course['smallPicture']),
             'content' => $course['about'],
+>>>>>>> 69abf3d72db901d968d510921461e9c6157e7119
         );
 
         $this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
