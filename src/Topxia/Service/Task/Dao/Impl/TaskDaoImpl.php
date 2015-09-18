@@ -43,7 +43,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
 
     public function findUserCompletedTasks($userId, $batchId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `status`='completed' ORDER BY `compltedTime` ASC";
+        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `batchId`=? AND `status`='completed' ORDER BY `completedTime` ASC";
         $tasks = $this->getConnection()->fetchAll($sql, array($userId, $batchId));
         return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
     }

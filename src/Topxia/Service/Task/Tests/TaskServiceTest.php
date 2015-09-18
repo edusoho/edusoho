@@ -87,6 +87,39 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals($taskNew['required'], $tasks[0]['required']);
     }
 
+    public function testFindUserCompletedTasks()
+    {
+        $taskNew = $this->_initTask();
+
+        $taskInfo2 = array(
+            'userId' => 5,
+            'taskType' => 'studyplan',
+            'createdTime' => time(),
+            'title' => 'java学习2',
+            'batchId' => 2,
+            'targetId' => 10,
+            'targetType' => 'text',
+            'required' => 0,
+            'meta' => array(
+                'classroomId' => 1,
+                'courseId' => 5,
+                'phaseId' => 1,
+                'lessonId' => 5,
+                'lessonTitle' => 'java学习2'
+            ),
+            'status' => 'completed',
+            'completedTime' => time(),
+            'taskStartTime' => strtotime(date('Y-m-d',strtotime("+1 day")).' 00:00:00'),
+            'taskEndTime' => strtotime(date('Y-m-d',strtotime("+1 day")).' 23:59:59')
+        );
+        $taskNew2 = $this->getTaskService()->addTask($taskInfo2);
+
+        $tasks = $this->getTaskService()->findUserCompletedTasks(5, 2);
+
+        $this->assertEquals($taskInfo2['title'], $tasks[0]['title']);
+        $this->assertEquals($taskInfo2['targetId'], $tasks[0]['targetId']);
+    }
+
 
     public function testUpdateTask()
     {
