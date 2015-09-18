@@ -17,27 +17,6 @@ class DefaultController extends BaseController
 
     public function indexAction (Request $request)
     {
-        $smsType = 'sms_live_play_one_hour';
-        $dayIsOpen = $this->getSmsService()->isOpen($smsType);
-        $parameters = array();
-        if ($dayIsOpen) {
-            $targetType = 'lesson';
-            $targetId = 3;
-            $processor = SmsProcessorFactory::create($targetType);
-            $return = $processor->getUrls($targetId, $smsType);
-            $callbackUrls = $return['urls'];
-            $count = $return['count'];
-            try {
-                    $api = CloudAPIFactory::create('leaf');
-                    $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
-                } catch (\RuntimeException $e) {
-                    throw new RuntimeException("发送失败！");
-            } 
-            /*var_dump($result);
-            exit(); */
-        }
-
-
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
         $orderBy = 'recommendedSeq';

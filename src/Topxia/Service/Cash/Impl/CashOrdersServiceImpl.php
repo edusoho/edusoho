@@ -4,6 +4,7 @@ namespace Topxia\Service\Cash\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Cash\CashOrdersService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 {

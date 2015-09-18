@@ -6,9 +6,9 @@ use Topxia\Service\Sms\SmsService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Common\ArrayToolkit;
+
 class SmsServiceImpl extends BaseService implements SmsService
 {
-
     public function isOpen($smsType)
     {
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
@@ -22,9 +22,8 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     public function smsSend($smsType, $userIds, $description, $parameters=array())
     {
-        if ($this->isOpen($smsType)) {
-            throw new RuntimeException("云短信相关设置未开启!");
-            
+        if (!$this->isOpen($smsType)) {
+            throw new \RuntimeException("云短信相关设置未开启!");
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
         $to = '';
@@ -35,9 +34,8 @@ class SmsServiceImpl extends BaseService implements SmsService
                     $api = CloudAPIFactory::create('leaf');
                     $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters));
                 } catch (\RuntimeException $e) {
-                    throw new RuntimeException("发送失败！");
+                    throw new \RuntimeException("发送失败！");
             }
-            $result['to'] = $to;
             foreach ($users as $user) {
                 $result['userId'] = $user['id'];
                 $result['nickname'] = $user['nickname'];

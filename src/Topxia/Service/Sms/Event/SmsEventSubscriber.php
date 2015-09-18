@@ -27,17 +27,20 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $smsType = 'sms_testpaper_check';
         if($this->getSmsService()->isOpen($smsType)){
             $testpaperResult = $event->getSubject();
-            $lessonId = $homeworkResult['lessonId'];
-            $lesson = $this->getCourseService()->getLesson($lessonId);
-            $courseId = $homeworkResult['courseId'];
-            $course = $this->getCourseService()->getCourse($courseId);
-            $parameters['lesson_title'] = '《'.$lesson['title'].'》'.'的试卷';
-            $parameters['course_title'] = '《'.$course['title'].'》';
-            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
-            $userId = $testpaperResult['userId'];
-            $user = $this->getUserService()->getUser($userId);
-            if ((isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) != 0))) {
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+            $testId = $testpaperResult['testId'];
+            $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+            $target = explode('-', $testpaper['target']);
+            if ($target[0] == 'course') {
+                $courseId = $target[1];
+                $course = $this->getCourseService()->getCourse($courseId);
+                $parameters['lesson_title'] = '《'.$testpaperResult['paperName'].'》'.'的试卷';
+                $parameters['course_title'] = '《'.$course['title'].'》';
+                $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
+                $userId = $testpaperResult['userId'];
+                $user = $this->getUserService()->getUser($userId);
+                if (strlen($user['verifiedMobile']) != 0) {
+                    $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                }
             }
         }
     }
@@ -52,10 +55,14 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $user = $this->getUserService()->getUser($userId);
             $parameters = array();
             $parameters['order_title'] = $order['title'];
-            $parameters['totalPrice'] = $order['totalPrice'];
+            if ($targetType == 'coin') {
+                $parameters['totalPrice'] = $order['amount'].'元';
+            } else {
+                $parameters['totalPrice'] = $order['totalPrice'].'元';
+            }
             $description = $parameters['order_title'].'成功回执';
-            if ((isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) != 0))) {
-                $this->getSmsService()->smsSend($smsType, array($userId), $parameters);
+            if (strlen($user['verifiedMobile']) != 0) {
+                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         }
     }
@@ -101,7 +108,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'name' => "直播短信一天定时",
                 'cycle' => 'once',
                 'time' => $lesson['startTime'] - 24*60*60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneDayJob',
+                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\Job\\smsSendOneDayJob',
                 'targetType' => 'lesson',
                 'targetId' => $lesson['id']
                 );
@@ -113,7 +120,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'name' => "直播短信一小时定时",
                 'cycle' => 'once',
                 'time' => $lesson['startTime'] - 60*60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneHourJob',
+                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\Job\\smsSendOneHourJob',
                 'targetType' => 'lesson',
                 'targetId' => $lesson['id']
                 );
@@ -133,6 +140,11 @@ class SmsEventSubscriber implements EventSubscriberInterface
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
     }
 
     protected function getSmsService()

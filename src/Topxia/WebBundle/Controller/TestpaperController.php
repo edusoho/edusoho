@@ -291,7 +291,6 @@ class TestpaperController extends BaseController
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return $this->createJsonResponse(true);
         }
-
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $answers = array_key_exists('data', $data) ? $data['data'] : array();

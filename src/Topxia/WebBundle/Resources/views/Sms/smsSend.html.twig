@@ -6,7 +6,6 @@
 {% block body %}
 
 <lable id="smsSend-form" class="form-horizontal"  data-url = "{{ path('generate_short_link',{url:url})}}" style="display:none;">
-
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="title">发送对象:</label>
@@ -35,17 +34,15 @@
       </p>
     </div>
   </div>
-
 </lable>
 
 <form id="smsSend-ready" class="form-horizontal">
-
+  <input type="hidden" name="sms_open" value={{isOpen}}>
   <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="title">短信发送准备中...</label>
-    </div>
+    <div class="col-md-6 control-label">
+      <p>{% if isOpen %}短信发送准备中...{% else %}请联系管理员，开启云短信相关设置。{% endif %}</p>
+    </div> 
   </div>
-  
 </form>
 <div id="smsSend-progress" class="package-update-progress" style="display:none;">
   <div class="progress progress-striped active">

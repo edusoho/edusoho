@@ -29,7 +29,9 @@ define(function(require, exports, module) {
         });
 
         var $ajaxUrl = $('#smsSend-form').data('url');
-        changeUrl();
+        if ($('input[name="sms_open"]').val()) {
+            changeUrl();
+        };
 		function changeUrl () {
 			$.get($ajaxUrl, function(response) {
 				if (response.url) {

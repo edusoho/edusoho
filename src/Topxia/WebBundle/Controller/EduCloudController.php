@@ -157,10 +157,10 @@ class EduCloudController extends BaseController
         $token = $this->getTokenService()->verifyToken('sms_send', $token);
         $smsType = $request->request->get('smsType');
         if (empty($token)) {
-            throw $this->createNotFoundException();
+            throw new \RuntimeException('回调TOKEN不存在');
         }
         if($token['data']['targetType'] != $targetType || $token['data']['targetId'] != $targetId || $token['data']['index']  != $index) {
-            throw $this->createNotFoundException();
+            throw new \RuntimeException('回调TOKEN有误');
         }
         $processor = SmsProcessorFactory::create($targetType);
         return $processor->getSmsInfo($targetId, $index, $smsType);

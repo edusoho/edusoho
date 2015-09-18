@@ -7,7 +7,8 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\Component\Payment\Payment;
- use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Common\ServiceEvent;
+
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
 	public function closeTrade($order)

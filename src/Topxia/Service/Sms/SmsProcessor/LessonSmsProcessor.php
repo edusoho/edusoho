@@ -4,7 +4,6 @@ namespace Topxia\Service\Sms\SmsProcessor;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
-use Exception;
 
 class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 {
@@ -20,9 +19,10 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         } else {
             $count = $this->getCourseService()->searchMemberCount(array('courseId' => $course['id']));
         }
-
+        global $kernel;
+        $container = $kernel->getContainer();
         for($i = 0; $i <= $count/1000; $i ++){
-            $urls[$i] = $_SERVER['SERVER_NAME'].'/edu_cloud/sms/callback/'.'lesson'.'/'.$targetId;
+            $urls[$i] = $container->get('router')->generate('edu_cloud_sms_callback',array('targetType' => 'lesson','targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
             $token = $this->getTokenService()->makeToken('sms_send', array('data' => array('targetType' => 'lesson', 'targetId' => $targetId, 'index' => $i * 1000)));
             $urls[$i] .= '&token='.$token['token'].'&$smsType='.$smsType;

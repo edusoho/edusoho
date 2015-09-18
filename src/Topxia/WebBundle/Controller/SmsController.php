@@ -19,6 +19,7 @@ class SmsController extends BaseController
         $item = array();
         $verifiedMobileUserNum = 0;
         $url = '';
+        $smsType = 'sms_'.$targetType.'_publish';
         if ($targetType == 'classroom') {
             $item = $this->getClassroomService()->getClassroom($id);
             $verifiedMobileUserNum = $this->getUserService()->findUserHasVerifiedMobileCount();
@@ -29,8 +30,14 @@ class SmsController extends BaseController
             $url = $this->generateUrl('course_show',array('id' => $id));
         } elseif ($targetType == 'lesson') {
             $lesson = $this->getCourseService()->getLesson($id);
+            if ($lesson['type'] == 'live') {
+                $smsType = 'sms_live_'.$targetType.'_publish';
+            } else {
+                $smsType = 'sms_normal_'.$targetType.'_publish';
+            }
             $item = $this->getCourseService()->getCourse($lesson['courseId']);
             $item['lesson_title'] = $lesson['title'];
+            $item['id'] = $id;
             $url = $this->generateUrl('course_learn',array('id' => $lesson['courseId']));
             $url .= '#lesson/'.$lesson['id'];
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
@@ -38,27 +45,25 @@ class SmsController extends BaseController
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
                 if ($classroom) {
                     $verifiedMobileUserNum = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
-                } else {
-                    $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileStudentsCountByCourseId($lesson['courseId']);
                 }
+            } else {
+                $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileStudentsCountByCourseId($lesson['courseId']);
             }
         }
 
-        return $this->render('TopxiaWebBundle:Sms:smsSend.html.twig',array(
+    return $this->render('TopxiaWebBundle:Sms:smsSend.html.twig',array(
             'item' => $item,
             'targetType' => $targetType,
             'url' => $url,
             'count' => $verifiedMobileUserNum,
             'index' => 1,
+            'isOpen' => $this->getSmsService()->isOpen($smsType),
         ));
     }
 
     public function sendAction(Request $request, $targetType, $id)
     {
-        $smsType = 'sms_'.$targetType.'publish';
-        if ( $this->getSmsService()->isOpen($smsType) ) {
-            throw new RuntimeException("请先开启相关设置!");
-        }
+        $smsType = 'sms_'.$targetType.'_publish';
         $index = $request->query->get('index');
         $onceSendNum = 1000;
         $url = $request->query->get('url');
@@ -66,8 +71,8 @@ class SmsController extends BaseController
         $parameters = array();
         if ($targetType == 'classroom') {
             $classroom = $this->getClassroomService()->getClassroom($id);
-            $parameters['clasroom_title'] = '《'.$classroom['title'].'》';
-            $description = $parameters['clasroom_title'].'发布';
+            $parameters['classroom_title'] = '《'.$classroom['title'].'》';
+            $description = $parameters['classroom_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'course') {
             $course = $this->getCourseService()->getCourse($id);
@@ -78,27 +83,36 @@ class SmsController extends BaseController
             $lesson = $this->getCourseService()->getLesson($id);
             $parameters['lesson_title'] = '《'.$lesson['title'].'》';
             if ($lesson['type'] == 'live') {
-                $smsType = 'sms_live'.$targetType.'publish';
+                $smsType = 'sms_live_'.$targetType.'_publish';
                 $parameters['startTime'] = date("Y-m-d h:i:s", $lesson['startTime']); 
             } else {
-                $smsType = 'sms_normal'.$targetType.'publish';
+                $smsType = 'sms_normal_'.$targetType.'_publish';
             }
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
             $parameters['course_title'] = '《'.$course['title'].'》';
             $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
             if ($course['parentId'] ) {
-                    $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
-                    if ($classroom) {
-                        $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'),0,$count);
-                    }
-                } else {
-                    $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
+                $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                if ($classroom) {
+                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'),0,$count);
                 }
+            } else {
+                $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
+            }
             $index = $count;
         }
+
+        if ( !$this->getSmsService()->isOpen($smsType) ) {
+            throw new \RuntimeException("请先开启相关设置!");
+        }
         $parameters['url'] = $url;
+
         if (!empty($students)) {
-            $studentIds = ArrayToolkit::column($students, 'id');
+            if ($targetType == 'lesson') {
+                $studentIds = ArrayToolkit::column($students, 'userId');
+            } else {
+                $studentIds = ArrayToolkit::column($students, 'id');
+            }
             $users = $this->getUserService()->findUsersByIds($studentIds);
             $to = '';
             foreach ($users as $key => $value ) {

@@ -596,7 +596,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'testpaper.finish', 
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
-
+        
         return $testpaperResult;
     }
 
@@ -671,14 +671,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
 
-        /*$testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
+        $testpaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
             'score' => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
             'checkTeacherId' => $teacherId,
             'checkedTime' => time(),
             'teacherSay' => $teacherSay
-        ));*/
+        ));
         $this->dispatchEvent(
             'testpaper.check', 
             new ServiceEvent($testpaperResult)
