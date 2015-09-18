@@ -593,6 +593,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
 	private function filterMyClassRoom($classrooms, $progresses)
 	{
+        $classrooms = $this->filterClassRooms($classrooms);
 		return array_map(function($classroom) use($progresses) {
 			$progresse = $progresses[$classroom["id"]];
 			$classroom["percent"] = $progresse["percent"];

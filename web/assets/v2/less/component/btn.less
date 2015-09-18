@@ -15,9 +15,9 @@
   // &.active {
   //   .box-shadow(none);
   // }
-  >i {
-    font-size: 14px;
-  }
+  // >i {
+  //   font-size: 14px;
+  // }
 }
 
 .btn-link {
@@ -190,6 +190,18 @@
   &:hover {
     color: #666;
     .box-shadow(0 10px 15px 0px rgba(51, 51, 51, 0.5));
+    .es-transition;
+  }
+}
+
+.btn-ghost {
+  border-color: #fff;
+  color: #fff;
+  border-radius: 20px;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    background-color: #fff;
     .es-transition;
   }
 }

@@ -27,6 +27,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
             'objectType' => 'classroom',
             'objectId' => $classroom['id'],
             'private' => $classroom['status'] == 'published' ? 0 : 1,
+            'private' =>$classroom['showable'] == 1 ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'classroom' => $this->simplifyClassroom($classroom),
@@ -44,6 +45,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
             'objectType' => 'classroom',
             'objectId' => $classroom['id'],
             'private' => $classroom['status'] == 'published' ? 0 : 1,
+            'private' =>$classroom['showable'] == 1 ? 0 : 1,
             'userId' => $userId,
             'properties' => array(
                 'classroom' => $this->simplifyClassroom($classroom),

@@ -165,7 +165,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds' , 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds' , 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate','buyable','showable'));
 
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新失败！');
@@ -565,7 +565,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 foreach ($diff as $courseId) {
                     $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
                     $this->getClassroomCourseDao()->deleteCourseByClassroomIdAndCourseId($classroomId,$courseId);
-                    $this->getCourseService()->deleteMemberByCourseId($courseId);
+                    $this->getCourseService()->deleteMemberByCourseIdAndRole($courseId,'student');
                     $this->getCourseService()->closeCourse($courseId,'classroom');
                     $course = $this->getCourseService()->getCourse($courseId);
                     $this->getClassroomDao()->waveClassroom($classroomId, 'noteNum', "-{$course['noteNum']}");
@@ -1005,9 +1005,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return false;
-        }
 
         if ($user->isAdmin()) {
             return true;
@@ -1016,6 +1013,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMember($id, $user['id']);
         if ($member) {
             return true;
+        }
+        if($classroom['showable'] &&  !$member['locked']){ 
+            return true;
+        }
+        if (!$user->isLogin()) {
+            return false;
         }
 
         return false;
