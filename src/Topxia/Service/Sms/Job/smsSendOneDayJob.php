@@ -29,16 +29,6 @@ class smsSendOneDayJob implements Job
         }
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getClassroomService()
-    {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
     protected function getSmsService()
     {
         return ServiceKernel::instance()->createService('Sms.SmsService');
