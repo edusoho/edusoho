@@ -12,7 +12,11 @@
 			data-user-id="{{app.user.id}}" 
 			data-file-id="{{file.id}}" 
 			data-file-type="{{file.type}}" 
+			{% if file.type == 'video' and file.storage == 'cloud' %}
+			data-url="{{url}}.m3u8"
+			{% else %}
 			data-url="{{url}}"
+			{% endif %}
 			data-player="{{player}}"
 			{% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
 	            data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"

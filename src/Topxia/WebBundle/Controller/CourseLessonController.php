@@ -19,13 +19,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if($lesson["free"]) {
-            goto getPlayerView;
+        if(!$lesson["free"]) {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
-        getPlayerView:
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id' => $lesson["mediaId"],
             'url' => $this->generateUrl("course_lesson_play_url", array(
