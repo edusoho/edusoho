@@ -120,6 +120,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $body = array(
+            'id' => $announcement['id'];
             'type' => 'announcement.create'
         );
 
