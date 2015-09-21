@@ -2,7 +2,6 @@ define(function(require, exports, module) {
 	var VideoJS = require('video-js'),
 		swfobject = require('swfobject');
 
-	require('mediaelementplayer');
 
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
