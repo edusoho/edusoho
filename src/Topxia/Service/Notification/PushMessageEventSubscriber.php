@@ -37,7 +37,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $from = array(
             'type' => $target['type'],
             'id' => $target['id'],
-            'image' => $this->getFileUrl($target['image']),
+            'image' => $target['image'],
         );
 
         $to = array('type' => 'user', 'id' => $result['userId']);
