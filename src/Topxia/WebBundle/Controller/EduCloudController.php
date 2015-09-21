@@ -163,7 +163,7 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('回调TOKEN有误');
         }
         $processor = SmsProcessorFactory::create($targetType);
-        $this->createJsonResponse($processor->getSmsInfo($targetId, $index, $smsType));
+        return $this->createJsonResponse($processor->getSmsInfo($targetId, $index, $smsType));
     }
 
     protected function generateSmsCode($length = 6)
