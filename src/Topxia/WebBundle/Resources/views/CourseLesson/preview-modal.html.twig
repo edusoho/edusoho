@@ -19,8 +19,7 @@
 				<div id="lesson-preview-player" 
           style="height:300px"
           data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
-          data-course-id="{{course.id}}"
-          data-lesson-id="{{lesson.id}}"
+          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id})}}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}

@@ -4,8 +4,6 @@ define(function(require, exports, module) {
 
 	require('mediaelementplayer');
 
-    var EsCloudPlayer = require('../widget/video-js-player');
-    var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -16,8 +14,8 @@ define(function(require, exports, module) {
             
             var courseId = lessonVideoDiv.data("courseId");
             var lessonId = lessonVideoDiv.data("lessonId");
+            var playerUrl = lessonVideoDiv.data("playerUrl");
 
-            var playerUrl = '../../course/' + courseId + '/lesson/' + lessonId + '/player';
             var html = '<iframe src=\''+playerUrl+'\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
             lessonVideoDiv.html(html);
