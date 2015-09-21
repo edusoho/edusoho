@@ -13,3 +13,23 @@ admin_classroom_create:
 admin_school:
     pattern:  /school
     defaults: { _controller: CustomAdminBundle:School:index}
+
+admin_school_create:
+    pattern:  /school-create
+    defaults: { _controller: CustomAdminBundle:School:create}
+
+admin_school_check:
+    pattern:  /school/check/{type}
+    defaults: { _controller: CustomAdminBundle:School:check}
+
+admin_school_check_parentId:
+    pattern:  /school/check-parentId
+    defaults: { _controller: CustomAdminBundle:School:checkParentId}
+
+admin_school_edit:
+    pattern:  /school/{id}/edit
+    defaults: { _controller: CustomAdminBundle:School:edit}
+
+admin_school_delete:
+    pattern:  /school/{id}/delete
+    defaults: { _controller: CustomAdminBundle:School:delete}

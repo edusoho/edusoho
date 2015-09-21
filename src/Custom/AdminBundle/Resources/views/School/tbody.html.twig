@@ -1,0 +1,19 @@
+<tbody>
+{% for organization in organizations %}
+  <tr id="organization-tr-{{ organization.id }}">
+    <td>
+      {% for i in 0..(organization.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─{{ organization.name }}
+    </td>
+    <td>{{ organization.code }}</td>
+    <td>{{ organization.description }}</td>
+    <td>
+      <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_school_edit', {id:organization.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+      {% if organization.depth < 5 %}
+        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_school_create', {parentId:organization.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加下属组织</a>
+      {% endif %}
+    </td>
+  </tr>
+{% else %}
+  <tr><td colspan="20"><div class="empty">暂无学校组织记录</div></td></tr>
+{% endfor %}
+</tbody>

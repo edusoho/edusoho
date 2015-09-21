@@ -16,4 +16,9 @@ class BaseController extends \Topxia\AdminBundle\Controller\BaseController
             throw $this->createNotFoundException();
         }
     }
+
+    protected function createService($name)
+    {
+        return $this->getServiceKernel()->createService($name);
+    }
 }
