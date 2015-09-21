@@ -114,7 +114,6 @@ class SmsController extends BaseController
                 $studentIds = ArrayToolkit::column($students, 'id');
             }
             $users = $this->getUserService()->findUsersByIds($studentIds);
-            $to = '';
             foreach ($users as $key => $value ) {
                 if (strlen($value['verifiedMobile']) == 0) {
                     unset($users[$key]);

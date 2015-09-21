@@ -46,8 +46,13 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         } else {
             $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']),array('createdTime','Desc'), $index, 1000);
         }
-        $studentIds = ArrayToolkit::column($studentIds, 'userId');
-        $users = $this->unsetUsersByMobile($studentIds);
+        $studentIds = ArrayToolkit::column($students, 'userId');
+        $users = $this->getUserService()->findUsersByIds($studentIds);
+        foreach ($users as $key => $value ) {
+            if (strlen($value['verifiedMobile']) == 0) {
+                unset($users[$key]);
+            }
+        }
         if ($users) {
             $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
             $to = implode(',', $verifiedMobiles);
