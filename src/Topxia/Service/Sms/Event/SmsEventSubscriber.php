@@ -89,7 +89,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonDelete(ServiceEvent $event)
     {
-        $lesson = $event->getSubject();
+        $context = $event->getSubject();
+        $lesson = $context['lesson'];
         $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
         if ($jobs) {
             $this->deleteJob($jobs);
