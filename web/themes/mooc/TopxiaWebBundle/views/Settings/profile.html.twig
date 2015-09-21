@@ -131,7 +131,7 @@
         <div class="form-group form-forIam-group form-student-group">
           <label class="col-md-2 control-label">{% if app.user.isTeacher() %}教工号{% else %}学号{% endif %}</label>
           <div class="col-md-7 controls">
-            <input type="text" id="profile_school" name="staffNo" class="form-control" value="{{ user.staffNo|default('') }}">
+            <input type="text" id="user_staffNo" name="staffNo" class="form-control" value="{{ user.staffNo|default('') }}">
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
