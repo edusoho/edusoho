@@ -17,6 +17,11 @@ admin_operation_school:
     parent: admin_operation
     router_name: admin_school
 
+admin_operation_school_manage:
+    name: 学校管理
+    parent: admin_operation_school
+    router_name: admin_school
+
 admin_operation_school_create:
     name: 添加学校组织
     parent: admin_operation_school
