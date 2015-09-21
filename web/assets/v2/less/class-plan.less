@@ -1,3 +1,116 @@
+// 班级管理中的学习计划
+.study-plan-form {
+  color: @gray;
+  .plan-item {
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 20px;
+     &:before {
+      position: absolute;
+      left: 15px;
+      width: 1px;
+      height: 100%;
+      background-color: @brand-primary; 
+    }
+    .num {
+      position: absolute;
+      top: 5px;
+      left: 0;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      .border-radius(50%);
+      color: @brand-primary;
+      border: 1px solid @brand-primary;
+    }
+    .action-delete {
+      margin-left: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .checkbox,
+  .form-group {
+    padding-left: 50px;
+  }
+  .inline-block {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }
+}
+
+.course-bar {
+  margin-top: 15px;
+  border: 1px solid @gray-light;
+  background-color: #fff;
+  color: @gray;
+  padding: 5px 15px;
+  font-size: 12px;
+  .es-box-shadow;
+  .bar-metas {
+    &:hover {
+      cursor: pointer;
+      color: @brand-danger;
+    }
+  }
+  &:first-child {
+    margin-top: 0;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &.active {
+    border-color: #f3d6ba;
+    background-color: #fffceb;
+    color: #e28327;
+  }
+  &.shift {
+    .box-shadow(none);
+    border: 1px dashed @gray-light;
+    background-color: #fafafa;
+  }
+}
+
+// 课程列表
+.panel-fixed {
+  position: fixed;
+  top: 200px;
+  right: 50px;
+  z-index: 2;
+  .panel-heading {
+    position: relative;
+  }
+  .pack-up {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    margin-right: 0 !important;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      cursor: pointer;
+      .es-transition;
+    }
+  }
+}
+
+.course-list-show {
+  position: fixed;
+  top: 200px;
+  right: 50px;
+  display: none;
+  z-index: 2;
+  .btn-more {
+    padding: 10px 5px;
+    color: #fff;
+    background-color: @brand-primary;
+  }
+}
+
+// 班级详情tab
 .study-plan-info {
   margin-top: 30px;
   color: #fff;
@@ -26,197 +139,161 @@
 }
 
 .study-plan-list {
-  margin-top: 50px;
-  .plan-item1 {
+  .plan-item {
     position: relative;
     padding-left: 40px;
     &:after {
       position: absolute;
       content: '';
       left: 9px;
-      top: 20px;
-      bottom: -20px;
+      top: 41px;
+      bottom: -41px;
       width: 2px;
       background-color: @gray-light;
     }
-    .plan-title {
-      margin-bottom: 20px;
-      font-size: 16px;
-      small {
-        margin-left: 20px;
-        color: @gray;
-      }
-    }
-    .plan-body {
-      list-style-type: none;
-      padding-left: 0;
-    }
-    .plan-number {
-      position: absolute;
-      top: 1px;
-      left: 0;
-      >i {
-        font-size: 20px;
-        color: @gray-light;
-      }
-    }
-  }
-  .plan-item {
-    position: relative;
-    padding-left: 180px;
-    margin-bottom: 50px;
-    @media(max-width: @screen-md-max) {
-      padding-left: 160px;
-    }
-    @media(max-width: @screen-xs-max) {
-      padding-left: 50px;
-    }
-    &.first,
-    &.last {
+    &.done {
       .plan-number {
-        border: 8px solid #9bdcbe;
-        width: 50px;
-        height: 50px;
-        left: 92px;
-        top: -6px;
-        @media(max-width: @screen-xs-max) {
-          left: -8px;
+        background-color: @brand-primary;
+        border-color: @brand-primary;
+        color: #fff;
+      }
+      &:after {
+        background-color: @brand-primary;
+      }
+    }
+    &.doing {
+      .plan-number {
+        background-color: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
+    &.plan-goal {
+      &:after {
+        display: none;
+      }
+      >ul {
+        padding-left: 0;
+        margin-bottom: 0;
+        >li {
+          list-style-type: none;
+          margin-bottom: 15px;
         }
       }
     }
-    &.last:before {
-      display: none;
-    }
-    &:before {
-      position: absolute;
-      content: '';
-      left: 112px;
-      top: 25px;
-      bottom: -60px;
-      width: 10px;
-      background: #9bdcbe;
-      @media(max-width: @screen-xs-max) {
-        left: 12px;
-      }
-    }
-    .plan-hour {
-      position: absolute;
-      left: 0;
-      top: 8px;
-      width: 80px;
-      text-align: right;
-      @media(max-width: @screen-xs-max) {
-        display: none;
-      }
-    }
-    .plan-number {
-      position: absolute;
-      left: 100px;
-      top: 3px;
-      width: 34px;
-      height: 34px;
-      line-height: 34px;
-      text-align: center;
-      background: @brand-primary;
-      .border-radius(50%);
-      font-size: 18px;
-      color: #fff;
-      @media(max-width: @screen-xs-max) {
-        left: 0;
-      }
-      >i {
-        font-size: 22px;
-      }
-
+  }
+  .plan-title {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    font-size: 16px;
+    color: @gray-darker;
+    small {
+      margin-left: 20px;
+      color: @gray;
     }
   }
-}
-
-.panel-course-list {
-  padding-left: 0;
-  list-style-type: none;
-  @media(max-width: @screen-xs-max) {
-    padding-left: 10px;
-  }
-  >li {
-    position: relative;
-    padding-right: 80px;
-    margin-bottom: 20px;
-    @media(max-width: @screen-xs-max) {
-      padding-right: 0;
-    }
-    &.done {
-      color: @brand-primary;
-      > a {
-        color: @brand-primary;
+  .plan-body {
+    padding-left: 0;
+    margin-bottom: 0;
+    >li {
+      position: relative;
+      position: relative;
+      padding-bottom: 25px;
+      list-style-type: none;
+      &:last-child {
+        border-bottom: 1px solid @gray-lighter;
       }
-    }
-    .period {
-      position: absolute;
-      right: 0;
-      top: 0;
-      @media(max-width: @screen-xs-max) {
-        display: none;
+      &:after {
+        position: absolute;
+        content: '';
+        left: -31px;
+        top: -31px;
+        bottom: 31px;
+        width: 2px;
+        z-index: 2;
+        background-color: @gray-light;
+      }
+      &.done,
+      &.doing {
+        .icon-plan-state {
+          background-color: @brand-primary;
+          border-color: @brand-primary;
+        }
+        &:after {
+          background-color: @brand-primary;
+        }
+      }
+      .icon-plan-state {
+        position: absolute;
+        top: 4px;
+        left: -35px;
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+        z-index: 3;
+        border: 2px solid @gray-light;
+        .border-radius(50%);
+      }
+      .icon-arrow {
+        position: absolute;
+        right: 0;
+        top: 0;
       }
     }
   }
-}
-
-.plan-goal {
-  position: relative;
-  background: @brand-primary;
-  color: #fff;
-  padding: 20px;
-  margin: 0 80px;
-  @media(max-width: @screen-md-max) {
-    margin: 0 20px;
-  }
-  @media(max-width: @screen-xs-max) {
-    margin: 0 auto;
-  }
-  .border-radius;
-  .plan-goal-heading {
-    position: relative;
-    margin: 0 -20px 30px;
-    line-height: 52px;
-    font-size: 18px;
-    text-align: center;
-    background: #9bdcbe;
-    &:before,
-    &:after {
-      position: absolute;
-      content: '';
-      top: 0;
-      width: 77px;
-      height: 60px;
-      @media(max-width: @screen-md-max) {
-        display: none;
-      }
-    }
-  }
-  .plan-goal-body {
-    min-height: 200px;
-    @media(max-width: @screen-xs-max) {
-      min-height: 100px;
-    }
-    ul {
-      @media(max-width: @screen-xs-max) {
-        padding-left: 10px;
-      }
-    }
-    p,li {
-      margin-bottom: 20px;
-      @media(max-width: @screen-xs-max) {
-        margin-bottom: 10px;
-      }
-    }
-  }
-  .plan-cup {
+  .plan-number {
     position: absolute;
-    bottom: -20px;
-    right: -20px;
-    @media(max-width: @screen-xs-max) {
-      display: none;
+    top: 26px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    line-height: 16px;
+    border: 2px solid @gray-light;
+    background-color: #fff;
+    .border-radius(50%);
+    color: @gray-light;
+    z-index: 3;
+    text-align: center;
+    &.big {
+      top: 21px;
+      left: -5px;
+      width: 30px;
+      height: 30px;
+      line-height: 26px;
+      >i {
+        font-size: 20px;
+      }
+    }
+  }
+  .plan-period-list {
+    display: none;
+    padding-left: 0;
+    padding-top: 5px;
+    list-style-type: none;
+    >li {
+      position: relative;
+      padding: 8px 0 8px 50px;
+      font-size: 12px;
+      line-height: 18px;
+      a {
+        display: block;
+        padding: 3px 5px;
+        &:hover {
+          background-color: @bg-color;
+        }
+      }
+    }
+    .period-type {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 40px;
+      padding: 3px 8px;
+      text-align: center;
+      background-color: @gray-light;
+      color: #fff;
+      &.done {
+        background-color: @brand-primary;
+      }
     }
   }
 }
@@ -281,6 +358,7 @@
     padding: 0 20px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
+    z-index: 1;
     &:after {
       left: 100%;
       top: 50%;
