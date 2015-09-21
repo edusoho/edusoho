@@ -4,6 +4,7 @@ namespace Topxia\Service\Sms\SmsProcessor;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
+use Topxia\Common\CurlToolkit;
 
 class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 {
@@ -35,9 +36,17 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
 	public function getSmsInfo($targetId, $index, $smsType)
     {
+        global $kernel;
+        $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
+        $hostName = $serviceKernel->getEnvVariable('schemeAndHost');
         $lesson = $this->getCourseService()->getLesson($targetId);
+        $originUrl = $hostName;
+        $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn',array('id' => $lesson['courseId'));
+        $originUrl .= '#lesson/'.$lesson['id'];
+        $url = $this->changeLink($originUrl);
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
         $to = '';
+        
         if ($course['parentId'] ) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if ($classroom) {
@@ -62,8 +71,20 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $parameters['startTime'] = date("Y-m-d h:i:s", $lesson['startTime']);
         $parameters['course_title'] = '《'.$course['title'].'》';
         $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
+        $parameters['url'] = $url;
 
         return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
+    }
+
+    private function changeLink($url)
+    {
+        $arrResponse = json_decode(CurlToolkit::postRequest("http://dwz.cn/create.php",array('url' => $url)),true);
+        if ($arrResponse['status'] != 0) {
+            throw new \RuntimeException("短链接生成失败!");
+        }
+        $shortUrl = $arrResponse['tinyurl'];
+
+        return $shortUrl;
     }
 
     protected function getUserService()
