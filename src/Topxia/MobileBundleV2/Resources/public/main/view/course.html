@@ -13,7 +13,7 @@
                     <li class="ui-border-b">
                         <a class="ui-btn btn-outline iconfont icon-tixing" href="#/coursenotice/course/{{ course.id }}">公告</a>
                         </li>
-                    <li ng-if="!course.source && member && member.role =='student' ">
+                    <li ng-if="0 == course.parentId && member && member.role =='student' ">
                         <a class="ui-btn btn-outline iconfont icon-tuichu" ng-click="$parent.showUnLearnDlg = true ">退出</a></li>
                 </ul>
                 <div class="ui-actionsheet" ng-class="showUnLearnDlg ? 'show' : '' ">  

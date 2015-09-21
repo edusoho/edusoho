@@ -160,11 +160,11 @@ directive('uiTab', function ($parse) {
     }
   }
 }).
-directive('imgError', function() {
+directive('imgError', function($timeout) {
   return {
     restrict: 'A',
     compile: function(tElem, tAttrs) {
-            return { 
+            return {
                 post: function postLink(scope, element, attributes) {
                   var errorSrc = "";
                   switch (attributes.imgError) {
@@ -175,16 +175,22 @@ directive('imgError', function() {
                       errorSrc = app.viewFloder  + "img/default_course.jpg";
                       break;
                     case "vip":
-                      errorSrc = app.viewFloder  + "img/vip_default.jpg";
+                      errorSrc = app.viewFloder  + "img/vip_default.png";
                       break;
                     case "classroom":
                       errorSrc = app.viewFloder  + "img/default_class.jpg";
                       break;
                   }
-
+                  
+                  element.attr('src', errorSrc);
                   element.on("error", function(e) {
                     element.attr("src", errorSrc);
+                    element.on("error", null);
                   });
+
+                  $timeout(function() {
+                    element.attr('src', attributes.ngSrc);
+                  }, 100);
                 }
             };
     }
@@ -203,7 +209,7 @@ directive('ngImgShow', function() {
             esNativeCore.showImages(this.alt, imageArray);
           });
         });
-      }, 100);   
+      }, 200);   
     }
   }
 }).

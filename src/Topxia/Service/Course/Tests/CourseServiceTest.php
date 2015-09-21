@@ -2333,6 +2333,14 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(1, $count);
     }
 
+    public function testDeleteMemberByCourseIdAndRole()
+    {
+        $member = array('courseId'=>1,'role'=>'student');
+        $member = $this->getCourseService()->createMember($member);
+        $count  = $this->getCourseService()->deleteMemberByCourseIdAndRole(1,'student');
+        $this->assertEquals(1, $count);
+    }
+
     public function testDeleteMemberByCourseId()
     {
         $member = array('courseId'=>1);

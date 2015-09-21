@@ -22,7 +22,7 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
         
         $conditions = array(
             'status' => 'published',
-            'private' => 0
+            'showable' => 1
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(

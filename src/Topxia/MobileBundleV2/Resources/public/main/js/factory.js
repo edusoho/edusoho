@@ -343,6 +343,11 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 			alert("该功能仅支持客户端!");
 		},
 		updateUser : function(user) {
+		},
+		uploadImage : function($q, url, headers, params, acceptType) {
+			var deferred = $q.defer();
+			deferred.resolve(null);
+			return deferred.promise;
 		}
 	};
 
