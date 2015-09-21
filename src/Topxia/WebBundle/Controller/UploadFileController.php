@@ -8,6 +8,7 @@ use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UploadFileController extends BaseController
 {
@@ -301,9 +302,74 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($info['format']['duration']);
     }
 
-    public function fileAction($id)
+    //播放地址，目前只剥离了音视频，只能forward
+    public function playUrlAction(Request $request, $id, $line=null)
     {
-        
+        $file = $this->getUploadFileService()->getFile($id);
+
+        if(empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if(!in_array($file["type"], array("audio", "video"))){
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            $factory = new CloudClientFactory();
+            $client = $factory->createClient();
+
+            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                        'data' => $file['id'], 
+                        'times' => 3, 
+                        'duration' => 3600,
+                        'userId' => $line
+                    ));
+
+                    if($this->setting("developer.balloon_player")) {
+                        $returnJson = true;
+                    }
+
+                    return $this->forward('TopxiaWebBundle:HLS:playlist', array(
+                        'request' => $request,
+                        'id' => $file['id'],
+                        'token' => $token['token'],
+                        'returnJson' => isset($returnJson)? $returnJson : 0
+                    ));
+                } else {
+                    $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                }
+            } else {
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+
+                if ($key) {
+                    $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                }
+            }
+
+            return $this->redirect($result['url']);
+        } else {
+            return $this->createLocalMediaResponse($file);
+        }
+    }
+
+    protected function createLocalMediaResponse($file)
+    {
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
     }
 
     protected function getSettingService()
@@ -334,6 +400,11 @@ class UploadFileController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function createFilesJsonResponse($files)

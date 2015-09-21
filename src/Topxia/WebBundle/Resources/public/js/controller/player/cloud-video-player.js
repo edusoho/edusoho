@@ -55,7 +55,7 @@ define(function(require, exports, module) {
         _initGrindPlayer: function() {
 
             var flashvars = {
-                src: this.get('url'),
+                src:  this.get('url'),
                 javascriptCallbackFunction: "__MediaPlayerEventProcesser",
                 autoPlay:false,
                 autoRewind: false,
@@ -63,10 +63,8 @@ define(function(require, exports, module) {
                 bufferTime: 8
             };
 
-            if (this.get('url').indexOf('.m3u8') > 0 || this.get('url').indexOf('HLSQualitiyList') > 0) {
-                flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/flashls-0.4.0.3.swf";
-                flashvars.hls_maxbackbufferlength = 300;
-            }
+            flashvars.plugin_hls = app.httpHost + app.basePath + "/assets/libs/player/flashls-0.4.0.3.swf";
+            flashvars.hls_maxbackbufferlength = 300;
             
             if (this.get('watermark')) {
                 flashvars.plugin_watermake = app.config.cloud.video_player_watermark_plugin;
@@ -90,7 +88,6 @@ define(function(require, exports, module) {
             var attrs = {
                 name: this.element.attr("id")
             };
-
             swfobject.embedSWF(
                 app.config.cloud.video_player,
                 this.element.attr("id"),

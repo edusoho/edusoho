@@ -11,7 +11,7 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class CourseLessonController extends BaseController
 {
-
+    //加载播放器的地址
     public function playerAction(Request $request, $courseId, $lessonId = 0)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -24,14 +24,45 @@ class CourseLessonController extends BaseController
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        
+
         getPlayerView:
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id' => $lesson["mediaId"],
-            'lessonId' => $lesson["id"],
-            'courseId' => $lesson["courseId"],
+            'url' => $this->generateUrl("course_lesson_play_url", array(
+                "courseId" => $courseId,
+                "lessonId" => $lessonId
+            ), true)
         ));
     }
+
+    //播放地址，目前只剥离了音视频
+    public function playUrlAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
+            throw $this->createNotFoundException();
+        }
+
+        $isPreview = $request->query->get('isPreview', 0);
+
+        if($isPreview) {
+            $user = $this->getCurrentUser();
+            if($user->isLogin() && $user->isAdmin()) {
+                goto getFileUrl;
+            }
+        } else {
+            if(!$lesson["free"]) {
+                list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+            }
+        }
+
+        getFileUrl:
+        return $this->forward("TopxiaWebBundle:UploadFile:playUrl",array(
+            'request' => $request,
+            'id' => $lesson['mediaId'],
+        ));
+    }
+
 
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
@@ -40,7 +71,6 @@ class CourseLessonController extends BaseController
             $lessonId = $request->query->get('lessonId');
         }
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $user = $this->getCurrentUser();
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
@@ -52,6 +82,7 @@ class CourseLessonController extends BaseController
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
+        $user = $this->getCurrentUser();
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
         if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
 
@@ -305,38 +336,7 @@ class CourseLessonController extends BaseController
 
         return $this->createJsonResponse($json);
     }
-
     
-
-    public function playlistAction(Request $request, $courseId, $lessonId)
-    {
-        $isPreview = $request->query->get('isPreview', 0);
-
-        $returnJson = $request->query->get('json', 0);
-
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
-            throw $this->createNotFoundException();
-        }
-
-        if(!($isPreview && $lesson["free"])) {
-            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        }
-
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-        if (!empty($file) && $file['storage'] == 'cloud') {
-
-            $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
-
-            return $this->redirect($this->generateUrl("hls_playlist",array(
-                'id' => $file['id'],
-                'token' => $token['token'],
-                'levelParam' => $request->query->get('level',''),
-                'returnJson' => $returnJson
-            )));
-        }
-    }
-
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);

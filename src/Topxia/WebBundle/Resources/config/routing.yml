@@ -352,9 +352,9 @@ course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
 
-course_lesson_playlist:
-    pattern:  /course/{courseId}/lesson/{lessonId}/playlist
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:playlist }
+course_lesson_play_url:
+    pattern:  /course/{courseId}/lesson/{lessonId}/play_url.m3u8
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:playUrl }
 
 course_lesson_player:
     pattern:  /course/{courseId}/lesson/{lessonId}/player

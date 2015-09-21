@@ -8,10 +8,12 @@ define(function(require, exports, module) {
 	exports.run = function() {
         var videoHtml = $('#lesson-video-content');
         var userId = videoHtml.data("userId");
-        var mediaId = videoHtml.data("mediaId");
+        var fileId = videoHtml.data("fileId");
+
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
         var watchLimit = videoHtml.data('watchLimit');
+
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
         var watermark = videoHtml.data('watermark');
@@ -25,34 +27,32 @@ define(function(require, exports, module) {
             html = '<audio id="lesson-player" width="500" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
             html += '</audio>';
-
         }
 
         videoHtml.html(html);
         videoHtml.show();
-
-		var playerFactory = new PlayerFactory();
-		var player = playerFactory.create(
-			videoHtml.data('player'),
-			{
-				element: '#lesson-player',
-				url: url,
+        var playerFactory = new PlayerFactory();
+        var player = playerFactory.create(
+            videoHtml.data('player'),
+            {
+                element: '#lesson-player',
+                url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark
-			}
-		);
+            }
+        );
 
-		player.on("timechange", function(e){
+        player.on("timechange", function(e){
             if(parseInt(player.getCurrentTime()) != parseInt(player.getDuration())){
-                DurationStorage.set(userId, mediaId, player.getCurrentTime());
+                DurationStorage.set(userId, fileId, player.getCurrentTime());
             }
         });
-	
-		player.on("ready", function(){
-        	player.setCurrentTime(DurationStorage.get(userId, mediaId));
-			player.play();
-		});
+    
+        player.on("ready", function(){
+            player.setCurrentTime(DurationStorage.get(userId, fileId));
+            player.play();
+        });
 
         var messenger = new Messenger({
             name: 'parent',
@@ -61,25 +61,25 @@ define(function(require, exports, module) {
         });
         messenger.sendToParent("inited", {});
 
-        var counter = new Counter(player, courseId, lessonId, watchLimit);
-        counter.setTimerId(
-            setInterval(
-                function(){
-        	       counter.execute()
-                }, 1000
-            )
-        );
+        // var counter = new Counter(player, courseId, lessonId, watchLimit);
+        // counter.setTimerId(
+        //     setInterval(
+        //         function(){
+        // 	       counter.execute()
+        //         }, 1000
+        //     )
+        // );
 	};
 
 	var DurationStorage = {
-        set: function(userId,mediaId,duration) {
+        set: function(userId,fileId,duration) {
             var durations = Store.get("durations");
             if(!durations || !(durations instanceof Array)){
                 durations = new Array();
             }
 
-            var value = userId+"-"+mediaId+":"+duration;
-            if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+mediaId)>-1){
+            var value = userId+"-"+fileId+":"+duration;
+            if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+fileId)>-1){
                 durations.splice(durations.length-1, durations.length);
             }
             if(durations.length>=20){
@@ -88,11 +88,11 @@ define(function(require, exports, module) {
             durations.push(value);
             Store.set("durations", durations);
         },
-        get: function(userId,mediaId) {
+        get: function(userId,fileId) {
             var durationTmpArray = Store.get("durations");
             if(durationTmpArray){
                 for(var i = 0; i<durationTmpArray.length; i++){
-                    var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
+                    var index = durationTmpArray[i].indexOf(userId+"-"+fileId);
                     if(index>-1){
                         var key = durationTmpArray[i];
                         return parseFloat(key.split(":")[1])-5;
@@ -101,11 +101,11 @@ define(function(require, exports, module) {
             }
             return 0;
         },
-        del: function(userId,mediaId) {
-            var key = userId+"-"+mediaId;
+        del: function(userId,fileId) {
+            var key = userId+"-"+fileId;
             var durationTmpArray = Store.get("durations");
             for(var i = 0; i<durationTmpArray.length; i++){
-                var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
+                var index = durationTmpArray[i].indexOf(userId+"-"+fileId);
                 if(index>-1){
                     durationTmpArray.splice(i,1);
                 }

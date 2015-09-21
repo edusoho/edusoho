@@ -9,11 +9,9 @@
 	<body>
 		<div class="lesson-dashboard ">
 			<div id="lesson-video-content" 
-			data-course-id="{{courseId}}" 
 			data-user-id="{{app.user.id}}" 
-			data-media-id="{{file.id}}" 
+			data-file-id="{{file.id}}" 
 			data-file-type="{{file.type}}" 
-			data-lesson-id="{{lessonId}}" 
 			data-url="{{url}}"
 			data-player="{{player}}"
 			{% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}

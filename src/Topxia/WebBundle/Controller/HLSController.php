@@ -12,13 +12,12 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 class HLSController extends BaseController
 {
 
-    public function playlistAction(Request $request, $id, $token)
+    public function playlistAction(Request $request, $id, $token, $returnJson=false)
     {
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $levelParam = $request->query->get('levelParam', "");
-        $returnJson = $request->query->get('returnJson', false);
+        $levelParam = $request->query->get('level', "");
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -71,8 +70,7 @@ class HLSController extends BaseController
             if ($line) {
                 $params['line'] = $line;
             }
-
-            if ($hideBeginning) {
+            if (!$this->haveHeadLeader()) {
                 $params['hideBeginning'] = 1;
             }
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
@@ -99,6 +97,15 @@ class HLSController extends BaseController
                 'Content-Disposition' => 'inline; filename="playlist.m3u8"',
             ));
         }
+    }
+
+    protected function haveHeadLeader()
+    {
+        $storage = $this->setting("storage");
+        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+            return true;
+        }
+        return false;
     }
 
     public function streamAction(Request $request, $id, $level, $token)
