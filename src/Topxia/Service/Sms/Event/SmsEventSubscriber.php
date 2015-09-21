@@ -109,7 +109,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'name' => "直播短信一天定时",
                 'cycle' => 'once',
                 'time' => $lesson['startTime'] - 24*60*60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneDayJob',
+                'jobClass' => substr(__NAMESPACE__, 0, -5) . 'Job\\smsSendOneDayJob',
                 'targetType' => 'lesson',
                 'targetId' => $lesson['id']
                 );
@@ -121,7 +121,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 'name' => "直播短信一小时定时",
                 'cycle' => 'once',
                 'time' => $lesson['startTime'] - 60*60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5) . '\\Job\\smsSendOneHourJob',
+                'jobClass' => substr(__NAMESPACE__, 0, -5) . 'Job\\smsSendOneHourJob',
                 'targetType' => 'lesson',
                 'targetId' => $lesson['id']
                 );
