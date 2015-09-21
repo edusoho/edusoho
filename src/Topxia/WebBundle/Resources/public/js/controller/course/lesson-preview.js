@@ -14,31 +14,14 @@ define(function(require, exports, module) {
 		if ($("#lesson-preview-player").length > 0) {
             var lessonVideoDiv = $('#lesson-preview-player');
             
-            if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                Notify.warning('视频文件正在转换中，稍后完成后即可查看');
-                return ;
-            }
+            var courseId = lessonVideoDiv.data("courseId");
+            var lessonId = lessonVideoDiv.data("lessonId");
 
-            var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+            var playerUrl = '../../course/' + courseId + '/lesson/' + lessonId + '/player';
             var html = '<iframe src=\''+playerUrl+'\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
-            $("#lesson-video-content").show();
-            $("#lesson-video-content").html(html);
+            lessonVideoDiv.html(html);
 
-            var messenger = new Messenger({
-                name: 'parent',
-                project: 'PlayerProject',
-                children: [viewerIframe],
-                type: 'parent'
-            });
-
-            messenger.on("ended", function(){
-                that._onFinishLearnLesson();
-            });
-
-            messenger.on("inited", function(){
-                clearInterval(that._counter.timerId);
-            });
 		}
 
 		if ($("#lesson-preview-ppt-player").length > 0) {
