@@ -23,9 +23,10 @@ define(function(require, exports, module) {
 					lang:'zh-cn',
 					allDayDefault:true,
 					defaultDate: today,
+					forceEventDuration: true,
 					businessHours: true, // display business hours
 					editable: false,
-					eventLimit: true,
+					eventLimit: false,
 					theme: false,
 					events: datajson,
 					displayEventEnd: true,
