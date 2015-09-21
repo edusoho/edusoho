@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Respose;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
@@ -153,15 +154,26 @@ class EduCloudController extends BaseController
     public function smsCallBackAction(Request $request, $targetType, $targetId)
     {
         $index = $request->query->get('index');
-        $token = $request->query->get('token');
-        $token = $this->getTokenService()->verifyToken('sms_send', $token);
+        $originToken = $request->query->get('token');
+        $token = $this->getTokenService()->verifyToken('sms_send', $originToken);
         $smsType = $request->query->get('smsType');
+        $originSign = $request->query->get('sign');
         if (empty($token)) {
             throw new \RuntimeException('回调TOKEN不存在');
         }
         if($token['data']['targetType'] != $targetType || $token['data']['targetId'] != $targetId || $token['data']['index']  != $index) {
             throw new \RuntimeException('回调TOKEN有误');
         }
+
+        $url = $request->gethost();
+        $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
+        $url .= '&index='.$index.'&token'=$originToken.'&smsType'.$smsType;
+        $api = CloudAPIFactory::create('leaf');
+        $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey())
+        if ($originSign != $sign) {
+            throw new \RuntimeException('sign不正确');
+        }
+
         $processor = SmsProcessorFactory::create($targetType);
         return $this->createJsonResponse($processor->getSmsInfo($targetId, $index, $smsType));
     }
@@ -222,4 +234,10 @@ class EduCloudController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
+    }
+
 }
