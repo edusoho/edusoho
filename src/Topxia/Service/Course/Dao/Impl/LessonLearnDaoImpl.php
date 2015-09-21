@@ -148,12 +148,6 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
     }
 
-    public function findLearnsByCourseId($courseId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
-    }
-
     public function deleteLearn($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));

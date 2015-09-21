@@ -59,12 +59,6 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         return $this->getAnnouncement($id);
 	}
 
-    public function findAnnouncementsByTargetTypeAndTargetId($targetType,$targetId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
-        return $this->getConnection()->fetchAll($sql, array($targetType,$targetId));
-    }
-
     protected function createSearchQueryBuilder($conditions)
     {
         

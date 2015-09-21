@@ -49,10 +49,29 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function findCourseFavoritesByCourseId($courseId)
+    public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function findFavoritesCountByCourseId($courseId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE courseId = ? ";
+        return $this->getConnection()->fetchColumn($sql,array($courseId));
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_favorite')
+            ->andWhere('courseId = :courseId');
+        return $builder;
     }
 
 }

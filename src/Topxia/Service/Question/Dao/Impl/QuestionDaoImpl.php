@@ -126,7 +126,6 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->orderBy($orderBy[0], $orderBy[1]);
-
         $questions = $builder->execute()->fetchAll() ? : array();
 
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
@@ -172,15 +171,6 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
     {
         $sql = "DELETE FROM {$this->table} WHERE parentId = ?";
         return $this->getConnection()->executeUpdate($sql, array($id));
-    }
-
-    public function findQuestionsByCourseId($courseId)
-    {   
-        if((int)$courseId){
-            $target = 'course-'.$courseId;
-        }
-        $sql ="SELECT * FROM {$this->table} WHERE target LIKE '%{$target}%'";
-        return $this->getConnection()->fetchAll($sql);
     }
 
     public function updateQuestionCountByIds($ids, $status)

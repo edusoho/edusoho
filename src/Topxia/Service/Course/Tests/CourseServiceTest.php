@@ -931,6 +931,20 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result['id'],$createCourse['id']);
     }
 
+    public function testFindDraftsCountByCourseId()
+    {
+        $draft = array(
+            'userId' => 1,
+            'title' => 'draft',
+            'courseId' => 1,
+            'lessonId' => 1
+        );
+
+        $this->getCourseService()->createCourseDraft($draft);
+        $count = $this->getCourseService()->findDraftsCountByCourseId(1);
+        $this->assertEquals(1,$count); 
+    }
+
     public function testGetCourseLessons()
     {
         $course = array(
@@ -1403,6 +1417,7 @@ class CourseServiceTest extends BaseTestCase
     public function testCreateLessonView()
     {
 
+
     }
 
     public function testFinishLearnLesson()
@@ -1690,6 +1705,32 @@ class CourseServiceTest extends BaseTestCase
     {
 
     }
+
+    public function testFindLessonsViewsCountByCourseId()
+    {
+        $lessonView = array('title'=>'lessonView','courseId'=>1,'lessonId'=>1);
+        $this->getCourseService()->createLessonView($lessonView);
+        $count = $this->getCourseService()->findLessonsViewsCountByCourseId(1);
+        $this->assertEquals(1,$count);
+    }
+    
+    public function testFindFavoritesCountByCourseId()
+    {    
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $course = array(
+            'title' => 'online test course 1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        $result = $this->getCourseService()->favoriteCourse($createCourse['id']);
+        $count = $this->getCourseService()->findFavoritesCountByCourseId(1);
+        $this->assertEquals(1,$count);
+    }
+
+
 
 //================ Chapter API[end] ==================
 
@@ -2325,6 +2366,14 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals('chapter 1',$chapter[0]['title']);
     }
 
+    public function testFindChaptersCountByCourseId()
+    {
+        $chapter = array('courseId' => 1, 'title' => 'chapter', 'type' => 'chapter','pId'=>1);  
+        $createdChapter = $this->getCourseService()->addChapter($chapter);
+        $count = $this->getCourseService()->findChaptersCountByCourseId(1);
+        $this->assertEquals(1,$count);
+    }
+
     public function testCreateMember()
     {
         $member = array('courseId'=>1);
@@ -2375,6 +2424,15 @@ class CourseServiceTest extends BaseTestCase
         $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1,1);
         $this->assertEquals('录播回放', $courseLessonReplay['title']);
     }
+
+    public function testFindLessonReplaysCountByCourseId()
+    {
+        $courseLessonReplay = array('lessonId'=>1,'courseId'=>1,'title'=>'录播回放');
+        $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
+        $this->assertEquals('录播回放', $courseLessonReplay['title']);
+        $count = $this->getCourseService()->findLessonReplaysCountByCourseId(1);
+        $this->assertEquals(1,$count);
+    }
  
     protected function getUserService()
     {
@@ -2389,5 +2447,4 @@ class CourseServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
-
 }

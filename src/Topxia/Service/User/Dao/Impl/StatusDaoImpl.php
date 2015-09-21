@@ -69,6 +69,7 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     {
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
+            ->andWhere('courseId = :courseId')
             ->andWhere('courseId IN ( :courseIds )')
             ->andWhere('courseId IN ( :classroomCourseIds ) OR classroomId = :classroomId')
             ->andWhere('classroomId = :onlyClassroomId')

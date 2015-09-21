@@ -35,8 +35,6 @@ interface LessonLearnDao
     public function searchLearns($conditions,$orderBy,$start,$limit);
 
     public function analysisLessonFinishedDataByTime($startTime,$endTime);
-
-    public function findLearnsByCourseId($courseId);
-
+    
     public function deleteLearn($id);
 }

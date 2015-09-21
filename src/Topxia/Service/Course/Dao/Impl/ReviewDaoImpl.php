@@ -79,12 +79,6 @@ class ReviewDaoImpl extends BaseDao implements ReviewDao
         return $this->getConnection()->executeUpdate($sql, array($id));
     }
 
-    public function findCourseReviewsByCourseId($courseId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
-    }
-
     protected function createReviewSearchBuilder($conditions)
     {
         if (isset($conditions['content'])) {

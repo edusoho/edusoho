@@ -32,25 +32,23 @@ define(function(require, exports, module) {
 		});
 
 		$table.on('click', '.delete-course', function() {
-			var chapter_name = $(this).data('chapter') ;
-			var part_name = $(this).data('part') ;
-			var user_name = $(this).data('user') ;
-			if (!confirm('删除课程，将删除课程的'+chapter_name+''+part_name+'、课时、'+user_name+'等关联信息。真的要删除该课程吗？')) {
-				return ;
+			if (!confirm('真的要删除该课程吗？')) {
+				$(this).attr('href',"javascript:;");
+				$(this).removeAttr('data-toggle');
+				return;
 			}
-
+			$(this).attr('href',"#modal");
+			$(this).attr('data-toggle','modal');
 			var $tr = $(this).parents('tr');
-			$.post($(this).data('url'), function(data){
+			$.post($(this).data('url'),function(data){
 				if(data == 'Have sub courses'){
-					Notify.danger('关联子课程,请先删除子课程');
+					Notify.danger('请先删除班级课程');
 				}else if(data == 'not remove classroom course'){
 					Notify.danger('当前课程未移除,请先移除班级课程');
-				}else{
-					Notify.success('课程删除成功');
+				}else if(data == 'delete draft course'){
 					$tr.remove();	
-				}
+				}else{}
 			});
-
 		});
 
 		$table.find('.copy-course[data-type="live"]').tooltip();

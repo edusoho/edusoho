@@ -66,6 +66,8 @@ interface CourseService
 
 	public function findUserFavoritedCourses($userId, $start, $limit);
 
+	public function findFavoritesCountByCourseId($courseId);
+
 	public function createCourse($course);
 
 	public function updateCourse($id, $fields);
@@ -119,6 +121,8 @@ interface CourseService
 	public function getCourseLesson($courseId, $lessonId);
 
 	public function findCourseDraft($courseId,$lessonId, $userId);
+
+	public function findDraftsCountByCourseId($courseId);
 
 	public function getCourseLessons($courseId);
 
@@ -204,6 +208,8 @@ interface CourseService
 
 	public function checkWatchNum($userId, $lessonId);
 
+	public function findLessonsViewsCountByCourseId($courseId);
+
 	/**
 	 * Chapter API
 	 */
@@ -226,6 +232,7 @@ interface CourseService
 
 	public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
 
+	public function findChaptersCountByCourseId($courseId);
 	/**
 	 * 获得课程的目录项
 	 * 
@@ -381,4 +388,6 @@ interface CourseService
 	public function deleteLessonReplayByLessonId($lessonId);
 
 	public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+
+	public function findLessonReplaysCountByCourseId($courseId);
 }

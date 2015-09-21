@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
@@ -127,23 +128,43 @@ class CourseController extends BaseController
         return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $courseId ,$type)
     {   
-        $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($id,1);
+        $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
         if($subCourse){
-            return $this->createJsonResponse('Have sub courses');
+             return $this->createJsonResponse('Have sub courses');
         } else {
-           $course = $this->getCourseService()->getCourse($id);
+           $course = $this->getCourseService()->getCourse($courseId);
            if($course['status'] == 'closed'){
-                $result = $this->getCourseDeleteService()->delete($id);
-                return $this->createJsonResponse(true);
+                if($type != 'parameter'){
+                    $result = $this->getCourseDeleteService()->delete($courseId,$type);  
+                    return $this->createJsonResponse($result);
+                }
            }else if($course['status'] == 'draft'){
-                $result = $this->getCourseService()->deleteCourse($id);
-                return $this->createJsonResponse(true);
+                $result = $this->getCourseService()->deleteCourse($courseId);
+                return $this->createJsonResponse('delete draft course');
            }else{
                 return $this->createJsonResponse('not remove classroom course');
            }
         }
+        return $this->render('TopxiaAdminBundle:Course:delete.html.twig',array('course'=>$course));
+    }
+
+    public function checkPasswordAction(Request $request)
+    {   
+        if($request->getMethod() == 'POST'){
+            $password = $request->request->get('password');
+            $currentUser = $this->getCurrentUser();
+            $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
+            if($password == $currentUser->password){
+                $response = array('success' => true, 'message' => '密码正确');
+            }else{
+                $response = array('success' => false, 'message' => '密码错误');
+            }
+
+            return $this->createJsonResponse($response);
+        }
+
     }
 
     public function publishAction(Request $request, $id)

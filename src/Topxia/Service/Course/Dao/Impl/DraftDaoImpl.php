@@ -84,13 +84,7 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         $this->getConnection()->update($this->Table, $fields, array('courseId' => $courseId,'userId' => $userId,'lessonId' => $lessonId));
         return $this->getEditDrafts($courseId,$userId,$lessonId);
     }
-
-    public function findDraftsByCourseId($courseId)
-    {
-        $sql = "SELECT * FROM {$this->draftTable} WHERE courseId = ?";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
-    }
-
+    
     public function deleteDraftByCourseIdAndUserId($courseId,$userId)
     {
         $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND userId = ?";
@@ -107,5 +101,4 @@ class DraftDaoImpl extends BaseDao implements DraftDao
     {
         return $this->getConnection()->delete($this->draftTable, array('id' => $id));
     }
-
 }

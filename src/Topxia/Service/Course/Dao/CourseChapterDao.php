@@ -7,7 +7,7 @@ interface CourseChapterDao
 
     public function getChapter($id);
 
-    public function findChaptersByCourseId($courseId);
+    public function searchChapters($conditions, $orderBy, $start, $limit);
 
     public function getChapterCountByCourseIdAndType($courseId, $type);
 
@@ -28,4 +28,6 @@ interface CourseChapterDao
     public function deleteChaptersByCourseId($courseId);
 
     public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
+
+    public function findChaptersCountByCourseId($courseId);
 }

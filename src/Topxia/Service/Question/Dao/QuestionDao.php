@@ -38,8 +38,6 @@ interface QuestionDao
 
     public function deleteQuestionsByParentId($id);
 
-    public function findQuestionsByCourseId($courseId);
-
     public function updateQuestionCountByIds($ids, $status);
 
     public function getQuestionCountGroupByTypes($conditions);

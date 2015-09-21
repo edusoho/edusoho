@@ -21,6 +21,12 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId, $userId)) ? : null;
     }
 
+    public function findDraftsCountByCourseId($courseId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->draftTable} WHERE courseId = ?";
+        return $this->getConnection()->fetchColumn($sql,array($courseId));  
+    }
+
     public function addCourseDraft($draft)
     {
         $affected = $this->getConnection()->insert($this->draftTable, $draft);
@@ -36,10 +42,29 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
         return $this->findCourseDraft($courseId,$lessonId, $userId);
     }
 
+    public function searchDrafts($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+        ->select('*')
+        ->orderBy($orderBy[0], $orderBy[1])
+        ->setFirstResult($start)
+        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
     public function deleteCourseDrafts($courseId,$lessonId, $userId)
     {
         $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND lessonId = ? AND userId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$lessonId, $userId));
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_draft')
+            ->andWhere('courseId = :courseId');
+        return $builder;
     }
 
 }

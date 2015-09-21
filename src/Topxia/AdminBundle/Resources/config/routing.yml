@@ -288,9 +288,12 @@ admin_course:
     defaults: { _controller: TopxiaAdminBundle:Course:index, filter:'normal' }
 
 admin_course_delete:
-    pattern:  /course/{id}/delete
+    pattern:  /course/{courseId}/delete/{type}
     defaults: { _controller: TopxiaAdminBundle:Course:delete }
-    methods: [POST]
+
+admin_course_check_password:
+    pattern:  /course/check/password
+    defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
 
 admin_course_publish:
     pattern: /course/{id}/publish
