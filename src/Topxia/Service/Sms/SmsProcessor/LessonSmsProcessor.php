@@ -41,12 +41,12 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $hostName = $serviceKernel->getEnvVariable('schemeAndHost');
         $lesson = $this->getCourseService()->getLesson($targetId);
         $originUrl = $hostName;
-        $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn',array('id' => $lesson['courseId'));
+        $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn',array('id' => $lesson['courseId']));
         $originUrl .= '#lesson/'.$lesson['id'];
         $url = $this->changeLink($originUrl);
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
         $to = '';
-        
+
         if ($course['parentId'] ) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if ($classroom) {
