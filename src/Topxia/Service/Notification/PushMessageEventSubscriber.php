@@ -200,7 +200,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'content' => $this->plainText($article['body'], 50),
         );
 
-        $this->push('资讯', '网校有新资讯!', $from, $to, $body);
+        $this->push('资讯', $article['title'], $from, $to, $body);
     }
 
     public function onDiscountStart(ServiceEvent $event)
