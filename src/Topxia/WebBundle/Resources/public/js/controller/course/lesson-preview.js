@@ -113,6 +113,11 @@ define(function(require, exports, module) {
         }
 
 		$modal = $('#modal');
+        $modal.on('hidden.bs.modal', function(){
+            if ($("#lesson-preview-player").length > 0) {
+                $("#lesson-preview-player").html("");
+            }
+        });
         $modal.on('click','.js-buy-btn', function(){
             $.get($(this).data('url'), function(html) {
                 $modal.html(html);
