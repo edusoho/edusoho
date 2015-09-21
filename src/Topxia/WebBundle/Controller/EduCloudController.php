@@ -152,10 +152,10 @@ class EduCloudController extends BaseController
 
     public function smsCallBackAction(Request $request, $targetType, $targetId)
     {
-        $index = $request->request->get('index');
-        $token = $request->request->get('token');
+        $index = $request->query->get('index');
+        $token = $request->query->get('token');
         $token = $this->getTokenService()->verifyToken('sms_send', $token);
-        $smsType = $request->request->get('smsType');
+        $smsType = $request->query->get('smsType');
         if (empty($token)) {
             throw new \RuntimeException('回调TOKEN不存在');
         }
