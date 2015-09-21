@@ -27,7 +27,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         for($i = 0; $i <= $count/1000; $i ++){
             $urls[$i] = $hostName;
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback',array('targetType' => 'lesson','targetId' => $targetId));
-            $urls[$i] .= '&index='.($i * 1000);
+            $urls[$i] .= '?index='.($i * 1000);
             $token = $this->getTokenService()->makeToken('sms_send', array('data' => array('targetType' => 'lesson', 'targetId' => $targetId, 'index' => $i * 1000)));
             $urls[$i] .= '&token='.$token['token'].'&smsType='.$smsType;
         }

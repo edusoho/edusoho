@@ -167,7 +167,7 @@ class EduCloudController extends BaseController
 
         $url = $request->gethost();
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
-        $url .= '&index='.$index.'&token='.$originToken.'&smsType='.$smsType;
+        $url .= '?index='.$index.'&token='.$originToken.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
         $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey());
         if ($originSign != $sign) {
