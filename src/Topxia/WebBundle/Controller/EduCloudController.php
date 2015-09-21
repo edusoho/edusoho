@@ -169,7 +169,7 @@ class EduCloudController extends BaseController
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
         $url .= '&index='.$index.'&token='.$originToken.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
-        $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey())
+        $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey());
         if ($originSign != $sign) {
             throw new \RuntimeException('sign不正确');
         }
