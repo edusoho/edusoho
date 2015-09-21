@@ -146,6 +146,9 @@ define(function(require, exports, module) {
     var swfobject = require('swfobject');
     window.onmessage=function(e){  
         var isPageFullScreen = e.data;
+        if(typeof(isPageFullScreen) != Boolean){
+            return ;
+        }
         var docContent = document.getElementById("lesson-document-content");
         if (isPageFullScreen) {
           docContent.removeAttribute("style");
