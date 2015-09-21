@@ -40,6 +40,9 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $serviceKernel = ServiceKernel::create($kernel->getEnvironment(), $kernel->isDebug());
         $hostName = $serviceKernel->getEnvVariable('schemeAndHost');
         $lesson = $this->getCourseService()->getLesson($targetId);
+        if (empty($lesson)) {
+            throw new \RuntimeException('课时不存在');
+        }
         $originUrl = $hostName;
         $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn',array('id' => $lesson['courseId']));
         $originUrl .= '#lesson/'.$lesson['id'];

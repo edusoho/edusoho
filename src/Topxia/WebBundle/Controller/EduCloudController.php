@@ -165,7 +165,8 @@ class EduCloudController extends BaseController
             throw new \RuntimeException('回调TOKEN有误');
         }
 
-        $url = $request->gethost();
+        //$url = $request->gethost();
+        $url = 'http://zgs295.test.edusoho.cn';
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
         $url .= '?index='.$index.'&token='.$originToken.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
