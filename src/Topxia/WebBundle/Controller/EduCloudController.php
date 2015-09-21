@@ -217,4 +217,9 @@ class EduCloudController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
 }
