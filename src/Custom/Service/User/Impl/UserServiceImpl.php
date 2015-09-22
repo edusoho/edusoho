@@ -9,6 +9,7 @@
 namespace Custom\Service\User\Impl;
 use Custom\Service\User\UserService;
 use Custom\Common\SimpleValidator;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\User\Impl\UserServiceImpl as BaseUserServiceImpl;
 
@@ -36,6 +37,108 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
         $fields = array('staffNo' => $staffNo);
         $this->getUserDao()->updateUser($user['id'], $fields);
+    }
+
+    public function updateUserProfile($id, $fields)
+    {
+        $user = $this->getUser($id);
+
+        if (empty($user)) {
+            throw $this->createServiceException('用户不存在，更新用户失败。');
+        }
+
+        $fields = ArrayToolkit::filter($fields, array(
+            'truename' => '',
+            'gender' => 'secret',
+            'iam' => '',
+            'idcard'=>'',
+            'birthday' => null,
+            'city' => '',
+            'mobile' => '',
+            'qq' => '',
+            'school' => '',
+            'class' => '',
+            'staffNo' => '',
+            'company' => '',
+            'job' => '',
+            'signature' => '',
+            'title' => '',
+            'about' => '',
+            'weibo' => '',
+            'weixin' => '',
+            'site' => '',
+            'intField1'=>null,
+            'intField2'=>null,
+            'intField3'=>null,
+            'intField4'=>null,
+            'intField5'=>null,
+            'dateField1'=>null,
+            'dateField2'=>null,
+            'dateField3'=>null,
+            'dateField4'=>null,
+            'dateField5'=>null,
+            'floatField1'=>null,
+            'floatField2'=>null,
+            'floatField3'=>null,
+            'floatField4'=>null,
+            'floatField5'=>null,
+            'textField1'=>"",
+            'textField2'=>"",
+            'textField3'=>"",
+            'textField4'=>"",
+            'textField5'=>"",
+            'textField6'=>"",
+            'textField7'=>"",
+            'textField8'=>"",
+            'textField9'=>"",
+            'textField10'=>"",
+            'varcharField1'=>"",
+            'varcharField2'=>"",
+            'varcharField3'=>"",
+            'varcharField4'=>"",
+            'varcharField5'=>"",
+            'varcharField6'=>"",
+            'varcharField7'=>"",
+            'varcharField8'=>"",
+            'varcharField9'=>"",
+            'varcharField10'=>"",
+        ));
+
+        if (empty($fields)) {
+            return $this->getProfileDao()->getProfile($id);
+        }
+
+        if (isset($fields['title'])) {
+            $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
+        }
+        unset($fields['title']);
+
+        if (isset($fields['staffNo'])){
+            $this->updateUserStaffNo($fields['staffNo'], $id);
+        }
+        unset($fields['staffNo']);
+
+        if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
+            throw $this->createServiceException('性别不正确，更新用户失败。');
+        }
+
+        if (!empty($fields['birthday']) && !SimpleValidator::date($fields['birthday'])) {
+            throw $this->createServiceException('生日不正确，更新用户失败。');
+        }
+
+        if (!empty($fields['mobile']) && !SimpleValidator::mobile($fields['mobile'])) {
+            throw $this->createServiceException('手机不正确，更新用户失败。');
+        }
+
+        if (!empty($fields['qq']) && !SimpleValidator::qq($fields['qq'])) {
+            throw $this->createServiceException('QQ不正确，更新用户失败。');
+        }
+
+        if(!empty($fields['about'])){
+            $fields['about'] = $this->purifyHtml($fields['about']);
+        }
+
+        return $this->getProfileDao()->updateProfile($id, $fields);
     }
 
     public function register($registration, $type = 'default')
@@ -162,7 +265,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             if(SimpleValidator::mobile($keyword)) {
                 return 'getUserByVerifiedMobile';
             }
-            
+
             return 'getUserByStaffNo';
         }
 

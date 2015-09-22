@@ -39,6 +39,6 @@ register_staffNo_check:
     pattern:  /register/staff-no/check
     defaults: { _controller: CustomWebBundle:Register:checkStaffNo }
 
-settings:
-    pattern:  /settings/
-    defaults: { _controller: CustomWebBundle:Settings:profile }
+#settings:
+#    pattern:  /settings/
+#    defaults: { _controller: CustomWebBundle:Settings:profile }

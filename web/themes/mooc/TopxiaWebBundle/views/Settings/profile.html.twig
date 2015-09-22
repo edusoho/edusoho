@@ -2,7 +2,7 @@
 
 {% block title %}基础信息 - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'settings/profile' %}
+{% set script_controller = 'theme/settings/profile' %}
 {% set side_nav = 'profile' %}
 
 {% block main %}
@@ -129,10 +129,10 @@
         {% endif %}
 
         <div class="form-group form-forIam-group form-student-group">
-          <label class="col-md-2 control-label">{% if app.user.isTeacher() %}教工号{% else %}学号{% endif %}</label>
+          <label class="col-md-2 control-label" for="profile_staffNo">{% if app.user.isTeacher() %}教工号{% else %}学号{% endif %}</label>
           <div class="col-md-7 controls">
-            <input type="text" id="user_staffNo" name="staffNo" class="form-control" value="{{ user.staffNo|default('') }}">
-            <div class="help-block" style="display:none;"></div>
+            <input type="text" id="profile_staffNo" name="profile[staffNo]" required="required" data-url="{{path('register_staffNo_check', {exclude:user.staffNo})}}" class="form-control" data-explain="" value="{{ user.staffNo|default('') }}">
+            <p class="help-block"></p>
           </div>
         </div>
 
