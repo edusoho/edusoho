@@ -24,19 +24,20 @@ class UserDaoImpl extends BaseUserDao implements UserDao
 
     protected function createUserQueryBuilder($conditions)
     {
+
         if(isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
 
-        if(isset($conditions['staffNo']))
-        {
+        if(isset($conditions['staffNo'])) {
             $conditions['staffNo'] = "%{$conditions['staffNo']}%";
         }
 
         $builder = parent::createUserQueryBuilder($conditions)
-            ->andWhere('staffNo LIKE :staffNo');
+            ->andWhere('staffNo LIKE :staffNo')
+            ->andWhere('schoolOrganizationId IN (:schoolOrganizationIds)');
 
         return $builder;
     }

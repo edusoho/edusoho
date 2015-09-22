@@ -93,6 +93,34 @@ class SchoolServiceImpl extends BaseService implements SchoolService
         return $tree;
     }
 
+    public function findSchoolOrganizationChildrenIds($id)
+    {
+        $organization = $this->getSchoolOrganization($id);
+        if (empty($organization)) {
+            return array();
+        }
+        $tree = $this->getSchoolOrganizationTree();
+
+        $childrenIds = array();
+        $depth = 0;
+        foreach ($tree as $node) {
+            if ($node['id'] == $organization['id']) {
+                $depth = $node['depth'];
+                continue;
+            }
+            if ($depth > 0 && $depth < $node['depth']) {
+                $childrenIds[] = $node['id'];
+            }
+
+            if ($depth > 0 && $depth >= $node['depth']) {
+                break;
+            }
+        }
+
+        return $childrenIds;
+    }
+
+
     protected function getSchoolDao()
     {
         return $this->createDao('Custom:School.SchoolDao');

@@ -8,16 +8,17 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150917132848 extends AbstractMigration
+class Version20150922134607 extends AbstractMigration
 {
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-        if (!$this->isFieldExist('user', 'staffNo')) {
-            $this->addSql("ALTER TABLE `user_profile` ADD `schoolOrganizationId` INT(10) UNSIGNED DEFAULT 0 COMMENT '学校组织ID' AFTER `city`;");
+        if (!$this->isFieldExist('user', 'schoolOrganizationId')) {
+            $this->addSql("ALTER TABLE `user` ADD `schoolOrganizationId` INT(10) UNSIGNED COMMENT '学校组织ID';");
         }
+
     }
 
     /**

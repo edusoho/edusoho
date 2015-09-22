@@ -59,6 +59,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             'school' => '',
             'class' => '',
             'staffNo' => '',
+            'schoolOrganizationId' => 0,
             'company' => '',
             'job' => '',
             'signature' => '',
@@ -118,6 +119,11 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         }
         unset($fields['staffNo']);
 
+        if (isset($fields['schoolOrganizationId'])){
+            $this->getUserDao()->updateUser($id, array('schoolOrganizationId' => $fields['schoolOrganizationId']));
+        }
+        unset($fields['schoolOrganizationId']);
+
         if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
             throw $this->createServiceException('性别不正确，更新用户失败。');
         }
@@ -140,6 +146,25 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
         return $this->getProfileDao()->updateProfile($id, $fields);
     }
+
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
+    {
+
+        $prepareSearchConditions = function () use (&$conditions){
+            if (!empty($conditions['includeChildren']) && isset($conditions['schoolOrganizationId'])) {
+                if (!empty($conditions['schoolOrganizationId'])){
+                    $childrenIds = $this->getSchoolService()->findSchoolOrganizationChildrenIds($conditions['schoolOrganizationId']);
+                    $conditions['schoolOrganizationIds'] = array_merge(array($conditions['schoolOrganizationId']), $childrenIds);
+                }
+                unset($conditions['schoolOrganizationId']);
+                unset($conditions['includeChildren']);
+            }
+        };
+        $prepareSearchConditions();
+
+        return parent::searchUsers($conditions, $orderBy, $start, $limit);
+    }
+
 
     public function register($registration, $type = 'default')
     {
@@ -250,7 +275,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
      * @param $keyword 用户登录时输入的关键字
      * @return 返回查询用户的函数名
      */
-    public function matchKeyword($keyword)
+    private function matchKeyword($keyword)
     {
         if(SimpleValidator::email($keyword)) {
             return 'getUserByEmail';
@@ -273,13 +298,13 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
     }
 
-    public function serialize(array $user)
+    private function serialize(array $user)
     {
         $user['roles'] = empty($user['roles']) ? '' :  '|' . implode('|', $user['roles']) . '|';
         return $user;
     }
 
-    public function unserialize(array $user = null)
+    private function unserialize(array $user = null)
     {
         if (empty($user)) {
             return null;
@@ -288,11 +313,16 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         return $user;
     }
 
-    public function unserializes(array $users)
+    private function unserializes(array $users)
     {
         return array_map(function($user) {
             return $this->unserialize($user);
         }, $users);
+    }
+
+    protected function getSchoolService()
+    {
+        return $this->createService("Custom:School.SchoolService");
     }
 
 }

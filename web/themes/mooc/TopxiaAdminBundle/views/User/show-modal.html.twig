@@ -123,6 +123,14 @@
       </td>
     </tr>
 
+    <tr>
+      <th>学校院系</th>
+      <td>
+        {% set org = data('SchoolOrganization', {id: user.schoolOrganizationId}) %}
+        {{ org.name|default('暂无') }}
+      </td>
+    </tr>
+
     {#   <tr>
         <th>学校</th>
         <td>

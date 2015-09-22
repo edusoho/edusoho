@@ -16,6 +16,18 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <select class="form-control" name="schoolOrganizationId">
+        {% set tree = data('SchoolOrganizationTree',{}) %}
+        {% set selectId = app.request.query.get('schoolOrganizationId') %}
+        <option value=0>选择学院</option>
+        {% for item in tree %}
+          <option value="{{ item.id }}" {% if item.id == selectId %}selected{% endif %}>{% for i in 0..(item.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ item.name }}</option>
+        {% endfor %}
+      </select>
+      <input type="hidden" name="includeChildren" value="true">
+    </div>
+
     <span class="divider"></span>
     <div class="form-group">
       <select id="keywordUserType" name="keywordUserType" class="form-control">
