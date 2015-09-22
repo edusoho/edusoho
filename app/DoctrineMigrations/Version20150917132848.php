@@ -16,7 +16,7 @@ class Version20150917132848 extends AbstractMigration
     public function up(Schema $schema)
  	{
         if (!$this->isFieldExist('user', 'staffNo')) {
-            $this->addSql("ALTER TABLE `user` ADD `staffNo` VARCHAR(12) UNSIGNED COMMENT '学生学号或教师教工号';");
+            $this->addSql("ALTER TABLE `user` ADD `staffNo` VARCHAR(12) COMMENT '学生学号或教师教工号';");
         }
     }
 
