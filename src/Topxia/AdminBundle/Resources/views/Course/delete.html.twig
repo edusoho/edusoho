@@ -11,8 +11,8 @@
         <input type="password" name="password" class="form-control">
       </div>
     </div>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="hidden" name="courseId" value="{{course.id}}"/>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
   <div id="delete-course-progress" class="delete-course-progress" style="display:none;">
     <div class="progress progress-striped active">

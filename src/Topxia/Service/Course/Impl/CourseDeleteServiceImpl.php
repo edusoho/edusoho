@@ -452,7 +452,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getCourseDao()->deleteCourse($course['id']);
         $courseLog = "删除课程《{$course['title']}》(#{$course['id']})";
         $this->getLogService()->info('course', 'delete', $courseLog);
-        return array('success'=>true,'message'=>'课程数据删除');
+        return array('success'=>false,'message'=>'课程数据删除');
     }
 
     protected function getCourseService()

@@ -480,4 +480,9 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
+    }
 }
