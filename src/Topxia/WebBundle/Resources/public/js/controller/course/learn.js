@@ -627,12 +627,11 @@ define(function(require, exports, module) {
             if(!mediaPlayingCounter){
                 mediaPlayingCounter = 0;
             }
-            var playing = this.dashboard.get("player").playing;
-
-            if(!this.dashboard) {
+            if(this.dashboard == undefined || this.dashboard.get("player") == undefined) {
                 return;
             }
 
+            var playing = this.dashboard.get("player").playing;
             var posted = false;
             if(mediaPlayingCounter >= this.interval || (mediaPlayingCounter>0 && !playing)){
                 var url="../../../../course/"+this.lessonId+'/watch/time/'+mediaPlayingCounter;
@@ -646,19 +645,6 @@ define(function(require, exports, module) {
                 mediaPlayingCounter = 0;
             } else if(playing) {
                 mediaPlayingCounter++;
-            }
-
-            if (this.watchLimit && !this.watched && mediaPlayingCounter >= 1) {
-                this.watched = true;
-                var url = '../../../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
-                $.get(url, function(result) {
-                    if (result.status == 'ok') {
-                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
-                    } else if (result.status == 'error') {
-                        window.location.reload();
-                    }
-
-                }, 'json');
             }
 
             Store.set("lesson_id_"+this.lessonId+"_playing_counter", mediaPlayingCounter);

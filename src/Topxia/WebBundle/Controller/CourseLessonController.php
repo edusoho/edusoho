@@ -267,6 +267,15 @@ class CourseLessonController extends BaseController
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
                         $json['mediaHLSUri'] = $url['url'];
+
+                        if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                            $user = $this->getCurrentUser();
+                            $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                            if ($watchStatus['status'] == 'error') {
+                                $wathcLimitTime = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
+                                $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
+                            }
+                        }
                     } elseif ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                     } else {
@@ -288,6 +297,8 @@ class CourseLessonController extends BaseController
                         }
                     }
 
+                } else {
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                     if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
                         $user = $this->getCurrentUser();
                         $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
@@ -296,8 +307,6 @@ class CourseLessonController extends BaseController
                             $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
                         }
                     }
-                } else {
-                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                 }
             } else {
                 $json['mediaUri'] = '';
