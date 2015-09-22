@@ -38,15 +38,6 @@ define(function(require, exports, module) {
 
         setup: function() {
 
-            this.on('ended', function(e){
-                this._onEnded(e);
-            });
-
-            this.on('timechange', function(e){
-                this._onTimeChange(e);
-            });
-
-
         },  
 
         destroy: function(){

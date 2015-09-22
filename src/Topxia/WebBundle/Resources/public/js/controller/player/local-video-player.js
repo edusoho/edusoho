@@ -48,7 +48,15 @@ define(function(require, exports, module) {
 
 			player.on('loadedmetadata' ,function(e){
 				that.trigger('ready', e);
-			})
+			});
+
+            player.on("play", function(e){
+                that.trigger("playing", e);
+            });
+
+            player.on("pause", function(e){
+                that.trigger("paused", e);
+            });
 
 			this.set("player", player);
 
