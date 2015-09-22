@@ -44,7 +44,10 @@ class SchoolController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        if(empty($this->getSchoolService()->getSchoolOrganization($id))){
+
+        $school = $this->getSchoolService()->getSchoolOrganization($id);
+
+        if(empty($school)){
             return $this->createNotFoundException();
         }
         $childrens = $this->getSchoolService()->findSchoolOrganizationsByParentId($id);
