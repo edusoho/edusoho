@@ -161,9 +161,9 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
             if(SimpleValidator::mobile($keyword)) {
                 return 'getUserByVerifiedMobile';
-            }else{
-                return 'getUserByStaffNo';
             }
+            
+            return 'getUserByStaffNo';
         }
 
         return 'getUserByNickname';
