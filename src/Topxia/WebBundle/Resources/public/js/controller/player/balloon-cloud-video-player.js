@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    var MediaPlayer = require('./media-player');
+    var Widget = require('widget');
     require("video-player");
     var Cookie = require('cookie');
 
-    var BalloonCloudVideoPlayer = MediaPlayer.extend({
+    var BalloonCloudVideoPlayer = Widget.extend({
         attrs: {
             fingerprint: '',
             watermark: '',

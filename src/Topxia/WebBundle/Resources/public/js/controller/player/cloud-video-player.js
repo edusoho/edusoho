@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-    var MediaPlayer = require('./media-player');
+    var Widget = require('widget');
     var swfobject = require('swfobject');
 
-    var CloudVideoPlayer = MediaPlayer.extend({
+    var CloudVideoPlayer = Widget.extend({
         attrs: {
             url: '',
             urlType: '',

@@ -1,11 +1,10 @@
 define(function(require, exports, module) {
 
-    var MediaPlayer = require('./media-player');
     var Notify = require('common/bootstrap-notify');
     var Widget = require('widget');
     require('mediaelementplayer');
 
-    var AudioPlayer = MediaPlayer.extend({
+    var AudioPlayer = Widget.extend({
     	attrs: {
         },
 

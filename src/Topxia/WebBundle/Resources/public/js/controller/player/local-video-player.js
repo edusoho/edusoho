@@ -1,11 +1,10 @@
 define(function(require, exports, module) {
 
-    var MediaPlayer = require('./media-player');
     var Notify = require('common/bootstrap-notify');
     var VideoJS = require('video-js');
     var Widget = require('widget');
 
-    var LocalVideoPlayer = MediaPlayer.extend({
+    var LocalVideoPlayer = Widget.extend({
     	attrs: {
         	hasPlayerError: false,
         	url: ''
