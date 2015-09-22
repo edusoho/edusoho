@@ -171,6 +171,7 @@ class EduCloudController extends BaseController
         $url .= '?index='.$index.'&token='.$originToken.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
         $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey());
+        file_put_contents('test.txt', $sign.'===='.$originSign, FILE_APPEND);
         if ($originSign != $sign) {
             throw new \RuntimeException('sign不正确');
         }
