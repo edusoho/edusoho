@@ -50,10 +50,12 @@ class SchoolController extends BaseController
         $childrens = $this->getSchoolService()->findSchoolOrganizationsByParentId($id);
         if ($childrens) {
             return $this->createJsonResponse(array('status' => 'error', 'message'=>'此机构有下属栏目，无法删除'));
-        } else {
-            $this->getSchoolService()->deleteSchoolOrganization($id);
-            return $this->createJsonResponse(array('status' => 'success', 'message'=>'机构已删除' ));
         }
+
+        $this->getSchoolService()->deleteSchoolOrganization($id);
+
+        return $this->createJsonResponse(array('status' => 'success', 'message'=>'机构已删除' ));
+
     }
 
     public function createAction(Request $request)
