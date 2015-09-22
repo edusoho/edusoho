@@ -4605,7 +4605,8 @@ Grid.mixin({
 
 
 	sortSegs: function(segs) {
-		segs.sort(proxy(this, 'compareSegs'));
+		segs.sort(function(a,b){return a<b?1:-1});
+		//segs.sort(proxy(this, 'compareSegs'));
 	},
 
 
