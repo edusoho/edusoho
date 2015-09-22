@@ -90,7 +90,16 @@ define(function(require, exports, module) {
                 });
 
                 player.on("ended", function(e){
+                    self._onEnded();
                     self.trigger("ended", e);
+                });
+
+                player.on("play", function(e){
+                    self.trigger("playing", e);
+                });
+
+                player.on("pause", function(e){
+                    self.trigger("paused", e);
                 });
 
                 self.set('player', player);
