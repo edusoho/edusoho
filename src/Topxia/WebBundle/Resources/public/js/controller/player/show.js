@@ -43,6 +43,12 @@ define(function(require, exports, module) {
             }
         );
 
+        var messenger = new Messenger({
+            name: 'parent',
+            project: 'PlayerProject',
+            type: 'child'
+        });
+
         player.on("timechange", function(e){
             if(parseInt(player.getCurrentTime()) != parseInt(player.getDuration())){
                 DurationStorage.set(userId, fileId, player.getCurrentTime());
@@ -54,21 +60,18 @@ define(function(require, exports, module) {
             player.play();
         });
 
-        var messenger = new Messenger({
-            name: 'parent',
-            project: 'PlayerProject',
-            type: 'child'
+        player.on("paused", function(){
+            messenger.sendToParent("paused", {pause: true});
         });
-        messenger.sendToParent("inited", {});
 
-        // var counter = new Counter(player, courseId, lessonId, watchLimit);
-        // counter.setTimerId(
-        //     setInterval(
-        //         function(){
-        // 	       counter.execute()
-        //         }, 1000
-        //     )
-        // );
+        player.on("playing", function(){
+            messenger.sendToParent("playing", {pause: false});
+        });
+
+        player.on("ended", function(){
+            messenger.sendToParent("ended", {stop: true});
+        });
+
 	};
 
 	var DurationStorage = {
@@ -113,85 +116,5 @@ define(function(require, exports, module) {
             Store.set("durations", durationTmpArray);
         }
     };
-
-    var Counter = Class.create({
-        initialize: function(player, courseId, lessonId, watchLimit) {
-            this.player = player;
-            this.courseId = courseId;
-            this.lessonId = lessonId;
-            this.interval = 120;
-            this.watched = false;
-            this.watchLimit = watchLimit;
-        },
-
-        setTimerId: function(timerId) {
-            this.timerId = timerId;
-        },
-
-        execute: function(){
-            var posted = this.addMediaPlayingCounter();
-            this.addLearningCounter(posted);
-        },
-
-        addLearningCounter: function(promptlyPost) {
-            var learningCounter = Store.get("lesson_id_"+this.lessonId+"_learning_counter");
-            if(!learningCounter){
-                learningCounter = 0;
-            }
-            learningCounter++;
-
-            if(promptlyPost || learningCounter >= this.interval){
-                var url="../../../../course/"+this.lessonId+'/learn/time/'+learningCounter;
-                $.get(url);
-                learningCounter = 0;
-            }
-
-            Store.set("lesson_id_"+this.lessonId+"_learning_counter", learningCounter);
-        }, 
-
-        addMediaPlayingCounter: function() {
-            var mediaPlayingCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
-            if(!mediaPlayingCounter){
-                mediaPlayingCounter = 0;
-            }
-            var playing = this.player.isPlaying();
-
-            if(!this.player) {
-            	return;
-            }
-
-            var posted = false;
-            if(mediaPlayingCounter >= this.interval || (mediaPlayingCounter>0 && !playing)){
-                var url="../../../../course/"+this.lessonId+'/watch/time/'+mediaPlayingCounter;
-                var self = this;
-                $.get(url, function(response) {
-                    if (self.watchLimit && response.watchLimited) {
-                        window.location.reload();
-                    }
-                }, 'json');
-                posted = true;
-                mediaPlayingCounter = 0;
-            } else if(playing) {
-                mediaPlayingCounter++;
-            }
-
-            if (this.watchLimit && !this.watched && mediaPlayingCounter >= 1) {
-                this.watched = true;
-                var url = '../../../../course/' + this.courseId + '/lesson/' + this.lessonId + '/watch_num';
-                $.get(url, function(result) {
-                    if (result.status == 'ok') {
-                        Notify.success('您已观看' + result.num + '次，剩余' + (result.limit - result.num) + '次。');
-                    } else if (result.status == 'error') {
-                        window.location.reload();
-                    }
-
-                }, 'json');
-            }
-
-            Store.set("lesson_id_"+this.lessonId+"_playing_counter", mediaPlayingCounter);
-
-            return posted;
-        }
-    });
 
 });

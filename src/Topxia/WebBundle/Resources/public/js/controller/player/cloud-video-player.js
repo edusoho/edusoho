@@ -110,6 +110,7 @@ define(function(require, exports, module) {
                     }
                     break;
                 case "complete":
+                    window.__MediaPlayer._onEnded();
                     window.__MediaPlayer.trigger('ended');
                     break;
                 case "timeChange":
@@ -157,6 +158,7 @@ define(function(require, exports, module) {
         },
 
         destroy: function() {
+            
         }
 
     });

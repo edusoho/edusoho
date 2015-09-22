@@ -11,7 +11,10 @@ define(function(require, exports, module) {
         },
 
         //events
-        _onBeforePlay: function() {
+        _onPlaying: function() {
+
+        },
+        _onPaused: function() {
 
         },
         _onTimeChange: function(e) {
@@ -42,7 +45,8 @@ define(function(require, exports, module) {
             this.on('timechange', function(e){
                 this._onTimeChange(e);
             });
-            
+
+
         },  
 
         destroy: function(){

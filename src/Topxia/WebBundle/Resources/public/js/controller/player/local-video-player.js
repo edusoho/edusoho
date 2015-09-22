@@ -38,6 +38,7 @@ define(function(require, exports, module) {
 			});
 
 			player.on('ended', function(e){
+                that._onEnded(e);
 				that.trigger('ended', e);
 			});
 
