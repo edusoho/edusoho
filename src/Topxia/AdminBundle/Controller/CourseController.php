@@ -136,6 +136,10 @@ class CourseController extends BaseController
         } else {
            $course = $this->getCourseService()->getCourse($courseId);
            if($course['status'] == 'closed'){
+                $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+                if($classroomCourse){
+                    return $this->createJsonResponse('not hvae remove classroom course');
+                }
                 if($type != 'parameter'){
                     $result = $this->getCourseDeleteService()->delete($courseId,$type);  
                     return $this->createJsonResponse($result);
@@ -143,8 +147,6 @@ class CourseController extends BaseController
            }else if($course['status'] == 'draft'){
                 $result = $this->getCourseService()->deleteCourse($courseId);
                 return $this->createJsonResponse('delete draft course');
-           }else{
-                return $this->createJsonResponse('not remove classroom course');
            }
         }
         return $this->render('TopxiaAdminBundle:Course:delete.html.twig',array('course'=>$course));

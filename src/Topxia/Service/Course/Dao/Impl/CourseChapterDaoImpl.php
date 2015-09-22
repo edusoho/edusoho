@@ -24,6 +24,12 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getChapter($this->getConnection()->lastInsertId());
     }
 
+    public function findChaptersByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime ASC";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
+    }
+
     public function searchChapters($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
