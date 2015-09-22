@@ -85,7 +85,7 @@ class DefaultController extends BaseController
             );
         }
 
-        if((isset($result['thirdCopyright']) and $result['copyright'] == '1'){  
+        if(isset($result['copyright']) and $result['copyright'] == '1'){  
             $hidden = array(
                 'cloud_notice' => '1'
             );
