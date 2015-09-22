@@ -99,7 +99,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$course['id']}"));
         if($questionCount>0){
-            $questions = $this->getQuestionDao()->searchQuestions(array('targetPrefix' => "course-{$course['id']}"), array('createdTime' ,'desc'), 0, 1000);
+            $questions = $this->getQuestionDao()->searchQuestions(array('targetPrefix' => "course-{$course['id']}"), array('createdTime' ,'desc'), 0, 500);
             foreach ($questions as $question) {
                 $this->getQuestionDao()->deleteQuestion($question['id']);
                 $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($question['id']);
@@ -118,7 +118,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $testpaperCount = $this->getTestpaperDao()->searchTestpapersCount(array('target'=>"course-{$course['id']}"));
         if($testpaperCount>0){
-            $testpapers = $this->getTestpaperDao()->searchTestpapers(array('target'=>"course-{$course['id']}"),array('createdTime' ,'desc'),0,1000);
+            $testpapers = $this->getTestpaperDao()->searchTestpapers(array('target'=>"course-{$course['id']}"),array('createdTime' ,'desc'),0,500);
             foreach ($testpapers as $testpaper) {
                 $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperId($testpaper['id']);
                 $this->getTestpaperItemResultDao()->deleteTestpaperItemResultByTestpaperId($testpaper['id']);
@@ -159,7 +159,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $chapterCount = $this->getCourseChapterDao()->findChaptersCountByCourseId($course['id']);
         if($chapterCount>0){
-            $chapters = $this->getCourseChapterDao()->searchChapters(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $chapters = $this->getCourseChapterDao()->searchChapters(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($chapters as $chapter) {
                 $this->getCourseChapterDao()->deleteChapter($chapter['id']);
             }
@@ -178,7 +178,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $draftCount = $this->getDraftDao()->findDraftsCountByCourseId($course['id']);
         if($draftCount>0){
-            $drafts = $this->getDraftDao()->searchDrafts(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $drafts = $this->getDraftDao()->searchDrafts(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($drafts as $draft) {
                 $this->getDraftDao()->deleteDraft($draft['id']);
             }
@@ -196,7 +196,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $lessonCount = $this->getLessonDao()->searchLessonCount(array('courseId'=>$course['id']));
         if($lessonCount>0){
-            $lessons = $this->getLessonDao()->searchLessons(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $lessons = $this->getLessonDao()->searchLessons(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($lessons as $lesson) {
                 $this->getLessonDao()->deleteLesson($lesson['id']);
             }
@@ -215,7 +215,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {   
         $lessonLearnCount = $this->getLessonLearnDao()->searchLearnCount(array('courseId'=>$course['id']));
         if($lessonLearnCount>0){
-            $lessonLearns = $this->getLessonLearnDao()->searchLearns(array('courseId'=>$course['id']),array('startTime' ,'desc'),0,1000);
+            $lessonLearns = $this->getLessonLearnDao()->searchLearns(array('courseId'=>$course['id']),array('startTime' ,'desc'),0,500);
             foreach ($lessonLearns as $lessonLearn) {
                $this->getLessonLearnDao()->deleteLearn($lessonLearn['id']); 
             }
@@ -230,7 +230,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $lessonReplayCount = $this->getCourseLessonReplayDao()->findLessonReplaysCountByCourseId($course['id']);
         if($lessonReplayCount>0){
-             $LessonReplays = $this->getCourseLessonReplayDao()->searchCourseLessonReplays(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+             $LessonReplays = $this->getCourseLessonReplayDao()->searchCourseLessonReplays(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($LessonReplays as  $LessonReplay) {
                 $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($LessonReplay['id']); 
                 $LessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播　{$LessonReplay['title']}";
@@ -248,7 +248,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $lessonViewCount = $this->getLessonViewDao()->findLessonsViewsCountByCourseId($course['id']);
         if($lessonViewCount>0){
-            $lessonViews = $this->getLessonViewDao()->searchLessonView(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $lessonViews = $this->getLessonViewDao()->searchLessonView(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($lessonViews as $lessonView) {
                 $this->getLessonViewDao()->deleteLessonView($lessonView['id']);
             }
@@ -267,7 +267,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         if($isDeleteHomework){
             $HomeworkCount = $this->getHomeworkDao()->findHomeworksCountByCourseId($course['id']);
             if($HomeworkCount>0){
-                $homeworks = $this->getHomeworkDao()->searchHomeworks(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+                $homeworks = $this->getHomeworkDao()->searchHomeworks(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
                 foreach ($homeworks as $homework) {  
                     $this->getHomeworkResultDao()->deleteResultsByHomeworkId($homework['id']);
                     $this->getHomeworkItemResultDao()->deleteItemResultsByHomeworkId($homework['id']);
@@ -296,7 +296,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         if($isDeleteHomework){
             $exerciseCount = $this->getExerciseDao()->findExercisesCountByCourseId($course['id']);
             if($exerciseCount>0){
-                $exercises = $this->getExerciseDao()->searchExercises(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+                $exercises = $this->getExerciseDao()->searchExercises(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
                 foreach ($exercises as $exercise) {
                     $this->getExerciseResultDao()->deleteExerciseResultByExerciseId($exercise['id']);
                     $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
@@ -322,7 +322,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $favoriteCount = $this->getFavoriteDao()->findFavoritesCountByCourseId($course['id']);
         if($favoriteCount>0){
-            $favorites = $this->getFavoriteDao()->searchCourseFavorites(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $favorites = $this->getFavoriteDao()->searchCourseFavorites(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($favorites as $favorite) {
                 $this->getFavoriteDao()->deleteFavorite($favorite['id']);
             }
@@ -339,7 +339,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $noteCount = $this->getCourseNoteDao()->findNotesCountByCourseId($course['id']);
         if($noteCount>0){
-            $notes = $this->getCourseNoteDao()->searchNotes(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $notes = $this->getCourseNoteDao()->searchNotes(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($notes as $note) {
                 $this->getCourseNoteLikeDao()->deleteNoteLikesByNoteId($note['id']);
                 $this->getCourseNoteDao()->deleteNote($note['id']);
@@ -357,7 +357,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $threadCount = $this->getThreadDao()->searchThreadCount(array('courseId'=>$course['id']));
         if($threadCount>0){
-            $threads = $this->getThreadDao()->searchThreads(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $threads = $this->getThreadDao()->searchThreads(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($threads as $thread) {
                 $this->getThreadPostDao()->deletePostsByThreadId($thread['id']);
                 $this->getThreadDao()->deleteThread($thread['id']); 
@@ -376,7 +376,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $reviewCount = $this->getReviewDao()->searchReviewsCount(array('courseId'=>$course['id']));
         if($reviewCount>0){
-            $reviews = $this->getReviewDao()->searchReviews(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $reviews = $this->getReviewDao()->searchReviews(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($reviews as $review) {
                 $this->getReviewDao()->deleteReview($review['id']);
             }
@@ -394,7 +394,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $announcementCount = $this->getAnnouncementDao()->searchAnnouncementsCount(array('targetId'=>$course['id'],'targetType'=>'course'));
         if($announcementCount>0){
-            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType'=>'course','targetId'=>$course['id'],array('createdTime' ,'desc'),0,1000));
+            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType'=>'course','targetId'=>$course['id'],array('createdTime' ,'desc'),0,500));
             foreach ($announcements as $announcement) {
                 $this->getAnnouncementDao()->deleteAnnouncement($announcement['id']);
             }
@@ -413,7 +413,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $statusCount = $this->getStatusDao()->searchStatusesCount(array('courseId'=>$course['id']));
         if($statusCount>0){
-            $statuses = $this->getStatusDao()->searchStatuses(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $statuses = $this->getStatusDao()->searchStatuses(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($statuses as $status) {
                $this->getStatusDao()->deleteStatus($status['id']);
             }
@@ -432,7 +432,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $memberCount = $this->getCourseMemberDao()->searchMemberCount(array('courseId'=>$course['id']));
         if($memberCount>0){
-            $members = $this->getCourseMemberDao()->searchMembers(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,1000);
+            $members = $this->getCourseMemberDao()->searchMembers(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($members as $member) {
                 $this->getCourseMemberDao()->deleteMember($member['id']);
             }
