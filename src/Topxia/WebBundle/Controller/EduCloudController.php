@@ -157,7 +157,7 @@ class EduCloudController extends BaseController
         $originToken = $request->query->get('token');
         $token = $this->getTokenService()->verifyToken('sms_send', $originToken);
         $smsType = $request->query->get('smsType');
-        $originSign = $request->query->get('sign');
+        $originSign = rawurldecode($request->query->get('sign'));
         if (empty($token)) {
             throw new \RuntimeException('回调TOKEN不存在');
         }
