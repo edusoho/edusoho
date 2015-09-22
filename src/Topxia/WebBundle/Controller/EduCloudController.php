@@ -164,9 +164,9 @@ class EduCloudController extends BaseController
         if($token['data']['targetType'] != $targetType || $token['data']['targetId'] != $targetId || $token['data']['index']  != $index) {
             throw new \RuntimeException('回调TOKEN有误');
         }
-
-        //$url = $request->gethost();
-        $url = 'http://zgs295.test.edusoho.cn';
+        $api = CloudAPIFactory::create('root');
+        $info = $api->get('/me');
+        $url = $info['siteUrl'];
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
         $url .= '?index='.$index.'&token='.$originToken.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
