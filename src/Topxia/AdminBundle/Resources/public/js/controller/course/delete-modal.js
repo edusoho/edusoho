@@ -47,27 +47,27 @@ define(function(require, exports, module) {
             {
                 title: '检查录播删除',
                 url: urls.lessonreplaysDeleteUrl,
-                progressRange: [33, 36]
+                progressRange: [33, 34]
             },
             {
                 title: '检查播放时长删除',
                 url: urls.lessonviewsDeleteUrl,
-                progressRange: [37, 40]
+                progressRange: [35, 47]
             },
             {
                 title: '检查作业删除',
                 url: urls.homeworkDeleteUrl,
-                progressRange: [53, 56]
+                progressRange: [49, 51]
             },
             {
                 title: '检查练习删除',
                 url: urls.exerciseDeleteUrl,
-                progressRange: [57, 60]
+                progressRange: [52, 53]
             },
             {
                 title: '检查课时删除',
                 url: urls.lessonDeleteUrl,
-                progressRange: [40, 50]
+                progressRange: [55, 60]
             },
             {
                 title: '检查课程收藏删除',
