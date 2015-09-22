@@ -9,89 +9,96 @@ use Topxia\Service\Course\CourseDeleteService;
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
 	public function delete($courseId, $type)
-    {    	
-        $course = $this->getCourseService()->getCourse($courseId);
+    {    
+        try{
+            $this->getCourseDao()->getConnection()->beginTransaction();
+            $course = $this->getCourseService()->getCourse($courseId);
+            switch ($type) {
 
-        switch ($type) {
+                case 'question':
+                    $result = $this->deleteQuestions($course);
+                    break;
 
-            case 'question':
-                return $this->deleteQuestions($course);
-                break;
+                case 'testpaper':
+                    $result = $this->deleteTestpapers($course);
+                    break;
 
-            case 'testpaper':
-                return $this->deleteTestpapers($course);
-                break;
+                case 'material':
+                    $result = $this->deleteMaterials($course);
+                    break;
 
-            case 'material':
-                return $this->deleteMaterials($course);
-                break;
+                case 'chapter':
+                    $result = $this->deleteChapters($course);
+                    break;
 
-            case 'chapter':
-                return $this->deleteChapters($course);
-                break;
+                case 'draft':
+                    $result = $this->deleteDrafts($course);
+                    break;
 
-            case 'draft':
-                return $this->deleteDrafts($course);
-                break;
+                case 'lesson':
+                    $result = $this->deleteLessons($course);
+                    break;
 
-            case 'lesson':
-                return $this->deleteLessons($course);
-                break;
+                case 'lessonLearns':
+                    $result = $this->deleteLessonLearns($course);
+                    break;
 
-            case 'lessonLearns':
-                return $this->deleteLessonLearns($course);
-                break;
+                case 'lessonReplays':
+                    $result = $this->deleteLessonReplays($course);
+                    break;
 
-            case 'lessonReplays':
-                return $this->deleteLessonReplays($course);
-                break;
+                case 'lessonViews':
+                    $result = $this->deleteLessonViews($course);
+                    break;
 
-            case 'lessonViews':
-                return $this->deleteLessonViews($course);
-                break;
+                case 'homework':
+                    $result = $this->deleteHomework($course);
+                    break;
 
-            case 'homework':
-                return $this->deleteHomework($course);
-                break;
+                case 'exercise':
+                    $result = $this->deleteExercise($course);
+                    break;
 
-            case 'exercise':
-                return $this->deleteExercise($course);
-                break;
+                case 'favorite':
+                    $result = $this->deleteFavorites($course);
+                    break;
 
-            case 'favorite':
-                return $this->deleteFavorites($course);
-                break;
+                case 'note':
+                    $result = $this->deleteNotes($course);
+                    break;
 
-            case 'note':
-                return $this->deleteNotes($course);
-                break;
+                case 'thread':
+                    $result = $this->deleteThreads($course);
+                    break;
 
-            case 'thread':
-                return $this->deleteThreads($course);
-                break;
+                case 'review':
+                    $result = $this->deleteReviews($course);
+                    break;
 
-            case 'review':
-                return $this->deleteReviews($course);
-                break;
+                case 'announcement':
+                    $result = $this->deleteAnnouncements($course);
+                    break;
 
-            case 'announcement':
-                return $this->deleteAnnouncements($course);
-                break;
+                case 'status':
+                    $result = $this->deleteStatuses($course);
+                    break;
 
-            case 'status':
-                return $this->deleteStatuses($course);
-                break;
+                case 'member':
+                    $result = $this->deleteMembers($course);
+                    break;
 
-            case 'member':
-                return $this->deleteMembers($course);
-                break;
-
-            case 'course':
-                return $this->deleteCourses($course);
-                break;   
-            default:
-                return;                  
-                break;
+                case 'course':
+                    $result = $this->deleteCourses($course);
+                    break;   
+                default:
+                    return;                  
+                    break;
+            }
+            $this->getCourseDao()->getConnection()->commit();
+            return $result;
+        }catch(\Exception $e){
+            $this->getCourseDao()->getConnection()->rollback();
+            throw $e;
         }
     }
 
@@ -104,6 +111,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $this->getQuestionDao()->deleteQuestion($question['id']);
                 $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($question['id']);
             }
+
             $questionLog = "删除课程《{$course['title']}》(#{$course['id']})的问题";
             $this->getLogService()->info('question', 'delete', $questionLog);
             $response = array('success'=>true,'message'=>'问题数据删除');

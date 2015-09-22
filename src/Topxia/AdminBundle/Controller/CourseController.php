@@ -142,6 +142,10 @@ class CourseController extends BaseController
 
     public function deleteAction(Request $request, $courseId ,$type)
     {   
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isSuperAdmin()) {
+           throw $this->createServiceException('您不是超级管理员！');
+        }
         $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
         if($subCourse){
              return $this->createJsonResponse('Have sub courses');
