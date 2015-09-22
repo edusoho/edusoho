@@ -140,7 +140,6 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         }
         $user = $this->$function($keyword);
 
-
         return $user;
     }
 
@@ -152,7 +151,9 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
     {
         if(SimpleValidator::email($keyword)) {
             return 'getUserByEmail';
-        }else if(SimpleValidator::staffNo($keyword)){
+        }
+
+        if(SimpleValidator::staffNo($keyword)){
 
             if(strlen($keyword) != 11){
                 return 'getUserByStaffNo';
@@ -163,9 +164,10 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             }else{
                 return 'getUserByStaffNo';
             }
-        }else {
-            return 'getUserByNickname';
         }
+
+        return 'getUserByNickname';
+
     }
 
     public function serialize(array $user)
