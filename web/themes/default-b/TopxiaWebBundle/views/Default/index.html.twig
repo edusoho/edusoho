@@ -354,7 +354,7 @@
         {% endif %}
 
         {# 学员动态 #}
-        {% set learns = data('LatestStatuses', {mode:'simple', count: 5}) %}
+        {% set learns = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
         {% if learns %}
           <div class="es-box status-side">
             <div class="es-box-heading">

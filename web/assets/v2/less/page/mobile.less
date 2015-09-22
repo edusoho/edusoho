@@ -277,6 +277,7 @@
       position: absolute;
       right: 7%;
       bottom: -90px;
+      opacity: 0;
       @media(max-width: @screen-md-max) {
         width: 450px;
         bottom: -60px;
@@ -287,14 +288,14 @@
       }
     }
 
-    // &.active {
-    //   >.container {
-    //     .animation(fadeInUp 1s ease both);
-    //   }
-    //   .img-two {
-    //     .animation(fadeInUp 1s .2s ease both);
-    //   }
-    // }
+    &.active {
+      // >.container {
+      //   .animation(fadeInUp 1s ease both);
+      // }
+      .img-two {
+        .animation(fadeInUp 1s  ease both);
+      }
+    }
   }
   .mobile-footer {
     position: relative;

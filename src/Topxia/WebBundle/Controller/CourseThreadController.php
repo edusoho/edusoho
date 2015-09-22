@@ -59,6 +59,12 @@ class CourseThreadController extends CourseBaseController
     {
 
         list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
+        if($course['parentId']){
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            }
+        }
         $user = $this->getCurrentUser();
 
         if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
@@ -317,6 +323,12 @@ class CourseThreadController extends CourseBaseController
     public function postAction(Request $request, $courseId, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        if($course['parentId']){
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            }
+        }
         $thread = $this->getThreadService()->getThread($course['id'], $id);
         $form = $this->createPostForm(array(
             'courseId' => $thread['courseId'],
@@ -546,6 +558,11 @@ class CourseThreadController extends CourseBaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+    
     protected function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)

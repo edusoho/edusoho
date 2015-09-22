@@ -11,6 +11,7 @@ use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\ExtensionManager;
 
+
 class WebExtension extends \Twig_Extension
 {
     protected $container;

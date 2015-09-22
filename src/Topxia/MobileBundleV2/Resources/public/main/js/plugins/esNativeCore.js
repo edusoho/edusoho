@@ -88,6 +88,14 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         },
         updateUser : function(user){
             exec(null, null, "ESNativeCore", "updateUser", [ user ]);
+        },
+        uploadImage : function($q, url, headers, params, acceptType) {
+            var deferred = $q.defer(); 
+            exec(function(data) {
+                deferred.resolve(data);
+            }, null, "ESNativeCore", "uploadImage", [ url, headers, params, acceptType ]);
+
+            return deferred.promise;
         }
     };
 });

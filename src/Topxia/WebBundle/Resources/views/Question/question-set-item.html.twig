@@ -19,6 +19,9 @@
       {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}
       {% if question %}
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+        {% if itemResult != null %}
+        <div class="well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}</div>
+        {% endif %}
       {% else %}
       此题已删除。
       {% endif %}

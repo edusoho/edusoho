@@ -970,11 +970,10 @@ a {
 
 .ui-userinfo .upload-file {
   left: 0;
-  width: 0;
-  height: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
   position: absolute !important;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px,1px,1px,1px);
 }
 
 .ui-userinfo .upload-label {
@@ -1129,6 +1128,7 @@ a {
 
 .ui-course .course-head img {
   width: 100%;
+  height: auto;
 }
 
 .ui-course .course-head .mask span {

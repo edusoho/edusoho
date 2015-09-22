@@ -90,7 +90,7 @@ class SiteSettingController extends BaseController
         $esBar = $this->getSettingService()->get('esBar', array());
 
         $default = array(
-            'enabled'=> 0
+            'enabled'=> 1
         );
 
         $esBar = array_merge($default,$esBar);

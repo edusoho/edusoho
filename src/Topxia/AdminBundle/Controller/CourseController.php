@@ -11,6 +11,7 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        
         if($filter == 'normal' ){
             $conditions["parentId"] = 0;
         }
@@ -30,6 +31,26 @@ class CourseController extends BaseController
         }
         if(isset($conditions["creator"]) && $conditions["creator"]==""){
             unset($conditions["creator"]);
+        }
+
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] ==1 && $coinSetting['cash_model']=='currency';
+
+        if(isset($conditions["chargeStatus"]) && $conditions["chargeStatus"]=="free"){
+            if($coinEnable) {
+                $conditions['coinPrice'] = '0.00' ;
+            }
+            else {
+                $conditions['price'] = '0.00' ;
+            }  
+        }
+        if(isset($conditions["chargeStatus"]) && $conditions["chargeStatus"]=="charge"){
+            if($coinEnable) {
+                $conditions['coinPrice_GT'] = '0.00' ;
+            }
+            else{
+                $conditions['price_GT'] = '0.00' ;
+            }
         }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
@@ -371,11 +392,21 @@ class CourseController extends BaseController
         $fields = $request->query->all();
         $course = $this->getCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
+        $classrooms = array();
+        if($fields['filter'] == 'classroom'){
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
+            $classrooms = ArrayToolkit::index($classrooms,'courseId');
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
         return $this->render('TopxiaAdminBundle:Course:tr.html.twig', array(
             'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
             'course' => $course,
             'default' => $default,
+            'classrooms'=> $classrooms,
             'filter' => $fields["filter"]
         ));
     }
