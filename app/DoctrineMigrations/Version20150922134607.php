@@ -16,7 +16,7 @@ class Version20150922134607 extends AbstractMigration
     public function up(Schema $schema)
     {
         if (!$this->isFieldExist('user', 'schoolOrganizationId')) {
-            $this->addSql("ALTER TABLE `user` ADD `schoolOrganizationId` INT(10) UNSIGNED COMMENT '学校组织ID';");
+            $this->addSql("ALTER TABLE `user` ADD `schoolOrganizationId` INT(10) DEFAULT 0 UNSIGNED COMMENT '学校组织ID';");
         }
 
     }
