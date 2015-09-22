@@ -15,3 +15,10 @@ analysisDateType:
     courseSum: 课程总数
     userSum: 用户总数
     # exitLesson: 退出学习数
+
+userKeyWordType:
+    nickname: 用户名
+    verifiedMobile: 手机号
+    email: 邮件地址
+    loginIp: 登录IP
+    staffNo: 学号/教工号
