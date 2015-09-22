@@ -15,6 +15,7 @@ class PlayerController extends BaseController
 		}
 
 		if($file["storage"] == 'cloud' && $file["type"] == 'video') {
+			
 			$blacklistPath = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/play_video_agent_blacklist.yml';
 			$blacklist = Yaml::parse(file_get_contents($blacklistPath));
 			foreach ($blacklist["blacklist"] as $value) {
@@ -22,6 +23,7 @@ class PlayerController extends BaseController
 					return $this->render('TopxiaWebBundle:Player:show.html.twig', array());
 				}
 			}
+
 			if($this->setting("developer.balloon_player", 0)){
 		        $player = "balloon-cloud-video-player";
 			} else {
