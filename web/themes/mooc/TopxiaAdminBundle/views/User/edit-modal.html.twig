@@ -68,7 +68,8 @@
         <label for="staffNo">{% if 'ROLE_TEACHER' in user.roles %}教工号{% else %}学号{% endif %}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="staffNo" name="staffNo" class="form-control" value="{{user.staffNo}}">
+        <input type="text" id="staffNo" name="staffNo" required="required" data-url="{{path('register_staffNo_check', {exclude:user.staffNo})}}" class="form-control" data-explain="" value="{{ user.staffNo|default('') }}">
+        <div class="help-block" style="display:none;"></div>
       </div>
     </div>
 
@@ -209,5 +210,5 @@
 {% block footer %}
   <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('user/edit-modal')</script>
+  <script>app.load('../../../../themes/mooc/js/user/edit-modal')</script>
 {% endblock %}
