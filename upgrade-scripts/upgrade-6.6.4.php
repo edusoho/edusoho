@@ -41,6 +41,10 @@ use Symfony\Component\Yaml\Yaml;
         $connection = $this->getConnection();
         
         $connection->exec("UPDATE `category_group` SET `depth`=3 WHERE `code`='course'");
+
+        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting['cloud_api_failover'] = 1;
+        ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
     }
 
     protected function isFieldExist($table, $filedName)
