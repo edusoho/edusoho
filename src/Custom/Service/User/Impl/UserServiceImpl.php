@@ -149,11 +149,11 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
-
-        $prepareSearchConditions = function () use (&$conditions){
+        $schoolService = $this->getSchoolService();
+        $prepareSearchConditions = function () use (&$conditions, $schoolService){
             if (!empty($conditions['includeChildren']) && isset($conditions['schoolOrganizationId'])) {
                 if (!empty($conditions['schoolOrganizationId'])){
-                    $childrenIds = $this->getSchoolService()->findSchoolOrganizationChildrenIds($conditions['schoolOrganizationId']);
+                    $childrenIds = $schoolService->findSchoolOrganizationChildrenIds($conditions['schoolOrganizationId']);
                     $conditions['schoolOrganizationIds'] = array_merge(array($conditions['schoolOrganizationId']), $childrenIds);
                 }
                 unset($conditions['schoolOrganizationId']);
