@@ -26,8 +26,12 @@ define(function(require, exports, module) {
 
         var html = "";
         if(fileType == 'video'){
-            html = '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" preload="auto"></video>';
-        } else if(fileType == 'audio'){
+            if (videoHtml.data('player') == 'local-video-player'){
+                html = '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
+            } else {
+                html = '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" preload="auto"></video>';
+            }
+        }else if(fileType == 'audio'){
             html = '<audio id="lesson-player" width="500" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
             html += '</audio>';
