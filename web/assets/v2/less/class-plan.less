@@ -370,107 +370,48 @@
 }
 
 .todo-list {
+  font-size: 12px;
   margin-bottom: 20px;
-  &.todo-list-plus {
-    li {
-      &:before {
-        position: absolute;
-        content: '';
-        top: -10px;
-        bottom: 10px;
-        left: 15px;
-        width: 2px;
-        background-color: @gray-light;
+  &.active {
+    .todo-list-header {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+    li.done {
+      .tag {
+        background-color: @brand-primary;
       }
-      &.done {
-        &:before,
-        .tag,
-        .dot {
-          background-color: @brand-primary;
-        }
-        .tag:after {
-          border-right-color: @brand-primary;
-        }
-        >a {
-          color: @brand-primary;
-        }
-      }
-      .tag:after {
-        right: 100%;
-        top: 50%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-        border-color: rgba(255, 255, 255, 0);
-        border-right-color: @gray;
-        border-width: 4px;
-        margin-top: -4px;
-      }
-      .dot {
-        position: absolute;
-        top: 26px;
-        left: 11px;
-        width: 10px;
-        height: 10px;
-        .border-radius(50%);
-        background: @gray-light;
-        z-index: 1;
+      >a {
+        color: @brand-primary;
       }
     }
   }
   .todo-list-header {
     position: relative;
-    background: @brand-primary;
-    color: #fff;
+    background: @gray-lighter;
     line-height: 30px;
     padding: 0 20px;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    z-index: 1;
-    &:after {
-      left: 100%;
-      top: 50%;
-      border: solid transparent;
-      content: " ";
-      height: 0;
-      width: 0;
-      position: absolute;
-      pointer-events: none;
-      border-color: rgba(255, 255, 255, 0);
-      border-right-color: #fff;
-      border-width: 15px;
-      margin-top: -15px;
-      margin-left: -30px;
-    }
+    .border-radius(20px);
   }
   ul {
     padding-left: 0;
-    list-style-type: none;
     li {
       position: relative;
-      padding: 20px 0 0 80px;
+      list-style-type: none;
+      padding: 20px 0 0 60px;
       .tag {
         position: absolute;
-        top: 20px;
-        left: 35px;
+        top: 18px;
+        left: 10px;
         text-align: center;
         height: 20px;
         line-height: 20px;
         width: 35px;
-        background: @gray;
+        background: @gray-light;
         color: #fff;
       }
       >a {
         .text-overflow;
-      }
-      >i {
-        position: absolute;
-        left: 10px;
-        top: 19px;
-        color: @gray;
       }
     }
   }
