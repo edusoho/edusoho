@@ -73,7 +73,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
 
         $parameters['lesson_title'] = '《'.$lesson['title'].'》';
-        $parameters['startTime'] = date("Y-m-d h:i:s", $lesson['startTime']);
+        $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
         $parameters['course_title'] = '《'.$course['title'].'》';
         $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
         $parameters['url'] = $url;
