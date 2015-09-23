@@ -37,12 +37,20 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
+        if (!empty($conditions['loginStartDate']) && !empty($conditions['loginEndDate'])) {
+            $conditions['loginStartTime'] = strtotime($conditions['loginStartDate']);
+            $conditions['loginEndTime'] = strtotime($conditions['loginEndDate']);
+        }
+        if (!empty($conditions['registerStartDate']) && !empty($conditions['registerEndDate'])) {
+            $conditions['startTime'] = strtotime($conditions['registerStartDate']);
+            $conditions['endTime'] = strtotime($conditions['registerEndDate']);
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
             20
         );
-
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('createdTime', 'DESC'),
