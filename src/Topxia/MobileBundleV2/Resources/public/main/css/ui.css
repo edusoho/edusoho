@@ -1990,7 +1990,7 @@ a {
 }
 
 .ui-article .ui-content p, .ui-article .ui-content span, .ui-article .ui-content div, .ui-article .ui-content a{
-  color: inherit;
+  color: #47494c;
   padding: initial;
   outline: initial;
   text-align: justify;
