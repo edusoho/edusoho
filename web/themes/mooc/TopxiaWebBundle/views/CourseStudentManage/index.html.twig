@@ -46,13 +46,14 @@
       <table class="table table-striped" id="course-student-list">
         <thead>
         <tr>
-          <th width="30%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</th>
-          <th width="10%">学号</th>
+          <th width="25%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</th>
+          <th width="20%">院系/专业</th>
           <th width="30%">学习进度</th>
-          <th width="30%">操作</th>
+          <th width="25%">操作</th>
         </tr>
         </thead>
         <tbody>
+        {% set schoolOrganization = data('SchoolOrganization', {all:1}) %}
         {% for student in students %}
           {% set user = users[student.userId] %}
           {% set progress = progresses[student.userId] %}
