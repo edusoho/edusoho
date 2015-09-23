@@ -42,7 +42,7 @@
     <section class="mooc-class-section">
       <div class="container">
         <div class="section-header" id="course-filter">
-         推荐班级
+         推荐班级z1
         </div>
         <div class="recommend-class-list">
           {% for classroom in RecommendClassrooms %}
@@ -59,7 +59,7 @@
               <p class="info hidden-xs hidden-sm">{{classroom.about|striptags}}</p>
               <p class="num"> <i class="es-icon es-icon-people mrm"></i>
                 {{classroom.studentNum + classroom.auditorNum }}人
-                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">加入班级</a>
+                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">班级详情</a>
               </p>
             </div>
             <div class="class-teacher hidden-xs hidden-sm">
@@ -76,7 +76,7 @@
 
               </div>
               <div class="bottom">
-                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">加入班级</a>
+                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">班级详情</a>
               </div>
             </div>
           </div>
