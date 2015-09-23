@@ -159,11 +159,10 @@ class EduCloudController extends BaseController
         $smsType = $request->query->get('smsType');
         $originSign = rawurldecode($request->query->get('sign'));
         if (empty($token)) {
-            throw new \RuntimeException('回调TOKEN不存在');
+            return $this->createJsonResponse(array('error'=>'回调TOKEN不存在'));
         }
         if($token['data']['targetType'] != $targetType || $token['data']['targetId'] != $targetId || $token['data']['index']  != $index) {
-            throw new \RuntimeException('回调TOKEN有误');
-        }
+            return $this->createJsonResponse(array('error'=>'回调TOKEN有误'));
         $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
         $url = $info['siteUrl'];
@@ -172,7 +171,7 @@ class EduCloudController extends BaseController
         $api = CloudAPIFactory::create('leaf');
         $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey());
         if ($originSign != $sign) {
-            throw new \RuntimeException('sign不正确');
+            return $this->createJsonResponse(array('error'=>'sign不正确'));
         }
 
         $processor = SmsProcessorFactory::create($targetType);

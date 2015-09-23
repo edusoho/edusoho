@@ -32,7 +32,6 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $urls[$i] .= '?index='.($i * 1000);
             $token = $this->getTokenService()->makeToken('sms_send', array('data' => array('targetType' => 'lesson', 'targetId' => $targetId, 'index' => $i * 1000)));
             $urls[$i] .= '&token='.$token['token'].'&smsType='.$smsType;
-            $urls[$i] = rawurlencode($urls[$i]);
         }
         return array('count' => $count, 'urls' => $urls);
     }
