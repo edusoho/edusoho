@@ -20,7 +20,7 @@
       {% if question %}
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
 
-        {% if itemResult != null %}
+        {% if questionStatus == 'finished' %}
         <div class="homework-question-actions text-right">
           {% include 'TopxiaWebBundle:Question:question-actions.html.twig' with { flags:['favorite', 'analysis'] } %}
         </div>
