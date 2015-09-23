@@ -1090,6 +1090,14 @@
                         throw new Error("KFEditor: not found command, " + commandName);
                     }
                     return commandObject.execFn.apply(commandObject.executor, [].slice.call(arguments, 1));
+                },
+                replaceSpecialCharacter: function(source) {
+                    var $source = source.replace(/\\cong/g,'=^\\sim')
+                    .replace(/\\varnothing/g,'\\oslash')
+                    .replace(/\\gets/g,'\\leftarrow')
+                    .replace(/\\because/g,'\\cdot_\\cdot\\cdot')
+                    .replace(/\\blacksquare/g,'\\rule{20}{20}');
+                    return $source;
                 }
             });
             function getService(serviceName) {
