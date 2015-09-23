@@ -60,7 +60,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl
 	{
 		$conditions = parent::_prepareCourseConditions($conditions);
 
-		if($conditions['userId'] <= 0){
+		if(isset($conditions['userId']) && $conditions['userId'] <= 0){
 			unset($conditions['userId']);
 		}
 
