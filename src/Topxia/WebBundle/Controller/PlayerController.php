@@ -16,6 +16,10 @@ class PlayerController extends BaseController
 
 		if($file["storage"] == 'cloud' && $file["type"] == 'video') {
 			
+			if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $file['videoWatermarkEmbedded'] = 1;
+            }
+			
 			$blacklistPath = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/play_video_agent_blacklist.yml';
 			$blacklist = Yaml::parse(file_get_contents($blacklistPath));
 			foreach ($blacklist["blacklist"] as $value) {
