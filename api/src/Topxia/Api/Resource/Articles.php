@@ -16,16 +16,24 @@ class Articles extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $articles = $this->getArticleService()->searchArticles($conditions, $sort, $start, $limit);
-
         $total = $this->getArticleService()->searchArticlesCount($conditions);
-
+        $start = $start == -1 ? rand(0, $total - 1) : $start;
+        $articles = $this->getArticleService()->searchArticles($conditions, $sort, $start, $limit);
         return $this->wrap($this->filter($articles), $total);
     }
 
     public function filter(&$res)
     {
         return $this->multicallFilter('Article', $res);
+    }
+
+    protected function multicallFilter($name, &$res)
+    {
+        foreach ($res as &$one) {
+            $this->callFilter($name, $one);
+            $one['body'] = '';
+        }
+        return $res;
     }
 
     protected function getArticleService()
