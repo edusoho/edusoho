@@ -58,11 +58,11 @@ class CourseServiceImpl extends BaseCourseServiceImpl
 
 	protected function _prepareCourseConditions($conditions)
 	{
-		$conditions = parent::_prepareCourseConditions($conditions);
-
-		if(isset($conditions['userId']) && $conditions['userId'] <= 0){
-			unset($conditions['userId']);
+		if(isset($conditions['nickname']) && empty($conditions['nickname'])){
+			unset($conditions['nickname']);
 		}
+
+		$conditions = parent::_prepareCourseConditions($conditions);
 
 		if(!empty($conditions['schoolOrganizationId']) && !empty($conditions['includeChildren'])){
 			$userConditions['schoolOrganizationId'] = $conditions['schoolOrganizationId'];
