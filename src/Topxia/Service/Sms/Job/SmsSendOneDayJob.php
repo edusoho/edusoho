@@ -6,11 +6,11 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class smsSendOneHourJob implements Job
+class SmsSendOneDayJob implements Job
 {
-	public function execute($params)
+    public function execute($params)
     {
-    	$smsType = 'sms_live_play_one_hour';
+        $smsType = 'sms_live_play_one_day';
         $dayIsOpen = $this->getSmsService()->isOpen($smsType);
         $parameters = array();
         if ($dayIsOpen) {
@@ -19,7 +19,7 @@ class smsSendOneHourJob implements Job
             $processor = SmsProcessorFactory::create($targetType);
             $return = $processor->getUrls($targetId, $smsType);
             $callbackUrls = $return['urls'];
-            $count = intval($return['count'] / 1000 + 1);
+            $count = $return['count'];
             try {
                     $api = CloudAPIFactory::create('leaf');
                     $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));

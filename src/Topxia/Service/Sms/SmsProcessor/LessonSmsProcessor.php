@@ -30,12 +30,11 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $urls[$i] = $hostName;
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback',array('targetType' => 'lesson','targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
-            $token = $this->getTokenService()->makeToken('sms_send', array('data' => array('targetType' => 'lesson', 'targetId' => $targetId, 'index' => $i * 1000)));
-            $urls[$i] .= '&token='.$token['token'].'&smsType='.$smsType;
+            $urls[$i] .= '&token='.'&smsType='.$smsType;
         }
         return array('count' => $count, 'urls' => $urls);
     }
-
+    
 	public function getSmsInfo($targetId, $index, $smsType)
     {
         global $kernel;
@@ -101,11 +100,6 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
-    }
-
-    protected function getTokenService()
-    {
-        return ServiceKernel::instance()->createService('User.TokenService');
     }
 
 }

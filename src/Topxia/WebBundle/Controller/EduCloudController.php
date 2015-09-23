@@ -154,23 +154,16 @@ class EduCloudController extends BaseController
     public function smsCallBackAction(Request $request, $targetType, $targetId)
     {
         $index = $request->query->get('index');
-        $originToken = $request->query->get('token');
-        $token = $this->getTokenService()->verifyToken('sms_send', $originToken);
         $smsType = $request->query->get('smsType');
         $originSign = rawurldecode($request->query->get('sign'));
-        if (empty($token)) {
-            return $this->createJsonResponse(array('error'=>'回调TOKEN不存在'));
-        }
-        if($token['data']['targetType'] != $targetType || $token['data']['targetId'] != $targetId || $token['data']['index']  != $index) {
-            return $this->createJsonResponse(array('error'=>'回调TOKEN有误'));
-        }
+
         $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
         $url = $info['siteUrl'];
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
-        $url .= '?index='.$index.'&token='.$originToken.'&smsType='.$smsType;
+        $url .= '?index='.$index.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
-        $sign = $this->getPasswordEncoder()->encodePassword($url, $api->getAccessKey());
+        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
         if ($originSign != $sign) {
             return $this->createJsonResponse(array('error'=>'sign不正确'));
         }
@@ -231,12 +224,8 @@ class EduCloudController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getTokenService()
-    {
-        return $this->getServiceKernel()->createService('User.TokenService');
-    }
 
-    protected function getPasswordEncoder()
+    protected function getSignEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
     }
