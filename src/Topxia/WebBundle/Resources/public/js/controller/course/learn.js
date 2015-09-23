@@ -268,14 +268,12 @@ define(function(require, exports, module) {
 
                     messenger.on("playing", function(){
                         var player = that.get("player");
-                        console.log(player);
                         player.playing = true;
                         that.set("player", player);
                     });
 
                     messenger.on("paused", function(){
                         var player = that.get("player");
-                        console.log(player);
                         player.playing = false;
                         that.set("player", player);
                     });
