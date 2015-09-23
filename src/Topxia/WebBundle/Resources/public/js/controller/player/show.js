@@ -4,9 +4,13 @@ define(function(require, exports, module) {
 	var Store = require('store');
 	var Class = require('class');
     var Messenger = require('./messenger');
+    var swfobject = require('swfobject');
 
 	exports.run = function() {
+
+
         var videoHtml = $('#lesson-video-content');
+
         var userId = videoHtml.data("userId");
         var fileId = videoHtml.data("fileId");
 
@@ -27,6 +31,18 @@ define(function(require, exports, module) {
             html = '<audio id="lesson-player" width="500" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
             html += '</audio>';
+        }
+
+        if (fileType == 'video' && !swfobject.hasFlashPlayerVersion('10.2')) {
+            html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+            html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+            html += '<span aria-hidden="true">×</span>';
+            html += '</button>';
+            html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+            html += '</div>';
+            videoHtml.html(html);
+            videoHtml.show();
+            return ;
         }
 
         videoHtml.html(html);
