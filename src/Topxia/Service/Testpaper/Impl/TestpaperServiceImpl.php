@@ -1003,9 +1003,4 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
-
-    protected function getSmsService()
-    {
-        return $this->createService('Sms.SmsService');
-    }
 }

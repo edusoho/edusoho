@@ -269,8 +269,4 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
         return $this->createService('Coupon:Coupon.CouponService');
     }
 
-    protected function getSmsService()
-    {   
-        return $this->createService('Sms.SmsService');
-    }
 }

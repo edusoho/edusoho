@@ -3,7 +3,6 @@ namespace Topxia\Service\Sms\SmsProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\NumberToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
@@ -61,17 +60,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']),array('createdTime','Desc'), $index, 1000);
         }
         $studentIds = ArrayToolkit::column($students, 'userId');
-        $users = $this->getUserService()->findUsersByIds($studentIds);
-        foreach ($users as $key => $value ) {
-            if (strlen($value['verifiedMobile']) == 0) {
-                unset($users[$key]);
-            }
-        }
-        if ($users) {
-            $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
-            $to = implode(',', $verifiedMobiles);
-        }
-
+        $to = $this->getUsersMobile($studentIds);
+    
         $parameters['lesson_title'] = '《'.$lesson['title'].'》';
         $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
         $parameters['course_title'] = '《'.$course['title'].'》';

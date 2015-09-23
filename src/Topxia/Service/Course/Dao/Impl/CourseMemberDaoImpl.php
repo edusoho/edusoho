@@ -120,7 +120,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $type, $isLearned, $role));
     }
 
-
     public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true)
     {
         $this->filterStartLimit($start, $limit);

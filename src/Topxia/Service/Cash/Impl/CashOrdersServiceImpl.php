@@ -87,7 +87,9 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                     $coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
                     $success = true;
-
+                    $this->dispatchEvent("order.pay.success", 
+                        new ServiceEvent($order,array('targetType'=>'coin'))
+                    );
                 } else {
                     $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
                 }
@@ -105,10 +107,6 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
         $order = $this->getOrderDao()->getOrder($order['id']);
 
-        $this->dispatchEvent("order.pay.success", 
-            new ServiceEvent($order,array('targetType'=>'coin'))
-        );
-        
         return array($success, $order);
     }
 
@@ -183,11 +181,6 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     protected function getCashService(){
       
         return $this->createService('Cash.CashService');
-    }
-
-    protected function getSmsService()
-    {   
-        return $this->createService('Sms.SmsService');
     }
 
 }

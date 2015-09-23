@@ -2,13 +2,13 @@
 namespace Topxia\Service\Sms\SmsProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\NumberToolkit;
-use Exception;
+use Topxia\Common\ArrayToolkit;
 
 class BaseProcessor {
 
-	protected function unsetUsersByMobile($userIds)
+	protected function getUsersMobile($userIds)
     {
+        $to = '';
         if (!empty($userIds)) {
             $users = $this->getUserService()->findUsersByIds($userIds);
             $to = '';
@@ -17,8 +17,12 @@ class BaseProcessor {
                     unset($users[$key]);
                 }
             }
-            return $users;
+            if ($users) {
+                $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
+                $to = implode(',', $verifiedMobiles);
+            }
         }
+        return $to;
     }
 
     protected function getUserService()
