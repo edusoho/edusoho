@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+添加关键字
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="keyword-form" action="{{ path('admin_keyword_create') }}" method="post">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="keyword-name-field">关键字</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="keyword-name-field" type="text" name="name">
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+   <script type="text/javascript">app.load('customadminbundle/controller/keyword/keyword-modal')</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="keyword-add-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#keyword-form">保存</button>
+{% endblock %}

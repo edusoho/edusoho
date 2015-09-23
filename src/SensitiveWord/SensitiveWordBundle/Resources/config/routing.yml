@@ -1,0 +1,3 @@
+sensitive_check:
+    pattern:  /sensitive/check/{type}
+    defaults: { _controller: SensitiveWordBundle:Sensitive:sensitiveCheck,type:'' }

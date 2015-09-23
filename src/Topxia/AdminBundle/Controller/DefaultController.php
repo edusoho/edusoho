@@ -78,6 +78,7 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     { 
         $result = CloudAPIFactory::create('leaf')->get('/me');
+
         if(isset($result['thirdCopyright']) and $result['thirdCopyright'] == '1'){
             $hidden = array(
                 'cloud_notice' => '1',
@@ -85,7 +86,9 @@ class DefaultController extends BaseController
             );
         }
 
+
         if(isset($result['copyright']) and $result['copyright'] == '1'){  
+
             $hidden = array(
                 'cloud_notice' => '1'
             );
