@@ -144,7 +144,7 @@ class CourseController extends BaseController
     {   
         $currentUser = $this->getCurrentUser();
         if (!$currentUser->isSuperAdmin()) {
-           throw $this->createServiceException('您不是超级管理员！');
+           throw $this->createAccessDeniedException('您不是超级管理员！');
         }
         $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
         if($subCourse){
@@ -157,6 +157,10 @@ class CourseController extends BaseController
                     return $this->createJsonResponse('not hvae remove classroom course');
                 }
                 if($type != 'parameter'){
+                    $session = $request->getSession()->get('checkPassword');
+                    if(!$session){
+                        throw $this->createAccessDeniedException('未输入正确的校验密码！');
+                    }
                     $result = $this->getCourseDeleteService()->delete($courseId,$type);  
                     return $this->createJsonResponse($result);
                 }
@@ -176,6 +180,7 @@ class CourseController extends BaseController
             $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
             if($password == $currentUser->password){
                 $response = array('success' => true, 'message' => '密码正确');
+                $request->getSession()->set('checkPassword',true); 
             }else{
                 $response = array('success' => false, 'message' => '密码错误');
             }
