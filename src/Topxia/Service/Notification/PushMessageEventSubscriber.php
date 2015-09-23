@@ -21,7 +21,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.join' => 'onClassroomJoin',
             'classroom.put_course' => 'onClassroomPutCourse',
             'article.create' => 'onArticleCreate',
-            'discount.start' => 'onDiscountStart',
+            'discount.pass' => 'onDiscountPass',
         );
     }
 
@@ -203,13 +203,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->push('资讯', $article['title'], $from, $to, $body);
     }
 
-    public function onDiscountStart(ServiceEvent $event)
+    public function onDiscountPass(ServiceEvent $event)
     {
         $discount = $event->getSubject();
 
-        $from = array('type' => 'school');
-        $to = array('type' => 'school');
-        $body = array('type' => 'discount.start');
+        $from = array('type' => 'global');
+        $to = array('type' => 'global');
+        $body = array('type' => 'discount.Pass');
 
         $this->push('公告', $discount['name'], $from, $to, $body);
     }
