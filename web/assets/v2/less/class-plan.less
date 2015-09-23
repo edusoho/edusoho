@@ -31,6 +31,13 @@
       }
     }
   }
+  .phase-name-box {
+    background: none;
+    border: none;
+    &:focus {
+      background: @brand-primary - #222;
+    }
+  }
   .checkbox,
   .form-group {
     padding-left: 50px;
@@ -107,6 +114,9 @@
     padding: 10px 5px;
     color: #fff;
     background-color: @brand-primary;
+    &:hover {
+      color: #fff;
+    }
   }
 }
 
@@ -134,6 +144,67 @@
     .btn {
       display: inline-block;
       margin-top: 20px;
+    }
+  }
+}
+
+.study-inplan-info {
+  .inplan-content {
+    position: relative;
+    z-index: 1;
+    margin: 0 5px;
+    background-color: #fff;
+    .es-box-shadow;
+    padding: 30px 260px 10px 50px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    color: @gray-darker;
+    .study-num {
+      color: @brand-primary;
+      font-size: 18px;
+      margin: 0 5px;
+    }
+    .total-num {
+      color: @gray;
+      margin: 0 5px;
+    }
+    .inplan-data {
+      position: absolute;
+      top: -6px;
+      left: 0;
+    }
+    .inplan-data-item {
+      position: relative;
+      padding-left: 120px;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    .progress {
+      background-color: @gray-lighter;
+      .box-shadow(none);
+      .border-radius(10px);
+    }
+  }
+  .chart {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  .percent {
+    display: inline-block;
+    padding: 40px 20px;
+    span {
+      font-size: 30px;
+      color: @brand-primary;
     }
   }
 }
