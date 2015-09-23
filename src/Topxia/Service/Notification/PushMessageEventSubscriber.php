@@ -210,7 +210,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $from = array('type' => 'global');
         $to = array('type' => 'global');
         $body = array(
-            'type' => "discount.$discount['type']"
+            'type' => 'discount.'.$discount['type']
         );
 
         $this->push('打折活动', $discount['name'], $from, $to, $body);
