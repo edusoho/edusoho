@@ -1990,9 +1990,11 @@ a {
 }
 
 .ui-article .ui-content p,span,div,a {
-  margin: initial;
   padding: initial;
   outline: initial;
+  text-align: justify;
+  line-height: 1.6;
+  margin: 10px auto 15px auto;
 }
 
 .ui-article .ui-content img {
