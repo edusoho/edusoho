@@ -38,6 +38,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
 	public function getSmsInfo($targetId, $index, $smsType)
     {
+        global $kernel;
         $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
         $hostName = $info['siteUrl'];
