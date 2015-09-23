@@ -149,20 +149,16 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
-        $schoolService = $this->getSchoolService();
-        $prepareSearchConditions = function () use (&$conditions, $schoolService){
-            if (!empty($conditions['includeChildren']) && isset($conditions['schoolOrganizationId'])) {
-                if (!empty($conditions['schoolOrganizationId'])){
-                    $childrenIds = $schoolService->findSchoolOrganizationChildrenIds($conditions['schoolOrganizationId']);
-                    $conditions['schoolOrganizationIds'] = array_merge(array($conditions['schoolOrganizationId']), $childrenIds);
-                }
-                unset($conditions['schoolOrganizationId']);
-                unset($conditions['includeChildren']);
-            }
-        };
-        $prepareSearchConditions();
+        $this->prepareSearchConditions($conditions);
 
         return parent::searchUsers($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchUserCount(array $conditions)
+    {
+        $this->prepareSearchConditions($conditions);
+
+        return parent::searchUserCount($conditions);
     }
 
 
@@ -323,6 +319,18 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
     protected function getSchoolService()
     {
         return $this->createService("Custom:School.SchoolService");
+    }
+
+    private function prepareSearchConditions(&$conditions)
+    {
+        if (!empty($conditions['includeChildren']) && isset($conditions['schoolOrganizationId'])) {
+            if (!empty($conditions['schoolOrganizationId'])){
+                $childrenIds = $this->getSchoolService()->findSchoolOrganizationChildrenIds($conditions['schoolOrganizationId']);
+                $conditions['schoolOrganizationIds'] = array_merge(array($conditions['schoolOrganizationId']), $childrenIds);
+            }
+            unset($conditions['schoolOrganizationId']);
+            unset($conditions['includeChildren']);
+        }
     }
 
 }

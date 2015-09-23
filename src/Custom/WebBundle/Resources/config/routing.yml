@@ -38,3 +38,7 @@ homepage_recommend_courses:
 register_staffNo_check:
     pattern:  /register/staff-no/check
     defaults: { _controller: CustomWebBundle:Register:checkStaffNo }
+
+course_manage_students:
+    pattern:  /course/{id}/manage/students
+    defaults: { _controller: CustomWebBundle:CourseStudentManage:index }

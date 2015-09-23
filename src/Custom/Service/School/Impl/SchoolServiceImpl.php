@@ -10,6 +10,7 @@ namespace Custom\Service\School\Impl;
 
 
 use Custom\Service\School\SchoolService;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 
 class SchoolServiceImpl extends BaseService implements SchoolService
@@ -73,7 +74,7 @@ class SchoolServiceImpl extends BaseService implements SchoolService
 
     public function findAllSchoolOrganization()
     {
-        return $this->getSchoolDao()->findAllSchoolOrganization();
+        return ArrayToolkit::index($this->getSchoolDao()->findAllSchoolOrganization(),'id');
     }
 
     protected function makeOrganizationTree(&$tree, &$organizations, $parentId)

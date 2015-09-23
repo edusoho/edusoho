@@ -3,6 +3,7 @@
 {% set menu = 'admin_user_manage' %}
 
 {% set script_controller = 'user/list' %}
+{% set schoolOrganization = data('SchoolOrganization', {all:1}) %}
 
 {% block main %}
 
@@ -20,7 +21,7 @@
       <select class="form-control" name="schoolOrganizationId">
         {% set tree = data('SchoolOrganizationTree',{}) %}
         {% set selectId = app.request.query.get('schoolOrganizationId') %}
-        <option value=0>选择学院</option>
+        <option value=0>选择院系/专业</option>
         {% for item in tree %}
           <option value="{{ item.id }}" {% if item.id == selectId %}selected{% endif %}>{% for i in 0..(item.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ item.name }}</option>
         {% endfor %}
@@ -63,7 +64,7 @@
       <th>学号/教工号</th>
       <th>Email</th>
       <th>注册时间</th>
-      <th>最近登录</th>
+      <th>院系/专业</th>
       <th>操作</th>
     </tr>
     </thead>

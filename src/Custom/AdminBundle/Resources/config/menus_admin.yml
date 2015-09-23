@@ -14,7 +14,7 @@ admin_app_center_show:
 
 admin_operation_school:
     name: 学校管理
-    parent: admin_operation
+    parent: admin_system
     router_name: admin_school
 
 admin_operation_school_manage:

@@ -56,6 +56,31 @@ class CourseServiceImpl extends BaseCourseServiceImpl
 		return $fields;
 	}
 
+	protected function _prepareCourseConditions($conditions)
+	{
+		$conditions = parent::_prepareCourseConditions($conditions);
+
+		if($conditions['userId'] <= 0){
+			unset($conditions['userId']);
+		}
+
+		if(!empty($conditions['schoolOrganizationId']) && !empty($conditions['includeChildren'])){
+			$userConditions['schoolOrganizationId'] = $conditions['schoolOrganizationId'];
+			$userConditions['includeChildren'] = $conditions['includeChildren'];
+			$count = $this->getUserService()->searchUserCount($userConditions);
+			$users = $this->getUserService()->searchUsers($userConditions, array('createdTime','DESC'), 0, $count);
+			$conditions['userIds'] = ArrayToolkit::column($users, 'id');
+			if(empty($conditions['userIds'])){
+				$conditions['userIds'] = array(0);
+			}
+			unset($conditions['schoolOrganizationId']);
+			unset($conditions['includeChildren']);
+		}
+
+		return $conditions;
+	}
+
+
 	public function findOtherPeriods($courseId){
 		$course=$this->getCourseDao()->getCourse($courseId);
 
