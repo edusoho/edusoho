@@ -1989,7 +1989,8 @@ a {
   margin-top: 8px;
 }
 
-.ui-article .ui-content p,span,div,a {
+.ui-article .ui-content p, .ui-article .ui-content span, .ui-article .ui-content div, .ui-article .ui-content a{
+  color: inherit;
   padding: initial;
   outline: initial;
   text-align: justify;
