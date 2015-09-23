@@ -27,6 +27,12 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         return $user ? $this->unserialize($user) : null;
     }
 
+    public function resetUserSchoolOrganizationId($schoolOrganizationId)
+    {
+        $this->getUserDao()->resetUserSchoolOrganizationId($schoolOrganizationId);
+    }
+
+
     public function updateUserStaffNo($staffNo, $userId)
     {
         $user = $this->getUser($userId);

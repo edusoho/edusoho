@@ -12,4 +12,5 @@ namespace Custom\Service\User;
 interface UserService
 {
     public function getUserByStaffNo($staffNo);
+    public function resetUserSchoolOrganizationId($SchoolOrganizationId);
 }

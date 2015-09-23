@@ -42,3 +42,7 @@ register_staffNo_check:
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: CustomWebBundle:CourseStudentManage:index }
+
+course_manage_student_export_csv:
+    pattern:  /course/{id}/manage/student/export
+    defaults: { _controller: CustomWebBundle:CourseStudentManage:exportCsv }

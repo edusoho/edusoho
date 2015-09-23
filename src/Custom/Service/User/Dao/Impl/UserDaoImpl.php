@@ -41,4 +41,12 @@ class UserDaoImpl extends BaseUserDao implements UserDao
 
         return $builder;
     }
+
+    public function resetUserSchoolOrganizationId($schoolOrganizationId)
+    {
+        $sql = "UPDATE {$this->table} SET schoolOrganizationId = 0 WHERE schoolOrganizationId = ?;";
+        return $this->getConnection()->executeQuery($sql, array($schoolOrganizationId));
+    }
+
+
 }

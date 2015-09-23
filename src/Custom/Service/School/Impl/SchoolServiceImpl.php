@@ -34,12 +34,20 @@ class SchoolServiceImpl extends BaseService implements SchoolService
 
     public function deleteSchoolOrganization($id)
     {
-        $this->getSchoolDao()->deleteSchoolOrganization($id);
+        $school = $this->getSchoolOrganization($id);
+        if(empty($school)){
+            $this->createNotFoundException();
+        }
+        $this->dispatchEvent('school.delete', $school['id']);
+        $this->getSchoolDao()->deleteSchoolOrganization($school['id']);
+        $this->getLogService()->info('school', 'delete', "删除院系/组织,{$school['name']}(#{$school['id']})");
     }
 
     public function addSchoolOrganization($organization)
     {
-        return $this->getSchoolDao()->addSchoolOrganization($organization);
+        $organization = $this->getSchoolDao()->addSchoolOrganization($organization);
+        $this->getLogService()->info('school', 'create', "添加院系/组织,{$organization['name']}(#{$organization['id']})");
+        return $organization;
     }
 
 
@@ -121,6 +129,10 @@ class SchoolServiceImpl extends BaseService implements SchoolService
         return $childrenIds;
     }
 
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
+    }
 
     protected function getSchoolDao()
     {

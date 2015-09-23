@@ -23,9 +23,9 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);
-                    Notify.success('保存栏目成功！');
+                    Notify.success('保存院系/专业成功！');
                 }).fail(function() {
-                    Notify.danger("添加栏目失败，请重试！");
+                    Notify.danger("添加院系/专业失败，请重试！");
                 });
 
             }
@@ -50,7 +50,7 @@ define(function(require, exports, module) {
         });
 
         $modal.find('.delete-organization').on('click', function() {
-            if (!confirm('真的要删除该栏目吗？')) {
+            if (!confirm('真的要删除该院系/专业吗？')) {
                 return ;
             }
 
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
                 }
 
             }, 'json').error(function(error) {
-                Notify.danger("删除栏目失败，请重试！"+error.responseJSON.error.message);
+                Notify.danger("删除院系/专业失败，请重试！");
             });
 
             return false;
