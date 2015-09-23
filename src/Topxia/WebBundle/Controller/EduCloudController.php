@@ -163,6 +163,7 @@ class EduCloudController extends BaseController
         }
         if($token['data']['targetType'] != $targetType || $token['data']['targetId'] != $targetId || $token['data']['index']  != $index) {
             return $this->createJsonResponse(array('error'=>'回调TOKEN有误'));
+        }
         $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
         $url = $info['siteUrl'];
