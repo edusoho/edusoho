@@ -138,7 +138,7 @@
           </a>
         </li>
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
-          <a href="javascript:" title="发送发布班级({{lesson.title}})通知短信" data-url="{{path('publish_sms_show',{targetType:'lesson',id:lesson.id})}}" data-toggle="modal" data-target="#modal">
+          <a href="javascript:" class="sms-send-btn" title="发送发布班级({{lesson.title}})通知短信" data-url="{{path('publish_sms_show',{targetType:'lesson',id:lesson.id})}}" data-toggle="modal" data-target="#modal">
             <span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信
           </a>
         </li>
