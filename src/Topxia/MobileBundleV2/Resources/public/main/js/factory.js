@@ -296,7 +296,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 			alert("请在客户端学习非图文课时");
 		},
 		share : function(url, title, about, pic) {
-			alert("请在客户端分享课程");
+			alert("请在客户端分享");
 		},
 		openDrawer : function(state) {
 			sideDelegate.toggleMenu();

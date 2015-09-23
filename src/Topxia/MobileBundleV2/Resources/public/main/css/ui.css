@@ -1989,6 +1989,12 @@ a {
   margin-top: 8px;
 }
 
+.ui-article .ui-content p,span,div,a {
+  margin: initial;
+  padding: initial;
+  outline: initial;
+}
+
 .ui-article .ui-content img {
   width: 100%;
   padding-right: 4px;
