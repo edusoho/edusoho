@@ -9,7 +9,23 @@
 {{ web_macro.flash_messages() }}
 
  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-    
+  <div class="mbm">
+      <select class="form-control" name="datePicker" id="datePicker">
+        {{ select_options({longinDate:'登陆时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
+      </select>
+
+    <div class="form-group longinDate">
+        <input class="form-control" type="text" id="loginStartDate" name="loginStartDate" value="{{app.request.query.get('loginStartDate')}}" placeholder="起始时间">
+        -
+        <input class="form-control" type="text" id="loginEndDate" name="loginEndDate" value="{{app.request.query.get('loginEndDate')}}" placeholder="结束时间">
+    </div>
+
+    <div class="form-group registerDate" style="display:none">
+        <input class="form-control" type="text" id="registerStartDate" name="registerStartDate" value="{{app.request.query.get('registerStartDate')}}" placeholder="起时间">
+        -
+        <input class="form-control" type="text" id="registerEndDate" name="registerEndDate" value="{{app.request.query.get('registerEndDate')}}" placeholder="结束时间">
+    </div>
+  </div>
     <div class="form-group">
       <select class="form-control" name="roles">
         {{ select_options(dict('userRole'), app.request.query.get('roles'), '--所有角色--') }}
@@ -32,26 +48,13 @@
     <div class="form-group">
       <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
     </div>
-    
-    <div class="form-group">
-      <label class="ptm" >登陆时间:</label>
-        <input class="form-control" type="text" id="loginStartDate" name="loginStartDate" value="{{app.request.query.get('loginStartDate')}}" placeholder="起始时间">
-        -
-        <input class="form-control" type="text" id="loginEndDate" name="loginEndDate" value="{{app.request.query.get('loginEndDate')}}" placeholder="结束时间">
-    </div>
 
-    <div class="form-group">
-      <label class="ptm" >注册时间:</label>
-        <input class="form-control" type="text" id="registerStartDate" name="registerStartDate" value="{{app.request.query.get('registerStartDate')}}" placeholder="起始时间">
-        -
-        <input class="form-control" type="text" id="registerEndDate" name="registerEndDate" value="{{app.request.query.get('registerEndDate')}}" placeholder="结束时间">
-    </div>
 
     <button class="btn btn-primary">搜索</button>
 
     {% if is_granted('ROLE_SUPER_ADMIN') %}
        {% if showUserExport %}
-        <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">导出用户</a>
+        <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">导出搜索结果</a>
 
         {% endif %}
     {% endif %}

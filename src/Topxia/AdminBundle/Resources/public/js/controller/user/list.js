@@ -6,7 +6,19 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        var $datePicker = $('#datePicker');
         var $table = $('#user-table');
+        
+        $datePicker.on('click',function(){
+            if($datePicker.val()=='longinDate'){
+                $('.longinDate').show();
+                $('.registerDate').hide();
+            }else{
+                $('.longinDate').hide();
+                $('.registerDate').show();
+            }
+        });
+
 
         $table.on('click', '.lock-user, .unlock-user', function() {
             var $trigger = $(this);
@@ -69,6 +81,8 @@ define(function(require, exports, module) {
                 var $loginEndDate = get_unix_time($loginEndDate1);
                 var $registerStartDate = get_unix_time($registerStartDate1);
                 var $registerEndDate = get_unix_time($registerEndDate1);
+
+                
 
                 $('#user-export').on('click', function() {
                    var self = $(this);
