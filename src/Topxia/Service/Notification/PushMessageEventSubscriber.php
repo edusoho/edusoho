@@ -211,7 +211,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $to = array('type' => 'global');
         $body = array('type' => 'discount.pass');
 
-        $this->push('公告', $discount['name'], $from, $to, $body);
+        $this->push('打折活动', $discount['name'], $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)
