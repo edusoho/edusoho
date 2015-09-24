@@ -19,6 +19,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.close' => 'onCourseClose',
             'announcement.create' => 'onAnnouncementCreate',
             'classroom.join' => 'onClassroomJoin',
+            'classroom.quit' => 'onClassroomQuit',
             'classroom.put_course' => 'onClassroomPutCourse',
             'article.create' => 'onArticleCreate',
             'discount.pass' => 'onDiscountPass',
@@ -133,6 +134,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
 
+        $this->addGroupMember('classroom', $classroom['id'], $userId);
+
         $from = array(
             'type' => 'classroom',
             'id' => $classroom['id'],
@@ -147,6 +150,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $body = array('type' => 'classroom.join', 'userId' => $userId);
 
         $this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
+    }
+
+    public function onClassroomQuit(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->deleteGroupMember('classroom', $classroom['id'], $userId);
     }
 
     public function onClassroomPutCourse(ServiceEvent $event)
@@ -227,6 +237,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
+    }
+
+    protected function addGroupMember($grouType, $groupId, $memberId)
+    {
+        $uri = "/groups/%s-%s/members";
+        $result = CloudAPIFactory::create('tui')->post(sprintf($uri, $grouType, $groupId), array(
+                'memberId' => $memberId,
+            ));
+    }
+
+    protected function deleteGroupMember($grouType, $groupId, $memberId)
+    {
+        $uri = "/groups/%s-%s/members/%s";
+        $result = CloudAPIFactory::create('tui')->delete(sprintf($uri, $grouType, $groupId, $memberId));
     }
 
     protected function getTarget($type, $id)
