@@ -37,7 +37,7 @@ define(function(require, exports, module) {
             html += '</audio>';
         }
 
-        if (fileType == 'video' && !swfobject.hasFlashPlayerVersion('10.2')) {
+        if (fileType == 'video' && !swfobject.hasFlashPlayerVersion('11')) {
             html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
             html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
             html += '<span aria-hidden="true">×</span>';

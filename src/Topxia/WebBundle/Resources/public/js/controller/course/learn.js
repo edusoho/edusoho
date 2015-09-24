@@ -489,11 +489,22 @@ define(function(require, exports, module) {
                     }, 'json');
                 } else if (lesson.type == 'flash' ) {
                     
+                    if (!swfobject.hasFlashPlayerVersion('11')) {
+                        var html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+                        html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+                        html += '<span aria-hidden="true">×</span>';
+                        html += '</button>';
+                        html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+                        html += '</div>';
+                        $("#lesson-swf-content").html(html);
+                        $("#lesson-swf-content").show();
+                    } else {
                         $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
                         swfobject.embedSWF(lesson.mediaUri, 
                             'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
                             {wmode:'opaque',allowFullScreen:'true'});
                         $("#lesson-swf-content").show();
+                    }
 
                 }
 
