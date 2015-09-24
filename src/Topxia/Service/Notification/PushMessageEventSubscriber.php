@@ -124,8 +124,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'announcement.create'
         );
 
-        $result = $this->push($target['title'], $announcement['content'], $from, $to, $body);
-        return $result;
+        $this->push($target['title'], $announcement['content'], $from, $to, $body);
     }
 
     public function onClassroomJoin(ServiceEvent $event)
