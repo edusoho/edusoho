@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-	var PlayerFactory = require('./player-factory');
+	
 	var Store = require('store');
 	var Class = require('class');
     var Messenger = require('./messenger');
@@ -52,6 +52,7 @@ define(function(require, exports, module) {
         videoHtml.html(html);
         videoHtml.show();
 
+        var PlayerFactory = require('./player-factory');
         var playerFactory = new PlayerFactory();
         var player = playerFactory.create(
             videoHtml.data('player'),

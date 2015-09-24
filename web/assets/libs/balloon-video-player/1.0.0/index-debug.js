@@ -10274,7 +10274,7 @@ vjs.plugin = function(name, init){
 
   var scrollSetting = {
     "": true,
-    "up": true,
+    "up": true
   };
 
   function findScrollSetting(value) {
@@ -11190,7 +11190,7 @@ vjs.plugin = function(name, init){
     if (cue.vertical === "") {
       this.applyStyles({
         left:  this.formatStyle(textPos, "%"),
-        width: this.formatStyle(cue.size, "%"),
+        width: this.formatStyle(cue.size, "%")
       });
     // Vertical box orientation; textPos is the distance from the top edge of the
     // area to the top edge of the box and cue.size is the height extending
@@ -11209,7 +11209,7 @@ vjs.plugin = function(name, init){
         left: this.formatStyle(box.left, "px"),
         right: this.formatStyle(box.right, "px"),
         height: this.formatStyle(box.height, "px"),
-        width: this.formatStyle(box.width, "px"),
+        width: this.formatStyle(box.width, "px")
       });
     };
   }
@@ -12433,7 +12433,7 @@ define("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug", [], f
         xpos: 0,
         ypos: 0,
         xrepeat: 0,
-        opacity: 100,
+        opacity: 100
     },
     extend = function() {
       var args, target, i, object, property;
