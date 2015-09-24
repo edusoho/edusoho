@@ -568,6 +568,11 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
+    public function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
     public function getCourseOrderService()
     {
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
