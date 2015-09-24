@@ -3,7 +3,7 @@ namespace Topxia\Service\Notification;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-
+use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -183,9 +183,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onArticleCreate(ServiceEvent $event)
     {
         $article = $event->getSubject();
-
+        $articleApp = new MobileSchoolUtil()->getArticleApp();
         $from = array(
-            'type' => 'news',
+            'id' => $articleApp['id'],
+            'type' => $articleApp['code'],
+            'image' => $articleApp['avatar']
         );
 
         $to = array(

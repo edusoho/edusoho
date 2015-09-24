@@ -24,7 +24,7 @@ class MobileSchoolUtil
             'id' => 2,
             'code' => 'news',
             'name' => '资讯',
-            'title' => '',
+            'title' => '网校资讯服务',
             'about' => '',
             'avatar' => '',
             'callback' => '',
@@ -42,6 +42,12 @@ class MobileSchoolUtil
     {
         $apps = $this->getSchoolApps();
         return isset($apps[$id]) ? $apps[$id] : array();
+    }
+
+    public function getArticleApp()
+    {
+        $apps = $this->getSchoolApps();
+        return $apps[2];
     }
 
 }
