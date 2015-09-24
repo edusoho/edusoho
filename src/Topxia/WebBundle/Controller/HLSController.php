@@ -17,6 +17,7 @@ class HLSController extends BaseController
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
+
         $levelParam = $request->query->get('level', "");
 
         if (empty($token)) {
