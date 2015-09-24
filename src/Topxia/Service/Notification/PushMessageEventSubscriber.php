@@ -23,6 +23,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.put_course' => 'onClassroomPutCourse',
             'article.create' => 'onArticleCreate',
             'discount.pass' => 'onDiscountPass',
+            'course.join' => 'onCourseJoin',
+            'course.quit' => 'onCourseQuit',
         );
     }
 
@@ -156,6 +158,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
         $this->deleteGroupMember('classroom', $classroom['id'], $userId);
+    }
+
+    public function onCourseJoin(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->addGroupMember('course', $course['id'], $userId);
+    }
+
+    public function onCourseQuit(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->deleteGroupMember('course', $course['id'], $userId);
     }
 
     public function onClassroomPutCourse(ServiceEvent $event)
