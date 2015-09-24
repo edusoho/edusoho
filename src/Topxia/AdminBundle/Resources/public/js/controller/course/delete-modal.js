@@ -95,6 +95,11 @@ define(function(require, exports, module) {
                 progressRange: [83, 86]
             },
             {
+                title: '检查通知删除',
+                url: urls.notificationDeleteUrl,
+                progressRange: [83, 86]
+            },
+            {
                 title: '检查动态删除',
                 url: urls.statusDeleteUrl,
                 progressRange: [87, 96]
