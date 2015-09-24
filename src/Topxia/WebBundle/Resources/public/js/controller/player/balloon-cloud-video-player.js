@@ -90,7 +90,6 @@ define(function(require, exports, module) {
                 });
 
                 player.on("ended", function(e){
-                    self._onEnded();
                     self.trigger("ended", e);
                 });
 

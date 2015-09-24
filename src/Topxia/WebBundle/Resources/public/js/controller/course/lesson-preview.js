@@ -60,13 +60,23 @@ define(function(require, exports, module) {
 
         if($("#lesson-preview-flash").length>0){
             var player = $("#lesson-preview-flash");
-            $.get(player.data('url'), function(response) {
-                var html = '<div id="lesson-swf-player" ></div>';
-                $("#lesson-preview-flash").html(html);
-                swfobject.embedSWF(response.mediaUri, 
-                    'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-                    {wmode:'opaque',allowFullScreen:'true'});
-            });
+            if (!swfobject.hasFlashPlayerVersion('11')) {
+                var html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+                html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+                html += '<span aria-hidden="true">×</span>';
+                html += '</button>';
+                html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+                html += '</div>';
+                player.html(html);
+            } else {
+                $.get(player.data('url'), function(response) {
+                    var html = '<div id="lesson-swf-player" ></div>';
+                    $("#lesson-preview-flash").html(html);
+                    swfobject.embedSWF(response.mediaUri, 
+                        'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                        {wmode:'opaque',allowFullScreen:'true'});
+                });
+            }
             player.css("height", '360px');
         }
 
