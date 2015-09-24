@@ -94,6 +94,7 @@ define(function(require, exports, module) {
 
         player.on("ended", function(){
             messenger.sendToParent("ended", {stop: true});
+            DurationStorage.del(userId, fileId);
         });
 
 	};
