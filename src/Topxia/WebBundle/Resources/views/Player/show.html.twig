@@ -10,7 +10,7 @@
 		{% if file|default(null) %}
 			<div class="lesson-dashboard ">
 				<div id="lesson-video-content" 
-				data-user-id="{{app.user.id}}" 
+				data-user-id="{{app.user.id|default(0)}}" 
 				data-file-id="{{file.id}}" 
 				data-file-type="{{file.type}}" 
 				{% if file.type == 'video' and file.storage == 'cloud' %}

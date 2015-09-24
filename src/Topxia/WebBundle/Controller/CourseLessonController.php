@@ -19,7 +19,9 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if(!$lesson["free"]) {
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+
+        if(!$lesson["free"] && empty($timelimit)) {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         }
 
@@ -48,7 +50,8 @@ class CourseLessonController extends BaseController
                 goto getFileUrl;
             }
         } else {
-            if(!$lesson["free"]) {
+            $timelimit = $this->setting('magic.lesson_watch_time_limit');
+            if(!$lesson["free"] && empty($timelimit)) {
                 list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
             }
         }
