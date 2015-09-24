@@ -92,12 +92,12 @@ define(function(require, exports, module) {
             {
                 title: '检查公告删除',
                 url: urls.announcementDeleteUrl,
-                progressRange: [83, 86]
+                progressRange: [83, 84]
             },
             {
                 title: '检查通知删除',
                 url: urls.notificationDeleteUrl,
-                progressRange: [83, 86]
+                progressRange: [85, 86]
             },
             {
                 title: '检查动态删除',

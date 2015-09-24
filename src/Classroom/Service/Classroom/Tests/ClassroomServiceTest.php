@@ -1123,7 +1123,6 @@ class ClassroomServiceTest extends BaseTestCase
             'roles' => array('ROLE_USER','ROLE_SUPER_ADMIN'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
-
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
         $this->assertEquals(true, $enabled);
@@ -1141,7 +1140,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
-        $this->assertEquals(false, $enabled);
+        $this->assertEquals(true, $enabled);
 
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
 
