@@ -11884,7 +11884,7 @@ videojs.addLanguage("zh-CN",{
  "Duration Time": "时长",
  "Remaining Time": "剩余时间",
  "Stream Type": "媒体流类型",
- "LIVE": "直播",
+ "LIVE": " ",
  "Loaded": "加载完毕",
  "Progress": "进度",
  "Fullscreen": "全屏",
