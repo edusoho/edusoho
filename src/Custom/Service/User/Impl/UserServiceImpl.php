@@ -200,6 +200,8 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
         $user['staffNo']  = empty($registration['staffNo']) ? '' : $registration['staffNo'];
+        $user['schoolOrganizationId']  = empty($registration['schoolOrganizationId']) ? 0 : $registration['schoolOrganizationId'];
+
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
