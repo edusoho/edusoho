@@ -22,6 +22,7 @@ class ClassroomServiceImpl extends BaseClassroomServiceImpl
 
     protected function prepareClassroomConditions(&$conditions)
     {
+
         if(!empty($conditions['schoolOrganizationId']) && !empty($conditions['includeChildren'])){
             $userConditions['schoolOrganizationId'] = $conditions['schoolOrganizationId'];
             $userConditions['includeChildren'] = $conditions['includeChildren'];
@@ -34,7 +35,7 @@ class ClassroomServiceImpl extends BaseClassroomServiceImpl
             unset($conditions['schoolOrganizationId']);
             unset($conditions['includeChildren']);
         }
-        var_dump($conditions);
+
     }
 
     protected function getUserService()

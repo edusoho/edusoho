@@ -122,7 +122,7 @@ class CourseStudentManageController extends BaseCourseStudentController
         foreach ($courseMembers as $courseMember) {
             $member = "";
             $member .= $users[$courseMember['userId']]['nickname'].",";
-            $member .= $users[$courseMember['userId']]['staffNo'].",";
+            $member .= $users[$courseMember['userId']]['staffNo'] ? $users[$courseMember['userId']]['staffNo']."," : "-,";
             if(!empty($schoolOrganization[$users[$courseMember['userId']]['schoolOrganizationId']])){
                 $member .= $schoolOrganization[$users[$courseMember['userId']]['schoolOrganizationId']]['name'].",";
             }else{

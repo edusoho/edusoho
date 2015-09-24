@@ -8,3 +8,4 @@ parameters:
         'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
         'User.UserDao' : 'Custom\Service\User\Dao\Impl\UserDaoImpl'
         'Course.CourseMemberDao' : 'Custom\Service\Course\Dao\Impl\CourseMemberDaoImpl'
+        'Classroom:Classroom.ClassroomMemberDao' : 'Custom\Service\Classroom\Dao\Impl\ClassroomMemberDaoImpl'
