@@ -1124,7 +1124,6 @@ class ClassroomServiceTest extends BaseTestCase
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
         $this->assertEquals(true, $enabled);
 
         $currentUser->fromArray(array(
@@ -1140,7 +1139,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
-        $this->assertEquals(true, $enabled);
+        $this->assertEquals(false, $enabled);
 
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
 
