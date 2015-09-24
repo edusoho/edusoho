@@ -5,7 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Silex\Application;
 use Topxia\Service\Util\EdusohoTuiClient;
-use Topxia\Api\Util\MobileSchoolUtil;
 
 $api = $app['controllers_factory'];
 
@@ -51,53 +50,6 @@ $api->get('/token', function () {
     return $token;
 });
 
-/*
-## 获取手机网校应用
-    GET /mobileschools/apps
-
-** 响应 **
-
-```
-{
-    'id' => {app-id},
-    'name' => {app-name},
-    'title' => {app-title},
-    'about' => {app-about},
-    'avatar' => {app-avatar},
-    'callback' => {app-callback}
-}
-```
-*/
-
-$api->get('/apps', function () {
-    $schoolUtil = new MobileSchoolUtil();
-
-    return $schoolUtil->searchSchoolApps();
-});
-
-/*
-## 根据id获取手机网校应用
-    GET /mobileschools/app/{id}
-
-** 响应 **
-
-```
-{
-    'id' => {app-id},
-    'name' => {app-name},
-    'title' => {app-title},
-    'about' => {app-about},
-    'avatar' => {app-avatar},
-    'callback' => {app-callback}
-}
-```
-*/
-
-$api->get('/app/{id}', function (Request $request, $id) {
-    $schoolUtil = new MobileSchoolUtil();
-
-    return $schoolUtil->findSchoolAppById($id);
-});
 
 /*
 ## 获取手机网校公告列表
