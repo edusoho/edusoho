@@ -192,7 +192,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onArticleCreate(ServiceEvent $event)
     {
         $article = $event->getSubject();
-        $articleApp = new MobileSchoolUtil()->getArticleApp();
+        $schoolUtil = new MobileSchoolUtil();
+        $articleApp = $schoolUtil->getArticleApp();
         $from = array(
             'id' => $articleApp['id'],
             'type' => $articleApp['code'],
