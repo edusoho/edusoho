@@ -26,7 +26,7 @@ class MobileSchoolUtil
             'name' => '资讯',
             'title' => '网校资讯服务',
             'about' => '',
-            'avatar' => '',
+            'avatar' => 'img/mobile/article_app_icon.jpg',
             'callback' => '',
         );
 

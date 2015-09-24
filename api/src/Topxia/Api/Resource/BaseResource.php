@@ -69,6 +69,9 @@ abstract class BaseResource
 
     protected function getAssetUrl($path)
     {
+        if (empty($path)) {
+            return '';
+        }
         $path = "http://{$_SERVER['HTTP_HOST']}/assets/{$path}";
         return $path;
     }
