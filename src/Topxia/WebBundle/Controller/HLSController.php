@@ -12,10 +12,11 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 class HLSController extends BaseController
 {
 
-    public function playlistAction(Request $request, $id, $token, $returnJson=false)
+    public function playlistAction(Request $request, $id, $token)
     {
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
+        $returnJson = $request->query->get('returnJson', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
 
         $levelParam = $request->query->get('level', "");

@@ -31,6 +31,7 @@ define(function(require, exports, module) {
                     media.addEventListener("ended", function(e) {
                         that.trigger("ended", e);
                     });
+
                     media.play();
                 }
             });

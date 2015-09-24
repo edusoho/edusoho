@@ -26,43 +26,10 @@ class CourseLessonController extends BaseController
         }
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
-            'request' => $request,
             'id' => $lesson["mediaId"],
-            'url' => $this->generateUrl("course_lesson_play_url", array(
-                "courseId" => $courseId,
-                "lessonId" => $lessonId,
-            ), true),
+            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : ''
         ));
     }
-
-    //播放地址，目前只剥离了音视频
-    public function playUrlAction(Request $request, $courseId, $lessonId)
-    {
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
-            throw $this->createNotFoundException();
-        }
-
-        $isPreview = $request->query->get('isPreview', 0);
-        if($isPreview) {
-            $user = $this->getCurrentUser();
-            if($user->isLogin() && $user->isAdmin()) {
-                goto getFileUrl;
-            }
-        } else {
-            $timelimit = $this->setting('magic.lesson_watch_time_limit');
-            if(!$lesson["free"] && empty($timelimit)) {
-                list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-            }
-        }
-
-        getFileUrl:
-        return $this->forward("TopxiaWebBundle:UploadFile:playUrl",array(
-            'id' => $lesson['mediaId'],
-            'mode' => $lesson["free"] == 1 ? '' : $request->query->get('mode')
-        ));
-    }
-
 
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
