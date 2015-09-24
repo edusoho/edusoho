@@ -75,11 +75,15 @@ class PlayerController extends BaseController
                         $returnJson = true;
                     }
 
-                    return $this->generateUrl('hls_playlist', array(
+                    $params = array(
                         'id' => $file['id'],
                         'token' => $token['token'],
-                        'returnJson' => isset($returnJson)? $returnJson : 0
-                    ));
+                    );
+                    if(isset($returnJson)){
+                        $params['returnJson'] = $returnJson;
+                    }
+
+                    return $this->generateUrl('hls_playlist', $params, true);
                 } else {
                     $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
