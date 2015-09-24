@@ -247,7 +247,7 @@ define(function(require, exports, module) {
                     }
 
                     var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
-                    var html = '<iframe src=\''+playerUrl+'\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+                    var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
                     $("#lesson-video-content").show();
                     $("#lesson-video-content").html(html);
@@ -255,7 +255,7 @@ define(function(require, exports, module) {
                     var messenger = new Messenger({
                         name: 'parent',
                         project: 'PlayerProject',
-                        children: [viewerIframe],
+                        children: [ document.getElementById('viewerIframe') ],
                         type: 'parent'
                     });
 

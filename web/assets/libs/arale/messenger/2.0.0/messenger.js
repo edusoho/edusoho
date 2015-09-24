@@ -23,9 +23,8 @@ define(function(require, exports, module) {
             var errMsg = '';
             if(arguments.length < 2){
                 errMsg = 'target error - target and name are both required';
-            // TODO: by canuo
-            // } else if (typeof target != 'object'){
-            //     errMsg = 'target error - target itself must be window object';
+            } else if (typeof target != 'object'){
+                errMsg = 'target error - target itself must be window object';
             } else if (typeof name != 'string'){
                 errMsg = 'target error - target name must be string type';
             }
