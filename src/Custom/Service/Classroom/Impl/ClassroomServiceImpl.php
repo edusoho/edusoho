@@ -10,17 +10,17 @@ class ClassroomServiceImpl extends BaseClassroomServiceImpl
 {
     public function searchMemberCount($conditions)
     {
-        $this->_prepareClassroomConditions($conditions);
+        $this->prepareClassroomConditions($conditions);
         return parent::searchMemberCount($conditions);
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
-        $this->_prepareClassroomConditions($conditions);
+        $this->prepareClassroomConditions($conditions);
         return parent::searchMembers($conditions, $orderBy, $start, $limit);
     }
 
-    private function _prepareClassroomConditions(&$conditions)
+    protected function prepareClassroomConditions(&$conditions)
     {
         if(!empty($conditions['schoolOrganizationId']) && !empty($conditions['includeChildren'])){
             $userConditions['schoolOrganizationId'] = $conditions['schoolOrganizationId'];
