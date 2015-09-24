@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
+    var Messenger = require('../player/messenger');
 
     exports.run = function() {
 
@@ -19,7 +20,20 @@ define(function(require, exports, module) {
 
             lessonVideoDiv.html(html);
 
-		}
+            if (lessonVideoDiv.data('timelimit')) {
+                $(".modal-footer").prepend($('.js-buy-text').html());
+                var messenger = new Messenger({
+                    name: 'parent',
+                    project: 'PlayerProject',
+                    children: [viewerIframe],
+                    type: 'parent'
+                });
+
+                messenger.on("ended", function(){
+                    lessonVideoDiv.html($('.js-time-limit-dev').html());
+                });
+            }
+    	}
 
 		if ($("#lesson-preview-ppt-player").length > 0) {
 			var $player = $("#lesson-preview-ppt-player");

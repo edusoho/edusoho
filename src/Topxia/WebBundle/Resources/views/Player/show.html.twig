@@ -14,7 +14,7 @@
 				data-file-id="{{file.id}}" 
 				data-file-type="{{file.type}}" 
 				{% if file.type == 'video' and file.storage == 'cloud' %}
-				data-url="{{url}}.m3u8"
+				data-url="{{url}}.m3u8?mode={{mode}}"
 				{% else %}
 				data-url="{{url}}"
 				{% endif %}

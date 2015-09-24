@@ -24,11 +24,12 @@ class CourseLessonController extends BaseController
         }
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
+            'request' => $request,
             'id' => $lesson["mediaId"],
             'url' => $this->generateUrl("course_lesson_play_url", array(
                 "courseId" => $courseId,
-                "lessonId" => $lessonId
-            ), true)
+                "lessonId" => $lessonId,
+            ), true),
         ));
     }
 
@@ -41,7 +42,6 @@ class CourseLessonController extends BaseController
         }
 
         $isPreview = $request->query->get('isPreview', 0);
-
         if($isPreview) {
             $user = $this->getCurrentUser();
             if($user->isLogin() && $user->isAdmin()) {
@@ -80,13 +80,13 @@ class CourseLessonController extends BaseController
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
         $user = $this->getCurrentUser();
+
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
         if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
 
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-
             if($course["parentId"]>0){
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
@@ -104,7 +104,7 @@ class CourseLessonController extends BaseController
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (empty($lesson['free']) && $file['storage'] != 'cloud') {
+            if (empty($lesson['free']) && empty($timelimit) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }

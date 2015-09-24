@@ -307,6 +307,8 @@ class UploadFileController extends BaseController
     {
         $file = $this->getUploadFileService()->getFile($id);
 
+        var_dump($request->query->get("mode","aaa"));exit();
+
         if(empty($file)) {
             throw $this->createNotFoundException();
         }
@@ -325,7 +327,8 @@ class UploadFileController extends BaseController
                         'data' => $file['id'], 
                         'times' => 3, 
                         'duration' => 3600,
-                        'userId' => $line
+                        'userId' => $this->getCurrentUser()->getId(),
+                        'mode' => $request->query->get("mode"),
                     ));
 
                     if($this->setting("developer.balloon_player")) {

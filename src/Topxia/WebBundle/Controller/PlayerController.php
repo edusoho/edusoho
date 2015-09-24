@@ -42,7 +42,8 @@ class PlayerController extends BaseController
 		return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
 			'file' => $file,
 			'url' => $url,
-			'player' => $player
+			'player' => $player,
+			"mode" => $request->query->get("mode", "")
         ));
 	}
 
