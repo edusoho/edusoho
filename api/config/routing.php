@@ -35,3 +35,6 @@ $app->get(_u('/classrooms/{classroomId}/members'), 'res.ClassroomMembers:get');
 $app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.ClassroomMember:get');
 
 $app->get(_u('/me/chatrooms'), 'res.MeChatroomes:get');
+
+$app->get(_u('/apps'), 'res.Apps:get');
+$app->get(_u('/app/{id}'), 'res.App:get');

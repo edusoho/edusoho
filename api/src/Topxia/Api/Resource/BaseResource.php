@@ -67,6 +67,12 @@ abstract class BaseResource
         return $path;
     }
 
+    protected function getAssetUrl($path)
+    {
+        $path = "http://{$_SERVER['HTTP_HOST']}/assets/{$path}";
+        return $path;
+    }
+
     protected function getCurrentUser()
     {
         return $this->getServiceKernel()->getCurrentUser();

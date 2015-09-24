@@ -10,6 +10,8 @@ $resources = array(
     'Classrooms',
     'MeChatroomes',
     'User',
+    'Apps',
+    'App'
 );
 
 foreach ($resources as $res) {
