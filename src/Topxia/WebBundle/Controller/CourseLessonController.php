@@ -58,8 +58,8 @@ class CourseLessonController extends BaseController
 
         getFileUrl:
         return $this->forward("TopxiaWebBundle:UploadFile:playUrl",array(
-            'request' => $request,
             'id' => $lesson['mediaId'],
+            'mode' => $lesson["free"] == 1 ? '' : $request->query->get('mode')
         ));
     }
 

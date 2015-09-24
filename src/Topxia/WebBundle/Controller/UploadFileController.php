@@ -303,7 +303,7 @@ class UploadFileController extends BaseController
     }
 
     //播放地址，目前只剥离了音视频，只能forward
-    public function playUrlAction(Request $request, $id, $line=null)
+    public function playUrlAction(Request $request, $id, $mode='')
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -324,7 +324,7 @@ class UploadFileController extends BaseController
                     $token = $this->getTokenService()->makeToken('hls.playlist', array(
                         'data' => array(
                             'id' => $file['id'], 
-                            'mode' => $request->query->get("mode", ""),
+                            'mode' => $mode,
                         ),
                         'times' => 3, 
                         'duration' => 3600,
