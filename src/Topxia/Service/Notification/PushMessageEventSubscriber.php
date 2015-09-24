@@ -47,7 +47,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'id' => $result['id']
         );
 
-        $this->push($target['title'], "试卷《{$result['paperName']}》批阅完成！", $from, $to, $body);
+        $this->push($target['title'], $result['paperName'], $from, $to, $body);
     }
 
     public function onLessonPubilsh(ServiceEvent $event)
