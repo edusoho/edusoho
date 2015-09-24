@@ -212,20 +212,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $body = array(
             'type' => 'discount.'.$discount['type']
         );
-        var content;
+        $content;
         switch ($discount['type']) {
             case 'free':
-                content = "【限时免费】";
+                $content = "【限时免费】";
                 break;
             case 'discount':
-                content = "【限时打折】";
+                $content = "【限时打折】";
                 break;
             default:
-                content = "【全站打折】";
+                $content = "【全站打折】";
                 break;
         }
 
-        $this->push('打折活动', content.$discount['name'], $from, $to, $body);
+        $this->push('打折活动', $content.$discount['name'], $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)
