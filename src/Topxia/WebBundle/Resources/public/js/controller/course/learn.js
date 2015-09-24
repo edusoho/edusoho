@@ -252,33 +252,33 @@ define(function(require, exports, module) {
                     $("#lesson-video-content").show();
                     $("#lesson-video-content").html(html);
 
-                    // var messenger = new Messenger({
-                    //     name: 'parent',
-                    //     project: 'PlayerProject',
-                    //     children: [viewerIframe],
-                    //     type: 'parent'
-                    // });
+                    var messenger = new Messenger({
+                        name: 'parent',
+                        project: 'PlayerProject',
+                        children: [viewerIframe],
+                        type: 'parent'
+                    });
 
-                    // messenger.on("ended", function(){
-                    //     var player = that.get("player");
-                    //     player.playing = false;
-                    //     that.set("player", player);
-                    //     that._onFinishLearnLesson();
-                    // });
+                    messenger.on("ended", function(){
+                        var player = that.get("player");
+                        player.playing = false;
+                        that.set("player", player);
+                        that._onFinishLearnLesson();
+                    });
 
-                    // messenger.on("playing", function(){
-                    //     var player = that.get("player");
-                    //     player.playing = true;
-                    //     that.set("player", player);
-                    // });
+                    messenger.on("playing", function(){
+                        var player = that.get("player");
+                        player.playing = true;
+                        that.set("player", player);
+                    });
 
-                    // messenger.on("paused", function(){
-                    //     var player = that.get("player");
-                    //     player.playing = false;
-                    //     that.set("player", player);
-                    // });
+                    messenger.on("paused", function(){
+                        var player = that.get("player");
+                        player.playing = false;
+                        that.set("player", player);
+                    });
 
-                    // that.set("player", {});
+                    that.set("player", {});
 
                 } else if (lesson.type == 'text' ) {
                     $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
