@@ -16,7 +16,7 @@
 		{% elseif lesson.type == 'video' or lesson.type == 'audio' %}
 			{% if lesson.mediaSource == 'self' %}
 				<div id="lesson-preview-player" 
-          style="height:300px"
+          style="height:300px;overflow:hidden"
           data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
           {% if not lesson.free %}
             data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
