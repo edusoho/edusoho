@@ -7,8 +7,8 @@ define(function(require, exports, module) {
 		var today=$('#datajson').data('today');
 		var $calendar = $('#calendar');
 		var Cal  = Widget.extend({
-			attr:{
-			},
+			//attr:{
+			//},
 			setup:function(){
 				var calendar = this.element.fullCalendar({
 					header: {
