@@ -23,12 +23,19 @@ class Article extends BaseResource
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
 
+        $site = $this->getSettingService()->get('site', array());
+        $res['source'] = $site['name'];
         return $res;
     }
 
     protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

@@ -48,7 +48,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'id' => $result['id']
         );
 
-        $this->push($target['title'], "试卷《{$result['paperName']}》批阅完成！", $from, $to, $body);
+        $this->push($target['title'], $result['paperName'], $from, $to, $body);
     }
 
     public function onLessonPubilsh(ServiceEvent $event)
@@ -125,8 +125,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'announcement.create'
         );
 
-        $result = $this->push($target['title'], $announcement['content'], $from, $to, $body);
-        return $result;
+        $this->push($target['title'], $announcement['content'], $from, $to, $body);
     }
 
     public function onClassroomJoin(ServiceEvent $event)
@@ -219,9 +218,23 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $from = array('type' => 'global');
         $to = array('type' => 'global');
-        $body = array('type' => 'discount.Pass');
+        $body = array(
+            'type' => 'discount.'.$discount['type']
+        );
+        $content;
+        switch ($discount['type']) {
+            case 'free':
+                $content = "【限时免费】";
+                break;
+            case 'discount':
+                $content = "【限时打折】";
+                break;
+            default:
+                $content = "【全站打折】";
+                break;
+        }
 
-        $this->push('公告', $discount['name'], $from, $to, $body);
+        $this->push('打折活动', $content.$discount['name'], $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)

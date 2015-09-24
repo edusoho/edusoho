@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Silex\Application;
 use Topxia\Service\Util\EdusohoTuiClient;
+use Topxia\Api\Util\MobileSchoolUtil;
 
 $api = $app['controllers_factory'];
 
@@ -69,29 +70,33 @@ $api->get('/token', function () {
 */
 
 $api->get('/apps', function () {
-    $mobile = ServiceKernel::instance()->createService('System.SettingService')->get('mobile');
-    $site = ServiceKernel::instance()->createService('System.SettingService')->get('site');
-    $apps[] = array(
-        'id' => 1,
-        'code' => 'announcement',
-        'name' => $site['name'],
-        'title' => $site['slogan'],
-        'about' => $mobile['about'],
-        'avatar' => $mobile['logo'],
-        'callback' => '/mobileschools/announcements'
-    );
+    $schoolUtil = new MobileSchoolUtil();
 
-    $apps[] = array(
-        'id' => 2,
-        'code' => 'news',
-        'name' => '资讯',
-        'title' => '',
-        'about' => '',
-        'avatar' => '',
-        'callback' => '',
-    );
+    return $schoolUtil->searchSchoolApps();
+});
 
-    return $apps;
+/*
+## 根据id获取手机网校应用
+    GET /mobileschools/app/{id}
+
+** 响应 **
+
+```
+{
+    'id' => {app-id},
+    'name' => {app-name},
+    'title' => {app-title},
+    'about' => {app-about},
+    'avatar' => {app-avatar},
+    'callback' => {app-callback}
+}
+```
+*/
+
+$api->get('/app/{id}', function (Request $request, $id) {
+    $schoolUtil = new MobileSchoolUtil();
+
+    return $schoolUtil->findSchoolAppById($id);
 });
 
 /*

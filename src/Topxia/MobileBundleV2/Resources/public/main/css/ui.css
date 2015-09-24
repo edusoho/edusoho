@@ -2,6 +2,7 @@
 
 body {
   font-size: 15px;
+  background-color: #f0f0f0;
 }
 
 a {
@@ -1979,6 +1980,53 @@ a {
   text-align: center;
 }
 /* discount-label */
+
+/* ui-article */
+.ui-article .ui-panel{
+  padding: 16px;
+}
+
+.ui-article .ui-content {
+  margin-top: 8px;
+}
+
+.ui-article .ui-content p, .ui-article .ui-content span, .ui-article .ui-content div, .ui-article .ui-content a{
+  color: #47494c;
+  padding: initial;
+  outline: initial;
+  text-align: justify;
+  line-height: 1.6;
+  margin: 10px auto 15px auto;
+}
+
+.ui-article .ui-content img {
+  width: 100%;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  display: block;
+  min-height: 100px;
+}
+
+.ui-article .ui-title {
+  font-size: 18px;
+}
+
+.ui-article .ui-subtitle {
+  font-size: 13px;
+  line-height: 30px;
+}
+
+.ui-article .ui-subtitle .time {
+  color: #ccc;
+}
+
+.ui-article .ui-subtitle .source {
+  color: #4a90e2;
+}
+
+/* ui-article */
 
 /** .ui-loading, bright **/
 .ui-loading {
