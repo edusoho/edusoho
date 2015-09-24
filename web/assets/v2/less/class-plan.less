@@ -14,7 +14,7 @@
     }
     .num {
       position: absolute;
-      top: 5px;
+      top: 0;
       left: 0;
       width: 30px;
       height: 30px;
@@ -38,7 +38,9 @@
       background: @brand-primary - #222;
     }
   }
-  .checkbox,
+  .checkbox {
+    padding-left: 70px;
+  }
   .form-group {
     padding-left: 50px;
   }
@@ -185,23 +187,35 @@
       .border-radius(10px);
     }
   }
-  .chart {
+  .es-chart {
     position: absolute;
     top: 20px;
     right: 40px;
-    display: inline-block;
-    width: 150px;
-    height: 150px;
-    text-align: center;
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
+    width: 140px;
+    height: 140px;
+    .percent {
+      padding: 40px 20px;
     }
+  }
+}
+
+.es-chart {
+  text-align: center;
+  .border-radius(50%);
+  &.done {
+    background-color: #46c37b;
+    color: #fff;
+    .percent span {
+      color: #fff;
+    }
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   .percent {
     display: inline-block;
-    padding: 40px 20px;
     span {
       font-size: 30px;
       color: @brand-primary;
@@ -437,6 +451,40 @@
       border-left-color: @brand-primary;
       border-width: 20px;
       margin-top: -20px;
+    }
+  }
+}
+
+.inplan-modal-step {
+  .plan-circle {
+    margin: 20px auto;
+    width: 120px;
+    height: 120px;
+    padding: 30px 20px;
+    text-align: center;
+    .border-radius(50%);
+    border: 2px solid @brand-primary;
+    color: @brand-primary;
+    font-size: 16px;
+    &.plan-circle-o {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+    span {
+      font-size: 24px;
+    }
+  }
+  .well {
+    position: relative;
+  }
+  .es-chart {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 140px;
+    height: 140px;
+    .percent {
+      padding: 40px 20px;
     }
   }
 }
