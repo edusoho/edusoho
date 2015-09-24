@@ -347,7 +347,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $noteCount = $this->getCourseNoteDao()->findNotesCountByCourseId($course['id']);
         if($noteCount>0){
-            $notes = $this->getCourseNoteDao()->searchNotes(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
+            $notes = $this->getCourseNoteDao()->searchNotes(array('courseId'=>$course['id']),array('createdTime'=>'DESC'),0,500);
             foreach ($notes as $note) {
                 $this->getCourseNoteLikeDao()->deleteNoteLikesByNoteId($note['id']);
                 $this->getCourseNoteDao()->deleteNote($note['id']);
@@ -365,7 +365,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $threadCount = $this->getThreadDao()->searchThreadCount(array('courseId'=>$course['id']));
         if($threadCount>0){
-            $threads = $this->getThreadDao()->searchThreads(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
+            $threads = $this->getThreadDao()->searchThreads(array('courseId'=>$course['id']),array(array('createdTime' ,'desc')),0,500);
             foreach ($threads as $thread) {
                 $this->getThreadPostDao()->deletePostsByThreadId($thread['id']);
                 $this->getThreadDao()->deleteThread($thread['id']); 
