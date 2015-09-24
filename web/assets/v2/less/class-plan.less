@@ -185,23 +185,35 @@
       .border-radius(10px);
     }
   }
-  .chart {
+  .es-chart {
     position: absolute;
     top: 20px;
     right: 40px;
-    display: inline-block;
-    width: 150px;
-    height: 150px;
-    text-align: center;
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
+    width: 140px;
+    height: 140px;
+    .percent {
+      padding: 40px 20px;
     }
+  }
+}
+
+.es-chart {
+  text-align: center;
+  .border-radius(50%);
+  &.done {
+    background-color: #46c37b;
+    color: #fff;
+    .percent span {
+      color: #fff;
+    }
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   .percent {
     display: inline-block;
-    padding: 40px 20px;
     span {
       font-size: 30px;
       color: @brand-primary;
@@ -458,6 +470,19 @@
     }
     span {
       font-size: 24px;
+    }
+  }
+  .well {
+    position: relative;
+  }
+  .es-chart {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 140px;
+    height: 140px;
+    .percent {
+      padding: 40px 20px;
     }
   }
 }
