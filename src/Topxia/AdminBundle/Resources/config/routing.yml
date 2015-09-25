@@ -654,7 +654,11 @@ admin_optimize_backupdb:
 admin_optimize_remove_upload_files:
     pattern:  /setting/optimize/remove-unusedfiles
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
-    methods: [POST]
+
+
+admin_optimize_remove_show_progressbar:
+    pattern:  /setting/optimize/show-progressbar
+    defaults: { _controller: TopxiaAdminBundle:Optimize:showProgressbar }
 
 admin_logs:
     pattern:  /setting/logs

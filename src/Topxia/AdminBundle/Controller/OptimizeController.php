@@ -44,8 +44,13 @@ class OptimizeController extends BaseController
 
     public function removeUnusedFilesAction()
     {
-        $this->getSystemUtilService()->removeUnusedUploadFiles();
-        return $this->createJsonResponse(true);       
+        $result = $this->getSystemUtilService()->removeUnusedUploadFiles();
+        return $this->createJsonResponse($result);
+    }
+
+    public function showProgressbarAction()
+    {
+        return $this->render('TopxiaAdminBundle:System:progressBar.html.twig');     
     }
 
     protected function isDisabledUpgrade()

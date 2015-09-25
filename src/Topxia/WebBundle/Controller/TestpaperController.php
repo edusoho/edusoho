@@ -351,7 +351,10 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
+        
+        if(!$testpaper){
+            return $this->createMessageResponse('error', '试卷已删除');
+        }
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
             throw $this->createAccessDeniedException('无权批阅试卷！');

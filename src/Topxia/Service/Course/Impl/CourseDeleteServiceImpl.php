@@ -79,10 +79,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                     $result = $this->deleteAnnouncements($course);
                     break;
 
-                case 'notification':
-                    $result = $this->deleteNotifications($course);
-                    break;
-
                 case 'status':
                     $result = $this->deleteStatuses($course);
                     break;
@@ -421,22 +417,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         
     }
 
-    protected function deleteNotifications($course)
-    {
-        $notificationCount = $this->getNotificationDao()->searchNotificationCount(array('courseId'=>'%"courseId":"'.$course['id'].'"%'));
-        if($notificationCount>0){
-            $notifications = $this->getNotificationDao()->searchNotifications(array('courseId'=>'%"courseId":"'.$course['id'].'"%'),array('createdTime','desc'),0,500);
-            foreach ($notifications as $notification) {
-                $this->getNotificationDao()->deleteNotification($notification['id']);
-            }
-            $notificationLog = "删除课程《{$course['title']}》(#{$course['id']})的通知";
-            $this->getLogService()->info('notification', 'delete', $notificationLog);
-            $response = array('success'=>true,'message'=>'课程通知删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课程通知查询失败');
-        }
-    }
-
     protected function deleteStatuses($course)
     {
         $statusCount = $this->getStatusDao()->searchStatusesCount(array('courseId'=>$course['id']));
@@ -650,11 +630,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getAnnouncementDao()
     {
         return $this->createDao('Announcement.AnnouncementDao');
-    }
-
-    protected function getNotificationDao()
-    {
-        return $this->createDao('User.NotificationDao');
     }
 
     protected function getStatusDao()

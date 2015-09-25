@@ -92,12 +92,7 @@ define(function(require, exports, module) {
             {
                 title: '检查公告删除',
                 url: urls.announcementDeleteUrl,
-                progressRange: [83, 84]
-            },
-            {
-                title: '检查通知删除',
-                url: urls.notificationDeleteUrl,
-                progressRange: [85, 86]
+                progressRange: [83, 86]
             },
             {
                 title: '检查动态删除',
@@ -187,5 +182,15 @@ define(function(require, exports, module) {
                 progressBar.error( title +  '时，发生了未知错误。');
                 $(document).clearQueue('delete_step_queue');
             });
+    }
+
+    function makeErrorsText(title, errors) {
+        var html = '<p>' + title + '<p>';
+        html += '<ul>';
+        $.each(errors, function(index, text) {
+            html += '<li>' + text + '</li>';
+        });
+        html += '</ul>';
+        return html;
     }
 });

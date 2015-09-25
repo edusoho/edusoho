@@ -13,7 +13,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	{
 		$targets = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
 		if(empty($targets)){
-			return ;
+			return array("success"=>false,'message'=>'无可优化文件');
 		}
 		$targets = $this->plainTargetId($targets);
 		foreach ($targets as $target) {
@@ -29,6 +29,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	        );
 			$this->removeUploadFiles($uploadFiles);
 		}
+		return array("success"=>true,'message'=>'优化文件');
 	}
 
 	protected function plainTargetId($targets)

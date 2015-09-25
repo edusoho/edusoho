@@ -249,6 +249,10 @@ class CourseController extends CourseBaseController
 
 	public function showAction(Request $request, $id)
 	{
+		$course = $this->getCourseService()->getCourse($id);
+		if(!$course){
+			return $this->createMessageResponse('error',"课程已删除");
+		}
 		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
