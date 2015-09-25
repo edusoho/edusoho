@@ -1217,10 +1217,11 @@ a {
 }
 
 .ui-course .discount-type {
-  border-radius: 5px;
   color: #fff;
-  padding: 3px 6px 3px 6px;
   font-size: 12px;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 3px 6px 3px 6px;
 }
 
 .ui-course .discount-type.type {
@@ -1442,6 +1443,10 @@ a {
 .ui-course-notice .ui-list>li {
   padding: 15px 0;
   margin: 0px 15px 0px 15px;
+}
+
+.ui-course-notice .ui-tips {
+  color: #37b97d;
 }
 
 /* ui-progress */
@@ -1969,6 +1974,7 @@ a {
 }
 
 .ui-pop-content .ui-btn, .ui-pop .ui-btn-s {
+  color: #666;
   margin: 8px 0 8px 0;
 }
 
