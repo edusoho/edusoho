@@ -21,8 +21,8 @@ class Version20150925151710 extends AbstractMigration
 
         $this->addSql("INSERT INTO `crontab_job` (`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) 
             VALUES
-        ('CancelOrderJob', 'everyhour', '0', 'Topxia\\Service\\Order\\Job\\CancelOrderJob', '', 0, 1440528069, 1440524469, 0, 0),
-        ('DeleteExpiredTokenJob', 'everyhour', '0', 'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob', '', 0, 1440528062, 1440524462, 0, 0);");
+        ('CancelOrderJob', 'everyhour', '0', 'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob', '', 0, 1440528069, 1440524469, 0, 0),
+        ('DeleteExpiredTokenJob', 'everyhour', '0', 'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob', '', 0, 1440528062, 1440524462, 0, 0);");
     }
 
     /**
