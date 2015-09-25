@@ -6,59 +6,59 @@
  * Time: 11:24
  */
 
-namespace Custom\Service\School\Impl;
+namespace Custom\Service\Organization\Impl;
 
 
-use Custom\Service\School\SchoolService;
+use Custom\Service\Organization\OrganizationService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 
-class SchoolServiceImpl extends BaseService implements SchoolService
+class OrganizationServiceImpl extends BaseService implements OrganizationService
 {
 
-    public function getSchoolOrganization($id)
+    public function getOrganization($id)
     {
         if ($id <= 0) {
             return array();
         }
-        return $this->getSchoolDao()->getSchoolOrganization($id);
+        return $this->getOrganizationDao()->getOrganization($id);
     }
 
-    public function findSchoolOrganizationsByParentId($parentId)
+    public function findOrganizationsByParentId($parentId)
     {
         $conditions = array('parentId' => $parentId);
         $orderBy = array('createdTime', 'DESC');
-        $count = $this->getSchoolDao()->searchSchoolOrganizationCount($conditions);
-        return $this->getSchoolDao()->searchSchoolOrganization($conditions, $orderBy, 0, $count);
+        $count = $this->getOrganizationDao()->searchOrganizationCount($conditions);
+        return $this->getOrganizationDao()->searchOrganizations($conditions, $orderBy, 0, $count);
     }
 
-    public function deleteSchoolOrganization($id)
+    public function deleteOrganization($id)
     {
-        $school = $this->getSchoolOrganization($id);
-        if(empty($school)){
+        $organization = $this->getOrganization($id);
+        if(empty($organization)){
             $this->createNotFoundException();
         }
-        $this->dispatchEvent('school.delete', $school['id']);
-        $this->getSchoolDao()->deleteSchoolOrganization($school['id']);
-        $this->getLogService()->info('school', 'delete', "删除院系/组织,{$school['name']}(#{$school['id']})");
+        $this->dispatchEvent('organization.delete', $organization['id']);
+        $this->getOrganizationDao()->deleteOrganization($organization['id']);
+        $this->getLogService()->info('Organization', 'delete', "删除院系/组织,{$organization['name']}(#{$organization['id']})");
     }
 
-    public function addSchoolOrganization($organization)
+    public function addOrganization($organization)
     {
-        $organization = $this->getSchoolDao()->addSchoolOrganization($organization);
-        $this->getLogService()->info('school', 'create', "添加院系/组织,{$organization['name']}(#{$organization['id']})");
+        $organization = $this->getOrganizationDao()->addOrganization($organization);
+        $this->getLogService()->info('Organization', 'create', "添加院系/组织,{$organization['name']}(#{$organization['id']})");
         return $organization;
     }
 
 
-    public function searchSchoolOrganization($conditions, $orderBy, $start, $limit)
+    public function searchOrganizations($conditions, $orderBy, $start, $limit)
     {
-        return $this->getSchoolDao()->searchSchoolOrganization($conditions, $orderBy, $start, $limit);
+        return $this->getOrganizationDao()->searchOrganizations($conditions, $orderBy, $start, $limit);
     }
 
-    public function getSchoolOrganizationTree()
+    public function getOrganizationTree()
     {
-        $organizations = $this->findAllSchoolOrganization();
+        $organizations = $this->findAllOrganizations();
 
         $prepared = array();
         foreach ($organizations as $organization) {
@@ -75,14 +75,14 @@ class SchoolServiceImpl extends BaseService implements SchoolService
         return $tree;
     }
 
-    public function updateSchoolOrganization($id, $fields)
+    public function updateOrganization($id, $fields)
     {
-        return $this->getSchoolDao()->updateSchoolOrganization($id, $fields);
+        return $this->getOrganizationDao()->updateOrganization($id, $fields);
     }
 
-    public function findAllSchoolOrganization()
+    public function findAllOrganizations()
     {
-        return ArrayToolkit::index($this->getSchoolDao()->findAllSchoolOrganization(),'id');
+        return ArrayToolkit::index($this->getOrganizationDao()->findAllOrganizations(),'id');
     }
 
     protected function makeOrganizationTree(&$tree, &$organizations, $parentId)
@@ -102,13 +102,13 @@ class SchoolServiceImpl extends BaseService implements SchoolService
         return $tree;
     }
 
-    public function findSchoolOrganizationChildrenIds($id)
+    public function findOrganizationChildrenIds($id)
     {
-        $organization = $this->getSchoolOrganization($id);
+        $organization = $this->getOrganization($id);
         if (empty($organization)) {
             return array();
         }
-        $tree = $this->getSchoolOrganizationTree();
+        $tree = $this->getOrganizationTree();
 
         $childrenIds = array();
         $depth = 0;
@@ -134,9 +134,9 @@ class SchoolServiceImpl extends BaseService implements SchoolService
         return $this->createService('System.LogService');
     }
 
-    protected function getSchoolDao()
+    protected function getOrganizationDao()
     {
-        return $this->createDao('Custom:School.SchoolDao');
+        return $this->createDao('Custom:Organization.OrganizationDao');
     }
 
 }

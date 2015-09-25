@@ -44,7 +44,7 @@ define(function(require, exports, module) {
         var $roles = $userSearchForm.find('[name=roles]').val();
         var $keywordType = $userSearchForm.find('[name=keywordType]').val();
         var $keyword = $userSearchForm.find('[name=keyword]').val();
-        var schoolOrganizationId = $userSearchForm.find('[name=schoolOrganizationId]').val();
+        var organizationId = $userSearchForm.find('[name=organizationId]').val();
 
 
         $('#user-export').on('click', function() {
@@ -53,7 +53,7 @@ define(function(require, exports, module) {
                 + "?roles=" + $roles
                 + "&keywordType=" + $keywordType
                 + "&keyword="+$keyword
-                + "&schoolOrganizationId=" + schoolOrganizationId
+                + "&organizationId=" + organizationId
             );
         });
 

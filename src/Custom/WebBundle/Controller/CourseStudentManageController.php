@@ -69,7 +69,7 @@ class CourseStudentManageController extends BaseCourseStudentController
     {
         $gender=array('female'=>'女','male'=>'男','secret'=>'秘密');
         $courseSetting = $this->getSettingService()->get('course', array());
-        $schoolOrganization = $this->getSchoolService()->findAllSchoolOrganization();
+        $organization = $this->getOrganizationService()->findAllOrganizations();
         if (isset($courseSetting['teacher_export_student']) && $courseSetting['teacher_export_student']=="1") {
             $course = $this->getCourseService()->tryManageCourse($id);
         } else {
@@ -123,8 +123,8 @@ class CourseStudentManageController extends BaseCourseStudentController
             $member = "";
             $member .= $users[$courseMember['userId']]['nickname'].",";
             $member .= $users[$courseMember['userId']]['staffNo'] ? $users[$courseMember['userId']]['staffNo']."," : "-,";
-            if(!empty($schoolOrganization[$users[$courseMember['userId']]['schoolOrganizationId']])){
-                $member .= $schoolOrganization[$users[$courseMember['userId']]['schoolOrganizationId']]['name'].",";
+            if(!empty($organization[$users[$courseMember['userId']]['organizationId']])){
+                $member .= $organization[$users[$courseMember['userId']]['organizationId']]['name'].",";
             }else{
                 $member .= "-,";
             }
@@ -160,8 +160,8 @@ class CourseStudentManageController extends BaseCourseStudentController
         return $response;
     }
 
-    protected function getSchoolService()
+    protected function getOrganizationService()
     {
-        return $this->getServiceKernel()->createService('Custom:School.SchoolService');
+        return $this->getServiceKernel()->createService('Custom:Organization.OrganizationService');
     }
 }

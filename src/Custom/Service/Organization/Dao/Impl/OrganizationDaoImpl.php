@@ -6,32 +6,32 @@
  * Time: 13:43
  */
 
-namespace Custom\Service\School\Dao\Impl;
+namespace Custom\Service\Organization\Dao\Impl;
 
 
-use Custom\Service\School\Dao\SchoolDao;
+use Custom\Service\Organization\Dao\OrganizationDao;
 use Topxia\Service\Common\BaseDao;
 
-class SchoolDaoImpl extends BaseDao implements SchoolDao
+class OrganizationDaoImpl extends BaseDao implements OrganizationDao
 {
-    const TABLENAME = 'school_organization' ;
+    const TABLENAME = 'organization' ;
 
-    public function getSchoolOrganization($id)
+    public function getOrganization($id)
     {
         $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addSchoolOrganization($organization)
+    public function addOrganization($organization)
     {
         $affected = $this->getConnection()->insert(self::TABLENAME, $organization);
         if ($affected <= 0) {
-            throw $this->createDaoException('Insert course error.');
+            throw $this->createDaoException('Insert organization error.');
         }
-        return $this->getSchoolOrganization($this->getConnection()->lastInsertId());
+        return $this->getOrganization($this->getConnection()->lastInsertId());
     }
 
-    public function searchSchoolOrganizationCount($conditions)
+    public function searchOrganizationCount($conditions)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -41,7 +41,7 @@ class SchoolDaoImpl extends BaseDao implements SchoolDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function searchSchoolOrganization($conditions, $orderBy, $start, $limit)
+    public function searchOrganizations($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -53,19 +53,19 @@ class SchoolDaoImpl extends BaseDao implements SchoolDao
         return $builder->execute()->fetchAll() ? : array();
     }
 
-    public function updateSchoolOrganization($id, $fields)
+    public function updateOrganization($id, $fields)
     {
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
-        return $this->getSchoolOrganization($id);
+        return $this->getOrganization($id);
     }
 
-    public function findAllSchoolOrganization()
+    public function findAllOrganizations()
     {
         $sql = "SELECT * FROM {$this->getTableName()};";
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function deleteSchoolOrganization($id)
+    public function deleteOrganization($id)
     {
         return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
     }
@@ -78,7 +78,7 @@ class SchoolDaoImpl extends BaseDao implements SchoolDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from(self::TABLENAME, 'school_organization')
+            ->from(self::TABLENAME, 'organization')
             ->andWhere('code = :code')
             ->andWhere('name = :name')
             ->andWhere('parentId = :parentId')

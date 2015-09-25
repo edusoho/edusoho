@@ -6,27 +6,26 @@
  * Time: 15:58
  */
 
-namespace Custom\Service\School\Event;
+namespace Custom\Service\Organization\Event;
 
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Common\ServiceKernel;
 
-class SchoolEventSubscriber extends ServiceEvent implements EventSubscriberInterface
+class OrganizationEventSubscriber extends ServiceEvent implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'school.delete' => 'onSchoolDelete'
+            'organization.delete' => 'onOrganizationDelete'
         );
     }
 
-    public function onSchoolDelete(ServiceEvent $event)
+    public function onOrganizationDelete(ServiceEvent $event)
     {
-        $schoolOrganizationId = $event->getSubject();
+        $organizationId = $event->getSubject();
 
-        $this->getUserService()->resetUserSchoolOrganizationId($schoolOrganizationId);
+        $this->getUserService()->resetUserOrganizationId($organizationId);
 
     }
 

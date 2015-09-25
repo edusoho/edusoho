@@ -26,9 +26,9 @@
         <div class="form-group">
           <input class="form-control " type="text" placeholder="请输入用户名" name="nickname" value="{{ app.request.get('nickname') }}">
 
-          <select class="form-control" name="schoolOrganizationId">
-            {% set tree = data('SchoolOrganizationTree',{}) %}
-            {% set selectId = app.request.query.get('schoolOrganizationId') %}
+          <select class="form-control" name="organizationId">
+            {% set tree = data('OrganizationTree',{}) %}
+            {% set selectId = app.request.query.get('organizationId') %}
             <option value=0>选择院系/专业</option>
             {% for item in tree %}
               <option value="{{ item.id }}" {% if item.id == selectId %}selected{% endif %}>{% for i in 0..(item.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ item.name }}</option>
@@ -53,7 +53,7 @@
         </tr>
         </thead>
         <tbody>
-        {% set schoolOrganization = data('SchoolOrganization', {all:1}) %}
+        {% set organizations = data('Organization', {all:1}) %}
         {% for student in students %}
           {% set user = users[student.userId] %}
           {% set progress = progresses[student.userId] %}

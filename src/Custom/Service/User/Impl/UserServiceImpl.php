@@ -27,9 +27,9 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         return $user ? $this->unserialize($user) : null;
     }
 
-    public function resetUserSchoolOrganizationId($schoolOrganizationId)
+    public function resetUserOrganizationId($organizationId)
     {
-        $this->getUserDao()->resetUserSchoolOrganizationId($schoolOrganizationId);
+        $this->getUserDao()->resetUserOrganizationId($organizationId);
     }
 
 
@@ -65,7 +65,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             'school' => '',
             'class' => '',
             'staffNo' => '',
-            'schoolOrganizationId' => 0,
+            'organizationId' => 0,
             'company' => '',
             'job' => '',
             'signature' => '',
@@ -125,10 +125,10 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         }
         unset($fields['staffNo']);
 
-        if (isset($fields['schoolOrganizationId'])){
-            $this->getUserDao()->updateUser($id, array('schoolOrganizationId' => $fields['schoolOrganizationId']));
+        if (isset($fields['organizationId'])){
+            $this->getUserDao()->updateUser($id, array('organizationId' => $fields['organizationId']));
         }
-        unset($fields['schoolOrganizationId']);
+        unset($fields['organizationId']);
 
         if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
             throw $this->createServiceException('性别不正确，更新用户失败。');
@@ -200,7 +200,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
         $user['staffNo']  = empty($registration['staffNo']) ? '' : $registration['staffNo'];
-        $user['schoolOrganizationId']  = empty($registration['schoolOrganizationId']) ? 0 : $registration['schoolOrganizationId'];
+        $user['organizationId']  = empty($registration['organizationId']) ? 0 : $registration['organizationId'];
 
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
@@ -324,19 +324,19 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         }, $users);
     }
 
-    protected function getSchoolService()
+    protected function getOrganizationService()
     {
-        return $this->createService("Custom:School.SchoolService");
+        return $this->createService("Custom:Organization.OrganizationService");
     }
 
     private function prepareSearchConditions(&$conditions)
     {
-        if (!empty($conditions['includeChildren']) && isset($conditions['schoolOrganizationId'])) {
-            if (!empty($conditions['schoolOrganizationId'])){
-                $childrenIds = $this->getSchoolService()->findSchoolOrganizationChildrenIds($conditions['schoolOrganizationId']);
-                $conditions['schoolOrganizationIds'] = array_merge(array($conditions['schoolOrganizationId']), $childrenIds);
+        if (!empty($conditions['includeChildren']) && isset($conditions['organizationId'])) {
+            if (!empty($conditions['organizationId'])){
+                $childrenIds = $this->getOrganizationService()->findOrganizationChildrenIds($conditions['organizationId']);
+                $conditions['organizationIds'] = array_merge(array($conditions['organizationId']), $childrenIds);
             }
-            unset($conditions['schoolOrganizationId']);
+            unset($conditions['organizationId']);
             unset($conditions['includeChildren']);
         }
     }

@@ -57,7 +57,8 @@
   </td>
 
   <td>
-    {{ schoolOrganization[user.schoolOrganizationId].name|default('--') }}
+
+    {{ organizations[user.organizationId].name|default('--') }}
   </td>
 
   {#<td>

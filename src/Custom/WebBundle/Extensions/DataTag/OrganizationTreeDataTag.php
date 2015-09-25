@@ -12,19 +12,19 @@ namespace Custom\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
-class SchoolOrganizationTreeDataTag extends BaseDataTag implements DataTag
+class OrganizationTreeDataTag extends BaseDataTag implements DataTag
 {
     /**
      * @param array $arguments
      */
     public function getData(array $arguments)
     {
-        return $this->getSchoolService()->getSchoolOrganizationTree();
+        return $this->getOrganizationService()->getOrganizationTree();
     }
 
-    public function getSchoolService()
+    public function getOrganizationService()
     {
-        return $this->createService('Custom:School.SchoolService');
+        return $this->createService('Custom:Organization.OrganizationService');
     }
 
 }

@@ -105,7 +105,7 @@ class ClassroomManageController extends BaseClassroomManageController
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = array('female' => '女','male' => '男','secret' => '秘密');
-        $schoolOrganization = $this->getSchoolService()->findAllSchoolOrganization();
+        $organizations = $this->getOrganizationService()->findAllOrganizations();
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $userinfoFields = array('truename','job','mobile','qq','company','gender','idcard','weixin');
@@ -153,8 +153,8 @@ class ClassroomManageController extends BaseClassroomManageController
             $member = "";
             $member .= $users[$classroomMember['userId']]['nickname'].",";
             $member .= $users[$classroomMember['userId']]['staffNo'] ? $users[$classroomMember['userId']]['staffNo']."," : "-,";
-            if(!empty($schoolOrganization[$users[$classroomMember['userId']]['schoolOrganizationId']])){
-                $member .= $schoolOrganization[$users[$classroomMember['userId']]['schoolOrganizationId']]['name'].",";
+            if(!empty($organizations[$users[$classroomMember['userId']]['organizationId']])){
+                $member .= $organizations[$users[$classroomMember['userId']]['organizationId']]['name'].",";
             }else{
                 $member .= "-,";
             }
@@ -217,9 +217,9 @@ class ClassroomManageController extends BaseClassroomManageController
         );
     }
 
-    protected function getSchoolService()
+    protected function getOrganizationService()
     {
-        return $this->getServiceKernel()->createService('Custom:School.SchoolService');
+        return $this->getServiceKernel()->createService('Custom:Organization.OrganizationService');
     }
 
 }

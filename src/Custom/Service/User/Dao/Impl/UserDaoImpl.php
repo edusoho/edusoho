@@ -37,15 +37,15 @@ class UserDaoImpl extends BaseUserDao implements UserDao
 
         $builder = parent::createUserQueryBuilder($conditions)
             ->andWhere('staffNo LIKE :staffNo')
-            ->andWhere('schoolOrganizationId IN (:schoolOrganizationIds)');
+            ->andWhere('organizationId IN (:organizationIds)');
 
         return $builder;
     }
 
-    public function resetUserSchoolOrganizationId($schoolOrganizationId)
+    public function resetUserOrganizationId($organizationId)
     {
-        $sql = "UPDATE {$this->table} SET schoolOrganizationId = 0 WHERE schoolOrganizationId = ?;";
-        return $this->getConnection()->executeQuery($sql, array($schoolOrganizationId));
+        $sql = "UPDATE {$this->table} SET organizationId = 0 WHERE organizationId = ?;";
+        return $this->getConnection()->executeQuery($sql, array($organizationId));
     }
 
 

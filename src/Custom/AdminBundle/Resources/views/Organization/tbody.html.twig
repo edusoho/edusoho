@@ -7,9 +7,9 @@
     <td>{{ organization.code }}</td>
     <td>{{ organization.description }}</td>
     <td>
-      <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_school_edit', {id:organization.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+      <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_organization_edit', {id:organization.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
       {% if organization.depth < 5 %}
-        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_school_create', {parentId:organization.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加下属组织</a>
+        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_organization_create', {parentId:organization.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加下属组织</a>
       {% endif %}
     </td>
   </tr>

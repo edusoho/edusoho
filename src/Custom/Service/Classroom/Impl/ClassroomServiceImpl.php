@@ -23,8 +23,8 @@ class ClassroomServiceImpl extends BaseClassroomServiceImpl
     protected function prepareClassroomConditions(&$conditions)
     {
 
-        if(!empty($conditions['schoolOrganizationId']) && !empty($conditions['includeChildren'])){
-            $userConditions['schoolOrganizationId'] = $conditions['schoolOrganizationId'];
+        if(!empty($conditions['organizationId']) && !empty($conditions['includeChildren'])){
+            $userConditions['organizationId'] = $conditions['organizationId'];
             $userConditions['includeChildren'] = $conditions['includeChildren'];
             $count = $this->getUserService()->searchUserCount($userConditions);
             $users = $this->getUserService()->searchUsers($userConditions, array('createdTime','DESC'), 0, $count);
@@ -32,7 +32,7 @@ class ClassroomServiceImpl extends BaseClassroomServiceImpl
             if(empty($conditions['userIds'])){
                 $conditions['userIds'] = array(0);
             }
-            unset($conditions['schoolOrganizationId']);
+            unset($conditions['organizationId']);
             unset($conditions['includeChildren']);
         }
 

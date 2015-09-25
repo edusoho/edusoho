@@ -11,13 +11,13 @@ namespace Custom\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class SchoolController extends BaseController
+class OrganizationController extends BaseController
 {
     public function indexAction()
     {
-        $organizations = $this->getSchoolService()->getSchoolOrganizationTree();
+        $organizations = $this->getOrganizationService()->getOrganizationTree();
 
-        return $this->render('CustomAdminBundle:School:index.html.twig', array(
+        return $this->render('CustomAdminBundle:Organization:index.html.twig', array(
             'organizations' => $organizations
         ));
     }
@@ -26,18 +26,18 @@ class SchoolController extends BaseController
     {
 
         if($request->getMethod() == 'POST'){
-            $this->getSchoolService()->updateSchoolOrganization($id, $request->request->all());
+            $this->getOrganizationService()->updateOrganization($id, $request->request->all());
             return $this->renderTBody();
         }
 
-        $schoolOrganization = $this->getSchoolService()->getSchoolOrganization($id);
+        $organization = $this->getOrganizationService()->getOrganization($id);
 
-        $organizationTree = $this->getSchoolService()->getSchoolOrganizationTree();
+        $organizationTree = $this->getOrganizationService()->getOrganizationTree();
 
 
 
-        return $this->render('CustomAdminBundle:School:modal.html.twig', array(
-            'schoolOrganization' => $schoolOrganization,
+        return $this->render('CustomAdminBundle:Organization:modal.html.twig', array(
+            'organization' => $organization,
             'tree' => $organizationTree
         ));
     }
@@ -45,17 +45,17 @@ class SchoolController extends BaseController
     public function deleteAction(Request $request, $id)
     {
 
-        $school = $this->getSchoolService()->getSchoolOrganization($id);
+        $organization = $this->getOrganizationService()->getOrganization($id);
 
-        if(empty($school)){
+        if(empty($organization)){
             return $this->createNotFoundException();
         }
-        $childrens = $this->getSchoolService()->findSchoolOrganizationsByParentId($id);
+        $childrens = $this->getOrganizationService()->findOrganizationsByParentId($id);
         if ($childrens) {
             return $this->createJsonResponse(array('status' => 'error', 'message'=>'此院系/专业有下属组织，无法删除'));
         }
 
-        $this->getSchoolService()->deleteSchoolOrganization($id);
+        $this->getOrganizationService()->deleteOrganization($id);
 
         return $this->createJsonResponse(array('status' => 'success', 'message'=>'院系/专业已删除' ));
 
@@ -67,12 +67,12 @@ class SchoolController extends BaseController
             $organization = $request->request->all();
             $organization['createdTime'] = time();
 
-            $this->getSchoolService()->addSchoolOrganization($organization);
+            $this->getOrganizationService()->addOrganization($organization);
 
             return $this->renderTBody();
         }
 
-        $schoolOrganization = array(
+        $organization = array(
             'id' => 0,
             'name' => '',
             'code' => '',
@@ -80,10 +80,10 @@ class SchoolController extends BaseController
             'description' => '',
         );
 
-        $organizationTree = $this->getSchoolService()->getSchoolOrganizationTree();
+        $organizationTree = $this->getOrganizationService()->getOrganizationTree();
 
-        return $this->render('CustomAdminBundle:School:modal.html.twig', array(
-            'schoolOrganization' => $schoolOrganization,
+        return $this->render('CustomAdminBundle:Organization:modal.html.twig', array(
+            'organization' => $organization,
             'tree' => $organizationTree
         ));
     }
@@ -101,7 +101,7 @@ class SchoolController extends BaseController
                 break;
         }
         $orderBy = array('createdTime', 'DESC');
-        $schoolOrg = $this->getSchoolService()->searchSchoolOrganization($conditions, $orderBy, 0, 1);
+        $schoolOrg = $this->getOrganizationService()->searchOrganizations($conditions, $orderBy, 0, 1);
         if(empty($schoolOrg) || $value == $exclude) {
             $response = array('success' => true, 'message' => '');
         }else{
@@ -115,8 +115,8 @@ class SchoolController extends BaseController
 
     public function renderTBody()
     {
-        $organizations = $this->getSchoolService()->getSchoolOrganizationTree();
-        return $this->render('CustomAdminBundle:School:tbody.html.twig', array(
+        $organizations = $this->getOrganizationService()->getOrganizationTree();
+        return $this->render('CustomAdminBundle:Organization:tbody.html.twig', array(
             'organizations' => $organizations
         ));
     }
@@ -136,8 +136,8 @@ class SchoolController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    protected function getSchoolService()
+    protected function getOrganizationService()
     {
-        return $this->createService('Custom:School.SchoolService');
+        return $this->createService('Custom:Organization.OrganizationService');
     }
 }

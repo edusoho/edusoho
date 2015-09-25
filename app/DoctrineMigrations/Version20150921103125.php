@@ -15,8 +15,8 @@ class Version20150921103125 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if (!$this->isTableExist('school_organization')){
-            $this->addSql("CREATE TABLE school_organization(
+        if (!$this->isTableExist('organization')){
+            $this->addSql("CREATE TABLE organization(
                 id INT(10) NOT NULL PRIMARY KEY auto_increment,
                 name varchar(255) NOT NULL ,
                 code varchar(64) NOT NULL ,

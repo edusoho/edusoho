@@ -11,7 +11,7 @@ namespace Custom\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
-class SchoolOrganizationDataTag extends BaseDataTag implements DataTag
+class OrganizationDataTag extends BaseDataTag implements DataTag
 {
     /**
      * @param 参数 ID 或者 ALL
@@ -20,7 +20,7 @@ class SchoolOrganizationDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         if(!empty($arguments['all'])){
-            return $this->getSchoolService()->findAllSchoolOrganization();
+            return $this->getOrganizationService()->findAllOrganizations();
         }
 
         if(empty($arguments['id'])){
@@ -30,13 +30,13 @@ class SchoolOrganizationDataTag extends BaseDataTag implements DataTag
 
         $orgId = $arguments['id'];
 
-        return $this->getSchoolService()->getSchoolOrganization($orgId);
+        return $this->getOrganizationService()->getOrganization($orgId);
 
     }
 
-    public function getSchoolService()
+    public function getOrganizationService()
     {
-        return $this->createService('Custom:School.SchoolService');
+        return $this->createService('Custom:Organization.OrganizationService');
     }
 
 }
