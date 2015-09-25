@@ -29,6 +29,13 @@ class SmsController extends BaseController
             $verifiedMobileUserNum = $this->getUserService()->findUserHasVerifiedMobileCount();
             $url = $this->generateUrl('course_show',array('id' => $id));
         } elseif ($targetType == 'lesson') {
+            $courseSetting = $this->getSettingService()->get('course', array());
+            if (isset($courseSetting['teacher_sms_send_lesson_publish']) && !$courseSetting['teacher_sms_send_lesson_publish']) {
+                $user = $this->getCurrentUser();
+                if(!$user->isAdmin()){
+                    throw new \RuntimeException('没有权限发短信');
+                }
+            }
             $lesson = $this->getCourseService()->getLesson($id);
             if ($lesson['type'] == 'live') {
                 $smsType = 'sms_live_'.$targetType.'_publish';
@@ -80,11 +87,18 @@ class SmsController extends BaseController
             $description = $parameters['course_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'lesson') {
+            $courseSetting = $this->getSettingService()->get('course', array());
+            if (isset($courseSetting['teacher_sms_send_lesson_publish']) && !$courseSetting['teacher_sms_send_lesson_publish']) {
+                $user = $this->getCurrentUser();
+                if(!$user->isAdmin()){
+                    throw new \RuntimeException('没有权限发短信');
+                }
+            }
             $lesson = $this->getCourseService()->getLesson($id);
             $parameters['lesson_title'] = '《'.$lesson['title'].'》';
             if ($lesson['type'] == 'live') {
                 $smsType = 'sms_live_'.$targetType.'_publish';
-                $parameters['startTime'] = date("Y-m-d h:i:s", $lesson['startTime']); 
+                $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']); 
             } else {
                 $smsType = 'sms_normal_'.$targetType.'_publish';
             }
