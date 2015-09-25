@@ -21,7 +21,7 @@ define(function(require, exports, module) {
             // group: 'default'
             var editor = CKEDITOR.replace('question-answer-field', {
                 toolbar: 'Minimal',
-                filebrowserImageUploadUrl: $('<div id="question-answer-field"></div>').data('imageUploadUrl'),
+                filebrowserImageUploadUrl: $('#question-answer-field').data('imageUploadUrl'),
                 height: 120
             });
 
