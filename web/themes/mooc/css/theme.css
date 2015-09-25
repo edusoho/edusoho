@@ -310,13 +310,13 @@ input:focus {
   background-color: #10b67c;
 }
 .nav.navbar-nav > li > a {
-  padding: 25px 20px;
+  padding: 25px 18px;
   font-size: 16px;
   font-weight: bold;
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .nav.navbar-nav > li > a {
-    padding: 10px 10px;
+    padding: 25px 15px;
   }
 }
 .nav.navbar-nav > li > a:hover,
@@ -2464,6 +2464,9 @@ input:focus {
     font-size: 14px;
     padding: 10px;
   }
+}
+.es-banner .title > i {
+  margin-top: 4px;
 }
 /*首页*/
 .navbar-brand {
