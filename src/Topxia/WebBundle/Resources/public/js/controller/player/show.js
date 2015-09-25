@@ -44,7 +44,7 @@ define(function(require, exports, module) {
             html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
             html += '<span aria-hidden="true">×</span>';
             html += '</button>';
-            html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器，';
+            html += '您的浏览器未安装Flash播放器或版本太低，请先安装Flash播放器，';
             html += '或前往<a href="/mobile" target="parent">下载App</a>。';
             html += '</div>';
             videoHtml.html(html);
