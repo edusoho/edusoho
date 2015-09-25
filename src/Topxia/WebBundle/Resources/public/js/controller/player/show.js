@@ -24,6 +24,7 @@ define(function(require, exports, module) {
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
+        var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
 
         var html = "";
 
@@ -39,7 +40,7 @@ define(function(require, exports, module) {
             html += '</audio>';
         }
 
-        if (fileType == 'video' && !swfobject.hasFlashPlayerVersion('11') && !agentInWhiteList) {
+        if (balloonVideoPlayer && fileType == 'video' && !swfobject.hasFlashPlayerVersion('11') && !agentInWhiteList) {
             html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
             html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
             html += '<span aria-hidden="true">×</span>';
