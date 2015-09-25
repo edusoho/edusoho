@@ -657,7 +657,7 @@ a {
   font-size: 18px ! important;
 }
 
-.ui-classroom.ui-course-tool {
+.ui-classroom.ui-course-tool, .ui-course.ui-course-tool {
   z-index: 11;
 }
 
