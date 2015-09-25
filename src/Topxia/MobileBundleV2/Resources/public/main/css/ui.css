@@ -1193,7 +1193,8 @@ a {
   overflow: hidden;
   display: inline-block;
   max-height: 40px;
-  line-height: 20px;
+  font-size: 18px;
+  line-height: 24px;
   width: 100%
 }
 
@@ -1202,17 +1203,26 @@ a {
   color: #37b97d;
 }
 
+.ui-course .course-price s {
+  color: #bbb;
+  font-size: 14px;
+}
+
 .ui-course .price-block>small {
   font-size: 13px;
 }
 
 .ui-course .price-block {
   display: inline-block;
-  width: 130px;
 }
 
 .ui-course .discount-body {
   color: #999;
+  font-size: 13px;
+}
+
+.ui-course .discount-block {
+  position: relative;
 }
 
 .ui-course .discount-type {
@@ -1235,12 +1245,14 @@ a {
 
 .ui-course .item-body {
   background: #fff;
-  padding: 12px 16px 12px 16px;
+  margin-bottom: 8px;
+  padding: 12px 16px 6px 16px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .ui-course .item-body p {
   margin-top: 0;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .ui-course .tabs {
