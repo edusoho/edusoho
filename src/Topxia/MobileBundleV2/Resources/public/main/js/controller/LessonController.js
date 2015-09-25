@@ -74,5 +74,29 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
       cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, self.createLessonIds());     
     }
 
+    $scope.getLessonBoxStyle = function($index) {
+
+      var style = "";
+      $prevItem = $scope.lessons[$index -1];
+      $nextItem = $scope.lessons[$index +1];
+
+      var isNoTop = false, isNoBottom = false;
+      if (!$prevItem || 'chapter' == $prevItem.itemType) {
+        style += " no-top";
+        isNoTop = true;
+      }
+
+      if (! $nextItem || 'lesson' != $nextItem.itemType) {
+        style += " no-bottom";
+        isNoBottom = true;
+      }
+
+      if (isNoTop && isNoBottom) {
+        style = "hidden";
+      }
+
+      return style;
+    }
+
     this.loadLessons();
 }

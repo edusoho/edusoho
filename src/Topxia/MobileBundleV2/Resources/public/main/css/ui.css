@@ -1039,7 +1039,7 @@ a {
 }
 
 .ui-course .ui-list-lesson .lesson-status {
-  //margin: 3px 0px 3px 0;
+  z-index: 2;
   background-image : none;
   position: relative;
   right: -15px;
@@ -1047,6 +1047,25 @@ a {
   height: 55px;
   display: block;
   text-align: center;
+}
+
+.ui-course .ui-list-lesson .ui-list-info .box {
+  width: 100%;
+  border: 1px;
+  background: none;
+  position: absolute;
+  height: 100%;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #e0e0e0;
+}
+
+.ui-course .ui-list-lesson .ui-list-info .box-line {
+  width: 1px;
+  background: #ccc;
+  position: absolute;
+  height: 100%;
+  margin-left: -32px;
 }
 
 .ui-course .ui-list-lesson .lesson-time {
@@ -1062,7 +1081,7 @@ a {
 
 .ui-course .ui-list-lesson .lesson-status i{
   background: #fff;
-  font-size: 25px;
+  font-size: 20px;
   line-height: 55px;
 }
 
@@ -1070,21 +1089,36 @@ a {
   padding-left: 32px;
   line-height: 55px;
   padding-right: 45px;
-  border-left: 1px solid #e0e0e0;
+  background-image: none;
 }
 
 .ui-course .ui-list-lesson .ui-list-info.chapter {
   padding-left: 12px;
   line-height: 44px;
+  background: #f7f7f7;
 }
 
 .ui-course .ui-list-lesson>li.chapter, .ui-course .ui-list>li.unit {
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: -1px;
   height: 44px;
   line-height: 44px;
-  background: #f0f0f0;
+  background: #fff;
   padding-left: 0;
+}
+
+.ui-course .ui-list-lesson>li.chapter .box, .ui-course .ui-list>li.unit .box {
+  border: 0;
+}
+
+.ui-course .ui-list-lesson .box-line.hidden {
+  display: none;
+}
+
+.ui-course .ui-list-lesson .box-line.no-top {
+  top: 50%;
+}
+
+.ui-course .ui-list-lesson .box-line.no-bottom {
+  bottom: 50%;
 }
 
 .ui-course .course-head .full-image {
@@ -1855,8 +1889,8 @@ a {
   display: inline-block;
   position: relative;
   padding: 1px;
-  color: #37b97d;
-  border: 1px solid #37b97d;
+  color: #ff884a;
+  border: 1px solid #ff884a;
   border-radius: 2px;
 }
 
