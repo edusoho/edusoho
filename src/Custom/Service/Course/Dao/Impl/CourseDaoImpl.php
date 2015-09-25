@@ -21,7 +21,7 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 	public function addCourse($course)
 	{
 		$course = parent::addCourse($course);
-		if($course['type'] == 'periodic' && $course['rootId'] == 0){
+		if($course['rootId'] == 0){
 			$fields = array('rootId' => $course['id']);
 			return parent::updateCourse($course['id'], $fields);
 		}

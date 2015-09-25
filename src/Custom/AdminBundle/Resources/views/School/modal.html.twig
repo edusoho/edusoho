@@ -16,7 +16,7 @@
       <label class="col-md-2 control-label" for="organization-code-field">组织编码</label>
       <div class="col-md-8 controls">
         <input class="form-control" id="organization-code-field" type="text" name="code" value="{{ schoolOrganization.code }}" data-url="{{ path('admin_school_check', {type : 'code', exclude : schoolOrganization.code}) }}" tabindex="2">
-        <div class="help-block"></div>
+        <div class="help-block">非必填</div>
       </div>
     </div>
 

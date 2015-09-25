@@ -1,6 +1,3 @@
-/**
- * Created by retamia on 15/9/21.
- */
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
@@ -35,12 +32,6 @@ define(function(require, exports, module) {
             element: '#organization-name-field',
             required: true,
             rule: 'maxlength{max:255}'
-        });
-
-        validator.addItem({
-            element: '#organization-code-field',
-            required: true,
-            rule: 'alphanumeric not_all_digital remote'
         });
 
         validator.addItem({
