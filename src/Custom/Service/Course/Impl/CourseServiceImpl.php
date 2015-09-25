@@ -29,6 +29,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl
 			'maxStudentNum' => 0,
 			'watchLimit' => 0,
 			'approval' => 0,
+			'maxRate' => 0,
+			'locked' =>0
 		));
 
 		if (!empty($fields['about'])) {

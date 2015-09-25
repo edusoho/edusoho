@@ -1,6 +1,8 @@
 parameters:
     topxia_services:
         'Course.CourseService' : 'Custom\Service\Course\Impl\CourseServiceImpl'
-
+        'User.UserService' : 'Custom\Service\User\Impl\UserServiceImpl'
+        'User.AuthService' : 'Custom\Service\User\Impl\AuthServiceImpl'
     topxia_daos:
         'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
+        'User.UserDao' : 'Custom\Service\User\Dao\Impl\UserDaoImpl'
