@@ -332,11 +332,6 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    protected function getTokenService()
-    {
-        return $this->getServiceKernel()->createService('User.TokenService');
-    }
-
     protected function createFilesJsonResponse($files)
     {
         foreach ($files as &$file) {
