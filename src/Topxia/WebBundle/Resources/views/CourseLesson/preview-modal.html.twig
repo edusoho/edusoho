@@ -73,9 +73,9 @@
       扫二维码继续学习
     </span>
   </span>
-   {% if lesson.status == 'published' %}
+   {% if lesson.status == 'published' and course.parentId == '0' %}
 
-    {% if course.price=='0.00'  %}
+    {% if course.price == '0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
         {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
           href="#modal" 
