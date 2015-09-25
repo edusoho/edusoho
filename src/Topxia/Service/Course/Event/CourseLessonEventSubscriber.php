@@ -66,6 +66,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 if($lesson['type'] == 'testpaper'){
                     $lesson['mediaId'] = $testpaperIds[$key];
                 }
+                if(!empty($lesson['mediaId'])){
+                    $this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+                }
                 $this->getCourseService()->addLesson($lesson);
             }
         }
@@ -89,7 +92,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
             foreach ($courseIds as $courseId) {
                 $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-                foreach ($classroomIds as  $classroomId) {
+                foreach ($classroomIds as $classroomId) {
                     $classroom = $this->getClassroomService()->getClassroom($classroomId);
                     $lessonNum = $classroom['lessonNum']-1;
                     $this->getClassroomService()->updateClassroom($classroomId, array("lessonNum" => $lessonNum));
@@ -100,6 +103,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             if ($courseIds) {
                 $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
                 foreach ($lessonIds as $key=>$lessonId) {
+                    if(!empty($lesson['mediaId'])){
+                        $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+                    }
                     $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
                 }
             }
@@ -120,6 +126,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
+        $fields = $event->getArgument('fields');
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
@@ -128,6 +135,17 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 unset($lesson['mediaId']);
             }
             foreach ($courseIds as $key=>$courseId) {
+                if($fields['mediaId'] != $lesson['mediaId']){
+                    // Incease the link count of the new selected lesson file
+                    if(!empty($fields['mediaId'])){
+                        $this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
+                    }
+
+                    // Decrease the link count of the original lesson file
+                    if(!empty($lesson['mediaId'])){
+                        $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+                    }
+                }
                 $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
             } 
         }
@@ -244,5 +262,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getTestpaperService()
     {
         return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 }
