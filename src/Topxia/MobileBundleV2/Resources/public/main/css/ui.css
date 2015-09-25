@@ -52,6 +52,11 @@ a {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5) ! important;
 }
 
+.st-content {
+  overflow-y: visible !important;
+  -webkit-overflow-scrolling: none;
+}
+
 .menu-content {
   padding: 20px;
   color: #999999;
@@ -277,8 +282,8 @@ a {
 /* ui-bar */
 .ui-bar {
   z-index: 12;
-  color: #37b97d;
-  background: #fff;
+  color: #fff;
+  background: #37b97d;
   display: inline-block;
   height: 44px;
   width: 100%;
@@ -321,7 +326,7 @@ a {
 
 .ui-bar .ui-btn {
   z-index: 2;
-  color: #37b97d;
+  color: #fff;
   height: 44px;
   line-height: 44px;
   width: 44px;
