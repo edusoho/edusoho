@@ -44,7 +44,9 @@ define(function(require, exports, module) {
             var html = '<video id="' + this.get('playerId') + '" src="';
             html += this.get('url') + '" autoplay controls style="' + style + '">';
             html += '</video>';
-            this.element.html(html);
+            var parent = this.element.parent();
+            this.element.remove();
+            parent.html(html);
             this.set('runtime', 'html5');
         },
 
