@@ -12,36 +12,51 @@ class PlayerController extends BaseController
 {
 	public function showAction(Request $request, $id, $mode = '')
 	{
-		$file = $this->getUploadFileService()->getFile($id);
-		if(empty($file)){
-			throw $this->createNotFoundException();
-		}
+        $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
 
-		if($file["storage"] == 'cloud' && $file["type"] == 'video') {
-			
-			if (!empty($file['convertParams']['hasVideoWatermark'])) {
+        $file = $this->getUploadFileService()->getFile($id);
+        if(empty($file)){
+            throw $this->createNotFoundException();
+        }
+
+        if($file["storage"] == 'cloud' && $file["type"] == 'video') {
+            
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-			
-			if($this->setting("developer.balloon_player", 0)){
-		        $player = "balloon-cloud-video-player";
-			} else {
-		        $player = "cloud-video-player";
-			}
-		} else if($file["storage"] == 'local' && $file["type"] == 'video'){
-	        $player = "local-video-player";
-		} else if($file["type"] == 'audio'){
-	        $player = "audio-player";
-		}
+            
+            if($this->setting("developer.balloon_player", 0)){
+                $player = "balloon-cloud-video-player";
+            } else {
+                $player = "cloud-video-player";
+            }
+        } else if($file["storage"] == 'local' && $file["type"] == 'video'){
+            $player = "local-video-player";
+        } else if($file["type"] == 'audio'){
+            $player = "audio-player";
+        }
 
-		$url = $this->getPlayUrl($id, $mode);
+        $url = $this->getPlayUrl($id, $mode);
+
 
 		return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
 			'file' => $file,
 			'url' => $url,
 			'player' => $player,
+            'agentInWhiteList' => $agentInWhiteList
         ));
 	}
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad");
+        foreach ($whiteList as $value) {
+            if(strpos($userAgent, $value)>-1){
+                return true;
+            }
+        }
+        return false; 
+    }
 
 	protected function getPlayUrl($id, $mode='')
     {
