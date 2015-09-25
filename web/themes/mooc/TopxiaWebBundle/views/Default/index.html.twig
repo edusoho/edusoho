@@ -12,7 +12,6 @@
 
   {# {% block container %} #}
   {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
-
   <section class="es-section section-gray" id="course-list">
     <div class="container">
       <div class="course-filter section-header" id="course-filter">
@@ -44,7 +43,7 @@
    <!-- 推荐班级 -->
   {% set RecommendClassrooms = data('RecommendClassrooms',{'count':2})%}
   {% if RecommendClassrooms %}
-    <section class="class-section">
+    <section class="mooc-class-section">
       <div class="container">
         <div class="section-header" id="course-filter">
          推荐班级
@@ -64,7 +63,7 @@
               <p class="info hidden-xs hidden-sm">{{classroom.about|striptags}}</p>
               <p class="num"> <i class="es-icon es-icon-people mrm"></i>
                 {{classroom.studentNum + classroom.auditorNum }}人
-                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">加入班级</a>
+                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">班级详情</a>
               </p>
             </div>
             <div class="class-teacher hidden-xs hidden-sm">
@@ -81,7 +80,7 @@
 
               </div>
               <div class="bottom">
-                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">加入班级</a>
+                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">班级详情</a>
               </div>
             </div>
           </div>

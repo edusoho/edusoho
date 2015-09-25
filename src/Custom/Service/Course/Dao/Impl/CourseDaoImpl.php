@@ -35,8 +35,17 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 			$conditions['rootId'] = 0;
 		}*/
 
+		if(isset($conditions['isPeriodic']) && $conditions['isPeriodic'] === true) {
+			unset($conditions['isPeriodic']);
+			$conditions['type'] = 'periodic';
+		} else if(isset($conditions['isPeriodic']) && $conditions['isPeriodic'] === false){
+			unset($conditions['isPeriodic']);
+			$conditions['excludeType'] = 'periodic';
+		}
+
 		$builder = parent::_createSearchQueryBuilder($conditions)
 			->andWhere('rootId =:rootId')
+			->andWhere('type <> :excludeType')
 			;
 
 		if(!empty($conditions['table']) && $conditions['table'] == 'singleCourse'){
@@ -46,6 +55,8 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 					group by rootId )";
 			$builder->from($table, 'course');
 		}
+
+
 
 		return $builder;
 	}
