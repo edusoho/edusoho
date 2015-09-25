@@ -38,3 +38,5 @@ $app->get(_u('/me/chatrooms'), 'res.MeChatroomes:get');
 
 $app->get(_u('/mobileschools/apps'), 'res.Apps:get');
 $app->get(_u('/mobileschools/app/{id}'), 'res.App:get');
+
+$app->get(_u('/homework/{id}'), 'res.Homework:get');
