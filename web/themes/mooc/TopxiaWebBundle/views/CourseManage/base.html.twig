@@ -69,7 +69,7 @@ locationUrl: path('location_all')
         {% if course.type == 'periodic' %}
           <div class="row form-group">
             <div class="col-md-2 control-label">
-              <label for="startTime">开始时间</label>
+              <label for="startTime">开课时间</label>
             </div>
             <div class="col-md-8 controls" style="z-index:2000;">
               <input type="text" id="startTime"  name="startTime" class="form-control" value="{% if course.startTime %}{{course.startTime|date("Y-m-d")}}{% endif %}">
@@ -77,7 +77,7 @@ locationUrl: path('location_all')
           </div>
           <div class="row form-group">
             <div class="col-md-2 control-label">
-              <label for="endTime">结束时间</label>
+              <label for="endTime">结课时间</label>
             </div>
             <div class="col-md-8 controls" style="z-index:2000;">
               <input type="text" id="endTime"  name="endTime" class="form-control" value="{% if course.endTime %}{{course.endTime|date("Y-m-d")}}{% endif %}">
