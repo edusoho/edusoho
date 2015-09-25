@@ -33,6 +33,14 @@ abstract class BaseResource
         return $res;
     }
 
+    protected function error($code, $message)
+    {
+        return array('error' => array(
+                'code' => $code,
+                'message' => $message,
+            ));
+    }
+
     protected function wrap($resources, $total)
     {
         return array('resources' => $resources, 'total' => $total);

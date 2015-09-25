@@ -8,6 +8,7 @@ $resources = array(
     'ClassroomMember',
     'ClassroomMembers',
     'Classrooms',
+    'Exercise',
     'MeChatroomes',
     'User',
 );
