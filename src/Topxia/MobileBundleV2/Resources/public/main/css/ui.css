@@ -317,7 +317,7 @@ a {
 
 .ui-bar .ui-bar-bg {
   height: 44px;
-  border-bottom: solid 1px #ddd;
+  border-bottom: solid 1px #0e935c;
 }
 
 .ui-bar .ui-btn.small {
@@ -916,7 +916,7 @@ a {
 }
 
 .shard-label {
-  color: gray;
+  color: #999;
   height: 40px;
   padding-left: 32px;
   padding-right: 32px;
@@ -924,7 +924,6 @@ a {
 }
 
 .shard-label span {
-  top: -20px;
   position: relative;
   display: inline-block;
   background: white;

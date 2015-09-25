@@ -153,13 +153,13 @@ factory('ClassRoomUtil', function() {
 factory('VipUtil', function() {
 
 	var payByYear = {
-		title : "按年支付",
+		title : "按年购买",
 		type : 20,
 		name : "year"
 	};
 
 	var payByMonth  ={
-		title : "按月支付",
+		title : "按月购买",
 		type : 30,
 		name : "month"
 	};
