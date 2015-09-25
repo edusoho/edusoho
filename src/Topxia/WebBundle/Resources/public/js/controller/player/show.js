@@ -23,6 +23,7 @@ define(function(require, exports, module) {
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
+        var agentInWhiteList = videoHtml.data('agentInWhiteList');
 
         var html = "";
         if(fileType == 'video'){
