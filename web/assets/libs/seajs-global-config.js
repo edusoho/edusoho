@@ -60,7 +60,7 @@ seajs.config({
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
-        'video-player': 'balloon-video-player/1.0.0/index-debug'
+        'video-player': 'balloon-video-player/1.0.0/index'
     },
 
 	// 预加载项
