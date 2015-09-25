@@ -26,14 +26,15 @@ define(function(require, exports, module) {
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
 
         var html = "";
+
         if(fileType == 'video'){
             if (videoHtml.data('player') == 'local-video-player'){
-                html = '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
+                html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
-                html = '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
+                html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
             }
         }else if(fileType == 'audio'){
-            html = '<audio id="lesson-player" width="500" height="50">';
+            html += '<audio id="lesson-player" width="500" height="50">';
             html += '<source src="' + url + '" type="audio/mp3" />';
             html += '</audio>';
         }
@@ -43,11 +44,13 @@ define(function(require, exports, module) {
             html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
             html += '<span aria-hidden="true">×</span>';
             html += '</button>';
-            html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+            html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器，';
+            html += '或前往<a href="/mobile" target="parent">下载App</a>。';
             html += '</div>';
             videoHtml.html(html);
             videoHtml.show();
-            return ;
+
+            return;
         }
 
         videoHtml.html(html);
