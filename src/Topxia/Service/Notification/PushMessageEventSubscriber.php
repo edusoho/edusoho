@@ -213,7 +213,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $from = array(
             'id' => $articleApp['id'],
             'type' => $articleApp['code'],
-            'image' => $articleApp['avatar']
+            'image' => $this->getAssetUrl($articleApp['avatar'])
         );
 
         $to = array(
@@ -316,6 +316,15 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
         $path = str_replace('public://', '', $path);
         $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
+        return $path;
+    }
+
+    protected function getAssetUrl($path)
+    {
+        if (empty($path)) {
+            return '';
+        }
+        $path = "http://{$_SERVER['HTTP_HOST']}/assets/{$path}";
         return $path;
     }
 
