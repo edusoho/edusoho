@@ -12206,7 +12206,7 @@ define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-se
 			
 			// Split default resolutions if set and valid, otherwise default to an empty array
 			default_resolutions = ( settings.default_res && typeof settings.default_res == 'string' ) ? settings.default_res.split( ',' ) : [];
-		
+
 		// Get all of the available resoloutions
 		while ( i > 0 ) {
 			
@@ -12267,10 +12267,10 @@ define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-se
 				}
 			}
 		}
-		
-		// Make sure we have at least 2 available resolutions before we add the button
-		if ( available_res.length < 2 ) { return; }
-		
+    
+    // Make sure we have at least 2 available resolutions before we add the button
+    if ( available_res.length < 1 ) { return; }
+
 		// Loop through the choosen default resolutions if there were any
 		for ( i = 0; i < default_resolutions.length; i++ ) {
 			
