@@ -238,48 +238,55 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if (lesson.type == 'video' || lesson.type == 'audio') {
+                    if(lesson.mediaSource == 'self') {
+                        var lessonVideoDiv = $('#lesson-video-content');
 
-                    var lessonVideoDiv = $('#lesson-video-content');
+                        if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
+                            Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                            return ;
+                        }
 
-                    if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                        Notify.warning('视频文件正在转换中，稍后完成后即可查看');
-                        return ;
+                        var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                        var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+
+                        $("#lesson-video-content").show();
+                        $("#lesson-video-content").html(html);
+
+                        var messenger = new Messenger({
+                            name: 'parent',
+                            project: 'PlayerProject',
+                            children: [ document.getElementById('viewerIframe') ],
+                            type: 'parent'
+                        });
+
+                        messenger.on("ended", function(){
+                            var player = that.get("player");
+                            player.playing = false;
+                            that.set("player", player);
+                            that._onFinishLearnLesson();
+                        });
+
+                        messenger.on("playing", function(){
+                            var player = that.get("player");
+                            player.playing = true;
+                            that.set("player", player);
+                        });
+
+                        messenger.on("paused", function(){
+                            var player = that.get("player");
+                            player.playing = false;
+                            that.set("player", player);
+                        });
+
+                        that.set("player", {});
+
+                    } else {
+                        $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+                        swfobject.embedSWF(lesson.mediaUri, 
+                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                            {wmode:'opaque',allowFullScreen:'true'});
+                        $("#lesson-swf-content").show();
                     }
-
-                    var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
-                    var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
-
-                    $("#lesson-video-content").show();
-                    $("#lesson-video-content").html(html);
-
-                    var messenger = new Messenger({
-                        name: 'parent',
-                        project: 'PlayerProject',
-                        children: [ document.getElementById('viewerIframe') ],
-                        type: 'parent'
-                    });
-
-                    messenger.on("ended", function(){
-                        var player = that.get("player");
-                        player.playing = false;
-                        that.set("player", player);
-                        that._onFinishLearnLesson();
-                    });
-
-                    messenger.on("playing", function(){
-                        var player = that.get("player");
-                        player.playing = true;
-                        that.set("player", player);
-                    });
-
-                    messenger.on("paused", function(){
-                        var player = that.get("player");
-                        player.playing = false;
-                        that.set("player", player);
-                    });
-
-                    that.set("player", {});
-
                 } else if (lesson.type == 'text' ) {
                     $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
                     $("#lesson-text-content").show();
