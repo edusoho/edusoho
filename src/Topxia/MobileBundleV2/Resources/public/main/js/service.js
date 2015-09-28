@@ -328,7 +328,7 @@ service('QuestionService', ['httpService', function(httpService) {
 	}
 }]).
 service('CourseService', ['httpService', function(httpService) {
-
+	
 	this.updateModifyInfo = function(params, callback) {
 		httpService.simplePost("/mapi_v2/Course/updateModifyInfo", arguments);
 	}

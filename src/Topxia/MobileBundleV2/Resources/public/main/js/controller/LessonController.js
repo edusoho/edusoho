@@ -40,8 +40,37 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
         for( index in data.learnStatuses ) {
             $scope.lastLearnStatusIndex = index;
         }
+
+        self.continueLearnLesson();
       });
     }
+
+    this.continueLearnLesson = function() {
+      $scope.$root.$on("continueLearnCourse", function(event, data) {
+          if (! $scope.lastLearnStatusIndex) {
+            alert("尚未开始学习!");
+            return
+          }
+          
+          var continueLesson =  self.findLessonById($scope.lastLearnStatusIndex);
+          if (! continueLesson) {
+            alert("还没用开始学习");
+            return
+          }
+          $scope.learnLesson(continueLesson);
+        });
+    };
+
+    this.findLessonById = function(lessonId) {
+      var lessons = $scope.lessons;
+      for (var i = 0; i < lessons.length; i++) {
+        if (lessonId == lessons[i].id) {
+          return lessons[i];
+        }
+      };
+
+      return null;
+    };
 
     this.createLessonIds = function() {
       var index = 0;
@@ -99,4 +128,8 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
     }
 
     this.loadLessons();
+    $scope.$on("$destroy", function(event, data) {
+      console.log(11);
+        $scope.$root.$on("continueLearnCourse", null);
+    });
 }

@@ -303,7 +303,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
           });
         }
       });
-    }
+    };
 
     $scope.shardCourse = function() {
       var about = $scope.course.about;
@@ -317,6 +317,10 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
         $scope.course.largePicture
       );      
     }
+
+    $scope.continueLearnCourse = function() {
+      $scope.$root.$emit("continueLearnCourse", {});
+    };
 }
 
 function CourseController($scope, $stateParams, CourseService, AppUtil, $state, cordovaUtil)
