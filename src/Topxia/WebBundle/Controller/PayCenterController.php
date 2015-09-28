@@ -150,7 +150,7 @@ class PayCenterController extends BaseController
 
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig',array(
             'goto'=> $goto,
-            ));
+        ));
     }
 
     public function payErrorAction(Request $request)
@@ -191,7 +191,7 @@ class PayCenterController extends BaseController
 
         if($payData['status'] == "created") {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->createPayRecord($order["id"], $payDate);
+            $this->getOrderService()->createPayRecord($order["id"], $payData);
             return new Response('success');
         }
 

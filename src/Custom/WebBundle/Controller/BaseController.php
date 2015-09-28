@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/10
- * Time: 10:13
- */
-
 namespace Custom\WebBundle\Controller;
 
 

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/15
- * Time: 18:42
- */
-
 namespace Custom\WebBundle\Controller\Classroom;
 use Symfony\Component\HttpFoundation\Request;
 use Classroom\ClassroomBundle\Controller\Classroom\CourseController as BaseCourseController;
@@ -24,7 +17,7 @@ class CourseController extends BaseCourseController
             'status' => 'published',
             'parentId' => 0,
             'excludeIds' => $excludeIds,
-            'rootId' => 0
+            'isPeriodic' => false
         );
 
         $paginator = new Paginator(
@@ -65,7 +58,7 @@ class CourseController extends BaseCourseController
         $conditions = array( "title" => $key );
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
-        $conditions['rootId'] = 0;
+        $conditions['isPeriodic'] = false;
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
             'latest',

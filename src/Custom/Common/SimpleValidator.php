@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/18
- * Time: 13:49
- */
-
 namespace Custom\Common;
 
 use Topxia\Common\SimpleValidator as BaseValidator;

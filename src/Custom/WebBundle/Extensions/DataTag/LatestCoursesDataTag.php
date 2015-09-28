@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/15
- * Time: 09:36
- */
-
 namespace Custom\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\LatestCoursesDataTag as BaseTag;

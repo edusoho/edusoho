@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/17
- * Time: 13:50
- */
-
 namespace Custom\Service\User\Impl;
 
 use Topxia\Service\User\Impl\AuthServiceImpl as BaseAuthServiceImpl;

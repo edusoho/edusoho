@@ -123,6 +123,14 @@
       </td>
     </tr>
 
+    <tr>
+      <th>学校院系</th>
+      <td>
+        {% set org = data('Organization', {id: user.organizationId}) %}
+        {{ org.name|default('暂无') }}
+      </td>
+    </tr>
+
     {#   <tr>
         <th>学校</th>
         <td>
@@ -145,7 +153,7 @@
         </td>
       </tr> #}
 
-    <tr>
+    {#<tr>
       <th>公司</th>
       <td>
         {% if profile.company %}
@@ -165,7 +173,7 @@
           暂无
         {% endif %}
       </td>
-    </tr>
+    </tr>#}
 
 
     <tr>

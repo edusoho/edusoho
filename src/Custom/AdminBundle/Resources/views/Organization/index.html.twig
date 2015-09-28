@@ -1,0 +1,19 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = "admin_operation_organization" %}
+
+{% block main %}
+
+  <table class="table table-hover" id="organization-table">
+    <thead>
+    <tr>
+      <th width="45%">组织名称</th>
+      <th width="20%">编码</th>
+      <th width="10%">备注</th>
+      <th width="20%">操作</th>
+    </tr>
+    </thead>
+    {% include 'CustomAdminBundle:Organization:tbody.html.twig' %}
+  </table>
+
+{% endblock %}

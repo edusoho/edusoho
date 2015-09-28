@@ -22,6 +22,18 @@ classroom_course_search:
     pattern: /classroom/{classroomId}/course/search
     defaults: { _controller: CustomWebBundle:Classroom\Course:search }
 
+classroom_manage_students:
+    pattern: /classroom/{id}/manage/students
+    defaults: { _controller: CustomWebBundle:Classroom\ClassroomManage:students }
+
+classroom_manage_aduitor:
+    pattern: /classroom/{id}/manage/aduitor
+    defaults: { _controller: CustomWebBundle:Classroom\ClassroomManage:aduitor }
+
+classroom_manage_student_export_csv:
+    pattern:  /classroom/{id}/manage/student/export/{role}
+    defaults: { _controller: CustomWebBundle:Classroom\ClassroomManage:exportCsv }
+
 
 search:
     pattern:  /search
@@ -38,3 +50,11 @@ homepage_recommend_courses:
 register_staffNo_check:
     pattern:  /register/staff-no/check
     defaults: { _controller: CustomWebBundle:Register:checkStaffNo }
+
+course_manage_students:
+    pattern:  /course/{id}/manage/students
+    defaults: { _controller: CustomWebBundle:CourseStudentManage:index }
+
+course_manage_student_export_csv:
+    pattern:  /course/{id}/manage/student/export
+    defaults: { _controller: CustomWebBundle:CourseStudentManage:exportCsv }

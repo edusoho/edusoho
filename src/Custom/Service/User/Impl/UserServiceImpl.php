@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/17
- * Time: 13:59
- */
-
 namespace Custom\Service\User\Impl;
 use Custom\Service\User\UserService;
 use Custom\Common\SimpleValidator;
@@ -26,6 +19,12 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
         return $user ? $this->unserialize($user) : null;
     }
+
+    public function resetUserOrganizationId($organizationId)
+    {
+        $this->getUserDao()->resetUserOrganizationId($organizationId);
+    }
+
 
     public function updateUserStaffNo($staffNo, $userId)
     {
@@ -59,6 +58,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             'school' => '',
             'class' => '',
             'staffNo' => '',
+            'organizationId' => 0,
             'company' => '',
             'job' => '',
             'signature' => '',
@@ -118,6 +118,11 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         }
         unset($fields['staffNo']);
 
+        if (isset($fields['organizationId'])){
+            $this->getUserDao()->updateUser($id, array('organizationId' => $fields['organizationId']));
+        }
+        unset($fields['organizationId']);
+
         if (!empty($fields['gender']) && !in_array($fields['gender'], array('male', 'female', 'secret'))) {
             throw $this->createServiceException('性别不正确，更新用户失败。');
         }
@@ -140,6 +145,21 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
         return $this->getProfileDao()->updateProfile($id, $fields);
     }
+
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
+    {
+        $this->prepareSearchConditions($conditions);
+
+        return parent::searchUsers($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchUserCount(array $conditions)
+    {
+        $this->prepareSearchConditions($conditions);
+
+        return parent::searchUserCount($conditions);
+    }
+
 
     public function register($registration, $type = 'default')
     {
@@ -173,6 +193,8 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
         $user['staffNo']  = empty($registration['staffNo']) ? '' : $registration['staffNo'];
+        $user['organizationId']  = empty($registration['organizationId']) ? 0 : $registration['organizationId'];
+
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
@@ -250,7 +272,7 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
      * @param $keyword 用户登录时输入的关键字
      * @return 返回查询用户的函数名
      */
-    public function matchKeyword($keyword)
+    private function matchKeyword($keyword)
     {
         if(SimpleValidator::email($keyword)) {
             return 'getUserByEmail';
@@ -273,13 +295,13 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
 
     }
 
-    public function serialize(array $user)
+    private function serialize(array $user)
     {
         $user['roles'] = empty($user['roles']) ? '' :  '|' . implode('|', $user['roles']) . '|';
         return $user;
     }
 
-    public function unserialize(array $user = null)
+    private function unserialize(array $user = null)
     {
         if (empty($user)) {
             return null;
@@ -288,11 +310,28 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         return $user;
     }
 
-    public function unserializes(array $users)
+    private function unserializes(array $users)
     {
         return array_map(function($user) {
             return $this->unserialize($user);
         }, $users);
+    }
+
+    protected function getOrganizationService()
+    {
+        return $this->createService("Custom:Organization.OrganizationService");
+    }
+
+    private function prepareSearchConditions(&$conditions)
+    {
+        if (!empty($conditions['includeChildren']) && isset($conditions['organizationId'])) {
+            if (!empty($conditions['organizationId'])){
+                $childrenIds = $this->getOrganizationService()->findOrganizationChildrenIds($conditions['organizationId']);
+                $conditions['organizationIds'] = array_merge(array($conditions['organizationId']), $childrenIds);
+            }
+            unset($conditions['organizationId']);
+            unset($conditions['includeChildren']);
+        }
     }
 
 }

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/17
- * Time: 14:02
- */
-
 namespace Custom\Service\User\Dao\Impl;
 
 use Custom\Service\User\Dao\UserDao;
@@ -24,20 +17,29 @@ class UserDaoImpl extends BaseUserDao implements UserDao
 
     protected function createUserQueryBuilder($conditions)
     {
+
         if(isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             $conditions[$conditions['keywordType']]=$conditions['keyword'];
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
 
-        if(isset($conditions['staffNo']))
-        {
+        if(isset($conditions['staffNo'])) {
             $conditions['staffNo'] = "%{$conditions['staffNo']}%";
         }
 
         $builder = parent::createUserQueryBuilder($conditions)
-            ->andWhere('staffNo LIKE :staffNo');
+            ->andWhere('staffNo LIKE :staffNo')
+            ->andWhere('organizationId IN (:organizationIds)');
 
         return $builder;
     }
+
+    public function resetUserOrganizationId($organizationId)
+    {
+        $sql = "UPDATE {$this->table} SET organizationId = 0 WHERE organizationId = ?;";
+        return $this->getConnection()->executeQuery($sql, array($organizationId));
+    }
+
+
 }

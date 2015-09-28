@@ -12,29 +12,33 @@
 
   {# {% block container %} #}
   {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
-  {% if recommendCourses %}      
-    <section class="es-section section-gray" id="course-list">
-      <div class="container">
-        <div class="course-filter section-header" id="course-filter">
-         推荐课程
-          <div class="course-sort btn-group">
-            <a href="javascript:;" class="btn btn-default active js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'latest'}) }}">最新</a>
-            <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'studentNum'}) }}">最热</a>
-          </div>
-        </div>
-        <div class="section-bodyer">
-          <div class="home-course-list row">
-            {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
-          </div>
-          <div class="text-center mvl">
-            <a href="{{ path('course_explore' ) }}" class="btn btn-gylight btn-md">
-              更多<i class="fa fa-angle-right mls"></i>
-            </a>
-          </div>
+  <section class="es-section section-gray" id="course-list">
+    <div class="container">
+      <div class="course-filter section-header" id="course-filter">
+       推荐课程
+        <div class="course-sort btn-group">
+          <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'latest'}) }}">最新</a>
+          <a href="javascript:;" class="btn btn-default js-course-filter" data-url="{{path('homepage_recommend_courses',{orderBy : 'studentNum'}) }}">最热</a>
         </div>
       </div>
-    </section>
-  {% endif %}
+      <div class="section-bodyer">
+        <div class="home-course-list row">
+        {% if recommendCourses %}
+          {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
+        {% else %}
+          {% set courses = data('LatestCourses',{count:3}) %}
+          {% include 'TopxiaWebBundle:Default:course-item.html.twig'%}
+        {% endif %}
+        </div>
+        <div class="text-center mvl">
+          <a href="{{ path('course_explore' ) }}" class="btn btn-gylight btn-md">
+            更多<i class="fa fa-angle-right mls"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
    <!-- 推荐班级 -->
   {% set RecommendClassrooms = data('RecommendClassrooms',{'count':2})%}
@@ -107,7 +111,7 @@
             {% endfor %}
           </div>
           <div class="text-center mvl">
-            <a href="{{ path('classroom_explore') }}" class="btn btn-gylight btn-md">
+            <a href="{{ path('teacher') }}" class="btn btn-gylight btn-md">
               更多 <i class="fa fa-angle-right mls"></i>
             </a>
           </div>

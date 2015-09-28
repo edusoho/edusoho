@@ -55,7 +55,13 @@
   </span>
     <span></span>
   </td>
+
   <td>
+
+    {{ organizations[user.organizationId].name|default('--') }}
+  </td>
+
+  {#<td>
     <span class="text-sm">
       {% if user.loginTime == 0 %}
         --
@@ -67,8 +73,8 @@
     <span class="text-muted text-sm">
     <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
       {{convertIP(user.loginIp)}}
-  </span>
-  </td>
+    </span>
+  </td>#}
   <td>
     <div class="btn-group">
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>

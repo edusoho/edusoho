@@ -75,6 +75,21 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
+        <label for="schoolOrganization">学校院系</label>
+      </div>
+      <div class="col-md-7 controls">
+        {% set tree = data('OrganizationTree',{}) %}
+        <select class="form-control" id="organizationId" type="text" name="organizationId" tabindex="2" >
+          <option value=0>选择组织</option>
+          {% for item in tree %}
+            <option value="{{ item.id }}" {% if item.id == user.organizationId  %}selected{% endif %}>{% for i in 0..(item.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ item.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    {#<div class="row form-group">
+      <div class="col-md-2 control-label">
         <label for="company">公司</label>
       </div>
       <div class="col-md-7 controls">
@@ -89,7 +104,7 @@
       <div class="col-md-7 controls">
         <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
       </div>
-    </div>
+    </div>#}
 
     <p></p>
     <div class="row form-group">

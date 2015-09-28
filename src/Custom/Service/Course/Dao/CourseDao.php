@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/11
- * Time: 12:54
- */
-
 namespace Custom\Service\Course\Dao;
 
 
