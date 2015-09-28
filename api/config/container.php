@@ -13,6 +13,7 @@ $resources = array(
     'Apps',
     'App',
     'Homework',
+    'HomeworkResult'
 );
 
 foreach ($resources as $res) {

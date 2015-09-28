@@ -40,3 +40,5 @@ $app->get(_u('/mobileschools/apps'), 'res.Apps:get');
 $app->get(_u('/mobileschools/app/{id}'), 'res.App:get');
 
 $app->get(_u('/homework/{id}'), 'res.Homework:get');
+$app->post(_u('/homework_results'), 'res.HomeworkResult:post');
+$app->get(_u('/homework_results/{id}'), 'res.HomeworkResult:get');
