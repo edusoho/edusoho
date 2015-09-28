@@ -3,7 +3,7 @@ namespace Topxia\Service\Notification;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-
+use Topxia\Api\Util\MobileSchoolUtil;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -19,9 +19,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.close' => 'onCourseClose',
             'announcement.create' => 'onAnnouncementCreate',
             'classroom.join' => 'onClassroomJoin',
+            'classroom.quit' => 'onClassroomQuit',
             'classroom.put_course' => 'onClassroomPutCourse',
             'article.create' => 'onArticleCreate',
             'discount.pass' => 'onDiscountPass',
+            'course.join' => 'onCourseJoin',
+            'course.quit' => 'onCourseQuit',
         );
     }
 
@@ -47,7 +50,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'id' => $result['id']
         );
 
-        $this->push($target['title'], "试卷《{$result['paperName']}》批阅完成！", $from, $to, $body);
+        $this->push($target['title'], $result['paperName'], $from, $to, $body);
     }
 
     public function onLessonPubilsh(ServiceEvent $event)
@@ -124,14 +127,15 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'announcement.create'
         );
 
-        $result = $this->push($target['title'], $announcement['content'], $from, $to, $body);
-        return $result;
+        $this->push($target['title'], $announcement['content'], $from, $to, $body);
     }
 
     public function onClassroomJoin(ServiceEvent $event)
     {
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
+
+        $this->addGroupMember('classroom', $classroom['id'], $userId);
 
         $from = array(
             'type' => 'classroom',
@@ -147,6 +151,27 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $body = array('type' => 'classroom.join', 'userId' => $userId);
 
         $this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
+    }
+
+    public function onClassroomQuit(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->deleteGroupMember('classroom', $classroom['id'], $userId);
+    }
+
+    public function onCourseJoin(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->addGroupMember('course', $course['id'], $userId);
+    }
+
+    public function onCourseQuit(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->deleteGroupMember('course', $course['id'], $userId);
     }
 
     public function onClassroomPutCourse(ServiceEvent $event)
@@ -183,9 +208,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onArticleCreate(ServiceEvent $event)
     {
         $article = $event->getSubject();
-
+        $schoolUtil = new MobileSchoolUtil();
+        $articleApp = $schoolUtil->getArticleApp();
         $from = array(
-            'type' => 'news',
+            'id' => $articleApp['id'],
+            'type' => $articleApp['code'],
+            'image' => $articleApp['avatar']
         );
 
         $to = array(
@@ -212,8 +240,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $body = array(
             'type' => 'discount.'.$discount['type']
         );
+        $content;
+        switch ($discount['type']) {
+            case 'free':
+                $content = "【限时免费】";
+                break;
+            case 'discount':
+                $content = "【限时打折】";
+                break;
+            default:
+                $content = "【全站打折】";
+                break;
+        }
 
-        $this->push('打折活动', $discount['name'], $from, $to, $body);
+        $this->push('打折活动', $content.$discount['name'], $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)
@@ -229,6 +269,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
+    }
+
+    protected function addGroupMember($grouType, $groupId, $memberId)
+    {
+        $uri = "/groups/%s-%s/members";
+        $result = CloudAPIFactory::create('tui')->post(sprintf($uri, $grouType, $groupId), array(
+                'memberId' => $memberId,
+            ));
+    }
+
+    protected function deleteGroupMember($grouType, $groupId, $memberId)
+    {
+        $uri = "/groups/%s-%s/members/%s";
+        $result = CloudAPIFactory::create('tui')->delete(sprintf($uri, $grouType, $groupId, $memberId));
     }
 
     protected function getTarget($type, $id)

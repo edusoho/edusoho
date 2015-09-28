@@ -11,6 +11,8 @@ $resources = array(
     'Exercise',
     'MeChatroomes',
     'User',
+    'Apps',
+    'App'
 );
 
 foreach ($resources as $res) {

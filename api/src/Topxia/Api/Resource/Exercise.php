@@ -19,13 +19,18 @@ class Exercise extends BaseResource
         if (empty($exercise)) {
             return $this->error('404', '该练习不存在!');
         }
-        $itemSet = $exerciseService->getItemSetByExerciseId($id)
+        $itemSet = $exerciseService->getItemSetByExerciseId($id);
 
-        
+        return $exercise;
     }
 
     public function post(Application $app, Request $request, $id)
     {
+    }
+
+    public function filter(&$res)
+    {
+        return $res;
     }
 
     protected function getExerciseService()

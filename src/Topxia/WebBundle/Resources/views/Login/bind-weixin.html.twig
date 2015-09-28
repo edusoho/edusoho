@@ -8,16 +8,13 @@
       <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_existbind') }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
 
         <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
-
-
         <div class="form-group">
-          <label class="control-label" for="bind-email-field">Email地址</label>
+          <label class="control-label" for="bind-email-field">Email / 手机</label>
           <div class="controls">
-            <input id="bind-email-field" class="form-control" type="text" name="email">
-            <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
+            <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
+            <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
           </div>
         </div>
-
         <div class="form-group">
           <label class="control-label" for="bind-password-field">密码</label>
           <div class="controls">
@@ -28,7 +25,7 @@
         <div class="form-group">
           <div class="controls">
             <button class="btn btn-fat btn-default btn-lg" type="submit" data-loading-text="正在提交...">绑定</button>
-            <button type="button" class="btn btn-fat btn-link btn-default btn-lg pull-right" data-dismiss="modal">取消</button>
+            <a href="{{path('homepage')}}" class="btn btn-fat btn-link btn-default btn-lg pull-right">返回</a>
           </div>
         </div>
 

@@ -39,7 +39,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#bind-email-field',
             required: true,
-            rule: 'email'
+            rule: 'email_or_mobile'
         });
 
 

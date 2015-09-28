@@ -34,6 +34,9 @@ $app->post(_u('/classrooms/{id}'), 'res.Classroom:post');
 $app->get(_u('/classrooms/{classroomId}/members'), 'res.ClassroomMembers:get');
 $app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.ClassroomMember:get');
 
-$app->post(_u('/exercise/{id}'), 'res.Exercise:get');
-
+$app->get(_u('/exercise/{id}'), 'res.Exercise:get');
 $app->get(_u('/me/chatrooms'), 'res.MeChatroomes:get');
+
+$app->get(_u('/mobileschools/apps'), 'res.Apps:get');
+$app->get(_u('/mobileschools/app/{id}'), 'res.App:get');
+
