@@ -151,6 +151,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         if($materialCount>0){
             $materials = $this->getMaterialDao()->findMaterialsByCourseId($course['id'],0,1000);
             foreach ($materials as $material) {
+                if(!empty($material['fileId'])){
+                    $this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
+                }
                 $this->getMaterialDao()->deleteMaterial($material['id']);
             }
             $materialLog = "删除课程《{$course['title']}》(#{$course['id']})的课时资料";
@@ -206,6 +209,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         if($lessonCount>0){
             $lessons = $this->getLessonDao()->searchLessons(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($lessons as $lesson) {
+                if(!empty($lesson['mediaId'])){
+                    $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+                }
                 $this->getLessonDao()->deleteLesson($lesson['id']);
             }
             $lessonLog = "删除课程《{$course['title']}》(#{$course['id']})的课时";
@@ -481,6 +487,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File.UploadFileService');
     }
 
     protected function getCourseChapterDao()
