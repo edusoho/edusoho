@@ -67,6 +67,24 @@ class Exercise extends BaseResource
         return array('result' => 'success');
     }
 
+    public function getResult(Application $app, Request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+        $isHomeworkInstalled = $this->getAppService()->getAppByCode('Homework');
+        if (empty($isHomeworkInstalled)) {
+            return $this->error('500', '网校不支持作业练习功能!');
+        }
+        $exerciseService = $this->getExerciseService();
+        $exercise = $exerciseService->getExercise($id);
+        if (empty($exercise)) {
+            return $this->error('404', '该练习不存在!');
+        }
+
+        $itemSetResult = $exerciseService->getItemSetResultByExerciseIdAndUserId($exercise['id'], $user['id']);
+
+        return array_merge($exercise, $itemSetResult);
+    }
+
     public function filter(&$res)
     {
         return $res;
