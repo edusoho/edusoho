@@ -1,11 +1,11 @@
 <?php
-namespace Custom\Service\Organization\Event;
+namespace Custom\Service\User\Event;
 
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceEvent;
 
-class OrganizationEventSubscriber extends ServiceEvent implements EventSubscriberInterface
+class UserEventSubscriber extends ServiceEvent implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
