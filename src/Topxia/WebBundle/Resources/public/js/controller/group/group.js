@@ -40,7 +40,7 @@
             if ($('#thread_content').length > 0) {
                 // group: group
                 var editor_thread = CKEDITOR.replace('thread_content', {
-                    toolbar: 'Group',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
                 });
 
@@ -78,7 +78,7 @@
             if ($('#post-thread-form').length > 0) {
 
                 var editor = CKEDITOR.replace('post_content', {
-                    toolbar: 'Group',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
                 });
 

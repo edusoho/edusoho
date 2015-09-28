@@ -17,7 +17,7 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
     config.toolbar_Thread = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source', 'kityformula'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'Smiley', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source', 'kityformula'] }
     ];
 
     config.toolbar_Question = [
