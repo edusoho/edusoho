@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class Exercise extends BaseResource
 {
@@ -20,6 +21,10 @@ class Exercise extends BaseResource
             return $this->error('404', '该练习不存在!');
         }
         $itemSet = $exerciseService->getItemSetByExerciseId($id);
+
+        if (empty($itemSet['items'])) {
+            $itemSet = $this->doStart($exercise);
+        }
 
         return array_merge($exercise, $itemSet);
     }
@@ -90,6 +95,46 @@ class Exercise extends BaseResource
         return $res;
     }
 
+    private function doStart($exercise)
+    {
+        $typeRange = $exercise['questionTypeRange'];
+        $typeRange = $this->getquestionTypeRangeStr($typeRange);
+        $excludeIds = $this->getRandQuestionIds($typeRange, $exercise['itemCount'], $exercise['source'], $exercise['courseId'], $exercise['lessonId']);
+
+        $this->getExerciseService()->startExercise($exercise['id'], $excludeIds);
+
+        return $this->getExerciseService()->getItemSetByExerciseId($exercise['id']);
+    }
+
+    private function getquestionTypeRangeStr(array $questionTypeRange)
+    {
+        $questionTypeRangeStr = "";
+        foreach ($questionTypeRange as $key => $questionType) {
+            $questionTypeRangeStr .= "'{$questionType}',";
+        }
+
+        return substr($questionTypeRangeStr, 0, -1);
+    }
+
+    private function getRandQuestionIds($typeRange, $itemCount, $questionSource, $courseId, $lessonId)
+    {
+        $questionsCount = $this->getQuestionService()->findQuestionsCountbyTypesAndSource($typeRange, $questionSource, $courseId, $lessonId);
+
+        $questions = $this->getQuestionService()->findQuestionsByTypesAndSourceAndExcludeUnvalidatedMaterial($typeRange, 0, $questionsCount, $questionSource, $courseId, $lessonId);
+        $questionIds = ArrayToolkit::column($questions, 'id');
+
+        $excludeIds = array_rand($questionIds, $itemCount);
+        if (!is_array($excludeIds)) {
+            $excludeIds = array($excludeIds);
+        }
+        $excludeIdsArr = array();
+        foreach ($excludeIds as $key => $excludeId) {
+            array_push($excludeIdsArr, $questions[$excludeId]['id']);
+        }
+
+        return $excludeIdsArr;
+    }
+
     protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
@@ -98,5 +143,10 @@ class Exercise extends BaseResource
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 }
