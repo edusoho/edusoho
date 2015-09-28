@@ -9,7 +9,6 @@ define(function(require, exports, module) {
         });
 
         progressBar.show();
-        console.log($('#optimize-hint').data('url'));
         $(document).queue('optimize-files_queue', function() {
                 exec('检查优化文件',$('#optimize-url').data('url'), progressBar, 20, 100);
         });
