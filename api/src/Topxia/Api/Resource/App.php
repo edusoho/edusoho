@@ -17,6 +17,10 @@ class App extends BaseResource
 
     public function filter(&$res)
     {
+        if (strpos($res['avatar'], "files/") !== false) {
+            $res['avatar'] = $this->getFileUrl($res['avatar']);
+            return $res;
+        }
         $res['avatar'] = $this->getAssetUrl($res['avatar']);
         return $res;
     }
