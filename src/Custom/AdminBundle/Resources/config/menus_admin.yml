@@ -19,7 +19,7 @@ admin_operation_organization_manage:
 
 admin_operation_organization_create:
     name: 添加学校组织
-    parent: admin_operation_organization
+    parent: admin_operation_organization_manage
     router_name: admin_organization_create
     mode: modal
     group: 2
