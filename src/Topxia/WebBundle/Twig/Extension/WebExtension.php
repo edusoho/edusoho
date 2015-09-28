@@ -11,6 +11,7 @@ use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\ExtensionManager;
 
+
 class WebExtension extends \Twig_Extension
 {
     protected $container;
@@ -331,6 +332,8 @@ class WebExtension extends \Twig_Extension
             $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
+
+        // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
 
         return $paths;
     }

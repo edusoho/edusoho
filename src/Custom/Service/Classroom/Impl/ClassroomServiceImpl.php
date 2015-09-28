@@ -8,20 +8,10 @@ use Topxia\Common\ArrayToolkit;
 
 class ClassroomServiceImpl extends BaseClassroomServiceImpl
 {
-    public function searchMemberCount($conditions)
-    {
-        $this->prepareClassroomConditions($conditions);
-        return parent::searchMemberCount($conditions);
-    }
 
-    public function searchMembers($conditions, $orderBy, $start, $limit)
+    protected function _prepareClassroomConditions($conditions)
     {
-        $this->prepareClassroomConditions($conditions);
-        return parent::searchMembers($conditions, $orderBy, $start, $limit);
-    }
-
-    protected function prepareClassroomConditions(&$conditions)
-    {
+        $conditions = parent::_prepareClassroomConditions($conditions);
 
         if(!empty($conditions['organizationId']) && !empty($conditions['includeChildren'])){
             $userConditions['organizationId'] = $conditions['organizationId'];
@@ -36,6 +26,7 @@ class ClassroomServiceImpl extends BaseClassroomServiceImpl
             unset($conditions['includeChildren']);
         }
 
+        return $conditions;
     }
 
     protected function getUserService()
