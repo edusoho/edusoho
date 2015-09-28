@@ -21,12 +21,14 @@
                     {{ course.coinPrice | formatCoinPrice }}
                     <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
                 </span>
-                <s ng-if="course.priceType != 'Coin'">
-                    {{ course.originPrice | formatPrice }}
-                </s>
-                <s ng-if="course.priceType == 'Coin'">
-                    {{ course.originCoinPrice | formatPrice }}
-                </s>
+                <span ng-if="discount">
+                    <s ng-if="course.priceType != 'Coin'">
+                        {{ course.originPrice | formatPrice }}
+                    </s>
+                    <s ng-if="course.priceType == 'Coin'">
+                        {{ course.originCoinPrice | formatPrice }}
+                    </s>
+                </span>
             </p>
             <div class="discount-block ui-border-t">
                 <p class="course-price ui-nowrap">

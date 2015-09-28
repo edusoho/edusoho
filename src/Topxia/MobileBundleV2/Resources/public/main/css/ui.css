@@ -534,12 +534,6 @@ a {
   background: #f0f0f0;
 }
 
-.ui-classroom .course-head-body{
-  background: #fff;
-  margin-bottom: 16px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
 .ui-classroom .item-body {
   position: relative;
 }
@@ -1032,6 +1026,12 @@ a {
   margin-bottom: -35px;
 }
 
+.ui-course .course-head-body{
+  background: #fff;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
 .ui-course .tab-top .ui-tab-nav {
   top: inherit;
   position: relative;
@@ -1245,9 +1245,7 @@ a {
 
 .ui-course .item-body {
   background: #fff;
-  margin-bottom: 8px;
   padding: 12px 16px 6px 16px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .ui-course .item-body p {
