@@ -12,14 +12,9 @@ admin_app_center_show:
     router_name: admin_app_center
     router_params: { postStatus : all }
 
-admin_operation_organization:
-    name: 学校管理
-    parent: admin_system
-    router_name: admin_organization
-
 admin_operation_organization_manage:
     name: 学校管理
-    parent: admin_operation_organization
+    parent: admin_system
     router_name: admin_organization
 
 admin_operation_organization_create:
