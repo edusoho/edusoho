@@ -21,7 +21,24 @@ class Exercise extends BaseResource
         }
         $itemSet = $exerciseService->getItemSetByExerciseId($id);
 
-        return $exercise;
+        return array_merge($exercise, $itemSet);
+    }
+
+    public function getByLesson(Application $app, Request $request, $id)
+    {
+        $isHomeworkInstalled = $this->getAppService()->getAppByCode('Homework');
+        if (empty($isHomeworkInstalled)) {
+            return $this->error('500', '网校不支持作业练习功能!');
+        }
+        $exerciseService = $this->getExerciseService();
+        $exercise = $exerciseService->getExerciseByLessonId($id);
+        if (empty($exercise)) {
+            return $this->error('404', '该课时不存在练习!');
+        }
+
+        $itemSet = $exerciseService->getItemSetByExerciseId($exercise['id']);
+
+        return array_merge($exercise, $itemSet);
     }
 
     public function post(Application $app, Request $request, $id)
