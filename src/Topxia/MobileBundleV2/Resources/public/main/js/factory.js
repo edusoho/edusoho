@@ -348,6 +348,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 			var deferred = $q.defer();
 			deferred.resolve(null);
 			return deferred.promise;
+		},
+		redirect : function(body) {
+			alert("请在app内转发分享");
 		}
 	};
 

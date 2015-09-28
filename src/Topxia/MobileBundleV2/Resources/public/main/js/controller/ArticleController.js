@@ -23,10 +23,28 @@ function ArticleController($scope, $state, $stateParams, cordovaUtil, ArticleSer
 	       about = about.substring(0, 20);
 	    }
 		cordovaUtil.share(
-        app.host + "/article/" + $scope.article.id, 
-        $scope.article.title, 
-        about, 
-        $scope.article.picture
-      );  
+	        app.host + "/article/" + $scope.article.id, 
+	        $scope.article.title, 
+	        about, 
+	        $scope.article.picture
+	    );  
+	}
+
+	$scope.redirect = function() {
+		var about = $scope.article.body;
+	    if (about.length > 20) {
+	       about = about.substring(0, 20);
+	    }
+
+		cordovaUtil.redirect({
+			type : "news.redirect",
+			fromType : "news",
+			id : $scope.article.id,
+			title : $scope.article.title,
+			image : $scope.article.picture,
+			content : about,
+			url : "",
+			source : "self"
+		});
 	}
 }

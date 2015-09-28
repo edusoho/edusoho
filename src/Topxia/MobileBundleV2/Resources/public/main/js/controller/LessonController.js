@@ -48,13 +48,13 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
     this.continueLearnLesson = function() {
       $scope.$root.$on("continueLearnCourse", function(event, data) {
           if (! $scope.lastLearnStatusIndex) {
-            alert("尚未开始学习!");
+            alert("还没有开始学习!");
             return
           }
           
           var continueLesson =  self.findLessonById($scope.lastLearnStatusIndex);
           if (! continueLesson) {
-            alert("还没用开始学习");
+            alert("还没有开始学习");
             return
           }
           $scope.learnLesson(continueLesson);
