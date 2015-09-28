@@ -32,7 +32,7 @@ a {
 }
 
 .top-tab-header {
-  top: 90px;
+  top: 88px;
   position: absolute;
   width: 100%;
 }
@@ -123,6 +123,10 @@ a {
 /** ui-scroll */
 
 /** ui-modal **/
+
+.ui-modal {
+  height: 75%;
+}
 
 .ui-modal .backdrop-bg {
     z-index: 3;
@@ -786,6 +790,7 @@ a {
 
 /** .category-card */
 .category-card {
+  height: 100%;
   background: #fff;
   display: block ! important;
   padding: 0px ! important;
@@ -793,6 +798,7 @@ a {
 
 .category-card .ui-grid-trisect {
   padding: 0;
+  height: 100%;
 }
 
 .category-card .ui-grid-trisect .ui-list {
@@ -801,6 +807,9 @@ a {
 
 .category-card .ui-grid-trisect>li{
   padding: 0;
+  height: 100%;
+  overflow-y:auto;
+  overflow-x:hidden;
 }
 
 .category-card .list_0 {

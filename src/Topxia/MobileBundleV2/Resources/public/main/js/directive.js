@@ -447,6 +447,9 @@ directive('modal', function () {
         scope.$emit("closeTab", {});
       });
 
+      element.on('touchmove', function(event) {
+        event.preventDefault();
+      });
     }
   }
 }).
