@@ -137,9 +137,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 if(array_key_exists('fields', $lesson) && $lesson['fields']['mediaId'] != $lesson['mediaId']){
                     // Incease the link count of the new selected lesson file
                     if(!empty($lesson['fields']['mediaId'])){
-                        $this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
+                        $this->getUploadFileService()->increaseFileUsedCount(array($lesson['fields']['mediaId']));
                     }
-
                     // Decrease the link count of the original lesson file
                     if(!empty($lesson['mediaId'])){
                         $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
