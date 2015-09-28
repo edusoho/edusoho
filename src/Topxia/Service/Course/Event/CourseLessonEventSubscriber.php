@@ -126,7 +126,6 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $fields = $event->getArgument('fields');
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
@@ -135,9 +134,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 unset($lesson['mediaId']);
             }
             foreach ($courseIds as $key=>$courseId) {
-                if($fields['mediaId'] != $lesson['mediaId']){
+                if(array_key_exists('fields', $lesson) && $lesson['fields']['mediaId'] != $lesson['mediaId']){
                     // Incease the link count of the new selected lesson file
-                    if(!empty($fields['mediaId'])){
+                    if(!empty($lesson['fields']['mediaId'])){
                         $this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
                     }
 
