@@ -334,7 +334,9 @@ directive('uiScroll', function($parse) {
                   }
                   if ( !scope.isLoading && ( (scrollTop + clientHeight) >= scrollHeight ) ) {
                     scope.isLoading = true;
-                    $parse(attrs.onInfinite)(scope);
+                    $parse(attrs.onInfinite)(scope, { successCallback : function() {
+                      scope.isLoading = false;
+                    } });
                   }
                 });
           }
