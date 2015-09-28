@@ -134,16 +134,15 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 unset($lesson['mediaId']);
             }
             foreach ($courseIds as $key=>$courseId) {
-                if(array_key_exists('fields', $lesson) && $lesson['fields']['mediaId'] != $lesson['mediaId']){
-                    // Incease the link count of the new selected lesson file
+                if(array_key_exists('fields', $lesson) && array_key_exists('mediaId', $lesson) && $lesson['fields']['mediaId'] != $lesson['mediaId']){
                     if(!empty($lesson['fields']['mediaId'])){
-                        $this->getUploadFileService()->increaseFileUsedCount(array($lesson['fields']['mediaId']));
+                        $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['fields']['mediaId']));
                     }
-                    // Decrease the link count of the original lesson file
                     if(!empty($lesson['mediaId'])){
-                        $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+                        $this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
                     }
                 }
+                unset($lesson['fields']);
                 $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
             } 
         }
