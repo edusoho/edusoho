@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/17
- * Time: 14:02
- */
-
 namespace Custom\Service\User\Dao\Impl;
 
 use Custom\Service\User\Dao\UserDao;

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/16
- * Time: 15:29
- */
-
 namespace Custom\AdminBundle\Controller;
 use Classroom\ClassroomBundle\Controller\ClassroomAdminController as BaseClassroomAdminController;
 use Symfony\Component\HttpFoundation\Request;

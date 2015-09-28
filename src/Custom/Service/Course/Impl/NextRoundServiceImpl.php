@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kdjd
- * Date: 15-7-29
- * Time: 上午11:17
- */
-
 namespace Custom\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/17
- * Time: 13:59
- */
-
 namespace Custom\Service\User\Impl;
 use Custom\Service\User\UserService;
 use Custom\Common\SimpleValidator;

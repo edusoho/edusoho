@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/15
- * Time: 18:42
- */
-
 namespace Custom\WebBundle\Controller\Classroom;
 use Symfony\Component\HttpFoundation\Request;
 use Classroom\ClassroomBundle\Controller\Classroom\CourseController as BaseCourseController;

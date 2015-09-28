@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/21
- * Time: 11:24
- */
-
 namespace Custom\Service\Organization\Impl;
 
 

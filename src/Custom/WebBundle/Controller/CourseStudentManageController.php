@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/23
- * Time: 11:14
- */
-
 namespace Custom\WebBundle\Controller;
 
 use Custom\Service\School\Impl\SchoolServiceImpl;

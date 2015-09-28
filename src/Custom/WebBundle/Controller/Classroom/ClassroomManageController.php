@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/24
- * Time: 17:13
- */
-
 namespace Custom\WebBundle\Controller\Classroom;
 
 use Classroom\ClassroomBundle\Controller\ClassroomManageController as BaseClassroomManageController;

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/23
- * Time: 15:58
- */
-
 namespace Custom\Service\Organization\Event;
 
 

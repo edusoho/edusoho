@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: retamia
- * Date: 15/9/25
- * Time: 10:40
- */
-
 namespace Custom\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
