@@ -132,7 +132,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getConnection()->fetchAll($sql, array($classroomId, $role));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['role'])) {
             $conditions['role'] = "%{$conditions['role']}%";
