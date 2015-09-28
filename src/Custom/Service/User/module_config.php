@@ -2,6 +2,6 @@
 
 return array(
     'event_subscriber' => array(
-        'Custom\\Service\\User\\Event\\UserEventSubscriber'
+        'Custom\\Service\\User\\Event\\OrganizationEventSubscriber'
     ),
 );
