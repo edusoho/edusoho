@@ -291,16 +291,16 @@ a {
   top: 0;
 }
 
-.ui-bar.search-bar {
-  background: #fff;
-}
-
 .ui-bar.search-bar .ui-searchbar-wrap {
   background: none;
 }
 
 .ui-bar.search-bar .ui-searchbar {
   background: #f8f9fa;
+}
+
+.ui-bar.search-bar .ui-searchbar-cancel {
+  color: #fff;
 }
 
 .ui-bar.transparent {
