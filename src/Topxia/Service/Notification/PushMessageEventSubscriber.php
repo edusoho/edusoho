@@ -319,6 +319,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             return $path;
         }
         $path = str_replace('public://', '', $path);
+        $path = str_replace('files/', '', $path);
         $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
         return $path;
     }
