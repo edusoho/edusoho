@@ -70,7 +70,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->updateClassroom($classroom2['id'],$textClassroom2);
         $classroom3 = $this->getClassroomService()->addClassroom($textClassroom3);
         $this->getClassroomService()->updateClassroom($classroom3['id'],$textClassroom3);
-        $conditions = array('status' => 'draft','showable' => 0,'buyable' => 0);
+        $conditions = array('status' => 'draft','showable' => 1,'buyable' => 1);
         $result = $this->getClassroomService()->searchClassroomsCount($conditions);
         $this->assertEquals(3,$result);
     }
