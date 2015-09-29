@@ -173,8 +173,10 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
                     if ($planTask['type'] == 'live') {
                         $liveLesson = $this->getCourseService()->getLesson($planTask['objectId']);
-                        $taskInfo['taskStartTime'] = $liveLesson['startTime'];
-                        $taskInfo['taskEndTime'] = $liveLesson['endTime'];
+                        if ($liveLesson['endTime'] > time()) {
+                            $taskInfo['taskStartTime'] = $liveLesson['startTime'];
+                            $taskInfo['taskEndTime'] = $liveLesson['endTime'];
+                        }
                     }
                 } 
                 else if ($planTask['type'] == 'homework') {
