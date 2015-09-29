@@ -1141,7 +1141,8 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
-        $this->assertEquals(false, $enabled);
+        $this->assertEquals(true, $enabled);//默认是showable班级
+
 
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
 
@@ -1191,7 +1192,14 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
+        $this->assertEquals(true, $enabled);
+
+        $classroom['showable'] = '0';
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$classroom);
+        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
+
+
     }
 
     public function testTryLookClassroom()
@@ -1252,7 +1260,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
-        $this->assertEquals(false, $enabled);
+        $this->assertEquals(true, $enabled);
     }
 
     public function testFindCoursesByClassroomId()
