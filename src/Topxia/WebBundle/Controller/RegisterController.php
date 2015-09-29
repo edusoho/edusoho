@@ -52,7 +52,6 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
-            $this->sendRegisterMessage($user);
 
             if(!isset($registration['nickname'])){
                 return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        

@@ -6,17 +6,17 @@
   border: 1px solid @gray-light;
 }
 
-.panel-lg {
-  .panel-heading {
-    padding: 15px 20px;
-  }
-  h1 {
-    margin: 0px 0;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 1.5;
-  }
-}
+// .panel-lg {
+//   .panel-heading {
+//     padding: 15px 20px;
+//   }
+//   h1 {
+//     margin: 0px 0;
+//     font-size: 20px;
+//     font-weight: bold;
+//     line-height: 1.5;
+//   }
+// }
 
 // 即将弃用
 .panel-col {
@@ -33,20 +33,21 @@
     border-bottom: 1px solid @gray-lighter;
     .panel-title {
       >i {
+        float: left;
         vertical-align: middle;
         margin-right: 10px;
       }
     }
     .more {
       position: absolute;
-      top: 7px;
+      top: 13px;
       right: 0;
       display: block;
       color: @gray;
       .es-transition;
-      >i {
-        font-size: 24px;
-      }
+      // >i {
+      //   font-size: 24px;
+      // }
       &:hover {
         color: #666666;
         .es-transition;

@@ -1,0 +1,18 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">设 置</h3>
+    </div>
+</div>
+<div class="top-header ui-userinfo">
+      <ul class="ui-list ui-list-text ui-list-link ui-list-cover">
+        <li class="ui-border-b">
+            <h4 class="ui-nowrap">扫描进入网校</h4>
+        </li>
+      </ul>
+      <div ng-if="isShowLogoutBtn" class="ui-btn-wrap" style="margin-top : 16px;">
+          <button class="ui-btn-lg btn-red" ng-click="logout()">
+              退出账号
+          </button>
+      </div>
+</div>

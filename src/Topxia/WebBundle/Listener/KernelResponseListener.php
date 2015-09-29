@@ -48,7 +48,7 @@ class KernelResponseListener
             );
 
             if (in_array($request->getPathInfo(), $whiteList) or strstr($request->getPathInfo(),'/admin')
-                or strstr($request->getPathInfo(),'/register/submited')) 
+                or strstr($request->getPathInfo(),'/register/submited') or strstr($request->getPathInfo(), '/mapi_v2')) 
             {
                 return ;
             }

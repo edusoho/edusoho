@@ -19,6 +19,18 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return true;
     }
 
+    public function searchNotifications($conditions, $orderBy, $start, $limit)
+    {
+        return NotificationSerialize::unserializes(
+            $this->getNotificationDao()->searchNotifications($conditions, $orderBy, $start, $limit)
+        );
+    }
+
+    public function searchNotificationCount($conditions)
+    {
+        return $this->getNotificationDao()->searchNotificationCount($conditions);
+    }
+
     public function findUserNotifications($userId, $start, $limit)
     {
         return NotificationSerialize::unserializes(

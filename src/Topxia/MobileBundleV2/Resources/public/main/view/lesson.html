@@ -1,0 +1,13 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">{{ lesson.title }}</h3>
+    </div>
+</div>
+<div class="top-header ui-lesson">
+	<div ng-include="lessonView"></div>
+</div>
+
+<script type="text/ng-template" id="view/lesson_text.html">
+	<div class="lesson-content" ng-html="lesson.content" ng-img-show></div>
+</script>

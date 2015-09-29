@@ -17,7 +17,7 @@ interface MessageService
      * 
      * @return array 私信的相关信息
      */
-    public function sendMessage($fromId, $toId, $content);
+    public function sendMessage($fromId, $toId, $content, $createdTime = null);
 
     public function getConversation($conversationId);
 
@@ -121,4 +121,7 @@ interface MessageService
     public function deleteMessagesByIds(array $ids=null);
 
     public function clearUserNewMessageCounter($userId);
+
+    //拉取当前用户在API处的私信信息列表并更新到系统中
+    public function pullMessagesFromApi();
 }

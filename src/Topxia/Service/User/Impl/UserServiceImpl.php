@@ -96,6 +96,36 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
+
+
+
+
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
+    {
+        $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
+        return $profiles;
+    }
+
+    public function searchUserProfileCount(array $conditions)
+    {
+        return $this->getProfileDao()->searchProfileCount($conditions);
+    }
+
+    public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
+    {
+        $approvals = $this->getUserApprovalDao()->searchApprovals($conditions, $orderBy, $start, $limit);
+        return $approvals;
+    }
+
+    public function searchApprovalsCount(array $conditions)
+    {
+        return $this->getUserApprovalDao()->searchApprovalsCount($conditions);
+    }
+
+
+
+
+
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
@@ -162,7 +192,8 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }, $oldAvatars);
 
-        return  $this->getUserDao()->updateUser($userId, $fields);
+        $user = $this->getUserDao()->updateUser($userId, $fields);
+        return UserSerialize::unserialize($user);
     }
 
     public function isNicknameAvaliable($nickname)
@@ -664,7 +695,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return null;
         }
@@ -682,7 +713,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function deleteToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return false;
         }
@@ -724,6 +755,11 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $this->getUserBindDao()->getBindByTypeAndFromId($type, $fromId);
+    }
+
+    public function getUserBindByToken($token)
+    {
+        return $this->getUserBindDao()->getBindByToken($token);
     }
 
     public function getUserBindByTypeAndUserId($type, $toId)
@@ -997,6 +1033,18 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getFriendDao()->findFriendCountByToId($userId);
     }
 
+    public function findFriends($userId, $start, $limit)
+    {
+        $friends = $this->getFriendDao()->findFriendsByUserId($userId, $start, $limit);
+        $ids = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+    
+    public function findFriendCount($userId)
+    {
+        return $this->getFriendDao()->findFriendCountByUserId($userId);
+    }
+
     public function follow($fromId, $toId)
     {
         $fromUser = $this->getUser($fromId);
@@ -1007,14 +1055,26 @@ class UserServiceImpl extends BaseService implements UserService
         if($fromId == $toId) {
             throw $this->createServiceException('不能关注自己！');
         }
+
+        $blacklist = $this->getBlacklistService()->getBlacklistByUserIdAndBlackId($toId,$fromId);
+        if (!empty($blacklist)) {
+            throw $this->createServiceException('关注失败！');
+        }
         $friend = $this->getFriendDao()->getFriendByFromIdAndToId($fromId, $toId);
         if(!empty($friend)) {
             throw $this->createServiceException('不允许重复关注!');
         }
-        return $this->getFriendDao()->addFriend(array(
-            "fromId"=>$fromId,
-            "toId"=>$toId,
-            "createdTime"=>time()));
+        $isFollowed = $this->isFollowed($toId, $fromId);
+        $pair = $isFollowed ? 1 : 0;
+        $friend = $this->getFriendDao()->addFriend(array(
+            'fromId' => $fromId,
+            'toId' => $toId,
+            'createdTime' => time(),
+            'pair' => $pair
+        ));
+        $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => $pair));
+        $this->getDispatcher()->dispatch('user.service.follow', new ServiceEvent($friend));
+        return $friend;
     }
 
     public function unFollow($fromId, $toId)
@@ -1028,7 +1088,13 @@ class UserServiceImpl extends BaseService implements UserService
         if(empty($friend)) {
             throw $this->createServiceException('不存在此关注关系，取消关注失败！');
         }
-        return $this->getFriendDao()->deleteFriend($friend['id']);
+        $result = $this->getFriendDao()->deleteFriend($friend['id']);
+        $isFollowed = $this->isFollowed($toId, $fromId);
+        if ($isFollowed) {
+            $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => 0));
+        }
+        $this->getDispatcher()->dispatch('user.service.unfollow', new ServiceEvent($friend));
+        return $result;
     }
 
     public function hasAdminRoles($userId)
@@ -1288,6 +1354,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
+    }
+
+    protected function getBlacklistService()
+    {
+        return $this->createService('User.BlacklistService');
     }
 
 }

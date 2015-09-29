@@ -34,7 +34,7 @@ class ProcessorDelegator
 		array_push($this->invokeArray, 'before', $name, 'after');
 		while ($function = array_pop($this->invokeArray)) {
 			$result = call_user_func(array($this->target, $function), $arguments);
-			if ($function == $name) {
+			if ($result != NULL) {
 				$functionResult = $result;
 			}
 		}

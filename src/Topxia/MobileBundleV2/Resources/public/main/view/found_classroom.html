@@ -1,0 +1,29 @@
+<div class="top-tab-header ui-found-course" ng-controller="FoundClassRoomController">
+	<div class="course-card classroom-card">
+		<h4><span class="circle-label"></span>推荐</h4>
+		<list-empty-view data="recommendClassRooms" title="暂时没有推荐班级">
+        </list-empty-view>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="classRoom in recommendClassRooms" ng-href="#/classroom/{{ classRoom.id  }}" ng-include=" 'view/classroom_list_item.html' | coverIncludePath ">
+		        
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="recommendClassRooms.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/classroomlist/">更多</button>
+		</div>
+	</div>
+
+	<div class="course-card classroom-card">
+		<h4><span class="circle-label"></span>最新</h4>
+		<list-empty-view data="latestClassrooms" title="暂时没有最新班级">
+        </list-empty-view>
+		<ul class="ui-list ui-border-tb">
+		    <li class="ui-border-t" ng-repeat="classRoom in latestClassrooms" ng-href="#/classroom/{{ classRoom.id  }}" ng-include=" 'view/classroom_list_item.html' | coverIncludePath ">
+		        
+		    </li>
+		</ul>
+		<div class="ui-btn-group" ng-if="latestClassrooms.length > 0">
+		    <button type="button" class="btn-green" ng-href="#/classroomlist/">更多</button>
+		</div>
+	</div>
+</div>

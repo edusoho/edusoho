@@ -1,0 +1,58 @@
+<div class="ui-bar search-bar">
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <div class="title">
+      	<div class="ui-searchbar-wrap ui-border-b focus" on-element-readey="focusSearchInput()">
+		    <div class="ui-searchbar ui-border-radius">
+		        <i class="ui-icon-search"></i>
+		        <div class="ui-searchbar-text">搜索课程</div>
+		        <div class="ui-searchbar-input">
+		        	<input ng-model="search" ng-keypress="inputKeyPress($event)" placeholder="搜索课程" autocapitalize="off">
+		        </div>
+		        <i class="ui-icon-close" ng-click="search = '' "></i>
+		    </div>
+		    <button class="ui-searchbar-cancel" ng-click="seach()">{{ search.length > 0 ? '搜索' : '取消' }}</button>
+		</div>
+    	</div>
+      </div>
+</div>
+
+<div class="top-header ui-scroller course-card" ui-scroll data="searchDatas" on-infinite="loadMore()">
+  <ul class="ui-list ui-border-tb">
+      <li class="ui-border-t" ng-repeat="course in searchDatas" ng-href="#/course/{{ course.id }}">
+          <div class="ui-list-img">
+              <img ng-src="{{ course.middlePicture }} " img-error="course" />
+              <span class="discount-label" ng-class="course.discount == 0 ? 'free' : 'rebate' " ng-if="course.discountId > 0">
+                      <span class="discount-label-bottom"></span>
+                      <span class="discount-label-content" ng-if="course.discount == 0">限时免费</span>
+                      <span class="discount-label-content" ng-if="course.discount > 0">限时打折</span>
+              </span>
+          </div>
+          <div class="ui-list-info">
+              <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+              <p class="bottom price-body">
+                <span class="origin-price">
+                      {{ course.price | formatPrice }}
+                      <s class="discount-color" ng-if="course.discountId > 0">
+                        {{ course.originPrice | formatPrice }}
+                      </s>
+                </span>
+
+                <span class="right">
+                      <i class="iconfont icon-person"></i>
+                      {{ course.studentNum }}人在学
+                </span>
+              </p>
+          </div>
+      </li>
+  </ul>
+
+  <list-empty-view data="searchDatas" title="没有搜索到神马">
+  </list-empty-view>
+
+  <div class="ui-loading-wrap" ng-show="canLoad">
+    <p>正在加载中...</p>
+    <i class="ui-loading"></i>
+  </div>
+
+</div>
