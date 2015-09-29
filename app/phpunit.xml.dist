@@ -33,6 +33,8 @@
             <directory>../src/Classroom/Service/</directory>
             <exclude>
                 <directory>../src/Classroom/Service/Classroom/Tests</directory>
+                <file>../src/Classroom/Service/*/*Service.php</file>
+                <file>../src/Classroom/Service/*/Dao/*Dao.php</file>
             </exclude>
 
             <directory>../src/Topxia/Common</directory>
@@ -48,6 +50,8 @@
             <directory>../src/Topxia/Service</directory>
             <exclude>
                 <directory>../src/Topxia/Service/*/Tests</directory>
+                <file>../src/Topxia/Service/*/*Service.php</file>
+                <file>../src/Topxia/Service/*/Dao/*Dao.php</file>
             </exclude>
 
 <!--
