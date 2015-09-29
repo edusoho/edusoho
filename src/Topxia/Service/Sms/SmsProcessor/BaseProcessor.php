@@ -13,7 +13,7 @@ class BaseProcessor {
             $users = $this->getUserService()->findUsersByIds($userIds);
             $to = '';
             foreach ($users as $key => $value ) {
-                if (strlen($value['verifiedMobile']) == 0) {
+                if (strlen($value['verifiedMobile']) == 0 || $value['locked']) {
                     unset($users[$key]);
                 }
             }

@@ -54,7 +54,7 @@ class SmsController extends BaseController
                     $verifiedMobileUserNum = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
                 }
             } else {
-                $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileMembersCountByCourseId($lesson['courseId']);
+                $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileMembersCountByCourseId($lesson['courseId'], 1);
             }
         }
 
@@ -129,7 +129,7 @@ class SmsController extends BaseController
             }
             $users = $this->getUserService()->findUsersByIds($studentIds);
             foreach ($users as $key => $value ) {
-                if (strlen($value['verifiedMobile']) == 0) {
+                if (strlen($value['verifiedMobile']) == 0 || $value['locked']) {
                     unset($users[$key]);
                 }
             }
