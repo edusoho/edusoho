@@ -50,4 +50,9 @@ class MobileSchoolUtil
         return $apps[2];
     }
 
+    public function getAnnouncementApp()
+    {
+        $apps = $this->getSchoolApps();
+        return $apps[1];
+    }
 }
