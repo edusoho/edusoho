@@ -304,7 +304,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $schoolApp = $schoolUtil->getArticleApp();
                 $target['title'] = '网校公告';
                 $target['id'] = $schoolApp['id'];
-                $target['image'] = $this->getFileUrl($schoolApp['avatar'])
+                $target['image'] = $this->getFileUrl($schoolApp['avatar']);
             default:
                 # code...
                 break;
