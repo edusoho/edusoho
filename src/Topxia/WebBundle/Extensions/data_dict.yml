@@ -299,8 +299,9 @@ userInfoFields:
     weibo: 微博
     weixin: 微信
 
-passedStatus: 
+passedStatus:
     excellent: 优秀
     good: 良好
     passed: 合格
     unpassed: 不合格
+

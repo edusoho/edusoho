@@ -145,7 +145,13 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     var swfobject = require('swfobject');
     window.onmessage=function(e){  
+        if(e == null || e == undefined ){
+            return;
+        }
         var isPageFullScreen = e.data;
+        if(typeof(isPageFullScreen) != "boolean"){
+            return ;
+        }
         var docContent = document.getElementById("lesson-document-content");
         if (isPageFullScreen) {
           docContent.removeAttribute("style");

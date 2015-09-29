@@ -12,6 +12,25 @@ use Topxia\Service\Task\TaskProcessor\TaskProcessorFactory;
 
 class CourseLessonController extends BaseController
 {
+    //加载播放器的地址
+    public function playerAction(Request $request, $courseId, $lessonId = 0)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+
+        if(!$lesson["free"] && empty($timelimit)) {
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        return $this->forward('TopxiaWebBundle:Player:show', array(
+            'id' => $lesson["mediaId"],
+            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : ''
+        ));
+    }
 
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
@@ -20,7 +39,6 @@ class CourseLessonController extends BaseController
             $lessonId = $request->query->get('lessonId');
         }
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $user = $this->getCurrentUser();
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
@@ -32,13 +50,14 @@ class CourseLessonController extends BaseController
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
+        $user = $this->getCurrentUser();
+
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
         if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
 
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-
             if($course["parentId"]>0){
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
@@ -56,7 +75,7 @@ class CourseLessonController extends BaseController
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (empty($lesson['free']) && $file['storage'] != 'cloud') {
+            if (empty($lesson['free']) && empty($timelimit) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }
@@ -126,14 +145,6 @@ class CourseLessonController extends BaseController
     public function showAction(Request $request, $courseId, $lessonId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
-        if(empty($member)) {
-            $user = $this->getCurrentUser();
-            $joinedByClassroomMember = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user->id);
-            if(isset($joinedByClassroomMember["id"])) {
-                $member = $joinedByClassroomMember;
-            }
-        }
         
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
@@ -227,6 +238,15 @@ class CourseLessonController extends BaseController
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
                         $json['mediaHLSUri'] = $url['url'];
+
+                        if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+                            $user = $this->getCurrentUser();
+                            $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
+                            if ($watchStatus['status'] == 'error') {
+                                $wathcLimitTime = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
+                                $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
+                            }
+                        }
                     } elseif ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                     } else {
@@ -248,6 +268,8 @@ class CourseLessonController extends BaseController
                         }
                     }
 
+                } else {
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                     if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
                         $user = $this->getCurrentUser();
                         $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
@@ -256,8 +278,6 @@ class CourseLessonController extends BaseController
                             $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
                         }
                     }
-                } else {
-                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
                 }
             } else {
                 $json['mediaUri'] = '';
@@ -293,7 +313,7 @@ class CourseLessonController extends BaseController
 
         return $this->createJsonResponse($json);
     }
-
+    
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);

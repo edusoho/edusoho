@@ -111,6 +111,16 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getProfileDao()->searchProfileCount($conditions);
     }
 
+    public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
+    {
+        $approvals = $this->getUserApprovalDao()->searchApprovals($conditions, $orderBy, $start, $limit);
+        return $approvals;
+    }
+
+    public function searchApprovalsCount(array $conditions)
+    {
+        return $this->getUserApprovalDao()->searchApprovalsCount($conditions);
+    }
 
 
 
@@ -685,7 +695,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return null;
         }
@@ -703,7 +713,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function deleteToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return false;
         }
