@@ -8,6 +8,7 @@ define(function(require, exports, module) {
 
         var dataTo = '';
         var smsType = '';
+        var captchaNum = 'captcha_num';
         if ($('input[name="set_bind_emailOrMobile"]').length > 0) {
             dataTo = 'set_bind_emailOrMobile';
             smsType = 'sms_registration';
@@ -31,6 +32,7 @@ define(function(require, exports, module) {
             element: '#captcha-form',
             dataTo: dataTo,
             smsType: smsType,
+            captchaNum: captchaNum,
         });
 
     };
