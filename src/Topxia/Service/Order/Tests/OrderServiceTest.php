@@ -892,9 +892,6 @@ class OrderServiceTest extends BaseTestCase
     }
 
 
-    /**  
-    * @expectedException Topxia\Service\Common\ServiceException  
-    */
 
     public function testPayOrderThird()
     {
