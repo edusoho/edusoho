@@ -594,8 +594,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
 
         if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $targetArr = str_split('/',$testpaperResult['target']);
-            $lessonInfo = str_split('-',$targetArr[1]);
+            $targetArr = explode('/',$testpaperResult['target']);
+            $lessonInfo = explode('-',$targetArr[1]);
             $this->dispatchEvent(
                 'task.finished', 
                 new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$testpaperResult['passedStatus']), 
@@ -691,8 +691,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         
         if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $targetArr = str_split('/',$testpaperResult['target']);
-            $lessonInfo = str_split('-',$targetArr[1]);
+            $targetArr = explode('/',$testpaperResult['target']);
+            $lessonInfo = explode('-',$targetArr[1]);
             $this->dispatchEvent(
                 'task.finished', 
                 new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$passedStatus), 
