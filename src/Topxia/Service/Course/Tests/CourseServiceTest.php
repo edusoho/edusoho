@@ -95,6 +95,26 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result[1]['title'],$course_like['title']);
     }
 
+    public function testGetHasVerifiedMobileSMembersCountByCourseId()
+    {
+        $course = array(
+            'title' => 'online test course1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        $user1 = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user1);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getUserService()->changeMobile($user1['id'], '13456520930');
+        $addCourse = $this->getCourseService()->becomeStudent($createCourse['id'],$user1['id']);
+        $count = $this->getCourseService()->getHasVerifiedMobileMembersCountByCourseId($createCourse['id']);
+        $this->assertEquals(1, $count);
+        $this->getUserService()->lockUser($user1['id']);
+        $count = $this->getCourseService()->getHasVerifiedMobileMembersCountByCourseId($createCourse['id'], 1);
+        $this->assertEquals(0, $count);
+    }
+
     public function testFindMinStartTimeByCourseId()
     {
         $course = array(
