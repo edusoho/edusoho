@@ -2778,7 +2778,7 @@ class OrderServiceTest extends BaseTestCase
         $payData = '{"a":"1}';
         $this->getOrderService()->createPayRecord($order1['id'],$payData);
         $result = $this->getOrderService()->getOrder($order1['id']);
-        $this->assertEquals($result['data'],'"{\"a\":\"1}"');
+        $this->assertEquals(json_decode($result['data']),$payData);
     }
     public function testCreateOrderLog()
     {
