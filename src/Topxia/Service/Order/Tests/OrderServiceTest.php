@@ -1270,11 +1270,8 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
+
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -1287,32 +1284,15 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
             'amount' => $order1['amount'],
             'paidTime' => time(),
         ));
-
-        $payOrder2 = $this->getOrderService()->payOrder(array(
-            'sn' => $order2['sn'],
-            'status' => 'success',
-            'amount' => $order2['amount'],
-            'paidTime' => time(),
-        ));
-
         $result = $this->getOrderService()->sumOrderPriceByTarget('course',$createCourse1['id']);
-        $this->assertEquals($result,'11');
+        $this->assertEquals($result,'1');
     }
     public function testSumCouponDiscountByOrderIds()
     {
@@ -1698,11 +1678,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -1715,29 +1691,13 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
             'amount' => $order1['amount'],
             'paidTime' => time(),
         ));
-        $payOrder2 = $this->getOrderService()->payOrder(array(
-            'sn' => $order2['sn'],
-            'status' => 'success',
-            'amount' => $order2['amount'],
-            'paidTime' => time(),
-        ));
-
         $result = $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
         $this->assertEquals($result['status'],'success');
     }
@@ -1776,11 +1736,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -1793,16 +1749,7 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $result = $this->getOrderService()->applyRefundOrder($order1['id']);
     }
 
@@ -1833,11 +1780,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $normalUser = new CurrentUser();
         $normalUser->fromArray($user);
@@ -1850,26 +1793,11 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
             'amount' => $order1['amount'],
-            'paidTime' => time(),
-        ));
-        $payOrder2 = $this->getOrderService()->payOrder(array(
-            'sn' => $order2['sn'],
-            'status' => 'success',
-            'amount' => $order2['amount'],
             'paidTime' => time(),
         ));
 
@@ -2057,11 +1985,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $normalUser = new CurrentUser();
         $normalUser->fromArray($user);
@@ -2074,29 +1998,13 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
             'amount' => $order1['amount'],
             'paidTime' => time(),
         ));
-        $payOrder2 = $this->getOrderService()->payOrder(array(
-            'sn' => $order2['sn'],
-            'status' => 'success',
-            'amount' => $order2['amount'],
-            'paidTime' => time(),
-        ));
-
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getOrderService()->applyRefundOrder($payOrder[1]['id'],10);
         $this->getOrderService()->cancelRefundOrder($payOrder[1]['id'],'true');
@@ -2141,11 +2049,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $normalUser = new CurrentUser();
         $normalUser->fromArray($user);
@@ -2158,26 +2062,11 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $currentUser['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
             'amount' => $order1['amount'],
-            'paidTime' => time(),
-        ));
-        $payOrder2 = $this->getOrderService()->payOrder(array(
-            'sn' => $order2['sn'],
-            'status' => 'success',
-            'amount' => $order2['amount'],
             'paidTime' => time(),
         ));
         $this->getServiceKernel()->setCurrentUser($normalUser);
@@ -2215,11 +2104,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $normalUser = new CurrentUser();
         $normalUser->fromArray($user);
@@ -2232,16 +2117,8 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $currentUser['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
+
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
@@ -2281,11 +2158,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $normalUser = new CurrentUser();
         $normalUser->fromArray($user);
@@ -2298,16 +2171,7 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $currentUser['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payOrder = $this->getOrderService()->payOrder(array(
             'sn' => $order1['sn'],
             'status' => 'success',
@@ -2803,11 +2667,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -2820,16 +2680,7 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $this->getOrderService()->updateOrderCashSn($order1['id'],'999999999');
         $result = $this->getOrderService()->getOrder($order1['id']);
         $this->assertEquals($result['cashSn'],'999999999');
@@ -2869,11 +2720,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -2886,16 +2733,7 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $result = $this->getOrderService()->updateOrderCashSn($order1['id'],null);
     }
 
@@ -2922,11 +2760,7 @@ class OrderServiceTest extends BaseTestCase
         $course1 = array(
             'title' => 'course 1'
         );
-        $course2 = array(
-            'title' => 'course 2'
-        );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $createCourse2 = $this->getCourseService()->createCourse($course2);
         $user = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -2939,16 +2773,7 @@ class OrderServiceTest extends BaseTestCase
             'targetId' => $createCourse1['id'], 
             'payment' => 'tenpay'
         );
-        $order2 = array(
-            'userId' => $user['id'],
-            'title' => 'buy course 2',  
-            'amount' => 10.00, //价格一定要有,否则payment会变成none
-            'targetType' => 'course', 
-            'targetId' => $createCourse1['id'], 
-            'payment' => 'alipay'
-        );
         $order1 = $this->getOrderService()->createOrder($order1);
-        $order2 = $this->getOrderService()->createOrder($order2);
         $payData = '{"a":"1}';
         $result = $this->getOrderService()->createPayRecord($order1['id'],$payData);
         $this->assertEquals($result['type'],'pay_create');
