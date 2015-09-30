@@ -18,6 +18,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             'course.lesson.publish' => 'onCourseLessonPublish',
             'course.lesson.updateStartTime' => 'onCourseLessonUpdateStartTime',
             'course.lesson.delete' => 'onCourseLessonDelete',
+            'course.lesson.unpublish' => 'onCourseLessonUnpublish',
         );
     }
 
@@ -73,17 +74,28 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $this->createJob($lesson);
     }
 
+    public function onCourseLessonUnpublish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+    }
+
     public function onCourseLessonUpdateStartTime(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-
         $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
 
         if ($jobs) {
             $this->deleteJob($jobs);
         }
 
-        $this->createJob($lesson);
+        if ($lesson['status'] == 'publish' && $lesson['type'] == 'live') {
+            $this->createJob($lesson);
+        }
 
     }
 

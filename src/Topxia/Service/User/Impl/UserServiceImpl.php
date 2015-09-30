@@ -96,10 +96,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
-
-
-
-
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
     {
         $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
@@ -1272,11 +1268,6 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }
         return $dayUserTotals;
-    }
-
-    public function findUserHasVerifiedMobileCount()
-    {
-        return $this->getUserDao()->findUserHasVerifiedMobileCount();
     }
 
     public function parseAts($text)

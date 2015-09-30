@@ -1,7 +1,6 @@
 define(function(require, exports, module){
 
 	require("jquery.bootstrap-datetimepicker");
-	require("$");
 
 	exports.run = function(){
 		$("#nextExcutedStartTime,#nextExcutedEndTime").datetimepicker({

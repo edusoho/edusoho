@@ -14,7 +14,7 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class SmsController extends BaseController
 {
-    public function showAction(Request $request, $targetType, $id)
+    public function prepareAction(Request $request, $targetType, $id)
     {   
         $item = array();
         $verifiedMobileUserNum = 0;
@@ -22,15 +22,15 @@ class SmsController extends BaseController
         $smsType = 'sms_'.$targetType.'_publish';
         if ($targetType == 'classroom') {
             $item = $this->getClassroomService()->getClassroom($id);
-            $verifiedMobileUserNum = $this->getUserService()->findUserHasVerifiedMobileCount();
+            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true));
             $url = $this->generateUrl('classroom_show',array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
-            $verifiedMobileUserNum = $this->getUserService()->findUserHasVerifiedMobileCount();
+            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true));
             $url = $this->generateUrl('course_show',array('id' => $id));
         } elseif ($targetType == 'lesson') {
             $courseSetting = $this->getSettingService()->get('course', array());
-            if (isset($courseSetting['teacher_sms_send_lesson_publish']) && !$courseSetting['teacher_sms_send_lesson_publish']) {
+            if (isset($courseSetting['teacher_sms_send']) && !$courseSetting['teacher_sms_send']) {
                 $user = $this->getCurrentUser();
                 if(!$user->isAdmin()){
                     throw new \RuntimeException('没有权限发短信');
@@ -88,7 +88,7 @@ class SmsController extends BaseController
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'lesson') {
             $courseSetting = $this->getSettingService()->get('course', array());
-            if (isset($courseSetting['teacher_sms_send_lesson_publish']) && !$courseSetting['teacher_sms_send_lesson_publish']) {
+            if (isset($courseSetting['teacher_sms_send']) && !$courseSetting['teacher_sms_send']) {
                 $user = $this->getCurrentUser();
                 if(!$user->isAdmin()){
                     throw new \RuntimeException('没有权限发短信');
@@ -108,12 +108,13 @@ class SmsController extends BaseController
             if ($course['parentId'] ) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
                 if ($classroom) {
-                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'),0,$count);
+                    $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
+                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'), $index, $onceSendNum);
                 }
             } else {
-                $students = $this->getCourseService()->findCourseStudentsByCourseIds(array($lesson['courseId']));
+                $count = $this->getCourseService()->searchMemberCount(array('courseId' => $course['id']));
+                $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']),array('createdTime','Desc'), $index, $onceSendNum);
             }
-            $index = $count;
         }
 
         if ( !$this->getSmsService()->isOpen($smsType) ) {

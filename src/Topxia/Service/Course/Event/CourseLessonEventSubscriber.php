@@ -122,19 +122,40 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $this->lessonUpdate($lesson);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
+            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            foreach ($courseIds as $key=>$courseId) {
+                $this->getCourseService()->updateLesson($lessonIds[$key],$lesson);
+            } 
+        }
     }
 
     public function onCourseLessonPublish(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $this->lessonUpdate($lesson);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
+            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            foreach ($courseIds as $key=>$courseId) {
+                $this->getCourseService()->publishLesson($lessonIds[$key],$courseId);
+            } 
+        }
     }
 
     public function onCourseLessonUnpublish(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
-        $this->lessonUpdate($lesson);
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
+            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
+            foreach ($courseIds as $key=>$courseId) {
+                $this->getCourseService()->unpublishLesson($lessonIds[$key],$courseId);
+            } 
+        }
     }
 
     public function onLessonStart(ServiceEvent $event)
@@ -203,20 +224,6 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $courseLessonReplay['createdTime'] = time();
             $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
         }
-    }
-
-
-    protected function lessonUpdate($lesson)
-    {
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
-            unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
-            foreach ($courseIds as $key=>$courseId) {
-                $this->getCourseService()->editLesson($lessonIds[$key],$lesson);
-            } 
-        }
-        return true;
     }
 
     protected function simplifyCousrse($course)

@@ -196,10 +196,4 @@ class UserDaoImpl extends BaseDao implements UserDao
         $sql="SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
         return $this->getConnection()->fetchColumn($sql, array($endTime));
     }
-
-    public function findUserHasVerifiedMobileCount()
-    {
-        $sql="SELECT count(id) as count From `{$this->table}` WHERE `verifiedMobile` != '' ";
-        return $this->getConnection()->fetchColumn($sql);
-    }
 }
