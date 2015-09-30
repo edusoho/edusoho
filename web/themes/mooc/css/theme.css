@@ -280,6 +280,7 @@ input:focus {
 }
 /* =========================== header =========================== */
 .navbar {
+  position: relative;
   background-color: #fff;
   border: 0;
   margin-bottom: 30px;
@@ -383,7 +384,7 @@ input:focus {
 }
 .nav-user {
   position: absolute;
-  right: 0;
+  right: 20px;
   top: 0;
 }
 @media (max-width: 767px) {
@@ -2471,9 +2472,6 @@ input:focus {
     font-size: 14px;
     padding: 10px;
   }
-}
-.navbar-collapse {
-  position: relative;
 }
 .es-banner .title > i {
   margin-top: 4px;
