@@ -30,9 +30,10 @@
     {#<button class="btn btn-primary" >搜索</button>#}
 
   </form>
-
-  <table class="table table-striped table-hover" id="orders-table">
-    {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode: 'my'} %}
-  </table>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover" id="orders-table">
+      {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode: 'my'} %}
+    </table>
+  </div>
 {{ web_macro.paginator(paginator) }}
 {% endblock %}

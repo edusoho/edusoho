@@ -135,6 +135,9 @@
   width: auto;
   // background-color: #fafafa;
   background-color: @gray-lighter;
+  @media(max-width:@screen-xs-max) {
+    height: auto;
+  }
 }
 
 .order-count {
@@ -196,6 +199,9 @@
   border-bottom: 0;
   padding: 50px 30px 50px 40px;
   line-height: 33px;
+  @media (max-width: @screen-xs-max) {
+    padding: 15px;
+  }
 }
 
 .order-item .coin-detail {
@@ -238,7 +244,7 @@
     color: @gray-dark;
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      padding: 50px 0 0 25px;
+      padding: 15px 15px 0 15px;
     }
   }
   .order-price {
@@ -249,7 +255,7 @@
     padding: 60px 30px 0 0;
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      padding: 0 0 0 25px;
+      padding: 0 0 0 15px;
       text-align: left;
     }
   }
@@ -267,7 +273,7 @@
     font-size: 16px;
     color: @gray;
     @media (max-width: @screen-xs-max) {
-      width: 100%;
+      width: 100% !important;
       line-height: 50px;
     }
     .title {
@@ -290,7 +296,7 @@
     font-size: 14px;
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      line-height: 50px;
+      // line-height: 50px;
       text-align: left;
       .form-control {
         margin-top: 9px;
@@ -340,8 +346,8 @@
     text-align: right;
     color: @gray-dark;
     @media (max-width: @screen-xs-max) {
-      width: 100%;
-      line-height: 50px;
+      width: 100% !important;
+      // line-height: 50px;
       text-align: left;
     }
     .cash-discount {
@@ -409,6 +415,9 @@
   text-align: right;
   margin-bottom: 30px;
   font-size: 16px;
+  @media (max-width: @screen-xs-max) {
+    margin: 0 0 15px 0;
+  }
 }
 
 .order-pay-heading {
@@ -419,6 +428,9 @@
 
 .order-pay-body {
   padding: 30px 0;
+  @media (max-width: @screen-xs-max) {
+    padding: 15px 0;
+  }
 }
 
 .pay  {
