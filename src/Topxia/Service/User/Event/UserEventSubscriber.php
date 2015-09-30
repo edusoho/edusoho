@@ -109,7 +109,6 @@ class UserEventSubscriber implements EventSubscriberInterface
             $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
             $this->getMessageService()->deleteConversation($conversation['id']);
         }
-
     }
 
     protected function getWelcomeBody($user)
