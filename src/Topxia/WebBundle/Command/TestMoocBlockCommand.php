@@ -8,7 +8,7 @@ use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 
-class TestBlockCommand extends BaseCommand
+class TestMoocBlockCommand extends BaseCommand
 {
     protected function configure()
     {
