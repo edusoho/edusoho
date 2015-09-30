@@ -284,6 +284,7 @@ input:focus {
   background-color: #fff;
   border: 0;
   margin-bottom: 30px;
+  padding: 0 20px;
   @media (min-width: @screen-sm-min) {
     border-radius: 0;
   }
@@ -315,11 +316,15 @@ input:focus {
 .nav.navbar-nav {
   >li {
     >a {
-      padding: 25px 18px;
+      padding: 25px 15px;
       font-size: 16px;
       font-weight: bold;
+      @media (max-width: @screen-md-max) and (min-width: @screen-md-min){
+        padding: 25px 10px;
+      }
       @media (max-width: @screen-sm-max) {
-        padding: 25px 15px;
+        padding: 25px 10px;
+        font-size: 14px;
       }
       &:hover,
       &:focus {
@@ -382,7 +387,9 @@ input:focus {
 }
 
 .nav-user {
-  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
   @media (max-width:@screen-xs-max) {
     float: none;
     margin: 0 -15px;
@@ -403,12 +410,6 @@ input:focus {
     padding: 3px 10px;
     margin: 12px 0 8px 0;
     border: 1px solid #fff;
-    // .triangle {
-    //   .inline-block;
-    //   width: 20px;
-    //   height: 10px;
-    //   background: url("../img/icon_triangle.png") no-repeat;
-    // }
     &:hover {
       border-color: #eee;
       .dropdown-menu {
@@ -556,8 +557,8 @@ input:focus {
     }
   }
   a {
-    display: block;
-    padding: 24px 0;
+    // display: block;
+    // padding: 24px 0;
     margin-left: 20px;
     font-size: 16px;
     @media (max-width: @screen-xs-max) {

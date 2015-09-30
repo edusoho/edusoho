@@ -283,6 +283,7 @@ input:focus {
   background-color: #fff;
   border: 0;
   margin-bottom: 30px;
+  padding: 0 20px;
 }
 @media (min-width: 768px) {
   .navbar {
@@ -310,13 +311,19 @@ input:focus {
   background-color: #10b67c;
 }
 .nav.navbar-nav > li > a {
-  padding: 25px 18px;
+  padding: 25px 15px;
   font-size: 16px;
   font-weight: bold;
 }
+@media (max-width: 1199px) and (min-width: 992px) {
+  .nav.navbar-nav > li > a {
+    padding: 25px 10px;
+  }
+}
 @media (max-width: 991px) {
   .nav.navbar-nav > li > a {
-    padding: 25px 15px;
+    padding: 25px 10px;
+    font-size: 14px;
   }
 }
 .nav.navbar-nav > li > a:hover,
@@ -375,7 +382,9 @@ input:focus {
   background: url("../img/search.png") no-repeat;
 }
 .nav-user {
-  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 @media (max-width: 767px) {
   .nav-user {
@@ -553,8 +562,6 @@ input:focus {
   }
 }
 .login-menu a {
-  display: block;
-  padding: 24px 0;
   margin-left: 20px;
   font-size: 16px;
 }
@@ -2464,6 +2471,9 @@ input:focus {
     font-size: 14px;
     padding: 10px;
   }
+}
+.navbar-collapse {
+  position: relative;
 }
 .es-banner .title > i {
   margin-top: 4px;
