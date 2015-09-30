@@ -8,13 +8,13 @@ use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 
-class TestMoocBlockCommand extends BaseCommand
+class TestBlockCommand extends BaseCommand
 {
     protected function configure()
     {
         $this
-            ->setName('topxia:testmoocblock')
-            ->setDescription('测试慕课老数据转换');
+            ->setName('topxia:testblock')
+            ->setDescription('测试老数据转换');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -42,72 +42,72 @@ class TestMoocBlockCommand extends BaseCommand
         $newData = array(
             'posters' => array(
                 array(
-                    'src' => $oldData['carousel1ground'][0]['src'],
+                    'src' => $oldData['carousel1banner'][0]['src'],
                     'alt' => "海报1",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => $oldData['carousel1background'][0]['value'],
                     'href' => $oldData['carousel1ground'][0]['href'],
                     'html' => $newHtml[0],
                     'status' => 1,
-                    'mode' => 'html'
+                    'mode' => 'img'
                 ), array(
-                    'src' => $oldData['carousel2ground'][0]['src'],
+                    'src' => $oldData['carousel2banner'][0]['src'],
                     'alt' => "海报2",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => $oldData['carousel2background'][0]['value'],
                     'href' => $oldData['carousel2ground'][0]['href'],
                     'html' => $newHtml[1],
                     'status' => 1,
-                    'mode' => 'html'
+                    'mode' => 'img'
                 ), array(
-                    'src' => $oldData['carousel3ground'][0]['src'],
+                    'src' => $oldData['carousel3banner'][0]['src'],
                     'alt' => "海报3",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => $oldData['carousel3background'][0]['value'],
                     'href' => $oldData['carousel3ground'][0]['href'],
                     'html' => $newHtml[2],
                     'status' => 1,
-                    'mode' => 'html'
+                    'mode' => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
+                    'src' => '/themes/mooc/img/banner4.jpg',
                     'alt' => "海报4",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => "#3F3F3F",
                     'href' => "",
                     'html' => "",
                     'status' => 0,
                     'mode' => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
+                    'src' => '/themes/mooc/img/banner4.jpg',
                     'alt' => "海报5",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => "#3F3F3F",
                     'href' => "",
                     'html' => "",
                     'status' => 0,
                     'mode' => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
+                    'src' => '/themes/mooc/img/banner4.jpg',
                     'alt' => "海报6",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => "#3F3F3F",
                     'href' => "",
                     'html' => "",
                     'status' => 0,
                     'mode' => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
+                    'src' => '/themes/mooc/img/banner4.jpg',
                     'alt' => "海报7",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => "#3F3F3F",
                     'href' => "",
                     'html' => "",
                     'status' => 0,
                     'mode' => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
+                    'src' => '/themes/mooc/img/banner4.jpg',
                     'alt' => "海报8",
-                    'layout' => 'limitWide',
+                    'layout' => 'tile',
                     'background' => "#3F3F3F",
                     'href' => "",
                     'html' => "",
