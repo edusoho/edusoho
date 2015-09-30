@@ -506,6 +506,7 @@ class CourseController extends CourseBaseController
 			$lesson = $this->getCourseService()->getLesson($lessonId);
 			$course = $this->getCourseService()->getCourse($lesson['courseId']);
 			$watchLimitTime = $course['watchLimit'] * $lesson['length'];
+
 			if ($lesson['type'] == 'video' && ($course['watchLimit'] > 0) && ($learn['watchTime'] >= $watchLimitTime)) {
 				$learn['watchLimited'] = true;
 			}
