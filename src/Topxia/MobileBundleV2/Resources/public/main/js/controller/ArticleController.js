@@ -2,6 +2,18 @@ app.controller('ArticleController', ['$scope', '$state', '$stateParams', 'cordov
 
 function ArticleController($scope, $state, $stateParams, cordovaUtil, ArticleService)
 {	
+	var self = this;
+
+	this.filterContent = function(content, limit) {
+		content = content.replace(/<\/?[^>]*>/g,'');
+		content = content.replace(/[ | ]*\n/g,'\n');
+		if (content.length > limit) {
+	       content = content.substring(0, limit);
+	    }
+
+	    return content;
+	}
+
 	$scope.init = function() {
 		$scope.showLoad();
 		ArticleService.getArticle({
@@ -18,32 +30,24 @@ function ArticleController($scope, $state, $stateParams, cordovaUtil, ArticleSer
 	}
 
 	$scope.share = function() {
-		var about = $scope.article.body;
-	    if (about.length > 20) {
-	       about = about.substring(0, 20);
-	    }
 		cordovaUtil.share(
 	        app.host + "/article/" + $scope.article.id, 
 	        $scope.article.title, 
-	        about, 
+	        self.filterContent($scope.article.body, 20), 
 	        $scope.article.picture
 	    );  
 	}
 
 	$scope.redirect = function() {
-		var about = $scope.article.body;
-	    if (about.length > 20) {
-	       about = about.substring(0, 20);
-	    }
-
+		var url = [app.rootPath, "#article/", $scope.article.id ].join("");
 		cordovaUtil.redirect({
 			type : "news.redirect",
 			fromType : "news",
 			id : $scope.article.id,
 			title : $scope.article.title,
 			image : $scope.article.picture,
-			content : about,
-			url : "",
+			content : self.filterContent($scope.article.body, 20),
+			url : url,
 			source : "self"
 		});
 	}
