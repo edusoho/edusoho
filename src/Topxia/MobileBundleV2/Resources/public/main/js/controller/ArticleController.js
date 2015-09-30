@@ -5,12 +5,13 @@ function ArticleController($scope, $state, $stateParams, cordovaUtil, ArticleSer
 	var self = this;
 
 	this.filterContent = function(content, limit) {
+
 		content = content.replace(/<\/?[^>]*>/g,'');
-		content = content.replace(/[ | ]*\n/g,'\n');
+		content = content.replace(/[\r\n\s]+/g,'');
 		if (content.length > limit) {
 	       content = content.substring(0, limit);
 	    }
-
+	    
 	    return content;
 	}
 
