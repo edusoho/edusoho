@@ -2,76 +2,38 @@ define(function(require, exports, module) {
 	var VideoJS = require('video-js'),
 		swfobject = require('swfobject');
 
-	require('mediaelementplayer');
 
-    var MediaPlayer = require('../widget/media-player4');
 	var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
+    var Messenger = require('../player/messenger');
 
     exports.run = function() {
 
-		if ($("#lesson-preview-video-player").length > 0) {
+		if ($("#lesson-preview-player").length > 0) {
+            var lessonVideoDiv = $('#lesson-preview-player');
+            
+            var courseId = lessonVideoDiv.data("courseId");
+            var lessonId = lessonVideoDiv.data("lessonId");
+            var playerUrl = lessonVideoDiv.data("playerUrl");
 
-			if ($("#lesson-preview-video-player").data('hlsUrl')) {
+            var html = '<iframe src=\''+playerUrl+'\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
-                $("#lesson-preview-video-player").html('<div id="lesson-video-player"></div>');
-                   
-                var mediaPlayer = new MediaPlayer({
-                   element: '#lesson-preview-video-player',
-                   playerId: 'lesson-video-player',
-                   height: '360px'
-                });
-                
-                var $hlsUrl = $("#lesson-preview-video-player").data('hlsUrl');
-                if ($("#lesson-preview-video-player").data('timelimit')) {
-                    $("#lesson-preview-video-player").append($('.js-buy-text').html());
+            lessonVideoDiv.html(html);
 
-                    mediaPlayer.on('ended', function() {
-                        $('#lesson-preview-video-player').html($('.js-time-limit-dev').html());
-                    });
-                }
-
-                mediaPlayer.setSrc($hlsUrl, 'video');
-                mediaPlayer.play();
-
-                $('#modal').one('hidden.bs.modal', function () {
-                    mediaPlayer.dispose();
+            if (lessonVideoDiv.data('timelimit')) {
+                $(".modal-footer").prepend($('.js-buy-text').html());
+                var messenger = new Messenger({
+                    name: 'parent',
+                    project: 'PlayerProject',
+                    children: [viewerIframe],
+                    type: 'parent'
                 });
 
-			} else {
-				$("#lesson-preview-video-player").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"  width="100%" height="360"></video>');
-
-				var videoPlayer = VideoJS("lesson-video-player", {
-	            	techOrder: ['flash','html5']
-	            });
-	            videoPlayer.width('100%');
-	            videoPlayer.src($("#lesson-preview-video-player").data('url'));
-		    	videoPlayer.play();
-
-		    	$('#modal').one('hidden.bs.modal', function () {
-		    		videoPlayer.dispose();
-		    		$("#lesson-preview-video-player").remove();
-		    	});
-			}
-
-		}
-
-		if ($("#lesson-preview-audio-player").length > 0) {
-			var audioPlayer = new MediaElementPlayer('#lesson-preview-audio-player',{
-				mode:'auto_plugin',
-				enablePluginDebug: false,
-				enableAutosize:true,
-				success: function(media) {
-					media.play();
-				}
-			});
-
-	    	$('#modal').one('hidden.bs.modal', function () {
-	    		audioPlayer.remove();
-	    		$("#lesson-preview-audio-player").remove();
-	    	});
-
-		}
+                messenger.on("ended", function(){
+                    lessonVideoDiv.html($('.js-time-limit-dev').html());
+                });
+            }
+    	}
 
 		if ($("#lesson-preview-ppt-player").length > 0) {
 			var $player = $("#lesson-preview-ppt-player");
@@ -98,13 +60,23 @@ define(function(require, exports, module) {
 
         if($("#lesson-preview-flash").length>0){
             var player = $("#lesson-preview-flash");
-            $.get(player.data('url'), function(response) {
-                var html = '<div id="lesson-swf-player" ></div>';
-                $("#lesson-preview-flash").html(html);
-                swfobject.embedSWF(response.mediaUri, 
-                    'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-                    {wmode:'opaque',allowFullScreen:'true'});
-            });
+            if (!swfobject.hasFlashPlayerVersion('11')) {
+                var html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+                html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+                html += '<span aria-hidden="true">×</span>';
+                html += '</button>';
+                html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+                html += '</div>';
+                player.html(html);
+            } else {
+                $.get(player.data('url'), function(response) {
+                    var html = '<div id="lesson-swf-player" ></div>';
+                    $("#lesson-preview-flash").html(html);
+                    swfobject.embedSWF(response.mediaUri, 
+                        'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                        {wmode:'opaque',allowFullScreen:'true'});
+                });
+            }
             player.css("height", '360px');
         }
 
@@ -165,6 +137,11 @@ define(function(require, exports, module) {
         }
 
 		$modal = $('#modal');
+        $modal.on('hidden.bs.modal', function(){
+            if ($("#lesson-preview-player").length > 0) {
+                $("#lesson-preview-player").html("");
+            }
+        });
         $modal.on('click','.js-buy-btn', function(){
             $.get($(this).data('url'), function(html) {
                 $modal.html(html);
