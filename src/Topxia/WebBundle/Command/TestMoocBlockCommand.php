@@ -13,7 +13,7 @@ class TestMoocBlockCommand extends BaseCommand
     protected function configure()
     {
         $this
-            ->setName('topxia:testblock')
+            ->setName('topxia:testmoocblock')
             ->setDescription('测试老数据转换');
     }
 
