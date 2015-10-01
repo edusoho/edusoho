@@ -14,8 +14,7 @@
   <div class="order-item-detail">
     {% if hasPayPassword %}
     本次使用
-    <label class="control-label" for="coinPayAmount" style="display:none">使用金额</label>
-    <input  {% if maxRate == 0 and priceType|default("RMB") == "RMB" %}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center inline-block width-input-small mlm mrm" role="coinNum" type="text" name="coinPayAmount" value="{{ (min(coinPayAmount|default(0),maxCoin|default(0)))}}" maxlength="">
+    <input  {% if maxRate == 0 and priceType|default("RMB") == "RMB" %}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center inline-block width-input-small mhm" role="coinNum" type="text" name="coinPayAmount" value="{{ (min(coinPayAmount|default(0),maxCoin|default(0)))}}" maxlength="">
     {{setting("coin.coin_name")}}
     {% endif %}
     <span class="coin-detail hidden-xs hidden-sm">
@@ -24,14 +23,14 @@
     <input style="display:none">{# Prevent autocompleting #}
     <input type="password" style="display:none">{# Prevent autocompleting #}
     {% if not hasPayPassword %}
-    <div  class="alert alert-warning alert-xs mtm">
+    <div  class="alert alert-warning alert-xs mtm inline-block" style="line-height:20px">
         为了保障账户资金安全，请先
       <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('settings_set_pay_password')}}">设置支付密码</a>
     </div>
     {% else %}
     <div role="password-input" style="display:none">
       <div class="controls mtm">
-        <input id="payPassword" class="form-control width-input-large" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
+        <input id="payPassword" class="form-control width-input-large inline-block" name="payPassword" type="password" placeholder="请输入支付密码" data-url="{{path('pay_password_check')}}" autocomplete="off"/>
         <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">忘记密码？</a>
         <br>
       </div>

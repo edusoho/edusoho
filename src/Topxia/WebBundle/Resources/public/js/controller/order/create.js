@@ -224,9 +224,9 @@ define(function(require, exports, module) {
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				$('[role="code-notify"]').css("display","inline-block");
 				if(data.useable == "no") {
-					$('[role="code-notify"]').addClass("failure").text(data.message);
+					$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").text(data.message);
 				} else if(data.useable == "yes"){
-					$('[role="code-notify"]').removeClass("failure").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
+					$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 					$('[role="coupon-code-verified"]').val(couponCode.val());
 				}

@@ -3,7 +3,7 @@ define(function(require, exports, module){
     exports.run = function() {
 
         $(".form-paytype").on('click','.check', function() {
-            var $this = $this;
+            var $this = $(this);
             if (!$this.hasClass('active')) {
                 $this.addClass('active').siblings().removeClass('active');
                 $("input[name='payment']").val($this.attr("id"));
