@@ -7,7 +7,6 @@
   <div class="panel panel-default panel-col my-wallet-panel">
     <div class="panel-heading" style="font-weight:normal;">
       {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
-      {# 账户余额: #}
       <span class="label label-primary label-md">账户余额</span>
       {% if setting('coin.coin_content') %}
         <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
@@ -19,7 +18,6 @@
             <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="30px" >
           {% endif %}
           <strong>{{account.cash|default(0)}}</strong>
-          <!-- {{setting('coin.coin_name')}} -->
         </div>
 
         {% if setting('coin.coin_enabled') %}

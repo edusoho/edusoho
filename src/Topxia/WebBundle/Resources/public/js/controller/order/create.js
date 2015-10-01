@@ -155,12 +155,12 @@ define(function(require, exports, module) {
 		function coinPriceZero(){
 			$('[role="coinNum"]').val(0);
 			$('[role="cash-discount"]').text("0.00");
-			$(".pay-password div[role='password-input']").hide();
+			$("[role='password-input']").hide();
 			validator.removeItem('[name="payPassword"]');
 		}
 
 		function showPayPassword(){
-			$(".pay-password div[role='password-input']").show();
+			$("[role='password-input']").show();
 			validator.addItem({
 				element: '[name="payPassword"]',
 				required: true,
