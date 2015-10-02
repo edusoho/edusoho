@@ -14,7 +14,7 @@
 	</head>
 	<body style="overflow:hidden;border:0px;">
 		{% if file|default(null) %}
-			<div class="lesson-dashboard ">
+			<div style="position:absolute;top:0;bottom:0;left:0;right:0;">
 				<div id="lesson-video-content" 
 				data-user-id="{{app.user.id|default(0)}}" 
 				data-file-id="{{file.id}}" 
@@ -32,15 +32,14 @@
 		        {% endif %}
 				{% if file.type == 'video' %}
 					{% if file.storage == 'local' %}
-					class="lesson-content local-video-player "
+					class="local-video-player "
 					{% elseif setting("developer.balloon_player")|default(0) %}
-					class="lesson-content ballon-video-player"
-					{% else  %}
-					class="lesson-content "
+					class="ballon-video-player"
 					{% endif %}
 				{% elseif file.type == 'audio' %}
-					class="lesson-content lesson-content-audio"
+					class="lesson-content-audio"
 				{% endif %}
+				style="height:100%"
 				></div>
 			</div>
 
