@@ -10,7 +10,13 @@
 		{% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
 		{% if setting("developer.balloon_player")|default(0) %}
 		    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
-		 {% endif %}
+		{% endif %}
+		<style type="text/css">
+			.lesson-content-audio {
+			  padding-top: 10%;
+			  text-align: center;
+			}
+		</style>
 	</head>
 	<body style="overflow:hidden;border:0px;">
 		{% if file|default(null) %}
