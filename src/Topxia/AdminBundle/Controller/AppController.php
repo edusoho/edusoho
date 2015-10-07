@@ -46,7 +46,6 @@ class AppController extends BaseController
             }
             $unTrial = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
             $unTrialHtml = json_decode($unTrial,true);
-            $flag = "canNotTrial";
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                 'articles' => $articles,
                 'untrial' => $unTrialHtml['content'],
@@ -111,9 +110,6 @@ class AppController extends BaseController
         if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
             $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
             $trialHtml = json_decode($trial,true);
-            $canTrial = "yes";
-        } else {
-            $canTrial = "no";
         }
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
@@ -135,8 +131,7 @@ class AppController extends BaseController
             'info' => $info,
             'isBinded' => $isBinded,
             'email' => $email,
-            'tlp' => $tlp,
-            'canTrial' => $canTrial,
+            'tlp' => $tlp,  
             'trialhtml' => (isset($trialHtml['content'])) ? $trialHtml['content'] : null,
         ));
     }

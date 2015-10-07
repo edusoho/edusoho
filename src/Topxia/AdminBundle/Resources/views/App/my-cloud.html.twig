@@ -20,7 +20,11 @@
 
         </ul> 
       {% endif %}
-      {% if canTrial is defined and canTrial == "no" %}
+      {% if is_trial() %}
+        {% if trialhtml is not null %}
+          {{ trialhtml|raw }}
+        {% endif %}
+      {% else %}
         <div class="eduyun-main">
 
           <!--个人资料-->
@@ -105,10 +109,6 @@
         </div>
       {% endif %}
 
-      {% if canTrial is defined and canTrial == "yes" %}
-        {% if trialhtml is not null %}
-          {{ trialhtml|raw }}
-        {% endif %}
-      {% endif %}
+      
 
 {% endblock %}

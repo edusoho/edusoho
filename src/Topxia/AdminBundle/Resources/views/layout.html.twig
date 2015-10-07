@@ -163,7 +163,7 @@
           {% if menu_breadcrumb_length >= 4 %}
             {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
           {% endif %}
-          {% if canTrial is defined and canTrial == "appCanTrial" %}
+          {% if is_trial() %}
             <div class="row form-group">
               <div class="help-block">
                 </br></br>
