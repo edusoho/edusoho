@@ -183,8 +183,13 @@ class CourseController extends BaseController
         $this->checkId($id);
         $course = $this->getCourseService()->getCourse($id);
         $conditions = $request->request->all();
-        $course['startTime'] = strtotime($conditions['startTime']);
-        $course['endTime'] = strtotime($conditions['endTime']);
+        $startTime = strtotime($conditions['startTime']);
+        $endTime = strtotime($conditions['endTime']);
+        if($startTime < $course['endTime']){
+            return $this->createMessageResponse('info', '周期课程开课时间不得早于上一期课程的结课时间', '周期课程', 3, $this->generateUrl('my_teaching_courses'));
+        }
+        $course['startTime'] = $startTime;
+        $course['endTime'] = $endTime;
 
         $this->getNextRoundService()->rounding($course);
 

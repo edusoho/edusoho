@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             rule: 'date_check'
         });
 
-        var now = new Date();
+        var lastCourseEndTime = $("#lastCourseEndTime").val();
 
         $("[name=startTime]").datetimepicker({
             language: 'zh-CN',
@@ -39,7 +39,7 @@ define(function(require, exports, module) {
             validator.query('[name=startTime]').execute();
         });
 
-        $('[name=startTime]').datetimepicker('setStartDate', now);
+        $('[name=startTime]').datetimepicker('setStartDate', lastCourseEndTime);
 
         $("[name=endTime]").datetimepicker({
             language: 'zh-CN',
@@ -50,7 +50,7 @@ define(function(require, exports, module) {
             validator.query('[name=endTime]').execute();
         });
 
-        $('[name=endTime]').datetimepicker('setStartDate', now);
+        $('[name=endTime]').datetimepicker('setStartDate', lastCourseEndTime);
 
     };
 
