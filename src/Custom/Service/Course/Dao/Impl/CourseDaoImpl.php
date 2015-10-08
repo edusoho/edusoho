@@ -50,9 +50,9 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 
 		if(!empty($conditions['table']) && $conditions['table'] == 'singleCourse'){
 			$now = time();
-			$table = "(select a.* from (
-						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) a
-					group by rootId )";
+			$table = "(select a.* from (	select b.* from (
+						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime > {$now} UNION all select b.* from (
+						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime < {$now}) a group by rootId )";
 			$builder->from($table, 'course');
 		}
 
