@@ -77,7 +77,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $materials = $this->getMaterialDao()->findMaterialsByCourseId($course['id'],0,1000);
             foreach ($materials as $material) {
                 if(!empty($material['fileId'])){
-                    $this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
+                    $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
                 }
                 $this->getMaterialDao()->deleteMaterial($material['id']);
             }
@@ -135,7 +135,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $lessons = $this->getLessonDao()->searchLessons(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($lessons as $lesson) {
                 if(!empty($lesson['mediaId'])){
-                    $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+                    $this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
                 }
                 $this->getLessonDao()->deleteLesson($lesson['id']);
             }
