@@ -36,7 +36,7 @@ class AppController extends BaseController
             $articles = $eduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
 
-            if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+            if ($this->getWebExtension()->isTrial()) {
                 $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
                 $trialHtml = json_decode($trial,true);
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
@@ -107,7 +107,7 @@ class AppController extends BaseController
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
 
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
             $trialHtml = json_decode($trial,true);
         }
@@ -193,7 +193,7 @@ class AppController extends BaseController
         }
 
         $showType=$request->query->get("showType");
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $canTrial = "appCanTrial";
         }
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
@@ -269,7 +269,7 @@ class AppController extends BaseController
             }
         }
 
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $canTrial = "appCanTrial";
         }
 
@@ -299,7 +299,7 @@ class AppController extends BaseController
             return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
         }
         $version = $this->getAppService()->getMainVersion();
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $canTrial = "appCanTrial";
         }
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
@@ -331,7 +331,7 @@ class AppController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
 
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $canTrial = "appCanTrial";
         }
         return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
@@ -356,4 +356,9 @@ class AppController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     } 
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
+    }
 }

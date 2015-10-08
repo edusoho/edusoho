@@ -114,7 +114,7 @@ class DefaultController extends BaseController
         curl_close($curl);
         $notices = json_decode($notices, true);
         $api = CloudAPIFactory::create('root');
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $canTrial = "canGetDays";
             $domain = $this->generateUrl('homepage',array(),true);
             $result = $api->get('/trial/remainDays',array('domain' => $domain));
@@ -449,5 +449,10 @@ class DefaultController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

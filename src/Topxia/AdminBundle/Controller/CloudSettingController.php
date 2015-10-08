@@ -29,12 +29,6 @@ class CloudSettingController extends BaseController
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
-            $canTrial = "canTrial";
-            return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
-                'canTrial' => $canTrial,
-            ));
-        }
         return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
         ));
     }
@@ -93,7 +87,7 @@ class CloudSettingController extends BaseController
     
     public function keyUpdateAction(Request $request)
     {
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
         }
         $settings = $this->getSettingService()->get('storage', array());
@@ -205,7 +199,7 @@ class CloudSettingController extends BaseController
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
-        if (file_exists(__DIR__ . '/../../../../app/data/trial.lock')) {
+        if ($this->getWebExtension()->isTrial()) {
             $trial = "hasTrialAccess";
             return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
                 'storageSetting'=>$storageSetting,
@@ -318,5 +312,10 @@ class CloudSettingController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }
