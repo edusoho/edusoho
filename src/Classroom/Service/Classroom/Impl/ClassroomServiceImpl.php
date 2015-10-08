@@ -563,12 +563,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $diff = array_diff($existCourseIds, $activeCourseIds);
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
-                    $courseLessons = $this->getCourseService()->findLessonsByCourseId($courseId);
-                    foreach ($courseLessons as $courseLesson) {
-                        if(!empty($courseLesson['mediaId'])){
-                            $this->getUploadFileService()->decreaseFileUsedCount(array($courseLesson['mediaId']));
-                        }
-                    }
                     $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
                     $this->getClassroomCourseDao()->deleteCourseByClassroomIdAndCourseId($classroomId,$courseId);
                     $this->getCourseService()->deleteMemberByCourseIdAndRole($courseId,'student');
@@ -1339,11 +1333,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     private function getStatusService()
     {
         return $this->createService('User.StatusService');
-    }
-
-    protected function getUploadFileService()
-    {
-        return $this->createService('File.UploadFileService');
     }
 }
 
