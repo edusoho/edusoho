@@ -2,7 +2,7 @@
 
 {% block title %}核实用户密码{% endblock %}
 {% block body %}
-  <form id="delete-form" action="{{path('admin_course_check_password')}}">
+  <form id="delete-form" action="{{path('admin_check_password')}}">
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label for="title">用户密码</label>
@@ -29,9 +29,9 @@
   data-material-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'material'}) }}"
   data-chapter-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'chapter'}) }}"
   data-draft-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'draft'}) }}"
-  data-lessonLearns-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lessonLearns'}) }}"
-  data-lessonReplays-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lessonReplays'}) }}"
-  data-lessonViews-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lessonViews'}) }}"
+  data-lessonLearns-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lessonLearn'}) }}"
+  data-lessonReplays-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lessonReplay'}) }}"
+  data-lessonViews-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lessonView'}) }}"
   data-homework-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'homework'}) }}"
   data-exercise-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'exercise'}) }}"
   data-lesson-delete-url="{{ path('admin_course_delete',{courseId:course.id,type:'lesson'}) }}"

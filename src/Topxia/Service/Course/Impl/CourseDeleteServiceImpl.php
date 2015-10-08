@@ -13,87 +13,17 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         try{
             $this->getCourseDao()->getConnection()->beginTransaction();
             $course = $this->getCourseService()->getCourse($courseId);
-            switch ($type) {
-
-                case 'question':
-                    $result = $this->deleteQuestions($course);
-                    break;
-
-                case 'testpaper':
-                    $result = $this->deleteTestpapers($course);
-                    break;
-
-                case 'material':
-                    $result = $this->deleteMaterials($course);
-                    break;
-
-                case 'chapter':
-                    $result = $this->deleteChapters($course);
-                    break;
-
-                case 'draft':
-                    $result = $this->deleteDrafts($course);
-                    break;
-
-                case 'lesson':
-                    $result = $this->deleteLessons($course);
-                    break;
-
-                case 'lessonLearns':
-                    $result = $this->deleteLessonLearns($course);
-                    break;
-
-                case 'lessonReplays':
-                    $result = $this->deleteLessonReplays($course);
-                    break;
-
-                case 'lessonViews':
-                    $result = $this->deleteLessonViews($course);
-                    break;
-
-                case 'homework':
-                    $result = $this->deleteHomework($course);
-                    break;
-
-                case 'exercise':
-                    $result = $this->deleteExercise($course);
-                    break;
-
-                case 'favorite':
-                    $result = $this->deleteFavorites($course);
-                    break;
-
-                case 'note':
-                    $result = $this->deleteNotes($course);
-                    break;
-
-                case 'thread':
-                    $result = $this->deleteThreads($course);
-                    break;
-
-                case 'review':
-                    $result = $this->deleteReviews($course);
-                    break;
-
-                case 'announcement':
-                    $result = $this->deleteAnnouncements($course);
-                    break;
-
-                case 'status':
-                    $result = $this->deleteStatuses($course);
-                    break;
-
-                case 'member':
-                    $result = $this->deleteMembers($course);
-                    break;
-
-                case 'course':
-                    $result = $this->deleteCourses($course);
-                    break;   
-                default:
-                    return;                  
-                    break;
+            $types = array('question','testpaper','material','chapter','draft','lesson','lessonLearn','lessonReplay','lessonView','homework','exercise','favorite','note','thread','review','announcement','status','member','course');
+            if(!in_array($type, $types)){
+                throw $this->createServiceException('未知类型,删除失败');
             }
+            if($type == 'status'){
+                $method = 'delete'.ucwords($type).'es';
+            }else{
+                $method = 'delete'.ucwords($type).'s';  
+            }
+            
+            $result = $this->$method($course);
             $this->getCourseDao()->getConnection()->commit();
             return $result;
         }catch(\Exception $e){

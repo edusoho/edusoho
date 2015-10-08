@@ -139,7 +139,12 @@ class CourseController extends BaseController
     {
         return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
-
+    /*
+    code 状态编号
+    1:　删除班级课程
+    2: 移除班级课程
+    0: 删除未发布课程成功
+    */
     public function deleteAction(Request $request, $courseId ,$type)
     {   
         $currentUser = $this->getCurrentUser();
@@ -148,15 +153,15 @@ class CourseController extends BaseController
         }
         $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
         if($subCourse){
-             return $this->createJsonResponse('Have sub courses');
+             return $this->createJsonResponse(array('code' =>1, 'message' => '请先删除班级课程'));
         } else {
            $course = $this->getCourseService()->getCourse($courseId);
            if($course['status'] == 'closed'){
                 $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
                 if($classroomCourse){
-                    return $this->createJsonResponse('not hvae remove classroom course');
+                    return $this->createJsonResponse(array('code' =>2, 'message' => '当前课程未移除,请先移除班级课程'));
                 }
-                if($type != 'parameter'){
+                if($type){
                     $session = $request->getSession()->get('checkPassword');
                     if(!$session){
                         throw $this->createAccessDeniedException('未输入正确的校验密码！');
@@ -166,7 +171,7 @@ class CourseController extends BaseController
                 }
            }else if($course['status'] == 'draft'){
                 $result = $this->getCourseService()->deleteCourse($courseId);
-                return $this->createJsonResponse('delete draft course');
+                return $this->createJsonResponse(array('code' =>0, 'message' => '删除课程成功'));
            }
         }
         return $this->render('TopxiaAdminBundle:Course:delete.html.twig',array('course'=>$course));

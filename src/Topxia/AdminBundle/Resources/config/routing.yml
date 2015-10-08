@@ -289,10 +289,10 @@ admin_course:
 
 admin_course_delete:
     pattern:  /course/{courseId}/delete/{type}
-    defaults: { _controller: TopxiaAdminBundle:Course:delete }
+    defaults: { _controller: TopxiaAdminBundle:Course:delete, type:'' }
 
-admin_course_check_password:
-    pattern:  /course/check/password
+admin_check_password:
+    pattern:  /check/password
     defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
 
 admin_course_publish:

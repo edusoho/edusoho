@@ -15,97 +15,97 @@ define(function(require, exports, module) {
 
         var steps = [
             {
-                title: '检查问题删除',
+                title: '正在删除问题',
                 url: urls.questionDeleteUrl,
                 progressRange: [3, 6]
             },
             {
-                title: '检查试卷删除',
+                title: '正在删除试卷',
                 url: urls.testpaperDeleteUrl,
                 progressRange: [7, 10]
             },
             {
-                title: '检查课时资料删除',
+                title: '正在删除课时资料',
                 url: urls.materialDeleteUrl,
                 progressRange: [13, 16]
             },
             {
-                title: '检查章节删除',
+                title: '正在删除检查章节',
                 url: urls.chapterDeleteUrl,
                 progressRange: [17, 20]
             },
             {
-                title: '检查草稿删除',
+                title: '正在删除草稿',
                 url: urls.draftDeleteUrl,
                 progressRange: [23, 26]
             },
             {
-                title: '检查学习时长删除',
+                title: '正在删除学习时长',
                 url: urls.lessonlearnsDeleteUrl,
                 progressRange: [27, 30]
             },
             {
-                title: '检查录播删除',
+                title: '正在删除录播',
                 url: urls.lessonreplaysDeleteUrl,
                 progressRange: [33, 34]
             },
             {
-                title: '检查播放时长删除',
+                title: '正在删除播放时长',
                 url: urls.lessonviewsDeleteUrl,
                 progressRange: [35, 47]
             },
             {
-                title: '检查作业删除',
+                title: '正在删除作业',
                 url: urls.homeworkDeleteUrl,
                 progressRange: [49, 51]
             },
             {
-                title: '检查练习删除',
+                title: '正在删除练习',
                 url: urls.exerciseDeleteUrl,
                 progressRange: [52, 53]
             },
             {
-                title: '检查课时删除',
+                title: '正在删除课时',
                 url: urls.lessonDeleteUrl,
                 progressRange: [55, 60]
             },
             {
-                title: '检查课程收藏删除',
+                title: '正在删除课程收藏',
                 url: urls.favoriteDeleteUrl,
                 progressRange: [63, 66]
             },
             {
-                title: '检查课程笔记删除',
+                title: '正在删除课程笔记',
                 url: urls.noteDeleteUrl,
                 progressRange: [67, 70]
             },
             {
-                title: '检查话题删除',
+                title: '正在删除话题',
                 url: urls.threadDeleteUrl,
                 progressRange: [73, 76]
             },
             {
-                title: '检查评价删除',
+                title: '正在删除评价',
                 url: urls.reviewDeleteUrl,
                 progressRange: [77, 80]
             },
             {
-                title: '检查公告删除',
+                title: '正在删除公告',
                 url: urls.announcementDeleteUrl,
                 progressRange: [83, 86]
             },
             {
-                title: '检查动态删除',
+                title: '正在删除动态',
                 url: urls.statusDeleteUrl,
                 progressRange: [87, 96]
             },
             {
-                title: '检查成员删除',
+                title: '正在删除成员',
                 url: urls.memberDeleteUrl,
                 progressRange: [97, 98]
             },
             {
-                title: '检查课程删除',
+                title: '正在删除课程',
                 url: urls.courseDeleteUrl,
                 progressRange: [99, 100]
             }

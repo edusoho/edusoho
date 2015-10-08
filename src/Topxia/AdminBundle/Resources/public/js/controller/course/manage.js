@@ -41,15 +41,13 @@ define(function(require, exports, module) {
 			}
 			var $tr = $this.parents('tr');
 			$.post($this.data('url'),function(data){
-				if(data == 'Have sub courses'){
-					Notify.danger('请先删除班级课程');
-				}else if(data == 'not hvae remove classroom course'){
-					Notify.danger('当前课程未移除,请先移除班级课程');
-				}else if(data == 'delete draft course'){
+				if(data.code > 0){ 
+					Notify.danger(data.message);
+				} else if(data.code == 0){ 
 					$tr.remove();
-					Notify.success('删除课程成功');	
-				}else{
-					$('.modal').modal('show').html(data);
+					Notify.success(data.message);
+				}else{ 
+					$('.modal').modal('show').html(data); 
 				}
 			});
 		});
