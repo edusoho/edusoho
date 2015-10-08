@@ -28,7 +28,7 @@
     <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class=" {% if (orderBy == 'recommendedSeq') %} selected {% endif %}">推荐课程</a>
   </div>
 
-  <div class="course-list">
+  <div class="course-list  explore">
 
     {% if courses %}
       {% for course in courses %}
