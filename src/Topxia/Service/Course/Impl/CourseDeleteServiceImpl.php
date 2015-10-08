@@ -13,15 +13,11 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         try{
             $this->getCourseDao()->getConnection()->beginTransaction();
             $course = $this->getCourseService()->getCourse($courseId);
-            $types = array('question','testpaper','material','chapter','draft','lesson','lessonLearn','lessonReplay','lessonView','homework','exercise','favorite','note','thread','review','announcement','status','member','course');
+            $types = array('questions','testpapers','materials','chapters','drafts','lessons','lessonLearns','lessonReplays','lessonViews','homeworks','exercises','favorites','notes','threads','reviews','announcements','statuses','members','course');
             if(!in_array($type, $types)){
                 throw $this->createServiceException('未知类型,删除失败');
             }
-            if($type == 'status'){
-                $method = 'delete'.ucwords($type).'es';
-            }else{
-                $method = 'delete'.ucwords($type).'s';  
-            }
+            $method = 'delete'.ucwords($type);  
             $result = $this->$method($course);
             $this->getCourseDao()->getConnection()->commit();
             return $result;
@@ -390,7 +386,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         
     }
 
-    protected function deleteCourses($course)
+    protected function deleteCourse($course)
     {
         $this->getCourseDao()->deleteCourse($course['id']);
         $courseLog = "删除课程《{$course['title']}》(#{$course['id']})";
