@@ -28,18 +28,20 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			return array(false, array());
 		}
 
-		$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
-
-		if($order["status"] == "paid"){
-			$this->dispatchEvent("order.pay.success", 
-				new ServiceEvent($order,array('targetType'=>$order["targetType"]))
-			);
-			return array(true, $order);
-		}
-
 		$connection = ServiceKernel::instance()->getConnection();
 		try {
 			$connection->beginTransaction();
+
+			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
+
+			if($order["status"] == "paid"){
+				$this->dispatchEvent("order.pay.success", 
+					new ServiceEvent($order,array('targetType'=>$order["targetType"]))
+				);
+				$connection->rollback();
+				return array(true, $order);
+			}
+
 
 			if($order["status"] == "created"){
 				$outflow = $this->proccessCashFlow($order);
