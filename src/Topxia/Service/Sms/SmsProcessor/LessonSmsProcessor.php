@@ -25,7 +25,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
         $hostName = $info['siteUrl'];
-        for($i = 0; $i <= $count/1000; $i ++){
+        for($i = 0; $i <= intval($count/1000); $i ++){
             $urls[$i] = $hostName;
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback',array('targetType' => 'lesson','targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
