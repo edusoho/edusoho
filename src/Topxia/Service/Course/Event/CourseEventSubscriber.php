@@ -207,7 +207,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 $material['courseId'] = $courseId;
                 $material['lessonId'] = $lessonIds[$key];
                 if(!empty($material['fileId'])){
-                    $this->getUploadFileService()->increaseFileUsedCount(array($material['fileId']));
+                    $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
                 }
                $this->getMaterialService()->createMaterial($material);
             }
@@ -225,7 +225,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByPIdAndLockedCourseIds($material['id'],$courseIds),'id');
             foreach ($materialIds as $key=>$materialId) {
                 if(!empty($material['fileId'])){
-                    $this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
+                    $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
                 }
                 $this->getMaterialService()->deleteMaterial($courseIds[$key],$materialId);
             }

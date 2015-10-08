@@ -1086,26 +1086,6 @@ class CourseServiceTest extends BaseTestCase
 
     }
 
-    public function testFindLessonsByCourseId()
-    {
-        $course = array(
-            'title' => 'online test course1'
-        );
-        $createCourse = $this->getCourseService()->createCourse($course);
-        $lesson = array(
-            'courseId' => $createCourse['id'],
-            'chapterId' => 0,
-            'free' => 0,
-            'title' => 'test'+rand(),
-            'summary' => '',
-            'type' => 'text',
-        );
-        $createLesson1 = $this->getCourseService()->createLesson($lesson);
-        $count = count($this->getCourseService()->findLessonsByCourseId(1));
-        $this->assertEquals(1,$count);
-
-    }
-
     public function testGetCourseLesson()
     {
         $course = array(
