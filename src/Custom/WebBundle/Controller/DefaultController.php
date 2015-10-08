@@ -19,7 +19,7 @@ class DefaultController extends BaseDefaultController
         $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 6);
         if(empty($courses)){
             unset($conditions['recommended']);
-            $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 6);
+            $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 3);
         }
         $userIds = array();
 
