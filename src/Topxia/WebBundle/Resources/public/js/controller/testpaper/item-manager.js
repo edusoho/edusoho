@@ -297,7 +297,7 @@ define(function(require, exports, module) {
 
         Validator.addRule('score', function(options) {
             var element = options.element;
-            var isFloat = /^[1-9]+(\.\d)?$/.test(element.val());
+            var isFloat = /^[1-9][0-9]*(\.\d)?$/.test(element.val());
             if (!isFloat){
                 return false;
             }

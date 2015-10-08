@@ -236,7 +236,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#lesson-suggest-period-field',
             required: true,
-            rule: 'decimal',
+            rule: 'arithmetic_number',
             display: '建议学习时长'
         });
     }
