@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         })
 
         $('a.course-ended').click(function(){
-            Notify.danger("本期课程已结束，请等待下次开课。");
+            Notify.danger("本期课程已结束，请等待下期开课。");
         })
     };
 
