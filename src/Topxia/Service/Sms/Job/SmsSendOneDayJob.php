@@ -19,7 +19,7 @@ class SmsSendOneDayJob implements Job
             $processor = SmsProcessorFactory::create($targetType);
             $return = $processor->getUrls($targetId, $smsType);
             $callbackUrls = $return['urls'];
-            $count = intval($return['count'] / 1000 + 1);
+            $count = ceil($return['count'] / 1000);
             try {
                     $api = CloudAPIFactory::create('leaf');
                     $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
