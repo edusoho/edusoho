@@ -22,7 +22,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             }else{
                 $method = 'delete'.ucwords($type).'s';  
             }
-            
             $result = $this->$method($course);
             $this->getCourseDao()->getConnection()->commit();
             return $result;
@@ -203,7 +202,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $response;
     }
 
-    protected function deleteHomework($course)
+    protected function deleteHomeworks($course)
     {
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
@@ -232,7 +231,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $response;
     }
 
-    protected function deleteExercise($course)
+    protected function deleteExercises($course)
     {
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
