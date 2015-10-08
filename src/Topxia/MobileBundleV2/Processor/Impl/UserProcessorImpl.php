@@ -644,9 +644,18 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version)
         );
+        
+        $delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($token['userId'], $token['type']);
+        foreach ($delTokens as $delToken) {
+            if($delToken['token'] != $token['token']){
+                $this->controller->getTokenService()->destoryToken($token['token']);
+            }
+        }
+
         $this->log("user_login", "用户二维码登录",  array(
-                "userToken" => $token)
-            );
+            "userToken" => $token)
+        );
+
 
         return $result;
     }
