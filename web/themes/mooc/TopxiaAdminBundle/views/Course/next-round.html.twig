@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-
+        <input type="hidden" id="lastCourseEndTime" value="{{ course.endTime|date("Y-m-d") }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
     </form>
