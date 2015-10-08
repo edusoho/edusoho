@@ -408,7 +408,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $announcementCount = $this->getAnnouncementDao()->searchAnnouncementsCount(array('targetId'=>$course['id'],'targetType'=>'course'));
         if($announcementCount>0){
-            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType'=>'course','targetId'=>$course['id'],array('createdTime' ,'desc'),0,500));
+            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType'=>'course','targetId'=>$course['id']),array('createdTime' ,'DESC'),0,500);
             foreach ($announcements as $announcement) {
                 $this->getAnnouncementDao()->deleteAnnouncement($announcement['id']);
             }
