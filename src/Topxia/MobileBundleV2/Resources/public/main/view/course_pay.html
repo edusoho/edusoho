@@ -1,0 +1,110 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">确认订单</h3>
+    </div>
+</div>
+
+<div class="top-header ui-course-pay">
+	<div class="ui-form ui-border-t">
+	        <div class="ui-form-item ui-border-b ui-list-divider">
+	            确认个人信息
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label>
+	                姓名
+	            </label>
+	            <input type="text" placeholder="{{ data.userProfile.truename ? '' : '还没填写真实姓名' }}" ng-model="data.userProfile.truename" readonly>
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label>
+	                手机
+	            </label>
+	            <input type="text" placeholder="{{ data.userProfile.mobile ? '' : '还没填写手机号码' }}" ng-model="data.userProfile.mobile" readonly>
+	        </div>
+	</div>
+
+	<ul class="ui-list ui-list-text ui-border-b ui-paycard">
+			<li class="ui-border-t ui-list-divider">
+				{{ orderLabel }}
+			</li>
+	    	<li class="ui-border-t">
+	        <div class="ui-list-img">
+	            <img ng-src="{{ data.orderInfo.picture }}" />
+	        </div>
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap">{{ data.orderInfo.title }}</h4>
+	            <p class="pay-price">{{ data.orderInfo.price | formatPrice }}</p>
+	        </div>
+	    	</li>
+	</ul>
+
+	<ul class="ui-list ui-list-link ui-list-text ui-border-b" ng-if="data.isInstalledCoupon">
+		<li class="ui-border-t ui-list-divider">
+			优惠信息
+		</li>
+	    	<li class="ui-border-t" ng-click="selectCoupon()">
+	        <h4 class="ui-nowrap">
+	            	优惠<span class="pay-price">{{ coupon.decreaseAmount }}</span>
+	        </h4>
+	    	</li>
+	</ul>
+	<ul class="ui-list ui-list-text ui-border-b" ng-if="coin">
+		<li class="ui-border-t">
+			<div class="ui-list-info">
+            			<h4>
+            				使用{{ coin.name }}
+            				<span class="subtitle">汇率{{ coin.cashRate }}</span>
+            			</h4>
+        			</div>
+        			<label class="ui-switch">
+	            		<input type="checkbox" ng-model="payMode" ng-change="changePayMode()" ng-checked="payMode == 'coin' " ng-if="priceType != 'Coin'" >
+	        		</label>
+		</li>
+	</ul>
+	<div class="ui-btn-wrap" style="background: #f0f0f0;">
+		<div class="pay-body">
+	  		需支付:
+	  		<p class="pay-price">
+	  			{{ payPrice | formatPrice }}
+	  			<span>{{ payMode == 'coin' ? coin.name : '' }}</span>
+	  		</p>
+	  	</div>
+	    
+		<button class="ui-btn-lg btn-yellow" ng-click="pay()">
+                		去支付
+           	</button>
+	</div>
+</div>
+
+<div class="ui-dialog ui-coupon full">
+    <div class="ui-dialog-bg">
+        <div class="ui-dialog-bgcontent"></div>
+    </div>
+    <div class="ui-dialog-cnt">
+    	<div class="ui-bar" ui-bar>
+	    <div class="ui-bar-bg">
+	      <button class="ui-btn btn-outline iconfont icon-fanhui" back="close"></button>
+	      <h3 class="title">优惠码</h3>
+	      <button class="ui-btn bar-tool btn-outline small" ng-click="checkCoupon()" >确认</button>
+	    </div>
+	</div>
+        	<div class="ui-form ui-border-t">
+	        <div class="ui-form-item ui-border-b ui-list-divider">
+	            填写优惠信息
+	        </div>
+	        <div class="ui-form-item ui-border-b">
+	            <label>
+	                优惠码
+	            </label>
+	            <input type="text" placeholder="优惠码" ng-model="formData.code">
+	            <a class="ui-icon-close" ng-show="formData.code.length > 0" ng-click="formData.code = '' ">
+	            </a>
+	        </div>
+	       
+	        <div class="ui-form-item ui-list-divider item-error">
+	        	{{ formData.error }}
+	        </div>
+	</div>
+    </div>
+</div>

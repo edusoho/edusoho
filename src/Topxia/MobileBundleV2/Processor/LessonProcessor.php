@@ -28,4 +28,8 @@ interface LessonProcessor
 	public function getTestpaperInfo();
 
 	public function getVideoMediaUrl();
+
+	public function getCourseDownLessons();
+
+	public function getLocalVideo();
 }

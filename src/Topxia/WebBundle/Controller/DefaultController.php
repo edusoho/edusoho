@@ -15,7 +15,6 @@ class DefaultController extends BaseController
     public function indexAction ()
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
-        
         $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
         $orderBy = 'recommendedSeq';
         if (empty($courses)) {
@@ -23,6 +22,7 @@ class DefaultController extends BaseController
             unset($conditions['recommended']);
             $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
         }
+
 
         $coinSetting=$this->getSettingService()->get('coin',array());
         if(isset($coinSetting['cash_rate'])){
@@ -275,5 +275,10 @@ class DefaultController extends BaseController
     protected function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getBlacklistService() 
+    {
+        return $this->getServiceKernel()->createService('User.BlacklistService');
     }
 }

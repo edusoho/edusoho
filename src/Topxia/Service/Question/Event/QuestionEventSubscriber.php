@@ -25,16 +25,15 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $questionCourseTarget = explode('-',$questionTarget[0]);
         $courseId = $questionCourseTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-        $num = count(explode('/',$question['target']));
-        if($num > 1) {
-            $questionLessonTarget = explode('-',$questionTarget[1]);
-            $lessonId = $questionLessonTarget[1];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
-        }
-
-        //材料题
-        if($question['parentId']){
-            if ($courseIds) {
+        if($courseIds){
+            $num = count(explode('/',$question['target']));
+            if($num > 1) {
+                $questionLessonTarget = explode('-',$questionTarget[1]);
+                $lessonId = $questionLessonTarget[1];
+                $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            }
+            //材料题
+            if($question['parentId']){
                 $lockedTarget= '';
                 foreach ($courseIds as $key => $courseId) {
                     if ($num > 1) {
@@ -50,15 +49,12 @@ class QuestionEventSubscriber implements EventSubscriberInterface
                     $this->getQuestionService()->editQuestion($questionId,array('subCount'=>$parentQuestion['subCount']));
                 }
             }
-        }
-        $question['pId'] = $question['id'];
-        unset($question['id']);
-        if (!empty($courseIds)) {
+            $question['pId'] = $question['id'];
+            unset($question['id']);
             foreach ($courseIds as $key => $courseId) {
                 if($question['parentId']) {
                     $question['parentId'] = $questionIds[$key];
                 }
-
                 if ($num > 1) {
                     $question['target'] = "course-".$courseId."/lesson-".$lessonIds[$key]."";
                 } else {
@@ -66,11 +62,9 @@ class QuestionEventSubscriber implements EventSubscriberInterface
                 }
                 $question['createdTime'] = time();
                 $question['updatedTime'] = time();
-
                 $this->getQuestionService()->addQuestion($question);
             }
         }
-
     }
 
     public function onQuestionUpdate(ServiceEvent $event)
@@ -83,25 +77,20 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $questionOldCourseTarget = explode('-',$questionOldTarget[0]);
         $courseId = $questionOldCourseTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-        
-        $num = count(explode('/',$question['target']));
-        
-        if($num > 1) {
-            $questionTarget = explode('/', $question['target']);
-            $questionLessonTarget = explode('-',$questionTarget[1]);
-            $lessonId = $questionLessonTarget[1];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
-        }
-
-        $oldNum = count(explode('/',$oldTarget));
-
-        if($oldNum > 1){
-            $questionOldLessonTarget = explode('-',$questionOldTarget[1]);
-            $oldLessonId = $questionOldLessonTarget[1];
-            $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
-        }
-
-        if ($courseIds) {
+        if($courseIds){
+            $num = count(explode('/',$question['target']));
+            if($num > 1) {
+                $questionTarget = explode('/', $question['target']);
+                $questionLessonTarget = explode('-',$questionTarget[1]);
+                $lessonId = $questionLessonTarget[1];
+                $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            }
+            $oldNum = count(explode('/',$oldTarget));
+            if($oldNum > 1){
+                $questionOldLessonTarget = explode('-',$questionOldTarget[1]);
+                $oldLessonId = $questionOldLessonTarget[1];
+                $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            }
             $lockedTarget = '';
             foreach ($courseIds as $key => $courseId) {
                 if ($oldNum > 1) {
@@ -113,7 +102,6 @@ class QuestionEventSubscriber implements EventSubscriberInterface
             $lockedTarget = "(".trim($lockedTarget,',').")";
             $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPIdAndLockedTarget($question['id'],$lockedTarget),'id');
             unset($question['id'],$question['parentId'],$question['pId'],$question['createdTime']); 
-            
             foreach ($questionIds as $key => $questionId) {
                 if ($num > 1) {
                     $question['target'] = "course-".$courseIds[$key]."/lesson-".$lessonIds[$key]."";
@@ -123,7 +111,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
 
                 $this->getQuestionService()->editQuestion($questionId,$question);
             }
-        }    
+        }   
     }
 
     public function onQuestionDelete(ServiceEvent $event)
@@ -133,13 +121,13 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $questionCourseTarget = explode('-',$questionTarget[0]);
         $courseId = $questionCourseTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-        $num = count(explode('/',$question['target']));
-        if($num > 1) {
-            $questionLessonTarget = explode('-',$questionTarget[1]);
-            $lessonId = $questionLessonTarget[1];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
-        }
-        if ($courseIds) {
+        if($courseIds){
+            $num = count(explode('/',$question['target']));
+            if($num > 1) {
+                $questionLessonTarget = explode('-',$questionTarget[1]);
+                $lessonId = $questionLessonTarget[1];
+                $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lessonId,$courseIds),'id');
+            }
             $lockedTarget= '';
             foreach ($courseIds as $key => $courseId) {
                 if ($num > 1) {
@@ -150,7 +138,6 @@ class QuestionEventSubscriber implements EventSubscriberInterface
             }
             $lockedTarget = "(".trim($lockedTarget,',').")";
             $questionIds = ArrayToolkit::column($this->getQuestionService()->findQuestionsByPIdAndLockedTarget($question['id'],$lockedTarget),'id');
-
             foreach ($questionIds as  $questionId) {
                 $question = $this->getQuestionService()->getQuestion($questionId);
                 $this->getQuestionService()->deleteQuestion($questionId);

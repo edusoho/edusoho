@@ -50,7 +50,9 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 		$announcement['userId'] = $this->getCurrentUser()->id;
 		$announcement['createdTime'] = time();
 
-		return $this->getAnnouncementDao()->addAnnouncement($announcement);
+        $announcement = $this->getAnnouncementDao()->addAnnouncement($announcement);
+        $this->getDispatcher()->dispatch('announcement.service.create', new ServiceEvent($announcement));
+        return $announcement;
 	}
 
     public function updateAnnouncement($id, $announcement)
