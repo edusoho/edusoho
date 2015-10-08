@@ -17,7 +17,10 @@ class DefaultController extends BaseDefaultController
         $conditions = array('status' => 'published', 'recommended' => 1 ,'parentId' => 0);
 
         $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 6);
-
+        if(empty($courses)){
+            unset($conditions['recommended']);
+            $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 6);
+        }
         $userIds = array();
 
         foreach($courses as $course){

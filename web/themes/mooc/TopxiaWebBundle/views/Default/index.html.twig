@@ -26,7 +26,7 @@
         {% if recommendCourses %}
           {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
         {% else %}
-          {% set courses = data('LatestCourses',{count:3}) %}
+          {% set courses = data('LatestCourses',{count:6}) %}
           {% include 'TopxiaWebBundle:Default:course-item.html.twig'%}
         {% endif %}
         </div>
