@@ -92,8 +92,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
         if ($jobs) {
             $this->deleteJob($jobs);
         }
-
-        if ($lesson['status'] == 'publish' && $lesson['type'] == 'live') {
+        
+        if ($lesson['status'] == 'published' && $lesson['type'] == 'live') {
             $this->createJob($lesson);
         }
 
