@@ -26,13 +26,6 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-	public function findTokenByToken($token)
-	{
-		$sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($token));
-        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
-	}
-
 	public function addToken(array $token)
 	{
         $token = $this->createSerializer()->serialize($token, $this->serializeFields);
@@ -42,6 +35,12 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         }
         return $this->getToken($this->getConnection()->lastInsertId());
 	}
+
+    public function findTokensByUserIdAndType($userId, $type)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and type = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId, $type)) ? : null;
+    }
 
 	public function deleteToken($id)
 	{

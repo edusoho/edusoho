@@ -42,7 +42,7 @@ class GroupThreadController extends BaseController
                 'content'=>$threadData['thread']['content'],
                 'groupId'=>$id,
                 'userId'=>$user['id']);
-           
+
             $thread=$this->getThreadService()->addThread($info);
 
             if(isset($threadData['file'])){

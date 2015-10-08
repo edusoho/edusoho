@@ -1,0 +1,102 @@
+define(function(require, exports, module) {
+
+    var Notify = require('common/bootstrap-notify');
+    var VideoJS = require('video-js');
+    var Widget = require('widget');
+
+    var LocalVideoPlayer = Widget.extend({
+    	attrs: {
+        	hasPlayerError: false,
+        	url: ''
+        },
+
+        events: {
+
+        },
+
+        setup: function() {
+        	
+    		var that = this;
+    		var player = VideoJS(this.element.attr("id"), {
+				techOrder: ['flash','html5'],
+				autoplay: false
+    		});
+			player.dimensions('100%', '100%');
+			player.src(this.get("url"));
+
+			player.on('error', function(error){
+			    this.set("hasPlayerError", true);
+			    var message = '您的浏览器不能播放当前视频。';
+			    Notify.danger(message, 60);
+			});
+
+			player.on('fullscreenchange', function(e) {
+			    if ($(e.target).hasClass('vjs-fullscreen')) {
+			        $("#site-navbar").hide();
+			    }
+			});
+
+			player.on('ended', function(e){
+                that._onEnded(e);
+				that.trigger('ended', e);
+			});
+
+			player.on('timeupdate', function(e){
+				that.trigger('timechange', e);
+			});
+
+			player.on('loadedmetadata' ,function(e){
+				that.trigger('ready', e);
+			});
+
+            player.on("play", function(e){
+                that.trigger("playing", e);
+            });
+
+            player.on("pause", function(e){
+                that.trigger("paused", e);
+            });
+
+			this.set("player", player);
+
+			LocalVideoPlayer.superclass.setup.call(this);
+    	},
+    	
+    	play: function(){
+    		this.get("player").play();
+    	},
+
+        _onEnded: function(e) {
+        	if (this.get("hasPlayerError")) {
+		        return ;
+		    }
+		    var player = this.get("player");
+
+		    player.currentTime(0);
+		    player.pause();
+        },
+
+        getCurrentTime: function() {
+        	return this.get("player").currentTime();
+        },
+
+        getDuration: function() {
+        	return this.get("player").duration();
+        },
+
+        setCurrentTime: function(time) {
+			this.get("player").currentTime(time);
+        },
+
+        isPlaying: function() {
+        	return !this.get("player").paused();
+        },
+
+        destroy: function() {
+        	this.get("player").dispose();
+        }
+    });
+
+    module.exports = LocalVideoPlayer;
+
+});

@@ -20,6 +20,7 @@
 	{% endfor %}
 
 </div>
+	{% set source = source|default('course') %}
 	{% if (source == 'classroom') %}
   		{% set canHandle = classroom_permit(targetId, 'Handle') %}	
 	{% else %} 	
