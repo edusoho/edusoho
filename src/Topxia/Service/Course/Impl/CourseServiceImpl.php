@@ -85,11 +85,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($lessons, 'id');
 	}
 
-	public function findLessonsByCourseId($courseId)
-	{
-		return $this->getLessonDao()->findLessonsByCourseId($courseId);
-	}
-
 	public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
 	{
 		return $this->getLessonDao()->findLessonsByParentIdAndLockedCourseIds($parentId ,$courseIds);
@@ -606,7 +601,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fileIds = ArrayToolkit::column($lessons, "mediaId");
 
 			if(!empty($fileIds)){
-				$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+				foreach ($fileIds as $fileId) {
+					$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
+				}
 			}
 		}
 
@@ -1046,7 +1043,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// Increase the linked file usage count, if there's a linked file used by this lesson.
 		if(!empty($lesson['mediaId'])){
-			$this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+			$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',1);
 		}
 
 		$this->updateCourseCounter($course['id'], array(
@@ -1201,12 +1198,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($fields['mediaId'] != $lesson['mediaId']){
 			// Incease the link count of the new selected lesson file
 			if(!empty($fields['mediaId'])){
-				$this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
+				$this->getUploadFileService()->waveUploadFile($fields['mediaId'],'usedCount',1);
 			}
 
 			// Decrease the link count of the original lesson file
 			if(!empty($lesson['mediaId'])){
-				$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+				$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
 			}
 		}
 
@@ -1263,7 +1260,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
 		if(!empty($lesson['mediaId'])){
-			$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+			$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
 		}
 
 		// Delete all linked course materials (the UsedCount of each material file will also be decreaased.)

@@ -67,7 +67,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                     $lesson['mediaId'] = $testpaperIds[$key];
                 }
                 if(!empty($lesson['mediaId'])){
-                    $this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+                    $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
                 }
                 $this->getCourseService()->addLesson($lesson);
             }
@@ -104,7 +104,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
                 foreach ($lessonIds as $key=>$lessonId) {
                     if(!empty($lesson['mediaId'])){
-                        $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+                        $this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
                     }
                     $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
                 }
@@ -136,10 +136,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             foreach ($courseIds as $key=>$courseId) {
                 if(array_key_exists('fields', $lesson) && array_key_exists('mediaId', $lesson) && $lesson['fields']['mediaId'] != $lesson['mediaId']){
                     if(!empty($lesson['fields']['mediaId'])){
-                        $this->getUploadFileService()->decreaseFileUsedCount(array($lesson['fields']['mediaId']));
+                        $this->getUploadFileService()->waveUploadFile($lesson['fields']['mediaId'],'usedCount',-1);
                     }
                     if(!empty($lesson['mediaId'])){
-                        $this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+                        $this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',1);
                     }
                 }
                 unset($lesson['fields']);
