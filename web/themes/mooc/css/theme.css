@@ -32,6 +32,9 @@
   border: 1px solid #0fbe8a;
   color: #0fbe8a;
 }
+.bar-main-body .btn-group.btn-action .btn {
+  border: 1px solid #34a263;
+}
 .label-sm {
   padding: 0.4em 0.6em;
 }
@@ -2713,7 +2716,6 @@ label {
   }
 }
 .recommend-class-list .class-img img {
-  height: 320px;
   width: 100%;
 }
 .recommend-class-list .class-info {
@@ -2776,4 +2778,7 @@ label {
 .recommend-class-list .class-teacher .bottom {
   height: 80px;
   line-height: 80px;
+}
+.mooc-class-section .recommend-class-list .class-img img {
+  height: 320px;
 }
