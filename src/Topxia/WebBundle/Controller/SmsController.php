@@ -26,8 +26,15 @@ class SmsController extends BaseController
             $url = $this->generateUrl('classroom_show',array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
-            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
             $url = $this->generateUrl('course_show',array('id' => $id));
+            if ($item['parentId'] ) {
+                $classroom = $this->getClassroomService()->findClassroomByCourseId($item['id']);
+                if ($classroom) {
+                    $verifiedMobileUserNum = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['classroomId'],1);
+                }
+            } else {
+                $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
+            }
         } elseif ($targetType == 'lesson') {
             $courseSetting = $this->getSettingService()->get('course', array());
             if (isset($courseSetting['teacher_sms_send']) && !$courseSetting['teacher_sms_send']) {
@@ -85,7 +92,15 @@ class SmsController extends BaseController
             $course = $this->getCourseService()->getCourse($id);
             $parameters['course_title'] = '课程：《'.$course['title'].'》';
             $description = $parameters['course_title'].'发布';
-            $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
+            if ($course['parentId'] ) {
+                $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+                if ($classroom) {
+                    $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
+                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime','Desc'), $index, $onceSendNum);
+                }
+            } else {
+                $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
+            }
         } elseif ($targetType == 'lesson') {
             $courseSetting = $this->getSettingService()->get('course', array());
             if (isset($courseSetting['teacher_sms_send']) && !$courseSetting['teacher_sms_send']) {
@@ -105,7 +120,7 @@ class SmsController extends BaseController
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
             $parameters['course_title'] = '课程：《'.$course['title'].'》';
             $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
-            if ($course['parentId'] ) {
+            if ($course['parentId']) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
                 if ($classroom) {
                     $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
@@ -121,9 +136,8 @@ class SmsController extends BaseController
             throw new \RuntimeException("请先开启相关设置!");
         }
         $parameters['url'] = $url;
-
         if (!empty($students)) {
-            if ($targetType == 'lesson') {
+            if ($targetType == 'lesson' || ($targetType == 'course' && $course['parentId'])) {
                 $studentIds = ArrayToolkit::column($students, 'userId');
             } else {
                 $studentIds = ArrayToolkit::column($students, 'id');
@@ -136,9 +150,8 @@ class SmsController extends BaseController
             }
             if (!empty($users)) {
                 $userIds = ArrayToolkit::column($users, 'id');
-                $this->getSmsService()->smsSend($smsType, $userIds, $description, $parameters);
+                $result = $this->getSmsService()->smsSend($smsType, $userIds, $description, $parameters);
             }
-
         }
 
         if ($count > $index + $onceSendNum ) {
