@@ -70,18 +70,6 @@ class CourseDeleteServiceTest extends BaseTestCase
             'courseId'=>$createCourse['id']
         ));
 
-        
-        $homework = array('description'=>'ces','courseId'=>$createCourse['id']);
-		$homework = $this->getHomeworkService()->addHomework($homework);
-		$this->assertEquals('ces',$homework['description']);
-		$homeworkItem = array('homeworkId'=>$homework['id']);
-		$this->getHomeworkService()->createHomeworkItems($homework['id'],$homeworkItem);
-
-    
-		$exercise = array('source'=>'course','courseId'=>$createCourse['id']);
-		$exercise = $this->getExerciseService()->addExercise($exercise);
-		$this->assertEquals('course',$exercise['source']);
-		
 		$lessonView = array('title'=>'lessonView','courseId'=>$createCourse['id'],'lessonId'=>$lesson['id']);
         $this->getCourseService()->createLessonView($lessonView);
 
@@ -118,11 +106,43 @@ class CourseDeleteServiceTest extends BaseTestCase
         );
         $question = $this->getQuestionService()->createQuestion($question);
         
-        $types = array('questions','testpapers','materials','chapters','drafts','lessons','lessonLearns','lessonReplays','lessonViews','homeworks','exercises','favorites','notes','threads','reviews','announcements','statuses','members','course');
+        $types = array('questions','testpapers','materials','chapters','drafts','lessons','lessonLearns','lessonReplays','lessonViews','favorites','notes','threads','reviews','announcements','statuses','members','course');
         foreach($types as $type){
         	$this->getCourseDeleteService()->delete($createCourse['id'],$type);
         }
 
+        $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$createCourse['id']}"));
+        $this->assertEquals(0,$questionCount);
+        $testpaperCount = $this->getTestpaperDao()->searchTestpapersCount(array('target'=>"course-{$createCourse['id']}"));
+		$this->assertEquals(0,$testpaperCount);
+		$materialCount = $this->getMaterialDao()->getMaterialCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$materialCount);
+		$chapterCount = $this->getCourseChapterDao()->findChaptersCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$chapterCount);
+		$draftCount = $this->getDraftDao()->findDraftsCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$draftCount);
+		$lessonCount = $this->getLessonDao()->searchLessonCount(array('courseId'=>$createCourse['id']));
+		$this->assertEquals(0,$lessonCount);
+		$lessonLearnCount = $this->getLessonLearnDao()->searchLearnCount(array('courseId'=>$createCourse['id']));
+		$this->assertEquals(0,$lessonLearnCount);
+		$lessonReplayCount = $this->getCourseLessonReplayDao()->findLessonReplaysCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$lessonReplayCount);
+		$lessonViewCount = $this->getLessonViewDao()->findLessonsViewsCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$lessonViewCount);
+		$favoriteCount = $this->getFavoriteDao()->findFavoritesCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$favoriteCount);
+		$noteCount = $this->getCourseNoteDao()->findNotesCountByCourseId($createCourse['id']);
+		$this->assertEquals(0,$noteCount);
+		$threadCount = $this->getThreadDao()->searchThreadCount(array('courseId'=>$createCourse['id']));
+		$this->assertEquals(0,$threadCount);
+		$reviewCount = $this->getReviewDao()->searchReviewsCount(array('courseId'=>$createCourse['id']));
+		$this->assertEquals(0,$reviewCount);
+		$announcementCount = $this->getAnnouncementDao()->searchAnnouncementsCount(array('targetId'=>$createCourse['id'],'targetType'=>'course'));
+		$this->assertEquals(0,$announcementCount);
+		$statusCount = $this->getStatusDao()->searchStatusesCount(array('courseId'=>$createCourse['id']));
+		$this->assertEquals(0,$statusCount);
+		$memberCount = $this->getCourseMemberDao()->searchMemberCount(array('courseId'=>$createCourse['id']));
+		$this->assertEquals(0,$memberCount);
     }
 
     protected function getCourseService()
@@ -149,14 +169,6 @@ class CourseDeleteServiceTest extends BaseTestCase
     {
     	return $this->getServiceKernel()->createService('Course.ThreadService');
     }
-    protected function getHomeworkService()
-    {
-        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
-    }
-    protected function getExerciseService()
-    {
-        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
-    }
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
@@ -173,4 +185,114 @@ class CourseDeleteServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
+
+    protected function getQuestionDao()
+    {
+        return $this->getServiceKernel()->createDao('Question.QuestionDao');
+    }
+
+    protected function getQuestionFavoriteDao()
+    {
+        return $this->getServiceKernel()->createDao('Question.QuestionFavoriteDao');
+    }
+
+    protected function getTestpaperResultDao()
+    {
+        return $this->getServiceKernel()->createDao('Testpaper.TestpaperResultDao');
+    }
+
+    protected function getTestpaperItemResultDao(){
+        
+        return $this->getServiceKernel()->createDao('Testpaper.TestpaperItemResultDao');
+    }
+
+    protected function getTestpaperItemDao(){
+        return $this->getServiceKernel()->createDao('Testpaper.TestpaperItemDao');
+    }
+
+    protected function getTestpaperDao()
+    {
+        return $this->getServiceKernel()->createDao('Testpaper.TestpaperDao');
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseDao');
+    }
+    protected function getFavoriteDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.FavoriteDao');
+    }
+
+    protected function getCourseNoteDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseNoteDao');
+    }
+
+    protected function getCourseNoteLikeDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseNoteLikeDao');
+    }
+
+    protected function getThreadDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.ThreadDao');
+    }
+
+    protected function getThreadPostDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.ThreadPostDao');
+    }
+
+    protected function getReviewDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.ReviewDao');
+    }
+
+    protected function getAnnouncementDao()
+    {
+        return $this->getServiceKernel()->createDao('Announcement.AnnouncementDao');
+    }
+
+    protected function getStatusDao()
+    {
+        return $this->getServiceKernel()->createDao('User.StatusDao');
+    }
+
+    protected function getCourseMemberDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+    }
+
+    protected function getMaterialDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseMaterialDao');
+    }
+    protected function getCourseChapterDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseChapterDao');
+    }
+
+    protected function getDraftDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseDraftDao');
+    }
+    protected function getLessonDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.LessonDao');
+    }
+    protected function getLessonLearnDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.LessonLearnDao');
+    }
+     protected function getCourseLessonReplayDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseLessonReplayDao');
+    }
+
+    protected function getLessonViewDao ()
+    {
+        return $this->getServiceKernel()->createDao('Course.LessonViewDao');
+    }
+
 }
