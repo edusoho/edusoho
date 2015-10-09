@@ -17,7 +17,7 @@ abstract class CourseBaseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
-            throw $this->createNotFoundException("课程不存在");
+            return $this->createMessageResponse('error',"该课程不存在或已删除");
         }
 
         $previewAs = $request->query->get('previewAs');

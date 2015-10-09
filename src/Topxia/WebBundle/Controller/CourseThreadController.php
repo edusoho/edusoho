@@ -57,10 +57,6 @@ class CourseThreadController extends CourseBaseController
 
     public function showAction(Request $request, $courseId, $threadId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
-        if(!$course){
-            return $this->createMessageResponse('error',"课程已删除");
-        }
         list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
