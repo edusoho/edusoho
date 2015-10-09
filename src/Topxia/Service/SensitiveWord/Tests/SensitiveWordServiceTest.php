@@ -17,7 +17,7 @@ class SensitiveWordServiceTest extends BaseTestCase
                         "三":3,
                         "四":4
                         }',
-            "firstLevel"=> "fafs",
+            "firstLevel"=> "a",
             "secondLevel" => "qaf",
             "thirdLevel" => "sfs"
         );

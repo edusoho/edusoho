@@ -25,11 +25,7 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 		}
 
 		if(isset($sensitiveWordSetting["secondLevel"]) && !empty($sensitiveWordSetting["secondLevel"])) {
-			$this->findSecondLevel($str, $sensitiveWordSetting["secondLevel"]);
-		}
-
-		if(isset($sensitiveWordSetting["thirdLevel"]) && !empty($sensitiveWordSetting["thirdLevel"])) {
-			$this->findThirdLevel($str, $sensitiveWordSetting["thirdLevel"]);
+			$str = $this->findSecondLevel($str, $sensitiveWordSetting["secondLevel"]);
 		}
 
 		return $str;
@@ -49,17 +45,22 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 
 	protected function findFirstLevel($str, $firstLevel)
 	{
-		
+		preg_match('['.$firstLevel.']', $str, $result);
+		if(empty($result)){
+			return $str;
+		} else {
+			throw $this->createServiceException("内容中包含敏感词");
+		}
 	}
 
 	protected function findSecondLevel($str, $secondLevel)
 	{
-
-	}
-
-	protected function findThirdLevel($str, $thirdLevel)
-	{
-
+		preg_match_all('['.$secondLevel.']', $str, $result, PREG_OFFSET_CAPTURE);
+		if(empty($result)){
+			return $str;
+		} else {
+			var_dump($result);
+		}
 	}
 
 	protected function getSettingService()
