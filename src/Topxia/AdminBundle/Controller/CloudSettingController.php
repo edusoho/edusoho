@@ -199,15 +199,6 @@ class CloudSettingController extends BaseController
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
-        if ($this->getWebExtension()->isTrial()) {
-            $trial = "hasTrialAccess";
-            return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
-                'storageSetting'=>$storageSetting,
-                'headLeader'=>$headLeader,
-                'trial' => $trial,
-            ));
-        }
-
         return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader' => $headLeader
