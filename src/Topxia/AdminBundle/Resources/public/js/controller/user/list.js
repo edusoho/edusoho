@@ -9,15 +9,16 @@ define(function(require, exports, module) {
         var $datePicker = $('#datePicker');
         var $table = $('#user-table');
         
-        $datePicker.on('click',function(){
-            if($datePicker.val()=='longinDate'){
-                $('.longinDate').show();
-                $('.registerDate').hide();
-            }else{
-                $('.longinDate').hide();
-                $('.registerDate').show();
-            }
-        });
+            // $datePicker.on('click',function(){
+            //     if($datePicker.val()=='longinDate'){
+            //         // $('.longinDate').show();
+            //         // $('.registerDate').hide();
+                    
+            //     }else{
+            //         // $('.longinDate').hide();
+            //         // $('.registerDate').show();
+            //     }
+            // });
 
 
         $table.on('click', '.lock-user, .unlock-user', function() {
@@ -55,15 +56,14 @@ define(function(require, exports, module) {
         });
 
                 var $userSearchForm = $('#user-search-form');
-                var $roles = $userSearchForm.find('[name=roles]').val(); 
+                var $roles = $userSearchForm.find('[name=roles]').val();
+                var $datePicker = $userSearchForm.find('[name=datePicker]').val();
                 var $keywordType = $userSearchForm.find('[name=keywordType]').val();
                 var $keyword = $userSearchForm.find('[name=keyword]').val();
                 var $keywordUserType = $userSearchForm.find('[name=keywordUserType]').val();
 
-                var $loginStartDate1 = $userSearchForm.find('[name=loginStartDate]').val();
-                var $loginEndDate1 = $userSearchForm.find('[name=loginEndDate]').val();
-                var $registerStartDate1 = $userSearchForm.find('[name=registerStartDate]').val();
-                var $registerEndDate1 = $userSearchForm.find('[name=registerEndDate]').val();
+                var $StartDate1 = $userSearchForm.find('[name=StartDate]').val();
+                var $EndDate1 = $userSearchForm.find('[name=EndDate]').val();
 
                 function get_unix_time(dateStr)
                     {
@@ -77,12 +77,8 @@ define(function(require, exports, module) {
                         }
                     }
 
-                var $loginStartDate = get_unix_time($loginStartDate1);
-                var $loginEndDate = get_unix_time($loginEndDate1);
-                var $registerStartDate = get_unix_time($registerStartDate1);
-                var $registerEndDate = get_unix_time($registerEndDate1);
-
-                
+                var $StartDate = get_unix_time($StartDate1);
+                var $EndDate = get_unix_time($EndDate1);
 
                 $('#user-export').on('click', function() {
                    var self = $(this);
@@ -90,48 +86,28 @@ define(function(require, exports, module) {
                     +"&keywordType="+$keywordType
                     +"&keyword="+$keyword
                     +"&keywordUserType="+$keywordUserType
-                    +"&loginStartTime="+$loginStartDate
-                    +"&loginEndTime="+$loginEndDate
-                    +"&startTime="+$registerStartDate
-                    +"&endTime="+$registerEndDate
+                    +"&StartDate="+$StartDate
+                    +"&EndDate="+$EndDate
+                    +"&datePicker="+$datePicker
                     );
                 });
 
-        $("#loginStartDate").datetimepicker({
+        $("#StartDate").datetimepicker({
             autoclose: true
         }).on('changeDate',function(){
-            $("#loginEndDate").datetimepicker('setStartDate',$("#loginStartDate").val().substring(0,16));
+            $("#EndDate").datetimepicker('setStartDate',$("#StartDate").val().substring(0,16));
         });
 
-        $("#loginStartDate").datetimepicker('setEndDate',$("#loginEndDate").val().substring(0,16));
+        $("#StartDate").datetimepicker('setEndDate',$("#EndDate").val().substring(0,16));
 
-        $("#loginEndDate").datetimepicker({
-            autoclose: true
-        }).on('changeDate',function(){
-
-            $("#loginStartDate").datetimepicker('setEndDate',$("#loginEndDate").val().substring(0,16));
-        });
-
-        $("#loginEndDate").datetimepicker('setStartDate',$("#loginStartDate").val().substring(0,16));
-
-        ///
-        $("#registerStartDate").datetimepicker({
-            autoclose: true
-        }).on('changeDate',function(){
-            $("#registerEndDate").datetimepicker('setStartDate',$("#registerStartDate").val().substring(0,16));
-        });
-
-        $("#registerStartDate").datetimepicker('setEndDate',$("#registerEndDate").val().substring(0,16));
-
-        $("#registerEndDate").datetimepicker({
+        $("#EndDate").datetimepicker({
             autoclose: true
         }).on('changeDate',function(){
 
-            $("#registerStartDate").datetimepicker('setEndDate',$("#registerEndDate").val().substring(0,16));
+            $("#StartDate").datetimepicker('setEndDate',$("#EndDate").val().substring(0,16));
         });
 
-        $("#registerEndDate").datetimepicker('setStartDate',$("#registerStartDate").val().substring(0,16));
-
+        $("#EndDate").datetimepicker('setStartDate',$("#StartDate").val().substring(0,16));
     };
 
 });

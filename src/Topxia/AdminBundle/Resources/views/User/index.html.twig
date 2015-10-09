@@ -14,16 +14,10 @@
         {{ select_options({longinDate:'登陆时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
       </select>
 
-    <div class="form-group longinDate">
-        <input class="form-control" type="text" id="loginStartDate" name="loginStartDate" value="{{app.request.query.get('loginStartDate')}}" placeholder="起始时间">
+    <div class="form-group ">
+        <input class="form-control" type="text" id="StartDate" name="StartDate" value="{{app.request.query.get('StartDate')}}" placeholder="起始时间">
         -
-        <input class="form-control" type="text" id="loginEndDate" name="loginEndDate" value="{{app.request.query.get('loginEndDate')}}" placeholder="结束时间">
-    </div>
-
-    <div class="form-group registerDate" style="display:none">
-        <input class="form-control" type="text" id="registerStartDate" name="registerStartDate" value="{{app.request.query.get('registerStartDate')}}" placeholder="起时间">
-        -
-        <input class="form-control" type="text" id="registerEndDate" name="registerEndDate" value="{{app.request.query.get('registerEndDate')}}" placeholder="结束时间">
+        <input class="form-control" type="text" id="EndDate" name="EndDate" value="{{app.request.query.get('EndDate')}}" placeholder="结束时间">
     </div>
   </div>
     <div class="form-group">

@@ -37,15 +37,21 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        if (!empty($conditions['loginStartDate']) && !empty($conditions['loginEndDate'])) {
-            $conditions['loginStartTime'] = strtotime($conditions['loginStartDate']);
-            $conditions['loginEndTime'] = strtotime($conditions['loginEndDate']);
+        if (!empty($conditions['StartDate']) && !empty($conditions['EndDate'])) {
+            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate'){
+            $conditions['loginStartTime'] = strtotime($conditions['StartDate']);
+            $conditions['loginEndTime'] = strtotime($conditions['EndDate']);
+            unset($conditions['StartDate']);
+            unset($conditions['EndDate']);
+            }
+            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'registerDate'){
+            $conditions['startTime'] = strtotime($conditions['StartDate']);
+            $conditions['endTime'] = strtotime($conditions['EndDate']);
+            unset($conditions['StartDate']);
+            unset($conditions['EndDate']);
+            }
         }
-        if (!empty($conditions['registerStartDate']) && !empty($conditions['registerEndDate'])) {
-            $conditions['startTime'] = strtotime($conditions['registerStartDate']);
-            $conditions['endTime'] = strtotime($conditions['registerEndDate']);
-        }
-
+           
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
@@ -67,7 +73,7 @@ class UserController extends BaseController
 
         $userIds = ArrayToolkit::column($users,'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
+        
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,
