@@ -10,9 +10,12 @@ class SensitiveWordServiceTest extends BaseTestCase
     public function testFilterSensitiveWord()
     {
         $setting = array(
-            "ignoreWord" => ",|,|.|。",
+            "ignoreWord" => "\,|\,|\.|\。",
             "wordReplace"=>'{
-                        "一":1
+                        "一":1,
+                        "二":2,
+                        "三":3,
+                        "四":4
                         }',
             "firstLevel"=> "fafs",
             "secondLevel" => "qaf",
@@ -20,7 +23,7 @@ class SensitiveWordServiceTest extends BaseTestCase
         );
         $this->getSettingService()->set('sensitiveWord', $setting);
 
-        $this->getSensitiveWordService()->filter("张三李四王武");
+        $this->getSensitiveWordService()->filter("张三李四王武。");
     }
 
     protected function getSettingService()

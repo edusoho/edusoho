@@ -17,7 +17,7 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 		}
 
 		if(isset($sensitiveWordSetting["ignoreWord"]) && !empty($sensitiveWordSetting["ignoreWord"])) {
-			$this->ignoreWord($str, $sensitiveWordSetting["ignoreWord"]);
+			$str = $this->ignoreWord($str, $sensitiveWordSetting["ignoreWord"]);
 		}
 
 		if(isset($sensitiveWordSetting["firstLevel"]) && !empty($sensitiveWordSetting["firstLevel"])) {
@@ -37,19 +37,19 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 
 	protected function replace($str, $wordReplace)
 	{
-		$json = json_decode($wordReplace, true);
+		$array = json_decode($wordReplace, true);
+		return strtr($str, $array);
 
 	}
 
 	protected function ignoreWord($str, $ignoreWord)
 	{
-		$json = json_decode($wordReplace, true);
-		preg_replace('', $str, '');
+		return preg_replace('['.$ignoreWord.']', '', $str);
 	}
 
 	protected function findFirstLevel($str, $firstLevel)
 	{
-
+		
 	}
 
 	protected function findSecondLevel($str, $secondLevel)
