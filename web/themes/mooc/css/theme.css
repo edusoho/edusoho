@@ -2042,18 +2042,13 @@ input:focus {
 }
 .es-panel.student-column li {
   float: left;
-  width: 50%;
-  margin: 15px auto;
+  width: 20%;
+  margin: 10px auto;
   text-align: center;
 }
-@media (max-width: 1199px) and (min-width: 992px) {
+@media (max-width: 1199px) and (min-width: 768px) {
   .es-panel.student-column li {
-    width: 25%;
-  }
-}
-@media (max-width: 991px) and (min-width: 768px) {
-  .es-panel.student-column li {
-    width: 25%;
+    width: 10%;
   }
 }
 .es-panel.student-column .avatar {
