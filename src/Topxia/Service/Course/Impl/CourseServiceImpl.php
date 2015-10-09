@@ -630,7 +630,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return true;
 	}
 
-	public function publishCourse($id,$source = 'course')
+	public function publishCourse($id, $source = 'course')
 	{
 		if ($source == 'course') {
 			$course = $this->tryManageCourse($id);
@@ -640,8 +640,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 				throw $this->createNotFoundException();
 			}
 		}
-		$this->getCourseDao()->updateCourse($id, array('status' => 'published'));
+		$course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
 		$this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
+		$this->dispatchEvent('course.publish', $course);
 	}
 
 	public function closeCourse($id, $source = 'course')
@@ -654,8 +655,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 				throw $this->createNotFoundException();
 			}
 		}
-		$this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
+		$course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
 		$this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
+		$this->dispatchEvent('course.close', $course);
 	}
 
 	public function favoriteCourse($courseId)
@@ -1052,10 +1054,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
-		$this->dispatchEvent("course.lesson.create", array(
-			"courseId"=>$lesson["courseId"], 
-			"lesson"=>$lesson
-		));
+		$this->dispatchEvent("course.lesson.create", $lesson);
 
 		return $lesson;
 	}
@@ -1318,7 +1317,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
 
-		$this->dispatchEvent("course.lesson.publish",$publishLesson);
+		$this->dispatchEvent("course.lesson.pubilsh",$publishLesson);
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
@@ -1908,6 +1907,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
 	}
 
+	public function findMemberUserIdsByCourseId($courseId)
+	{
+		return $this->getMemberDao()->findMemberUserIdsByCourseId($courseId);
+	}
+
 	public function updateCourseMember($id, $fields)
 	{
 		return $this->getMemberDao()->updateMember($id, $fields);
@@ -2212,6 +2216,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		$this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
+		$this->dispatchEvent(
+		    'course.quit', 
+		    new ServiceEvent($course, array('userId' => $member['userId']))
+		);
 	}
 
 	public function lockStudent($courseId, $userId)
