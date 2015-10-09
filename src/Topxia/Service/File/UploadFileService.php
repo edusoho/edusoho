@@ -55,8 +55,6 @@ interface UploadFileService
     public function findShareHistory($sourceUserId);
     
     public function cancelShareFile($sourceUserId, $targetUserId);
-
-    public function increaseFileUsedCount($fileId);
-
-    public function decreaseFileUsedCount($fileId);
+    
+    public function waveUploadFile($id, $field, $diff);
 }
