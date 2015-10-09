@@ -73,16 +73,19 @@ class BuildPackageCommand extends BaseCommand
                 continue;
             }
 
+            if (strpos($opFile, 'doc/') === 0 ) {
+                $output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                continue;
+            }
+
             $opBundleFile = $this->getBundleFile($opFile);
 
             if ($op == 'M' || $op == 'A') {
-                if (strpos($opFile, 'doc/') === false ) {
-                    $output->writeln("<info>增加更新文件：{$opFile}</info>");
-                    $this->copyFileAndDir($opFile, $packageDirectory);
-                    if ($opBundleFile) {
-                        $output->writeln("<info>增加更新文件：[BUNDLE]        {$opBundleFile}</info>");
-                        $this->copyFileAndDir($opBundleFile, $packageDirectory);
-                    }
+                $output->writeln("<info>增加更新文件：{$opFile}</info>");
+                $this->copyFileAndDir($opFile, $packageDirectory);
+                if ($opBundleFile) {
+                    $output->writeln("<info>增加更新文件：[BUNDLE]        {$opBundleFile}</info>");
+                    $this->copyFileAndDir($opBundleFile, $packageDirectory);
                 }
             }
 
