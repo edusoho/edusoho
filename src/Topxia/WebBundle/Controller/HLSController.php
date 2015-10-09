@@ -14,10 +14,12 @@ class HLSController extends BaseController
 
     public function playlistAction(Request $request, $id, $token)
     {
-
         $line = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
+        $returnJson = $request->query->get('returnJson', false);
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
+
+        $levelParam = $request->query->get('level', "");
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -42,20 +44,24 @@ class HLSController extends BaseController
                 continue;
             }
 
-            $tokenFields = array(
-                'data' => array(
-                    'id' => $file['id']. $level, 
-                    'mode' => $mode
-                ) , 
-                'times' => 1, 
-                'duration' => 3600
-            );
+            if(empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
+                $tokenFields = array(
+                    'data' => array(
+                        'id' => $file['id']. $level, 
+                        'mode' => $mode
+                    ) , 
+                    'times' => 1, 
+                    'duration' => 3600
+                );
 
-            if(!empty($token['userId'])) {
-                $tokenFields['userId'] = $token['userId'];
+                if(!empty($token['userId'])) {
+                    $tokenFields['userId'] = $token['userId'];
+                }
+
+                $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
+            } else {
+                $token['token'] = $this->getTokenService()->makeFakeTokenString();
             }
-
-            $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
 
             $params = array(
                 'id' => $file['id'],
@@ -66,8 +72,7 @@ class HLSController extends BaseController
             if ($line) {
                 $params['line'] = $line;
             }
-
-            if ($hideBeginning) {
+            if (!$this->haveHeadLeader()) {
                 $params['hideBeginning'] = 1;
             }
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
@@ -80,17 +85,29 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        $playlist = $api->get('/hls/playlist', array( 'streams' => $streams, 'qualities' => $qualities));
+        if($returnJson){
+            $playlist = $api->get('/hls/playlist/json', array( 'streams' => $streams, 'qualities' => $qualities));
+            return $this->createJsonResponse($playlist);
+        } else {
+            $playlist = $api->get('/hls/playlist', array( 'streams' => $streams, 'qualities' => $qualities));
+            if (empty($playlist['playlist'])) {
+                return $this->createMessageResponse('error', '生成视频播放列表失败！');
+            }
 
-        if (empty($playlist['playlist'])) {
-            return $this->createMessageResponse('error', '生成视频播放列表失败！');
+            return new Response($playlist['playlist'], 200, array(
+                'Content-Type' => 'application/vnd.apple.mpegurl',
+                'Content-Disposition' => 'inline; filename="playlist.m3u8"',
+            ));
         }
+    }
 
-        return new Response($playlist['playlist'], 200, array(
-            'Content-Type' => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="playlist.m3u8"',
-        ));
-
+    protected function haveHeadLeader()
+    {
+        $storage = $this->setting("storage");
+        if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
+            return true;
+        }
+        return false;
     }
 
     public function streamAction(Request $request, $id, $level, $token)

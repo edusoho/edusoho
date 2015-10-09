@@ -20,6 +20,12 @@ class EduCloudController extends BaseController
 
             $smsType = $request->request->get('sms_type');
             $this->checkSmsType($smsType, $currentUser);
+            if ($smsType != 'sms_user_pay') {
+                $captchaNum = strtolower($request->request->get('captcha_num'));
+                if ($request->getSession()->get('captcha_code') != $captchaNum) {
+                    return $this->createJsonResponse(array('error' => '验证码错误'));
+                }
+            }
 
             $targetSession = $request->getSession()->get($smsType);
             $smsLastTime = $targetSession['sms_last_time'];
