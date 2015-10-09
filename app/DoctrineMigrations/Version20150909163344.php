@@ -23,7 +23,6 @@ class Version20150909163344 extends AbstractMigration
                 `sess_time` INTEGER UNSIGNED NOT NULL,
                 `sess_lifetime` MEDIUMINT NOT NULL
             ) COLLATE utf8_bin, ENGINE = InnoDB;");
-        }
     }
 
     /**
