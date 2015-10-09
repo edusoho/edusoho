@@ -204,8 +204,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
             unset($material['id']);
             unset($lesson['id'],$lesson['courseId'],$lesson['chapterId'],$lesson['parentId']);
             foreach ($courseIds as $key => $courseId) {
-               $material['courseId'] = $courseId;
-               $material['lessonId'] = $lessonIds[$key];
+                $material['courseId'] = $courseId;
+                $material['lessonId'] = $lessonIds[$key];
+                if(!empty($material['fileId'])){
+                    $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
+                }
                $this->getMaterialService()->createMaterial($material);
             }
             foreach ($courseIds as $key => $courseId) {
@@ -221,6 +224,9 @@ class CourseEventSubscriber implements EventSubscriberInterface
         if ($courseIds) {
             $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByPIdAndLockedCourseIds($material['id'],$courseIds),'id');
             foreach ($materialIds as $key=>$materialId) {
+                if(!empty($material['fileId'])){
+                    $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
+                }
                 $this->getMaterialService()->deleteMaterial($courseIds[$key],$materialId);
             }
         }
@@ -337,6 +343,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getMaterialService()
     {
         return ServiceKernel::instance()->createService('Course.MaterialService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 
 }

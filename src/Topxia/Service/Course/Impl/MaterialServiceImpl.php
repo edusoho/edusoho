@@ -50,7 +50,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		// Increase the linked file usage count, if there's a linked file used by this material.
 		if(!empty($material['fileId'])){
-			$this->getUploadFileService()->increaseFileUsedCount(array($material['fileId']));
+			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',1);
 		}
 
 		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
@@ -76,7 +76,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 		$this->dispatchEvent("material.delete",$material);
 		// Decrease the linked file usage count, if there's a linked file used by this material.
 		if(!empty($material['fileId'])){
-			$this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
+			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
 		}
 
 		if($material['lessonId']){
@@ -104,7 +104,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		// Decrease the linked matrial file usage count, if there are linked materials used by this lesson.
 		if(!empty($fileIds)){
-			$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+			foreach ($fileIds as $fileId) {
+				$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
+			}
 		}
 
 		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId);
@@ -118,7 +120,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		// Decrease the linked material file usage count, if there are linked materials used by this course.
 		if(!empty($fileIds)){
-			$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+			foreach ($fileIds as $fileId) {
+				$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
+			}
 		}
 
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
