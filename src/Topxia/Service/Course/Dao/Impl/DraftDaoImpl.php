@@ -96,9 +96,4 @@ class DraftDaoImpl extends BaseDao implements DraftDao
         $sql = "DELETE FROM {$this->Table} WHERE courseId = ? AND userId = ? AND lessonId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$userId,$lessonId));
     }
-
-    public function deleteDraft($id)
-    {
-        return $this->getConnection()->delete($this->draftTable, array('id' => $id));
-    }
 }

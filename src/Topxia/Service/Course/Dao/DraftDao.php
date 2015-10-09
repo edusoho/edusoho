@@ -21,6 +21,4 @@ interface DraftDao
     public function updateDraft($userId,$courseId, $fields);
 
     public function updateEditDraft($userId,$courseId,$lessonId,$fields);
-    
-    public function deleteDraft($id);
 }

@@ -17,4 +17,6 @@ interface CourseDraftDao
     public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
     
     public function searchDrafts($conditions, $orderBy, $start, $limit);
+
+    public function deleteDraft($id);
 }

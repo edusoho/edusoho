@@ -59,6 +59,11 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
         return $this->getConnection()->executeUpdate($sql, array($courseId,$lessonId, $userId));
     }
 
+    public function deleteDraft($id)
+    {
+        return $this->getConnection()->delete($this->draftTable, array('id' => $id));
+    }
+
     protected function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)
