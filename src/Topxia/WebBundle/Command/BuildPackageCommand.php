@@ -147,6 +147,14 @@ class BuildPackageCommand extends BaseCommand
              return str_ireplace('src/Classroom/ClassroomBundle/Resources/public', 'web/bundles/classroom', $file);
         }
 
+        if (stripos($file, 'src/Custom/AdminBundle/Resources/public') === 0) {
+            return str_ireplace('src/Custom/AdminBundle/Resources/public', 'web/bundles/customadmin', $file);
+        }
+
+        if (stripos($file, 'src/Custom/WebBundle/Resources/public') === 0) {
+            return str_ireplace('src/Custom/WebBundle/Resources/public', 'web/bundles/customweb', $file);
+        }
+
         return null;
     }
 
