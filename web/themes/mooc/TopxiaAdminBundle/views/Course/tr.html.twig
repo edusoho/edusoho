@@ -26,12 +26,18 @@
 
   </td>
   <td>
-    {% if  course.serializeMode =="none" %}
-      <span class="text-info">非连载课程</span>
-    {% elseif course.serializeMode =="serialize" %}
-      <span class="text-info">连载中</span>
-    {% elseif course.serializeMode =="finished" %}
-      <span class="text-info">已完结</span>
+    {% if course.type == 'periodic' %}
+      <span class="text-info text-sm">开课时间:{{ course.startTime|date("Y-m-d") }}</span>
+      <br>
+      <span class="text-info text-sm">结课时间:{{ course.endTime|date("Y-m-d") }}</span>
+    {% else %}
+      {% if  course.serializeMode =="none" %}
+        <span class="text-info">非连载课程</span>
+      {% elseif course.serializeMode =="serialize" %}
+        <span class="text-info">连载中</span>
+      {% elseif course.serializeMode =="finished" %}
+        <span class="text-info">已完结</span>
+      {% endif %}
     {% endif %}
   </td>
   {% if filter == 'classroom' %}
