@@ -3,7 +3,7 @@ namespace Topxia\Common;
 
 class CurlToolkit
 {
-	public static function postRequest($url, $params，$conditions)
+	public static function postRequest($url, $params, $conditions = array())
     {
         $curl = curl_init();
         $conditions['userAgent'] = isset($conditions['userAgent']) ?:'Topxia OAuth Client 1.0';
