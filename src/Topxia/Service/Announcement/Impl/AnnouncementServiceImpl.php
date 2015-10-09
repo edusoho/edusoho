@@ -47,6 +47,8 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             unset($announcement['notify']);
         }
 
+        $announcement['content'] = $this->purifyHtml(empty($announcement['content']) ? '' : $announcement['content']);
+
 		$announcement['userId'] = $this->getCurrentUser()->id;
 		$announcement['createdTime'] = time();
 
