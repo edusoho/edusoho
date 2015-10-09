@@ -73,7 +73,7 @@ class BuildPackageCommand extends BaseCommand
                 continue;
             }
 
-            if (strpos($opFile, 'doc/') === 0 ) {
+            if (strpos($opFile, 'doc') === 0 ) {
                 $output->writeln("<comment>忽略文件：{$opFile}</comment>");
                 continue;
             }
