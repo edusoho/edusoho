@@ -290,7 +290,9 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
-            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailer);
+            $mailerWithoutPassword = $mailer;
+            $mailerWithoutPassword['password']='******';
+            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailerWithoutPassword);
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 

@@ -238,9 +238,10 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
-    public function createPayRecord($id, $payDate)
+    public function createPayRecord($id, $payData)
     {
-        $this->getOrderService()->updateOrder($id, array('data'=>json_encode($payData)));
+        $payData = array('data'=>json_encode($payData));
+        $order =$this->updateOrder($id,$payData);
         $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
     }
 

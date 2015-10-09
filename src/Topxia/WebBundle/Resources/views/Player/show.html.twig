@@ -1,0 +1,50 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    
+    {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
+  </head>
+  <body style="overflow:hidden;border:0px;">
+    {% if file|default(null) %}
+      <div style="position:absolute;top:0;bottom:0;left:0;right:0;">
+        <div id="lesson-video-content" 
+        data-user-id="{{app.user.id|default(0)}}" 
+        data-file-id="{{file.id}}" 
+        data-file-type="{{file.type}}" 
+        data-url="{{url}}"
+        data-player="{{player}}"
+        data-balloon-video-player="{{setting("developer.balloon_player")|default(0)}}"
+        data-agent-in-white-list="{{agentInWhiteList}}"
+        {% if not file.videoWatermarkEmbedded|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+          data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+        {% endif %}
+        {% if setting('storage.video_fingerprint') and app.user %}
+          data-fingerprint="{{ finger_print() }}"
+          data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+        {% endif %}
+        {% if file.type == 'video' %}
+          {% if file.storage == 'local' %}
+          class="local-video-player "
+          {% elseif setting("developer.balloon_player")|default(0) %}
+          class="ballon-video-player"
+          {% endif %}
+        {% elseif file.type == 'audio' %}
+          class="lesson-content-audio"
+        {% endif %}
+        style="height:100%"
+        ></div>
+      </div>
+
+      {% set script_controller = 'player/show' %}
+
+      {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+    {% else %}
+      <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="{{path('mobile')}}" target="parent">下载App</a>。</div>
+    {% endif %}
+  </body>
+</html>
