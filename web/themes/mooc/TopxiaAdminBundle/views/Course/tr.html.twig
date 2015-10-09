@@ -27,9 +27,9 @@
   </td>
   <td>
     {% if course.type == 'periodic' %}
-      <span class="text-info text-sm">开课时间:{{ course.startTime|date("Y-m-d") }}</span>
+      <span class="{% if course.status == 'draft' %}text-muted{% else %}text-info{% endif %} text-sm">开课时间:{% if course.startTime %}{{ course.startTime|date("Y-m-d") }}{% else %}--{% endif %}</span>
       <br>
-      <span class="text-info text-sm">结课时间:{{ course.endTime|date("Y-m-d") }}</span>
+      <span class="{% if course.status == 'draft' %}text-muted{% else %}text-info{% endif %} text-sm">结课时间:{% if course.endTime %}{{ course.endTime|date("Y-m-d") }}{% else %}--{% endif %}</span>
     {% else %}
       {% if  course.serializeMode =="none" %}
         <span class="text-info">非连载课程</span>
