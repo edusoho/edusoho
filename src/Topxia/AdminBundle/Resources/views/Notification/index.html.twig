@@ -1,0 +1,33 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_batch_notification' %}
+
+{% block main %}
+<table id="batchnotification-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th width="60%">站内信通知内容</th>
+              <th>创建时间</th>
+              <th>发布人</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+           {% if batchnotifications %}
+            {% for batchnotification in batchnotifications %}
+            <tr>
+              <td>{{batchnotification.content}}</td>
+              <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
+              <td>{{users[batchnotification.fromId].nickname}}</td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+          </tbody>
+        </table>
+
+        {% if not batchnotifications %}
+        <div class="empty">暂无站内信</div>
+        {% endif %}
+
+        {{ web_macro.paginator(paginator) }}
+{% endblock %}

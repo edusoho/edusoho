@@ -1,0 +1,33 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{% if batchnotification|default(null) %}全站通知发送{% endif %}{% endblock %}
+{% block body %}
+
+<form id="batchnotification-create-form" class="form-horizontal" method="post" action="{% if batchnotification|default(null) %}{% else %}{{ path('admin_batch_notification_create')}}{% endif %}">
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="title">通知标题</label>
+    </div>
+    <div class="col-md-8 controls">
+      <input type="text" id="title"  name="title" class="form-control" value="{% if batchnotification|default(null) %}{{batchnotification.title}}{% endif %}">
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="content">群发内容</label>
+    </div>
+    <div class="col-md-8 controls">
+      <input type="text" id="content"  name="content" class="form-control" value="{% if batchnotification|default(null) %}{{batchnotification.content}}{% endif %}">
+    </div>
+  </div>
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="batchnotification-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#batchnotification-create-form">发送</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('batchnotification/notification-modal')</script>
+{% endblock %}
