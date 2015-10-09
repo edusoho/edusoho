@@ -133,6 +133,8 @@ interface ClassroomService
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds);
 
+    public function findMemberCountByClassroomIdAndHasVerifiedMobile($classroomId, $locked);
+
     public function findClassroomStudents($classroomId, $start, $limit);
 
     public function lockStudent($classroomId, $userId);

@@ -22,11 +22,11 @@ class SmsController extends BaseController
         $smsType = 'sms_'.$targetType.'_publish';
         if ($targetType == 'classroom') {
             $item = $this->getClassroomService()->getClassroom($id);
-            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true));
+            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
             $url = $this->generateUrl('classroom_show',array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseService()->getCourse($id);
-            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true));
+            $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
             $url = $this->generateUrl('course_show',array('id' => $id));
         } elseif ($targetType == 'lesson') {
             $courseSetting = $this->getSettingService()->get('course', array());
@@ -51,10 +51,10 @@ class SmsController extends BaseController
             if ($course['parentId'] ) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
                 if ($classroom) {
-                    $verifiedMobileUserNum = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
+                    $verifiedMobileUserNum = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['classroomId'],1);
                 }
             } else {
-                $verifiedMobileUserNum = $this->getCourseService()->getHasVerifiedMobileMembersCountByCourseId($lesson['courseId'], 1);
+                $verifiedMobileUserNum = $this->getCourseService()->findMemberCountByCourseIdAndHasVerifiedMobile($lesson['courseId'], 1);
             }
         }
 
@@ -78,12 +78,12 @@ class SmsController extends BaseController
         $parameters = array();
         if ($targetType == 'classroom') {
             $classroom = $this->getClassroomService()->getClassroom($id);
-            $parameters['classroom_title'] = '《'.$classroom['title'].'》';
+            $parameters['classroom_title'] = '班级：《'.$classroom['title'].'》';
             $description = $parameters['classroom_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'course') {
             $course = $this->getCourseService()->getCourse($id);
-            $parameters['course_title'] = '《'.$course['title'].'》';
+            $parameters['course_title'] = '课程：《'.$course['title'].'》';
             $description = $parameters['course_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'lesson') {
@@ -95,7 +95,7 @@ class SmsController extends BaseController
                 }
             }
             $lesson = $this->getCourseService()->getLesson($id);
-            $parameters['lesson_title'] = '《'.$lesson['title'].'》';
+            $parameters['lesson_title'] = '课时：《'.$lesson['title'].'》';
             if ($lesson['type'] == 'live') {
                 $smsType = 'sms_live_'.$targetType.'_publish';
                 $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']); 
@@ -103,7 +103,7 @@ class SmsController extends BaseController
                 $smsType = 'sms_normal_'.$targetType.'_publish';
             }
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
-            $parameters['course_title'] = '《'.$course['title'].'》';
+            $parameters['course_title'] = '课程：《'.$course['title'].'》';
             $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
             if ($course['parentId'] ) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);

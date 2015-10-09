@@ -169,7 +169,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
         $sql .= " JOIN  `user` As c ON m.courseId = ?";
         if ($locked) {
-            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 ";
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1 ";
         } else {
             $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
         }

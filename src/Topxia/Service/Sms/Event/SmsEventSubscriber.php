@@ -34,8 +34,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
             if ($target[0] == 'course') {
                 $courseId = $target[1];
                 $course = $this->getCourseService()->getCourse($courseId);
-                $parameters['lesson_title'] = '《'.$testpaperResult['paperName'].'》'.'的试卷';
-                $parameters['course_title'] = '《'.$course['title'].'》';
+                $parameters['lesson_title'] = '试卷：《'.$testpaperResult['paperName'].'》'.'的试卷';
+                $parameters['course_title'] = '课程：《'.$course['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
                 $userId = $testpaperResult['userId'];
                 $user = $this->getUserService()->getUser($userId);

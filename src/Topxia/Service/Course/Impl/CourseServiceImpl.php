@@ -1932,7 +1932,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
 	}
 
-	public function getHasVerifiedMobileMembersCountByCourseId($courseId, $locked = 0)
+	public function findMemberCountByCourseIdAndHasVerifiedMobile($courseId, $locked = 0)
 	{
 		return $this->getMemberDao()->findMemberCountByCourseIdAndHasVerifiedMobile($courseId, $locked);
 	}

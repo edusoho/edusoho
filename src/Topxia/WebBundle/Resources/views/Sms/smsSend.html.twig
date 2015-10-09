@@ -11,7 +11,7 @@
       <label for="title">发送对象:</label>
     </div>
     <div class="col-md-7 controls">
-      <p class="help-block">{% if targetType == 'classroom' %}班级内{% else %}课程内{% endif %}用户</p>
+      <p class="help-block">{% if targetType == 'lesson' %}课程内{% else %}所有{% endif %}用户</p>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
     </div>
     <div style="z-index:2000;">
       <p class="help-block">
-        [{{setting('cloud_sms.sms_school_name')}}]《{{item.title}}》{% if targetType == 'lesson' %}-{{item.lesson_title}}{% endif %}已发布!<a href ='{{url}}' target="_blank">链接地址</a>
+        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}班级{% else %}课程{% endif %}：《{{item.title}}》{% if targetType == 'lesson' %}-课时：{{item.lesson_title}}{% endif %}已发布!<a href ='{{url}}' target="_blank">链接地址</a>
       </p>
     </div>
   </div>
