@@ -103,9 +103,6 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             if ($courseIds) {
                 $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByParentIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
                 foreach ($lessonIds as $key=>$lessonId) {
-                    if(!empty($lesson['mediaId'])){
-                        $this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
-                    }
                     $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
                 }
             }
