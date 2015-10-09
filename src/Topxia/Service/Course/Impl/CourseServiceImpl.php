@@ -1318,7 +1318,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
 
-		$this->dispatchEvent("course.lesson.update",$publishLesson);
+		$this->dispatchEvent("course.lesson.publish",$publishLesson);
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
@@ -1332,7 +1332,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
-		$this->dispatchEvent("course.lesson.update",$unpublishLesson);
+		$this->dispatchEvent("course.lesson.unpublish",$unpublishLesson);
 	}
 
 	public function getNextLessonNumber($courseId)
