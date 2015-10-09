@@ -38,12 +38,13 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 	protected function replace($str, $wordReplace)
 	{
 		$json = json_decode($wordReplace, true);
-		var_dump($json);
+
 	}
 
 	protected function ignoreWord($str, $ignoreWord)
 	{
-
+		$json = json_decode($wordReplace, true);
+		preg_replace('', $str, '');
 	}
 
 	protected function findFirstLevel($str, $firstLevel)
