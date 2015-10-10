@@ -44,11 +44,13 @@
         </div>
       </div>
 
+      {% if setting("developer.debug")|default(0) %}
       <div class="form-group">
         <div class="col-md-6 col-md-offset-3">
           <a href="{{ path('admin_setting_cloud_key_update') }}" class="btn btn-sm btn-default">设置新的授权码</a>
           </div>
       </div>
+      {% endif %}
 
       <div class="form-group" id="loading-text">
         <div class="col-md-6 col-md-offset-3">

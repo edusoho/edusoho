@@ -301,4 +301,5 @@ $api->get('/notifications', function (Request $request) {
         'total' => $count
     );
 });
+
 return $api;

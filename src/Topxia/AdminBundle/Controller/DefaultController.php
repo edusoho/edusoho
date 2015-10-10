@@ -12,6 +12,7 @@ class DefaultController extends BaseController
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
+        $currentDay = $this->weekday(time());
 
         if($dateType == "today"){
             $startTime = strtotime('today'); 
@@ -24,13 +25,24 @@ class DefaultController extends BaseController
         }
 
         if($dateType == "this_week"){
-            $startTime = strtotime('Monday this week');
-            $endTime = strtotime('Monday next week');
+            if($currentDay == '星期日'){
+                $startTime = strtotime('Monday last week');
+                $endTime = strtotime('Monday this week');
+            }else{
+                $startTime = strtotime('Monday this week');
+                $endTime = strtotime('Monday next week');
+            }
+            
         }
 
         if($dateType == "last_week"){
-            $startTime = strtotime('Monday last week');
-            $endTime = strtotime('Monday this week');
+            if($currentDay == '星期日'){
+                $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
+                $endTime = strtotime('Monday this week') - (7 * 24 * 60 * 60);
+            }else{
+                $startTime = strtotime('Monday last week');
+                $endTime = strtotime('Monday this week');
+            }
         }
 
         if($dateType == "this_month"){
@@ -78,6 +90,7 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     { 
         $result = CloudAPIFactory::create('leaf')->get('/me');
+
         $hidden = array();
         if(isset($result['thirdCopyright']) and $result['thirdCopyright'] == '1'){
             $hidden = array(
@@ -404,6 +417,16 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function weekday($time)
+    {
+        if(is_numeric($time))
+        {
+            $weekday = array('星期日','星期一','星期二','星期三','星期四','星期五','星期六');
+            return $weekday[date('w', $time)];
+        }
+        return false;
     }
 
     protected function getSettingService()
