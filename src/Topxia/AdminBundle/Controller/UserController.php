@@ -37,7 +37,7 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        if (!empty($conditions['StartDate']) && !empty($conditions['EndDate'])) {
+        if (!empty($conditions['StartDate']) || !empty($conditions['EndDate'])) {
             if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate'){
             $conditions['loginStartTime'] = strtotime($conditions['StartDate']);
             $conditions['loginEndTime'] = strtotime($conditions['EndDate']);
@@ -51,7 +51,7 @@ class UserController extends BaseController
             unset($conditions['EndDate']);
             }
         }
-           
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),

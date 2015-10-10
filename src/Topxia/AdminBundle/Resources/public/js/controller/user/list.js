@@ -62,10 +62,10 @@ define(function(require, exports, module) {
                 var $keyword = $userSearchForm.find('[name=keyword]').val();
                 var $keywordUserType = $userSearchForm.find('[name=keywordUserType]').val();
 
-                var $StartDate1 = $userSearchForm.find('[name=StartDate]').val();
-                var $EndDate1 = $userSearchForm.find('[name=EndDate]').val();
+                var $StartDate = $userSearchForm.find('[name=StartDate]').val();
+                var $EndDate = $userSearchForm.find('[name=EndDate]').val();
 
-                function get_unix_time(dateStr)
+                function getUnixTime(dateStr)
                     {
                         if (dateStr == '') {
                         return '';
@@ -77,8 +77,8 @@ define(function(require, exports, module) {
                         }
                     }
 
-                var $StartDate = get_unix_time($StartDate1);
-                var $EndDate = get_unix_time($EndDate1);
+                var $StartDate = getUnixTime($StartDate);
+                var $EndDate = getUnixTime($EndDate);
 
                 $('#user-export').on('click', function() {
                    var self = $(this);
