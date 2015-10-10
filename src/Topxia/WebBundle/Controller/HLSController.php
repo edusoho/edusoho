@@ -151,6 +151,8 @@ class HLSController extends BaseController
         );
 
         $manclient = $request->headers->get('manclient', '');
+        var_dump( $manclient);
+        exit();
         if ($manclient == 'VideoJs') {
             $tokenFields['data']['keyencryption'] = 1;
         }
