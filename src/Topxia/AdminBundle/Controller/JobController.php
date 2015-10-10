@@ -10,25 +10,20 @@ class JobController extends BaseController {
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
-        $conditions = array(
+        $fields = ArrayToolkit::filter($fields,array(
             'nextExcutedStartTime'=>'',
             'nextExcutedEndTime'=>'',
             'name'=>'',
             'cycle'=>''
-        );
-
-        if(!empty($fields)){
-            $conditions =$fields;
-        }
-
+        ));
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getJobService()->searchJobsCount($conditions),
+            $this->getJobService()->searchJobsCount($fields),
             30
         );
 
         $jobs = $this->getJobService()->searchJobs(
-            $conditions, 
+            $fields, 
             'created', 
             $paginator->getOffsetCount(), 
             $paginator->getPerPageCount()
