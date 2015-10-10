@@ -161,8 +161,8 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00') + $j;
                     $taskInfo['taskEndTime'] = strtotime(date('Y-m-d',$taskEndTime).' 23:59:59');
 
-                    $taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
-                    $taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
+                    //$taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
+                    //$taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
                     
                     break;
                 }
