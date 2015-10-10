@@ -141,7 +141,6 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
 
-
         $tokenFields = array(
             'data' => array(
                 'id' => $file['id'], 
@@ -150,6 +149,11 @@ class HLSController extends BaseController
             'times' => 1, 
             'duration' => 3600
         );
+
+        $manclient = $request->headers->get('manclient', '');
+        if ($manclient == 'VideoJs') {
+            $tokenFields['data']['keyencryption'] = 1;
+        }
 
         if(!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
@@ -215,6 +219,11 @@ class HLSController extends BaseController
 
         if (empty($file['convertParams']['hlsKey'])) {
             return new Response($fakeKey);
+        }
+
+        $manclient = $request->headers->get('manclient', '');
+        if (!empty($token['data']['keyencryption'])) {
+            new Response('1'.$file['convertParams']['hlsKey']);
         }
 
         return new Response($file['convertParams']['hlsKey']);
