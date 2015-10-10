@@ -8,18 +8,6 @@ define(function(require, exports, module) {
 
         var $datePicker = $('#datePicker');
         var $table = $('#user-table');
-        
-            // $datePicker.on('click',function(){
-            //     if($datePicker.val()=='longinDate'){
-            //         // $('.longinDate').show();
-            //         // $('.registerDate').hide();
-                    
-            //     }else{
-            //         // $('.longinDate').hide();
-            //         // $('.registerDate').show();
-            //     }
-            // });
-
 
         $table.on('click', '.lock-user, .unlock-user', function() {
             var $trigger = $(this);
