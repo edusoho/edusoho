@@ -168,7 +168,6 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
