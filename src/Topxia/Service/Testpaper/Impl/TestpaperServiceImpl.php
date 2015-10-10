@@ -138,7 +138,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'status' => 'open'
         );
         $testpaper = $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
-        $this->dispatchEvent("testpaper.update",$testpaper);
+        $this->dispatchEvent("testpaper.publish",$testpaper);
         return $testpaper;
     }
 
@@ -155,7 +155,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'status' => 'closed'
         );
         $testpaper = $this->getTestpaperDao()->updateTestpaper($id, $testpaper);
-        $this->dispatchEvent("testpaper.update",$testpaper);
+        $this->dispatchEvent("testpaper.close",$testpaper);
         return $testpaper;
     }
 

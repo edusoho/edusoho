@@ -112,6 +112,24 @@ class DefaultController extends BaseController
 
     public function getCloudNoticesAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            $domain = $this->generateUrl('homepage',array(),true);
+            $api = CloudAPIFactory::create('root');
+            $result = $api->get('/trial/remainDays',array('domain' => $domain));
+
+            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+                "trialTime" => (isset($result)) ? $result : null,
+            ));
+
+        } else {
+            $notices = $this->getNoticesFromOpen();
+            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+                "notices" => $notices,
+            ));
+        }
+    }
+
+    private function getNoticesFromOpen(){
         $userAgent = 'Open EduSoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
@@ -126,10 +144,7 @@ class DefaultController extends BaseController
         $notices = curl_exec($curl);
         curl_close($curl);
         $notices = json_decode($notices, true);
-        
-        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
-            "notices"=>$notices,
-        ));
+        return $notices;
     }
 
     public function officialMessagesAction()
@@ -463,5 +478,10 @@ class DefaultController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }
