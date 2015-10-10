@@ -12,7 +12,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     {
         $lesson = $this->getCourseService()->getLesson($targetId);
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        if ($course['parentId'] ) {
+        $count = 0;
+        if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if ($classroom) {
                 $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId']));
@@ -91,5 +92,11 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
 
 }
