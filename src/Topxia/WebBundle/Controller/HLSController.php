@@ -223,7 +223,7 @@ class HLSController extends BaseController
         }
 
         if (!empty($token['data']['keyencryption'])) {
-            return new Response('1'.$file['convertParams']['hlsKey']);
+            return new Response('1'.substr($file['convertParams']['hlsKey'],8,2).substr($file['convertParams']['hlsKey'],2,6).substr($file['convertParams']['hlsKey'],0,2).substr($file['convertParams']['hlsKey'],10,6));
         }
 
         return new Response($file['convertParams']['hlsKey']);
