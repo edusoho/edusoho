@@ -1319,11 +1319,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
 
-<<<<<<< HEAD
 		$this->dispatchEvent("course.lesson.publish",$publishLesson);
-=======
-		$this->dispatchEvent("course.lesson.pubilsh",$publishLesson);
->>>>>>> develop
+
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
