@@ -64,9 +64,15 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $to = $this->getUsersMobile($studentIds);
     
         $parameters['lesson_title'] = '课时：《'.$lesson['title'].'》';
-        $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
+        if ($lesson['type'] == 'live') {
+            $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
+        }
         $parameters['course_title'] = '课程：《'.$course['title'].'》';
-        $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
+        if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
+        } else {
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告'; 
+        }
         $parameters['url'] = $url;
 
         return array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters);
