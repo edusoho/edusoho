@@ -72,7 +72,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                 'taskType' => 'studyplan',
                 'batchId' => $userTask['batchId'],
                 'status' => 'active',
-                'taskEndTimeLessThan' => $userTask['taskStartTime']
+                'taskStartTimeLessThan' => $userTask['taskStartTime'],
             ));
 
             if ($beforeActiveUserTaskCount > 0) {
@@ -104,8 +104,10 @@ class StudyPlanTaskProcessor implements TaskProcessor
             );
 
             $newTaskIds = array();
-            $i = 0;
+            $i = $j = 0;
             $perDayStudyTime = 0;
+            $planStartTime = $plan['setTime'] ? $plan['planStartTime'] : $planMember['createdTime'];
+
             foreach ($planTasks as $key => $planTask) {
 
                 $availableHours = $planMember['metas']['availableHours'];
@@ -126,10 +128,11 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
                 $perDayStudyTime += $planTask['suggestHours'];
                
+
                 //获取任务执行时间
                 for ($i = $i; $i <= $targetDays; $i++) {
-                    
-                    $taskStartTime = $i == 0 ? $planMember['createdTime'] : strtotime("+{$i} day", $planMember['createdTime']);
+
+                    $taskStartTime = $i == 0 ? $planStartTime : strtotime("+{$i} day", $planStartTime);
 
                     $weekDay = date('w', $taskStartTime);
                     if (!in_array($weekDay, $availableDate)) {
@@ -137,6 +140,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     }
 
                     if ($perDayStudyTime < $availableHours) {
+                        if ($perDayStudyTime == 0) {
+                            $taskStartTime = strtotime("-1 day", $taskStartTime);
+                        }
                         $taskEndTime = $taskStartTime;
                     } 
                     else if ($perDayStudyTime == $availableHours) {
@@ -152,7 +158,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                         $i++;
                     }
 
-                    $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00');
+                    $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00') + $j;
                     $taskInfo['taskEndTime'] = strtotime(date('Y-m-d',$taskEndTime).' 23:59:59');
 
                     //$taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
@@ -200,7 +206,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     }
                 }
                 unset($taskInfo['completedTime']);
-                
+                $j += 10;
             }
             //删除更新后不存在的任务
             if ($type == 'update') {
@@ -218,7 +224,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
     private function _updateUserTasks($newTaskIds, $userId, $batchId)
     {
         $tasks = $this->getTaskService()->findUserTasksByBatchIdAndTasktype($userId, $batchId, 'studyPlan'); 
-        //print_r($tasks);
+        
         if ($tasks) {
             foreach ($tasks as $key => $task) {
                 if (!in_array($task['id'], $newTaskIds)) {
