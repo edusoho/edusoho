@@ -333,9 +333,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $path;
     }
 
-    protected function plainText($text)
+    protected function plainText($text, $count)
     {
-        return $text;
+        return mb_substr($text, 0, $count);
     }
 
     protected function getCourseService()
