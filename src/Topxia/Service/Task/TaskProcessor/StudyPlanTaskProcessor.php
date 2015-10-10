@@ -131,7 +131,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
                 //获取任务执行时间
                 for ($i = $i; $i <= $targetDays; $i++) {
-                    
+
                     $taskStartTime = $i == 0 ? $planStartTime : strtotime("+{$i} day", $planStartTime);
 
                     $weekDay = date('w', $taskStartTime);
@@ -140,6 +140,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     }
 
                     if ($perDayStudyTime < $availableHours) {
+                        if ($perDayStudyTime == 0) {
+                            $taskStartTime = strtotime("-1 day", $taskStartTime);
+                        }
                         $taskEndTime = $taskStartTime;
                     } 
                     else if ($perDayStudyTime == $availableHours) {
@@ -158,8 +161,8 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00') + $j;
                     $taskInfo['taskEndTime'] = strtotime(date('Y-m-d',$taskEndTime).' 23:59:59');
 
-                    //$taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
-                    //$taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
+                    $taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
+                    $taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
                     
                     break;
                 }
@@ -221,7 +224,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
     private function _updateUserTasks($newTaskIds, $userId, $batchId)
     {
         $tasks = $this->getTaskService()->findUserTasksByBatchIdAndTasktype($userId, $batchId, 'studyPlan'); 
-        //print_r($tasks);
+        
         if ($tasks) {
             foreach ($tasks as $key => $task) {
                 if (!in_array($task['id'], $newTaskIds)) {
