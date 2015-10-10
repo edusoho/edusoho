@@ -1,21 +1,37 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 {% if is_trial() %}
+  <script>
+    var _hmt = _hmt || [];
+  </script>
+  <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
   <div class="row form-group">
     <div class="help-block">
-      <script>
-          var _hmt = _hmt || [];
-      </script>
-      <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
-      <p style = "text-align: left;font-size:18px">&nbsp&nbsp欢迎使用，试用将于 <span style="color:#fed032;"> {% if trialTime.endTime is defined %}{{trialTime.endTime|date("Y年m月d日")}} {% else %} 未知时间{% endif %}</span> 到期,剩余 <span style="color:#fed032;">{% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}未知{% endif %}</span> 天。</p>
-      <p style = "text-align: left;font-size:18px">&nbsp
-      您可以联系销售人员购买授权版本，或者延长试用期限。
-      电话：0571-86819929 或 <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
-      <script type="text/javascript">
-          BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
-      </script>
+      <p style = "text-align: left;font-size:18px">
+        &nbsp&nbsp欢迎使用，试用将于 
+        <span style="color:#fed032;"> 
+          {% if trialTime.endTime is defined %}
+            {{trialTime.endTime|date("Y年m月d日")}} 
+          {% else %} 
+            未知时间
+          {% endif %}
+        </span> 
+        到期,剩余 
+        <span style="color:#fed032;">
+          {% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}未知{% endif %}
+        </span> 天。
+      </p>
+      <p style = "text-align: left;font-size:18px">
+        &nbsp您可以联系销售人员购买授权版本，或者延长试用期限。电话：0571-86819929 或 
+        <span>
+          <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
+        </span>
       </p>
     </div>
   </div>
+
+  <script type="text/javascript">
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
+  </script>
 {% else %}
   <div class="col-md-12">
     <div class="main-system-alert">
@@ -28,3 +44,4 @@
     </div>
   </div>
 {% endif %}
+
