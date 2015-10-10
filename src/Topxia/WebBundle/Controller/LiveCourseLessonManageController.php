@@ -50,7 +50,6 @@ class LiveCourseLessonManageController extends BaseController
 
 			$liveLesson['mediaId'] = $live['id'];
 			$liveLesson['liveProvider'] = $live['provider'];
-			$liveLesson['suggestHours'] = $liveLesson['timeLength'] / 60;
 			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
 
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(

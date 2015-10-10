@@ -1034,6 +1034,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
 		if ($lesson['type'] == 'live') {
 			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
+			$lesson['suggestHours'] = $lesson['length'] / 60;
 		}
 		
 		$lesson = $this->getLessonDao()->addLesson(
