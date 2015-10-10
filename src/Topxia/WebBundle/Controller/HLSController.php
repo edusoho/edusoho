@@ -222,6 +222,8 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
+        var_dump(!empty($token['data']['keyencryption']));
+        exit();
         if (!empty($token['data']['keyencryption'])) {
             new Response('1'.$file['convertParams']['hlsKey']);
         }
