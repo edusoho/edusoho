@@ -23,15 +23,32 @@ class EditorController extends BaseController
 
             $file = $request->files->get('upload');
 
+
+            $mimeType = finfo_file(finfo_open(FILEINFO_MIME),$file);
+
             if ($token['type'] == 'image') {
                 if (!FileToolkit::isImageFile($file)) {
                     throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
                 }
+
+                $result = strpos($mimeType, 'image');
+                $isPicture = is_int($result);
+                if ($isPicture == false){
+                throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
+                }
+
             } elseif ($token['type'] == 'flash') {
                 $errors = FileToolkit::validateFileExtension($file, 'swf');
                 if (!empty($errors)) {
                     throw new \RuntimeException("您上传的不是Flash文件，请重新上传。");
                 }
+
+                $result = strpos($mimeType, 'application/x-shockwave-flash');
+                $isFlash = is_int($result);
+                if ($isFlash == false){
+                throw new \RuntimeException("您上传的不是Flash文件，请重新上传。");
+                }
+
             } else {
                 throw new \RuntimeException("上传类型不正确！");
             }
