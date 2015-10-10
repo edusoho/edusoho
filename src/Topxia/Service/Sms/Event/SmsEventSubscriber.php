@@ -52,7 +52,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
     {
         $order = $event->getSubject();
         $targetType = $event->getArgument('targetType');
-        $smsType = 'sms_'.$targetType.'_buy';
+        $smsType = 'sms_'.$targetType.'_buy_notify';
         if ($this->getSmsService()->isOpen($smsType)) {
             $userId = $order['userId'];
             $user = $this->getUserService()->getUser($userId);

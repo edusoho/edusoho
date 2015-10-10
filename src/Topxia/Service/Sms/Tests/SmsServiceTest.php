@@ -28,10 +28,10 @@ class SmsServiceTest extends BaseTestCase
 	        'sms_homework_check' => 'off',
 	        'sms_testpaper_check' => 'off',
 	        'sms_order_pay_success' => 'off',
-	        'sms_course_buy' => 'off',
-	        'sms_classroom_buy' => 'off',
-	        'sms_vip_buy' => 'off',
-	        'sms_coin_buy' => 'off',
+	        'sms_course_buy_notify' => 'off',
+	        'sms_classroom_buy_notify' => 'off',
+	        'sms_vip_buy_notify' => 'off',
+	        'sms_coin_buy_notify' => 'off',
        	);
        $this->getSettingService()->set('cloud_sms', $dataUserPosted);
        $isOpen = $this->getSmsService()->isOpen('sms_normal_lesson_publish');

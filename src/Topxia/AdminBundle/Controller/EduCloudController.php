@@ -114,21 +114,21 @@ class EduCloudController extends BaseController
                 'sms_homework_check' => 'off',
                 'sms_testpaper_check' => 'off',
                 'sms_order_pay_success' => 'off',
-                'sms_course_buy' => 'off',
-                'sms_classroom_buy' => 'off',
-                'sms_vip_buy' => 'off',
-                'sms_coin_buy' => 'off',
+                'sms_course_buy_notify' => 'off',
+                'sms_classroom_buy_notify' => 'off',
+                'sms_vip_buy_notify' => 'off',
+                'sms_coin_buy_notify' => 'off',
             );
             if ($dataUserPosted['sms_order_pay_success'] == 'on') {
-                $dataUserPosted['sms_course_buy'] = 'on';
-                $dataUserPosted['sms_classroom_buy'] = 'on';
-                $dataUserPosted['sms_vip_buy'] = 'on';
-                $dataUserPosted['sms_coin_buy'] = 'on';
+                $dataUserPosted['sms_course_buy_notify'] = 'on';
+                $dataUserPosted['sms_classroom_buy_notify'] = 'on';
+                $dataUserPosted['sms_vip_buy_notify'] = 'on';
+                $dataUserPosted['sms_coin_buy_notify'] = 'on';
             } else {
-                $dataUserPosted['sms_course_buy'] = 'off';
-                $dataUserPosted['sms_classroom_buy'] = 'off';
-                $dataUserPosted['sms_vip_buy'] = 'off';
-                $dataUserPosted['sms_coin_buy'] = 'off';
+                $dataUserPosted['sms_course_buy_notify'] = 'off';
+                $dataUserPosted['sms_classroom_buy_notify'] = 'off';
+                $dataUserPosted['sms_vip_buy_notify'] = 'off';
+                $dataUserPosted['sms_coin_buy_notify'] = 'off';
             }
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
