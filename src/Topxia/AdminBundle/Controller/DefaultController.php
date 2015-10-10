@@ -112,6 +112,24 @@ class DefaultController extends BaseController
 
     public function getCloudNoticesAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            $domain = $this->generateUrl('homepage',array(),true);
+            $api = CloudAPIFactory::create('root');
+            $result = $api->get('/trial/remainDays',array('domain' => $domain));
+
+            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+                "trialTime" => (isset($result)) ? $result : null,
+            ));
+
+        } else {
+            $notices = $this->getNoticesFromOpen();
+            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+                "notices" => $notices,
+            ));
+        }
+    }
+
+    private function getNoticesFromOpen(){
         $userAgent = 'Open EduSoho App Client 1.0';
         $connectTimeout = 10;
         $timeout = 10;
@@ -126,19 +144,7 @@ class DefaultController extends BaseController
         $notices = curl_exec($curl);
         curl_close($curl);
         $notices = json_decode($notices, true);
-        $api = CloudAPIFactory::create('root');
-        if ($this->getWebExtension()->isTrial()) {
-            $canTrial = "canGetDays";
-            $domain = $this->generateUrl('homepage',array(),true);
-            $result = $api->get('/trial/remainDays',array('domain' => $domain));
-
-        }
-
-        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
-            "notices" => $notices,
-            "trialTime" => (isset($result)) ? $result : null,
-            "canTrial" => (isset($canTrial)) ? $canTrial : null,
-        ));
+        return $notices;
     }
 
     public function officialMessagesAction()

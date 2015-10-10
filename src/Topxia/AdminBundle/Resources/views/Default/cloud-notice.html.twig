@@ -1,13 +1,11 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
-  {% if is_trial() %}
+{% if is_trial() %}
   <div class="row form-group">
     <div class="help-block">
-    <script>
-        var _hmt = _hmt || [];
-    </script>
-    <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
-
-
+      <script>
+          var _hmt = _hmt || [];
+      </script>
+      <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
       <p style = "text-align: left;font-size:18px">&nbsp&nbsp欢迎使用，试用将于 <span style="color:#fed032;"> {% if trialTime.endTime is defined %}{{trialTime.endTime|date("Y年m月d日")}} {% else %} 未知时间{% endif %}</span> 到期,剩余 <span style="color:#fed032;">{% if trialTime.remainDays is defined %} {{ trialTime.remainDays }} {% else %}未知{% endif %}</span> 天。</p>
       <p style = "text-align: left;font-size:18px">&nbsp
       您可以联系销售人员购买授权版本，或者延长试用期限。
@@ -16,12 +14,9 @@
           BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
       </script>
       </p>
-      </br>
     </div>
   </div>
-  {% endif %}
-
-  {% if notices %}
+{% else %}
   <div class="col-md-12">
     <div class="main-system-alert">
       <h2> 站长公告</h2>
@@ -32,7 +27,4 @@
         </ul>
     </div>
   </div>
-
-
-
-  {% endif %}
+{% endif %}
