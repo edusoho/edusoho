@@ -156,9 +156,6 @@ class HLSController extends BaseController
             $tokenFields['data']['keyencryption'] = 1;
         }
 
-        var_dump( $tokenFields);
-        exit();
-
         if(!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
         }
@@ -225,7 +222,8 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
-        $manclient = $request->headers->get('manclient', '');
+        var_dump($token['data']['keyencryption']);
+        exit();
         if (!empty($token['data']['keyencryption'])) {
             new Response('1'.$file['convertParams']['hlsKey']);
         }
