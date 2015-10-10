@@ -1,4 +1,4 @@
-<div class="ui-course top-header" style="padding-bottom: 58px;">
+<div class="ui-course top-header ui-scroller" style="padding-bottom: 58px;">
     <div class="course-head-body">
         <div class="course-head">
             <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course" />
@@ -30,7 +30,7 @@
                     </s>
                 </span>
             </p>
-            <div class="discount-block ui-border-t">
+            <div class="discount-block ui-border-t" ng-if="discount">
                 <p class="course-price ui-nowrap">
                     <span ng-if="discount" class="discount-type discount">
                         {{ discount.type | coverDiscount : course.discount }}
