@@ -100,7 +100,6 @@ define(function(require, exports, module) {
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.item-actions .delete-lesson-btn').parent().addClass('hidden').removeClass('show');
-                $(id).find('.item-actions .sms-send-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时发布成功！');
             });
@@ -114,7 +113,6 @@ define(function(require, exports, module) {
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');
-                $(id).find('.item-actions .sms-send-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时已取消发布！');
             });
