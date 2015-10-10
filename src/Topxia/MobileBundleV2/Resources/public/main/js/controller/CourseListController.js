@@ -11,17 +11,16 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
     $scope.start = $scope.start || 0;
 
     console.log("CourseListController");
-      $scope.loadMore = function(){
-            if (! $scope.canLoad) {
-              return;
-            }
-           setTimeout(function() {
-              $scope.loadCourseList($stateParams.sort);
-           }, 200);
-         
+      $scope.loadMore = function(successCallback){
+        if (! $scope.canLoad) {
+            return;
+        }
+        setTimeout(function() {
+            $scope.loadCourseList($stateParams.sort, successCallback);
+        }, 200);
       };
 
-      $scope.loadCourseList = function(sort) {
+      $scope.loadCourseList = function(sort, successCallback) {
              $scope.showLoad();
               CourseService.searchCourse({
                 limit : 10,
@@ -31,6 +30,9 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
                 type : $stateParams.type
               }, function(data) {
                         $scope.hideLoad();
+                        if (successCallback) {
+                          successCallback();
+                        }
                         var length  = data ? data.data.length : 0;
                         if (!data || length == 0 || length < 10) {
                             $scope.canLoad = false;

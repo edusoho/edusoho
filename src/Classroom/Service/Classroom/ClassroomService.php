@@ -98,6 +98,8 @@ interface ClassroomService
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
+    public function findMemberUserIdsByClassroomId($classroomId);
+
     public function getClassroomMember($classroomId, $userId);
 
     public function remarkStudent($classroomId, $userId, $remark);

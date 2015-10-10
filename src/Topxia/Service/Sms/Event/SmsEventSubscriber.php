@@ -13,7 +13,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.check' => 'onTestpaperCheck',
+            'testpaper.reviewed' => 'onTestpaperReviewed',
             'order.pay.success' => 'onOrderPaySuccess',
             'course.lesson.publish' => 'onCourseLessonPublish',
             'course.lesson.updateStartTime' => 'onCourseLessonUpdateStartTime',
@@ -22,7 +22,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function onTestpaperCheck(ServiceEvent $event)
+    public function onTestpaperReviewed(ServiceEvent $event)
     {
         $parameters = array();
         $smsType = 'sms_testpaper_check';

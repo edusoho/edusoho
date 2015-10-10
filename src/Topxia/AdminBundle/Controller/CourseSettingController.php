@@ -42,6 +42,7 @@ class CourseSettingController extends BaseController
             'userinfoFields' => array(),
             "userinfoFieldNameArray" => array(),
             "copy_enabled" => '0',
+            "testpaperCopy_enabled" => '0',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
