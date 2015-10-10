@@ -193,9 +193,7 @@ class AppController extends BaseController
         }
 
         $showType=$request->query->get("showType");
-        if ($this->getWebExtension()->isTrial()) {
-            $canTrial = "appCanTrial";
-        }
+
         return $this->render('TopxiaAdminBundle:App:center.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
@@ -203,7 +201,6 @@ class AppController extends BaseController
             'installedApps' => $installedApps,
             'type' => $postStatus,
             'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null,
-            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
@@ -269,9 +266,6 @@ class AppController extends BaseController
             }
         }
 
-        if ($this->getWebExtension()->isTrial()) {
-            $canTrial = "appCanTrial";
-        }
 
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
@@ -279,7 +273,6 @@ class AppController extends BaseController
             'plugin' => $plugin,
             'type' => $postStatus,
             'appMeta' => $appMeta,
-            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
@@ -299,13 +292,9 @@ class AppController extends BaseController
             return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
         }
         $version = $this->getAppService()->getMainVersion();
-        if ($this->getWebExtension()->isTrial()) {
-            $canTrial = "appCanTrial";
-        }
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
             'version' => $version,
-            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
@@ -330,15 +319,10 @@ class AppController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-
-        if ($this->getWebExtension()->isTrial()) {
-            $canTrial = "appCanTrial";
-        }
         return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
             'logs' => $logs,
             'users' => $users,
             'paginator' => $paginator,
-            'canTrial' => (isset($canTrial)) ? $canTrial : null,
         ));
     }
 
