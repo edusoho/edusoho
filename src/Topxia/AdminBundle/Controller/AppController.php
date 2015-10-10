@@ -37,8 +37,7 @@ class AppController extends BaseController
             $articles = json_decode($articles, true);
 
             if ($this->getWebExtension()->isTrial()) {
-                $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
-                $trialHtml = json_decode($trial,true);
+                $trialHtml = $this->getCloudCenterExperiencePage();
                 return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                     'articles' => $articles,
                     'trial' => $trialHtml['content'],
@@ -108,8 +107,7 @@ class AppController extends BaseController
         $notices = json_decode($notices, true);
 
         if ($this->getWebExtension()->isTrial()) {
-            $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
-            $trialHtml = json_decode($trial,true);
+            $trialHtml = $this->getCloudCenterExperiencePage();
         }
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
@@ -325,6 +323,13 @@ class AppController extends BaseController
             'paginator' => $paginator,
         ));
     }
+    
+    protected function getCloudCenterExperiencePage()
+    {
+        $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
+        $trialHtml = json_decode($trial,true);
+        return $trialHtml;
+    } 
 
     protected function getAppService()
     {
