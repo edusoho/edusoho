@@ -31,6 +31,10 @@ class FinanceSettingController extends BaseController
             'wxpay_key' => '',
             'wxpay_secret' => '',
             'wxpay_account' => '',
+            'heepay_enabled' => 0,
+            'heepay_key' => '',
+            'heepay_secret' => '',
+            'heepay_account' => ''
         );
 
         $payment = array_merge($default, $payment);
@@ -40,6 +44,8 @@ class FinanceSettingController extends BaseController
             $payment['alipay_secret'] = trim($payment['alipay_secret']);
             $payment['wxpay_key'] = trim($payment['wxpay_key']);
             $payment['wxpay_secret'] = trim($payment['wxpay_secret']);
+            $payment['heepay_key'] = trim($payment['heepay_key']);
+            $payment['heepay_secret'] = trim($payment['heepay_secret']);
 
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);

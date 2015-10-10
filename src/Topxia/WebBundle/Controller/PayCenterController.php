@@ -87,6 +87,7 @@ class PayCenterController extends BaseController
 	{
 		$fields = $request->request->all();
 		$user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
@@ -109,7 +110,6 @@ class PayCenterController extends BaseController
 		if ($order['status'] == 'paid') {
             $processor = OrderProcessorFactory::create($order["targetType"]);
             $router = $processor->getRouter();
-
             return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
         } else {
 
@@ -118,7 +118,6 @@ class PayCenterController extends BaseController
                 'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
                 'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
             );
-
             return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
                 'order' => $order,
                 'requestParams' => $payRequestParams,
@@ -127,10 +126,9 @@ class PayCenterController extends BaseController
 	}
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
-    {
+    {   
         $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
-
         $payData = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
@@ -161,7 +159,8 @@ class PayCenterController extends BaseController
     public function payNotifyAction(Request $request, $name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-        if ($name == 'alipay') {
+        
+        if ($name == 'alipay' || 'heepay') {
             $response = $this->createPaymentResponse($name, $request->request->all());
         }
         elseif ($name == 'wxpay') {
@@ -238,13 +237,12 @@ class PayCenterController extends BaseController
         $formRequest = $paymentRequest->form();
         $params = $formRequest['params'];
         $payment = $request->request->get('payment');
-        if ($payment == 'alipay') {
+        if ($payment == 'alipay' || 'heepay') {
             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
                 'form' => $paymentRequest->form(),
                 'order' => $order,
             ));
-        }
-        elseif ($payment == 'wxpay') {
+        }elseif ($payment == 'wxpay') {
             $returnXml = $paymentRequest->unifiedOrder();
             if(!$returnXml){
                 throw new \RuntimeException("xml数据异常！");
@@ -393,13 +391,12 @@ class PayCenterController extends BaseController
                 'type' => $settings["{$payment}_type"]
             );
         }
-        elseif ($payment == 'wxpay') {
+        elseif ($payment == 'wxpay' || 'heepay') {
             $options = array(
                 'key' => $settings["{$payment}_key"],
                 'secret' => $settings["{$payment}_secret"]
             );
         }
-
         return $options;
     }
 
@@ -407,7 +404,6 @@ class PayCenterController extends BaseController
     {
         $options = $this->getPaymentOptions($name);
         $response = Payment::createResponse($name, $options);
-
         return $response->setParams($params);
     }
 
@@ -422,12 +418,11 @@ class PayCenterController extends BaseController
         $enableds = array();
 
         $setting = $this->setting('payment', array());
-
         if (empty($setting['enabled'])) {
             return $enableds;
         }
 
-        $payNames = array('alipay','wxpay');
+        $payNames = array('alipay','wxpay','heepay');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(

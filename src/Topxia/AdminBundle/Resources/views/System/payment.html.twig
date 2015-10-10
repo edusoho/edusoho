@@ -19,14 +19,14 @@
     </div>
   </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="disabled_message">支付关闭时的提示信息</label>
-      </div>
-      <div class="controls col-md-8">
-        <textarea id="disabled_message" name="disabled_message" class="form-control">{{payment.disabled_message}}</textarea>
-      </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="disabled_message">支付关闭时的提示信息</label>
     </div>
+    <div class="controls col-md-8">
+      <textarea id="disabled_message" name="disabled_message" class="form-control">{{payment.disabled_message}}</textarea>
+    </div>
+  </div>
 
 
   <fieldset>
@@ -94,10 +94,9 @@
         <div class="help-block">该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。</div>
       </div>
     </div>
-
   </fieldset>
 
-    <fieldset>
+  <fieldset>
     <legend>微信支付</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
@@ -137,7 +136,48 @@
         <input type="text" id="wxpay_account" name="wxpay_account" class="form-control" value="{{payment.wxpay_account}}">
       </div>
     </div>
+  </fieldset>
 
+  <fieldset>
+    <legend>汇付宝支付</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>接口状态</label>
+      </div>
+      <div class="controls col-md-3 radios">
+        {{ radios('heepay_enabled', {1:'开启', 0:'关闭'}, payment.heepay_enabled) }}
+      </div>
+      <div class="controls col-md-4 radios">
+        <a href="javascript:;">简单申请介绍</a>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="heepay_key">PID</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="heepay_key" name="heepay_key" class="form-control" value="{{payment.heepay_key}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="heepay_key">商户平台Key</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="heepay_secret" name="heepay_secret" class="form-control" value="{{payment.heepay_secret}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="heepay_key">商户号</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="heepay_account" name="heepay_account" class="form-control" value="{{payment.heepay_account}}">
+      </div>
+    </div>
   </fieldset>
 
   <div class="form-group">
@@ -146,7 +186,6 @@
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>
-
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>

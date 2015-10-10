@@ -10,14 +10,14 @@ class HeepayRequest extends Request {
     public function form()
     {
         $form = array();
-        $form['action'] = $this->url . '?_input_charset=utf-8';
+        $form['action'] = $this->url;
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
         return $form;
     }
-
+ 
     public function signParams($params) {
-        unset($params['goods_name'],$params['remark']);
+        unset($params['pay_code'],$params['goods_name'],$params['remark']);
         $sign = '';
         foreach ($params as $key => $value) {
             if (empty($value)) {
@@ -25,22 +25,19 @@ class HeepayRequest extends Request {
             }
             $sign .= $key . '=' . $value . '&';
         }
-        $sign = substr($sign, 0, - 1);
-        $sign .='&'.$this->options['secret'];
-        var_dump($sign);
-        exit();
+        $sign .='key='.$this->options['secret'];
         return md5($sign);
     }
 
     protected function convertParams($params)
     {
         $converted = array();
-
         $converted['version'] = 1;
         $converted['agent_id'] = $this->options['key'];
-        $converted['agent_bill_id']= $params['orderSn'];
+        $converted['agent_bill_id']= strtolower($params['orderSn']);
         $converted['agent_bill_time']=date("YmdHis",time());
-        $converted['pay_type'] = 20;
+        $converted['pay_type']='20';
+        $converted['pay_code']='0';
         $converted['pay_amt'] = $params['amount'];
         if (!empty($params['notifyUrl'])) {
             $converted['notify_url'] = $params['notifyUrl'];
@@ -49,8 +46,7 @@ class HeepayRequest extends Request {
             $converted['return_url'] = $params['returnUrl'];
         }
         $converted['user_ip']=str_replace(".", "_", $this->get_client_ip());
-        $converted['is_test']=1;
-        $converted['goods_name']=$this->filterText($params['title']);
+        $converted['goods_name']=urlencode(mb_substr($this->filterText($params['title']), 0, 50, 'utf-8'));
         $converted['remark']='';
         $converted['sign'] = $this->signParams($converted);
         return $converted;
@@ -59,11 +55,6 @@ class HeepayRequest extends Request {
     protected function filterText($text)
     {
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
-    }
-
-    private function getPaymentType()
-    {
-        return empty($this->options['type']) ? 'direct' : $this->options['type'];
     }
 
     private function get_client_ip()
