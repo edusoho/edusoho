@@ -1026,7 +1026,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		// 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
-		$lesson['status'] = $course['status'] == 'published' ? 'unpublished' : 'published';
+		$lesson['status'] = 'unpublished';
 		$lesson['free'] = empty($lesson['free']) ? 0 : 1;
 		$lesson['number'] = $this->getNextLessonNumber($lesson['courseId']);
 		$lesson['seq'] = $this->getNextCourseItemSeq($lesson['courseId']);
