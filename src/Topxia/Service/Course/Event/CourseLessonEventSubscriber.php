@@ -24,14 +24,14 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonCreate(ServiceEvent $event)
     {
-        $context = $event->getSubject();
+        $lesson = $event->getSubject();
 
-        $courseId = $context["courseId"];
+        $courseId = $lesson['courseId'];
         $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
         foreach ($classroomIds as  $classroomId) {
             $classroom = $this->getClassroomService()->getClassroom($classroomId);
             $lessonNum = $classroom['lessonNum']+1;
-            $this->getClassroomService()->updateClassroom($classroomId, array("lessonNum" => $lessonNum));
+            $this->getClassroomService()->updateClassroom($classroomId, array('lessonNum' => $lessonNum));
         }
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
@@ -40,14 +40,13 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             foreach ($classroomIds as  $classroomId) {
                 $classroom = $this->getClassroomService()->getClassroom($classroomId);
                 $lessonNum = $classroom['lessonNum']+1;
-                $this->getClassroomService()->updateClassroom($classroomId, array("lessonNum" => $lessonNum));
+                $this->getClassroomService()->updateClassroom($classroomId, array('lessonNum' => $lessonNum));
             }
         }
         
-        $lesson = $context["lesson"];
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
         foreach ($courseIds as $courseId) {
-            $this->getCourseService()->editCourse($courseId, array("lessonNum"=>$course['lessonNum']));
+            $this->getCourseService()->editCourse($courseId, array('lessonNum'=>$course['lessonNum']));
         }
         if (!empty($courseIds)){
             $lesson ['parentId'] = $lesson ['id'];
