@@ -262,6 +262,8 @@ interface CourseService
 
 	public function searchMemberIds($conditions, $sort, $start, $limit);
 
+	public function findMemberUserIdsByCourseId($courseId);
+
 	public function updateCourseMember($id, $fields);
 
 	public function isMemberNonExpired($course, $member);
