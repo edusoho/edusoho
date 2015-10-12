@@ -36,4 +36,6 @@ interface TokenService
     public function destoryToken($value);
 
     public function deleteExpiredTokens($limit);
+
+    public function findTokensByUserIdAndType($userId, $type);
 }

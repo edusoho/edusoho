@@ -11,6 +11,10 @@
 
 {% block main %}
 
+{% if type == 'foot' %}
+<div class="alert alert-info"><i class="glyphicon glyphicon-info-sign"></i> 清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往 <a class="text-info" style="font-weight:bold;" href="{{ path('admin_block', {category:'theme'}) }}">［运营］－［编辑区管理］</a> 中进行编辑。</div>
+{% endif %}
+
 <table id="navigation-table" class="table table-striped table-hover navigation-table">
 	<thead>
 	  <tr>

@@ -11,6 +11,7 @@ define(function(require, exports, module) {
         attrs: {
             dataTo: 'mobile',
             smsType: 'sms_registration',
+            captchaNum: 'captcha_num',
         },
         events: {
             'click #getcode_num': 'changeCaptcha'
@@ -41,6 +42,7 @@ define(function(require, exports, module) {
                                 url: $('.js-sms-send').data('smsUrl'),
                                 smsType: self.get('smsType'),
                                 dataTo : self.get('dataTo'),
+                                captchaNum : self.get('captchaNum'),
                                 captcha: true,
                                 captchaValidated: self._captchaValidated,
                                 preSmsSend: function(){

@@ -1,5 +1,15 @@
 <?php
-
+// 尚存在问题：
+// 1.vendor不存在导致升级检测失败报错
+// 2.topxia:build命令没有打包新的api目录，打包6.5.5时需要修改该命令
+// 3.执行打包命令需要在项目根目录下存在installFiles文件夹
+// 4.如果遇到要打版本不同的问题，检查
+// web/install/edusoho_init.sql中的cloud_app数据的版本，
+// systeminfo，
+// app/config/config.yml，
+// CHANGELOG各自的版本
+// 5.包太大可能导致上传脚本失败
+// 6.打包代码都在feature/install-data
 use Composer\Autoload\ClassLoader;
 
 require __DIR__.'/../../vendor2/autoload.php';
@@ -11,11 +21,11 @@ $twig = new Twig_Environment($loader, array(
 
 $twig->addGlobal('edusho_version', \Topxia\System::VERSION);
 
-$step =intval(empty($_GET['step']) ? 0 : $_GET['step']);
-
+$step = intval(empty($_GET['step']) ? 0 : $_GET['step']);
+$init_data = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
 $functionName = 'install_step' . $step;
 
-$functionName();
+$functionName($init_data);
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
@@ -34,7 +44,7 @@ function check_installed()
     }
 }
 
-function install_step0()
+function install_step0($init_data = 0)
 {
     check_installed();
 
@@ -42,7 +52,7 @@ function install_step0()
     echo $twig->render('step-0.html.twig', array('step' => 0));
 }
 
-function install_step1()
+function install_step1($init_data = 0)
 {
     check_installed();
     global $twig;
@@ -110,7 +120,7 @@ function install_step1()
     ));
 }
 
-function install_step2()
+function install_step2($init_data = 0)
 {
     check_installed();
     global $twig;
@@ -119,17 +129,12 @@ function install_step2()
     $post = array();
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
         $post = $_POST;
-
-        $replace = empty($_POST['database_replace']) ? false : true;
-
-        $error = _create_database($_POST, $replace);
-        if (empty($error)) {
-            $error = _create_config($_POST);
-        }
-        if (empty($error)) {
-            header("Location: start-install.php?step=3");
-            exit(); 
-        }
+        $post['index'] = empty($_GET['index']) ? 0 : $_GET['index'];
+        $replace = empty($post['database_replace']) ? false : true;
+        $result = _create_database($post, $replace);
+        
+        echo json_encode($result);
+        exit();
     }
 
     echo $twig->render('step-2.html.twig', array(
@@ -139,7 +144,7 @@ function install_step2()
     ));
 }
 
-function install_step3()
+function install_step3($init_data = 0)
 {
     check_installed();
     global $twig;
@@ -158,27 +163,41 @@ function install_step3()
     if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 
         $init = new SystemInit();
+        if (!empty($init_data)) {
+            $connection->exec("delete from `user` where id=1;");
+            $connection->exec("delete from `user_profile` where id=1;");
+        }
         $admin = $init->initAdmin($_POST);
+
         $init->initSiteSettings($_POST);
-        $init->initRegisterSetting($admin);
-        $init->initMailerSetting($_POST['sitename']);
-        $init->initPaymentSetting();
-        $init->initStorageSetting();
-        $init->initTag();
-        $init->initCategory();
-        $init->initFile();
-        $init->initPages();
-        $init->initNavigations();
-        $init->initBlocks();
-        $init->initThemes();
+        if (empty($init_data)) {
+            $init->initRegisterSetting($admin);
+            $init->initMailerSetting($_POST['sitename']);
+            $init->initPaymentSetting();
+            $init->initStorageSetting();
+            $init->initTag();
+            $init->initCategory();
+            $init->initFile();
+            $init->initPages();
+            $init->initNavigations();
+            $init->initBlocks();
+            $init->initThemes();
+            $init->initRefundSetting();
+            $init->initArticleSetting();
+            $init->initDefaultSetting();
+            $init->initCrontabJob();
+            $init->initDeveloperSetting();
+        } else {
+            $init->deleteKey();
+            $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
+            $connection->exec("update `user` set id = 1 where nickname = '".$_POST['nickname']."';");
+        }
         $init->initLockFile();
-        $init->initRefundSetting();
-        $init->initArticleSetting();
-        $init->initDefaultSetting();
 
         header("Location: start-install.php?step=4");
         exit();
     }
+
 
     echo $twig->render('step-3.html.twig', array(
         'step' => 3,
@@ -187,7 +206,7 @@ function install_step3()
     ));
 }
 
-function install_step4()
+function install_step4($init_data = 0)
 {
     global $twig;
     
@@ -212,11 +231,26 @@ function install_step4()
     ));
 }
 
+<<<<<<< HEAD
+=======
+function install_step5($init_data = 0)
+{
+    try {
+        $filesystem = new Filesystem();
+        $filesystem->remove(__DIR__);
+    } catch(\Exception $e) {
+
+    }
+
+    header("Location: ../app.php/");
+    exit(); 
+}
+>>>>>>> master
 
 /**
  * 生产Key
  */
-function install_step999()
+function install_step999($init_data = 0)
 {
     if (empty($_COOKIE['nokey'])) {
         session_start();
@@ -248,20 +282,43 @@ function _create_database($config, $replace)
 {
     try {
         $pdo = new PDO("mysql:host={$config['database_host']};port={$config['database_port']}", "{$config['database_user']}", "{$config['database_password']}");
-
         $pdo->exec("SET NAMES utf8");
 
-        $result = $pdo->exec("create database `{$config['database_name']}`;");
-        if (empty($result) and !$replace) {
-            return "数据库{$config['database_name']}已存在，创建失败，请删除或者勾选覆盖数据库之后再安装！";
+        //仅在第一次进来时初始化数据库表结构
+        if (empty($config['index'])) {
+            $result = $pdo->exec("create database `{$config['database_name']}`;");
+            if (empty($result) and !$replace) {
+                return "数据库{$config['database_name']}已存在，创建失败，请删除或者勾选覆盖数据库之后再安装！";
+            }
+
+            $pdo->exec("USE `{$config['database_name']}`;");
+
+            $sql = file_get_contents('./edusoho.sql');
+            $result = $pdo->exec($sql);
+            if ($result === false) {
+                return "创建数据库表结构失败，请删除数据库后重试！";
+            }
+
+            if (empty($config["database_init"])) {
+                _create_config($config);
+                return array('success' => true);
+            }
         }
 
-        $pdo->exec("USE `{$config['database_name']}`;");
-
-        $sql = file_get_contents('./edusoho.sql');
-        $result = $pdo->exec($sql);
-        if ($result === false) {
-            return "创建数据库表结构失败，请删除数据库后重试！";
+        //每次进来都执行一个演示数据初始化文件
+        if(!empty($config["database_init"]) && $config["database_init"]==1) {
+            $index = $config['index'];
+            if ($index > 0) {
+                $pdo->exec("USE `{$config['database_name']}`;");
+            }
+            _init_data($pdo, $config, $index);
+            $index++;
+            $filesystem = new Filesystem();
+            if (!$filesystem->exists('edusoho_init_'.$index.'.sql')) {
+                _init_auto_increment($pdo, $config);
+                return array('success' => true);
+            }
+            return array('index' => $index);
         }
 
         return null;
@@ -269,6 +326,31 @@ function _create_database($config, $replace)
     } catch (\PDOException $e) {
         return '数据库连接不上，请检查数据库服务器、用户名、密码是否正确!';
     }
+}
+
+function _init_data($pdo, $config, $index)
+{
+    $sql = file_get_contents('./edusoho_init_'.$index.'.sql');
+    $result = $pdo->exec($sql);
+}
+
+function _init_auto_increment($pdo, $config)
+{
+    $sql = "show tables";
+    $results = $pdo->query($sql)->fetchAll();
+    foreach ($results as $result) {
+        $table = $result["0"];
+        $countSql = "select count(*) from {$table}";
+        $sqlPdo = $pdo->query($countSql);
+        if(!empty($sqlPdo)) {
+            $count = $pdo->query($countSql)->fetchColumn(0);
+            if($count>0) {
+                $pdo->exec("alter table {$table} AUTO_INCREMENT={$count};");
+            }
+        }
+    }
+    _create_config($config);
+
 }
 
 function _create_config($config)
@@ -352,6 +434,17 @@ class SystemInit
         $settingService->set('default', $defaultSetting);
     }
 
+    public function deleteKey()
+    {
+        $settings = $this->getSettingService()->get('storage', array());
+        if (!empty($settings['cloud_key_applied'])) {
+            unset($settings['cloud_access_key']);
+            unset($settings['cloud_secret_key']);
+            unset($settings['cloud_key_applied']);
+            $this->getSettingService()->set('storage', $settings);
+        }
+
+    }
     public function initKey()
     {
         $settings = $this->getSettingService()->get('storage', array());
@@ -425,6 +518,12 @@ class SystemInit
         $this->getSettingService()->set('site', $default);
     }
 
+    public function initDeveloperSetting() 
+    {
+        $developer = $this->getSettingService()->get('developer', array());
+        $developer['cloud_api_failover'] = 1;
+        $this->getSettingService()->set('developer', $developer);
+    }
 
     public function initRegisterSetting($user)
     {
@@ -512,7 +611,7 @@ EOD;
         $group = $this->getCategoryService()->addGroup(array(
             'name' => '课程分类',
             'code' => 'course',
-            'depth' => 2,
+            'depth' => 3,
         ));
 
         $this->getCategoryService()->createCategory(array(
@@ -687,6 +786,7 @@ EOD;
             'title'=>'直播频道首页图片轮播'
         ));
 
+<<<<<<< HEAD
         $content = <<<'EOD'
 <a href="#"><img src="../assets/img/placeholder/live-slide-1.jpg" /></a>
 <a href="#"><img src="../assets/img/placeholder/live-slide-2.jpg" /></a>
@@ -697,25 +797,27 @@ EOD;
         $block = $this->getBlockService()->createBlock(array(
             'code'=>'bill_banner',
             'title'=>'我的账户Banner'
+=======
+    public function initCrontabJob()
+    {
+        $this->getCrontabService()->createJob(array(
+            'name'=>'CancelOrderJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+>>>>>>> master
         ));
 
         $this->getCrontabService()->createJob(array(
             'name'=>'DeleteExpiredTokenJob', 
             'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
             'jobParams'=>'',
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
         ));
-
-        // $this->getCrontabService()->createJob(array(
-        //     'name'=>'DeleteSessionJob', 
-        //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
-        //     'jobParams'=>'',
-        //     'nextExcutedTime'=>time(),
-        //     'createdTime'=>time()
-        // ));
 
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
