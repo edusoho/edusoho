@@ -20,8 +20,10 @@ class DefaultController extends BaseController
         if (empty($courses)) {
             $orderBy = 'latest';
             unset($conditions['recommended']);
-            $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+            $recommendedCourses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
+            $courses = $this->addCoursesLatestToRecommended($conditions,$recommendedCourses);
         }
+
 
 
         $coinSetting=$this->getSettingService()->get('coin',array());
@@ -215,6 +217,17 @@ class DefaultController extends BaseController
         unset($conditions['orderBy']);
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
+        $courses = $this->addCoursesLatestToRecommended($conditions,$courses);
+
+        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
+            'orderBy' => $orderBy,
+            'categoryId' => $categoryId,
+            'courses' => $courses
+        ));
+    }
+
+    public function addCoursesLatestToRecommended($conditions,$courses)
+    {
         if(isset($conditions['recommended'])){
             $count = 12 - count($courses);
             if($count > 0){
@@ -225,12 +238,7 @@ class DefaultController extends BaseController
                 }
             }
         }
-
-        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
-            'orderBy' => $orderBy,
-            'categoryId' => $categoryId,
-            'courses' => $courses
-        ));
+        return $courses;
     }
 
     protected function calculateUserLearnProgress($course, $member)

@@ -78,7 +78,7 @@ class CourseController extends CourseBaseController
                     array_push($courses, $notRecommendCourse);
                 }
             }
-        }
+        }//可以独立出一个方法，暂时先等待下一步需求
 		$group = $this->getCategoryService()->getGroupByCode('course');
 		if (empty($group)) {
 			$categories = array();
