@@ -53,8 +53,6 @@ class CourseController extends CourseBaseController
 		$orderBy = $courseSetting['explore_default_orderBy'];
 		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
 		unset($conditions['orderBy']);
-		
-		// $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
 
 		$conditions['parentId'] = 0;
 		$conditions['status'] = 'published';
