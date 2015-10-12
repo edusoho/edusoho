@@ -6,9 +6,11 @@
 <table id="batchnotification-table" class="table table-striped">
           <thead>
             <tr>
-              <th width="60%">站内信通知内容</th>
+              <th width="40%">站内信通知标题</th>
               <th>创建时间</th>
               <th>发布人</th>
+              <th>状态</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -16,9 +18,11 @@
            {% if batchnotifications %}
             {% for batchnotification in batchnotifications %}
             <tr>
-              <td>{{batchnotification.content}}</td>
+              <td><a href="">{{batchnotification.title|raw}}</a></td>
               <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
               <td>{{users[batchnotification.fromId].nickname}}</td>
+              <td>已发布</td>
+              <td>操作你没</td>
             </tr>
             {% endfor %}
           {% endif %}

@@ -11,4 +11,6 @@ interface BatchNotificationDao
 	public function searchBatchNotificationCount($conditions);
 
 	public function searchBatchNotifications($conditions, $orderBy, $start, $limit);
+
+	public function deleteBatchNotification($id);
 }

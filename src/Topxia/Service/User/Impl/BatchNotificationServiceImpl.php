@@ -30,7 +30,34 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         return $this->getBatchNotificationDao()->searchBatchNotifications($conditions, $orderBy, $start, $limit);
     }
     public function checkoutBatchNotification($user){
-        return 0;
+        $conditions = array(
+            'userId' => $user['id']
+            );
+        $notification = $this->getNotificationDao()->searchNotifications($conditions,array('parentId','DESC'),0,1);
+        if(!empty($notification) && $notification[0]['parentId'] != 0){
+            $conditions = array(
+                'id' => $notification[0]['parentId']
+                );
+        }else{
+            $conditions = array(
+                'id' => 0
+                );
+        }
+        $batchNotifications = $this->searchBatchNotifications($conditions,array('createdTime','ASC'),0,9999);
+        if(!empty($batchNotifications)){
+                foreach ($batchNotifications as $key => $batchNotification) {
+                    $notification = array(
+                        'userId'  => $user['id'],
+                        'type'  => $batchNotification['targetType'],
+                        'content' => $batchNotification['content'],
+                        'parentId'  => $batchNotification['id'],
+                        'createdTime'  =>  $batchNotification['createdTime'],
+                        );
+                    $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
+                    $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
+            }
+            return true;
+        }
     }
 
     protected function addBatchNotification($type,$title,$fromId,$content,$targetType,$targetId,$createdTime){
@@ -45,6 +72,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         );
         return $this->getBatchNotificationDao()->addBatchNotification($batchNotification);
     }
+
     protected function getBatchNotificationDao()
     {
         return $this->createDao('User.BatchNotificationDao');
@@ -53,5 +81,18 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getNotificationDao()
+    {
+        return $this->createDao('User.NotificationDao');
+    }
+}
+class NotificationSerialize
+{
+    public static function serialize(array $notification)
+    {
+        $notification['content'] = json_encode($notification['content']);
+        return $notification;
     }
 }

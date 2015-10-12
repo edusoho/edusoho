@@ -433,7 +433,6 @@ admin_batch_notification:
 admin_batch_notification_create:
     name: 群发通知
     parent: admin_batch_notification
-    mode: modal
     group: 2
 admin_announcement:
     name: 网站公告管理
