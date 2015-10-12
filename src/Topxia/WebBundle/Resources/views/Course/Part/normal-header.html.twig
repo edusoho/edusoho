@@ -136,7 +136,7 @@
         {% if course.studentNum >= course.maxStudentNum %}
           <small>(名额已满)</small>
         {% else %}
-          <small>({{ course.maxStudentNum }}名额)</small>
+          <small class="hidden-sm">({{ course.maxStudentNum }}名额)</small>
         {% endif %}
       {% endif %}
     {% else %}
