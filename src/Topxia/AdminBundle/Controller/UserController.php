@@ -37,33 +37,19 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        if (!empty($conditions['StartDate']) || !empty($conditions['EndDate'])) {
-            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate'){
-            $conditions['loginStartTime'] = strtotime($conditions['StartDate']);
-            $conditions['loginEndTime'] = strtotime($conditions['EndDate']);
-            unset($conditions['StartDate']);
-            unset($conditions['EndDate']);
-            }
-            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'registerDate'){
-            $conditions['startTime'] = strtotime($conditions['StartDate']);
-            $conditions['endTime'] = strtotime($conditions['EndDate']);
-            unset($conditions['StartDate']);
-            unset($conditions['EndDate']);
-            }
-        }
-
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->searchUserCount($conditions),
             20
         );
+
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+        
         $app = $this->getAppService()->findInstallApp("UserImporter");
         
         $showUserExport = false;

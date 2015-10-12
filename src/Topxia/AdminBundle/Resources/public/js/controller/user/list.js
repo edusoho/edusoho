@@ -44,58 +44,29 @@ define(function(require, exports, module) {
         });
 
                 var $userSearchForm = $('#user-search-form');
-                var $roles = $userSearchForm.find('[name=roles]').val();
-                var $datePicker = $userSearchForm.find('[name=datePicker]').val();
-                var $keywordType = $userSearchForm.find('[name=keywordType]').val();
-                var $keyword = $userSearchForm.find('[name=keyword]').val();
-                var $keywordUserType = $userSearchForm.find('[name=keywordUserType]').val();
-
-                var $StartDate = $userSearchForm.find('[name=StartDate]').val();
-                var $EndDate = $userSearchForm.find('[name=EndDate]').val();
-
-                function getUnixTime(dateStr)
-                    {
-                        if (dateStr == '') {
-                        return '';
-                        }else{
-                            var newstr = dateStr.replace(/-/g,'/'); 
-                            var date =  new Date(newstr); 
-                            var time_str = date.getTime().toString();
-                        return time_str.substr(0, 10);
-                        }
-                    }
-
-                var $StartDate = getUnixTime($StartDate);
-                var $EndDate = getUnixTime($EndDate);
 
                 $('#user-export').on('click', function() {
                    var self = $(this);
-                   self.attr('data-url', self.attr('data-url')+"?roles="+$roles
-                    +"&keywordType="+$keywordType
-                    +"&keyword="+$keyword
-                    +"&keywordUserType="+$keywordUserType
-                    +"&StartDate="+$StartDate
-                    +"&EndDate="+$EndDate
-                    +"&datePicker="+$datePicker
-                    );
+                   var data = $userSearchForm.serialize();
+                   self.attr('data-url', self.attr('data-url')+"?"+data);
                 });
 
-        $("#StartDate").datetimepicker({
-            autoclose: true
+        $("#startDate").datetimepicker({
+            autoclose: true,
         }).on('changeDate',function(){
-            $("#EndDate").datetimepicker('setStartDate',$("#StartDate").val().substring(0,16));
+            $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
         });
 
-        $("#StartDate").datetimepicker('setEndDate',$("#EndDate").val().substring(0,16));
+        $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
 
-        $("#EndDate").datetimepicker({
-            autoclose: true
+        $("#endDate").datetimepicker({
+            autoclose: true,
         }).on('changeDate',function(){
 
-            $("#StartDate").datetimepicker('setEndDate',$("#EndDate").val().substring(0,16));
+            $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
         });
 
-        $("#EndDate").datetimepicker('setStartDate',$("#StartDate").val().substring(0,16));
+        $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
     };
 
 });

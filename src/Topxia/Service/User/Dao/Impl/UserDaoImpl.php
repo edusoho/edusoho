@@ -114,6 +114,17 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
+        if (isset($conditions['startDate']) || isset($conditions['endDate'])) {
+            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate'){
+            $conditions['loginStartTime'] = strtotime($conditions['startDate']);
+            $conditions['loginEndTime'] = strtotime($conditions['endDate']);
+            }
+            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'registerDate'){
+            $conditions['startTime'] = strtotime($conditions['startDate']);
+            $conditions['endTime'] = strtotime($conditions['endDate']);
+            }
+        }
+
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
