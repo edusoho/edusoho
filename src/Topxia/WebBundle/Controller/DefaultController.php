@@ -14,16 +14,14 @@ class DefaultController extends BaseController
 
     public function indexAction ()
     {
-        $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
-        $recommendedCourses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
+        $conditions = array('status' => 'published', 'parentId' => 0);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
         $orderBy = 'recommendedSeq';
         if (empty($courses)) {
             $orderBy = 'latest';
             unset($conditions['recommended']);
             $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
         }
-        $courses = $this->addCoursesLatestToRecommended($conditions,$recommendedCourses);
-
 
 
         $coinSetting=$this->getSettingService()->get('coin',array());
@@ -211,13 +209,9 @@ class DefaultController extends BaseController
             unset($conditions['categoryId']);
         }
         $orderBy = $conditions['orderBy'];
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-        }
         unset($conditions['orderBy']);
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
-        $courses = $this->addCoursesLatestToRecommended($conditions,$courses);
 
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
             'orderBy' => $orderBy,

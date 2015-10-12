@@ -54,7 +54,6 @@ class CourseController extends CourseBaseController
 		$orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
 		unset($conditions['orderBy']);
 		
-		$conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
 
 		$conditions['parentId'] = 0;
 		$conditions['status'] = 'published';
@@ -69,16 +68,6 @@ class CourseController extends CourseBaseController
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
-		if(isset($conditions['recommended'])){
-            $count = 12 - count($courses);
-            if($count > 0){
-                $conditions['recommended'] = 0;
-                $notRecommendCourses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $count);
-                foreach($notRecommendCourses as $notRecommendCourse){
-                    array_push($courses, $notRecommendCourse);
-                }
-            }
-        }//可以独立出一个方法，暂时先等待下一步需求
 		$group = $this->getCategoryService()->getGroupByCode('course');
 		if (empty($group)) {
 			$categories = array();
