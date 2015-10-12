@@ -67,7 +67,7 @@
         <ul class="nav navbar-nav">
           {% for m in menu_children('admin', 'admin', 1) %}
 
-            {% if m.code != "admin_system" %}
+            {% if m.code not in ["admin_system", "admin_app"] %}
               <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
                 {{ self_macro.menu_link_html(_context, m) }}
               </li>  
