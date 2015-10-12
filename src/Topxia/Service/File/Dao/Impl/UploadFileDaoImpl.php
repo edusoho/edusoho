@@ -55,6 +55,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+            
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
@@ -121,6 +122,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->from($this->table, $this->table)
             ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
+            ->andWhere('targetId IN ( :targets )')
             ->andWhere('type = :type')
             ->andWhere('storage = :storage')
             ->andWhere('filename LIKE :filenameLike')

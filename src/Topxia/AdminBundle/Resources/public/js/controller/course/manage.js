@@ -35,15 +35,21 @@ define(function(require, exports, module) {
 			var chapter_name = $(this).data('chapter') ;
 			var part_name = $(this).data('part') ;
 			var user_name = $(this).data('user') ;
-			if (!confirm('删除课程，将删除课程的'+chapter_name+''+part_name+'、课时、'+user_name+'信息。真的要删除该课程吗？')) {
-				return ;
+			var $this = $(this);
+			if (!confirm('删除课程，将删除课程的'+chapter_name+''+part_name+'、课时、'+user_name+'等信息。真的要删除该课程吗？')) {
+				return;
 			}
-
-			var $tr = $(this).parents('tr');
-			$.post($(this).data('url'), function(){
-				$tr.remove();
+			var $tr = $this.parents('tr');
+			$.post($this.data('url'),function(data){
+				if(data.code > 0){ 
+					Notify.danger(data.message);
+				} else if(data.code == 0){ 
+					$tr.remove();
+					Notify.success(data.message);
+				}else{ 
+					$('.modal').modal('show').html(data); 
+				}
 			});
-
 		});
 
 		$table.find('.copy-course[data-type="live"]').tooltip();
@@ -51,9 +57,6 @@ define(function(require, exports, module) {
 		$table.on('click', '.copy-course[data-type="live"]', function(e) {
 			e.stopPropagation();
 		});
-
-
-
 	};
 
 });
