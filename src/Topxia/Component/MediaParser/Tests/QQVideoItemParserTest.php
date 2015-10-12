@@ -22,6 +22,15 @@ class QQVideoItemParserTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('name', $video);
         $this->assertArrayHasKey('page', $video);
         $this->assertArrayHasKey('files', $video);
+
+        $video = $this->createParser()->parse('http://v.qq.com/page/w/1/e/w0168yk7k1e.html');
+        $this->assertEquals('video', $video['type']);
+        $this->assertEquals('qqvideo', $video['source']);
+        $this->assertEquals('qqvideo:w0168yk7k1e', $video['uuid']);
+        $this->assertArrayHasKey('name', $video);
+        $this->assertArrayHasKey('page', $video);
+        $this->assertArrayHasKey('files', $video);
+
     }
 
     private function createParser()
