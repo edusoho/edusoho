@@ -178,7 +178,21 @@ define( function ( require ) {
                 .replace(/\\varnothing/g, '\\oslash')
                 .replace(/\\gets/g, '\\leftarrow')
                 .replace(/\\because/g, '\\cdot_\\cdot\\cdot')
-                .replace(/\\blacksquare/g, '\\rule{20}{20}');
+                .replace(/\\blacksquare/g, '\\rule{20}{20}')
+                .replace(/\\omicron/g, '\\mathrm{o}')
+                .replace(/\\Alpha/g, '\\mathrm{A}')
+                .replace(/\\Beta/g, '\\mathrm{B}')
+                .replace(/\\Epsilon/g, '\\mathrm{E}')
+                .replace(/\\Zeta/g, '\\mathrm{Z}')
+                .replace(/\\Eta/g, '\\mathrm{H}')
+                .replace(/\\Iota/g, '\\mathrm{I}')
+                .replace(/\\Kappa/g, '\\mathrm{K}')
+                .replace(/\\Mu/g, '\\mathrm{M}')
+                .replace(/\\Nu/g, '\\mathrm{N}')
+                .replace(/\\Omicron/g, '\\mathrm{O}')
+                .replace(/\\Rho/g, '\\mathrm{P}')
+                .replace(/\\Tau/g, '\\mathrm{T}')
+                .replace(/\\Chi/g, '\\mathrm{X}');
             return $source;
         }
 

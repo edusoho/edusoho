@@ -547,7 +547,7 @@ define( function ( require ) {
 
         var list = [
                 "aleph", /*"beth",*/ "daleth", "gimel", "complement", "ell", "eth", "hbar",
-                "hslash", "mho", "partial", "wp", "circledS", "Bbbk", "Finv", "Game",
+                "hslash", "mho", "partial", "wp", "circledS", /*"Bbbk",*/ "Finv", "Game",
                 "Im", "Re"
             ],
             configList = config[ 2 ].options.box.group[ 3 ].items;
