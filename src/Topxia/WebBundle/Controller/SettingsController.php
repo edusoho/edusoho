@@ -791,7 +791,7 @@ class SettingsController extends BaseController
 	public function bindAction(Request $request, $type)
 	{
 		$this->checkBindsName($type);
-		$callback = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+		$callback = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
 		$settings = $this->setting('login_bind');
 		$config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
 		$client = OAuthClientFactory::create($type, $config);
@@ -819,7 +819,7 @@ class SettingsController extends BaseController
 			goto response;
 		}
 
-		$callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+		$callbackUrl = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
 		try {
 			$token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
 		} catch (\Exception $e) {
