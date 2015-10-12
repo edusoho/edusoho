@@ -4,7 +4,6 @@ namespace Topxia\Service\Course\Dao;
 
 interface FavoriteDao
 {
-
     public function getFavorite($id);
 
     public function getFavoriteByUserIdAndCourseId($userId, $courseId);
@@ -17,4 +16,7 @@ interface FavoriteDao
 
     public function deleteFavorite($id);
 
+    public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
+
+    public function findFavoritesCountByCourseId($courseId);
 }
