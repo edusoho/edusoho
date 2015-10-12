@@ -8,7 +8,7 @@ interface BlockDao
 
     public function searchBlockCount($condition);
 
-    public function addBlock($Block);
+    public function addBlock($block);
 
     public function deleteBlock($id);
 

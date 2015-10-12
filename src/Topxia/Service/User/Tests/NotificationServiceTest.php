@@ -42,7 +42,7 @@ class NotificationServiceTest extends BaseTestCase
         $this->assertEquals("content", $notifications[1]['content']['message']);
     }
 
-    private function createUser()
+    protected function createUser()
     {
         $user = array();
         $user['email'] = "user@user.com";
@@ -51,11 +51,11 @@ class NotificationServiceTest extends BaseTestCase
         return $this->getUserService()->register($user);
     }
 
-    private function getUserService(){
+    protected function getUserService(){
     return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getNotificationService(){
+    protected function getNotificationService(){
     return $this->getServiceKernel()->createService('User.NotificationService');
     }
 

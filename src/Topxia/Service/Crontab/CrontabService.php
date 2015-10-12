@@ -12,4 +12,8 @@ interface CrontabService
     public function deleteJob($id);
 
     public function scheduleJobs();
+
+    public function getNextExcutedTime();
+
+    public function setNextExcutedTime($nextExcutedTime);
 }

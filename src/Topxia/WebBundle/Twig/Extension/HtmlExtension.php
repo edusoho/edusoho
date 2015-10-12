@@ -25,7 +25,7 @@ class HtmlExtension extends \Twig_Extension
             return $default;
         }
 
-        if (!is_array($object) or !isset($object[$key])) {
+        if (!is_array($object) || !isset($object[$key])) {
             return $default;
         }
 

@@ -10,7 +10,7 @@ class KeyApplier
     {
         $setting = $this->getSettingService()->get('storage', array());
 
-        if (!empty($setting['cloud_access_key']) and !empty($setting['cloud_secret_key']) and !empty($setting['cloud_key_applied'])) {
+        if (!empty($setting['cloud_access_key']) && !empty($setting['cloud_secret_key']) && !empty($setting['cloud_key_applied'])) {
             return array(
                 'accessKey' => $setting['cloud_access_key'],
                 'secretKey' => $setting['cloud_secret_key'],

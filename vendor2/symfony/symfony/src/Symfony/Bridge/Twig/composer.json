@@ -1,0 +1,54 @@
+{
+    "name": "symfony/twig-bridge",
+    "type": "symfony-bridge",
+    "description": "Symfony Twig Bridge",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "twig/twig": "~1.12,>=1.12.3"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~2.7",
+        "symfony/finder": "~2.3",
+        "symfony/form": "~2.3.5",
+        "symfony/http-kernel": "~2.3",
+        "symfony/intl": "~2.3",
+        "symfony/routing": "~2.2",
+        "symfony/templating": "~2.1",
+        "symfony/translation": "~2.2",
+        "symfony/yaml": "~2.0,>=2.0.5",
+        "symfony/security": "~2.0,>=2.0.5"
+    },
+    "suggest": {
+        "symfony/finder": "",
+        "symfony/form": "",
+        "symfony/http-kernel": "",
+        "symfony/routing": "",
+        "symfony/templating": "",
+        "symfony/translation": "",
+        "symfony/yaml": "",
+        "symfony/security": ""
+    },
+    "autoload": {
+        "psr-0": { "Symfony\\Bridge\\Twig\\": "" }
+    },
+    "target-dir": "Symfony/Bridge/Twig",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3-dev"
+        }
+    }
+}

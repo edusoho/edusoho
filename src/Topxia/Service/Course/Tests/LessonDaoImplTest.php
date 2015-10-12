@@ -20,7 +20,7 @@ class LessonDaoImplTest extends BaseTestCase
        $this->assertGreaterThanOrEqual(0, count($lessons));
     }
 
-    private function getLessonDao()
+    protected function getLessonDao()
     {
         return $this->getServiceKernel()->createDao('Course.LessonDao');
     }

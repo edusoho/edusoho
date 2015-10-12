@@ -23,7 +23,9 @@ function createLinkstring($para) {
 	$arg = substr($arg,0,count($arg)-2);
 	
 	//如果存在转义字符，那么去掉转义
-	if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+	if(get_magic_quotes_gpc()){
+		$arg = stripslashes($arg);
+	}
 	
 	return $arg;
 }
@@ -41,7 +43,9 @@ function createLinkstringUrlencode($para) {
 	$arg = substr($arg,0,count($arg)-2);
 	
 	//如果存在转义字符，那么去掉转义
-	if(get_magic_quotes_gpc()){$arg = stripslashes($arg);}
+	if(get_magic_quotes_gpc()){
+		$arg = stripslashes($arg);
+	}
 	
 	return $arg;
 }
@@ -53,8 +57,12 @@ function createLinkstringUrlencode($para) {
 function paraFilter($para) {
 	$para_filter = array();
 	while (list ($key, $val) = each ($para)) {
-		if($key == "sign" || $key == "sign_type" || $val == "")continue;
-		else	$para_filter[$key] = $para[$key];
+		if($key == "sign" || $key == "sign_type" || $val == ""){
+			continue;
+		}
+		else{
+			$para_filter[$key] = $para[$key];
+		}
 	}
 	return $para_filter;
 }
@@ -144,14 +152,18 @@ function getHttpResponseGET($url,$cacert_url) {
  */
 function charsetEncode($input,$_output_charset ,$_input_charset) {
 	$output = "";
-	if(!isset($_output_charset) )$_output_charset  = $_input_charset;
+	if(!isset($_output_charset) ){
+		$_output_charset  = $_input_charset;
+	}
 	if($_input_charset == $_output_charset || $input ==null ) {
 		$output = $input;
 	} elseif (function_exists("mb_convert_encoding")) {
 		$output = mb_convert_encoding($input,$_output_charset,$_input_charset);
 	} elseif(function_exists("iconv")) {
 		$output = iconv($_input_charset,$_output_charset,$input);
-	} else die("sorry, you have no libs support for charset change.");
+	} else{
+		die("sorry, you have no libs support for charset change.");
+	}
 	return $output;
 }
 /**
@@ -163,14 +175,18 @@ function charsetEncode($input,$_output_charset ,$_input_charset) {
  */
 function charsetDecode($input,$_input_charset ,$_output_charset) {
 	$output = "";
-	if(!isset($_input_charset) )$_input_charset  = $_input_charset ;
+	if(!isset($_input_charset) ){
+		$_input_charset  = $_input_charset ;
+	}
 	if($_input_charset == $_output_charset || $input ==null ) {
 		$output = $input;
 	} elseif (function_exists("mb_convert_encoding")) {
 		$output = mb_convert_encoding($input,$_output_charset,$_input_charset);
 	} elseif(function_exists("iconv")) {
 		$output = iconv($_input_charset,$_output_charset,$input);
-	} else die("sorry, you have no libs support for charset changes.");
+	} else{
+		die("sorry, you have no libs support for charset changes.");
+	}
 	return $output;
 }
 ?>

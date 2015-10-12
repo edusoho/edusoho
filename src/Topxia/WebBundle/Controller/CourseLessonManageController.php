@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Common\Paginator;
 
 class CourseLessonManageController extends BaseController
@@ -266,14 +266,14 @@ class CourseLessonManageController extends BaseController
 		$targetId = $course['id'];
 		$draft = $this->getCourseService()->findCourseDraft($courseId,$lessonId, $userId);
 		$setting = $this->setting('storage');
-		if ($setting['upload_mode'] == 'local') {
-			// $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
-			//     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-			//     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
-			// );
-		} else {
+		// if ($setting['upload_mode'] == 'local') {
+		// 	// $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+		// 	//     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+		// 	//     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+		// 	// );
+		// } else {
 
-		}
+		// }
 		$lesson['title'] = str_replace(array('"',"'"), array('&#34;','&#39;'), $lesson['title']);
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
@@ -435,7 +435,7 @@ class CourseLessonManageController extends BaseController
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 		if($course['type']=='live'){
-			$client = LiveClientFactory::createClient();
+			$client = new EdusohoLiveClient();
 			if ($lesson['type'] == 'live') {
 				$result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
 			}
@@ -443,57 +443,63 @@ class CourseLessonManageController extends BaseController
 		}
 		$this->getCourseService()->deleteLesson($course['id'], $lessonId);
 		$this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
-		
+        if ($this->isPluginInstalled('Homework')) { //如果安装了作业插件那么也删除作业和练习
+        	$homework = $this->getHomeworkService()->getHomeworkByLessonId($lessonId);
+        	if(!empty($homework)) {
+            	$this->getHomeworkService()->removeHomework($homework['id']);
+        	}
+            $this->getExerciseService()->deleteExercisesByLessonId($lesson['id']);
+        }
 		return $this->createJsonResponse(true);
 	}
 
-	private function secondsToText($value)
+	protected function secondsToText($value)
 	{
 		$minutes = intval($value / 60);
 		$seconds = $value - $minutes * 60;
 		return array($minutes, $seconds);
 	}
 
-	private function textToSeconds($minutes, $seconds)
+	protected function textToSeconds($minutes, $seconds)
 	{
 		return intval($minutes) * 60 + intval($seconds);
 	}
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
     
-    private function getAppService(){
+    protected function getAppService(){
 		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
     
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getCourseMaterialService()
+    protected function getCourseMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
-    private function getDiskService()
+    protected function getDiskService()
     {
         return $this->getServiceKernel()->createService('User.DiskService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
     
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
@@ -503,4 +509,13 @@ class CourseLessonManageController extends BaseController
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getHomeworkService()
+    {
+    	return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    }
+
+    protected function getExerciseService()
+    {
+    	return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
 }

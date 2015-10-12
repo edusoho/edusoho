@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         imageCrop.on("afterCrop", function(response){
             var url = $("#upload-avatar-btn").data("url");
             $.post(url, {images: response}, function(){
-                history.go(-1);
+                document.location.href=$("#upload-avatar-btn").data("gotoUrl");
             });
         });
 

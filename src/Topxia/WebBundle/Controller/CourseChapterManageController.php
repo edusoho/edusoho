@@ -68,12 +68,12 @@ class CourseChapterManageController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-        private function getSettingService()
+        protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

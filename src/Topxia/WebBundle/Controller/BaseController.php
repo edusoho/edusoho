@@ -114,7 +114,7 @@ abstract class BaseController extends Controller
 
     protected function sendEmail($to, $title, $body, $format = 'text')
     {
-        $format == 'html' ? 'text/html' : 'text/plain';
+        $format = $format == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());
 

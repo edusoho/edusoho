@@ -44,25 +44,34 @@ class OptimizeController extends BaseController
 
     public function removeUnusedFilesAction()
     {
-        $this->getSystemUtilService()->removeUnusedUploadFiles();
-        return $this->createJsonResponse(true);       
+        $result = $this->getSystemUtilService()->removeUnusedUploadFiles();
+        if($result){
+            return $this->createJsonResponse(array("success"=>true,'message'=>'优化文件'));
+        }else{
+            return $this->createJsonResponse(array("success"=>false,'message'=>'无可优化文件')); 
+        }
     }
 
-    private function isDisabledUpgrade()
+    public function showProgressbarAction()
+    {
+        return $this->render('TopxiaAdminBundle:System:progressBar.html.twig');     
+    }
+
+    protected function isDisabledUpgrade()
     {
         if (!$this->container->hasParameter('disabled_features')) {
             return false;
         }
 
         $disableds = $this->container->getParameter('disabled_features');
-        if (!is_array($disableds) or empty($disableds)) {
+        if (!is_array($disableds) || empty($disableds)) {
             return false;
         }
 
         return in_array('upgrade', $disableds);
     }
 
-    private function getSystemUtilService()
+    protected function getSystemUtilService()
     {
         return $this->getServiceKernel()->createService('Util.SystemUtilService');
     }

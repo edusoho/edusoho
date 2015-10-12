@@ -32,6 +32,7 @@ define(function(require, exports, module) {
 
         var $list = $("#course-item-list").sortable({
             distance: 20,
+            itemSelector: '.item-lesson, .item-chapter',
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 sortList($list);
@@ -40,7 +41,7 @@ define(function(require, exports, module) {
                 return isContainer ? children : parent.attr('id');
             },
             isValidTarget:function (item, container) {
-                if(item.has('li').length){ 
+                if(item.siblings('li').length){ 
                     return true;
                 }else{
                     return false;

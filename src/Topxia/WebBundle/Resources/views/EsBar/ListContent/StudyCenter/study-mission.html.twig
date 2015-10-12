@@ -1,0 +1,56 @@
+<div class="text-line gray small">
+  <h5><span>学习任务</span></h5>
+  <div class="line"></div>
+</div>
+
+{% if classrooms or courses %}
+  {% for classroom in classrooms %}
+    <div class="bar-task">
+      <div class="bar-task-header">
+        <div class="title">
+          {{ setting('classroom.name')|default("班级") }}: {{ classroom.title }}
+          <span>{{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}</span>
+        </div>
+      </div>
+
+      <ul class="bar-time-line">
+        {% if classroom['lessons'] %}
+          {% for lesson in classroom['lessons'] %}
+            {% set status = lesson.isLearned %}
+            {% if status %}
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" target="_blank">课时{{ lesson.number }}-{{ lesson.title }}</a></li>
+            {% else %}
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" target="_blank">课时{{ lesson.number }}-{{ lesson.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% endfor %}
+  {% for course in courses %}
+    <div class="bar-task">
+      <div class="bar-task-header">
+        <div class="title">
+          课程: {{ course.title }}
+          <span>{{ course.learnedLessonNum ~ '/' ~ course.allLessonNum }}</span>
+        </div>
+      </div>
+
+      <ul class="bar-time-line">
+        {% if course['lessons'] %}
+          {% for lesson in course['lessons'] %}
+            {% set status = lesson.isLearned %}
+            {% if status %}
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" target="_blank">课时{{ lesson.number }}-{{ lesson.title }}</a></li>
+            {% else %}
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_learn', {id:lesson.courseId}) ~ '#lesson/' ~ lesson.id }}" target="_blank">课时{{ lesson.number }}-{{ lesson.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% endfor %}
+{% else %}
+  <span class=""></span>暂未发现还有未学习课时。<a href="{{ path('course_explore') }}">去逛逛>></a>
+
+{% endif %}

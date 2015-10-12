@@ -62,17 +62,17 @@ class CourseMaterialManageController extends BaseController
         return $this->createJsonResponse(true);
 	}
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getMaterialService()
+    protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

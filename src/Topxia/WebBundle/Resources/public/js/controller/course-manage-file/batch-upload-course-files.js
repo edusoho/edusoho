@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
     function getFileType(fileSuffix) {
         var fileSuffixs = {
-            "video": "*.mp4;*.avi;*.flv;*.wmv;*.mov;",
+            "video": "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;",
             "audio": "*.mp3",
             "document": "*.doc;*.docx;*.pdf",
             "ppt": "*.ppt;*.pptx",
@@ -49,7 +49,6 @@ define(function(require, exports, module) {
     }
 
 	function uploadStart(file, self, switcher) {
-        console.log(file);
         var data = {};
         var targetType = self.element.data('targetType');
 		var uploadMode = self.element.data('uploadMode');
@@ -129,7 +128,7 @@ define(function(require, exports, module) {
     }
     function getFileExt(str) { 
         var d=/\.[^\.]+$/.exec(str); 
-        return d; 
+        return d[0].toLowerCase(); 
     }
 
     exports.run = function() {
@@ -139,7 +138,7 @@ define(function(require, exports, module) {
         var chunkUpload = new ChunkUpload({
             element: '#selectFiles',
             file_types : fileExts,
-            file_size_limit : "1 GB",
+            file_size_limit : "2 GB",
             uploadOnSelected: false
         });
 		var switcher = null;
@@ -169,8 +168,8 @@ define(function(require, exports, module) {
 
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
-            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov";
-            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name)[0])>-1){
+            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v";
+            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: videoInfoUrl,
                     data: {key: serverData.key},
@@ -180,7 +179,7 @@ define(function(require, exports, module) {
                         serverData.lazyConvert = 1;
                     }
                 });
-            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name)[0])>-1){
+            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: audioInfoUrl,
                     data: {key: serverData.key},
@@ -193,7 +192,7 @@ define(function(require, exports, module) {
                 serverData.mimeType=file.type;
             }
 
-            if('*.ppt;*.pptx;*.doc;*.docx;*.pdf'.indexOf(getFileExt(file.name)[0])>-1){
+            if('*.ppt;*.pptx;*.doc;*.docx;*.pdf'.indexOf(getFileExt(file.name))>-1){
 
                 serverData.lazyConvert = 1;
             } 

@@ -2,11 +2,6 @@
 
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-   {{ parent() }}
-   <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar.css') }}" />
-{% endblock %}
-
 {% set hideSetupHint = true %}
 
 {% if is_plugin_installed('Homework') %}
@@ -18,10 +13,18 @@
 {% set script_controller = 'course/learn' %}
 {% set bodyClass = 'lesson-dashboard-page' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% if setting("developer.balloon_player")|default(0) %}
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  {% endif %}
+{% endblock %}
+
 {% block header %}{% endblock %}
 {% block footer %}{% endblock %}
+{% block esBar %}{% endblock %}
+{% block full_content %}
 
-{% block full_content %}       
   <div class="lesson-dashboard" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-course-uri="{{ path('course_show', {id:course.id}) }}"
@@ -50,9 +53,10 @@
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+            data-fingerprint="{{ finger_print() }}"
           {% endif %}
             data-user-id="{{ app.user.id }}"
+            data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
         ></div>
         <div class="watermarkEmbedded" ></div>
 
@@ -99,6 +103,16 @@
       <div class="toolbar-nav">
 
         <ul class="toolbar-nav-stacked" id="lesson-toolbar-primary"></ul>
+        <ul class="list-unstyled">
+          <li class="es-qrcode toolbar-qrcode" data-url="{{path('common_learn_qrcode',{courseId: course.id,type:"lesson-qrcode"})}}">
+            <i class="es-icon es-icon-qrcode"></i><br>
+            扫一扫
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              扫二维码继续学习
+            </span>
+          </li>
+        </ul>
         <ul class="toolbar-nav-stacked" id="lesson-toolbar-secondary">
           <li class="hide-pane" style="display:none;">
             <a href="javascript:"><span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -158,3 +172,4 @@
   </div><!-- /.modal -->
 
 {% endblock %}
+

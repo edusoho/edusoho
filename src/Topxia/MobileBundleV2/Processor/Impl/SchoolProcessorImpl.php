@@ -26,35 +26,78 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
+    public function getVipPayInfo()
+    {
+        if (! $this->controller->isinstalledPlugin("Vip")) {
+            return $this->createErrorResponse('no_vip', '网校未安装vip插件');
+        }
+
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', "您尚未登录！");
+        }
+        
+        $levelId = $this->getParam("levelId");
+        $level = $this->getLevelService()->getLevel($levelId);
+        
+        $buyType = $this->controller->setting('vip.buyType');
+        if (empty($buyType)) {
+            $buyType = 10;
+        }
+
+        return array(
+                'level' => $level,
+                'buyType' => $buyType
+        );
+    }
+
+    public function getSchoolVipList()
+    {
+        $userId = $this->getParam("userId");
+        if (! $this->controller->isinstalledPlugin("Vip")) {
+            return $this->createErrorResponse('no_vip', '网校未安装vip插件');
+        }
+
+        if (! $this->controller->setting('vip.enabled')) {
+            return $this->createMessageResponse('vip_closed', '会员专区已关闭');
+        }
+
+        $levels = $this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100);
+
+        $levels = array_map(function($level){
+            $level["picture"] = sprintf("/assets/img/default/vip_%d.png", $level["id"]);
+            return $level;
+        }, $levels);
+        
+        $user = $this->controller->getUserService()->getUser($userId);
+        return array(
+                'user' => $this->controller->filterUser($user),
+                'vips' => $levels
+        );
+    }
+
+    public function getSchoolPlugins()
+    {
+        $appsInstalled = $this->getAppService()->findApps(0, 100);
+        $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
+
+        foreach ($appsInstalled as $key => $value) {
+            foreach ($value as $valueKey => $v) {
+                if (!in_array($valueKey, array(
+                    "id", "version", "type"))) {
+                    unset($value[$valueKey]);
+                }
+
+               $appsInstalled[$key] = $value;
+            }
+            
+        }
+        return $appsInstalled;
+    }
+
     public function getSchoolApps()
     {
-        $host = $this->request->getSchemeAndHttpHost();
-        $article = array(
-            "code"=>"Article",
-            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/article.png",
-            "name"=>"网校资讯",
-            "description"=>"EduSoho官方应用，网校资讯。",
-            "author"=>"官方",
-            "version"=>"1.0.0",
-            "support_version"=>"2.4.0+",
-            "action"=>array(),
-            "url"=>"articleApp"
-        );
-
-        $group = array(
-            "code"=>"Group",
-            "icon"=>$host  . "/bundles/topxiamobilebundlev2/img/group.png",
-            "name"=>"网校小组社区",
-            "description"=>"网校小组社区",
-            "author"=>"官方",
-            "version"=>"1.0.0",
-            "support_version"=>"2.4.0+",
-            "action"=>array(),
-            "url"=>""
-        );
-        return array(
-            $article, $group
-            );
+        return array();
     }
     
     public function registDevice()
@@ -96,6 +139,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     {
         $code = $this->fixHttpHeaderInject($this->request->get("code", "edusoho"));
         $client = $this->fixHttpHeaderInject($this->request->get("client", "android"));
+
+        $userAgent = $this->request->headers->get("user-agent");
+        if (strpos($userAgent, 'MicroMessenger')) {
+            return $this->controller->render('TopxiaMobileBundleV2:Content:download.html.twig', array());
+        }
         return $this->controller->redirect("http://www.edusoho.com/download/mobile?client={$client}&code=" . $code);
     }
 
@@ -184,6 +232,19 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         ));
     }
 
+    public function getSchoolProfile()
+    {
+        $mobile = $this->controller->getSettingService()->get('mobile', array());
+        
+        $content = $this->controller->render('TopxiaMobileBundleV2:Content:index.html.twig', array(
+            'content' => $this->controller->convertAbsoluteUrl($this->request, $mobile['about'])
+        ))->getContent();
+
+        return array(
+            "data"=>$content
+            );
+    }
+
     public function getSchoolInfo()
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
@@ -197,15 +258,16 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
     {
         $mobile = $this->controller->getSettingService()->get('mobile', array());
 
-        $courseIds = explode(",", $mobile['courseIds']);
+        $courseIds = explode(",", isset($mobile['courseIds']) ? $mobile['courseIds'] : "");
         $courses = $this->controller->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses,'id');
         $sortedCourses = array();
         foreach ( $courseIds as $value){
-            if(!empty($value))
+            if(!empty($value)){
                 if(array_key_exists($value, $courses)){
                     $sortedCourses[] = $courses[$value];
                 }
+            }
         } 
          
         $result = array(
@@ -215,21 +277,55 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         return $result;
     }
 
-    public function getRecommendCourses()
+    public function getHotCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
             'type' => 'normal',
+            "recommended"=>0
+        );
+        return $this->getCourseByType("popular", $conditions);
+    }
+
+    public function getLiveRecommendCourses()
+    {
+        $conditions = array(
+            'parentId'=> 0,
+            'status' => 'published',
+            'type' => "live",
             "recommended"=>1
         );
         return $this->getCourseByType("recommendedSeq", $conditions);
     }
 
+    public function getRecommendCourses()
+    {
+        $conditions = array(
+            'parentId'=> 0,
+            'status' => 'published',
+            'type' => "normal",
+            "recommended"=>1
+        );
+        return $this->getCourseByType("recommendedSeq", $conditions);
+    }
+
+    public function getLiveLatestCourses()
+    {
+        $conditions = array(
+            'parentId'=> 0,
+            'status' => 'published',
+            'type' => "live"
+        );
+        return $this->getCourseByType("latest", $conditions);
+    }
+
     public function getLatestCourses()
     {
         $conditions = array(
+            'parentId'=> 0,
             'status' => 'published',
-            'type' => 'normal'
+            'type' => "normal"
         );
         return $this->getCourseByType("latest", $conditions);
     }
@@ -354,7 +450,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         }
 
         $token = $this->controller->getUserToken($request);
-        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+        if (empty($token) ||  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 
@@ -447,6 +543,11 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
         curl_close($curl);
 
         return $response;
+    }
+
+    public function getLevelService()
+    {
+        return $this->controller->getService('Vip:Vip.LevelService');
     }
 }
 

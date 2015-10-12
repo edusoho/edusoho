@@ -8,8 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
+
 
 class SettingController extends BaseController
 {
@@ -20,9 +22,14 @@ class SettingController extends BaseController
         $settingMobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled' => 0, // 网校状态
+            'enabled' => 1, // 网校状态
+            'ver' => 1,//是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
+            'appname' => '',
+            'appabout' =>'',
+            'applogo' =>'',
+            'appcover' =>'',
             'notice' => '', //公告
             'splash1' => '', // 启动图1
             'splash2' => '', // 启动图2
@@ -34,6 +41,7 @@ class SettingController extends BaseController
         $mobile = array_merge($default, $settingMobile);
         if ($request->getMethod() == 'POST') {
             $settingMobile = $request->request->all();
+
             $mobile = array_merge($settingMobile,$operationMobile,$courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
@@ -45,8 +53,20 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        }else{
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        }
+        
+        //是否拥有定制app
+        $hasMobile = $result['hasMobile'] ?$result['hasMobile']:0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
+            'mobileCode' => $mobileCode,
+            'hasMobile'=>$hasMobile
         ));
     }
 
@@ -247,7 +267,7 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function setCloudSmsKey($key, $val)
+    protected function setCloudSmsKey($key, $val)
     {
         $setting = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
@@ -256,6 +276,10 @@ class SettingController extends BaseController
 
     public function mailerAction(Request $request)
     {
+        if($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array());  
+        }
+
         $mailer = $this->getSettingService()->get('mailer', array());
         $default = array(
             'enabled' => 0,
@@ -270,7 +294,9 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
-            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailer);
+            $mailerWithoutPassword = $mailer;
+            $mailerWithoutPassword['password']='******';
+            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailerWithoutPassword);
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
@@ -323,7 +349,7 @@ class SettingController extends BaseController
         ));
     }
 
-    private function getDefaultSet()
+    protected function getDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -424,13 +450,13 @@ class SettingController extends BaseController
             $phpwindConfig = $data['phpwind_config'];
 
             if ($setting['mode'] == 'discuz') {
-                if (!file_exists($discuzConfigPath) or !is_writeable($discuzConfigPath)) {
+                if (!file_exists($discuzConfigPath) || !is_writeable($discuzConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
-                if (!file_exists($phpwindConfigPath) or !is_writeable($phpwindConfigPath)) {
+                if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
@@ -465,7 +491,7 @@ class SettingController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        $client = LiveClientFactory::createClient();
+        $client = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
         $default = array(
@@ -473,6 +499,7 @@ class SettingController extends BaseController
             'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
             'buy_fill_userinfo' => '0',
             'teacher_modify_price' => '1',
+            'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
             'student_download_media' => '0',
@@ -552,7 +579,7 @@ class SettingController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $setting = $this->getSettingService()->get('user_partner', array());
-        if (empty($setting['mode']) or !in_array($setting['mode'], array('phpwind', 'discuz'))) {
+        if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
             return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
@@ -590,7 +617,7 @@ class SettingController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -618,5 +645,10 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

@@ -1,0 +1,6 @@
+{% if app.user and app.user.setup == 0 and not app.request.cookies.get('close_weixin_alert')%}
+  <div class="alert alert-warning alert-xs alert-dismissible weixin-alert hide visible-xs" role="alert">
+    您是微信账号登录，如果已有账号，请<a href="{{ path('login_bind_weixin') }}"><font class="color-success">绑定</font></a>，以免丢失学习记录
+    <span style="right:0;top:-5px" class="close" data-dismiss="alert">x</span>
+  </div>
+{% endif %}

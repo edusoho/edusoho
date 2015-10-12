@@ -21,7 +21,7 @@ class AppPackageUpdateController extends BaseController
     public function checkEnvironmentAction(Request $request, $id)
     {
         $settings = $this->getSettingService()->get('storage', array());
-        if (empty($settings['cloud_key_applied']) or empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+        if (empty($settings['cloud_key_applied']) || empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $errors = array(
                 sprintf('您尚未申请云平台授权码，<a href="%s">请先申请授权码</a>。', $this->generateUrl('admin_setting_cloud_key_update')),
             );
@@ -70,14 +70,18 @@ class AppPackageUpdateController extends BaseController
 
     public function beginUpgradeAction(Request $request, $id)
     {
-        $errors = $this->getAppService()->beginPackageUpdate($id, $request->query->get('type'));
+        $index = $request->query->get('index', 0);
+        $errors = $this->getAppService()->beginPackageUpdate($id, $request->query->get('type'), $index);
         return $this->createResponseWithErrors($errors);
     }
 
-    private function createResponseWithErrors($errors)
+    protected function createResponseWithErrors($errors)
     {
         if (empty($errors)) {
             return $this->createJsonResponse(array('status' => 'ok'));
+        }
+        if (isset($errors['index'])) {
+            return $this->createJsonResponse($errors);
         }
         return $this->createJsonResponse(array('status' => 'error', 'errors'=>$errors));
     }

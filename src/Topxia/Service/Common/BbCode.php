@@ -16,7 +16,9 @@ class BbCode extends BaseService
 		);
 		foreach ($matches[0] as $value) {
 
-			if ( preg_match_all("#\[[a-zA-Z]*\]#", $value, $urlMatchs) == 0) continue;
+			if ( preg_match_all("#\[[a-zA-Z]*\]#", $value, $urlMatchs) == 0){
+				continue;
+			}
 
 			if ($urlMatchs[0][0] == '[image]') {
 				$urls['image'][] = str_replace(array('[image]', '[/image]'), '', $value);
@@ -47,12 +49,12 @@ class BbCode extends BaseService
 		return $this->$method($file);
 	}
 
-	private function getImage ($file)
+	protected function getImage ($file)
 	{
 		return '[image]'.$file['hashId'].'[/image]';
 	}
 
-	private function getUploadFileService()
+	protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
     }

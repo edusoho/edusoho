@@ -1,0 +1,45 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">登 录</h3>
+      <a class="ui-btn btn-outline bar-tool small" href="#/regist">注册</a>
+    </div>
+</div>
+<div class="top-header sign login">
+    <div class="ui-form">
+        <form action="#">
+            <div class="ui-form-item ui-form-item-pure ui-border-b">
+                <input type="text" placeholder="手机号/邮箱/昵称" ng-model="user.username">
+                <a class="ui-icon-close" ng-show="user.username.length > 0" ng-click="user.username = '' "></a>
+            </div>
+            <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
+                <input type="password" placeholder="密码" ng-model="user.password">
+                <a class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
+            </div>
+        </form>
+        <div class="ui-btn-wrap padding-none margin-t">
+            <button class="ui-btn-lg btn-green" ng-click="login(user)">
+                登 录
+            </button>
+        </div>
+    </div>
+    <div style="margin-top:16px;text-align: center;">
+      
+        <div class="shard-label">
+          <span>| 其他方式登录 |</span>
+        </div>
+        <ul class="ui-grid-trisect">
+          <li>
+              <i class="iconfont icon-qq shard-login qq-login" ng-click="loginWithOpen('QQ')"></i>
+          </li>
+          <li>
+              <i class="iconfont icon-icon shard-login weibo-login" ng-click="loginWithOpen('SinaWeibo')"></i>
+          </li>
+          <li>
+              <i class="iconfont icon-weixin shard-login weixin-login" ng-click="loginWithOpen('Wechat')"></i>
+          </li>
+        </ul>
+      </div>
+  </div>
+
+</div>

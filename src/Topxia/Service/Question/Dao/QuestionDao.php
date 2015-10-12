@@ -12,6 +12,8 @@ interface QuestionDao
 
     public function findQuestionsByParentIds(array $ids);
 
+    public function findQuestionsByPIdAndLockedTarget($pId,$lockedTarget);
+
     public function findQuestionsbyTypes($types, $start, $limit);
 
     public function findQuestionsByTypesAndExcludeUnvalidatedMaterial($types, $start, $limit);

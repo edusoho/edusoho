@@ -31,12 +31,12 @@ class TeacherController extends BaseController
         $user = $this->getCurrentUser();
         $teacherIds = ArrayToolkit::column($teachers, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
-        $Myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
+        $myFollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         return $this->render('TopxiaWebBundle:Teacher:index.html.twig', array(
             'teachers' => $teachers ,
             'profiles' => $profiles,
             'paginator' => $paginator,
-            'Myfollowings' => $Myfollowings,
+            'Myfollowings' => $myFollowings,
         ));
     }
     

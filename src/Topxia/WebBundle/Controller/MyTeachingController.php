@@ -70,7 +70,7 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $classrooms=$this->getClassroomService()->searchMembers(array('roles'=>array('teacher', 'headTeacher', 'assistant', 'studentAssistent'),'userId'=>$user->id),array('createdTime','desc'),0,9999);
+        $classrooms=$this->getClassroomService()->searchMembers(array('roles'=>array('teacher', 'headTeacher', 'assistant'),'userId'=>$user->id),array('createdTime','desc'),0,9999);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
 

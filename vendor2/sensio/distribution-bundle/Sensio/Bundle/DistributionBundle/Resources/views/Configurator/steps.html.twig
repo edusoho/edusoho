@@ -1,0 +1,14 @@
+<div class="symfony-block-steps">
+    {% for i in 1..count %}
+
+      {% if i == index + 1 %}
+          <span class="selected">Step {{ i }}</span>
+      {% else %}
+          <span>Step {{ i }}</span>
+      {% endif %}
+
+      {% if i != count %}
+        &gt;
+      {% endif %}
+    {% endfor %}
+</div>

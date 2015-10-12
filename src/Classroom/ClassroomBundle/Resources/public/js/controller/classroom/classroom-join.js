@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-
+    require('../../../../topxiaweb/js/util/qrcode').run();
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var UserSign = require('../../../../topxiaweb/js/util/sign.js');

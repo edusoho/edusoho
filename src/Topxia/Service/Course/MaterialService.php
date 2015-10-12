@@ -5,7 +5,11 @@ interface MaterialService
 {
 	public function uploadMaterial($material);
 
+	public function createMaterial($fields);
+
 	public function deleteMaterial($courseId, $materialId);
+
+	public function deleteMaterialByMaterialId($materialId);
 
 	public function deleteMaterialsByLessonId($lessonId);
 
@@ -16,6 +20,8 @@ interface MaterialService
 	public function findCourseMaterials($courseId, $start, $limit);
 
 	public function findLessonMaterials($lessonId, $start, $limit);
+
+	public function findMaterialsByPIdAndLockedCourseIds($pId, $courseIds);
 
 	public function getMaterialCount($courseId);
 

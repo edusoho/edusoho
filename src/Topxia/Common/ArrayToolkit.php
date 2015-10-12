@@ -15,7 +15,6 @@ class ArrayToolkit
                 $column[] = $item[$columnName];
             }
 		}
-
         return $column;
 	}
 

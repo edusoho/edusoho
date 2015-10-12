@@ -115,7 +115,6 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
         return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
             'categoryCode' => $categoryCode,
             'category' => $category,
@@ -209,13 +208,20 @@ class ArticleController extends BaseController
 
         $sameTagArticles = array();
         foreach ($articles as $key => $value) {
-            if (array_intersect($value['tagIds'], $article['tagIds']) and $value['id'] != $article['id'] and !empty($value['thumb'])) {
+            if (array_intersect($value['tagIds'], $article['tagIds']) && $value['id'] != $article['id'] && !empty($value['thumb'])) {
                 $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
             }
         }
 
         $user = $this->getCurrentUser();
+
         $userLike = $this->getArticleService()->getArticleLike($id, $user['id']);
+
+        $articleBody = $article['body'];
+
+        $articleBody = strip_tags($articleBody,'');
+
+        $articleBody = preg_replace("/ /","",$articleBody); 
 
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree' => $categoryTree,
@@ -225,7 +231,7 @@ class ArticleController extends BaseController
             'articleNext' => $articleNext,
             'tags' => $tags,
             'seoKeyword' => $seoKeyword,
-            'seoDesc' => $article['body'],
+            'seoDesc' => $articleBody,
             'breadcrumbs' => $breadcrumbs,
             'categoryName' => $category['name'],
             'categoryCode' => $category['code'],
@@ -236,7 +242,8 @@ class ArticleController extends BaseController
             'count' => $count,
             'tagNames' => $tagNames,
             'sameTagArticles' => $sameTagArticles,
-            'userLike' => $userLike
+            'userLike' => $userLike,
+            'category' => $category
         ));
     }
 
@@ -290,7 +297,7 @@ class ArticleController extends BaseController
         }
 
         $post = $this->getThreadService()->getPost($postId);
-        if ($post and $post['parentId']) {
+        if ($post && $post['parentId']) {
             $post = $this->getThreadService()->getPost($post['parentId']);
         }
 
@@ -399,7 +406,7 @@ class ArticleController extends BaseController
         ));
     }
 
-    private function autoParagraph($text)
+    protected function autoParagraph($text)
     {
         if (trim($text) !== '') {
             $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
@@ -415,7 +422,7 @@ class ArticleController extends BaseController
         return $text;
     }
 
-    private function getRootCategory($categoryTree, $category)
+    protected function getRootCategory($categoryTree, $category)
     {
         $start = false;
         foreach (array_reverse($categoryTree) as $treeCategory) {
@@ -431,7 +438,7 @@ class ArticleController extends BaseController
         return;
     }
 
-    private function getSubCategories($categoryTree, $rootCategory)
+    protected function getSubCategories($categoryTree, $rootCategory)
     {
         $categories = array();
 
@@ -470,27 +477,27 @@ class ArticleController extends BaseController
         return $this->createJsonResponse($article);
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
     }

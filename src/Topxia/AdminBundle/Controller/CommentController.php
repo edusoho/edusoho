@@ -37,7 +37,7 @@ class CommentController extends BaseController
         }
     }
 
-    private function getCommentService()
+    protected function getCommentService()
     {
         return $this->getServiceKernel()->createService('Content.CommentService');
     }

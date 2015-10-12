@@ -21,7 +21,9 @@ class NumberToolkit {
                 $next = (int)$floatStr;
                 if($next != 0) {
                     $rUp = "";
-                    for($x=1;$x<$precision;$x++) $rUp .= "0";
+                    for($x=1;$x<$precision;$x++){
+                        $rUp .= "0";
+                    }
                     $amt[1] = $amt[1] + (float)(".".$rUp."1");
                 }
             }

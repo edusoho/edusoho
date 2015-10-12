@@ -19,7 +19,7 @@
 	   <div style="margin-bottom:5px">
         <strong>正确答案</strong>
        </div> 
-       <p class="question-text-success">{{ rightAnswer|join(' 或 ')|raw }}</p>
+       <p  class="question-text-success">{{ rightAnswer|bbCode2Html|raw }}</p>
 	{% endfor %}
 </div>
 {% if itemResult.teacherSay|default(null) %}

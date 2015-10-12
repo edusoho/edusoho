@@ -38,17 +38,17 @@ class CouponController extends BaseController
         ));
 	}
 
-    private function getCouponService()
+    protected function getCouponService()
     {
         return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

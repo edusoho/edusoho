@@ -25,7 +25,7 @@ class FileController extends BaseController
     	return $this->createNewJsonResponse(true);
     }
 
-    private function buildFileSearchForm()
+    protected function buildFileSearchForm()
     {
     	$groups = $this->getFileService()->getAllFileGroups();
 

@@ -1,6 +1,5 @@
 {% do load_script('review/list') %}
-
-{% if member and member.role != 'auditor' %}
+{% if member and canReview|default(1) %}
   <div class="clearfix">
     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>重新评价</button>
   </div>
@@ -17,7 +16,7 @@
 
     <div class="form-group clearfix">
       <span class="text-success pull-left" style="display: none;">评价已保存！</span>
-      <button type="submit" class="btn btn-primary pull-right" data-loading-text="正在保存...">保存</button>
+      <button type="submit" class="btn btn-primary pull-right" data-loading-text="正在保存..." autocomplete="off">保存</button>
       <button class="btn btn-link pull-right js-hide-review-form" type="button" {% if userReview %}style="display:none;"{% endif %}>取消</button>
     </div>
 

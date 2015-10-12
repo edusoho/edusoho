@@ -53,7 +53,7 @@ class LoginListener extends BaseService implements AuthenticationSuccessHandlerI
     	}			
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
       	return $this->createService('User.UserService');
     }

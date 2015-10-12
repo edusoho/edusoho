@@ -13,7 +13,7 @@ class LogServiceTest extends BaseTestCase
        $this->assertNull(null);
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }

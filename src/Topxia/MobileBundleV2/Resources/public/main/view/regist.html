@@ -1,0 +1,55 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">注 册</h3>
+    </div>
+</div>
+
+<div class="ui-tab tab-top sign login" ui-tab>
+    <ul class="ui-tab-nav ui-border-b">
+        <li><span class="line">手机号注册</span></li>
+        <li><span>邮箱注册</span></li>
+    </ul>
+    <ul class="ui-tab-content tab-display top-tab-header" style="padding-top : 8px;">
+        <li>
+            <div class="ui-form">
+	    		<div class="ui-form-item ui-form-item-r ui-border-b">
+		            <input type="text" maxlength="15" placeholder="请输入手机号" ng-model="user.phone">
+
+		            <button type="button" class="ui-border-l ui-btn-code" ng-click="sendSmsCode(user.phone)">发送验证码</button>
+		            <a class="ui-icon-close" ng-show="user.phone.length > 0" ng-click="user.phone = '' "></a>
+		      </div>
+		        <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
+		            <input type="password" placeholder="请输入验证码" ng-model="user.code">
+		            <a href="#" class="ui-icon-close" ng-show="user.code.length > 0" ng-click="user.code = '' "></a>
+		        </div>
+		         <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
+		            <input type="password" placeholder="请输入密码" ng-model="user.password">
+		            <a href="#" class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
+		        </div>
+		         <div class="ui-btn-wrap padding-none margin-t">
+		            <button class="ui-btn-lg btn-green" ng-click="registWithPhone(user)">
+		                注 册
+		            </button>
+		        </div>
+		</div>
+        </li>
+        <li>
+            <div class="ui-form">
+		        <div class="ui-form-item ui-form-item-pure ui-border-b">
+		            <input type="email" placeholder="请输入邮箱" ng-model="user.email">
+		            <a href="#" class="ui-icon-close" ng-show="user.email.length > 0" ng-click="user.email = '' "></a>
+		        </div>
+		         <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
+		            <input type="password" placeholder="请输入密码" ng-model="user.password">
+		            <a href="#" class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
+		        </div>
+		         <div class="ui-btn-wrap padding-none margin-t">
+		            <button class="ui-btn-lg btn-green" ng-click="registWithEmail(user)">
+		                注 册
+		            </button>
+		        </div>
+		</div>
+        </li>
+    </ul>
+</div>

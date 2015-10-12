@@ -13,7 +13,7 @@ interface ArticleLikeDao
 
     public function findArticleLikesByUserId($userId);
 
-    public function findArticleLikesByArticleId($ArticleId);
+    public function findArticleLikesByArticleId($articleId);
 
     public function findArticleLikesByArticleIds(array $articleIds);
 

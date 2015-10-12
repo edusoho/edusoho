@@ -252,7 +252,7 @@ class CategoryServiceTest extends BaseTestCase
         $this->assertFalse($group); 
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }

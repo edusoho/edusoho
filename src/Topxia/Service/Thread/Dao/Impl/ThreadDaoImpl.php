@@ -68,7 +68,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createThreadSearchQueryBuilder($conditions)
+    protected function createThreadSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['title'] = "%{$conditions['title']}%";

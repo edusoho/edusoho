@@ -2,12 +2,17 @@
                 <div class="panel panel-default">
                   <div class="panel-body">
                     {% set status = sms.status|default('created') %}
-                    <h4 class="eduyun-title">云短信{% if sms %}<a href="{{path('admin_cloud_sms_account')}}" target="_blank">查看账单</a>{% endif %}</h4>
+                    <h4 class="eduyun-title">云短信
+                      {% if sms %}
+                        <a href="{{path('admin_cloud_detail')}}" target="_blank">账单</a>{% endif %}
+                        <a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank">购买</a>
+                    </h4>
                      {% if not sms %}
-                            <div class="alert alert-warning alert-sm" role="alert" >
-                              <!--未开启-->
-                               <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云短信，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开通</a>
-                           </div>
+                        <div class="alert alert-warning alert-sm" role="alert" >
+                          <!--未开启-->
+                          <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云短信，<a href="{{path('admin_edu_cloud_sms')}}" target="_blank">去开通</a>
+                        </div>
+                        
                       {% else %}
 
                         {% if status == 'created' %}

@@ -1,0 +1,97 @@
+{# 
+    mode的取值有:
+      my:该模式下不显示购买者
+      admin:该模式下详情无下拉菜单 
+      course:该模式下详情无下拉菜单
+#}
+
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% set mode = mode|default(['my']) %}
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>创建时间</th>
+      <th>状态</th>
+      <th>实付(元)</th>
+      {% if mode in ['course', 'admin'] %}
+        <th>购买者</th>
+      {% endif %}
+      <th>支付方式</th>
+      <th style="min-width:100px">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+      {% set buyer = users[order.userId]|default(null) %}
+        <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
+          <td>
+            {% if order.targetType == 'course' %}
+              <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.targetType == 'vip' %}
+              <a href="{{ path('vip', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.targetType == 'classroom' %}
+              <a href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% else %}
+              <strong>{{order.title}}</strong>
+            {% endif %}
+            <br>
+            <span class="text-muted text-sm">订单号：{{order.sn}}</span>
+          </td>
+          <td><span class="text-muted text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
+          <td>{{ dict_text('orderStatus:html', order.status) }}</td>
+          <td><span class="money-text">{{order.amount}}</span></td>
+          {% if mode in ['admin', 'course'] %}
+            <td>
+              {{ web_macro.user_link(buyer) }}
+            </td>
+          {% endif %}
+          <td>
+            {% if order.paidTime > 0 %}
+              {{ dict_text('payment', order.payment)|default('--') }}
+              <br>
+              <span class="text-muted text-sm">{{ order.paidTime |date('Y-n-d H:i:s') }}</span>
+            {% else %}
+              --
+            {% endif %}
+          </td>
+          <td>
+            {% if 'admin' == mode  %}
+                <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_order_detail', {id:order.id}) }}">详情</a>
+              {% endif %}
+            {% if 'course' == mode %}
+            <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('course_order_detail', {id:order.id}) }}">详情</a>
+            {% endif %}
+
+            {% if 'my' == mode %}
+              <div class="btn-group">
+                <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">详情</a> 
+                {% if order.status == 'refunding' or  order.status == 'created' %}
+                  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu pull-right {# text-right #}" style="min-width: 120px;" > 
+
+                  {# <div class="actions"> #}
+                    {% if order.status == 'refunding' %}
+                      <li><a href="javascript:;" class="cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">取消退款</a></li>
+                    {% endif %}
+                    {% if order.status == 'created' %}
+
+                      <li>
+                        <a href="{{path('pay_center_show', {sn:order.sn})}}"  style="display:block" >去支付</a>
+                      </li>
+                      <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a></li>
+
+                    {% endif %}
+                   {#  </div> #}
+                  </ul>
+                {% endif %}
+              </div>
+            {% endif %}
+          </td>
+        </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">暂无订单记录</div></td></tr>
+    {% endfor %}
+  </tbody>

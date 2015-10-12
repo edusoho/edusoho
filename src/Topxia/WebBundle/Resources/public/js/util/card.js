@@ -1,76 +1,120 @@
 define(function (require, exports, module) {
 
-    bindCardEvent('.js-card-content');
-    $(".js-user-card").on("mouseenter", function () {
-        var _this = $(this);
-        var userId = _this.data('userId');
-        var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
-        if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
-            _this.popover({
-                trigger: 'manual',
-                placement: 'auto top',
-                html: 'true',
-                content: function(){
-                    if ($('#user-card-' + userId).length > 0) {
-                        return $('#user-card-' + userId)[0].outerHTML;
-                    }  else {
-                        return loadingHtml;
+    if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+        bindCardEvent('.js-card-content');
+        $(".js-user-card").on("mouseenter", function () {
+
+
+            var _this = $(this);
+            var userId = _this.data('userId');
+            var loadingHtml = '<div class="card-body"><div class="card-loader"><span class="loader-inner"><span></span><span></span><span></span></span> 名片加载中</div>';
+
+            var timer = setTimeout(function(){
+
+                function callback(html) {
+                        
+                    _this.popover('destroy');
+
+                    if ($('#user-card-' + userId).length == 0) {
+                        if ($('body').find('#user-card-store').length > 0 ) {
+                            $('#user-card-store').append(html);
+                        } else {
+                            $('body').append('<div id="user-card-store" class="hidden"></div>');
+                            $('#user-card-store').append(html);
+                        }
                     }
-                },
-                template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
-                container: 'body',
-                animation: true
-            });
-            _this.popover("show");
-            _this.data('popover', true);
-            _this.on('show.bs.popover', function () {
-                $(".popover").hide();
-            });
 
-            $.get(_this.data('cardUrl'),function(html) {
-                if ($('body').find('#user-card-store').length > 0) {
-                    $('#user-card-store').append(html);
-                } else {
-                    $('body').append('<div id="user-card-store" class="hidden"></div>');
-                    $('#user-card-store').append(html);
-                }
-                
-                $(".popover").on("mouseleave", function () {
-                    $(_this).popover('hide');
-                });
-                setTimeout(function(){
+                    _this.popover({
+                        trigger: 'manual',
+                        placement: 'auto top',
+                        html: 'true',
+                        content: function(){
+                            return html;
+                        },
+                        template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
+                        container: 'body',
+                        animation: true
+                    });
+
                     _this.popover("show");
-                }, 400);
+
+                    _this.data('popover', true);
+                
+                    $(".popover").on("mouseleave", function () {
+                        $(_this).popover('hide');
+                    });
+                    
+                };
+
+                if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
+                    
+                    function beforeSend () {
+
+                        _this.popover({
+                            trigger: 'manual',
+                            placement: 'auto top',
+                            html: 'true',
+                            content: function(){
+                                return loadingHtml;
+                            },
+                            template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
+                            container: 'body',
+                            animation: true
+                        });
+
+                        // _this.popover("show");
+
+                    };
+
+                    $.ajax ({
+                        type:"GET",
+                        url: _this.data('cardUrl'),
+                        dataType: "html",
+                        beforeSend: beforeSend,
+                        success: callback
+                    });
+
+                } else {
+                    var html = $('#user-card-' + userId).clone();
+                    callback(html);
+                    // _this.popover("show");
+                }
                
-            });         
-        } else {
-            _this.popover("show");
-        }
+                bindMsgBtn($('.es-card'), _this);
+
+
+            },300);
+
+            _this.data('timerId', timer);
+
+        }).on("mouseleave", function () {
+     
+            var _this = $(this);
+      
+            setTimeout(function () {
        
-        bindMsgBtn($('.es-card'), _this);
+                if (!$(".popover:hover").length) {
+       
+                    _this.popover("hide");
+       
+               }
+       
+           }, 100);
 
-    }).on("mouseleave", function () {
- 
-        var _this = $(this);
-  
-        setTimeout(function () {
-   
-            if (!$(".popover:hover").length) {
-   
-                _this.popover("hide")
-   
-           }
-   
-       }, 100);
+            clearTimeout(_this.data('timerId'));
 
-    });
+        });
+    }
 
     
     function bindCardEvent(selector)
     {
         $('body').on('click', '.js-card-content .follow-btn', function(){
             var $btn = $(this);
-            showUnfollowBtn($btn);
+            var loggedin = $btn.data('loggedin');
+            if(loggedin == "1"){
+                showUnfollowBtn($btn);
+            }
             $.post($btn.data('url'));
         }).on('click', '.js-card-content .unfollow-btn', function(){
             var $btn = $(this);

@@ -107,7 +107,7 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $this->assertNull($getCommon);
     }
 
-    private function createUser(){
+    protected function createUser(){
         $user = array();
         $user['email'] = "user@user.com";
         $user['nickname'] = "user";
@@ -115,7 +115,7 @@ class UserCommonAdminServiceTest extends BaseTestCase
         return $this->getUserService()->register($user);
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }

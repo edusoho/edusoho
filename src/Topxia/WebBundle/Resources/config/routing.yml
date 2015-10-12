@@ -1,9 +1,11 @@
 homepage:
     pattern:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
+
 homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
+
 live_jump:
     pattern: /live/jump
     defaults: { _controller: TopxiaWebBundle:Default:jump }
@@ -49,6 +51,15 @@ login_bind_exist:
     defaults: { _controller: TopxiaWebBundle:LoginBind:exist }
     methods: [POST]
 
+login_bind_existbind:
+    pattern:  /login/bind/weixinmob/existbind
+    defaults: { _controller: TopxiaWebBundle:LoginBind:existBind }
+    methods: [POST]
+
+login_bind_weixin:
+    pattern:  /login/weixinmob
+    defaults: { _controller: TopxiaWebBundle:LoginBind:weixinIndex }
+
 login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
@@ -90,6 +101,10 @@ register_email_check:
     pattern:  /register/email/check
     defaults: { _controller: TopxiaWebBundle:Register:emailCheck }
 
+register_mobile_check:
+    pattern:  /register/mobile/check
+    defaults: { _controller: TopxiaWebBundle:Register:mobileCheck }
+
 register_email_or_mobile_check:
     pattern:  /register/email_or_mobile/check
     defaults: { _controller: TopxiaWebBundle:Register:emailOrMobileCheck }
@@ -101,6 +116,10 @@ register_nickname_check:
 register_captcha_check:
     pattern:  /register/captcha/check
     defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
+
+register_captcha_modal:
+    pattern:  /register/captcha/modal
+    defaults: { _controller: TopxiaWebBundle:Register:captchaModal }
 
 register_analysis:
     pattern:  /register/analysis
@@ -161,6 +180,10 @@ hls_playlist:
     pattern: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: TopxiaWebBundle:HLS:playlist}
 
+player_local_media:
+    pattern: /player/{id}/file/{token}
+    defaults: { _controller: TopxiaWebBundle:Player:localMedia}
+
 hls_stream:
     pattern: /hls/{id}/stream/{level}/{token}.m3u8
     defaults: { _controller: TopxiaWebBundle:HLS:stream}
@@ -190,9 +213,13 @@ live_course_play:
     pattern:  /course/{courseId}/lesson/{lessonId}/live_entry
     defaults: { _controller: TopxiaWebBundle:LiveCourse:entry }
 
-live_course_replay:
-    pattern: /live/replay/course/{courseId}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:replay }
+live_classroom_url:
+    pattern:  /course/{courseId}/lesson/{lessonId}/get_classroom_url
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:getClassroomUrl }
+
+live_classroom_replay_url:
+    pattern: /course/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/get_replay_url
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:getReplayUrl }
 
 live_course_list:
     pattern:  /live/list/{category}
@@ -217,6 +244,10 @@ live_course_lesson_replay_create:
 live_course_lesson_replay_entry:
     pattern: /livecourse/{courseId}/lesson/{lessonId}/replay/{courseLessonReplayId}/entry
     defaults: { _controller: TopxiaWebBundle:LiveCourse:entryReplay }
+
+live_capacity:
+    pattern: /live_capacity/{id}
+    defaults: { _controller: TopxiaWebBundle:LiveCourse:liveCapacity }
 
 course_explore:
     pattern:  /course/explore/{category}
@@ -268,6 +299,10 @@ course_become_use_member:
     defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
     methods: [POST]
 
+course_member_ids:
+    pattern:  /course/{id}/member_ids
+    defaults: { _controller: TopxiaWebBundle:Course:memberIds }
+
 course_rebuy:
     pattern:  /course/{courseId}/course_rebuy
     defaults: { _controller: TopxiaWebBundle:Course:rebuy }
@@ -283,6 +318,10 @@ course_order_buy:
 course_order_repay:
     pattern:  /course/order/repay
     defaults: { _controller: TopxiaWebBundle:CourseOrder:repay }
+
+course_order_detail:
+    pattern:  /course/order/{id}/detail
+    defaults: { _controller: TopxiaWebBundle:CourseOrder:orderDetail }
 
 order_refund:
     pattern:  /target/{id}/order/refund
@@ -320,6 +359,10 @@ course_lesson_detail_data:
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
+
+course_lesson_player:
+    pattern:  /course/{courseId}/lesson/{lessonId}/player
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:player }
 
 course_lesson_preview:
     pattern:  /course/{courseId}/lesson/{lessonId}/preview
@@ -366,11 +409,6 @@ course_lesson_learn_finish:
 course_lesson_learn_cancel:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/cancel
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnCancel }
-    methods: [POST]
-
-course_lesson_watch_num:
-    pattern:  /course/{courseId}/lesson/{lessonId}/watch_num
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:watchNum }
     methods: [POST]
 
 course_lesson_plugin_lesson_list:
@@ -536,6 +574,26 @@ course_manage_data:
     pattern:  /course/{id}/manage/data
     defaults: { _controller: TopxiaWebBundle:CourseManage:data }
 
+
+#课程同步
+course_manage_course_sync:
+    pattern:  /course/manage/course/sync/{id}/{type}
+    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSync}
+
+course_manage_course_sync_edit:
+    pattern:  /course/manage/course/sync/edit
+    defaults: { _controller: TopxiaWebBundle:CourseManage:courseSyncEdit}
+
+
+course_manage_order:
+    pattern:  /course/{id}/manage/order
+    defaults: { _controller: TopxiaWebBundle:CourseManage:order }
+
+course_manage_order_export_csv:
+    pattern:  /course/{id}/manage/order/export
+    defaults: { _controller: TopxiaWebBundle:CourseManage:orderExportCsv }
+
+
 course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
@@ -594,6 +652,15 @@ course_manage_student_remark:
 course_manage_student_check:
     pattern:  /course/{id}/manage/student_check
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:checkStudent }
+
+course_manage_student_import:
+    pattern:  /course/{id}/manage/student/import
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:import }
+
+course_manage_student_to_base:
+    pattern:  /course/{id}/manage/student/importing
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:excelDataImport }
+    methods: [POST]
 
 course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
@@ -1011,6 +1078,10 @@ password_reset_update:
     pattern:  /password/reset/update
     defaults: { _controller: TopxiaWebBundle:PasswordReset:update }
 
+password_reset_check_mobile:
+    pattern:  /password/reset/check/mobile
+    defaults: { _controller: TopxiaWebBundle:PasswordReset:checkMobileExists }
+
 browser_upgrade:
     pattern:  /browser/upgrade
     defaults: { _controller: TopxiaWebBundle:Browser:upgrade }
@@ -1123,7 +1194,7 @@ my_order_cancel:
     methods: [POST]
 
 web_user_order_detail:
-    pattern: /order/{id}/detail
+    pattern: /my/order/{id}/detail
     defaults: { _controller: TopxiaWebBundle:MyOrder:detail }
 
 my_order_cancel_refund:
@@ -1220,6 +1291,10 @@ user_learning_classrooms:
 user_card_show:
     pattern:  /user/{userId}/card/show
     defaults: { _controller: TopxiaWebBundle:User:cardShow }
+
+login_after_fill_userinfo:
+    pattern:  /fill/userinfo
+    defaults: { _controller: TopxiaWebBundle:User:fillUserInfo }
 
 message_create:
     pattern: /message/create/{toId}
@@ -1592,6 +1667,10 @@ pay_result_notice:
     pattern: /pay/result/notice
     defaults: { _controller: TopxiaWebBundle:PayCenter:resultNotice }
 
+wxpay_roll:
+    pattern: /pay/wxpay/roll
+    defaults: {_controller: TopxiaWebBundle:PayCenter:wxpayRoll }
+
 order_show:
     pattern:  /order/show
     defaults: { _controller: TopxiaWebBundle:Order:show }
@@ -1736,4 +1815,34 @@ course_note_cancel_like:
     pattern:  /course/note/{noteId}/cancel_like
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
+
+common_learn_qrcode:
+    pattern: /qrcode/generate
+    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
+
+common_parse_qrcode:
+    pattern: /qrcode/parse/{token}
+    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
+
+esbar_my_classroom:
+    pattern:  /esbar/my/classroom
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:classroom }
+
+esbar_my_course:
+    pattern:  /esbar/my/course
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:course }
+
+esbar_my_notify:
+    pattern:  /esbar/my/notify
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:notify }
+
+esbar_my_practice:
+    pattern:  /esbar/my/practice/{status}
+    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+
+#esbar_my_history:
+#    pattern:  /esbar/my/history
+#    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+
 

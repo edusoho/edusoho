@@ -25,10 +25,10 @@
           </div>
 
           <div class="form-group">
-            <label class="control-label" for="setup-nickname-field">昵称</label>
+            <label class="control-label" for="setup-nickname-field">用户名</label>
             <div class="controls">
               <input class="form-control" id="setup-nickname-field" type="text" name="nickname" value="{{ app.user.nickname }}" data-url="{{ path('settings_setup_check_nickname') }}" />
-              <div class="help-block">昵称一旦保存，就不能再修改了</div>
+              <div class="help-block">用户名一旦保存，就不能再修改了</div>
             </div>
           </div>
 
@@ -42,7 +42,7 @@
         </form>
       {% else %}
         <div class="alert alert-danger">
-          <p>该帐号已经设置过Email地址和昵称，不能再次设置！</p>
+          <p>该帐号已经设置过Email地址和用户名，不能再次设置！</p>
           <p><a href="{{ path('homepage') }}" class="btn btn-primary">返回首页</a></p>
         </div>
       {% endif %}

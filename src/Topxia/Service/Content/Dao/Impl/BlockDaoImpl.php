@@ -31,7 +31,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     }
 
 
-     private function createBlockQueryBuilder($conditions)
+     protected function createBlockQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions,function($v){
             if($v === 0){
@@ -52,7 +52,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
             ->andWhere('category = :category')
             ->andWhere('title LIKE :title');
     }
-    private function isSortField($condition){
+    protected function isSortField($condition){
         if(isset($condition['category']) && $condition['category'] =='lastest'){
             return true;
         }

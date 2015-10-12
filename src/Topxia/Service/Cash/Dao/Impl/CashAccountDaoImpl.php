@@ -76,7 +76,7 @@ class CashAccountDaoImpl extends BaseDao implements CashAccountDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createAccountQueryBuilder($conditions)
+    protected function createAccountQueryBuilder($conditions)
     {
 
         $conditions = array_filter($conditions);

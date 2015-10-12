@@ -11,8 +11,11 @@
 <link href="{{ asset('bundles/topxiamobilebundlev2/css/ui-style.css') }}" rel="stylesheet" />
 
 {% endblock %}
-
-<script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova.js') }}"></script>
+{% if clientType == 'Android' %}
+    <script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova_Android.js') }}"></script>
+{%  elseif clientType == 'iOS' %} 
+    <script src="{{ asset('bundles/topxiamobilebundlev2/js/cordova_iOS.js') }}"></script>
+{% endif %}
 {% block head_scripts %}
 
 {% endblock %}
@@ -23,9 +26,10 @@
 <script type="text/javascript">
     window.onLoad = function() {
                 document.addEventListener("deviceready", onDeviceReady, false);
-        }
+    }
 
     window.onDeviceReady = function() {
+        console.log("onDeviceReady:");
     }
 </script>
 {% block content %}

@@ -8,7 +8,7 @@ interface ThreadService
 {
 	public function getThread($courseId, $threadId);
 
-	public function findThreadsByType($courseId, $type, $sort = 'latestCreated', $start, $limit);
+	public function findThreadsByType($courseId, $type, $sort, $start, $limit);
 
 	public function findLatestThreadsByType($type, $start, $limit);
 
@@ -61,7 +61,7 @@ interface ThreadService
 	 * 
 	 * @return array 获得的话题回帖列表。
 	 */
-	public function findThreadPosts($courseId, $threadId, $sort = 'default', $start, $limit);
+	public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
 
 	public function getPostCountByuserIdAndThreadId($userId,$threadId);
 

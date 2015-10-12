@@ -19,14 +19,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function getFile($id)
     {
        $file = $this->getUploadFileDao()->getFile($id);
-       if(empty($file)) return null;
+       if(empty($file)){
+        return null;
+       }
        return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
     public function getFileByHashId($hashId)
     {
        $file = $this->getUploadFileDao()->getFileByHashId($hashId);
-       if(empty($file)) return null;
+       if(empty($file)){
+        return null;
+       }
        return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
@@ -129,10 +133,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
         $file = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
-        
+
         $file = $this->getUploadFileDao()->addFile($file);
         
-        return $file;
+        return $file; 
     }
 
     public function renameFile($id, $newFilename)
@@ -246,7 +250,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     public function makeUploadParams($params)
-    {
+    {    
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
     }
 
@@ -448,15 +452,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 		}
 	}
 
-    public function increaseFileUsedCount($fileIds){
-        $this->getUploadFileDao()->updateFileUsedCount($fileIds, 1);
+    public function waveUploadFile($id, $field, $diff)
+    {
+      $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);  
     }
 
-    public function decreaseFileUsedCount($fileIds){
-        $this->getUploadFileDao()->updateFileUsedCount($fileIds, -1);
-    }
-
-    private function generateKey ($length = 0 )
+    protected function generateKey ($length = 0 )
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -468,34 +469,35 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $key;
     }
 
-    private function getFileImplementorByFile($file)
+    protected function getFileImplementorByFile($file)
     {
         return $this->getFileImplementor($file['storage']);
     }
 
-    private function getUploadFileDao()
+    protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');
     }
     
-    private function getUploadFileShareDao(){
+    protected function getUploadFileShareDao(){
     	return $this->createDao('File.UploadFileShareDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getFileImplementor($key)
+    protected function getFileImplementor($key)
     {
         if (!array_key_exists($key, self::$implementor)) {
             throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
         }
+
         return $this->createService(self::$implementor[$key]);
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

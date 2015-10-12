@@ -329,7 +329,7 @@ class ThreadServiceTest extends BaseTestCase
         $post=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>'aaaaaa',),$group['id'],$user['id'],$thread['id']);
         $post1=$this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content'=>"test1"),$group['id'],$user['id'],$thread['id']);
 
-        $posts=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),array('createdTime' => 'DESC'),0,10);
+        $posts=$this->getThreadService()->searchPosts(array('userId'=>$user['id']),array('createdTime' , 'DESC'),0,10);
         $this->assertCount(2,$posts);
     }
 
@@ -476,21 +476,21 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(0,$thread['isStick']);
 
     }
-    private function getGroupService()
+    protected function getGroupService()
     {
         return $this->getServiceKernel()->createService('Group.GroupService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
-    private function createUser(){
+    protected function createUser(){
         $user = array();
         $user['email'] = "user@user.com";
         $user['nickname'] = "user";
@@ -498,7 +498,7 @@ class ThreadServiceTest extends BaseTestCase
         return $this->getUserService()->register($user);
     }
 
-    private function createUser1(){
+    protected function createUser1(){
         $user = array();
         $user['email'] = "user1@user1.com";
         $user['nickname'] = "user1";

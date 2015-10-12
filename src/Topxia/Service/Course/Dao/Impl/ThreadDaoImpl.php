@@ -95,7 +95,13 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		return $builder->execute()->fetchAll() ? : array();
 	}
 
-	private function createThreadSearchQueryBuilder($conditions)
+	public function findThreadsCountByCourseId($courseId)
+	{
+		$sql = "SELECT COUNT(*) FROM {$this->table} WHERE courseId = ? ";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
+	}
+
+	protected function createThreadSearchQueryBuilder($conditions)
 	{
 		if (isset($conditions['title'])) {
 			$conditions['title'] = "%{$conditions['title']}%";
@@ -152,5 +158,4 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 		$sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
 	}
-
 }

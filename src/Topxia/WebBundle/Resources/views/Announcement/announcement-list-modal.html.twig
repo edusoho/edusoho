@@ -6,7 +6,7 @@
 	<div class="announcement-list">
 	{% if announcements %}
 		{% for announcement in announcements %}
-        <div class="alert alert-default alert-edit" role="alert">
+        <div class="alert alert-default alert-edit clearfix" role="alert">
           <div class="alert-header">
             <i class="icon-click es-icon es-icon-chevronright"></i>
             <span class="title">
@@ -15,15 +15,16 @@
             
             {% if canManage %}
 	            <span class="editor">
-	              <a data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetId}) }}"><i class="es-icon es-icon-edit" data-toggle="tooltip" data-placement="top" title="编辑"></i></a>
+                {{ announcement.createdTime|date('Y-m-d') }}
+	              <a class="mlm" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetId}) }}"><i class="es-icon es-icon-edit" data-toggle="tooltip" data-placement="top" title="编辑"></i></a>
 	              <a href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetId}) }}"><i class="es-icon es-icon-delete ml10" data-toggle="tooltip" data-placement="top" title="删除"></i></a>
-	            </span>
+              </span>
             {% else %}
-            	<span class="data">{{ announcement.createdTime|date('Y-m-d') }}</span>
-        		{% endif %}
-
+            	<span class="data">{{ announcement.createdTime|date('Y-m-d H:i:s') }}</span>
+        	  {% endif %}
+            
           </div>
-          <div class="details" style="display: none;">
+          <div class="details">
             {{ announcement.content|raw }}
           </div>
         </div>
@@ -33,8 +34,6 @@
 		<div class="alert alert-edit">暂无公告</div>
 	{% endif %}
   </div>
-
-
 
 	<script>
 		app.load('announcement/announcement');

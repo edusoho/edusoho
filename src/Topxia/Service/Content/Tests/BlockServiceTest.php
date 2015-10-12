@@ -88,12 +88,12 @@ class BlockServiceTest extends BaseTestCase
             'email'=>'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $BlockCount = $this->getBlockService()->searchBlockCount();
+        $BlockCount = $this->getBlockService()->searchBlockCount(array('title'=>'默认'));
         $this->assertEquals(0, $BlockCount);
 
         $this->getBlockService()->createBlock($blockFields1);
         $this->getBlockService()->createBlock($blockFields2);
-        $BlockCount = $this->getBlockService()->searchBlockCount();
+        $BlockCount = $this->getBlockService()->searchBlockCount(array('title'=>'默认'));
         $this->assertEquals(2, $BlockCount);
     }
 
@@ -102,7 +102,7 @@ class BlockServiceTest extends BaseTestCase
      */
      public function testSearchBlockCountWithEmptyBlock()
     {   
-        $BlockCount = $this->getBlockService()->searchBlockCount();
+        $BlockCount = $this->getBlockService()->searchBlockCount(array('title'=>'默认'));
         $this->assertEquals(0, $BlockCount);
     }
 
@@ -129,7 +129,7 @@ class BlockServiceTest extends BaseTestCase
         $registeredUser = $this->getUserService()->register($userInfo);
         $createBlock1 = $this->getBlockService()->createBlock($blockFields1);
         $createBlock2 = $this->getBlockService()->createBlock($blockFields2);
-        $findedBlocks = $this->getBlockService()->searchBlocks(0, 30);
+        $findedBlocks = $this->getBlockService()->searchBlocks(array('title'=>'title'),array('createdTime','DESC'),0, 30);
         $this->assertEquals(2, count($findedBlocks));
         $this->assertContains($createBlock1, $findedBlocks);
         $this->assertContains($createBlock2, $findedBlocks);
@@ -140,7 +140,7 @@ class BlockServiceTest extends BaseTestCase
      */
     public function testSearchBlocksWithEmptyBlocks()
     {   
-        $findedBlocks = $this->getBlockService()->searchBlocks(0, 30);
+        $findedBlocks = $this->getBlockService()->searchBlocks(array('title'=>'默认'),array('createdTime','DESC'),0, 30);
         $this->assertEmpty($findedBlocks);
     }
 
@@ -409,17 +409,17 @@ class BlockServiceTest extends BaseTestCase
         $contents = $this->getBlockService()->getContentsByCodes(array());
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getBlockService()
+    protected function getBlockService()
     {
         return $this->getServiceKernel()->createService('Content.BlockService');
     }

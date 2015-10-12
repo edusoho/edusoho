@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="swiftmailer.class">Swift_Mailer</parameter>
+
+        <parameter key="swiftmailer.transport.sendmail.class">Swift_Transport_SendmailTransport</parameter>
+        <parameter key="swiftmailer.transport.mail.class">Swift_Transport_MailTransport</parameter>
+
+        <parameter key="swiftmailer.transport.failover.class">Swift_Transport_FailoverTransport</parameter>
+
+        <parameter key="swiftmailer.plugin.redirecting.class">Swift_Plugins_RedirectingPlugin</parameter>
+        <parameter key="swiftmailer.plugin.impersonate.class">Swift_Plugins_ImpersonatePlugin</parameter>
+        <parameter key="swiftmailer.plugin.messagelogger.class">Swift_Plugins_MessageLogger</parameter>
+        <parameter key="swiftmailer.plugin.antiflood.class">Swift_Plugins_AntiFloodPlugin</parameter>
+
+        <parameter key="swiftmailer.transport.smtp.class">Swift_Transport_EsmtpTransport</parameter>
+
+        <parameter key="swiftmailer.plugin.blackhole.class">Swift_Plugins_BlackholePlugin</parameter>
+
+        <parameter key="swiftmailer.spool.file.class">Swift_FileSpool</parameter>
+
+        <parameter key="swiftmailer.spool.memory.class">Swift_MemorySpool</parameter>
+        <parameter key="swiftmailer.email_sender.listener.class">Symfony\Bundle\SwiftmailerBundle\EventListener\EmailSenderListener</parameter>
+
+        <parameter key="swiftmailer.data_collector.class">Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector</parameter>
+    </parameters>
+
+    <services>
+        <service id="swiftmailer.mailer.abstract" class="%swiftmailer.class%" public="true" abstract="true">
+            <argument type="service" id="swiftmailer.transport" />
+        </service>
+
+        <service id="swiftmailer.transport.sendmail.abstract" class="%swiftmailer.transport.sendmail.class%" abstract="true" public="false" />
+
+        <service id="swiftmailer.transport.mail.abstract" class="%swiftmailer.transport.mail.class%" abstract="true" public="false">
+            <argument type="service" id="swiftmailer.transport.mailinvoker" />
+        </service>
+
+        <service id="swiftmailer.transport.null.abstract" class="Swift_Transport_NullTransport" abstract="true" public="false">
+        </service>
+
+        <service id="swiftmailer.transport.failover" class="%swiftmailer.transport.failover.class%" public="false" />
+
+        <service id="swiftmailer.transport.mailinvoker" class="Swift_Transport_SimpleMailInvoker" public="false" />
+
+        <service id="swiftmailer.transport.buffer.abstract" class="Swift_Transport_StreamBuffer" abstract="true" public="false">
+            <argument type="service" id="swiftmailer.transport.replacementfactory" />
+        </service>
+
+        <service id="swiftmailer.transport.authhandler.abstract" class="Swift_Transport_Esmtp_AuthHandler" abstract="true" public="false">
+            <argument type="collection">
+                <argument type="service"><service class="Swift_Transport_Esmtp_Auth_CramMd5Authenticator" public="false" /></argument>
+                <argument type="service"><service class="Swift_Transport_Esmtp_Auth_LoginAuthenticator" public="false" /></argument>
+                <argument type="service"><service class="Swift_Transport_Esmtp_Auth_PlainAuthenticator" public="false" /></argument>
+            </argument>
+        </service>
+
+        <service id="swiftmailer.transport.eventdispatcher.abstract" class="Swift_Events_SimpleEventDispatcher" abstract="true" public="false" />
+
+        <service id="swiftmailer.transport.replacementfactory" class="Swift_StreamFilters_StringReplacementFilterFactory" public="false" />
+
+        <service id="swiftmailer.plugin.redirecting.abstract" class="%swiftmailer.plugin.redirecting.class%" abstract="true" public="false" />
+
+        <service id="swiftmailer.plugin.antiflood.abstract" class="%swiftmailer.plugin.antiflood.class%" abstract="true" public="false" />
+
+        <service id="swiftmailer.plugin.impersonate.abstract" class="%swiftmailer.plugin.impersonate.class%" abstract="true" public="false" />
+
+        <service id="swiftmailer.plugin.messagelogger.abstract" class="%swiftmailer.plugin.messagelogger.class%" abstract="true" />
+
+        <service id="swiftmailer.transport.smtp.abstract" class="%swiftmailer.transport.smtp.class%" public="false" abstract="true" />
+
+        <service id="swiftmailer.transport.spool.abstract" class="Swift_Transport_SpoolTransport" public="false" abstract="true" />
+
+        <service id="swiftmailer.spool.file.abstract" class="%swiftmailer.spool.file.class%" public="false" abstract="true">
+            <argument>%kernel.root_dir%/../data/swiftmailer/spool</argument>
+        </service>
+
+        <service id="swiftmailer.spool.memory.abstract" class="%swiftmailer.spool.memory.class%" public="false" abstract="true" />
+
+        <service id="swiftmailer.email_sender.listener" class="%swiftmailer.email_sender.listener.class%">
+            <tag name="kernel.event_subscriber" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
+
+        <service id="swiftmailer.data_collector" class="%swiftmailer.data_collector.class%" public="false">
+            <argument type="service" id="service_container" />
+        </service>
+
+    </services>
+</container>

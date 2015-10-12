@@ -78,6 +78,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
+        if ($priceType == "Coin") {
+            $maxCoin = $coinPayAmount;
+        } else {
+            $maxCoin =  NumberToolkit::roundUp($level['maxRate'] * $totalPrice / 100 * $cashRate);
+        }
+
         return array(
             'level' => empty($level) ? null : $level,
 			'unitType' => empty($unitType) ? null : $unitType,
@@ -92,6 +98,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             'account' => $account,
             'hasPayPassword' => $hasPayPassword,
             'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin,
         );
         
 	}

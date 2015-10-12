@@ -14,17 +14,17 @@ class FileServiceTest extends BaseTestCase
         $this->assertNull(null);
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getMaterialService()
+    protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }

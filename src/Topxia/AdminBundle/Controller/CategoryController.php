@@ -99,7 +99,7 @@ class CategoryController extends BaseController
         }
     }
 
-    private function renderTbody($groupId)
+    protected function renderTbody($groupId)
     {
         $group = $this->getCategoryService()->getGroup($groupId);
         $categories = $this->getCategoryService()->getCategoryTree($groupId);
@@ -109,12 +109,12 @@ class CategoryController extends BaseController
         ));
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

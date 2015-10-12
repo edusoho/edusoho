@@ -73,13 +73,13 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
 
     public function getItemsCountByTestIdAndParentId($testId, $parentId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `parentId` = ?";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? AND `parentId` = ?";
         return $this->getConnection()->fetchColumn($sql, array($testId, $parentId));
     }
 
     public function getItemsCountByTestIdAndQuestionType($testId, $questionType)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? and `questionType` = ? ";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `testId` = ? AND `questionType` = ? ";
         return $this->getConnection()->fetchColumn($sql, array($testId, $questionType));
     }
 
@@ -100,9 +100,20 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         }
         $params = array_merge(array($missScore), $ids);
         $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks});";
+        $sql ="UPDATE {$this->table} SET missScore = ? WHERE testId IN ({$marks})";
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
+
+    public function findTestpaperItemsByPIdAndLockedTestIds($pId,$testIds)
+    {
+        if(empty($testIds)){ 
+            return array(); 
+        }
+        $params = array_merge(array($pId), $testIds);
+        $marks = str_repeat('?,', count($testIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND testId IN ({$marks})";
+        return $this->getConnection()->fetchAll($sql,$params);
+    }
 
 }

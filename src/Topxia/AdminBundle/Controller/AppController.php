@@ -9,8 +9,8 @@ use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
 
 use Topxia\Service\CloudPlatform\KeyApplier;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class AppController extends BaseController
 {
@@ -25,15 +25,29 @@ class AppController extends BaseController
 
     public function myCloudAction(Request $request)
     {
-        $content = $this->getEduCloudService()->getUserOverview();
-        $info = $this->getEduCloudService()->getAccountInfo();
+        // @apitodo 需改成leaf
+        $api = CloudAPIFactory::create('root');
 
-        $EduSohoOpenClient = new EduSohoOpenClient();
-        if (empty($info['level']) or (!(isset($content['service']['storage'])) and !(isset($content['service']['live'])) and !(isset($content['service']['sms'])) )  ) {
-            $articles = $EduSohoOpenClient->getArticles();
+        $content = $api->get("/users/{$api->getAccessKey()}/overview");
+        $info = $api->get('/me');
+
+        $eduSohoOpenClient = new EduSohoOpenClient();
+        if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
+            $articles = $eduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
+
+            if ($this->getWebExtension()->isTrial()) {
+                $trialHtml = $this->getCloudCenterExperiencePage();
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'articles' => $articles,
+                    'trial' => $trialHtml['content'],
+                ));
+            }
+            $unTrial = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
+            $unTrialHtml = json_decode($unTrial,true);
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                 'articles' => $articles,
+                'untrial' => $unTrialHtml['content'],
             ));
         }
 
@@ -42,8 +56,12 @@ class AppController extends BaseController
 
     public function myCloudOverviewAction(Request $request)
     {
-        $content = $this->getEduCloudService()->getUserOverview();
-        $info = $this->getEduCloudService()->getAccountInfo();
+        // @apitodo 需改成leaf
+        $api = CloudAPIFactory::create('root');
+
+        $content = $api->get("/users/{$api->getAccessKey()}/overview");
+        $info = $api->get('/me');
+
         if(isset($info['licenseDomains'])) {
 
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -54,13 +72,13 @@ class AppController extends BaseController
 
         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'],0,stripos($isBinded['email'], '@')),-4),'****',$isBinded['email']) : null ;
 
-        $EduSohoOpenClient = new EduSohoOpenClient;
+        $eduSohoOpenClient = new EduSohoOpenClient;
 
         $currentTime = date('Y-m-d', time());
 
         $account = isset($content['account']) ? $content['account'] : null;
         $day = ''; 
-        if (isset($content['account']['arrearageDate']) and  $content['account']['arrearageDate'] != 0 ) {
+        if (isset($content['account']['arrearageDate']) &&  $content['account']['arrearageDate'] != 0 ) {
             $day =ceil( (strtotime($currentTime) - $content['account']['arrearageDate']) /86400) ;
         }
 
@@ -69,9 +87,10 @@ class AppController extends BaseController
         $startDate = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '' ;
         $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) /86400) : '' ;
 
+        $tlp = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0 ;
         $storage = isset($content['service']['storage']) ? $content['service']['storage'] : null ;
         $storageDate = isset($content['service']['storage']['expire']) ? ceil( ($content['service']['storage']['expire'] - strtotime($currentTime) ) /86400) : '' ;
-        $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],0,1) : '' ;
+        $month = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'],-2) : '' ;
         $startYear = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],0,4) : '' ;
         $startMonth = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'],-2) : '' ;
         $endYear = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'],0,4) : '' ;
@@ -84,9 +103,12 @@ class AppController extends BaseController
 
         $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null ;
 
-        $notices = $EduSohoOpenClient->getNotices();
+        $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
 
+        if ($this->getWebExtension()->isTrial()) {
+            $trialHtml = $this->getCloudCenterExperiencePage();
+        }
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
             'packageDate' =>$packageDate,
@@ -107,10 +129,12 @@ class AppController extends BaseController
             'info' => $info,
             'isBinded' => $isBinded,
             'email' => $email,
+            'tlp' => $tlp,  
+            'trialhtml' => (isset($trialHtml['content'])) ? $trialHtml['content'] : null,
         ));
     }
 
-    private function isLocalAddress($address)
+    protected function isLocalAddress($address)
     {
         if (in_array($address, array('localhost', '127.0.0.1'))) {
             return true;
@@ -174,7 +198,7 @@ class AppController extends BaseController
             'allApp' => $app,
             'installedApps' => $installedApps,
             'type' => $postStatus,
-            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null
+            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null,
         ));
     }
 
@@ -240,6 +264,7 @@ class AppController extends BaseController
             }
         }
 
+
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
@@ -265,7 +290,6 @@ class AppController extends BaseController
             return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
         }
         $version = $this->getAppService()->getMainVersion();
-
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
             'version' => $version,
@@ -293,12 +317,19 @@ class AppController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-
         return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
             'logs' => $logs,
             'users' => $users,
+            'paginator' => $paginator,
         ));
     }
+    
+    protected function getCloudCenterExperiencePage()
+    {
+        $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
+        $trialHtml = json_decode($trial,true);
+        return $trialHtml;
+    } 
 
     protected function getAppService()
     {
@@ -313,10 +344,10 @@ class AppController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
-    }
+    } 
 
-    protected function getEduCloudService()
+    private function getWebExtension()
     {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
-    }   
+        return $this->container->get('topxia.twig.web_extension');
+    }
 }

@@ -105,6 +105,35 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $childrenIds;
     }
 
+    public function findCategoryBreadcrumbs($categoryId)
+    {
+        $breadcrumbs = array();
+        $category = $this->getCategory($categoryId);
+        if (empty($category)) {
+            return array();
+        }
+        $categoryTree = $this->getCategoryTree($category['groupId']);
+
+        $indexedCategories = ArrayToolkit::index($categoryTree, 'id');
+
+        while (true) {
+            if (empty($indexedCategories[$categoryId])) {
+                break;
+            }
+
+            $category = $indexedCategories[$categoryId];
+            $breadcrumbs[] = $category;
+
+            if (empty($category['parentId'])) {
+                break;
+            }
+
+            $categoryId = $category['parentId'];
+        }
+
+        return array_reverse($breadcrumbs);
+    }
+
     public function makeNavCategories($code, $groupCode)
     {
        
@@ -122,7 +151,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 $activeIds[] = $parentId;
                 $sibling = $this->findAllCategoriesByParentId($parentId);
                 if ($sibling) {
-                    $categories[$level++] = $sibling;
+                    $categories[$level] = $sibling;
+                    $level++;
                 }
                 $parent = $this->getCategory($parentId);
                 $parentId = $parent['parentId'];
@@ -245,7 +275,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getGroupDao()->deleteGroup($id);
     }
 
-    private function makeCategoryTree(&$tree, &$categories, $parentId)
+    protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
         static $leaf = false;
@@ -261,7 +291,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $tree;
     }
 
-    private function filterCategoryFields(&$category, $releatedCategory = null)
+    protected function filterCategoryFields(&$category, $releatedCategory = null)
     {
         foreach (array_keys($category) as $key) {
             switch ($key) {
@@ -298,7 +328,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                     $category['parentId'] = (int) $category['parentId'];
                     if ($category['parentId'] > 0) {
                         $parentCategory = $this->getCategory($category['parentId']);
-                        if (empty($parentCategory) or $parentCategory['groupId'] != $category['groupId']) {
+                        if (empty($parentCategory) || $parentCategory['groupId'] != $category['groupId']) {
                             throw $this->createServiceException("父分类(ID:{$category['groupId']})不存在，保存分类失败");
                         }
                     }
@@ -309,17 +339,17 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $category;
     }
 
-    private function getCategoryDao ()
+    protected function getCategoryDao ()
     {
         return $this->createDao('Taxonomy.CategoryDao');
     }
 
-    private function getGroupDao()
+    protected function getGroupDao()
     {
         return $this->createDao('Taxonomy.CategoryGroupDao');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }

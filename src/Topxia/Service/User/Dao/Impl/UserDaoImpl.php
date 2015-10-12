@@ -52,7 +52,9 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function findUsersByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
+        if(empty($ids)){
+            return array();
+        }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         
@@ -77,7 +79,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function createUserQueryBuilder($conditions)
+    protected function createUserQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions,function($v){
             if($v === 0){
@@ -103,8 +105,30 @@ class UserDaoImpl extends BaseDao implements UserDao
             unset($conditions['keyword']);
         }
 
+        if (isset($conditions['keywordUserType'])) {
+            $conditions['type'] = "%{$conditions['keywordUserType']}%";
+            unset($conditions['keywordUserType']);
+        }
+
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = "%{$conditions['nickname']}%";
+        }
+
+        if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'longinDate'){
+            if(isset($conditions['startDate'])){
+                $conditions['loginStartTime'] = strtotime($conditions['startDate']);
+            }
+            if(isset($conditions['endDate'])){
+                $conditions['loginEndTime'] = strtotime($conditions['endDate']);
+            }
+        }
+        if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'registerDate'){
+            if(isset($conditions['startDate'])){
+                $conditions['startTime'] = strtotime($conditions['startDate']);
+            }
+            if(isset($conditions['endDate'])){
+                $conditions['endTime'] = strtotime($conditions['endDate']);
+            }
         }
 
         return  $this->createDynamicQueryBuilder($conditions)
@@ -112,7 +136,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('promoted = :promoted')
             ->andWhere('roles LIKE :roles')
             ->andWhere('roles = :role')
-            ->andWhere('nickname LIKE :nickname')
+            ->andWhere('UPPER(nickname) LIKE :nickname')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('createdIp = :createdIp')
             ->andWhere('approvalStatus = :approvalStatus')
@@ -120,9 +144,15 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('level = :level')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
+            ->andWhere('approvalTime >= :startApprovalTime')
+            ->andWhere('approvalTime <= :endApprovalTime')
+            ->andWhere('loginTime >= :loginStartTime')
+            ->andWhere('loginTime <= :loginEndTime')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
             ->andWhere('verifiedMobile = :verifiedMobile')
+            ->andWhere('type LIKE :type')
+            ->andWhere('id IN ( :userIds)')
             ->andWhere('id NOT IN ( :excludeIds )');
     }
 
@@ -163,7 +193,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function analysisRegisterDataByTime($startTime,$endTime)
     {
-        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? and `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 

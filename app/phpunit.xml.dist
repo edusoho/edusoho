@@ -15,8 +15,10 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>../src/*/Service/*/Tests</directory>
-            <directory>../src/Component/*/Tests</directory>
+            <directory>../src/Classroom/Service/Classroom/Tests</directory>
+            <directory>../src/Topxia/Common/Tests</directory>
+            <directory>../src/Topxia/Component/*/Tests</directory>
+            <directory>../src/Topxia/Service/*/Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -28,12 +30,28 @@
 
     <filter>
         <whitelist>
+            <directory>../src/Classroom/Service/</directory>
+            <exclude>
+                <directory>../src/Classroom/Service/Classroom/Tests</directory>
+                <file>../src/Classroom/Service/*/*Service.php</file>
+                <file>../src/Classroom/Service/*/Dao/*Dao.php</file>
+            </exclude>
+
+            <directory>../src/Topxia/Common</directory>
+            <exclude>
+                <directory>../src/Topxia/Common/Tests</directory>
+            </exclude>
+
+            <directory>../src/Topxia/Component</directory>
+            <exclude>
+                <directory>../src/Topxia/Component/*/Tests</directory>
+            </exclude>
+
             <directory>../src/Topxia/Service</directory>
             <exclude>
                 <directory>../src/Topxia/Service/*/Tests</directory>
-            </exclude>
-            <exclude>
-                <directory>../src/Component/*/Tests</directory>
+                <file>../src/Topxia/Service/*/*Service.php</file>
+                <file>../src/Topxia/Service/*/Dao/*Dao.php</file>
             </exclude>
 
 <!--

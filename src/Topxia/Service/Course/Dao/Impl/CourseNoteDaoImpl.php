@@ -95,6 +95,12 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function findNotesCountByCourseId($courseId)
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE courseId = ? ";
+        return $this->getConnection()->fetchColumn($sql,array($courseId));
+    }
+
     public function getNoteCountByUserIdAndCourseId($userId, $courseId)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND courseId = ?";
@@ -102,7 +108,7 @@ class CourseNoteDaoImpl extends BaseDao implements CourseNoteDao
         return $this->getConnection()->fetchColumn($sql, array($userId, $courseId));
     }
 
-    private function createSearchNoteQueryBuilder($conditions)
+    protected function createSearchNoteQueryBuilder($conditions)
     {
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

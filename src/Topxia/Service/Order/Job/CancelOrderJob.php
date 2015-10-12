@@ -20,12 +20,12 @@ class CancelOrderJob implements Job
 
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    private function getServiceKernel()
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }

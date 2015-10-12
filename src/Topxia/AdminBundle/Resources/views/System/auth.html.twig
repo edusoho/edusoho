@@ -8,341 +8,116 @@
 {{ web_macro.flash_messages() }}
 
 <form  id="auth-form" class="form-horizontal" method="post" novalidate>
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label >用户注册模式</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      {{ radios('register_mode', {'email':'邮箱注册', 'email_or_mobile':'邮箱或手机注册', 'closed':'关闭'}, auth.register_mode) }}
-      <div class="help-block" >开启云短信后，才可使用“邮箱或手机注册”</div>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label>用户修改昵称</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner').nickname_enabled|default(0)) }}
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label >注册防护机制</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <label>
-        <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
-      </label>
-      <label>
-        <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
-      </label>
-      <label>
-        <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
-      </label>
-      <label>
-        <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
-      </label>
-    </div>
-
-    <div class="controls col-md-8 mtl low register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
-      <div class="well">
-        方案说明：
-            <p class="mll mtm">1：注册时需填写验证码。</p>
-      </div>
-    </div>
-
-    <div class="controls col-md-8 mtl middle register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
-      <div class="well">
-        方案说明：
-            <p class="mll mtm">1：注册时需填写验证码。</p>
-            <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
-      </div>
-    </div>
-
-    <div class="controls col-md-8 mtl high register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
-      <div class="well">
-        方案说明：
-            <p class="mll mtm">1：注册时需填写验证码。</p>
-            <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
-            <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
-      </div>
-    </div>
-{# 
-    {% if auth.register_protective|default(none) != "none" %}
-    <div class="controls col-md-8 mtl"  id="register-help">
-      <div class="well">
-        方案说明：
-        {% if  auth.register_protective|default(null) == "low" %}
-          <div class="low">
-            <p class="mll mtm">1：注册时需填写验证码。</p>
-          </div>
-        {% endif %}
-
-        {% if  auth.register_protective|default(null) == "middle" %}
-          <div class="middle">
-            <p class="mll mtm">1：注册时需填写验证码。</p>
-            <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
-          </div>
-        {% endif %}
-
-        {% if  auth.register_protective|default(null) == "high" %}
-          <div class="high">
-            <p class="mll mtm">1：注册时需填写验证码。</p>
-            <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
-            <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
-          </div>
-        {% endif %}
-        </div>
-      </div>
-    {% endif %} #}
-  </div>
-
-
-{#   <div class="form-group">
-      <div class="col-md-3 control-label">
-          <label >是否开启注册时的验证码</label>
-      </div>
-      <div class="controls col-md-8 radios">
-          {{ radios('captcha_enabled', {1:'开启', 0:'关闭'}, auth.captcha_enabled) }} 
-          <p class="help-block">开启后，注册时使用验证码</p>
-      </div>
-  </div> #}
-
-	<div class="form-group">
-	  <div class="col-md-3 control-label">
-	    <label >邮箱验证登录</label>
-	  </div>
-	  <div class="controls col-md-8 radios">
-	    {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
-	  </div>
-	</div>
-
-	<div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录</div>
-	<input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
-    <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label>头像设置提醒</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner').avatar_alert|default('none')) }}
-    </div>
-  </div>
 
   <fieldset>
-    <legend>新用户激活邮件设置</legend>
-
+    <legend>注册设置</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="email_activation_title" >新用户激活邮件标题</label>
+        <label >用户注册模式</label>
       </div>
       <div class="controls col-md-8">
-        <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="email_activation_body">新用户激活邮件内容</label>
-      </div>
-      <div class="controls col-md-8">
-        <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
-        <div class="help-block">
-          {% verbatim %}
-          <div>变量说明：</div>
-          <ul>
-            <li>{{nickname}} 为接收方用户昵称</li>
-            <li>{{sitename}} 为网站名称</li>
-            <li>{{siteurl}} 为网站的地址</li>
-            <li>{{verifyurl}} 为邮箱验证地址</li>
-          </ul>
-          {% endverbatim %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">邮箱注册</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">手机注册</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">邮箱或手机注册</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="closed" %}btn-primary{% endif %} model" data-modle="closed">关闭</button>
         </div>
+        <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
+        <div class="help-block" >开启云短信后，才可使用“手机注册”或“邮箱或手机注册”</div>
       </div>
     </div>
-  </fieldset>
-  <fieldset>
-    <legend>注册信息字段设置</legend>
-      <div class="row">
+
+    
+    <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_mode == 'closed' %}hidden{% endif %}">
+      <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="email_activation_body">注册时需提供</label>
+          <label >邮箱验证登录</label>
         </div>
-        <div class="controls col-md-8 "  id="show-list">
-        {% for sort in auth.registerSort%}
-            {% if sort=='email' and setting("auth.register_mode") == "email" %}
-            <button type="button" class="btn btn-default btn-xs">邮箱地址</button>
-            {% endif %}
-            {% if sort=='mobile' and setting("auth.register_mode") == "email" %}
-            <button type="button" class="btn btn-default btn-xs">手机号码</button>
-            {% endif %}
-            {% if sort=='emailOrMobile' and setting("auth.register_mode") == "email_or_mobile" %}
-            <button type="button" class="btn btn-default btn-xs">邮箱或者手机</button>
-            {% endif %}
-            {% if sort=='password' %}
-            <button type="button" class="btn btn-default btn-xs">密码</button>
-            {% endif %}
-            {% if sort=='nickname' %}
-            <button type="button" class="btn btn-default btn-xs">昵称</button>
-            {% endif %}
-            {% if sort=='truename' %}
-            <button type="button" class="btn btn-default btn-xs">姓名</button>
-            {% endif %}
-            {% if sort=='idcard' %}
-            <button type="button" class="btn btn-default btn-xs">身份证号码</button>
-            {% endif %}
-             {% if sort=='job' %}
-            <button type="button" class="btn btn-default btn-xs">职业</button>
-            {% endif %}
-             {% if sort=='gender' %}
-            <button type="button" class="btn btn-default btn-xs">性别</button>
-            {% endif %}
-             {% if sort=='company' %}
-            <button type="button" class="btn btn-default btn-xs">公司</button>
-            {% endif %}
-            {% if  userFields %}
-                {% for field in userFields %}
-                      {% if sort==field.fieldName %}
-                           <button type="button" class="btn btn-default btn-xs">{{field.title}}</button>
-                     {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-        <div class="pull-right "><a href="javascript:" id="show-list-btn">编辑 <span class="
-  glyphicon glyphicon-chevron-down"></span></a></div>
+        <div class="controls col-md-8 radios">
+          {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
+        </div>
       </div>
-        <div  class="controls col-md-8 " id="show-register-list">
-          <div class="form-group "><ul class="sortable-list" data-role="list">
-          </div>
-            <div class="form-group"><ul class="register-list sortable-list" data-role="list">
-            {% if auth.registerFieldNameArray %}
-            {% for sort in auth.registerFieldNameArray %}
-               {% if sort=='email' and setting("auth.register_mode") == "email"  %}
-                <li class="list-group-item clearfix" data-role="item" >
-                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
-                </li>
-               {% endif %}
+      <div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置</div>
+      <input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
 
-               {% if sort=='emailOrMobile' and setting("auth.register_mode") == "email_or_mobile" %}
-                <li class="list-group-item clearfix" data-role="item" >
-                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="emailOrMobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱或手机<span class="text-muted"> (系统必需，不可取消)</span>
-                </li>
-               {% endif %}
-
-               {% if sort=='nickname' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %} {% if sort == "nickname" %} checked =true {% endif %} {% endfor %} name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"></span>
-                </li>
-               {% endif %}
-               {% if sort=='password' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted"> (系统必需，不可取消)</span>
-                </li>
-               {% endif %}
-               {% if sort=='truename' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="truename"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="truename"></input><input type="hidden"  name="registerFieldNameArray[]" value="truename"></input> 姓名
-                </li>
-               {% endif %}
-               {% if sort=='mobile' and setting("auth.register_mode") == "email" %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="mobile"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
-                </li>
-               {% endif %}
-               {% if sort=='idcard' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="idcard"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted"> (带格式校检)</span>
-                </li>
-               {% endif %}
-               {% if sort=='gender' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="gender"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="gender"></input><input type="hidden"  name="registerFieldNameArray[]" value="gender"></input> 性别
-                </li>
-               {% endif %}
-               {% if sort=='job' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox" {% for sort in auth.registerSort %}{% if sort=="job"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="job"></input><input type="hidden"  name="registerFieldNameArray[]" value="job"></input> 职业
-                </li>
-               {% endif %}
-               {% if sort=='company' %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox"  {% for sort in auth.registerSort %}{% if sort=="company"%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="company"></input><input type="hidden"  name="registerFieldNameArray[]" value="company"></input> 公司
-                </li>            
-               {% endif %}
-               {% if userFields %}
-               {% for field in userFields %}
-                {% if sort==field.fieldName %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                  &nbsp;<input type="checkbox"  {% for sort in auth.registerSort %}{% if sort==field.fieldName%}checked=true{% endif %}{% endfor %} name="registerSort[]" value="{{sort}}"></input><input type="hidden"  name="registerFieldNameArray[]" value="{{sort}}"></input> {{field.title}}
-                </li>            
-               {% endif %}
-               {% endfor %}
-               {% endif %}
-            {% endfor %}
-            {% else %}
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="email"></input><input type="hidden"  name="registerFieldNameArray[]" value="email"></input> 邮箱地址<span class="text-muted"> (系统必需，不可取消)</span>
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="nickname"></input><input type="hidden"  name="registerFieldNameArray[]" value="nickname"></input> 昵称<span class="text-muted"> (系统必需，不可取消)</span>
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" checked=true onclick="return false" name="registerSort[]" value="password"></input><input type="hidden"  name="registerFieldNameArray[]" value="password"></input><input type="hidden"  name="registerSort[]" value="confirmPassword"></input><input type="hidden"  name="registerFieldNameArray[]" value="confirmPassword"></input> 密码<span class="text-muted"> (系统必需，不可取消)</span>
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="truename"></input><input type="hidden"  name="registerFieldNameArray[]" value="truename"></input> 姓名
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="mobile"></input><input type="hidden"  name="registerFieldNameArray[]" value="mobile"></input> 手机号码<span class="text-muted"> (带格式校检)</span>
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="idcard"></input><input type="hidden"  name="registerFieldNameArray[]" value="idcard"></input> 身份证号码<span class="text-muted"> (带格式校检)</span>
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="gender"></input><input type="hidden"  name="registerFieldNameArray[]" value="gender"></input> 性别
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="job"></input><input type="hidden"  name="registerFieldNameArray[]" value="job"></input> 职业
-            </li>
-            <li class="list-group-item clearfix" data-role="item" >
-              <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-              &nbsp;<input type="checkbox" name="registerSort[]" value="company"></input><input type="hidden"  name="registerFieldNameArray[]" value="company"></input> 公司
-            </li>
-            {% if  userFields %}
-                {% for field in userFields %}
-                    <li class="list-group-item clearfix" data-role="item" >
-                      <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
-                      &nbsp;<input type="checkbox" name="registerSort[]" value="{{field.fieldName}}"></input><input type="hidden"  name="registerFieldNameArray[]" value="{{field.fieldName}}"></input> {{field.title}}
-                    </li>
-                {% endfor %}
-            {% endif %}
-            {% endif %}
-            </ul>
-            <span class="help-block pull-right">可拖动调整先后次序.勾选后，在注册时就必须要填写该项目，将会增加注册难度，请谨慎使用</span>
-          </div>
-          <div style="text-align:center;"><a href="javascript:" id="hide-list-btn">收起 <span class="
-glyphicon glyphicon-chevron-up"></span></a></div>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_title" >新用户激活邮件标题</label>
         </div>
+        <div class="controls col-md-8">
+          <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_body">新用户激活邮件内容</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
+          <div class="help-block">
+            {% verbatim %}
+            <div>变量说明：</div>
+            <ul>
+              <li>{{nickname}} 为接收方用户昵称</li>
+              <li>{{sitename}} 为网站名称</li>
+              <li>{{siteurl}} 为网站的地址</li>
+              <li>{{verifyurl}} 为邮箱验证地址</li>
+            </ul>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
     </div>
+
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >注册防护机制</label>
+      </div>
+
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
+        </label>
+      </div>
+
+      <div class="controls col-md-8 mtl low register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          方案说明：
+          <p class="mll mtm">1：注册时需填写验证码。</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 mtl middle register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          方案说明：
+          <p class="mll mtm">1：注册时需填写验证码。</p>
+          <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 mtl high register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          方案说明：
+          <p class="mll mtm">1：注册时需填写验证码。</p>
+          <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
+          <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
+        </div>
+      </div>
+    </div>
+
   </fieldset>
+
   <fieldset>
     <legend>欢迎信息设置</legend>
 
@@ -372,7 +147,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
-        <div class="help-block">通常为这个网站的管理员，请输入用户昵称。</div>
+        <div class="help-block">通常为这个网站的管理员，请输入用户用户名。</div>
       </div>
     </div>
 
@@ -396,7 +171,7 @@ glyphicon glyphicon-chevron-up"></span></a></div>
           <div>注意： 私信长度不能超过1000个字符</div>
           <div>变量说明：</div>
           <ul>
-            <li>{{nickname}} 为接收方用户昵称</li>
+            <li>{{nickname}} 为接收方用户用户名</li>
             <li>{{sitename}} 为网站名称</li>
             <li>{{siteurl}} 为网站的地址</li>
           </ul>
@@ -430,25 +205,24 @@ glyphicon glyphicon-chevron-up"></span></a></div>
   </fieldset>
 
 
- <fieldset>
-    <legend>名称设置</legend>
+  {% if setting('magic.username_setting')|default(false) %}
+    <fieldset>
+      <legend>名称设置</legend>
+      <div class="row form-group">
+          <div class="col-md-2 col-md-offset-2 control-label">
+              <label for="user_name">用户名称</label>
+          </div>
+          <div class="controls col-md-4">
+            <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
+          </div>
+      </div>
 
-    <div class="row form-group">
-        <div class="col-md-2 col-md-offset-2 control-label">
-            <label for="user_name">用户名称</label>
-        </div>
-        <div class="controls col-md-4">
-          <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
-        </div>
-    </div>
-
-  <div class="alert alert-info deduction text-center">
-  <p><strong> 
-  注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
-  </strong></p>
-  </div>
-
-  </fieldset> 
+      <div class="alert alert-info deduction text-center">
+        <p><strong> 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+        </strong></p>
+      </div>
+    </fieldset> 
+  {% endif %}
   
   <div class="form-group">
     <div class="col-md-3 control-label"></div>

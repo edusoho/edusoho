@@ -46,7 +46,7 @@ class MobileOrderController extends MobileBaseController
         $user = $this->getCurrentUser();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         
-        if (empty($member) or empty($member['orderId'])) {
+        if (empty($member) || empty($member['orderId'])) {
             return $this->createErrorResponse($request, 'not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         }
 

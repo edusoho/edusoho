@@ -171,7 +171,7 @@ class MoneyCardController extends BaseController
         return $response;
     }
 
-	private function getMoneyCardService()
+	protected function getMoneyCardService()
     {
         return $this->getServiceKernel()->createService('MoneyCard.MoneyCardService');
     }

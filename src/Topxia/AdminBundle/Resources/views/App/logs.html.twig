@@ -1,4 +1,5 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::cloud-app-layout.html.twig' %}
+
 
 {% set script_controller = 'app/logs' %}
 
@@ -56,5 +57,5 @@
       {% endfor %}
     </tbody>
   </table>
-
+  {{ web_macro.paginator(paginator) }}
 {% endblock %}

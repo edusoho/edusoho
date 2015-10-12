@@ -1,0 +1,98 @@
+<section class="ui-panel ui-panel-card ui-border-t ui-panel-auto" ui-auto-panel data="classRoomDetailContent">
+    <h2 class="title-body">
+	    <span class="title">班级概览</span>
+    </h2>
+    <div class="ui-panel-content" ng-bind-html="classRoomDetailContent" ng-img-show>
+    </div>
+    <p class="ui-panel-autobtn">
+        <span class="autobtn-text">展开</span>
+        <i class='iconfont icon-expandmore autobtn-icon'></i>
+    </p>
+</section>
+<section class="ui-panel ui-panel-card ui-border-t">
+    <h2 class="title-body">
+	<span class="title">班级教师 ({{ classRoom.teachers.length }})</span>
+
+	<a class="title-tips" href="#/teacherlist/classroom/{{ classRoom.id }}">
+		<i class="iconfont icon-gengduo"></i>
+	</a>
+</h2>
+    <div class="ui-panel-content">
+        <ul class="ui-list">
+            <li class="ui-border-t" ng-if="classRoom.teachers[0]">
+                <div class="ui-avatar-s" ui-sref="userInfo({ userId : classRoom.teachers[0].id })">
+                    <img ng-src="{{ classRoom.teachers[0].mediumAvatar | coverAvatar }}" />
+                </div>
+                <div class="ui-list-info">
+                    <h4 class="ui-nowrap">{{ classRoom.teachers[0].nickname }}
+            	<label class="ui-label">教师</label>
+            </h4>
+                    <p class="ui-nowrap">{{ classRoom.teachers[0].title }}</p>
+                </div>
+            </li>
+            <li ng-if="! classRoom.teachers[0]">
+                <p>该班级暂无教师</p>
+                </i>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section class="ui-panel ui-panel-card ui-border-t" ng-init="loadStudents()">
+    <h2 class="title-body">
+    <span class="title">班级学员 ({{ classRoom.studentNum }})</span>
+
+    <a class="title-tips" href="#/studentlist/classroom/{{ classRoom.id }}">
+        <i class="iconfont icon-gengduo"></i>
+    </a>
+</h2>
+    <div class="ui-panel-content">
+        <ul class="ui-list">
+            <li class="ui-border-t" ng-repeat="student in students">
+                <div class="ui-avatar-s" ui-sref="userInfo({ userId : student.id })">
+                    <img ng-src="{{ student.mediumAvatar | coverAvatar }}" />
+                </div>
+                <div class="ui-list-info">
+                    <h4 class="ui-nowrap">{{ student.nickname }}
+                    </h4>
+                    <p class="ui-nowrap">{{ student.title }}</p>
+                </div>
+            </li>
+            <li ng-if="! students">
+                <p>该班级暂无学员</p>
+                </i>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section class="ui-panel ui-panel-card ui-border-t" ng-init="loadReviews()">
+    <h2 class="title-body">
+	<span class="title">班级评价 ({{ reviews.length }})</span>
+
+	<a class="title-tips" href="#/coursereview/classroom/{{ classRoom.id }}">
+		<i class="iconfont icon-gengduo"></i>
+	</a>
+</h2>
+    <div class="ui-panel-content ui-review">
+        <ul class="ui-list">
+            <li class="ui-border-t" ng-if="reviews[0]">
+                <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
+                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" img-error="avatar"/>
+                </div>
+                <div class="ui-list-info">
+                    <h4 class="ui-nowrap ui-review-header">
+	            	{{ reviews[0].user.nickname }}
+	            	<span class="ui-review-rating">
+		      	<i class="iconfont" ng-class="reviews[0].rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
+		      	</span>
+	            </h4>
+                    <p class="ui-nowrap">{{ reviews[0].content }}</p>
+                </div>
+            </li>
+            <li ng-if="! reviews[0]">
+                <p>该班级暂无评价</p>
+                </i>
+        </ul>
+    </div>
+</section>

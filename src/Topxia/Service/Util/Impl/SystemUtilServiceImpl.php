@@ -12,24 +12,25 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	public function removeUnusedUploadFiles()
 	{
 		$targets = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
-		if(empty($targets)) return ;
-		$targets = $this->plainTargetId($targets);
-		foreach ($targets as $target) {
-	        $conditions = array(
-	            'targetType'=> 'courselesson', 
-	            'targetId'=>$target
-	        );
-        	$uploadFiles = $this->getUploadFileService()->searchFiles(
-	            $conditions,
-	            'latestCreated',
-	            0,
-	            1000
-	        );
-			$this->removeUploadFiles($uploadFiles);
+		if(empty($targets)){
+			return 0;
 		}
+		$targets = $this->plainTargetId($targets);
+		$conditions = array(
+            'targetType'=> 'courselesson', 
+            'targets'=>$targets
+	   	);
+    	$uploadFiles = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            'latestCreated',
+            0,
+            500
+        );
+        return $this->removeUploadFiles($uploadFiles);
+		
 	}
 
-	private function plainTargetId($targets)
+	protected function plainTargetId($targets)
 	{
 		$result = array();
 		foreach ($targets as $target) {
@@ -38,11 +39,14 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 		return $result;
 	}
 
-	private function removeUploadFiles($uploadFiles)
+	protected function removeUploadFiles($uploadFiles)
 	{
+		$count = 0;
 		foreach ($uploadFiles as $file) {
-			$this->getUploadFileService()->deleteFile($file['id']);
+			$result = $this->getUploadFileService()->deleteFile($file['id']);
+			$count+= $result;
 		}
+		return $count;
 	}
 	
 

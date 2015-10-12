@@ -91,9 +91,23 @@ interface UserService
 
     public function markLoginInfo();
 
+    public function markLoginFailed($userId, $ip);
+
+    public function markLoginSuccess($userId, $ip);
+
+    public function checkLoginForbidden($userId, $ip);
+
     public function updateUserProfile($id, $fields);
 
     public function getUserProfile($id);
+
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchUserProfileCount(array $conditions);
+
+    public function searchApprovals(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchApprovalsCount(array $conditions);
 
     public function changeUserRoles($id, array $roles);
 
@@ -156,6 +170,8 @@ interface UserService
 
     public function getUserBindByTypeAndUserId($type, $toId);
 
+    public function getUserBindByToken($token);
+
     public function findBindsByUserId($userId);
     
     public function unBindUserByTypeAndToId($type, $toId);
@@ -182,6 +198,10 @@ interface UserService
     
     //当前用户关注的人们
     public function findAllUserFollower($userId);
+
+    public function findFriends($userId, $start, $limit);
+
+    public function findFriendCount($userId);
 
     /**
      * 过滤得到用户关注中的用户ID列表
@@ -211,12 +231,6 @@ interface UserService
     public function findUsersCountByLessThanCreatedTime($endTime);
 
     public function dropFieldData($fieldName);
-
-    public function userLoginFail($user,$failAllowNum = 3, $temporaryMinutes = 20);
-
-    public function isUserTemporaryLockedOrLocked($user);
-
-    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId);
 
     /**
      * 解析文本中@(提)到的用户

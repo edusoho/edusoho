@@ -46,18 +46,18 @@ class CloudAppDaoImpl extends BaseDao implements CloudAppDao
         return $this->getConnection()->fetchColumn($sql);
     }
 
-    public function addApp($App)
+    public function addApp($app)
     {
-        $affected = $this->getConnection()->insert($this->table, $App);
+        $affected = $this->getConnection()->insert($this->table, $app);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert App error.');
         }
         return $this->getApp($this->getConnection()->lastInsertId());
     }
 
-    public function updateApp($id,$App)
+    public function updateApp($id,$app)
     {
-        $this->getConnection()->update($this->table, $App, array('id' => $id));
+        $this->getConnection()->update($this->table, $app, array('id' => $id));
         return $this->getApp($id);
     }
 

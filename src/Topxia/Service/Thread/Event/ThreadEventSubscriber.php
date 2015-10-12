@@ -56,7 +56,7 @@ class ThreadEventSubscriber implements EventSubscriberInterface
         $this->callTargetEventProcessor('onPostVote', $event);
     }
 
-    private function callTargetEventProcessor($method, $event)
+    protected function callTargetEventProcessor($method, $event)
     {
         $subject = $event->getSubject();
 
@@ -75,7 +75,7 @@ class ThreadEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return ServiceKernel::instance()->createService('Thread.ThreadService');
     }

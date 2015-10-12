@@ -1,5 +1,5 @@
 body {
-  padding-top: 60px;
+  padding-top: 70px;
   padding-bottom: 40px;
 }
 
@@ -355,4 +355,8 @@ fieldset #checkboxChoices{
   background: none repeat scroll 0% 0% #F60;
   padding: 2px 5px;
   border-radius: 12px;
+}
+
+.popover.help-popover {
+  max-width: 500px;
 }

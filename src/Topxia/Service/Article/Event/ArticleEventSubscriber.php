@@ -46,7 +46,7 @@ class ArticleEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return ServiceKernel::instance()->createService('Article.ArticleService');
     }

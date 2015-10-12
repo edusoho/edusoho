@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Endroid\QrCode\QrCode;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController
 {    
@@ -28,11 +28,18 @@ class MobileController extends BaseController
             return $this->createMessageResponse('info', '客户端尚未开启！');
         }
 
-        $result = $this->createAPIClient()->get('/me');
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        }else{
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        }
 
         return $this->render('TopxiaWebBundle:Mobile:index.html.twig', array(
             'host' => $request->getHttpHost(),
-            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
+            'mobileCode' => $mobileCode,
+            'mobile' => $mobile
         ));
     }
 
@@ -52,7 +59,7 @@ class MobileController extends BaseController
     }
 
     public function downloadAction(Request $request)
-    {
+    {   
         $params = $request->query->all();
         $baseUrl = $request->getSchemeAndHttpHost();
         return $this->redirect($baseUrl . "/mapi_v2/School/getDownloadUrl?" . http_build_query($params));

@@ -34,7 +34,7 @@ class ThemeController extends BaseController
 
     }
 
-    private function getTheme($uri)
+    protected function getTheme($uri)
     {
         if (empty($uri)) {
             return null;
@@ -58,7 +58,7 @@ class ThemeController extends BaseController
         return $theme;
     }
 
-    private function getThemes()
+    protected function getThemes()
     {
         $themes = array();
 

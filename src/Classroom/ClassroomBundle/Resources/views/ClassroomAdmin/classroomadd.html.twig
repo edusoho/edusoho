@@ -3,6 +3,8 @@
 {% block title %}创建班级 - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'classroombundle/controller/classroom-admin/create' %}
+{% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
+
 
 {% block content %}
 <div class="row">
@@ -26,11 +28,33 @@
 
           <div class="form-group">
             <div class="col-md-3 control-label">
-              <label >是否开放加入</label>
+              <label >班级展示</label>
             </div>
-            <div class="col-md-8 controls radios">
-              {{ radios('private', {'0':'是', '1':'否'}, 0 ) }}
-              <div class="help-block">选择“否”，将不允许自行加入，适用于封闭教学</div>
+            <div id="create-classroom"  class="col-md-8 controls radios">
+              <label>
+              <input id="showable-open" type="radio" name="showable" value="1" checked="checked" > 开启
+              </label>
+              <label>
+                <input id="showable-close" type="radio" name="showable" value="0"> 关闭
+              </label>
+              <div class="help-block">关闭后，班级将彻底隐藏，无法在前台查看到。</div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div id='buyable'>
+              <div class="col-md-3 control-label">
+                <label >班级购买</label>
+              </div>
+              <div class="col-md-8 controls radios">
+                <label>
+                  <input id="buyable-open" type="radio" name="buyable" value="1" checked="checked" > 开启
+                </label>
+                <label>
+                  <input id="buyable-close" type="radio" name="buyable" value="0"> 关闭
+                </label>
+                <div class="help-block">关闭后班级将无法在线购买加入。</div>
+              </div>
             </div>
 
           </div>

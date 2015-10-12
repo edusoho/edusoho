@@ -70,7 +70,7 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
 
 	public function updateLearn($id, $fields)
 	{
-        $id = $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLearn($id);
 	}
 
@@ -115,7 +115,8 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    private function _createSearchQueryBuilder($conditions)
+
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['targetType'])) {
             $builder=$this->createDynamicQueryBuilder($conditions)
@@ -132,16 +133,23 @@ class LessonLearnDaoImpl extends BaseDao implements LessonLearnDao
             ->andWhere("courseId = :courseId")
             ->andWhere("finishedTime >= :startTime")
             ->andWhere("finishedTime <= :endTime");
+
         }
 
-        $builder->andWhere("courseId IN (:courseIds)");
+        $builder->andWhere("courseId IN (:courseIds)")
+                ->andWhere('lessonId IN (:lessonIds)');
 
         return $builder;
     }
 
     public function analysisLessonFinishedDataByTime($startTime,$endTime)
     {
-        $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>=? and `finishedTime`<=? and `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
+        $sql="SELECT count(id) as count, from_unixtime(finishedTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`finishedTime`>=? AND `finishedTime`<=? AND `status`='finished'  group by from_unixtime(`finishedTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime,$endTime));
+    }
+
+    public function deleteLearn($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 }

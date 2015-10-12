@@ -8,7 +8,7 @@ class ImporterProcessorFactory
 
 	public static function create($target)
     {
-    	if(empty($target) || !in_array($target,array('classroom'))) {
+    	if(empty($target) || !in_array($target,array('classroom','course'))) {
     		throw new Exception("用户导入类型不存在");
     	}
 

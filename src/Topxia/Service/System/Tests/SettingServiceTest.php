@@ -35,7 +35,7 @@ class SettingServiceTest extends BaseTestCase
         $this->assertNull($foundSetting);
     }
     
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

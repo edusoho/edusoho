@@ -180,6 +180,11 @@ define(function(require, exports, module) {
             '{{display}}必须为正数'
         ],
         [
+            'percent_number',
+            /^(100|[1-9]\d|\d)$/,
+            '必须在0~100之间'
+        ],
+        [
             'maxsize_image',
             function (options) {
                 var element = options.element;

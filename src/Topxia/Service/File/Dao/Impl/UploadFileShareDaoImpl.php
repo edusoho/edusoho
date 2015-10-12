@@ -9,7 +9,7 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao {
 	protected $table = 'upload_files_share';
 	
 	public function findMySharingContacts($targetUserId){
-		$sql = "SELECT DISTINCT sourceUserId FROM {$this->table} WHERE targetUserId = ? and isActive = 1;";
+		$sql = "SELECT DISTINCT sourceUserId FROM {$this->table} WHERE targetUserId = ? AND isActive = 1;";
 		$result = $this->getConnection()->fetchAll($sql, array($targetUserId)) ? : null;
 		return $result;
 	}
@@ -21,7 +21,7 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao {
 	}
 	
 	public function findShareHistory($sourceUserId, $targetUserId){
-		$sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? and targetUserId = ? LIMIT 1;";
+		$sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? AND targetUserId = ? LIMIT 1;";
 		$result = $this->getConnection()->fetchAssoc($sql, array($sourceUserId, $targetUserId)) ? : null;
 		return $result;
 	}

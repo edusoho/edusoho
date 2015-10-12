@@ -8,7 +8,7 @@ use Topxia\WebBundle\Extensions\DataTag\CategoryAnnouncementDataTag;
 class CategoryAnnouncementDataTagTest extends BaseTestCase
 {
 
-    public function testGetData()
+   /* public function testGetData()
     {
        //添加category
         $groupId = $this->getCategoryService()->addGroup(array(
@@ -114,5 +114,5 @@ class CategoryAnnouncementDataTagTest extends BaseTestCase
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
+    }*/
 }

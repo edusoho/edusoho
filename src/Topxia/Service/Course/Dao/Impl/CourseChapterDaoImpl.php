@@ -30,6 +30,17 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
+    public function searchChapters($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+        ->select('*')
+        ->orderBy($orderBy[0], $orderBy[1])
+        ->setFirstResult($start)
+        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
+
     public function getChapterCountByCourseIdAndType($courseId, $type)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ?";
@@ -75,6 +86,35 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId));
+    }
+
+    public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds)
+    {
+       if(empty($courseIds)){
+            return array();
+        }
+       
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+       
+        $parmaters = array_merge(array($pId), $courseIds);
+
+        $sql ="SELECT * FROM {$this->table} WHERE pId= ? AND courseId IN ({$marks})";
+        
+        return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
+    }
+
+    public function findChaptersCountByCourseId($courseId)
+    {
+        $sql = "SELECT count(*) FROM {$this->table} WHERE  courseId = ?";
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_chapter')
+            ->andWhere('courseId = :courseId');
+        return $builder;
     }
 
 }

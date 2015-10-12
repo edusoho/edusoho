@@ -7,7 +7,7 @@ class FieldSerializer
 
     public function serialize(array &$fields, array $serializeFields)
     {
-        if (empty($fields) or empty($serializeFields)) {
+        if (empty($fields) || empty($serializeFields)) {
             return $fields;
         }
 
@@ -24,7 +24,7 @@ class FieldSerializer
 
     public function unserialize(array &$fields, array $serializeFields)
     {
-        if (empty($fields) or empty($serializeFields)) {
+        if (empty($fields) || empty($serializeFields)) {
             return $fields;
         }
 
@@ -48,7 +48,7 @@ class FieldSerializer
         return $fieldsList;
     }
 
-    private function getSerializeAlgorithm($algorithm)
+    protected function getSerializeAlgorithm($algorithm)
     {
         if (!isset($this->cachedAlgorithm[$algorithm])) {
             $class = __NAMESPACE__ . '\\' . ucfirst($algorithm) . 'SerializeAlgorithm';

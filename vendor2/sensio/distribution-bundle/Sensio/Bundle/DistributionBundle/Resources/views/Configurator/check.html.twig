@@ -1,0 +1,43 @@
+{% extends "SensioDistributionBundle::Configurator/layout.html.twig" %}
+
+{% block content %}
+    {% if majors|length %}
+        <h1>Major Problems that need to be fixed now</h1>
+        <p>
+            We have detected <strong>{{ majors|length }}</strong> major problems.
+            You <em>must</em> fix them before continuing:
+        </p>
+        <ol>
+            {% for message in majors %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% if minors|length %}
+        <h1>Some Recommendations</h1>
+
+        <p>
+            {% if majors|length %}
+            Additionally, we
+            {% else %}
+            We
+            {% endif %}
+            have detected some minor problems that we <em>recommend</em> you to fix to have a better Symfony
+            experience:
+
+            <ol>
+                {% for message in minors %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ol>
+        </p>
+
+    {% endif %}
+
+    {% if not majors|length %}
+        <ul class="symfony_list">
+            <li><a href="{{ url }}">Configure your Symfony Application online</a></li>
+        </ul>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var AutoComplete = require('autocomplete');
+    var AutoComplete = require('edusoho.autocomplete');
     var DynamicCollection = require('../../../../../topxiaweb/js/controller/widget/dynamic-collection4');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
@@ -17,14 +17,13 @@ define(function(require, exports, module) {
             trigger: '#teacher-input',
             dataSource: $("#teacher-input").data('url'),
             filter: {
-                name: 'stringMatch',
+                name: 'stringIgnoreCaseMatch',
                 options: {
                     key: 'nickname'
                 }
             },
             selectFirst: true
         }).render();
-
         autocomplete.on('itemSelect', function(data){
             var error = '';
             dynamicCollection.element.find('input[name="ids[]"]').each(function(i, item) {
@@ -49,7 +48,6 @@ define(function(require, exports, module) {
         $(".teacher-list-group").sortable({
             'distance':20
         });
-
 
     };
 

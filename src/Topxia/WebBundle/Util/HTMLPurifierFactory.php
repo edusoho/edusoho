@@ -21,7 +21,7 @@ class HTMLPurifierFactory {
     }
 
     public function get () {
-        $path = $this->container->getParameter('kernel.root_dir') . '/../vendor/htmlpurifier/htmlpurifier-standalone/library/HTMLPurifier.standalone.php';
+        $path = $this->container->getParameter('kernel.root_dir') . '/../vendor2/htmlpurifier/htmlpurifier-standalone/library/HTMLPurifier.standalone.php';
         require_once $path;
         
         $cacheDir = $this->container->getParameter('kernel.cache_dir') . '/htmlpurifier';

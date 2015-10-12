@@ -59,7 +59,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         return $this->getAnnouncement($id);
 	}
 
-    private function createSearchQueryBuilder($conditions)
+    protected function createSearchQueryBuilder($conditions)
     {
         
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -73,7 +73,7 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
         return $builder;
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
 

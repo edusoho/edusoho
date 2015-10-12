@@ -132,7 +132,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->executeUpdate($sql, array($parentId));
     }
 
-	private function _createThreadSearchBuilder($conditions)
+	protected function _createThreadSearchBuilder($conditions)
 	{
 	    $builder = $this->createDynamicQueryBuilder($conditions)
 	        ->from($this->table,$this->table)

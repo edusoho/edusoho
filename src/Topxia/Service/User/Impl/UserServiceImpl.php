@@ -84,6 +84,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
+        if(isset($conditions['nickname'])){
+            $conditions['nickname'] = strtoupper($conditions['nickname']);
+        }
         $users = $this->getUserDao()->searchUsers($conditions, $orderBy, $start, $limit);
         return UserSerialize::unserializes($users);
     }
@@ -92,6 +95,36 @@ class UserServiceImpl extends BaseService implements UserService
     {
         return $this->getUserDao()->searchUserCount($conditions);
     }
+
+
+
+
+
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
+    {
+        $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
+        return $profiles;
+    }
+
+    public function searchUserProfileCount(array $conditions)
+    {
+        return $this->getProfileDao()->searchProfileCount($conditions);
+    }
+
+    public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
+    {
+        $approvals = $this->getUserApprovalDao()->searchApprovals($conditions, $orderBy, $start, $limit);
+        return $approvals;
+    }
+
+    public function searchApprovalsCount(array $conditions)
+    {
+        return $this->getUserApprovalDao()->searchApprovalsCount($conditions);
+    }
+
+
+
+
 
     public function setEmailVerified($userId)
     {
@@ -159,7 +192,8 @@ class UserServiceImpl extends BaseService implements UserService
             }
         }, $oldAvatars);
 
-        return  $this->getUserDao()->updateUser($userId, $fields);
+        $user = $this->getUserDao()->updateUser($userId, $fields);
+        return UserSerialize::unserialize($user);
     }
 
     public function isNicknameAvaliable($nickname)
@@ -193,7 +227,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changePassword($id, $password)
     {
         $user = $this->getUser($id);
-        if (empty($user) or empty($password)) {
+        if (empty($user) || empty($password)) {
             throw $this->createServiceException('参数不正确，更改密码失败。');
         }
 
@@ -206,7 +240,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
-        $this->clearUserConsecutivePasswordErrorTimesAndLockDeadline($id);
+        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
 
         $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
 
@@ -216,7 +250,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changePayPassword($userId, $newPayPassword)
     {
         $user = $this->getUser($userId);
-        if (empty($user) or empty($newPayPassword)) {
+        if (empty($user) || empty($newPayPassword)) {
             throw $this->createServiceException('参数不正确，更改支付密码失败。');
         }
 
@@ -247,7 +281,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function changeMobile($id, $mobile)
     {
         $user = $this->getUser($id);
-        if (empty($user) or empty($mobile)) {
+        if (empty($user) || empty($mobile)) {
             throw $this->createServiceException('参数不正确，更改失败。');
         }
 
@@ -314,32 +348,61 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->verifyInSaltOut($payPassword, $user['payPasswordSalt'], $user['payPassword']);
     }
 
-   public function parseEmailOrMobile($registration)
+    public function parseRegistration($registration)
     {
-        if(!$this->isMobileRegisterMode()){
-            return $registration;
-        }
-        if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
-            if (SimpleValidator::email($registration['emailOrMobile'])) {
-                $registration['email'] = $registration['emailOrMobile'];
-            } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
-                $registration['mobile'] = $registration['emailOrMobile'];
-                $registration['verifiedMobile'] = $registration['emailOrMobile'];
-            } else {
-                throw $this->createServiceException('emailOrMobile error!');
+        $mode = $this->getRegisterMode();
+        if($mode =='email_or_mobile'){
+            if (isset($registration['emailOrMobile']) && !empty($registration['emailOrMobile'])) {
+                if (SimpleValidator::email($registration['emailOrMobile'])) {
+                    $registration['email'] = $registration['emailOrMobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
+                } elseif (SimpleValidator::mobile($registration['emailOrMobile'])) {
+                    $registration['mobile'] = $registration['emailOrMobile'];
+                    $registration['verifiedMobile'] = $registration['emailOrMobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_mobile';
+                } else {
+                    throw $this->createServiceException('emailOrMobile error!');
+                }
+            }else{
+                throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
+            }
+        }elseif ($mode =='mobile') {
+            if (isset($registration['mobile']) && !empty($registration['mobile'])) {
+                if (SimpleValidator::mobile($registration['mobile'])) {
+                    $registration['mobile'] = $registration['mobile'];
+                    $registration['verifiedMobile'] = $registration['mobile'];
+                    $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_mobile';
+                } else {
+                    throw $this->createServiceException('mobile error!');
+                }
+            }else{
+                throw $this ->createServiceException('参数不正确，手机不能为空。');
             }
         }else{
-            throw $this ->createServiceException('参数不正确，邮箱或手机不能为空。');
+            $registration['type'] = isset($registration['type']) ? $registration['type'] : 'web_email';
+            return $registration;
         }
+
         return  $registration;
     }
 
     public function isMobileRegisterMode(){
         $authSetting = $this->getSettingservice()->get('auth');
-        return (isset($authSetting['register_mode']) && ($authSetting['register_mode'] == 'email_or_mobile')); 
+        return (isset($authSetting['register_mode']) && (($authSetting['register_mode'] == 'email_or_mobile') || ($authSetting['register_mode'] == 'mobile'))); 
+    }
+    /**
+    * email, email_or_mobile, mobile, null
+    */
+    private function getRegisterMode(){
+        $authSetting = $this->getSettingservice()->get('auth');
+        if (isset($authSetting['register_mode'])) {
+            return $authSetting['register_mode'] ;
+        }else{
+            return null;
+        }
     }
 
-    private function getRandomChar(){
+    protected function getRandomChar(){
           return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
@@ -368,17 +431,23 @@ class UserServiceImpl extends BaseService implements UserService
         }
         
         $user['email'] = $registration['email'];
+        $user['emailVerified'] = isset($registration['emailVerified']) ? $registration['emailVerified'] : 0;
         $user['nickname'] = $registration['nickname'];
         $user['roles'] =  array('ROLE_USER');
-        $user['type'] = $type;
+        $user['type'] = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp'] = empty($registration['createdIp']) ? '' : $registration['createdIp'];
         $user['createdTime'] = time();
 
+        $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());
         if (in_array($type, array('default', 'phpwind', 'discuz'))) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 1;
-        } else {
+        } elseif (in_array($type, array('qq', 'weibo', 'renren','weixinweb')) && isset($thirdLoginInfo["{$type}_set_fill_account"]) && $thirdLoginInfo["{$type}_set_fill_account"]){
+            $user['salt'] = '';
+            $user['password'] = '';
+            $user['setup'] = 1;
+        }else {
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 0;
@@ -577,7 +646,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('QQ不正确，更新用户失败。');
         }
 
-        if(!empty($fields['about'])) $fields['about'] = $this->purifyHtml($fields['about']);
+        if(!empty($fields['about'])){
+            $fields['about'] = $this->purifyHtml($fields['about']);
+        }
 
         return $this->getProfileDao()->updateProfile($id, $fields);
     }
@@ -624,7 +695,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return null;
         }
@@ -642,7 +713,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function deleteToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return false;
         }
@@ -678,8 +749,17 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     public function getUserBindByTypeAndFromId($type, $fromId)
-    {
+    {   
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $type = 'weixin';
+        }
+
         return $this->getUserBindDao()->getBindByTypeAndFromId($type, $fromId);
+    }
+
+    public function getUserBindByToken($token)
+    {
+        return $this->getUserBindDao()->getBindByToken($token);
     }
 
     public function getUserBindByTypeAndUserId($type, $toId)
@@ -694,6 +774,10 @@ class UserServiceImpl extends BaseService implements UserService
 
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
+        }
+
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $type = 'weixin';
         }
 
         return $this->getUserBindDao()->getBindByToIdAndType($type, $toId);
@@ -712,6 +796,11 @@ class UserServiceImpl extends BaseService implements UserService
         if(!in_array($type, $types)) {
             throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
         }
+
+        if ($type == 'weixinweb' || $type == 'weixinmob') {
+            $type = 'weixin';
+        }
+
         return $this->getUserBindDao()->addBind(array(
             'type' => $type,
             'fromId' => $fromId,
@@ -735,6 +824,100 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $this->getLogService()->info('user', 'login_success', '登录成功');
+    }
+
+    public function markLoginFailed($userId, $ip)
+    {
+        $user = $userId ? $this->getUser($userId) : null;
+        
+
+        $setting = $this->getSettingService()->get('login_bind', array());
+
+        $default = array(
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'temporary_lock_minutes' => 20,
+        );
+        $setting = array_merge($default, $setting);
+
+        $fields = array();
+        if ($user && $setting['temporary_lock_enabled']) {
+            if (time() > $user['lastPasswordFailTime'] + $setting['temporary_lock_minutes']*60) {
+                $fields['consecutivePasswordErrorTimes'] = 1;
+            } else {
+                $fields['consecutivePasswordErrorTimes'] = $user['consecutivePasswordErrorTimes'] + 1;
+            }
+
+            if ($fields['consecutivePasswordErrorTimes'] >=  $setting['temporary_lock_allowed_times']) {
+                $fields['lockDeadline'] = time() + $setting['temporary_lock_minutes']*60;
+            }
+
+            $fields['lastPasswordFailTime'] = time();
+
+            $user = $this->getUserDao()->updateUser($user['id'], $fields);   
+        }
+
+        if ($user) {
+            $log = "用户({$user['nickname']})，" . ($user['consecutivePasswordErrorTimes'] ? "连续第{$user['consecutivePasswordErrorTimes']}次登录失败" : '登录失败');
+        } else {
+            $log = "用户(IP: $ip)，" . ($user['consecutivePasswordErrorTimes'] ? "连续第{$user['consecutivePasswordErrorTimes']}次登录失败" : '登录失败');
+        }
+
+        $this->getLogService()->info('user', 'login_fail', $log);
+
+        $ipFailedCount = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
+
+        return array(
+            'failedCount' => $user['consecutivePasswordErrorTimes'],
+            'leftFailedCount' => $setting['temporary_lock_allowed_times'] - $user['consecutivePasswordErrorTimes'],
+            'ipFaildCount' => $ipFailedCount
+        );
+    }
+
+    public function markLoginSuccess($userId, $ip)
+    {
+        $fields = array(
+            'lockDeadline' => 0,
+            'consecutivePasswordErrorTimes' => 0,
+            'lastPasswordFailTime' => 0,
+        );
+
+        $this->getUserDao()->updateUser($userId, $fields);
+        $this->getIpBlacklistService()->clearFailedIp($ip);
+    }
+
+    public function checkLoginForbidden($userId, $ip)
+    {
+        $user = $userId ? $this->getUser($userId) : null;
+
+        $setting = $this->getSettingService()->get('login_bind', array());
+
+        $default = array(
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
+            'ip_temporary_lock_allowed_times' => 20,
+            'temporary_lock_minutes' => 20,
+        );
+        $setting = array_merge($default, $setting);
+
+        if (empty($setting['temporary_lock_enabled'])) {
+            return array('status' => 'ok');
+        }
+
+        $ipFailedCount = $this->getIpBlacklistService()->getIpFailedCount($ip);
+        if ($ipFailedCount >= $setting['ip_temporary_lock_allowed_times']) {
+            return array( 'status' => 'error', 'code' => 'max_ip_failed_limit');
+        }
+
+        if ($user && $setting['temporary_lock_enabled'] &&  ($user['lockDeadline'] > time()) ) {
+            return array( 'status' => 'error', 'code' => 'max_failed_limit');
+        }
+
+        if ($user && $setting['temporary_lock_enabled'] && ($user['consecutivePasswordErrorTimes'] >= $setting['temporary_lock_allowed_times'])) {
+            return array( 'status' => 'error', 'code' => 'max_failed_limit');
+        }
+
+        return array('status' => 'ok');
     }
 
     public function lockUser($id)
@@ -850,6 +1033,18 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getFriendDao()->findFriendCountByToId($userId);
     }
 
+    public function findFriends($userId, $start, $limit)
+    {
+        $friends = $this->getFriendDao()->findFriendsByUserId($userId, $start, $limit);
+        $ids = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+    
+    public function findFriendCount($userId)
+    {
+        return $this->getFriendDao()->findFriendCountByUserId($userId);
+    }
+
     public function follow($fromId, $toId)
     {
         $fromUser = $this->getUser($fromId);
@@ -860,14 +1055,26 @@ class UserServiceImpl extends BaseService implements UserService
         if($fromId == $toId) {
             throw $this->createServiceException('不能关注自己！');
         }
+
+        $blacklist = $this->getBlacklistService()->getBlacklistByUserIdAndBlackId($toId,$fromId);
+        if (!empty($blacklist)) {
+            throw $this->createServiceException('关注失败！');
+        }
         $friend = $this->getFriendDao()->getFriendByFromIdAndToId($fromId, $toId);
         if(!empty($friend)) {
             throw $this->createServiceException('不允许重复关注!');
         }
-        return $this->getFriendDao()->addFriend(array(
-            "fromId"=>$fromId,
-            "toId"=>$toId,
-            "createdTime"=>time()));
+        $isFollowed = $this->isFollowed($toId, $fromId);
+        $pair = $isFollowed ? 1 : 0;
+        $friend = $this->getFriendDao()->addFriend(array(
+            'fromId' => $fromId,
+            'toId' => $toId,
+            'createdTime' => time(),
+            'pair' => $pair
+        ));
+        $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => $pair));
+        $this->getDispatcher()->dispatch('user.service.follow', new ServiceEvent($friend));
+        return $friend;
     }
 
     public function unFollow($fromId, $toId)
@@ -881,7 +1088,13 @@ class UserServiceImpl extends BaseService implements UserService
         if(empty($friend)) {
             throw $this->createServiceException('不存在此关注关系，取消关注失败！');
         }
-        return $this->getFriendDao()->deleteFriend($friend['id']);
+        $result = $this->getFriendDao()->deleteFriend($friend['id']);
+        $isFollowed = $this->isFollowed($toId, $fromId);
+        if ($isFollowed) {
+            $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => 0));
+        }
+        $this->getDispatcher()->dispatch('user.service.unfollow', new ServiceEvent($friend));
+        return $result;
     }
 
     public function hasAdminRoles($userId)
@@ -973,8 +1186,16 @@ class UserServiceImpl extends BaseService implements UserService
         );
         
         $currentUser = $this->getCurrentUser();
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
+            array(
+            'userId'=> $user['id'],
+            'note'=> $note,
+            //'status' => 'approved',
+            'operatorId' => $currentUser['id'])
+        );
+
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !" );
-        $mesage = array(
+        $message = array(
             'note' => $note ? $note : '',
             'type' =>'through');
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
@@ -993,8 +1214,9 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime' => time(),
         ));
 
+        $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'],'approved');
         $currentUser = $this->getCurrentUser();
-        $this->getUserApprovalDao()->addApproval(
+        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
             array(
             'userId'=> $user['id'],
             'note'=> $note,
@@ -1003,7 +1225,7 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getLogService()->info('user', 'approval_fail', "用户{$user['nickname']}实名认证失败，操作人:{$currentUser['nickname']} !" );
-        $mesage = array(
+        $message = array(
             'note' => $note ? $note : '',
             'type' =>'reject');
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
@@ -1015,7 +1237,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getProfileDao()->dropFieldData($fieldName);
     }
 
-    private function getUserApprovalDao()
+    protected function getUserApprovalDao()
     {
         return $this->createDao("User.UserApprovalDao");
     }
@@ -1069,52 +1291,52 @@ class UserServiceImpl extends BaseService implements UserService
         return $ats;
     }
 
-    private function getFriendDao()
+    protected function getFriendDao()
     {
         return $this->createDao("User.FriendDao");
     }
 
-    private function getUserDao()
+    protected function getUserDao()
     {
         return $this->createDao('User.UserDao');
     }
 
-    private function getProfileDao()
+    protected function getProfileDao()
     {
         return $this->createDao('User.UserProfileDao');
     }
 
-    private function getUserSecureQuestionDao()
+    protected function getUserSecureQuestionDao()
     {
         return $this->createDao('User.UserSecureQuestionDao');
     }
 
-    private function getUserBindDao()
+    protected function getUserBindDao()
     {
         return $this->createDao('User.UserBindDao');
     }
 
-    private function getUserTokenDao()
+    protected function getUserTokenDao()
     {
         return $this->createDao('User.TokenDao');
     }
 
-    private function getUserFortuneLogDao()
+    protected function getUserFortuneLogDao()
     {
         return $this->createDao('User.UserFortuneLogDao');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->createService('Content.FileService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->createService('User.NotificationService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }
@@ -1124,31 +1346,21 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createService('System.LogService');
     }
 
-    private function getPasswordEncoder()
+    protected function getIpBlacklistService()
+    {
+        return $this->createService('System.IpBlacklistService');
+    }
+
+    protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
     }
 
-    public function userLoginFail($user,$failAllowNum = 3,$temporaryMinutes = 20)
+    protected function getBlacklistService()
     {
-        $currentTime = time();
-        if ($user['consecutivePasswordErrorTimes'] >= $failAllowNum-1){
-            $this->getUserDao()->updateUser($user['id'], array('lockDeadline' => $currentTime+$temporaryMinutes*60));
-        } else {
-            $this->getUserDao()->updateUser($user['id'], array('consecutivePasswordErrorTimes' => $user['consecutivePasswordErrorTimes']+1));
-        }
-        $this->getUserDao()->updateUser($user['id'], array('lastPasswordFailTime' => $currentTime));        
+        return $this->createService('User.BlacklistService');
     }
 
-    public function isUserTemporaryLockedOrLocked($user)
-    {
-        return ( $user['locked'] == 1 )||( $user['lockDeadline'] > time() );
-    }
-
-    public function clearUserConsecutivePasswordErrorTimesAndLockDeadline($userId)
-    {
-        $this->getUserDao()->updateUser($userId, array('lockDeadline' => 0, 'consecutivePasswordErrorTimes' => 0));
-    }
 }
 
 class UserSerialize

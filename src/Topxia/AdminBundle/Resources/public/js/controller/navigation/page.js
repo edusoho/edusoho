@@ -22,7 +22,7 @@ define(function(require, exports, module) {
         var group = $('.navigation-table tbody').sortable({
             group: 'serialization',
             containerPath: '> tr',
-            itemSelector: 'tr.has-subItems',
+            itemSelector: 'tr.has-subItems,tr.child',
             placeholder: '<tr class="placeholder"/>',
             onDrop: function (item, container, _super) {
                 _super(item, container);

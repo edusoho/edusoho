@@ -21,7 +21,7 @@ class OrderRefundController extends BaseController
         $target = $processor->getTarget($id);
         $user = $this->getCurrentUser();
         $member = $processor->getTargetMember($id, $user["id"]);
-        if (empty($member) or empty($member['orderId'])) {
+        if (empty($member) || empty($member['orderId'])) {
             throw $this->createAccessDeniedException('您不是学员或尚未购买，不能退学。');
         }
 
@@ -76,7 +76,7 @@ class OrderRefundController extends BaseController
         }
 
         $member = $processor->getTargetMember($target['id'], $user['id']);
-        if (empty($member) or empty($member['orderId'])) {
+        if (empty($member) || empty($member['orderId'])) {
             throw $this->createAccessDeniedException('您不是学员或尚未购买，不能取消退款。');
         }
 

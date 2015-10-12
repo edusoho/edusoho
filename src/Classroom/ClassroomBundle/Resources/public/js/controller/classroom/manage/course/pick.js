@@ -26,7 +26,6 @@ define(function(require, exports, module) {
 
         $('#search').on('click',function(){
 
-            
             if($('[name=key]').val() != "" ){
 
                 $.post($(this).data('url'),$('.form-search').serialize(),function(data){
@@ -35,6 +34,19 @@ define(function(require, exports, module) {
                 });
             }
 
+        });
+
+        $('#enterSearch').keydown(function(event){
+
+            if(event.keyCode==13){
+
+                $.post($(this).data('url'),$('.form-search').serialize(),function(data){
+
+                    $('.courses-list').html(data);
+                
+                });
+                return false;
+            }
         });
 
         $('#all-courses').on('click',function(){

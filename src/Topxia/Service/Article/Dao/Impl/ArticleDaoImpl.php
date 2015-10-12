@@ -59,8 +59,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
     public function findAllArticles()
     {
         $sql = "SELECT * FROM {$this->table};";
-        $articles = $this->getConnection()->fetchAssoc($sql, array());
-        return $article ? $this->createSerializer()->unserialize($article, $this->serializeFields) : array();
+        $articles = $this->getConnection()->fetchAll($sql, array());
+        return $articles ? $this->createSerializer()->unserializes($articles, $this->serializeFields) : array();
     }
 
     public function findArticlesByCategoryIds(array $categoryIds, $start, $limit)
@@ -149,6 +149,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
     public function deleteArticle($id)
     {
+        $this->getConnection()->delete('thread_post',array('targetId' => $id , 'targetType'=>'article'));
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
@@ -172,7 +173,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
         return $this->getConnection()->fetchAll($sql, $tagArray);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 

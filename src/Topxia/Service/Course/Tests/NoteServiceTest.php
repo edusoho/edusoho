@@ -32,8 +32,9 @@ class NoteServiceTest extends BaseTestCase
         ));
 
         $foundNote = $this->getNoteService()->getNote($note['id']);
+        $this->assertEquals($note['userId'], $foundNote['userId']);
 
-        $this->assertEquals($note['id'], $foundNote['userId']);
+
     }
 
 
@@ -76,6 +77,31 @@ class NoteServiceTest extends BaseTestCase
      */
     public function testFindUserCourseNotes()
     {
+
+    }
+
+    public function textFindNotesCountByCourseId()
+    {
+        $courseInfo = array(
+            'type' => 'online',
+            'title' => 'online test course'
+        );
+        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
+        $lessonInfo = array(
+            'courseId' => $createdCourse['id'],
+            'title' => 'test lesson 1',
+            'content' => 'test lesson content 1',
+            'type' => 'text'
+        );
+        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo);
+        $noteInfo = array(
+            'content' => 'note_content',
+            'lessonId' => $createdLesson1['id'],
+            'courseId' => $createdCourse['id'],
+        );
+        $savedNote = $this->getNoteService()->saveNote($noteInfo);
+        $count = $thit->getNoteService()->findNotesCountByCourseId(1);
+        $this->assertEquals(1,$count);
 
     }
 
@@ -280,17 +306,17 @@ class NoteServiceTest extends BaseTestCase
 
     }
 
-    private function getNoteService()
+    protected function getNoteService()
     {
         return $this->getServiceKernel()->createService('Course.NoteService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }

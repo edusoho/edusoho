@@ -11,7 +11,7 @@ class LessonLearnDaoTest extends BaseTestCase
     	$this->getLessonLearnDao()->analysisLessonFinishedDataByTime(time(), time());
     }
 
-    private function getLessonLearnDao()
+    protected function getLessonLearnDao()
     {
         return $this->getServiceKernel()->createDao('Course.LessonLearnDao'); 
     }

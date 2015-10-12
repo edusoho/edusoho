@@ -1,0 +1,76 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>
+    {%- block title -%}
+      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {%- endblock -%}
+  </title>
+  <meta name="keywords" content="{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}" />
+  <meta name="description" content="{% block description %}{{ setting('site.seo_description') }}{% endblock %}" />
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  {{ setting('login_bind.verify_code', '')|raw }}
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
+
+  {% block stylesheets %}
+    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+  {% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+  <![endif]-->
+
+  <!--[if IE 8]>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
+
+  {% block head_scripts %}{% endblock %}
+
+</head>
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+
+{% block body %}
+
+  <div class="es-wrap">
+
+    
+    {% block full_content %}
+      {% block top_content %}{% endblock %}
+      
+      <div id="content-container" class="container">
+        {% set bodyClass = 'custompage' %}
+        {% block content %}
+        <div class="es-section">
+          
+          <div class="section-header"><h1>{{ content.title }}</h1></div>
+          
+          {% if content.body %}
+            {{ content.body|raw }}
+          {% else %}
+            <div class="empty">当前页面尚未编辑内容，请在管理后台编辑。</div>
+          {% endif %}
+        </div>
+        {% endblock %}
+      </div><!-- /container -->
+      {% endblock %}
+    
+    {% block bottom %}{% endblock %}
+  </div> 
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+{% endblock %}
+
+{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+
+</body>
+</html>

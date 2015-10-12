@@ -38,7 +38,7 @@ class YoukuVideoItemParser extends AbstractItemParser
         }
 
         parse_str(parse_url($matches[1], PHP_URL_QUERY), $query);
-        if (empty($query) or empty($query['title'])) {
+        if (empty($query) || empty($query['title'])) {
             throw $this->createParseException('解析优酷视频页面信息失败!!');
         }
 

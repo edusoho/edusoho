@@ -29,7 +29,7 @@ class CloudClientFactory
         return $client;
     }
 
-    private function getKernenl()
+    protected function getKernenl()
     {
         return ServiceKernel::instance();
     }

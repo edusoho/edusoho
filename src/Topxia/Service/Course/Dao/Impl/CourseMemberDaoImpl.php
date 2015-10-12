@@ -52,6 +52,22 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $role));
     }
 
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
+    {
+        $this->filterStartLimit($start, $limit);
+
+        $sql  = "SELECT m.* FROM {$this->table} m ";
+        $sql.= ' JOIN  '. CourseDao::TABLENAME . ' AS c ON m.userId = ? ';
+        $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
+        if($onlyPublished){
+            $sql .= " AND c.status = 'published' ";
+        }
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($userId, $role));
+    }
+
     public function getMembersByCourseIds($courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1) . '?';
@@ -65,6 +81,17 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
         $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
         $sql.= " AND m.role =  ? AND m.courseId = c.id ";
+        if($onlyPublished){
+            $sql.= " AND c.status = 'published' ";
+        }
+        return $this->getConnection()->fetchColumn($sql,array($userId, $role));
+    }
+
+    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
+        $sql.= " JOIN  ". CourseDao::TABLENAME ." AS c ON m.userId = ? ";
+        $sql.= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
         if($onlyPublished){
             $sql.= " AND c.status = 'published' ";
         }
@@ -117,7 +144,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ? 
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ?
             ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
@@ -199,6 +226,12 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function deleteMemberByCourseIdAndRole($courseId,$role)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE courseId = ? AND role= ?";
+        return $this->getConnection()->executeUpdate($sql, array($courseId,$role));
+    }
+
     public function deleteMembersByCourseId($courseId)
     {
         $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
@@ -224,7 +257,13 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    public function findMemberUserIdsByCourseId($courseId)
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE courseId = ?";
+        return $this->getConnection()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_member')
@@ -235,8 +274,8 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime < :startTimeLessThan')
-            ->andWhere('courseId IN (:courseIds)');
-
+            ->andWhere('courseId IN (:courseIds)')
+            ->andWhere('classroomId = :classroomId');
         return $builder;
     }
 

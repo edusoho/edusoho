@@ -22,9 +22,8 @@ class TestpaperController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
-
+        $testpapersTargets = ArrayToolkit::column($testpaperResults,'target');
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
         $testpapers = ArrayToolkit::index($testpapers, 'id');
 
@@ -34,7 +33,16 @@ class TestpaperController extends BaseController
             $course = explode('-', $course[0]);
             return $course[1];
         }, $targets);
+        $lessonIds = array_map(function($target){
+            $lesson = explode('/', $target);
+            $lesson = explode('-', $lesson[1]);
+            return $lesson[1];
+        }, $testpapersTargets);
 
+        foreach ($testpaperResults as $ke => &$value) {
+               $value['lessonId'] =  $lessonIds[$ke];
+        }
+  
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
@@ -200,6 +208,12 @@ class TestpaperController extends BaseController
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        
+        if(!$testpaper){
+            throw $this->createNotFoundException("试卷不存在");
+        }
+        
         if (in_array($testpaperResult['status'], array('doing', 'paused'))){
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
         }
@@ -230,6 +244,8 @@ class TestpaperController extends BaseController
             'id' => $id,
             'total' => $total,
             'student' => $student,
+            'source' => $request->query->get('source','course'),
+            'targetId' => $request->query->get('targetId',0)
         ));
     }
 
@@ -278,7 +294,7 @@ class TestpaperController extends BaseController
 
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
-        if (!empty($testpaperResult) and !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+        if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return $this->createJsonResponse(true);
         }
 
@@ -322,7 +338,7 @@ class TestpaperController extends BaseController
             // @todo refactor. , wellming
             $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
-            if ($targets[$testpaperResult['target']]['type'] == 'lesson' and !empty($targets[$testpaperResult['target']]['id'])) {
+            if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
                 $lessons = $this->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
                 if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
                     $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
@@ -341,7 +357,10 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
+        
+        if(!$testpaper){
+            throw $this->createNotFoundException("试卷不存在");
+        }
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
             throw $this->createAccessDeniedException('无权批阅试卷！');
@@ -420,7 +439,7 @@ class TestpaperController extends BaseController
     }
 
 
-    private function makeTestpaperTotal ($testpaper, $items)
+    protected function makeTestpaperTotal ($testpaper, $items)
     {
         $total = array();
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
@@ -431,7 +450,7 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                if (array_key_exists('missScore', $testpaper['metas']) and array_key_exists($type, $testpaper["metas"]["missScore"])){
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper["metas"]["missScore"])){
                     $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
                 } else {
                     $total[$type]['missScore'] = 0;
@@ -621,17 +640,17 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getCourseService ()
+    protected function getCourseService ()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -641,7 +660,7 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

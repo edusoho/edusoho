@@ -1,4 +1,4 @@
-<div class="form-group">
+  <div class="form-group">
   <div class="col-md-2 control-label"><label for="testpaper-percentage-field">生成方式</label></div>
   <div class="col-md-8 controls radios">
        {{ radios('mode', {'rand':'随机生成', 'difficulty':'按难易程度'}, 'rand') }}
@@ -43,7 +43,6 @@
       <div class="testpaper-question-option-item">
           <button type="button" class="btn btn-link testpaper-question-option-item-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
           <span style="min-width:85px;display:inline-block;_display:inline;">{{type.name}}</span>
-          
           <span class="mlm">题目数量:</span>
           <input type="text" class="form-control width-input width-input-mini input-sm item-number" name="counts[{{type.key}}]"  value="0" />/
           <span class="text-info question-num" role="questionNum" type="{{type.key}}">{{questionNums[type.key]["questionNum"]|default(0)}}</span>

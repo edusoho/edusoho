@@ -1,24 +1,19 @@
-{% if  member.role == "auditor" %}
+{% if  'auditor' in member.role %}
   <div class="panel panel-default class-join-header-bottom">
     <div class="panel-body">
 
-    <div class="hint">
-      您现在是 <span>旁听生</span>，只能有限参与，{% if classroom.price > 0 %}购买{% endif %}成为正式学员后即可完整学习
-    </div>
+      <div class="hint">
+        您现在是 <span>旁听生</span>，只能有限参与，{% if classroom.price > 0 %}购买{% endif %}成为正式学员后即可完整学习
+      </div>
 
-          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-          
-          <div class="class-price">{% if classroom.price > 0 %}{{set_price(classroom.price * setting('coin.cash_rate') )}}<span>{{setting('coin.coin_name')}}</span>{% else %}免费{% endif %}<del>{{coinPrice}}{{setting('coin.coin_name')}}</del></div>
-
-          {% else %}
-          <div class="class-price">{% if classroom.price > 0 %}¥{{classroom.price}}{% else %}免费{% endif %} <del>¥{{price}}</del></div>
-        {% endif %}
-
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        <div class="class-price">{% if classroom.price > 0 %}{{set_price(classroom.price * setting('coin.cash_rate') )}}<span>{{setting('coin.coin_name')}}</span>{% else %}免费{% endif %}<del>{{coinPrice}}{{setting('coin.coin_name')}}</del></div>
+      {% else %}
+        <div class="class-price">{% if classroom.price > 0 %}¥{{classroom.price}}{% else %}免费{% endif %} <del>¥{{price}}</del></div>
+      {% endif %}
 
       {% if classroom.status == "published" or app.request.get('previewAs')|default("") %}
-
         <div class="row">
-
           <div class="col-md-6 col-sm-6 class-freebuy">
             {% if classroomMemberLevel %}
               {% if checkMemberLevelResult == 'not_login' %}
@@ -32,33 +27,32 @@
               {% endif %}
             {% endif %}
           </div>
-        {% if classroomMemberLevel %}
-          {% if classroom.price > 0 %}
-          <div class="col-md-6 col-sm-6 class-buy">
-            <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
-          </div>
-          {% else %}
-          <div class="col-md-6 col-sm-6 class-buy">
-            <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">免费加入</a>
-          </div>
+          {% if classroomMemberLevel %}
+            {% if classroom.price > 0 %}
+            <div class="col-md-6 col-sm-6 class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
+            </div>
+            {% else %}
+            <div class="col-md-6 col-sm-6 class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">免费加入</a>
+            </div>
+            {% endif %}
           {% endif %}
-        {% endif %}
 
-        {% if not classroomMemberLevel %}
-          {% if classroom.price > 0 %}
-          <div class="class-buy">
-            <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
-          </div> 
-          {% else %}
-          <div class="class-buy">
-            <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">免费加入</a>
-          </div>
+          {% if not classroomMemberLevel %}
+            {% if classroom.price > 0 %}
+            <div class="class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
+            </div> 
+            {% else %}
+            <div class="class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">免费加入</a>
+            </div>
+            {% endif %}
           {% endif %}
-        {% endif %}
-
         </div>
-
       {% endif %}
+      
     </div>
   </div>
 {% endif %}

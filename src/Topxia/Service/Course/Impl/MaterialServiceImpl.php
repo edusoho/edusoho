@@ -50,31 +50,50 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		// Increase the linked file usage count, if there's a linked file used by this material.
 		if(!empty($material['fileId'])){
-			$this->getUploadFileService()->increaseFileUsedCount(array($material['fileId']));
+			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',1);
 		}
 
 		$this->getCourseService()->increaseLessonMaterialCount($fields['lessonId']);
 
+		$this->dispatchEvent("material.create",$material);
+
 		return $material;
+	}
+
+	public function createMaterial($fields)
+	{
+		return $this->getMaterialDao()->addMaterial($fields);
 	}
 
 	public function deleteMaterial($courseId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
-		if (empty($material) or $material['courseId'] != $courseId) {
+
+		if (empty($material) || $material['courseId'] != $courseId) {
 			throw $this->createNotFoundException('课程资料不存在，删除失败。');
 		}
 		$this->getMaterialDao()->deleteMaterial($materialId);
-
+		$this->dispatchEvent("material.delete",$material);
 		// Decrease the linked file usage count, if there's a linked file used by this material.
 		if(!empty($material['fileId'])){
-			$this->getUploadFileService()->decreaseFileUsedCount(array($material['fileId']));
+			$this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
 		}
 
 		if($material['lessonId']){
 		   $count = $this->getMaterialDao()->getLessonMaterialCount($courseId,$material['lessonId']);
 		   $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
 		}
+	}
+
+
+	public function findMaterialsByPIdAndLockedCourseIds($pId, $courseIds)
+	{
+		return $this->getMaterialDao()->findMaterialsByPIdAndLockedCourseIds($pId, $courseIds);
+	}
+
+	public function deleteMaterialByMaterialId($materialId)
+	{
+		return $this->getMaterialDao()->deleteMaterial($materialId);
 	}
 
 	public function deleteMaterialsByLessonId($lessonId)
@@ -85,7 +104,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		// Decrease the linked matrial file usage count, if there are linked materials used by this lesson.
 		if(!empty($fileIds)){
-			$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+			foreach ($fileIds as $fileId) {
+				$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
+			}
 		}
 
 		return $this->getMaterialDao()->deleteMaterialsByLessonId($lessonId);
@@ -99,7 +120,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
 		// Decrease the linked material file usage count, if there are linked materials used by this course.
 		if(!empty($fileIds)){
-			$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+			foreach ($fileIds as $fileId) {
+				$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
+			}
 		}
 
 		return $this->getMaterialDao()->deleteMaterialsByCourseId($courseId);
@@ -108,7 +131,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	public function getMaterial($courseId, $materialId)
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
-		if (empty($material) or $material['courseId'] != $courseId) {
+		if (empty($material) || $material['courseId'] != $courseId) {
 			return null;
 		}
 		return $material;
@@ -135,22 +158,22 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	}
 
 
-    private function getMaterialDao()
+    protected function getMaterialDao()
     {
     	return $this->createDao('Course.CourseMaterialDao');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
     	return $this->createService('Course.CourseService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
     	return $this->createService('Content.FileService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
     }

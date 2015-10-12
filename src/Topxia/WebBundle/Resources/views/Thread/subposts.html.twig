@@ -8,7 +8,11 @@
 </ul>
 
 {% if less %}
-  {{ web_macro.paginator(paginator, 'pagination-sm hide') }}
+  <div class="text-center">
+    {{ web_macro.paginator(paginator, 'pagination-sm hide') }}
+  </div>
 {% else %}
-  {{ web_macro.paginator(paginator, 'pagination-sm') }}
+  <div class="text-center">
+    {{ web_macro.paginator(paginator, 'pagination-sm') }}
+  </div>
 {% endif %}

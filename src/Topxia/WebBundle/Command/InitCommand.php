@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\BlockToolkit;
 
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+
 class InitCommand extends BaseCommand
 {
 
@@ -22,6 +25,8 @@ class InitCommand extends BaseCommand
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
 		$output->writeln('<info>开始初始化系统</info>');
+
+        $this->installAssets($output);
 		$this->initServiceKernel();
 
 		$user = $this->initAdminUser($output);
@@ -41,9 +46,19 @@ class InitCommand extends BaseCommand
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
         $this->initBlock($output);
+        $this->initCrontabJob($output);
 
 		$output->writeln('<info>初始化系统完毕</info>');
 	}
+
+    private function installAssets($output)
+    {
+        $command = new AssetsInstallCommand();
+        $command->setContainer($this->getContainer());
+        $subInput = new StringInput('--symlink --relative');
+        $command->run($subInput, $output);
+        $output->writeln('<info>installAssets成功</info>');
+    }
 
 	private function initRefundSetting($output)
 	{
@@ -361,6 +376,17 @@ EOD;
             'public' => 1,
         ));
 
+        $this->getFileService()->addFileGroup(array(
+            'name' => '编辑区',
+            'code' => 'block',
+            'public' => 1,
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name' => '班级',
+            'code' => 'classroom',
+            'public' => 1,
+        ));
 
         $directory = $this->getContainer()->getParameter('topxia.disk.local_directory');
         chmod($directory, 0777);
@@ -404,6 +430,43 @@ EOD;
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/jianmo/block.json';
+        BlockToolkit::init($json, $this->getContainer());
+
+    }
+
+    public function initCrontabJob($output){
+        $output->write('  初始化CrontabJob');
+        $this->getCrontabService()->createJob(array(
+            'name'=>'CancelOrderJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        $this->getCrontabService()->createJob(array(
+            'name'=>'DeleteExpiredTokenJob', 
+            'cycle'=>'everyhour',
+            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
+            'jobParams'=>'',
+            'nextExcutedTime'=>time(),
+            'createdTime'=>time()
+        ));
+
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteSessionJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobParams'=>'',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+        
+        $this->getSettingService()->set("crontab_next_executed_time", time());
+
+        $output->writeln(' ...<info>成功</info>');
     }
 
 	private function initServiceKernel()
@@ -447,4 +510,8 @@ EOD;
 		return $this->getServiceKernel()->createService('User.UserService');
 	}
 
+    protected function getCrontabService()
+    {
+        return $this->getServiceKernel()->createService('Crontab.CrontabService');
+    }
 }

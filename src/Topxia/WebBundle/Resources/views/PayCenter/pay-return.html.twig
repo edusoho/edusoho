@@ -1,0 +1,25 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %} 支付中心 - {{ parent() }}{% endblock %}
+{% set script_controller = 'pay/success-redirect' %}
+
+{% block content %}
+<div class="order-pay">
+  <div class="order-nav hidden-xs clearfix ">
+    <div>确认订单<b></b></div>
+    <div><span></span>订单支付<b></b></div>
+    <div class="on"><span></span>订单完成</div>
+  </div>
+  <div  class="es-section">
+    <div class="section-header">
+      <h1>订单完成</h1>
+    </div>
+    <div class="order-pay-body">
+      <div class="order-pay-state">
+        <i class="es-icon  es-icon-iccheckcircleblack24px"></i>
+        <p class="js-turn" data-url= {{ goto }}>订单支付成功，将在 <span class="js-countdown">3</span> 秒后跳转</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

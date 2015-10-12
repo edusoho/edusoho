@@ -1,74 +1,43 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}个人中心 - {{ parent() }}{% endblock %}
+{% block title %}个人设置 - {{ parent() }}{% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-md-3">
     {% block side %}
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="list-group-block">
-            <div class="list-group-panel">
+      <div class="sidenav">
+        <ul class="list-group">
+          <li class="list-group-heading">个人设置</li>
+          {% set side_nav = side_nav|default(null) %}
+          
+          <li class="list-group-item {% if side_nav == 'profile' %}active{% endif %}">
+            <a href="{{ path('settings') }}"><i class="glyphicon glyphicon-user"></i> 基础信息</a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'avatar' %}active{% endif %}">
+            <a href="{{ path('settings_avatar') }}"><i class="glyphicon glyphicon-picture"></i> 头像设置</a>
+          </li>
+          
+          <li class="list-group-item {% if side_nav == 'security' %}active{% endif %}">
+            <a href="{{ path('settings_security') }}"><i class="glyphicon glyphicon-lock"></i> 安全设置</a>
+          </li>
+          
 
+          {#<li class="list-group-item {% if side_nav == 'password' %}active{% endif %}">
+            <a href="{{ path('settings_password') }}"><i class="glyphicon glyphicon-lock"></i> 登录密码修改</a>
+          </li>#}
 
+          <li class="list-group-item {% if side_nav == 'email' %}active{% endif %}">
+            <a href="{{ path('settings_email') }}"><i class="glyphicon glyphicon-envelope"></i> 邮箱设置</a>
+          </li>
 
-              <div class="list-group-heading">个人中心</div>
-            <ul class="list-group">
-              {% set side_nav = side_nav|default(null) %}
-              
-              <a class="list-group-item {% if side_nav == 'profile' %}active{% endif %}" href="{{ path('settings') }}"><i class="glyphicon glyphicon-user"></i> 基础信息</a>
-              
-              <a class="list-group-item {% if side_nav == 'avatar' %}active{% endif %}" href="{{ path('settings_avatar') }}"><i class="glyphicon glyphicon-picture"></i> 头像设置</a>
-              
-              <a class="list-group-item {% if side_nav == 'security' %}active{% endif %}" href="{{ path('settings_security') }}"><i class="glyphicon glyphicon-lock"></i> 安全设置</a>
+          {% if setting('login_bind', []).enabled|default(false) %}
+            <li class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" >
+              <a href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> 第三方登录</a>
+            </li>
+          {% endif %}
 
-             {#  <a class="list-group-item {% if side_nav == 'password' %}active{% endif %}" href="{{ path('settings_password') }}"><i class="glyphicon glyphicon-lock"></i> 登录密码修改</a> #}
-              
-              <a class="list-group-item {% if side_nav == 'email' %}active{% endif %}" href="{{ path('settings_email') }}"><i class="glyphicon glyphicon-envelope"></i> 邮箱设置</a>
-
-              {% if setting('login_bind', []).enabled|default(false) %}
-                <a class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> 第三方登录</a>
-              {% endif %}
-
-            </ul>
-          </div>
-
-{#           <div class="list-group-panel">
-
-               
-            <div class="list-group-heading">订单</div>
-
-            <ul class="list-group">
-                <a class="list-group-item 
-                     {% if side_nav == 'my-orders' %} active {% endif %} " 
-                     href="{{path('my_orders')}}">我的订单</a>
-
-                <a class="list-group-item 
-                     {% if side_nav == 'my-bill' or side_nav == 'my-coin' %} active {% endif %} " 
-                     href="
-                     {% if setting('coin.coin_enabled') %}
-                      {{path('my_coin')}}
-                     {% else %}
-                      {{path('my_bill')}}
-                     {% endif %}
-                     "
-                     >账户中心{# 我的现金账单 #}</a>                
-
-                {#虚拟币#}
-{#                 {% if setting('coin.coin_enabled') %}
-                      <a class="list-group-item 
-                        {% if side_nav == 'my-coin' %} active {% endif %} " 
-                        href="{{path('my_coin')}}">我的{{setting('coin.coin_name')}}</a>
-                {% endif %}
-              
-            </ul>
-          </div> #} 
-
-            
-          </div><!-- /list-group-block -->
-        </div>
-
+        </ul>
       </div>
     {% endblock %}
   </div>

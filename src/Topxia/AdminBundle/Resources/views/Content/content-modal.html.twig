@@ -9,124 +9,124 @@
 {% set content = content|default(null) %}
 
 <form class="two-col-form" id="content-form" method="post" enctype="multipart/form-data"
-	{% if content %}
-		action="{{ path('admin_content_edit', {id:content.id}) }}"
-	{% else %}
-		action="{{ path('admin_content_create', {type:type.alias}) }}"
-	{% endif %}
-	>
-	<div class="row">
-		<div class="col-md-8 two-col-main">
-			{% if 'title' in type.basicFields %}
-				<div class="form-group">
-				  <label for="content-title-field" class="control-label">标题</label>
-				  <div class="controls">
-				  	<input class="form-control" id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
-				  </div>
-				</div>
-			{% endif %}
+  {% if content %}
+    action="{{ path('admin_content_edit', {id:content.id}) }}"
+  {% else %}
+    action="{{ path('admin_content_create', {type:type.alias}) }}"
+  {% endif %}
+  >
+  <div class="row">
+    <div class="col-md-8 two-col-main">
+      {% if 'title' in type.basicFields %}
+        <div class="form-group">
+          <label for="content-title-field" class="control-label">标题</label>
+          <div class="controls">
+            <input class="form-control" id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
+          </div>
+        </div>
+      {% endif %}
 
-			<div class="form-group">
-				<label for="editor-field" class="control-label">编辑器类型</label>
-				<div class="controls radios">
-	              	<label><input type="radio" name="editor" value="richeditor" 
-	              		{% if content is empty %}
-	              		 checked="checked" 
-	              		{% elseif content.editor == 'richeditor'%}
-	              		 checked="checked"
-	              		{% endif %}>
-	              		可视化编辑器</label>
-	             	<label><input type="radio" name="editor" value="none"
-	             		{% if content and content.editor == 'none' %} checked="checked" {% endif %}
-	             		>HTML编辑器</label>
-	            </div>
-	        </div>
+      <div class="form-group">
+        <label for="editor-field" class="control-label">编辑器类型</label>
+        <div class="controls radios">
+          <label><input type="radio" name="editor" value="richeditor" 
+            {% if content is empty %}
+             checked="checked" 
+            {% elseif content.editor == 'richeditor'%}
+             checked="checked"
+            {% endif %}>
+            可视化编辑器</label>
+        <label><input type="radio" name="editor" value="none"
+          {% if content and content.editor == 'none' %} checked="checked" {% endif %}
+          >HTML编辑器</label>
+        </div>
+      </div>
 
-			{% if 'body' in type.basicFields %}
-				<label for="content-body-field" class="control-label">正文</label>
+      {% if 'body' in type.basicFields %}
+        <label for="content-body-field" class="control-label">正文</label>
 
-				<div class="form-group" 
-				{% if content and content.editor == 'none' %}
-					style="display:none"
-				{% endif %}
-				>
-					<div class="controls">
-						<textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body"
-						  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
-						  data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
-						>{{ field_value(content, 'body') }}</textarea>
-					</div>
-				</div>
+        <div class="form-group" 
+        {% if content and content.editor == 'none' %}
+          style="display:none"
+        {% endif %}
+        >
+          <div class="controls">
+            <textarea class="form-control" id="richeditor-body-field" rows="16" name="richeditor-body"
+              data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+              data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+            >{{ field_value(content, 'body') }}</textarea>
+          </div>
+        </div>
 
-				<div class="form-group" 
-				{% if content is empty %}
-          		 style="display:none" 
-          		{% elseif content.editor == 'richeditor'%}
-          		 style="display:none"
-          		{% endif %}>
-					<div class="controls">
-						<textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(content, 'body') }}</textarea>
-					</div>
-				</div> 
-			{% endif %}
+        <div class="form-group" 
+        {% if content is empty %}
+               style="display:none" 
+              {% elseif content.editor == 'richeditor'%}
+               style="display:none"
+              {% endif %}>
+          <div class="controls">
+            <textarea class="form-control" id="noneeditor-body-field" rows="16" name="noneeditor-body">{{ field_value(content, 'body') }}</textarea>
+          </div>
+        </div> 
+      {% endif %}
 
-			{% if type.extendedFields %}
-			  {% include 'TopxiaAdminBundle:Content:' ~ type.alias ~ '-extended-fields.html.twig' %}
-			{% endif %}
-		</div>
-		<div class="col-md-4 two-col-side">
-			{% if 'alias' in type.basicFields %}
-				<div class="panel panel-default">
-				  <div class="panel-heading">URL路径</div>
-				  <div class="panel-body">
-					  <div class="form-group">
-					  	<div class="controls">
-							  <input class="form-control" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
-					  	</div>
-					  </div>
-				  </div>
-				</div>
-			{% endif %}
+      {% if type.extendedFields %}
+        {% include 'TopxiaAdminBundle:Content:' ~ type.alias ~ '-extended-fields.html.twig' %}
+      {% endif %}
+    </div>
+    <div class="col-md-4 two-col-side">
+      {% if 'alias' in type.basicFields %}
+        <div class="panel panel-default">
+          <div class="panel-heading">URL路径</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <div class="controls">
+                <input class="form-control" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
-			{% if 'categoryId' in type.basicFields %}
-				<div class="panel">
-				  <div class="panel-heading">分类</div>
-				  <select name="categoryId">
-				  	{{ select_options(category_choices('default'), field_value(content, 'categoryId'), '请选择分类') }}
-				  </select>
-				</div>
-			{% endif %}
+      {% if 'categoryId' in type.basicFields %}
+        <div class="panel">
+          <div class="panel-heading">分类</div>
+          <select name="categoryId">
+            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), '请选择分类') }}
+          </select>
+        </div>
+      {% endif %}
 
-			{% if 'tagIds' in type.basicFields %}
-				<div class="panel">
-				  <div class="panel-heading">标签</div>
-				  <div class="form-group">
-				  	<div class="controls" style="width:100%;">
-						  <input class="width-full" id="content-tags-field" type="text" name="tags" value="{{ field_value(content, 'tagIds')|tags_join }}">
-				  	</div>
-				  </div>
-				</div>
-			{% endif %}
+      {% if 'tagIds' in type.basicFields %}
+        <div class="panel">
+          <div class="panel-heading">标签</div>
+          <div class="form-group">
+            <div class="controls" style="width:100%;">
+              <input class="width-full" id="content-tags-field" type="text" name="tags" value="{{ field_value(content, 'tagIds')|tags_join }}">
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
-			{% if 'template' in type.basicFields %}
-				<div class="panel panel-default" style="display:none">
-				  <div class="panel-heading">模版</div>
-				  <div class="panel-body">
-					  {% set templates = {'default': '默认模版', 'customize': '自定义模版'} %}
-					  {% set templates = {'default': '默认模版'} %}
-					  <select class="form-control" name="template">
-					  	{{ select_options(templates, field_value(content, 'template')) }}
-					  </select>
-				  </div>
-				</div>
-			{% endif %}
+      {% if 'template' in type.basicFields %}
+        <div class="panel panel-default" >
+          <div class="panel-heading">模版</div>
+          <div class="panel-body">
+            {% set templates = {'default': '默认模版','blank':'无导航栏'} %}
 
-			<input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+            <select class="form-control" name="template">
+              {{ select_options(templates, field_value(content, 'template')) }}
+            </select>
+          </div>
+        </div>
+      {% endif %} 
+
+      <input type="hidden" name="publishedTime" value="{{ field_value(content, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
 
 
-		</div>
-	</div>
-	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
 <script> app.load('content/content-modal') </script>

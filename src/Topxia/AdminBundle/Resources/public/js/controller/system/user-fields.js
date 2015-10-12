@@ -2,6 +2,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    require('jquery.sortable');
+    require('/bundles/topxiaadmin/js/controller/system/common');
 
     exports.run = function() {
 
@@ -17,17 +19,15 @@ define(function(require, exports, module) {
             }
 		});
 
+        var titleArr = ['真实姓名','手机号码','QQ','所在公司','身份证号码','性别','职业','微博','微信'];
         $('#add-btn').on('click', function() {
-                if($('input[name="field_title"]').val() == '真实姓名'|| $('input[name="field_title"]').val() == '手机号码' 
-                    || $('input[name="field_title"]').val() == 'QQ' || $('input[name="field_title"]').val() == '所在公司'
-                    || $('input[name="field_title"]').val() == '身份证号码' 
-                    || $('input[name="field_title"]').val() == '性别' || $('input[name="field_title"]').val() == '职业'
-                    || $('input[name="field_title"]').val() == '微博' 
-                    || $('input[name="field_title"]').val() == '微信' )
-                {
-                    Notify.danger('请勿添加与默认字段相同的自定义字段！')
-                    return false;
-                }
+            var field_title = $('input[name="field_title"]').val();
+            
+            if($.inArray(field_title, titleArr) >= 0 )
+            {
+                Notify.danger('请勿添加与默认字段相同的自定义字段！')
+                return false;
+            }
         });
 
         validator.addItem({
@@ -49,9 +49,31 @@ define(function(require, exports, module) {
         });
 
 
+        $(".fill-userinfo-list").sortable({
+          'distance': 20
+        });
+
         $('#field_type').on('change',function(){
             
             $('#type_num').html($(this).children('option:selected').attr('num'));
+        });
+
+        $('#show-fields-list-btn').on('click',function(){
+            $('#show-fields-list').show();
+            $('#show-checked-fields-list').hide();
+        })
+
+        $("#hide-fields-list-btn").on("click", function() {
+            $("#show-fields-list").hide();
+
+            var fieldNameHtml = '';
+            $('.fill-userinfo-list input:checkbox:checked').each(function(){
+                var fieldName = $(this).closest('li').text();
+                fieldNameHtml += '<button type="button" class="btn btn-default btn-xs">'+$.trim(fieldName)+'</button>&nbsp;';
+            })
+
+            $('#show-checked-fields-list .pull-left').html(fieldNameHtml);
+            $("#show-checked-fields-list").show();
         });
 
     };

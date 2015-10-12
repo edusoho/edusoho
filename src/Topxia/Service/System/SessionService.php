@@ -9,5 +9,5 @@ interface SessionService
 
     public function clearByUserId ($userId);
 
-    public function deleteInvalidSession($retentionTime);
+    public function deleteInvalidSession($sessionTime, $limit);
 }

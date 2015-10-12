@@ -193,6 +193,11 @@
 
                     var postId = $(this).attr('postId');
                     $.post($(this).data('url'), "", function(html) {
+
+                        $("body,html").animate({
+                            scrollTop: $("#post-"+postId).offset().top
+                        }, 300), !1
+
                         $('.reply-post-list-' + postId).replaceWith(html);
 
                     })
@@ -200,6 +205,7 @@
                 });
 
                 $('.group-post-list').on('click', '.reply-btn', function() {
+                    var $this = $(this);
 
                     var postId = $(this).attr('postId');
                     var fromUserIdVal = "";
@@ -222,7 +228,9 @@
                             if (error) {
                                 return false;
                             }
-                            $(this).button('submiting').addClass('disabled');
+                            
+                            $this.button('submiting').addClass('disabled');
+
                             $.ajax({
                                 url: $(".thread-post-reply-form").attr('post-url'),
                                 data: "content=" + replyContent + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal,

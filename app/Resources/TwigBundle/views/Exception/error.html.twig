@@ -2,14 +2,19 @@
 {% block title %}出错啦 - {{ parent() }}{% endblock %}
 
 {% block body %}
-	<div class="container">
-		<div class="content">
-			<h1>哇哦，有状况发生啦！</h1>
-			<div class="message">服务器返回了"{{ status_code }} {{ status_text }}"。
-				看起来是像出了点状况，请把该信息报告给管理员。我们会立即修复这个问题。真的非常抱歉！</div>
-			<div class="actions">
-				<a href="{{ path('homepage', {ref:500}) }}">返回首页</a>
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="panel panel-default error-panel">
+      <div class="panel-heading">
+        <span class="error-title">{{ status_code }}</span>{{ status_text }}
+      </div>
+      <div class="panel-body">
+        <div class="well">
+          <p>如果你看到该提示，说明服务器出现了问题。</p>
+          <p>刚从被窝中努力爬起来的程序员哥哥正拼命修复中。</p>
+          <p><a href="{{ path('homepage', {ref:500}) }}">返回首页 ></a></p>
+          <span class="error-500-icon hidden-xs"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

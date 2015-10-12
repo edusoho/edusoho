@@ -5,15 +5,20 @@ define(function(require, exports, module) {
     var Swiper = require('swiper');
 
     exports.run = function() {
-        var swiper = new Swiper('.es-poster.swiper-container', {
-            pagination: '.swiper-pager',
-            paginationClickable: true,
-            autoplay: 5000,
-            autoplayDisableOnInteraction: false,
-            loop: true,
-            calculateHeight: true,
-            roundLengths: true
-        });
+        if ($(".es-poster .swiper-slide").length > 1) {
+            var swiper = new Swiper('.es-poster.swiper-container', {
+                pagination: '.swiper-pager',
+                paginationClickable: true,
+                autoplay: 5000,
+                autoplayDisableOnInteraction: false,
+                loop: true,
+                calculateHeight: true,
+                roundLengths: true,
+                onInit: function(swiper) {
+                   $(".swiper-slide").removeClass('swiper-hidden'); 
+                }
+            });
+        }
         Lazyload.init();
 
         $("#course-list").on('click','.js-course-filter',function(){
@@ -21,7 +26,8 @@ define(function(require, exports, module) {
              $.get($btn.data('url'),function(html){
                $('#course-list').html(html);
                Lazyload.init();
-               $('[data-toggle="tooltip"]').tooltip();
+               $(".tooltip").remove();
+               $('[data-toggle="tooltip"]').tooltip({container: 'body'});
             })
         })
 
@@ -29,7 +35,10 @@ define(function(require, exports, module) {
 
         $('.recommend-teacher').on('click', '.teacher-item .follow-btn', function(){
             var $btn = $(this);
-            showUnfollowBtn($btn);
+            var loggedin = $btn.data('loggedin');
+            if(loggedin == "1"){
+                showUnfollowBtn($btn);
+            }
             $.post($btn.data('url'));
         }).on('click', '.teacher-item .unfollow-btn', function(){
             var $btn = $(this);

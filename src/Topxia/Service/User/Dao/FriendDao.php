@@ -8,6 +8,8 @@ interface FriendDao
 
     public function deleteFriend($id);
 
+    public function updateFriendByFromIdAndToId($fromId, $toId, $fields);
+
     public function getFriendByFromIdAndToId($fromId, $toId);
 
     public function getFriendsByFromIdAndToIds($fromId, array $toIds);
@@ -25,4 +27,8 @@ interface FriendDao
     public function findFriendsByToId($toId, $start, $limit);
 
     public function findFriendCountByToId($toId);
+
+    public function findFriendsByUserId($userId, $start, $limit);
+
+    public function findFriendCountByUserId($userId);
 }

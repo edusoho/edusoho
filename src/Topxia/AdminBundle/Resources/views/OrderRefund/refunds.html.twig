@@ -12,7 +12,7 @@
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" name="nickname" value="{{ app.request.get('nickname') }}" placeholder="退款人昵称">
+      <input class="form-control" type="text" name="nickname" value="{{ app.request.get('nickname') }}" placeholder="退款人用户名">
     </div>
 
 {#     <div class="form-group" >
@@ -87,5 +87,9 @@
       {% endif %}
     </tbody>
   </table>
+
+  <div class="paginator">
+    {{ web_macro.paginator(paginator) }} 
+  </div>
 
 {% endblock %}

@@ -1,0 +1,34 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">课程概览</h3>
+    </div>
+</div>
+
+<div class="top-header ui-course ui-course-detail">
+	<section class="ui-panel ui-panel-card ui-border-t">
+	    <h2 class="title-body">
+	    	<span class="title">课程简介</span>
+	    </h2>
+	    <div class="ui-panel-content" ng-bind-html="course.about" ng-img-show>
+	    </div>
+	</section>
+
+	<section class="ui-panel ui-panel-card ui-border-t">
+	    <h2 class="title-body">
+	    	<span class="title">课程目标</span>
+	    </h2>
+	    <div class="ui-panel-content">
+	    	<li ng-repeat="goal in course.goals">{{ goal }}</li>
+	    </div>
+	</section>
+
+	<section class="ui-panel ui-panel-card ui-border-t">
+	    <h2 class="title-body">
+	    	<span class="title">适合人群</span>
+	    </h2>
+	    <div class="ui-panel-content">
+	    	<li ng-repeat="audience in course.audiences">{{ audience }}</li>
+	    </div>
+	</section>
+</div>

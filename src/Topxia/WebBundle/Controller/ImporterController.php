@@ -89,7 +89,7 @@ class ImporterController extends BaseController
     }
 
 
-    private function getImporterProcessor($targetType)
+    protected function getImporterProcessor($targetType)
     {
         return ImporterProcessorFactory::create($targetType);
     }

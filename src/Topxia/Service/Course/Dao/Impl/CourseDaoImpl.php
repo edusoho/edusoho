@@ -36,6 +36,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        if(empty($parentId)){
+            return array();
+        }
+        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
+        return $this->getConnection()->fetchAll($sql, array($parentId,$locked));
+    }
+
     public function findCoursesByCourseIds(array $ids, $start, $limit)
     {
         if(empty($ids)){
@@ -69,13 +78,13 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array($status));
     }
 
-    public function findCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         if(empty($tagIds)){
             return array();
         }
 
-        $sql ="SELECT * FROM {$this->getTablename()} WHERE status = ? AND ";
+        $sql ="SELECT * FROM {$this->getTablename()} WHERE parentId = 0 AND status = ? AND (";
 
         foreach ($tagIds as $key => $tagId) {
             if ($key > 0 ) {
@@ -85,7 +94,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             }
         }
 
-        $sql .= " ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
+        $sql .= ") ORDER BY {$orderBy[0]} {$orderBy[1]} LIMIT {$start}, {$limit}";
         
         return $this->getConnection()->fetchAll($sql, array($status));
 
@@ -94,14 +103,25 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $builder = $this->_createSearchQueryBuilder($conditions)
+        if ($orderBy[0] == 'recommendedSeq') {
+            $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy('recommended', 'DESC')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+            $builder->addOrderBy('recommendedSeq','ASC');
+            $builder->addOrderBy('recommendedTime', 'DESC');
+            $builder->addOrderBy('createdTime','DESC');
+
+        } else {
+            $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
-        if ($orderBy[0] == 'recommendedSeq') {
-            $builder->addOrderBy('recommendedTime', 'DESC');
         }
+        
+
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
@@ -114,6 +134,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
+
         $affected = $this->getConnection()->insert(self::TABLENAME, $course);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
@@ -126,7 +147,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }
-
+    
     public function deleteCourse($id)
     {
         return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
@@ -150,7 +171,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($discountId));
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -188,9 +209,11 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('price = :price')
             ->andWhere('price > :price_GT')
             ->andWhere('originPrice > :originPrice_GT')
+            ->andWhere('originPrice = :originPrice')
             ->andWhere('coinPrice > :coinPrice_GT')
             ->andWhere('coinPrice = :coinPrice')
             ->andWhere('originCoinPrice > :originCoinPrice_GT')
+            ->andWhere('originCoinPrice = :originCoinPrice')
             ->andWhere('title LIKE :titleLike')
             ->andWhere('userId = :userId')
             ->andWhere('recommended = :recommended')
@@ -210,14 +233,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('parentId > :parentId_GT')
             ->andWhere('parentId IN ( :parentIds )')
             ->andWhere('id NOT IN ( :excludeIds )')
-            ->andWhere('id IN ( :courseIds )');
+            ->andWhere('id IN ( :courseIds )')
+            ->andWhere('locked = :locked');
 
         return $builder;
     }
 
     public function analysisCourseDataByTime($startTime,$endTime)
     {
-             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} and `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+             $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
             return $this->getConnection()->fetchAll($sql);
     }
@@ -235,7 +259,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
          return $this->getConnection()->fetchAll($sql);
     }
 
-    private function getTablename()
+    protected function getTablename()
     {
         return self::TABLENAME;
     }

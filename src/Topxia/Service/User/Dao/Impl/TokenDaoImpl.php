@@ -26,13 +26,6 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
     }
 
-	public function findTokenByToken($token)
-	{
-		$sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
-        $token = $this->getConnection()->fetchAssoc($sql, array($token));
-        return $token ? $this->createSerializer()->unserialize($token, $this->serializeFields) : null;
-	}
-
 	public function addToken(array $token)
 	{
         $token = $this->createSerializer()->serialize($token, $this->serializeFields);
@@ -43,10 +36,22 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         return $this->getToken($this->getConnection()->lastInsertId());
 	}
 
+    public function findTokensByUserIdAndType($userId, $type)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and type = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId, $type)) ? : null;
+    }
+
 	public function deleteToken($id)
 	{
 		return $this->getConnection()->delete($this->table, array('id' => $id));
 	}
+
+    public function deleteTokensByExpiredTime($expiredTime, $limit)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
+        return $this->getConnection()->executeQuery($sql, array($expiredTime));
+    }
 
     public function waveRemainedTimes($id, $diff)
     {
@@ -61,7 +66,7 @@ class TokenDaoImpl extends BaseDao implements TokenDao
         return $builder->execute()->fetchColumn(0);
 	}
 
-	private function _createSearchQueryBuilder($conditions)
+	protected function _createSearchQueryBuilder($conditions)
 	{
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user_token')

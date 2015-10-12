@@ -1,0 +1,33 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">课程设置</h3>
+    </div>
+</div>
+<div class="top-header">
+	<div class="ui-form ui-border-t">
+	        <div class="ui-form-item ui-form-item-switch ui-border-b">
+	            <p>
+	                讨论组消息免打扰
+	            </p>
+	            <label class="ui-switch">
+	                <input type="checkbox">
+	            </label>
+	        </div>
+	        <div class="ui-form-item ui-form-item-switch ui-border-b">
+	            <p>
+	                课程消息免打扰
+	            </p>
+	            <label class="ui-switch">
+	                <input type="checkbox">
+	            </label>
+	        </div>
+	        <div class="ui-form-item ui-form-item-switch">
+	        	<div ng-if="isLearn" class="ui-btn-wrap sign-padding">
+		            <button class="ui-btn-lg btn-red" ng-click="exitLearnCourse()">
+		                退出课程
+		            </button>
+	        	</div>
+	        </div>
+	</div>
+</div>

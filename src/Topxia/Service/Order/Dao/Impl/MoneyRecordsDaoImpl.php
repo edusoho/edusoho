@@ -28,7 +28,7 @@ class MoneyRecordsDaoImpl extends BaseDao implements MoneyRecordsDao
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'money_record')

@@ -244,7 +244,7 @@ class CourseQuestionManageController extends BaseController
         ));
     }
 
-    private function getQuestionTargetChoices($course)
+    protected function getQuestionTargetChoices($course)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $choices = array();
@@ -258,7 +258,7 @@ class CourseQuestionManageController extends BaseController
         return $choices;
     }
 
-    private function getQuestionCategoryChoices($course)
+    protected function getQuestionCategoryChoices($course)
     {
         $categories = $this->getQuestionService()->findCategoriesByTarget("course-{$course['id']}", 0, QuestionService::MAX_CATEGORY_QUERY_COUNT);
         $choices = array();
@@ -268,17 +268,17 @@ class CourseQuestionManageController extends BaseController
         return $choices;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

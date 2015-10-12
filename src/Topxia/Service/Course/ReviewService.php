@@ -11,7 +11,7 @@ interface ReviewService
 	
 	public function getUserCourseReview($userId, $courseId);
 
-	public function searchReviews($conditions, $sort = 'latest', $start, $limit);
+	public function searchReviews($conditions, $sort, $start, $limit);
 
 	public function searchReviewsCount($conditions);
 

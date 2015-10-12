@@ -121,7 +121,7 @@ abstract class BaseDao
 
     protected function checkOrderBy (array $orderBy, array $allowedOrderByFields)
     {
-        if (empty($orderBy[0]) or empty($orderBy[1])) {
+        if (empty($orderBy[0]) || empty($orderBy[1])) {
             throw new \RuntimeException('orderBy参数不正确');
         }
         

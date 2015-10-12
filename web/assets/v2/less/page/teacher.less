@@ -1,8 +1,16 @@
 .teacher-item {
-  margin: 10px auto;
+  position: relative;
+  margin-bottom: 20px;
   text-align: center;
-  .border-radius(4px);
-  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+  z-index: 1;
+  .border-radius;
+  .es-box-shadow;
+  &.no-shadow {
+    .box-shadow(none);
+  }
+  @media (min-width: @screen-md-min) {
+    .es-transup;
+  }
   &:hover {
     .metas {
       .opacity(1);
@@ -14,9 +22,11 @@
     }
   }
   .teacher-top {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    background-color: #fafafa;
+    position: relative;
+    z-index: 1;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    background-color: @bg-color;
     padding: 20px 10px;
   }
   .avatar-lg {
@@ -27,7 +37,7 @@
     .text-overflow;
   }
   .position {
-    color: @gray;
+    color: @gray-medium;
     .text-overflow;
   }
   .teacher-bottom {
@@ -37,13 +47,14 @@
   .about,
   .metas {
     position: absolute;
-    top: 20px;
     right: 20px;
     bottom: 20px;
     left: 20px;
+    z-index: 1;
     .es-transition;
   }
   .about {
+    top: 20px;
     line-height: 25px;
     overflow: hidden;
     color: @gray;
@@ -55,6 +66,9 @@
     .opacity(0);
     .btn {
       margin: 0 15px;
+      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        margin: 0 10px;
+      }
     }
   }
 }

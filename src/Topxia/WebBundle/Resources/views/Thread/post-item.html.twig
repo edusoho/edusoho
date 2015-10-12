@@ -1,3 +1,4 @@
+<!-- 待确认删除 -->
 <li id="post-{{ post.id }}" class="thread-post thread-post-{{ post.id }} media">
   <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
     <img class="img-circle" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" >
@@ -10,7 +11,7 @@
       <span class="text-muted">{{post.createdTime|smart_time}} </span>
       {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
-    <div class="thread-post-content">{{ post.content|at(post.ats)|raw }}</div>
+    <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
     <div class="comment-sns">
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>

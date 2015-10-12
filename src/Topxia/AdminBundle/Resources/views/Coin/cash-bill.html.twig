@@ -16,6 +16,11 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
+    <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+    lastHowManyMonths:app.request.get('lastHowManyMonths'),
+    cashType:cashType,
+    nickname:app.request.query.get('nickname'),
+    })}}">导出结果</a>
 
     </form>
 
@@ -59,7 +64,7 @@
             <td>
               <span class="text-sm">
                 {% if cash.type =="inflow" %}
-                  支付宝 
+                  {{ dict_text('payment', cash.payment) }}
                 {% else %}
                   网校支付
                 {% endif %}

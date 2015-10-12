@@ -202,7 +202,7 @@ class MessageServiceTest extends BaseTestCase
     }
 
 
-    private function createSender(){
+    protected function createSender(){
     $sender = array();
     $sender['email'] = "sender@sender.com";
     $sender['nickname'] = "sender";
@@ -210,7 +210,7 @@ class MessageServiceTest extends BaseTestCase
     return $this->getUserService()->register($sender);
     }
 
-    private function createReceiver(){
+    protected function createReceiver(){
     $receiver = array();
     $receiver['email'] = "receiver@receiver.com";
     $receiver['nickname'] = "receiver";
@@ -218,11 +218,11 @@ class MessageServiceTest extends BaseTestCase
     return $this->getUserService()->register($receiver);
     }
 
-    private function getUserService(){
+    protected function getUserService(){
     return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getMessageService(){
+    protected function getMessageService(){
     return $this->getServiceKernel()->createService('User.MessageService');
     }
 

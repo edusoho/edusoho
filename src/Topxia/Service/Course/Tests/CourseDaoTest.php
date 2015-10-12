@@ -24,7 +24,7 @@ class CourseDaoTest extends BaseTestCase
 
     }
 
-    private function getCourseDao()
+    protected function getCourseDao()
     {
         return $this->getServiceKernel()->createDao('Course.CourseDao'); 
     }

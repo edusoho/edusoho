@@ -171,13 +171,13 @@ class DiscuzAuthProvider implements AuthProvider
         return 'discuz';
     }
 
-    private function initDiscuzApi()
+    protected function initDiscuzApi()
     {
         require_once __DIR__ .'/../../../../../app/config/uc_client_config.php';
         require_once __DIR__ .'/../../../../../vendor_user/uc_client/client.php';
     }
 
-    private function convertApiResult($result)
+    protected function convertApiResult($result)
     {
         if ($result > 0) {
             return array('success', '');
@@ -187,7 +187,7 @@ class DiscuzAuthProvider implements AuthProvider
             case 0:
                 return array('error_input', '输入不合法');
             case -1:
-                return array('error_length_invalid', '名称不合法');
+                return array('error_length_invalid', '名称不合法,长度不符合关联论坛用户名要求');
             case -2:
                 return array('error_illegal_char', '名称含有非法字符');
             case -3:

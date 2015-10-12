@@ -38,17 +38,17 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
 
     public function addCommonAdmin($admin)
     {
-        if (!isset($admin['userId']) or empty($admin['userId'])) {
+        if (!isset($admin['userId']) || empty($admin['userId'])) {
 
             throw $this->createServiceException("userId不能为空！");
         }
 
-        if (!isset($admin['title']) or empty($admin['title'])) {
+        if (!isset($admin['title']) || empty($admin['title'])) {
 
             throw $this->createServiceException("名称不能为空！");
         }
 
-        if (!isset($admin['url']) or empty($admin['url'])) {
+        if (!isset($admin['url']) || empty($admin['url'])) {
             
             throw $this->createServiceException("url不能为空！");
         }
@@ -72,7 +72,7 @@ class UserCommonAdminServiceImpl extends BaseService implements UserCommonAdminS
         }
     }
 
-    private function getCommonAdminDao() 
+    protected function getCommonAdminDao() 
     {
         return $this->createDao('User.UserCommonAdminDao');
     }

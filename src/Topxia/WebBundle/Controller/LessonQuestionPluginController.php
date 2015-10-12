@@ -157,7 +157,7 @@ class LessonQuestionPluginController extends BaseController
         ));
     }
 
-    private function createQuestionForm($data = array())
+    protected function createQuestionForm($data = array())
     {
         return $this->createNamedFormBuilder('question', $data)
             ->add('title', 'text')
@@ -167,7 +167,7 @@ class LessonQuestionPluginController extends BaseController
             ->getForm();
     }
 
-    private function createPostForm($data = array())
+    protected function createPostForm($data = array())
     {
         return $this->createNamedFormBuilder('post', $data)
             ->add('content', 'textarea')
@@ -176,12 +176,12 @@ class LessonQuestionPluginController extends BaseController
             ->getForm();
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

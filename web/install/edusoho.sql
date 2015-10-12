@@ -245,6 +245,8 @@ CREATE TABLE `course` (
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
   `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
+  `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -273,6 +275,7 @@ CREATE TABLE `course_chapter` (
   `seq` int(10) unsigned NOT NULL COMMENT '章节序号',
   `title` varchar(255) NOT NULL COMMENT '章节名称',
   `createdTime` int(10) unsigned NOT NULL COMMENT '章节创建时间',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -332,6 +335,7 @@ CREATE TABLE `course_lesson` (
   `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `parentId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -394,6 +398,7 @@ CREATE TABLE `course_material` (
   `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -522,6 +527,7 @@ CREATE TABLE `friend` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '关注ID',
   `fromId` int(10) unsigned NOT NULL COMMENT '关注人ID',
   `toId` int(10) unsigned NOT NULL COMMENT '被关注人ID',
+  `pair` TINYINT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '是否为互加好友',
   `createdTime` int(10) unsigned NOT NULL COMMENT '关注时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -614,6 +620,7 @@ CREATE TABLE `log` (
 DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '私信Id',
+  `type` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '私信类型',
   `fromId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发信人Id',
   `toId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收信人Id',
   `content` text NOT NULL COMMENT '私信内容',
@@ -630,8 +637,10 @@ CREATE TABLE `message_conversation` (
   `latestMessageUserId` int(10) unsigned DEFAULT NULL COMMENT '最后发信人ID',
   `latestMessageTime` int(10) unsigned NOT NULL COMMENT '最后发信时间',
   `latestMessageContent` text NOT NULL COMMENT '最后发信内容',
+  `latestMessageType` enum('text','image','video','audio') NOT NULL DEFAULT 'text' COMMENT '最后一条私信类型',
   `unreadNum` int(10) unsigned NOT NULL COMMENT '未读数量',
   `createdTime` int(10) unsigned NOT NULL COMMENT '会话创建时间',
+  
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -705,7 +714,7 @@ CREATE TABLE `orders` (
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
-  `payment` enum('none','alipay','tenpay','coin') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `payment` enum('none','alipay','tenpay','coin','wxpay') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
   `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
   `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
   `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',
@@ -769,6 +778,7 @@ CREATE TABLE `question` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='问题表';
 
@@ -868,6 +878,7 @@ CREATE TABLE `testpaper` (
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改人',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   `metas` text COMMENT '题型排序',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -896,6 +907,7 @@ CREATE TABLE `testpaper_item_result` (
   `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
   `answer` text COMMENT '回答',
   `teacherSay` text COMMENT '老师评价',
+  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
   PRIMARY KEY (`id`),
   KEY `testPaperResultId` (`testPaperResultId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
@@ -998,7 +1010,7 @@ CREATE TABLE `user` (
   `payPassword` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码',
   `payPasswordSalt` varchar(64) NOT NULL DEFAULT '' COMMENT '支付密码Salt',
   `uri` varchar(64) NOT NULL DEFAULT '' COMMENT '用户URI',
-  `nickname` varchar(64) NOT NULL COMMENT '昵称',
+  `nickname` varchar(64) NOT NULL COMMENT '用户名',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `tags` varchar(255) NOT NULL DEFAULT '' COMMENT '标签',
   `type` varchar(32) NOT NULL COMMENT 'default默认为网站注册, weibo新浪微薄登录',
@@ -1008,7 +1020,7 @@ CREATE TABLE `user` (
   `mediumAvatar` varchar(255) NOT NULL DEFAULT '' COMMENT '中头像',
   `largeAvatar` varchar(255) NOT NULL DEFAULT '' COMMENT '大头像',
   `emailVerified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '邮箱是否为已验证',
-  `setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否初始化设置的，未初始化的可以设置邮箱、昵称。',
+  `setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否初始化设置的，未初始化的可以设置邮箱、用户名。',
   `roles` varchar(255) NOT NULL COMMENT '用户角色',
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐',
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
@@ -1176,7 +1188,7 @@ CREATE TABLE `cash_orders` (
   `status` enum('created','paid','cancelled') NOT NULL,
   `title` varchar(255) NOT NULL,
   `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `payment` enum('none','alipay') NOT NULL DEFAULT 'none',
+  `payment` enum('none','alipay','wxpay') NOT NULL DEFAULT 'none',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
   `note` varchar(255) NOT NULL DEFAULT '',
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1206,6 +1218,7 @@ CREATE TABLE `cash_flow` (
   `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
   `orderSn` varchar(40) NOT NULL COMMENT '订单号',
   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '帐目类目',
+  `payment` ENUM( 'alipay', 'wxpay' ),
   `note` text COMMENT '备注',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -1392,7 +1405,7 @@ CREATE TABLE `thread_member` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统Id',
   `threadId` int(10) unsigned NOT NULL COMMENT '话题Id',
   `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
-  `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
+  `nickname` varchar(255) DEFAULT NULL COMMENT '用户名',
   `truename` varchar(255) DEFAULT NULL COMMENT '真实姓名',
   `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
   `createdTIme` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -1414,6 +1427,7 @@ CREATE TABLE `classroom` (
   `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
   `headTeacherId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班主任ID',
   `teacherIds` varchar(255) NOT NULL DEFAULT '' COMMENT '教师IDs',
+  `assistantIds` TEXT COMMENT '助教Ids',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `auditorNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '旁听生数',
   `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
@@ -1430,6 +1444,10 @@ CREATE TABLE `classroom` (
   `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '100' COMMENT '推荐序号',
   `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `rating` FLOAT UNSIGNED NOT NULL DEFAULT '0' COMMENT '排行数值',
+  `ratingNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '投票人数',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
+  `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放展示',
+  `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1455,7 +1473,7 @@ CREATE TABLE `classroom_member` (
   `threadNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题数',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否被锁定',
   `remark` text COMMENT '备注',
-  `role` enum('auditor','student','teacher','headTeacher','assistant', 'studentAssistant') NOT NULL DEFAULT 'auditor' COMMENT '角色',
+  `role` VARCHAR(255) NOT NULL DEFAULT 'auditor' COMMENT '角色',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1480,3 +1498,24 @@ CREATE TABLE `article_like` (
  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点赞时间',
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='资讯点赞表';
+
+DROP TABLE IF EXISTS `ip_blacklist`;
+CREATE TABLE `ip_blacklist` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+`ip` varchar(32) NOT NULL,
+`type` enum('failed','banned') NOT NULL,
+`counter` int(10) unsigned NOT NULL DEFAULT '0',
+`expiredTime` int(10) unsigned NOT NULL DEFAULT '0',
+`createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `blacklist`;
+CREATE TABLE `blacklist` (
+`id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+`userId` int(10) unsigned NOT NULL COMMENT '名单拥有者id',
+`blackId` int(10) unsigned NOT NULL COMMENT '黑名单用户id',
+`createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
+

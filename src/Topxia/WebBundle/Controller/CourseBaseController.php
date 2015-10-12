@@ -9,7 +9,6 @@ use Topxia\Common\Paginator;
 use Topxia\WebBundle\Form\CourseType;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\LiveClientFactory;
 
 abstract class CourseBaseController extends BaseController
 {
@@ -75,7 +74,7 @@ abstract class CourseBaseController extends BaseController
                 );
             }
 
-            if (empty($member) or $member['role'] != 'teacher') {
+            if (empty($member) || $member['role'] != 'teacher') {
                 return $member;
             }
 

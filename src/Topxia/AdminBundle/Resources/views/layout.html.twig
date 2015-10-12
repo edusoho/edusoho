@@ -1,5 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import _self as self_macro %}
+
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
 {% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
@@ -8,6 +10,7 @@
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
 {% set menu_hiddens = setting('menu_hiddens', []) %}
+{% if hiddenMenus() %}{% endif %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -34,11 +37,15 @@
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
+  
+  {% block stylesheets %}
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
   <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+  {% endblock %}
+
   {% block javascripts %}{% endblock %}
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
@@ -58,11 +65,9 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
       </div>
       <div class="navbar-collapse collapse">
-
         <ul class="nav navbar-nav">
-          {% for m in menu_children('admin', 'admin', 1) %}
-
-            {% if m.code == "admin_app"%}
+           {% for m in menu_children('admin', 'admin', 1) %}
+            {% if m.code == "admin_app" %}
                {% if not is_granted('ROLE_SUPER_ADMIN') %}
                 {% set parameter = {'postStatus':'all'} %}
                 {% set m = m|array_merge({'router_params':parameter,'router_name':'admin_app_center'}) %}
@@ -70,13 +75,15 @@
             {% endif %}
 
             {% if m.code != "admin_system" %}
-                <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
-                </li>  
+              {% if not in_menu_blacklist(m.code) %}
+                <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
+                  {{ self_macro.menu_link_html(_context, m) }}
+                </li>
+              {% endif %} 
             {% else %}    
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                   <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
+                  {{ self_macro.menu_link_html(_context, m) }}
                   </li>
                 {% endif %}
             {% endif %}
@@ -120,7 +127,7 @@
                             
                   {% if not menu_hiddens[m.code]|default(false)  %}
                     {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                    {{ _self.menu_link_html(_context, m, menuClass) }}
+                    {{ self_macro.menu_link_html(_context, m, menuClass) }}
                   {% endif %}
                       
                   {% endif %}
@@ -139,7 +146,7 @@
               {% block page_buttons %}
                 {% for m in menu_children('admin', menu_current.code, 2) %}
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                   {% endif %}
                 {% endfor %}
               {% endblock %}
@@ -157,12 +164,14 @@
             {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
           {% endif %}
 
+          {% block content_header %}{% endblock %}
+          
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m, m.class|default('')) }}
+                    {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -174,7 +183,7 @@
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m) }}
+                    {{ self_macro.menu_link_html(_context, m) }}
                   {% endif %}
                 </li>
               {% endfor %}

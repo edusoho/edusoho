@@ -251,7 +251,7 @@ input.LargeInput {width: 600px;}
 
 
 .analysis-input {
-  max-width: 120px;
+  max-width: 100px;
 }
 .app-info {
 
@@ -295,10 +295,10 @@ input.LargeInput {width: 600px;}
   padding-right: 30px;
 }
 
-.es-poster{
+.eduyun-poster{
   position:relative;
 }
-.es-poster a.btn{
+.eduyun-poster a.btn{
   position:absolute;
   bottom:70px;
   right:60px;
@@ -311,17 +311,17 @@ input.LargeInput {width: 600px;}
   font-size:18px;
 }
 
-.es-poster a.btn:hover{
+.eduyun-poster a.btn:hover{
 
 }
-.es-poster b{
+.eduyun-poster b{
   color: #FFF;
   position: absolute;
   bottom: 120px;
   right: 102px;
   font-size: 12px;
 }
-.es-poster span{
+.eduyun-poster span{
   margin-left:10px;
 }
 
@@ -576,11 +576,11 @@ input.LargeInput {width: 600px;}
   margin-top: 15px;
 }
 
-@media (max-width: 1198px) {
+/*@media (max-width: 1198px) {
   .img-upload {
     margin-left: -24px;
   }
-}
+}*/
 
 .pagination > li > a {
   height: 34px;

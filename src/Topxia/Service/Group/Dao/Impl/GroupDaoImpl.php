@@ -92,7 +92,7 @@ class GroupDaoImpl extends BaseDao implements GroupDao
 
     }
 
-    private function _createGroupSearchBuilder($conditions)
+    protected function _createGroupSearchBuilder($conditions)
     {
 
         if (isset($conditions['title'])) {

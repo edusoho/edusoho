@@ -1,0 +1,30 @@
+{% extends "SensioDistributionBundle::Configurator/layout.html.twig" %}
+
+{% block content_class %}config_done{% endblock %}
+{% block content %}
+    <div class="step">
+        <h1>Well done!</h1>
+        {% if is_writable %}
+        <h2>Your distribution is configured!</h2>
+        {% else %}
+        <h2 class="configure-error">Your distribution is almost configured but...</h2>
+        {% endif %}
+        <h3>
+            <span>
+                {% if is_writable %}
+                    Your parameters.yml file has been overwritten with these parameters (in <em>{{ yml_path }}</em>):
+                {% else %}
+                    Your parameters.yml file is not writeable! Here are the parameters you can copy and paste in <em>{{ yml_path }}</em>:
+                {% endif %}
+            </span>
+        </h3>
+
+        <textarea class="symfony-configuration">{{ parameters }}</textarea>
+
+        {% if welcome_url %}
+            <ul>
+                <li><a href="{{ welcome_url }}">Go to the Welcome page</a></li>
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}
