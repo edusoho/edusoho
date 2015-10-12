@@ -165,7 +165,7 @@ class PayCenterController extends BaseController
             $response = $this->createPaymentResponse($name, $request->request->all());
         }
         elseif ($name == 'wxpay') {
-            $returnXml = $request->getContent();//$GLOBALS['HTTP_RAW_POST_DATA'];
+            $returnXml = $request->getContent();
             $returnArray = $this->fromXml($returnXml);
             $response = $this->createPaymentResponse($name, $returnArray);
         }
