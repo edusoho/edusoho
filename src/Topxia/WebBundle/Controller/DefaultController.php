@@ -15,14 +15,14 @@ class DefaultController extends BaseController
     public function indexAction ()
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
-        $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
+        $recommendedCourses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
         $orderBy = 'recommendedSeq';
         if (empty($courses)) {
             $orderBy = 'latest';
             unset($conditions['recommended']);
-            $recommendedCourses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
-            $courses = $this->addCoursesLatestToRecommended($conditions,$recommendedCourses);
+            $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, 12);
         }
+        $courses = $this->addCoursesLatestToRecommended($conditions,$recommendedCourses);
 
 
 
