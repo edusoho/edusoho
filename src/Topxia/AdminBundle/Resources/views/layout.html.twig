@@ -164,6 +164,8 @@
             {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
           {% endif %}
 
+          {% block content_header %}{% endblock %}
+          
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}

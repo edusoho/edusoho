@@ -44,8 +44,39 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId));
 	}
 
+	public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
+	{
+		$this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+
+	}
+
+	public function findLessonReplaysCountByCourseId($courseId)
+	{
+		$sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE courseId = ? ";
+        return $this->getConnection()->fetchColumn($sql,array($courseId));
+	}
+
+	public function deleteCourseLessonReplay($id)
+	{
+		return $this->getConnection()->delete($this->getTablename(), array('id' => $id));
+	}
+
 	protected function getTablename()
     {
         return self::TABLENAME;
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_lesson_replay')
+            ->andWhere('courseId = :courseId');
+        return $builder;
     }
 }

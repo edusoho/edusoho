@@ -386,6 +386,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
 		$favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
 		return CourseSerialize::unserializes($favoriteCourses);
+	}
+
+	public function findFavoritesCountByCourseId($courseId)
+	{
+		return $this->getFavoriteDao()->findFavoritesCountByCourseId($courseId);
 	}	
 
 	public function createCourse($course)
@@ -630,7 +635,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return true;
 	}
 
-	public function publishCourse($id,$source = 'course')
+	public function publishCourse($id, $source = 'course')
 	{
 		if ($source == 'course') {
 			$course = $this->tryManageCourse($id);
@@ -640,8 +645,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 				throw $this->createNotFoundException();
 			}
 		}
-		$this->getCourseDao()->updateCourse($id, array('status' => 'published'));
+		$course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
 		$this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
+		$this->dispatchEvent('course.publish', $course);
 	}
 
 	public function closeCourse($id, $source = 'course')
@@ -654,8 +660,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 				throw $this->createNotFoundException();
 			}
 		}
-		$this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
+		$course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
 		$this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
+		$this->dispatchEvent('course.close', $course);
 	}
 
 	public function favoriteCourse($courseId)
@@ -786,6 +793,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
+	}
+
+	public function findLessonsViewsCountByCourseId($courseId)
+	{
+		return $this->getLessonViewDao()->findLessonsViewsCountByCourseId($courseId);
 	}
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
@@ -935,6 +947,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($draft);
 	}
 
+	public function findDraftsCountByCourseId($courseId)
+	{
+		return  $this->getCourseDraftDao()->findDraftsCountByCourseId($courseId);
+	}
+
 	public function getCourseLessons($courseId)
 	{
 		$lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
@@ -1052,10 +1069,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
-		$this->dispatchEvent("course.lesson.create", array(
-			"courseId"=>$lesson["courseId"], 
-			"lesson"=>$lesson
-		));
+		$this->dispatchEvent("course.lesson.create", $lesson);
 
 		return $lesson;
 	}
@@ -1731,6 +1745,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getChapterDao()->findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
 	}
 
+	public function findChaptersCountByCourseId($courseId)
+	{
+		return $this->getChapterDao()->findChaptersCountByCourseId($courseId);
+	}
+
 	public function getNextUnitNumberAndParentId($courseId)
 	{
 		$lastChapter = $this->getChapterDao()->getLastChapterByCourseIdAndType($courseId, 'chapter');
@@ -1906,6 +1925,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$orderBy = array('createdTime', 'DESC');
 		} 
 		return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
+	}
+
+	public function findMemberUserIdsByCourseId($courseId)
+	{
+		return $this->getMemberDao()->findMemberUserIdsByCourseId($courseId);
 	}
 
 	public function updateCourseMember($id, $fields)
@@ -2212,6 +2236,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		$this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
+		$this->dispatchEvent(
+		    'course.quit', 
+		    new ServiceEvent($course, array('userId' => $member['userId']))
+		);
 	}
 
 	public function lockStudent($courseId, $userId)
@@ -2530,6 +2558,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId)
 	{
 		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+	}
+
+	public function findLessonReplaysCountByCourseId($courseId)
+	{
+		return $this->getCourseLessonReplayDao()->findLessonReplaysCountByCourseId($courseId);
 	}
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)

@@ -28,6 +28,7 @@ class BaseTestCase extends WebTestCase
 
     public static function setUpBeforeClass()
     {
+        $_SERVER['HTTP_HOST']='test.com';//mock $_SERVER['HTTP_HOST'] for http request testing
         static::$kernel = static::createKernel();
         static::$kernel->boot();
     }

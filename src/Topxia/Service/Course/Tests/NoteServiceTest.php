@@ -80,6 +80,31 @@ class NoteServiceTest extends BaseTestCase
 
     }
 
+    public function textFindNotesCountByCourseId()
+    {
+        $courseInfo = array(
+            'type' => 'online',
+            'title' => 'online test course'
+        );
+        $createdCourse = $this->getCourseService()->createCourse($courseInfo);
+        $lessonInfo = array(
+            'courseId' => $createdCourse['id'],
+            'title' => 'test lesson 1',
+            'content' => 'test lesson content 1',
+            'type' => 'text'
+        );
+        $createdLesson1 = $this->getCourseService()->createLesson($lessonInfo);
+        $noteInfo = array(
+            'content' => 'note_content',
+            'lessonId' => $createdLesson1['id'],
+            'courseId' => $createdCourse['id'],
+        );
+        $savedNote = $this->getNoteService()->saveNote($noteInfo);
+        $count = $thit->getNoteService()->findNotesCountByCourseId(1);
+        $this->assertEquals(1,$count);
+
+    }
+
     /**
      * @todo
      */
