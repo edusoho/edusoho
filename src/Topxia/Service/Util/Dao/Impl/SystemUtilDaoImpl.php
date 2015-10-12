@@ -10,7 +10,7 @@ class SystemUtilDaoImpl extends BaseDao implements SystemUtilDao
    public function getCourseIdsWhereCourseHasDeleted()
    {
         $sql = "SELECT DISTINCT  targetId FROM upload_files WHERE "; 
-        $sql .= " targetType='courselesson' AND usedCount<= 0 AND targetId NOT IN (SELECT id FROM course) LIMIT 0, 500";
+        $sql .= " targetType='courselesson' AND usedCount<= 0 AND targetId NOT IN (SELECT id FROM course)";
         return $this->getConnection()->fetchAll($sql);    
    }
 

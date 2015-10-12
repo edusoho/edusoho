@@ -30,172 +30,160 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteQuestions($course)
     {
         $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$course['id']}"));
+        $count=0;
         if($questionCount>0){
             $questions = $this->getQuestionDao()->searchQuestions(array('targetPrefix' => "course-{$course['id']}"), array('createdTime' ,'desc'), 0, 500);
             foreach ($questions as $question) {
-                $this->getQuestionDao()->deleteQuestion($question['id']);
+                $result = $this->getQuestionDao()->deleteQuestion($question['id']);
                 $this->getQuestionFavoriteDao()->deleteFavoriteByQuestionId($question['id']);
+                $count+=$result;
             }
 
             $questionLog = "删除课程《{$course['title']}》(#{$course['id']})的问题";
             $this->getLogService()->info('question', 'delete', $questionLog);
-            $response = array('success'=>true,'message'=>'问题数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'问题数据查询失败');
         }
 
-        return $response;
+        return $count;
     }
 
     protected function deleteTestpapers($course)
     {
         $testpaperCount = $this->getTestpaperDao()->searchTestpapersCount(array('target'=>"course-{$course['id']}"));
+        $count=0;
         if($testpaperCount>0){
             $testpapers = $this->getTestpaperDao()->searchTestpapers(array('target'=>"course-{$course['id']}"),array('createdTime' ,'desc'),0,500);
             foreach ($testpapers as $testpaper) {
                 $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperId($testpaper['id']);
                 $this->getTestpaperItemResultDao()->deleteTestpaperItemResultByTestpaperId($testpaper['id']);
                 $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testpaper['id']);
-                $this->getTestpaperDao()->deleteTestpaper($testpaper['id']);
+                $result = $this->getTestpaperDao()->deleteTestpaper($testpaper['id']);
+                $count+=$result;
                 //删除完成试卷动态
                 $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_testpaper','testpaper',$testpaper['id']);
             }
             $testpaperLog = "删除课程《{$course['title']}》(#{$course['id']})的试卷";
             $this->getLogService()->info('testpaper', 'delete', $testpaperLog);
-            $response = array('success'=>true,'message'=>'试卷数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'试卷数据查询失败');
         }
-
-        return $response;
+        return $count;
     }
 
     protected function deleteMaterials($course)
     {
         $materialCount = $this->getMaterialDao()->getMaterialCountByCourseId($course['id']);
+        $count=0;
         if($materialCount>0){
             $materials = $this->getMaterialDao()->findMaterialsByCourseId($course['id'],0,1000);
             foreach ($materials as $material) {
                 if(!empty($material['fileId'])){
                     $this->getUploadFileService()->waveUploadFile($material['fileId'],'usedCount',-1);
                 }
-                $this->getMaterialDao()->deleteMaterial($material['id']);
+                $result = $this->getMaterialDao()->deleteMaterial($material['id']);
+                $count+=$result;
             }
             $materialLog = "删除课程《{$course['title']}》(#{$course['id']})的课时资料";
             $this->getLogService()->info('material', 'delete', $materialLog);
-            $response = array('success'=>true,'message'=>'课时资料数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时资料数据查询失败');
         }
-
-        return $response;  
+        return $count;  
     }
 
     protected function deleteChapters($course)
     {
         $chapterCount = $this->getCourseChapterDao()->findChaptersCountByCourseId($course['id']);
+        $count=0;
         if($chapterCount>0){
             $chapters = $this->getCourseChapterDao()->searchChapters(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($chapters as $chapter) {
-                $this->getCourseChapterDao()->deleteChapter($chapter['id']);
+                $result = $this->getCourseChapterDao()->deleteChapter($chapter['id']);
+                $count+=$result;
             }
             $chapterLog = "删除课程《{$course['title']}》(#{$course['id']})的课时章/节";
             $this->getLogService()->info('chapter', 'delete', $chapterLog);
-            $response = array('success'=>true,'message'=>'课时章节数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时章节数据查询失败');
         }
-
-        return $response;
-
+        return $count;
     }
 
     protected function deleteDrafts($course)
     {
         $draftCount = $this->getDraftDao()->findDraftsCountByCourseId($course['id']);
+        $count=0;
         if($draftCount>0){
             $drafts = $this->getDraftDao()->searchDrafts(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($drafts as $draft) {
-                $this->getDraftDao()->deleteDraft($draft['id']);
+                $result = $this->getDraftDao()->deleteDraft($draft['id']);
+                $count+=$result;
             }
             $draftLog = "删除课程《{$course['title']}》(#{$course['id']})的草稿";
             $this->getLogService()->info('draft', 'delete', $draftLog);
-            $response = array('success'=>true,'message'=>'课时草稿数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时草稿数据查询失败');
         }
-
-        return $response;
+        return $count;
     }
 
     protected function deleteLessons($course)
     {
         $lessonCount = $this->getLessonDao()->searchLessonCount(array('courseId'=>$course['id']));
+        $count=0;
         if($lessonCount>0){
             $lessons = $this->getLessonDao()->searchLessons(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($lessons as $lesson) {
                 if(!empty($lesson['mediaId'])){
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
                 }
-                $this->getLessonDao()->deleteLesson($lesson['id']);
+                $result=$this->getLessonDao()->deleteLesson($lesson['id']);
+                $count+=$result;
             }
             $lessonLog = "删除课程《{$course['title']}》(#{$course['id']})的课时";
             $this->getLogService()->info('lesson', 'delete', $lessonLog);
-            $response = array('success'=>true,'message'=>'课时数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时数据查询失败');
         }
-
-        return $response;
+        return $count;
         
     }
 
     protected function deleteLessonLearns($course)
     {   
         $lessonLearnCount = $this->getLessonLearnDao()->searchLearnCount(array('courseId'=>$course['id']));
+        $count=0;
         if($lessonLearnCount>0){
             $lessonLearns = $this->getLessonLearnDao()->searchLearns(array('courseId'=>$course['id']),array('startTime' ,'desc'),0,500);
             foreach ($lessonLearns as $lessonLearn) {
-               $this->getLessonLearnDao()->deleteLearn($lessonLearn['id']); 
+               $result = $this->getLessonLearnDao()->deleteLearn($lessonLearn['id']); 
+               $count+=$result;
             }
-            $response = array('success'=>true,'message'=>'课时时长数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时时长数据查询失败');
+            $lessonLearnLog = "删除课程《{$course['title']}》(#{$course['id']})的课时时长";
+            $this->getLogService()->info('lessonLearn', 'delete', $lessonLearnLog);
         }
-        return $response;    
+        return $count;    
     }
 
     protected function deleteLessonReplays($course)
     {
         $lessonReplayCount = $this->getCourseLessonReplayDao()->findLessonReplaysCountByCourseId($course['id']);
+        $count=0;
         if($lessonReplayCount>0){
              $LessonReplays = $this->getCourseLessonReplayDao()->searchCourseLessonReplays(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($LessonReplays as  $LessonReplay) {
-                $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($LessonReplay['id']); 
-                $LessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播　{$LessonReplay['title']}";
-                $this->getLogService()->info('LessonReplay', 'delete', $LessonReplayLog);
+                $result= $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($LessonReplay['id']); 
+                $count+=$result;
             }
-            $response = array('success'=>true,'message'=>'课时录播数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时录播数据查询成功');
+            $LessonReplayLog = "删除课程《{$course['title']}》(#{$course['id']})的录播";
+            $this->getLogService()->info('LessonReplay', 'delete', $LessonReplayLog);
         }
-
-        return $response;
+        return $count;
     }
 
     protected function deleteLessonViews($course)
     {
         $lessonViewCount = $this->getLessonViewDao()->findLessonsViewsCountByCourseId($course['id']);
+        $count=0;
         if($lessonViewCount>0){
             $lessonViews = $this->getLessonViewDao()->searchLessonView(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($lessonViews as $lessonView) {
-                $this->getLessonViewDao()->deleteLessonView($lessonView['id']);
+                $result = $this->getLessonViewDao()->deleteLessonView($lessonView['id']);
+                $count+=$result;
             }
-            $response = array('success'=>true,'message'=>'课时播放时长数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时播放时长数据查询失败');
+            $lessonViewLog = "删除课程《{$course['title']}》(#{$course['id']})的播放时长";
+            $this->getLogService()->info('lessonView', 'delete', $lessonViewLog);
         }
-        return $response;
+        return $count;
     }
 
     protected function deleteHomeworks($course)
@@ -203,6 +191,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
         $isDeleteHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+        $count=0;
         if($isDeleteHomework){
             $HomeworkCount = $this->getHomeworkDao()->findHomeworksCountByCourseId($course['id']);
             if($HomeworkCount>0){
@@ -211,20 +200,16 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                     $this->getHomeworkResultDao()->deleteResultsByHomeworkId($homework['id']);
                     $this->getHomeworkItemResultDao()->deleteItemResultsByHomeworkId($homework['id']);
                     $this->getHomeworkItemDao()->deleteItemsByHomeworkId($homework['id']);
-                    $this->getHomeworkDao()->deleteHomework($homework['id']);
+                    $result = $this->getHomeworkDao()->deleteHomework($homework['id']);
+                    $count+=$result;
                     //删除完成作业动态
                     $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_homework','homework',$homework['id']);
                 }
                 $homeworkLog = "删除课程《{$course['title']}》(#{$course['id']})的作业";
-                $this->getLogService()->info('homework', 'delete', $homeworkLog);
-                $response = array('success'=>true,'message'=>'课时作业数据删除');  
-            }else{
-                $response = array('success'=>false,'message'=>'课时播作业数据查询失败');
+                $this->getLogService()->info('homework', 'delete', $homeworkLog);  
             }
-        }else{
-            $response = array('success'=>false,'message'=>'作业插件未安装');
         }
-        return $response;
+        return $count;
     }
 
     protected function deleteExercises($course)
@@ -232,6 +217,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
         $isDeleteHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+        $count=0;
         if($isDeleteHomework){
             $exerciseCount = $this->getExerciseDao()->findExercisesCountByCourseId($course['id']);
             if($exerciseCount>0){
@@ -240,149 +226,130 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                     $this->getExerciseResultDao()->deleteExerciseResultByExerciseId($exercise['id']);
                     $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
                     $this->getExerciseItemDao()->deleteItemByExerciseId($exercise['id']);
-                    $this->getExerciseDao()->deleteExercise($exercise['id']);
+                    $result = $this->getExerciseDao()->deleteExercise($exercise['id']);
+                    $count+=$result;
                     //删除完成练习的动态
                     $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_exercise','exercise',$exercise['id']);
                 }
                 $exerciseLog = "删除课程《{$course['title']}》(#{$course['id']})的练习";
                 $this->getLogService()->info('exercise', 'delete', $exerciseLog);
-                $response = array('success'=>true,'message'=>'课时练习数据删除');
-            }else{
-                $response = array('success'=>false,'message'=>'课时练习数据查询失败'); 
             }
-        }else{
-            $response = array('success'=>false,'message'=>'作业插件未安装');
-        }   
-        
-        return $response;
+        }
+        return $count;
     }
 
     protected function deleteFavorites($course)
     {
         $favoriteCount = $this->getFavoriteDao()->findFavoritesCountByCourseId($course['id']);
+        $count=0;
         if($favoriteCount>0){
             $favorites = $this->getFavoriteDao()->searchCourseFavorites(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($favorites as $favorite) {
-                $this->getFavoriteDao()->deleteFavorite($favorite['id']);
+                $result = $this->getFavoriteDao()->deleteFavorite($favorite['id']);
+                $count+=$result;
             }
             $favoriteLog = "删除课程《{$course['title']}》(#{$course['id']})的课程收藏";
             $this->getLogService()->info('favorite', 'delete', $favoriteLog);
-            $response = array('success'=>true,'message'=>'课时收藏数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时收藏数据查询失败');
         }
-        return $response;
+        return $count;
     }
 
     protected function deleteNotes($course)
     {
         $noteCount = $this->getCourseNoteDao()->findNotesCountByCourseId($course['id']);
+        $count=0;
         if($noteCount>0){
             $notes = $this->getCourseNoteDao()->searchNotes(array('courseId'=>$course['id']),array('createdTime'=>'DESC'),0,500);
             foreach ($notes as $note) {
                 $this->getCourseNoteLikeDao()->deleteNoteLikesByNoteId($note['id']);
-                $this->getCourseNoteDao()->deleteNote($note['id']);
+                $result = $this->getCourseNoteDao()->deleteNote($note['id']);
+                $count+=$result;
             }
             $noteLog = "删除课程《{$course['title']}》(#{$course['id']})的课程笔记";
             $this->getLogService()->info('note', 'delete', $noteLog);
-            $response = array('success'=>true,'message'=>'课时笔记数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课时笔记数据查询失败');
         }
-        return $response;
+        return $count;
     }
 
     protected function deleteThreads($course)
     {
         $threadCount = $this->getThreadDao()->searchThreadCount(array('courseId'=>$course['id']));
+        $count=0;
         if($threadCount>0){
             $threads = $this->getThreadDao()->searchThreads(array('courseId'=>$course['id']),array(array('createdTime' ,'desc')),0,500);
             foreach ($threads as $thread) {
                 $this->getThreadPostDao()->deletePostsByThreadId($thread['id']);
-                $this->getThreadDao()->deleteThread($thread['id']); 
+                $result = $this->getThreadDao()->deleteThread($thread['id']);
+                $count+=$result; 
             }
             $threadLog = "删除课程《{$course['title']}》(#{$course['id']})的话题";
             $this->getLogService()->info('thread', 'delete', $threadLog);   
-            $response = array('success'=>true,'message'=>'课程话题数据删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课程话题数据查询失败');
         }
-        return $response;
-       
+        return $count;
     }
 
     protected function deleteReviews($course)
     {
         $reviewCount = $this->getReviewDao()->searchReviewsCount(array('courseId'=>$course['id']));
+        $count=0;
         if($reviewCount>0){
             $reviews = $this->getReviewDao()->searchReviews(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($reviews as $review) {
-                $this->getReviewDao()->deleteReview($review['id']);
+                $result = $this->getReviewDao()->deleteReview($review['id']);
+                $count+=$result;
             }
             $reviewLog = "删除课程《{$course['title']}》(#{$course['id']})的评价";
             $this->getLogService()->info('review', 'delete', $reviewLog);
-            $response = array('success'=>true,'message'=>'课程评价删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课程评价查询失败');
         }
-
-        return $response;
+        return $count;
     }
 
     protected function deleteAnnouncements($course)
     {
         $announcementCount = $this->getAnnouncementDao()->searchAnnouncementsCount(array('targetId'=>$course['id'],'targetType'=>'course'));
+        $count=0;
         if($announcementCount>0){
             $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType'=>'course','targetId'=>$course['id']),array('createdTime' ,'DESC'),0,500);
             foreach ($announcements as $announcement) {
-                $this->getAnnouncementDao()->deleteAnnouncement($announcement['id']);
+                $result = $this->getAnnouncementDao()->deleteAnnouncement($announcement['id']);
+                $count+=$result;
             }
             $announcementLog = "删除课程《{$course['title']}》(#{$course['id']})的公告";
             $this->getLogService()->info('announcement', 'delete', $announcementLog);    
-            $response = array('success'=>true,'message'=>'课程公告删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课程公告查询失败');
         }
-
-        return $response;
-        
+        return $count; 
     }
 
     protected function deleteStatuses($course)
     {
         $statusCount = $this->getStatusDao()->searchStatusesCount(array('courseId'=>$course['id']));
+        $count=0;
         if($statusCount>0){
             $statuses = $this->getStatusDao()->searchStatuses(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($statuses as $status) {
-               $this->getStatusDao()->deleteStatus($status['id']);
+               $result = $this->getStatusDao()->deleteStatus($status['id']);
+               $count+=$result;
             }
             $statusLog = "删除课程《{$course['title']}》(#{$course['id']})的动态";
             $this->getLogService()->info('status', 'delete', $statusLog);
-            $response = array('success'=>true,'message'=>'课程动态删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课程动态查询失败');
         }
-
-        return $response;
-        
+        return $count;   
     }
 
     protected function deleteMembers($course)
     {
         $memberCount = $this->getCourseMemberDao()->searchMemberCount(array('courseId'=>$course['id']));
+        $count=0;
         if($memberCount>0){
             $members = $this->getCourseMemberDao()->searchMembers(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
             foreach ($members as $member) {
-                $this->getCourseMemberDao()->deleteMember($member['id']);
+                $result = $this->getCourseMemberDao()->deleteMember($member['id']);
+                $count+=$result;
             }
             $memberLog = "删除课程《{$course['title']}》(#{$course['id']})的成员";
             $this->getLogService()->info('member', 'delete', $memberLog);
-            $response = array('success'=>true,'message'=>'课程成员删除');
-        }else{
-            $response = array('success'=>false,'message'=>'课程成员查询失败');
         }
-
-        return $response;
+        return $count;
         
     }
 
@@ -391,7 +358,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getCourseDao()->deleteCourse($course['id']);
         $courseLog = "删除课程《{$course['title']}》(#{$course['id']})";
         $this->getLogService()->info('course', 'delete', $courseLog);
-        return array('success'=>false,'message'=>'课程数据删除');
+        return 0;
     }
 
     protected function getCourseService()

@@ -151,8 +151,8 @@ class CourseController extends BaseController
         if (!$currentUser->isSuperAdmin()) {
            throw $this->createAccessDeniedException('您不是超级管理员！');
         }
-        $subCourse = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
-        if($subCourse){
+        $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
+        if(!empty($subCourses)){
              return $this->createJsonResponse(array('code' =>1, 'message' => '请先删除班级课程'));
         } else {
            $course = $this->getCourseService()->getCourse($courseId);
@@ -162,12 +162,12 @@ class CourseController extends BaseController
                     return $this->createJsonResponse(array('code' =>2, 'message' => '当前课程未移除,请先移除班级课程'));
                 }
                 if($type){
-                    $session = $request->getSession()->get('checkPassword');
-                    if(!$session){
+                    $isCheckPassword = $request->getSession()->get('checkPassword');
+                    if(!$isCheckPassword){
                         throw $this->createAccessDeniedException('未输入正确的校验密码！');
                     }
                     $result = $this->getCourseDeleteService()->delete($courseId,$type);  
-                    return $this->createJsonResponse($result);
+                    return $this->createJsonResponse($this->returnDeleteStatus($result,$type));
                 }
            }else if($course['status'] == 'draft'){
                 $result = $this->getCourseService()->deleteCourse($courseId);
@@ -458,6 +458,27 @@ class CourseController extends BaseController
             'classrooms'=> $classrooms,
             'filter' => $fields["filter"]
         ));
+    }
+
+    protected function returnDeleteStatus($result,$type)
+    {
+        $dataDictionary = array('questions'=>'问题','testpapers'=>'试卷','materials'=>'课时资料','chapters'=>'课时章节','drafts'=>'课时草稿','lessons'=>'课时','lessonLearns'=>'课时时长','lessonReplays'=>'课时录播','lessonViews'=>'课时播放时长','homeworks'=>'课时作业','exercises'=>'课时练习','favorites'=>'课时收藏','notes'=>'课时笔记','threads'=>'课程话题','reviews'=>'课程评价','announcements'=>'课程公告','statuses'=>'课程动态','members'=>'课程成员','course'=>'课程');
+        if($result>0){
+            $message = $dataDictionary[$type]."数据删除";
+            return array('success'=>true,'message'=>$message);
+        }else{
+            if($type == "homeworks" || $type == "exercises"){
+               $message = $dataDictionary[$type]."数据删除失败或插件未安装";
+               return array('success'=>false,'message'=>$message);
+            }else if($type =='course'){
+               $message = $dataDictionary[$type]."数据删除";
+               return array('success'=>false,'message'=>$message);
+            }else{
+                $message = $dataDictionary[$type]."数据删除失败";
+                return array('success'=>false,'message'=>$message);
+            }
+        }
+
     }
 
     protected function getCourseService()
