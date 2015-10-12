@@ -43,11 +43,16 @@ class ClassroomThreadController extends BaseController
 
     public function createAction(Request $request, $classroomId, $type)
     {
+        if(!in_array($type, array('discussion', 'question', 'event'))) {
+            throw $this->createAccessDeniedException('类型参数有误!');
+        }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
             throw $this->createAccessDeniedException('无权限创建活动!');
+        } else if (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
+            throw $this->createAccessDeniedException('无权限创建话题!');
         }
 
         if ($request->getMethod() == 'POST') {
