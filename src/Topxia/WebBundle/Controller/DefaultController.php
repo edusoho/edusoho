@@ -209,6 +209,9 @@ class DefaultController extends BaseController
             unset($conditions['categoryId']);
         }
         $orderBy = $conditions['orderBy'];
+        if ($orderBy == 'recommendedSeq') {  
+           $conditions['recommended'] = 1; 
+        }
         unset($conditions['orderBy']);
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
