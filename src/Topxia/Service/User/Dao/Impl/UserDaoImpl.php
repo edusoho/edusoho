@@ -114,14 +114,20 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
-        if (isset($conditions['startDate']) || isset($conditions['endDate'])) {
-            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate'){
-            $conditions['loginStartTime'] = strtotime($conditions['startDate']);
-            $conditions['loginEndTime'] = strtotime($conditions['endDate']);
+        if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'longinDate'){
+            if(isset($conditions['startDate'])){
+                $conditions['loginStartTime'] = strtotime($conditions['startDate']);
             }
-            if(!empty($conditions['datePicker']) && $conditions['datePicker'] == 'registerDate'){
-            $conditions['startTime'] = strtotime($conditions['startDate']);
-            $conditions['endTime'] = strtotime($conditions['endDate']);
+            if(isset($conditions['endDate'])){
+                $conditions['loginEndTime'] = strtotime($conditions['endDate']);
+            }
+        }
+        if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'registerDate'){
+            if(isset($conditions['startDate'])){
+                $conditions['startTime'] = strtotime($conditions['startDate']);
+            }
+            if(isset($conditions['endDate'])){
+                $conditions['endTime'] = strtotime($conditions['endDate']);
             }
         }
 
