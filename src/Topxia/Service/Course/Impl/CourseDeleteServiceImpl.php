@@ -190,7 +190,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         $count=0;
         if($isDeleteHomework){
             $HomeworkCount = $this->getHomeworkDao()->findHomeworksCountByCourseId($course['id']);
@@ -216,7 +216,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         $code = 'Homework';
         $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         $count=0;
         if($isDeleteHomework){
             $exerciseCount = $this->getExerciseDao()->findExercisesCountByCourseId($course['id']);
