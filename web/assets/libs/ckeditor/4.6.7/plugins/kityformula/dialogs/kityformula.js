@@ -52,7 +52,7 @@
                         return;
                     }
                     var $imgUrl = 'http://formula.edusoho.net/cgi-bin/mimetex.cgi?'+source;
-                    $.post($('#'+editor.name).data('imageDownloadUrl')+'&url='+$imgUrl, function(result){
+                    $.post($('#'+editor.name).data('imageDownloadUrl'),{url:$imgUrl}, function(result){
                         var insertHtml='<img kityformula="true" src="'+result+'" alt="'+source+'">';
                         editor.insertHtml(insertHtml);
                     });

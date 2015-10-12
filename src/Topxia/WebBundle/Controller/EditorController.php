@@ -60,8 +60,10 @@ class EditorController extends BaseController
     public function downloadAction(Request $request)
     {
         $token = $request->query->get('token');
-        $url = $request->query->get('url');
+        $url = $request->request->get('url');
         $url = str_replace(' ', '%20', $url);
+        $url = str_replace('+', '%2B', $url);
+        $url = str_replace('#', '%23', $url);
         $maker = new UploadToken();
         $token = $maker->parse($token);
         if (empty($token)) {
