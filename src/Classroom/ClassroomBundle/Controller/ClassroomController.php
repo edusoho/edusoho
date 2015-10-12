@@ -741,7 +741,7 @@ class ClassroomController extends BaseController
     private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-        if (!$classroomSetting['discount_buy']) {
+        if (empty($classroomSetting['discount_buy'])) {
             return false;
         }
 
