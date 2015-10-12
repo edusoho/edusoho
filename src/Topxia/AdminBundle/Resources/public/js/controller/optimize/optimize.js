@@ -38,10 +38,6 @@ define(function(require, exports, module) {
             });
         });
 
-        $('#optimizeFile').on('click',  function() {
-            $.post($(this).data('url'), function(response) {       
-            })
-        });
 
 
     };
