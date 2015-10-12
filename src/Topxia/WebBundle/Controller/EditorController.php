@@ -23,12 +23,15 @@ class EditorController extends BaseController
 
             $file = $request->files->get('upload');
 
+
+
+            $mimeType = FileToolkit::getMimeType($file);
+            
             if ($token['type'] == 'image') {
                 if (!FileToolkit::isImageFile($file)) {
                     throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
                 }
-
-                $isPicture = FileToolkit::verifyMimeType($file,'image');
+                $isPicture = is_int(strpos(strtolower($mimeType), 'image'));
                 if (!$isPicture){
                 throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
                 }
@@ -39,7 +42,7 @@ class EditorController extends BaseController
                     throw new \RuntimeException("您上传的不是Flash文件，请重新上传。");
                 }
 
-                $isFlash = FileToolkit::verifyMimeType($file,'application/x-shockwave-flash');
+                $isFlash = is_int(strpos(strtolower($mimeType), 'application/x-shockwave-flash'));
                 if (!$isFlash){
                 throw new \RuntimeException("您上传的不是Flash文件，请重新上传。");
                 }

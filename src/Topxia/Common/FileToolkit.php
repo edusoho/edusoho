@@ -1001,13 +1001,10 @@ class FileToolkit
         return array($naturalSize, $scaledSize);
     }
 
-    public static function verifyMimeType(File $file,$type)
+    public static function getMimeType(File $file)
     {
         $mimeType = finfo_file(finfo_open(FILEINFO_MIME),$file);
-        $result = strpos($mimeType, $type);
-        $isMatch = is_int($result);
-
-        return $isMatch;
+        return $mimeType;
     }
 
 }
