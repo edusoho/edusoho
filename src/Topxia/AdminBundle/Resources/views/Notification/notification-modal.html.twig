@@ -1,33 +1,57 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set modalSize = 'large' %}
+{% set menu = 'admin_batch_notification_create' %}
 
-{% block title %}{% if batchnotification|default(null) %}全站通知发送{% endif %}{% endblock %}
-{% block body %}
+{% set script_controller = 'batchnotification/notification-modal' %}
 
-<form id="batchnotification-create-form" class="form-horizontal" method="post" action="{% if batchnotification|default(null) %}{% else %}{{ path('admin_batch_notification_create')}}{% endif %}">
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="title">通知标题</label>
-    </div>
-    <div class="col-md-8 controls">
-      <input type="text" id="title"  name="title" class="form-control" value="{% if batchnotification|default(null) %}{{batchnotification.title}}{% endif %}">
-    </div>
-  </div>
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="content">群发内容</label>
-    </div>
-    <div class="col-md-8 controls">
-      <input type="text" id="content"  name="content" class="form-control" value="{% if batchnotification|default(null) %}{{batchnotification.content}}{% endif %}">
-    </div>
-  </div>
+{% set batchnotification = batchnotification|default(null) %}
 
+{% block page_title %}群发通知{% endblock %}
+
+{% block main %}
+
+<style>
+  #notification-form .popover {
+  	max-width: 400px;
+  	width: 400px;
+  }	
+
+</style>
+
+
+<form class="two-col-form" id="notification-form" method="post" enctype="multipart/form-data"
+	{% if batchnotification %}
+		action="{{ path('admin_batch_notification_edit', {id:batchnotification.id}) }}"
+	{% else %}
+		action="{{ path('admin_batch_notification_create') }}"
+	{% endif %}
+		>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="form-group">
+			  	<label for="article-title-field" class="control-label">通知标题</label>
+			  	<div class="controls">
+			  		<input class="form-control" id="article-title-field" type="text" name="title" value="{{ batchnotification.title|default('') }}">
+			  	</div>
+			</div>
+			<div class="form-group">
+				<label for="richeditor-body-field" class="control-label">正文</label>
+				<div class="controls">
+					<textarea class="form-control" id="richeditor-body-field" rows="16" name="content"
+					  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+					  data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+					 >{{ batchnotification.content|default('') }}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	    <button id="notification-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">确定</button>
+			<a class="btn btn-link" href="{{ path('admin_batch_notification') }}">返回</a>
+		</div>		
+	</div>
 </form>
-{% endblock %}
 
-{% block footer %}
-  <button id="batchnotification-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#batchnotification-create-form">发送</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-  <script>app.load('batchnotification/notification-modal')</script>
 {% endblock %}

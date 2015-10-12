@@ -13,4 +13,6 @@ interface BatchNotificationDao
 	public function searchBatchNotifications($conditions, $orderBy, $start, $limit);
 
 	public function deleteBatchNotification($id);
+
+	public function updateBatchNotification($id,$batchNotification);
 }

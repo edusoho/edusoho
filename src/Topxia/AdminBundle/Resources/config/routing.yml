@@ -1285,3 +1285,16 @@ admin_batch_notification:
 admin_batch_notification_create:
     pattern: /batch_notification/create
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:create }
+
+admin_batch_notification_edit:
+    pattern: /batch_notification/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:edit }
+
+admin_batch_notification_delete:
+    pattern: /batch_notification/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:delete }
+    methods: [POST]
+
+admin_batch_notification_send:
+    pattern: /batch_notification/send/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }

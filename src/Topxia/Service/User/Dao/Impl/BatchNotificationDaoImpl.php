@@ -41,6 +41,12 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
     public function deleteBatchNotification($id)
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    public function updateBatchNotification($id, $batchNotification)
+    {
+        $this->getConnection()->update($this->table, $batchNotification, array('id' => $id));
+        return $this->getBatchNotificationById($id);
     } 
 
     public function searchBatchNotifications($conditions, $orderBy, $start, $limit){
@@ -74,6 +80,7 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
             ->andWhere('type = :type')
             ->andWhere('createdTime = :createdTime')
             ->andWhere('id > :id')
-            ->andWhere('content LIKE :content');
+            ->andWhere('content LIKE :content')
+            ->andWhere('published = :published');
     }
 }

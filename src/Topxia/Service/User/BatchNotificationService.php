@@ -4,7 +4,7 @@ namespace Topxia\Service\User;
 
 interface BatchNotificationService
 {
-    public function sendBatchNotification($fromId, $title,$content,$createdTime,$targetType,$targetId,$type);
+    public function sendBatchNotification($fromId, $title,$content,$createdTime = null,$targetType,$targetId,$type,$published = 0);
 
     /**
      * 获取私信内容
@@ -35,4 +35,8 @@ interface BatchNotificationService
      * @return integer   搜索出的全站信数目
      */
     public function checkoutBatchNotification($user);
+
+    public function deleteBatchNotificationById($id);
+
+    public function updateBatchNotification($id,$batchNotification);
 }

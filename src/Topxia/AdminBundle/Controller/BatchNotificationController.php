@@ -22,8 +22,7 @@ class BatchNotificationController extends BaseController
             $paginator->getPerPageCount()
             );
     	$userIds =  ArrayToolkit::column($batchnotifications, 'fromId');
-        $users=$this->getUserService()->findUsersByIds($userIds);
-
+        $users = $this->getUserService()->findUsersByIds($userIds);
     	return $this->render('TopxiaAdminBundle:Notification:index.html.twig',array(
     		'paginator' => $paginator,
     		'batchnotifications' => $batchnotifications,
@@ -48,16 +47,57 @@ class BatchNotificationController extends BaseController
             }
             $batchnotification['createdtime'] = time();
             //（可扩展）默认发送全站私信，可改成群发某个组或者班级成员等
-            $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'], 'global', 0 ,'text');
+            $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'], 'global', 0 ,'text',0);
             return $this->redirect($this->generateUrl('admin_batch_notification'));
         }
-        return $this->render('TopxiaAdminBundle:Notification:test-modal.html.twig',array(
+        return $this->render('TopxiaAdminBundle:Notification:notification-modal.html.twig',array(
             'batchnotification' => $batchnotification
             ));
-    	/*return $this->render('TopxiaAdminBundle:Notification:notification-modal.html.twig',array(
-    		'batchnotification' => $batchnotification
-    		));*/
     }
+    public function editAction(Request $request, $id)
+    {
+        $batchnotification = $this->getBatchNotificationService()->getBatchNotificationById($id);
+        if (empty($batchnotification)) {
+            throw $this->createNotFoundException('通知已删除！');
+        }
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id, $formData);
+            return $this->redirect($this->generateUrl('admin_batch_notification'));
+        }
+        return $this->render('TopxiaAdminBundle:Notification:notification-modal.html.twig',array(
+            'batchnotification' => $batchnotification
+        ));
+    }
+    public function sendAction(Request $request, $id)
+    {
+
+        $batchnotification = $this->getBatchNotificationService()->getBatchNotificationById($id);
+        if (empty($batchnotification)) {
+            throw $this->createNotFoundException('通知已删除！');
+        }
+        $batchnotification['published'] = $batchnotification['published'] == 0 ? 1 : 0;
+        if(!$batchnotification['published'])
+        {
+            return $this->createJsonResponse(array("status" =>"failed"));
+        }
+        if ($request->getMethod() == "POST" ) {
+            $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id,$batchnotification);
+        }
+        return $this->createJsonResponse(array("status" =>"success"));
+    }
+    public function deleteAction(Request $request,$id)
+    {
+        if ($request->getMethod() == 'POST') {
+            $result = $this->getBatchNotificationService()->deleteBatchNotificationById($id);
+            if($result){
+                return $this->createJsonResponse(array("status" =>"failed"));
+            } else {
+                return $this->createJsonResponse(array("status" =>"success")); 
+            }
+        }
+    }
+
     protected function getBatchNotificationService()
     {
         return $this->getServiceKernel()->createService('User.BatchNotificationService');

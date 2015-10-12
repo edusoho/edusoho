@@ -31,7 +31,14 @@ class BatchNotificationServiceTest extends BaseTestCase
     	//var_dump($notifications);
         $user = $this->createUser();
         $result=$this->getBatchNotificationService()->checkoutBatchNotification($user);
-        var_dump($result);
+        $this->getBatchNotificationService()->deleteBatchNotificationById(1);
+        $notification2=$this->getBatchNotificationService()->getBatchNotificationById(1);
+        $notification3=$this->getBatchNotificationService()->getBatchNotificationById(2);
+        var_dump($notification2);
+        var_dump($notification3);
+        $notification3['content'] = empty($notification3['content']) ? 'aaaaaa' :'bbbbbb';
+        $this->getBatchNotificationService()->updateBatchNotification(2,$notification3);
+        var_dump($notification3);
     }
 	protected function createUser()
     {

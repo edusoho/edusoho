@@ -1,36 +1,60 @@
 define(function(require, exports, module) {
 
+    require('ckeditor');
+
     var Validator = require('bootstrap.validator');
+    var Uploader = require('upload');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
-        var $modal = $('#batchnotification-create-form').parents('.modal');
 
-        $form = $('#batchnotification-create-form');
+        var $form = $("#notification-form");
+        $modal = $form.parents('.modal');
 
+        var validator = _initValidator($form, $modal);
+        console.log(validator);
+        var $editor = _initEditorFields($form, validator);
+    };
+    function _initEditorFields($form, validator) {
+
+        // group: 'default'
+        CKEDITOR.replace('richeditor-body-field', {
+            toolbar: 'Full',
+            filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
+            height: 300
+        });
+    }
+    function _initValidator($form, $modal) {
         var validator = new Validator({
-            element: '#batchnotification-create-form',
-            autoSubmit: false,
+            element: '#notification-form',
+            failSilently: true,
+            triggerType: 'change',
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
-                $('#batchnotification-create-btn').button('submiting').addClass('disabled');
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    $modal.modal('hide');
-                    window.location.reload();
-
-                }).error(function(){
-                    Notify.danger('操作失败');
-                });
+                CKupdate();
+                $('#notification-operate-save').button('loading').addClass('disabled');
+                Notify.success('保存成功！');
             }
         });
+
         validator.addItem({
-            element: '[name=content]',
-            required: true,
-            rule: 'minlength{min:2}'
+            element: '[name=title]',
+            required: true
         });
 
-    };
-
+        validator.addItem({
+            element: '[name=richeditorBody]',
+            required: true
+        });
+        return validator;
+    }
+    function CKupdate() {
+    for ( instance in CKEDITOR.instances ) {
+        CKEDITOR.instances[instance].updateElement(); 
+    }
+}
+    
 });
