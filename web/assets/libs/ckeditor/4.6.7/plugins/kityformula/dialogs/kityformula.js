@@ -51,6 +51,10 @@
                     if ($.trim(source) == "\\placeholder"){
                         return;
                     }
+                    if(/.*[\u4e00-\u9fa5]+.*$/.test(source)) {
+                        alert("不能含有汉字！");
+                        return false;
+                    }
                     var $imgUrl = 'http://formula.edusoho.net/cgi-bin/mimetex.cgi?'+source;
                     $.post($('#'+editor.name).data('imageDownloadUrl'),{url:$imgUrl}, function(result){
                         var insertHtml='<img kityformula="true" src="'+result+'" alt="'+source+'">';
