@@ -69,6 +69,16 @@ class CourseController extends CourseBaseController
 			$paginator->getOffsetCount(),
 			$paginator->getPerPageCount()
 		);
+		if(isset($conditions['recommended'])){
+            $count = 12 - count($courses);
+            if($count > 0){
+                $conditions['recommended'] = 0;
+                $notRecommendCourses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $count);
+                foreach($notRecommendCourses as $notRecommendCourse){
+                    array_push($courses, $notRecommendCourse);
+                }
+            }
+        }
 		$group = $this->getCategoryService()->getGroupByCode('course');
 		if (empty($group)) {
 			$categories = array();

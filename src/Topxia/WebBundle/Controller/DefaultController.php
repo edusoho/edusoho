@@ -215,6 +215,17 @@ class DefaultController extends BaseController
         unset($conditions['orderBy']);
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
+        if(isset($conditions['recommended'])){
+            $count = 12 - count($courses);
+            if($count > 0){
+                $conditions['recommended'] = 0;
+                $notRecommendCourses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $count);
+                foreach($notRecommendCourses as $notRecommendCourse){
+                    array_push($courses, $notRecommendCourse);
+                }
+            }
+        }
+
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
             'orderBy' => $orderBy,
             'categoryId' => $categoryId,
