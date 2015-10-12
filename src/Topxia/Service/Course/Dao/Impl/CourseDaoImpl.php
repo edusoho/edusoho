@@ -112,12 +112,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $builder->addOrderBy('recommendedSeq','ASC');
             $builder->addOrderBy('recommendedTime', 'DESC');
             $builder->addOrderBy('createdTime','DESC');
-        }
-        $builder = $this->_createSearchQueryBuilder($conditions)
+
+        } else {
+            $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+        }
+        
 
         return $builder->execute()->fetchAll() ? : array(); 
     }
