@@ -67,13 +67,6 @@
         <ul class="nav navbar-nav">
           {% for m in menu_children('admin', 'admin', 1) %}
 
-            {% if m.code == "admin_app"%}
-              {% if not is_granted('ROLE_SUPER_ADMIN') %}
-                {% set parameter = {'postStatus':'all'} %}
-                {% set m = m|array_merge({'router_params':parameter,'router_name':'admin_app_center'}) %}
-              {% endif %}
-            {% endif %}
-
             {% if m.code != "admin_system" %}
               <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
                 {{ self_macro.menu_link_html(_context, m) }}
