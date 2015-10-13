@@ -104,7 +104,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteDrafts($course)
     {
-        $draftCount = $this->getDraftDao()->searchDraftCount((array('courseId'=>$course['id']));
+        $draftCount = $this->getDraftDao()->searchDraftCount(array('courseId'=>$course['id']));
         $count=0;
         if($draftCount>0){
             $drafts = $this->getDraftDao()->searchDrafts(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
