@@ -16,7 +16,7 @@ interface FavoriteDao
 
     public function deleteFavorite($id);
 
-    public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
+    public function searchCourseFavoriteCount($conditions);
 
-    public function findFavoritesCountByCourseId($courseId);
+    public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
 }

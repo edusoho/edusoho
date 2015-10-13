@@ -12,8 +12,6 @@ interface NoteService
 
     public function findUserCourseNotes($userId, $courseId);
 
-    public function findNotesCountByCourseId($courseId);
-
     public function searchNotes($conditions, $sort, $start, $limit);
 
     public function searchNoteCount($conditions);

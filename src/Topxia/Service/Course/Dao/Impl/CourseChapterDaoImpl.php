@@ -30,6 +30,13 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
+    public function searchChapterCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function searchChapters($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -101,12 +108,6 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         $sql ="SELECT * FROM {$this->table} WHERE pId= ? AND courseId IN ({$marks})";
         
         return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
-    }
-
-    public function findChaptersCountByCourseId($courseId)
-    {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE  courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     protected function _createSearchQueryBuilder($conditions)
