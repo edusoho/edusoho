@@ -189,9 +189,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteHomeworks($course)
     {
         $code = 'Homework';
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         $count=0;
+        $homework = $this->getAppService()->findInstallApp($code);
+        if(!empty($homework)){
+           return $count; 
+        }
+        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         if($isDeleteHomework){
             $HomeworkCount = $this->getHomeworkDao()->searchHomeworkCount(array('courseId'=>$course['id']));
             if($HomeworkCount>0){
@@ -208,6 +211,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $homeworkLog = "删除课程《{$course['title']}》(#{$course['id']})的作业";
                 $this->getLogService()->info('homework', 'delete', $homeworkLog);  
             }
+        }else{
+            throw $this->createServiceException('作业插件未升级,删除课程失败');
         }
         return $count;
     }
@@ -215,9 +220,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteExercises($course)
     {
         $code = 'Homework';
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         $count=0;
+        $homework = $this->getAppService()->findInstallApp($code);
+        if(!empty($homework)){
+           return $count; 
+        }
+        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         if($isDeleteHomework){
             $exerciseCount = $this->getExerciseDao()->searchExerciseCount(array('courseId'=>$course['id']));
             if($exerciseCount>0){
@@ -234,6 +242,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
                 $exerciseLog = "删除课程《{$course['title']}》(#{$course['id']})的练习";
                 $this->getLogService()->info('exercise', 'delete', $exerciseLog);
             }
+        }else{
+            throw $this->createServiceException('作业插件未升级,删除课程失败');
         }
         return $count;
     }
