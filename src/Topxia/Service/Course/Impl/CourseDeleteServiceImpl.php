@@ -20,6 +20,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $method = 'delete'.ucwords($type);  
             $result = $this->$method($course);
             $this->getCourseDao()->getConnection()->commit();
+
             return $result;
         }catch(\Exception $e){
             $this->getCourseDao()->getConnection()->rollback();
