@@ -18,9 +18,9 @@ interface CourseLessonReplayDao
 
 	public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
 
-	public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
+	public function searchCourseLessonReplayCount($conditions);
 
-	public function findLessonReplaysCountByCourseId($courseId);
+	public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
 
 	public function deleteCourseLessonReplay($id);
 }
