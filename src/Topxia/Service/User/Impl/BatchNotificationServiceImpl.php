@@ -31,25 +31,32 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     }
     public function checkoutBatchNotification($user){
         $conditions = array(
-            'userId' => $user['id']
+            'userId' => $user['id'],
+            'type' => 'global'
             );
         $notification = $this->getNotificationDao()->searchNotifications($conditions,array('parentId','DESC'),0,1);
         if(!empty($notification) && $notification[0]['parentId'] != 0){
             $conditions = array(
-                'id' => $notification[0]['parentId']
+                'id' => $notification[0]['parentId'],
+                'published' => 1
                 );
         }else{
             $conditions = array(
-                'id' => 0
+                'id' => 0,
+                'published' => 1
                 );
         }
         $batchNotifications = $this->searchBatchNotifications($conditions,array('createdTime','ASC'),0,9999);
         if(!empty($batchNotifications)){
                 foreach ($batchNotifications as $key => $batchNotification) {
+                    $content = array(
+                        'content' => $batchNotification['content'],
+                        'title' => $batchNotification['title']
+                        );
                     $notification = array(
                         'userId'  => $user['id'],
                         'type'  => $batchNotification['targetType'],
-                        'content' => $batchNotification['content'],
+                        'content' => $content,
                         'parentId'  => $batchNotification['id'],
                         'createdTime'  =>  $batchNotification['createdTime'],
                         );

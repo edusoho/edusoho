@@ -4,8 +4,10 @@
   </div>
   <div class="media-body">
     <div class="notification-body">
-      {% set data = notification.content %}
-  	 系统通知：{{ data|raw }}。
+      {% set data = notification.content|raw %}
+  	 系统通知：<a href="" target='_blank'>
+     {{ data.title|raw}}。
+     </a>
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  
