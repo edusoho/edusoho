@@ -36,36 +36,36 @@ class KeywordFilter extends BaseService
 
 	}
  
-	public function insert($utf8_str)
+	public function insert($utf8Str)
 	{
-		$chars = $this->get_chars($utf8_str);
+		$chars = $this->getChars($utf8Str);
 		$chars[] = null;	//串结尾字符
 		$count = count($chars);
-		$T = &$this->tree;
+		$tree = &$this->tree;
 		for($i = 0;$i < $count;$i++){
 			$c = $chars[$i];
-			if(!array_key_exists($c, $T)){
-				$T[$c] = array();	//插入新字符，关联数组
+			if(!array_key_exists($c, $tree)){
+				$tree[$c] = array();	//插入新字符，关联数组
 			}
-			$T = &$T[$c];
+			$tree = &$tree[$c];
 		}
 	}
  
-	public function remove($utf8_str)
+	public function remove($utf8Str)
 	{
-		$chars = $this->get_chars($utf8_str);
+		$chars = $this->getChars($utf8Str);
 		$chars[] = null;
 		if($this->_find($chars)){	//先保证此串在树中
 			$chars[] = null;
 			$count = count($chars);
-			$T = &$this->tree;
+			$tree = &$this->tree;
 			for($i = 0;$i < $count;$i++){
 				$c = $chars[$i];
-				if(count($T[$c]) == 1){		//表明仅有此串
-					unset($T[$c]);
+				if(count($tree[$c]) == 1){		//表明仅有此串
+					unset($tree[$c]);
 					return;
 				}
-				$T = &$T[$c];
+				$tree = &$tree[$c];
 			}
 		}
 	}
@@ -73,53 +73,53 @@ class KeywordFilter extends BaseService
 	private function _find(&$chars)
 	{
 		$count = count($chars);
-		$T = &$this->tree;
+		$tree = &$this->tree;
 		for($i = 0;$i < $count;$i++){
 			$c = $chars[$i];
-			if(!array_key_exists($c, $T)){
+			if(!array_key_exists($c, $tree)){
 				return false;
 			}
-			$T = &$T[$c];
+			$tree = &$tree[$c];
 		}
 		return true;
 	}
  
-	public function find($utf8_str)
+	public function find($utf8Str)
 	{
-		$chars = $this->get_chars($utf8_str);
+		$chars = $this->getChars($utf8Str);
 		$chars[] = null;
 		return $this->_find($chars);
 	}
  
-	public function contain($utf8_str, $do_count = 0)
+	public function contain($utf8Str, $doCount = 0)
 	{
-		$chars = $this->get_chars($utf8_str);
+		$chars = $this->getChars($utf8Str);
 		$chars[] = null;
 		$len = count($chars);
-		$Tree = &$this->tree;
+		$tree = &$this->tree;
 		$count = 0;
 		for($i = 0;$i < $len;$i++){
 			$c = $chars[$i];
-			if(array_key_exists($c, $Tree)){	//起始字符匹配
-				$T = &$Tree[$c];
+			if(array_key_exists($c, $tree)){	//起始字符匹配
+				$subTree = &$tree[$c];
 				for($j = $i + 1;$j < $len;$j++){
 					$c = $chars[$j];
-					if(array_key_exists(null, $T)){
-						if($do_count){
+					if(array_key_exists(null, $subTree)){
+						if($doCount){
 							$count++;
 						}
 						else{
 							return true;
 						}
 					}
-					if(!array_key_exists($c, $T)){
+					if(!array_key_exists($c, $subTree)){
 						break;
 					}
-					$T = &$T[$c];
+					$subTree = &$subTree[$c];
 				}
 			}
 		}
-		if($do_count){
+		if($doCount){
 			return $count;
 		}
 		else{
@@ -127,7 +127,7 @@ class KeywordFilter extends BaseService
 		}
 	}
  
-	public function contain_all($str_array)
+	public function containAll($strArray)
 	{
 		foreach($str_array as $str){
 			if($this->contain($str)){
@@ -147,7 +147,7 @@ class KeywordFilter extends BaseService
 		$this->tree = unserialize($str);
 	}
  
-	public function get_chars($utf8_str)
+	public function getChars($utf8Str)
 	{
 		$s = $utf8_str;
 		$len = strlen($s);
