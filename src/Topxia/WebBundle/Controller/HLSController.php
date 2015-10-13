@@ -153,10 +153,7 @@ class HLSController extends BaseController
         $manclient = $request->headers->get('manclient', '');
         $userAgent = $request->headers->get('User-Agent', '');
 
-        var_dump(strpos($userAgent , "Android"));
-        exit();
-
-        if ($manclient == 'VideoJs') {
+        if (!empty(strpos($userAgent , "Android"))&&!empty(strpos($userAgent , "Mac OS"))) {
             $tokenFields['data']['keyencryption'] = 1;
         }
 
