@@ -153,7 +153,7 @@ class HLSController extends BaseController
         $manclient = $request->headers->get('manclient', '');
         $userAgent = $request->headers->get('User-Agent', '');
 
-        if (!empty(strpos($userAgent , "Android"))&&!empty(strpos($userAgent , "Mac OS"))) {
+        if (!empty(strpos($userAgent , "Android")) && !empty(strpos($userAgent , "Mac OS"))) {
             $tokenFields['data']['keyencryption'] = 1;
         }
 
