@@ -60,8 +60,13 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 			return $str;
 		} else {
 			$keywordFilter = new KeywordFilter();
-			$keywordFilter->addKeywords(array('中国','中华人民共和国','美国人','美国黑人'));
-			$keywordFilter->filter('我们都是中国人');
+			$start = time();
+			$keywordFilter->addKeywords(array('sb', '中国', '中华人民共和国', '美国', '美国人', '美国黑人'));
+			var_dump(time() - $start);
+			$str = $keywordFilter->filter('你是sb, test sbtr, dasqsad发生的甘为人梯我很高复合风管盔头台湾人二二二佛挡杀佛涣发大号结过婚看我认为自助餐发发该罚的罚好得很就感觉');
+			var_dump(time() - $start);
+			var_dump($str);
+			return $str;
 		}
 	}
 

@@ -67,17 +67,14 @@ class KeywordFilter extends BaseService
 			}
 		}
 
-		$str = implode('', $chars);
-
 		foreach ($indexs as $value) {
 			$start = $value[0];
 			$end = $value[1];
-			for ($i=0; $i < $end - $start; $i++) { 
-				$replace += '*';
+			for ($i=$start; $i <= $end; $i++) { 
+				$chars[$i] = '*';
 			}
-			$str = substr_replace($str, $replace, $start, $length);
 		}
-		var_dump($str);
+		$str = implode('', $chars);
 		return $str;
 	}
 
