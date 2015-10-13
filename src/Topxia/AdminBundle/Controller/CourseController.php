@@ -468,7 +468,7 @@ class CourseController extends BaseController
             return array('success'=>true,'message'=>$message);
         }else{
             if($type == "homeworks" || $type == "exercises"){
-               $message = $dataDictionary[$type]."数据删除失败或插件未安装";
+               $message = $dataDictionary[$type]."数据删除失败或插件未安装或插件未升级";
                return array('success'=>false,'message'=>$message);
             }else if($type =='course'){
                $message = $dataDictionary[$type]."数据删除";
