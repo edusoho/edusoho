@@ -44,6 +44,13 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId));
 	}
 
+	public function searchCourseLessonReplayCount($conditions)
+	{
+		$builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+	}
+
 	public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
 	{
 		$this->filterStartLimit($start, $limit);
@@ -54,12 +61,6 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();
 
-	}
-
-	public function findLessonReplaysCountByCourseId($courseId)
-	{
-		$sql = "SELECT COUNT(*) FROM {$this->getTablename()} WHERE courseId = ? ";
-        return $this->getConnection()->fetchColumn($sql,array($courseId));
 	}
 
 	public function deleteCourseLessonReplay($id)

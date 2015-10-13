@@ -49,6 +49,13 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function searchCourseFavoriteCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -58,12 +65,6 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();
-    }
-
-    public function findFavoritesCountByCourseId($courseId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE courseId = ? ";
-        return $this->getConnection()->fetchColumn($sql,array($courseId));
     }
 
     protected function _createSearchQueryBuilder($conditions)

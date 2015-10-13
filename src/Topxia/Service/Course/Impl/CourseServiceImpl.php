@@ -795,11 +795,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
 	}
 
-	public function findLessonsViewsCountByCourseId($courseId)
-	{
-		return $this->getLessonViewDao()->findLessonsViewsCountByCourseId($courseId);
-	}
-
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
 	{
 		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
@@ -945,11 +940,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			return null;
 		}
 		return LessonSerialize::unserialize($draft);
-	}
-
-	public function findDraftsCountByCourseId($courseId)
-	{
-		return  $this->getCourseDraftDao()->findDraftsCountByCourseId($courseId);
 	}
 
 	public function getCourseLessons($courseId)
@@ -1743,11 +1733,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds)
 	{
 		return $this->getChapterDao()->findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
-	}
-
-	public function findChaptersCountByCourseId($courseId)
-	{
-		return $this->getChapterDao()->findChaptersCountByCourseId($courseId);
 	}
 
 	public function getNextUnitNumberAndParentId($courseId)
@@ -2558,11 +2543,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId)
 	{
 		return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
-	}
-
-	public function findLessonReplaysCountByCourseId($courseId)
-	{
-		return $this->getCourseLessonReplayDao()->findLessonReplaysCountByCourseId($courseId);
 	}
 
 	public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
