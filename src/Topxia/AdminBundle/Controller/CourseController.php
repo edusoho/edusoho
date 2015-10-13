@@ -152,13 +152,14 @@ class CourseController extends BaseController
            throw $this->createAccessDeniedException('您不是超级管理员！');
         }
         //判断作业插件版本号
-        $code="homework";
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
-        if(!$isDeleteHomework){
-            return $this->createJsonResponse(array('code' =>1, 'message' => '作业插件未升级'));
+        $homework = $this->getAppService()->findInstallApp("Homework");
+        if(!empty($homework)){
+           $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
+            if(!$isDeleteHomework){
+                return $this->createJsonResponse(array('code' =>1, 'message' => '作业插件未升级'));
+            } 
         }
-
+        
         $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
         if(!empty($subCourses)){
              return $this->createJsonResponse(array('code' =>2, 'message' => '请先删除班级课程'));
