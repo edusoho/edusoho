@@ -103,7 +103,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                 'createdTime' => time()
             );
 
-            $newTaskIds = array();
+            $newTaskIds = $previewTaskInfo = array();
             $i = $j = 0;
             $perDayStudyTime = 0;
             $planStartTime = $plan['setTime'] ? $plan['planStartTime'] : $planMember['createdTime'];
@@ -140,8 +140,8 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     }
 
                     if ($perDayStudyTime < $availableHours) {
-                        if ($perDayStudyTime == 0) {
-                            $taskStartTime = strtotime("-1 day", $taskStartTime);
+                        if ($planTask['suggestHours'] == 0 && $planTask['type'] == 'homework') {
+                            $taskStartTime = $previewTaskInfo['taskEndTime'];//strtotime("-1 day", $taskStartTime);
                         }
                         $taskEndTime = $taskStartTime;
                     } 
@@ -151,7 +151,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                         $i++;
                     } 
                     else {
-                        $taskNeedDay = ceil($planTask['suggestHours'] / $availableHours);
+                        $taskNeedDay = ceil($planTask['suggestHours'] / $availableHours) - 1;
                         $taskEndTime = strtotime("+{$taskNeedDay} day", $taskStartTime);
                         $perDayStudyTime = $perDayStudyTime - $availableHours;
 
@@ -205,6 +205,8 @@ class StudyPlanTaskProcessor implements TaskProcessor
                         $newTaskIds[] = $userTargetTask['id'];
                     }
                 }
+
+                $previewTaskInfo = $taskInfo;
                 unset($taskInfo['completedTime']);
                 $j += 10;
             }
