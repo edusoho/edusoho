@@ -49,7 +49,7 @@ class PlayerController extends BaseController
 
     protected function agentInWhiteList($userAgent)
     {
-        $whiteList = array("iPhone", "iPad","Mac");
+        $whiteList = array("iPhone", "iPad","Mac",'Android');
         foreach ($whiteList as $value) {
             if(strpos($userAgent, $value)>-1){
                 return true;
