@@ -60,8 +60,8 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 			return $str;
 		} else {
 			$keywordFilter = new KeywordFilter();
-			$keywordFilter->addKeywords(array('中国','中华人民共和国','美国','美国人','美国黑人'));
-			var_dump($keywordFilter->find('我们都是中国人'));
+			$keywordFilter->addKeywords(array('中国','中华人民共和国','美国人','美国黑人'));
+			$keywordFilter->filter('我们都是中国人');
 		}
 	}
 

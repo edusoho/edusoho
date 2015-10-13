@@ -50,6 +50,64 @@ class KeywordFilter extends BaseService
 			$tree = &$tree[$c];
 		}
 	}
+
+	public function filter($utf8Str)
+	{
+		$chars = $this->getChars($utf8Str);
+		$count = count($chars);
+		$tree = &$this->tree;
+		$indexs = array();
+		for($i = 0;$i < $count;$i++){
+			$result = $this->iterate($chars, $i, $tree, $i);
+			if(is_array($result)) {
+				list($start, $end, $i) = $result;
+				$indexs[] = array($start, $end);
+			} else {
+				$i = $result;
+			}
+		}
+
+		$str = implode('', $chars);
+
+		foreach ($indexs as $value) {
+			$start = $value[0];
+			$end = $value[1];
+			for ($i=0; $i < $end - $start; $i++) { 
+				$replace += '*';
+			}
+			$str = substr_replace($str, $replace, $start, $length);
+		}
+		var_dump($str);
+		return $str;
+	}
+
+	public function iterate($chars, $i, $tree, $start)
+	{
+		$c = $chars[$i];
+		if(array_key_exists($c, $tree)){
+			$tree = &$tree[$c];
+			if(array_key_exists("", $tree)){
+				$end = $i;
+				return array($start, $end, $i);
+			}else{
+				$i++;
+				if($i >= count($chars)) {
+					return $i;
+				}
+				$result = $this->iterate($chars, $i, $tree, $start);
+
+				if(is_array($result)) {
+					return $result;
+				} else {
+					return $i;
+				}
+			}
+		} else {
+			return $i;
+		}
+
+
+	}
  
 	public function remove($utf8Str)
 	{
@@ -149,7 +207,7 @@ class KeywordFilter extends BaseService
  
 	public function getChars($utf8Str)
 	{
-		$s = $utf8_str;
+		$s = $utf8Str;
 		$len = strlen($s);
 		if($len == 0) {
 			return array();
