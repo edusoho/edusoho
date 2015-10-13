@@ -168,9 +168,7 @@ define(function(require, exports, module) {
                 dataType: 'json',
                 type: 'POST'
             }).done(function(data, textStatus, jqXHR) {
-                if (data.status == 'error') {
-                    progressBar.error(makeErrorsText(title + '失败：', data.errors));
-                }else if(data.success){
+                if(data.success){
                     progressBar.setProgress(startProgress, data.message);
                     title =  data.message;
                     exec(title, url, progressBar, startProgress, endProgress);
@@ -182,15 +180,5 @@ define(function(require, exports, module) {
                 progressBar.error( title +  '时，发生了未知错误。');
                 $(document).clearQueue('delete_step_queue');
             });
-    }
-
-    function makeErrorsText(title, errors) {
-        var html = '<p>' + title + '<p>';
-        html += '<ul>';
-        $.each(errors, function(index, text) {
-            html += '<li>' + text + '</li>';
-        });
-        html += '</ul>';
-        return html;
     }
 });

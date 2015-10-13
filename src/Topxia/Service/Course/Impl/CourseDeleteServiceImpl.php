@@ -20,6 +20,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $method = 'delete'.ucwords($type);  
             $result = $this->$method($course);
             $this->getCourseDao()->getConnection()->commit();
+
             return $result;
         }catch(\Exception $e){
             $this->getCourseDao()->getConnection()->rollback();
@@ -188,25 +189,26 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteHomeworks($course)
     {
-        $code = 'Homework';
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         $count=0;
-        if($isDeleteHomework){
-            $HomeworkCount = $this->getHomeworkDao()->searchHomeworkCount(array('courseId'=>$course['id']));
-            if($HomeworkCount>0){
-                $homeworks = $this->getHomeworkDao()->searchHomeworks(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
-                foreach ($homeworks as $homework) {  
-                    $this->getHomeworkResultDao()->deleteResultsByHomeworkId($homework['id']);
-                    $this->getHomeworkItemResultDao()->deleteItemResultsByHomeworkId($homework['id']);
-                    $this->getHomeworkItemDao()->deleteItemsByHomeworkId($homework['id']);
-                    $result = $this->getHomeworkDao()->deleteHomework($homework['id']);
-                    $count+=$result;
-                    //删除完成作业动态
-                    $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_homework','homework',$homework['id']);
+        $homework = $this->getAppService()->findInstallApp('Homework');
+        if(!empty($homework)){
+            $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
+            if($isDeleteHomework){
+                $HomeworkCount = $this->getHomeworkDao()->searchHomeworkCount(array('courseId'=>$course['id']));
+                if($HomeworkCount>0){
+                    $homeworks = $this->getHomeworkDao()->searchHomeworks(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
+                    foreach ($homeworks as $homework) {  
+                        $this->getHomeworkResultDao()->deleteResultsByHomeworkId($homework['id']);
+                        $this->getHomeworkItemResultDao()->deleteItemResultsByHomeworkId($homework['id']);
+                        $this->getHomeworkItemDao()->deleteItemsByHomeworkId($homework['id']);
+                        $result = $this->getHomeworkDao()->deleteHomework($homework['id']);
+                        $count+=$result;
+                        //删除完成作业动态
+                        $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_homework','homework',$homework['id']);
+                    }
+                    $homeworkLog = "删除课程《{$course['title']}》(#{$course['id']})的作业";
+                    $this->getLogService()->info('homework', 'delete', $homeworkLog);  
                 }
-                $homeworkLog = "删除课程《{$course['title']}》(#{$course['id']})的作业";
-                $this->getLogService()->info('homework', 'delete', $homeworkLog);  
             }
         }
         return $count;
@@ -214,25 +216,26 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteExercises($course)
     {
-        $code = 'Homework';
-        $homework = $this->getAppService()->findInstallApp($code);
-        $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
         $count=0;
-        if($isDeleteHomework){
-            $exerciseCount = $this->getExerciseDao()->searchExerciseCount(array('courseId'=>$course['id']));
-            if($exerciseCount>0){
-                $exercises = $this->getExerciseDao()->searchExercises(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
-                foreach ($exercises as $exercise) {
-                    $this->getExerciseResultDao()->deleteExerciseResultByExerciseId($exercise['id']);
-                    $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
-                    $this->getExerciseItemDao()->deleteItemByExerciseId($exercise['id']);
-                    $result = $this->getExerciseDao()->deleteExercise($exercise['id']);
-                    $count+=$result;
-                    //删除完成练习的动态
-                    $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_exercise','exercise',$exercise['id']);
+        $homework = $this->getAppService()->findInstallApp('Homework');
+        if(!empty($homework)){
+            $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
+            if($isDeleteHomework){
+                $exerciseCount = $this->getExerciseDao()->searchExerciseCount(array('courseId'=>$course['id']));
+                if($exerciseCount>0){
+                    $exercises = $this->getExerciseDao()->searchExercises(array('courseId'=>$course['id']),array('createdTime' ,'desc'),0,500);
+                    foreach ($exercises as $exercise) {
+                        $this->getExerciseResultDao()->deleteExerciseResultByExerciseId($exercise['id']);
+                        $this->getExerciseItemResultDao()->deleteItemResultByExerciseId($exercise['id']);
+                        $this->getExerciseItemDao()->deleteItemByExerciseId($exercise['id']);
+                        $result = $this->getExerciseDao()->deleteExercise($exercise['id']);
+                        $count+=$result;
+                        //删除完成练习的动态
+                        $this->getStatusDao()->deleteStatusesByCourseIdAndTypeAndObject(0,'finished_exercise','exercise',$exercise['id']);
+                    }
+                    $exerciseLog = "删除课程《{$course['title']}》(#{$course['id']})的练习";
+                    $this->getLogService()->info('exercise', 'delete', $exerciseLog);
                 }
-                $exerciseLog = "删除课程《{$course['title']}》(#{$course['id']})的练习";
-                $this->getLogService()->info('exercise', 'delete', $exerciseLog);
             }
         }
         return $count;
