@@ -21,12 +21,6 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
         return $this->getConnection()->fetchAssoc($sql, array($courseId,$lessonId, $userId)) ? : null;
     }
 
-    public function findDraftsCountByCourseId($courseId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->draftTable} WHERE courseId = ?";
-        return $this->getConnection()->fetchColumn($sql,array($courseId));  
-    }
-
     public function addCourseDraft($draft)
     {
         $affected = $this->getConnection()->insert($this->draftTable, $draft);
@@ -40,6 +34,13 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
      {
         $this->getConnection()->update($this->draftTable, $fields, array('courseId' => $courseId,'lessonId' => $lessonId,'userId' => $userId));
         return $this->findCourseDraft($courseId,$lessonId, $userId);
+    }
+
+    public function searchDraftCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function searchDrafts($conditions, $orderBy, $start, $limit)

@@ -17,6 +17,4 @@ interface LessonViewDao
 	public function searchLessonViewGroupByTime($startTime,$endTime,$conditions);
 
 	public function deleteLessonView($id);
-
-	public function findLessonsViewsCountByCourseId($courseId);
 }
