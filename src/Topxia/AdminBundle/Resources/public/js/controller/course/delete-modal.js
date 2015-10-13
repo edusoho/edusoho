@@ -168,8 +168,8 @@ define(function(require, exports, module) {
                 dataType: 'json',
                 type: 'POST'
             }).done(function(data, textStatus, jqXHR) {
-                if (data.status == 'error') {
-                    progressBar.error(makeErrorsText(title + '失败：', data.errors));
+                if (!data.success) {
+                    progressBar.error(makeErrorsText(title + '失败：', data.message));
                 }else if(data.success){
                     progressBar.setProgress(startProgress, data.message);
                     title =  data.message;
