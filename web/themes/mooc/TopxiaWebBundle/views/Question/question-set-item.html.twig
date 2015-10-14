@@ -2,6 +2,7 @@
 
   <div class="question-set-item-side">
       <span class="question-set-item-seq">
+      
       {% if item.parentId %}
         {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}
       {% else %}

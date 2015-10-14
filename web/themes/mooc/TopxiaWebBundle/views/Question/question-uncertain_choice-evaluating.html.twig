@@ -1,0 +1,33 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
+  
+  {% set choiceIndex = '' %}
+  {% for key,choice in itemResult.answer %}
+    {% set choiceIndex = choiceIndex ~ " " ~ (65+choice)|chr %}
+  {% endfor %}
+
+<div class="homework-question-result">
+
+    {% if itemResult.status == 'right' %}
+     <span class="glyphicon glyphicon-ok question-text-success"></span>
+    {% elseif itemResult.status == 'wrong' %}
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
+  {% elseif itemResult.status == 'partRight' %}
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 部分答对,选择了<strong class="question-text-danger">{{ choiceIndex }}</strong>
+    {% elseif itemResult.status == 'noAnswer' %}
+　　　  <span class="glyphicon glyphicon-remove question-text-danger pull-left">未答题</span>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
