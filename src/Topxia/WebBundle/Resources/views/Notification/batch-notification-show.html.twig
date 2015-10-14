@@ -1,43 +1,30 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}通知 - {{ parent() }}{% endblock %}
-{% set script_controller = 'message/notification-list' %}
+{% block title %}系统通知{% endblock %}
 
-{% block content %}
-<div class="row row-8">
-  <div class="col-md-8 col-md-offset-2">
-    <div class="panel panel-default panel-page">
-      <div class="panel-heading">
-        <h2> 通知 </h2>
-      </div>
-      <ul class="media-list notification-list">
-      {% if batchnotification %}
-        <div class="row form-group">
-		    <div class="col-md-2 control-label">
-		      <label for="title">标题</label>
-		    </div>
-		    <div class="col-md-7 controls">
-		      {{ batchnotification.title }}
-		    </div>
-		  </div>
-
-  <div class="row form-group">
-    <div class="col-md-2 control-label">
-      <label for="content">正文</label>
+{% block body %}
+<div class="row"> 
+  <div class="col-md-10 col-md-offset-1"> 
+    {% if batchnotification %}
+    <div class="row"> 
+      <div class="col-md-2"> 
+        <h4 for="title">标题:</h4> 
+      </div> 
+      <h4 class="col-md-10"> 
+        {{ batchnotification.title }} 
+      </h4> 
     </div>
-    <div class="col-md-7 controls">
-      {{ batchnotification.content|raw }}
-    </div>
-  </div>
-
-        {% else %}
-          <li class="empty">暂无通知</li>
-        {% endif %}
-      </ul>
-
-
-    </div><!-- /panel -->
-  </div>
-</div>
-
+    <div class="row"> 
+      <div class="col-md-2"> 
+        <label for="content">正文:</label> 
+      </div> 
+      <div class="col-md-10 editor-text"> 
+        {{ batchnotification.content|raw }} 
+      </div> 
+    </div> 
+    {% else %} 
+      <div class="empty">暂无通知</div> 
+    {% endif %} 
+  </div> 
+</div> 
 {% endblock %}

@@ -19,7 +19,7 @@
         {% if batchnotifications %}
             {% for batchnotification in batchnotifications %}
                 <tr>
-                    <td><a href="">{{batchnotification.title|raw}}</a></td>
+                    <td><a href="javascript:;" data-url="{{ path('batch_notification_show',{ id:batchnotification.id }) }}"data-toggle="modal" data-target="#modal">{{batchnotification.title|raw}}</a></td>
                     <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
                     <td>{{users[batchnotification.fromId].nickname}}</td>
                     {% if batchnotification.published %}<td>已发送</td>{% else %}<td>未发送</td>{% endif %}
@@ -44,7 +44,6 @@
         {% endif %}
     </tbody>
 </table>
-
   {% if not batchnotifications %}
   <div class="empty">暂无站内信</div>
   {% endif %}
