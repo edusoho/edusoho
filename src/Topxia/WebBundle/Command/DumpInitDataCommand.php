@@ -65,7 +65,11 @@ class DumpInitDataCommand extends BaseCommand
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 
-		$command = "ssh -l root {$domain} 'cd /var/www/{$domain} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk web/files'";
+		// $command = "ssh -l root {$domain} 'cd /var/www/{$domain} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk web/files'";
+		// $output->writeln("<info>{$command}</info>");
+		// exec($command);
+
+		$command = "ssh -l root {$domain} 'cd /var/www/{$domain} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk'";
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 

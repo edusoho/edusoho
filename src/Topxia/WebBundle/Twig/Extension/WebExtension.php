@@ -609,6 +609,9 @@ class WebExtension extends \Twig_Extension
             }
             return $url;
         }
+        if (strpos($uri, "http://") !== false) {
+            return $uri;
+        }
         $uri = $this->parseFileUri($uri);
         if ($uri['access'] == 'public') {
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
@@ -657,6 +660,9 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false)
     {
+        if (strpos($uri, "http://") !== false) {
+            return $uri;
+        }
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
         
