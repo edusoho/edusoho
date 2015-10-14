@@ -14,7 +14,9 @@ class SensitiveWordController extends BaseController
     	$sensitiveWordSetting = $this->getSettingService()->get("sensitiveWord", array());
     	if($request->getMethod() == 'POST'){
     		$fields = $request->request->all();
-    		$sensitiveWordSetting = ArrayToolkit::parts($fields, array("ignoreWord", "wordReplace", "firstLevel", "secondLevel", "thirdLevel"));
+    		$sensitiveWordSetting = ArrayToolkit::parts($fields, array("ignoreWord", "wordReplace", "firstLevel", "secondLevel"));
+
+            var_dump(explode("\ ", $sensitiveWordSetting["firstLevel"]));
 
     		$this->getSettingService()->set("sensitiveWord", $sensitiveWordSetting);
 
