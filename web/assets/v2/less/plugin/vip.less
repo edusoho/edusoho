@@ -114,6 +114,9 @@
     padding: 15px 20px;
     font-size: 16px;
     color: @gray;
+    @media (max-width: @screen-sm-max) {
+      padding: 10px 15px;
+    }
     @media (max-width: @screen-xs-max) {
       font-size: 14px;
       padding: 10px;
@@ -156,6 +159,9 @@
       background-color: #fff;
       .es-transition;
     }
+    &.active:hover {
+      cursor: default;
+    }
   }
 }
 
@@ -189,6 +195,7 @@
       margin-top: 10px;
       font-size: 24px;
       margin-bottom: 20px;
+      color: @gray-darker;
       @media (max-width: @screen-sm-max) {
         margin-bottom: 10px;
         font-size: 18px;
@@ -237,11 +244,12 @@
 .vip-new-member {
   background: url('@{img-src}vip/vip_bg.jpg') center center no-repeat;
   padding: 60px 0;
+  text-align: center;
   .title {
     font-size: 32px;
     color: #fff;
     margin-bottom: 50px; 
-    text-align: center;
+    
   }
   .member-list {
     margin-bottom: 30px;
