@@ -33,14 +33,35 @@ class Homework extends BaseResource
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items'));
         $items = $res['items'];
         $newItmes = array();
+        $materialMap = array();
         foreach ($items as $item) {
-            $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty'));
+            $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
             if (empty($item['metas'])) {
-                $item['metas'] = (object) $item['metas'];
+                $item['metas'] = array();
             }
-            $newItmes[] = $item;
+            if (isset($item['metas']['choices'])) {
+                $metas = array_values($item['metas']['choices']);
+                $item['metas'] = $metas;
+            }
+
+            if ('material' == $item['type']) {
+                $materialMap[$item['id']] = array();
+            }
+
+            if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
+                $materialMap[$item['parentId']][] = $item;
+                continue;
+            }
+            
+            $item['items'] = array();
+            $newItmes[$item['id']] = $item;
         }
-        $res['items'] = $newItmes;
+
+        foreach ($materialMap as $id => $material) {
+            $newItmes[$id]['items'] = $material;
+        }
+
+        $res['items'] = array_values($newItmes);
         return $res;
     }
 
