@@ -32,7 +32,7 @@ class Homework extends BaseResource
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items'));
         $items = $res['items'];
-        $newItmes = [];
+        $newItmes = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty'));
             $newItmes[] = $item;
