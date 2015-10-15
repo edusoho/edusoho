@@ -132,10 +132,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
                 $taskInfo['status'] = 'active';
 
                 $perDayStudyTime += $planTask['suggestHours'];
-               
 
                 //获取任务执行时间
-                for ($i = $i; $i <= $targetDays; $i++) {
+                for ($i; $i <= $targetDays; $i++) {
 
                     $taskStartTime = $i == 0 ? $planStartTime : strtotime("+{$i} day", $planStartTime);
 
@@ -158,9 +157,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     else {
                         $taskNeedDay = ceil($planTask['suggestHours'] / $availableHours) - 1;
                         $taskEndTime = strtotime("+{$taskNeedDay} day", $taskStartTime);
-                        $perDayStudyTime = $perDayStudyTime - $availableHours;
+                        $perDayStudyTime = abs($perDayStudyTime - $availableHours * ($taskNeedDay + 1));
 
-                        $i++;
+                        $i = $taskNeedDay > 1 ? ($i + $taskNeedDay + 1) : ($i + 1);
                     }
 
                     $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00') + $j;
