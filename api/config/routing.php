@@ -34,6 +34,10 @@ $app->post(_u('/classrooms/{id}'), 'res.Classroom:post');
 $app->get(_u('/classrooms/{classroomId}/members'), 'res.ClassroomMembers:get');
 $app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.ClassroomMember:get');
 
+$app->get(_u('/exercise/{id}'), 'res.Exercise:get');
+$app->post(_u('/exercise/{id}'), 'res.Exercise:post');
+$app->get(_u('/exercise/{id}/result'), 'res.Exercise:getResult');
+$app->get(_u('/lesson/{id}/exercise'), 'res.Exercise:getByLesson');
 $app->get(_u('/me/chatrooms'), 'res.MeChatroomes:get');
 
 $app->get(_u('/mobileschools/apps'), 'res.Apps:get');
@@ -42,3 +46,4 @@ $app->get(_u('/mobileschools/app/{id}'), 'res.App:get');
 $app->get(_u('/homework/{id}'), 'res.Homework:get');
 $app->post(_u('/homework_results'), 'res.HomeworkResult:post');
 $app->get(_u('/homework_results/{id}'), 'res.HomeworkResult:get');
+
