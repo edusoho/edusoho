@@ -14,7 +14,7 @@
   {% if user %}
     <a class="link-light {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
   {% else %}
-    <a class="link-light {{ class }}" href="javascript:;"><del>用户不存在</del></a>
+    <a class="link-light {{ class }}" href="javascript:;"><del>{{'用户不存在'|trans}}</del></a>
   {% endif %}
 {%- endmacro -%}
 
@@ -28,7 +28,7 @@
 
 {% macro bytesToSize(bytes) %}
   {% spaceless %}
-      
+
       {% set kilobyte = 1024 %}
       {% set megabyte = kilobyte * 1024 %}
       {% set gigabyte = megabyte * 1024 %}
@@ -53,7 +53,7 @@
   {% if paginator.lastPage > 1 %}
     <ul class="pagination {{ class }}">
       {% if paginator.currentPage != paginator.firstPage %}
-        <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">首页</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">{{'首页'|trans}}</a></li>
         <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">&#60;</a></li>
       {% endif %}
       {% for page in paginator.pages %}
@@ -62,7 +62,7 @@
 
       {% if paginator.currentPage != paginator.lastPage %}
         <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">&#62;</a></li>
-        <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">尾页</a></li>
+        <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{'尾页'|trans}}</a></li>
       {% endif %}
     </ul>
   {% endif %}

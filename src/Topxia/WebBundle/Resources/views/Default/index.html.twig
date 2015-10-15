@@ -8,7 +8,7 @@
 {% set script_controller = 'index' %}
 
 {% block full_content %}
-  
+
   <!-- 轮播 -->
   {{ block_show('jianmo:home_top_banner') }}
 
@@ -21,7 +21,7 @@
   <section class="live-course-section">
     <div class="container">
       <div class="text-line gray">
-        <h5><span>近期直播</span><div class="line"></div></h5>
+        <h5><span>{{'近期直播'|trans}}</span><div class="line"></div></h5>
         <!-- <div class="subtitle">实时跟踪直播课程，避免课程遗漏。</div> -->
       </div>
       <div class="course-list">
@@ -37,7 +37,7 @@
                     <i class="es-icon es-icon-videocam"></i>
                   </div>
                   <div class="date">
-                    正在直播
+                    {{'正在直播'|trans}}
                   </div>
                 </div>
               {% else %}
@@ -61,13 +61,13 @@
                 <div class="course-item course-default">
                   <i class="es-icon es-icon-videocam"></i>
                   <br>
-                  敬请期待
+                  {{'敬请期待'|trans}}
                 </div>
                 <div class="course-date">
                   <div class="btn-circle btn-circle-md">
                     <i class="es-icon es-icon-accesstime"></i>
                   </div>
-                </div> 
+                </div>
               </div>
             {% endfor %}
           {% endif %}
@@ -75,7 +75,7 @@
       </div>
       <div class="text-center mvl">
         <a href="{{ path('live_course_explore') }}" class="btn btn-default btn-lg">
-          更多直播 <i class="es-icon es-icon-morehoriz"></i>
+          {{'更多直播'|trans}} <i class="es-icon es-icon-morehoriz"></i>
         </a>
       </div>
     </div>
@@ -93,7 +93,7 @@
       <div class="container">
         <div class="text-line">
           <h5>
-            <span>推荐{{ setting('classroom.name')|default("班级") }}</span>
+            <span>{{'推荐'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}</span>
             <div class="line"></div>
           </h5>
           <!-- <div class="subtitle">班级化学习体系，给你更多的课程相关服务。</div> -->
@@ -101,13 +101,13 @@
         <div class="recommend-class-list row">
           {% for classroom in RecommendClassrooms %}
             <div class="col-md-3 col-sm-6">
-               {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %} 
+               {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %}
             </div>
           {% endfor %}
         </div>
         <div class="text-center mvl">
           <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
-            更多{{ setting('classroom.name')|default("班级") }} <i class="es-icon es-icon-morehoriz"></i>
+            {{'更多'|trans}}{{ setting('classroom.name')|default("班级"|trans) }} <i class="es-icon es-icon-morehoriz"></i>
           </a>
         </div>
       </div>
@@ -120,7 +120,7 @@
     <section class="group-dynamic">
       <div class="container">
         <div class="text-line gray">
-          <h5><span>小组动态</span><div class="line"></div></h5>
+          <h5><span>{{'小组动态'|trans}}</span><div class="line"></div></h5>
           <!-- <div class="subtitle">参与小组，结交更多同学，关注课程动态。</div> -->
         </div>
         <div class="group-dynamic-body row">
@@ -128,7 +128,7 @@
             <div class="panel panel-default index-group">
               <div class="panel-heading">
                 <a href="{{ path('group') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
-                <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>热门小组</h3>
+                <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>{{'热门小组'|trans}}</h3>
               </div>
               <div class="panel-body row">
                 {% for group in groups %}
@@ -162,7 +162,7 @@
             <div class="panel panel-default index-dynamic">
               <div class="panel-heading">
                 <h3 class="panel-title">
-                  <i class="es-icon es-icon-recentactors pull-left"></i>学员动态
+                  <i class="es-icon es-icon-recentactors pull-left"></i>{{'学员动态'|trans}}
                 </h3>
               </div>
               <div class="panel-body">
@@ -198,7 +198,7 @@
   <section class="recommend-teacher">
     <div class="container">
       <div class="text-line">
-        <h5><span>推荐教师</span><div class="line"></div></h5>
+        <h5><span>{{'推荐教师'|trans}}</span><div class="line"></div></h5>
         <!-- <div class="subtitle">名师汇集，保证教学质量与学习效果。</div> -->
       </div>
       <div class="row">
@@ -212,7 +212,7 @@
       </div>
       <div class="text-center mvl">
         <a href="{{ path('teacher') }}" class="btn btn-default btn-lg">
-          更多教师 <i class="es-icon es-icon-morehoriz"></i>
+          {{'更多教师'|trans}} <i class="es-icon es-icon-morehoriz"></i>
         </a>
       </div>
     </div>

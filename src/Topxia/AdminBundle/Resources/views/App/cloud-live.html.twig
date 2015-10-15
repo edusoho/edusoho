@@ -16,9 +16,9 @@
                       <p class="text-muted">{{'教室容量：'|trans}}{{capacity|default(0)}}{{'人'|trans}}</p>
                       {% if expire and expire > 0  %}
                         <p class="text-muted">{{'有效期至：'|trans}}{{expire|date("Y-m-d")}}</p>
-                    
+
                         {% if liveDate == 0 %}
-                              <p class="text-danger text-sm">云直播服务将于明天过期</p>
+                              <p class="text-danger text-sm">{{'云直播服务将于明天过期'|trans}}</p>
                         {% endif %}
                         <!--7天警告-->
                         {% if 7 >= liveDate|default(31)  and liveDate|default(31)  > 0 %}
@@ -26,12 +26,12 @@
                         {% endif %}
                         <!--已过期-->
                         {% if liveDate|default(31)  < 0 %}
-                              <p class="text-danger text-sm">云直播服务已过期</p>
+                              <p class="text-danger text-sm">{{'云直播服务已过期'|trans}}</p>
                         {% endif %}
                       {% endif %}
                     {% endif %}
                     <p class="panel-bottom">
-                      支持Web端、移动端，让手机也能看直播！
+                      {{'支持Web端、移动端，让手机也能看直播！'|trans}}
                     </p>
                   </div>
                 </div>
