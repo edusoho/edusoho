@@ -80,9 +80,6 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
 
     public function updateBatchNotification($id,$batchNotification)
     {
-        if (empty($this->getBatchNotificationDao()->getBatchNotificationById($id))) {
-            throw $this->createServiceException("通知不存在，操作失败。");
-        }
         if(!empty($batchNotification)){
             $this->getBatchNotificationDao()->updateBatchNotification($id,$batchNotification);
         }

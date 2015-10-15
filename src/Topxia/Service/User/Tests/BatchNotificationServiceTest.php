@@ -23,6 +23,8 @@ class BatchNotificationServiceTest extends BaseTestCase
     	$this->getBatchNotificationService()->sendBatchNotification($fromId, $title,$content,$createdTime,$targetType,$targetId,$type);
     	//var_dump($notification);
     	$notification1=$this->getBatchNotificationService()->getBatchNotificationById(1);
+        $notification2=$this->getBatchNotificationService()->getBatchNotificationById(2);
+        var_dump($notification2);
     	//var_dump($notification1);
     	$conditions=array('fromId'=>1);
     	$num=$this->getBatchNotificationService()->searchBatchNotificationsCount($conditions);
