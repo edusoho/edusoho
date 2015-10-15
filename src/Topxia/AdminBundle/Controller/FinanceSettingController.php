@@ -34,7 +34,12 @@ class FinanceSettingController extends BaseController
             'heepay_enabled' => 0,
             'heepay_key' => '',
             'heepay_secret' => '',
-            'heepay_account' => ''
+            'heepay_account' => '',
+            'quickpay_enabled' => 0,
+            'quickpay_key'=>'',
+            'quickpay_secret'=>'',
+            'quickpay_aes'=>'',
+            'quickpay_account'=>''
         );
 
         $payment = array_merge($default, $payment);

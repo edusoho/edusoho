@@ -121,25 +121,25 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="wxpay_key">商户平台Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
         <label for="wxpay_key">商户号</label>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="wxpay_account" name="wxpay_account" class="form-control" value="{{payment.wxpay_account}}">
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="wxpay_key">商户平台Key</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
+      </div>
+    </div> 
   </fieldset>
 
   <fieldset>
-    <legend>汇付宝支付</legend>
+    <legend>网银支付</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label>接口状态</label>
@@ -163,19 +163,70 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
+        <label for="heepay_key">商户号</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="heepay_account" name="heepay_account" class="form-control" value="{{payment.heepay_account}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
         <label for="heepay_key">商户平台Key</label>
       </div>
       <div class="controls col-md-8">
         <input type="text" id="heepay_secret" name="heepay_secret" class="form-control" value="{{payment.heepay_secret}}">
       </div>
     </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>快捷支付</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>接口状态</label>
+      </div>
+      <div class="controls col-md-3 radios">
+        {{ radios('quickpay_enabled', {1:'开启', 0:'关闭'}, payment.quickpay_enabled) }}
+      </div>
+      <div class="controls col-md-4 radios">
+        <a href="https://www.heepay.com/" target="_blank">简单申请介绍</a>
+      </div>
+    </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="heepay_key">商户号</label>
+        <label for="quickpay_key">PID</label>
       </div>
       <div class="controls col-md-8">
-        <input type="text" id="heepay_account" name="heepay_account" class="form-control" value="{{payment.heepay_account}}">
+        <input type="text" id="quickpay_key" name="quickpay_key" class="form-control" value="{{payment.quickpay_key}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="quickpay_key">加密密钥</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="quickpay_aes" name="quickpay_aes" class="form-control" value="{{payment.quickpay_aes}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="quickpay_key">商户号</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="quickpay_account" name="quickpay_account" class="form-control" value="{{payment.quickpay_account}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="quickpay_key">商户平台Key</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="quickpay_secret" name="quickpay_secret" class="form-control" value="{{payment.quickpay_secret}}">
       </div>
     </div>
   </fieldset>

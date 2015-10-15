@@ -88,6 +88,7 @@ class PayCenterController extends BaseController
 		$fields = $request->request->all();
 		$user = $this->getCurrentUser();
 
+
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
@@ -102,7 +103,6 @@ class PayCenterController extends BaseController
 
         $this->getOrderService()->updateOrder($fields["orderId"],array('payment' => $fields['payment']));
         $order = $this->getOrderService()->getOrder($fields["orderId"]);
-
 		if($user["id"] != $order["userId"]) {
 			return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
 		}
@@ -112,7 +112,6 @@ class PayCenterController extends BaseController
             $router = $processor->getRouter();
             return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
         } else {
-
             $payRequestParams = array(
                 'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
                 'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
@@ -233,6 +232,7 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request , $order, $requestParams)
     {
+
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         $formRequest = $paymentRequest->form();
         $params = $formRequest['params'];
@@ -340,12 +340,14 @@ class PayCenterController extends BaseController
     protected function createPaymentRequest($order, $requestParams)
     {   
         $options = $this->getPaymentOptions($order['payment']);
+        $user_profile = $this->getUserService()->getUserProfile($order['userId']);
         $request = Payment::createRequest($order['payment'], $options);
         $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
             'title' => $order['title'],
             'summary' => '',
-            'amount' => $order['amount'],
+            'mobile' =>$user_profile['mobile'],
+            'amount' => $order['amount']
         ));
         return $request->setParams($requestParams);
     }
@@ -390,11 +392,16 @@ class PayCenterController extends BaseController
                 'secret' => $settings["{$payment}_secret"],
                 'type' => $settings["{$payment}_type"]
             );
-        }
-        elseif ($payment == 'wxpay' || 'heepay') {
+        }elseif ($payment == 'wxpay' || $payment=='heepay') {
             $options = array(
                 'key' => $settings["{$payment}_key"],
                 'secret' => $settings["{$payment}_secret"]
+            );
+        }else{
+            $options = array(
+                'key' => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'aes'=>$settings["{$payment}_aes"]
             );
         }
         return $options;
@@ -422,7 +429,7 @@ class PayCenterController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay','wxpay','heepay');
+        $payNames = array('alipay','wxpay','heepay','quickpay');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(
@@ -452,5 +459,10 @@ class PayCenterController extends BaseController
     protected function getCashOrdersService(){
       
         return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getUserService(){
+      
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
