@@ -9,6 +9,11 @@ class StudyPlanTaskProcessor implements TaskProcessor
 {
     public function addTask(array $fields)
     {
+        return ;
+    }
+
+    public function addBatchTasks(array $batchFields)
+    {
         $classroomId = $fields['classroomId'];
         $userId = $fields['userId'];
 
