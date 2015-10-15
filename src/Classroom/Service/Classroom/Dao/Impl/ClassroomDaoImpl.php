@@ -80,7 +80,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             ->andWhere('id IN (:classroomIds)')
             ->andWhere('recommended = :recommended')
             ->andWhere('showable = :showable')
-            ->andWhere('buyable = :buyable');
+            ->andWhere('buyable = :buyable')
+            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+            ->andWhere('vipLevelId = :vipLevelId')
+            ->andWhere('vipLevelId IN ( :vipLevelIds )');
 
         return $builder;
     }
