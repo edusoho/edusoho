@@ -14,8 +14,8 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
     public function addBatchTasks(array $batchFields)
     {
-        $classroomId = $fields['classroomId'];
-        $userId = $fields['userId'];
+        $classroomId = $batchFields['classroomId'];
+        $userId = $batchFields['userId'];
 
         $plan = $this->getClassroomPlanService()->getPlanByClassroomId($classroomId);
         if (!$plan){
