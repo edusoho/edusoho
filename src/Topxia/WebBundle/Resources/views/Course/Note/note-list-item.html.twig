@@ -6,7 +6,7 @@
     <div class="content">
       {{ note.content|raw }}
     </div>
-    <a href="javascript:;" class="more more-show">[展开全文]</a>
+    <a href="javascript:;" class="more more-show">[{{'展开全文'|trans}}]</a>
     <div class="metas clearfix">
       {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span>
       {% include 'TopxiaWebBundle:Course/Note:note-mates.html.twig' %}

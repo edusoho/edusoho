@@ -1,12 +1,12 @@
 {% if article.source or article.sourceUrl %}
 <div class="well">
-  {% if article.source %} 
-    <p>文章来源: <strong class="mll">{{ article.source }}</strong></p>
+  {% if article.source %}
+    <p>{{'文章来源'|trans}}: <strong class="mll">{{ article.source }}</strong></p>
   {% endif %}
 
-  {% if article.sourceUrl %} 
+  {% if article.sourceUrl %}
     <p>
-      原文链接: 
+      {{'原文链接'|trans}}:
       <a href="{{ article.sourceUrl }}" class="mll transition" target="_blank">
         {{ article.sourceUrl }}
       </a>

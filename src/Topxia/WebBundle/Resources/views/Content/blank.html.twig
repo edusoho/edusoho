@@ -42,29 +42,29 @@
 
   <div class="es-wrap">
 
-    
+
     {% block full_content %}
       {% block top_content %}{% endblock %}
-      
+
       <div id="content-container" class="container">
         {% set bodyClass = 'custompage' %}
         {% block content %}
         <div class="es-section">
-          
+
           <div class="section-header"><h1>{{ content.title }}</h1></div>
-          
+
           {% if content.body %}
             {{ content.body|raw }}
           {% else %}
-            <div class="empty">当前页面尚未编辑内容，请在管理后台编辑。</div>
+            <div class="empty">{{'当前页面尚未编辑内容，请在管理后台编辑。'|trans}}</div>
           {% endif %}
         </div>
         {% endblock %}
       </div><!-- /container -->
       {% endblock %}
-    
+
     {% block bottom %}{% endblock %}
-  </div> 
+  </div>
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>

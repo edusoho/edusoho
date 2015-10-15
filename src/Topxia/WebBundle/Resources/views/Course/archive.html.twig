@@ -1,10 +1,10 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
-{% block title %}课程存档 -{{ parent() }}{% endblock %}
-{% block keywords %}{{'课程存档'}}{% endblock %}
+{% block title %}{{'课程存档'|trans}} -{{ parent() }}{% endblock %}
+{% block keywords %}{{'课程存档'|trans}}{% endblock %}
 {% block description %}{% endblock %}
 {% block content %}
   <div class="es-section">
-    <div class="section-header"><h1>课程存档</h1></div>
+    <div class="section-header"><h1>{{'课程存档'|trans}}</h1></div>
     {% if courses %}
       <ul class="media-list">
         {% for course in courses %}
@@ -14,10 +14,10 @@
             <h4><a href="{{ path('course_archive_show', {id:course.id}) }}">{{ course.title }}</a></h4>
             <div class="fsn text-muted">
               {% if teacher %}
-                教师： <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                {{'教师：'|trans}} <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               {% endif %}
               {% if tags %}
-                <span class="text-muted">标签：</span>
+                <span class="text-muted">{{'标签：'|trans}}</span>
                 {% for tag in tags %}
                   <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
                 {% endfor %}
@@ -27,7 +27,7 @@
         {% endfor %}
       </ul>
     {% else %}
-      <div class="empty">目前暂时无课程</div>
+      <div class="empty">{{'目前暂时无课程'|trans}}</div>
     {% endif %}
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}

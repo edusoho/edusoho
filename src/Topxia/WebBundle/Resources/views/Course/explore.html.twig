@@ -4,9 +4,9 @@
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
-{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if CategoryParent %}{{ ','}}{{ CategoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if CategoryParent %}{{ ','}}{{ CategoryParent.name|default('') }}{% endif %}{% else %}{{ '全部'|trans }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {% block title %}{{ categoryArray.name|default('全部'|trans) }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
     {% endblock %}
 
 {% block top_content %}
@@ -14,11 +14,11 @@
     <div class="container">
       <div class="title">
         <i class="es-icon es-icon-viewcomfy"></i>
-        课程列表
+        {{'课程列表'|trans}}
       </div>
       {% if setting("classroom.enabled") %}
       <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
-        查看{{ setting('classroom.name')|default('班级') }}
+        {{'查看'|trans}}{{ setting('classroom.name')|default('班级'|trans) }}
       </a>
       {% endif %}
     </div>
@@ -31,29 +31,29 @@
   {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
   <div class="course-filter" id="course-filter">
     <ul class="nav nav-pills hidden-xs" role="tablist">
-      <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy}) }}">全部课程</a></li>
-      <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy}) }}">免费课程</a></li>
+      <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy}) }}">{{'全部课程'|trans}}</a></li>
+      <li role="presentation"class="{% if (fliter == 'free') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy}) }}">{{'免费课程'|trans}}</a></li>
       {% if setting("course.live_course_enabled") == 1 %}
-      <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy}) }}">直播课程</a></li>
+      <li role="presentation"class="{% if (fliter == 'live') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy}) }}">{{'直播课程'|trans}}</a></li>
       {% endif %}
     </ul>
     <div class="btn-group visible-xs">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy|default('latest')}) }}" class="{% if (fliter == 'all') %}active {% endif %}">全部课程</a></li>
-        <li><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'free') %}active {% endif %}">免费课程</a></li>
-        <li><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'live') %}active {% endif %}">直播课程</a></li>
+        <li><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy|default('latest')}) }}" class="{% if (fliter == 'all') %}active {% endif %}">{{'全部课程'|trans}}</a></li>
+        <li><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'free') %}active {% endif %}">{{'免费课程'|trans}}</a></li>
+        <li><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'live') %}active {% endif %}">{{'直播课程'|trans}}</a></li>
       </ul>
     </div>
     <div class="course-sort btn-group">
       <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'latest'}) }}" class="btn btn-default {% if (orderBy == 'latest') %} active {% endif %}">
-        最新
+        {{'最新'|trans}}
       </a>
       <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'studentNum'}) }}" class="btn btn-default {% if (orderBy == 'studentNum') %} active {% endif %}">
-        最热
+        {{'最热'|trans}}
       </a>
       <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class="btn btn-default {% if (orderBy == 'recommendedSeq') %} active {% endif %}">
-        推荐
+        {{'推荐'|trans}}
       </a>
     </div>
   </div>
@@ -66,7 +66,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <div class="empty">该分类下无课程</div>
+        <div class="empty">{{'该分类下无课程'|trans}}</div>
       {% endif %}
     </div>
   </div>

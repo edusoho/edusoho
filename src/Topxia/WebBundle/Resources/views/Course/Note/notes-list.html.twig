@@ -8,7 +8,7 @@
     {% set userLike = noteLikes[note.id]|default(null) %}
     {% include 'TopxiaWebBundle:Course/Note:note-list-item.html.twig'%}
   {% else %}
-    <div class="empty">暂无笔记记录</div>
+    <div class="empty">{{'暂无笔记记录'|trans}}</div>
   {% endfor %}
 </div>
 
@@ -17,7 +17,7 @@
 </nav>
 {% else %}
 	<div class="note-list" id="note-list">
-		<div class="empty">暂无笔记记录</div>
+		<div class="empty">{{'暂无笔记记录'|trans}}</div>
 	</div>
 {% endif %}
 

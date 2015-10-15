@@ -3,8 +3,8 @@
     {% set category = categories[article.categoryId] %}
     {% include 'TopxiaWebBundle:Article/Widget:list-item.html.twig' %}
   {% else %}
-     <div class="empty tac text-muted mvl">还没有任何资讯</div>
+     <div class="empty tac text-muted mvl">{{'还没有任何资讯'|trans}}</div>
   {% endfor %}
-  
+
   {% include 'TopxiaWebBundle:Article/Part:paginator.html.twig' %}
 </section>

@@ -9,13 +9,13 @@
 {% set bodyClass = 'custompage' %}
 {% block content %}
 <div class="es-section">
-  
+
   <div class="section-header"><h1>{{ content.title }}</h1></div>
-  
+
   {% if content.body %}
   	{{ content.body|raw }}
   {% else %}
-    <div class="empty">当前页面尚未编辑内容，请在管理后台编辑。</div>
+    <div class="empty">{{'当前页面尚未编辑内容，请在管理后台编辑。'|trans}}</div>
   {% endif %}
 </div>
 {% endblock %}
