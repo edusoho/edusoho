@@ -35,6 +35,9 @@ class Homework extends BaseResource
         $newItmes = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty'));
+            if (empty($item['metas'])) {
+                $item['metas'] = (object) $item['metas'];
+            }
             $newItmes[] = $item;
         }
         $res['items'] = $newItmes;
