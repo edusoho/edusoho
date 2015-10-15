@@ -58,6 +58,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
+
         return $this->render("TopxiaAdminBundle:OperationAnalysis:register.html.twig",array(
             'registerDetail'=>$registerDetail,
             'paginator'=>$paginator,
@@ -190,24 +191,23 @@ class AnalysisController extends BaseController
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+                    return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
+               'tab' => "trend",
+            )));
         }
 
         $paginator = new Paginator(
-                $request,
-                $this->getLogService()->searchLogCount(array('action'=>"login_success",'startDateTime'=>date("Y-m-d H:i:s",$timeRange['startTime']),'endDateTime'=>date("Y-m-d H:i:s",$timeRange['endTime']))),
-             20
+            $request,
+            $this->getLogService()->searchLogCount(array('action'=>"login_success",'startDateTime'=>date("Y-m-d H:i:s",$timeRange['startTime']),'endDateTime'=>date("Y-m-d H:i:s",$timeRange['endTime']))),
+            20
         );
 
         $loginDetail=$this->getLogService()->searchLogs(
             array('action'=>"login_success",'startDateTime'=>date("Y-m-d H:i:s",$timeRange['startTime']),'endDateTime'=>date("Y-m-d H:i:s",$timeRange['endTime'])),
             'created',
-              $paginator->getOffsetCount(),
-              $paginator->getPerPageCount()
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
          );
 
         $loginData="";
@@ -249,24 +249,23 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
     
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_course', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_course', array(
+            'tab' => "trend",
+            )));
         }
 
         $paginator = new Paginator(
-                $request,
-                $this->getCourseService()->searchCourseCount($timeRange),
-             20
+            $request,
+            $this->getCourseService()->searchCourseCount($timeRange),
+            20
         );
 
         $courseDetail=$this->getCourseService()->searchCourses(
             $timeRange,
             '',
-              $paginator->getOffsetCount(),
-              $paginator->getPerPageCount()
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
          );
 
         $courseData="";
@@ -312,24 +311,23 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
 
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_lesson', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson', array(
+            'tab' => "trend",
+            )));
         }
 
         $paginator = new Paginator(
-                $request,
-                $this->getCourseService()->searchLessonCount($timeRange),
-             20
+            $request,
+            $this->getCourseService()->searchLessonCount($timeRange),
+            20
         );
 
         $lessonDetail=$this->getCourseService()->searchLessons(
             $timeRange,
             array('createdTime',"desc"),
-              $paginator->getOffsetCount(),
-              $paginator->getPerPageCount()
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
          );
 
         $lessonData="";
@@ -376,23 +374,22 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
         
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_join', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_join', array(
+            'tab' => "trend",
+            )));
         }
         $paginator = new Paginator(
-                $request,
-                $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid")),
-             20
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid")),
+            20
         );
 
         $joinLessonDetail=$this->getOrderService()->searchOrders(
             array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid"),
             "latest",
-              $paginator->getOffsetCount(),
-              $paginator->getPerPageCount()
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
          );
 
         $joinLessonData="";
@@ -439,16 +436,15 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
         
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_exit', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_exit', array(
+            'tab' => "trend",
+            )));
         }
         $paginator = new Paginator(
-                $request,
-                $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"statusPaid"=>"paid","statusCreated"=>"created")),
-                20
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"statusPaid"=>"paid","statusCreated"=>"created")),
+            20
         );
 
         $exitLessonDetail=$this->getOrderService()->searchOrders(
@@ -506,16 +502,15 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
 
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_paid', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_paid', array(
+            'tab' => "trend",
+            )));
         }
         $paginator = new Paginator(
-                $request,
-                $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
-             20
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
+            20
         );
 
         $paidLessonDetail=$this->getOrderService()->searchOrders(
@@ -532,11 +527,28 @@ class AnalysisController extends BaseController
             $data=$this->fillAnalysisData($condition,$paidLessonData);          
         }
 
-        $courseIds = ArrayToolkit::column($paidLessonDetail, 'targetId');
+        $paidCourseDetail = array();
+        foreach ($paidLessonDetail as $value) {
+            if($value['targetType']=='course'){
+                $paidCourseDetail[] = $value;
+            }
+        }
+
+        $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId');//结果包含购买班级，直接用targetId搜是不正确的
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
-        $userIds = ArrayToolkit::column($paidLessonDetail, 'userId');
+        //目前已经是所有的课程了，在把parientId != 0 的课程剔除
+        $allCourse = array();
+        foreach ($courses as $value) {
+            if($value['parentId'] == '0')
+            $allCourse[] = $value;
+        }
+        $courses = ArrayToolkit::index($allCourse,'id');
+        // $paidCourseDetail = $paidLessonDetail;
+
+
+        $userIds = ArrayToolkit::column($paidCourseDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
                 
@@ -547,14 +559,82 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
+
         return $this->render("TopxiaAdminBundle:OperationAnalysis:paid-lesson.html.twig",array(
-            'paidLessonDetail'=>$paidLessonDetail,
+            'paidCourseDetail'=>$paidCourseDetail,
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
             'courses'=>$courses,
             'users'=>$users,
             'paidLessonStartDate'=>$paidLessonStartDate,
+            'dataInfo'=>$dataInfo,      
+        ));
+    }
+
+    public function paidClassroomAction(Request $request,$tab)
+    {
+        $data=array();
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+        $paidClassroomStartDate = '';
+
+        if(!$timeRange) {
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_Classroom_paid', array(
+            'tab' => "trend",
+            )));
+        }
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"statusPaid"=>"paid","statusCreated"=>"created")),
+            20
+        );
+        $paidDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00"),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+        $paidClassroomData="";
+        if($tab=="trend"){
+            $paidClassroomData=$this->getOrderService()->analysisPaidClassroomOrderDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $data=$this->fillAnalysisData($condition,$paidClassroomData);          
+        }
+
+        $paidClassroomDetail = array();
+        foreach ($paidDetail as $value) {
+            if($value['targetType']=='classroom'){
+                $paidClassroomDetail[] = $value;
+            }
+        }
+
+        $classroomIds = ArrayToolkit::column($paidClassroomDetail, 'targetId');
+
+        $classroom=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        $userIds = ArrayToolkit::column($paidClassroomDetail, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+                
+        $paidClassroomStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00"),"early",0,1);
+
+        foreach ($paidClassroomStartData as $key) {
+            $paidClassroomStartDate=date("Y-m-d",$key['createdTime']);
+        }
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:paid-classroom.html.twig",array(
+            'paidClassroomDetail'=>$paidClassroomDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'data'=>$data,
+            'classroom'=>$classroom,
+            'users'=>$users,
+            'paidClassroomStartDate'=>$paidClassroomStartDate,
             'dataInfo'=>$dataInfo,      
         ));
     }
@@ -568,16 +648,15 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
 
         if(!$timeRange) {
-
             $this->setFlashMessage("danger","输入的日期有误!");
-                return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_finished', array(
-                'tab' => "trend",
+            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_finished', array(
+            'tab' => "trend",
             )));
         }
         $paginator = new Paginator(
-                $request,
-                $this->getCourseService()->searchLearnCount(array("startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime'],"status"=>"finished")),
-             20
+            $request,
+            $this->getCourseService()->searchLearnCount(array("startTime"=>$timeRange['startTime'],"endTime"=>$timeRange['endTime'],"status"=>"finished")),
+            20
         );
 
         $finishedLessonDetail=$this->getCourseService()->searchLearns(
@@ -642,7 +721,7 @@ class AnalysisController extends BaseController
         if(!$timeRange) {
           $this->setFlashMessage("danger","输入的日期有误!");
             return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
-               'tab' => "trend",
+            'tab' => "trend",
             )));
         }
 
@@ -898,11 +977,10 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
         
         if(!$timeRange) {
-
-              $this->setFlashMessage("danger","输入的日期有误!");
-                        return $this->redirect($this->generateUrl('admin_operation_analysis_income', array(
-                   'tab' => "trend",
-                )));
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_income', array(
+            'tab' => "trend",
+            )));
         }
         $paginator = new Paginator(
             $request,
@@ -961,7 +1039,6 @@ class AnalysisController extends BaseController
         $timeRange=$this->getTimeRange($condition);
 
         if(!$timeRange) {
-
             $this->setFlashMessage("danger","输入的日期有误!");
             return $this->redirect($this->generateUrl('admin_operation_analysis_course_income', array(
             'tab' => "trend",
@@ -1169,4 +1246,10 @@ class AnalysisController extends BaseController
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
 }
