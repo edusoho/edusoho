@@ -5,6 +5,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\SensitiveWord\SensitiveWordService;
 use Topxia\Service\SensitiveWord\Type\QuestionTypeFactory;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\KeywordFilter;
 
 class SensitiveWordServiceImpl extends BaseService implements SensitiveWordService
 {
@@ -60,8 +61,7 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 			return $str;
 		} else {
 			$keywordFilter = new KeywordFilter();
-			$keywordFilter->addKeywords(array('sb', '中国', '中华人民共和国', '美国', '美国人', '美国黑人'));
-			$str = $keywordFilter->filter('你是sb, test sbtr, dasqsad发生的甘为人梯我很高复合风管盔头台湾人二二二佛挡杀佛涣发大号结过婚看我认为自助餐发发该罚的罚好得很就感觉');
+			$str = $keywordFilter->filter($str);
 			return $str;
 		}
 	}
@@ -69,6 +69,11 @@ class SensitiveWordServiceImpl extends BaseService implements SensitiveWordServi
 	protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getKeywordFilter()
+    {
+        return $this->createService('Common.KeywordFilter');
     }
 
 }

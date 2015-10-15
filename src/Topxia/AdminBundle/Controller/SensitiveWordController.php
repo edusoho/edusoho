@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\KeywordFilter;
 
 class SensitiveWordController extends BaseController
 {
@@ -16,7 +17,10 @@ class SensitiveWordController extends BaseController
     		$fields = $request->request->all();
     		$sensitiveWordSetting = ArrayToolkit::parts($fields, array("ignoreWord", "wordReplace", "firstLevel", "secondLevel"));
 
-            var_dump(explode("\ ", $sensitiveWordSetting["firstLevel"]));
+            $keywords = explode("\r\n", $sensitiveWordSetting["secondLevel"]);
+
+            $keywordFilter = new KeywordFilter();
+            $keywordFilter->addKeywords($keywords);
 
     		$this->getSettingService()->set("sensitiveWord", $sensitiveWordSetting);
 

@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\SensitiveWord\Impl;
+namespace Topxia\Service\Common;
 
 use Topxia\Service\Common\BaseService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -9,8 +9,12 @@ class KeywordFilter extends BaseService
 
 	protected $tree = array();
 
-	public function __construct() 
+	public function initTree() 
 	{
+		if(!empty($this->tree)) {
+			return;
+		}
+
 		$file = $this->getKernel()->getParameter('kernel.root_dir') .  '/data/keywords.php';
 		$filesystem = new Filesystem();
 
@@ -29,15 +33,19 @@ class KeywordFilter extends BaseService
 		$file = $this->getKernel()->getParameter('kernel.root_dir') .  '/data/keywords.php';
 		$filesystem = new Filesystem();
 
-		if (!$filesystem->exists($file)) {
-			$fileContent = "<?php \nreturn " . var_export($this->tree, true) . ";";
-	        file_put_contents($file, $fileContent);
+		if ($filesystem->exists($file)) {
+			$filesystem->remove($file);
         }
+
+		$fileContent = "<?php \nreturn " . var_export($this->tree, true) . ";";
+        file_put_contents($file, $fileContent);
 
 	}
  
 	public function insert($utf8Str)
 	{
+		$this->initTree();
+
 		$chars = $this->getChars($utf8Str);
 		$chars[] = null;	//串结尾字符
 		$count = count($chars);
