@@ -20,8 +20,13 @@ class Homework extends BaseResource
             $homework = array();
             return $homework;
         }
-        
+
         $items = $this->getHomeworkService()->findItemsByHomeworkId($homework['id']);
+
+        $course = $this->getCorrseService()->getCourse($homework['courseId']);
+        $homework['courseTitle'] = $course['title'];
+        $lesson = $this->getCorrseService()->getLesson($homework['lessonId']);
+        $homework['lessonTitle'] = $lesson['title'];
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
         $homework['items'] = $questions;
@@ -30,7 +35,7 @@ class Homework extends BaseResource
 
     public function filter(&$res)
     {
-        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items'));
+        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
         $items = $res['items'];
         $newItmes = array();
         $materialMap = array();
@@ -73,5 +78,10 @@ class Homework extends BaseResource
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    protected function getCorrseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
