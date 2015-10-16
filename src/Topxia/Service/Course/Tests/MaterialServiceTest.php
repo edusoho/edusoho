@@ -58,7 +58,7 @@ class MaterialServiceTest extends BaseTestCase
     */
     public function testCreateMaterial()
     {
-        $Material = array('title'=>'material');
+        $Material = array('title'=>'material','fileId'=>'1','createdTime'=>time());
         $Material = $this->getMaterialService()->createMaterial($Material);
         $this->assertEquals('material', $Material['title']);
     

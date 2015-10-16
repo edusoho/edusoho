@@ -184,7 +184,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $copiedLesson = $this->getLessonDao()->addLesson($fields);
             $map[$lesson['id']] = $copiedLesson;
             if (array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"]>0 && in_array($copiedLesson["type"], array('video', 'audio', 'ppt'))) {
-                $this->getUploadFileDao()->updateFileUsedCount(array($copiedLesson["mediaId"]), 1);
+                $this->getUploadFileDao()->waveUploadFile($copiedLesson["mediaId"],'usedCount',1);
             }
             if(array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated' && !empty($copiedLesson)){
                 $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId,$lesson['id']);
@@ -277,7 +277,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $map[$material['id']] = $copiedMaterial;
 
             if (array_key_exists("fileId", $copiedMaterial) && $copiedMaterial["fileId"]>0) {
-                $this->getUploadFileDao()->updateFileUsedCount(array($copiedMaterial["fileId"]), 1);
+                $this->getUploadFileDao()->waveUploadFile($copiedMaterial["fileId"],'usedCount',1);
             }
         }
 
@@ -290,7 +290,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         $map = array();
         foreach ($homeworks as $homework) {
-            $fields = ArrayToolkit::parts($homework, array('description', 'itemCount', 'createdUserId', 'updatedUserId'));
+            $fields = ArrayToolkit::parts($homework, array('description', 'itemCount', 'createdUserId', 'updatedUserId', 'correctPercent'));
 
             $fields['courseId'] = $newCourse['id'];
             if ($homework['lessonId']) {

@@ -5,6 +5,7 @@ package.json
 **/release/
 **/release/*
 /.idea
+/.vscode
 /web/bundles/
 /app/cache/*
 /app/config/parameters.yml
@@ -64,3 +65,6 @@ web/assets/img/default/video.png
 /src/Tests/*
 /web/assets/v2/bootstrap/less
 /web/install/edusoho_init.sql
+/app/data/api_server.json
+/installFiles
+/app/data/trial.lock

@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
-
+{% set bodyClass = 'bg-blank' %}
 {% do load_script('search/search') %}
 
 {% block top_content %}
