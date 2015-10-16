@@ -62,7 +62,7 @@ seajs.config({
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
-        'momentmin':'fullcalendar/lib/moment.min.js'
+        'momentmin':'fullcalendar/lib/moment.min.js',
         'video-player': 'balloon-video-player/1.0.0/index-debug'
     },
 
