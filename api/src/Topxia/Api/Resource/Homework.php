@@ -54,6 +54,7 @@ class Homework extends BaseResource
             }
             
             $item['stem'] = $this->coverDescription($item['stem']);
+            $item['answer'] = $this->coverAnswer($item['answer']);
             if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
                 $materialMap[$item['parentId']][] = $item;
                 continue;
@@ -69,6 +70,20 @@ class Homework extends BaseResource
 
         $res['items'] = array_values($newItmes);
         return $res;
+    }
+
+    private function coverAnswer($answer) {
+        if (is_array($answer)) {
+            $answer = array_map(function($answerValue){
+                if (is_array($answerValue)) {
+                    return implode('|', $answerValue);
+                }
+                return $answerValue;
+            }, $answer);
+            return $answer;
+        }
+
+        return array();
     }
 
     private function coverDescription($stem)
