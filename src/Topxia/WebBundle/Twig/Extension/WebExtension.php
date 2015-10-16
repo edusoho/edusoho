@@ -105,8 +105,15 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('crontab_next_executed_time', array($this, 'getNextExecutedTime')),
              new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
+             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
         );
     }
+
+    public function getUserVipLevel($userId)
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.VipService')->getMemberByUserId($userId);
+    }
+
     public function getParametersFromUrl($url)
     {
         $BaseUrl = parse_url($url);
