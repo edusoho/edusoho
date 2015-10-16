@@ -16,6 +16,17 @@ class CourseController extends CourseBaseController
 	{
 		$conditions = $request->query->all();
 		$categoryArray = array();
+		$levels = array();
+		if ($this->isPluginInstalled('Vip')) {
+			$levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
+			if (!isset($conditions['currentLevelId'])) {
+				$conditions['currentLevelId'] = 'all';
+			} else {
+				$vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($conditions['currentLevelId']), 'id');
+            	$conditions['vipLevelIds'] = array_merge(array($conditions['currentLevelId']), $vipLevelIds);
+			}
+		}
+
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
@@ -107,7 +118,9 @@ class CourseController extends CourseBaseController
 			'categoryArray' => $categoryArray,
 			'group' => $group,
 			'categoryArrayDescription' => $categoryArrayDescription,
-			'CategoryParent' => $CategoryParent
+			'CategoryParent' => $CategoryParent,
+			'levels' => $levels,
+			'currentLevelId' =>$conditions['currentLevelId'],
 		));	
 	}
 
@@ -852,5 +865,10 @@ class CourseController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    public function getLevelService($value='')
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }
