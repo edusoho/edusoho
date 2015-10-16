@@ -42,11 +42,12 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=title]',
+            rule: 'maxlength{max:50}',
             required: true
         });
 
         validator.addItem({
-            element: '[name=richeditorBody]',
+            element: '[name=content]',
             required: true
         });
         return validator;
