@@ -15,7 +15,7 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals($taskNew['id'], $task['id']);
     }
 
-    public function testGetTaskBy()
+    public function testGetTaskByParams()
     {
     	$taskInfo2 = array(
     		'userId' => 5,
@@ -41,12 +41,18 @@ class TaskServiceTest extends BaseTestCase
     	$taskNew1 = $this->_initTask();
     	$taskNew2 = $this->getTaskService()->addTask($taskInfo2);
 
-        $task = $this->getTaskService()->getTaskBy(5, 'studyplan', 10, 'testpaper');
+        $conditions = array(
+            'userId' => 5,
+            'taskType' => 'studyplan',
+            'targetId' => 10,
+            'targetType' => 'testpaper'
+        );
+        $task = $this->getTaskService()->getTaskByParams($conditions);
 
         $this->assertEquals($taskNew2['id'], $task['id']);
     }
 
-    public function testGetActiveTaskBy()
+   /* public function testGetActiveTaskBy()
     {
     	$taskInfo2 = array(
     		'userId' => 5,
@@ -75,13 +81,13 @@ class TaskServiceTest extends BaseTestCase
         $task = $this->getTaskService()->getActiveTaskBy(5, 'studyplan', 10, 'text');
 
         $this->assertEquals($taskNew1['id'], $task['id']);
-    }
+    }*/
 
-    public function testFindUserTasksByBatchIdAndTasktype()
+    public function testFindUserTasksByBatchIdAndTaskType()
     {
     	$taskNew = $this->_initTask();
 
-        $tasks = $this->getTaskService()->findUserTasksByBatchIdAndTasktype(5, 2, 'studyplan');
+        $tasks = $this->getTaskService()->findUserTasksByBatchIdAndTaskType(5, 2, 'studyplan');
 
         $this->assertEquals($taskNew['title'], $tasks[0]['title']);
         $this->assertEquals($taskNew['required'], $tasks[0]['required']);

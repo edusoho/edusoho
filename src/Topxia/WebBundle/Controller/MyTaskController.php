@@ -47,11 +47,6 @@ class MyTaskController extends BaseController
         ));
 	}
 
-	public function updateAction(Request $request)
-	{
-		return "";
-	}
-
 	protected function getTaskService()
 	{
 		return $this->getServiceKernel()->createService('Task.TaskService');

@@ -53,7 +53,14 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
     public function finishTask(array $targetObject, $userId)
     {
-        $getTask = $this->getTaskService()->getActiveTaskBy($userId, 'studyplan', $targetObject['id'], $targetObject['type']);
+        $conditions = array(
+            'userId' => $userId,
+            'taskType' => 'studyplan',
+            'targetId' => $targetObject['id'],
+            'targetType' => $targetObject['type'],
+            'status' => 'active'
+        );
+        $getTask = $this->getTaskService()->getTaskByParams($conditions);
 
         if ($getTask) {
             $canFinished = $this->_canFinished($getTask, $targetObject);
@@ -70,7 +77,15 @@ class StudyPlanTaskProcessor implements TaskProcessor
 
     public function canFinish($targetId, $targetType, $userId)
     {
-        $userTask = $this->getTaskService()->getActiveTaskBy($userId, 'studyplan', $targetId, $targetType);
+        $conditions = array(
+            'userId' => $userId,
+            'taskType' => 'studyplan',
+            'targetId' => $targetId,
+            'targetType' => $targetType,
+            'status' => 'active'
+        );
+        $userTask = $this->getTaskService()->getTaskByParams($conditions);
+
         if ($userTask) {
             $beforeActiveUserTaskCount = $this->getTaskService()->searchTaskCount(array(
                 'userId' => $userId,
@@ -92,33 +107,20 @@ class StudyPlanTaskProcessor implements TaskProcessor
     {
         $this->getTaskDao()->getConnection()->beginTransaction();
         try {
-            //获取我学过的课时
-            $conditions = array(
-                'userId' => $userId,
-                'courseIds' => $courseIds,
-                'status' => 'finished'
-            );
-            $userLearnedLessons = $this->getCourseService()->searchLearns($conditions, array('id','DESC'), 0, 1000);
-            $userLearnedLessons = ArrayToolkit::index($userLearnedLessons,
-                'lessonId');
-
-            $taskInfo = array(
-                'userId' => $userId,
-                'taskType' => 'studyplan',
-                'createdTime' => time()
-            );
-
+            
             $newTaskIds = $previewTaskInfo = array();
-            $i = $j = 0;
+            $dayLoop = $j = 0;
             $perDayStudyTime = 0;
             $planStartTime = $plan['setTime'] ? $plan['planStartTime'] : $planMember['createdTime'];
+            $availableHours = $planMember['metas']['availableHours'];
+            $availableDate = $planMember['metas']['availableDate'];
+            $targetDays = $planMember['metas']['targetWeeks'] * 7;
 
             foreach ($planTasks as $key => $planTask) {
 
-                $availableHours = $planMember['metas']['availableHours'];
-                $availableDate = $planMember['metas']['availableDate'];
-                $targetDays = $planMember['metas']['targetWeeks'] * 7;
-
+                $taskInfo['userId'] = $userId;
+                $taskInfo['taskType'] = 'studyplan';
+                $taskInfo['createdTime'] = time();
                 $taskInfo['title'] = $planTask['title'];
                 $taskInfo['batchId'] = $plan['id'];
                 $taskInfo['targetId'] = $planTask['objectId'];
@@ -134,9 +136,9 @@ class StudyPlanTaskProcessor implements TaskProcessor
                 $perDayStudyTime += $planTask['suggestHours'];
 
                 //获取任务执行时间
-                for ($i; $i <= $targetDays; $i++) {
+                /*for ($dayLoop; $dayLoop <= $targetDays; $dayLoop++) {
 
-                    $taskStartTime = $i == 0 ? $planStartTime : strtotime("+{$i} day", $planStartTime);
+                    $taskStartTime = $dayLoop == 0 ? $planStartTime : strtotime("+{$dayLoop} day", $planStartTime);
 
                     $weekDay = date('w', $taskStartTime);
                     if (!in_array($weekDay, $availableDate)) {
@@ -152,14 +154,14 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     else if ($perDayStudyTime == $availableHours) {
                         $taskEndTime = $taskStartTime;
                         $perDayStudyTime = $perDayStudyTime - $availableHours;
-                        $i++;
+                        $dayLoop++;
                     } 
                     else {
                         $taskNeedDay = ceil($planTask['suggestHours'] / $availableHours) - 1;
                         $taskEndTime = strtotime("+{$taskNeedDay} day", $taskStartTime);
                         $perDayStudyTime = abs($perDayStudyTime - $availableHours * ($taskNeedDay + 1));
 
-                        $i = $i + $taskNeedDay;
+                        $dayLoop = $dayLoop + $taskNeedDay;
                     }
 
                     $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00') + $j;
@@ -168,19 +170,6 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     //$taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
                     //$taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
                     
-                    break;
-                }
-                
-                $taskInfo['targetId'] = $planTask['objectId'];
-                $taskInfo['targetType'] = $planTask['type'];
-                if ($planTask['type'] != 'homework' && $planTask['type'] != 'testpaper') {
-                    
-                    if ($userLearnedLessons && isset($userLearnedLessons[$planTask['objectId']])) {
-                        
-                        $taskInfo['status'] = 'completed';
-                        $taskInfo['completedTime'] = $userLearnedLessons[$planTask['objectId']]['finishedTime'];
-                    }
-
                     if ($planTask['type'] == 'live') {
                         $liveLesson = $this->getCourseService()->getLesson($planTask['objectId']);
                         if ($liveLesson['endTime'] > time()) {
@@ -188,20 +177,30 @@ class StudyPlanTaskProcessor implements TaskProcessor
                             $taskInfo['taskEndTime'] = $liveLesson['endTime'];
                         }
                     }
-                } 
-                else if ($planTask['type'] == 'homework') {
-                    $info = $this->_getUserHomeworkPassed($planTask['objectId'], $userId, $plan);
-                    $taskInfo = array_merge($taskInfo, $info);
-                } 
-                else if ($planTask['type'] == 'testpaper') {
-                    $info = $this->_getUserTestpaperPassed($planTask['meta']['mediaId'], $userId, $plan);
-                    $taskInfo = array_merge($taskInfo, $info);
-                }
+
+                    break;
+                }*/
+                list($dayLoop, $perDayStudyTime, $taskTimeInfo) = $this->_setTaskExecuteTime($dayLoop, $planTask, $planMember, $planStartTime, $perDayStudyTime, $lastTaskInfo);
+                $taskTimeInfo['taskStartTime'] += $j;
+                $taskInfo = array_merge($taskInfo, $taskTimeInfo);
+
+                $taskInfo['targetId'] = $planTask['objectId'];
+                $taskInfo['targetType'] = $planTask['type'];
+
+                //根据课时学习状态获取任务完成状态
+                $statusInfo = $this->_getTaskStatus($planTask, $userId, $plan);
+                $taskInfo = array_merge($taskInfo, $info);
 
                 if ($type == 'add') {
                     $this->getTaskService()->addTask($taskInfo);
                 } else {
-                    $userTargetTask = $this->getTaskService()->getTaskBy($userId, 'studyplan', $taskInfo['targetId'], $taskInfo['targetType']);
+                    $conditions = array(
+                        'userId' => $userId,
+                        'taskType' => 'studyplan',
+                        'targetId' => $taskInfo['targetId'],
+                        'targetType' => $taskInfo['targetType']
+                    );
+                    $userTargetTask = $this->getTaskService()->getTaskByParams($conditions);
                     if (!$userTargetTask) {
                         $newTask = $this->getTaskService()->addTask($taskInfo);
                         $newTaskIds[] = $newTask['id'];
@@ -210,13 +209,13 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     }
                 }
 
-                $previewTaskInfo = $taskInfo;
+                $lastTaskInfo = $taskInfo;
                 unset($taskInfo['completedTime']);
                 $j += 10;
             }
             //删除更新后不存在的任务
             if ($type == 'update') {
-                $this->_updateUserTasks($newTaskIds, $userId, $plan['id']);
+                $this->_deleteUnusedTasks($newTaskIds, $userId, $plan['id']);
             }
 
             $this->getTaskDao()->getConnection()->commit();
@@ -227,15 +226,89 @@ class StudyPlanTaskProcessor implements TaskProcessor
         }
     }
 
-    private function _updateUserTasks($newTaskIds, $userId, $batchId)
+    private function _setTaskExecuteTime($dayLoop, $planTask, $planMember, $planStartTime, $perDayStudyTime, $lastTaskInfo)
     {
-        $tasks = $this->getTaskService()->findUserTasksByBatchIdAndTasktype($userId, $batchId, 'studyPlan'); 
-        
-        if ($tasks) {
-            foreach ($tasks as $key => $task) {
-                if (!in_array($task['id'], $newTaskIds)) {
-                    $this->getTaskService()->deleteTask($task['id']);
+        $availableHours = $planMember['metas']['availableHours'];
+        $availableDate = $planMember['metas']['availableDate'];
+        $targetDays = $planMember['metas']['targetWeeks'] * 7;
+
+        for ($dayLoop; $dayLoop <= $targetDays; $dayLoop++) {
+
+            $taskStartTime = $dayLoop == 0 ? $planStartTime : strtotime("+{$dayLoop} day", $planStartTime);
+
+            $weekDay = date('w', $taskStartTime);
+            if (!in_array($weekDay, $availableDate)) {
+                continue;
+            }
+
+            if ($perDayStudyTime < $availableHours) {
+                if ($planTask['suggestHours'] == 0 && $planTask['type'] == 'homework') {
+                    $taskStartTime = $lastTaskInfo['taskEndTime'];
                 }
+                $taskEndTime = $taskStartTime;
+            } 
+            else if ($perDayStudyTime == $availableHours) {
+                $taskEndTime = $taskStartTime;
+                $perDayStudyTime = $perDayStudyTime - $availableHours;
+                $dayLoop++;
+            } 
+            else {
+                $taskNeedDay = ceil($planTask['suggestHours'] / $availableHours) - 1;
+                $taskEndTime = strtotime("+{$taskNeedDay} day", $taskStartTime);
+                $perDayStudyTime = abs($perDayStudyTime - $availableHours * ($taskNeedDay + 1));
+
+                $dayLoop = $dayLoop + $taskNeedDay;
+            }
+
+            $timeInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00');
+            $timeInfo['taskEndTime'] = strtotime(date('Y-m-d',$taskEndTime).' 23:59:59');
+
+            //$taskInfo['taskStartDate'] = date('Y-m-d H:i:s', $taskInfo['taskStartTime']);
+            //$taskInfo['taskEndDate'] = date('Y-m-d H:i:s', $taskInfo['taskEndTime']);
+            
+            if ($planTask['type'] == 'live') {
+                $liveLesson = $this->getCourseService()->getLesson($planTask['objectId']);
+                if ($liveLesson['endTime'] > time()) {
+                    $timeInfo['taskStartTime'] = $liveLesson['startTime'];
+                    $timeInfo['taskEndTime'] = $liveLesson['endTime'];
+                }
+            }
+
+            break;
+        }
+
+        return array($dayLoop, $perDayStudyTime, $timeInfo);
+    }
+
+    private function _getTaskStatus($planTask, $userId, $plan)
+    {
+        if ($planTask['type'] == 'homework') {
+            $statusInfo = $this->_getUserHomeworkPassed($planTask['objectId'], $userId, $plan);
+        } 
+        else if ($planTask['type'] == 'testpaper') {
+            $statusInfo = $this->_getUserTestpaperPassed($planTask['meta']['mediaId'], $userId, $plan);
+        }
+        else {
+            //判断该课程是否已学过
+            $lessonLearn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $planTask['objectId']);
+            if ($lessonLearn && $lessonLearn == 'finished') {
+                $statusInfo['status'] = 'completed';
+                $statusInfo['completedTime'] = $lessonLearn['finishedTime'];
+            }
+        }
+
+        return $statusInfo;
+    }
+
+    private function _deleteUnusedTasks($newTaskIds, $userId, $batchId)
+    {
+        $tasks = $this->getTaskService()->findUserTasksByBatchIdAndTaskType($userId, $batchId, 'studyPlan'); 
+        $allTaskIds = ArrayToolkit::column($tasks,'id');
+        $diff = array_diff($allTaskIds, $newTaskIds);
+
+        if ($diff) {
+            foreach ($diff as $key => $taskId) {
+                $this->getTaskService()->deleteTask($task['id']);
             }
         }
             
@@ -334,6 +407,11 @@ class StudyPlanTaskProcessor implements TaskProcessor
     protected function getTaskDao()
     {
         return ServiceKernel::instance()->createDao('Task.TaskDao');
+    }
+
+    protected function getLessonLearnDao()
+    {
+        return ServiceKernel::instance()->createDao('Course.LessonLearnDao');
     }
 
 }
