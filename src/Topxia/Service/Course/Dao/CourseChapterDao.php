@@ -9,6 +9,10 @@ interface CourseChapterDao
 
     public function findChaptersByCourseId($courseId);
 
+    public function searchChapterCount($conditions);
+
+    public function searchChapters($conditions, $orderBy, $start, $limit);
+
     public function getChapterCountByCourseIdAndType($courseId, $type);
 
     public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId);

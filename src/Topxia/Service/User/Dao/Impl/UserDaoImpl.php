@@ -114,6 +114,23 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
+        if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'longinDate'){
+            if(isset($conditions['startDate'])){
+                $conditions['loginStartTime'] = strtotime($conditions['startDate']);
+            }
+            if(isset($conditions['endDate'])){
+                $conditions['loginEndTime'] = strtotime($conditions['endDate']);
+            }
+        }
+        if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'registerDate'){
+            if(isset($conditions['startDate'])){
+                $conditions['startTime'] = strtotime($conditions['startDate']);
+            }
+            if(isset($conditions['endDate'])){
+                $conditions['endTime'] = strtotime($conditions['endDate']);
+            }
+        }
+
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user')
             ->andWhere('promoted = :promoted')
@@ -127,10 +144,15 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('level = :level')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
+            ->andWhere('approvalTime >= :startApprovalTime')
+            ->andWhere('approvalTime <= :endApprovalTime')
+            ->andWhere('loginTime >= :loginStartTime')
+            ->andWhere('loginTime <= :loginEndTime')
             ->andWhere('locked = :locked')
             ->andWhere('level >= :greatLevel')
             ->andWhere('verifiedMobile = :verifiedMobile')
             ->andWhere('type LIKE :type')
+            ->andWhere('id IN ( :userIds)')
             ->andWhere('id NOT IN ( :excludeIds )');
     }
 

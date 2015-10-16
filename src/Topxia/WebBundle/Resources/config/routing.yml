@@ -180,6 +180,10 @@ hls_playlist:
     pattern: /hls/{id}/playlist/{token}.m3u8
     defaults: { _controller: TopxiaWebBundle:HLS:playlist}
 
+player_local_media:
+    pattern: /player/{id}/file/{token}
+    defaults: { _controller: TopxiaWebBundle:Player:localMedia}
+
 hls_stream:
     pattern: /hls/{id}/stream/{level}/{token}.m3u8
     defaults: { _controller: TopxiaWebBundle:HLS:stream}
@@ -295,6 +299,10 @@ course_become_use_member:
     defaults: { _controller: TopxiaWebBundle:Course:becomeUseMember }
     methods: [POST]
 
+course_member_ids:
+    pattern:  /course/{id}/member_ids
+    defaults: { _controller: TopxiaWebBundle:Course:memberIds }
+
 course_rebuy:
     pattern:  /course/{courseId}/course_rebuy
     defaults: { _controller: TopxiaWebBundle:Course:rebuy }
@@ -351,6 +359,10 @@ course_lesson_detail_data:
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
+
+course_lesson_player:
+    pattern:  /course/{courseId}/lesson/{lessonId}/player
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:player }
 
 course_lesson_preview:
     pattern:  /course/{courseId}/lesson/{lessonId}/preview

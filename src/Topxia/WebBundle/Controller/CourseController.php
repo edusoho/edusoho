@@ -506,6 +506,7 @@ class CourseController extends CourseBaseController
 			$lesson = $this->getCourseService()->getLesson($lessonId);
 			$course = $this->getCourseService()->getCourse($lesson['courseId']);
 			$watchLimitTime = $course['watchLimit'] * $lesson['length'];
+
 			if ($lesson['type'] == 'video' && ($course['watchLimit'] > 0) && ($learn['watchTime'] >= $watchLimitTime)) {
 				$learn['watchLimited'] = true;
 			}
@@ -565,7 +566,6 @@ class CourseController extends CourseBaseController
 		} else {
 			$canExit = false;
 		}
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -801,6 +801,12 @@ class CourseController extends CourseBaseController
 		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
 
 		));
+	}
+
+	public function memberIdsAction(Request $request, $id)
+	{
+		$ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+		return $this->createJsonResponse($ids);
 	}
 
 	protected function getUserService()

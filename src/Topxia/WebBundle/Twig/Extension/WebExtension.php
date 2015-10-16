@@ -11,6 +11,7 @@ use Topxia\Service\Util\HTMLPurifierFactory;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\ExtensionManager;
 
+
 class WebExtension extends \Twig_Extension
 {
     protected $container;
@@ -104,6 +105,7 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('crontab_next_executed_time', array($this, 'getNextExecutedTime')),
              new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
+             new \Twig_SimpleFunction('is_trial',array($this,'isTrial')),
         );
     }
     public function getParametersFromUrl($url)
@@ -331,6 +333,8 @@ class WebExtension extends \Twig_Extension
             $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
+
+        // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
 
         return $paths;
     }
@@ -1139,6 +1143,13 @@ class WebExtension extends \Twig_Extension
     public function getName ()
     {
         return 'topxia_web_twig';
+    }
+
+    public function isTrial() {
+        if (file_exists(__DIR__ . '/../../../../../app/data/trial.lock')) {
+            return true;
+        }
+        return false;
     }
 
     public function blur_phone_number($phoneNum)

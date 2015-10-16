@@ -38,6 +38,7 @@ seajs.config({
         'mask': 'arale/overlay/1.1.4/mask',
         'sticky': 'arale/sticky/1.3.1/sticky',
         'cookie': 'arale/cookie/1.0.2/cookie',
+        'messenger': 'arale/messenger/2.0.0/messenger',
         "templatable": "arale/templatable/0.9.1/templatable",
         'placeholder': 'arale/placeholder/1.1.0/placeholder',
         'json': 'gallery/json/1.0.3/json',
@@ -62,6 +63,7 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js'
+        'video-player': 'balloon-video-player/1.0.0/index-debug'
     },
 
 	// 预加载项

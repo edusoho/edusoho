@@ -21,18 +21,7 @@
     sudo brew tap homebrew/dupes 
     sudo brew tap josegonzalez/homebrew-php 
 
-五、删除mac自带的php 
-
-    sudo apachectl stop 
-    sudo rm -rf /etc/apache2/ 
-    sudo rm -rf /usr/libexec/apache2/ 
-    sudo rm -rf /usr/php 
-    sudo rm -rf /usr/bin/php 
-    sudo rm -rf /usr/bin/php-config 
-    sudo rm -rf /usr/bin/phpize 
-    sudo rm -rf /usr/share/man/man*/php* 
-
-六、安装php 
+五、安装php 
 
     sudo brew install php55 --with-debug --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear php5 --with-cli --with-curl --with-fpm --with-intl --with-mcrypt --with-mysqlnd_ms --with-gd
 

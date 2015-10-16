@@ -3,19 +3,16 @@ define(function(require, exports, module) {
         Class = require('class'),
         Store = require('store'),
         Backbone = require('backbone'),
-        VideoJS = require('video-js'),
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
         chapterAnimate = require('../course/widget/chapter-animate');
-        
+        var Messenger = require('../player/messenger');
+
         require('mediaelementplayer');
-
-
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
-    var MediaPlayer = require('../widget/media-player4');
     var SlidePlayer = require('../widget/slider-player');
     var DocumentPlayer = require('../widget/document-player');
 
@@ -91,30 +88,30 @@ define(function(require, exports, module) {
 
         _onFinishLearnLesson: function() {
             var $btn = this.element.find('[data-role=finish-lesson]'),
-                toolbar = this._toolbar,
-                self = this;
+            toolbar = this._toolbar,
+            self = this;
 
-                var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
-                $.post(url, function(response) {
+            var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
+            $.post(url, function(response) {
 
-                    if (response.isLearned) {
-                        $('#course-learned-modal').modal('show');
-                    }
+                if (response.isLearned) {
+                    $('#course-learned-modal').modal('show');
+                }
 
-                    if (!response.canFinish) {
-                        $("#modal").html(response.html);
-                        $("#modal").modal('show');
-                        return false;
-                    } else if (response.canFinish && response.html != '') {
-                        $("#modal").html(response.html);
-                        $("#modal").modal('show');
-                    }
+                if (!response.canFinish) {
+                    $("#modal").html(response.html);
+                    $("#modal").modal('show');
+                    return false;
+                } else if (response.canFinish && response.html != '') {
+                    $("#modal").html(response.html);
+                    $("#modal").modal('show');
+                }
 
-                    $btn.addClass('btn-success');
-                    $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
-                    toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
+                $btn.addClass('btn-success');
+                $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+                toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 
-                }, 'json');
+            }, 'json');
 
         },
 
@@ -177,29 +174,12 @@ define(function(require, exports, module) {
         },
 
         _afterLoadLesson: function(lessonId) {
-            var player, type;
-            if (this.get('videoPlayer')) {
-                player = this.get('videoPlayer');
-                type = "VideoPlayer";
-            }
-
-            if (this.get('audioPlayer')) {
-                player = this.get('audioPlayer');
-                type = "AudioPlayer";
-            }
-
-            if (this.get('mediaPlayer')) {
-                player = this.get('mediaPlayer');
-                player = document.getElementById(player.get("playerId"));
-                type = "MediaPlayer";
-            }
-
             if (this._counter && this._counter.timerId) {
                 clearInterval(this._counter.timerId);
             }
 
             var self = this;
-            this._counter = new Counter(player, type, this.get('courseId'), lessonId, this.get('watchLimit'));
+            this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'));
             this._counter.setTimerId(setInterval(function(){self._counter.execute()}, 1000));
         },
 
@@ -210,32 +190,16 @@ define(function(require, exports, module) {
             }
             this._toolbar.set('lessonId', id);
 
-            // FIX BUG: #1892
-            if (this.get('videoPlayer')) {
-                this.get('videoPlayer').dispose();
-                this.set('videoPlayer', null);
-            }
-
-            if (this.get('audioPlayer')) {
-                this.get('audioPlayer').remove();
-                this.set('audioPlayer', null);
-            }
-
-            if (this.get('mediaPlayer')) {
-                this.get('mediaPlayer').dispose();
-                this.set('mediaPlayer', null);
-            }
-
             swfobject.removeSWF('lesson-swf-player');
 
             $('#lesson-iframe-content').empty();
+            $('#lesson-video-content').html("");
 
             this.element.find('[data-role=lesson-content]').hide();
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-
-
+                
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
@@ -283,335 +247,284 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").html(html);
                     $("#lesson-iframe-content").show();
 
-                } else if ( (lesson.type == 'video' || lesson.type == 'audio') && lesson.mediaHLSUri ) {
-                    $("#lesson-video-content").html('<div id="lesson-video-player"></div>');
-                    $("#lesson-video-content").show();
+                } else if (lesson.type == 'video' || lesson.type == 'audio') {
+                    if(lesson.mediaSource == 'self') {
+                        var lessonVideoDiv = $('#lesson-video-content');
 
-                    var mediaPlayer = new MediaPlayer({
-                        element: '#lesson-video-content',
-                        playerId: 'lesson-video-player'
-                    });
-
-                    mediaPlayer.on("timeChange", function(data){
-                        var userId = $('#lesson-video-content').data("userId");
-                        if(parseInt(data.currentTime) != parseInt(data.duration)){
-                            DurationStorage.set(userId, lesson.mediaId, data.currentTime);
-                        }
-                    });
-
-                    mediaPlayer.on("ready", function(playerId, data){
-                        var player = document.getElementById(playerId);
-                        var userId = $('#lesson-video-content').data("userId");
-                        player.seek(DurationStorage.get(userId, lesson.mediaId));
-                    });
-
-                    mediaPlayer.setSrc(lesson.mediaHLSUri, lesson.type);
-                    mediaPlayer.on('ended', function() {
-                        var userId = $('#lesson-video-content').data("userId");
-                        DurationStorage.del(userId, lesson.mediaId);
-                        if (that._counter) {
-                            that._counter.watched = false;
+                        if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
+                            Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                            return ;
                         }
 
-                        that._onFinishLearnLesson();
-                    });
+                        var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                        var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
-                    mediaPlayer.play();
-                    that.set('mediaPlayer', mediaPlayer);
+                        $("#lesson-video-content").show();
+                        $("#lesson-video-content").html(html);
 
-                } else {
-                    if (lesson.type == 'video') {
-                        if (lesson.mediaSource == 'self') {
-                            $("#lesson-video-content").html('<video id="lesson-video-player" class="video-js vjs-default-skin" controls preload="auto"></video>');
-                            
-                            if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                                Notify.warning('视频文件正在转换中，稍后完成后即可查看');
-                                return ;
-                            }
-
-                            var player = VideoJS("lesson-video-player", {
-                                techOrder: ['flash','html5']
-                            });
-                            var hasPlayerError = false;
-
-                            player.dimensions('100%', '100%');
-                            player.src(lesson.mediaUri);
-                            player.on('ended', function() {
-                                if (hasPlayerError) {
-                                    return ;
-                                }
-                                that._onFinishLearnLesson();
-                                player.currentTime(0);
-                                player.pause();
-                            });
-                            
-                            player.on('error', function(error){
-                                hasPlayerError = true;
-                                var message = '您的浏览器不能播放当前视频。';
-                                Notify.danger(message, 60);
-                            });
-                            $("#lesson-video-content").show();
-                            player.play();
-                            player.on('fullscreenchange', function(e) {
-                                if ($(e.target).hasClass('vjs-fullscreen')) {
-                                    $("#site-navbar").hide();
-                                }
-                            });
-
-                            that.set('videoPlayer', player);
-
-                        } else {
-                            $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-                            swfobject.embedSWF(lesson.mediaUri, 
-                                'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-                                {wmode:'opaque',allowFullScreen:'true'});
-                            $("#lesson-swf-content").show();
-                        }
-                    } else if (lesson.type == 'audio') {
-                        var html = '<audio id="lesson-audio-player" width="500" height="50">';
-                        html += '<source src="' + lesson.mediaUri + '" type="audio/mp3" />';
-                        html += '</audio>';
-
-                        $("#lesson-audio-content").html(html);
-         
-                        var audioPlayer = new MediaElementPlayer('#lesson-audio-player', {
-                            mode:'auto_plugin',
-                            enablePluginDebug: false,
-                            enableAutosize:true,
-                            success: function(media) {
-                                media.addEventListener("ended", function() {
-                                    that._onFinishLearnLesson();
-                                });
-                                media.play();
-                            }
+                        var messenger = new Messenger({
+                            name: 'parent',
+                            project: 'PlayerProject',
+                            children: [ document.getElementById('viewerIframe') ],
+                            type: 'parent'
                         });
-                        that.set('audioPlayer', audioPlayer);
-                        $("#lesson-audio-content").show();
 
-                    } else if (lesson.type == 'text' ) {
-                        $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
-                        $("#lesson-text-content").show();
-                        $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
-                        $("#lesson-text-content").scrollTop(0);
-                        $("#lesson-text-content").perfectScrollbar('update');
+                        messenger.on("ended", function(){
+                            var player = that.get("player");
+                            player.playing = false;
+                            that.set("player", player);
+                            that._onFinishLearnLesson();
+                        });
 
-                    } else if (lesson.type =="live") {
-                        var liveStartTimeFormat = lesson.startTimeFormat;
-                        var liveEndTimeFormat = lesson.endTimeFormat;
-                        var startTime = lesson.startTime;
-                        var endTime = lesson.endTime;
+                        messenger.on("playing", function(){
+                            var player = that.get("player");
+                            player.playing = true;
+                            that.set("player", player);
+                        });
 
-                        var courseId = lesson.courseId;
-                        var lessonId = lesson.id;
-                        var $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-                        if(iID) {
-                            clearInterval(iID);
-                        }
+                        messenger.on("paused", function(){
+                            var player = that.get("player");
+                            player.playing = false;
+                            that.set("player", player);
+                        });
 
-                        var intervalSecond = 0;
+                        that.set("player", {});
 
-                        function generateHtml() {
-                            var nowDate = lesson.nowDate + intervalSecond;
-                            var startLeftSeconds = parseInt(startTime - nowDate);
-                            var endLeftSeconds = parseInt(endTime - nowDate);
-                            var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
-                            var modulo = startLeftSeconds % (60 * 60 * 24);
-                            var hours = Math.floor(modulo / (60 * 60));
-                            modulo = modulo % (60 * 60);
-                            var minutes = Math.floor(modulo / 60);
-                            var seconds = modulo % 60;
-                            var $replayGuid = "老师们：";
-                            $replayGuid += "<br>";
+                    } else {
+                        $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+                        swfobject.embedSWF(lesson.mediaUri, 
+                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                            {wmode:'opaque',allowFullScreen:'true'});
+                        $("#lesson-swf-content").show();
+                    }
+                } else if (lesson.type == 'text' ) {
+                    $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
+                    $("#lesson-text-content").show();
+                    $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+                    $("#lesson-text-content").scrollTop(0);
+                    $("#lesson-text-content").perfectScrollbar('update');
 
-                            if(lesson.liveProvider == 1) {
-                                $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
-                                $replayGuid += "<span style='color:red'>录制面板</span>";
-                                $replayGuid += "”，录制完成后点击“";
-                                $replayGuid += "<span style='color:red'>暂停</span>”";
-                                $replayGuid += "结束录播，录播结束后在“";
-                                $replayGuid += "<span style='color:red'>录播管理</span>";
-                                $replayGuid += "”界面生成回放。";
-                                $replayGuid += "<br>";
-                            } else {
-                                $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                                $replayGuid += "直播平台“<span style='color:red'>下课后</span>”且“<span style='color:red'>直播时间</span>”结束后，在课时管理的“";
-                                $replayGuid += "<span style='color:red'>录播管理</span>";
-                                $replayGuid += "”点击生成回放。";
-                                $replayGuid += "<br>";
-                            }
+                } else if (lesson.type =="live") {
+                    var liveStartTimeFormat = lesson.startTimeFormat;
+                    var liveEndTimeFormat = lesson.endTimeFormat;
+                    var startTime = lesson.startTime;
+                    var endTime = lesson.endTime;
 
-
-                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
-
-                            if (days == 0) {
-                                $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                            };
-
-                            if (hours == 0 && days != 0) {
-                                $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                            };
-
-                            if (hours == 0 && days == 0) {
-                                $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                            };
-
-                            if (0< startLeftSeconds && startLeftSeconds < 7200) {
-                                 $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-                                 var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-                                 if(lesson.isTeacher) {
-                                    $countDown = $replayGuid;
-                                    $countDown += "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                                }else{
-                                    $countDown = "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                                }
-                            };
-
-                            if (startLeftSeconds <= 0) {
-                                clearInterval(iID);
-                                 $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
-                                 var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-                                if(lesson.isTeacher) {
-                                    $countDown = $replayGuid;
-                                    $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                                }else{
-                                    $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                                }
-                            };
-
-                            if (endLeftSeconds <= 0) {
-                                $liveNotice = "<p>直播已经结束</p>";
-                                $countDown = "";
-                                if(lesson.replays && lesson.replays.length>0){
-                                    $.each(lesson.replays, function(i,n){
-                                        $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>"+n.title+"</a>&nbsp;&nbsp;";
-                                    });
-                                }
-                            };
-
-                            $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
-
-                            intervalSecond++;
-                        }
-
-                        generateHtml();
-
-                        iID = setInterval(generateHtml, 1000);
-
-                        $("#lesson-live-content").show();
-                        $("#lesson-live-content").perfectScrollbar({wheelSpeed:50});
-                        $("#lesson-live-content").scrollTop(0);
-                        $("#lesson-live-content").perfectScrollbar('update');
-
-                    } else if (lesson.type == 'testpaper') {
-                        var url = '../../test/' + lesson.mediaId + '/do?targetType=lesson&targetId=' + id;
-                        var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
-                        var html = '<span class="text-info">正在载入，请稍等...</span>';
-                        $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
-                        $("#lesson-testpaper-content").show();
-
-                        $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
-                            if (result.error) {
-                                html = '<span class="text-danger">' + result.error + '</span>';
-                            } else {
-                                if (result.status == 'nodo') {
-                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
-                                } else if (result.status == 'finished') {
-                                    var redoUrl = '../../test/' + lesson.mediaId + '/redo?targetType=lesson&targetId=' + id;
-                                    var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
-                                    html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
-                                } else if (result.status == 'doing' || result.status == 'paused') {
-                                    html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
-                                } else if (result.status == 'reviewing') {
-                                    html = '试卷正在批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看试卷</a>'
-                                }
-                            }
-
-                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
-
-                        }, 'json');
-
+                    var courseId = lesson.courseId;
+                    var lessonId = lesson.id;
+                    var $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
+                    if(iID) {
+                        clearInterval(iID);
                     }
 
-                    else if (lesson.type == 'ppt') {
-                        $.get(that.get('courseUri') + '/lesson/' + id + '/ppt', function(response) {
-                            if (response.error) {
-                                var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
-                                $("#lesson-ppt-content").html(html).show();
-                                return ;
+                    var intervalSecond = 0;
+
+                    function generateHtml() {
+                        var nowDate = lesson.nowDate + intervalSecond;
+                        var startLeftSeconds = parseInt(startTime - nowDate);
+                        var endLeftSeconds = parseInt(endTime - nowDate);
+                        var days = Math.floor(startLeftSeconds / (60 * 60 * 24));
+                        var modulo = startLeftSeconds % (60 * 60 * 24);
+                        var hours = Math.floor(modulo / (60 * 60));
+                        modulo = modulo % (60 * 60);
+                        var minutes = Math.floor(modulo / 60);
+                        var seconds = modulo % 60;
+                        var $replayGuid = "老师们：";
+                        $replayGuid += "<br>";
+
+                        if(lesson.liveProvider == 1) {
+                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
+                            $replayGuid += "<span style='color:red'>录制面板</span>";
+                            $replayGuid += "”，录制完成后点击“";
+                            $replayGuid += "<span style='color:red'>暂停</span>”";
+                            $replayGuid += "结束录播，录播结束后在“";
+                            $replayGuid += "<span style='color:red'>录播管理</span>";
+                            $replayGuid += "”界面生成回放。";
+                            $replayGuid += "<br>";
+                        } else {
+                            $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                            $replayGuid += "直播平台“<span style='color:red'>下课后</span>”且“<span style='color:red'>直播时间</span>”结束后，在课时管理的“";
+                            $replayGuid += "<span style='color:red'>录播管理</span>";
+                            $replayGuid += "”点击生成回放。";
+                            $replayGuid += "<br>";
+                        }
+
+
+                        $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
+
+                        if (days == 0) {
+                            $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                        };
+
+                        if (hours == 0 && days != 0) {
+                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                        };
+
+                        if (hours == 0 && days == 0) {
+                            $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+                        };
+
+                        if (0< startLeftSeconds && startLeftSeconds < 7200) {
+                             $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
+                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                             if(lesson.isTeacher) {
+                                $countDown = $replayGuid;
+                                $countDown += "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }else{
+                                $countDown = "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                             }
+                        };
 
-                            var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
-                            $("#lesson-ppt-content").html(html).show();
+                        if (startLeftSeconds <= 0) {
+                            clearInterval(iID);
+                             $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
+                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                            if(lesson.isTeacher) {
+                                $countDown = $replayGuid;
+                                $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }else{
+                                $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            }
+                        };
 
-                            var watermarkUrl = $("#lesson-ppt-content").data('watermarkUrl');
-                            if (watermarkUrl) {
-                                $.get(watermarkUrl, function(watermark) {
-                                    var player = new SlidePlayer({
-                                        element: '.slide-player',
-                                        slides: response,
-                                        watermark: watermark
-                                    });
+                        if (endLeftSeconds <= 0) {
+                            $liveNotice = "<p>直播已经结束</p>";
+                            $countDown = "";
+                            if(lesson.replays && lesson.replays.length>0){
+                                $.each(lesson.replays, function(i,n){
+                                    $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>"+n.title+"</a>&nbsp;&nbsp;";
                                 });
+                            }
+                        };
 
-                            } else {
+                        $("#lesson-live-content").find('.lesson-content-text-body').html($liveNotice + '<div style="padding-bottom:15px; border-bottom:1px dashed #ccc;">' + lesson.summary + '</div>' + '<br>' + $countDown);
+
+                        intervalSecond++;
+                    }
+
+                    generateHtml();
+
+                    iID = setInterval(generateHtml, 1000);
+
+                    $("#lesson-live-content").show();
+                    $("#lesson-live-content").perfectScrollbar({wheelSpeed:50});
+                    $("#lesson-live-content").scrollTop(0);
+                    $("#lesson-live-content").perfectScrollbar('update');
+
+                } else if (lesson.type == 'testpaper') {
+                    var url = '../../test/' + lesson.mediaId + '/do?targetType=lesson&targetId=' + id;
+                    var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
+                    var html = '<span class="text-info">正在载入，请稍等...</span>';
+                    $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+                    $("#lesson-testpaper-content").show();
+
+                    $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
+                        if (result.error) {
+                            html = '<span class="text-danger">' + result.error + '</span>';
+                        } else {
+                            if (result.status == 'nodo') {
+                                html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
+                            } else if (result.status == 'finished') {
+                                var redoUrl = '../../test/' + lesson.mediaId + '/redo?targetType=lesson&targetId=' + id;
+                                var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
+                                html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
+                            } else if (result.status == 'doing' || result.status == 'paused') {
+                                html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
+                            } else if (result.status == 'reviewing') {
+                                html = '试卷正在批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看试卷</a>'
+                            }
+                        }
+
+                        $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+
+                    }, 'json');
+
+                } else if (lesson.type == 'ppt') {
+                    $.get(that.get('courseUri') + '/lesson/' + id + '/ppt', function(response) {
+                        if (response.error) {
+                            var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
+                            $("#lesson-ppt-content").html(html).show();
+                            return ;
+                        }
+
+                        var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
+                        $("#lesson-ppt-content").html(html).show();
+
+                        var watermarkUrl = $("#lesson-ppt-content").data('watermarkUrl');
+                        if (watermarkUrl) {
+                            $.get(watermarkUrl, function(watermark) {
                                 var player = new SlidePlayer({
                                     element: '.slide-player',
-                                    slides: response
+                                    slides: response,
+                                    watermark: watermark
                                 });
-                            }
+                            });
+
+                        } else {
+                            var player = new SlidePlayer({
+                                element: '.slide-player',
+                                slides: response
+                            });
+                        }
 
 
-                        }, 'json');
-                    }
+                    }, 'json');
+                } else if (lesson.type == 'document' ) {
 
-                    else if (lesson.type == 'document' ) {
-
-                        $.get(that.get('courseUri') + '/lesson/' + id + '/document', function(response) {
-                            if (response.error) {
-                                var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
-                                $("#lesson-document-content").html(html).show();
-                                return ;
-                            }
-
-                            var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+                    $.get(that.get('courseUri') + '/lesson/' + id + '/document', function(response) {
+                        if (response.error) {
+                            var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
                             $("#lesson-document-content").html(html).show();
+                            return ;
+                        }
 
-                            var watermarkUrl = $("#lesson-document-content").data('watermarkUrl');
-                            if (watermarkUrl) {
-                                $.get(watermarkUrl, function(watermark) {
-                                    var player = new DocumentPlayer({
-                                        element: '#lesson-document-content',
-                                        swfFileUrl:response.swfUri,
-                                        pdfFileUrl:response.pdfUri,
-                                        watermark: {
-                                            'xPosition': 'center',
-                                            'yPosition': 'center',
-                                            'rotate': 45,
-                                            'contents': watermark
-                                        }
-                                    });
-                                });
-                            } else {
+                        var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
+                        $("#lesson-document-content").html(html).show();
+
+                        var watermarkUrl = $("#lesson-document-content").data('watermarkUrl');
+                        if (watermarkUrl) {
+                            $.get(watermarkUrl, function(watermark) {
                                 var player = new DocumentPlayer({
                                     element: '#lesson-document-content',
                                     swfFileUrl:response.swfUri,
-                                    pdfFileUrl:response.pdfUri
+                                    pdfFileUrl:response.pdfUri,
+                                    watermark: {
+                                        'xPosition': 'center',
+                                        'yPosition': 'center',
+                                        'rotate': 45,
+                                        'contents': watermark
+                                    }
                                 });
-                            }
-                        }, 'json');
-                    }
-
-                    else if (lesson.type == 'flash' ) {
-                        
-                            $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-                            swfobject.embedSWF(lesson.mediaUri, 
-                                'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-                                {wmode:'opaque',allowFullScreen:'true'});
-                            $("#lesson-swf-content").show();
-
+                            });
+                        } else {
+                            var player = new DocumentPlayer({
+                                element: '#lesson-document-content',
+                                swfFileUrl:response.swfUri,
+                                pdfFileUrl:response.pdfUri
+                            });
+                        }
+                    }, 'json');
+                } else if (lesson.type == 'flash' ) {
+                    
+                    if (!swfobject.hasFlashPlayerVersion('11')) {
+                        var html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+                        html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+                        html += '<span aria-hidden="true">×</span>';
+                        html += '</button>';
+                        html += '您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。';
+                        html += '</div>';
+                        $("#lesson-swf-content").html(html);
+                        $("#lesson-swf-content").show();
+                    } else {
+                        $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
+                        swfobject.embedSWF(lesson.mediaUri, 
+                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                            {wmode:'opaque',allowFullScreen:'true'});
+                        $("#lesson-swf-content").show();
                     }
 
                 }
+
 
                 if (lesson.type == 'testpaper') {
                     that.element.find('[data-role=finish-lesson]').hide();
@@ -700,54 +613,9 @@ define(function(require, exports, module) {
 
     });
 
-    var DurationStorage = {
-        set: function(userId,mediaId,duration) {
-            var durations = Store.get("durations");
-            if(!durations || !(durations instanceof Array)){
-                durations = new Array();
-            }
-
-            var value = userId+"-"+mediaId+":"+duration;
-            if(durations.length>0 && durations.slice(durations.length-1,durations.length)[0].indexOf(userId+"-"+mediaId)>-1){
-                durations.splice(durations.length-1, durations.length);
-            }
-            if(durations.length>=20){
-                durations.shift();
-            }
-            durations.push(value);
-            Store.set("durations", durations);
-        },
-        get: function(userId,mediaId) {
-            var durationTmpArray = Store.get("durations");
-            if(durationTmpArray){
-                for(var i = 0; i<durationTmpArray.length; i++){
-                    var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
-                    if(index>-1){
-                        var key = durationTmpArray[i];
-                        return parseFloat(key.split(":")[1])-5;
-                    }
-                }
-            }
-            return 0;
-        },
-        del: function(userId,mediaId) {
-            var key = userId+"-"+mediaId;
-            var durationTmpArray = Store.get("durations");
-            for(var i = 0; i<durationTmpArray.length; i++){
-                var index = durationTmpArray[i].indexOf(userId+"-"+mediaId);
-                if(index>-1){
-                    durationTmpArray.splice(i,1);
-                }
-            }
-            Store.set("durations", durationTmpArray);
-        }
-    };
-
-
     var Counter = Class.create({
-        initialize: function(player, type, courseId, lessonId, watchLimit) {
-            this.player = player;
-            this.type = type;
+        initialize: function(dashboard, courseId, lessonId, watchLimit) {
+            this.dashboard = dashboard;
             this.courseId = courseId;
             this.lessonId = lessonId;
             this.interval = 120;
@@ -760,10 +628,7 @@ define(function(require, exports, module) {
         },
 
         execute: function(){
-            var posted = false;
-            if(this.player && this.type){
-                posted = this.addMediaPlayingCounter();
-            }
+            var posted = this.addMediaPlayingCounter();
             this.addLearningCounter(posted);
         },
 
@@ -775,41 +640,40 @@ define(function(require, exports, module) {
             learningCounter++;
 
             if(promptlyPost || learningCounter >= this.interval){
-                var url="../../course/"+this.lessonId+'/learn/time/'+learningCounter;
-                $.post(url);
+                var url="../../../../course/"+this.lessonId+'/learn/time/'+learningCounter;
+                $.get(url);
                 learningCounter = 0;
             }
 
             Store.set("lesson_id_"+this.lessonId+"_learning_counter", learningCounter);
-        }, 
+        },
 
         addMediaPlayingCounter: function() {
-            var learningCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
-            if(!learningCounter){
-                learningCounter = 0;
+            var mediaPlayingCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
+            if(!mediaPlayingCounter){
+                mediaPlayingCounter = 0;
+            }
+            if(this.dashboard == undefined || this.dashboard.get("player") == undefined) {
+                return;
             }
 
-            var paused = this.player && this.type && (
-                (this.type == "MediaPlayer" && typeof(this.player.getPlaying) == "function" && !this.player.getPlaying())
-                || (this.type == "AudioPlayer" && this.player.media.paused)
-                || (this.type == "VideoPlayer" && this.player.paused()));
-
+            var playing = this.dashboard.get("player").playing;
             var posted = false;
-            if(learningCounter >= this.interval || (learningCounter>0 && paused)){
-                var url="../../course/"+this.lessonId+'/watch/time/'+learningCounter;
+            if(mediaPlayingCounter >= this.interval || (mediaPlayingCounter>0 && !playing)){
+                var url="../../../../course/"+this.lessonId+'/watch/time/'+mediaPlayingCounter;
                 var self = this;
-                $.post(url, function(response) {
-                    if (self.watchLimit && response.watchLimited && self.type == 'MediaPlayer') {
+                $.get(url, function(response) {
+                    if (self.watchLimit && response.watchLimited) {
                         window.location.reload();
                     }
                 }, 'json');
                 posted = true;
-                learningCounter = 0;
-            } else if(!paused) {
-                learningCounter++;
+                mediaPlayingCounter = 0;
+            } else if(playing) {
+                mediaPlayingCounter++;
             }
 
-            Store.set("lesson_id_"+this.lessonId+"_playing_counter", learningCounter);
+            Store.set("lesson_id_"+this.lessonId+"_playing_counter", mediaPlayingCounter);
 
             return posted;
         }

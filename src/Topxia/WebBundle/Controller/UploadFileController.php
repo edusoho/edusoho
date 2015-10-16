@@ -8,6 +8,7 @@ use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UploadFileController extends BaseController
 {
