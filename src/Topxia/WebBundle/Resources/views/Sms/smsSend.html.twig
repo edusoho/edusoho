@@ -30,7 +30,7 @@
     </div>
     <div style="z-index:2000;">
       <p class="help-block">
-        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}班级{% else %}课程{% endif %}：《{{item.title}}已发布!<a href ='{{url}}' target="_blank">链接地址</a>
+        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}{{ setting('classroom.name')|default("班级") }}{% else %}课程{% endif %}：《{{item.title}}》现已开始报名!<a href ='{{url}}' target="_blank">链接地址</a>
       </p>
     </div>
   </div>
@@ -40,7 +40,7 @@
   <input type="hidden" name="sms_open" value={{isOpen}}>
   <div class="row form-group">
     <div class="col-md-6 control-label">
-      <p>{% if isOpen %}短信发送准备中...{% else %}请联系管理员，开启云短信相关设置。{% endif %}</p>
+      <p>{% if isOpen %}短信发送准备中...{% else %}请联系超级管理员，开启云短信相关设置。{% endif %}</p>
     </div> 
   </div>
 </form>
