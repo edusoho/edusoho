@@ -194,7 +194,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                     $taskInfo = array_merge($taskInfo, $info);
                 } 
                 else if ($planTask['type'] == 'testpaper') {
-                    $info = $this->_getUserTestpaperPassed($planTask['objectId'], $userId, $plan);
+                    $info = $this->_getUserTestpaperPassed($planTask['meta']['mediaId'], $userId, $plan);
                     $taskInfo = array_merge($taskInfo, $info);
                 }
 
