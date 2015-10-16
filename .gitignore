@@ -63,3 +63,5 @@ web/assets/img/default/video.png
 /src/Tests/*
 /app/data/api_server.json
 /installFiles
+/app/data/trial.lock
+

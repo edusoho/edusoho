@@ -96,6 +96,9 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             }, null, "ESNativeCore", "uploadImage", [ url, headers, params, acceptType ]);
 
             return deferred.promise;
+        },
+        redirect : function(body) {
+            exec(null, null, "ESNativeCore", "redirect", [ body ]);
         }
     };
 });

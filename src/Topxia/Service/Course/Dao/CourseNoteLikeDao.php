@@ -18,4 +18,6 @@ interface CourseNoteLikeDao
     public function findNoteLikesByNoteIds(array $noteIds);
 
     public function findNoteLikesByNoteIdsAndUserId(array $noteIds, $userId);
+
+    public function deleteNoteLikesByNoteId($noteId);
 }
