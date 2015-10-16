@@ -1352,15 +1352,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
-<<<<<<< HEAD
 		$this->dispatchEvent("course.lesson.update",$unpublishLesson);
 
-		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-			$this->dispatchEvent('studyplan.task.delete', new ServiceEvent($unpublishLesson));
-		}
-=======
 		$this->dispatchEvent("course.lesson.unpublish",$unpublishLesson);
->>>>>>> master
 	}
 
 	public function getNextLessonNumber($courseId)
