@@ -159,7 +159,7 @@ class StudyPlanTaskProcessor implements TaskProcessor
                         $taskEndTime = strtotime("+{$taskNeedDay} day", $taskStartTime);
                         $perDayStudyTime = abs($perDayStudyTime - $availableHours * ($taskNeedDay + 1));
 
-                        $i = $taskNeedDay > 1 ? ($i + $taskNeedDay + 1) : ($i + 1);
+                        $i = $i + $taskNeedDay;
                     }
 
                     $taskInfo['taskStartTime'] = strtotime(date('Y-m-d',$taskStartTime).' 00:00:00') + $j;
