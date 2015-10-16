@@ -499,6 +499,7 @@ class AnalysisController extends BaseController
         $paidLessonStartDate="";
 
         $condition=$request->query->all();
+
         $timeRange=$this->getTimeRange($condition);
 
         if(!$timeRange) {
@@ -513,8 +514,8 @@ class AnalysisController extends BaseController
             20
         );
 
-        $paidLessonDetail=$this->getOrderService()->searchOrders(
-            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00"),
+        $paidCourseDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>'course'),
             "latest",
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -527,28 +528,16 @@ class AnalysisController extends BaseController
             $data=$this->fillAnalysisData($condition,$paidLessonData);          
         }
 
-        $paidCourseDetail = array();
-        foreach ($paidLessonDetail as $value) {
-            if($value['targetType']=='course'){
-                $paidCourseDetail[] = $value;
-            }
-        }
+        $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId');//订单中的课程
 
-        $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId');//结果包含购买班级，直接用targetId搜是不正确的
-
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-
-        //目前已经是所有的课程了，在把parientId != 0 的课程剔除
-        $allCourse = array();
-        foreach ($courses as $value) {
-            if($value['parentId'] == '0')
-            $allCourse[] = $value;
-        }
-        $courses = ArrayToolkit::index($allCourse,'id');
-        // $paidCourseDetail = $paidLessonDetail;
-
-
+        $courses=$this->getCourseService()->searchCourses(//订单中的课程zai剔除班级中的课程
+            array('courseIds'=>$courseIds,'parentId'=>'0'),
+            "latest",
+            0,
+            count($paidCourseDetail)
+        );
         $userIds = ArrayToolkit::column($paidCourseDetail, 'userId');
+        $courses = ArrayToolkit::index($courses,'id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
                 
@@ -591,8 +580,8 @@ class AnalysisController extends BaseController
             $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"statusPaid"=>"paid","statusCreated"=>"created")),
             20
         );
-        $paidDetail=$this->getOrderService()->searchOrders(
-            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00"),
+        $paidClassroomDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'),
             "latest",
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -602,13 +591,6 @@ class AnalysisController extends BaseController
         if($tab=="trend"){
             $paidClassroomData=$this->getOrderService()->analysisPaidClassroomOrderDataByTime($timeRange['startTime'],$timeRange['endTime']);
             $data=$this->fillAnalysisData($condition,$paidClassroomData);          
-        }
-
-        $paidClassroomDetail = array();
-        foreach ($paidDetail as $value) {
-            if($value['targetType']=='classroom'){
-                $paidClassroomDetail[] = $value;
-            }
         }
 
         $classroomIds = ArrayToolkit::column($paidClassroomDetail, 'targetId');
