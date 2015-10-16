@@ -61,7 +61,7 @@ abstract class BaseResource
         return $text;
     }
 
-    protected function getFileUrl($path)
+    public function getFileUrl($path)
     {
         if (empty($path)) {
             return '';
