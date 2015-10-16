@@ -52,7 +52,8 @@ class Homework extends BaseResource
             if ('material' == $item['type']) {
                 $materialMap[$item['id']] = array();
             }
-
+            
+            $item['stem'] = $this->coverDescription($item['stem']);
             if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
                 $materialMap[$item['parentId']][] = $item;
                 continue;
@@ -68,6 +69,17 @@ class Homework extends BaseResource
 
         $res['items'] = array_values($newItmes);
         return $res;
+    }
+
+    private function coverDescription($stem)
+    {
+        $ext = $this;
+        $stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($ext) {
+            $url = $ext->getFileUrl($matches[1]);
+            return "<img src='{$url}' />";
+        }, $stem);
+
+        return $stem;
     }
 
     protected function getHomeworkService()
