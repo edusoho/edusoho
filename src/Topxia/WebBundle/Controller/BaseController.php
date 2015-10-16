@@ -88,8 +88,18 @@ abstract class BaseController extends Controller
             return ;
         }
 
-        $sessionId = $this->container->get('request')->getSession()->getId();
+        $sessionId = $this->createToken($this->container->get('request'));
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
+    }
+
+    private function createToken(Request $request)
+    {
+        $userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
+        if (empty($userLoginToken)) {
+            $userLoginToken = md5($request->getSession()->getId());
+            setcookie('U_LOGIN_TOKEN', $userLoginToken, time()+3600*24*365);
+        }
+        return $userLoginToken;
     }
 
     protected function setFlashMessage ($level, $message)
