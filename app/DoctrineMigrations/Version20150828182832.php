@@ -20,7 +20,7 @@ class Version20150828182832 extends AbstractMigration
               `id` int(10) NOT NULL AUTO_INCREMENT,
               `title` varchar(255) DEFAULT NULL COMMENT '任务标题',
               `description` text COMMENT '任务描述',
-              `meta` text COMMENT '任务源信息',
+              `meta` text COMMENT '任务元信息',
               `userId` int(10) NOT NULL DEFAULT '0',
               `taskType` varchar(100) NOT NULL COMMENT '任务类型',
               `batchId` int(10) NOT NULL DEFAULT '0' COMMENT '批次Id',
