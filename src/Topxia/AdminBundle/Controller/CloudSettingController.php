@@ -87,6 +87,9 @@ class CloudSettingController extends BaseController
     
     public function keyUpdateAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
+        }
         $settings = $this->getSettingService()->get('storage', array());
 
         if ($request->getMethod() == 'POST') {
@@ -197,8 +200,8 @@ class CloudSettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
-            'storageSetting'=>$storageSetting,
-            'headLeader'=>$headLeader
+            'storageSetting' => $storageSetting,
+            'headLeader' => $headLeader
         ));
     }
 
@@ -300,5 +303,10 @@ class CloudSettingController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

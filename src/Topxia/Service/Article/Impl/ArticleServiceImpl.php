@@ -101,6 +101,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
 
+        $this->dispatchEvent('article.create', $article);
+
         return $article;
     }
 

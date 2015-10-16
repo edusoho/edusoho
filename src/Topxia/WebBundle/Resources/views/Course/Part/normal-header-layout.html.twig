@@ -7,7 +7,7 @@
       {% block content %}{% endblock %}
 
       {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('course_manage', {id:course.id}) }}" class="btn btn-default setting" title="课程管理">
+        <a href="{{ path('course_manage', {id:course.id}) }}" class="btn btn-default setting hidden-xs hidden-sm" title="课程管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}

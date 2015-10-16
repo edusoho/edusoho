@@ -52,16 +52,16 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, array($type, $mediaId));
     }
 
-    public function findMinStartTimeByCourseId($courseId)
-    {
-        $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
-        return $this->getConnection()->fetchAll($sql,array($courseId));
-    }
-
     public function findLessonsByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY seq ASC";
         return $this->getConnection()->fetchAll($sql, array($courseId));
+    }
+
+    public function findMinStartTimeByCourseId($courseId)
+    {
+        $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
+        return $this->getConnection()->fetchAll($sql,array($courseId));
     }
 
     public function findLessonIdsByCourseId($courseId)
@@ -216,5 +216,4 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
             return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
-
 }
