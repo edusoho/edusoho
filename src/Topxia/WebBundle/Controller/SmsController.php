@@ -57,7 +57,9 @@ class SmsController extends BaseController
         $parameters = array();
         if ($targetType == 'classroom') {
             $classroom = $this->getClassroomService()->getClassroom($id);
-            $parameters['classroom_title'] = '班级：《'.$classroom['title'].'》';
+            $classroomSetting  = $this->getSettingService()->get("classroom");
+            $classroomName = isset($classroomSetting['name'])?$classroomSetting['name']:'班级';
+            $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
             $description = $parameters['classroom_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'course') {

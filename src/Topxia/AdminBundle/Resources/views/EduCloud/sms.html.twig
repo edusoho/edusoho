@@ -302,7 +302,7 @@
                       <div id="article-property-tips5-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】同学们，班级：《班级名称》现已开始报名！链接地址”<br>
+                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】同学们，{{ setting('classroom.name')|default("班级") }}：《班级名称》现已开始报名！链接地址”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           所有用户
                           <br>
