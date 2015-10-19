@@ -22,7 +22,7 @@ class MyTaskController extends BaseController
 				if($task['taskType']=='studyplan'){
 					if ($task['targetType'] == 'homework') {
 						$tasksevents[$key]['url'] = $this->generateUrl('course_homework_start_do', array(
-							'courseId'=>$task['courseId'],'homeworkId'=>$task['objectId']));
+							'courseId'=>$task['meta']['courseId'],'homeworkId'=>$task['targetId']));
 					} else {
 						$tasksevents[$key]['url'] = $this->generateUrl('course_learn',array(
 						'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
