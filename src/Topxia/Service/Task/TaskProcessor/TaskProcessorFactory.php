@@ -12,7 +12,13 @@ class TaskProcessorFactory
     		throw new Exception("任务类型不存在不存在");
     	}
 
-    	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'TaskProcessor';
+    	if ($target == 'studyPlan') {
+    		$namespace = 'ClassroomPlan\Service\ClassroomPlan\TaskProcessor';
+    	} else {
+    		$namespace = __NAMESPACE__;
+    	}
+
+    	$class = $namespace . '\\' . ucfirst($target). 'TaskProcessor';
 
     	return new $class();
     }

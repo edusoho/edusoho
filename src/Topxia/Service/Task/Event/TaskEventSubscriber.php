@@ -5,7 +5,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Task\TaskProcessor\TaskProcessorFactory;
 
 class TaskEventSubscriber implements EventSubscriberInterface
 {
@@ -13,7 +12,13 @@ class TaskEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'task.finished' => 'onFinished',
+            //'task.finished' => 'onFinished',
+
+            'course.lesson_finish' => 'onFinished',
+            'homework.finish' => 'onHomeworkFinished',
+            'homework.check' => 'onFinished',
+            'testpaper.reviewed' => 'onTestPaperFinished',
+            'testpaper.finish' => 'onTestPaperFinished',
         );
     }
 
@@ -21,20 +26,47 @@ class TaskEventSubscriber implements EventSubscriberInterface
     {
         $targetObject = $event->getSubject();
         $taskType = $event->getArgument('taskType');
-        $userId = $event->getArgument('userId');
 
-        $taskProcessor = $this->getTaskProcessor($taskType);
-
-        $taskProcessor->finishTask($targetObject, $userId);
+        $this->_finishTask($taskType, $targetObject);
     }
 
-    
-
-    protected function getTaskProcessor($type)
+    public function onHomeworkFinished(ServiceEvent $event)
     {
-        return TaskProcessorFactory::create($type);
+        $homework = $event->getSubject();
+        $homeworkResult = $event->getArgument('homeworkResult');
+        $targetObject = array('id'=>$homework['id'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus']);
+
+        $this->_finishTask('studyPlan', $targetObject);
     }
 
-    
+    public function onTestPaperFinished(ServiceEvent $event)
+    {
+        $testpaper = $event->getSubject();
+        $testpaperResult = $event->getArgument('testpaperResult');
+        $target = explode('-', $testpaperResult['target']);
+        
+        if (isset($target[3])) {
+            $lesson = $this->getCourseService()->getLesson($target[3]);
+
+            $targetObject = array('id'=>$lesson['id'], 'type'=>'testpaper', 'passedStatus'=>$testpaperResult['passedStatus']);
+            $this->_finishTask('studyPlan',$targetObject);
+        }
+
+    }
+
+    private function _finishTask($taskType, $targetObject)
+    {
+        $this->getTaskService()->finishTask($targetObject, $taskType);
+    }
+
+    protected function getTaskService()
+    {
+        return ServiceKernel::instance()->createService('Task.TaskService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
 
 }

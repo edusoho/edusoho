@@ -62,6 +62,44 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->searchTaskCount($conditions);
     }
 
+    public function finishTask(array $targetObject, $taskType)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'userId' => $user->id,
+            'taskType' => $taskType,
+            'targetId' => $targetObject['id'],
+            'targetType' => $targetObject['type'],
+            'status' => 'active'
+        );
+        $getTask = $this->getTaskByParams($conditions);
+
+        if ($getTask) {
+            $canFinished = $this->_canFinished($getTask, $targetObject);
+
+            if ($canFinished) {
+                $updateInfo = array('status'=>'completed', 'completedTime'=>time());
+                return $this->updateTask($getTask['id'], $updateInfo);
+            }
+            
+        }
+
+        return array();
+    }
+
+    private function _canFinished($task, $targetObject)
+    {
+        $canFinished = true;
+        if ($task['required'] && ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper')) {
+            if ($targetObject['passedStatus'] == 'unpassed' || $targetObject['passedStatus'] == 'none') {
+                $canFinished = false;
+            }
+        }
+        
+        return $canFinished;
+    }
+
     protected function getTaskDao()
     {
         return $this->createDao('Task.TaskDao');
