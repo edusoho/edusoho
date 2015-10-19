@@ -85,7 +85,7 @@
                     checked="checked"
                   {% endif %}> 关闭
                 </label>
-                <p class="help-block">短信开始使用后，将收取0.07元/条的费用</p>
+                <p class="help-block">短信最低￥0.055/条，点击<a href="http://open.edusoho.com/quotation/cloud/sms">这里</a>了解详情。</p>
               </div>
             </div>
 
@@ -105,8 +105,6 @@
                 </div>
                 <div class="col-md-5 controls">
                   <input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
-                  <p class="help-block"></p>
-                  <p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
                 </div>
                 <div class="col-md-2">
                   <span class="btn btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
@@ -122,8 +120,6 @@
                 </div>
                 <div class="col-md-5 controls">
                   <input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
-                  <p class="help-block"></p>
-                  <p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
                 </div>
               </div>
             {% endif %}
@@ -142,8 +138,8 @@
                     <table class="table table-striped order-table">
                       <tbody>
                         <tr> 
-                          <th style="text-align: center;" width="30%">短信内容</th>
-                          <td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效</td> 
+                          <th style="text-align: center;" width="30%">网校名称</th>
+                          <td>{{ setting('cloud_sms.sms_school_candidate_name')|default('') }}</td> 
                         </tr>
                         <tr> 
                           <th style="text-align: center;" width="30%">审核时间</th>
@@ -153,10 +149,6 @@
                               ，期间短信验证功能仍可以正常使用
                             {% endif %}
                           </td> 
-                        </tr>
-                        <tr> 
-                          <th style="text-align: center;" width="30%">短信价格</th> 
-                          <td>0.07元/条</td> 
                         </tr>
                         <tr> 
                           <th style="text-align: center;" width="30%">审核状态</th> 
@@ -199,7 +191,7 @@
                       <div id="article-property-tips1-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -222,7 +214,7 @@
                       <div id="article-property-tips2-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -243,7 +235,7 @@
                       <div id="article-property-tips3-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -264,7 +256,7 @@
                       <div id="article-property-tips4-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -295,14 +287,14 @@
                   <tr>
                     <td rowspan="9" style="text-align:center;vertical-align:middle;font-size:18px;">教务通知
                     </td>
-                    <td>新班级发布</td>
+                    <td>新{{ setting('classroom.name')|default("班级") }}发布</td>
                     <td>
                       5
                       <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips5" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
                       <div id="article-property-tips5-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】同学们，{{ setting('classroom.name')|default("班级") }}：《班级名称》现已开始报名！链接地址”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】同学们，{{ setting('classroom.name')|default("班级") }}：《班级名称》现已开始报名！{{setting('cloud_sms.sms_school_name')|default('')}} 链接地址”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           所有用户
                           <br>
@@ -335,7 +327,7 @@
                       <div id="article-property-tips6-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】同学们，课程：《课程名称》现已开始报名！链接地址”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】同学们，课程：《课程名称》现已开始报名！{{setting('cloud_sms.sms_school_name')|default('')}} 链接地址”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           所有用户（或者班级用户）
                           <br>
@@ -365,7 +357,7 @@
                       <div id="article-property-tips7-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的课程：《课程名称》－课时：《课时名》已发布！链接地址”<br><span <span style="color:blue;"> 发送对象:</span><br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的课程：《课程名称》－课时：《课时名》已发布！{{setting('cloud_sms.sms_school_name')|default('')}} 链接地址”<br><span <span style="color:blue;"> 发送对象:</span><br>
                           课程用户
                           <br>
                         </div>
@@ -397,7 +389,7 @@
                       <div id="article-property-tips8-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】课程：《课程名》－课时：《课时名》将在［开播时间］开播！链接地址”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】课程：《课程名》－课时：《课时名》将在［开播时间］开播！{{setting('cloud_sms.sms_school_name')|default('')}} 链接地址”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           课程用户
                           <br>
@@ -445,7 +437,7 @@
                       <div id="article-property-tips9-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】课程：《课程名》－课时《课时名》将在［开播时间］开播！链接地址”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】课程：《课程名》－课时《课时名》将在［开播时间］开播！{{setting('cloud_sms.sms_school_name')|default('')}} 链接地址”<br>
                         </div>
                         <span style="color:blue;"> 发送对象:</span><br>
                           课程用户
@@ -475,7 +467,7 @@
                       <div id="article-property-tips10-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】课程：《课程名》－课时：《课时名》将在［开播时间］开播！链接地址”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】课程：《课程名》－课时：《课时名》将在［开播时间］开播！{{setting('cloud_sms.sms_school_name')|default('')}} 链接地址”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           课程用户
                           <br>
@@ -505,7 +497,7 @@
                       <div id="article-property-tips11-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧！{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -542,7 +534,7 @@
                       <div id="article-property-tips12-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的课程：《课程名》-作业：《课时名》的试卷已被老师批阅，快来看看吧！”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧！{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -589,7 +581,7 @@
                       <div id="article-property-tips13-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买课程《课程名称》，支付［订单金额］”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】你已成功购买课程《课程名称》，支付［订单金额］。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -621,7 +613,7 @@
                       <div id="article-property-tips14-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买班级《班级名称》，支付［订单金额］”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】你已成功购买班级《班级名称》，支付［订单金额］。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -637,7 +629,7 @@
                       <div id="article-property-tips15-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买《会员名称》，支付［订单金额］”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】你已成功购买《会员名称》，支付［订单金额］。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
@@ -653,7 +645,7 @@
                       <div id="article-property-tips16-html" style="display:none;">
                         <div style="width:250px;font-size:14px;">
                           <span style="color:blue;"> 短信内容:</span><br>
-                          “【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】你已成功购买《虚拟币面值》《单位》，支付［订单金额］”<br>
+                          “【<span id="js-sms-school-name">网校通知</span>】你已成功购买《虚拟币面值》《单位》，支付［订单金额］。{{setting('cloud_sms.sms_school_name')|default('')}}”<br>
                           <span style="color:blue;"> 发送对象:</span><br>
                           单个用户
                           <br>
