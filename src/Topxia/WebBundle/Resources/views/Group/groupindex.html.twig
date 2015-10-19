@@ -21,8 +21,10 @@
         {% endif %}
       </ul>
       {% if paginator.currentPage == paginator.firstPage %}
-        <div class="alert alert-info clearfix">
+        <div class="alert alert-info ">
+          <div class="clearfix">
           {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
+          </div>
           <hr>
           <div class="">
             {% if is_groupmember==0%}

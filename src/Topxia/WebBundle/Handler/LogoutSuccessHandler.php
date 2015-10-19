@@ -19,6 +19,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
         if ($this->getAuthService()->hasPartnerAuth()) { 
             $user = ServiceKernel::instance()->getCurrentUser();
             setcookie("REMEMBERME");
+            setcookie('U_LOGIN_TOKEN');
             if (!$user->isLogin()) {
                 return parent::onLogoutSuccess($request);
             }
