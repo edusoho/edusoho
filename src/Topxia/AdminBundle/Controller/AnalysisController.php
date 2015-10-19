@@ -510,7 +510,7 @@ class AnalysisController extends BaseController
         }
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>'course')),
             20
         );
 
