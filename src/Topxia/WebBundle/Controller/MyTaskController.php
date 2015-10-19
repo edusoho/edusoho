@@ -20,9 +20,15 @@ class MyTaskController extends BaseController
 				$tasksevents[$key]['end'] = date("Y-m-d H:i:s",strtotime('+1 day', $task['taskEndTime']));
 				$tasksevents[$key]['id'] = $task['id'];
 				if($task['taskType']=='studyplan'){
+					if ($task['targetType'] == 'homework') {
+						$tasksevents[$key]['url'] = $this->generateUrl('course_homework_start_do', array(
+							'courseId'=>$task['courseId'],'homeworkId'=>$task['objectId']));
+					} else {
 						$tasksevents[$key]['url'] = $this->generateUrl('course_learn',array(
-							'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
+						'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
 					}
+				}
+
 				if($task['status']=='completed'){
 					$tasksevents[$key]['color']='#46c37b';
 				}else{
