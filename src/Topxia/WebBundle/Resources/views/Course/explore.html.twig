@@ -29,6 +29,43 @@
   {% set fliter = fliter|default('all') %}
   {% set orderBy = orderBy|default('latest')%}
   {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
+  <div class="es-filter">
+    <ul class="nav nav-sort">
+      <li>
+        <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %} active {% endif %}">
+          最新
+        </a>
+      </li>
+      <li>
+        <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %} active {% endif %}">
+          最热
+        </a>
+      </li>
+      <li>
+        <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">
+          推荐
+        </a>
+      </li>
+    </ul>
+    <div class="filter">
+      <div class="btn-group">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i> {{ dict_text('searchCourseType',fliter|default('all')) }}</button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy|default('latest')}) }}" class="{% if (fliter == 'all') %}active {% endif %}">金牌会员</a></li>
+          <li><a href="{{ path('course_explore', {category:category, fliter:'free',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'free') %}active {% endif %}">银牌会员</a></li>
+          <li><a href="{{ path('course_explore', {category:category, fliter:'live',orderBy: orderBy|default('latest')}) }}" class="{% if (fliter == 'live') %}active {% endif %}">铜牌会员</a></li>
+        </ul>
+      </div>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="" value=""> 直播课程
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" id="" value=""> 免费课程
+      </label>
+    </div>
+  </div>
+
+  {# 做完删除
   <div class="course-filter" id="course-filter">
     <ul class="nav nav-pills hidden-xs" role="tablist">
       <li role="presentation" class="{% if (fliter == 'all') %}active {% endif %}"><a href="{{ path('course_explore',{category:category, fliter:'all',orderBy : orderBy}) }}">全部课程</a></li>
@@ -57,6 +94,7 @@
       </a>
     </div>
   </div>
+  #}
   <div class="course-list">
     <div class="row">
       {% if courses %}
