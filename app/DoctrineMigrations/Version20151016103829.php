@@ -53,6 +53,10 @@ class Version20151016103829 extends AbstractMigration
             if($this->isFieldExist('exercise', 'pId')){
               $this->addSql("ALTER TABLE `exercise` CHANGE `pId` `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制练习的Id'"); 
             }
+
+            if($this->isFieldExist('exercise_item', 'pId')){
+              $this->addSql("ALTER TABLE `exercise_item` DROP `pId`"); 
+            }
         }
     }
 

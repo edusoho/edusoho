@@ -3638,7 +3638,7 @@ class CourseServiceTest extends BaseTestCase
     public function testFindCoursesByParentIdAndLocked()
     {
         $course1 = array('title' => 'test-one','parentId'=>1,'locked'=>1);
-        $course1 = $this->getCourseService()->createCourse($course1);
+        $course1 = $this->getCourseDao()->addCourse($course1);
         $result = $this->getCourseService()->findCoursesByParentIdAndLocked(1,1);
         $this->assertEquals(1,count($result));
     }
@@ -3737,6 +3737,12 @@ class CourseServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+
+    protected function getCourseDao()
+    {
+        return $this->getServiceKernel()->createDao('Course.CourseDao');
+    }
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
