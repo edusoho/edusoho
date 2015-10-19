@@ -178,6 +178,7 @@ analysisDateType:
     lesson: 新增课时数
     joinLesson: 加入学习数
     paidLesson: 购买课程数
+    paidClassroom: 购买班级数
     finishedLesson: 完成课时学习数
     videoViewed: 视频观看数
     cloudVideoViewed: └─ 云视频观看数
