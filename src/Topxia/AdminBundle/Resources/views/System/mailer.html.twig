@@ -35,6 +35,7 @@
         </div>
         <div class="controls col-md-8 radios">
           {{ radios('enabled', {1:'开启', 0:'关闭'}, mailer.enabled) }}
+          <p class="help-block">需要登录邮箱，在邮箱设置中开启smtp服务才能发送验证邮件</p>
         </div>
       </div>
 
@@ -44,7 +45,7 @@
         </div>
         <div class="controls col-md-8">
           <input type="text" id="host" name="host" class="form-control" value="{{mailer.host}}">
-          <p class="help-block">例：smtp.yourmail.com</p>
+          <p class="help-block"> 每种邮箱的地址都不相同，请根据使用的邮箱类型，查找邮箱服务器地址，如：smtp.yourmail.com</p>
         </div>
       </div>
       <p></p>
@@ -75,6 +76,7 @@
         </div>
         <div class="controls col-md-8">
           <input type="password" id="password" name="password" class="form-control" value="{{mailer.password}}">
+          <p class="help-block">smtp密码：即邮箱密码</p>
         </div>
       </div>
      <p></p>
