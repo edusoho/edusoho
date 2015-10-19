@@ -386,6 +386,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
 		$favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
 		return CourseSerialize::unserializes($favoriteCourses);
+	}
+
+	public function findFavoritesCountByCourseId($courseId)
+	{
+		return $this->getFavoriteDao()->findFavoritesCountByCourseId($courseId);
 	}	
 
 	public function createCourse($course)

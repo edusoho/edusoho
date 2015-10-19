@@ -32,6 +32,7 @@ define(function(require, exports, module) {
 
         var $list = $("#course-item-list").sortable({
             distance: 20,
+            itemSelector: '.item-lesson, .item-chapter',
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 sortList($list);

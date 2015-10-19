@@ -324,7 +324,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         $map = array();
         foreach ($homeworks as $homework) {
-            $fields = ArrayToolkit::parts($homework, array('description', 'itemCount', 'createdUserId', 'updatedUserId'));
+            $fields = ArrayToolkit::parts($homework, array('description', 'itemCount', 'createdUserId', 'updatedUserId', 'correctPercent'));
 
             $fields['courseId'] = $newCourse['id'];
             if ($homework['lessonId']) {

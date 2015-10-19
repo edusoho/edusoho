@@ -1,101 +1,91 @@
-.class-join-header {
+// 用于在学、在教班级
+.class-wide-list {
   .title {
-    margin: 0 100px 20px 0;
-    font-size: 24px;
+    margin-bottom: 20px;
+    font-size: 20px;
     overflow: hidden;
-    @media (min-width: @screen-md-min) {
-      height: 36px;
-      line-height: 36px;
-    }
-    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    height: 36px;
+    line-height: 36px;
+    @media (max-width: @screen-sm-max) {
       height: 30px;
       line-height: 30px;
       font-size: 18px;
     }
-    @media (max-width: @screen-xs-max) {
-      margin-right: 0;
-      font-size: 18px;
-    }
-    .label {
-      .inline-block;
-    }
   }
   .class-metas {
-    color: #999;
-    font-size: 16px;
+    color: @gray;
     .course-num {
       margin-right: 40px;
     }
   }
   .class-student {
-    font-size: 18px;
-    line-height: 18px;
+    font-size: 16px;
     margin-bottom: 20px;
-    color: #999;
+    color: @gray;
     .fa {
       margin-right: 10px;
     }
   }
 }
 
-// 待删除
-.classroom-block .classroom-img {
-  width: 150px;
-  float: left;
-  margin-right: 20px;
-}
+// 待删除-有页面，但无调用的地方
+// .classroom-block .classroom-img {
+//   width: 150px;
+//   float: left;
+//   margin-right: 20px;
+// }
 
-@media (min-width: 992px) and (max-width: 1199px) {
-  .classroom-block .classroom-img {
-    width: 120px;
-    margin-right: 10px;
-  }
-}
+// @media (min-width: 992px) and (max-width: 1199px) {
+//   .classroom-block .classroom-img {
+//     width: 120px;
+//     margin-right: 10px;
+//   }
+// }
 
-@media (max-width: 767px) {
-  .classroom-block .classroom-img {
-    width: 120px;
-    margin-right: 10px;
-  }
-}
+// @media (max-width: 767px) {
+//   .classroom-block .classroom-img {
+//     width: 120px;
+//     margin-right: 10px;
+//   }
+// }
 
-.classroom-block .classroom-img img {
-  .border-radius;
-}
+// .classroom-block .classroom-img img {
+//   .border-radius;
+// }
 
-.classroom-block .title {
-  font-size: 14px;
-  margin: 6px 0 6px 0;
-  height: 40px;
-  overflow: hidden;
-}
+// .classroom-block .title {
+//   font-size: 14px;
+//   margin: 6px 0 6px 0;
+//   height: 40px;
+//   overflow: hidden;
+// }
 
-@media (min-width: 992px) and (max-width: 1199px) {
-  .classroom-block .title {
-    margin: 0 0 6px 0;
-  }
-}
+// @media (min-width: 992px) and (max-width: 1199px) {
+//   .classroom-block .title {
+//     margin: 0 0 6px 0;
+//   }
+// }
 
-@media (max-width: 767px) {
-  .classroom-block .title {
-    margin: 0 0 6px 0;
-  }
-}
+// @media (max-width: 767px) {
+//   .classroom-block .title {
+//     margin: 0 0 6px 0;
+//   }
+// }
 
-.classroom-block .content {
-  font-size: 14px;
-  color: #bbb;
-  margin-top: 4px;
-}
+// .classroom-block .content {
+//   font-size: 14px;
+//   color: #bbb;
+//   margin-top: 4px;
+// }
 
-@media (min-width: 992px) and (max-width: 1199px) {
-  .classroom-block .content {
-    margin-top: 0;
-  }
-}
+// @media (min-width: 992px) and (max-width: 1199px) {
+//   .classroom-block .content {
+//     margin-top: 0;
+//   }
+// }
 
-@media (max-width: 767px) {
-  .classroom-block .content {
-    margin-top: 0;
-  }
-}
+// @media (max-width: 767px) {
+//   .classroom-block .content {
+//     margin-top: 0;
+//   }
+// }
