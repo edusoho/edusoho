@@ -26,4 +26,6 @@ interface TaskService
 
     public function searchTaskCount($conditions);
 
+    public function finishTask(array $targetObject, $taskType);
+
 }

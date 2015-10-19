@@ -577,7 +577,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
-        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedScore'] ? 'passed' : 'unpassed';
+        if ($testpaper['passedScore'] > 0) {
+            $fields['passedStatus'] = $fields['score'] >= $testpaper['passedScore'] ? 'passed' : 'unpassed';
+        } else {
+            $fields['passedStatus'] = 'none';
+        }
 
         $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
         $fields['endTime'] = time();
@@ -593,7 +597,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
 
-        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
+        /*if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
             $targetArr = explode('/',$testpaperResult['target']);
             $lessonInfo = explode('-',$targetArr[1]);
             $this->dispatchEvent(
@@ -601,7 +605,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$testpaperResult['passedStatus']), 
                     array('taskType'=>'studyPlan', 'userId'=>$userId))
             );
-        }
+        }*/
 
         return $testpaperResult;
     }
@@ -638,9 +642,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testResults = array();
         
         $teacherSay = $field['teacherSay'];
-        $passedStatus = $field['passedStatus'];
         unset($field['teacherSay']);
-        unset($field['passedStatus']);
 
 
         $items = $this->getTestpaperItemDao()->findItemsByTestpaperId($paperId);
@@ -679,20 +681,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
 
-        $testPaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
+        $result = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
             'score' => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
             'checkTeacherId' => $teacherId,
             'checkedTime' => time(),
-            'teacherSay' => $teacherSay,
-            'passedStatus' => $passedStatus
+            'teacherSay' => $teacherSay
         ));
 
-
         $this->dispatchEvent('testpaper.reviewed', $testPaperResult);
+        $this->dispatchEvent(
+            'testpaper.reviewed', 
+            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
+        );
         
-        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
+        /*if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
             $targetArr = explode('/',$testpaperResult['target']);
             $lessonInfo = explode('-',$targetArr[1]);
             $this->dispatchEvent(
@@ -700,10 +704,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$passedStatus), 
                     array('taskType'=>'studyPlan', 'userId'=>$testpaperResult['userId']))
             );
-        }
+        }*/
 
         return $testPaperResult;
-
     }
 
     public function submitTestpaperAnswer($id, $answers)
@@ -977,10 +980,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets($targets);
     }
 
-    public function getItemsCountByTestIdAndType ($conditions, $groupBy='')
-    {
-        return $this->getTestpaperItemDao()->getItemsCountByTestIdAndType($conditions, $groupBy);
-    }
+
 
 
 	protected function getTestpaperDao()
@@ -1026,8 +1026,4 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
-    protected function getAppService()
-    {
-        return $this->createService('CloudPlatform.AppService');
-    }
 }

@@ -30,7 +30,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onTestPaperReviewed(ServiceEvent $event)
     {
-        $result = $event->getSubject();
+        $testpaper = $event->getSubject();
+        $result = $event->getArgument('testpaperResult');
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         $testpaper['target'] = explode('-', $testpaper['target']);
