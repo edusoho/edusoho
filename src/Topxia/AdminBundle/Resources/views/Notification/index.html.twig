@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th width="40%">站内信通知标题</th>
+            <th>发布时间</th>
             <th>创建时间</th>
             <th>发布人</th>
             <th>状态</th>
@@ -20,6 +21,11 @@
             {% for batchnotification in batchnotifications %}
                 <tr>
                     <td><a href="javascript:;" data-url="{{ path('batch_notification_show',{ id:batchnotification.id }) }}"data-toggle="modal" data-target="#modal">{{batchnotification.title|raw}}</a></td>
+                    {% if batchnotification.sendedTime == 0 %}
+                    <td>---- - - :</td>
+                    {% else %}
+                    <td>{{batchnotification.sendedTime|date('Y-m-d H:i')}}</td>
+                    {% endif %}
                     <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
                     <td>{{users[batchnotification.fromId].nickname}}</td>
                     {% if batchnotification.published %}<td>已发送</td>{% else %}<td>未发送</td>{% endif %}

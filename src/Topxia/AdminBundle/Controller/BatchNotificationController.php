@@ -37,17 +37,13 @@ class BatchNotificationController extends BaseController
             $batchnotification['fromId'] = $user['id'];
             $batchnotification['content'] = empty($batchnotification['content']) ? '' :$batchnotification['content'] ;
             $batchnotification['title'] = empty($batchnotification['title']) ? '' : $batchnotification['title'];
-            if(empty($batchnotification['content']))
-            {
-            	$this->createMessageResponse('error','群发内容为空');
-            }
             if(empty($batchnotification['title']))
             {
                 $this->createMessageResponse('error','群发标题为空');
             }
             $batchnotification['createdtime'] = time();
             //（可扩展）默认发送全站私信，可改成群发某个组或者班级成员等
-            $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'], 'global', 0 ,'text',0);
+            $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'],0, 'global', 0 ,'text',0);
             return $this->redirect($this->generateUrl('admin_batch_notification'));
         }
         return $this->render('TopxiaAdminBundle:Notification:notification-modal.html.twig',array(
@@ -82,9 +78,32 @@ class BatchNotificationController extends BaseController
             return $this->createJsonResponse(array("status" =>"failed"));
         }
         if ($request->getMethod() == "POST" ) {
+            $batchnotification['sendedTime'] = time();
             $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id,$batchnotification);
         }
         return $this->createJsonResponse(array("status" =>"success"));
+    }
+    public function directSendAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $batchnotification = $request->request->all();
+
+        if ($request->getMethod() == "POST" ) {
+            $batchnotification['fromId'] = $user['id'];
+            $batchnotification['content'] = empty($batchnotification['content']) ? '' :$batchnotification['content'] ;
+            $batchnotification['title'] = empty($batchnotification['title']) ? '' : $batchnotification['title'];
+            if(empty($batchnotification['title']))
+            {
+                $this->createMessageResponse('error','群发标题为空');
+            }
+            $batchnotification['createdtime'] = time();
+            //（可扩展）默认发送全站私信，可改成群发某个组或者班级成员等
+            $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'],time(), 'global', 0 ,'text',1);
+            return $this->redirect($this->generateUrl('admin_batch_notification'));
+        }
+        return $this->render('TopxiaAdminBundle:Notification:notification-modal.html.twig',array(
+            'batchnotification' => $batchnotification
+            ));
     }
     public function deleteAction(Request $request,$id)
     {

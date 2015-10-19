@@ -6,7 +6,7 @@
 
 {% set batchnotification = batchnotification|default(null) %}
 
-{% block page_title %}群发通知{% endblock %}
+{% block page_title %}全站站内通知{% endblock %}
 
 {% block main %}
 
@@ -50,6 +50,8 @@
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	    <button id="notification-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">确定</button>
 			<a class="btn btn-link" href="{{ path('admin_batch_notification') }}">返回</a>
+			<a class="btn btn-link" href="javascript:;" id="directsend" data-herfurl="{{ path('admin_batch_notification') }}"
+			data-url="{{path('admin_batch_notification_directsend')}}">直接发送</a>
 		</div>		
 	</div>
 </form>

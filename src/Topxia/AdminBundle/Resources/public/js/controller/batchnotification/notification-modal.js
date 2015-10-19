@@ -12,8 +12,13 @@ define(function(require, exports, module) {
         $modal = $form.parents('.modal');
 
         var validator = _initValidator($form, $modal);
-        console.log(validator);
         var $editor = _initEditorFields($form, validator);
+         $("#directsend").click(function(){
+            CKupdate();
+            $.post($("#directsend").data('url'),$form.serialize(),function(){
+               window.location.href = $("#directsend").data('herfurl');
+            });
+         });
     };
     function _initEditorFields($form, validator) {
 
@@ -46,16 +51,14 @@ define(function(require, exports, module) {
             required: true
         });
 
-        validator.addItem({
-            element: '[name=content]',
-            required: true
-        });
         return validator;
     }
+
     function CKupdate() {
     for ( instance in CKEDITOR.instances ) {
         CKEDITOR.instances[instance].updateElement(); 
     }
+    
 }
     
 });

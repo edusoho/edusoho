@@ -6,15 +6,13 @@ use Topxia\Service\User\BatchNotificationService;
 
 class BatchNotificationServiceImpl extends BaseService implements BatchNotificationService
 {
-    public function sendBatchNotification($fromId, $title,$content,$createdTime = null,$targetType,$targetId = 0,$type = "text",$published = 0){
+    public function sendBatchNotification($fromId, $title,$content,$createdTime = null,$sendedTime,$targetType,$targetId = 0,$type = "text",$published = 0){
         if (empty($fromId)) {
             throw $this->createServiceException("发件人未注册!");
         }
-        if(empty($content)){
-            throw $this->createServiceException("抱歉,不能发送空内容!"); 
-        }
         $createdTime = empty($createdTime) ? time() : $createdTime;
-        $notification = $this->addBatchNotification($type,$title,$fromId, $content,$targetType,$targetId, $createdTime,$published);
+        $sendedTime = $sendedTime  ? time() : $sendedTime;
+        $notification = $this->addBatchNotification($type,$title,$fromId, $content,$targetType,$targetId, $createdTime,$sendedTime,$published);
         return $notification;
     }
 
@@ -58,7 +56,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
                         'type'  => $batchNotification['targetType'],
                         'content' => $content,
                         'parentId'  => $batchNotification['id'],
-                        'createdTime'  =>  $batchNotification['createdTime'],
+                        'createdTime'  =>  $batchNotification['sendedTime'],
                         );
                     $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
                     $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
@@ -86,7 +84,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         return true;
     }
 
-    protected function addBatchNotification($type,$title,$fromId,$content,$targetType,$targetId,$createdTime,$published){
+    protected function addBatchNotification($type,$title,$fromId,$content,$targetType,$targetId,$createdTime,$sendedTime,$published){
         $batchNotification = array(
             'type' => $type,
             'title' =>$title,
@@ -95,6 +93,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
             'targetType' => $targetType,
             'targetId' => $targetId,
             'createdTime' => $createdTime,
+            'sendedTime' => $sendedTime,
             'published' =>$published
         );
         return $this->getBatchNotificationDao()->addBatchNotification($batchNotification);

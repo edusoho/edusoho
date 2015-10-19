@@ -13,11 +13,13 @@
           {{ batchnotification.title }} 
         </h2>
       </div>
-        <div class="col-md-9">
+       <div class="row">
+        <div class="col-md-11 text-muted fsn mrm">
           <p>
-            发送时间 ：{{ batchnotification.createdTime|date_format }}  
+            发布时间 ：{{ batchnotification.sendedTime|date_format }}  
           </p> 
         </div>
+       </div>
       <div class="row"> 
         <h4 class="col-md-11 editor-text"> 
           {{ batchnotification.content|raw }} 

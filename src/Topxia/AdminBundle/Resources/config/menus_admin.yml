@@ -426,12 +426,12 @@ admin_cloud_bill:
     parent: admin_my_cloud
     router_name: admin_cloud_bill
 admin_batch_notification:
-    name: 全站信通知
+    name: 全站站内通知
     parent: admin_operation
     before: admin_operation_block
     group: 2
 admin_batch_notification_create:
-    name: 群发通知
+    name: 创建站内通知
     parent: admin_batch_notification
     group: 2
 admin_announcement:
