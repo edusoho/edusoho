@@ -48,9 +48,7 @@
      </div>
   </form>
 
-  <table class="table table-striped table-hover" id="order-table">
-    {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
-  </table>
+  {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
 
   <div class="paginator">
     {{ web_macro.paginator(paginator) }} 
