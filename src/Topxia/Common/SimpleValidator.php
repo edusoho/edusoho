@@ -54,12 +54,7 @@ class SimpleValidator
         return !!preg_match('/^1\d{10}$/', $value);
     }
 
-    public static function classroomId($value)
-    {
-        return !!preg_match('/^(\d+,?)*\d+$/', $value);
-    }                       
-
-    public static function courseId($value)
+    public static function numbers($value)
     {
         return !!preg_match('/^(\d+,?)*\d+$/', $value);
     }
