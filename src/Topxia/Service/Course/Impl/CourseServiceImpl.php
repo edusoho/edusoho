@@ -1626,6 +1626,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $statuses;
 	}
 
+	public function getLearnByUserIdAndLessonId($userId, $lessonId)
+	{
+		return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+	}
+
 	public function findUserLearnedLessons($userId, $courseId)
 	{
 		return ArrayToolkit::index($this->getLessonLearnDao()->findLearnsByUserIdAndCourseId($userId, $courseId) ? : array(), 'lessonId');
