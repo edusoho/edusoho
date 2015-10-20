@@ -85,7 +85,7 @@
       </div> 
   </div>
   </fieldset>
-
+<fieldset id="third_login">
   {% for type, client in clients %}
     <fieldset data-role="oauth2-setting" data-type="{{ type }}">
       <legend>{{ client.admin_name }}</legend>
@@ -165,6 +165,7 @@
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </fieldset>
 </form>
 
 {% endblock %}
