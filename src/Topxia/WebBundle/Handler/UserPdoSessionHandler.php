@@ -70,6 +70,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     const LOCK_TRANSACTIONAL = 2;
 
+    const MAX_LIFE_TIME = 1800;
+
     /**
      * @var \PDO|null PDO instance or null when not connected yet
      */
@@ -279,7 +281,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         if (null === $this->pdo) {
             $this->connect($this->dsn ?: $savePath);
         }
-        $maxlifetime = (int) ini_get('session.gc_maxlifetime');
+        $maxlifetime = self::MAX_LIFE_TIME;
         $this->gc($maxlifetime);
         return true;
     }
@@ -350,7 +352,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        $maxlifetime = (int) ini_get('session.gc_maxlifetime');
+        $maxlifetime = self::MAX_LIFE_TIME;
 
         $token = $this->context->getToken();
 
