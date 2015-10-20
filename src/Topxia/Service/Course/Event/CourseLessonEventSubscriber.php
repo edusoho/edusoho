@@ -14,14 +14,18 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'course.lesson.create' => array('onCourseLessonCreate', 0),
-            'course.lesson.delete' => array('onCourseLessonDelete', 0),
-            'course.teacher.update' => array('onCourseTeacherUpdate', 0),
+            'course.lesson.delete' => array('onCourseLessonDelete', 0),           
             'course.lesson.update'=> 'onCourseLessonUpdate',
             'course.lesson.generate.replay'=>'onCourseLessonGenerateReplay',
             'course.lesson.publish'=> 'onCourseLessonPublish',
             'course.lesson.unpublish'=> 'onCourseLessonUnpublish',
             'course.lesson_start' => 'onLessonStart',
-            'course.lesson_finish' =>'onLessonFinish'
+            'course.lesson_finish' =>'onLessonFinish',
+            'material.create' => 'onMaterialCreate',
+            'material.delete' => 'onMaterialDelete',
+            'chapter.create' => 'onChapterCreate',
+            'chapter.delete' => 'onChapterDelete',
+            'chapter.update' => 'onChapterUpdate'
         );
     }
 
@@ -71,33 +75,6 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
             foreach ($lessonIds as $key=>$lessonId) {
                 $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
-            }
-        }
-    }
-
-    public function onCourseTeacherUpdate(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-
-        $courseId = $context["courseId"];
-
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-
-        
-        $findClassroomsByCourseIds =  $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-
-        foreach ($findClassroomsByCourseIds as $findClassroomsByCourseId) {
-            $this->getClassroomService()->updateClassroomTeachers($findClassroomsByCourseId);
-        }
-
-        if ($courseIds) {
-            
-            $course = $context['course'];
-
-            $teachers = $context['teachers'];
-
-            foreach ($courseIds as $courseId) {
-                $this->getCourseService()->setCourseTeachers($courseId,$teachers);
             }
         }
     }
@@ -209,6 +186,78 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 'lesson' => $this->simplifyLesson($lesson),
             ),
         ));
+    }
+
+    public function onMaterialCreate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $argument = $context['argument'];
+        $material = $context['material'];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'],1),'id');
+        if ($courseIds) {
+            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($material['lessonId'],$courseIds),'id');
+            $argument['copyId'] = $material['id'];
+            foreach ($courseIds as $key => $courseId) {
+                $argument['courseId'] = $courseId;
+                $argument['lessonId'] = $lessonIds[$key];
+                $this->getMaterialService()->uploadMaterial($argument);
+            }
+        }
+    }
+
+    public function onMaterialDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'],1),'id');
+        if ($courseIds) {
+            $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($context['id'],$courseIds),'id');
+            foreach ($materialIds as $key=>$materialId) {
+                $this->getMaterialService()->deleteMaterial($courseIds[$key],$materialId);
+            }
+        }
+    }
+
+    public function onChapterCreate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $argument = $context['argument'];
+        $chapter = $context['chapter'];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($chapter['courseId'],1),'id');
+        if ($courseIds){
+            $argument['copyId'] = $chapter['id'];
+            foreach ($courseIds as  $courseId) {
+                $argument['courseId'] = $courseId;
+                $this->getCourseService()->createChapter($argument);
+            }
+        }
+    }
+
+    public function onChapterDelete(ServiceEvent $event)
+    {
+        $chapter = $event->getSubject();
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($chapter['courseId'],1),'id');
+        if ($courseIds) {
+           $chapterIds = ArrayToolkit::column($this->getCourseService()->findChaptersByCopyIdAndLockedCourseIds($chapter['id'], $courseIds),'id');
+           foreach ($chapterIds as $key=>$chapterId) {
+               $this->getCourseService()->deleteChapter($courseIds[$key],$chapterId);
+           }
+        }
+        
+    }
+
+    public function onChapterUpdate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $argument = $context['argument'];
+        $chapter = $context['chapter'];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($chapter['courseId'],1),'id');
+        if ($courseIds) {
+            $chapterIds = ArrayToolkit::column($this->getCourseService()->findChaptersByCopyIdAndLockedCourseIds($chapter['id'], $courseIds),'id');
+            foreach ($chapterIds as $key=>$chapterId) {
+               $argument['courseId']=$courseIds[$key];
+               $this->getCourseService()->updateChapter($courseIds[$key], $chapterId, $argument);
+            }
+        }
     }
 
     protected function simplifyCousrse($course)
