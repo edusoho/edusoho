@@ -168,7 +168,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
 
 		//创建thread过滤html
-		$thread['content'] = $this->purifyHtml($thread['content']);
+		$thread['content'] = $this->filterSensitiveWord($this->purifyHtml($thread['content']));
 		$thread['createdTime'] = time();
 		$thread['latestPostUserId'] = $thread['userId'];
 		$thread['latestPostTime'] = $thread['createdTime'];
@@ -214,7 +214,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		//更新thread过滤html
-		$fields['content'] = $this->purifyHtml($fields['content']);
+		$fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
 		return $this->getThreadDao()->updateThread($threadId, $fields);
 	}
 
@@ -353,7 +353,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$post['createdTime'] = time();
 
 		//创建post过滤html
-		$post['content'] = $this->purifyHtml($post['content']);
+		$post['content'] = $this->filterSensitiveWord($this->purifyHtml($post['content']));
 		$post = $this->getThreadPostDao()->addPost($post);
 
 		// 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
@@ -384,7 +384,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		//更新post过滤html
-		$fields['content'] = $this->purifyHtml($fields['content']);
+		$fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
 		return $this->getThreadPostDao()->updatePost($id, $fields);
 	}
 

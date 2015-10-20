@@ -67,6 +67,11 @@ abstract class BaseService
         return $purifier->purify($html);
     }
 
+    protected function filterSensitiveWord($text)
+    {
+        return $text;
+    }
+
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
         return new ServiceException($message, $code);

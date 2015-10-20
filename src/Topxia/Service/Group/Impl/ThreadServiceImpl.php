@@ -308,7 +308,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
         $this->getThreadGoodsDao()->deleteGoodsByThreadId($id,'content');
         $this->hideThings($fields['content'],$id);
-
+        $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+        
         return $this->getThreadDao()->updateThread($id,$fields);
     }
 
@@ -395,6 +396,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function updatePost($id,$fields)
     {
+        if(!empty($fields['content'])) {
+            $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+        }
         return $this->getThreadPostDao()->updatePost($id,$fields);
     }
 

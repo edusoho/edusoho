@@ -129,7 +129,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['content'])) {
             throw $this->createServiceException("话题内容不能为空！");
         }
-        $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
+        $thread['content'] = $this->filterSensitiveWord($this->purifyHtml(empty($thread['content'])) ? '' : $thread['content']);
         $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         if (empty($thread['targetId'])) {
@@ -383,7 +383,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.create', $fields);
 
-        $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
         $fields['ats'] = $this->getUserService()->parseAts($fields['content']);
         $fields['userId'] = $user['id'];
         $fields['createdTime'] = time();
