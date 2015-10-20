@@ -22,6 +22,8 @@ interface TaskService
 
     public function deleteTask($id);
 
+    public function deleteTasksByBatchIdAndTaskTypeAndUserId($batchId, $taskType, $userId);
+
     public function searchTasks($conditions, $orderBy, $start, $limit);
 
     public function searchTaskCount($conditions);

@@ -78,6 +78,11 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function deleteTasksByBatchIdAndTaskTypeAndUserId($batchId, $taskType, $userId)
+    {
+        return $this->getConnection()->delete($this->table, array('batchId' => $batchId,'taskType'=>$taskType,'userId'=>$userId));
+    }
+
     public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
