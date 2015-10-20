@@ -28,7 +28,7 @@
                     {% endif %}
                     <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
                     <td>{{users[batchnotification.fromId].nickname}}</td>
-                    {% if batchnotification.published %}<td>已发送</td>{% else %}<td>未发送</td>{% endif %}
+                    {% if batchnotification.published %}<td>已发布</td>{% else %}<td>未发布</td>{% endif %}
                     <td>
                         <div class="btn-group">
                             {% if batchnotification.published %}
@@ -39,7 +39,7 @@
                                 <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_batch_notification_send', {id:batchnotification.id}) }}">发送</a></li>
+                                    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_batch_notification_send', {id:batchnotification.id}) }}">发布</a></li>
                                     <li><a href="javascript:" data-role="delete-item" data-url="{{ path('admin_batch_notification_delete', {id:batchnotification.id}) }}">删除</a></li>
                                 </ul>
                             {% endif %}
