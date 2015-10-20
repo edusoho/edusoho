@@ -42,6 +42,9 @@
 					  data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
 					 >{{ batchnotification.content|default('') }}</textarea>
 				</div>
+				<div class="controls">
+			  		<input class="form-control hidden" id="hidden" type="text" name="type" value="">
+			  	</div>
 			</div>
 		</div>
 	</div>
@@ -50,8 +53,7 @@
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	    <button id="notification-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在保存...">保存</button>
 			<a class="btn btn-link" href="{{ path('admin_batch_notification') }}">返回</a>
-			<a class="btn btn-link" href="javascript:;" id="directsend" data-herfurl="{{ path('admin_batch_notification') }}"
-			data-url="{{path('admin_batch_notification_directsend')}}">直接发布</a>
+		<button id="notification-operate-publish" class="btn btn-primary" data-toggle="form-submit" data-loading-text="正在发布...">直接发布</button>
 		</div>		
 	</div>
 </form>

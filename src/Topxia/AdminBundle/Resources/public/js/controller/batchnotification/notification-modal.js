@@ -8,22 +8,13 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
 
+        $("#notification-operate-publish").click(function(){
+            $('#hidden').val('publish');
+        });
         var $form = $("#notification-form");
         $modal = $form.parents('.modal');
         var validator = _initValidator($form, $modal);
         var $editor = _initEditorFields($form, validator);
-         $("#directsend").click(function(){
-            CKupdate();
-            if (!confirm('发送后不可修改，确认发送？')) {
-                return ;
-            }
-            $.post($("#directsend").data('url'),$form.serialize(),function(data){
-                if(data.status == 'failed' && data.error == 'rule'){
-                    alert("发送失败，标题不能为空，标题字数不能超过50字");
-                }
-               window.location.href = $("#directsend").data('herfurl');
-            });
-         });
     };
     function _initEditorFields($form, validator) {
 
@@ -45,8 +36,14 @@ define(function(require, exports, module) {
                     return false;
                 }
                 CKupdate();
-                $('#notification-operate-save').button('loading').addClass('disabled');
-                Notify.success('保存成功！');
+                if($('#hidden').val() == 'publish'){
+                    $('#notification-operate-publish').button('loading').addClass('disabled');
+                    Notify.success('发布成功！');
+                }
+                else{
+                    $('#notification-operate-save').button('loading').addClass('disabled');
+                    Notify.success('保存成功！');
+                }
             }
         });
 
