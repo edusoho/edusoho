@@ -59,7 +59,6 @@ class UserController extends BaseController
 
         $userIds = ArrayToolkit::column($users,'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-        var_dump($users);
         
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
