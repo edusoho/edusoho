@@ -84,6 +84,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return  $this->getTestpaperDao()->updateTestpaper($id, $fields);
     }
 
+    public function getItemsCountByTestIdAndType($conditions, $groupBy='')
+    {
+        return $this->getTestpaperItemDao()->getItemsCountByTestIdAndType($conditions, $groupBy='');
+    }
+
     protected function filterTestpaperFields($fields, $mode = 'create')
     {
         $filtedFields = array();
