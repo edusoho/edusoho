@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             }
             $.post($("#directsend").data('url'),$form.serialize(),function(data){
                 if(data.status == 'failed' && data.error == 'rule'){
-                    alert("发送失败，标题不能为空，标题字数不能超过50子");
+                    alert("发送失败，标题不能为空，标题字数不能超过50字");
                 }
                window.location.href = $("#directsend").data('herfurl');
             });
