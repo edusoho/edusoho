@@ -61,7 +61,7 @@ define(function(require, exports, module) {
 
         $('#teacher-add').on('click', function(){
             var inputValue = $('#teacher-input').val();
-            if(inputValue.length<1){
+            if(inputValue.length<1 || !autocomplete.items){
             	    return ;
             }
             for(var i=0;i<autocomplete.items.length;i++){
