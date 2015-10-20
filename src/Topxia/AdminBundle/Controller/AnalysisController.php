@@ -59,10 +59,14 @@ class AnalysisController extends BaseController
 
         $dataInfo=$this->getDataInfo($condition,$timeRange);
 
+        $registerIds = ArrayToolkit::column($registerDetail,'id');
+        $registerProfiles = $this->getUserService()->findUserProfilesByIds($registerIds);
+
         return $this->render("TopxiaAdminBundle:OperationAnalysis:register.html.twig",array(
             'registerDetail'=>$registerDetail,
             'paginator'=>$paginator,
             'tab'=>$tab,
+            'registerProfiles'=>$registerProfiles,
             'data'=>$data,
             "registerStartDate"=>$registerStartDate,
             "dataInfo"=>$dataInfo,
@@ -118,6 +122,9 @@ class AnalysisController extends BaseController
         $result['userSumStartDate'] = $userSumStartDate;
         $result['dataInfo'] = $dataInfo;
 
+        $userSumIds = ArrayToolkit::column($userSumDetail,'id');
+        $userSumProfiles = $this->getUserService()->findUserProfilesByIds($userSumIds);
+        $result['userSumProfiles'] = $userSumProfiles;
         return $this->render("TopxiaAdminBundle:OperationAnalysis:user-sum.html.twig",$result);
     }
 
