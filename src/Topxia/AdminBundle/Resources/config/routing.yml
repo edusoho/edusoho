@@ -1102,6 +1102,10 @@ admin_operation_analysis_lesson_finished:
     pattern:  /operation/analysis/lesson/finished/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
 
+admin_operation_analysis_classroom_paid:
+    pattern:  /operation/analysis/classroom/paid/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:paidClassroom }
+
 admin_operation_analysis_video_viewed:
     pattern:  /operation/analysis/video/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:videoViewed }

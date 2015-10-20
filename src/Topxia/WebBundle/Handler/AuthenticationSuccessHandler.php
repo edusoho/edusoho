@@ -23,9 +23,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         } else {
             $this->getUserService()->markLoginSuccess($userId, $request->getClientIp());
         }
-
-        $sessionId = $request->getSession()->getId();
-
+        $sessionId = $this->createToken($request);
         $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
 
         if ($request->isXmlHttpRequest()) {
@@ -43,6 +41,16 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         }
 
         return parent::onAuthenticationSuccess($request, $token);
+    }
+
+    private function createToken(Request $request)
+    {
+        $userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
+        if (empty($userLoginToken)) {
+            $userLoginToken = md5($request->getSession()->getId());
+            setcookie('U_LOGIN_TOKEN', $userLoginToken, time()+3600*24*365);
+        }
+        return $userLoginToken;
     }
 
     private function getUserService()
