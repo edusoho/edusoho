@@ -47,10 +47,25 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    public function findFilesByIds(array $ids)
+    {
+        $files = $this->getUploadFileDao()->findFilesByIds($ids);
+        if (empty($files)) {
+            return array();
+        }
+
+        return $this->mergeImplFiles($files);
+    }
+
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
-        return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+        $files = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+        if (empty($files)) {
+            return array();
+        }
+
+        return $this->mergeImplFiles($files);
     }
 
     public function searchFilesCount($conditions)
@@ -180,6 +195,27 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         return $conditions;
+    }
+
+    protected function mergeImplFiles($files)
+    {
+        $groupedFiles = array();
+        foreach ($files as $file) {
+            $name = $this->getFileImplementorName($file);
+            $groupedFiles[$name][] = $file;
+        }
+
+        $implFiles = array();
+        foreach ($groupedFiles as $name => $files) {
+            $implFiles = array_merge($implFiles, $this->createFileImplementor($name)->findFiles($files));
+        }
+
+        return $implFiles;
+    }
+
+    protected function getFileImplementorName($file)
+    {
+        return $file['storage'];
     }
 
     protected function getFileImplementor($file)

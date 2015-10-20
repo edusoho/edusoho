@@ -14,53 +14,24 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $api = CloudAPIFactory::create();
         $cloudFile = $api->get("/files/{$file['globalId']}");
 
-        $file['hashId'] = $cloudFile['storageKey'];
-        $file['fileSize'] = $cloudFile['size'];
+        return $this->mergeCloudFile($file, $cloudFile);
+    }
 
-        $statusMap = array(
-            'none' => 'none',
-            'waiting' => 'waiting',
-            'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
-        );
-        $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
-
-        if (empty($cloudFile['processParams']['output'])) {
-            $file['convertParams'] = array();
-            $file['metas2'] = array();
-        } else {
-            if ($file['type'] == 'video') {
-                $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
-                    'videoQuality' => $cloudFile['processParams']['videoQuality'],
-                    'audioQuality' => $cloudFile['processParams']['audioQuality'],
-                );
-                $file['metas2'] = $cloudFile['metas']['levels'];
-
-            } elseif ($file['type'] == 'ppt') {
-                $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
-                );
-                $file['metas2'] = $cloudFile['metas'];
-            } elseif ($file['type'] == 'document') {
-                $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
-                );
-                $file['metas2'] = $cloudFile['metas'];
-            } elseif ($file['type'] == 'audio') {
-                $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
-                    'videoQuality' => 'normal',
-                    'audioQuality' => 'normal',
-                );
-                $file['metas2'] = $cloudFile['metas']['levels'];
+    public function findFiles($files)
+    {
+        $globalIds = ArrayToolkit::column($files, 'globalId');
+        $api = CloudAPIFactory::create();
+        $result = $api->get("/files?ids=". implode(',', $globalIds));
+        $cloudFiles = $result['data'];
+        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+        foreach ($files as $i => $file) {
+            if (empty($cloudFiles[$file['globalId']])) {
+                continue;
             }
+            $files[$i] = $this->mergeCloudFile($file, $cloudFiles[$file['globalId']]);
         }
 
-        // echo "<pre>";var_dump($cloudFile, $file); echo "</pre>";exit();
-
-        return $file;
+        return $files;
     }
 
     public function resumeUpload($hash, $file)
@@ -135,6 +106,56 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $download = $api->get("/files/{$file['globalId']}/download");
         $download['type'] = 'url';
         return $download;
+    }
+
+    private function mergeCloudFile($file, $cloudFile)
+    {
+        $file['hashId'] = $cloudFile['storageKey'];
+        $file['fileSize'] = $cloudFile['size'];
+
+        $statusMap = array(
+            'none' => 'none',
+            'waiting' => 'waiting',
+            'processing' => 'doing',
+            'ok' => 'success',
+            'error' => 'error',
+        );
+        $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
+
+        if (empty($cloudFile['processParams']['output'])) {
+            $file['convertParams'] = array();
+            $file['metas2'] = array();
+        } else {
+            if ($file['type'] == 'video') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                    'videoQuality' => $cloudFile['processParams']['videoQuality'],
+                    'audioQuality' => $cloudFile['processParams']['audioQuality'],
+                );
+                $file['metas2'] = $cloudFile['metas']['levels'];
+
+            } elseif ($file['type'] == 'ppt') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                );
+                $file['metas2'] = $cloudFile['metas'];
+            } elseif ($file['type'] == 'document') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                );
+                $file['metas2'] = $cloudFile['metas'];
+            } elseif ($file['type'] == 'audio') {
+                $file['convertParams'] = array(
+                    'convertor' => $cloudFile['processParams']['output'],
+                    'videoQuality' => 'normal',
+                    'audioQuality' => 'normal',
+                );
+                $file['metas2'] = $cloudFile['metas']['levels'];
+            }
+        }
+
+        return $file;
+
     }
 
 }

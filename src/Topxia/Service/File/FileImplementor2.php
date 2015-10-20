@@ -6,6 +6,8 @@ interface FileImplementor2
 
     public function getFile($file);
 
+    public function findFiles($file);
+
 	public function prepareUpload($params);
 
 	public function initUpload($file);
