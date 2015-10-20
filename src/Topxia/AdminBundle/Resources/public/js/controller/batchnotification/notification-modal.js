@@ -10,12 +10,17 @@ define(function(require, exports, module) {
 
         var $form = $("#notification-form");
         $modal = $form.parents('.modal');
-
         var validator = _initValidator($form, $modal);
         var $editor = _initEditorFields($form, validator);
          $("#directsend").click(function(){
             CKupdate();
-            $.post($("#directsend").data('url'),$form.serialize(),function(){
+            if (!confirm('发送后不可修改，确认发送？')) {
+                return ;
+            }
+            $.post($("#directsend").data('url'),$form.serialize(),function(data){
+                if(data.status == 'failed' && data.error == 'rule'){
+                    alert("发送失败，标题不能为空，标题字数不能超过50子");
+                }
                window.location.href = $("#directsend").data('herfurl');
             });
          });
