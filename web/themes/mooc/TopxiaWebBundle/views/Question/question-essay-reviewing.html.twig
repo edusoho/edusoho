@@ -27,19 +27,19 @@
     {% set canHandle = app.user.isTeacher() %}
   {% endif %}
 
-  {% if homework.type == 'evaluate' and homework.evaluateEndTime > "now" %}
+  {# {% if homework.type == 'evaluate' and homework.evaluateEndTime > "now" %} #}
     <div class="question-eassy-form-control">
       <div>
         <strong>学员点评：</strong>
-        {% if evaluateNum != 0 %}
+        {# {% if evaluateNum != 0 %} #}
           <div>{% if canHandle %}{{ '正确' }}{% else %}学员{{ loop.index }}{% endif %}：5fen</div>{# {{ fromUserId }} #}
           <div>very good!!</div>
-        {% else %}
+        {# {% else %} #}
           <div>暂无学生评价</div>
-        {% endif %}
+        {# {% endif %} #}
       </div>
     </div>
-  {% endif %}
+  {# {% endif %} #}
 
   {% if canHandle %}
     <div class="quetion-eassy-form-control question-theacher-score-input">
