@@ -64,13 +64,13 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $studentIds = ArrayToolkit::column($students, 'userId');
         $to = $this->getUsersMobile($studentIds);
     
+        $lesson['title'] = NameCutterTookit::cutter($lesson['title'], 20, 15, 4);
         $parameters['lesson_title'] = '课时：《'.$lesson['title'].'》';
-        $parameters['lesson_title'] = NameCutterTookit::cutter($parameters['lesson_title'], 20, 15, -4);
         if ($lesson['type'] == 'live') {
             $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
         }
+        $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
         $parameters['course_title'] = '课程：《'.$course['title'].'》';
-        $parameters['course_title'] = NameCutterTookit::cutter($parameters['course_title'], 20, 15, -4);
         if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
             $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
         } else {

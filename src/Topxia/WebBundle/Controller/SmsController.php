@@ -37,7 +37,7 @@ class SmsController extends BaseController
                 $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
             }
         }
-
+        $item['title'] = NameCutterTookit::cutter($item['title'], 20, 15, 4);
     return $this->render('TopxiaWebBundle:Sms:smsSend.html.twig',array(
             'item' => $item,
             'targetType' => $targetType,
@@ -60,14 +60,14 @@ class SmsController extends BaseController
             $classroom = $this->getClassroomService()->getClassroom($id);
             $classroomSetting  = $this->getSettingService()->get("classroom");
             $classroomName = isset($classroomSetting['name'])?$classroomSetting['name']:'班级';
-            $parameters['classroom_title'] = NameCutterTookit::cutter($parameters['classroom_title'], 20, 15, -4);
+            $classroom['title'] = NameCutterTookit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
             $description = $parameters['classroom_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'course') {
             $course = $this->getCourseService()->getCourse($id);
+            $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
             $parameters['course_title'] = '课程：《'.$course['title'].'》';
-            $parameters['course_title'] = NameCutterTookit::cutter($parameters['course_title'], 20, 15, -4);
             $description = $parameters['course_title'].'发布';
             if ($course['parentId'] ) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);

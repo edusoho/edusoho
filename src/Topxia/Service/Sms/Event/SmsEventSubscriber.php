@@ -37,8 +37,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
             if ($target[0] == 'course') {
                 $courseId = $target[1];
                 $course = $this->getCourseService()->getCourse($courseId);
-                $parameters['lesson_title'] = NameCutterTookit::cutter($parameters['lesson_title'], 20, 15, -4);
-                $parameters['course_title'] = NameCutterTookit::cutter($parameters['course_title'], 20, 15, -4);
+                $testpaperResult['lesson_title'] = NameCutterTookit::cutter($testpaperResult['lesson_title'], 20, 15, 4);
+                $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
                 $parameters['lesson_title'] = '试卷：《'.$testpaperResult['paperName'].'》'.'的试卷';
                 $parameters['course_title'] = '课程：《'.$course['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
@@ -61,7 +61,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $user = $this->getUserService()->getUser($userId);
             $parameters = array();
             $parameters['order_title'] = $order['title'];
-            $parameters['order_title'] = NameCutterTookit::cutter($parameters['order_title'], 20, 15, -4);
+            $parameters['order_title'] = NameCutterTookit::cutter($parameters['order_title'], 20, 15, 4);
             if ($targetType == 'coin') {
                 $parameters['totalPrice'] = $order['amount'].'元';
             } else {
