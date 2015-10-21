@@ -86,8 +86,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     'questionType' => $item['questionType'],
                     'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
                     'score' => $item['score'],
-                    'missScore' => $item['missScore'],
-                    'copyId'=>$item['id']
+                    'missScore' => $item['missScore']
                 );
 
                 $this->getTestpaperItemDao()->addItem($fields);
