@@ -55,7 +55,7 @@
           </ul>
         </div>
       {% endif %}
-      <label class="checkbox-inline">
+      <label class="checkbox-inline btn">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
           {{ path('classroom_explore', {category:category, fliter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
