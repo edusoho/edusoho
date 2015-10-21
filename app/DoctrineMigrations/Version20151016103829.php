@@ -17,7 +17,7 @@ class Version20151016103829 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
 
-        if (!$this->isFieldExist('course_lesson', 'parentId')) {
+        if ($this->isFieldExist('course_lesson', 'parentId')) {
             $this->addSql("ALTER TABLE `course_lesson` CHANGE `parentId` `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id'");
         }
 
