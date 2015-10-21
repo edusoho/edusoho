@@ -4,17 +4,15 @@
 
 {% block course_main %}
 
-  <div class="course-detail-content clearfix">
+  <div class="course-detail-content">
 
     <div class="es-piece">
       <div class="piece-header">
         课程介绍
       </div>
-      <div class="piece-body p-lg">
+      <div class="piece-body p-lg clearfix">
         {% if course.about %}
-        <div class="clearfix">
           {{ course.about|raw }}
-        </div>
         {% else %}
           <div class="text-muted">暂无课程简介</div>
         {% endif %}
