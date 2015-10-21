@@ -14,12 +14,19 @@ class TaskEventSubscriber implements EventSubscriberInterface
         return array(
             //'task.finished' => 'onFinished',
 
-            'course.lesson_finish' => 'onFinished',
+            'course.lesson_finish' => 'onLessonFinished',
             'homework.finish' => 'onHomeworkFinished',
-            'homework.check' => 'onFinished',
+            'homework.check' => 'onHomeworkCheck',
             'testpaper.reviewed' => 'onTestPaperFinished',
             'testpaper.finish' => 'onTestPaperFinished',
         );
+    }
+
+    public function onLessonFinished(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+
+        $this->_finishTask('studyplan', $lesson);
     }
 
     public function onFinished(ServiceEvent $event)
@@ -36,7 +43,15 @@ class TaskEventSubscriber implements EventSubscriberInterface
         $homeworkResult = $event->getArgument('homeworkResult');
         $targetObject = array('id'=>$homework['id'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus']);
 
-        $this->_finishTask('studyPlan', $targetObject);
+        $this->_finishTask('studyplan', $targetObject);
+    }
+
+    public function onHomeworkCheck(ServiceEvent $event)
+    {
+        $homeworkResult = $event->getSubject();
+        $targetObject = array('id'=>$homeworkResult['homeworkId'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus']);
+
+        $this->_finishTask('studyplan', $targetObject);
     }
 
     public function onTestPaperFinished(ServiceEvent $event)
@@ -49,7 +64,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
             $lesson = $this->getCourseService()->getLesson($target[3]);
 
             $targetObject = array('id'=>$lesson['id'], 'type'=>'testpaper', 'passedStatus'=>$testpaperResult['passedStatus']);
-            $this->_finishTask('studyPlan',$targetObject);
+            $this->_finishTask('studyplan',$targetObject);
         }
 
     }
