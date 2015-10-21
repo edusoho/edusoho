@@ -26,12 +26,16 @@ class CardBagDaoImpl extends BaseDao implements CardBagDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    // protected function _createSearchQueryBuilder($conditions)
-    // {   
-    //     $builder = $this->createDynamicQueryBuilder($conditions)
-    //         ->from($this->table, 'userId')
-    //         ->andWhere('cardId = :cardId')
-    //     return $builder;
-    // }
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'cardId')
+            ->andWhere('cardType = :cardType')
+            ->andWhere('deadline = :deadline')
+            ->andWhere('status = :status')
+            ->andWhere('userId = :userId')
+            
+        return $builder;
+    }
 
 }

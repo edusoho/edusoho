@@ -4,5 +4,5 @@ namespace Topxia\Service\CardBag;
 
 interface CardBagService
 {
-    public function addCard($conditions);
+    public function addCard($card);
 }
