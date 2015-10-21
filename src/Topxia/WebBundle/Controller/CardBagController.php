@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Component\Payment\Payment;
-use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
