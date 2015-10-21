@@ -88,7 +88,7 @@ class TestpaperController extends BaseController
         //学习计划任务
         if ($this->getAppService()->findInstallApp('classroomPlan')) {
             $taskProcessor = $this->getTaskProcessor('studyPlan');
-            $canFinish = $taskProcessor->canFinish($testId, 'testpaper', $userId);
+            $canFinish = $taskProcessor->canFinish($targetId, 'testpaper', $userId);
 
             if (!$canFinish) {
                 return $this->createMessageResponse('info','在该任务之前，还有学习任务没有完成哦！');
