@@ -20,26 +20,6 @@ class TaskDaoImpl extends BaseDao implements TaskDao
         return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
     }
 
-    /*public function getTaskBy($userId, $taskType, $targetId, $targetType)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? LIMIT 1";
-        $task = $this->getConnection()->fetchAssoc($sql, array($userId, $taskType, $targetId, $targetType));
-        return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
-    }
-
-    public function getActiveTaskBy($userId, $taskType, $targetId, $targetType)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `targetId`=? AND `targetType`=? AND `status`='active' LIMIT 1";
-        $task = $this->getConnection()->fetchAssoc($sql, array($userId, $taskType, $targetId, $targetType));
-        return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
-    }*/
-
-    public function getTaskByParams(array $conditions)
-    {
-        $tasks = $this->searchTasks($conditions, array('taskStartTime','ASC'), 0, 1);
-        return $tasks ? $tasks[0] : null;
-    }
-
     public function findUserTasksByBatchIdAndTaskType($userId, $batchId, $taskType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `batchId`=?";

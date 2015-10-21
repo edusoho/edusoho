@@ -602,16 +602,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
 
-        /*if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $targetArr = explode('/',$testpaperResult['target']);
-            $lessonInfo = explode('-',$targetArr[1]);
-            $this->dispatchEvent(
-                'task.finished', 
-                new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$testpaperResult['passedStatus']), 
-                    array('taskType'=>'studyPlan', 'userId'=>$userId))
-            );
-        }*/
-
         return $testpaperResult;
     }
 
@@ -695,22 +685,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'teacherSay' => $teacherSay
         ));
 
-        $this->dispatchEvent('testpaper.reviewed', $testPaperResult);
         $this->dispatchEvent(
             'testpaper.reviewed', 
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
         
-        /*if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $targetArr = explode('/',$testpaperResult['target']);
-            $lessonInfo = explode('-',$targetArr[1]);
-            $this->dispatchEvent(
-                'task.finished', 
-                new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$passedStatus), 
-                    array('taskType'=>'studyPlan', 'userId'=>$testpaperResult['userId']))
-            );
-        }*/
-
         return $testPaperResult;
     }
 
