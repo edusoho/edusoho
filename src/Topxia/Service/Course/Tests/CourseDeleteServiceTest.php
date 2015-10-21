@@ -89,7 +89,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
         $target ='course-'.$createCourse['id'];
         $testpaper = array('name' => 'Test','target'=>$target);
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
+        $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
         $this->assertEquals('Test',$testpaper['name']);
 
         $question = array(
