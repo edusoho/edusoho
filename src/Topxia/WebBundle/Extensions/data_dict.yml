@@ -99,7 +99,7 @@ dateType:
     this_month: 本月
     last_month: 上月
 
-weekType:
+week:
       1: 一
       2: 二
       3: 三
