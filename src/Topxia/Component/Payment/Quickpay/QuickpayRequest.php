@@ -6,13 +6,14 @@ use Topxia\Component\Payment\Request;
 class QuickpayRequest extends Request {
 
     protected $url = 'Https://Pay.Heepay.com/ShortPay/SubmitOrder.aspx';
+    protected $submitUrl = '';
 
     public function form()
     {
         $form = array();
-        $form['action'] = $this->returnUrl($this->params);
-        $form['method'] = 'post';
-        $form['params'] = array();
+        $form['method'] = 'get';
+        $form['params'] = $this->convertParams($this->params);
+        $form['action'] = $this->submitUrl;
         return $form;
     }
  
@@ -28,10 +29,8 @@ class QuickpayRequest extends Request {
         return md5(strtolower($sign));
     }
 
-    protected function returnUrl($params)
+    protected function convertParams($params)
     {
-        date_default_timezone_set('Asia/Shanghai');
-        header("Content-type:text/html;charset=utf-8");
         if(empty($params) ||!array_key_exists('mobile',$params)){
             throw new \RuntimeException(sprintf('参数传递错误。'));
         }
@@ -43,7 +42,7 @@ class QuickpayRequest extends Request {
         $aesArr['device_type']=1;
         $aesArr['device_id']='';
         $aesArr['custom_page']=0;
-        $aesArr['display']=0;
+        $aesArr['display']=1;
         if (!empty($params['returnUrl'])) {
             $aesArr['return_url']=$params['returnUrl'];
         }
@@ -68,11 +67,34 @@ class QuickpayRequest extends Request {
         $result = $this->curlRequest($url);
         $xml = simplexml_load_string($result);
         $redir=(string)$xml->encrypt_data;
-        $redirurl=$this->Decrypt($redir, $this->options['aes']);
-        var_dump($redirurl);
-        exit();
-        //$returnUrl = explode('redirect_url=', $redirurl);
-        //echo "<script>top.location='".$returnUrl[1]."'</script>";
+        $redirurl=$this->Decrypt($redir,$this->options['aes']);
+
+        // parse_str($redirurl,$tip);
+        // if(!array_key_exists('redirect_url', $tip)){
+        //     throw new \RuntimeException(sprintf($tip['ret_msg']));
+        // }
+        // $this->submitUrl=$tip['redirect_url'];
+        // unset($tip['ret_code'],$tip['ret_msg'],$tip['redirect_url']);
+        // $converted = array();
+        // foreach ($tip as $key => $value) {
+        //     $converted[$key]=$value;
+        // }
+
+        $arr=explode('redirect_url=', $redirurl);
+
+
+
+        //return $converted;
+
+
+        // if(count($arr)<2){
+        //     throw new \RuntimeException(sprintf('支付异常。'));
+        // }
+        //return $tip['redirect_url'];
+        // echo $arr[1];
+        // //header('Location:'.$arr[1]);
+        echo "<script>top.location='".$arr[1]."'</script>";
+        
     }
 
     private function curlRequest($url)
@@ -118,8 +140,10 @@ class QuickpayRequest extends Request {
     private function Decrypt($data,$key){
 
         $decodeKey = base64_decode($key);
-        $iv     = substr($decodeKey,0,16);
+        $data = base64_decode($data);
+        $iv = substr($decodeKey,0,16);
         $encrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv); 
+
         return $encrypted;
     }
 
