@@ -17,15 +17,6 @@ class CourseController extends CourseBaseController
 		$conditions = $request->query->all();
 		$categoryArray = array();
 		$levels = array();
-		if ($this->isPluginInstalled('Vip')) {
-			$levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
-			if (!isset($conditions['currentLevelId'])) {
-				$conditions['currentLevelId'] = 'all';
-			} else {
-				$vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($conditions['currentLevelId']), 'id');
-            	$conditions['vipLevelIds'] = array_merge(array($conditions['currentLevelId']), $vipLevelIds);
-			}
-		}
 
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
@@ -37,8 +28,14 @@ class CourseController extends CourseBaseController
         unset($conditions['code']);
 
 		if(!isset($conditions['fliter'])){
-			$conditions['fliter'] ='all';
-		} elseif ($conditions['fliter'] == 'free') {
+			$conditions['fliter'] =array(
+				'type' => 'all',
+				'price' => 'all',
+				'currentLevelId' => 'all',
+			);
+		}
+		$fliter = $conditions['fliter'];
+		if ($fliter['price'] == 'free') {
 			$coinSetting = $this->getSettingService()->get("coin");
 	        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
 	        $priceType = "RMB";
@@ -51,10 +48,20 @@ class CourseController extends CourseBaseController
 			} else {
 				$conditions['coinPrice'] = '0.00';
 			}
-		} elseif ($conditions['fliter'] == 'live'){
+		}
+
+		if ($fliter['type'] == 'live'){
 			$conditions['type'] = 'live';
 		}
-		$fliter = $conditions['fliter'];
+
+		if ($this->isPluginInstalled('Vip')) {
+			$levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
+			if (!$fliter['currentLevelId'] != 'all') {
+				$vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
+            	$conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+			}
+		}
+
 		unset($conditions['fliter']);
 
 		$courseSetting = $this->getSettingService()->get('course', array());
@@ -120,7 +127,6 @@ class CourseController extends CourseBaseController
 			'categoryArrayDescription' => $categoryArrayDescription,
 			'CategoryParent' => $CategoryParent,
 			'levels' => $levels,
-			'currentLevelId' =>$conditions['currentLevelId'],
 		));	
 	}
 
