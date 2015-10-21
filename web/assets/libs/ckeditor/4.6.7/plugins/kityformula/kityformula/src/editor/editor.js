@@ -174,11 +174,13 @@ define( function ( require ) {
         },
 
         replaceSpecialCharacter: function(source) {
+            //基础数学
             var $source = source.replace(/\\cong/g, '=^\\sim')
                 .replace(/\\varnothing/g, '\\oslash')
                 .replace(/\\gets/g, '\\leftarrow')
                 .replace(/\\because/g, '\\cdot_\\cdot\\cdot')
                 .replace(/\\blacksquare/g, '\\rule{20}{20}')
+                //希腊字母
                 .replace(/\\omicron/g, '\\mathrm{o}')
                 .replace(/\\Alpha/g, '\\mathrm{A}')
                 .replace(/\\Beta/g, '\\mathrm{B}')
@@ -192,7 +194,46 @@ define( function ( require ) {
                 .replace(/\\Omicron/g, '\\mathrm{O}')
                 .replace(/\\Rho/g, '\\mathrm{P}')
                 .replace(/\\Tau/g, '\\mathrm{T}')
-                .replace(/\\Chi/g, '\\mathrm{X}');
+                .replace(/\\Chi/g, '\\mathrm{X}')
+                .replace(/\\digamma/g, '\\mathcal{F}')
+                .replace(/\\varkappa/g, '\\mathcal{N}')
+                //求反运算符
+                .replace(/\\nless/g, '\\not<')
+                .replace(/\\ngtr/g, '\\not>')
+                .replace(/\\nleq/g, '\\not\\leq')
+                .replace(/\\ngeq/g, '\\not\\geq')
+                .replace(/\\nsim/g, '\\not\\sim')
+                .replace(/\\lneqq/g, '\\underset{\\not=}<')
+                .replace(/\\gneqq/g, '\\underset{\\not=}>')
+                .replace(/\\nprec/g, '\\not\\prec')
+                .replace(/\\nsucc/g, '\\not\\succ')
+                .replace(/\\nsubseteq/g, '\\not\\subseteq')
+                .replace(/\\nsupseteq/g, '\\not\\supseteq')
+                .replace(/\\subsetneq/g, '\\underset{\\not-}\\subset')
+                .replace(/\\supsetneq/g, '\\underset{\\not-}\\supset')
+                .replace(/\\lnsim/g, '\\underset{\\not\\sim}<')
+                .replace(/\\gnsim/g, '\\underset{\\not\\sim}>')
+                .replace(/\\precnsim/g, '\\underset{\\not\\sim}\\prec')
+                .replace(/\\succnsim/g, '\\underset{\\not\\sim}\\succ')
+                .replace(/\\ntriangleleft/g, '\\not\\triangleleft')
+                .replace(/\\ntriangleright/g, '\\not\\triangleright')
+                .replace(/\\nmid/g, '\\not\\mid')
+                .replace(/\\nparallel/g, '\\not\\parallel')
+                .replace(/\\nvdash/g, '\\not\\vdash')
+                //字母类符号
+                //箭头
+                .replace(/\\nleftarrow/g, '\\not\\leftarrow')
+                .replace(/\\nrightarrow/g, '\\not\\rightarrow')
+                .replace(/\\nLeftarrow/g, '\\not\\Leftarrow')
+                .replace(/\\nRightarrow/g, '\\not\\Rightarrow')
+                .replace(/\\nLeftrightarrow/g, '\\not\\Leftrightarrow')
+                .replace(/\\leftleftarrows/g, '_\\leftarrow^\\leftarrow')
+                .replace(/\\rightrightarrows/g, '_\\rightarrow^\\rightarrow')
+                .replace(/\\upuparrows/g, '\\uparrow\\uparrow')
+                .replace(/\\downdownarrows/g, '\\downarrow\\downarrow')
+                .replace(/\\leftrightarrows/g, '_\\rightarrow^\\leftarrow')
+                .replace(/\\rightleftarrows/g, '_\\leftarrow ^\\rightarrow')
+                ;
             return $source;
         }
 
