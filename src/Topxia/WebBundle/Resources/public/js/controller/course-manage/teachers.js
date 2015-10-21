@@ -66,6 +66,7 @@ define(function(require, exports, module) {
             }
             for(var i=0;i<autocomplete.items.length;i++){
             	 if(inputValue == autocomplete.items[i].textContent){
+            	 	autocomplete.set("selectedIndex", i);
 			autocomplete.selectItem(i);
 			return ;
             	 }
