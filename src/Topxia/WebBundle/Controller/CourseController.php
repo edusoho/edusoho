@@ -873,7 +873,7 @@ class CourseController extends CourseBaseController
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
-    public function getLevelService($value='')
+    public function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
