@@ -63,19 +63,18 @@ $app->before(function (Request $request) use ($app) {
             break;
         }
     }
-    // $token = $request->headers->get('Auth-Token', '');
-    // if (!$inWhiteList && empty($token)) {
-    //     throw createNotFoundException("AuthToken is not exist.");
-    // }
+    $token = $request->headers->get('Auth-Token', '');
+    if (!$inWhiteList && empty($token)) {
+        throw createNotFoundException("AuthToken is not exist.");
+    }
     $userService = ServiceKernel::instance()->createService('User.UserService');
-    // $token = $userService->getToken('mobile_login', $token);
+    $token = $userService->getToken('mobile_login', $token);
 
-    // if (!$inWhiteList && empty($token['userId'])) {
-    //     throw createAccessDeniedException("AuthToken is invalid.");
-    // }
+    if (!$inWhiteList && empty($token['userId'])) {
+        throw createAccessDeniedException("AuthToken is invalid.");
+    }
 
-    // $user = $userService->getUser($token['userId']);
-    $user = $userService->getUser(1);
+    $user = $userService->getUser($token['userId']);
     if (!$inWhiteList && empty($user)) {
         throw createNotFoundException("Auth user is not found.");
     }

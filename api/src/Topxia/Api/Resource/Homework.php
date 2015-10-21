@@ -16,27 +16,29 @@ class Homework extends BaseResource
         } else {
             $homework = $this->getHomeworkService()->getHomework($id);
         }
+
         if (empty($homework)) {
             $homework = array();
             return $homework;
         }
 
-        $items = $this->getHomeworkService()->findItemsByHomeworkId($homework['id']);
-
         $course = $this->getCorrseService()->getCourse($homework['courseId']);
         $homework['courseTitle'] = $course['title'];
         $lesson = $this->getCorrseService()->getLesson($homework['lessonId']);
         $homework['lessonTitle'] = $lesson['title'];
-        $indexdItems = ArrayToolkit::index($items, 'questionId');
-        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
-        $homework['items'] = $questions;
+
+        if ('lesson' != $idType) {
+            $items = $this->getHomeworkService()->findItemsByHomeworkId($homework['id']);
+            $indexdItems = ArrayToolkit::index($items, 'questionId');
+            $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+            $homework['items'] = $this->filterItem($questions);
+        }
+        
         return $this->filter($homework);
     }
 
-    public function filter(&$res)
+    private function filterItem($items)
     {
-        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
-        $items = $res['items'];
         $newItmes = array();
         $materialMap = array();
         foreach ($items as $item) {
@@ -54,7 +56,7 @@ class Homework extends BaseResource
             }
             
             $item['stem'] = $this->coverDescription($item['stem']);
-            $item['answer'] = $this->coverAnswer($item['answer']);
+            unset($item['answer']);
             if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
                 $materialMap[$item['parentId']][] = $item;
                 continue;
@@ -68,7 +70,12 @@ class Homework extends BaseResource
             $newItmes[$id]['items'] = $material;
         }
 
-        $res['items'] = array_values($newItmes);
+        return array_values($newItmes);
+    }
+
+    public function filter(&$res)
+    {
+        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
         return $res;
     }
 

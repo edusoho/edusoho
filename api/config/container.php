@@ -14,7 +14,8 @@ $resources = array(
     'Apps',
     'App',
     'Homework',
-    'HomeworkResult'
+    'HomeworkResult',
+    'Upload'
 );
 
 foreach ($resources as $res) {
