@@ -1614,9 +1614,6 @@ my_bill:
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
-my_card_bag:
-    pattern: /my/card
-    defaults: { _controller: TopxiaWebBundle:CardBag:showCard }
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }
