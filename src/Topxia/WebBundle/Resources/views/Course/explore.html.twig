@@ -50,6 +50,17 @@
       </li>
     </ul>
     <div class="filter">
+      {% if is_plugin_installed('vip')%}
+        <div class="btn-group">
+          <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i>会员课程</button>
+          <ul class="dropdown-menu" role="menu">
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">全部</a></li>
+          {% for level in levels%}
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+          {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
       <label class="checkbox-inline btn">
         <input type="checkbox" {% if type == 'live'%}checked="true" {% endif %} id="live" value="
         {% if type == 'all'%}
