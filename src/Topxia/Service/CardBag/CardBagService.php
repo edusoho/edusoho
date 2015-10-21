@@ -1,7 +1,8 @@
 <?php
+
 namespace Topxia\Service\CardBag;
 
 interface CardBagService
 {
-    public function addCardToCardBag($conditions);
+    public function addCard($conditions);
 }

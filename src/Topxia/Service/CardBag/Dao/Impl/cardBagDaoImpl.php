@@ -3,35 +3,35 @@
 namespace Topxia\Service\CardBag\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\Cash\Dao\CardBagDao;
+use Topxia\Service\CardBag\Dao\CardBagDao;
 
 
-class CashFlowDaoImpl extends BaseDao implements CashFlowDao
+class CardBagDaoImpl extends BaseDao implements CardBagDao
 {
-    protected $table = 'card_bag';
+    protected $table = 'card';
 
-    public function addCardToCardBag($card)
+    public function addCard($card)
     {
     	$affected = $this->getConnection()->insert($this->table , $card);
     	if ($affected <= 0) {
-            throw $this->createDaoException('Insert course error.');
+            throw $this->createDaoException('Insert card error.');
         }
         return $this->getCard($this->getConnection()->lastInsertId());
 
     }
 
-    public function getCard($cardId)
+    public function getCard($id)
     {
-    	$sql = "SELECT * FROM {$this->table} WHERE cardId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($cardId)) ? : null;
+    	$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    protected function _createSearchQueryBuilder($conditions)
-    {   
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'userId')
-            ->andWhere('cardId = :cardId')
-        return $builder;
-    }
+    // protected function _createSearchQueryBuilder($conditions)
+    // {   
+    //     $builder = $this->createDynamicQueryBuilder($conditions)
+    //         ->from($this->table, 'userId')
+    //         ->andWhere('cardId = :cardId')
+    //     return $builder;
+    // }
 
 }

@@ -1616,7 +1616,7 @@ my_coin:
     defaults: { _controller: TopxiaWebBundle:Coin:index }
 my_card_bag:
     pattern: /my/card
-    defaults: { _controller: TopxiaWebBundle:CardBag:index }
+    defaults: { _controller: TopxiaWebBundle:CardBag:showCard }
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }

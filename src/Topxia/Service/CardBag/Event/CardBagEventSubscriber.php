@@ -19,8 +19,7 @@ class CardBagEventSubscriber implements EventSubscriberInterface
     public function onCardAdd(ServiceEvent $event)
     {
     	$card = $event->getSubject();
-    	$card['userId'] = $event->getArgument('userId');
-    	$this->getCardBagService()->addCardToCardBag($card);
+    	$this->getCardBagService()->addCard($card);
 
     }
 

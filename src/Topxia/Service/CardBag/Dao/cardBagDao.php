@@ -2,10 +2,10 @@
 
 namespace Topxia\Service\cardBag\Dao;
 
-interface cardBagDao
+interface CardBagDao
 {
 
-	public function addCardToCardBag($card);
+	public function addCard($card);
 
 	 
 }
