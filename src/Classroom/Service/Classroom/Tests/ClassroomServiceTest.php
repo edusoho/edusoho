@@ -16,6 +16,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $textClassroom = array(
             'title' => 'test',
+            'status' => 'draft',
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
