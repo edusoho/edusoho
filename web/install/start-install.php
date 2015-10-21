@@ -299,10 +299,15 @@ function _create_database($config, $replace)
 
             $pdo->exec("USE `{$config['database_name']}`;");
 
-            $sql = file_get_contents('./edusoho.sql');
+            $sql = file_get_contents('./edusoho-mooc.sql');
             $result = $pdo->exec($sql);
             if ($result === false) {
                 return "创建数据库表结构失败，请删除数据库后重试！";
+            }
+
+            if (empty($config["database_init"])) {
+                _create_config($config);
+                return array('success' => true);
             }
         }
 
