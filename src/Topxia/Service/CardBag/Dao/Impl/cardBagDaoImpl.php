@@ -33,8 +33,8 @@ class CardBagDaoImpl extends BaseDao implements CardBagDao
             ->andWhere('cardType = :cardType')
             ->andWhere('deadline = :deadline')
             ->andWhere('status = :status')
-            ->andWhere('userId = :userId')
-            
+            ->andWhere('userId = :userId');
+
         return $builder;
     }
 
