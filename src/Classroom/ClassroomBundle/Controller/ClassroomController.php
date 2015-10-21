@@ -68,7 +68,7 @@ class ClassroomController extends BaseController
             }
         }
 
-        $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
+        $orderBy = !isset($conditions['orderBy']) ? 'createdTime' : $conditions['orderBy'];
         unset($conditions['orderBy']);
         
         $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
