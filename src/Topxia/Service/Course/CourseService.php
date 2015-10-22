@@ -110,6 +110,8 @@ interface CourseService
 
 	public function getLesson($id);
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num);
+
 	public function findLessonsByIds(array $ids);
 
 	public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds);

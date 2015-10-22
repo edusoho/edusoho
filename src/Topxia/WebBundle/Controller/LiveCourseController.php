@@ -259,6 +259,14 @@ class LiveCourseController extends BaseController
         }
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $lesson["isEnd"] = intval(time()-$lesson["endTime"])>0;
+
+        $client = new EdusohoLiveClient();
+        if ($lesson['type'] == 'live') {
+            $result = $client->getMaxOnline($lesson['mediaId']);
+            // var_dump($result);exit();
+            $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'],$result);
+        }
+
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(
             'course' => $this->getCourseService()->getCourse($courseId),
             'lesson' => $lesson,
