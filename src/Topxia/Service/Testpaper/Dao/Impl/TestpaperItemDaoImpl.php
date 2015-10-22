@@ -104,7 +104,7 @@ class TestpaperItemDaoImpl extends BaseDao implements TestpaperItemDao
         return $this->getConnection()->executeUpdate($sql, $params);
     }
 
-    public function getItemsCountByTestIdAndType(array $conditions, $groupBy='')
+    public function getItemsCountByParams(array $conditions, $groupBy='')
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('count(id) as num, sum(score) as score,questionType');

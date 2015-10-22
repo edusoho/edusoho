@@ -417,8 +417,8 @@ class CourseTestpaperManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $items = $this->getTestpaperService()->getItemsCountByTestIdAndType(array('testId'=>$testpaperId,'parentIdDefault'=>0),$gourpBy='questionType');
-        $subItems = $this->getTestpaperService()->getItemsCountByTestIdAndType(array('testId'=>$testpaperId,'parentId'=>0));
+        $items = $this->getTestpaperService()->getItemsCountByParams(array('testId'=>$testpaperId,'parentIdDefault'=>0),$gourpBy='questionType');
+        $subItems = $this->getTestpaperService()->getItemsCountByParams(array('testId'=>$testpaperId,'parentId'=>0));
         
         $items = ArrayToolkit::index($items,'questionType');
         $objectiveQuestionsCount = 0;

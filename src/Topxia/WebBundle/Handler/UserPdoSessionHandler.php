@@ -14,6 +14,7 @@ namespace Topxia\WebBundle\Handler;
 use Symfony\Component\Security\Core\SecurityContext;
 
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Topxia\Service\Common\ServiceKernel;
 
 /**
  * Session handler using a PDO connection to read and write data.
@@ -68,6 +69,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      * it's the only reliable solution across DBMSs.
      */
     const LOCK_TRANSACTIONAL = 2;
+
+    const MAX_LIFE_TIME = 1800;
 
     /**
      * @var \PDO|null PDO instance or null when not connected yet
@@ -278,7 +281,8 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         if (null === $this->pdo) {
             $this->connect($this->dsn ?: $savePath);
         }
-
+        $maxlifetime = self::MAX_LIFE_TIME;
+        $this->gc($maxlifetime);
         return true;
     }
 
@@ -303,9 +307,23 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
     {
         // We delay gc() to close() so that it is executed outside the transactional and blocking read-write process.
         // This way, pruning expired sessions does not block them from being started while the current session is used.
-        $this->gcCalled = true;
-
+        $rootDirectory = $this->getSystemRootDirectory();
+        $path = "$rootDirectory/app/data/session_gc_time.data";
+        if (!file_exists($path)) {
+            $lastGcTime = 0;
+        } else {
+            $lastGcTime = intval(file_get_contents($path));
+        }
+        if (time() - $lastGcTime > $maxlifetime/2) {
+            $this->gcCalled = true;
+            file_put_contents($path, time());
+        }
         return true;
+    }
+
+    protected function getSystemRootDirectory()
+    {
+        return dirname(ServiceKernel::instance()->getParameter('kernel.root_dir'));
     }
 
     /**
@@ -334,7 +352,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        $maxlifetime = (int) ini_get('session.gc_maxlifetime');
+        $maxlifetime = self::MAX_LIFE_TIME;
 
         $token = $this->context->getToken();
 
