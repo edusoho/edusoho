@@ -5,7 +5,6 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\NameCutterTookit;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 {
@@ -24,9 +23,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
         global $kernel;
         $container = $kernel->getContainer();
-        $api = CloudAPIFactory::create('root');
-        $info = $api->get('/me');
-        $hostName = $info['siteUrl'];
+        $siteSetting = $this->getSettingService()->get('site');
+        $hostName = $siteSetting['url'];
         for($i = 0; $i <= intval($count/1000); $i ++){
             $urls[$i] = $hostName;
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback',array('targetType' => 'lesson','targetId' => $targetId));
@@ -39,9 +37,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 	public function getSmsInfo($targetId, $index, $smsType)
     {
         global $kernel;
-        $api = CloudAPIFactory::create('root');
-        $info = $api->get('/me');
-        $hostName = $info['siteUrl'];
+        $siteSetting = $this->getSettingService()->get('site');
+        $hostName = $siteSetting['url'];
         $lesson = $this->getCourseService()->getLesson($targetId);
         if (empty($lesson)) {
             throw new \RuntimeException('课时不存在');
@@ -107,5 +104,9 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 
 }
