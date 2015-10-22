@@ -597,12 +597,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->getClassroomDao()->getConnection()->commit();
 
-            if ($this->getAppService()->findInstallApp('ClassroomPlan') && !empty($activeCourseIds)) {
-                $this->dispatchEvent(
-                    'studyplan.course.delete',
-                    new ServiceEvent($activeCourseIds, array('classroomId' => $classroomId))
-                );
-            }
+            $this->dispatchEvent(
+                'classroom.course.delete',
+                new ServiceEvent($activeCourseIds, array('classroomId' => $classroomId))
+            );
             
         } catch (\Exception $e) {
             $this->getClassroomDao()->getConnection()->rollback();

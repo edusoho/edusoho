@@ -1001,6 +1001,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'liveProvider' => 'none',
+			'copyId'=>0,
+			'suggestHours' => '0.0'
 		));
 
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1062,6 +1064,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 		$this->dispatchEvent("course.lesson.create", $lesson);
 
+		
 		return $lesson;
 	}
 
@@ -1177,7 +1180,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'homeworkId' => 0,
-			'exerciseId' => 0
+			'exerciseId' => 0,
+			'suggestHours' => '1.0',
+
 		));
 
 		if (isset($fields['title'])) {
@@ -1217,6 +1222,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$updatedLesson['fields']=$lesson;
 		$this->dispatchEvent("course.lesson.update",$updatedLesson);
 		
+
+		if ($this->getAppService()->findInstallApp('ClassroomPlan') && $updatedLesson['status'] == 'published') {
+            $this->dispatchEvent('studyplan.task.update', new ServiceEvent($updatedLesson));
+        }
 
 		return $updatedLesson;
 	}
@@ -1277,6 +1286,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"courseId"=>$courseId, 
 			"lesson"=>$lesson
 		));
+
+		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
+            $this->dispatchEvent('studyplan.task.delete', new ServiceEvent($lesson));
+        }
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
@@ -1324,6 +1337,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
 
+		$this->dispatchEvent("course.lesson.update",$publishLesson);
+
 		$this->dispatchEvent("course.lesson.publish",$publishLesson);
 	}
 
@@ -1337,6 +1352,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+
+		$this->dispatchEvent("course.lesson.update",$unpublishLesson);
 
 		$this->dispatchEvent("course.lesson.unpublish",$unpublishLesson);
 	}
@@ -1545,6 +1562,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 			new ServiceEvent($lesson, array('course' => $course))
 		);
 
+		$this->dispatchEvent(
+			'task.finished', 
+			new ServiceEvent($lesson, array('taskType'=>'studyPlan', 'userId'=>$member['userId']))
+		);
 	}
 
 	public function searchLearnCount($conditions)
@@ -1621,11 +1642,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		return $statuses;
-	}
-
-	public function getLearnByUserIdAndLessonId($userId, $lessonId)
-	{
-		return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
 	}
 
 	public function findUserLearnedLessons($userId, $courseId)
