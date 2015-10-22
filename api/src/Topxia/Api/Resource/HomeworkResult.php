@@ -11,7 +11,7 @@ class HomeworkResult extends BaseResource
     public function post(Application $app, Request $request, $homeworkId)
     {
         $answers = $request->request->all();
-        $answers = !empty($data['answers']) ? $data['answers'] : array();
+        $answers = !empty($answers['data']) ? $answers['data'] : array();
         $result = $this->getHomeworkService()->startHomework($homeworkId);
         $this->getHomeworkService()->submitHomework($result['id'], $answers);
         $res = array(

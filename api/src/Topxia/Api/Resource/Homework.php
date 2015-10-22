@@ -31,13 +31,34 @@ class Homework extends BaseResource
             $items = $this->getHomeworkService()->findItemsByHomeworkId($homework['id']);
             $indexdItems = ArrayToolkit::index($items, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
-            $homework['items'] = $this->filterItem($questions);
+            $homework['items'] = $this->filterItem($questions, null);
         }
         
         return $this->filter($homework);
     }
 
-    private function filterItem($items)
+    public function result(Application $app, Request $request, $id)
+    {
+        $homeworkResult = $this->getHomeworkService()->getResult($id);
+        $homework = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
+
+        $course = $this->getCorrseService()->getCourse($homework['courseId']);
+        $homework['courseTitle'] = $course['title'];
+        $lesson = $this->getCorrseService()->getLesson($homework['lessonId']);
+        $homework['lessonTitle'] = $lesson['title'];
+
+        $items = $this->getHomeworkService()->findItemsByHomeworkId($homework['id']);
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+
+        $itemSetResults = $this->getHomeworkService()->findItemResultsbyHomeworkResultId($homeworkResult['id']);
+        $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
+        $homework['items'] = $this->filterItem($questions, $itemSetResults);
+
+        return $this->filter($homework);
+    }
+
+    private function filterItem($items, $itemSetResults)
     {
         $newItmes = array();
         $materialMap = array();
@@ -51,12 +72,17 @@ class Homework extends BaseResource
                 $item['metas'] = $metas;
             }
 
+            $item['answer'] = $this->filterAnswer($item, $itemSetResults);
+
             if ('material' == $item['type']) {
                 $materialMap[$item['id']] = array();
             }
+
+            if ($itemSetResults) {
+                $item['result'] = $itemSetResults[$item['id']];
+            }
             
             $item['stem'] = $this->coverDescription($item['stem']);
-            unset($item['answer']);
             if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
                 $materialMap[$item['parentId']][] = $item;
                 continue;
@@ -77,6 +103,20 @@ class Homework extends BaseResource
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
         return $res;
+    }
+
+    private function filterAnswer($item, $itemSetResults) {
+
+        if (empty($itemSetResults)) {
+            if ('fill' == $item['type']) {
+                return array_map(function($answer) {
+                    return "";
+                }, $item['answer']);
+            }
+            return null;
+        }
+
+        return $this->coverAnswer($item['answer']);
     }
 
     private function coverAnswer($answer) {
