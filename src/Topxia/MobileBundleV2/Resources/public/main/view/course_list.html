@@ -41,7 +41,7 @@
         </li>
     </ul>
 
-    <div class="ui-scroller course-card" ui-scroll data="courses" on-infinite="loadMore()">
+    <div class="ui-scroller course-card" ui-scroll data="courses" on-infinite="loadMore(successCallback)">
       <ul class="ui-list ui-border-tb">
           <li class="ui-border-t" ng-repeat="course in courses" ng-href="#/course/{{ course.id }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
               

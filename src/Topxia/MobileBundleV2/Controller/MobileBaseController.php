@@ -353,6 +353,9 @@ class MobileBaseController extends BaseController
             $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
             $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
 
+            $user['email'] = "****";
+            $user['mobile'] = "****";
+            $user['verifiedMobile'] = "****";
             unset($user['password']);
             unset($user['payPasswordSalt']);
             unset($user['payPassword']);
@@ -563,6 +566,11 @@ class MobileBaseController extends BaseController
     public function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    public function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     public function getCourseOrderService()
