@@ -414,7 +414,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 				}
 				if (isset($itemValue['items'])) {
 					$filterItems = array_values($itemValue['items']);
-					$itemValue['items'] = array_map(function($filterItem)use ($controller){
+					$itemValue['items'] = array_map(function($filterItem)use ($controller, $isShowTestResult){
 						return $controller->filterMetas($filterItem, $isShowTestResult);
 					}, $filterItems);
 				}

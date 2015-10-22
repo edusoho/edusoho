@@ -5,6 +5,9 @@
 {% set script_controller = 'cloud/index' %}
 {% block main %}
 
+    {% if is_trial() %}
+      {{ trial|raw}}
+    {% else %}
       <ul class="nav nav-tabs mbl">
 
         <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
@@ -18,90 +21,7 @@
         </li>
 
       </ul>
+      {{ untrial|raw }}
+    {% endif %}
 
-      <!-- 广告页面开始 -->
-      <div class="es-eduyun-ad">
-        <div id="eduyun-poster" class="eduyun-poster carousel slide" data-ride="carousel">
-          <div class="carousel-inner" role="listbox">
-            <div class="item active">
-              <img class="img-responsive" src="{{ default_path('cloud-banner.jpg') }}">
-              <a href="{{ path('admin_cloud_access') }}" class="btn btn-warning" target="_blank">接入教育云<span
-                class="glyphicon glyphicon-circle-arrow-right"></span></a>
-            </div>
-            <div class="item">
-              <a href="http://open.edusoho.com/educloud/activity" target="_blank"><img class="img-responsive" src="{{ default_path('cloud-banner2.jpg') }}"></a>
-            </div>
-          </div>
-          <ol class="carousel-indicators">
-            <li data-target="#eduyun-poster" data-slide-to="0" class="active"></li>
-            <li data-target="#eduyun-poster" data-slide-to="1"></li>
-          </ol>
-        </div>
-        <div class="row es-row">
-          <div class="col-md-4">
-            <h3 class="es-ad-title">视频安全，四重保护一步到位</h3>
-
-            <div class="es-ad-info">
-                <p>自主研发TLP2.0技术</p>
-
-                <p>上万家机构使用安全零事故</p>
-            </div>
-            <div class="media">
-              <div class="pull-left">
-                <a>
-                  <img class="media-object" src="{{ default_path('icon_1.png') }}">
-                </a>
-              </div>
-              <div class="media-body">
-                  <h4 class="media-heading">认识教育云</h4>
-                  <a href="http://www.edusoho.com/videos/cloud.mp4" target="_blank">什么是教育云</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <h3 class="es-ad-title">万人直播，电视、移动端全面覆盖</h3>
-
-            <div class="es-ad-info">
-                <p>500+加速节点 更流畅</p>
-
-                <p>淘宝大学、新东方在线等大型客户共同选择</p>
-            </div>
-            <div class="media">
-              <div class="pull-left">
-                <a>
-                  <img class="media-object" src="{{ default_path('icon_2.png') }}">
-                </a>
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading"><a href="http://open.edusoho.com/article" target="_blank">最新资讯</a></h4>
-                <a href="{{articles[0]['articleUrl']}}" target="_blank">{{articles[0]['title']}}</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <h3 class="es-ad-title">一次接入，云短信随心选择</h3>
-
-            <div class="es-ad-info">
-              <p>及时发送通知，实用便捷 </p> 
-              <p>获得精准信息，实现高效营销</p>
-
-            </div>
-            <div class="media">
-              <div class="pull-left">
-                <a>
-                  <img class="media-object" src="{{ default_path('icon_3.png') }}">
-                </a>
-              </div>
-              <div class="media-body">
-                <h4 class="media-heading"><span>3分钟接入教育云</span></h4>
-                <span style="color:#f8ae64;">即将上线</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 广告页面结束 -->
-
-{% endblock %}
+    {% endblock %}

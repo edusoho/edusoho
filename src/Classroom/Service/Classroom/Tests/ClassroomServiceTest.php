@@ -16,8 +16,10 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $textClassroom = array(
             'title' => 'test',
+            'status' => 'draft',
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
 
         $this->assertEquals(1, $classroom['id']);
 
@@ -70,7 +72,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getClassroomService()->updateClassroom($classroom2['id'],$textClassroom2);
         $classroom3 = $this->getClassroomService()->addClassroom($textClassroom3);
         $this->getClassroomService()->updateClassroom($classroom3['id'],$textClassroom3);
-        $conditions = array('status' => 'draft','showable' => 0,'buyable' => 0);
+        $conditions = array('status' => 'draft','showable' => 1,'buyable' => 1);
         $result = $this->getClassroomService()->searchClassroomsCount($conditions);
         $this->assertEquals(3,$result);
     }
@@ -1123,9 +1125,9 @@ class ClassroomServiceTest extends BaseTestCase
             'roles' => array('ROLE_USER','ROLE_SUPER_ADMIN'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
-
+       
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
+       
         $this->assertEquals(true, $enabled);
 
         $currentUser->fromArray(array(
@@ -1141,7 +1143,8 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
-        $this->assertEquals(false, $enabled);
+        $this->assertEquals(true, $enabled);//默认是showable班级
+
 
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
 
@@ -1191,7 +1194,14 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
+        $this->assertEquals(true, $enabled);
+
+        $classroom['showable'] = '0';
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$classroom);
+        $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
         $this->assertEquals(false, $enabled);
+
+
     }
 
     public function testTryLookClassroom()
@@ -1252,7 +1262,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
 
-        $this->assertEquals(false, $enabled);
+        $this->assertEquals(true, $enabled);
     }
 
     public function testFindCoursesByClassroomId()

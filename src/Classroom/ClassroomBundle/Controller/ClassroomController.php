@@ -298,9 +298,15 @@ class ClassroomController extends BaseController
         $classroomDescription = $classroom['about'];
         $classroomDescription = strip_tags($classroomDescription,'');
         $classroomDescription = preg_replace("/ /","",$classroomDescription);
-    }
+        }
+
+        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        if ($member && !$member['locked']) {
+            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+        }
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
+            'layout' => $layout,
             'classroom' => $classroom,
             'member' => $member,
             'classroomDescription' => $classroomDescription
@@ -735,7 +741,7 @@ class ClassroomController extends BaseController
     private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-        if (!$classroomSetting['discount_buy']) {
+        if (empty($classroomSetting['discount_buy'])) {
             return false;
         }
 
@@ -933,6 +939,11 @@ class ClassroomController extends BaseController
         return $enableds;
     }
 
+    public function memberIdsAction(Request $request, $id)
+    {
+        $ids = $this->getClassroomService()->findMemberUserIdsByClassroomId($id);
+        return $this->createJsonResponse($ids);
+    }
 
     protected function getThreadService()
     {

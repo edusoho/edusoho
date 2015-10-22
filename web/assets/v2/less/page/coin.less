@@ -1,60 +1,25 @@
-.panel-qrcode {
-  .pay-qrcode-body {
-    border: 1px solid #f5f5f5;
-    margin-bottom: 50px;
-    padding: 20px;
-    text-align: center;
-  }
-  .qrcode-img {
+// 虚拟币充值
+.coin-block {
+  padding: 40px 0 25px 0;
+  .coin-text {
     float: left;
-    width: 19%;
-    margin-left: 24%;
-    @media (max-width: @screen-md-max) {
-      width: 23%;
-      margin-left: 21%;
-    }
-    @media (max-width: @screen-sm-max) {
-      width: 30%;
-      margin-left: 15%;
-    }
-    @media (max-width: @screen-xs-max) {
-      width: 100%;
-      float: none;
-      margin-left: 0;
-    }
     img {
-      width: 100%;
-      margin: 20px auto;
+      margin: 0 10px 14px 0;
+    }
+    strong {
+      font-size: 30px;
+      color: #ff5d42;
     }
   }
-  .qrcode-img-two {
+  .coin-btn {
     float: left;
-    width: 40%;
-    @media (max-width: @screen-md-max) {
-      width: 35%;
-    }
-    @media (max-width: @screen-sm-max) {
-      width: 40%;
-    }
-    img {
-      margin: 0 auto;
-    }
+    margin: 4px 0 0 55px;
   }
-  .text-qrcode {
-    color: #fff;
-    padding: 5px 10px;
-    background: @brand-primary;
-  }
-  .pay-qrcode-footer {
-    padding-right: 30px;
-    font-size: 16px;
-    text-align: right;
-    a {
-      font-size: 14px;
-    }
-    .pay-rmb {
-      font-size: 24px;
-      color: @brand-danger;
-    }
-  }
+}
+
+// 订单详情表
+.table.order-table > tbody > tr > td,
+.table.order-table > tbody > tr > th {
+  padding:  10px;
+  line-height: 22px;
 }

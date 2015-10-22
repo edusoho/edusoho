@@ -105,6 +105,7 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('crontab_next_executed_time', array($this, 'getNextExecutedTime')),
              new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
+             new \Twig_SimpleFunction('is_trial',array($this,'isTrial')),
         );
     }
     public function getParametersFromUrl($url)
@@ -332,6 +333,8 @@ class WebExtension extends \Twig_Extension
             $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
+
+        // $paths['balloon-video-player'] = 'http://player-cdn.edusoho.net/balloon-video-player';
 
         return $paths;
     }
@@ -607,6 +610,9 @@ class WebExtension extends \Twig_Extension
             }
             return $url;
         }
+        if (strpos($uri, "http://") !== false) {
+            return $uri;
+        }
         $uri = $this->parseFileUri($uri);
         if ($uri['access'] == 'public') {
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
@@ -655,6 +661,9 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false)
     {
+        if (strpos($uri, "http://") !== false) {
+            return $uri;
+        }
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
         
@@ -1140,6 +1149,13 @@ class WebExtension extends \Twig_Extension
     public function getName ()
     {
         return 'topxia_web_twig';
+    }
+
+    public function isTrial() {
+        if (file_exists(__DIR__ . '/../../../../../app/data/trial.lock')) {
+            return true;
+        }
+        return false;
     }
 
     public function blur_phone_number($phoneNum)
