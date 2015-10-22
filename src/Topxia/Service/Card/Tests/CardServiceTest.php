@@ -29,7 +29,9 @@ class CardServiceTest extends BaseTestCase
         $testCoupons = $this->getCouponService()->findCouponsByBatchId($couponBanch['id'],0,2);
         $card = array(
             'cardType' => 'moneyType',
-            'cardId' => $testCoupons[1]['id']
+            'cardId' => $testCoupons[1]['id'],
+            'userId' => $testCoupons[1]['userId'],
+            'deadline' => $testCoupons[1]['deadline']
         );
         $results = $this->getCardService()->addCard($card);
         $this->assertEquals($results['cardId'],$testCoupons[1]['id']);
