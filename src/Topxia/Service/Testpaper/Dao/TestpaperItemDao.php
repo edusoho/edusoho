@@ -30,7 +30,7 @@ interface TestpaperItemDao
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
 
-    public function getItemsCountByTestIdAndType(array $conditions, $groupBy='');
+    public function getItemsCountByParams(array $conditions, $groupBy='');
     
     public function findTestpaperItemsByPIdAndLockedTestIds($pId,$testIds);
 }
