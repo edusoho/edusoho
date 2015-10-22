@@ -29,37 +29,33 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     }
     public function checkoutBatchNotification($user){
         $conditions = array(
-            'userId' => $user['id'],
-            'type' => 'global'
+            'id' => 0,
+            'published' => 1
             );
-        $notification = $this->getNotificationDao()->searchNotifications($conditions,array('parentId','DESC'),0,1);
-        if(!empty($notification) && $notification[0]['parentId'] != 0){
-            $conditions = array(
-                'id' => $notification[0]['parentId'],
-                'published' => 1
-                );
-        }else{
-            $conditions = array(
-                'id' => 0,
-                'published' => 1
-                );
-        }
         $batchNotifications = $this->searchBatchNotifications($conditions,array('createdTime','ASC'),0,9999);
         if(!empty($batchNotifications)){
                 foreach ($batchNotifications as $key => $batchNotification) {
-                    $content = array(
-                        'content' => $batchNotification['content'],
-                        'title' => $batchNotification['title']
-                        );
-                    $notification = array(
-                        'userId'  => $user['id'],
-                        'type'  => $batchNotification['targetType'],
-                        'content' => $content,
-                        'parentId'  => $batchNotification['id'],
-                        'createdTime'  =>  $batchNotification['sendedTime'],
-                        );
-                    $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
-                    $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
+                    $conditions = array(
+                        'userId' => $user['id'],
+                        'type' => 'global',
+                        'parentId' => $batchNotification['id']
+                    );
+                    $notification = $this->getNotificationDao()->searchNotifications($conditions,array('parentId','DESC'),0,1);
+                    if(empty($notification)){
+                        $content = array(
+                            'content' => $batchNotification['content'],
+                            'title' => $batchNotification['title']
+                            );
+                        $notification = array(
+                            'userId'  => $user['id'],
+                            'type'  => $batchNotification['targetType'],
+                            'content' => $content,
+                            'parentId'  => $batchNotification['id'],
+                            'createdTime'  =>  $batchNotification['sendedTime'],
+                            );
+                        $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
+                        $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
+                }
             }
             return true;
         }
