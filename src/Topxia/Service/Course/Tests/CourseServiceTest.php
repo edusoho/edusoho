@@ -1846,7 +1846,6 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCreateLessonView()
     {
-        //wait it know
     }
 
     public function testFinishLearnLesson()
@@ -2506,6 +2505,8 @@ class CourseServiceTest extends BaseTestCase
         $result = $this->getCourseService()->getNextChapterNumber($course['id']);
         $this->assertEquals('2',$result);
     }
+    
+
 
 //================ Chapter API[end] ==================
 
@@ -3873,5 +3874,4 @@ class CourseServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Course.CourseMemberService');
     }
-
 }

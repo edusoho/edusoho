@@ -1,7 +1,7 @@
-{# 
+{#
     mode的取值有:
       my:该模式下不显示购买者
-      admin:该模式下详情无下拉菜单 
+      admin:该模式下详情无下拉菜单
       course:该模式下详情无下拉菜单
 #}
 
@@ -18,7 +18,7 @@
         <th>{{'购买者'|trans}}</th>
       {% endif %}
       <th>{{'支付方式'|trans}}</th>
-      <th>{{'操作'|trans}}</th>
+      <th style="min-width:100px">{{'操作'|trans}}</th>
     </tr>
   </thead>
   <tbody>
@@ -65,12 +65,12 @@
 
             {% if 'my' == mode %}
               <div class="btn-group">
-                <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'详情'|trans}}</a> 
+                <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'详情'|trans}}</a>
                 {% if order.status == 'refunding' or  order.status == 'created' %}
                   <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                   </a>
-                  <ul class="dropdown-menu pull-right {# text-right #}" style="min-width: 120px;" > 
+                  <ul class="dropdown-menu pull-right {# text-right #}" style="min-width: 120px;" >
 
                   {# <div class="actions"> #}
                     {% if order.status == 'refunding' %}

@@ -8,32 +8,41 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label >{{'云视频'|trans}}</label>
-    </div>
-    <div class="controls col-md-8 radios">
-
-      {{ radios('upload_mode', {'local':'关闭'|trans, 'cloud':'开启'|trans}, storageSetting.upload_mode) }}
-
+  {% if is_trial() %}
+    <div class="row form-group">
       <div class="help-block">
-        {{'EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击'|trans}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}
+        </br></br>
+        <p style = "text-align:center;font-size:16px">{{'视频托管服务由EduSoho教育云提供'|trans}} <a href="http://open.edusoho.com/educloud" target="_blank">{{'了解详情'|trans}}</a></p>
+        </br>
       </div>
-
     </div>
-  </div>
+    <hr>
+  {% else %}
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label >云视频</label>
+      </div>
+      <div class="controls col-md-8 radios">
 
+        {{ radios('upload_mode', {'local':'关闭'|trans, 'cloud':'开启'|trans}, storageSetting.upload_mode) }}
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_bucket" >{{'云视频Bucket'|trans}}</label>
+        <div class="help-block">
+          {{'EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击'|trans}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}
+        </div>
+
+      </div>
     </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
-    </div>
-  </div>
 
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_bucket" >{{'云视频Bucket'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
+      </div>
+    </div>
+  {% endif %}
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="cloud_bucket" >{{'云视频转码类型'|trans}}</label>
@@ -117,14 +126,14 @@
   <div class="row form-group" >
     <div class="col-md-3 control-label">
       <label>{{'云视频指纹'|trans}}</label>
-    </div>  
+    </div>
     <div class="controls col-md-8 radios">
       {{ radios('video_fingerprint', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.video_fingerprint) }}
       <div class="help-block">{{'开启后，将在视频播放中随机时间、随机位置显示当前网站域名及'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'的用户名。'|trans}}</div>
     </div>
   </div>
   {% if storageSetting.upload_mode == 'cloud' %}
-  
+
   <hr>
 <div class="upload-mode"></div>
 
@@ -146,7 +155,7 @@
     <div class="controls col-md-8">
 
 
-      <div class="file-chooser-bar" 
+      <div class="file-chooser-bar"
         {% if not storageSetting.video_header|default(null) %}
         style="display:none;"
         {% endif %}
@@ -161,7 +170,7 @@
 
       </div>
 
-      <div class="file-chooser-main" 
+      <div class="file-chooser-main"
         {% if storageSetting.video_header|default(null) %}
         style="display:none;"
         {% endif %}
@@ -171,7 +180,7 @@
             data-role="uploader-btn"
             data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
             data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
-            data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:'headLeader', targetId:0, lazyConvert:1}) }}{% endif %}" 
+            data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:'headLeader', targetId:0, lazyConvert:1}) }}{% endif %}"
             data-progressbar="#video-chooser-progress"
             data-storage-type="{{storageSetting.upload_mode}}"
             data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"

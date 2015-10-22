@@ -1,45 +1,38 @@
 {% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
 
-{# {% set script_controller = 'my/orders' %} #}
-
 {% set side_nav = 'my-bill' %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="es-section h400">
   {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
 
-  {# <div class="panel-heading">我的现金消费账单</div> #}
-    <div class="panel-body">
+  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="form-group">
+      <select class="form-control" name="lastHowManyMonths"  onchange="submit();">
+        {% set options = {'':'全部记录'|trans,'oneWeek':'最近一周'|trans,'twoWeeks':'最近两周'|trans,'oneMonth':'最近一个月'|trans,'twoMonths':'最近两个月'|trans,'threeMonths':'最近三个月'|trans} %}
+        {{ select_options(options, app.request.get('lastHowManyMonths')) }}
+      </select>
+    </div>
 
-    <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-      <div class="form-group">
-        <select class="form-control" name="lastHowManyMonths"  onchange="submit();">
-          {% set options = {'':'全部记录'|trans,'oneWeek':'最近一周'|trans,'twoWeeks':'最近两周'|trans,'oneMonth':'最近一个月'|trans,'twoMonths':'最近两个月'|trans,'threeMonths':'最近三个月'|trans} %}
-          {{ select_options(options, app.request.get('lastHowManyMonths')) }}
-        </select>
+    {#<button class="btn btn-primary">搜索</button>#}
+     <div class="control-label pull-right" style="padding-top: 8px;">
+      {{'收入：'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'元'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {{'支出：'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'元'|trans}}
       </div>
-
-      {#<button class="btn btn-primary">搜索</button>#}
-       <div class="control-label pull-right" style="padding-top: 8px;">
-        {{'收入：'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'元'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        {{'支出：'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'元'|trans}}
-        </div>
-    </form>
-
-        <br>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        {% if cashes %}
+  </form>
+  <br>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      {% if cashes %}
         <tr>
           <th><span class="text-sm">{{'流水号'|trans}}</span></th>
           <th><span class="text-sm">{{'名称'|trans}}</span></th>
           <th><span class="text-sm">{{'成交时间'|trans}}</span></th>
           <th class="text-right" style="padding-right: 60px;"><span class="text-sm">{{'收支'|trans}}</span></th>
-
           <th><span class="text-sm">{{'支付方式'|trans}}</span></th>
         </tr>
         {% for cash in cashes %}
-           <tr>
+          <tr>
             <td><span class="text-sm">{{cash.sn}}</span></td>
             <td><span class="text-sm">{{cash.name}}</span><br>
                 <span class="text-muted text-sm">{{'订单号：'|trans}}{{cash.orderSn}}</span></td>
@@ -71,15 +64,14 @@
             </td>
           </tr>
         {% endfor %}
-        {% else %}
-        <div class="empty">{{'暂无记录'|trans}}</div>
-        {% endif %}
-      </table>
-    </div>
-    <nav class="text-center">
-      {{ web_macro.paginator(paginator) }}
-    </nav>
+      {% else %}
+      <div class="empty">{{'暂无记录'|trans}}</div>
+      {% endif %}
+    </table>
   </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
 </div>
 
 {% endblock %}

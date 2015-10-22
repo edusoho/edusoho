@@ -16,12 +16,12 @@ define(function(require, exports, module) {
             var isMobile = reg_mobile.test(emailOrMobile);
             if(isMobile){
                 $(".email_mobile_msg").removeClass('hidden');
-                $('.captcha_div').addClass('hidden');
+                $('.js-captcha').addClass('hidden');
                 $('.js-sms-send').removeClass('disabled');
             }else {
                 $(".email_mobile_msg").addClass('hidden');
                 $('.js-sms-send').addClass('disabled');
-                $('.captcha_div').removeClass('hidden');
+                $('.js-captcha').removeClass('hidden');
             }
             if (isEmail || isMobile) {
                 result = true;
