@@ -1,11 +1,11 @@
 <?php
-namespace Topxia\Service\CardBag\Impl;
+namespace Topxia\Service\Card\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\CardBag\CardBagService;
+use Topxia\Service\Card\CardService;
 use Topxia\Common\ArrayToolkit;
 
-class CardBagServiceImpl extends BaseService implements CardBagService
+class CardServiceImpl extends BaseService implements CardService
 {
 	public function addCard($card)
 	{
@@ -30,13 +30,13 @@ class CardBagServiceImpl extends BaseService implements CardBagService
 			$card['deadline'] = $coupon[$card['cardId']]['deadline'];
 			//Coupon插件没有提供的getCoupon方法
 		}
-		return $this->getCardBagDao()->addCard($card);
+		return $this->getCardDao()->addCard($card);
 		
 	}
 
-	protected function getCardBagDao()
+	protected function getCardDao()
 	{
-		return $this->createDao('CardBag.CardBagDao');
+		return $this->createDao('Card.CardDao');
 	}
 
 	protected function getCouponService()

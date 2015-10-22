@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\CardBag\Event;
+namespace Topxia\Service\Card\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Common\StringToolkit;
@@ -7,7 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
-class CardBagEventSubscriber implements EventSubscriberInterface
+class CardEventSubscriber implements EventSubscriberInterface
 {
 	public static function getSubscribedEvents()
     {
@@ -19,12 +19,12 @@ class CardBagEventSubscriber implements EventSubscriberInterface
     public function onCardAdd(ServiceEvent $event)
     {
     	$card = $event->getSubject();
-    	$this->getCardBagService()->addCard($card);
+    	$this->getCardService()->addCard($card);
 
     }
 
-    protected function getCardBagService()
+    protected function getCardService()
     {
-        return ServiceKernel::instance()->createService('CardBag.CardBagService');
+        return ServiceKernel::instance()->createService('Card.CardService');
     }
 }
