@@ -89,22 +89,19 @@ class ClassroomController extends BaseController
         $allClassrooms = ArrayToolkit::index($classrooms, 'id');
         if(!$categoryArray){
             $categoryArrayDescription = array();
-        }
-        else{
-        $categoryArrayDescription = $categoryArray['description'];
-        $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
-        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
-        $categoryArrayDescription = substr( $categoryArrayDescription, 0, 100 );
+        } else {
+            $categoryArrayDescription = $categoryArray['description'];
+            $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+            $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+            $categoryArrayDescription = substr( $categoryArrayDescription, 0, 100 );
         } 
         if(!$categoryArray){
-            $CategoryParent = '';
-        }
-        else{
+            $categoryParent = '';
+        } else {
             if(!$categoryArray['parentId']){
-                    $CategoryParent = '';
-                }
-                else{
-                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+                $categoryParent = '';
+            } else {
+                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
 
@@ -116,7 +113,7 @@ class ClassroomController extends BaseController
             'category' => $category,
             'categoryArray' => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
-            'CategoryParent' => $CategoryParent,
+            'categoryParent' => $categoryParent,
             'fliter' => $fliter,
             'levels' => $levels,
             'orderBy' => $orderBy,

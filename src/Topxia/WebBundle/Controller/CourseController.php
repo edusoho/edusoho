@@ -95,22 +95,20 @@ class CourseController extends CourseBaseController
 		}
 		if(!$categoryArray){
 			$categoryArrayDescription = array();
-		}
-		else{
-		$categoryArrayDescription = $categoryArray['description'];
-		$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
-        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
-        $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
+		} else{
+			$categoryArrayDescription = $categoryArray['description'];
+			$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+	        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+	        $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         } 
         if(!$categoryArray){
-            $CategoryParent = '';
-        }
-        else{
+            $categoryParent = '';
+        } else {
             if(!$categoryArray['parentId']){
-                    $CategoryParent = '';
+                    $categoryParent = '';
                 }
                 else{
-                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
@@ -125,7 +123,7 @@ class CourseController extends CourseBaseController
 			'categoryArray' => $categoryArray,
 			'group' => $group,
 			'categoryArrayDescription' => $categoryArrayDescription,
-			'CategoryParent' => $CategoryParent,
+			'categoryParent' => $categoryParent,
 			'levels' => $levels,
 		));	
 	}
