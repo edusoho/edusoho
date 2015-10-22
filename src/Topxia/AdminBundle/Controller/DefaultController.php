@@ -110,6 +110,51 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function inspectAction(Request $request)
+    {
+        $inspectList = array();
+        $inspectList = array($this->addInspectRole('host',$this->hostInspect($request)));
+
+        $inspectList = array_filter($inspectList);
+        return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
+            'inspectList' => $inspectList
+        ));
+    }
+
+
+    private function addInspectRole($name, $function)
+    {
+        if ($function['status'] == 'ok') {
+            return array();
+        }
+
+        return array('name' => $name,'value' => array(
+                            'status' => $function['status'],
+                            'except' => $function['except'],
+                            'actually' => $function['actually'],
+                            'errorMessage' => $function['errorMessage'],
+                            'settingUrl' => $function['settingUrl']
+                    ));
+    }
+
+    private function hostInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_setting_site');
+        $fliter = array('http://','https://');
+        if ($currentHost != str_replace($fliter,"",$siteSetting['url'])) {
+            return array(
+                'status' => 'fail',
+                'errorMessage' => '当前域名和设置域名不符!',
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl
+                );
+        }
+        return array('status' => 'ok','except' => $siteSetting['url'],'actually' => $currentHost,'settingUrl' => $settingUrl);
+    }
+
     public function getCloudNoticesAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
