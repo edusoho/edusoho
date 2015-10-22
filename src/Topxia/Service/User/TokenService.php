@@ -27,7 +27,15 @@ interface TokenService
      * @return boolean 该Token值是否OK
      */
     public function verifyToken($type, $value);
-
+    /**
+     * 校验优惠码Token
+     *
+     * @param   string  $type Token类型
+     * @param   string  $key  Token的值
+     *
+     * @return string 该Token的错误信息
+     */
+    public function verifyCouponToken($type, $value);
     /**
      * 作废一个Token
      * 

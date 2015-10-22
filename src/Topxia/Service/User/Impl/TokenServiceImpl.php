@@ -51,6 +51,24 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $token;
     }
 
+    public function verifyCouponToken($type, $value)
+    {
+        $token = $this->getTokenDao()->getTokenByToken($value);
+        if (empty($token)) {
+            return $result = 'empty';
+        }
+
+        if ($token['type'] != $type) {
+            return $result = 'notype';
+        }
+
+        if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time()) ) {
+            return $result = 'end';
+        }
+
+        return $token;
+    }
+
     public function destoryToken($token)
     {
         $token = $this->getTokenDao()->getTokenByToken($token);
