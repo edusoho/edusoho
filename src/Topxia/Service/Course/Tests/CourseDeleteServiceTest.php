@@ -10,24 +10,29 @@ use Topxia\Service\Taxonomy\TagService;
 
 class CourseDeleteServiceTest extends BaseTestCase
 {
-	public function testdelete()
+    public function testdelete()
     {
-    	$course = array(
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course = array(
             'title' => 'online test course '
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->getCoursesCount();
         $this->assertEquals(1,$result);
 
-        $status = array('courseId'=>$createCourse['id']);
-    	$this->getStatusService()->publishStatus($status);
-    	$count = $this->getStatusService()->searchStatusesCount(array('courseId'=>$createCourse['id']));
-    	$this->assertEquals(1,$count);
+        $status = array('courseId'=>$createCourse['id'],'type'=>'start_learn_lesson','properties'=>'{"course":{"id":"3","title":"edusoho_java\u8bfe\u7a0b","picture":"","type":"normal","rating":"0","about":"","price":"0.00"},"lesson":{"id":"2","number":"1","type":"text","title":"edusoho_java\u8bfe\u7a0b_1","summary":"124214"}}');
+        $this->getStatusService()->publishStatus($status);
+        $count = $this->getStatusService()->searchStatusesCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(1,$count);
 
-    	$announcementInfo = array(
-        	'targetType' => 'course',
-        	'targetId' => $createCourse['id'],
-        	'content' => 'test_announcement',
+        $announcementInfo = array(
+            'targetType' => 'course',
+            'targetId' => $createCourse['id'],
+            'content' => 'test_announcement',
             'startTime'=>time(),
             'endTime'=>time()+3600*1000,
             'url'=> 'http://www.baidu.com'
@@ -51,13 +56,13 @@ class CourseDeleteServiceTest extends BaseTestCase
 
         $thread = array(
             'courseId' => $createCourse['id'],
-			'type' => 'discussion',
-			'title' => 'test thread',
-			'content' => 'test content',
-		);
-    	$createdThread = $this->getThreadService()->createThread($thread);
+            'type' => 'discussion',
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
 
-    	$lesson = $this->getCourseService()->createLesson(array(
+        $lesson = $this->getCourseService()->createLesson(array(
             'courseId' => $createCourse['id'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
@@ -70,10 +75,10 @@ class CourseDeleteServiceTest extends BaseTestCase
             'courseId'=>$createCourse['id']
         ));
 
-		$lessonView = array('title'=>'lessonView','courseId'=>$createCourse['id'],'lessonId'=>$lesson['id']);
+        $lessonView = array('title'=>'lessonView','courseId'=>$createCourse['id'],'lessonId'=>$lesson['id'],'fileId'=>'1', 'fileType'=>'video', 'fileStorage'=>'local', 'fileSource'=>'www.baidu.avi');
         $this->getCourseService()->createLessonView($lessonView);
 
-        $courseLessonReplay = array('courseId'=>$createCourse['id'],'title'=>'录播回放');
+        $courseLessonReplay = array('courseId'=>$createCourse['id'],'title'=>'录播回放','lessonId'=>$lesson['id'],'replayId'=>'1','userId'=>$currentUser['id'],'createdTime'=>time());
         $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
     
         $draft = array(
@@ -88,9 +93,9 @@ class CourseDeleteServiceTest extends BaseTestCase
         $createdChapter = $this->getCourseService()->createChapter($chapter);
 
         $target ='course-'.$createCourse['id'];
-        $testpaper = array('name' => 'Test','target'=>$target);
+        $testpaper = array('name' => 'Test','target'=>$target,'targetId'=>$createCourse['id'],'pattern'=>'QuestionType','ranges'=>array('you'=>'isSB'),'counts'=>array('hello'=>'imstefanie'),'missScores'=>'-1');
         $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
+        $this->assertEquals('Test',$testpaper[0]['name']);
 
         $question = array(
             'type' => 'single_choice',
@@ -108,41 +113,53 @@ class CourseDeleteServiceTest extends BaseTestCase
         
         $types = array('questions','testpapers','materials','chapters','drafts','lessons','lessonLearns','lessonReplays','lessonViews','favorites','notes','threads','reviews','announcements','statuses','members','course');
         foreach($types as $type){
-        	$this->getCourseDeleteService()->delete($createCourse['id'],$type);
+            $this->getCourseDeleteService()->delete($createCourse['id'],$type);
         }
 
         $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$createCourse['id']}"));
         $this->assertEquals(0,$questionCount);
         $testpaperCount = $this->getTestpaperDao()->searchTestpapersCount(array('target'=>"course-{$createCourse['id']}"));
-		$this->assertEquals(0,$testpaperCount);
-		$materialCount = $this->getMaterialDao()->getMaterialCountByCourseId($createCourse['id']);
-		$this->assertEquals(0,$materialCount);
-		$chapterCount = $this->getCourseChapterDao()->searchChapterCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$chapterCount);
-		$draftCount = $this->getDraftDao()->searchDraftCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$draftCount);
-		$lessonCount = $this->getLessonDao()->searchLessonCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$lessonCount);
-		$lessonLearnCount = $this->getLessonLearnDao()->searchLearnCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$lessonLearnCount);
-		$lessonReplayCount = $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$lessonReplayCount);
-		$lessonViewCount = $this->getLessonViewDao()->searchLessonViewCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$lessonViewCount);
-		$favoriteCount = $this->getFavoriteDao()->searchCourseFavoriteCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$favoriteCount);
-		$noteCount = $this->getCourseNoteDao()->searchNoteCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$noteCount);
-		$threadCount = $this->getThreadDao()->searchThreadCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$threadCount);
-		$reviewCount = $this->getReviewDao()->searchReviewsCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$reviewCount);
-		$announcementCount = $this->getAnnouncementDao()->searchAnnouncementsCount(array('targetId'=>$createCourse['id'],'targetType'=>'course'));
-		$this->assertEquals(0,$announcementCount);
-		$statusCount = $this->getStatusDao()->searchStatusesCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$statusCount);
-		$memberCount = $this->getCourseMemberDao()->searchMemberCount(array('courseId'=>$createCourse['id']));
-		$this->assertEquals(0,$memberCount);
+        $this->assertEquals(0,$testpaperCount);
+        $materialCount = $this->getMaterialDao()->getMaterialCountByCourseId($createCourse['id']);
+        $this->assertEquals(0,$materialCount);
+        $chapterCount = $this->getCourseChapterDao()->searchChapterCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$chapterCount);
+        $draftCount = $this->getDraftDao()->searchDraftCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$draftCount);
+        $lessonCount = $this->getLessonDao()->searchLessonCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$lessonCount);
+        $lessonLearnCount = $this->getLessonLearnDao()->searchLearnCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$lessonLearnCount);
+        $lessonReplayCount = $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$lessonReplayCount);
+        $lessonViewCount = $this->getLessonViewDao()->searchLessonViewCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$lessonViewCount);
+        $favoriteCount = $this->getFavoriteDao()->searchCourseFavoriteCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$favoriteCount);
+        $noteCount = $this->getCourseNoteDao()->searchNoteCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$noteCount);
+        $threadCount = $this->getThreadDao()->searchThreadCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$threadCount);
+        $reviewCount = $this->getReviewDao()->searchReviewsCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$reviewCount);
+        $announcementCount = $this->getAnnouncementDao()->searchAnnouncementsCount(array('targetId'=>$createCourse['id'],'targetType'=>'course'));
+        $this->assertEquals(0,$announcementCount);
+        $statusCount = $this->getStatusDao()->searchStatusesCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$statusCount);
+        $memberCount = $this->getCourseMemberDao()->searchMemberCount(array('courseId'=>$createCourse['id']));
+        $this->assertEquals(0,$memberCount);
+    }
+
+    private function createUser()
+    {
+        $user = array();
+        $user['email'] = "user@user.com";
+        $user['nickname'] = "user";
+        $user['password'] = "user";
+        $user =  $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
+        $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
+        return $user;
     }
 
     protected function getCourseService()
@@ -167,7 +184,7 @@ class CourseDeleteServiceTest extends BaseTestCase
     }
     protected function getThreadService()
     {
-    	return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course.ThreadService');
     }
     protected function getQuestionService()
     {
