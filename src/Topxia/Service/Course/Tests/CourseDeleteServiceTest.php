@@ -93,23 +93,34 @@ class CourseDeleteServiceTest extends BaseTestCase
         $createdChapter = $this->getCourseService()->createChapter($chapter);
 
         $target ='course-'.$createCourse['id'];
+
         $testpaper = array('name' => 'Test','target'=>$target,'targetId'=>$createCourse['id'],'pattern'=>'QuestionType','ranges'=>array('you'=>'isSB'),'counts'=>array('hello'=>'imstefanie'),'missScores'=>'-1');
         $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
         $this->assertEquals('Test',$testpaper[0]['name']);
 
         $question = array(
             'type' => 'single_choice',
-            'stem' => 'test single choice question 1.',
-            'choices' => array(
-                'question 1 -> choice 1',
-                'question 1 -> choice 2',
-                'question 1 -> choice 3',
-                'question 1 -> choice 4',
-            ),
-            'answer' => array(1),
-            'target' =>$target
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => $target,
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>0,
+            'copyId'=>1,
+            "answer"=>"2"
         );
         $question = $this->getQuestionService()->createQuestion($question);
+
+        $testpaper = array('name' => 'Test',"description"=>'测试',"limitedTime"=>'0',"mode"=>"rand","range"=>"course","ranges"=>array(),"counts"=>array("single_choice"=>"1","choice"=>"0","uncertain_choice"=>"0","fill"=>"0","determine"=>"0","material"=>"0"),'CopyId'=>1,'target'=>$target,"scores"=>array("single_choice"=>"2","uncertain_choice"=>"2","choice"=>"2","uncertain_choice"=>"2","fill"=>"2","determine"=>"2","essay"=>"2","material"=>"2"),"missScores"=>array("choice"=>0,"uncertain_choice"=>0),"percentages"=>array("simple"=>"","normal"=>"","difficulty"=>''),"target"=>$target,"pattern"=>"QuestionType","copyId"=>"1");
+
+        $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
+        $this->assertEquals('Test',$testpaper[0]['name']);
         
         $types = array('questions','testpapers','materials','chapters','drafts','lessons','lessonLearns','lessonReplays','lessonViews','favorites','notes','threads','reviews','announcements','statuses','members','course');
         foreach($types as $type){
