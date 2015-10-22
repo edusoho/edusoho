@@ -122,19 +122,13 @@ class DefaultController extends BaseController
     }
 
 
-    private function addInspectRole($name, $function)
+    private function addInspectRole($name, $value)
     {
-        if ($function['status'] == 'ok') {
+        if ($value['status'] == 'ok') {
             return array();
         }
 
-        return array('name' => $name,'value' => array(
-                            'status' => $function['status'],
-                            'except' => $function['except'],
-                            'actually' => $function['actually'],
-                            'errorMessage' => $function['errorMessage'],
-                            'settingUrl' => $function['settingUrl']
-                    ));
+        return array('name' => $name,'value' => $value);
     }
 
     private function hostInspect($request)
