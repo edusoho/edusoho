@@ -20,7 +20,11 @@
 
         </ul> 
       {% endif %}
-
+      {% if is_trial() %}
+        {% if trialhtml is not null %}
+          {{ trialhtml|raw }}
+        {% endif %}
+      {% else %}
         <div class="eduyun-main">
 
           <!--个人资料-->
@@ -103,6 +107,8 @@
           </fieldset>
           
         </div>
+      {% endif %}
 
+      
 
 {% endblock %}

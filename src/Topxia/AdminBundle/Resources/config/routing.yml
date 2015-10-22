@@ -288,9 +288,12 @@ admin_course:
     defaults: { _controller: TopxiaAdminBundle:Course:index, filter:'normal' }
 
 admin_course_delete:
-    pattern:  /course/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Course:delete }
-    methods: [POST]
+    pattern:  /course/{courseId}/delete/{type}
+    defaults: { _controller: TopxiaAdminBundle:Course:delete, type:'' }
+
+admin_check_password:
+    pattern:  /check/password
+    defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
 
 admin_course_publish:
     pattern: /course/{id}/publish
@@ -651,7 +654,11 @@ admin_optimize_backupdb:
 admin_optimize_remove_upload_files:
     pattern:  /setting/optimize/remove-unusedfiles
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
-    methods: [POST]
+
+
+admin_optimize_remove_show_progressbar:
+    pattern:  /setting/optimize/show-progressbar
+    defaults: { _controller: TopxiaAdminBundle:Optimize:showProgressbar }
 
 admin_logs:
     pattern:  /setting/logs
@@ -1094,6 +1101,10 @@ admin_operation_analysis_lesson_paid:
 admin_operation_analysis_lesson_finished:
     pattern:  /operation/analysis/lesson/finished/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
+
+admin_operation_analysis_classroom_paid:
+    pattern:  /operation/analysis/classroom/paid/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:paidClassroom }
 
 admin_operation_analysis_video_viewed:
     pattern:  /operation/analysis/video/viewed/{tab}

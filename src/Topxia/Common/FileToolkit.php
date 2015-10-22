@@ -943,7 +943,7 @@ class FileToolkit
         if($resizeWidth>0 && $resizeHeight>0){
             $image->resize(new Box($resizeWidth, $resizeHeight));
         }
-        $image->save($targetPath, array('quality' => 90));
+        $image->save($targetPath, array('quality' => 100));
 
         return $image;
     }
@@ -951,7 +951,7 @@ class FileToolkit
     public static function resize($image, $targetPath, $resizeWidth=0, $resizeHeight=0)
     {
         $image->resize(new Box($resizeWidth, $resizeHeight));
-        $image->save($targetPath, array('quality' => 90));
+        $image->save($targetPath, array('quality' => 100));
         return $image;
     }
 
@@ -999,6 +999,12 @@ class FileToolkit
         $scaledSize = $naturalSize->widen($width)->heighten($height);
 
         return array($naturalSize, $scaledSize);
+    }
+
+    public static function getMimeType(File $file)
+    {
+        $mimeType = finfo_file(finfo_open(FILEINFO_MIME),$file);
+        return $mimeType;
     }
 
 }
