@@ -31,69 +31,38 @@
   </footer> #}
   <section class="friendlink">
     <div class="container">
-      <h4>友情链接</h4>
-      <ul>
-        <li><a href="">Edusoho开源网络课堂</a></li>
-        <li><a href="">气球雨学院</a></li>
-        <li><a href="">好知网</a></li>
-        <li><a href="">360安全网址导航</a></li>
-        <li><a href="">站长之家</a></li>
-        <li><a href="">新课网</a></li>
-        <li><a href="">好知</a></li>
-      </ul>
+      {{ block_show('mooc:footer_link') }}
     </div>
   </section>
   <footer>
     <div class="container">
       <div class="row">
-        <div class="col-md-4 footer-link">
-          <div class="link-item">
-            <h4>关于</h4>
-            <ul>
-              <li><a href="">关于我们</a></li>
-              <li><a href="">联系我们</a></li>
-              <li><a href="">招聘信息</a></li>
-            </ul>
-          </div>
-          <div class="link-item">
-            <h4>帮助</h4>
-            <ul>
-              <li><a href="">常见问题</a></li>
-              <li><a href="">客服</a></li>
-              <li><a href="">免责声明</a></li>
-            </ul>
-          </div>
-          <div class="link-item">
-            <h4>推荐</h4>
-            <ul>
-              <li><a href="">热门老师</a></li>
-              <li><a href="">热门课程</a></li>
-              <li><a href="">咨询</a></li>
-            </ul>
-          </div>
-
-        </div>
-        <div class="col-md-4 footer-attr">
-          <p>
-            <i class="iconfont icon-zuobiao"></i>
-            浙江省杭州市西湖区余杭塘路866号
-          </p>
-          <p>
-            <i class="es-icon es-icon-phone"></i>
-            0571-8681-9929
-          </p>
-          <p>
-            <i class="es-icon es-icon-mail"></i>
-            test@edusoho.com
-          </p>
-        </div>
-        <div class="col-md-4 footer-logos">
-         
-        </div>
+        {{ block_show('mooc:bottom_info') }}
       </div>
     </div>
+    <div class="footer-by">
+      <div class="container">
+        {% include "TopxiaWebBundle::powered-by.html.twig" %}
+        {{ setting('site.analytics')|raw }} 
+        <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
+        <div class="mts">
+          {% if setting('site.copyright') %}
+            课程内容版权均归
+            <a href="/">
+              {{ setting('site.copyright') }}
+            </a>
+            所有
+          {% endif %}
+          {% if setting('site.icp') %}
+            <a class="mlm" href="http://www.miibeian.gov.cn/" target="_blank">
+              {{ setting('site.icp') }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </section>
   </footer>
-  <section class="footer-by">
+<!--   <section class="footer-by">
     <p>Powered by EduSoho v6.6.4 ©2014-2015 课程存档</p>
     <p>课程内容版权均归 杭州阔知网络科技有限公司 所有 浙ICP备13006852号-1</p>
-  </section>
+  </section> -->
