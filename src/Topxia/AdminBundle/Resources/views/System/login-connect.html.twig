@@ -85,7 +85,7 @@
       </div> 
   </div>
   </fieldset>
-<fieldset id="third_login"  {% if loginConnect.enabled|default(null) == 0} style="display:none"{% endif %}>
+<fieldset id="third_login"  {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
   {% for type, client in clients %}
     <fieldset data-role="oauth2-setting" data-type="{{ type }}">
       <legend>{{ client.admin_name }}</legend>
