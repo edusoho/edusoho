@@ -48,8 +48,8 @@ class CourseMediaManageController extends BaseController
     public function importAction(Request $request, $id)
     {
     	$url = $request->query->get('url');
-    	$proxy = new ParserProxy();
-    	$item = $proxy->parseItem($url);
+        $proxy = new ParserProxy();
+        $item = $proxy->parseItem($url);
     	return $this->createJsonResponse($item);
     }
 

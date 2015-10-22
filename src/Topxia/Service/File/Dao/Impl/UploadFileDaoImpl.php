@@ -55,6 +55,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->orderBy($orderBy[0], $orderBy[1])
             ->setFirstResult($start)
             ->setMaxResults($limit);
+            
         return $builder->execute()->fetchAll() ? : array(); 
     }
 
@@ -87,12 +88,19 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getFile($id);
     }
 
-    public function updateFileUsedCount($fileIds, $offset){
+    public function waveUploadFile($id, $field, $diff)
+    {
+        $fields = array('usedCount');
 
-        $marks = str_repeat('?,', count($fileIds) - 1) . '?';
-        $sql = "UPDATE {$this->table} SET usedCount = usedCount + ? where id in ({$marks})";
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+        }
 
-        return $this->getConnection()->executeUpdate($sql, array_merge(array($offset), $fileIds));
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+
+        $this->clearCached();
+
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
     public function getFileByTargetType($targetType)
@@ -114,6 +122,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->from($this->table, $this->table)
             ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
+            ->andWhere('targetId IN ( :targets )')
             ->andWhere('type = :type')
             ->andWhere('storage = :storage')
             ->andWhere('filename LIKE :filenameLike')

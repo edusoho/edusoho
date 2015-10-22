@@ -566,7 +566,6 @@ class CourseController extends CourseBaseController
 		} else {
 			$canExit = false;
 		}
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),

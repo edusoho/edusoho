@@ -947,7 +947,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
         if ($isStudentOrAuditor) {
-            if (array_intersect($member['role'], array('student', 'auditor'))) {
+            if (array_intersect($member['role'], array('student', 'auditor', 'teacher', 'headTeacher'))) {
                 return true;
             }
         } else {

@@ -276,6 +276,10 @@ class SettingController extends BaseController
 
     public function mailerAction(Request $request)
     {
+        if($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array());  
+        }
+
         $mailer = $this->getSettingService()->get('mailer', array());
         $default = array(
             'enabled' => 0,
@@ -641,5 +645,10 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

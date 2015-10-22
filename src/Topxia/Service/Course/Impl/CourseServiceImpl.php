@@ -386,6 +386,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$courseFavorites = $this->getFavoriteDao()->findCourseFavoritesByUserId($userId, $start, $limit);
 		$favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
 		return CourseSerialize::unserializes($favoriteCourses);
+	}
+
+	public function findFavoritesCountByCourseId($courseId)
+	{
+		return $this->getFavoriteDao()->findFavoritesCountByCourseId($courseId);
 	}	
 
 	public function createCourse($course)
@@ -601,7 +606,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fileIds = ArrayToolkit::column($lessons, "mediaId");
 
 			if(!empty($fileIds)){
-				$this->getUploadFileService()->decreaseFileUsedCount($fileIds);
+				foreach ($fileIds as $fileId) {
+					$this->getUploadFileService()->waveUploadFile($fileId,'usedCount',-1);
+				}
 			}
 		}
 
@@ -1043,7 +1050,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// Increase the linked file usage count, if there's a linked file used by this lesson.
 		if(!empty($lesson['mediaId'])){
-			$this->getUploadFileService()->increaseFileUsedCount(array($lesson['mediaId']));
+			$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',1);
 		}
 
 		$this->updateCourseCounter($course['id'], array(
@@ -1195,17 +1202,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if($fields['mediaId'] != $lesson['mediaId']){
 			// Incease the link count of the new selected lesson file
 			if(!empty($fields['mediaId'])){
-				$this->getUploadFileService()->increaseFileUsedCount(array($fields['mediaId']));
+				$this->getUploadFileService()->waveUploadFile($fields['mediaId'],'usedCount',1);
 			}
 
 			// Decrease the link count of the original lesson file
 			if(!empty($lesson['mediaId'])){
-				$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+				$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
 			}
 		}
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+		$updatedLesson['fields']=$lesson;
 		$this->dispatchEvent("course.lesson.update",$updatedLesson);
+		
 
 		return $updatedLesson;
 	}
@@ -1255,7 +1264,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
 		if(!empty($lesson['mediaId'])){
-			$this->getUploadFileService()->decreaseFileUsedCount(array($lesson['mediaId']));
+			$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
 		}
 
 		// Delete all linked course materials (the UsedCount of each material file will also be decreaased.)
@@ -1313,8 +1322,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
 
-		$this->dispatchEvent("course.lesson.update",$publishLesson);
-		$this->dispatchEvent("course.lesson.pubilsh",$publishLesson);
+		$this->dispatchEvent("course.lesson.publish",$publishLesson);
 	}
 
 	public function unpublishLesson($courseId, $lessonId)
@@ -1328,7 +1336,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
 
-		$this->dispatchEvent("course.lesson.update",$unpublishLesson);
+		$this->dispatchEvent("course.lesson.unpublish",$unpublishLesson);
 	}
 
 	public function getNextLessonNumber($courseId)

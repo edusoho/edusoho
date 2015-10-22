@@ -203,7 +203,6 @@ interface CourseService
 	public function searchWatchTime($conditions);
 
 	public function checkWatchNum($userId, $lessonId);
-
 	/**
 	 * Chapter API
 	 */

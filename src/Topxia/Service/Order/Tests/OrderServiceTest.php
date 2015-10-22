@@ -565,12 +565,157 @@ class OrderServiceTest extends BaseTestCase
 
     public function testSearchBill()
     {
-        //等待写
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则paymen会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则paymen会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse2['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+        );
+        $sort = 'latest';
+        $result = $this->getOrderService()->searchBill($conditions,$sort,0,100);
+        $this->assertEquals(count($result),2);
+
     }
 
     public function testCountUserBillNum()
     {
-        //bill待研究
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse2['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+        );
+        $sort = 'latest';
+        $result = $this->getOrderService()->countUserBillNum($conditions);
+        $this->assertEquals($result,2);
     }
 
     public function testSumOrderAmounts()
@@ -843,7 +988,6 @@ class OrderServiceTest extends BaseTestCase
     /**  
     * @expectedException Topxia\Service\Common\ServiceException  
     */
-
     public function testPayOrderTwice()
     {
         $user = $this->createUser(); 
@@ -890,7 +1034,6 @@ class OrderServiceTest extends BaseTestCase
             'paidTime' => time(),
         ));
     }
-
 
 
     public function testPayOrderThird()
@@ -984,9 +1127,1719 @@ class OrderServiceTest extends BaseTestCase
         $this->assertEquals(1,$result);
     }
 
+    // /**  
+    // * @expectedException Topxia\Service\Common\ServiceException  
+    // */
+    // public function testCanOrderPayTwice()
+    // {
+    //     $order = nulll;
+    //     $this->getOrderService()->canOrderPay($order);
+    // }
+
     public function testCancelOrder()
     {
-        //
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse2['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $canceledOrder = $this->getOrderService()->cancelOrder($order1['id']);
+        $this->assertEquals($canceledOrder['status'],'cancelled');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCancelOrderTwice()
+    {
+        $order = array('id'=>'100');
+        $result = $this->getOrderService()->cancelOrder($order['id']);
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCancelOrderThird()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $result = $this->getOrderService()->cancelOrder($order1['id']);
+    }
+
+    public function testSumOrderPriceByTarget()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $result = $this->getOrderService()->sumOrderPriceByTarget('course',$createCourse1['id']);
+        $this->assertEquals($result,'1');
+    }
+    public function testSumCouponDiscountByOrderIds()
+    {
+        //需要插件支持
+
+    }
+    public function testFindUserRefundCount()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
+        $result = $this->getOrderService()->findUserRefundCount($user['id'],0,10);
+        $this->assertEquals($result,2);
+    }
+    public function testFindRefundsByIds()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
+        $result = $this->getOrderService()->findRefundsByIds(array(2,1));
+        $this->assertEquals(count($result),2);        
+    }
+    public function testFindUserRefunds()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
+        $result = $this->getOrderService()->findUserRefunds($user['id'],0,10);
+        $this->assertEquals(count($result),2);
+    }
+    public function testSearchRefunds()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'success',//取消订单成功
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
+        $result = $this->getOrderService()->searchRefunds($conditions,'1',0,100);
+        $this->assertEquals(count($result),2);
+    }
+    public function testSearchRefundCount()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'success',//取消订单成功
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
+        $result = $this->getOrderService()->searchRefundCount($conditions);
+        $this->assertEquals($result,2);
+    }
+    public function testApplyRefundOrder()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $result = $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        $this->assertEquals($result['status'],'success');
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testApplyRefundOrderTwice()
+    {
+        $order = array('id'=>'100');
+        $result = $this->getOrderService()->applyRefundOrder($order['id']);
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testApplyRefundOrderThird()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $result = $this->getOrderService()->applyRefundOrder($order1['id']);
+    }
+
+    public function testAuditRefundOrder()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id'],10);
+        $result = $this->getOrderService()->auditRefundOrder($payOrder[1]['id'],'true');
+        $this->assertEquals('true',$result);
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testAuditRefundOrderTwice()
+    {
+        $order = array('id'=>'100');
+        $result = $this->getOrderService()->auditRefundOrder($order['id'],'true');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testAuditRefundOrderThird()
+    {   
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $result = $this->getOrderService()->auditRefundOrder($order1['id'],'true');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testAuditRefundOrderForth()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        // $this->getOrderService()->applyRefundOrder($payOrder[1]['id'],1);
+        $this->getOrderService()->auditRefundOrder($order1['id'],'true');
+    }
+
+    // public function testAuditRefundOrderFifth()
+    // {
+    //     $user = $this->createUser(); 
+    //     $currentUser = new CurrentUser();
+    //     $currentUser->fromArray($user);
+    //     $this->getServiceKernel()->setCurrentUser($currentUser);
+    //     $payment = array(
+    //         'enabled' => 1,
+    //         'disabled_message' => '尚未开启支付模块，无法购买课程。',
+    //         'bank_gateway' => 'none',
+    //         'alipay_enabled' => 0,
+    //         'alipay_key' => '',
+    //         'alipay_secret' => '',
+    //         'alipay_account' => '',
+    //         'alipay_type' => 'direct',
+    //         'tenpay_enabled' => 1,
+    //         'tenpay_key' => '',
+    //         'tenpay_secret' => '',
+    //     );
+    //     $this->getSettingService()->set('payment', $payment);
+    //     $refund = array(
+    //         'maxRefundDays' => 100.00,
+    //         );
+    //     $this->getSettingService()->set('refund',$refund);
+    //     $course1 = array(
+    //         'title' => 'course 1'
+    //     );
+    //     $createCourse1 = $this->getCourseService()->createCourse($course1);
+    //     $order1 = array(
+    //         'userId' => $user['id'],
+    //         'title' => 'buy course 1',  
+    //         'amount' => 1.00, //价格一定要有,否则payment会变成none
+    //         'targetType' => 'course', 
+    //         'targetId' => $createCourse1['id'], 
+    //         'payment' => 'tenpay'
+    //     );
+    //     $order1 = $this->getOrderService()->createOrder($order1);
+    //     $payOrder = $this->getOrderService()->payOrder(array(
+    //         'sn' => $order1['sn'],
+    //         'status' => 'success',
+    //         'amount' => $order1['amount'],
+    //         'paidTime' => time(),
+    //     ));
+    // }
+
+    public function testCancelRefundOrder()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id'],10);
+        $this->getOrderService()->cancelRefundOrder($payOrder[1]['id'],'true');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCancelRefundOrderTwice()
+    {
+        $order = array('id'=>'100');
+        $result = $this->getOrderService()->CancelRefundOrder($order['id'],'true');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCancelRefundOrderThird()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $currentUser['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id'],10);
+        $this->getOrderService()->cancelRefundOrder($payOrder[1]['id'],'true');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCancelRefundOrderForth()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $currentUser['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $this->getOrderService()->cancelRefundOrder($payOrder[0]['id']);
+    }
+
+        /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCancelRefundOrderFifth()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $currentUser['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $this->getOrderService()->applyRefundOrder($payOrder[0]['id'],10,'sss');
+        $this->getOrderService()->cancelRefundOrder($payOrder[0]['id']);
+    }
+
+
+    public function testAnalysisCourseOrderDataByTimeAndStatus()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+        $startTime = time()-3600*24;
+        $endTime = time()+3600*24;
+        $status = 'paid';
+        $result = $this->getOrderService()->AnalysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+        $this->assertEquals($result[0]['count'],'2');
+    }
+    public function testAnalysisPaidCourseOrderDataByTime()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+        $startTime = time()-3600*24;
+        $endTime = time()+3600*24;
+        $result = $this->getOrderService()->AnalysisPaidCourseOrderDataByTime($startTime,$endTime);
+        $this->assertEquals($result[0]['count'],'2');
+    }
+    public function testAnalysisExitCourseDataByTimeAndStatus()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $refund = array(
+            'maxRefundDays' => 100.00,
+            );
+        $this->getSettingService()->set('refund',$refund);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $normalUser = new CurrentUser();
+        $normalUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($normalUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse2['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getOrderService()->applyRefundOrder($payOrder[1]['id'],10);
+        $this->getOrderService()->applyRefundOrder($payOrder2[1]['id'],10);
+        $result = $this->getOrderService()->auditRefundOrder($payOrder[1]['id'],'true');
+        $startTime = time()-3600*24;
+        $endTime = time()+3600*24;
+        $result = $this->getOrderService()->analysisExitCourseDataByTimeAndStatus($startTime,$endTime);
+        $this->assertEquals($result[0]['count'],'2');
+    }
+    public function testAnalysisAmount()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+
+        $result = $this->getOrderService()->analysisAmount($conditions);
+        $this->assertEquals($result,'11');        
+    }    
+    public function testAnalysisAmountDataByTime()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+        $startTime = time()-3600*24;
+        $endTime = time()+3600*24;
+        $result = $this->getOrderService()->analysisAmountDataByTime($startTime,$endTime);
+        $this->assertEquals($result[0]['count'],'11');
+    }    
+    public function testAnalysisCourseAmountDataByTime()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+
+        $payOrder = $this->getOrderService()->payOrder(array(
+            'sn' => $order1['sn'],
+            'status' => 'success',
+            'amount' => $order1['amount'],
+            'paidTime' => time(),
+        ));
+
+        $payOrder2 = $this->getOrderService()->payOrder(array(
+            'sn' => $order2['sn'],
+            'status' => 'success',
+            'amount' => $order2['amount'],
+            'paidTime' => time(),
+        ));
+        $conditions = array(
+            'keywordType' => 'nickname',
+            'keyword' => 'user',
+            'endTime' => time()+3600*24,//账单的时间一定会比订单的时间迟
+            'status' => 'paid',//账单的状态一定是支付完成的
+            'userId' => $user['id'],
+            'amount' => '0.1',
+        );
+        $startTime = time()-3600*24;
+        $endTime = time()+3600*24;
+        $result = $this->getOrderService()->analysisCourseAmountDataByTime($startTime,$endTime);
+        $this->assertEquals($result[0]['count'],'11');
+    }
+    public function testUpdateOrderCashSn()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $this->getOrderService()->updateOrderCashSn($order1['id'],'999999999');
+        $result = $this->getOrderService()->getOrder($order1['id']);
+        $this->assertEquals($result['cashSn'],'999999999');
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testUpdateOrderCashSnTwice()
+    {
+        $order = array('id'=>'100');
+        $result = $this->getOrderService()->updateOrderCashSn($order['id'],'100');
+    }
+
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testUpdateOrderCashSnThird()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $result = $this->getOrderService()->updateOrderCashSn($order1['id'],null);
+    }
+
+    public function testCreatePayRecord()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $payData = '{"a":"1}';
+        $this->getOrderService()->createPayRecord($order1['id'],$payData);
+        $result = $this->getOrderService()->getOrder($order1['id']);
+        $this->assertEquals(json_decode($result['data']),$payData);
+    }
+    public function testCreateOrderLog()
+    {
+        $user = $this->createUser(); 
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled' => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 1,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course1 = array(
+            'title' => 'course 1'
+        );
+        $course2 = array(
+            'title' => 'course 2'
+        );
+        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse2 = $this->getCourseService()->createCourse($course2);
+        $user = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order1 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 1',  
+            'amount' => 1.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'tenpay'
+        );
+        $order2 = array(
+            'userId' => $user['id'],
+            'title' => 'buy course 2',  
+            'amount' => 10.00, //价格一定要有,否则payment会变成none
+            'targetType' => 'course', 
+            'targetId' => $createCourse1['id'], 
+            'payment' => 'alipay'
+        );
+        $order1 = $this->getOrderService()->createOrder($order1);
+        $order2 = $this->getOrderService()->createOrder($order2);
+        $result = $this->getOrderService()->createOrderLog($order1['id'],'ssfs');
+        $this->assertEquals($result['id'],3);//创建order会增加一条orderlog,这里直接增加一条Log,没有增加order
+    }
+    /**
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testCreateOrderLogTwice()
+    {
+        $order = array('id'=>'100');
+        $result = $this->getOrderService()->createOrderLog($order['id'],'ssfs');
     }
 	//=================私有或者受保护的方法，用来调用命名空间外的对象[start]==============
 	protected function getUserService()
