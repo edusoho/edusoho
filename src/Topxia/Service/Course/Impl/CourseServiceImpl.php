@@ -1771,7 +1771,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$items = $this->getCourseItems($courseId);
 		$existedItemIds = array_keys($items);
-		var_dump($itemIds);
 		if (count($itemIds) != count($existedItemIds)) {
 			throw $this->createServiceException('itemdIds参数不正确');
 		}
@@ -1810,7 +1809,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 				    }
 					if ($fields['parentId'] != $item['parentId'] || $fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
 						$argument = $fields;
-						var_dump($fields);
 						$this->updateChapter($courseId,$item['id'], $fields);
 					}
 
