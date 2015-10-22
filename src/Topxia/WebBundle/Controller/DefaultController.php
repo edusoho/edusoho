@@ -209,18 +209,20 @@ class DefaultController extends BaseController
             unset($conditions['categoryId']);
         }
         $orderBy = $conditions['orderBy'];
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
+        if ($orderBy == 'recommendedSeq') {  
+           $conditions['recommended'] = 1; 
         }
         unset($conditions['orderBy']);
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
+
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
             'orderBy' => $orderBy,
             'categoryId' => $categoryId,
             'courses' => $courses
         ));
     }
+
 
     protected function calculateUserLearnProgress($course, $member)
     {

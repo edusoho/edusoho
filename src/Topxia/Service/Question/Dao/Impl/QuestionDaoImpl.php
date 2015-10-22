@@ -126,7 +126,6 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->orderBy($orderBy[0], $orderBy[1]);
-
         $questions = $builder->execute()->fetchAll() ? : array();
 
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);

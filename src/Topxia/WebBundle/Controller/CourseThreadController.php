@@ -57,7 +57,6 @@ class CourseThreadController extends CourseBaseController
 
     public function showAction(Request $request, $courseId, $threadId)
     {
-
         list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);

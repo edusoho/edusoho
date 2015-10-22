@@ -17,20 +17,16 @@
       <a class="btn btn-info pull-right btn-sm mhs" href="{{ path('course_manage_student_import', {id:course.id}) }}"><i class="glyphicon glyphicon-import"></i> 批量导入</a>
       <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</button>
     {% endif %}
-
   </div>
   
   <div class="panel-body">  
-      <form class="form-inline well well-sm " action="" method="get" novalidate>
+    <form class="form-inline well well-sm " action="" method="get" novalidate>
+      <div class="form-group">
+        <input class="form-control " type="text" placeholder="请输入用户名" name="nickname" value="{{ app.request.get('nickname') }}">
 
-        <div class="form-group">
-          <input class="form-control " type="text" placeholder="请输入用户名" name="nickname" value="{{ app.request.get('nickname') }}">
-
-          <button class="btn btn-primary">搜索</button>
-        </div>
-        <div class="clearfix"></div>
-        
-
+        <button class="btn btn-primary">搜索</button>
+      </div>
+      <div class="clearfix"></div>
     </form>
     <table class="table table-striped" id="course-student-list">
       <thead>
@@ -51,12 +47,8 @@
         {% endfor %}
       </tbody>
     </table>
-
     {{ web_macro.paginator(paginator) }}
-
   </div>
-
 </div>
-
 
 {% endblock %}

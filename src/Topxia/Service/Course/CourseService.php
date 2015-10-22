@@ -203,7 +203,6 @@ interface CourseService
 	public function searchWatchTime($conditions);
 
 	public function checkWatchNum($userId, $lessonId);
-
 	/**
 	 * Chapter API
 	 */
@@ -254,6 +253,8 @@ interface CourseService
 	public function getCourseMember($courseId, $userId);
 
 	public function searchMemberIds($conditions, $sort, $start, $limit);
+
+	public function findMemberUserIdsByCourseId($courseId);
 
 	public function updateCourseMember($id, $fields);
 
