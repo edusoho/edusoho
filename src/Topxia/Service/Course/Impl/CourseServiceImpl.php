@@ -1189,7 +1189,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
 		}
 		
-		if(array_key_exists('mediaId', $fields)){
+		if(array_key_exists('media', $fields)){
 			$this->fillLessonMediaFields($fields);
 		}
 		
@@ -1203,7 +1203,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		));
 
 		// Update link count of the course lesson file, if the lesson file is changed
-		if(array_key_exists('mediaId', $fields)){
+		if(array_key_exists('media', $fields)){
 			if($fields['mediaId'] != $lesson['mediaId']){
 				// Incease the link count of the new selected lesson file
 				if(!empty($fields['mediaId'])){
