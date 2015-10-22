@@ -11,7 +11,7 @@ use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
 
 
-class CardBagController extends BaseController
+class CardController extends BaseController
 {
 
 
@@ -21,7 +21,7 @@ class CardBagController extends BaseController
 
     // }
 
-    protected function getCardBagService() {
-    	return $this->getServiceKernel()->createService('CardBag.CardBagService');
+    protected function getCardService() {
+    	return $this->getServiceKernel()->createService('Card.CardService');
     }
 }

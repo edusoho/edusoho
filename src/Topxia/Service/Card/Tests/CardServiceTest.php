@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\CardBag\Tests;
+namespace Topxia\Service\Card\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
@@ -7,7 +7,7 @@ use Topxia\Service\User\UserService;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\System\SettingService;
 
-class CardBagServiceTest extends BaseTestCase
+class CardServiceTest extends BaseTestCase
 {
 
     public function testAddCard()
@@ -31,16 +31,16 @@ class CardBagServiceTest extends BaseTestCase
             'cardType' => 'moneyType',
             'cardId' => $testCoupons[1]['id']
         );
-        $results = $this->getCardBagService()->addCard($card);
+        $results = $this->getCardService()->addCard($card);
         $this->assertEquals($results['cardId'],$testCoupons[1]['id']);
 
         
     }
 
 
-    protected function getCardBagService()
+    protected function getCardService()
     {
-        return $this->getServiceKernel()->createService('CardBag.CardBagService'); 
+        return $this->getServiceKernel()->createService('Card.CardService'); 
     }
 
     protected function getCouponService()

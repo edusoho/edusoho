@@ -1,12 +1,12 @@
 <?php
 
-namespace Topxia\Service\CardBag\Dao\Impl;
+namespace Topxia\Service\Card\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\CardBag\Dao\CardBagDao;
+use Topxia\Service\Card\Dao\CardDao;
 
 
-class CardBagDaoImpl extends BaseDao implements CardBagDao
+class CardDaoImpl extends BaseDao implements CardDao
 {
     protected $table = 'card';
 
