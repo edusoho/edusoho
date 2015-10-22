@@ -141,6 +141,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
@@ -163,6 +164,12 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
 
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$courseUrl}'>{$course['title']}</a>".'课程，请审核。';
+            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ROLE_SUPER_ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'),array('id','DESC'),0,$adminCount);
+                foreach ($admins as $key => $admin) {
+                    $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+                }
         } elseif ($refund['status'] == 'success') {
             $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
         }

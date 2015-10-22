@@ -1171,8 +1171,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
-        if ( empty($member) || !in_array('student', $member) ) {
-            throw $this->createServiceException("用户(#{$userId})不是班级(#{$courseId})的学员，封锁学员失败。");
+        if ( empty($member) || !in_array('student', $member['role']) ) {
+            throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，封锁学员失败。");
         }
 
         if ($member['locked']) {
@@ -1190,8 +1190,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (empty($member) || in_array('student', $member['role'])) {
-            throw $this->createServiceException("用户(#{$userId})不是该班级(#{$courseId})的学员，解封学员失败。");
+        if (empty($member) || !in_array('student', $member['role'])) {
+            throw $this->createServiceException("用户(#{$userId})不是该班级(#{$classroomId})的学员，解封学员失败。");
         }
 
         if (empty($member['locked'])) {
