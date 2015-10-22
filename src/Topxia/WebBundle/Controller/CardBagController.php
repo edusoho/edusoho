@@ -20,6 +20,10 @@ class CardBagController extends BaseController
     //     $user = $this->getCurrentUser();
 
     // }
+    public function showCards()
+    {
+    	
+    }
 
     protected function getCardBagService() {
     	return $this->getServiceKernel()->createService('CardBag.CardBagService');
