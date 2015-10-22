@@ -70,7 +70,7 @@
 				<td><span class="pull-right">{{todayBuyClassroomNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayBuyClassroomNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}
-				<td><a href="{{path('admin_operation_analysis_Classroom_paid',{tab:"trend",analysisDateType:'paidClassroom'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_Classroom_paid',{tab:"detail",analysisDateType:'paidClassroom'})}}">详情</a></td>
+				<td><a href="{{path('admin_operation_analysis_classroom_paid',{tab:"trend",analysisDateType:'paidClassroom'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_classroom_paid',{tab:"detail",analysisDateType:'paidClassroom'})}}">详情</a></td>
 			{% endif %}	
 			</tr>
 
