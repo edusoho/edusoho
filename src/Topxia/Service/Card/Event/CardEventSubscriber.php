@@ -18,7 +18,8 @@ class CardEventSubscriber implements EventSubscriberInterface
 
     public function onCardAdd(ServiceEvent $event)
     {
-    	$card = $event->getSubject();
+    	$fields = $event->getSubject();
+        $card = ArrayToolkit::parts($fields, array('cardType', 'cardId', 'deadline', 'userId'));
     	$this->getCardService()->addCard($card);
 
     }
