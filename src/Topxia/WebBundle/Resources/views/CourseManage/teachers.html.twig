@@ -54,6 +54,9 @@
               <button class="btn btn-default" type="button" data-role="item-add" id="teacher-add" >添加</button>
             </span>
           </div>
+          <div>
+              只能添加有教师权限的用户
+          </div>
      
           <script type="text/plain" data-role="model">{{ teachers|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="item-template">
