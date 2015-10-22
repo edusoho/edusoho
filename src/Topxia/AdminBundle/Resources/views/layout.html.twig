@@ -36,12 +36,12 @@
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
-  
+
   {% block stylesheets %}
-  <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/rtl/bootstrap.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/css/rtl/common.css') }}" rel="stylesheet" />
-  <link href="{{ asset('bundles/topxiaadmin/css/rtl/admin.css') }}" rel="stylesheet" />
-  <link href="{{ asset('bundles/topxiaadmin/css/rtl/admin_v2.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
+  <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
+  <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
   <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
   {% endblock %}
 
@@ -77,8 +77,8 @@
             {% if m.code != "admin_system" %}
                 <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
-                </li>  
-            {% else %}    
+                </li>
+            {% else %}
                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                   <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
@@ -122,12 +122,12 @@
                 {% for m in groupedMenus %}
                 {% set array = {'0':'admin_my_cloud','1':'admin_setting_cloud_video','2':'admin_setting_cloud'} %}
                  {% if m.code not in  array or is_granted('ROLE_SUPER_ADMIN') %}
-                            
+
                   {% if not menu_hiddens[m.code]|default(false)  %}
                     {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
                     {{ self_macro.menu_link_html(_context, m, menuClass) }}
                   {% endif %}
-                      
+
                   {% endif %}
 
                 {% endfor %}
@@ -201,7 +201,7 @@
 </html>
 
 {% macro menu_link_html(_context, menu, class) %}
-  <a 
+  <a
   {% if class %}
     class="{{ class }}"
   {% endif %}
