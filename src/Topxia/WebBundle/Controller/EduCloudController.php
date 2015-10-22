@@ -163,9 +163,8 @@ class EduCloudController extends BaseController
         $smsType = $request->query->get('smsType');
         $originSign = rawurldecode($request->query->get('sign'));
 
-        $api = CloudAPIFactory::create('root');
-        $info = $api->get('/me');
-        $url = $info['siteUrl'];
+        $siteSetting = $this->getSettingService()->get('site');
+        $url = $siteSetting['url'];
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
         $url .= '?index='.$index.'&smsType='.$smsType;
         $api = CloudAPIFactory::create('leaf');
