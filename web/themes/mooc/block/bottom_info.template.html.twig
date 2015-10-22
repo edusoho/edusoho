@@ -8,7 +8,7 @@
 
 <div class="col-md-4 footer-attr hidden-sm hidden-xs">
   <p>
-    <i class="iconfont icon-zuobiao"></i>
+    <i class="glyphicon glyphicon-map-marker"></i>
     {{ bottomAddr[0].value|default('') }}
   </p>
   <p>
@@ -21,7 +21,7 @@
   </p>
 </div>
 
-<div class="col-md-4 footer-logos hidden-sm hidden-xs">
+<div class="col-md-4 footer-logos hidden-sm hidden-xs footer-logo">
   <a class="" href="{{ bottomLogo[0].href|default('') }}" target="{{ bottomLogo[0].target|default('') }}"><img src="{{ asset(bottomLogo[0].src|default('')) }}" alt="{{ bottomLogo[0].alt|default('') }}"></a>
   <div class="footer-sns">
     {% if (weibo[0].href) %}

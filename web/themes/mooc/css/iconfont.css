@@ -15,7 +15,7 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-zuobiao:before { content: "\e604"; }
 .icon-time:before { content: "\e600"; }
-.icon-zuobiao:before { content: "\e603"; }
 .icon-xiala:before { content: "\e601"; }
 .icon-xunzhang:before { content: "\e602"; }
