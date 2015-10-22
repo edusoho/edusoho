@@ -1687,7 +1687,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($chapter)) {
 			throw $this->createServiceException("章节#{$chapterId}不存在！");
 		}
-		$fields = ArrayToolkit::parts($fields, array('title'));
+		$fields = ArrayToolkit::parts($fields, array('title','number','seq','parentId'));
 		$chapter = $this->getChapterDao()->updateChapter($chapterId, $fields);
 
 		$this->dispatchEvent("chapter.update",array('argument'=>$argument,'chapter'=>$chapter));
@@ -1771,7 +1771,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$items = $this->getCourseItems($courseId);
 		$existedItemIds = array_keys($items);
-
+		var_dump($itemIds);
 		if (count($itemIds) != count($existedItemIds)) {
 			throw $this->createServiceException('itemdIds参数不正确');
 		}
@@ -1810,6 +1810,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 				    }
 					if ($fields['parentId'] != $item['parentId'] || $fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
 						$argument = $fields;
+						var_dump($fields);
 						$this->updateChapter($courseId,$item['id'], $fields);
 					}
 
