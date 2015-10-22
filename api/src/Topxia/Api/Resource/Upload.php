@@ -23,7 +23,10 @@ class Upload extends BaseResource
             return $this->error('500', '上传文件失败!');
         }
 
-        return $url;
+        return array(
+                'code' => '200',
+                'message' => $url
+        );
     }
 
     protected function getFileService()
