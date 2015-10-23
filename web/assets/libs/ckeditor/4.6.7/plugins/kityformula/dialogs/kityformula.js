@@ -55,6 +55,14 @@
                         alert("不能含有汉字！");
                         return false;
                     }
+                    for(var i=0;i<source.length;i++)
+                    {
+                        strCode=source.charCodeAt(i);
+                        if((strCode>65248)||(strCode==12288)){
+                            alert("不能含有中文全角字符");
+                            return false;
+                        }
+                    }
                     var $imgUrl = 'http://formula.edusoho.net/cgi-bin/mimetex.cgi?'+source;
                     $.post($('#'+editor.name).data('imageDownloadUrl'),{url:$imgUrl}, function(result){
                         var insertHtml='<img kityformula="true" src="'+result+'" alt="'+source+'">';
