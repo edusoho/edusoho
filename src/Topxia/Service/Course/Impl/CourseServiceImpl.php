@@ -1207,7 +1207,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
 		));
-
 		// Update link count of the course lesson file, if the lesson file is changed
 		if(array_key_exists('mediaId', $fields)){
 			if($fields['mediaId'] != $lesson['mediaId']){
