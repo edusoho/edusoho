@@ -1195,7 +1195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			$fields['suggestHours'] = $fields['length'] / 60;
 		}
 		
-		if(array_key_exists('mediaId', $fields)){
+		if(array_key_exists('media', $fields)){
 			$this->fillLessonMediaFields($fields);
 		}
 		

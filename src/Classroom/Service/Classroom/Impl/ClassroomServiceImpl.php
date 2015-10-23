@@ -1094,6 +1094,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $this->updateStudentNumAndAuditorNum($classroomId);
+
+        $this->dispatchEvent(
+            'classroom.quit',
+            new ServiceEvent($classroom, array('userId' => $userId))
+        );
     }
 
     private function removeStudentsFromClasroomCourses($classroomId, $userId)
