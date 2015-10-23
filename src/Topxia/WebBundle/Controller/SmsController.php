@@ -38,7 +38,7 @@ class SmsController extends BaseController
             }
         }
         $item['title'] = NameCutterTookit::cutter($item['title'], 20, 15, 4);
-    return $this->render('TopxiaWebBundle:Sms:smsSend.html.twig',array(
+        return $this->render('TopxiaWebBundle:Sms:sms-send.html.twig',array(
             'item' => $item,
             'targetType' => $targetType,
             'url' => $url,

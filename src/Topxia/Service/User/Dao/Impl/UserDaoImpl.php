@@ -114,8 +114,6 @@ class UserDaoImpl extends BaseDao implements UserDao
             $conditions['nickname'] = "%{$conditions['nickname']}%";
         }
 
-        $conditions['verifiedMobileNull'] = "";
-
         if(!empty($conditions['datePicker'])&& $conditions['datePicker'] == 'longinDate'){
             if(isset($conditions['startDate'])){
                 $conditions['loginStartTime'] = strtotime($conditions['startDate']);
@@ -158,6 +156,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('id NOT IN ( :excludeIds )');
 
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
+            $conditions['verifiedMobileNull'] = "";
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
         }
         return $builder;
