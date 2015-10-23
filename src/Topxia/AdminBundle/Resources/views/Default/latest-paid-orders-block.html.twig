@@ -1,0 +1,44 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<div class="col-md-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			 <h3 class="panel-title">{{'最新购买记录'|trans}}</h3>
+		</div>
+    {% if orders %}
+      <table class="table table-condensed table-bordered table-striped table-hover">
+  	    <thead>
+  	      <tr>
+  	        <th width="50%">{{'订单名称'|trans}}</th>
+  	        <th width="10%">{{'金额'|trans}}</th>
+  	        <th width="10%">{{'购买人'|trans}}</th>
+  	        <th width="20%">{{'支付方式'|trans}}</th>
+  	      </tr>
+  	    </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+            	<td>
+  		          {% if order.targetType == 'course' %}
+                  <a href="{{ path('course_show', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+                {% elseif order.targetType == 'vip' %}
+              		<a href="{{ path('vip', {id:order.targetId}) }}" target="_blank">{{ order.title }}</a>
+              	{% else %}
+  	            	{{ order.title }}
+              	{% endif %}
+            	</td>
+              <td class="money-text">{{order.amount}} {{'元'|trans}}</td>
+              <td>
+              	{{ admin_macro.user_link(users[order.userId]) }}
+              </td>
+              <td>
+              	<span class="text-sm">{{ dict_text('payment', order.payment)|default('--') }}  / {{order.paidTime |date('Y-n-d H:i')}}</span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">{{'暂无最新购买记录'|trans}}</div>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,61 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+{% if itemResult.status == 'right' %}
+  
+  {% set itemResultStatus = '你答对了' %}
+  
+{% elseif itemResult.status == 'wrong' %}
+
+  {% set itemResultStatus = '回答错误' %}
+
+{% elseif itemResult.status == 'partRight' %}
+
+  {% set itemResultStatus = '部分回答正确' %}
+
+{% elseif itemResult.status == 'noAnswer' %}
+
+  {% set itemResultStatus = '你未回答' %}
+
+{% endif %}
+
+  <div class="question-fill-inputs ">
+    <div class="">
+      <div class="homework-question-fill">
+         <ul>
+          {% for index,rightAnswer in question.answer %}
+
+            <li>
+              填空({{index+1}})： 正确答案 
+              <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+              {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
+             回答是
+
+              <strong class="question-text-danger">{{ itemResult.answer[index] }}</strong>。
+              {% else %}
+              未回答
+              {% endif %}
+
+              {% if itemResult.answer[index]|default(null)  in rightAnswer %}
+                  <span class="glyphicon glyphicon-ok question-text-success">
+              {% else %}
+                  <span class="glyphicon glyphicon-remove question-text-danger">
+              {% endif %}
+            </li>
+
+          {% endfor %}
+
+         </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

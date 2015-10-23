@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}<span class="text-muted">提示</span>{% endblock %}
+
+{% block body %}
+	{% if not classroom %}
+		<div style="height: 50px;text-align: center;">
+	        <p style="line-height: 50px;">
+	        	课程已从班级中移除
+	        </p>
+	    </div>
+	{% else %}
+	    <div style="height: 50px;text-align: center;">
+	        <p style="line-height: 50px;">
+	        还不是班级成员,请先<a href="{{ path('classroom_show', {id:classroom.id}) }}">加入班级</a>
+	        </p>
+	    </div>
+	{% endif %}
+   
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+{% endblock %}

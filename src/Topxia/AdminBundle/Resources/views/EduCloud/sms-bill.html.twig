@@ -1,0 +1,35 @@
+{% extends 'TopxiaAdminBundle:Cloud:layout.html.twig' %}
+
+{% block title %}云短信账单 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'sms' %} 
+{% set script_controller = '' %}
+
+{% block maincontent %}
+	<div class="page-header"><h1>云短信账单</h1></div>
+	<div class="well well-sm">
+	  账户余额：<strong class="text-success">{{account.cash|default(0)}}元</strong>&nbsp;&nbsp;&nbsp;&nbsp;
+	  <a href="{{path('admin_cloud_recharge')}}" target="_blank" class="btn btn-primary">充值</a>
+	  <a href="http://open.edusoho.com/article/1#recharge" style="float:right;" target="_blank" class="btn btn-link">充值帮助</a>
+	</div>
+
+  <table class="table table-hover" id="bill-table">
+    <tr>
+      <th>账单日期</th>
+      <th>账单金额</th>
+      <th>账单明细</th>
+      <th>生成时间</th>
+    </tr>
+    {% for bill in bills %}
+    <tr>
+      <td>{{ bill.date }}</td>
+      <td>{{ bill.amount }}</td>
+      <td>{{ bill.title }}</td>
+      <td>{{ bill.createdTime| date('Y-m-d H:i:s') }}</td>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">暂无账单记录</div></td></tr>
+    {% endfor %}
+  </table>
+
+  {{ web_macro.paginator(paginator) }} 
+{% endblock %}

@@ -1,0 +1,519 @@
+<div id="media-choosers">
+
+  <div class="file-chooser" id="video-chooser" style="display:none;"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+    data-hls-encrypted="{{ setting('developer.hls_encrypted', 1) }}"
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
+  >
+    <div class="file-chooser-bar" style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+      <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。</div>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane" data-toggle="tab">上传视频</a></li>
+        {% if is_plugin_installed('MaterialLib') %}
+        <li>
+          <a href="#video-chooser-disk-pane" data-toggle="tab">
+            从资料库中选择
+          </a>
+        </li>
+        {% endif %}
+
+        <li>
+          <a href="#video-chooser-course-file" data-toggle="tab">
+            从课程文件中选择
+          </a>
+        </li>
+
+        <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="video-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+
+
+
+
+{% if storageSetting.upload_mode == 'cloud'  %}
+  <div class="video-quality-switcher">
+    <div>
+      <label>视频转码类型：</label>
+      <span class="quality-switcher-bar">
+        <span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> 设置</a>
+      </span>
+    </div>
+
+    <div class="quality-switcher-control">
+      <div class="video-quality radios">
+        画质：
+        {% if file|default(null) %}
+          {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, file.convertParams.videoQuality|default('low')) }}
+        {% else %}
+          {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+        {% endif %}
+      </div>
+
+      <div class="audio-quality radios">
+        音质：
+        {% if file|default(null) %}
+          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, file.convertParams.audioQuality|default('low')) }}
+        {% else %}
+          {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality|default('low')) }}
+          {% endif %}
+      </div>
+
+      <div class="quality-actions">
+        <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">确定</a>
+        <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">取消</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="file-chooser-uploader-label">选择你要上传的视频文件：</div>
+            <div class="file-chooser-uploader-control">
+              <span id="video-choose-uploader-btn"
+                data-role="uploader-btn"
+                data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v{% else %}*.mp4{% endif %}"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId, lazyConvert:1}) }}{% endif %}" 
+                data-progressbar="#video-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'video'})}}"
+                >
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
+            </div>
+            <div class="progress" id="video-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                {% if storageSetting.upload_mode == 'cloud' %}
+                  <li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
+                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+                  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+                {% else %}
+                  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+                  <li>
+                    视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+	{% if is_plugin_installed('MaterialLib') %}
+          <div class="tab-pane" id="video-chooser-disk-pane">
+              <div id="file-browser-video" data-role="file-browser"
+              data-base-url="{{ path('uploadfile_browser', {type:'video'}) }}" 
+              data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}" 
+              data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+              data-empty="暂无视频文件，请先上传。">
+              	<div class="file-browser-list-container"></div>
+              </div>
+          </div>
+        {% endif %}
+
+        <div class="tab-pane" id="video-chooser-course-file">
+            <div id="file-browser-video" data-role="course-file-browser"
+            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'video'}) }}" 
+            data-empty="暂无视频文件，请先上传。">
+            </div>
+        </div>
+
+        <div class="tab-pane" id="video-chooser-import-pane">
+          <div class="input-group">
+            <input class="form-control" type="text" placeholder="支持优酷、土豆、腾讯、网易公开课的视频页面地址导入" data-role="import-url" >
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="file-chooser" id="audio-chooser" style="display:none;"
+      data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId}) }}"
+      data-targetType="{{targetType}}"
+      data-targetId="{{targetId}}"
+  >
+    <div class="file-chooser-bar"  style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#audio-chooser-upload-pane" data-toggle="tab">上传音频</a></li>
+        {% if is_plugin_installed('MaterialLib') %}
+        <li><a href="#audio-chooser-disk-pane" data-toggle="tab">
+              从资料库中选择
+        </a></li>
+        {% endif %}
+
+        <li>
+          <a href="#audio-chooser-course-file" data-toggle="tab">
+            从课程文件中选择
+          </a>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="audio-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的音频文件：</div>
+            <div class="file-chooser-uploader-control">
+              <span id="audio-choose-uploader-btn" 
+                data-role="uploader-btn"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-progressbar="#audio-chooser-progress"
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-get-media-info="{{path('uploadfile_cloud_get_media_info',{type:'audio'})}}"
+                >
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
+            </div>
+            <div class="progress" id="audio-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
+                {% if storageSetting.upload_mode == 'cloud' %}
+                  500M
+                {% else %}
+                  {{ upload_max_filesize() }}
+                {% endif %}
+                </strong>。</li>
+                {% if storageSetting.upload_mode == 'cloud' %}
+                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+                  <li>音频将上传到<strong>云服务器</strong></li>
+                {% else %}
+                  <li>
+                    音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+
+        </div>
+	{% if is_plugin_installed('MaterialLib') %}
+          <div class="tab-pane" id="audio-chooser-disk-pane">
+            <div id="file-browser-audio" data-role="file-browser"
+            		data-base-url="{{ path('uploadfile_browser', {type:'audio'}) }}" 
+              data-default-url="{{ path('uploadfile_browser', {type:'audio', source:'upload'}) }}" 
+              data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+              data-empty="暂无音频文件，请先上传。">
+            		<div class="file-browser-list-container"></div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="tab-pane" id="audio-chooser-course-file">
+          <div id="file-browser-audio" data-role="course-file-browser"
+          data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'audio'}) }}" data-empty="暂无音频文件，请先上传。"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <div class="file-chooser" id="ppt-chooser" style="display:none;"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'ppt', lazyConvert:1}) }}"
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
+  >
+    <div class="file-chooser-bar"  style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">上传PPT</a></li>
+        {% if is_plugin_installed('MaterialLib') %}
+        <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">
+              从资料库中选择
+        </a></li>
+        {% endif %}
+
+         <li>
+          <a href="#ppt-chooser-course-file" data-toggle="tab">
+            从课程文件中选择
+          </a>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="ppt-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的PPT文件：</div>
+            <div class="file-chooser-uploader-control">
+              <span id="ppt-choose-uploader-btn" 
+                data-role="uploader-btn"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId,lazyConvert:1}) }}{% endif %}" 
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-progressbar="#ppt-chooser-progress">
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
+            </div>
+            <div class="progress" id="ppt-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                <li>支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                <li>PPT将上传到<strong>云服务器</strong></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+	{% if is_plugin_installed('MaterialLib') %}
+          <div class="tab-pane" id="ppt-chooser-disk-pane">
+            <div id="file-browser-ppt" data-role="file-browser"
+            		data-base-url="{{ path('uploadfile_browser', {type:'ppt'}) }}" 
+              data-default-url="{{ path('uploadfile_browser', {type:'ppt', source:'upload'}) }}" 
+              data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+            		data-empty="暂无PPT文件，请先上传。">
+            	<div class="file-browser-list-container"></div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="tab-pane" id="ppt-chooser-course-file">
+            <div id="file-browser-ppt" data-role="course-file-browser"
+            data-url="{{ path('uploadfile_browsers', {targetType:targetType, targetId:targetId, type:'ppt'}) }}" data-empty="暂无PPT文件，请先上传。"></div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+
+
+
+ <div class="file-chooser" id="document-chooser" style="display:none;"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:'document'}) }}"
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
+  >
+    <div class="file-chooser-bar"  style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#document-chooser-upload-pane" data-toggle="tab">上传文档</a></li>
+        {% if is_plugin_installed('MaterialLib') %}
+        <li><a href="#document-chooser-disk-pane" data-toggle="tab">
+              从资料库中选择
+        </a></li>
+        {% endif %}
+
+         <li>
+          <a href="#document-chooser-course-file" data-toggle="tab">
+            从课程文件中选择
+          </a>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="document-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的文档：</div>
+            <div class="file-chooser-uploader-control">
+              <span id="document-choose-uploader-btn" 
+                data-role="uploader-btn"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId,lazyConvert:1}) }}{% endif %}" 
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-progressbar="#document-chooser-progress">
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
+            </div>
+            <div class="progress" id="document-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                <li>支持<strong>pdf,doc,docx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                <li>文档将上传到<strong>云服务器</strong></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+  {% if is_plugin_installed('MaterialLib') %}
+          <div class="tab-pane" id="document-chooser-disk-pane">
+            <div id="file-browser-document" data-role="file-browser"
+                data-base-url="{{ path('uploadfile_browser', {type:'document'}) }}" 
+              data-default-url="{{ path('uploadfile_browser', {type:'document', source:'upload'}) }}" 
+              data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+                data-empty="暂无文档，请先上传。">
+              <div class="file-browser-list-container"></div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="tab-pane" id="document-chooser-course-file">
+            <div id="file-browser-document" data-role="course-file-browser"
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'document'}) }}" data-empty="暂无文档，请先上传。"></div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+
+
+
+   <div class="file-chooser" id="flash-chooser" style="display:none;"
+    data-params-url="{{ path('uploadfile_params', {storage:storageSetting.upload_mode, targetType:targetType, targetId:targetId, convertor:''}) }}"
+    data-targetType="{{targetType}}"
+    data-targetId="{{targetId}}"
+  >
+    <div class="file-chooser-bar"  style="display:none;">
+      <span data-role="placeholder"></span>
+      <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> 编辑</button>
+    </div>
+
+    <div class="file-chooser-main">
+      <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+        <li class="active"><a class="file-chooser-uploader-tab" href="#flash-chooser-upload-pane" data-toggle="tab">上传Flash</a></li>
+        {% if is_plugin_installed('MaterialLib') %}
+        <li><a href="#flash-chooser-disk-pane" data-toggle="tab">
+              从资料库中选择
+        </a></li>
+        {% endif %}
+
+         <li>
+          <a href="#flash-chooser-course-file" data-toggle="tab">
+            从课程文件中选择
+          </a>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="flash-chooser-upload-pane">
+
+          <div class="file-chooser-uploader">
+            <div class="file-chooser-uploader-label">选择你要上传的Flash：</div>
+            <div class="file-chooser-uploader-control">
+              <span id="flash-choose-uploader-btn" 
+                data-role="uploader-btn"
+                data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
+                data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}{% endif %}" 
+                data-storage-type="{{storageSetting.upload_mode}}"
+                data-progressbar="#flash-chooser-progress">
+                <a class="uploadBtn btn btn-default btn-lg">
+                  上传
+                </a>
+                <div style="display:none">
+                  <input data-role="fileSelected" class="filePrew" type="file" />
+                </div>
+              </span>
+            </div>
+            <div class="progress" id="flash-chooser-progress" style="display:none;">
+              <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <ul>
+                <li>支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
+                <li>Flash将上传到<strong>云服务器</strong></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+  {% if is_plugin_installed('MaterialLib') %}
+          <div class="tab-pane" id="flash-chooser-disk-pane">
+            <div id="file-browser-flash" data-role="file-browser"
+                data-base-url="{{ path('uploadfile_browser', {type:'flash'}) }}" 
+              data-default-url="{{ path('uploadfile_browser', {type:'flash', source:'upload'}) }}" 
+              data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+                data-empty="暂无Flash，请先上传。">
+              <div class="file-browser-list-container"></div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="tab-pane" id="flash-chooser-course-file">
+            <div id="file-browser-flash" data-role="course-file-browser"
+            data-url="{{ path('uploadfile_browser', {targetType:targetType, targetId:targetId, type:'flash'}) }}" data-empty="暂无Flash，请先上传。"></div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

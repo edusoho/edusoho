@@ -1,0 +1,5 @@
+<ul class="nav nav-pills">
+	<li{% if tab_nav == 'learning' %} class="active"{% endif %}><a href="{{ path('my_courses_learning') }}">学习中</a></li>
+	<li{% if tab_nav == 'learned' %} class="active"{% endif %}><a href="{{ path('my_courses_learned') }}">已学完</a></li>
+	<li{% if tab_nav == 'favorited' %} class="active"{% endif %}><a href="{{ path('my_courses_favorited') }}">收藏</a></li>
+</ul>

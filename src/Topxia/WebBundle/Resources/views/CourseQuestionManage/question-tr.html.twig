@@ -1,0 +1,42 @@
+<tr data-role='item'>
+  <td><input value="{{question.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
+  <td>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">{{ question.stem |fill_question_stem_text| plain_text(40) }}</a>
+    <div>
+      {% set target = targets[question.target]|default(null) %}
+      {% if target.type|default(null) != 'course' %}
+        <small class="text-muted">从属于 {{targets[question.target].simple_name|default('')}}</small>
+      {% else %}
+        <small class="text-muted">从属于 本课程</small>
+      {% endif %}
+      {% if question.type == 'material'%}
+           {% if  question.subCount == 0  %}
+              <span class="label label-danger">未完成</span>
+           {% endif %}
+      {% endif %}
+    </div>
+    
+  </td>
+  <td>
+  {{ dict('questionType')[question.type] }}
+  {% if question.type == 'material'%}<br><small class="text-muted">({{ question.subCount }}子题)</small>{% endif %}
+  </td>
+  <td>
+    {{ macro.user_link(users[question.userId]) }}
+    <br />
+    <span class="text-muted text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+      <ul class="dropdown-menu pull-right">
+        {% if question.type == 'material'%}
+          <li><a href="{{ path('course_manage_question',{courseId:course.id, parentId:question.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理子题</a></li>
+        {% endif %}
+        <li><a href="{{ path('course_manage_question_update', {courseId:course.id,id:question.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑</a></li>
+        <li><a href="javascript:" data-name='题目{% if question.type == 'material'%}(含子题){% endif %}' data-role='item-delete' data-url="{{ path('course_manage_question_delete', {courseId:course.id, id:question.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

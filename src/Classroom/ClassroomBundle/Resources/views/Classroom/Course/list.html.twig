@@ -1,0 +1,36 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% set nav = 'course' %}
+{% block main %}
+{% do load_script('classroombundle/controller/classroom/course/list') %}
+  <div class="class-course-list">
+    {% for course in courses %}
+      <div class="course-item">
+        <div class="media">
+          <a class="media-left" href="{{ path('course_show', {id:course.id}) }}">
+            {{ lazy_img(filepath(course.middlePicture, 'course.png'), '', '') }}
+          </a>
+          <div class="media-body">
+            <div class="title">
+              <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a>
+              <div class="score">
+                {{ web_macro.star(course.rating) }}
+              </div>
+            
+              <div class="price hidden-xs">
+                原价：{% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %}
+              </div>
+              <span class="course-show">
+                <i class="es-icon es-icon-keyboardarrowdown" data-lesson-url="{{ path('classrom_course_lessons_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+    
+  </div>
+{% endblock %}
+   

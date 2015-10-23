@@ -1,0 +1,21 @@
+
+.breadcrumb {
+  background-color: @gray-lighter;
+  li.active {
+    color: @gray;
+  }
+  a {
+    color: @gray;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+}
+
+.lt-ie9 .breadcrumb li {
+  padding-left: 5px;
+}
+
+

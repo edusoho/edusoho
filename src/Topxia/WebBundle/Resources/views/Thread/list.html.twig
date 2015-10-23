@@ -1,0 +1,16 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="topic-list">
+  {% for thread in threads %}
+    {% set author = users[thread.userId] %}
+    {% include 'TopxiaWebBundle:Thread/Part:list-item.html.twig' %}
+  {% else %}
+    <div class="empty">暂无话题</div>
+  {% endfor %}
+</div>
+
+<nav class="text-center">
+  <ul class="pagination">
+      {{ web_macro.paginator(paginator) }}
+    </ul>
+</nav>

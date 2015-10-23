@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+	<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{ path('my_discussions') }}">课程话题</a></li>
+	<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{ path('my_classroom_discussions') }}">{{ setting('classroom.name')|default("班级") }}话题</a></li>
+</ul>
+<br>

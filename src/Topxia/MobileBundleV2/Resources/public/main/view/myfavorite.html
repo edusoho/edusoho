@@ -1,0 +1,21 @@
+<div class="ui-bar" ui-bar>
+  <div class="ui-bar-bg">
+    <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+    <h3 class="title">我的收藏</h3>
+  </div>
+</div>
+
+<div class="ui-tab tab-top" ui-tab>
+    <ul class="ui-tab-nav ui-border-b">
+        <li><span class="line">课程</span></li>
+        <li><span>直播课</span></li>
+    </ul>
+    <ul class="ui-tab-content tab-display ui-course-learn">
+        <li>  
+          <div ng-include=" 'view/myfavorite_course.html' | coverIncludePath "></div>
+        </li>
+        <li>
+          <div ng-include=" 'view/myfavorite_live.html' | coverIncludePath "></div>
+        </li>
+    </ul>
+</div>

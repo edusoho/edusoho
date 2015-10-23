@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}课程图片 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'picture' %}
+{% set script_controller = 'course-manage/picture' %}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    课程图片
+  </div>
+
+  <div class="panel-body">
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <p class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过<strong>2M</strong>。</p>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a 
+          id="upload-picture-btn"
+          class="btn btn-fat btn-primary" 
+          data-upload-token="{{ upload_token('tmp', 'image') }}"
+          data-goto-url="{{path('course_manage_picture_crop', {id:course.id})}}"
+          >选择要上传的图片</a>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+{% endblock %}
+

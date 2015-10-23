@@ -1,0 +1,18 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_ip_blacklist' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form method="post">
+	<textarea id="ips" name="ips" rows="18" class="form-control">{% if ips  %}{{ips.ips}}{% endif %}
+</textarea>
+
+  <div class="help-block">一行一个IP，被加入黑名单的IP将被禁止访问！暂不支持网段的封锁!</div>
+  <input type="submit" class="btn btn-primary" value="提交">
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

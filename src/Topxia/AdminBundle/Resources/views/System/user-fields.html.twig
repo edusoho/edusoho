@@ -1,0 +1,242 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'system/user-fields' %}
+
+{% set menu = 'admin_setting_user_fields' %}
+{% block page_buttons %}
+<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">添加字段</button>
+{% endblock %}
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+<form action="" class="form-horizontal" method="post">
+  <fieldset>
+    <legend>自定义字段设置</legend>
+    <table class="table table-striped table-hover" id="course-table">
+      <thead>
+      <tr>
+        <th>字段名称</th>
+        <th>类型</th>
+        <th>是否显示</th>
+        <th>显示序号</th>
+        <!-- <th>创建时间</th> -->
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% include 'TopxiaAdminBundle:System:user-fields.table.tr.html.twig' %}
+      </tbody>
+    </table>
+  </fieldset>
+  
+  
+  <fieldset>
+    <legend>个人资料设置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >购买课程或班级时填写个人资料</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('buy_fill_userinfo', {1:'开启', 0:'关闭'}, courseSetting.buy_fill_userinfo|default(0)) }}
+        <p class="help-block">开启后，{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}购买课程时，需填写个人资料</p>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3" id="show-list">
+        <div class="pull-left">
+          {% for sort in courseSetting.userinfoFields|default([]) %}
+            {% set userCustomField = userFields[sort]|default(null) %}
+            {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
+            {% if userCustomField %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userCustomField.title }}
+              </button>
+            {% elseif userInfoFieldsDict %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userInfoFieldsDict }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+          
+        <div class="pull-right ">
+          <a href="javascript:" id="show-list-btn">编辑 
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-2" id="show-register-list" style="display:none">
+        <div class="form-group">
+          <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
+            {% set checkedFieldsKeys = courseSetting.userinfoFields|default([]) %}
+
+            {% if courseSetting.userinfoFieldNameArray|default(null) %}
+              {% for field in courseSetting.userinfoFieldNameArray %}
+                {% set userCustomField = userFields[field]|default(null) %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="userinfoFields[]" value="{{ field }}" {% if field in checkedFieldsKeys %}checked=true{% endif %} />
+                  <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ field }}" /> 
+                  {% if userCustomField %}{{ userCustomField.title }}{% else %}{{ dict_text('userInfoFields', field) }}{% endif %}
+                  {% if field == 'email' or field == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
+                </li>
+              {% endfor %}
+            {% else %}
+                
+              {% set userInfoFields = dict('userInfoFields') %}
+              {% for key,field in userInfoFields %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="userinfoFields[]" value="{{ key }}" {% if key in checkedFieldsKeys %}checked=true{% endif %} />
+                  <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ key }}" /> 
+                  {{ field }}
+                  {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
+                </li>
+              {% endfor %}
+
+              {% if  userFields %}
+                {% for field in userFields %}
+                  <li class="list-group-item clearfix" data-role="item" >
+                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                    <input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}" />
+                    <input type="hidden"  name="userinfoFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+                  </li>
+                {% endfor %}
+              {% endif %}
+
+            {% endif %}
+          </ul>
+
+          <div class="help-block col-md-12"><span class="text-success">可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。</span></div>
+
+        </div>
+        <div class="mbl" style="text-align:center;">
+          <a href="javascript:" id="hide-list-btn">收起 
+            <span class="glyphicon glyphicon-chevron-up"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >登录后填写个人资料</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('fill_userinfo_after_login', {1:'开启', 0:'关闭'}, setting('auth.fill_userinfo_after_login')|default(0)) }}
+        <p class="help-block">开启后，{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}登录后需填写个人资料</p>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3" id="show-checked-fields-list">
+        <div class="pull-left">
+          {% for sort in authSetting.registerSort|default([]) %}
+            {% if sort == 'emailOrMobile' %}{% set sort = 'email' %}{% endif %}
+            {% set userCustomField = userFields[sort]|default(null) %}
+            {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
+            {% if userCustomField %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userCustomField.title }}
+              </button>
+            {% elseif userInfoFieldsDict %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userInfoFieldsDict }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+          
+        <div class="pull-right ">
+          <a href="javascript:" id="show-fields-list-btn">编辑 
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-2" id="show-fields-list" style="display:none">
+        <div class="form-group">
+          <ul class="fill-userinfo-list sortable-list list-unstyled col-md-12" data-role="list">
+            {% set checkedUserFieldsKeys = authSetting.registerSort|default([]) %}
+
+            {% if authSetting.registerFieldNameArray|default(null) %}
+              {% for field in authSetting.registerFieldNameArray %}
+                {% if field == 'emailOrMobile' %}{% set field = 'email' %}{% endif %}
+                {% set userCustomField = userFields[field]|default(null) %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="registerSort[]" value="{{ field }}" {% if field in checkedUserFieldsKeys %}checked=true{% endif %} />
+                  <input type="hidden"  name="registerFieldNameArray[]" value="{{ field }}" /> 
+                  {% if userCustomField %}{{ userCustomField.title }}{% else %}{{ dict_text('userInfoFields', field) }}{% endif %}
+                  {% if field == 'email' or field == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
+                </li>
+              {% endfor %}
+            {% else %}
+                
+              {% set userInfoFields = dict('userInfoFields') %}
+              {% for key,field in userInfoFields %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="registerSort[]" value="{{ key }}" {% if key in checkedUserFieldsKeys %}checked=true{% endif %} />
+                  <input type="hidden"  name="registerFieldNameArray[]" value="{{ key }}" /> 
+                  {{ field }}
+                  {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
+                </li>
+              {% endfor %}
+
+              {% if  userFields %}
+                {% for field in userFields %}
+                  <li class="list-group-item clearfix" data-role="item" >
+                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                    <input type="checkbox" name="registerSort[]" value="{{field.fieldName}}" />
+                    <input type="hidden"  name="registerFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+                  </li>
+                {% endfor %}
+              {% endif %}
+
+            {% endif %}
+          </ul>
+
+          <div class="help-block col-md-12"><span class="text-success">可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。</span></div>
+
+        </div>
+        <div class="mbl" style="text-align:center;">
+          <a href="javascript:" id="hide-fields-list-btn">收起 
+            <span class="glyphicon glyphicon-chevron-up"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>其它设置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>头像设置提醒</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('avatar_alert', {'none':'从不', 'in_user_center':'每次进入"我的课程"时', 'when_join_course':'加入免费课程时强制要求'}, setting('user_partner.avatar_alert')|default('none')) }}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>用户修改用户名</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('nickname_enabled', {1:'开启', 0:'关闭'}, setting('user_partner.nickname_enabled')|default(0)) }}
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>  
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
+</form>
+
+{% include 'TopxiaAdminBundle:System:user-fields.modal.html.twig' %}
+
+{% endblock %}

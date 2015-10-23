@@ -1,0 +1,153 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}登录 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/login-bind-choose' %}
+
+{% block content %}
+<div class="row row-6">
+  <div class="col-md-6 col-md-offset-3">
+
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>登录</h2></div>
+      <div class="well well-sm">
+        <div class="media">
+          <a class="pull-left" href="javascript:">
+            <img class="media-object" src="{{ oauthUser.smallAvatar }}">
+          </a>
+          <div class="media-body">
+            <div><strong>{{ oauthUser.name }}</strong></div>
+            <div class="text-muted">您正在使用<strong class="text-primary"> {{ clientMeta.name }} </strong>登录{{ setting('site.name') }}</div>
+          </div>
+        </div>
+      </div>
+
+
+      {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
+
+        <form id="set-bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" >
+          <div class="form-group">
+            <label class="control-label" for="set-bind-nickname-field">用户名</label>
+            <div class="controls">
+              <input id="set-bind-nickname-field" class="form-control" type="text" name="nickname" value="{{ oauthUser.name }}" data-url="{{ path('register_nickname_check') }}" />
+              <p class="help-block">推荐用现在这个，也可以另外取一个。最长18个英文或者9个汉字</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label" for="set_bind_email">邮箱地址</label>
+            <div class="controls">
+              <input id="set_bind_email" class="form-control" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+            </div>
+          </div>
+
+          {# {% if setting('auth.register_mode') == 'email' %}
+            <div class="form-group">
+              <label class="control-label" for="set_bind_email">邮箱地址</label>
+              <div class="controls">
+                <input id="set_bind_email" class="form-control" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+              </div>
+            </div>
+          {% elseif setting('auth.register_mode') == 'mobile' %}
+            <div class="form-group">
+              <label class="control-label" for="set_bind_mobile">手机号码</label>
+              <div class="controls">
+                <input type="text" id="set_bind_mobile" name="set_bind_emailOrMobile" class="form-control" data-url="{{path('register_mobile_check')}}">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% else %}
+            <div class="form-group mb40">
+              <label class="control-label" for="set_bind_emailOrMobile">手机/邮箱</label>
+              <div class="controls">
+                <input type="text" id="set_bind_emailOrMobile" name="set_bind_emailOrMobile" class="form-control" data-url="{{path('register_email_or_mobile_check')}}">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% endif %} #}
+
+          {# {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
+            <div class="form-group mb40 {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
+              <label class="control-label required" for="sms_code">短信验证码</label>
+              <div class="controls row" >
+                <div class = "col-md-8" >
+                  <input type="text" class="form-control" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                  <p class="help-block"> </p> 
+                </div>
+                <div class="col-md-4">
+                  <a href="#modal" data-toggle="modal" class="btn btn-default btn-sm js-sms-send disabled" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send') }}">
+                    <span id="js-time-left"></span>
+                    <span id="js-fetch-btn-text">获取短信验证码</span>
+                 </a>
+                </div>
+              </div>
+            </div>
+          {% endif %} #}
+
+          {% if setting('auth.user_terms') == 'opened' %}
+            <label id="user_terms">
+              <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+            </label>
+          {% endif %}
+
+          <div class="tac pvl">
+            <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg"  data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">确认登录</button>
+          </div>  
+        </form>
+
+      {% else %}
+        <div class="tac pvl">
+          <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
+          <button id="bind-new-btn" class="btn btn-primary btn-lg" data-url="{{ path('login_bind_new', {type:type}) }}" data-loading-text="正在登录..." data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">直接登录</button>
+        </div>
+
+      {% endif %}
+        <hr>
+
+        <p class="text-primary">
+          已有帐号？绑定到已有帐号：
+          <a href="{{ path('login_bind_exist', {type: type}) }}"></a>
+        </p>
+
+        <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_exist', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
+
+          <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
+
+          {% if (setting('auth.register_mode') == 'mobile' or setting('auth.register_mode') == 'email_or_mobile') and setting('cloud_sms.sms_enabled') %}
+            <div class="form-group">
+              <label class="control-label" for="bind-email-field">Email / 手机</label>
+              <div class="controls">
+                <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
+                <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
+              </div>
+            </div>
+          {% else %}
+            <div class="form-group">
+              <label class="control-label" for="bind-email-field">Email地址</label>
+              <div class="controls">
+                <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
+                <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址</p>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <label class="control-label" for="bind-password-field">密码</label>
+            <div class="controls">
+              <input id="bind-password-field" class="form-control" type="password" name="password">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="controls">
+              <button class="btn btn-fat btn-default btn-lg" type="submit" data-loading-text="正在提交...">绑定</button>
+            </div>
+          </div>
+
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<tr id="disk-table-{{file.id}}" data-role="item">
+  <td><input value="{{file.id}}" type="checkbox"  data-role="batch-item" ></td>
+  <td class="text-primary">{{file.filename}}</td>
+  <td class="text-info">
+    {{ admin_macro.bytesToSize(file.size) }}
+  </td>
+
+  <td>{{ dict_text('fileType:html', file.type) }}</td>
+
+  <td>
+      {% if file.storage == 'local' %}
+       本地存储
+      {% elseif file.storage == 'cloud' %}
+       云视频
+      {% endif %}
+  </td>
+
+  <td>
+    {{ admin_macro.user_link(creator) }}
+  </td>
+  
+  <td>
+    {% if file.createdTime > 0 %}
+      <span class="text-muted text-sm" title="创建时间">{{ file.createdTime |date('Y-n-d H:i:s') }}</span>      
+    {% else %}
+      --
+    {% endif %}
+  </td>
+
+  <td>
+  <button class="btn btn-default btn-sm" data-role="item-delete" data-name="文件" data-url="{{ path('admin_course_disk_delete', {id:file.id}) }}">删除</button>
+</td>
+
+
+</tr>

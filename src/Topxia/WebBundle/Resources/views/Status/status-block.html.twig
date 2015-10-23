@@ -1,0 +1,27 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<div class="panel panel-default student-dynamic">
+
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>学员动态</h3>
+  </div>
+
+  <div class="panel-body">
+  {% if learns %}
+    
+      {% for key,learn in learns %}
+        {% if loop.index < 7 %}
+          <div class="media media-number-o">
+            <div class="media-body">
+              {{ web_macro.user_link(learn.user) }}
+              {{ learn.message|raw }}
+            </div>
+          </div> 
+         {% endif %}
+      {% endfor %}
+
+    {% else %}
+     <div class="empty">还没有动态</div>
+    {% endif %}
+  </div>
+
+</div>

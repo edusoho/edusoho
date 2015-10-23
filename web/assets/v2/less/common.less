@@ -1,0 +1,121 @@
+body { 
+  background: #eee;
+  word-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  &.bg-blank {
+    background-color: #fff;
+  }
+}
+
+html.nav-active,
+html.nav-active body {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.es-wrap {
+  .es-transition;
+  &.nav-active {
+    .es-transition;
+    transform: translate3d(250px, 0, 0);
+    -webkit-transform: translate3d(250px, 0, 0);
+    -o-transform: translate3d(250px, 0, 0);
+    -moz-transform: translate3d(250px, 0, 0);
+  }
+}
+
+.html-mask.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backface-visibility: hidden;
+}
+
+#content-container {
+  margin: 30px auto;
+  min-height: 400px;
+  @media(max-width:@screen-xs-max) {
+    min-height: 250px;
+  }
+}
+
+a:hover, 
+a:focus {
+  text-decoration: none;
+}
+
+.caret {
+  border-top: 4px solid;
+}
+
+.tooltip {
+  min-width: 40px;
+}
+
+.affix,
+.affix-bottom {
+  z-index: 1;
+}
+
+// 富文本编辑器
+.cke_chrome {
+  .border-radius();
+  border-color: @gray-light !important;
+  .box-shadow(none) !important;
+}
+
+// 全站公告
+.alert-notice {
+  .border-radius(none);
+  margin-bottom: 0;
+  padding: 0;
+  border: none;
+  color: @brand-primary;
+  .swiper-container {
+    position: relative;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+  }
+  .swiper-wrapper {
+    padding-right: 30px;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+  }
+  .close {
+    float: none;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    width: 30px;
+  }
+}
+
+// 站内公告
+.aside-notice {
+  padding: 0;
+  .swiper-container {
+    position: relative;
+    padding: 0 15px;
+    height: 38px;
+    line-height: 38px;
+    overflow: hidden;
+  }
+  .swiper-slide {
+    float: none;
+    .text-overflow;
+  }
+}

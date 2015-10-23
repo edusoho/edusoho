@@ -1,0 +1,54 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+{% set script_controller = 'course-manage/students' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}管理
+    {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
+      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</a>
+    {% endif %}
+    {% if app.user.isAdmin() or isTeacherAuthManageStudent == 1 %}
+      <a class="btn btn-info pull-right btn-sm mhs" href="{{ path('course_manage_student_import', {id:course.id}) }}"><i class="glyphicon glyphicon-import"></i> 批量导入</a>
+      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> 添加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</button>
+    {% endif %}
+  </div>
+  
+  <div class="panel-body">  
+    <form class="form-inline well well-sm " action="" method="get" novalidate>
+      <div class="form-group">
+        <input class="form-control " type="text" placeholder="请输入用户名" name="nickname" value="{{ app.request.get('nickname') }}">
+
+        <button class="btn btn-primary">搜索</button>
+      </div>
+      <div class="clearfix"></div>
+    </form>
+    <table class="table table-striped" id="course-student-list">
+      <thead>
+        <tr>
+          <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</th>
+          <th width="30%">学习进度</th>
+          <th width="30%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+          {% set user = users[student.userId] %}
+          {% set progress = progresses[student.userId] %}
+          {% set isFollowing = user.id in followingIds %}
+          {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+</div>
+
+{% endblock %}

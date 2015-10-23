@@ -1,0 +1,624 @@
+.course-detail-header {
+  position: relative;
+  // background-color: @gray-lighter;
+  // background: url("@{img-src}course_detail_header.jpg");
+  // background-size: 100% 100%;
+  // background-attachment: fixed;
+  // padding: 30px 0 10px 0;
+  // padding-top: 20px;
+  .breadcrumb {
+    margin: 12px auto;
+    padding: 8px 0;
+    background: none;
+  }
+  .es-section {
+    position: relative;
+    padding: 0;
+    margin-bottom: 0;
+  }
+  .setting {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0 3px;
+  }
+  .course-img {
+    position: relative;
+    float: left;
+    background-color: #fff;
+    @media (max-width: @screen-xs-max) {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px; 
+    }
+    .course-img-cover {
+      position: absolute;
+      display: block;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: #000;
+      .opacity(0.4);
+      .es-transition;
+      &:hover {
+        .opacity(0.7);
+        .es-transition;
+      }
+      .es-icon {
+        color: white;
+        font-size: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -50px;
+        margin-top: -50px;
+      }
+    }
+    .img-responsive {
+      width: 100%;
+      @media (max-width: @screen-xs-max) {
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px; 
+      }
+    }
+    .tags {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      span {
+        margin-right: 5px;
+      }
+    }
+    .tag-serialing {
+      display: inline-block;
+      width: 40px;
+      height: 50px;
+      margin-right: 6px;
+      background: url("@{img-src}tag_serialing.png") no-repeat;
+    }
+    .tag-live {
+      display: inline-block;
+      width: 40px;
+      height: 50px;
+      background: url("@{img-src}tag_live.png") no-repeat;
+    }
+    .tag-finished {
+      display: inline-block;
+      width: 40px;
+      height: 50px;
+      background: url("@{img-src}tag_finished.png") no-repeat;
+    }
+  }
+  .title {
+    color: @gray-darker;
+  }
+  .subtitle {
+    color: @gray;
+    margin-bottom: 10px;
+    .text-overflow;
+  }
+  .metas {
+    color: @gray;
+    p {
+      font-size: 12px;
+      label {
+        width: 60px;
+        margin-bottom: 0;
+        font-weight: normal;
+      }
+      span {
+        display: inline-block;
+      }
+    }
+  }
+  .expiry-date {
+    margin-bottom: 0;
+  }
+  .discount-price {
+    .price {
+      font-size: 24px;
+      color: @gray-darker;
+      margin-right: 10px;
+      i {
+        font-size: 14px;
+        font-style: normal;
+      }
+    }
+    .discount {
+      position: relative;
+      margin-left: 12px;
+      padding: 0 15px 0 15px;
+      display: inline-block;
+      font-size: 14px;
+      color: #fff;
+      background-color: @brand-primary;
+      height: 24px;
+      line-height: 24px;
+      &:before {
+        content: "";
+        float: left;
+        position: absolute;
+        top: 0;
+        left: -12px;
+        width: 0;
+        height: 0;
+        border-color: transparent @brand-primary transparent transparent;
+        border-style: solid;
+        border-width: 12px 12px 12px 0;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 1px;
+        float: left;
+        width: 4px;
+        height: 4px;
+        .border-radius;
+        background: #fff;
+      }
+    }
+  }
+  .activity {
+    margin-bottom: 0;
+    .name {
+      color: @brand-primary;
+      margin-right: 10px;
+    }
+    i {
+      margin-right: 5px;
+    }
+  }
+  .course-operation {
+    padding: 12px 15px;
+    background-color: @bg-color;
+    color: @gray;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    @media (max-width: @screen-sm-max) {
+      .border-radius;
+    }
+    .student-num {
+      text-align: center;
+      font-size: 22px;
+      padding: 20px 0;
+      @media (max-width: @screen-md-max) {
+        padding: 15px 0;
+      }
+      i {
+        margin-right: 10px;
+        font-size: 28px;
+      }
+    }
+  }
+  .course-data {
+    list-style-type: none;
+    padding: 10px 0;
+    >li {
+      float: left;
+      width: 33.33%;
+      margin: 10px 0;
+      color: @gray;
+      text-align: center;
+      line-height: 30px;
+      @media (max-width: @screen-md-max) {
+        margin: 5px 0;
+        line-height: 20px;
+      }
+      &:first-child {
+        border: none;
+      }
+      .dropdown-toggle,
+      >a {
+        color: @gray;
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+      p {
+        margin-bottom: 0;
+      }
+      i {
+        font-size: 26px;
+      }
+    }
+    &.active {
+      >li {
+        width: 33.33%;
+      }
+    }
+  }
+}
+
+.course-detail-header.before {
+  .course-img {
+    width: 480px;
+    margin: 15px;
+    @media (max-width: @screen-md-max) {
+      width: 380px;
+      margin: 10px;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 340px;
+    }
+    @media (max-width: @screen-xs-max) {
+      float: none;
+      width: 100%;
+      margin: 0;
+    }
+  }
+  .course-info {
+    float: left;
+    width: 390px;
+    width: 386px\9;
+    padding: 15px 20px 15px 5px;
+    background-color: #fff;
+    @media (max-width: @screen-md-max) {
+      width: 350px;
+      width: 346px\9;
+      padding: 8px 10px;
+      .title {
+        margin-top: 10px;
+      }
+    }
+    @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
+      .title {
+        .text-overflow;
+      }
+    }
+    @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+      width: 360px;
+      width: 356px\9;
+      height: 211px;
+      border-top-right-radius: 2px;
+    }
+    @media (max-width: @screen-xs-max) {
+      float: none;
+      width: 100%;
+    }
+  }
+  .course-operation {
+    float: right;
+    width: 240px;
+    @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
+      width: 190px;
+      padding: 10px;
+    }
+    @media (max-width: @screen-sm-max) {
+      float: none;
+      width: 100%;
+      padding: 10px 10px 0 10px;
+    }
+    .student-num {
+      border-bottom: 1px solid @gray-lighter;
+      @media (max-width: @screen-sm-max) {
+        float: left;
+        width: 33.33%;
+        border: none;
+      }
+    }
+    .buy {
+      padding: 26px 0;
+      text-align: center;
+      @media (max-width: @screen-md-max) {
+        padding: 12px 0;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding: 18px 0 10px 0;
+        float: left;
+        width: 33.33%;
+      }
+      @media (max-width: @screen-xs-max) {
+        width: 50%;
+      }
+      .btn {
+        padding: 10px 30px;
+      }
+    }
+  }
+  .course-data {
+    border-bottom: 1px solid @gray-lighter;
+    @media (max-width: @screen-sm-max) {
+      float: left;
+      width: 33.33%;
+      margin-bottom: 0;
+      border: none;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 50%;
+    }
+    >li {
+      width: 50%;
+      @media (max-width: @screen-xs-max) {
+        width: 50%;
+      }
+    }
+    &.active >li {
+      width: 33.33%;
+    }
+  }
+}
+
+.course-detail-header.after {
+  .course-img {
+    width: 300px;
+    margin: 15px;
+    @media (max-width: @screen-md-max) {
+      width: 240px;
+      margin: 10px;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+      margin: 0;
+    }  
+  }
+  .course-info {
+    float: left;
+    width: 570px;
+    width: 566px\9;
+    padding: 15px 25px;
+    background-color: #fff;
+    @media (max-width: @screen-md-max) {
+      width: 470px;
+      width: 466px\9;
+      padding: 10px;
+      .title {
+        margin-top: 10px;
+      }
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 320px;
+      width: 316px\9;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+  }
+  .course-operation {
+    float: right;
+    width: 240px;
+    @media (max-width: @screen-md-max) {
+      width: 210px;
+      padding: 10px;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 140px;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    .student-num {
+      padding: 15px 0;
+      border-bottom: 1px solid @gray-lighter;
+      @media (max-width: @screen-md-max) {
+        font-size: 20px;
+        padding: 10px 0;
+      }
+    } 
+  }
+  .course-data {
+    padding: 16px 0;
+    margin-bottom: 0;
+    &.two-col>li {
+      width: 50%;
+    }
+  }
+  .progress {
+    height: 11px;
+    margin-bottom: 0;
+  }
+  .course-header-bottom {
+    padding: 15px;
+    line-height: 40px;
+    color: @gray;
+    .next-class {
+      float: right;
+      margin-right: 50px;
+      max-width: 600px;
+      .text-overflow;
+      @media (max-width: @screen-md-max) {
+        max-width: 400px;
+      }
+      @media (max-width: @screen-md-max) {
+        max-width: 250px;
+        margin-right: 30px;
+      }
+      >a {
+        color: @gray;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+    .btn {
+      float: right;
+      padding: 10px 30px;
+      // margin-right: 20px;
+      // @media (max-width: @screen-md-max) {
+      //   margin-right: 10px;
+      // }
+      // @media (max-width: @screen-md-max) {
+      //   margin-right: 0;
+      // }
+    }
+  }
+}
+
+// 待删
+// .recommend-class {
+//   background-color: #fff;
+//   @media (max-width: @screen-xs-max) {
+//     display: none;
+//   }
+//   .container {
+//     position: relative;
+//     box-shadow: -2px 0 1px #f5f5f5;
+//   }
+//   .class-label {
+//     position: absolute;
+//     top: 35px;
+//     bottom: 35px;
+//     right: 100%;
+//     padding: 25px 13px;
+//     color: #fff;
+//     text-align: center;
+//     background-color: @brand-primary;
+//     @media (max-width: @screen-md-max) {
+//       top: 30px;
+//       bottom: 30px;
+//       padding: 10px 10px;
+//     }
+//   }
+// }
+
+
+// .recommend-class {
+//   .recommend-class-list {
+//     position: relative;
+//     padding: 20px 10px;
+//   }
+//   .swiper-container {
+//     height: 175px;
+//     @media (max-width: @screen-md-max) {
+//       height: 150px;
+//     }
+//     @media (max-width: @screen-sm-max) {
+//       height: 112px;
+//     }
+//   }
+//   .class-item {
+//     margin: 15px 10px;
+//     @media (max-width: @screen-md-max) {
+//       margin: 0 5px;
+//     }
+//   }
+//   .class-belong {
+//     position: absolute;
+//     top: 20px;
+//     left: 20px;
+//     width: 50px;
+//     height: 50px;
+//     padding: 10px;
+//     text-align: center;
+//     background-color: #37b97d;
+//     color: #fff;
+//     font-size: 12px;
+//     .border-radius(50%);
+//   }
+//   .swiper-slide {
+//     width: 25%;
+//     float: left;
+//     h3 {
+//       @media (max-width: @screen-md-max) {
+//         font-size: 14px;
+//         margin-bottom: 0;
+//       }
+//       @media (max-width: @screen-xs-max) {
+//         display: none;
+//       }
+//     }
+//   }
+//   .arrow-prev,
+//   .arrow-next {
+//     position: absolute;
+//     top: 50%;
+//     margin-top: -22px;
+//     z-index: 100;
+//     >i {
+//       color: @gray;
+//       font-size: 30px;
+//     }
+//     &:hover {
+//       cursor: pointer;
+//       >i {
+//         color: @brand-primary;
+//       }
+//     }
+//   }
+//   .arrow-prev {
+//     left: -10px;
+//   }
+//   .arrow-next {
+//     right: -10px;
+//   }
+// }
+
+// .class-detail {
+//   margin-top: -10px;
+// }
+
+.course-material {
+  input {
+    margin-right: 10px;
+  }
+}
+
+.course-detail-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+// 课程侧边栏
+.belongs-class {
+  .media-left {
+    img {
+      width: 100px;
+      height: auto;
+      border: 3px solid #fff;
+      .border-radius;
+      .es-box-shadow;
+    }
+  }
+  .media-body {
+    vertical-align: middle;
+    >a {
+      color: @gray-dark;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+    }
+  }
+}
+
+// 推荐班级
+.panel-class {
+  .arrow-prev,
+  .arrow-next {
+    position: absolute;
+    top: 35%;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    .border-radius(50%);
+    background-color: #7f7f7f;
+    background-color: rgba(127, 127, 127, 0.5);
+    color: #fff;
+    text-align: center;
+    .es-transition;
+    visibility: hidden;
+    &:hover {
+      background-color: rgba(127, 127, 127, 0.8);
+      .es-transition;
+    }
+  }
+  .arrow-prev {
+    left: 5px;
+  }
+  .arrow-next {
+    right: 5px;
+  }
+  &:hover {
+    .arrow-prev,
+    .arrow-next {
+      visibility: visible;
+    }
+  }
+}
+
+.course-detail {
+  margin-top: -10px; 
+}

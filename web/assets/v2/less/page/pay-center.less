@@ -1,0 +1,60 @@
+// 支付方式
+.form-paytype  {
+  .order-detail-bg {
+    padding: 50px;
+    @media (max-width: @screen-xs-max) {
+      padding: 15px; 
+    } 
+  }
+  .pay-type-label  {
+    display: inline-block;
+    margin-right: 10%;
+    font-size: 18px;
+    @media (max-width: @screen-xs-max) {
+      display: block;
+    }
+  }
+}
+
+.form-paytype .check {
+  cursor: pointer;
+  width: 150px;
+  height: 58px;
+  border: 2px solid @gray-light;
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  line-height: 58px;
+  display:inline-block;
+  margin-right:15px;
+  @media(max-width: @screen-xs-max) {
+    margin-right: 5px;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    img {
+      width: 80%;
+      height: auto;
+    }
+  }
+  &.active {
+    border: 2px solid @brand-primary;
+    .icon {
+      display: block;
+    }
+  }
+  .icon {
+    display: none;
+    background: url('@{img-src}old/pay-check-status.png') no-repeat;
+    top: -1px;
+    right: -1px;
+    width: 23px;
+    height: 26px;
+    background-position: 0 -4px;
+    position: absolute;
+    overflow: hidden;
+  }
+}
+
+
+

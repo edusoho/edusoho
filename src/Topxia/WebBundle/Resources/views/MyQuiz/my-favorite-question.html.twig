@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle:MyQuiz:layout.html.twig' %}
+
+{% set script_controller = 'quiz-question/my-favorite' %}
+
+{% block list %}
+
+  {% if favoriteQuestions %}
+    <table class="table table-striped table-hover">
+    	<tbody>
+    		{% for favoriteQuestion in favoriteQuestions %}
+    			{% set paper = testpapers[targets[favoriteQuestion.target].id] %}
+    			{% set question = questions[favoriteQuestion.questionId] %}
+    			
+    				{% include 'TopxiaWebBundle:MyQuiz:my-favorite-question-tr.html.twig' %}
+
+    		{% endfor %}
+    	</tbody>
+    </table>
+  {% else %}
+    <div class="empty">还没有收藏的题目</div>
+  {% endif %}
+
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

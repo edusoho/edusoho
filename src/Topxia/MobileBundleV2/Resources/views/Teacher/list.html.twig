@@ -1,0 +1,29 @@
+{% extends 'TopxiaMobileBundleV2::group.layout.html.twig' %}
+{% block title %}{{ '名师列表' }}{% endblock %}
+
+{% block content %}
+
+<div class="am-list-news-bd">
+  	<ul class="am-list">
+    	{% for teacher in teachers %}
+      		{% set profile = profiles[teacher.id] %}
+      			<li onclick="window.edusoho.clickOnAndroid({{ teacher.id }})" class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="padding-top:12px">
+	      				<div class="am-u-sm-2 am-list-thumb" >
+	          				<img class="media-object" style="width:100%;" src="{{ teacher.mediumAvatar }}">
+	        			</div>
+	        			<div class="am-u-sm-10 am-list-main">
+	          				<h4 class="am-list-item-hd" style="margin-bottom:5px">{{ teacher.nickname }} 
+	          					<span style="margin-left:15px">{{ teacher.title }}</span>
+	          				</h4>
+	          			<div class="am-list-item-text">
+	          				{{ profile.about|raw }}</div>
+	        			</div>
+      			</li>
+    	{% endfor %}
+  	</ul>
+</div>
+{% block head_scripts %}
+	{{ parent() }}
+{% endblock %}
+
+{% endblock %}

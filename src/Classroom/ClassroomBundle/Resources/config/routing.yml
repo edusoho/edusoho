@@ -1,0 +1,246 @@
+
+classroom_manage:
+    pattern: /classroom/{id}/manage
+    defaults: { _controller: ClassroomBundle:ClassroomManage:index }
+
+classroom_manage_courses:
+    pattern: /classroom/{id}/manage/courses
+    defaults: { _controller: ClassroomBundle:ClassroomManage:courses }
+
+classroom_courses_select:
+    pattern: /classroom/{id}/courses/select
+    defaults: { _controller: ClassroomBundle:ClassroomManage:coursesSelect }
+
+classroom_manage_set_info:
+    pattern: /classroom/{id}/manage/set_info
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setInfo }
+
+classroom_manage_set_picture:
+    pattern: /classroom/{id}/manage/set_picture
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setPicture }
+
+classroom_manage_picture_crop:
+    pattern: /classroom/{id}/manage/picture_crop
+    defaults: { _controller: ClassroomBundle:ClassroomManage:pictureCrop }
+
+classroom_manage_set_price:
+    pattern: /classroom/{id}/manage/price/set
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setPrice }
+
+classroom_manage_students:
+    pattern: /classroom/{id}/manage/students
+    defaults: { _controller:ClassroomBundle:ClassroomManage:students }
+
+classroom_manage_aduitor:
+    pattern: /classroom/{id}/manage/aduitor
+    defaults: { _controller: ClassroomBundle:ClassroomManage:aduitor }
+
+classroom_manage_service:
+    pattern: /classroom/{id}/manage/service
+    defaults: { _controller: ClassroomBundle:ClassroomManage:service}
+
+classroom_manage_teachers:
+    pattern: /classroom/{id}/manage/teachers
+    defaults: { _controller: ClassroomBundle:ClassroomManage:teachers }
+
+classroom_manage_headteacher:
+    pattern: /classroom/{id}/manage/headteacher
+    defaults: { _controller: ClassroomBundle:ClassroomManage:headteacher }
+
+classroom_manage_assistants:
+    pattern: /classroom/{id}/manage/assistants
+    defaults: { _controller: ClassroomBundle:ClassroomManage:assistants }
+
+classroom_manage_publish:
+    pattern: /classroom/{id}/manage/publish
+    defaults: { _controller: ClassroomBundle:ClassroomManage:publish }
+    methods: [POST]
+
+classroom_manage_close:
+    pattern: /classroom/{id}/manage/close
+    defaults: { _controller: ClassroomBundle:ClassroomManage:close }
+    methods: [POST]
+
+classroom_manage_checkName:
+    pattern: /classroom/manage/checkName
+    defaults: { _controller: ClassroomBundle:ClassroomManage:checkName }
+
+classroom_manage_student_remark:
+    pattern:  /classroom/{classroomId}/manage/student/{userId}/remark
+    defaults: { _controller: ClassroomBundle:ClassroomManage:remark }
+
+classroom_manage_student_remove:
+    pattern:  /classroom/{classroomId}/manage/student/{userId}/remove
+    defaults: { _controller: ClassroomBundle:ClassroomManage:remove }
+    methods: [POST]
+
+classroom_manage_student_create:
+    pattern:  /classroom/{id}/manage/student/create
+    defaults: { _controller: ClassroomBundle:ClassroomManage:create }
+
+classroom_manage_student_check:
+    pattern:  /classroom/{id}/manage/student_check
+    defaults: { _controller: ClassroomBundle:ClassroomManage:checkStudent }
+
+classroom_manage_student_export_csv:
+    pattern:  /classroom/{id}/manage/student/export/{role}
+    defaults: { _controller: ClassroomBundle:ClassroomManage:exportCsv }
+
+classroom_manage_student_import:
+    pattern:  /classroom/{id}/manage/student/import
+    defaults: { _controller: ClassroomBundle:ClassroomManage:importUsers }
+
+classroom_manage_student_to_base:
+    pattern:  /classroom/{id}/manage/student/importing
+    defaults: { _controller: ClassroomBundle:ClassroomManage:excelDataImport }
+    methods: [POST]
+
+classroom_manage_testpaper:
+    pattern:  /classroom/{id}/manage/testpaper/{status}
+    defaults: { _controller: ClassroomBundle:ClassroomManage:testpaper }
+
+classroom_manage_homework:
+    pattern:  /classroom/{id}/manage/homework/{status}
+    defaults: { _controller: ClassroomBundle:ClassroomManage:homework }
+
+classroom_explore:
+    pattern:  /classroom/explore/{category}
+    defaults: { _controller: ClassroomBundle:Classroom:explore, category:'' }
+
+classroom_show:
+    pattern:  /classroom/{id}
+    defaults: { _controller: ClassroomBundle:Classroom:show }
+
+classroom_reviews:
+    pattern:  /classroom/{id}/review
+    defaults: { _controller: ClassroomBundle:Classroom/Review:list }
+
+classroom_review_create:
+    pattern:  /classroom/{id}/review/create
+    defaults: { _controller: ClassroomBundle:Classroom/Review:create }
+
+classroom_introductions:
+    pattern:  /classroom/{id}/introduction
+    defaults: { _controller: ClassroomBundle:Classroom:introduction }
+
+# classroom_review_create:
+#     pattern:  /classroom/{id}/review/create
+#     defaults: { _controller: ClassroomBundle:Classroom:create }
+
+classroom_buy:
+    pattern: /classroom/{id}/buy
+    defaults: { _controller: ClassroomBundle:Classroom:buy }
+
+classroom_buy_modify_user_info:
+    pattern: /classroom/buy/modify_user_info
+    defaults: { _controller: ClassroomBundle:Classroom:modifyUserInfo }
+
+classroom_sign:
+    pattern:  classroom/sign/{classroomId}
+    defaults: { _controller: ClassroomBundle:Classroom:sign }
+
+classroom_signed_records:
+    pattern:  classroom/sign/{classroomId}/records
+    defaults: { _controller: ClassroomBundle:Classroom:getSignedRecordsByPeriod }
+
+classroom_become_auditor:
+    pattern: /classroom/{id}/becomeAuditor
+    defaults: { _controller: ClassroomBundle:Classroom:becomeAuditor }
+
+classroom_exit:
+    pattern: /classroom/{id}/exit
+    defaults: { _controller: ClassroomBundle:Classroom:exit }
+
+classroom_canview:
+    pattern: /classroom/{classroomId}/canview
+    defaults: { _controller: ClassroomBundle:Classroom:canview }
+
+classroom_courses:
+    pattern: /classroom/{classroomId}/courses
+    defaults: { _controller: ClassroomBundle:Classroom/Course:list }
+#
+# 讨论区
+#
+classroom_threads:
+    pattern: /classroom/{classroomId}/threads
+    defaults: { _controller: ClassroomBundle:ClassroomThread:list }
+
+classroom_thread_create:
+    pattern: /classroom/{classroomId}/thread/{type}/create
+    defaults: { _controller: ClassroomBundle:ClassroomThread:create, type:'discussion' }
+
+classroom_thread_show:
+    pattern: /classroom/{classroomId}/thread/{threadId}
+    defaults: { _controller: ClassroomBundle:ClassroomThread:show }
+
+classroom_thread_update:
+    pattern: /classroom/{classroomId}/thread/{threadId}/update
+    defaults: { _controller: ClassroomBundle:ClassroomThread:update }
+
+classroom_vip_buy:
+    pattern: /classroom/{id}/vip_buy
+    defaults: { _controller: ClassroomBundle:Classroom:becomeStudent }
+
+classroom_member_ids:
+    pattern: /classroom/{id}/member_ids
+    defaults: { _controller: ClassroomBundle:Classroom:memberIds }
+
+classroom_thread_members_become:
+    pattern: /classroom/{classroomId}/thread/{threadId}/members/become
+    defaults: { _controller: ClassroomBundle:Thread/Member:become }
+
+classroom_thread_members_quit:
+    pattern: /classroom/{classroomId}/thread/{threadId}/member/{memberId}/quit
+    defaults: { _controller: ClassroomBundle:Thread/Member:quit }
+
+my_classrooms:
+    pattern: /my/classrooms
+    defaults: { _controller: ClassroomBundle:Classroom:myClassroom }
+
+classroom_headteacher_match:
+    pattern: /classroom/{classroomId}/headteacher/match
+    defaults: { _controller: ClassroomBundle:Common/Utility:headteacherMatch }
+
+classroom_assistants_match:
+    pattern: /classroom/{classroomId}/assistants/match
+    defaults: { _controller: ClassroomBundle:Common/Utility:assistantsMatch }
+
+classroom_courses_pick:
+    pattern: /classroom/{classroomId}/course/pick
+    defaults: { _controller: ClassroomBundle:Classroom/Course:pick }
+
+classroom_course_search:
+    pattern: /classroom/{classroomId}/course/search
+    defaults: { _controller: ClassroomBundle:Classroom/Course:search }
+
+my_teaching_classroom_threads:
+    pattern: /my/teaching/classroom/threads/{type}
+    defaults: { _controller: ClassroomBundle:Classroom:classroomThreads }
+
+my_classroom_discussions:
+    pattern: /my/classroom/discussions
+    defaults: { _controller: ClassroomBundle:Classroom:classroomDiscussions }
+
+classroom_course_notes_list:
+    pattern: /classroom/{classroomId}/courses/notes
+    defaults: { _controller: ClassroomBundle:Course/Note:list }
+
+classroom_teachers:
+    pattern: /classroom/{classroomId}/teachers/list
+    defaults: { _controller: ClassroomBundle:Classroom/Teacher:list }
+
+classroom_teacherIds_catch:
+    pattern: /classroom/{classroomId}/teacherIds/catch
+    defaults: { _controller: ClassroomBundle:Classroom/Teacher:catchIds }
+
+classroom_course_lessons_preview:
+    pattern: /classroom/{classroomId}/course/{courseId}/lessons/preview
+    defaults: { _controller: ClassroomBundle:Course/Lesson:preview }
+
+classroom_buy_hint:
+    pattern: /classroom/courses/{courseId}/buy/hint
+    defaults: { _controller: ClassroomBundle:Course/Lesson:buyHint }
+
+classrom_course_lessons_list:
+    pattern: /classroom/{classroomId}/course/{courseId}/lessons/list
+    defaults: { _controller: ClassroomBundle:Course/Lesson:list }

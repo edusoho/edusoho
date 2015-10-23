@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ setting('classroom.name')|default("班级") }}管理 - {{ parent() }}{% endblock %}
+
+{% block content %}
+  {% include ('ClassroomBundle:ClassroomManage:header.html.twig') %}
+
+  <div class="row">
+    <div class="col-md-3">
+      {% block side %}
+        {% set side_nav = side_nav|default(null) %}
+        <div class="sidenav">
+          {{ render(controller('ClassroomBundle:ClassroomManage:menu',{classroom:classroom,sideNav:side_nav})) }}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="col-md-9">
+      {% block main %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

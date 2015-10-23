@@ -1,0 +1,126 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}注册 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/register' %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-6 col-sm-8 col-md-offset-3 col-sm-offset-2 mtl">
+    {% if isRegisterEnabled %}
+      <div class="panel panel-default panel-page">
+        <div class="panel-heading"><h2>注册</h2></div>
+
+        <form id="register-form" method="post" action="">
+          {{ web_macro.flash_messages() }}
+        
+          {% if setting('auth.register_mode') == 'email' %}
+            <div class="form-group mb40">
+              <label class="control-label required" for="register_email">邮箱地址</label>
+              <div class="controls">
+                <input type="text" id="register_email" name="email" required="required" class="form-control" data-url="{{path('register_email_check')}}" placeholder="填写你常用的邮箱作为登录帐号">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% elseif setting('auth.register_mode') == 'mobile' %}
+            <div class="form-group mb40">
+              <label class="control-label required" for="register_mobile">手机号码</label>
+              <div class="controls">
+                <input type="text" id="register_mobile" name="verifiedMobile" required="required" class="form-control" data-url="{{path('register_mobile_check')}}" placeholder="填写你常用的手机号码作为登录帐号">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% else %}
+            <div class="form-group mb40">
+              <label class="control-label required" for="register_emailOrmobile">手机/邮箱</label>
+              <div class="controls">
+                <input type="text" id="register_emailOrMobile" name="emailOrMobile" required="required" class="form-control" data-url="{{path('register_email_or_mobile_check')}}" placeholder="填写你常用的邮箱或手机号码作为登录帐号">
+                <p class="help-block"></p>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="form-group mb40">
+            <label class="control-label required" for="register_nickname">用户名</label>
+            <div class="controls">
+              <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}" placeholder="该怎么称呼你？ 中、英文均可，最长18个英文或9个汉字">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <div class="form-group mb40">
+            <label class="control-label required" for="register_password">密码</label>
+            <div class="controls">
+              <input type="password" id="register_password" name="password" required="required" class="form-control" placeholder="5-20位英文、数字、符号，区分大小写">
+              <p class="help-block"></p>
+            </div>
+          </div>
+
+          {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
+            <div class="form-group mb40 js-captcha">
+              <label class="control-label required" for="captcha_num">验证码</label>
+              <div class="controls row">
+                <div class = "col-xs-7">
+                  <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="5" placeholder="验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
+                </div>
+                <div class="col-xs-5">
+                  <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;height:34px;width:100%" >
+                </div>
+                <div class="col-md-12 help-block"></div>  
+              </div>
+            </div>    
+          {% endif %}
+
+          {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
+            <div class="form-group mb40 {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
+              <label class="control-label required" for="sms_code">短信验证码</label>
+              <div class="controls row" >
+                <div class = "col-md-8" >
+                  <input type="text" class="form-control" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                  <p class="help-block"> </p> 
+                </div>
+                <div class="col-md-4">
+                  <a href="#modal" data-toggle="modal" class="btn btn-default btn-sm js-sms-send disabled" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send') }}">
+                    <span id="js-time-left"></span>
+                    <span id="js-fetch-btn-text">获取短信验证码</span>
+                 </a> 
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if setting('auth.user_terms') == 'opened' %}
+            <div class="form-group mb40">
+              <div class="controls">
+                <label>
+                  <input type="checkbox" id="user_terms" checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+                </label>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="form-group">
+            <div class="controls">
+              <button type="submit" id="register-btn" data-submiting-text="正在提交" class="btn btn-primary btn-large btn-block">注册</button>
+            </div>
+          </div>
+
+          <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+        </form>
+
+        {% if setting('login_bind.enabled') %}
+          <div class="social-logins">
+            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+          </div>
+        {% endif %}
+
+      </div>
+    {% else %}
+      <div class="panel panel-default">
+        <div class="panel-heading"><h2>系统暂时关闭注册，请联系管理员</h2></div>
+      </div>
+    {% endif %}    
+  </div>
+</div>
+{% endblock %}

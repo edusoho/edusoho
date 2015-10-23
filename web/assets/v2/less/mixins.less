@@ -1,0 +1,174 @@
+@import "mixins/fadeinleft.less";           //css3效果
+@import "mixins/fadeinup.less";             //css3效果
+@import "mixins/fadeinright.less";          //css3效果
+@import "mixins/fadeindown.less";           //css3效果
+@import "mixins/scale.less";                //css3效果
+@import "mixins/loader-inner.less";         //css3效果
+@import "mixins/shake.less";                //css3效果-上下抖动
+@import "mixins/transup.less";              //css3效果-向上推动
+@import "mixins/color.less";                //颜色
+@import "mixins/input.less";                //输入框
+@import "mixins/spacing.less";              //间距
+@import "mixins/text.less";                 //文字
+
+.es-icon {
+  line-height: 1;
+}
+
+.p-lg {
+  line-height: 30px;
+  margin-bottom: 30px;
+}
+
+// 富文本编辑器样式统一处理
+.editor-text {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// 分割线
+.divider-line {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+// 限制最小高度
+.h400 {
+  min-height: 400px;
+}
+
+// table-cell引起的兼容问题
+.media-body .editor-text img {
+  width: 100% \9;
+  @media screen and (min--moz-device-pixel-ratio:0) {
+    width: 100%;
+  }
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+// 用于空数据
+.empty {
+  text-align: center;
+  color: @gray-medium;
+  padding: 20px 0;
+}
+
+// 字体颜色变化，一般用于a标签
+.link-dark {
+  color: @gray-darker;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+.link-light {
+  color: @gray-dark;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+.link-white {
+  color: #fff;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+// 动画效果
+a.transition {
+  .es-transition;
+  &:hover {
+    .es-transition;
+  }
+}
+
+// 元素下划线
+.underline {
+  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+// 字符串截取 推荐用text-overflow
+.ellipsis,
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+// 透明度兼容
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+// 图片响应式
+.img-responsive(@display: block) {
+  display: @display;
+  max-width: 100%;
+  height: auto;
+}
+
+// css3样式简写
+.es-transform(@x:1.1 , @y:1.1) {
+  -webkit-transform: scale(@x, @y);
+     -moz-transform: scale(@x, @y);
+      -ms-transform: scale(@x, @y);
+       -o-transform: scale(@x, @y);
+          transform: scale(@x, @y);
+}
+
+.es-transition(@property:all,@time:.3s) {
+  -webkit-transition: @property @time ease;
+     -moz-transition: @property @time ease;
+       -o-transition: @property @time ease;
+          transition: @property @time ease;
+}
+
+.box-shadow(@box-shadow:none) {
+  -webkit-box-shadow: @box-shadow;
+     -moz-box-shadow: @box-shadow;
+          box-shadow: @box-shadow;
+}
+
+.es-box-shadow {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+}
+
+.border-radius(@border-radius:2px) {
+  -webkit-border-radius: @border-radius;
+     -moz-border-radius: @border-radius;
+          border-radius: @border-radius;
+}
+
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+}
+
+.transform(@transform) {
+  -webkit-transform: @transform;
+     -moz-transform: @transform;
+       -o-transform: @transform;
+          transform: @transform;
+}

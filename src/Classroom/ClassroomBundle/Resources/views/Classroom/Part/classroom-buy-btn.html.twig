@@ -1,0 +1,46 @@
+{% if setting("course.buy_fill_userinfo")|default(false) %}
+  {% if checkMemberLevelResult == 'ok' %}
+    <a  class="btn btn-primary btn-lg"  href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
+  {% else %}
+    {% if classroom.buyable == 1 %}
+      <a class="btn btn-link" href="#modal" data-toggle="modal" data-url="{{ path('classroom_buy', {id:classroom.id}) }}">加入购买</a>
+      <a class="btn btn-primary btn-lg" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">进去逛逛</a>
+      {% else %}
+      <button type="button" style="pointer-events:auto" class="btn btn-warning disabled" data-toggle="tooltip" data-placement="top" title="该班级无法在线购买，若需帮助请联系客服">无法购买</button>
+    {% endif %}
+  {% endif %}
+{% else %}
+  {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
+    {% if classroom.buyable == 1 %}
+    <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
+    <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
+    {% else %}
+    <button type="button" style="pointer-events:auto" class="btn btn-warning disabled" data-toggle="tooltip" data-placement="top" title="该班级无法在线购买，若需帮助请联系客服">无法购买</button>
+    {% endif %}
+  {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
+    <a href="{{ path('vip_buy') }}"  class="btn btn-primary btn-lg" >{{ classroomMemberLevel.name }}，免费学</a>  
+
+  {% elseif checkMemberLevelResult == 'level_low' %}
+    <a  class="btn btn-primary btn-lg"  href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
+
+  {% elseif checkMemberLevelResult == 'ok' %}
+    <a  class="btn btn-primary btn-lg"  href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
+
+  {% else %}
+    {% if classroom.buyable == 1 %}
+      <a  class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
+        {% if canFreeJoin and app.user and classroom.price > 0 %}
+        data-toggle="tooltip"
+        data-placement="top"
+        title="您之前已购买了本{{setting('classroom.name')|default('班级')}}的所有收费课程，可免费学习！"
+        {% endif %}
+      >免费加入</a>
+    {% else %}
+    <button type="button" style="pointer-events:auto" class="btn btn-warning disabled" data-toggle="tooltip" data-placement="top" title="该班级无法在线购买，若需帮助请联系客服">无法购买</button>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+
+
+

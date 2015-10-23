@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{'账户中心'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+
+      <div class="sidenav">
+        <ul class="list-group">
+          <li class="list-group-heading">{{'账户中心'|trans}}</li>
+          <li class="list-group-item {% if side_nav == 'my-bill' or side_nav == 'my-coin' %} active {% endif %}">
+            <a href="
+              {% if setting('coin.coin_enabled') %}
+                {{path('my_coin')}}
+              {% else %}
+                {{path('my_bill')}}
+              {% endif %}
+              ">{{'我的账户'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
+            <a href="{{path('my_orders')}}">{{'我的订单'|trans}}</a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

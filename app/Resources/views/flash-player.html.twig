@@ -1,0 +1,14 @@
+{% if type == "youku" %}
+	{% set videoUrl = url | youku_player_url %}
+{% else %}
+	{% set videoUrl = url %}
+{% endif %}
+
+<embed 
+    src="{{ videoUrl }}" 
+    type="application/x-shockwave-flash" 
+    allowscriptaccess="always" 
+    allowfullscreen="true" 
+    wmode="opaque" 
+    width="600" 
+    height="450"></embed>

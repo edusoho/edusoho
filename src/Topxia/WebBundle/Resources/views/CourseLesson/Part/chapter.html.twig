@@ -1,0 +1,26 @@
+{% if item.type == 'unit' %}
+  <li class="section">
+    <span class="title">
+      第 {{ item.number }} 
+      {% if setting('default.part_name') %}
+        {{setting('default.part_name')|default('节')}}
+      {% else %}
+        节
+      {% endif %}：{{ item.title }}
+    </span>
+  </li>
+{% else %}
+  <li class="chapter clearfix">
+    <i class="es-icon es-icon-toc"></i>
+    <span class="title">
+      第 {{ item.number }} 
+      {% if setting('default.chapter_name') %}
+        {{setting('default.chapter_name')|default('章')}}
+      {% else %}
+        章
+      {% endif %}：{{ item.title }}
+      </span>
+    </span>
+    <span class="period-show"><i class="es-icon es-icon-remove"></i></span>
+  </li>
+{% endif %}

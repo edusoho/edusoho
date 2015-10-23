@@ -1,0 +1,13 @@
+{
+  "family": "gallery",
+  "name": "json",
+  "version": "1.0.3",
+  "description": "JSON in JavaScript.",
+  "author": "Douglas Crockford",
+  "homepage": "http://www.JSON.org/",
+  "spm": {
+    "output": [
+      "json.js"
+    ]
+  }
+}

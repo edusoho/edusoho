@@ -1,0 +1,89 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
+{% set bodyClass = 'bg-blank' %}
+{% do load_script('search/search') %}
+
+{% block top_content %}
+  <div class="course-banner es-banner">
+    <div class="container">
+      <div class="title">
+        <span>搜索</span>SEARCH
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  
+  <!-- 核心内容区 -->
+
+  <div class="course-filter search-filter" id="course-filter">
+    <div class="result-declare">
+      共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
+    </div>
+    <ul class="nav nav-pills hidden-xs" role="tablist">
+      <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
+      {% if isShowVipSearch  %}
+        {% if currentUserVipLevel  %}
+          <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
+            <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
+          </li>
+        {% endif %}
+      {% endif %}
+      <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
+          <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
+      </li>
+      <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
+          <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
+      </li>
+    </ul>
+    <div class="btn-group visible-xs">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} 
+      <span class="caret"></span></button>
+
+      <ul class="dropdown-menu" role="menu">
+        <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
+        {% if isShowVipSearch  %}
+            {% if currentUserVipLevel  %}
+              <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
+                <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
+              </li>
+          {% endif %}
+        {% endif %}
+        <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
+            <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
+        </li>
+        <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
+            <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+    <!-- 课程列表 -->
+  <div class="course-list">
+      {% if courses %}
+        <div class="row">
+          {% for course in courses %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
+      {% endif %}
+
+  </div>
+
+  <nav class="text-center">
+    {% if courses %}
+    {{ web_macro.paginator(paginator) }} 
+    {% endif %}
+  </nav>
+
+  <!-- /核心内容区 -->
+
+{% endblock %}

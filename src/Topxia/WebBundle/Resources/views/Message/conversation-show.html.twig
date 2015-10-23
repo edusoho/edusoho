@@ -1,0 +1,42 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}私信 - {{ parent() }}{% endblock %}
+{% set script_controller = 'message/show' %}
+{% block content %}
+
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading">
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">返回我的私信</a>
+        <h2>与{{ receiver.nickname }}的私信对话</h2>
+      </div>
+
+      <form id="message-reply-form" class="message-reply-form clearfix" method="post" 
+      action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
+        <div class="form-group">
+          {{ form_widget(form.content, {attr:{class:'form-control', rows:3, placeholder:'请输入私信内容'}}) }}
+        </div>
+
+        <div class="form-group">
+          {{ form_rest(form) }}
+          <button id="course-reply-btn" class="btn btn-primary pull-right disabled">发送</button>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+
+      <ul class="media-list message-list">
+        {% for message in messages %}
+          {% include 'TopxiaWebBundle:Message/Template:message-item-' ~ message.type ~ '.tpl.html.twig' %}
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
+  </div>
+</div>
+
+
+{% endblock %}

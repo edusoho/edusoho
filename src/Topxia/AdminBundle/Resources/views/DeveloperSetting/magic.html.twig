@@ -1,0 +1,45 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% block title %}Feature Magic Setting - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="page-header"><h1>Feature Magic Setting</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <textarea class="form-control" rows="10" name="setting">{{ setting }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-danger">
+  {% verbatim %}
+    <h4>注意事项</h4>
+    <ul>
+      <li>此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！</li>
+      <li>视频指纹："video_fingerprint": "{{company}} {{truename}} {{mobile}}"</li>
+      <li>文档指纹： "doc_watermark": "{{company}} {{truename}} {{mobile}}"</li>
+      <li>PPT指纹： "ppt_watermark": "{{company}} {{truename}} {{mobile}}"</li>
+      <li>试卷指纹："testpape r_watermark": "{{company}} {{truename}} {{mobile}}"</li>
+      <li>视频课时观看次数： "lesson_watch_limit": true</li>
+      <li>视频课时观看时长："lesson_watch_time_limit": 600</li>
+      <li>购买课程前实名认证："buy_before_approval": true</li>
+      <li>是否开启web定时任务："disable_web_crontab": 0（１为关闭，０为启用）</li>
+    </ul>
+  {% endverbatim %}
+</div>
+
+{% endblock %}

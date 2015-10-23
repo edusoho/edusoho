@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}个人中心 - {{ parent() }}{% endblock %}
+{% set nav = 'index' %}
+{% set bodyClass = 'index' %}
+{% block content %}
+
+<div class="row">
+  {% include 'TopxiaWebBundle:My:my-nav.html.twig' %}
+    <div class="col-md-9">
+        <div class="panel panel-default panel-col">
+          <div class="panel-heading">
+            {% include 'TopxiaWebBundle:MyCourse:my-courses-nav.html.twig' %}
+              </div>
+              <div class="panel-body">
+                {% if learningCourses is empty %}
+                <h3>你还没有学习任何课程，<a href="{{ path('course_explore') }}">来探索更多课程吧！ </a>
+            {% else %}
+                {% include 'TopxiaWebBundle:MyCourse:my-courses-list.html.twig' with { users: users, courses: learningCourses } %}
+            {% endif %}
+            </div>
+        </div>
+        {{ web_macro.paginator(paginator) }}
+    </div>
+</div>
+
+{% endblock %}

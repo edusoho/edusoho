@@ -1,0 +1,290 @@
+//幻灯片
+.es-poster {
+  position: relative;
+  background: #fff;
+  margin: 0 auto;
+  max-height: 600px;
+  // @media(max-width:@screen-md-max) {
+  //   max-height: 470px;
+  // }
+  // @media(max-width:@screen-sm-max) {
+  //   max-height: 360px;
+  // }
+  // @media(max-width:@screen-xs-max) {
+  //   max-height: 200px;
+  // }
+  .swiper-slide {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    .container {
+      position: relative;
+    }
+    .img-responsive {
+      margin: 0 auto;
+    }
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      height: 100%;
+      .container {
+        position: relative;
+        height: 100%;
+      }
+    }
+    .title {
+      position: absolute;
+      top: 130px;
+      left: 50px;
+      line-height: 80px;
+      margin-bottom: 20px;
+      font-size: 70px;
+      color: #fff;
+      opacity:0;
+      span {
+        display: block;
+      }
+      @media (max-width: @screen-md-max) {
+        font-size: 60px;
+      }
+      @media (max-width: @screen-sm-max) {
+        font-size: 40px;
+        line-height: 50px;
+        top: 100px;
+      }
+      @media (max-width: @screen-xs-max) {
+        top: 20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 26px;
+        span {
+          display: inline-block;
+        }
+      }
+    }
+    .subtitle {
+      position: absolute;
+      top: 320px;
+      left: 50px;
+      color: @brand-primary;
+      font-size: 22px;
+      opacity:0;
+      span {
+        margin-right: 20px;
+      }
+      @media (max-width: @screen-sm-max) {
+        top: 220px;
+        font-size: 18px;
+      }
+      @media (max-width: @screen-xs-max) {
+        left: 0;
+        right: 0;
+        text-align: center;
+        top: 80px;
+        span {
+          margin: 0 10px;
+        }
+      }
+    }
+    .item-mac {
+      position: absolute;
+      bottom: 50px;
+      right: 0;
+      max-width: 70%;
+      opacity: 0;
+      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        width: 550px;
+      }
+      @media (max-width: @screen-sm-max) {
+        width: 400px;
+      }
+      @media (max-width: @screen-xs-max) {
+        display: none;
+      }
+    }
+    &.swiper-slide-active {
+      .title {
+        .animation(fadeInUp 1s .2s ease both);
+      }
+      .subtitle {
+        .animation(fadeInLeft 1s .8s ease both);
+      }
+      .item-mac {
+        .animation(fadeInRight 1s .2s ease both);
+      }
+    }
+  }
+  .swiper-pager {
+    position: absolute;
+    bottom: 30px;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    @media (max-width: @screen-xs-max) {
+      display: none;
+    }
+    span {
+      font-size: 0;
+      margin: 0 10px;
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      .border-radius(50%);
+      border: 2px solid #fff;
+      @media (max-width: @screen-xs-max) {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+      }
+      &:hover {
+        cursor: pointer;
+        background: #fff;
+        .opacity(1);
+      }
+      &.swiper-active-switch {
+        background: #fff;
+        .opacity(1);
+      }
+    }
+  }
+}
+
+// 课程筛选
+.course-filter {
+  position: relative;
+  min-height: 48px;
+  margin: 0 0 20px 0;
+  padding-right: 150px;
+  .nav-pills> li {
+    margin: 0 30px 10px 0;
+  }
+  .course-sort {
+    position: absolute;
+    right: 0;
+    top: 0;
+    .btn-circle {
+      margin-left: 10px;
+    }
+  }
+}
+
+//课程模块
+.course-list-section {
+  position: relative;
+  padding-bottom: 20px;
+  background: #fff;
+}
+
+// 直播
+.live-course-section {
+  padding-bottom: 20px;
+  background: #fafafa;
+}
+
+//学习介绍
+.introduction-section {
+  position: relative;
+  // background-image: linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: -webkit-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: -moz-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: -o-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  background-color: @brand-primary;
+  h4, h5 {
+    color: #fff;
+  }
+  img {
+    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+  }
+  .introduction-item {
+    margin: 90px 0;
+    // display: inline-block;
+    text-align: center;
+    height: 220px;
+    vertical-align: top;
+    @media (max-width: @screen-sm-max) {
+      margin: 40px 0;
+    }
+  }
+}
+
+// 推荐班级
+.class-section {
+  padding-bottom: 20px;
+  background-color: #fff;
+}
+
+.recommend-class-list {
+  .class-item {
+    position: relative;
+    margin: 0 auto 30px;
+    z-index: 1;
+    &:hover {
+      .class-bg-layer {
+        transform: translateY(-6px);
+        -webkit-transform: translateY(-6px);
+        -moz-transform: translateY(-6px);
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -webkit-transition: all .4s .05s ease;
+        -moz-transition: all .4s .05s ease;
+        transition: all .4s .05s ease;
+      }
+      .class-item-bg {
+        transform: translateY(-8px);
+        -webkit-transform: translateY(-8px);
+        -moz-transform: translateY(-8px);
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        .es-transition;
+      }
+    }
+    .class-bg-layer {
+      .es-transition;
+    }
+    .class-item-bg {
+      background-color: #fff;
+      padding: 10px;
+      .border-radius;
+      .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
+      .es-transition;
+    }
+    .class-img {
+      display: block;
+    }
+    .img-responsive {
+      width: 100%;
+    }
+    h3 {
+      margin: 15px 0 5px 0;
+      font-size: 14px;
+      .text-overflow;
+    }
+  }
+}
+
+.lt-ie9 .recommend-class-list .class-item {
+  border: 1px solid @gray-light;
+}
+
+//小组动态
+.group-dynamic {
+  padding-bottom: 20px;
+  background: @bg-color;
+}
+
+.index-group {
+  padding-bottom: 15px;
+}
+
+// 推荐教师
+.recommend-teacher {
+  padding-bottom: 20px;
+  background: #fff;
+}

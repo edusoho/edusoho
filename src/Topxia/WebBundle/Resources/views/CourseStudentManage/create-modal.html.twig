@@ -1,0 +1,56 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}添加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}{% endblock %}
+{% block body %}
+
+<form id="student-create-form" class="form-horizontal" method="post" action="{{ path('course_manage_student_create', {id:course.id}) }}">
+  {% if course.status == 'published' %}
+  	<div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-nickname" name="queryfield" class="form-control" 
+        data-url="{{ path('course_manage_student_check',{id:course.id})}}" placeholder='邮箱/手机/用户名' >
+      	<div class="help-block">只能添加系统中已注册的用户</div>
+    	</div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="buy-price">购买价格</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="buy-price" name="price" value="0" class="form-control">
+        <div class="help-block">本课程的价格为{{course.price}}元</div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-remark">备注</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-remark" name="remark" class="form-control">
+        <div class="help-block">选填</div>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能添加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}，请课程发布后再添加。</div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {% if course.status == 'published' %}
+    <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="正在保存..." data-user="{{default.user_name|default('学员')}}">保存</button>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('course-manage/student-create')</script>
+{% endblock %}

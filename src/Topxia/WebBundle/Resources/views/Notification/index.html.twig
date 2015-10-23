@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}通知 - {{ parent() }}{% endblock %}
+{% set script_controller = 'message/notification-list' %}
+
+{% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading">
+        <h2> 通知 </h2>
+      </div>
+
+      <ul class="media-list notification-list">
+        {% for notification in notifications %}
+          {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
+
+        {% else %}
+          <li class="empty">暂无通知</li>
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
+  </div>
+</div>
+
+{% endblock %}

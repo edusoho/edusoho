@@ -1,0 +1,13 @@
+<tr>
+	<td>
+		<a href="#modal" data-toggle="modal" data-url="{{ path('my_favorite_question_preview', {id:question.id}) }}">{{ question.stem|plain_text(40) }}</a>
+		<div class="text-muted">
+		  <small>来自试卷《{{ paper.name }}》</small>
+		  <small class="mhs">•</small>
+		  <small>收藏于 {{ favoriteQuestion.createdTime|date('Y-n-d H:i:s') }}</small>
+		</div>
+	</td>
+	<td>
+		<button data-url="{{ path('my_unfavorite_question', {id:question.id, targetType:'testpaper', targetId:paper.id}) }}" class="btn btn-default btn-sm pull-right unfavorite-btn"><span class="glyphicon glyphicon-star-empty"></span> 取消收藏</button>
+	</td>
+</tr>

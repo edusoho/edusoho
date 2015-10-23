@@ -1,0 +1,69 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_refund' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="max-refund-days-field" >退款期限</label>
+    </div>
+    <div class="controls col-md-8">
+      <input id="max-refund-days-field" class="form-control" name="maxRefundDays" type="text"   value="{{refundSetting.maxRefundDays}}">
+      <div class="help-block">用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="apply-notification-field" >退款申请通知</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="apply-notification-field" class="form-control" name="applyNotification">{{ refundSetting.applyNotification }}</textarea>
+      <div class="help-block">退款申请提交时，发送给用户的站内通知。</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="success-notification-field" >退款审核通过通知</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="success-notification-field" class="form-control" name="successNotification">{{ refundSetting.successNotification }}</textarea>
+      <div class="help-block">管理员审核退款通过时，发送给用户的站内通知。</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="failed-notification-field">退款审核未通过通知</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="failed-notification-field" class="form-control" name="failedNotification">{{ refundSetting.failedNotification }}</textarea>
+      <div class="help-block">管理员审核退款未通过时，发送给用户的站内通知。</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% verbatim %}
+<div class="alert alert-info">
+  <p><strong>通知变量说明：</strong></p>
+  <ul>
+    <li>{{course}}: 需退款的课程</li>
+    <li>{{amount}}: 退款金额</li>
+  </ul>
+</div>
+{% endverbatim %}
+
+{% endblock %}

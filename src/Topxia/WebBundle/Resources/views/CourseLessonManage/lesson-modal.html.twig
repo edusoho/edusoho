@@ -1,0 +1,148 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+{% set lesson = lesson|default(null) %}
+
+
+{% block title %}
+  {% if lesson %}编辑课时{{ lesson.number }}{% else %}添加课时{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+  data-create-draft-url="{{path('course_draft_create')}}"
+  {% if lesson %}
+    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
+  {% else %}
+    action="{{ path('course_manage_lesson_create', {id:course.id}) }}"
+  {% endif %}
+  >
+
+  <div class="form-group" {% if lesson %}style="display:none;"{% endif %}>
+    <div class="col-md-2 control-label"><label>类型</label></div>
+    <div class="col-md-9 controls">
+      <div class="radios">
+        {{ radios('type', dict('lessonType'), field_value(lesson, 'type')|default('video')) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}" >
+    <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
+    <div class="col-md-9 controls">
+      <div class="row">
+        <div class="col-md-10">
+          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
+        </div>
+        <div class="col-md-2">
+          <div class="checkbox">
+            <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> 免费课时</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}">
+    <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
+    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
+
+    </div>
+  </div>
+
+  <div class="form-group for-text-type">
+
+
+
+    <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">内容</label></div>
+    <div class="col-md-9 controls">
+      
+      {% if draft|default(false) %}
+      <a id ="see-draft-btn" class="btn btn-link" data-url="{{path('course_draft_view')}}" >
+        <small>
+        您有一段自动保存内容，继续编辑请点击
+        </small>
+      </a>
+      {% endif %}
+
+      <textarea class="form-control" id="lesson-content-field" name="content"
+      data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+      data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+      >{{ lesson.content|default('') }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %} ">
+    <div class="col-md-2 control-label for-video-type"><label>视频</label></div>
+    <div class="col-md-2 control-label for-audio-type"><label>音频</label></div>
+    <div class="col-md-2 control-label for-ppt-type"><label>PPT</label></div>
+    <div class="col-md-2 control-label for-document-type"><label>文档</label></div>
+    <div class="col-md-2 control-label for-flash-type"><label>Flash</label></div>
+    <div class="col-md-9 controls">
+      {% include "TopxiaWebBundle:CourseLessonManage:media-choose.html.twig" %}
+      <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
+    </div>
+  </div>
+
+  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-ppt-type{% endif %}">
+    <div class="col-md-offset-2 col-md-9">
+      <div class="alert alert-info">
+        <p>{{ 'PPT课时需要开通EduSoho云文档服务才能使用,'|copyright_less }}点击<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">这里</a>了解详情。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-document-type{% endif %}">
+    <div class="col-md-offset-2 col-md-9">
+      <div class="alert alert-info">
+        <p>{{ '文档课时需要开通EduSoho云文档服务才能使用,'|copyright_less }}点击<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">这里</a>了解详情。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-flash-type{% endif %}">
+    <div class="col-md-offset-2 col-md-9">
+      <div class="alert alert-info">
+        <p>{{ 'Flash课时需要开通EduSoho云视频服务才能使用,'|copyright_less }}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group for-video-type for-audio-type" id="lesson-length-form-group">
+      <div class="col-md-2 control-label for-video-type"><label>视频时长</label></div>
+      <div class="hide"><label for="lesson-length-field">视频时长或</label></div>
+      <div class="col-md-2 control-label for-audio-type"><label for="lesson-length-field">音频时长</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-minute-field" type="text" name="minute" value="{{ field_value(lesson, 'minute') }}">分
+      <input class="form-control width-input width-input-small" id="lesson-second-field" type="text" name="second" value="{{ field_value(lesson, 'second') }}">秒
+      <div class="help-block">时长必须为整数。</div>
+    </div>
+  </div>
+
+  {% if 'lesson_credit' in features %}
+  <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
+    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">学分</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> 分
+      <div class="help-block">学完此课时，可获得的学分</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+
+</form>
+ 
+
+<script>app.load('course-manage/lesson-modal')</script>
+
+
+{% endblock %}
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal" id="cancel-btn">取消</button>
+    <button id="course-lesson-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{% if lesson %}保存{% else %}添加{% endif %}</button>
+{% endblock %}
+
+{% set hideFooter = true %}

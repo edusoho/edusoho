@@ -1,0 +1,13 @@
+<?php
+
+namespace Topxia\Service\{{service}}\Dao;
+
+interface {{bigName}}Dao
+{
+    public function get{{bigName}}($id);
+    // public function search{{bigName}}s($conditions, $oderBy, $start, $limit);
+    // public function search{{bigName}}sCount(array $conditions);
+    public function add{{bigName}}(array ${{smallName}});
+    public function update{{bigName}}($id, array ${{smallName}});
+    public function delete{{bigName}}($id);
+}

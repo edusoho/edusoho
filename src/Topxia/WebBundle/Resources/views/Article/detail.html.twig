@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ article.title }} - {% if category.seoTitle %}{{ category.seoTitle }}{% else %}{{ category.name }}{% endif %} - {{ parent() }}{% endblock %}
+
+{% block keywords %}{{ seoKeyword }}{% endblock %}
+
+{% block description %}{{ seoDesc|plain_text(100) }}{% endblock %}
+
+{% set bodyClass = 'artcile-detail-page' %}
+
+{% block content %}
+
+  {{ load_script('article/detail') }}
+
+  <div class="article-detail row" id="detail-content">
+    <!-- 主内容 -->
+    <div class="col-md-8 article-detail-main">
+      <section class="es-section article-content">
+        {% include 'TopxiaWebBundle:Article/Part:detail-breadcrumb.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-metas.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-boy.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-copyright.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-tags.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-share.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-related-article.html.twig' %}
+        
+        {% include 'TopxiaWebBundle:Article/Part:detail-post-form.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-post-list.html.twig' %}
+        
+      </section>
+    </div>
+    
+    <aside class="col-md-4 article-sidebar">
+      {% include 'TopxiaWebBundle:Article/Widget:sidebar.html.twig' %}
+    </aside>
+    
+  </div>
+
+{% endblock %}
+

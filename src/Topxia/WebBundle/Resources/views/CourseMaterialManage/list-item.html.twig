@@ -1,0 +1,9 @@
+<li class="list-group-item clearfix">
+  <button class="close delete-btn" type="button" title="删除" data-url="{{ path('course_manage_material_delete', {courseId:material.courseId, lessonId:material.lessonId, materialId:material.id}) }}">&times;</button>
+  {% if material.link %}
+    <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+    <span class="glyphicon glyphicon-new-window text-muted text-sm" title="网络链接资料"></span>
+  {% else %}
+    <a href="{{ path('course_material_download', {courseId:material.courseId, materialId:material.id}) }}">{{ material.title }}</a>
+  {% endif %}
+</li>

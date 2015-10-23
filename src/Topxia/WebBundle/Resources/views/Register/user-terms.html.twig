@@ -1,0 +1,11 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}服务协议 - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="es-section">
+  <div class="section-header"><h1>服务协议</h1></div>
+  {{ userTerms|raw }}
+</div>
+{% endblock %}

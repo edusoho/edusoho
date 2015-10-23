@@ -1,0 +1,99 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% block title %}开发者设置 - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="page-header"><h1>开发者设置</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>调试</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('debug', {1:'开启', 0:'关闭'}, developerSetting.debug) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>应用中心API地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="app_api_url" value="{{ developerSetting.app_api_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>云服务API地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_server" value="{{ developerSetting.cloud_api_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Push API地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_tui_server" value="{{ developerSetting.cloud_api_tui_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>API故障转移机制</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('cloud_api_failover', {1:'开启', 0:'关闭'}, developerSetting.cloud_api_failover|default(0)) }}
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>HLS加密视频</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('hls_encrypted', {1:'开启', 0:'关闭'}, developerSetting.hls_encrypted) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>气球播放器</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('balloon_player', {1:'开启', 0:'关闭'}, developerSetting.balloon_player|default(0)) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-warning">
+  <h4>注意事项</h4>
+  <ul>
+    <li>此页设置，仅供调试使用，请勿随意修改参数，不然将造成系统不可预知的错误。</li>
+    <li>请保持：<br>
+      「调试」：关闭<br>
+      「应用中心API地址」：空<br>
+      「云服务API地址」：　http://api.edusoho.net 或 空<br>
+      「HLS加密视频」：　开启
+    </li>
+  </ul>
+</div>
+
+{% endblock %}

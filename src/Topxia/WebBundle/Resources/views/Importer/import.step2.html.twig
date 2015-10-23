@@ -1,0 +1,24 @@
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">学员批量导入</div>
+  <div class="panel-body">
+    <form method="post" enctype="multipart/form-data" action="{{ path(data.excel_import_url, {id:targetObject.id}) }}">
+      {% if errorInfo %}
+        {% for errorInfo in errorInfo%}
+         <div class="col-md-offset-2">{{errorInfo|raw}}</div><br>
+        {% endfor %}
+        <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">重新导入</a>
+        </div> 
+      {% else %}
+        {% if checkInfo %}
+          {% for checkInfo in checkInfo%}
+            <div class="col-md-offset-2">{{checkInfo}}</div><br>
+          {% endfor %}
+        {% endif %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" value="{{allUserData}}" name="data">
+        <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
+        <div class="col-md-offset-2"><button type="submit" class="btn btn-primary" id="start-import-btn" >确定导入</button> <a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">返回</a></div>
+      {% endif %}
+    </form>
+  </div>
+</div>

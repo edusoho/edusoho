@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+{% if itemResult.answer|default(null) %}
+  {% set answerChoiceIndex = itemResult.answer %}
+{% endif %}
+
+  <div class="question-choices-inputs">
+    <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1" {% if 1 in  answerChoiceIndex|default(null) %}checked{% endif %}> 正确</label>
+    <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="0" {% if 0 in answerChoiceIndex|default(null) %}checked{% endif %}>错误</label>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

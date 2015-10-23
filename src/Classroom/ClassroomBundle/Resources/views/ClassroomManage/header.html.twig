@@ -1,0 +1,87 @@
+{% set unsetted = "" %}
+{% if not classroom.about %}
+{% set unsetted = unsetted ~ ",简介" %}
+{% endif %}
+{% if not classroom.smallPicture %}
+{% set unsetted = unsetted ~ ",图片" %}
+{% endif %}
+{% if classroom.price == 0 %}
+  {% set unsetted = unsetted ~ ",价格" %}
+{% endif %}
+{% if classroom.courseNum == 0 %}
+{% set unsetted = unsetted ~ ",课程" %}
+{% endif %}
+
+
+<div class="es-section course-manage-header clearfix">
+  <img class="picture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}">
+  <h1 class="title"><a href="{{path('classroom_show',{id:classroom.id})}}">{{classroom.title}}</a>
+    {% if classroom.status == "draft" %}
+    <span class="label label-warning ">未发布</span>
+    {% elseif classroom.status == "closed" %}
+    <span class="label label-danger ">已关闭</span>
+    {% endif %}
+    {% if classroom.status == "published" %}
+    <span class="label label-success"> 已发布</span>
+    {% endif %}
+  </h1>
+
+  <div class="toolbar hidden-xs">
+    {% if classroom.status == 'published' %}
+      <div class="btn-group">
+        <a class="btn btn-default dropdown-toggle btn-sm" href="{{ path('classroom_show', {id:classroom.id}) }}">返回{{ setting('classroom.name')|default("班级") }}主页</a>
+      </div>
+    {% endif %}
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+        预览 <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'})}}" target="blank">作为未购买用户</a></li>
+        {% if  classroom.showable %}
+          <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'auditor'})}}" target="blank">作为旁听生</a></li>
+        {% endif %}
+        <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'member'})}}" target="_blank">作为正式学员</a></li>
+      </ul>
+    </div>
+
+
+    {% if classroom.status != 'published' %}
+      <div class="btn-group">
+        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">
+          发布
+        </button>
+      </div>
+
+      <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">发布{{ setting('classroom.name')|default("班级") }}</h4>
+            </div>
+            <div class="modal-body">
+              <p>
+                {% if unsetted|length > 0 %}
+                {% set unsetted = sub_str(unsetted, 1, unsetted|length - 1 )|split(',')  %}
+                <span class="text-danger">
+                    {{unsetted|join("，")}}还未设置
+                </span>
+                {% endif %}
+                &nbsp;确定要发布吗？
+              </p>
+            </div>
+            <div class="modal-footer">
+              <a data-dismiss="modal" href="">取消</a>&nbsp;
+              <button type="button" class="btn btn-success" id="publishSure" data-url="{{path('classroom_manage_publish',{id:classroom.id})}}">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% do load_script('classroombundle/controller/classroom/manage/publish') %}

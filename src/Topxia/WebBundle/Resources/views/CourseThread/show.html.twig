@@ -1,0 +1,93 @@
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
+
+{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'course/thread-show' %}
+
+{% set tab = 'thread' %}
+
+{% block course_main %}
+
+  <ul class="breadcrumb">
+    <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
+    <li class="active">{% if thread.type == 'question' %}问答{% else %}话题{% endif %}</li>
+  </ul>
+
+  <div class="thread">
+    <div class="thread-header">
+      {{ web_macro.user_avatar(author, 'pull-right') }}
+      <h2 class="thread-title">
+        {% if thread.type == 'question' %}
+        <span class="label label-info">问</span>
+        {% endif %}
+        {{ thread.title }}
+      </h2>
+      <div class="thread-metas">
+        By {{  web_macro.user_link(author, 'link-muted') }}
+        <span class="bullet mhs">•</span>
+        {{ thread.createdTime|smart_time }}
+        <span class="bullet mhs">•</span>
+        {{ thread.hitNum}} 次浏览
+        {% if lesson %}
+          <span class="bullet mhs">•</span>
+          <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">课时{{lesson.number}}</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="thread-body">{{ thread.content|raw }}</div>
+    {% if isManager or app.user.id == author.id %}
+      <div class="thread-footer" >
+        <a href="{{ path('course_thread_edit', {courseId:thread.courseId, id:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> 编辑</a>
+        {% if isManager %}
+          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, id:thread.id}) }}" data-after-url="{{ path('course_threads', {id:course.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要删除该帖吗？"><span class="glyphicon glyphicon-remove-sign"></span> 删除</a>
+          {% if thread.isStick %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要取消置顶该帖吗？"><span class="glyphicon glyphicon-minus-sign"></span> 取消置顶</a>
+          {% else %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-role="confirm-btn" data-confirm-message="您真的要置顶该帖吗？"><span class="glyphicon glyphicon-circle-arrow-up"></span> 置顶</a>
+          {% endif %}
+
+          {% if thread.isElite %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要取消加精该帖吗？"><span class="glyphicon glyphicon-hand-right"></span> 取消加精</a>
+          {% else %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}"data-role="confirm-btn" data-confirm-message="您真的要加精该帖吗？"><span class="glyphicon glyphicon-thumbs-up"></span>  加精</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="thread-posts">
+    {% if thread.type == 'question' and elitePosts %}
+      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-share-alt"></span> 教师的答案</h3>
+      <ul class="thread-post-list media-list">
+        {% for post in elitePosts %}
+          {% set author = users[post.userId] %}
+          {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <h3 class="thread-posts-heading">
+      <span class="glyphicon glyphicon-share-alt"></span>
+      <span id="thread-post-num">{{ thread.postNum }}</span> {% if thread.type == 'question' %}所有答案{% else %}回复{% endif %}
+    </h3>
+
+    <ul class="thread-post-list media-list">
+      {% for post in posts %}
+        {% set author = users[post.userId] %}
+        {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
+      {% else %}
+        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+      {% endfor %}
+    </ul>
+
+    {{ web_macro.paginator(paginator) }}
+
+    {% if isMemberNonExpired %}
+      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> 添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h3>
+      {{ render(controller('TopxiaWebBundle:CourseThread:post', {courseId:course.id, id:thread.id})) }}
+    {% endif %}
+
+  </div>
+
+{% endblock %}

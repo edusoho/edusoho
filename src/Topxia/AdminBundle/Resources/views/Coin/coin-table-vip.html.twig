@@ -1,0 +1,36 @@
+<div class="table-responsive" id = "table-responsive">
+  <table class="table" style="table-layout:fixed;word-break:break-all">
+    <tr>
+      <th width="40%">会员</th>
+      <th>人民币价格</th>
+      <th>最大可抵扣比率</th>
+      <th>最大可抵扣金额</th>
+      <th>最大可用{{ setting('coin.coin_name')|default('虚拟币') }}</th>
+    </tr>
+    {% if items %}
+      {% for item in items %}
+        <tr>
+          <td>
+            <div class="chearfix">
+              <img class="pull-left mrl" src="{{ item.picture|default(asset('assets/img/default/vip-default.png')) }}" style="width:100px;"/>
+              <a class="pull-left" href="{{ path('vip') }}" target="_blank" >{{item.name}}
+              </a>
+            </div>
+          </td>
+          <td>
+            <span id="rmb{{item.id}}" class="rmbPrice">{{item.monthPrice}}</span>
+          </td>
+          <td>
+            <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
+          </td>
+          <td>
+            <span id="deRmb{{item.id}}">{{ (item.maxRate * item.monthPrice / 100)|number_format(2, '.') }}</sapn>
+          </td>
+          <td>
+            <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.monthPrice * set.cash_rate)|number_format(2, '.') }}</sapn>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+  </table>
+</div>

@@ -1,0 +1,28 @@
+
+{% if paperResults %}
+
+<table class="table table-striped table-hover">
+	<tbody>
+		{% for paperResult in paperResults %}
+			{% set testpaper = testpapers[paperResult.testId] %}
+			{% set student = users[paperResult.userId] %}
+			{% if courses|default(null) %}
+				{% set course = courses[testpaper.target|get_course_id] %}
+			{% endif %}
+			{% if teachers|default(null) %}
+				{% set teacher = teachers[paperResult.checkTeacherId]|default(null) %}
+			{% endif %}
+				{% include 'TopxiaWebBundle:MyQuiz:list-teacher-test-tr.html.twig' %}
+
+		{% endfor %}
+	</tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+
+{% else %}
+  {% if status == 'reviewing' %}
+    <div class="empty">还没有等待批阅的试卷</div>
+  {% elseif status == 'finished' %}
+    <div class="empty">还没有已经批阅的试卷</div>
+  {% endif %}
+{% endif %}

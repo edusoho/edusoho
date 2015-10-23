@@ -1,0 +1,57 @@
+body {
+	background: #eeeff0;
+}
+
+.install-container {
+	margin: 0 auto;
+	width: 940px;
+}
+
+.paper {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.paper-heading {
+	padding: 20px;
+}
+
+.paper-heading h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 25px;
+}
+
+.brand {
+	color: #00ba84;
+}
+
+.paper-body {
+	padding: 20px;
+}
+
+.agreement {
+	border: 1px solid #bdbcbc;
+	width: 650px;
+	height: 350px;
+	padding: 10px;
+	overflow: hidden;
+	display: block;
+	overflow-y: scroll;
+	margin: 0 auto;
+	font-size: 12px;
+	line-height: 1.5;
+	margin-bottom: 22px;
+	outline: none;
+}
+
+.actions {
+	text-align: center;
+}
+
+.nav {
+	margin-bottom: 20px;
+}

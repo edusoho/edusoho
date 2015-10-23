@@ -1,0 +1,16 @@
+<section class="introduction-section">
+  <div class="container hidden-xs">
+    <div class="row">
+      {% for i in 1..3 %}
+        {% set icon = _context['icon' ~ i]%}
+        {% set title =_context['icon' ~ i ~ 'title'] %}
+        {% set introduction =_context['icon' ~ i ~ 'introduction'] %}
+        <div class="col-md-4 col-sm-4 col-xs-12 introduction-item">
+          <img class="img-responsive" src="{{ icon[0].src|default('') }}">
+          <h4>{{ title[0].value|default('') }}</h4>
+          <h5>{{ introduction[0].value|default('') }}</h5>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

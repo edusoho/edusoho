@@ -1,0 +1,77 @@
+{% extends 'TopxiaWebBundle:QuizQuestionTest:testpaper-layout.html.twig' %}
+{% do load_script('quiz-question/testpaper-result') %}
+{% block testpaper_heading_status %}
+  {% if paperResult.status == 'finished' %}
+    <div class="label label-success">批阅完成</div>
+  {% elseif paperResult.status == 'reviewing' %}
+    <div class="label label-info">批阅中</div>
+  {% endif %}
+{% endblock %}
+
+{% block testpaper_heading_content %}
+
+  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
+
+  {% if paperResult.status == 'reviewing' %}
+    <div class="alert alert-warning">老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。</div>
+  {% elseif paperResult.status == 'finished' %}
+    {% if paperResult.teacherSay %}
+      <div class="alert alert-success">
+        <div class=""><strong>评语：</strong></div>
+        <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
+      </div>
+    {% endif %}
+
+    {% if paperResult.passedStatus == 'unpassed' %}
+      <div class="alert alert-danger">
+        您未通过考试，请<a href="{{ path('course_manage_redo_test', {testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+      </div>
+    {% elseif paperResult.passedStatus == 'passed' %}
+      <div class="alert alert-success">恭喜您已通过本次考试。</div>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}
+
+{% block testpaper_body_sidebar %}
+
+{% if ( paperResult.status in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
+
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {% for type in paper.metas.question_type_seq %}
+
+          {% for item in items[type] %}
+            {% if item.questionType != 'material' %}
+              <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
+            {% else %}
+              {% for item in item.items|default([]) %}
+                <a href="javascript:;" data-anchor="#question{{ item.questionId }}" class="btn btn-default btn-index pull-left {% if paperResult.status == 'reviewing' and item.questionType == 'essay' %}checking{% elseif item.question.testResult.status|default(null) == 'partRight' %}wrong{% else %}{{ item.question.testResult.status|default(null) }}{% endif %}">{{ item.seq }}</a>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+
+          <div class="clearfix mtm mbm"></div>
+        {% endfor %}
+
+        <div class="testpaper-card-explain clearfix">
+            <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">正确</small>
+            <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">错误</small>
+            <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">待批阅</small>
+            <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">未做</small>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="showWrong" />
+            <span class="text-info">只看错题</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}

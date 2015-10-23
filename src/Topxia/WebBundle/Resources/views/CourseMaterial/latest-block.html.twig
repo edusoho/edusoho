@@ -1,0 +1,24 @@
+{% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" %}
+  {% block heading %}
+  <h2>课程资料</h2>
+  {% endblock %}
+  {% block body %}
+
+  {% if materials %}
+	  <ul>
+	  {% for material in materials %}
+	    <li>
+        {% if app.user and (app.user.id == course.userId or is_granted('ROLE_ADMIN')) %}
+          <a class="pull-right material-delete" href="javascript:" data-url="{{ path('course_material_delete', {id:course.id, materialId:material.id}) }}">x</a>
+        {% endif %}
+        <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}">{{ material.title }}</a>
+        <div class="text-muted">{{ material.description }}</div>
+      </li>
+	  {% endfor %}
+	  </ul>
+  {% else %}
+    <div class="text-muted">此课程暂无资料</div>
+  {% endif %}
+
+  {% endblock %}
+{% endembed %}

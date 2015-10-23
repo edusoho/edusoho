@@ -1,0 +1,49 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{% if lesson.type != 'live' %}
+<h5>课时简介</h5>
+<div class="lesson-about">
+	{% if lesson.summary  %}
+    {{ lesson.summary|space2nbsp|raw|nl2br}}
+	{% else %}
+	  此课时无简介。
+	{% endif %}
+</div>
+{% endif %}
+
+{% if lesson.type in ['video', 'audio'] and setting('course.student_download_media') and file %}
+<h5>课时音视频文件下载</h5>
+<div class="lesson-about">
+  <a href="{{ path('course_lesson_media_download', {courseId:lesson.courseId, lessonId:lesson.id}) }}">{{ file.size|file_size }} (点击下载)</a>
+</div>
+{% endif %}
+
+
+<h5>课时资料</h5>
+
+{% if lesson.status == 'published' %}
+  <ul class="media-list toolbar-pane-list">
+  {% for material in materials %}
+    <li class="media list-item">
+      <div class="media-body list-item-body">
+        {% if material.link %}
+          <div class="title">
+            <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+            <span class="glyphicon glyphicon-new-window text-muted text-sm" title="网络链接资料"></span>
+          </div>
+        {% else %}
+        	<div class="title">
+        		<a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+        		<span class="meta">({{ material.fileSize|file_size }})</span>
+        	</div>
+        	<div class="summary">{{ material.description }}</div>
+        {% endif %}
+      </div>
+    </li>
+    {% else %}
+      <li class="empty-item" style="text-align:left;margin-left:10px;">此课时无资料</li>
+  {% endfor %}
+  </ul>
+{% else %}
+  <div class="lesson-about">此课时尚未发布，不能下载课时资料</div>
+{% endif %}

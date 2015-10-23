@@ -1,0 +1,27 @@
+.nav-pills {
+  >li {
+    margin-right: 5px;
+    >a {
+      // padding: 7px 16px;
+      padding: 10px 15px;
+      color: @gray-dark;
+      .es-transition;
+      &:hover {
+        background-color: @gray-lighter;
+        .es-transition;
+      }
+    }
+    &.active {
+      >a {
+        color: #fff;
+        background: @brand-primary;
+        .es-transition;
+      }
+    }
+  }
+  &.nav-pills-sm >li >a {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 4px 13px;
+  }
+}

@@ -1,0 +1,58 @@
+# 请不要修改此文件的参数
+parameters:
+    role_hierarchy:
+        ROLE_TEACHER:     ROLE_USER
+        ROLE_BACKEND:     ROLE_USER
+        ROLE_ADMIN:       [ROLE_TEACHER, ROLE_BACKEND]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    register_fileds: 
+        email: required
+        nickname: required
+        password: required
+        repassword: required
+    disabled_features: []
+    cloud_convertor:
+        HLSVideo:
+            video:
+                low: [240k, 440k, 640k]
+                normal: [440k, 640k, 1000k]
+                high: [640k, 1000k, 1500k]
+            audio:
+                low: [32k, 48k, 64k]
+                normal: [48k, 64k, 96k]
+                high: [64k, 96k, 128k]
+            segtime: 10
+        HLSAudio:
+            low: 64k
+            normal: 96k
+            high: 128k
+        audio:
+            shd: mp3
+        ppt:
+            density: 150
+            quality: 80
+            resize: 1200
+
+
+
+    cloud_client:
+        arguments: 
+            videoCommands:
+                avthumb/m3u8/segtime/10/preset/video_240k : sd
+                avthumb/m3u8/segtime/10/preset/video_440k : hd
+                avthumb/m3u8/segtime/10/preset/video_640k : shd
+                # avthumb/mp4/r/24/vb/256k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac : sd
+                # avthumb/mp4/r/24/vb/512k/vcodec/libx264/ar/44100/ab/64k/acodec/libfaac : hd
+                # avthumb/mp4/r/24/vb/1024k/vcodec/libx264/ar/44100/ab/64k/acodec/libfaac : shd
+            audioCommands:
+                avthumb/mp3: shd
+            pptCommands:
+                odconv/pdf: pdf
+
+    cdn_path: http://cdn.staticfile.org
+
+    cloud.video_player: "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/GrindPlayer.swf"
+    cloud.video_player_watermark_plugin: "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Watermake-1.0.3.swf"
+    cloud.video_player_fingerprint_plugin: "http://cdn.staticfile.org/GrindPlayerCN/1.0.2/Fingerprint-1.0.1.swf"
+

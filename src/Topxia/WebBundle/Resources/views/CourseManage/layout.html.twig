@@ -1,0 +1,164 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}课程管理 - {{ parent() }}{% endblock %}
+
+{% block content %}
+<style>
+.locked li a{
+  padding:10px 15px 10px 0px !important;
+}
+.locked li a>span{
+  display:inline-block;
+  width:35px;
+  padding:0px 10px;
+}
+</style>
+  {{ render(controller('TopxiaWebBundle:Course:header', {course:course, manage: true})) }}
+
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+      {% set side_nav = side_nav|default(null) %}
+      <div class="sidenav locked">
+        <ul class="list-group">
+          <li class="list-group-heading">课程信息</li>  
+          <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'base'}) }}{% else %}
+            {{ path('course_manage_base', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>基本信息
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'detail' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'detail'}) }}{% else %}
+            {{ path('course_manage_detail', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>详细信息
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'picture'}) }}{% else %}
+            {{ path('course_manage_picture', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>课程图片
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'lesson' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'lesson'}) }}{% else %}
+            {{ path('course_manage_lesson', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>课时管理
+            </a>
+          </li>
+          {% if course.type == 'live' %}
+          <li class="list-group-item {% if side_nav == 'replay' %}active{% endif %}" >
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'replay'}) }}{% else %}
+            {{ path('live_course_manage_replay', {id:course.id}) }}
+            {% endif %}"><span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>录播管理</a>
+          </li>
+          {% endif %}
+          <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'files'}) }}{% else %}
+            {{ path('course_manage_files', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>文件管理
+            </a>
+          </li>
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-heading">课程设置</li>
+          <li class="list-group-item {% if side_nav == 'price' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'price'}) }}{% else %}
+            {{ path('course_manage_price', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>价格设置
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'teachers'}) }}{% else %}
+            {{ path('course_manage_teachers', {id:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>教师设置
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
+            <a href="{{ path('course_manage_students', {id:course.id}) }}">
+              <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% endif %}管理
+            </a>
+          </li>
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-heading">题库</li>
+          <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'question'}) }}{% else %}
+            {{ path('course_manage_question', {courseId:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>题目管理
+            </a>
+          </li>
+
+          {% if is_plugin_installed('QuestionPlus') and setting('question_plus.enabled') %}
+            <li class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}">
+              <a href="{% if course.locked|default(0) == 1 %}
+              {{ path('course_manage_course_sync', {id:course.id,type:'question_plumber'}) }}{% else %}
+              {{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}
+              {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>题目导入/导出
+            </a>
+            </li>
+          {% endif %}
+
+          <!-- <li class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}">
+            <a href="{{ path('course_manage_question_category', {courseId:course.id}) }}">题目类别管理</a>
+          </li> -->
+          
+          <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'testpaper'}) }}{% else %}
+            {{ path('course_manage_testpaper', {courseId:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>试卷管理
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
+            <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>试卷批阅</a>
+          </li>
+          {% if is_plugin_installed('Homework') %}
+            <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
+              <a href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}"><span></span>作业批改</a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-heading">课程运营</li>
+          <li class="list-group-item {% if side_nav == 'course_manage_data' %}active{% endif %}">
+            <a href="{{path('course_manage_data',{id:course.id})}}">
+              <span></span>课程学习数据</a>
+          </li>
+
+          {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
+          <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
+            <a href="{{path('course_manage_order',{id:course.id})}}"><span></span>课程订单查询</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

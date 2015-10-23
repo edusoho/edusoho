@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% set modalSize = 'large' %}
+
+{% block title %}订单详情{% endblock %}
+{% block body %}
+    
+
+<ul class="nav nav-tabs mbl">
+  <li class="active"><a href="#detail" data-toggle="tab">详情</a></li>
+  <li class=""><a href="#log" data-toggle="tab">日志</a></li>
+</ul>
+{% include 'TopxiaWebBundle:MyOrder:detail-order.html.twig' %}
+
+{% endblock %}
+
+{% block footer %}
+  <div>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+  </div>
+
+{% endblock %}

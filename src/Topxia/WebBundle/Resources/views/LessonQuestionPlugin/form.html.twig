@@ -1,0 +1,24 @@
+<form id="lesson-question-plugin-form" method="post" action="{{ path('course_lesson_plugin_question_create') }}">
+
+	<div class="form-group">
+		<div class="controls">
+	    {{ form_widget(form.title, {attr:{class:'form-control expand-form-trigger', placeholder:'我要提问', 'data-display':'标题'}}) }}
+    </div>
+	</div>
+
+	<div class="form-group detail-form-group hide">
+		<div class="controls">
+	    {{ form_widget(form.content, {attr:{class:'form-control', rows:5, placeholder:'详细描述你的问题', 'data-image-upload-url': path('editor_upload', {token:upload_token('course')}) }}) }}
+	  </div>
+	</div>
+
+	<div class="form-group detail-form-group hide">
+		<div class="controls clearfix">
+			<button class="btn btn-primary btn-sm pull-right" type="submit">提问</button>
+			<button class="btn btn-link btn-sm collapse-form-btn pull-right" type="button">取消</button>
+		</div>
+	</div>
+
+  {{ form_rest(form) }}
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

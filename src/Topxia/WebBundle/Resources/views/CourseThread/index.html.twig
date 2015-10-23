@@ -1,0 +1,12 @@
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
+
+{% set tab = 'thread' %}
+
+{% block course_main %}
+
+  {% include 'TopxiaWebBundle:Course/Part:thread-list-header.html.twig' %}
+  
+  {% include 'TopxiaWebBundle:Thread:list.html.twig' %}
+
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}登录{{ setting('site.name') }}{% endblock %}
+
+{% block body %}
+
+<form id="login-ajax-form" class="form-vertical form-vertical-small" method="post" action="{{ path('login_check') }}">
+
+  <div class="alert alert-danger" style="display:none;"></div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label hidden" for="ajax-username">邮箱/手机/用户名</label>
+    <div class="controls">
+      <input class="form-control" type="text" id="ajax-username" name="_username" placeholder="邮箱/手机/用户名" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label hidden" for="ajax-password">密码</label>
+    <div class="controls">
+      <input class="form-control" type="password" id="ajax-password" name="_password" placeholder="密码" />
+    </div>
+  </div>
+
+  <div class="pemember-password-wrap">
+    <button type="submit" class="btn btn-primary">登录</button>
+    <span class="pemember-password text-muted">
+      <input type="checkbox" name="_remember_me" checked="checked"> 记住密码
+    </span>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+<script>
+	app.load('auth/login-ajax');
+</script>
+
+{% endblock %}
+
+{% block footer %}
+<div class="tal fsn">
+  <a href="{{ path('password_reset') }}">找回密码</a>
+  <span class="text-muted mhs">|</span>
+  <span class="text-muted">还没有注册帐号？</span>
+  <a href="{{ path('register', {goto:_target_path}) }}">立即注册</a>
+</div>
+
+{% if setting('login_bind.enabled') %}
+  <div class="social-logins">
+    {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+  </div>
+{% endif %}
+
+ 
+{% endblock %}

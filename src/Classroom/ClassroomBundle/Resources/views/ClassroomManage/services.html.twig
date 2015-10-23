@@ -1,0 +1,65 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% block title %}服务设置 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'service' %}
+{% block main %}
+   
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">服务设置</div>
+  <div class="panel-body">
+    <form id="services-form" class="form-horizontal" method="post">
+          {{ web_macro.flash_messages() }}
+          <div class="form-group" id="services-form-group">
+            <label class="col-md-2 control-label">
+              提供的服务
+            </label>
+            <div class="col-md-10 controls checkboxs">
+              <label><input type="checkbox" name="service[]" value="homeworkReview" {% if 'homeworkReview' in classroom.service %}checked='checked'{% endif %}> 24小时作业批改</label>
+              <p class="help-block">24小时内完成作业批改，即时反馈并巩固您的学习效果。</p>
+            </div>
+            <label class="col-md-2 control-label">
+            </label>
+            <div class="col-md-10 controls checkboxs">
+              <label><input type="checkbox" name="service[]" value="testpaperReview" {% if 'testpaperReview' in classroom.service %}checked='checked'{% endif %}> 24小时阅卷点评</label>
+              <p class="help-block">24小时内批阅您提交的试卷，给予有针对性的点评。</p>
+            </div>
+            <label class="col-md-2 control-label">
+            </label>
+            <div class="col-md-10 controls checkboxs">
+              <label><input type="checkbox" name="service[]" value="teacherAnswer" {% if 'teacherAnswer' in classroom.service %}checked='checked'{% endif %}> 提问必答</label>
+              <p class="help-block">对于提问做到有问必答，帮您扫清学习过程中的种种障碍。</p>
+            </div>
+            <label class="col-md-2 control-label">
+            </label>
+            <div class="col-md-10 controls checkboxs">
+              <label><input type="checkbox" name="service[]" value="liveAnswer" {% if 'liveAnswer' in classroom.service %}checked='checked'{% endif %}> 一对一在线答疑</label>
+              <p class="help-block">提供专属的一对一在线答疑，快速答疑解惑。
+              </p>
+            </div>
+            <label class="col-md-2 control-label">
+            </label>
+            <div class="col-md-10 controls checkboxs">
+              <label><input type="checkbox" name="service[]" value="event" {% if 'event' in classroom.service %}checked='checked'{% endif %}> {{setting("classroom.name")|default("班级")}}活动</label>
+              <p class="help-block">不定期组织各种线上或线下的{{setting("classroom.name")|default("班级")}}活动，让学习更加生动有趣，同学关系更为紧密。
+              </p>
+            </div>
+            <label class="col-md-2 control-label">
+            </label>
+            <div class="col-md-10 controls checkboxs">
+              <label><input type="checkbox" name="service[]" value="workAdvise" {% if 'workAdvise' in classroom.service %}checked='checked'{% endif %}> 就业指导</label>
+              <p class="help-block">完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导。
+              </p>
+            </div>
+
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-8 controls">
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+              <button type="submit" class="btn btn-fat btn-primary">保存</button>
+            </div>
+          </div>
+        </div>  
+    </form>
+  </div>
+</div>
+{% endblock %}

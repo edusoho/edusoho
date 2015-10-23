@@ -1,0 +1,17 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block content %}
+
+  <div class="live-course-body row">
+    <div class="col-md-8">
+      <div class="es-tag">直播频道</div>
+      {% block live_main %}{% endblock %}
+    </div>
+    <aside class="col-md-4">
+      {% block live_side %}{% endblock %}
+    </aside>
+  </div>
+
+{% endblock %}

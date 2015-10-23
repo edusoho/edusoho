@@ -1,0 +1,84 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}生成充值卡{% endblock %}
+{% block body %}
+
+<form id="money-card-create-form" class="form-horizontal" method="post" action="{{ path('admin_money_card_create')}}">
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="money">金额</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="money" data-url="" name="money" class="form-control" >
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="cardPrefix">卡号前缀</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="cardPrefix" name="cardPrefix" data-url="{{ path('admin_money_card_batch_card_prefix_check') }}" class="form-control" >
+    </div>
+  </div>
+
+   <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="cardLength">卡号位数</label>
+    </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="cardLength" name="cardLength" class="form-control">
+      <p class="help-block">卡号前缀位数包括在内</p>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+    <label for="passwordLength">密码位数</label>
+  </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="passwordLength" name="passwordLength" class="form-control">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+    <label for="deadlineCreate">有效期</label>
+  </div>
+    <div class="col-md-7 controls" style="z-index:2000;">
+      <input type="text" id="deadlineCreate" name="deadline" class="form-control" value="">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+    <label for="number">生成数量</label>
+  </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="number" name="number" class="form-control">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+    <label for="note">备注</label>
+  </div>
+    <div class="col-md-7 controls">
+      <textarea class="form-control" rows="3" name="note"></textarea>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button type="submit" class="btn btn-primary pull-right" data-loading-text="正在生成，请稍后" data-toggle="form-submit" data-target="#money-card-create-form" id="batch-create">提交</button>
+
+  <script>app.load('money-card/create-modal')</script>
+{% endblock %}

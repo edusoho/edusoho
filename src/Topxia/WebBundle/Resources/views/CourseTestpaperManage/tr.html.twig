@@ -1,0 +1,51 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as macro %}
+<tr data-role='item'>
+    <td><input value="{{ testpaper.id }}" type="checkbox" data-role="batch-item" ></td>
+    <td>
+      <a href="{{ path('course_manage_preview_test', {testId:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
+    </td>
+    <td>
+      {% if testpaper.status == 'draft' %}草稿{% endif %}
+      {% if testpaper.status == 'open' %}已发布{% endif %}
+      {% if testpaper.status == 'closed' %}已关闭{% endif %}
+    </td>
+    <td>
+      {{ testpaper.itemCount}}题 <span class="text-muted">/</span> {{testpaper.score}}分
+      {% if testpaper.passedScore > 0 %}
+        <div class="text-muted"><small>及格：{{ testpaper.passedScore }}分</small></div>
+      {% endif %}
+    </td>
+    <td>
+      {% if testpaper.limitedTime > 0 %}{{ testpaper.limitedTime}}分钟{% else %}无限制{% endif %}
+    </td>
+    <td>
+      {{ macro.user_link(user) }}
+      <br />
+      <span class="text-muted text-sm">{{testpaper.updatedTime | date('Y-n-d H:i:s')}}</span>
+    </td>
+    <td>
+        <div class="btn-group">
+          <a href="{{ path('course_manage_preview_test', {testId:testpaper.id}) }}" class="btn btn-default btn-sm" target="_blank">预览</a>
+
+          <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+          </a>
+
+          <ul class="dropdown-menu pull-right">
+            {% if testpaper.status in ['draft', 'closed'] %}
+              <li><a class="open-testpaper" href="javascript:" title="发布试卷{{ testpaper.name }}" data-url="{{ path('course_manage_testpaper_publish', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-ok"></span> 发布试卷</a></li>
+            {% endif %}
+            {% if testpaper.status == 'open' %}
+              <li><a class="close-testpaper" href="javascript:" title="关闭试卷{{ testpaper.name }}" data-url="{{ path('course_manage_testpaper_close', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> 关闭试卷</a></li>
+            {% endif %}
+
+            {% if testpaper.status == 'draft' %}
+              <li><a href="{{ path('course_manage_testpaper_update', {courseId:course.id,id:testpaper.id}) }}"><span class="glyphicon glyphicon-edit"></span> 编辑试卷信息</a></li>
+              <li><a href="{{ path('course_manage_testpaper_items', {courseId:course.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> 管理题目</a></li>
+              <li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> 重新生成题目</a></li>
+              <li><a href="javascript:" data-name='试卷' data-role='item-delete' data-url="{{ path('course_manage_testpaper_delete', {courseId:course.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-remove-circle"></span> 删除试卷</a></li>
+            {% endif %}
+          </ul>
+        </div>
+    </td>
+</tr>

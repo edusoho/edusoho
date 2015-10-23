@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle:MyOrder:layout.html.twig' %}
+
+{% set script_controller = 'my/orders' %}
+
+{% set main_nav = 'orders' %}
+
+{% block main_body %}
+  <ul class="nav nav-pills" role="tablist">
+    <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">全部订单</a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">待付款<span class="badge">{{waitToBePaidCount}}</span></a></li>
+    <li role="presentation" {% if app.request.query.get('status')=='paid' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'paid'})}}">已付款</a></li>
+  </ul>
+  <br>
+  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <input type="hidden" name="status" value="{{app.request.query.get('status')}}"> 
+    <div class="form-group">
+      <select class="form-control" name="lastHowManyMonths"  onchange="submit();" >
+        {% set options = {'oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月','':'全部记录'} %}
+        {{ select_options(options, request.get('lastHowManyMonths')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" name="payWays"  onchange="submit();" >
+        {% set options = {'alipay':'支付宝','wxpay':'微信支付','none':'其他支付','':'支付方式'} %}
+        {{ select_options(options, request.get('payWays')) }}
+      </select>
+    </div>
+  </form>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover" id="orders-table">
+      {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode: 'my'} %}
+    </table>
+  </div>
+{{ web_macro.paginator(paginator) }}
+{% endblock %}

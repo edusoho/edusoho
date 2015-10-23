@@ -1,0 +1,13 @@
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
+
+{% set thread = thread|default(null) %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% set tab = 'review' %}
+
+{% block course_main %}
+
+  {% include 'TopxiaWebBundle:Review:Widget/list.html.twig' %}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的小组 - {{ parent() }}{% endblock %}
+{% set tab_nav = 'join' %}
+{% set side_nav = 'my-group' %}
+{% block main %}
+  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+  {% block heading %} 
+    我的小组
+       {% endblock %}
+    {% block body %}
+      <div class="row">
+        <div class="col-md-12">
+          {% include 'TopxiaWebBundle:Group:group-member-nav-pill.html.twig' %}
+          {% if adminGroups %}
+          <div class="page-header">
+            <h4> 我管理的小组</h4>
+          </div>
+          {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
+          'groups':adminGroups,  }
+          %}
+          {% endif %}
+        </div>
+        <div class="col-md-12">
+          <div class="page-header">
+            <h4> 我加入的小组</h4>
+          </div>
+          {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
+          'groups':groups,  }
+          %}
+          
+        </div>
+        <div class="col-md-12 pull-left">
+          {{ web_macro.paginator(paginator) }}
+        </div>
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

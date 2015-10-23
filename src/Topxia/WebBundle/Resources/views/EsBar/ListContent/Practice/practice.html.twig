@@ -1,0 +1,55 @@
+{% extends 'TopxiaWebBundle:EsBar:ListContent/practice.html.twig' %}
+{% set esBarMenu = status %}
+{% block myPractice %}
+<div class="text-line gray small">
+  <h5><span>考试</span></h5>
+  <div class="line"></div>
+</div>
+
+<ul class="list-unstyled">
+  {% if testPaperResults %}
+    {% set testCount = 10 %}
+    {% for testPaperResult in testPaperResults %}
+      {% set testCount = loop.length %}
+      <li><i class="es-icon es-icon-chevronright"></i><a target="_blank" href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-light">{{ testPaperResult.paperName }}</a></li>
+    {% endfor %}
+    {% if testCount >= 10 %}
+      <li class="text-center">
+        <a class="link-light" href="{{ path('my_quiz') }}" target="_blank">
+          更多<i class="es-icon es-icon-angledoubleright"></i>
+        </a>
+      </li>
+    {% endif %}
+  {% else %}
+    <li class="empty">暂无考试</li>
+  {% endif %}
+</ul>
+
+<div class="text-line gray small">
+  <h5><span>作业</span></h5>
+  <div class="line"></div>
+</div>
+
+<ul class="list-unstyled">
+{% if homeworkResults %}
+  {% set homeworkCount = 10 %}
+  {% for homeworkResult in homeworkResults %}
+    {% set homeworkCount = loop.length %}
+    {% set lesson = lessons[homeworkResult.lessonId] %}
+    {% set course = courses[homeworkResult.courseId] %}
+    {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
+    <li><i class="es-icon es-icon-chevronright"></i><a target="_blank" class="link-light" href="{{ path('course_homework_result',{courseId:course.id,homeworkId:homeworkResult.homeworkId,resultId:homeworkResult.id,userId:app.user.id}) }}">《{{ course.title }}》第 {{ lesson.number }}课时</a></li>
+  {% endfor %}
+  {% if homeworkCount >= 10 %}
+    <li class="text-center">
+      <a class="link-light" href="{{ path('my_homework_list') }}" target="_blank">
+        更多<i class="es-icon es-icon-angledoubleright"></i>
+      </a>
+    </li>
+  {% endif %}
+{% else %}
+  <li class="empty">暂无作业</li>
+{% endif %}
+</ul>
+
+{% endblock %}

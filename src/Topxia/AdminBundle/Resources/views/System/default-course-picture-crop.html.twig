@@ -1,0 +1,40 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_course_avatar' %}
+
+{% set script_controller = 'setting/default-course-picture-crop' %}
+
+{% block main %}
+
+<meta http-equiv="pragma" content="no-cache" />
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    自定义默认课程图片
+  </div>
+
+  <div class="panel-body">
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <img src="{{ filepath(pictureUrl) }}" 
+          id="default-course-picture-crop" 
+          width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+          <div class="help-block">提示：请选择图片裁剪区域。</div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a class="btn btn-fat btn-primary" 
+          data-url="{{path('admin_setting_default_course_picture_crop')}}"
+          data-goto-url="{{path('admin_setting_course_avatar')}}"
+          id="upload-course-picture-btn" >保存</a>
+          <a href="javascript:;" class="go-back btn btn-link">重新选择图片</a>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

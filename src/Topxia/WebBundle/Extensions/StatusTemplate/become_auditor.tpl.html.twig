@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  成为了班级 <a href="{{ path('classroom_show', {id: props.classroom.id}) }}" title="来自《{{ props.classroom.title }}》">{{ props.classroom.title|sub_text(15)}} </a>的旁听生
+{% elseif mode == 'full' %}
+
+{% endif %}

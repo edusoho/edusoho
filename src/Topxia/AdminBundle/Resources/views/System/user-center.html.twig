@@ -1,0 +1,72 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'setting/user-center' %}
+
+{% set menu = 'admin_setting_user_center' %}
+
+{% block main %}
+
+  {% if setting.mode !='default' %}
+    <div class="page-header clearfix"><a href="{{ path('admin_setting_admin_sync') }}" class="pull-right btn btn-link">管理员帐号同步</a>
+    </div>
+  {% endif %}
+  
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label >用户中心</label>
+    </div>
+    <div class="controls col-md-8 radios mode-radios">
+      {{ radios('mode', {'default':'无', 'discuz':'Discuz (Ucenter)', 'phpwind':'phpwind (WindID)'}, setting.mode) }}
+      <div class="help-block">支持phpwind 9系列，Discuz X2.5/X3.0/X3.1的用户中心</div>
+    </div>
+  </div>
+
+  <div class="row form-group with-discuz" style="display:none;">
+    <div class="col-md-3 control-label"><label>Ucenter配置</label></div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" name="discuz_config" rows="10">{{ discuzConfig }}</textarea>
+      <div class="help-block">从Ucenter复制配置，粘帖到此处。注意：请在第一行加上" &lt;?php"。 <a href="http://www.qiqiuyu.com/course/125" target="_blank">如何配置？</a></div>
+    </div>
+  </div>
+
+  <div class="row form-group with-phpwind" style="display:none;">
+    <div class="col-md-3 control-label"><label>WindId配置</label></div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" name="phpwind_config" rows="10">{{ phpwindConfig }}</textarea>
+      <div class="help-block">如使用phpwind (WindID)的用户中心，请填写此项配置。<a href="http://demo.edusoho.com/course/125" target="_blank">如何配置？</a></div>
+    </div>
+  </div>
+
+    <div class="form-group with-phpwind with-discuz">
+    <div class="col-md-3 control-label">
+      <label for="email_filter">过滤邮箱地址清单</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea id="email_filter" name="email_filter" class="form-control" rows="5">{{setting.email_filter}}</textarea>
+      <div class="help-block">
+        {% verbatim %}
+        <div>每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱</div>
+        {% endverbatim %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+
+
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

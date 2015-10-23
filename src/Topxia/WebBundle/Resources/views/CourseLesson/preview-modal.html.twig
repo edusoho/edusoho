@@ -1,0 +1,116 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
+
+{% block body %}
+  {% if setting("developer.balloon_player")|default(0) %}
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  {% endif %}
+  
+	{% if lesson.status == 'published' %}
+	  {% if lesson.mediaSource == 'iframe' %}
+      <div id="lesson-preview-iframe" data-url="{{ lesson.mediaUri }}" style="display:none;">
+      </div>
+		{% elseif lesson.type == 'video' or lesson.type == 'audio' %}
+			{% if lesson.mediaSource == 'self' %}
+				<div id="lesson-preview-player" 
+          style="height:300px;overflow:hidden"
+          data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
+          {% if not lesson.free %}
+            data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
+          {% endif %}
+          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, mode:'preview'})}}"
+          {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+            data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+          {% endif %}
+          {% if setting('storage.video_fingerprint') and app.user %}
+            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+          {% endif %}
+        ></div>
+        <div class="js-time-limit-dev hidden">
+          <div style="height:360px;background-color:black;" class="text-center">
+            <br><br><br><br>
+            <br><br><br><br>
+            <div style="font-size:20px;color:#fff;">
+              立刻购买本课程，即可获得全部完整学习内容。
+            </div>
+          </div>
+          <div class="js-buy-text">
+            <span class="text-success">
+              您可以免费试看前{{ (setting('magic.lesson_watch_time_limit')|default(0)/60)|number_format(2,'.') }}分钟，购买后可完整观看。
+            </span>
+          </div>
+        </div>
+        <input type="hidden" id="videoWatermarkEmbedded" value="{{ hasVideoWatermarkEmbedded }}">
+      {% else %}
+        <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
+      {% endif %}
+    {% elseif lesson.type == 'ppt' %}
+      <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}" class="lesson-preview-ppt"></div>
+    {% elseif lesson.type == 'document' %}
+      <div id="lesson-preview-doucment" data-url="{{ path('course_lesson_document', {courseId:lesson.courseId, lessonId:lesson.id}) }}" {% if setting('magic.doc_watermark') %}data-watermark-url="{{ path('cloud_doc_watermark') }}" {% endif %}></div>
+    {% elseif lesson.type == 'flash' %}
+      <div id="lesson-preview-flash" data-url="{{ path('course_lesson_flash', {courseId:lesson.courseId, lessonId:lesson.id}) }}" ></div>
+    {% else %}
+      <div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
+        {{ lesson.content|raw }}
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="empty">课时尚未发布，无法预览！</div>
+  {% endif %}
+  <script>app.load('course/lesson-preview')</script>
+{% endblock %}
+
+{% block footer %}
+  <span class="es-qrcode bottom mrl" data-url="{{path('common_learn_qrcode',{lessonId: lesson.id,courseId: lesson.courseId,type:"lesson-qrcode"})}}">
+    <i class="es-icon es-icon-qrcode"></i>
+    <span class="qrcode-popover">
+      <img src="" alt="">
+      扫二维码继续学习
+    </span>
+  </span>
+   {% if lesson.status == 'published' and course.parentId == '0' %}
+
+    {% if course.price == '0.00'  %}
+      <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
+        {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
+          href="#modal" 
+          data-toggle="modal" 
+          data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+        {% else %}
+          href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+        {% endif %}
+      >
+        {% if user.id %}
+          免费加入学习
+        {% else %}
+          登录后加入学习
+        {% endif %}
+      </a>
+    {% else %}
+      <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
+        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
+          href="javascript:;" 
+          data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+        {% else %}
+          href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+        {% endif %}
+      >
+        {% if user.id %}
+          {% if vipStatus == 'ok' %}
+            觉得不错？点击加入此课程
+          {% else %}
+            觉得不错？点击购买此课程（{{ course.price }}元）
+          {% endif %}
+        {% else %}
+          登录后购买学习完整的课程
+        {% endif %}
+      </a>
+    {% endif %}
+  {% endif %} 
+ {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
+
+{% endblock %}

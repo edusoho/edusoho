@@ -1,0 +1,46 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_cloud_bill' %}
+
+{% block main %}
+
+  <table class="table table-hover" id="bill-table">
+    <tr>
+      <th>账单月份</th>
+      <th>空间使用量</th>
+      <th>流量</th>
+      <th>空间费用</th>
+      <th>流量费用</th>
+      <th>费用合计</th>
+    </tr>
+    {% for bill in bills %}
+    <tr>
+      <td>{{ bill.date }}</td>
+      <td>
+        月末：{{ bill.space }}G <br> 月均： {{ bill.spaceAvg }}G
+        <br><small class="text-muted">免费额度：{{ bill.spaceGift }}G</small>
+      </td>
+      <td>
+        {{ bill.transfer }}G
+        <br><small class="text-muted">免费额度：{{ bill.transferGift }}G/月</small>
+      </td>
+      <td>
+        {{ bill.spaceFee }}元
+        <br><small class="text-muted">(单价：{{ bill.spacePrice }}元/G)</small>
+      </td>
+      <td>
+        {{ bill.transferFee }}元
+        <br><small class="text-muted">(单价：{{ bill.transferPrice }}元/G)</small>
+      </td>
+      <td><strong class="text-success">{{ bill.totalFee }}元</strong></td>
+    </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">暂无账单记录</div></td></tr>
+    {% endfor %}
+  </table>
+
+  <div class="alert alert-info">
+    空间费用 = 月均空间使用量 * 空间单价
+  </div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+<div class="media group-media group-media-sm">
+  <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
+    <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-sm" >
+  </a>
+  <div class="media-body">
+    <p>
+      <a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a>
+    </p>
+    <div class="text-muted text-normal">
+      {{group.memberNum}}个成员&nbsp;
+      {{group.threadNum}}个话题
+    </div>
+  </div> 
+</div>

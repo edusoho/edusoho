@@ -1,0 +1,236 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+
+{% set menu = 'admin_edu_cloud_sms' %} 
+
+{% set script_controller = 'educloud/sms-setting' %}
+
+{% block main %}
+	{% if is_trial() %}
+		<div class="row form-group">
+      		<div class="help-block">
+        		</br></br>
+        		<script>
+		          	var _hmt = _hmt || [];
+		        </script>
+		        <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+
+        		<p style = "text-align: center;font-size:16px">短信发送服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a></p>
+
+        		<p style = "text-align:center;font-size:16px">当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 
+		        电话：0571-86819929 或 
+                <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
+		        </p>
+
+        		<script type="text/javascript">
+            		BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
+        		</script>
+        		</br></br>
+      		</div>
+    	</div>
+	{% else %}	
+	  {{ web_macro.flash_messages() }}
+	  {% if not smsStatus or smsStatus.status == 'error' %}
+		  <div class="panel panel-default">
+				<table class="table table-striped table-hover" style="word-break:break-all;">
+					<thead>
+	          <tr>
+	            <th style="text-align: center; width: 70%">原因</th>
+	            <th style="text-align: center; width: 30%">操作</th>
+	          </tr>
+	        </thead>
+	        <tbody style="text-align: center;">
+	        	<tr>
+	        		<td>
+	        			您还未开通云短信服务
+	        		</td>
+	        		<td>
+	        			<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
+	        		</td>
+	        	</tr>
+	        </tbody>
+				</table>
+			</div>
+
+		{% else %}
+			{% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
+			{% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('off')) %}
+				<div class="alert alert-danger">
+					<a href="{{path("admin_edu_cloud_sms_no_message")}}" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+					{{ smsStatus.schoolNameError }}
+				</div>
+		{% endif %}
+
+		<form class="form-horizontal" method="post" id="sms-form" novalidate="">
+			<fieldset>
+				{% if hasSchoolName %}
+					<legend>短信设置</legend>
+					<div class="form-group">
+	    			<div class="col-md-3 control-label">
+	      			<label class="pull-right">短信功能</label>
+	    			</div>
+
+	    			<div class="controls col-md-8 radios">
+	      			<label>
+	      				<input type="radio" name="sms_enabled" value="1"
+	      				{% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
+	      					checked="checked"
+	      				{% endif %}> 开启
+	      			</label>
+	      			<label>
+	      				<input type="radio" name="sms_enabled" value="0" 
+	      				{% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
+	      					checked="checked"
+	      				{% endif %}> 关闭
+	      			</label>
+	      			<p class="help-block">短信开始使用后，将收取0.07元/条的费用</p>
+	    			</div>
+			    </div>
+
+			  {% endif %}
+		    	{% if smsStatus.status in ['passed','failed'] %}
+	    			{% if ( not hasSchoolName ) and (smsStatus.status == 'failed') %}
+	    				<div class="alert alert-danger">
+	    					您的网校名称“{{setting('cloud_sms.sms_school_candidate_name')|default('')}}”未通过审核，原因是：{{ smsStatus.message|default('网校名称不符合规范') }}
+
+	    					<span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 重新申请 </span>
+			    		</div>
+
+	    			{% else %}
+			    		<div class="form-group">
+		      			<div class="col-md-3 control-label">
+		        			<label for="sms-school-name" class="pull-right">网校名称</label>
+		      			</div>
+			      		<div class="col-md-5 controls">
+			        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
+			        		<p class="help-block"></p>
+			        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
+			      		</div>
+			      		<div class="col-md-2">
+			      			<span class="btn btn-default js-alter-school-name" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}">修改</span>
+			      		</div>
+			    		</div>	
+			    	{% endif %}
+
+			    {% elseif  smsStatus.status == 'auditing' %}
+		    		{% if hasSchoolName %}
+			    		<div class="form-group">
+								<div class="col-md-3 control-label">
+		        			<label for="name" class="pull-right">网校名称</label>
+		      			</div>
+			      		<div class="col-md-5 controls">
+			        		<input type="text" id="name" name="sms-school-name" class="form-control js-school-name" value="{{setting('cloud_sms.sms_school_name')|default('')}}" readonly="readonly">
+			        		<p class="help-block"></p>
+			        		<p>短信内容：“【<span id="js-sms-school-name">{{setting('cloud_sms.sms_school_name')|default('')}}</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效”</p>
+			      		</div>
+			    		</div>
+			    	{% endif %}
+
+		    		<div class="alert alert-warning">
+		    			<span>网校名称【{{setting('cloud_sms.sms_school_candidate_name')|default('')}}】正在审核中 <a href="#js-apply-details" class="btn btn-default btn-sm" data-toggle="modal">详情</a></span>
+		    		</div>
+			    		
+		    		<div class = "modal{#  fade #}" id="js-apply-details" role = "dialog">
+	            <div class = "modal-dialog">
+	              <div class = "modal-content">
+	                <div class = "modal-header">
+	                   <h4>申请详情</h4>
+	                </div>
+		              <div class = "modal-body">	                              
+										<table class="table table-striped order-table">
+								      <tbody>
+								      	<tr> 
+								      		<th style="text-align: center;" width="30%">短信内容</th>
+								      		<td>【 {{ setting('cloud_sms.sms_school_candidate_name')|default('') }} 】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效</td> 
+								      	</tr>
+								      	<tr> 
+								      		<th style="text-align: center;" width="30%">审核时间</th>
+								      		<td>
+								      			审核需1到3个工作日
+								      			{% if '' != (setting('cloud_sms.sms_school_name')|default('')) %}
+								      			  ，期间短信验证功能仍可以正常使用
+								      			{% endif %}
+								      		</td> 
+								      	</tr>
+								      	<tr> 
+								      		<th style="text-align: center;" width="30%">短信价格</th> 
+								      		<td>0.07元/条</td> 
+								      	</tr>
+								      	<tr> 
+								      		<th style="text-align: center;" width="30%">审核状态</th> 
+								      		<td> 审核中 </td> 
+								      	</tr>
+								    	</tbody>
+										</table>
+		              </div>
+	                <div class = "modal-footer">
+	                  <a class = "btn btn-primary" data-dismiss = "modal">关闭</a>
+	                </div>
+	              </div>
+	          	</div>
+	      		</div>
+			    {% endif %}
+
+		    	{% if hasSchoolName %}
+		    		<div class="js-usage" {% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}style="display:none;" {% endif %}>
+			    		<legend>短信验证</legend>
+			    		<div class="form-group">
+		      			<div class="col-md-3 control-label">
+		        			<label class="pull-right">使用场景</label>
+		      			</div>
+
+			      		<div class="controls col-md-8 radios checkboxes">     				
+							    <input type="hidden" name="sms_bind" value="on">
+							    <label>
+							    	<input type="checkbox" checked	disabled readonly> <span>手机绑定功能已开启</span>
+							    </label>
+							    <br>	
+								{# <label>
+							    	<input name="sms_registration" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_registration')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}> <span>新用户注册时</span>
+							    </label>
+							    <br> #}		      			 
+							    <label>
+							    	<input name="sms_user_pay" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_user_pay')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %} > 使用账户余额支付时
+							    </label>
+							    <br>
+							    {# <label>
+							    	<input name="sms_forget_pay_password" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_forget_pay_password')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}> 忘记支付密码时
+							    </label> #}
+							    {# <br>
+							    <label>
+							    	<input name="sms_forget_password" type="checkbox"
+							    	{% if (setting('cloud_sms.sms_forget_password')|default('')) == 'on' %}
+							    		checked
+							    	{% endif %}> <span>忘记登录密码时</span>
+							    </label> #}
+			      		</div>
+			    		</div>
+		    		</div>
+		    	{% endif %}
+				</fieldset>
+
+				{% if hasSchoolName %}
+					<div class="form-group">
+						<div class="controls col-md-offset-3 col-md-8">
+			      			<button type="submit" class="btn btn-primary">提交</button>
+			    		</div>
+		    		</div>
+		    	{% endif %}
+	    		<input type="hidden" name="register-mode" value="{{ setting('auth.register_mode')}}">
+	  			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+			</form>
+		{% endif %}
+	{% endif %}
+
+	
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'TopxiaWebBundle:MyCourse:layout.html.twig' %}
+
+{% block title %}已收藏 - {{ parent() }}{% endblock %}
+
+{% set tab_nav = 'favorited' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+	  <div class="panel-heading">我的课程</span></div>
+	  	<div class="panel-body">
+
+	  		 {% include 'TopxiaWebBundle:MyCourse:nav-pill.html.twig' %}
+
+ {% if courses %}
+		{{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+		{{ web_macro.paginator(paginator) }} 
+  {% else %}
+    <div class="empty">暂无已收藏的课程</div>
+  {% endif %}
+
+</div>
+</div>
+{% endblock %}

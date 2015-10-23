@@ -1,0 +1,27 @@
+{
+    "family": "arale",
+    "name": "placeholder",
+    "version": "1.1.0",
+    "description": "针对不支持 html5 placeholder 的占位符兼容解决方案。",
+    "keywords": ["utility", "ie", "input"],
+    "homepage": "http://aralejs.org/placeholder/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aralejs/placeholder"
+    },
+    "author": "偏右 <afc163@gmail.com>",
+    "maintainers": [
+        "偏右 <afc163@gmail.com>",
+        "南伯 <me@lepture.com>"
+    ],
+    "bugs": {
+        "url": "https://github.com/aralejs/placeholder/issues"
+    },
+    "spm": {
+        "alias": {
+            "$": "$"
+        },
+        "output": ["placeholder.js"]
+    },
+    "tests": ["placeholder"]
+}

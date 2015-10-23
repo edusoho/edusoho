@@ -1,0 +1,17 @@
+{% set settings = setting('login_bind', []) %}
+
+{% if settings.enabled|default(false) %}
+	<div class="social-logins">
+		{% if settings.weibo_enabled|default(false) %}
+		  <a href="{{ path('login_bind', {type:'weibo', _target_path:_target_path|default('')}) }}" class="social-login-btn"><i class="social-icon social-icon-weibo"></i>微博帐号登录</a>
+		{% endif %}
+
+		{% if settings.qq_enabled|default(false) %}
+		  <a href="{{ path('login_bind', {type:'qq', _target_path:_target_path|default('')}) }}" class="social-login-btn"><i class="social-icon social-icon-qq"></i>QQ帐号登录</a>
+		{% endif %}
+
+		{% if settings.renren_enabled|default(false) %}
+		  <a href="{{ path('login_bind', {type:'renren', _target_path:_target_path|default('')}) }}" class="social-login-btn"><i class="social-icon social-icon-renren"></i>人人帐号登录</a>
+		{% endif %}
+	</div>
+{% endif %}

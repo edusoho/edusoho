@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  开始学习课时 <a href="{{ path('course_show', {id: props.course.id}) }}" title="来自《{{ props.course.title }}》">{{ props.lesson.title|sub_text(15)}}</a>
+{% elseif mode == 'full' %}
+
+{% endif %}

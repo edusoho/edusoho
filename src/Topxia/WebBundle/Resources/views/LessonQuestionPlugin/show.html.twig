@@ -1,0 +1,38 @@
+<div class="lesson-plugin-pane lesson-question-plugin-pane">
+
+	<div class="lesson-question-plugin-pane-header clearfix">
+		<button type="button" class="btn btn-default back-to-list">返回</button>
+		<h4>{{threader.nickname}}<i>问...</i></h4>
+	</div>
+
+	<div class="lesson-question-plugin-pane-thread">
+		<h5><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></h5>
+		<div class="lesson-question-plugin-pane-thread-content">{{ thread.content|raw }}</div>
+	</div>
+
+	<div class="lesson-question-plugin-pane-posts">
+		<div class="posts-header"><h5><span data-role="post-number">{{ thread.postNum }}</span> 回答</h5></div>
+	</div>
+
+	<ul data-role="post-list" class="posts">
+		{% for post in posts %}
+		  {% set user = users[post.userId] %}
+		  {% include 'TopxiaWebBundle:LessonQuestionPlugin:post-item.html.twig' %}
+		{% endfor %}
+	</ul>
+
+	<form class="post-form" data-role="post-form" method="post" action="{{ path('course_lesson_plugin_question_answer') }}" novalidate>
+		<div class="form-group">
+			<div class="controls">
+				{{ form_widget(form.content, {attr:{class:'form-control', rows:4, 'data-display':'内容'}}) }}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="controls clearfix">
+				{{ form_rest(form) }}
+				<button type="submit" class="btn btn-primary pull-right">添加答案</button>
+			</div>
+		</div>
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+</div>

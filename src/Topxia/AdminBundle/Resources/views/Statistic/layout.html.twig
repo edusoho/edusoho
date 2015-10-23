@@ -1,0 +1,21 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set nav = 'statistic' %}
+
+{% block content %}
+  <div class="col-md-2">
+
+    {% block sidebar %}
+      <div class="list-group">
+
+        <a href="#" class="list-group-item">访问明细</a>
+
+        <a href="#" class="list-group-item">收入明细</a>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

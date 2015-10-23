@@ -1,0 +1,76 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的小组 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-group' %}
+{% set tab_nav = 'index' %}
+{% block main %}
+    {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+      {% block heading %} 
+        我的小组
+      {% endblock %}
+
+      {% block body %}
+          <div class="row">
+
+            <div class="col-md-12">
+
+              {% include 'TopxiaWebBundle:Group:group-member-nav-pill.html.twig' %}
+
+              <div class="page-header">
+                <h4> 我加入的小组<a class="badge pull-right" href="{{path('group_member_join',{type:'myGroup'})}}" style="background-color:#3cb373;">{{groupsCount}}</a></h4>
+              </div>
+
+              {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {
+              'groups':groups,  }
+              %}
+
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="page-header">
+                <h4>我发起的话题<a class="badge pull-right" href="{{path('group_member_threads')}}" style="background-color:#3cb373;">{{threadsCount}}</a></h4>
+              </div>
+
+              {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
+              'threads':ownThreads,
+              'groups':groupsAsOwnThreads, }
+              %}
+              
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="page-header">
+                <h4>回复的话题<a class="badge pull-right" href="{{path('group_member_posts')}}" style="background-color:#3cb373;">{{postsCount}}</a></h4>
+              </div>
+              
+              {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
+              'lastPostMembers':postLastPostMembers,
+              'groups':groupsAsPostThreads,
+              'threads':threads,
+              'user':user,}
+              %}
+              
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="page-header">
+                <h4>收藏的话题<a class="badge pull-right" href="{{path('group_thread_collecting')}}" style="background-color:#3cb373;">{{collectCount}}</a></h4>
+              </div>
+              
+              {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
+              'lastPostMembers':collectLastPostMembers,
+              'groups':groupsAsCollectThreads,
+              'threads':collectThreads,
+              'user':user,}
+              %}
+              
+            </div>
+
+          </div>
+      {% endblock %}
+    {% endembed %}
+{% endblock %}

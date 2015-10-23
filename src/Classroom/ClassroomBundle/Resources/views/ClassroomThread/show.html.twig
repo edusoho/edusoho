@@ -1,0 +1,17 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+
+{% set nav = 'thread' %}
+{% block main %}
+  <input type="hidden" id="isTeachersUrl" value="{{ path('classroom_teacherIds_catch',{'classroomId':classroom.id}) }}" >
+  <div class="hidden js-only-teacher-div">
+    <button data-url="{{ path('classroom_thread_show',{classroomId:classroom.id,threadId:thread.id}) }}" class='js-only-teacher pull-right btn btn-link btn-xs {% if filter.adopted|default(0) %}active{% endif %}'>{% if filter.adopted|default(0) %}查看全部{% else %}只看老师{% endif %}</button>
+  </div>
+  {{ load_script('classroombundle/controller/classroom/thread-show') }}
+  {{ render(controller('TopxiaWebBundle:Thread:show', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, filter:filter})) }}
+
+
+{% endblock %}
+
+

@@ -1,0 +1,31 @@
+<div class="order-item clearfix">
+  <div class="order-item-title">
+    <i class="es-icon es-icon-localplay">
+    </i>
+    <span class="title">优惠码</span> 
+    <span role="no-use-coupon-code">
+    （没有使用优惠码）</span>
+  </div>
+  <div class="order-item-detail  coupon-detail" >
+    <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">输入优惠码</a>
+    {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
+      <div role="coupon-code" class="input-group" style="display: none;">
+        <input role="coupon-code-verified" name="couponCode" type="hidden"/>
+        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="请输入优惠码" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+         {{ totalPrice }}  {# {{courses[0]['price']}} #}
+        "/> 
+          <button class="btn btn-primary" type="button" role="coupon-use">使用</button>
+          <a href="javascript:;" class="btn btn-link" role="cancel-coupon">取消</a>
+      </div>
+    {% endif %}
+    <div role="code-notify" class="alert alert-success alert-xs mtm" style="display:none;line-height:20px;"></div>
+  </div>
+  <div class="order-item-price" role="coupon-price">
+    <span class="mrs">抵扣</span>
+    {% if priceType|default("RMB") == "RMB" %}<span>￥</span>{% endif %}
+    <span role="price" style="font-size: 24px">0.00</span>
+    <span>
+      {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
+    </span>
+  </div>
+</div>

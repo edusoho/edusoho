@@ -1,0 +1,17 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="topic-detail">
+  
+  {% include 'TopxiaWebBundle:Thread/Part:thread-crumbs.html.twig' with {target:target, thread:thread,type:thread.type, isUpdate:false} %}
+
+  {% include 'TopxiaWebBundle:Thread/Part:' ~ thread.type ~ '-header.html.twig' %}
+
+  {% include 'TopxiaWebBundle:Thread/Part:thread-action.html.twig' %}
+
+  {% include 'TopxiaWebBundle:Thread/Part:good-post.html.twig' with {posts:goodPosts} %}
+  
+  {% include 'TopxiaWebBundle:Thread/Part:all-post.html.twig' %}
+  
+  {% include 'TopxiaWebBundle:Thread/Part:post-form.html.twig' %}
+
+</div>

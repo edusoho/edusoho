@@ -1,0 +1,58 @@
+{% if  'auditor' in member.role %}
+  <div class="panel panel-default class-join-header-bottom">
+    <div class="panel-body">
+
+      <div class="hint">
+        您现在是 <span>旁听生</span>，只能有限参与，{% if classroom.price > 0 %}购买{% endif %}成为正式学员后即可完整学习
+      </div>
+
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        <div class="class-price">{% if classroom.price > 0 %}{{set_price(classroom.price * setting('coin.cash_rate') )}}<span>{{setting('coin.coin_name')}}</span>{% else %}免费{% endif %}<del>{{coinPrice}}{{setting('coin.coin_name')}}</del></div>
+      {% else %}
+        <div class="class-price">{% if classroom.price > 0 %}¥{{classroom.price}}{% else %}免费{% endif %} <del>¥{{price}}</del></div>
+      {% endif %}
+
+      {% if classroom.status == "published" or app.request.get('previewAs')|default("") %}
+        <div class="row">
+          <div class="col-md-6 col-sm-6 class-freebuy">
+            {% if classroomMemberLevel %}
+              {% if checkMemberLevelResult == 'not_login' %}
+                <a href="{{ path('login') }}" >{{ classroomMemberLevel.name }}，免费学</a>  
+              {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
+                <a href="{{ path('vip_buy') }}">{{ classroomMemberLevel.name }}，免费学</a>  
+              {% elseif checkMemberLevelResult == 'level_low' %}
+                <a href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
+              {% elseif checkMemberLevelResult == 'ok' %}
+                <a href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
+              {% endif %}
+            {% endif %}
+          </div>
+          {% if classroomMemberLevel %}
+            {% if classroom.price > 0 %}
+            <div class="col-md-6 col-sm-6 class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
+            </div>
+            {% else %}
+            <div class="col-md-6 col-sm-6 class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">免费加入</a>
+            </div>
+            {% endif %}
+          {% endif %}
+
+          {% if not classroomMemberLevel %}
+            {% if classroom.price > 0 %}
+            <div class="class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
+            </div> 
+            {% else %}
+            <div class="class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">免费加入</a>
+            </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endif %}
+      
+    </div>
+  </div>
+{% endif %}

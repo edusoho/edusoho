@@ -1,0 +1,172 @@
+mapi_course_pay:
+    pattern:  /courses/{courseId}/pay
+    defaults: { _controller: TopxiaMobileBundle:MobileOrder:payCourse }
+
+mapi_course_refund:
+    pattern:  /courses/{courseId}/refund
+    defaults: { _controller: TopxiaMobileBundle:MobileOrder:refundCourse }
+
+mapi_order_submit_pay_request:
+    pattern:  /order/{id}/submit_pay_request
+    defaults: { _controller: TopxiaMobileBundle:MobileOrder:submitPayRequest }
+
+
+topxia_mobile_alipay_notify:
+    pattern:  /{name}/alipay_notify
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payNotify }
+
+topxia_mobile_alipay_pay:
+    pattern:  /alipay_pay
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:pay }
+
+topxia_mobile_alipay_callback:
+    pattern:  /{name}/alipay_callback
+    defaults: { _controller: TopxiaMobileBundle:MobileAlipay:payCallBack }
+
+topxia_mobile_qrcode:
+    pattern:  /qrcode
+    defaults: { _controller: TopxiaMobileBundle:Qrcode:index }
+
+mapi_courses:
+    pattern:  /courses
+    defaults: { _controller: TopxiaMobileBundle:Course:courses }
+
+mapi_about:
+    pattern:  /about
+    defaults: { _controller: TopxiaMobileBundle:User:getSchoolSite }
+
+mapi_course:
+    pattern:  /courses/{courseId}
+    defaults: { _controller: TopxiaMobileBundle:Course:course }
+
+mapi_course_items:
+    pattern:  /courses/{courseId}/items
+    defaults: { _controller: TopxiaMobileBundle:Course:items }
+
+mapi_course_lesson:
+    pattern:  /courses/{courseId}/lessons/{lessonId}
+    defaults: { _controller: TopxiaMobileBundle:Course:lesson }
+
+mapi_course_lesson_media:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/media
+    defaults: { _controller: TopxiaMobileBundle:Course:lessonMedia }
+
+mapi_course_reviews:
+    pattern:  /courses/{courseId}/reviews
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:reviews }
+    methods: [GET]
+
+mapi_course_review_create:
+    pattern:  /courses/{courseId}/reviews
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:create }
+    methods: [POST]
+
+mapi_course_review_create_html5:
+    pattern:  /courses/{courseId}/review_create
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:create }
+
+mapi_course_review_get:
+    pattern:  /courses/{courseId}/reviews/{reviewId}
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:get }
+    methods: [GET]
+
+mapi_course_review_update:
+    pattern:  /courses/{courseId}/reviews/{reviewId}
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
+    methods: [POST]
+
+mapi_course_review_update_html5:
+    pattern:  /courses/{courseId}/reviews/{reviewId}/update
+    defaults: { _controller: TopxiaMobileBundle:CourseReview:update }
+
+mapi_course_favorite:
+    pattern:  /courses/{courseId}/favorite
+    defaults: { _controller: TopxiaMobileBundle:Course:favorite }
+    methods: [GET, POST]
+
+mapi_course_unfavorite:
+    pattern:  /courses/{courseId}/unfavorite
+    defaults: { _controller: TopxiaMobileBundle:Course:unfavorite }
+    methods: [GET, POST]
+
+mapi_course_can_learn:
+    pattern:  /courses/{courseId}/can_learn
+    defaults: { _controller: TopxiaMobileBundle:Course:canLearn }
+    methods: [GET, POST]
+
+mapi_course_lesson_learn:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/learn
+    defaults: { _controller: TopxiaMobileBundle:Course:learn }
+    methods: [GET, POST]
+
+mapi_course_lesson_unlearn:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/unlearn
+    defaults: { _controller: TopxiaMobileBundle:Course:unLearn }
+    methods: [GET, POST]
+
+mapi_course_lesson_learn_status:
+    pattern:  /courses/{courseId}/lessons/{lessonId}/learn_status
+    defaults: { _controller: TopxiaMobileBundle:Course:learnStatus }
+
+mapi_me_favorite_courses:
+    pattern:  /me/favorite_courses
+    defaults: { _controller: TopxiaMobileBundle:Course:meFavorites }
+
+mapi_me_learning_courses:
+    pattern:  /me/learning_courses
+    defaults: { _controller: TopxiaMobileBundle:Course:meLearnings }
+
+mapi_me_learned_courses:
+    pattern:  /me/learned_courses
+    defaults: { _controller: TopxiaMobileBundle:Course:meLearneds }
+
+mapi_me_notifications:
+    pattern:  /me/notifications
+    defaults: { _controller: TopxiaMobileBundle:User:notifiactions }
+
+mapi_user:
+    pattern:  /users/{id}
+    defaults: { _controller: TopxiaMobileBundle:User:user }
+
+mapi_user_register:
+    pattern:  /users
+    defaults: { _controller: TopxiaMobileBundle:User:register }
+    methods: [POST]
+
+mapi_user_register_html5:
+    pattern:  /user_register
+    defaults: { _controller: TopxiaMobileBundle:User:register }
+
+mapi_user_login:
+    pattern:  /login
+    defaults: { _controller: TopxiaMobileBundle:User:login }
+
+mapi_user_logout:
+    pattern:  /logout
+    defaults: { _controller: TopxiaMobileBundle:User:logout }
+
+mapi_user_login_with_token:
+    pattern:  /login_with_token
+    defaults: { _controller: TopxiaMobileBundle:User:loginWithToken }
+
+mapi_user_login_with_site:
+    pattern:  /login_with_site
+    defaults: { _controller: TopxiaMobileBundle:User:loginWithSite }
+
+mapi_mobile_version:
+    pattern:  /mobile_version
+    defaults: { _controller: TopxiaMobileBundle:Mobile:mobileVersion }
+
+mapi_mobile_notify_version:
+    pattern:  /notify_mobile_version
+    defaults: { _controller: TopxiaMobileBundle:Mobile:notifyMobileVersion }
+
+mapi_mobile_regist_device:
+    pattern:  /regist_device
+    defaults: { _controller: TopxiaMobileBundle:Mobile:mobileDeviceRegist }
+    methods: [POST, GET]
+
+mapi_mobile_log:
+    pattern:  /mobile_school_login
+    defaults: { _controller: TopxiaMobileBundle:Mobile:mobileSchoolLogin }
+    methods: [POST, GET]

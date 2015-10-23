@@ -1,0 +1,34 @@
+{% if classrooms %}
+  <div class="panel panel-default panel-class hidden-sm" id="panel-class">
+    <div class="panel-heading">
+      <a href="{{path('classroom_explore')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+      <h3 class="panel-title">
+        <i class="es-icon es-icon-locallibrary"></i>
+        {{'推荐'|trans}}{{ setting('classroom.name')|default('班级'|trans) }}
+      </h3>
+    </div>
+    <div class="panel-body">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {% for classroom in classrooms %}
+            <div class="swiper-slide swiper-hidden">
+              <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+              </a>
+              <h5 style="margin-bottom:0"><a class="link-dark text-overflow" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h5>
+            </div>
+          {% endfor %}
+        </div>
+        {% if classrooms|length > 1 %}
+          <a href="javascipt:;" class="arrow-prev">
+            <i class="es-icon es-icon-chevronleft"></i>
+          </a>
+          <a href="javascipt:;" class="arrow-next">
+            <i class="es-icon es-icon-chevronright"></i>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% do load_script('course/recommend-classroom') %}
+{% endif %}

@@ -1,0 +1,51 @@
+parameters:
+    security.authentication.provider.dao.class: Topxia\WebBundle\Handler\AuthenticationProvider
+
+services:
+    form.type.default_category:
+        class: Topxia\WebBundle\Form\Common\DefaultCategoryType
+        tags:
+            - { name: form.type, alias: default_category }
+
+    form.type.user_role:
+        class: Topxia\WebBundle\Form\Common\UserRoleType
+        tags:
+            - { name: form.type, alias: user_role }
+
+    form.type.tags:
+        class: Topxia\WebBundle\Form\Common\TagsType
+        tags:
+            - { name: form.type, alias: tags }
+
+    form.type.gender:
+        class: Topxia\WebBundle\Form\Common\GenderType
+        tags:
+            - { name: form.type, alias: gender }
+
+    topxia.data_dict.user_role:
+        class: Topxia\WebBundle\DataDict\UserRoleDict
+
+    topxia.data_dict.gender:
+        class: Topxia\WebBundle\DataDict\GenderDict
+
+    authentication_handler:
+        class: 'Topxia\Service\Common\LoginListener'
+
+    topxia.timemachine:
+        class:			Topxia\Common\TimeMachine
+        arguments:		['Asia/Shanghai']
+
+    topxia.target_helper:
+        class:          Topxia\WebBundle\Util\TargetHelper
+        arguments:      [@service_container]
+
+    topxia.file_locator:
+        class:          Topxia\WebBundle\Theme\FileLocator
+        arguments:      [@kernel, '%kernel.root_dir%/Resources']
+    # file_locator:
+    #     alias:          topxia.file_locator
+    topxia.templating.locator:
+        class:          %templating.locator.class%
+        arguments:      [@topxia.file_locator, %kernel.cache_dir%]
+    templating.locator:
+        alias:          topxia.templating.locator

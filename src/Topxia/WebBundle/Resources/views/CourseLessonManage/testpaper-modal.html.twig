@@ -1,0 +1,63 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set lesson = lesson|default(null) %}
+
+{% block title %}
+  {% if lesson %}编辑试卷课时{{ lesson.number }}{% else %}添加试卷课时{% endif %}
+{% endblock %}
+
+{% block body %}
+  {% if paperOptions %}
+    <form id="course-lesson-form" class="form-horizontal lesson-form" method="post"  {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+      {% if lesson %}
+        action="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"
+      {% else %}
+        action="{{ path('course_manage_lesson_create_testpaper', {id:course.id}) }}"
+      {% endif %}
+      >
+
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="lesson-mediaId-field">试卷</label></div>
+        <div class="col-md-9 controls">
+          <select id="lesson-mediaId-field" class="form-control" name="mediaId">
+            {{select_options(paperOptions, lesson.mediaId|default(0), '请选择试卷')}}
+          </select>
+          <div class="help-block">如果找不到试卷，请先确定该试卷已经发布</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
+        <div class="col-md-9 controls">
+          <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ lesson.title|default('') }}">
+        </div>
+      </div>
+
+      {% if 'lesson_credit' in features %}
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="lesson-title-field">限制学分</label></div>
+        <div class="col-md-9 controls">
+          <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> 分
+          <div class="help-block">参加此次考试所需的学分，０分则不限制。</div>
+        </div>
+      </div>
+      {% endif %}
+
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+    <script>app.load('course-manage/lesson-testpaper-modal')</script>
+  {% else %}
+    <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+  {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+  {% if paperOptions %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button id="course-testpaper-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">保存</button>
+  {% else %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    {% endif %}
+{% endblock %}

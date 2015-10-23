@@ -1,0 +1,237 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_user_auth' %}
+
+{% set script_controller = 'setting/auth' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+<form  id="auth-form" class="form-horizontal" method="post" novalidate>
+
+  <fieldset>
+    <legend>注册设置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >用户注册模式</label>
+      </div>
+      <div class="controls col-md-8">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">邮箱注册</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">手机注册</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">邮箱或手机注册</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="closed" %}btn-primary{% endif %} model" data-modle="closed">关闭</button>
+        </div>
+        <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
+        <div class="help-block" >开启云短信后，才可使用“手机注册”或“邮箱或手机注册”</div>
+      </div>
+    </div>
+
+    
+    <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_mode == 'closed' %}hidden{% endif %}">
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label >邮箱验证登录</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('email_enabled', {'opened':'开启', 'closed':'关闭'}, auth.email_enabled) }}
+        </div>
+      </div>
+      <div class="help-block" style="margin-left:250px;margin-top:-15px;">开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置</div>
+      <input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_title" >新用户激活邮件标题</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_body">新用户激活邮件内容</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
+          <div class="help-block">
+            {% verbatim %}
+            <div>变量说明：</div>
+            <ul>
+              <li>{{nickname}} 为接收方用户昵称</li>
+              <li>{{sitename}} 为网站名称</li>
+              <li>{{siteurl}} 为网站的地址</li>
+              <li>{{verifyurl}} 为邮箱验证地址</li>
+            </ul>
+            {% endverbatim %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >注册防护机制</label>
+      </div>
+
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(none) == "none" %}checked="checked"{% endif %}> 无
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> 低
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default(null) == "middle" %}checked="checked"{% endif %}> 中
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> 高
+        </label>
+      </div>
+
+      <div class="controls col-md-8 mtl low register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          方案说明：
+          <p class="mll mtm">1：注册时需填写验证码。</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 mtl middle register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          方案说明：
+          <p class="mll mtm">1：注册时需填写验证码。</p>
+          <p class="mll mtm">2：同一IP24小时內只能注册30次。</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 mtl high register-help  col-md-offset-3" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          方案说明：
+          <p class="mll mtm">1：注册时需填写验证码。</p>
+          <p class="mll mtm">2：同一IP24小时內只能注册10次。</p>
+          <p class="mll mtm">3：同一IP1小时內只能注册1个账号。</p>
+        </div>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>欢迎信息设置</legend>
+
+    <div class="form-group" style="display:none;">
+      <div class="col-md-3 control-label">
+        <label>发送欢迎信息</label>
+      </div>
+      <div class="controls col-md-8 checkboxs">
+        {{ checkboxs('welcome_methods', {'message':'站内私信', 'email':'电子邮件'}, auth.welcome_methods) }}
+        <div class="help-block">新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_title">发送欢迎信息</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('welcome_enabled', {'opened':'开启', 'closed':'关闭'}, auth.welcome_enabled) }}
+        <div class="help-block">欢迎信以站内私信的方式，发送给新用户。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_sender">欢迎信息发送方</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
+        <div class="help-block">通常为这个网站的管理员，请输入用户用户名。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_title">欢迎信息标题</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="welcome_title" name="welcome_title" class="form-control" value="{{auth.welcome_title}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_body">欢迎信息内容</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{auth.welcome_body}}</textarea>
+        <div class="help-block">
+          {% verbatim %}
+          <div>注意： 私信长度不能超过1000个字符</div>
+          <div>变量说明：</div>
+          <ul>
+            <li>{{nickname}} 为接收方用户用户名</li>
+            <li>{{sitename}} 为网站名称</li>
+            <li>{{siteurl}} 为网站的地址</li>
+          </ul>
+          {% endverbatim %}
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>服务条款设置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="user_terms">是否开启服务条款</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('user_terms', {'opened':'开启', 'closed':'关闭'}, auth.user_terms) }}
+        <div class="help-block">开启后用户注册时必须同意条款才能注册</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="user_terms_body">条款内容</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.user_terms_body }}</textarea>
+      </div>
+    </div>
+
+  </fieldset>
+
+
+  {% if setting('magic.username_setting')|default(false) %}
+    <fieldset>
+      <legend>名称设置</legend>
+      <div class="row form-group">
+          <div class="col-md-2 col-md-offset-2 control-label">
+              <label for="user_name">用户名称</label>
+          </div>
+          <div class="controls col-md-4">
+            <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('学员')}}" {% else %} value="学员" {% endif %}>
+          </div>
+      </div>
+
+      <div class="alert alert-info deduction text-center">
+        <p><strong> 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+        </strong></p>
+      </div>
+    </fieldset> 
+  {% endif %}
+  
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>  
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
+</form>
+
+{% endblock %}

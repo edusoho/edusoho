@@ -1,0 +1,17 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-subpost media user-id-{{author.id}} {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
+  data-author-name="{{ author.nickname }}">
+  <div class="media-left">
+    {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
+  </div>
+  <div class="media-body">
+    <div class="metas">
+      {% include 'TopxiaWebBundle:Thread:post-manage-menu.html.twig' %}
+      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+      <span class="bullet">•</span>
+      <span class="text-muted">{{post.createdTime|smart_time}} </span>
+    </div>
+    <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
+    {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
+  </div>
+</li>

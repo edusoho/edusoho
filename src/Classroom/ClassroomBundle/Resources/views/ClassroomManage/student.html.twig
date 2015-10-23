@@ -1,0 +1,38 @@
+  {% extends 'ClassroomBundle:ClassroomManage:students.html.twig' %}
+
+{% block title %}学员管理 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'student' %}
+
+{% set script_controller = 'classroombundle/controller/classroom/students' %}
+
+{% block maincontent %}
+
+  <form class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="form-group">
+      <input class="form-control " type="text" placeholder="请输入用户名" name="nickName" value="{{ app.request.get('nickName') }}">
+      <button class="btn btn-primary">搜索</button>
+    </div>
+  </form>
+  <table class="table table-striped" id="course-student-list">
+    <thead>
+      <tr>
+        <th width="40%">学员</th>
+        <th width="30%">学习进度</th>
+        <th width="30%">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+        {% set user = users[student.userId] %}
+        {% set progress = progresses[student.userId] %}
+        {% include 'ClassroomBundle:ClassroomManage:tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">无学员记录</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
+
+{% set thread = thread|default(null) %}
+
+{% block title %}{% if thread %}编辑话题{% else %}发表话题{% endif %} - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'course/thread-form' %}
+
+{% set tab = 'thread' %}
+
+{% block course_main %}
+
+<ul class="breadcrumb">
+  <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
+  {% if thread %}
+    <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
+    <li class="active">{% if type == 'question' %}编辑问题{% else %}编辑话题{% endif %}</li>
+  {% else %}
+    <li class="active">{% if type == 'question' %}提问题{% else %}发表话题{% endif %}</li>
+  {% endif %}
+</ul>
+
+
+<form id="thread-form" class="form-vertical" method="post" 
+  {% if thread %}
+    action="{{ path('course_thread_edit', {courseId:course.id, id:thread.id}) }}"
+  {% else %}
+    action="{{ path('course_thread_create', {id:course.id}) }}"
+    {% endif %}
+  >
+
+  <div class="form-group">
+    <div class="controls">
+      {% set placeholder = type == 'question' ? '标题，用一句话说清你的问题' : '标题' %}
+      {{ form_widget(form.title, {attr:{class:'form-control', placeholder:placeholder, 'data-display':'标题'}}) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls">
+      {{ form_widget(form.content, {attr:{class:'form-control', rows:15, 'data-display':'内容', 'data-image-upload-url': path('editor_upload', {token:upload_token('course')})}}) }}
+    </div>
+  </div>
+
+  <div class="form-group clearfix">
+    <div class="controls pull-right">
+      {{ form_rest(form) }}
+      {% if thread %}
+        <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">取消</a>
+        <button type="submit" class="btn btn-primary btn-fat">保存</button>
+      {% else %}
+        <a href="{{ path('course_threads', {id:course.id}) }}" class="btn btn-link">取消</a>
+        <button type="submit" class="btn btn-primary">发表</button>
+      {% endif  %}
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+
+
+{% endblock %}

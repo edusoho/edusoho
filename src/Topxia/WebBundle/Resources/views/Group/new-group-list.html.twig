@@ -1,0 +1,25 @@
+{% if newGroups %}
+  <div class="panel panel-default">
+    <div class="panel-heading">新晋小组</div>
+    <div class="panel-body">
+      <ul class="media-list">
+        {% for group in newGroups %}
+          <li class="media">
+            <div class="media-left">
+              <a href="{{path('group_show',{id:group.id})}}">
+                <img src="{{filepath(group.logo, 'group.png')}}" class="avatar-square-sm">
+              </a>
+            </div>
+            <div class="media-body">
+              <p>
+                <a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title}}</a>
+                <span class="text-success fsn">{{group.memberNum}}个成员</span>
+              </p>
+              <p class="fsn text-muted">{{ group.about|plain_text(30) }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

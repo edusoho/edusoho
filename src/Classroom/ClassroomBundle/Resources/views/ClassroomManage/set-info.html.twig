@@ -1,0 +1,103 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'classroombundle/controller/classroom/set-info' %}
+{% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
+
+{% block title %}基本信息 - {{ parent() }}{% endblock %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">基本信息</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="title">名称</label>
+        </div>
+        <div class="controls col-md-8">
+          <input name="title" type="text"  id="title" class="form-control" value="{{classroom.title}}"/>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >简介</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea name="about" class="form-control" rows="6" 
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}" id="about">{{ classroom.about|raw }}</textarea>
+        </div>
+      </div>
+
+     {# 先隐藏了到时候再说
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >课程说明</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea name="description" rows="10" class="form-control" 
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+          id="description">{{classroom.description}}</textarea>
+        </div>
+      </div> #}
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >班级展示</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          <label>
+          <input id="showable-open" type="radio" name="showable" value="1" data-showable="{{classroom.showable}}"> 开启
+          </label>
+          <label>
+            <input id="showable-close" type="radio" name="showable" value="0"> 关闭
+          </label>
+          <div class="help-block">关闭后，班级将彻底隐藏，无法在前台查看到。</div>
+        </div>
+
+      </div>
+      <div class="row form-group">
+      <div id='buyable'>
+        <div class="col-md-2 control-label">
+          <label >班级购买</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          <label>
+          <input id="buyable-open" type="radio" name="buyable" value="1" data-buyable="{{classroom.buyable}}" > 开启
+          </label>
+          <label>
+            <input id="buyable-close" type="radio" name="buyable" value="0"> 关闭
+          </label>
+          <div class="help-block">关闭后班级将无法在线购买加入。</div>
+        </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-md-2 control-label">分类</label>
+        <div class="col-md-8 controls">
+          <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+            {{ select_options(category_choices('course'), classroom.categoryId, {'0':'分类'}) }}
+          </select>
+          <div class="help-block" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary" id="classroom-save">提交</button>  
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

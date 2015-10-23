@@ -1,0 +1,89 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    {{ render(controller('ClassroomBundle:Classroom:dashboard',{classroom:classroom, nav:nav, member:member})) }}
+    {% if courses is empty %}
+      <ul class="media-list">
+        <li class="mvl tac text-muted">暂无课程内容</li>
+      </ul>
+    {% else %}
+      <div class="class-content">
+        <div class="class-about">
+          <p>
+            {{classroom.description|raw}}
+          </p>
+        </div>
+        <ul class="class-course">
+          {% for course in courses %}
+          <li class="course-item">
+            <a class="course-priture" href="{{path('course_show',{id:course.id})}}" target="_blank">
+              <img src="{{ filepath(course.middlePicture, 'course.png') }}" >
+            </a>
+            <div class="course-body">
+              <h4 class="title">
+                <a href="{{path('course_show',{id:course.id})}}" target="_blank">{{course.title}}</a>
+              </h4>
+              <div class="metas">
+                <span class="period">{{course.lessonNum}}课时</span>
+                <span class="price">
+                {% if courseMembers[course.id] and not member and setting('classroom.discount_buy') %}
+                已购买
+                {% else %}
+                  {% if member and not 'auditor' in member.role %}
+                    {% if courseMembers[course.id] and courseMembers[course.id].learnedNum == 0 %}
+                    未学
+                    {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum == course.lessonNum %}
+                    <span class="text-success">已学完</span>
+                    {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum < course.lessonNum %}
+                    <span class="text-info">学习中</span>
+                    {% else %}
+                    未学
+                    {% endif %} 
+
+
+                  {% elseif courseMembers[course.id] and member and 'auditor' in member.role  and setting('classroom.discount_buy') %}
+                  已购买
+                  {% else %}
+                      {% if setting('coin.coin_enabled') and setting('coin. price_type') == 'Coin' %}
+
+                        {% if course.price * setting('coin.cash_rate') > 0 %}
+                        {{course.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}} 
+                        {% else %}免费{% endif %}
+
+                      {% else %}
+
+                        {% if course.price > 0 %}
+                           {{ course.price }}元 
+                        {% else %}免费{% endif %}
+
+                      {% endif %}
+
+                  {% endif %}
+
+                {% endif %}
+                </span>
+              </div>
+              <div class="metas">
+                <span class="class-teacher">
+                  <i class="fa fa-user"></i>
+                  {% set teacher = teachers[course.id]|default(null) %}
+                    {% if teacher %}
+                    {% for user in teacher%}
+                    {% if loop.index <= 3%}
+                      <a class="teacher-nickname mrl" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </span>
+                {% if setting('course.show_student_num_enabled', '1') == 1  %}
+                <span class="class-student"><i class="fa fa-users"></i>{{course.studentNum}}</span>
+                {% endif %}
+                <span class="stars-{{ (course.rating)|number_format }} pull-right hidden-xs">&nbsp;</span>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</div>

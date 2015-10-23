@@ -1,0 +1,41 @@
+{% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
+
+{% block title %}评论管理 - {{ parent() }}{% endblock %}
+
+{% import 'TopxiaWebBundle::macro.html.twig' as m %}
+{% set menu = 'comment' %}
+{% set script_controller = 'comment/list' %}
+{% block main %}
+
+<div class="page-header"><h1>评论监控</h1></div>
+
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th width="5%">ID</th>
+         <th width="20%">评论对象</th>
+         <th width="45%">评论内容</th>
+         <th width="10%">发言人</th>
+         <th width="10%">发言时间</th>
+         <th width="10%">操作</th>
+      </tr>
+   </thead>
+   <tbody>
+     {% for c in comments %}
+     {% set u = userList[c.userId] %}
+     <tr>
+       <td>{{ c.id }}</td>
+       <td>
+         <a href="">课程-{{ c.objectId }}</a>
+       </td>
+       <td>{{ c.content|e|nl2br|raw }}</td>
+       <td>{{ m.user_link(u) }}</td>
+       <td>{{ c.createdTime|smart_time }}</td>
+       <td><a href="javascript:;" class="btn btn-sm comment-delete" data-url="{{ path('admin_comment_delete', {id:c.id}) }}">删除</a></td>
+     </tr>
+     {% endfor %}
+   </tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}

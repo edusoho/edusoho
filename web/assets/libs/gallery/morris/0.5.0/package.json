@@ -1,0 +1,29 @@
+{
+  "family": "gallery",
+  "name": "morris",
+  "version": "0.5.0",
+  "homepage": "http://morrisjs.github.com/morris.js/",
+  "description": "Easy, pretty charts",
+"license": "BSD-2-Clause",
+  "author": {
+    "name": "Olly Smith",
+    "email": "olly@oesmith.co.uk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/morrisjs/morris.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/morrisjs/morris.js/issues"
+  },
+  "spm": {
+    "alias": {
+      "$": "$",
+      "raphael": "gallery/raphael/2.1.2/raphael"
+    },
+    "output": [
+      "morris.js",
+      "morris.css"
+    ]
+  }
+}

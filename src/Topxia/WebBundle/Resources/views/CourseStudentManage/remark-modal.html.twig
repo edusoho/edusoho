@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}备注{% endblock %}
+{% block body %}
+
+<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}" data-user="{{default.user_name|default('学员')}}">
+
+  <div class="form-group">
+    <div class="controls">
+    	<input class="form-control" id="student-remark" name="remark" value="{{member.remark}}" >
+      <div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-remark-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+<script>app.load('course-manage/student-remark')</script>
+{% endblock %}

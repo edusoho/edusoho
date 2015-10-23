@@ -1,0 +1,57 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}注册 - {{ parent() }}{% endblock %}
+{% set script_controller = 'auth/register-nickname' %}
+
+{% block content %}
+ <style type="text/css">
+  .form-group {
+    margin-bottom: 40px;
+  }
+  .form-control {
+      display: block;
+      width: 100%;
+      height: 38px;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857;
+      color: #555;
+      background-color: #FFF;
+      background-image: none;
+      border: 1px solid #CCC;
+      border-radius: 4px;
+      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+      transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    }
+ </style>
+<div class="row row-6">
+  <div class="col-md-6 col-md-offset-3 ptl">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>仅需一步，完善资料，让大家记住你！ </h2></div>
+      <form id="login-fill-userinfo-form" class="form-vertical" method="post" action="{{path('register_nickname_update')}}">
+        <input type="hidden" name='id' value="{{user.id}}">
+        <input type="hidden" name='emailOrMobile' value="{{user.verifiedMobile}}">
+
+        {{ web_macro.flash_messages() }}
+        <div class="form-group">
+          <label class="control-label required hidden" for="register_nickname">用户名</label>
+          <div class="controls">
+            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control" data-url="{{path('register_nickname_check')}}"  data-userid ="{{user.id}}" data-randmo="{{user.nickname}}" data-explain="该怎么称呼你？ 中、英文均可，最长18个英文或9个汉字" placeholder='用户名'>
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+          <div class="form-group">
+            <div class="controls">
+              <button type="submit" id="register-nickname-btn" data-submiting-text="正在提交" class="btn btn-primary btn-large btn-block">保存</button>
+              <p class="help-block">如果跳过，您将使用随机生成的用户名 <a href="javascript:;" class="pull-right nickname_ingnore">跳过</a></p>           
+            </div>
+          </div>
+          
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>    
+  </div>
+</div>
+{% endblock %}

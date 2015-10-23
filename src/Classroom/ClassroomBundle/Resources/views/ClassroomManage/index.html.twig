@@ -1,0 +1,181 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% block title %}{{ setting('classroom.name')|default("班级") }}管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'main' %}
+{% set script_controller = 'classroombundle/controller/classroom/index' %}
+
+{% block main %}
+
+{% set unsetted = "" %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <div class="row">
+      <div class="col-md-4">
+        <div class="well">
+          <h4>设置</h4>
+          <table class="table">
+            <tr>
+              <td>简介</td>
+              {% if not classroom.about %}
+                <td>
+                  <a class="btn btn-danger btn-xs pull-right" href="{{path('classroom_manage_set_info',{id:classroom.id})}}">
+                    未设置 <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                  </a>
+                </td>
+                {% set unsetted = unsetted ~ ",简介" %}
+              {% else %}
+                <td>
+                  <i class="glyphicon glyphicon-ok-sign pull-right text-success"></i>
+                </td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td>图片</td>
+              {% if not classroom.smallPicture %}
+                <td>
+                  <a class="btn btn-danger btn-xs pull-right" href="{{path('classroom_manage_set_picture',{id:classroom.id})}}">
+                    未设置 <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                  </a>
+                </td>
+                {% set unsetted = unsetted ~ ",图片" %}
+              {% else %}
+                <td>
+                  <i class="glyphicon glyphicon-ok-sign pull-right text-success"></i>
+                </td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td>价格</td>
+              <td>
+                <a class="btn btn-info btn-xs pull-right" href="{{path('classroom_manage_set_price',{id:classroom.id})}}">
+                  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                    {% if classroom.price * setting('coin.cash_rate')  == 0 %}
+                      {% set unsetted = unsetted ~ ",价格" %}
+                    {% endif %}
+                  {% else %}
+                    {{ classroom.price }}元
+                    {% if classroom.price == 0 %}
+                      {% set unsetted = unsetted ~ ",价格" %}
+                    {% endif %}
+                  {% endif %}
+                  <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="well">
+          <h4>课程</h4>
+          <table class="table">
+            <tr>
+              <td>课程数</td>
+              <td>
+                <a class="btn btn-{% if classroom.courseNum > 0 %}info{% else %}danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">
+                  {{classroom.courseNum|default(0)}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                </a>
+              </td>
+              {% if classroom.courseNum == 0 %}
+                {% set unsetted = unsetted ~ ",课程" %}
+              {% endif %}
+            </tr>
+            <tr>
+              <td>课时数</td>
+              <td><span class="label label-default pull-right">{{classroom.lessonNum}}</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="well">
+          <h4>学员</h4>
+          <table class="table">
+            <tr>
+              <td>学员数</td>
+              <td>
+                <a class="btn {% if (classroom.studentNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_students', {id:classroom.id}) }}">
+                  {{classroom.studentNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>旁听生数</td>
+              <td>
+                <a class="btn {% if (classroom.auditorNum) > 0 %}btn-info{% else %}btn-danger{% endif %} btn-xs pull-right" href="{{ path('classroom_manage_aduitor', {id:classroom.id}) }}">
+                  {{classroom.auditorNum}} <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% if classroom.status == "published" %}
+      <hr>
+      <div class="row">
+        <div class="col-md-6">
+          <h4>{{ setting('classroom.name')|default("班级") }}学习情况</h4>
+          <table class="table">
+            <thead>
+              <th></th>
+              <th>昨日</th>
+              <th>今日</th>
+            </thead>
+            <tr>
+              <td>全部学员数</td>
+              <td>{{yestodayAllCount}}</td>
+              <td>{{allCount}}</td>
+            </tr>
+            <tr>
+              <td>正式学员数</td>
+              <td>{{yestodayStudentCount}}</td>
+              <td>{{studentCount}}</td>
+            </tr>
+            <tr>
+              <td>课时完成学习数</td>
+              <td>{{yesterdayFinishedLessonNum}}</td>
+              <td>{{todayFinishedLessonNum}}</td>
+            </tr>
+            <tr>
+                <td>新增话题数</td>
+                <td>{{yesterdayThreadCount}}</td>
+                <td>{{todayThreadCount}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="col-md-6 reviews">
+          <h4>最新评价</h4>
+          <br>
+          {% if reviews%}
+            {% for review in reviews %}
+              {% if loop.index <= 4 %}
+                <div class="media">
+                  <div class="pull-left">
+                    <span class="class-name">{{reviewUsers[review.userId].nickname}}</span>
+                  </div>
+                  <div class="media-body">
+                    <div class="stars-{{ (review.rating)|number_format }}"></div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<time>{{review.createdTime|smart_time}}</time>                                                    
+                    <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:reviewUsers[review.userId].id})}}" style="float:right;">私信</button>
+                  </div>
+                  <p>{{ review.content|plain_text(40) }}</p>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <div class="empty">该{{ setting('classroom.name')|default("班级") }}尚无评价</div>
+          {% endif %}
+        </div>
+      </div>
+      <hr>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

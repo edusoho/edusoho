@@ -1,0 +1,41 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% block title %}搜索 - {{ parent() }}{% endblock %}
+{% block content %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">小组搜索</h2>
+      <form class="form-inline more hidden-xs" style="top:7px" action="{{path('group_search_group')}}" method="get">
+        <div class="form-group">
+          <div class="input-group group-search">
+            <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel-body">
+      {% if groups %}
+      <div class="row">
+        {% for group in groups %}
+          <div class="col-md-3 col-sm-4">
+            {% include 'TopxiaWebBundle:Group:group-media-small.html.twig'  %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </div>
+      {% else %}
+      <div class="empty">暂无小组信息</div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

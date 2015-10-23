@@ -1,0 +1,46 @@
+{% import 'TopxiaAdminBundle::macro.html.twig' as admin_macro %}
+<tr id="money-card-table-tr-{{ moneyCard.id }}">
+  <td>
+    <strong>{{ moneyCard.cardId }}</strong>
+  </td>
+
+  <td>
+    <span class="text-sm"><a href="javascript:;" class="btn btn-link" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_money_card_get_password', {id:moneyCard.id}) }}">查看密码</a></span>
+  </td>
+
+  <td>
+    <span class="text-sm">{{ moneyCard.deadline }}</span>
+  </td>
+
+  <td>
+    <span class="text-sm">{{ moneyCard.batchId }}</span>
+  </td>
+
+  <td>
+    {% if moneyCard.cardStatus == 'normal' %}
+      <span class="text-sm">正常</span>
+    {% elseif moneyCard.cardStatus == 'invalid' %}
+      <span class="text-sm">作废</span>
+    {% endif %}
+  </td>
+
+  <td>
+    {% if moneyCard.rechargeTime == 0 %}
+      <span class="text-sm">未充值</span>
+    {% else %}
+      <span class="text-sm">已充值({{ moneyCard.rechargeUserId }})</span>
+      <br />
+      <span class="text-sm">{{ moneyCard.rechargeTime|date('Y-n-d H:i:s') }}</span>
+    {% endif %}
+  </td>
+
+  <td>
+    <span class="text-sm"><a href="javascript:;" class="btn btn-link delete" data-url="{{ path('admin_money_card_delete', {id:moneyCard.id}) }}">删除</a></span>
+    {% if moneyCard.cardStatus == 'normal' %}
+      <span class="text-sm"><a class="btn btn-link lock-money-card" href="javascript:" title="作废充值卡{{ moneyCard.cardId }}" data-url="{{ path('admin_money_card_lock', {id:moneyCard.id }) }}">作废</a></span>
+    {% elseif moneyCard.cardStatus == 'invalid' %}
+      <span class="text-sm"><a class="btn btn-link unlock-money-card" href="javascript:" title="启用充值卡{{ moneyCard.cardId }}" data-url="{{ path('admin_money_card_unlock', {id:moneyCard.id }) }}">启用</a></span>
+    {% endif %}
+  </td>
+</tr>
+

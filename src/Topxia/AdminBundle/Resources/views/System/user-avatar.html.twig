@@ -1,0 +1,30 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_user_avatar' %}
+{% set script_controller = 'setting/default-user-avatar' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+ <fieldset>
+    <div class="form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8 radios" id="default-avatar" >
+        {{ radios('avatar', {1:'自定义默认头像', 0:'系统默认头像'}, defaultSetting.defaultAvatar|default(0)) }}
+        <p>网校内未上传头像的用户，都会显示该默认头像。推荐尺寸（270*270）</p>    
+        {% include 'TopxiaAdminBundle:System:default-avatar.html.twig' %}
+      </div>
+    </div>
+  </fieldset>
+  <form method="post" action="{{ path('admin_setting_avatar') }}" >
+    <div class="form-group mll">
+        <div class="col-md-3 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary mtl">提交</button>  
+        </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="hidden" name="defaultAvatar" value="{{ defaultSetting.defaultAvatar|default(0) }}">
+    </div>
+  </form>
+
+{% endblock %}

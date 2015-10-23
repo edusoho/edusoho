@@ -1,0 +1,18 @@
+<li class="post-item">
+	<div class="post-item-heading clearfix">
+		<img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" class="avatar">
+		<div class="infos">
+			<div class="nickname">
+				<a href="{{ path('user_show', {id:user.id}) }}" class="nickname">{{ user.nickname }}</a>
+				{% if user.id in course.teacherIds %}
+					<span class="teacher-flag">老师</span>
+				{% endif %}
+			</div>
+			<div class="time">{{ post.createdTime|smart_time }}</div>
+		</div>
+	</div>
+
+	<div class="post-item-body">
+		{{ post.content|raw }}
+	</div>
+</li>

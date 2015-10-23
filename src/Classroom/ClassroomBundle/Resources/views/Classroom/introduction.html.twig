@@ -1,0 +1,17 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+{% block title %}{{ parent() }}{% endblock %}
+{% set nav = 'introduction' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% block keywords %}{{ parent() }}{% endblock %}
+
+
+{% block main %}
+  <div class="class-about">
+        {% if introduction is empty %}
+            <p class="mvl tac text-muted">暂无介绍</p>
+        {% else %}
+              {{ introduction|raw }}
+        {% endif %}
+  </div>
+    
+{% endblock %}

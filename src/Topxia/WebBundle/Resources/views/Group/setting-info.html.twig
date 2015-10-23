@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle:Group:setting-layout.html.twig' %}
+
+{% set script_controller = 'group/group' %}
+
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+{% set settingNav = 'info' %}
+
+{% block group_setting_body %}
+
+  <form id="user-group-form" class="form-horizontal" method="post" action="{{path('group_edit',{id:groupinfo.id})}}">
+                      
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="group_grouptitle">小组名称</label>
+      <div class="col-md-9 controls">
+        <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
+        value="{{groupinfo.title}}" >
+        <div class="help-block" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="group">小组介绍</label>
+      <div class="col-md-9 controls">
+        <textarea name="group[about]" rows="10" id="group" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{groupinfo.about}}</textarea>
+      </div>
+    </div>
+    
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    
+
+    <div class="row">
+      <div class="col-xs-7 col-xs-offset-2">
+        <button id="group-save-btn" data-submiting-text="正在修改" type="submit" class="btn btn-primary">修改</button>
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}

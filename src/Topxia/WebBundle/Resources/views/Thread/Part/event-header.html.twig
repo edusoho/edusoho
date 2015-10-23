@@ -1,0 +1,7 @@
+{{ render(controller('TopxiaWebBundle:Thread/Event:showEventTitle', {request:app.request, thread:thread})) }}
+
+<div class="editor-text">
+  {{ thread.content|at(thread.ats)|raw }}
+</div>
+
+{{ render(controller('TopxiaWebBundle:Thread/Member:showMembers', {request:app.request, thread:thread})) }}

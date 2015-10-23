@@ -1,0 +1,26 @@
+{% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
+
+{% block title %}作业批改 - {{ parent() }}{% endblock %}
+{% set side_nav = 'homework-check' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">作业批改</div>
+    <div class="panel-body">
+      <ul class="nav nav-tabs">
+        <li {% if status == 'reviewing' %} class="active"{% endif %}>
+          <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">未批改
+            <span class="badge">{{ reviewingCount|default(0) }}</span>
+          </a>
+        </li>
+
+        <li {% if status == 'finished' %} class="active"{% endif %}>
+          <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'finished'}) }}">已批改
+            <span class="badge">{{ finishedCount|default(0) }}</span>
+          </a>
+        </li>
+      </ul>
+      {% include 'HomeworkBundle:CourseHomeworkManage:teaching-homework-list.html.twig' %}
+    </div>
+  </div>
+{% endblock %}

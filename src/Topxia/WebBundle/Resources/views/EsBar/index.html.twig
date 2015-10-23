@@ -1,0 +1,55 @@
+<!-- 侧边栏快捷操作 -->
+<div class="es-bar hidden-xs">
+
+  {% if app.user is empty %}
+    <input type="hidden" id="notLogin">
+  {% endif %}
+
+  <!-- 左侧列表 -->
+  {% include 'TopxiaWebBundle:EsBar:left-list.html.twig' %}
+
+  <!-- 列表内容 -->
+  {% if app.user and app.user.isLogin() %}
+    <!-- 通知 -->
+    <div class="es-bar-main" id="bar-message">
+      {% include 'TopxiaWebBundle:EsBar:ListContent/notification.html.twig' %}
+    </div>
+
+    <!-- 考试/作业 -->
+    <div class="es-bar-main" id="bar-homework">
+      {% include 'TopxiaWebBundle:EsBar:ListContent/practice.html.twig' %}
+    </div>
+
+    <!-- 课程/班级 -->
+    <div class="es-bar-main" id="bar-course-list">
+      {% include 'TopxiaWebBundle:EsBar:ListContent/study-place.html.twig' %}
+    </div>
+
+    <!-- 学习中心 -->
+    <div class="es-bar-main" id="bar-user-center">
+      {% include 'TopxiaWebBundle:EsBar:ListContent/study-center.html.twig' %}
+    </div>
+
+    <!-- 客服 -->
+
+
+
+    <!-- 学习历史 -->
+    {#<div class="es-bar-main" id="bar-history">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-light" data-url="" id="bar-my-history"><i class="es-icon es-icon-arrowforward"></i></a>
+        学习历史
+      </div>
+      <div class="bar-main-body" id="bar-history-list">
+
+      </div>
+    </div>#}
+
+  {% endif %}
+
+  {% include 'TopxiaWebBundle:EsBar:ListContent/consult.html.twig' %}
+
+</div>
+
+{% do load_script('es-bar/index') %}
+

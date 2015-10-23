@@ -1,0 +1,63 @@
+<div side-view class="side-content">
+    
+  <div id="st-container" class="st-container">
+
+      <nav class="st-menu st-effect-1 menu-content" id="menu-1">
+          <ul class="ui-list ui-list-text ui-list-avatar">
+            <li class="ui-border-t" ng-click="showMyView('userinfo')">
+                <div class="ui-avatar-one">
+                    <img ng-src="{{ user.mediumAvatar | coverAvatar }}">
+                </div>
+                
+                <div class="ui-list-info ui-border-t" ng-if="user">
+                    <h3>{{ user.nickname }}</h3>
+                    <p class="ui-nowrap">{{ user.signature ? user.signature : '神马都没有' }}</p>
+                </div>
+                <div class="ui-list-info ui-border-t" ng-if="!user">
+                    <h3>个人中心</h3>
+                    <p>登录/注册</p>
+                </div>
+            </li>
+          </ul>
+
+            <div ng-if="! user">
+                    <div class="ui-btn-wrap">
+                        <a class="ui-btn-lg btn-green" ng-click="showMyView('login')">登 录</a>
+                    </div>
+                    <div class="ui-btn-wrap">
+                        <a class="ui-btn-lg btn-black" href="#/regist">注 册</a>
+                    </div>
+            </div>
+            <ul class="ui-list ui-list-text" ng-if="user">
+                <li class="ui-border-t" ng-click="showMyView('mylearn')">
+                    <i class="icon iconfont icon-shuben"></i>
+                    我的学习
+                </li>
+                <li class="ui-border-t" ui-sref="viplist()">
+                    <i class="icon iconfont icon-huizhang"></i>
+                    开通会员
+                </li>
+                <li class="ui-border-t" ng-click="showMyView('myfavorite')">
+                    <i class="icon iconfont icon-shoucang"></i>
+                    我的收藏
+                </li>
+                <li class="ui-border-t" ng-click="showMyView('mygroup')">
+                    <i class="icon iconfont icon-fabiao"></i>
+                    我的发表
+                </li>
+                <li class="ui-border-t" ng-click="showMyView('setting')">
+                    <i class="icon iconfont icon-shezhi"></i>
+                    设置
+                </li>
+            </ul>
+        </ul>
+      </nav>
+
+        <div class="st-content">
+            <div class="st-pusher">
+            </div>
+            <div ui-view="menuContent"></div>
+        </div>
+  </div>
+
+</div>

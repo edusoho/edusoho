@@ -1,0 +1,39 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{% if pageNav == 'teach' %}{{'在教课程'}} - {% elseif pageNav == 'learn' %}{{'在学课程'}} - {% elseif pageNav == 'favorited' %}{{'收藏的课程'}} - {% elseif pageNav == 'group' %}{{'加入的小组'}} - {% elseif pageNav == 'friend' %}{{'关注/粉丝'}} - {% else %}{{''}}{% endif %}{{user.nickname}}的个人主页 - {{ parent() }}{% endblock %}
+
+{% block keywords %}{{ user.title }}{% endblock %}
+{% block description %}{{ user.about|default('')|plain_text(100) }}{% endblock %}
+{% set bodyClass = 'userpage' %}
+{% set pageNav = pageNav|default(null) %}
+
+{% set script_controller = 'user/user' %}
+
+{% block content %}
+
+{{ render(controller('TopxiaWebBundle:User:headerBlock', {user:user})) }}
+
+<div class="es-section">
+  <ul class="nav nav-tabs clearfix">
+  	{% if 'ROLE_TEACHER' in user.roles %}
+	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">在教课程</a></li>
+    {% endif %}
+    <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">在学课程</a></li>
+    <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">收藏的课程</a></li>
+    <li {% if pageNav == 'group' %}class="active"{% endif %}><a href="{{path('user_group',{id:user.id})}}">加入的小组</a></li>
+    <li {% if pageNav == 'friend' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">关注/粉丝</a></li>
+
+    {% if setting('classroom.enabled')|default(0) %}
+    {% if 'ROLE_TEACHER' in user.roles %}
+      <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">在教{{ setting('classroom.name')|default("班级") }}</a></li>
+    {% endif %}
+    
+    <li {% if pageNav == 'learning' %}class="active"{% endif %}><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">在学{{ setting('classroom.name')|default("班级") }}</a></li>
+    {% endif %}
+  </ul>
+
+  {% block main %}{% endblock %}
+
+</div>
+
+{% endblock %}

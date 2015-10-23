@@ -1,0 +1,63 @@
+.control-text {
+  display: inline-block;
+  min-height: 34px;
+  padding: 6px 0;
+  font-size: 14px;
+  line-height: 20px;
+  vertical-align: middle;
+}
+
+.radios,
+.checkboxs {
+  padding-top: 5px;
+  vertical-align: middle;
+}
+
+.radios label,
+.checkboxs label {
+  font-weight: normal;
+  padding: 0 20px 0 0px;
+}
+
+textarea {
+  resize: none;
+}
+
+.control-label span.required {
+  color: @brand-primary;
+}
+
+.form-horizontal {
+  .form-group {
+    margin-bottom: 30px;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 15px;
+    }
+  }
+  .form-control {
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.form-control {
+  color: @gray-dark;
+  // .box-shadow(none);
+  border-color: @gray-light;
+  // &:focus {
+  //   .box-shadow(none);
+  // }
+  &::-webkit-input-placeholder { 
+    color: @gray;
+  }
+  &:-moz-placeholder {
+    color: @gray;
+  }
+  &::-moz-placeholder {
+    color: @gray;
+  }
+  &:-ms-input-placeholder { 
+    color: @gray;
+  }
+}

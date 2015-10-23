@@ -1,0 +1,17 @@
+ <div class="top-reply {% if not posts|length|default(0) %}hidden{% endif %}">
+  <div class="js-all-post-head page-header">
+    所有回复
+  </div>
+  <ul class="comment-list thread-pripost-list">
+    {% for post in posts %}
+      {% set author = users[post.userId] %}
+      {% include 'TopxiaWebBundle:Thread/Part:post-item.html.twig' %}
+    {% else %}
+      <li class="empty">一个回复都没有！</li>
+    {% endfor %}
+  </ul>
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+</div>

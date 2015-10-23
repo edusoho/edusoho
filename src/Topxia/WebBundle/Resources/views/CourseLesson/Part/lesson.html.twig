@@ -1,0 +1,20 @@
+{% if member %}
+  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+{% else %}
+  {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
+{% endif %}
+<li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
+  {% if item.status == 'published' %}
+    <a {% if member %}href="{{ lessonUrl }}" data-toggle="tooltip" data-placement="bottom" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
+    title="{{ item.title }}">
+    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+    <span class="title">课时{{ item.number }}：{{ item.title }}</span>
+    {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+    </a>
+  {% else %}   
+    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+    <span class="title">课时{{ item.number }}：{{ item.title }}</span>
+    {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+  {% endif %}
+
+</li>

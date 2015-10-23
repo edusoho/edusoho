@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{% if category.seoTitle %}{{ category.seoTitle }}{% else %}{{ category.name }}{% endif %} - {{ parent() }}{% endblock %}
+
+{% block keywords %}{{ category.seoKeyword }}{% endblock %}
+
+{% block description %}{{ category.seoDesc }}{% endblock %}
+
+
+{% set bodyClass = 'artcile-cat-page' %}
+
+{% block content %}
+  <!-- 资讯 -->
+  {{ render(controller('TopxiaWebBundle:Article:categoryNav', {categoryCode:categoryCode})) }}
+
+  <div class="article-list-body row">
+    <!-- list主内容-->
+    <div class="col-md-8 article-list-mian">
+      {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' %}
+
+    </div>
+    
+    <aside class="col-md-4 article-sidebar">
+      {% include 'TopxiaWebBundle:Article/Widget:sidebar.html.twig' %}
+    </aside>
+
+  </div>
+
+{% endblock %}

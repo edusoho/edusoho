@@ -1,0 +1,24 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">{{ title }}</h3>
+    </div>
+</div>
+
+<div class="top-header" ng-init="loadUsers()">
+	<ul class="ui-list ui-list-text">  
+		<li class="ui-border-t" ng-repeat="user in users" ui-sref="userInfo({ userId : user.id })">
+	        <div class="ui-avatar-s">
+	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar"/>
+	        </div>
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap">
+	            	{{ user.nickname }} 
+	            </h4>
+	            <p class="ui-nowrap">{{ user.title }}</p>
+	        </div>
+	    </li>
+	</ul>
+	<list-empty-view class="lesson-empty" data="users" title="{{ emptyStr }}">
+	</list-empty-view>
+</div>

@@ -1,0 +1,4 @@
+{% set imglink = carousel|first|default(null) %}
+<a href="{{ imglink.href|default('') }}">
+  <img src="{{ asset(imglink.src) }}" alt="{{ imglink.alt|default('') }}" />
+</a>

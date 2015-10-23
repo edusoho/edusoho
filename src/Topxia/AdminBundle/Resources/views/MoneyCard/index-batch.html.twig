@@ -1,0 +1,50 @@
+{% extends 'TopxiaAdminBundle:User:layout.html.twig' %}
+
+{% block title %}用户管理 - {{ parent() }}{% endblock %}
+
+{% set menu = 'money_card' %}
+
+{% set script_controller = 'money-card/batch-list' %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <button class="btn btn-info btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{path('admin_money_card_create')}}">生成充值卡</button>
+  <h1 class="pull-left">充值卡管理</h1>
+</div>
+
+<ul class="nav nav-tabs">
+  <li><a href="{{ path('admin_money_card') }}">充值卡</a></li>
+  <li class="active"><a href="{{ path('admin_money_card_batch') }}">生成记录</a></li>
+</ul>
+
+    <table id="money-card-batch-table" class="table table-striped table-hover" data-search-form="#money-card-batch-search-form">
+      <thead>
+        <tr>
+          <th>生成批次</th>
+          <th>金额</th>
+          <th>卡号前缀</th>
+          <th>卡号位数</th>
+          <th>有效期</th>
+          <th>生成张数</th>
+          <th>已充张数</th>
+          <th>未充张数</th>
+          <th>生成人</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% if batchs %}
+        {% for batch in batchs %}
+            {% include 'TopxiaAdminBundle:MoneyCard:batch-table-tr.html.twig' with {batch:batch} %}
+        {% endfor %}
+      </tbody>
+    </table>
+      {% else %}
+      </tbody>
+    </table>
+    <div class='empty'>数据库君表示自己非常不给力，啥都没找到~~</div>
+      {% endif %}
+    {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-sm' %}
+
+{% block title %}暂停{% endblock %}
+{% block body %}
+
+<div class="well well-lg">
+  <div class="empty">考试已暂停，请尽快回来哦~
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-info" data-dismiss="modal">继续</button>
+
+{% endblock %}

@@ -1,0 +1,442 @@
+admin:
+    name: 后台
+    parent: null
+admin_user:
+    name: 用户
+    parent: admin
+admin_course:
+    name: 课程
+    parent: admin
+admin_operation:
+    name: 运营
+    parent: admin
+    router_name: admin_article
+admin_order:
+    name: 订单
+    parent: admin
+    router_name: admin_course_order_manage
+admin_finance:
+    name: 账务
+    parent: admin
+    router_name: admin_bill
+admin_app:
+    name: 教育云
+    parent: admin
+    router_name: admin_my_cloud
+admin_system:
+    name: 系统
+    parent: admin
+    router_name: admin_setting_site
+admin_operation_article:
+    name: 资讯管理
+    parent: admin_operation
+    router_name: admin_article
+admin_operation_group:
+    name: 小组管理
+    parent: admin_operation
+    router_name: admin_group
+admin_operation_mobile_banner_manage:
+    name: 轮播图设置
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile
+admin_operation_mobile_select_manage:
+    name: 每周精选设置
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile_select
+admin_operation_block:
+    name: 编辑区管理
+    parent: admin_operation
+    router_name: admin_block
+    router_params: { 'category': 'all'}
+    group: 2
+admin_block_visual_edit:
+    name: 编辑
+    parent: admin_operation_block
+    router_params: {'blockId': 'block.id'}
+    router_params_context: 1
+
+
+
+admin_block_visual_edit_history:
+    name: 历史记录
+    parent: admin_operation_block
+    router_params: {'blockId': 'block.id'}
+    router_params_context: 1
+admin_operation_content:
+    name: 自定义页面管理
+    parent: admin_operation
+    router_name: admin_content
+    router_params: { type: page }
+    group: 2
+admin_operation_mobile:
+    name: 移动端内容管理
+    parent: admin_operation
+    group: 2
+admin_operation_analysis_register:
+    name: 数据统计
+    parent: admin_operation
+    router_params: { tab: trend , analysisDateType:register }
+    after: admin_operation_content
+    group: 3
+admin_operation_article_create:
+    name: 添加资讯
+    parent: admin_operation_article_manage
+    router_name: admin_article_create
+    group: 2
+admin_operation_category_create:
+    name: 新建栏目
+    parent: admin_operation_article_category
+    router_name: admin_article_category_create
+    mode: modal
+    group: 2
+admin_operation_article_manage:
+    name: 资讯管理
+    parent: admin_operation_article
+    router_name: admin_article
+admin_operation_article_category:
+    name: 栏目管理
+    parent: admin_operation_article
+    router_name: admin_article_category
+admin_operation_group_create:
+    name: 创建小组
+    parent: admin_operation_group_manage
+    router_name: group_add
+    group: 2
+    blank: 1
+admin_operation_group_manage:
+    name: 小组管理
+    parent: admin_operation_group
+    router_name: admin_group
+admin_operation_group_thread:
+    name: 话题管理
+    parent: admin_operation_group
+    router_name: admin_groupThread
+admin_course_show:
+    name: 课程管理
+    parent: admin_course
+    router_name: admin_course
+admin_course_add:
+    name: 创建课程
+    parent: admin_course_manage
+    router_name: course_create
+    group: 2
+    blank: 1
+admin_live_course_add:
+    name: 创建直播课程
+    parent: admin_course_manage
+    router_name: course_create
+    router_params: {'flag': 'isLive'}
+    group: 2
+    blank: 1
+admin_live_course:
+    name: 直播管理
+    parent: admin_course
+    router_params: {'status': 'underway'}
+admin_course_thread:
+    name: 话题管理
+    parent: admin_course
+    router_name: admin_thread
+admin_course_thread_manage:
+    name: 课程话题
+    parent: admin_course_thread
+    router_name: admin_thread
+admin_course_question:
+    name: 问答管理
+    parent: admin_course
+    router_name: admin_question
+    router_params: {'postStatus': 'unPosted'}
+admin_course_note:
+    name: 笔记管理
+    parent: admin_course
+    router_name: admin_note
+admin_course_review:
+    name: 评价管理
+    parent: admin_course
+    router_name: admin_review
+admin_course_category:
+    name: 分类管理
+    parent: admin_course
+admin_category_create:
+    name: 添加分类
+    parent: admin_course_category
+    router_params: {'groupId': 'group.id'}
+    router_params_context: 1
+    group: 2
+    mode: modal
+admin_course_tag:
+    name: 标签管理
+    parent: admin_course
+    router_name: admin_tag
+admin_course_tag_manage:
+    name: 管理
+    parent: admin_course_tag
+    router_name: admin_tag
+admin_course_tag_add:
+    name: 新增标签
+    parent: admin_course_tag
+    router_name: admin_tag_create
+    mode: modal
+    group: 2
+admin_user_show:
+    name: 用户管理
+    parent: admin_user
+    router_name: admin_user
+admin_user_create:
+    name: 添加新用户
+    parent: admin_user_manage
+    mode: modal
+    group: 2
+admin_user_manage:
+    name: 用户管理
+    parent: admin_user_show
+    router_name: admin_user
+admin_login_record:
+    name: 登录日志
+    parent: admin_user_show
+admin_teacher:
+    name: 教师管理
+    parent: admin_user
+admin_approval_approvals:
+    name: 实名认证管理
+    parent: admin_user
+    router_params: { approvalStatus: approving}
+admin_message:
+    name: 私信管理
+    parent: admin_user
+admin_course_manage:
+    name: 课程管理
+    parent: admin_course_show
+    router_name: admin_course
+admin_course_recommend:
+    name: 课程推荐
+    parent: admin_course_show
+    router_name: admin_course_recommend_list
+admin_course_data:
+    name: 课程统计
+    parent: admin_course_show
+admin_course_order:
+    name: 课程订单
+    parent: admin_order
+    router_name: admin_course_order_manage
+admin_coin_orders:
+    name: 虚拟币订单
+    parent: admin_order
+admin_coin_order_query:
+    name: 查阅
+    parent: admin_coin_order
+    router_name: admin_coin_orders
+admin_course_order_query:
+    name: 查阅
+    parent: admin_course_order
+    router_name: admin_course_order_manage
+admin_bills:
+    name: 账单管理
+    parent: admin_finance
+    router_name: admin_bill
+admin_cash_bill:
+    name: 现金账单
+    parent: admin_bills
+    router_name: admin_bill
+admin_coin_records:
+    name: 虚拟币账单
+    parent: admin_bills
+admin_coin_user:
+    name: 虚拟币管理
+    parent: admin_finance
+    router_name: admin_coin_user_records
+admin_coin_user_records:
+    name: 记录
+    parent: admin_coin_user
+    router_name: admin_coin_user_records
+admin_course_refunds:
+    name: 课程退款管理
+    parent: admin_finance
+    router_name: admin_order_refunds
+    router_params: {targetType:course,status:created}
+admin_course_refunds_manage:
+    name: 管理
+    parent: admin_course_refunds
+    router_name: admin_order_refunds
+    router_params: {targetType:course,status:created}
+admin_setting:
+    name: 站点设置
+    parent: admin_system
+    router_name: admin_setting_site
+admin_setting_massage:
+    name: 基础信息
+    parent: admin_setting
+    router_name: admin_setting_site
+admin_setting_theme:
+    name: 主题
+    parent: admin_setting
+    router_name: admin_setting_theme
+admin_setting_mailer:
+    name: 邮件服务器设置
+    parent: admin_setting
+admin_top_navigation:
+    name: 顶部导航
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: top }
+admin_foot_navigation:
+    name: 底部导航
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: foot }
+admin_setting_consult_setting:
+    name: 客服
+    parent: admin_setting
+admin_setting_es_bar:
+    name: 侧边栏
+    parent: admin_setting
+admin_setting_share:
+    name: 分享
+    parent: admin_setting
+admin_setting_user:
+    name: 用户设置
+    parent: admin_system
+    router_name: admin_setting_auth
+admin_user_auth:
+    name: 注册
+    parent: admin_setting_user
+    router_name: admin_setting_auth
+admin_setting_login_bind:
+    name: 登录
+    parent: admin_setting_user
+admin_setting_user_center:
+    name: 用户中心
+    parent: admin_setting_user
+admin_setting_user_fields:
+    name: 用户信息设置
+    parent: admin_setting_user
+admin_user_avatar:
+    name: 默认头像
+    parent: admin_setting_user
+    router_name: admin_setting_avatar
+admin_setting_course_setting:
+    name: 课程设置
+    parent: admin_system
+admin_setting_course:
+    name: 课程
+    parent: admin_setting_course_setting
+    router_name: admin_setting_course_setting
+admin_setting_live_course:
+    name: 直播
+    parent: admin_setting_course_setting
+    router_name: admin_setting_live_course_setting
+admin_setting_questions_setting:
+    name: 题库
+    parent: admin_setting_course_setting
+admin_setting_course_avatar:
+    name: 默认图片
+    parent: admin_setting_course_setting
+admin_setting_operation:
+    name: 运营设置
+    parent: admin_system
+    router_name: admin_article_setting
+admin_article_setting:
+    name: 资讯
+    parent: admin_setting_operation
+admin_group_set:
+    name: 小组
+    parent: admin_setting_operation
+admin_setting_finance:
+    name: 账务设置
+    parent: admin_system
+    router_name: admin_setting_payment
+admin_payment:
+    name: 支付
+    parent: admin_setting_finance
+    router_name: admin_setting_payment
+_admin_coin_settings:
+    name: 虚拟币
+    parent: admin_setting_finance
+    router_name: admin_coin_settings
+admin_coin_settings:
+    name: 虚拟币设置
+    parent: _admin_coin_settings
+admin_coin_model:
+    name: 使用方式
+    fullname: 虚拟币使用方式设置
+    parent: _admin_coin_settings
+admin_setting_refund:
+    name: 退款
+    parent: admin_setting_finance
+admin_setting_mobile:
+    name: 移动端设置
+    parent: admin_system
+admin_optimize:
+    name: 优化和备份
+    parent: admin_system
+    group: 2
+admin_setting_ip_blacklist:
+    name: IP黑名单
+    parent: admin_system
+    group: 2
+admin_logs:
+    name: 系统日志
+    parent: admin_system
+    group: 2
+admin_logs_query:
+    name: 系统操作日志
+    parent: admin_logs
+    router_name: admin_logs
+admin_logs_prod:
+    name: 程序运行日志
+    parent: admin_logs
+admin_my_cloud:
+    name: 我的教育云
+    parent: admin_app
+admin_setting_cloud_video:
+    name: 设置
+    parent: admin_app
+admin_app_center_show:
+    name: ES应用
+    parent: admin_app
+    router_name: admin_app_center
+    router_params: { postStatus : all }
+admin_setting_cloud:
+    name: 授权码
+    parent: admin_app
+admin_app_center:
+    name: 应用中心
+    parent: admin_app_center_show
+    router_name: admin_app_center
+    router_params: { postStatus : all }
+admin_app_installed:
+    name: 已购项目
+    parent: admin_app_center_show
+    router_params: { postStatus : all }
+admin_app_upgrades:
+    name: 更新
+    parent: admin_app_center_show
+    class: app-upgrade
+admin_app_logs:
+    name: 更新日志
+    parent: admin_app_center_show
+admin_cloud_video_setting:
+    name: 云视频设置
+    parent: admin_setting_cloud_video
+    router_name: admin_setting_cloud_video
+admin_edu_cloud_sms:
+    name: 云短信设置
+    parent: admin_setting_cloud_video
+admin_cloud_bill:
+    name: 云视频账单
+    parent: admin_my_cloud
+    router_name: admin_cloud_bill
+admin_announcement:
+    name: 网站公告管理
+    parent: admin_operation
+    before: admin_operation_block
+    group: 2
+admin_announcement_create:
+    name: 新增公告
+    parent: admin_announcement
+    mode: modal
+    group: 2
+admin_course_review_tab:
+    name: 课程评价
+    parent: admin_course_review
+    router_name: admin_review
+    group: 1

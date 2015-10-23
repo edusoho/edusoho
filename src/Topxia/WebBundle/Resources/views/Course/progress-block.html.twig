@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><h3 class="panel-title">{{'学习进度'|trans}}</h3></div>
+  <div class="panel-body">
+    <div class="progress">
+      <div class="progress-bar" style="width: {{ progress.percent }};"></div>
+    </div>
+    <div class="clearfix">
+      {% if progress.percent == '100%' %}
+        <button class="btn btn-default btn-sm disabled pull-right">{{'您已完成全部课时的学习'|trans}}</button>
+      {% else %}
+        {% if nextLearnLesson %}
+          <a class="btn btn-primary btn-sm pull-right" id="next-learn-btn" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="{{'继续学习：'|trans}}{{ nextLearnLesson.title }}">{{'继续学习'|trans}}</a>
+        {% endif %}
+      {% endif %}
+
+      <span class="text-muted">{{'已学'|trans}}: <strong class="text-success">{{ progress.number }}</strong> / <strong>{{ progress.total }}</strong></span>
+
+      {% if course.giveCredit >0 %}
+        <span class="text-muted mlm">{{'获得学分：'|trans}}<strong class="text-success">{{ member.credit }}</strong> / <strong>{{ course.giveCredit }}</strong></span>
+      {% endif %}
+
+      {% if not member.deadline|default(0) == 0 %}
+        <br>
+        <span class="text-muted">有效期： <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
+      {% endif %}
+
+    </div>
+  </div>
+</div>

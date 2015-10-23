@@ -1,0 +1,88 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>
+    {%- block title -%}
+      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {%- endblock -%}
+  </title>
+  <meta name="keywords" content="{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}" />
+  <meta name="description" content="{% block description %}{{ setting('site.seo_description') }}{% endblock %}" />
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login" />
+  <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open" />
+  {{ setting('login_bind.verify_code', '')|raw }}
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" type="image/x-icon" media="screen"/>
+  {% endif %}
+
+  {% block stylesheets %}
+    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+  {% endblock %}
+  
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
+
+  {% block head_scripts %}{% endblock %}
+
+</head>
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+
+{% block body %}
+
+  <div class="es-wrap">
+
+    {% block header %}
+      {% include 'TopxiaWebBundle::weixin-alert.html.twig'%}
+      {% include 'TopxiaWebBundle::site-hint.html.twig' %}
+      {% include 'TopxiaWebBundle:Default:header.html.twig' %}
+    {% endblock %}
+    
+    {% block full_content %}
+      {% block top_content %}{% endblock %}
+      
+      <div id="content-container" class="container">
+        {% block content %}{% endblock %}
+      </div>
+    {% endblock %}
+    
+    {% block footer %}
+      {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
+    {% endblock %}
+
+    {% block bottom %}{% endblock %}
+  </div>
+
+  {% block esBar %}
+    {% if setting('esBar.enabled', 0) %}
+        {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
+    {% endif %}
+  {% endblock %}
+
+  {% block floatConsult %}
+    {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
+      {% if not setting('esBar.enabled',0) %}
+        {% include 'TopxiaWebBundle::float-consult.html.twig' %}
+      {% endif %}
+    {% endif %}
+  {% endblock %}
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+  
+{% endblock %}
+
+{% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+
+</body>
+</html>

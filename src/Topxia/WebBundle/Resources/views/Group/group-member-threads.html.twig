@@ -1,0 +1,28 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的小组 - {{ parent() }}{% endblock %}
+{% set tab_nav = 'thread' %}
+{% set side_nav = 'my-group' %}
+{% block main %}
+  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+  {% block heading %} 
+    我的小组
+       {% endblock %}
+    {% block body %}
+      <div class="row">
+        
+        <div class="col-md-12">
+          {% include 'TopxiaWebBundle:Group:group-member-nav-pill.html.twig' %}
+           <br>
+          {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
+          'threads':threads,
+          'groups':groups, }
+          %}
+        </div>
+        <div class="col-md-12 pull-left">
+          {{ web_macro.paginator(paginator) }}
+        </div>
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

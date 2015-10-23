@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'公告'|trans}}{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+
+  <div class="announcement-detail clearfix">
+  	<div>{{ announcement.content|raw }}</div>
+		<div class="text-muted pull-right mtm">{{'发表于'|trans}} {{ announcement.createdTime | date('Y-m-d H:i') }}</div>
+	</div>
+
+{% endblock %}

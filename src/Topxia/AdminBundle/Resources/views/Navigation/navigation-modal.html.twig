@@ -1,0 +1,101 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set block = block|default(null) %}
+
+{% block title %}
+{% if navigation.id == 0 and navigation.type =='top' %}
+新增顶部导航
+{% elseif navigation.id > 0 and navigation.type =='top'%}
+编辑顶部导航
+{% elseif navigation.id == 0 and navigation.type =='foot'%}
+新增底部导航
+{% elseif navigation.id > 0 and navigation.type =='foot'%}
+编辑底部导航
+{% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" id="navigation-form"
+  {% if navigation.id == 0 %}
+    action="{{ path('admin_navigation_create') }}"
+  {% else %}
+    action="{{ path('admin_navigation_update', {id:navigation.id}) }}" 
+  {% endif %}
+ method="post">
+
+  {% if parentNavigation %}
+  <div class="row form-group">
+    <div class="col-md-3 control-label"><label>上级导航</label></div>
+    <div class="col-md-8 controls"> 
+      {{ parentNavigation.name }}
+      <div class="help-block">请注意：增加子导航后，对应的上级导航链接将不起作用。</div>
+    </div>
+  </div>
+  {% endif %}
+
+
+ <div class="row form-group">
+  <div class="col-md-3 control-label"><label for="name">名称</label></div>
+  <div class="col-md-8 controls"> 
+    <input class="form-control" type="text" id="name" value="{{navigation.name}}" name="name"></div>
+</div>
+<p></p>
+
+<div class="row form-group">
+  <div class="col-md-3 control-label"><label for="url">链接地址</label></div>
+  <div class="col-md-8 controls"> <input class="form-control" type="text" id="url" {% if navigation.url %} value="{{navigation.url}}" {% else %} value="http://" {% endif %} name="url" ></div>
+</div>
+
+<p></p>
+
+<input type="hidden" name="type" value="{{ navigation.type }}" >
+
+<div class="row form-group">
+          <div class="col-md-3 control-label"><label>新开窗口</label></div>
+          <div class="col-md-8 controls radios"> 
+            <div id="isNewWin">
+              <input type="radio" name="isNewWin"  value="0"
+               {% if navigation.isNewWin == 0 %} checked="checked" {% endif %}>
+              <label >否</label>
+              <input type="radio" name="isNewWin"  value="1"
+              {% if navigation.isNewWin == 1 %} checked="checked" {% endif %}>
+              <label >是</label>
+            </div>
+          </div>
+</div>
+
+<div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>状态</label>
+      </div>
+      <div class="col-md-8 controls radios">
+        <div id="isOpen">
+          <input type="radio" name="isOpen"  value="1" 
+          {% if navigation.isOpen == 1 %} checked="checked" {% endif %}>
+          <label>开启</label>
+          <input type="radio" name="isOpen"  value="0"
+           {% if navigation.isOpen == 0 %} checked="checked" {% endif %}>
+          <label>关闭</label>
+        </div>
+      </div>
+</div>
+<input type="hidden" name="parentId" value="{{ parentNavigation.id|default(0) }}">
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+  <script type="text/javascript">
+  {% if navigation.id  == 0  %}
+    app.load('navigation/create-modal')
+  {% else %}
+    app.load('navigation/edit-modal')
+  {% endif %}
+  </script>
+  
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="navigation-save-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#navigation-form">保存</button>
+{% endblock %}

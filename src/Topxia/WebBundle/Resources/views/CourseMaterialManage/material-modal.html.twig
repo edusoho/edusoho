@@ -1,0 +1,49 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}添加资料{% endblock %}
+{% block body %}
+
+<form id="course-material-form" class="form-horizontal" action="{{ path('course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) }}" enctype="multipart/form-data" method="post">
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1  controls">
+      <ul class="list-group" id="material-list" {% if not materials %}style="display:none;"{% endif %}>
+        {% for material in materials %}
+          {% include 'TopxiaWebBundle:CourseMaterialManage:list-item.html.twig' %}
+        {% endfor %}
+      </ul>
+      {% if not materials %}
+        <span class="control-text text-warning">暂无资料，请上传。</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
+      {% include 'TopxiaWebBundle:CourseMaterialManage:file-chooser.html.twig' %}
+      <input type="hidden" name="fileId">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls">
+      <textarea class="form-control" name="description" rows="2" placeholder="填写资料简介 (可选)"></textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-10 col-md-offset-1 controls">
+      <button class="btn btn-primary" id="material-upload-btn" type="submit">添加</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<script>app.load('course-manage/material-modal')</script>
+
+{% endblock %}
+
+{% set hide_footer = true %}

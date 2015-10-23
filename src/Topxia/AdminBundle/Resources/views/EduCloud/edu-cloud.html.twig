@@ -1,0 +1,59 @@
+{% extends 'TopxiaAdminBundle:EduCloud:edu-cloud-layout.html.twig' %}
+
+{% block title %}教育云 - {{ parent() }}{% endblock %}
+
+{% set menu = 'overview' %}
+{# {% set script_controller = '' %} #}
+
+{% block main %}
+  <div class="page-header"><h1>概览</h1></div>
+{% if account %}
+  <div class="panel panel-default">
+    <table class="table table-striped table-hover" style="word-break:break-all;">
+      <thead>
+          <tr>
+              <th style="text-align: center; width: 40%">项目</th>
+              <th style="text-align: center; width: 30%">内容</th>
+              <th style="text-align: center;">操作</th>
+          </tr>
+      </thead>
+      <tbody style="text-align: center;">
+        
+          <tr>
+            <td>账户余额</td> 
+            <td><span>{{account.cash|default(0)}}</span> 元 </td>
+            <td><a class="btn btn-primary btn-sm" href="{{path('admin_cloud_recharge')}}" target="_blank"> 去充值 </a></td>
+          </tr>
+        
+          <tr>
+            <td>云短信状态</td>
+            <td>
+              <span>
+              {% if smsStatus.status == 'auditing' %}
+                审核中
+              {% endif %}
+              {% if smsStatus.status == 'failed' %}
+                未通过
+              {% endif %}
+              {% if smsStatus.status == 'passed' %}
+                已通过
+              {% endif %}
+              {% if smsStatus.status == 'error' %}
+                {{ smsStatus.message }}
+              {% endif %}
+              </span>
+            </td>
+
+            <td>
+              {% if smsStatus.status == 'error' %} {# or smsStatus.status == 'failed' #}
+                <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > 申请开通云短信 </span>
+              {% endif %}
+            </td>
+          </tr>
+      <tbody>
+    </table>
+  </div>
+{% else %}
+  <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/register" target="_blank"> 没有帐号? 去注册 </a></td>
+{% endif %}
+{% endblock %}

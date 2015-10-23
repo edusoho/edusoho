@@ -1,0 +1,34 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+        {% set data = notification.content %}
+          {% if data.type == 'perusal' %}
+            【试卷已完成】 
+          {% elseif data.type == 'read' %}
+            【试卷已批阅】
+          {% endif %}
+           <a href='{{path('user_show',{id:data.userId})}}' target='_blank'>{{data.userName}}</a> 
+            {% if data.type == 'perusal' %}
+             刚刚完成了
+          {% elseif data.type == 'read' %}
+            刚刚批阅了
+          {% endif %}
+          {{data.name}} ，
+          {% if data.type == 'perusal' %}
+            <a href='{{path('course_manage_test_teacher_check',{id:data.id})}}' target='_blank'>
+             请点击批阅 
+          {% elseif data.type == 'read' %}
+            <a href='{{path('course_manage_test_results',{id:data.id})}}' target='_blank'>
+            请点击查看结果
+          {% endif %}
+          </a>
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>
+

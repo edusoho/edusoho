@@ -1,0 +1,39 @@
+<div class="nav-filter clearfix">
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{'发话题'|trans}} <span class="caret"></span></button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="{{ path('course_thread_create', {id:course.id, type:'discussion'}) }}">{{'发话题'|trans}}</a></li>
+      <li><a href="{{ path('course_thread_create', {id:course.id, type:'question'}) }}">{{'提问题'|trans}}</a></li>
+    </ul>
+  </div>
+
+
+  <ul class="nav nav-pills nav-pills-sm">
+    <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'all'})) }}">{{'全部'|trans}}</a></li>
+
+    <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'question'})) }}">{{'问答'|trans}}</a></li>
+
+    <li{% if filters.type == 'elite' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({type:'elite'})) }}">{{'精华'|trans}}</a></li>
+
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span>{{'排序：'|trans}}</span>
+        {% if filters.sort == 'posted' %}
+          {{'最后回复'|trans}}
+        {% elseif filters.sort == 'created'%}
+          {{'最新发帖'|trans}}
+        {% endif %}
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu hidden-xs">
+        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'posted'})) }}">{{'最后回复'|trans}}</a></li>
+        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('course_threads', {id:course.id}|merge(filters)|merge({sort:'created'})) }}">{{'最新发帖'|trans}}</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
+
+
+

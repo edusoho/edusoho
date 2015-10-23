@@ -1,0 +1,97 @@
+<!-- 紧跟标题 -->
+{% if item.materialNum > 0 %}
+  <i class="es-icon es-icon-filedownload mls" title="资料"></i>
+{% endif %}
+
+{% if (item.id in homeworkLessonIds|default(null)) or (item.id in exercisesLessonIds|default(null)) %}
+  <i class="es-icon es-icon-mylibrarybooks mls" title="作业、练习"></i>
+{% endif %}
+
+{% if app.user and setting('magic.lesson_watch_limit') and course.watchLimit > 0 and item.type == 'video' and not fromPlugin|default(false) %}
+  {% set remainTime = (course.watchLimit * item.length) - lessonLearns[item.id].watchTime|default(0) %}
+  {% if remainTime > 0 %}
+    <small class="text text-info">还剩 {{ remainTime|duration_text }}</small>
+  {% else %}
+    <small class="text text-info">已达最大可看时长</small>
+  {% endif %}
+{% endif %}
+
+
+<!-- 右边图标 -->
+{% if item.status == 'published' %}
+  {% if item.type == 'video' %}
+    <span class="date" title="视频时长{{ item.length|duration }}">{{ item.length|duration }}</span>
+    <span class="course-type">
+      <i class="es-icon es-icon-videoclass" data-toggle="tooltip" data-placement="top" title="视频课程"></i>
+    </span>
+  {% endif %}
+
+  {% if item.type == 'audio' %}
+    <span class="date" title="音频时长{{ item.length|duration }}">{{ item.length|duration }}</span>
+    <span class="course-type">
+      <i class="es-icon es-icon-audioclass" data-toggle="tooltip" data-placement="top" title="音频课程"></i>
+    </span>
+  {% endif %}
+
+  {% if item.type == 'text' %}
+    <span class="course-type">
+      <i class="es-icon es-icon-graphicclass" data-toggle="tooltip" data-placement="top" title="图文课程" data-original-title="图文"></i>
+    </span>
+  {% endif %}
+  
+  {% if item.type == 'testpaper' %}
+    <span class="course-type">
+      <i class="es-icon es-icon-check" data-toggle="tooltip" data-placement="top" title="试卷" data-original-title="试卷"></i>
+    </span>
+  {% endif %}
+
+  {% if item.type == 'ppt' %}
+    <span class="course-type">
+      <i class="es-icon es-icon-pptclass" data-toggle="tooltip" data-placement="top" title="PPT课程"></i>
+    </span>
+  {% endif %}
+
+  {% if item.type == 'document' %}
+    <span class="course-type">
+      <i class="es-icon es-icon-description" data-toggle="tooltip" data-placement="top" title="文档课程" data-original-title="文档"></i>
+    </span>
+  {% endif %}
+
+  {% if item.type == 'flash' %}
+    <span class="course-type">
+      <i class="es-icon es-icon-flashclass" data-toggle="tooltip" data-placement="top" title="flash课程"></i>
+    </span>
+  {% endif %}
+
+  {% if item.type == 'live' %}
+    
+    <span class="course-type">
+      <i class="es-icon es-icon-videocam" data-toggle="tooltip" data-placement="top" title="直播课程"></i>
+      {% if item.startTime > currentTime %}
+        <small class="type">{{ item.startTime|date('m月d日') }} 
+          {# {% for key,week in weeks %}
+            {% if key == item.startTime|date('w')  %}
+              星期{{ week }}
+            {% endif %}
+            {% endfor %}  先隐藏星期#}
+          {{ item.startTime|date('H：i') }}
+        </small>
+      {% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+        <small class="type">正在直播中</small>
+      {% elseif item.endTime < currentTime %}
+
+        <small class="type">
+          {% if item.replayStatus == 'generated' %}
+            回放
+          {% else %}
+            直播结束
+          {% endif %}
+        </small>
+        
+      {% endif %}
+    </span>
+  {% endif %}
+
+{% else %}
+  <span class="period-state">未发布</span>
+{% endif %}

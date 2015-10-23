@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}加入活动{% endblock %}
+{% block body %}
+
+  <form id="join-event-form" class="form-horizontal" method="post" 
+  action="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}"
+  >
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="truename">真实姓名 </label>
+      <div class="col-md-6 controls">
+          <input class="form-control" id="truename" type="text" name="truename" value="{{ userProfile.truename }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="mobile">手机</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="mobile" type="text" name="mobile" value="{{ userProfile.mobile }}">
+      </div>
+    </div>
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  
+  <button class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="join-event-btn" class="btn btn-primary" data-loading-text="正在提交" type="submit" data-toggle="form-submit" data-target="#join-event-form">提交</button>
+
+  <script>
+    app.load('thread/user-info-modal');
+  </script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<form id="lesson-note-plugin-form" method="post" action="{{ path('course_lesson_plugin_note_save') }}">
+  <div class="form-group note-content">
+    <div class="controls">
+      {{ form_widget(form.content, {attr:{'data-image-upload-url': path('editor_upload', {token:upload_token('course')})} }) }}
+    </div>
+  </div>
+
+  <div class="form-group note-actions">
+    <div class="controls clearfix">
+      <span class="text-muted" data-role="saved-message"></span>
+      <button id="save" class="btn btn-primary btn-xs pull-right" type="submit">保存笔记</button>
+      {{ form_rest(form) }}
+      <label class="text-muted"><input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}> 分享笔记</label>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

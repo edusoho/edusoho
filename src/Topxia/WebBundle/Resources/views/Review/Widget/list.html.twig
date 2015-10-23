@@ -1,0 +1,57 @@
+{% do load_script('review/list') %}
+{% if member and canReview|default(1) %}
+  <div class="clearfix">
+    <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>重新评价</button>
+  </div>
+
+  <form id="review-form" method="post" action="{{ reviewSaveUrl }}" {% if userReview %}style="display:none;"{% endif %}>
+    <div class="form-group controls">
+      请打分： <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
+      <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">
+    </div>
+
+    <div class="form-group controls">
+      <textarea class="form-control" rows="8" data-display="评价详细内容" name="content">{{ userReview.content|default('') }}</textarea>
+    </div>
+
+    <div class="form-group clearfix">
+      <span class="text-success pull-left" style="display: none;">评价已保存！</span>
+      <button type="submit" class="btn btn-primary pull-right" data-loading-text="正在保存..." autocomplete="off">保存</button>
+      <button class="btn btn-link pull-right js-hide-review-form" type="button" {% if userReview %}style="display:none;"{% endif %}>取消</button>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endif %}
+
+{% for review in reviews if users[review.userId]|default(false) %}
+  {% set user = users[review.userId] %}
+  <div class="js-reviews">
+    <div class="media media-evaluate">
+      <div class="media-left">
+        {{ web_macro.user_avatar(user, '', 'avatar-sm') }}
+      </div>
+      <div class="media-body">
+        <div class="title">{{ web_macro.user_link(user) }} {{ review.createdTime|date('Y-m-d') }}</div>
+        <div class="score">
+          {{ web_macro.star(review.rating) }}
+        </div>
+        <div class="content">
+            <div class="short-content">{{ review.content|sub_text(100) }}</div>
+            <div class="full-content" style="display:none;">{{ review.content|nl2br }}</div>
+        </div>
+        <div class="actions">
+          <a href="javascript:;" class="show-full-btn">[展开全文]</a>
+          <a href="javascript:;" class="show-short-btn" style="display:none;">[收起全文]</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% else %}
+  <div class="empty">暂无评价</div>
+{% endfor %}
+
+{% if paginator|default(null) %}
+  {{ web_macro.paginator(paginator) }}
+{% endif  %}

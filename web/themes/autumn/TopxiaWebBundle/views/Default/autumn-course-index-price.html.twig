@@ -1,0 +1,9 @@
+  {% if setting('course.coursesPrice') == 0 %}
+    {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
+      <span class="price" style="display:inline">{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}
+      </span>
+    {% else %}
+      <span class="price">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}
+      </span>
+    {% endif %}
+  {% endif %}

@@ -1,0 +1,91 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+{% block title %}
+  {% if type == 'question' %}
+    {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}问答
+    {% set side_nav = 'my-teaching-questions' %}
+  {% elseif type == 'discussion' %}
+    {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}话题
+    {% set side_nav = 'my-teaching-discussions' %}
+  {% endif %}
+  - {{ parent() }}
+{% endblock %}
+{% if type == 'question' %}
+  {% set side_nav = 'my-teaching-questions' %}
+{% elseif type == 'discussion' %}
+  {% set side_nav = 'my-teaching-discussions' %}
+{% endif %}
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {% if type == 'question' %}
+        {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}问答
+      {% elseif type == 'discussion' %}
+        {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}话题
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      {% include 'TopxiaWebBundle:MyTeaching:tab.html.twig'%}
+      {% if threads %}
+        
+        {% set type = type|default('discussion') %}
+        <ul class="media-list">
+          {% for thread in threads %}
+            {% if classrooms %}
+              {% set classroom = classrooms[thread.targetId]|default(null) %}
+              <li class="media">
+                <div class="media-body">
+                  {% if thread.postNum > 0 %}
+                    <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
+                  {% endif %}
+                  <div class="mbm">
+                    {% if thread.type == 'question' %}
+                      <span class="label label-info" title="问答帖">问</span>
+                    {% endif  %}
+                    <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
+                    {% if thread.nice %}
+                      <span class="label label-warning" title="精华帖">精</span>
+                    {% endif %}
+                  </div>
+                  <div class="text-muted text-normal">
+                    {% if classroom %}
+                      <span>发表于{{ setting('classroom.name')|default("班级") }}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-muted">{{ classroom.title }}</a></span>
+                    {% else %}
+                      <span>{{ setting('classroom.name')|default("班级") }}已删除</span>
+                    {% endif %}
+                    <span class="bullet">•</span>
+                    {% if thread.postNum > 0 %}
+                      {% set poster = users[thread.lastPostUserId] %}
+                      <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
+                      ,
+                      <span>{{ thread.lastPostTime|smart_time }}</span>
+                      <span class="bullet">•</span>
+                    {% endif %}
+                    <span>{{ thread.hitNum }}浏览</span>
+                  </div>
+                </div>
+              </li>
+            {% else %}
+              {% if type == 'question' %}
+                <li class="empty">你还没提过问题</li>
+              {% else %}
+                <li class="empty">你还没发表过话题</li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <nav class="text-center">
+          {{ web_macro.paginator(paginator) }} 
+        </nav>
+        
+      {% else %}
+        
+        {% if type == 'question' %}
+          <div class="empty">您的{{ setting('classroom.name')|default("班级") }}中还没有{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}提问过...</div>
+        {% elseif type == 'discussion' %}
+          <div class="empty">您的{{ setting('classroom.name')|default("班级") }}中还没有{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}话题...</div>
+        {% endif %}
+        
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

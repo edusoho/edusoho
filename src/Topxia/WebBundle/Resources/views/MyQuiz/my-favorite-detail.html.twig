@@ -1,0 +1,66 @@
+<div class="clearfix"></div>
+<br>
+{% if question.type == 'fill' %}
+<div class="panel panel-default" style="display:none">
+
+	<div class="panel-body">
+		正确答案：{{ question.answer|join(', ') }}
+		<br>
+		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+	</div>
+
+</div>
+{% endif %}
+
+{% if question.type in ['single_choice', 'choice'] %}
+
+<div class="panel panel-default" style="display:none">
+	{% set keys = [] %}
+	{% set keys_answer = [] %}
+	<div class="panel-body">
+		<ul class="list-unstyled">
+			{% for key, choice in question.choices %}
+				<li>{{ choice.choiceIndex }}. {{ choice.content }}</li>
+
+				{% if key in question.answer %}
+					{% set keys = keys|merge([choice.choiceIndex]) %}
+				{% endif  %}
+				{% if key in question.testResult.answer|default([]) %}
+					{% set keys_answer = keys_answer|merge([choice.choiceIndex]) %}
+				{% endif %}
+
+			{% endfor %}
+		</ul>
+
+		正确答案：{{ keys|join(',') }}
+		<br>
+		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+	</div>
+
+</div>
+
+{% endif %}
+
+{% if question.type == 'determine' %}
+<div class="panel panel-default" style="display:none">
+
+	<div class="panel-body">
+		正确答案：{% if question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}
+		<br>
+		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+	</div>
+
+</div>
+{% endif %}
+
+{% if question.type == 'essay' %}
+<div class="panel panel-default" style="display:none">
+
+	<div class="panel-body">
+		正确答案：{{ question.answer[0]}}
+		<br>
+		{% if question.analysis != '' %}解析：{{ question.analysis }}{% endif %}
+	</div>
+
+</div>
+{% endif %}

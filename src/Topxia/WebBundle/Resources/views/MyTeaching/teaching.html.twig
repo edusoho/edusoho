@@ -1,0 +1,104 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}在教课程 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% set type="question" %}
+
+{% block main %}
+{# <div class="panel panel-default panel-col"> #}
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    <span class="pull-right">
+      <a id="create-course" href="{{ path('course_create') }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 创建课程</a>
+      {% if live_course_enabled %}
+        <a id="create-course" href="{{ path('course_create',{flag:'isLive'}) }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> 创建直播课程</a>
+      {% endif %}
+    </span>
+    在教课程
+  </div>
+
+  <div class="panel-body">
+
+    {% include 'TopxiaWebBundle:MyTeaching:course-tab.html.twig'%}
+
+    <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
+      <thead>
+      <tr>
+        <th width="50%">名称</th>
+        {% if filter == 'classroom' %}
+        <th >所属{{setting("classroom.name")|default("班级")}}</th>
+        {% else %}
+        <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数</th>
+        <th>价格(元)</th>
+        {% endif %}
+        <th>状态</th>
+        <th width="20%">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+          <tr>
+            <td>
+
+              <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
+                <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
+              </a>
+
+              <div class="mlm">
+                <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+                
+                {% if course.type == 'live' %}
+                  <span class="label label-success live-label">直播</span>
+                {% endif  %}
+
+                {% if filter == 'classroom' %} 
+                  {% set classroom = classrooms[course.id]|default(null) %}
+                  {% if not classroom %}
+                    <span class="label label-danger live-label mls">已移除</span>
+                  {% endif %}
+                {% endif %}
+              </div>
+
+            </td>
+            {% if filter == 'classroom' %}
+            <td>
+              {% set classroom = classrooms[course.id]|default(null) %}
+              {% if classroom %} 
+                <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+              {% endif %}
+            </td>
+            {% else %}
+            <td>{{ course.studentNum }}</td>
+            <td>{{ course.price }}</td>
+            {% endif %}
+            <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+            <td>
+              <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">管理</a>
+
+                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                  <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a></li>
+                  <li><a href="{{ path('course_manage_files', {id:course.id}) }}">文件管理</a></li>
+                  <li><a href="{{ path('course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}管理</a></li>
+                </ul>
+              </div>
+
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20">暂无在教的课程</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav> 
+  </div>
+</div>
+
+{% endblock %}

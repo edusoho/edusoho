@@ -1,0 +1,63 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}添加学员{% endblock %}
+{% block body %}
+
+<form id="student-create-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_student_create', {id:classroom.id}) }}">
+  {% if classroom.status == 'published' %}
+  	<div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-nickname">学员</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-nickname" name="queryfield" class="form-control" 
+        data-url="{{ path('classroom_manage_student_check',{id:classroom.id})}}" placeholder='邮箱/手机/用户名' >
+      	<div class="help-block">只能添加系统中已注册的用户</div>
+    	</div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="buy-price">购买价格</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="buy-price" name="price" value="0" class="form-control">
+        <div class="help-block">
+          本课程的价格为                         
+                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                             {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                          {% else %}
+                              {{ classroom.price }}元
+                          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-remark">备注</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-remark" name="remark" class="form-control">
+        <div class="help-block">选填</div>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}班级不能添加学员，请班级发布后再添加。</div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {% if classroom.status == 'published' %}
+    <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="正在保存..." data-user="{{default.user_name|default('学员')}}">保存</button>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('classroombundle/controller/classroom/student-create')</script>
+{% endblock %}

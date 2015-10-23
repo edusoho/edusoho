@@ -1,0 +1,19 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% if students %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{{'最新'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</h3>
+	</div>
+	<div class="panel-body">
+		<ul class="user-grids">
+		{% for  student in students %}
+			{% set user = users[student.userId] %}
+			<li>
+				{{ web_macro.user_avatar(user) }}
+				<p>{{ web_macro.user_link(user) }}</p>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+</div>
+{% endif %}

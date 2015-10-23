@@ -1,0 +1,54 @@
+body {
+  background-color: #eef0f3;
+}
+
+.container {
+  width: 640px;
+  margin: 60px auto;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.title {
+  margin: 0 40px 20px 40px;
+  padding-top: 40px;
+  font-size: 32px;
+}
+
+.message {
+  margin: 0 40px 40px 40px;
+  font-size: 16px;
+}
+
+.browsers {
+  margin: 0 40px 40px 40px;
+  border-top: 2px solid #618bbb;
+  padding: 18px 3px;
+}
+
+.browsers .head {
+  font-size: 14px;
+  margin-bottom: 10px;
+
+}
+
+
+.browser-chrome,
+.browser-firefox,
+.browser-ie {
+  background: transparent url(../img/base/browsers-in-alert.png) no-repeat 0 0;
+  display: inline-block;
+  width: 150px;
+  height: 45px;
+  zoom: 1;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.browser-firefox {
+  background-position: -150px 0px;
+}
+
+.browser-ie {
+  background-position: -300px 0px;
+}

@@ -1,0 +1,24 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}购买课程{% endblock %}
+
+{% block body %}
+
+<form id="course-repay-form" class="form-horizontal" method="post" action="{{ path('course_order_repay') }}">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="text-warning">您已有该课程未支付的订单，请点击支付完成购买！</div>
+    </div>
+  </div>
+  <input type="hidden" name="orderId" value="{{ order.id }}" />
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="course-pay" class="btn btn-primary" type="submit" data-toggle="form-submit" data-target="#course-repay-form">点击支付</button>
+    <a href="javascript:;" class="btn btn-primary cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消此订单</a>
+  <script>
+    app.load('course/repay');
+  </script>
+{% endblock %}

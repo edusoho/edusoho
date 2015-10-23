@@ -1,0 +1,9 @@
+<div class="class-item">
+  <div class="class-bg-layer"></div>
+  <div class="class-item-bg">
+    <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+    </a>
+    <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+  </div>
+</div>

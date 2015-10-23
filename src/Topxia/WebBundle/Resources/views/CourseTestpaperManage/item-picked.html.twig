@@ -1,0 +1,6 @@
+<table class="picked-items">
+{% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
+{% for question in subQuestions %}
+  {% include 'TopxiaWebBundle:CourseTestpaperManage:item-tr.html.twig' %}
+{% endfor %}
+</table>

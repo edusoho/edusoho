@@ -1,0 +1,42 @@
+{% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
+
+{% block title %} 第三方登录 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'binds' %}
+
+{% set settings = setting('login_bind', []) %}
+
+{% block main %}
+  {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}第三方登录{% endblock %}
+    {% block body %}
+      {{ web_macro.flash_messages() }}
+       <ul class="media-list">
+          {% for type, client in clients %} 
+          {% if settings[type ~ '_enabled']|default(false) and type != 'weixinmob' %}
+            <li class="media">
+              {% if client.large_icon_img|default(null) %}
+                <img src="{{ asset(client.large_icon_img) }}" class=" media-object pull-left">
+              {% endif %}
+              <div class="media-body">
+                {% if client.status|default(null) == 'bind' %}
+                  <a href="{{ path('settings_binds_unbind', {'type':type}) }}" class="unbind btn btn-default pull-right">取消绑定</a>
+                {% else %}
+                  <a href="{{ path('settings_binds_bind', {'type':type}) }}" class="bind btn btn-primary pull-right">绑定</a>
+                {% endif %}
+
+                <div>{% if type == 'weixinweb'%}微信登录{% else %}{{ client.name }}{% endif %}</div>
+                {% if client.status|default(null) == 'bind' %}
+                  <div class="text-success">已绑定</div>
+                {% else %}
+                  <div class="text-muted">未绑定</div>
+                {% endif %}
+
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %} 
+      </ul>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

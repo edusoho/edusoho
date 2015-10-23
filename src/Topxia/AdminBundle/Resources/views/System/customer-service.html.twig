@@ -1,0 +1,65 @@
+{% extends 'TopxiaAdminBundle:System:operation.layout.html.twig' %}
+
+{% block title %}在线客户服务 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'customer_service' %}
+{% set script_controller = 'setting/customer-service' %}
+
+{% block main_content %}
+
+<div class="page-header"><h1>在线客户服务</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form id="customer-service-setting" class="form-horizontal" method="post" novalidate>
+  
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label >在线客户服务</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('customer_service_mode', {'opened':'开启', 'closed':'关闭'}, customerServiceSetting.customer_service_mode) }}
+    </div>
+  </div>
+  <hr>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="customer_of_qq" >客服QQ</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="customer_of_qq" name="customer_of_qq" class="form-control" 
+        value="{{customerServiceSetting.customer_of_qq}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="customer_of_phone" >客服电话</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="customer_of_phone" name="customer_of_phone" class="form-control" 
+        value="{{customerServiceSetting.customer_of_phone}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="customer_of_mail" >客服Mail</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="customer_of_mail" name="customer_of_mail" class="form-control" 
+        value="{{customerServiceSetting.customer_of_mail}}">
+      </div>
+    </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>  
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

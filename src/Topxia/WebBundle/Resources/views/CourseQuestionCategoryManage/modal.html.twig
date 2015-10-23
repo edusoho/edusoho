@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set category = category | default(null)%}
+{% block title %}{% if category %}编辑题目类别{% else %}添加题目类别{% endif %}{% endblock %}
+
+{% block body %}
+  <form id="category-form" class="form-horizontal" action="
+  {% if category %}
+    {{ path('course_manage_question_category_update', {courseId:course.id, id:category.id}) }}
+  {% else %}
+    {{ path('course_manage_question_category_create', {courseId:course.id}) }}
+  {% endif %}" method="post">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="category-name-field">名称</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name|default('') }}" tabindex="1">
+      </div>
+    </div>
+
+    <input type="hidden" name="courseId" value="{{ course.id }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+  <div>
+
+  </div>
+
+  <script type="text/javascript"> app.load('quiz-question/category-creator') </script>
+{% endblock %}
+
+{% block footer %}
+
+    <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+  <button id="category-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">保存</button>
+{% endblock %}

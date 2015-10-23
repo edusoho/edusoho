@@ -1,0 +1,56 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set bodyClass = 'classroom-list-page bg-blank' %}
+{% set script_controller = 'classroombundle/controller/classroom/explore' %}
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if CategoryParent %}{{ ','}}{{ CategoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
+  {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
+    {% block title %}{{ categoryArray.name|default('全部')  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {% endblock %}
+
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        <i class="es-icon es-icon-viewcomfy"></i>
+        {{ setting('classroom.name')|default("班级") }}列表
+      </div>
+      <a class="btn btn-primary btn-lg more" href="{{ path('course_explore') }}">
+        查看课程
+      </a>
+    </div>
+  </div>
+  
+{% endblock %}
+{% block content %}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, path:'classroom_explore'})) }}
+  <div class="class-list row">
+    {% if classrooms %}
+      {% for classroom in classrooms %}
+        <div class="col-md-4 col-sm-6">
+          <div class="class-item">
+            <div class="class-img">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                <h3>{{ classroom.title }}</h3>
+                <div class="image-overlay"></div>
+              </a>
+            </div>
+            <div class="class-serve">
+              {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
+            </div>
+            <ul class="class-data clearfix">
+              <li><i class="es-icon es-icon-book"></i>{{allClassrooms[classroom.id].courseNum}}</li>
+              <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
+              <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
+            </ul>
+          </div>
+        </div>
+      {% endfor %}
+      
+    {% else %}
+      <div class="empty">目前暂时无{{ setting('classroom.name')|default("班级") }}</div>
+    {% endif %}
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

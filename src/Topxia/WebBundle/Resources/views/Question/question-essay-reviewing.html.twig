@@ -1,0 +1,43 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+<div class="question-eassy-form-control">
+	<div class="question-eassy-answer">
+		<strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}回答:
+		</strong>
+	</div>
+	<p>{% if itemResult.answer[0]|default(null) %}{{ itemResult.answer[0]|raw }}{% else %}未回答{% endif %}</p>
+
+</div>
+<div class="question-eassy-form-control">
+	 {% for rightAnswer in question.answer %}
+		   <div class="question-eassy-rightanswer"><strong>正确答案</strong></div> <p class="question-text-success">{{ rightAnswer|bbCode2Html|raw }}</p>
+	{% endfor %}
+
+</div>
+	{% set source = source|default('course') %}
+	{% if (source == 'classroom') %}
+  		{% set canHandle = classroom_permit(targetId, 'Handle') %}	
+	{% else %} 	
+  		{% set canHandle = app.user.isTeacher() %}
+	{% endif %}
+	{% if canHandle %}
+	<div  class="question-eassy-form-control question-teacher-say-input">
+		<div class="teacher-say-text">评语:</div>
+		<textarea class="form-control  teacher-say"  name="answer[{{ question.id }}]"  data-type="essay" data-question-id="{{ question.id }}"></textarea>
+	</div>
+	{% else %}
+		<div class="question-score">
+			<div class="question-result-title">老师正在批阅！</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

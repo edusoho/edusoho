@@ -1,0 +1,42 @@
+<li class="autumn-grid autumn-course-grid">
+  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture">
+    {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', '') }}
+    {% if course.status == 'draft' %}
+      <span class="label  label-warning course-status">未发布</span>
+    {% elseif course.status == 'closed' %}
+      <span class="label label-danger course-status">已关闭</span>
+    {% endif %} 
+
+    {% if course.serializeMode == 'serialize' %}
+      <span class="label label-success series-mode-label">更新中</span>
+    {% elseif course.serializeMode == 'finished' %}
+      <span class="label label-warning series-mode-label">已完结</span>
+    {% endif %}
+
+    {% if course.type == 'live' %}
+      {% set lesson = course['lesson']|default(null) %}
+      {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+        <span class="label label-warning series-mode-label">正在直播中</span>
+      {% else %}
+        <span class="label label-success series-mode-label">直播</span>
+      {% endif %}
+    {% endif %}
+  </a>
+  <h3 class="course-name"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h3>
+  <div class="course-about">{{ course.about|plain_text(60) }}</div>
+  
+  <div class="course-price-info">  
+    {% if setting('course.coursesPrice') == 0 %}
+      {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+    {% endif %}
+  </div>
+
+  <div class="course-metas">
+    <span class="teachers">
+       主讲:
+      {% for teacher in course.teachers %}
+       {{ web_macro.user_link(teacher, 'text-muted') }}
+      {% endfor %}
+    </span>
+  </div>
+</li>

@@ -1,0 +1,10 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}提示{% endblock %}
+{% block body %}
+  <div class="alert alert-info">购买该课程需要通过实名认证，您还没有完成实名认证，赶快去认证吧~</div>
+{% endblock %}
+
+{% block footer %}
+	<a href="{{ path('setting_approval_submit') }}" class="btn btn-primary">去认证</a>
+{% endblock %}

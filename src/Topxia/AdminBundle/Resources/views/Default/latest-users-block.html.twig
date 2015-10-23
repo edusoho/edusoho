@@ -1,0 +1,42 @@
+{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+<div class="col-md-6">
+ 	<div class="panel panel-default">
+	
+	 	<div class="panel-heading">
+	 		<h3 class="panel-title">{{'新注册用户'|trans}}</h3>
+	 	</div>
+
+    {% if users %}
+  		<table class="table table-condensed table-striped table-hover">
+        <thead>
+          <tr>
+            <th width="40%">{{'用户名'|trans}}</th>
+            <th width="25%" >{{'注册来源'|trans}}</th>
+            <th width="25%">{{'注册时间'|trans}}</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{% for user in users %}
+        		<tr>
+              <td>
+              	{{ admin_macro.user_link(user) }}
+              	<br>
+              	<span class="text-muted text-sm">{{ user.email }}</span>
+              </td>
+              <td>
+              	{{ dict_text('userType', user.type) }}
+              </td>
+              <td>
+              	<span class="text-sm">{{user.createdTime | date('Y-n-d H:i:s') }}</span>
+              	<br>
+              	<a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.createdIp }}" target="_blank">{{user.createdIp}}</a>
+              </td>
+        		</tr>
+        	{% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">{{'暂无新注册用户'|trans}}</div>
+    {% endif %}
+	</div>
+</div>

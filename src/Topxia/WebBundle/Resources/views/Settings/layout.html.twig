@@ -1,0 +1,48 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}个人设置 - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+      <div class="sidenav">
+        <ul class="list-group">
+          <li class="list-group-heading">个人设置</li>
+          {% set side_nav = side_nav|default(null) %}
+          
+          <li class="list-group-item {% if side_nav == 'profile' %}active{% endif %}">
+            <a href="{{ path('settings') }}"><i class="glyphicon glyphicon-user"></i> 基础信息</a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'avatar' %}active{% endif %}">
+            <a href="{{ path('settings_avatar') }}"><i class="glyphicon glyphicon-picture"></i> 头像设置</a>
+          </li>
+          
+          <li class="list-group-item {% if side_nav == 'security' %}active{% endif %}">
+            <a href="{{ path('settings_security') }}"><i class="glyphicon glyphicon-lock"></i> 安全设置</a>
+          </li>
+          
+
+          {#<li class="list-group-item {% if side_nav == 'password' %}active{% endif %}">
+            <a href="{{ path('settings_password') }}"><i class="glyphicon glyphicon-lock"></i> 登录密码修改</a>
+          </li>#}
+
+          <li class="list-group-item {% if side_nav == 'email' %}active{% endif %}">
+            <a href="{{ path('settings_email') }}"><i class="glyphicon glyphicon-envelope"></i> 邮箱设置</a>
+          </li>
+
+          {% if setting('login_bind', []).enabled|default(false) %}
+            <li class="list-group-item {% if side_nav == 'binds' %}active{% endif %}" >
+              <a href="{{ path('settings_binds') }}"><i class="glyphicon glyphicon-circle-arrow-right"></i> 第三方登录</a>
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

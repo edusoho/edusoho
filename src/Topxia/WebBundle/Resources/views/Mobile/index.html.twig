@@ -1,0 +1,70 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% set script_controller = 'mobile/index' %}
+
+{% block title %}移动学习 - {{ parent() }}{% endblock %}
+
+{% block full_content %}
+  <div class="es-mobile">
+    <div class="js-mobile-item mobile-first">
+      <div class="container">
+        <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
+        <div class="img-two hidden-xs">
+          <img class="img-two-bg" src="{{asset("assets/v2/img/mobile/phone_white_bg.png")}}" alt="">
+          {% if setting('mobile.appcover') %}
+          <img class="img-two-content" src="{{asset(setting('mobile.appcover'))}}" alt="">
+          {% else %}
+          <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
+          {% endif %}
+        </div>
+        <div class="mobile-content">
+          <div class="title">{{mobile.appname|default('阔知学堂')}}</div>
+          <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地')}}</div>    
+          <div class="label-mobile">{% if mobile.appname|default() %}仅需一步，轻松搞定！{% else %}仅需两步，轻松搞定！ {% endif %}</div>
+          <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">立即下载体验<i class="es-icon es-icon-keyboardarrowdown"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class=" mobile-second">
+      <div class="container">
+        <div class="step">
+          {% if mobile.appname|default() == '' %}<span class="member">1</span>{% endif %} 
+          扫描二维码，下载手机APP。
+        </div>
+        <div class="mobile-content row">
+          <div class="col-md-4 col-sm-6 col-xs-6">
+          {% if setting('mobile.applogo') %}
+          <img class="img-one" style="width:120px;height:120px" src="{{asset(setting('mobile.applogo'))}}" alt="">   
+          {% else %}
+          <img class="img-one" src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt=""> 
+          {% endif %}
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-6">
+            <img class="img-two" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
+          </div>
+          <div class="col-md-4">
+            <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn-android"><i class='es-icon es-icon-android'></i>Android 客户端</a>
+            <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" class="btn-apple"><i class='es-icon es-icon-apple'></i>iPhone客户端</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if mobile.appname|default() == ''%}
+    <div class="js-mobile-item mobile-third">
+      <div class="container">
+        <div class="step">
+          <span class="member">2</span> 打开阔知学堂APP，扫描网校二维码。
+        </div>
+        <div class="qrcode">
+          <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
+          <p>扫一扫登录客户端</p>
+        </div>
+        <img class="img-two hidden-xs" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
+      </div>
+      <div class="mobile-footer hidden-xs">
+        <div class="container"><img src="{{asset("assets/v2/img/mobile/phone_gui_shadow.png")}}" alt=""></div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}

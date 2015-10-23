@@ -1,0 +1,55 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% set replaceFor= replaceFor|default(null) %}
+
+{% block title %}试卷{% if replaceFor %}替换{% else %}添加{% endif %}题目{% endblock %}
+
+{% block body %}
+
+  <form id="testpaper-item-picker-form" class="form-inline well well-sm" action="{{ path('course_manage_testpaper_item_picker', {courseId:course.id, testpaperId:testpaper.id}) }}" novalidate>
+    <div class="form-group">
+      <select class="form-control" name="target" style="width:200px;height:32px;">
+        {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+    </div>
+
+    <input type="hidden" name="excludeIds" value="{{ conditions.excludeIds|join(',') }}">
+    <input type="hidden" name="type" value="{{ conditions.type }}">
+    <input type="hidden" name="replace" value="{{ replace }}">
+
+    <button class="btn btn-primary btn-sm">搜索</button>
+
+  </form>
+
+  <table class="table table-condensed" id="testpaper-item-picker-table">
+    <thead>
+    <tr>
+      <th width="45%">题干</th>
+      <th>类型</th>
+      <th>分值</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for question in questions %}
+        {% include 'TopxiaWebBundle:CourseTestpaperManage:item-pick-tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">无题目记录</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+  <script>app.load('testpaper/item-picker')</script>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" data-toggle="form-submit" data-target="#block-form">关闭</button>
+{% endblock %}

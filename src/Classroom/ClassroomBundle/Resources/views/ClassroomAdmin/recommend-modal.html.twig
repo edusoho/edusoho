@@ -1,0 +1,28 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}设置推荐班级{% endblock %}
+{% block body %}
+
+<form id="classroom-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:ref}) }}">
+  
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="number">序号</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="number" name="number" class="form-control" value="" data-widget-cid="widget-1" data-explain="请输入0-10000的整数">
+    <div class="help-block">请输入0-10000的整数(默认序号是100)</div></div>
+  </div>
+
+</form>
+{% endblock %}
+
+
+{% block footer %}
+  <button id = "classroom-recommend-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#classroom-recommend-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('classroombundle/controller/classroom-admin/recommend-modal')</script>
+{% endblock %}

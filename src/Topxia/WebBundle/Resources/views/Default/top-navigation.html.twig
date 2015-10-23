@@ -1,0 +1,21 @@
+{% for nav in navigations if nav.isOpen %}
+  {% set subNavs = nav.children|default([]) %}
+  {% if  loop.index == 6  and not isMobile|default(false) %}
+    <li class="nav-more nav-hover">
+      <a class="more">
+        <i class="es-icon es-icon-morehoriz"></i>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        {% for nav in navigations[5:]  if nav.isOpen %}
+          {% set subNavs = nav.children|default([]) %}
+
+          {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
+        {% endfor %}
+      </ul>
+    </li>
+  {% endif %}
+  
+  {% if loop.index < 6 or isMobile|default(false) %}
+    {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
+  {% endif %}
+{% endfor %}      

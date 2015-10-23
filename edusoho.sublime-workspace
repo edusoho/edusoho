@@ -1,0 +1,517 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tr",
+				"trans"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/Topxia/AdminBundle/Controller/BaseController.php",
+			"settings":
+			{
+				"buffer_size": 1308,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/exmetjan/桌面/dev.log",
+			"settings":
+			{
+				"buffer_size": 25462,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 38.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"gitdiff",
+				"Git: Diff"
+			],
+			[
+				"gitme",
+				"Git: Merge"
+			],
+			[
+				"gitmeg",
+				"Git: Merge"
+			],
+			[
+				"gitdif",
+				"Git: Diff"
+			],
+			[
+				"gitstat",
+				"Git: Status"
+			],
+			[
+				"merge",
+				"Git: Merge"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 601.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/exmetjan/www/edusoho",
+		"/home/exmetjan/www/edusoho/app",
+		"/home/exmetjan/www/edusoho/app/config",
+		"/home/exmetjan/www/edusoho/src",
+		"/home/exmetjan/www/edusoho/src/Topxia",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Controller",
+		"/home/exmetjan/www/edusoho/src/Topxia/Service",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views"
+	],
+	"file_history":
+	[
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Coin/coin-model.html.twig",
+		"/home/exmetjan/www/edusoho/app/config/parameters.yml",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/ArticleController.php",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Coin/coin-course-set.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Coin/coin-table-setting.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Coin/coin-table-vip.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Coin/coin-table-classroom.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Coin/coin-table-course.html.twig",
+		"/home/exmetjan/www/edusoho/src/Classroom/ClassroomBundle/Controller/ClassroomAdminController.php",
+		"/home/exmetjan/www/edusoho/CHANGELOG",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/App/cloud.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/OperationAnalysis/register.table.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Course/tr.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Course/course-recommend-tr.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/CloudSetting/video.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Block/block-visual-items.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Block/block-visual-edit.html.twig",
+		"/home/exmetjan/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/exmetjan/下载/Shadowsocks/gui-config.json",
+		"/home/exmetjan/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 48.0
+	},
+	"find_in_files":
+	{
+		"height": 136.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"login",
+			"getArticleService()",
+			"getCategoryService()",
+			"\"password\" : \"1\",",
+			"\"server_port\" : 30000,"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"\"password\" : \"z13B8o7uBy\",",
+			"\"server_port\" : 30279,"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/Topxia/AdminBundle/Controller/BaseController.php",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1308,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								546,
+								546
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content"
+							],
+							"is_xml": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/exmetjan/桌面/dev.log",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 25462,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25462,
+								25462
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content"
+							],
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 8652.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 36.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git-merge":
+	{
+		"height": 176.0
+	},
+	"output.git-pull":
+	{
+		"height": 176.0
+	},
+	"pinned_build_system": "",
+	"project": "edusoho.sublime-project",
+	"replace":
+	{
+		"height": 68.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"adminbundle/resources/views/coin/coin-model.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Coin/coin-model.html.twig"
+			],
+			[
+				"coin-table-vip.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Coin/coin-table-vip.html.twig"
+			],
+			[
+				"coin-table-classroom.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Coin/coin-table-classroom.html.twig"
+			],
+			[
+				"coin-table-course.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Coin/coin-table-course.html.twig"
+			],
+			[
+				"coin-table-setting.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Coin/coin-table-setting.html.twig"
+			],
+			[
+				"adminbundle/resources/views/coin/coin-course-set.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Coin/coin-course-set.html.twig"
+			],
+			[
+				"src/topxia/adminbundle/resources/views/app/cloud.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/App/cloud.html.twig"
+			],
+			[
+				"adminbundle/resources/views/operationanalysis/register.table.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/OperationAnalysis/register.table.html.twig"
+			],
+			[
+				"adminbundle/resources/views/course/tr.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Course/tr.html.twig"
+			],
+			[
+				"resources/views/course/course-recommend-tr.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Course/course-recommend-tr.html.twig"
+			],
+			[
+				"adminbundle/resources/views/cloudsetting/video.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/CloudSetting/video.html.twig"
+			],
+			[
+				"adminbundle/resources/views/block/block-visual-items.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Block/block-visual-items.html.twig"
+			],
+			[
+				"adminbundle/resources/views/app/cloud.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/App/cloud.html.twig"
+			],
+			[
+				"adminbundle/resources/views/block/block-visual-edit.html.twig",
+				"src/Topxia/AdminBundle/Resources/views/Block/block-visual-edit.html.twig"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "bi",
+		"selected_items":
+		[
+			[
+				"bi",
+				"~/www/biligplus/biligplus.sublime-project"
+			],
+			[
+				"m",
+				"~/www/meten/meten.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 296.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

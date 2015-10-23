@@ -1,0 +1,9 @@
+<div class="ui-content">
+ 	<h3 class="subtitle blod ui-nowrap">{{ article.title}}</h3>
+ 	<h6 class="title">
+ 		<span class="ui-txt-info">{{ article.publishedTime|date('Y-m-d H:i') }}</span>
+ 		<span >{{ article.source}}</span> 
+ 		<span class="ui-txt-highlight">阅读 {{ article.hits }}</span>
+ 	</h6>
+ 	<p class="content-body">{{ article.body | raw}}</p>
+</div>

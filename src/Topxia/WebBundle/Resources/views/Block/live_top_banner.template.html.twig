@@ -1,0 +1,3 @@
+{% for imglink in carousel|default(null) if imglink.src|default('') %}
+  <a href="{{ imglink.href|default('') }}"><img src="{{ asset(imglink.src) }}" /></a>
+{% endfor %}

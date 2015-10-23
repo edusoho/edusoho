@@ -1,0 +1,55 @@
+{% if canManage %}
+  <ul class="list-group">
+    <li class="list-group-item {% if side_nav == 'main' %}active{% endif %}">
+      <a href="{{ path('classroom_manage', {id:classroom.id}) }}">管理首页</a>
+    </li>
+  </ul>
+  
+  <ul class="list-group">
+    <li class="list-group-heading">{{ setting('classroom.name')|default("班级") ~ '设置' }}</li>
+    <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_set_info', {id:classroom.id}) }}">基本信息 {% if classroom.about is empty %}<span class="label label-info">未完善</span>{% endif %}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'price' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_set_price', {id:classroom.id}) }}">价格设置</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
+    <a href="{{ path('classroom_manage_set_picture', {id:classroom.id}) }}">封面图片 {% if classroom.smallPicture is empty %}<span class="label label-info">未设置</span>{% endif %}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'service' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_service', {id:classroom.id}) }}">服务设置</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'headTeacher' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_headteacher', {id:classroom.id}) }}">班主任设置</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_teachers', {id:classroom.id}) }}">教师设置</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'assistant' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_assistants', {id:classroom.id}) }}">助教设置</a>
+    </li>
+    
+  </ul>
+{% endif %}
+
+<ul class="list-group">
+  <li class="list-group-heading">{{ setting('classroom.name')|default("班级") ~ '管理' }}</li>
+  {% if canManage %}
+    <li class="list-group-item {% if side_nav == 'courses' %}active{% endif %}"><a href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">课程管理</a></li>
+    <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">学员管理</a>
+    </li>
+  {% endif %}
+
+  {% if canHandle %}
+    <li class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}">
+      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">试卷批阅</a>
+    </li>
+   
+    {% if is_plugin_installed('Homework') %}
+      <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
+        <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">作业批改</a>
+      </li>
+    {% endif %}
+  {% endif %}
+</ul>

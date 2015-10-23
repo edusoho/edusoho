@@ -1,0 +1,65 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'兑换'|trans}}{% endblock %}
+{% block body %}
+
+<form id="change-form" class="form-horizontal" method="post" action="{{path('coin_change')}}">
+
+  <div class="row form-group">
+    <div class="col-md-3 control">
+      <label for="amount">{{'可兑换金额'|trans}}({{'元'|trans}}):</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{changeAmount}}</label>
+    </div>
+
+    <div class="col-md-3 control">
+      <label for="amount">{{'已兑换'|trans}}:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{amount-changeAmount}}</label>
+    </div>
+
+  </div>
+  <div class="table-responsive">
+  <table class="table table-striped">
+    <tr>
+      <th>{{'消费赠送'|trans}}</th>
+      <th>{{'赠送'|trans}}{{setting('coin.coin_name')}}</th>
+    </tr>
+    {% for data in data%}
+    <tr>
+      <td>{{data.send}}</td><td>{{data.sendAmount}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% if not data %}
+    <div class="empty">{{'暂无可兑换信息'|trans}}</div>
+  {% endif %}
+</div>
+  <div class="row form-group">
+    <div class="col-md-3 control">
+      <label for="amount">{{'消费'|trans}}:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{changeAmount-canUseAmount}}</label>
+    </div>
+    <div class="col-md-3 control">
+      <label for="amount">{{'累计赠送'|trans}}:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="money-text">{{canChange}}</label>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#change-form">{{'兑换'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+{% endblock %}

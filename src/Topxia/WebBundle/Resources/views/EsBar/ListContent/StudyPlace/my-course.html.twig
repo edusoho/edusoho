@@ -1,0 +1,36 @@
+{% extends 'TopxiaWebBundle:EsBar:ListContent/study-place.html.twig' %}
+{% set esBarMenu = 'course' %}
+{% block myStudyPlace %}
+{% if courses %}
+  <!-- 课程 -->
+  <div class="course-list">
+    {% set courseCount = 15 %}
+    {% for course in courses %}
+      {% set courseCount = loop.length %}
+      <div class="course-item">
+        <div class="course-img">
+          <a target="_blank" href="{{ path('course_show', {id:course.id}) }}">
+            <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}">
+          </a>
+        </div>
+        <div class="progress progress-xs">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{ course.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ course.percent }}%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
+          </div>
+        </div>
+        <div class="course-info">
+          <div class="title">
+            <a target="_blank" class="link-dark" href="{{ path('course_show', {id:course.id}) }}">
+              {{ course.title }}
+            </a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    {% if courseCount >= 15 %}
+      <p class="text-center"><a class="link-light" href="{{ path('my_courses_learning') }}" target="_blank">更多<i class="es-icon es-icon-angledoubleright"></i></a></p>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="empty">暂无课程</div>
+{% endif %}
+{% endblock %}

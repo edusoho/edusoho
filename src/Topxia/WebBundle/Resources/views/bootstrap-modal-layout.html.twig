@@ -1,0 +1,13 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">{% block title %}{% endblock %}</h4>
+    </div>
+    <div class="modal-body">{% block body %}{% endblock %}</div>
+    {% if not hide_footer|default(false) %}
+      <div class="modal-footer">{% block footer %}{% endblock %}</div>
+    {% endif %}
+  </div>
+</div>

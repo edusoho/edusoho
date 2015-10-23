@@ -1,0 +1,28 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% if reviews %}
+	<div class="es-box">
+		<div class="es-box-heading"><h2>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'评价'|trans}}</h2></div>
+	<ul class="media-list latest-review-list">
+		{% for review in reviews %}
+		  {% set author = users[review.userId]|default(null) %}
+		  {% set course = courses[review.courseId]|default(null) %}
+		  {% if author and course %}
+			  <li class="media">
+
+			  	{{ web_macro.user_avatar(author,'author-picture-link','author-picture') }}
+			  	{{ web_macro.user_link(author, 'author-nickname')}}
+
+			  	<span class="text-muted">{{'说：'|trans}}</span> <br>
+			  	<div class="review-content">{{ review.content|plain_text(50) }}</div>
+
+				  <div class="review-footer">
+					  <a href="{{ path('course_show', {id:course.id}) }}" class="course-title"> 《 {{ course.title }} 》</a>
+					  <span class="divider"></span>
+					  <span class="stars-{{review.rating }}">&nbsp;</span>
+				  </div>
+			  </li>
+		  {% endif %}
+		{% endfor %}
+	</ul>
+	</div>
+{% endif %}

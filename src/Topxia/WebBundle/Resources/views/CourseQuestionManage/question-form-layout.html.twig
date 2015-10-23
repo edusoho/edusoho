@@ -1,0 +1,137 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{% if question.id %}编辑{% else %}添加{% endif %}题目 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'question' %}
+{% set script_controller = 'quiz-question/create' %}
+
+{% block main %}
+
+{% set parentQuestion = parentQuestion|default(null) %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading clearfix">
+    题目管理
+  </div>
+  <div class="panel-body">
+
+    <ol class="breadcrumb">
+      <li><a href="{{ path('course_manage_question',{courseId:course.id}) }}">题目管理</a></li>
+      {% if parentQuestion %}
+        <li><a href="{{ path('course_manage_question',{courseId:course.id, parentId: parentQuestion.id}) }}">{{ dict_text('questionType', parentQuestion.type) }}</a></li>
+      {% endif %}
+      <li class="active">{% if question.id %}编辑{% else %}添加{% endif %}题目</li>
+    </ol>
+    
+    <div id="question-creator-widget"
+      data-upload-url="{{ path('course_manage_question_upload', {courseId:course.id, type:question.type}) }}"
+      data-media-upload-params-url="{{ path('uploadfile_params', {targetType:'question', targetId:0}) }}"
+      data-media-upload-callback-url="{{ path('uploadfile_cloud_callback', {targetType:'question', targetId:0}) }}"
+
+      >
+      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" 
+          action="{% if question.id %}{{ path('course_manage_question_update',{courseId:course.id, id:question.id, goto:app.request.get('goto')}) }}{% else %}{{ path('course_manage_question_create',{courseId:course.id, type:question.type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}"
+          >
+        {{ web_macro.flash_messages() }}
+
+        {% if not parentQuestion %}
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>从属</label></div>
+          <div class="col-md-8 controls">
+            <select class="form-control width-input width-input-large" name="target" data-role="target">
+              {{ select_options(targetsChoices, question.target|default(null)) }}
+            </select>
+            <div class="help-block">可以针对本课程或者某个课时出题</div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>难度</label></div>
+          <div class="col-md-8 controls radios">
+            {{ radios('difficulty', {'simple':'简单', 'normal':'一般', 'difficulty':'困难'}, question.difficulty | default('normal')) }}
+          </div>          
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label for="question-stem-field">{{ question_stem_label|default('题干') }}</label></div>
+          <div class="col-md-8 controls">
+            <textarea class="form-control" id="question-stem-field" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
+            {% set question_stem_help = question_stem_help|default('') %}
+            {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
+          </div>
+          <div class="col-md-2 webuploader-for-glyphicon" style="padding-left:0;">
+            <div id="question-stem-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-picture"></i></div>
+            {% if enabledAudioQuestion|default(null) %}
+              <div id="question-stem-audio-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-volume-up"></i></div>
+            {% endif %}
+          </div>
+        </div>
+
+        {% block question_extra_fields %}{% endblock %}
+
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls ">
+              <a data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; 显示/隐藏 高级选项 ...</a>
+          </div>
+        </div>
+        
+        <div id="advanced-collapse" class="advanced-collapse collapse">
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-analysis-field">解析</label></div>
+            <div class="col-md-8 controls">
+                <textarea class="form-control" id="question-analysis-field" name="analysis">{{ question.analysis|default('') }}</textarea>
+            </div>
+            <div class="col-md-2" style="padding-left:0;">
+              <div id="question-analysis-uploader" class="btn btn-sm btn-default  webuploader-container" data-role="analysis-uploader" data-target="#question-analysis-field"><i class="glyphicon glyphicon-picture"></i></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="question-score-field">分值</label></div>
+            <div class="col-md-4 controls">
+              <input class="form-control" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
+            </div>
+          </div>
+
+          <!-- <div class="form-group">
+            <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
+            <div class="col-md-8 controls">
+                <select class="form-control width-input width-input-large" name="categoryId" data-role="category">
+                  {{ select_options(categoryChoices, question.categoryId|default(0), '请选择类别') }}
+                </select>
+            </div>
+          </div> -->
+
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-2 controls">
+            {% block question_buttons %}
+              {% if not question.id %}
+                <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="continue">保存并继续添加</button>
+              {% endif %}
+              <button type="submit" data-role="submit" class="btn btn-primary submit-btn" data-submission="submit">保存</button>
+            {% endblock %}
+            <a href="{{ path('course_manage_question', {courseId:course.id, parentId:parentQuestion.id|default(0)}) }}" class="btn btn-link">返回</a>
+          </div>
+        </div>
+
+        <input type="hidden" name="submission">
+        <input type="hidden" name="type" value="{{ question.type }}">
+        <input type="hidden" name="parentId" value="{{ parentQuestion.id|default(0) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+
+    </div>
+    
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+ 

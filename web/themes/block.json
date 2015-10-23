@@ -1,0 +1,74 @@
+{
+    "bill_banner":
+    {
+        "title": "我的账户Banner",
+        "category": "system",
+        "templateName": "TopxiaWebBundle:Block:bill_banner.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "图片",
+                "desc": "建议使用800x170大小的图片，只能设置添加１张图片。",
+                "count": 1,
+                "type": "imglink",
+                "default": [
+                    {  
+                        "src": "\/assets\/img\/placeholder\/banner-wallet.png",
+                        "alt": "图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    }
+                ]
+            }
+        }
+    },
+
+    "live_top_banner":
+    {
+        "title": "直播频道 - 首页 - 头部轮播图",
+        "category": "system",
+        "templateName": "TopxiaWebBundle:Block:live_top_banner.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "轮播图",
+                "desc": "建议使用715x310大小的图片，最多可设置５张图片。",
+                "count": 5,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt": "轮播图１图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-2.jpg",
+                        "alt": "轮播图２图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt": "轮播图3图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-2.jpg",
+                        "alt": "轮播图4图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt": "轮播图5图片描述",
+                        "href": "#",
+                        "target": "_self"
+                    }
+                ]
+            }
+        }
+    }
+ 
+}

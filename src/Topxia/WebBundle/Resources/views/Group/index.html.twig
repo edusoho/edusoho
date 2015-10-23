@@ -1,0 +1,99 @@
+{% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
+{% block title %}小组 {{ parent() }}{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          热门小组
+          <a href="{{path('group_search_group')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+        </div>
+        <div class="panel-body">
+          <div class="row group-grids">
+            {% for group in activeGroup %}
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 grid">
+                <p>
+                  <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+                    <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-sm">
+                  </a>
+                </p>
+                <p class="title"><a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" >{{group.title}}</a></p>
+              </div>
+            {% else %}
+              <div class="empty">暂无小组信息！</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">最近话题</div>
+        <div class="panel-body">
+          {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
+          threads:recentlyThread,
+          groups:groupinfo,
+          users:owners,
+          }%}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      {% if user.id %}
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="media">
+              <div class="media-left">
+                {{ web_macro.user_avatar(user, '','avatar-md') }}
+              </div>
+              <div class="media-body">
+                <p>{{ web_macro.user_link(user , 'link-light') }}</p>
+                <div class="metas">
+                  <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
+                  {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path ('group_add') }}" class="btn btn-primary btn-xs btn-default active" role="button">创建小组</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <form class="mbl" action="{{path('group_search_group')}}" method="get">
+        <div class="input-group group-search">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input type="text" class="form-control" placeholder="小组搜索" name="keyWord">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div>
+      </form>
+      {% if myJoinGroup %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            我的小组
+            {% if user.id %} 
+              <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="more">
+              <i class="es-icon es-icon-morehoriz"></i></a>
+            {% endif %}
+          </div>
+          <div class="panel-body">
+            <div class="row group-grids">
+              {% for group in myJoinGroup %}
+                <div class="col-lg-3 col-md-4 col-sm-2 col-xs-4 grid">
+                  <p>
+                    <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+                      <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-sm">
+                    </a>
+                  </p>
+                  <p class="title">
+                    <a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                  </p>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% include 'TopxiaWebBundle:Group:new-group-list.html.twig' %}
+    </div>
+  </div>
+{% endblock %}

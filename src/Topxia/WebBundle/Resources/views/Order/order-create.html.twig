@@ -1,0 +1,91 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %} 订单确认 - {{ parent() }}{% endblock %}
+{% set script_controller = 'order/create' %}
+
+{% block esBar %}{% endblock %}
+
+{% block content %}
+<div class="order-pay">
+  <div class="order-nav hidden-xs clearfix">
+    <div class="on">确认订单<b></b></div>
+    <div><span></span>订单支付<b></b></div>
+    <div><span></span>订单完成</div>
+  </div>
+  <div class="es-section">
+    <div class="section-header"><h1>订单确认</h1></div>
+    <div class="order-pay-body">
+      <form id="order-create-form" method="post" action="{{path('order_create')}}">
+        <input type="password" style="display:none">
+      	{% if order|default(null) %}
+        <input type="hidden" name="orderId" value="{{order.id}}"/>
+        {% endif %}
+      	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
+        data-price-type = "{{priceType|default('RMB')}}"/>
+        <input type="hidden" name="targetType" value="{{targetType}}"/>
+        <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
+        <input type="hidden" name="targetId" value="{{targetId}}"/>
+        <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
+        <input type="hidden" name="shouldPayMoney" value=""/>
+        <input type="hidden" name="sms_code" value=""/>
+        <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <div class="order-detail-bg">
+        {% if targetType == "course" and course|default(null) %}
+          {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
+        {% endif %}
+        {% if targetType == "vip" %}
+          {% include 'TopxiaWebBundle:Order:vip.html.twig' %}
+        {% endif %}
+        {% if targetType == "classroom" %}
+          {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
+        {% endif %}
+        </div>
+
+        {% if (is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false)) or setting('coin.coin_enabled') %}
+        <div class="order-detail-bg">
+
+        {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) %}
+        	{% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
+        {% endif %}
+
+        {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) and setting('coin.coin_enabled') %}
+        <div class="divider-line"></div>
+        {% endif %}
+
+        {% if setting('coin.coin_enabled') %}
+        	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
+        {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+          <div class="total-price">
+            应付金额：
+            {% if priceType|default('RMB') == "Coin" %}
+              <span role="pay-coin">0</span> {{setting("coin.coin_name")}} ÷ 汇率({{cashRate|default(1)}}) = <span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb"></span> 元
+            {% else %}
+              <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span> 
+            {% endif %}
+          </div>
+        </div>
+        <div class="form-group text-right">
+          <a 
+            {% if targetType == "course" and course|default(null) %}
+              href="{{ path('course_show', {id:course.id}) }}" 
+            {% elseif targetType == "vip" %}
+              href="{{ path('vip_renew') }}"
+            {% elseif targetType == "classroom" %}
+              href="{{ path('classroom_show', {id:classroom.id}) }}"
+            {% endif %}
+            class="btn btn-link" style="">取消</a>
+          {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %} 
+            <a class="btn btn-primary" id="js-order-create-sms-btn" data-toggle="modal" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" >提交订单</a>
+          {% else %}
+            <button class="btn btn-primary" id="order-create-btn" type="submit">提交订单</button>          
+          {% endif %} 
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

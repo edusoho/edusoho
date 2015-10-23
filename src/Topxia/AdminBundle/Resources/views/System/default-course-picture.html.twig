@@ -1,0 +1,35 @@
+
+<div class="form-group" id="course-picture-class" 
+{% if setting('default.defaultCoursePicture') == 0 %}
+style="display:none;"
+{% endif %}
+>
+<div class="col-md-8 control-label"><b>自定义默认课程图片</b></div>
+  <form id="course-picture-form" method="post" >
+    <div class="controls col-md-8 controls">
+      <img src="{{ system_default_path('course.png' ) }}">
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">      
+        <a id="default-course-picture-btn"
+        data-upload-token="{{ upload_token('system', 'image') }}"
+        data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
+        class="btn btn-default btn-sm">上传</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="form-group" id="system-course-picture-class" 
+{% if setting('default.defaultCoursePicture') == 1 %}
+style="display:none;"
+{% endif %}
+>
+  <div class="col-md-8 control-label"><b>系统默认课程图片</b></div>
+    <div class="controls col-md-8 controls">
+      <img src="{{ asset('assets/img/default/course.png') }}">
+    </div>
+</div>
+

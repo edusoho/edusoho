@@ -1,0 +1,38 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<tr id="student-{{ user.id }}-tr">
+  <td class="media" style="vertical-align: middle;">
+    {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
+    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+    {% if student.remark %}
+      <span class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
+    {% endif %}
+    <div class="text-muted text-sm">加入时间：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+  </td>
+  <td style="vertical-align: middle;">
+    {% if role == 'student' %}
+      <div class="progress mvm" title="已学{{ progress.number }}课程">
+        <div class="progress-bar" style="width: {{ progress.percent }}" data-toggle="tooltip" data-placement="right" data-original-title="{{ progress.percent }}">
+        </div>
+      </div>
+    {% endif %}
+  </td>
+  <td style="vertical-align: middle;">
+    <div class="btn-group">
+      {% if app.user.id != user.id %}
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+      {% endif %}
+      {% if app.user.isAdmin() %}
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', {courseId:classroom.id, userId:user.id})}}">查看资料</button>
+      {% elseif setting("course.buy_fill_userinfo") %}
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_defined_show', {courseId:classroom.id, userId:user.id}) }}">查看资料</button>
+      {% endif %}
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">管理
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id})}}">备注</a></li>
+        <li><a class="student-remove" href="javascript:;" data-url="{{path('classroom_manage_student_remove', {classroomId:classroom.id, userId:user.id})}}" data-user="{{default.user_name|default('学员')}}">移除</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

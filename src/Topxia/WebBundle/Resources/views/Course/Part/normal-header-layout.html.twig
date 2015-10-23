@@ -1,0 +1,20 @@
+<section class="course-detail-header {{ layoutClass|default('') }}">
+  <div class="container">
+
+    {% block before_content %}{% endblock %}
+
+    <div class="es-section clearfix">
+      {% block content %}{% endblock %}
+
+      {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('course_manage', {id:course.id}) }}" class="btn btn-default setting hidden-xs hidden-sm" title="{{'课程管理'|trans}}">
+          <i class="es-icon es-icon-setting"></i>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% block after_content %}{% endblock %}
+
+

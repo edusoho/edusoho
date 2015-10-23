@@ -1,0 +1,31 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'classroombundle/controller/classroom-admin/recommend-list' %}
+{% set menu = 'admin_classroom_recommend' %}
+
+{% block main %}
+
+  <table class="table table-striped table-hover" id="classroom-table">
+    <thead>
+    <tr>
+      <th>顺序号</th>
+      <th width="50%">班级名称</th>
+      <th>创建时间</th>
+      <th>推荐时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for classroom in classrooms %}
+        {% include 'ClassroomBundle:ClassroomAdmin:recommend-tr.html.twig' %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">暂无推荐班级</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }} 
+  </nav>
+
+{% endblock %}

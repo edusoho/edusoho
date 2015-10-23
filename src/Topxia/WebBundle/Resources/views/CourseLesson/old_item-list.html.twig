@@ -1,0 +1,118 @@
+{% set learnStatuses = learnStatuses|default([]) %}
+{% set experience = experience|default(false) %}
+<div class="course-item-list-wrap">
+	{% set class = class|default('') %}
+	<ul class="course-item-list {{ class }} " id="course-item-list" >
+		{% for id, item in items %}
+		  {% if 'chapter' in id %}
+		    {% if item.type == 'unit' %}
+				  <li class="item chapter-item chapter-item-unit clearfix">
+				  	<span class="name">第 {{ item.number }} {% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}</span>
+				  	<span class="title">{{ item.title }}</span>
+		  	  </li>
+		    {% else %}
+				  <li class="item chapter-item clearfix">
+				  	<span class="name">第 {{ item.number }} {% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}</span>
+				  	<span class="title">{{ item.title }}</span>
+		  	  </li>
+		    {% endif %}
+		  {% elseif 'lesson' in id %}
+	    	  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+		    <li class="item lesson-item {% if learnStatuses[item.id]|default(null) %}lesson-item-{{ learnStatuses[item.id] }}{% endif %} lesson-item-{{item.id}} hover-item clearfix " data-id="{{ item.id }}" data-num="{{loop.index}}">
+		    	{% if item.status == 'published' %}	    	
+			    	{% if item.type == 'video' %}
+				    	<span class="type" title="视频时长{{ item.length|duration }}">
+				    		<span>{{ item.length|duration }}</span>
+				    		<i class="fa fa-file-video-o"></i>
+				    	</span>
+				    {% elseif item.type == 'audio' %}
+				      <span class="type" title="音频时长{{ item.length|duration }}">
+			    		<span>{{ item.length|duration }}</span>
+			    		<i class="fa fa-file-audio-o"></i>
+				      </span>
+				    {% elseif item.type == 'text' %}
+				      <span class="type">图文 <i class="fa fa-file-photo-o"></i></span>
+				    {% elseif item.type == 'testpaper' %}
+				      <span class="type">试卷 <i class="fa fa-file-text-o"></i></span>
+				    {% elseif item.type == 'ppt' %}
+				      <span class="type">PPT <i class="fa fa-file-powerpoint-o"></i></span>
+	    		    {% elseif item.type == 'document' %}
+				      <span class="type">文档 <i class="fa fa-files-o"></i></span>
+			      	{% elseif item.type == 'flash' %}
+				      <span class="type">Flash <i class="fa fa-film"></i></span>
+				    {% elseif item.type == 'live' %}
+				      <span class="type">&nbsp;<i class="fa fa-video-camera"></i></span>
+				       	{% if item.startTime > currentTime %}
+							<small class="type">{{ item.startTime|date('m月d日') }} 
+								{% for key,week in weeks %}
+									{% if key == item.startTime|date('w')  %}
+										星期{{ week }}
+									{% endif %}
+							    {% endfor %}
+								{{ item.startTime|date('H：i') }}
+							</small>
+						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
+							<small class="type">正在直播中</small>
+						{% elseif item.endTime < currentTime %}
+
+							<small class="type" >
+					    		{% if item.replayStatus == 'generated' %}
+					    		<span class="type">回放</span>
+					    		<span class="glyphicon 
+					    		glyphicon-play-circle"></span>
+					    		{% else %}
+					    		<span class="type">直播结束</span>
+					    		{% endif %}
+					    	</small>
+							
+						{% endif %}
+				    {% endif %}
+			    {% else %}
+			      	<span class="status">未发布</span>
+			    {% endif %}
+
+		    	<span class="name ">课时{{ item.number }}</span>
+		    	<span class="pie ">&nbsp;</span>
+		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
+			    	{{ item.title }} 
+			    	{% if item.type != 'text' and item.type != 'live' and item.type != 'testpaper' %}
+			    		{% if item.mediaId != 0 and not (files[item.mediaId]|default(false)) and show|default(false) %}
+							<span class="label label-danger fileDeletedLesson" title="课时文件已删除" >无效课时</span>
+						{% endif %}
+					{% endif %}
+
+				    {% if (item.id in homeworkLessonIds|default(null)) or (item.id in exercisesLessonIds|default(null)) %}
+							<span class="glyphicon  glyphicon-list-alt" title="作业、练习"></span>
+				    {% endif %}
+
+				    {% if item.materialNum > 0 %}
+				      <span class="glyphicon  glyphicon-download" title="资料"></span>
+				    {% endif %}
+
+				    {% if item.giveCredit > 0 %}
+				      <small class="text-muted">({{ item.giveCredit }}学分)</small>
+				    {% endif %}
+
+				    {% if item.requireCredit > 0 %}
+				      <small class="text-muted">(需{{ item.requireCredit }}学分)</small>
+				    {% endif %}
+						
+						{% if setting('magic.lesson_watch_limit') 
+								and course.watchLimit > 0 
+								and item.type == 'video'
+								and showWatchLimit|default(false) %}
+							{% set limitNum = course.watchLimit - lessonLearns[item.id].watchNum|default(0) %}
+							{% if limitNum > 0 %}
+							  &nbsp;&nbsp;<span style="color:#E79022">(还可观看{{ limitNum }}次)</span>
+							{% else %}
+								&nbsp;&nbsp;<span class="text-danger">(已无观看次数)</span>
+							{% endif %}
+							
+						{% endif %}
+		    	</a>
+		    	<button class="btn btn-success btn-mini action">开始学习</button>
+		    </li>
+		  {% endif  %}
+		{% endfor %}
+	</ul>
+</div>

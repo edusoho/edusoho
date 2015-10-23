@@ -1,0 +1,39 @@
+  {% extends 'ClassroomBundle:ClassroomManage:students.html.twig' %}
+
+{% block title %}旁听生管理 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'aduitor' %}
+
+{% set script_controller = 'classroombundle/controller/classroom/students' %}
+
+{% block maincontent %}
+ <div class="alert alert-info "><i class="es-icon es-icon-infooutline mrm"></i>旁听生是班级的潜在购买者,只能参加该班级下的话题互动。</div>
+  <form class="form-inline well well-sm " action="" method="get" novalidate>
+    <div class="form-group">
+      <input class="form-control " type="text" placeholder="请输入用户名" name="nickName" value="{{ app.request.get('nickName') }}">
+
+      <button class="btn btn-primary">搜索</button>
+    </div>
+    <div class="clearfix"></div>
+  </form>
+  
+  <table class="table table-striped" id="course-student-list">
+    <thead>
+      <tr>
+        <th width="40%">旁听生</th>
+         <th width="30%"></th>
+        <th width="30%">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+       {% for student in students %}
+        {% set user = users[student.userId] %}
+        {% include 'ClassroomBundle:ClassroomManage:tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">无学员记录</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

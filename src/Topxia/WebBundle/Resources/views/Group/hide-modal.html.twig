@@ -1,0 +1,42 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% block title %}查看隐藏帖{% endblock %}
+{% block body %}
+
+<form id="hide-form" class="form-horizontal" method="post" action="{{path('group_thread_hide',{threadId:threadId})}}">
+
+  <div class="row form-group">
+    <div class="col-md-3 col-md-offset-2 control">
+      <label class="control-label"> 账户余额:</label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="control-label" id="canUse" data-val="{{account.cash|default(0)}}">{{account.cash|default(0)}}</label>
+    </div>
+
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 col-md-offset-2 control">
+      <label for="amount" class="control-label"> 所需{{setting('coin').coin_name}}:
+      </label>
+    </div>
+    <div class="col-md-3 controls">
+       <label class="control-label" name="amount" id="amount">{{need}} {% if need > account.cash|default(0)%}<a href="{{path('my_coin_buy')}}" class="mll" style="color: #428bca;">充值</a>{% endif %}</label>
+    </div>
+
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+{% endblock %}
+
+{% block footer %}
+  <script>
+    app.load('group/hide-modal');
+  </script>
+  
+  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="{% if need > account.cash|default(0)%}disabled{% endif %} btn btn-primary pull-right" data-toggle="form-submit" data-target="#hide-form">立即查看</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+{% endblock %}

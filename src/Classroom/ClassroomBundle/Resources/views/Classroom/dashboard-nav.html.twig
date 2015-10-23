@@ -1,0 +1,26 @@
+<div class="nav-btn-tab">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="{% if nav == 'introduction' %}active{% endif %}"><a  href="{{ path('classroom_introductions', {id:classroom.id}) }}">介绍</a></li>
+
+    <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">课程 <small class="text-muted">{% if classroom.courseNum != 0 %}( {{classroom.courseNum}} ){% endif %}</small></a></li>
+
+  {% if  classroom.showable or ( not classroom.showable and member) %}
+    <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">评价 <small class="text-muted">{% if classroom.ratingNum != 0 %}( {{classroom.ratingNum}} ){% endif %}</small></a></li>
+
+    <li role="presentation" class="{% if nav == 'thread' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}) }}">话题 <small class="text-muted">{% if classroom.threadNum != 0 %}( {{classroom.threadNum}} ){% endif %}</small></a></li>
+
+    <li role="presentation" class="{% if nav == 'note' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}) }}">笔记 <small class="text-muted">{% if classroom.noteNum != 0 %}( {{ classroom.noteNum }} ){% endif %}</small></a></li>
+  {% endif %}
+
+    <li role="presentation" class="{% if nav == 'teachers' %}active{% endif %}"><a href="{{ path('classroom_teachers', {classroomId:classroom.id}) }}">师资</a></li>
+
+  </ul>
+  
+  {% if canManageClassroom %}
+  <div class="btnbar hidden-xs">
+    <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add', {targetType:'classroom', targetId:classroom.id}) }}" class="btn btn-link">
+      <i class="es-icon es-icon-anonymous-iconfont"></i>公告
+    </a>
+  </div>
+  {% endif %}
+</div>

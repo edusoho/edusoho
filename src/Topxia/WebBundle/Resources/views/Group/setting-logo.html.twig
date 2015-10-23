@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle:Group:setting-layout.html.twig' %}
+
+{% set script_controller = 'group/group_logo' %}
+
+{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+
+{% set settingNav = 'logo' %}
+
+{% block group_setting_body %}
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">当前图标</label>
+      <div class="controls col-md-8 controls">
+        <img class="avatar-square-md" src="{{ filepath(logo, 'group.png')}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。推荐大小（180*180）</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="group-save-btn" 
+        data-upload-token="{{ upload_token('tmp', 'image') }}"
+        data-goto-url="{{path('group_setLogoCrop', {id: id, page:'logoCrop'})}}"
+        class="btn btn-primary">上传新图标</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

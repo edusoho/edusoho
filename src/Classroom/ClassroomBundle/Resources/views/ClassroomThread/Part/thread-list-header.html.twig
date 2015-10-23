@@ -1,0 +1,41 @@
+<div class="nav-filter clearfix">
+  
+  {% if service.canAccess('thread.create', {targetType:'classroom', targetId:classroom.id}) %}
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">发话题 <span class="caret"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">发话题</a></li>
+        <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">提问题</a></li>
+        {% if service.canAccess('thread.event.create', {targetType:'classroom', targetId:classroom.id}) %}
+          <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">建活动</a></li> 
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <ul class="nav nav-pills nav-pills-sm">
+    <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'all'})) }}">全部</a></li>
+    
+    <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'question'})) }}">问答</a></li>
+
+    <li{% if filters.type == 'nice' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'nice'})) }}">精华</a></li>
+
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span>排序：</span>
+        {% if filters.sort == 'posted' %}
+          最后回复
+        {% elseif filters.sort == 'created'%} 
+          最新发帖
+        {% endif %}
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu hidden-xs">
+        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a  href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({sort:'posted'})) }}">最后回复</a></li>
+        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({sort:'created'})) }}">最新发帖</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>
+

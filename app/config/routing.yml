@@ -1,0 +1,38 @@
+__web:
+    resource: "@TopxiaWebBundle/Resources/config/routing.yml"
+
+topxia_admin:
+    resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+topxia_mobile:
+    resource: "@TopxiaMobileBundle/Resources/config/routing.yml"
+    prefix:   /mapi_v1
+
+topxia_mobile_v2:
+    resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
+    prefix:   /mapi_v2
+
+classroom_web:
+    resource: "@ClassroomBundle/Resources/config/routing.yml"
+    prefix:   /
+
+classroom_admin:
+    resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
+custom_web:
+    resource: "@CustomWebBundle/Resources/config/routing.yml"
+    prefix:   /
+
+custom_admin:
+    resource: "@CustomAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+_plugins:
+    resource: routing_plugins.yml
+
+# Internal routing configuration to handle ESI
+# _internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal

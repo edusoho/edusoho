@@ -1,0 +1,91 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}价格设置 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'price' %}
+{% set script_controller = 'course-manage/price' %}
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">价格设置</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+
+    {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
+    {% set coinRate = setting('coin.cash_rate', 1) %}
+
+    {% if canModifyPrice %}
+      <form class="form-horizontal" id="price-form" method="post" action="{{path('course_manage_price',{id:course.id})}}" data-cashrate="{{setting('coin.cash_rate', 1)}}">
+        {% if currency == 'coin' %}
+          <div class="form-group">
+            <label class="col-md-2 control-label">{{setting('coin.coin_name')}}价格</label>
+            <div class="col-md-8 controls">
+              <input type="text" name="coinPrice" class="form-control course-current-price" value="{{course.originCoinPrice}}">
+              <div class="help-block">
+                <span class="text-muted">{{ coinRate }}{{setting('coin.coin_name')}} = １元</span>
+              </div>
+              {% if discount %}
+                <div class="alert alert-warning">
+                  <small>当前课程正处于「{{ discount.name }}」打折活动中。
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>  
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-2 control-label">手机端价格</label>
+            <div class="col-md-8 controls">
+              <input type="text" name="price" class="form-control" value="{{course.originPrice}}">
+              <div class="help-block">因手机端不支持虚拟币支付，价格仍显示为人民币价格。</div>
+            </div>
+          </div>
+
+        {% else %}
+          <div class="form-group">
+            <label class="col-md-2 control-label">价格</label>
+            <div class="col-md-8 controls">
+              <input type="text" name="price" class="form-control course-current-price" value="{{course.originPrice}}">
+              <div class="help-block">
+              </div>
+              {% if discount %}
+                <div class="alert alert-warning">
+                  当前课程正处于「{{ discount.name }}」打折活动中。<br>
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> 元</strong>。
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+
+        {% endif %}
+
+        {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+          <div class="form-group">
+            <label class="col-md-2 control-label">会员课程设置</label>
+            <div class="col-md-8 controls">
+              <select name="vipLevelId" class="form-control width-input width-input-large">
+                {{ select_options(levels, course.vipLevelId, '无') }}
+              </select>
+              <div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <button class="btn btn-fat btn-primary" id="price-save-btn" type="submit">保存</button>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          </div>
+        </div>
+
+      </form>
+    {% else %}
+      <div class="alert alert-danger">抱歉，您无权设置课程价格，如有需要请联系网站管理员！</div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

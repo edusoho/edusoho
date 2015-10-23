@@ -1,0 +1,9 @@
+{% extends 'ClassroomBundle:Classroom:content-layout.html.twig' %}
+
+{% set nav = 'review' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% block main %}
+
+  {% include 'TopxiaWebBundle:Review:Widget/list.html.twig' %}
+
+{% endblock %}
