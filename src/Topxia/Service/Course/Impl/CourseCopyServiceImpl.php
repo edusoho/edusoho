@@ -212,7 +212,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             'name' => "直播短信一天定时",
             'cycle' => 'once',
             'time' => $lesson['startTime'] - 24*60*60,
-            'jobClass' => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneDayJob',
+            'jobClass' => substr(__NAMESPACE__, 0, -11) . 'sms\\Job\\SmsSendOneDayJob',
             'targetType' => 'lesson',
             'targetId' => $lesson['id']
             );
@@ -224,7 +224,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             'name' => "直播短信一小时定时",
             'cycle' => 'once',
             'time' => $lesson['startTime'] - 60*60,
-            'jobClass' => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneHourJob',
+            'jobClass' => substr(__NAMESPACE__, 0, -11) . 'sms\\Job\\SmsSendOneHourJob',
             'targetType' => 'lesson',
             'targetId' => $lesson['id']
             );
