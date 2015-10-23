@@ -81,7 +81,7 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
             ->andWhere('targetType = :targetType')
             ->andWhere('targetId = :targetId')
             ->andWhere('type = :type')
-            ->andWhere('createdTime = :createdTime')
+            ->andWhere('createdTime > :createdTime')
             ->andWhere('id > :id')
             ->andWhere('content LIKE :content')
             ->andWhere('published = :published');
