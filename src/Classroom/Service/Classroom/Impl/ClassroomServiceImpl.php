@@ -358,7 +358,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !$members ? array() : ArrayToolkit::index(MemberSerialize::unserializes($members), 'classroomId');
     }
 
-    public function findMemberCountByClassroomIdAndHasVerifiedMobile($classroomId, $locked = 0)
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
     {
         return $this->getClassroomMemberDao()->findMemberCountByclassroomIdAndHasVerifiedMobile($classroomId, $locked);
     }

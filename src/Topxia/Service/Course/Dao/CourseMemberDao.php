@@ -25,7 +25,7 @@ interface CourseMemberDao
 
     public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
    
-    public function findMemberCountByCourseIdAndHasVerifiedMobile($courseId, $locked);
+    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
     

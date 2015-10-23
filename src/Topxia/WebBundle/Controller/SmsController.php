@@ -31,7 +31,7 @@ class SmsController extends BaseController
             if ($item['parentId'] ) {
                 $classroom = $this->getClassroomService()->findClassroomByCourseId($item['id']);
                 if ($classroom) {
-                    $verifiedMobileUserNum = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['classroomId'],1);
+                    $verifiedMobileUserNum = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['classroomId'],1);
                 }
             } else {
                 $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));

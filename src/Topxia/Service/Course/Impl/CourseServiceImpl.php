@@ -1219,10 +1219,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
 		$updatedLesson['fields']=$lesson;
-		if ( isset($fields['startTime']) && $fields['startTime'] != $lesson['startTime'] ) {
-			$this->dispatchEvent('course.lesson.updateStartTime',$updatedLesson);
-		}
-
 		$this->dispatchEvent("course.lesson.update",array('argument'=>$argument,'lesson'=>$updatedLesson));
 		
 		return $updatedLesson;
@@ -1935,9 +1931,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
 	}
 
-	public function findMemberCountByCourseIdAndHasVerifiedMobile($courseId, $locked = 0)
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
 	{
-		return $this->getMemberDao()->findMemberCountByCourseIdAndHasVerifiedMobile($courseId, $locked);
+		return $this->getMemberDao()->findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 	}
 
 	public function findCourseTeachers($courseId)

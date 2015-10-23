@@ -19,7 +19,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             'testpaper.reviewed' => 'onTestpaperReviewed',
             'order.pay.success' => 'onOrderPaySuccess',
             'course.lesson.publish' => 'onCourseLessonPublish',
-            'course.lesson.updateStartTime' => 'onCourseLessonUpdateStartTime',
+            'course.lesson.updateStartTime' => 'onCourseLessonUpdate',
             'course.lesson.delete' => 'onCourseLessonDelete',
             'course.lesson.unpublish' => 'onCourseLessonUnpublish',
         );
@@ -109,17 +109,21 @@ class SmsEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onCourseLessonUpdateStartTime(ServiceEvent $event)
+    public function onCourseLessonUpdate(ServiceEvent $event)
     {
-        $lesson = $event->getSubject();
-        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+        $context = $event->getSubject();
+        $argument = $context['argument'];
+        $lesson = $context['lesson'];
+        if ( $lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['startTime'] && $this->getSmsService()->isOpen('sms_live_lesson_publish')) {
+            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
 
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
-        
-        if ($lesson['status'] == 'published' && $lesson['type'] == 'live') {
-            $this->createJob($lesson);
+            if ($jobs) {
+                $this->deleteJob($jobs);
+            }
+            
+            if ($lesson['status'] == 'published' && $lesson['type'] == 'live') {
+                $this->createJob($lesson);
+            }
         }
 
     }

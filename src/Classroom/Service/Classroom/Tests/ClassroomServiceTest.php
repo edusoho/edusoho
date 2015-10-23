@@ -55,7 +55,7 @@ class ClassroomServiceTest extends BaseTestCase
         
     }
 
-    public function testFindMemberCountByClassroomIdAndHasVerifiedMobile()
+    public function testFindMobileVerifiedMemberCountByClassroomId()
     {
         $textClassroom = array(
             'title' => 'test1'
@@ -70,16 +70,16 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getUserService()->changeMobile($currentUser['id'], '13456520930');
         $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['id'], 0);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 0);
         $this->assertEquals(1,$result);
         $this->getUserService()->lockUser($currentUser['id']);
-        $result = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['id'], 1);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
         $this->assertEquals(0,$result);
         $this->getUserService()->unlockUser($currentUser['id']);
-        $result = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['id'], 1);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
         $this->assertEquals(1,$result);
         $this->getClassroomService()->lockStudent($classroom['id'], $currentUser['id']);
-        $result = $this->getClassroomService()->findMemberCountByClassroomIdAndHasVerifiedMobile($classroom['id'], 1);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
         $this->assertEquals(0,$result);
 
     }

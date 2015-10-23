@@ -92,7 +92,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result[1]['title'],$course_like['title']);
     }
 
-    public function testFindMemberCountByCourseIdAndHasVerifiedMobile()
+    public function testFindMobileVerifiedMemberCountByCourseId()
     {
         $course = array(
             'title' => 'online test course1'
@@ -105,10 +105,10 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getUserService()->changeMobile($user1['id'], '13456520930');
         $addCourse = $this->getCourseService()->becomeStudent($createCourse['id'],$user1['id']);
-        $count = $this->getCourseService()->findMemberCountByCourseIdAndHasVerifiedMobile($createCourse['id']);
+        $count = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id']);
         $this->assertEquals(1, $count);
         $this->getUserService()->lockUser($user1['id']);
-        $count = $this->getCourseService()->findMemberCountByCourseIdAndHasVerifiedMobile($createCourse['id'], 1);
+        $count = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id'], 1);
         $this->assertEquals(0, $count);
     }
 
