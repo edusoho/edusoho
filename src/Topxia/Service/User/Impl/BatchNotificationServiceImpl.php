@@ -6,7 +6,8 @@ use Topxia\Service\User\BatchNotificationService;
 
 class BatchNotificationServiceImpl extends BaseService implements BatchNotificationService
 {
-    public function createBatchNotification($fields){
+    public function createBatchNotification($fields)
+    {
         if (empty($fields['fromId'])) {
             throw $this->createServiceException("发件人未注册!");
         }
@@ -28,7 +29,8 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         return $notification;
     }
 
-    public function publishBatchNotification($id){
+    public function publishBatchNotification($id)
+    {
         $batchNotification = $this->getBatchNotificationDao()->getBatchNotification($id);
         if(empty($batchNotification)){
             throw $this->createServiceException("不存在此通知!");
@@ -42,18 +44,22 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         return true;
     }
 
-    public function getBatchNotification($id){
+    public function getBatchNotification($id)
+    {
         return $this->getBatchNotificationDao()->getBatchNotification($id);
     }
 
-    public function searchBatchNotificationsCount($conditions){
+    public function searchBatchNotificationsCount($conditions)
+    {
         return $this->getBatchNotificationDao()->searchBatchNotificationCount($conditions);
     }
 
-    public function searchBatchNotifications($conditions, $orderBy, $start, $limit){
+    public function searchBatchNotifications($conditions, $orderBy, $start, $limit)
+    {
         return $this->getBatchNotificationDao()->searchBatchNotifications($conditions, $orderBy, $start, $limit);
     }
-    public function checkoutBatchNotification($userId){
+    public function checkoutBatchNotification($userId)
+    {
         $conditions = array(
             'id' => 0,
             'published' => 1
@@ -104,7 +110,8 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         return true;
     }
 
-    protected function addBatchNotification($type,$title,$fromId,$content,$targetType,$targetId,$createdTime,$sendedTime,$published){
+    protected function addBatchNotification($type,$title,$fromId,$content,$targetType,$targetId,$createdTime,$sendedTime,$published)
+    {
         $batchNotification = array(
             'type' => $type,
             'title' =>$title,

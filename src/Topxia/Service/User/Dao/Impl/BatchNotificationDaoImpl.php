@@ -17,7 +17,8 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function addBatchNotification($batchNotification){
+    public function addBatchNotification($batchNotification)
+    {
     	$affected = $this->getConnection()->insert($this->table, $batchNotification);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert batchNotification error.');
@@ -25,7 +26,8 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
         return $this->getBatchNotification($this->getConnection()->lastInsertId());
     }
 
-    public function searchBatchNotificationCount($conditions){
+    public function searchBatchNotificationCount($conditions)
+    {
     	if (isset($conditions['content'])) {
             if(empty($conditions['content'])){
                 unset($conditions['content']);
@@ -49,7 +51,8 @@ class BatchNotificationDaoImpl extends BaseDao implements BatchNotificationDao
         return $this->getBatchNotification($id);
     } 
 
-    public function searchBatchNotifications($conditions, $orderBy, $start, $limit){
+    public function searchBatchNotifications($conditions, $orderBy, $start, $limit)
+    {
     	$this->filterStartLimit($start, $limit);
         if (isset($conditions['content'])) {
             $conditions['content'] = "%{$conditions['content']}%";

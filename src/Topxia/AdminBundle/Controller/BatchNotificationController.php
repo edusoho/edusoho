@@ -7,7 +7,8 @@ use Topxia\Common\ArrayToolkit;
 
 class BatchNotificationController extends BaseController
 {
-	public function indexAction(Request $request){
+	public function indexAction(Request $request)
+    {
 		$user = $this->getCurrentUser();
     	$conditions = array();
     	$paginator = new Paginator(
@@ -30,7 +31,8 @@ class BatchNotificationController extends BaseController
     		));
     }
 
-    public function createAction(Request $request){
+    public function createAction(Request $request)
+    {
     	$user = $this->getCurrentUser();
     	$batchnotification = $request->request->all();
     	if ($request->getMethod() == "POST" ) {
@@ -45,8 +47,7 @@ class BatchNotificationController extends BaseController
             if($batchnotification['type'] == 'publish'){
                 $batchnotification = $this->getBatchNotificationService()->createBatchNotification($batchnotification);
                 $this->getBatchNotificationService()->publishBatchNotification($batchnotification['id']);
-            }
-            else{
+            }else{
                 //（可扩展）默认发送全站私信，可改成群发某个组或者班级成员等
                 $batchnotification = $this->getBatchNotificationService()->createBatchNotification($batchnotification);
             }
@@ -68,8 +69,7 @@ class BatchNotificationController extends BaseController
             if($formData['type'] == 'publish'){
                 $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id, $formData);
                 $batchnotification = $this->getBatchNotificationService()->publishBatchNotification($id);
-            }
-            else{
+            }else{
                 $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id, $formData);
             }
             return $this->redirect($this->generateUrl('admin_batch_notification'));
@@ -80,7 +80,6 @@ class BatchNotificationController extends BaseController
     }
     public function sendAction(Request $request, $id)
     {
-
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
             throw $this->createNotFoundException('通知已删除！');
