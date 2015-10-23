@@ -26,7 +26,7 @@ class UserLoginTokenListener
             return;
         }
 
-        $userLoginToken = $request->getSession()->getId();
+        $userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
         $user = $this->getUserService()->getCurrentUser();
 
         if(isset($user['locked']) && $user['locked'] == 1){
@@ -66,7 +66,6 @@ class UserLoginTokenListener
 
                 $response = new RedirectResponse($goto, '302');
                 $response->headers->setCookie(new Cookie("REMEMBERME", ''));
-
                 $event->setResponse($response);
         }
 
@@ -79,8 +78,7 @@ class UserLoginTokenListener
             return;
         }
 
-    	if ($userLoginToken != $user['loginSessionId']) {
-
+        if ($userLoginToken != $user['loginSessionId']) {
             $request->getSession()->invalidate();
             $this->container->get("security.context")->setToken(null);
 
@@ -88,11 +86,11 @@ class UserLoginTokenListener
 
             $response = new RedirectResponse($goto, '302');
             $response->headers->setCookie(new Cookie("REMEMBERME", ''));
-
+            setcookie("U_LOGIN_TOKEN", '', -1);
             $this->container->get('session')->getFlashBag()->add('danger', '此帐号已在别处登录，请重新登录');
 
-    		$event->setResponse($response);
-    	}
+            $event->setResponse($response);
+        }
     }
 
     private function makeHash($user)
