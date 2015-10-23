@@ -292,9 +292,13 @@ class DefaultController extends BaseController
 
         $yesterdayJoinLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid"));
     
-        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00"));
+        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'course'));
 
-        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00"));
+        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'course'));
+
+        $todayBuyClassroomNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'));
+
+        $yesterdayBuyClassroomNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'));
 
         $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
 
@@ -355,6 +359,10 @@ class DefaultController extends BaseController
             'yesterdayJoinLessonNum'=>$yesterdayJoinLessonNum,
             'todayBuyLessonNum'=>$todayBuyLessonNum,
             'yesterdayBuyLessonNum'=>$yesterdayBuyLessonNum,
+
+            'todayBuyClassroomNum'=>$todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum'=>$yesterdayBuyClassroomNum,
+
             'todayFinishedLessonNum'=>$todayFinishedLessonNum,
             'yesterdayFinishedLessonNum'=>$yesterdayFinishedLessonNum,
 

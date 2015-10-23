@@ -41,7 +41,7 @@ interface LessonDao
 
     public function findLessonsByIds(array $ids);
 
-    public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds);
+    public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds);
 
     public function sumLessonGiveCreditByCourseId($courseId);
 
