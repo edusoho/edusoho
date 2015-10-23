@@ -35,9 +35,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			$order = $this->getOrderService()->getOrderBySn($payData['sn'],true);
 
 			if($order["status"] == "paid"){
-				$this->dispatchEvent("order.pay.success", 
-					new ServiceEvent($order,array('targetType'=>$order["targetType"]))
-				);
 				$connection->rollback();
 				return array(true, $order);
 			}
