@@ -6,18 +6,44 @@ use Topxia\Service\User\BatchNotificationService;
 
 class BatchNotificationServiceImpl extends BaseService implements BatchNotificationService
 {
-    public function sendBatchNotification($fromId, $title,$content,$createdTime = null,$sendedTime,$targetType,$targetId = 0,$type = "text",$published = 0){
-        if (empty($fromId)) {
+    public function createBatchNotification($fields){
+        if (empty($fields['fromId'])) {
             throw $this->createServiceException("发件人未注册!");
         }
-        $createdTime = empty($createdTime) ? time() : $createdTime;
-        $sendedTime = $sendedTime  ? time() : $sendedTime;
-        $notification = $this->addBatchNotification($type,$title,$fromId, $content,$targetType,$targetId, $createdTime,$sendedTime,$published);
+        if(!isset($fields['targetId'])){
+            $fields['targetId'] = 0;
+        }
+        if(empty($fields['type'])){
+            $fields['type'] = 'text';
+        }
+        if(!isset($fields['published'])){
+            $fields['published'] = 0;
+        }
+        if(!isset($fields['targetType'])){
+            $fields['targetType'] = 'global';
+        }
+        $fields['createdTime'] = isset($fields['createdTime']) ? time() : $fields['createdTime'];
+        $fields['sendedTime'] = 0;
+        $notification = $this->getBatchNotificationDao()->addBatchNotification($fields);
         return $notification;
     }
 
-    public function getBatchNotificationById($id){
-        return $this->getBatchNotificationDao()->getBatchNotificationById($id);
+    public function publishBatchNotification($id){
+        $batchNotification = $this->getBatchNotificationDao()->getBatchNotification($id);
+        if(empty($batchNotification)){
+            throw $this->createServiceException("不存在此通知!");
+        }
+        if ($batchNotification['published'] == 1) {
+            throw $this->createServiceException("此通知已经发送!");
+        }
+        $batchNotification['published'] = 1;
+        $batchNotification['sendedTime'] = time();
+        $this->getBatchNotificationDao()->updateBatchNotification($id,$batchNotification);
+        return true;
+    }
+
+    public function getBatchNotification($id){
+        return $this->getBatchNotificationDao()->getBatchNotification($id);
     }
 
     public function searchBatchNotificationsCount($conditions){
@@ -27,42 +53,40 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     public function searchBatchNotifications($conditions, $orderBy, $start, $limit){
         return $this->getBatchNotificationDao()->searchBatchNotifications($conditions, $orderBy, $start, $limit);
     }
-    public function checkoutBatchNotification($user){
+    public function checkoutBatchNotification($userId){
         $conditions = array(
             'id' => 0,
             'published' => 1
             );
-        $batchNotifications = $this->searchBatchNotifications($conditions,array('createdTime','ASC'),0,9999);
-        if(!empty($batchNotifications)){
-                foreach ($batchNotifications as $key => $batchNotification) {
-                    $conditions = array(
-                        'userId' => $user['id'],
-                        'type' => 'global',
-                        'parentId' => $batchNotification['id']
+        $batchNotifications = $this->searchBatchNotifications($conditions,array('createdTime','DESC'),0,10);
+        $conditions = array(
+            'userId' => $userId,
+            'type' => 'global',
+        );
+        $notification = $this->getNotificationDao()->searchNotifications($conditions,array('createdTime','DESC'),0,1);
+        $comparetime = $notification[0]['createdTime'];
+        $user = $this->getUserService()->getUser($userId);
+        foreach ($batchNotifications as $key => $batchNotification) {
+            if($batchNotification['sendedTime'] > $user['createdTime'] && $comparetime < $batchNotification['sendedTime']){
+                $content = array(
+                    'content' => $batchNotification['content'],
+                    'title' => $batchNotification['title']
                     );
-                    $notification = $this->getNotificationDao()->searchNotifications($conditions,array('parentId','DESC'),0,1);
-                    if(empty($notification)){
-                        $content = array(
-                            'content' => $batchNotification['content'],
-                            'title' => $batchNotification['title']
-                            );
-                        $notification = array(
-                            'userId'  => $user['id'],
-                            'type'  => $batchNotification['targetType'],
-                            'content' => $content,
-                            'parentId'  => $batchNotification['id'],
-                            'createdTime'  =>  $batchNotification['sendedTime'],
-                            );
-                        $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
-                        $this->getUserService()->waveUserCounter($user['id'], 'newNotificationNum', 1);
-                }
+                $notification = array(
+                    'userId'  => $userId,
+                    'type'  => $batchNotification['targetType'],
+                    'content' => $content,
+                    'batchId'  => $batchNotification['id'],
+                    'createdTime'  =>  $batchNotification['sendedTime'],
+                    );
+                $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
+                $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
             }
-            return true;
         }
     }
-    public function deleteBatchNotificationById($id)
+    public function deleteBatchNotification($id)
     {
-        $batchNotification = $this->getBatchNotificationDao()->getBatchNotificationById($id);
+        $batchNotification = $this->getBatchNotificationDao()->getBatchNotification($id);
         if (empty($batchNotification)) {
             throw $this->createServiceException("通知不存在，操作失败。");
         }

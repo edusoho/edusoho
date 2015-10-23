@@ -1,13 +1,11 @@
 define(function(require, exports, module) {
 
     require('ckeditor');
-
-    var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
+    var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
-
         $("#notification-operate-publish").click(function(){
             $('#hidden').val('publish');
         });
@@ -47,12 +45,5 @@ define(function(require, exports, module) {
                 Notify.success('保存成功！');
             }
         });
-     };
-    function CKupdate() {
-    for ( instance in CKEDITOR.instances ) {
-        CKEDITOR.instances[instance].updateElement(); 
-    }
-    
-}
-    
+     }; 
 });

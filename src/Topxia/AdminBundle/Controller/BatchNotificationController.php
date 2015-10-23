@@ -41,13 +41,14 @@ class BatchNotificationController extends BaseController
             {
                 $this->createMessageResponse('error','群发标题为空');
             }
-            $batchnotification['createdtime'] = time();
+            $batchnotification['createdTime'] = time();
             if($batchnotification['type'] == 'publish'){
-                $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'],time(), 'global', 0 ,'text',1);
+                $batchnotification = $this->getBatchNotificationService()->createBatchNotification($batchnotification);
+                $this->getBatchNotificationService()->publishBatchNotification($batchnotification['id']);
             }
             else{
                 //（可扩展）默认发送全站私信，可改成群发某个组或者班级成员等
-                $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $batchnotification['fromId'] , $batchnotification['title'] , $batchnotification['content'] , $batchnotification['createdtime'],0, 'global', 0 ,'text',0);
+                $batchnotification = $this->getBatchNotificationService()->createBatchNotification($batchnotification);
             }
             return $this->redirect($this->generateUrl('admin_batch_notification'));
         }
@@ -58,15 +59,15 @@ class BatchNotificationController extends BaseController
     public function editAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
-        $batchnotification = $this->getBatchNotificationService()->getBatchNotificationById($id);
+        $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
             throw $this->createNotFoundException('通知已删除！');
         }
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             if($formData['type'] == 'publish'){
-                $batchnotification = $this->getBatchNotificationService()->sendBatchNotification( $user['id'] , $formData['title'] , $formData['content'] , $batchnotification['createdTime'],time(), 'global', 0 ,'text',1);
-                $this->getBatchNotificationService()->deleteBatchNotificationById($id);
+                $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id, $formData);
+                $batchnotification = $this->getBatchNotificationService()->publishBatchNotification($id);
             }
             else{
                 $batchnotification = $this->getBatchNotificationService()->updateBatchNotification($id, $formData);
@@ -80,7 +81,7 @@ class BatchNotificationController extends BaseController
     public function sendAction(Request $request, $id)
     {
 
-        $batchnotification = $this->getBatchNotificationService()->getBatchNotificationById($id);
+        $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
             throw $this->createNotFoundException('通知已删除！');
         }
@@ -98,7 +99,7 @@ class BatchNotificationController extends BaseController
     public function deleteAction(Request $request,$id)
     {
         if ($request->getMethod() == 'POST') {
-            $result = $this->getBatchNotificationService()->deleteBatchNotificationById($id);
+            $result = $this->getBatchNotificationService()->deleteBatchNotification($id);
             if($result){
                 return $this->createJsonResponse(array("status" =>"failed"));
             } else {
@@ -109,7 +110,7 @@ class BatchNotificationController extends BaseController
 
     public function showAction(Request $request,$id)
     {
-        $batchnotification = $this->getBatchNotificationService()->getBatchNotificationById($id);
+        $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
             
             throw $this->createNotFoundException('通知已被管理员删除！');

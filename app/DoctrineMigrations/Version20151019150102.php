@@ -15,7 +15,7 @@ class Version20151019150102 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->addSql("ALTER TABLE `batch_notification` ADD `sendedTime` int(10) NOT NULL DEFAULT '0' COMMENT '群发私信发送时间' AFTER `createdTime`; ");
+        $this->addSql("ALTER TABLE `batch_notification` ADD `sendedTime` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知的发送时间' AFTER `createdTime`; ");
         // this up() migration is auto-generated, please modify it to your needs
 
     }

@@ -43,7 +43,7 @@ class DefaultController extends BaseController
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
         $user = $this->getCurrentUser();
         if(!empty($user['id'])){
-            $this->getBatchNotificationService()->checkoutBatchNotification($user);
+            $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,

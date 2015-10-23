@@ -4,39 +4,19 @@ namespace Topxia\Service\User;
 
 interface BatchNotificationService
 {
-    public function sendBatchNotification($fromId, $title,$content,$createdTime = null,$targetType,$targetId,$type,$published = 0);
+    public function createBatchNotification($fields);
 
-    /**
-     * 获取私信内容
-     */
-    public function getBatchNotificationById($id);
+    public function publishBatchNotification($id);
 
-    /**
-     * 搜索特定状态下的私信条数
-     *
-     * @param  array $conditions 搜索条件
-     * 
-     * @return integer   搜索出的全站信数目
-     */
-    
+    public function getBatchNotification($id);
+
     public function searchBatchNotificationsCount($conditions);
-    /**
-     * 搜索特定状态下的私信条数
-     *
-     * @param  array $conditions 搜索条件
-     * @param  string $sort 排序方式
-     * 
-     * @return array   搜索出的群发私信
-     */
-    public function searchBatchNotifications($conditions, $sort, $start, $limit);
-    /**
-     * 验证用户是否有新的群发私信
-     * 
-     * @return integer   搜索出的全站信数目
-     */
-    public function checkoutBatchNotification($user);
 
-    public function deleteBatchNotificationById($id);
+    public function searchBatchNotifications($conditions, $sort, $start, $limit);
+
+    public function checkoutBatchNotification($userId);
+
+    public function deleteBatchNotification($id);
 
     public function updateBatchNotification($id,$batchNotification);
 }

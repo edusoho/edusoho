@@ -15,7 +15,7 @@ class Version20151010104630 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->addSql("ALTER TABLE `notification` ADD `parentId` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知表中的ID' AFTER `content`; ");
+        $this->addSql("ALTER TABLE `notification` ADD `batchId` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知表中的ID' AFTER `content`; ");
         // this up() migration is auto-generated, please modify it to your needs
 
     }

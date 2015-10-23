@@ -6,7 +6,7 @@ interface BatchNotificationDao
 {
     public function addBatchNotification($batchNotification);
 
-	public function getBatchNotificationById($id);
+	public function getBatchNotification($id);
 
 	public function searchBatchNotificationCount($conditions);
 
