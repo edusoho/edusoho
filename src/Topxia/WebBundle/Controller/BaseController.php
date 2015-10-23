@@ -69,6 +69,7 @@ abstract class BaseController extends Controller
         ));
     }
 
+    //TODO 即将删除
     protected function authenticateUser ($user)
     {
         $user['currentIp'] = $this->container->get('request')->getClientIp();
@@ -88,11 +89,12 @@ abstract class BaseController extends Controller
             return ;
         }
 
-        $sessionId = $this->createToken($this->container->get('request'));
+        $sessionId = $this->_createToken($this->container->get('request'));
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
     }
 
-    private function createToken(Request $request)
+    // TODO 即将删除
+    private function _createToken(Request $request)
     {
         $userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
         if (empty($userLoginToken)) {
