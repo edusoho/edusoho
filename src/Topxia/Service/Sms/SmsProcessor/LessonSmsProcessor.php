@@ -84,7 +84,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         if ($arrResponse['status'] != 0) {
             throw new \RuntimeException("短链接生成失败!");
         }
-        $shortUrl = $arrResponse['tinyurl'];
+        $shortUrl = $arrResponse['tinyurl'].' ';
 
         return $shortUrl;
     }

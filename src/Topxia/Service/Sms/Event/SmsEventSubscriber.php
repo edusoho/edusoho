@@ -39,8 +39,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
                 $course = $this->getCourseService()->getCourse($courseId);
                 $testpaperResult['lesson_title'] = NameCutterTookit::cutter($testpaperResult['lesson_title'], 20, 15, 4);
                 $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
-                $parameters['lesson_title'] = '试卷：《'.$testpaperResult['paperName'].'》'.'的试卷';
-                $parameters['course_title'] = '课程：《'.$course['title'].'》';
+                $parameters['lesson_title'] = '《'.$testpaperResult['paperName'].'》'.'试卷';
+                $parameters['course_title'] = '《'.$course['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
                 $userId = $testpaperResult['userId'];
                 $user = $this->getUserService()->getUser($userId);
