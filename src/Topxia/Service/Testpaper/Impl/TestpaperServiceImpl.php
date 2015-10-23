@@ -680,12 +680,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'teacherSay' => $teacherSay
         ));
 
-        $this->dispatchEvent(
-            'testpaper.reviewed', 
-            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
-        );
+        $this->dispatchEvent('testpaper.reviewed', $result);
         
-        return $testPaperResult;
+        return $result;
     }
 
     public function submitTestpaperAnswer($id, $answers)
