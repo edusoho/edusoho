@@ -2,6 +2,7 @@
           <thead>
             <tr>
               <th>用户名</th>
+              <th>手机号</th>
               <th>注册邮箱</th>
               <th>注册来源</th>
               <th>IP地址</th>
@@ -13,6 +14,15 @@
             {% for data in userSumDetail %}
               <tr>
                 <td>{{data.nickname}}</td>
+                <td>
+                    {% if data.verifiedMobile %}
+                    {{ data.verifiedMobile }}<span class="text-success">(已绑定)</span>
+                    {% elseif userSumProfiles[data.id].mobile %}
+                    {{ userSumProfiles[data.id].mobile }}<span class="text-danger">(未绑定)</span>
+                    {% else %}
+                    -- 
+                    {% endif %}
+                    </td>
                 <td>
                   {% set emailArr = data.email|split('@') %}
                   {% if emailArr[1] != 'edusoho.net' %}
