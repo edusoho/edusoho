@@ -75,16 +75,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    public function editTestpaper($id, $fields)
-    {
-        return  $this->getTestpaperDao()->updateTestpaper($id, $fields);
-    }
-
-    public function getItemsCountByTestIdAndType($conditions, $groupBy='')
-    {
-        return $this->getTestpaperItemDao()->getItemsCountByTestIdAndType($conditions, $groupBy='');
-    }
-
     protected function filterTestpaperFields($fields, $mode = 'create')
     {
         $filtedFields = array();
@@ -578,11 +568,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
-        if ($testpaper['passedScore'] > 0) {
-            $fields['passedStatus'] = $fields['score'] >= $testpaper['passedScore'] ? 'passed' : 'unpassed';
-        } else {
-            $fields['passedStatus'] = 'none';
-        }
+        $fields['passedStatus'] = $fields['score'] >= $testpaper['passedScore'] ? 'passed' : 'unpassed';
 
         $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
         $fields['endTime'] = time();
@@ -597,6 +583,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'testpaper.finish', 
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
+
+        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
+            $targetArr = explode('/',$testpaperResult['target']);
+            $lessonInfo = explode('-',$targetArr[1]);
+            $this->dispatchEvent(
+                'task.finished', 
+                new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$testpaperResult['passedStatus']), 
+                    array('taskType'=>'studyPlan', 'userId'=>$userId))
+            );
+        }
 
         return $testpaperResult;
     }
@@ -633,7 +629,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testResults = array();
         
         $teacherSay = $field['teacherSay'];
+        $passedStatus = $field['passedStatus'];
         unset($field['teacherSay']);
+        unset($field['passedStatus']);
 
 
         $items = $this->getTestpaperItemDao()->findItemsByTestpaperId($paperId);
@@ -672,18 +670,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $totalScore = $subjectiveScore + $testpaperResult['objectiveScore'];
 
-        $result = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
+        $testPaperResult = $this->getTestpaperResultDao()->updateTestpaperResult($id, array(
             'score' => $totalScore,
             'subjectiveScore' => $subjectiveScore,
             'status' => 'finished',
             'checkTeacherId' => $teacherId,
             'checkedTime' => time(),
-            'teacherSay' => $teacherSay
+            'teacherSay' => $teacherSay,
+            'passedStatus' => $passedStatus
         ));
 
-        $this->dispatchEvent('testpaper.reviewed', $result);
         
-        return $result;
+        $this->dispatchEvent(
+            'testpaper.reviewed', 
+            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
+        );
+
+        return $testPaperResult;
     }
 
     public function submitTestpaperAnswer($id, $answers)
@@ -942,6 +945,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperItemDao()->getItemsCountByParams($conditions, $groupBy);
     }
 
+
 	protected function getTestpaperDao()
     {
         return $this->createDao('Testpaper.TestpaperDao');
@@ -985,4 +989,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform.AppService');
+    }
 }
