@@ -8,7 +8,7 @@
   <div class="section-header"><h1>标签</h1></div>
   {% if tags  %}
     {% for tag in tags %}
-      <a href="{{ path('tag_show', {name:tag.name}) }}" class="btn-tag mrl mtl">{{ tag.name }}</a>
+      <a href="{{ path('tag_show', {name:tag.name}) }}" class="btn-tag">{{ tag.name }}</a>
     {% endfor %}
   {% else %}
     <div class="empty">当前还没有标签!</div>

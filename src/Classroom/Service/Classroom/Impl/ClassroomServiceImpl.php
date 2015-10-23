@@ -377,6 +377,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !$members ? array() : MemberSerialize::unserializes($members);
     }
 
+    public function findMemberUserIdsByClassroomId($classroomId)
+    {
+        return $this->getClassroomMemberDao()->findMemberUserIdsByClassroomId($classroomId);
+    }
+
     public function getClassroomMember($classroomId, $userId)
     {
         $member = $this->getClassroomMemberDao()->getMemberByClassroomIdAndUserId($classroomId, $userId);
@@ -422,6 +427,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->updateStudentNumAndAuditorNum($classroomId);
 
         $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员#{$member['id']}");
+        $this->dispatchEvent(
+            'classroom.quit',
+            new ServiceEvent($classroom, array('userId' => $member['userId']))
+        );
     }
 
     public function isClassroomStudent($classroomId, $userId)
@@ -938,7 +947,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
         if ($isStudentOrAuditor) {
-            if (array_intersect($member['role'], array('student', 'auditor'))) {
+            if (array_intersect($member['role'], array('student', 'auditor', 'teacher', 'headTeacher'))) {
                 return true;
             }
         } else {
@@ -1270,9 +1279,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $id,
             'courseId' => $courseId,
             'parentCourseId' => $course['parentId'],
-            );
+        );
 
-        $this->getClassroomCourseDao()->addCourse($classroomCourse);
+        $classroomCourse = $this->getClassroomCourseDao()->addCourse($classroomCourse);
+
+        $this->dispatchEvent('classroom.put_course', $classroomCourse);
     }
 
     public function getFileService()

@@ -73,4 +73,9 @@ class CourseNoteLikeDaoImpl extends BaseDao implements CourseNoteLikeDao
         $noteIds = array_merge(array($userId), $noteIds);
         return $this->getConnection()->fetchAll($sql, $noteIds);
     }
+
+    public function deleteNoteLikesByNoteId($noteId)
+    {
+        return $this->getConnection()->delete($this->table, array('noteId' => $noteId));
+    }
 }

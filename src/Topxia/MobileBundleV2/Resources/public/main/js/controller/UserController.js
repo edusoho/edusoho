@@ -6,12 +6,14 @@ app.controller('StudentListController', ['$scope', 'ClassRoomService', '$statePa
 function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
 {
 	$scope.title = "课程教师";
+	$scope.emptyStr = "该课程暂无教师";
 	var self = this;
 	this.initService = function() {
 		if ("course" == $stateParams.targetType) {
 			self.targetService = self.loadCourseTeachers;
 		} else if ("classroom" == $stateParams.targetType) {
 			$scope.title = "班级教师";
+			$scope.emptyStr = "该班级暂无教师";
 			self.targetService = self.loadClassRoomTeachers;
 		}
 	};
@@ -42,6 +44,7 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 function StudentListController($scope, ClassRoomService, $stateParams)
 {
 	$scope.title = "班级学员";
+	$scope.emptyStr = "该班级暂无学员";
 	ClassRoomService.getStudents({
 		classRoomId : $stateParams.targetId,
 		limit : -1

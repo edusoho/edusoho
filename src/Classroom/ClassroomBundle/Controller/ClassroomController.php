@@ -741,7 +741,7 @@ class ClassroomController extends BaseController
     private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-        if (!$classroomSetting['discount_buy']) {
+        if (empty($classroomSetting['discount_buy'])) {
             return false;
         }
 
@@ -939,6 +939,11 @@ class ClassroomController extends BaseController
         return $enableds;
     }
 
+    public function memberIdsAction(Request $request, $id)
+    {
+        $ids = $this->getClassroomService()->findMemberUserIdsByClassroomId($id);
+        return $this->createJsonResponse($ids);
+    }
 
     protected function getThreadService()
     {

@@ -566,7 +566,6 @@ class CourseController extends CourseBaseController
 		} else {
 			$canExit = false;
 		}
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -779,7 +778,7 @@ class CourseController extends CourseBaseController
 	public function relatedCoursesBlockAction($course)
 	{   
 
-		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
+		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc' , ''), 0, 4);
 		
 		return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
 			'courses' => $courses,
@@ -802,6 +801,12 @@ class CourseController extends CourseBaseController
 		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
 
 		));
+	}
+
+	public function memberIdsAction(Request $request, $id)
+	{
+		$ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+		return $this->createJsonResponse($ids);
 	}
 
 	protected function getUserService()

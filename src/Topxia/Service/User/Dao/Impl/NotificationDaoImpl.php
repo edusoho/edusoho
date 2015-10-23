@@ -61,12 +61,18 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function deleteNotification($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
     protected function createNotificationQueryBuilder($conditions)
     {
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'notification')
             ->andWhere('userId = :userId')
             ->andWhere('parentId = :parentId')
+            ->andWhere('content LIKE :content')
             ->andWhere('type = :type');
     }
     

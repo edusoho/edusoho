@@ -63,3 +63,6 @@ web/assets/img/default/video.png
 /src/Tests/*
 /app/data/api_server.json
 /installFiles
+/app/data/trial.lock
+/app/data/session_gc_time.data
+
