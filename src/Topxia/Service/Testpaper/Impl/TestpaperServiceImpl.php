@@ -680,17 +680,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'passedStatus' => $passedStatus
         ));
 
-        $this->dispatchEvent('testpaper.reviewed', $testPaperResult);
         
-        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $targetArr = explode('/',$testpaperResult['target']);
-            $lessonInfo = explode('-',$targetArr[1]);
-            $this->dispatchEvent(
-                'task.finished', 
-                new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$passedStatus), 
-                    array('taskType'=>'studyPlan', 'userId'=>$testpaperResult['userId']))
-            );
-        }
+        $this->dispatchEvent(
+            'testpaper.reviewed', 
+            new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
+        );
 
         return $testPaperResult;
     }
