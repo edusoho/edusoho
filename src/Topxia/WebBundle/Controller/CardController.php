@@ -20,9 +20,10 @@ class CardController extends BaseController
     //     $user = $this->getCurrentUser();
 
     // }
-    public function showCards()
+    public function ShowCardsAction(Request $request)
     {
-    	
+    	$conditions = $request->query->all();
+        
     }
 
     protected function getCardService() {

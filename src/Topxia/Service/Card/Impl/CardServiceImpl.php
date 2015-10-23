@@ -4,6 +4,7 @@ namespace Topxia\Service\Card\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Card\CardService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Card\CardDetailProcessor\CardDetailFactory;
 
 class CardServiceImpl extends BaseService implements CardService
 {
@@ -21,9 +22,31 @@ class CardServiceImpl extends BaseService implements CardService
 		
 	}
 
+	public function findCardsByUserIdAndCardType($userId,$cardType)
+	{
+		if (empty($cardType)) {
+			throw $this->createServiceException('缺少必要字段，请明确卡的类型');
+		}
+		return $this->getCardDao()->findCardsByUserIdAndCardType($userId,$cardType);
+	}
+
+	public function findCardsByCardTypeAndCardIds(array $ids,$cardType)
+	{
+		$processor = $this->getCardDetailProcessor($cardType);
+		$limit = count($ids);
+		return $processor->getCardDetailByCardIds($ids,array('deadline','DESC'),0,$limit);
+		
+	}
+
 	protected function getCardDao()
 	{
 		return $this->createDao('Card.CardDao');
+	}
+
+	protected function getCardDetailProcessor($cardType)
+	{
+		$processor = CardDetailFactory::create($cardType);
+		return $processor;
 	}
 
 
