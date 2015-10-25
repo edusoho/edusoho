@@ -1,17 +1,17 @@
 {% set modal_class= "modal-lg" %}
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% block title %}{{lesson.title}}课时的数据{% endblock %}
+{% block title %}{{lesson.title}}{{'课时的数据'|trans}}{% endblock %}
 {% block body %}
   <div class="table-responsive">
     <table class="table table-bordered" style="word-break:break-all;text-align:center;">
       <tr class="active">
-        <td>用户名</td>
-        <td>加入课时时间</td>
-        <td>完成课时时间</td>
-        <td width="18%">课时学习时长（分）</td>
-        <td width="18%">音视频时长（分）</td>
-        <td width="18%">音视频学习时长（分）</td>
-        <td>最近考试得分</td>
+        <td>{{'用户名'|trans}}</td>
+        <td>{{'加入课时时间'|trans}}</td>
+        <td>{{'完成课时时间'|trans}}</td>
+        <td width="18%">{{'课时学习时长（分）'|trans}}</td>
+        <td width="18%">{{'音视频时长（分）'|trans}}</td>
+        <td width="18%">{{'音视频学习时长（分）'|trans}}</td>
+        <td>{{'最近考试得分'|trans}}</td>
       </tr>
       {% if students %}
         {% for student in students %}
@@ -32,8 +32,8 @@
           </tr>
         {% endfor %}
       {% endif %}
-      
-      
+
+
     </table>
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}

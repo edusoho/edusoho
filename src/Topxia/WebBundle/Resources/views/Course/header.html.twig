@@ -6,21 +6,21 @@
   </a>
   <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
     {% if course.status=='closed' %}
-      <span class="label label-danger ">已关闭</span>
+      <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif course.status=='draft' %}
-      <span class="label label-warning ">未发布</span>
+      <span class="label label-warning ">{{'未发布'|trans}}</span>
     {% elseif course.status=='published' %}
       {% if course.serializeMode=='serialize' %}
-        <span class="label label-success ">更新中</span>
+        <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode=='finished' %}
-        <span class="label label-warning ">已完结</span>
+        <span class="label label-warning ">{{'已完结'|trans}}</span>
       {% endif %}
     {% endif %}
   </h1>
 
   <div class="teachers">
     {% if course.teacherIds|default(null) %}
-      教师：
+      {{'教师：'|trans}}
       {% for id in course.teacherIds %}
         {% set user = users[id] %}
         <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
