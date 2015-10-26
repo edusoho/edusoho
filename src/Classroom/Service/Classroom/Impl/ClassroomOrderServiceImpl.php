@@ -142,9 +142,9 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);  
             }
 
-            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>".'课程，请审核。';
-            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ROLE_SUPER_ADMIN'));
-            $admins = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'),array('id','DESC'),0,$adminCount);
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>".'班级，请审核。';
+            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
                 foreach ($admins as $key => $admin) {
                     $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
                 }

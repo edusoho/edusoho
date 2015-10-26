@@ -165,8 +165,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
 
             $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$courseUrl}'>{$course['title']}</a>".'课程，请审核。';
-            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ROLE_SUPER_ADMIN'));
-            $admins = $this->getUserService()->searchUsers(array('roles'=>'ROLE_SUPER_ADMIN'),array('id','DESC'),0,$adminCount);
+            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
                 foreach ($admins as $key => $admin) {
                     $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
                 }
