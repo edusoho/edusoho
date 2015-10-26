@@ -65,7 +65,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
             'type' => 'global',
         );
         $notification = $this->getNotificationDao()->searchNotifications($conditions,array('createdTime','DESC'),0,1);
-        $comparetime = $notification[0]['createdTime'];
+        $comparetime = $notification ? $notification[0]['createdTime'] : 0;
         $conditions = array(
             'id' => 0,
             'published' => 1,
