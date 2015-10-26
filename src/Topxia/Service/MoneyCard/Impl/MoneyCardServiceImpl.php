@@ -302,6 +302,56 @@ class MoneyCardServiceImpl extends BaseService
         return $this->getMoneyCardDao()->updateMoneyCard($id, $fields);
     }
 
+    public function receiveMoneyCard($token,$userId)
+    {
+        $token =$this->getTokenService()->verifyToken('coupon',$token);
+        if(!$token){
+            return false;
+        }
+        try{
+            $this->getMoneyCardDao()->getConnection()->beginTransaction();
+            $batch = $this->getCouponBatchDao()->getBatchByToken($token['token'],true);
+            $conditions = array(
+                'userId' => $userId,
+                'batchId' => $batch['id']
+                );
+            $coupon = $this->getCouponDao()->searchCoupons($conditions,array('id','DESC'),0,1);
+            if(!empty($coupon))
+            {
+                $this->getCouponBatchDao()->getConnection()->commit();
+                return false;
+            }
+            $conditions = array(
+                'userId' => 0,
+                'batchId' => $batch['id']
+                );
+            $coupons = $this->getCouponDao()->searchCoupons($conditions,array('id','ASC'),0,1);
+            if(empty($coupons))
+            {
+                $this->getCouponBatchDao()->getConnection()->commit();
+                return false;
+            }
+            $coupon = $this->getCouponDao()->getCoupon($coupons[0]['id']);
+            if(!empty($coupon)){
+                $coupon = $this->getCouponDao()->updateCoupon($coupon['id'],array(
+                    'userId' => $userId,
+                    'status' => 'receive'
+                    ));
+                if(empty($coupon))
+                {
+                    $this->getCouponBatchDao()->getConnection()->commit();
+                    return false;
+                }
+                $this->dispatchEvent("coupon.receive",$coupon);
+            }
+            $this->getCouponBatchDao()->getConnection()->commit();
+            return  true;
+        } catch (\Exception $e) {
+            $this->getCouponBatchDao()->getConnection()->rollback();      
+            throw $e;
+        }
+    }
+
     protected function getMoneyCardDao()
     {
         return $this->createDao('MoneyCard.MoneyCardDao');
