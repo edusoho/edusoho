@@ -4290,9 +4290,9 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   line-height: 1.42857143;
   text-decoration: none;
   color: #919191;
-  background-color: #f1f1f1;
-  border: 1px solid #e1e1e1;
-  margin: 4px;
+  background-color: #f5f5f5;
+  border: 1px solid #dcdcdc;
+  margin: 5px;
   border-radius: 2px;
 }
 .pagination > li > a:hover,
@@ -4311,7 +4311,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   cursor: default;
   color: #fff;
   background-color: #46c37b;
-  border-color: #46c37b;
+  border-color: #34a263;
 }
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
