@@ -12,7 +12,7 @@
 				</strong>
 		</div>
 	<p class="">{{ itemResult.answer[0]|default('')|raw }}</p>
-
+	<span>该题得分 {{ itemResult.score }} </span>
 </div>
 <div style="margin-bottom:18px">
  {% for rightAnswer in question.answer %}
