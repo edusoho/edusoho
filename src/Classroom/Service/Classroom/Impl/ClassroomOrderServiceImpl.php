@@ -136,7 +136,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
             if ($message) {
                 $variables = array(
-                    'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
+                    'item' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
                 );
                 $message = StringToolkit::template($message, $variables);
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);  

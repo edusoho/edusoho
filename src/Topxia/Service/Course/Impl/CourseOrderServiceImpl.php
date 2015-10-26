@@ -158,7 +158,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
             if ($message) {
                 $variables = array(
-                    'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"
+                    'item' => "<a href='{$courseUrl}'>{$course['title']}</a>"
                 );
                 $message = StringToolkit::template($message, $variables);
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
