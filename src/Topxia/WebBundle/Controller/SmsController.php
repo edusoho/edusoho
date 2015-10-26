@@ -83,7 +83,7 @@ class SmsController extends BaseController
         if ( !$this->getSmsService()->isOpen($smsType) ) {
             throw new \RuntimeException("请先开启相关设置!");
         }
-        $parameters['url'] = $url;
+        $parameters['url'] = $url.' ';
         if (!empty($students)) {
             if ($targetType == 'course' && $course['parentId']) {
                 $studentIds = ArrayToolkit::column($students, 'userId');
