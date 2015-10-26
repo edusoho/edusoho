@@ -237,7 +237,7 @@ class PayCenterController extends BaseController
         $formRequest = $paymentRequest->form();
         $params = $formRequest['params'];
         $payment = $request->request->get('payment');
-        if ($payment == 'alipay' || 'heepay') {
+        if ($payment == 'alipay' || $payment == 'heepay') {
             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
                 'form' => $paymentRequest->form(),
                 'order' => $order,

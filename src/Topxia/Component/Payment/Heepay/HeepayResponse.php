@@ -97,6 +97,9 @@ class HeepayResponse extends Response
     private function toArray($result)
     {
         $data = explode("|", $result);
+        if(count($data)<=1){
+           throw new \RuntimeException(sprintf('该笔单据查询次数超过一次，请过15分钟之后再查询')); 
+        }
         $param = array();
         if(is_array($data)){
             foreach ($data as $value) {
