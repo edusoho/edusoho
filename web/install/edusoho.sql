@@ -804,13 +804,13 @@ CREATE TABLE `question_favorite` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `session2`;
- CREATE TABLE `session2` (
-  `session_id` varchar(255) NOT NULL,
-  `session_value` text NOT NULL,
-  `session_time` int(11) NOT NULL,
-  `user_id` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`session_id`)
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE `sessions` (
+  `sess_id` VARBINARY(128) NOT NULL PRIMARY KEY,
+  `sess_user_id` INT UNSIGNED NOT NULL DEFAULT  '0',
+  `sess_data` BLOB NOT NULL,
+  `sess_time` INTEGER UNSIGNED NOT NULL,
+  `sess_lifetime` MEDIUMINT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `setting`;
