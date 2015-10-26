@@ -22,7 +22,7 @@
 			 <p  class="question-text-success">{{ rightAnswer|bbCode2Html|raw }}</p>
 	{% endfor %}
 </div>
-  {% if homework.type == 'evaluate' and homework.evaluateEndTime > "now" %}
+  {% if homework.type == 'evaluate' and behavior|default('view') == 'view' %}
   	{% if itemsEvaluateGroup[itemResult.id]|default(null) %}
 			<div class="quetion-eassy-form-control question-evaluate-score-input">
 				{% for itemsEvaluate in itemsEvaluateGroup[itemResult.id] %}
