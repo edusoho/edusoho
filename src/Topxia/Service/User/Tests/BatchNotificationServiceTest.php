@@ -28,7 +28,7 @@ class BatchNotificationServiceTest extends BaseTestCase
     	//var_dump($notification);
     	$notification1=$this->getBatchNotificationService()->getBatchNotification(1);
         $notification2=$this->getBatchNotificationService()->getBatchNotification(2);
-        var_dump($notification2);
+        //var_dump($notification2);
     	//var_dump($notification1);
     	$conditions=array('fromId'=>1);
     	$num=$this->getBatchNotificationService()->searchBatchNotificationsCount($conditions);
@@ -40,11 +40,11 @@ class BatchNotificationServiceTest extends BaseTestCase
         $this->getBatchNotificationService()->deleteBatchNotification(1);
         $notification2=$this->getBatchNotificationService()->getBatchNotification(1);
         $notification3=$this->getBatchNotificationService()->getBatchNotification(2);
-        var_dump($notification2);
-        var_dump($notification3);
+        //var_dump($notification2);
+        //var_dump($notification3);
         $notification3['content'] = empty($notification3['content']) ? 'aaaaaa' :'bbbbbb';
         $this->getBatchNotificationService()->updateBatchNotification(2,$notification3);
-        var_dump($notification3);
+        //var_dump($notification3);
     }
 	protected function createUser()
     {
