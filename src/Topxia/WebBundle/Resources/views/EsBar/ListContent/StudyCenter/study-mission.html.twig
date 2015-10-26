@@ -14,7 +14,19 @@
       </div>
 
       <ul class="bar-time-line">
-        {% if classroom['lessons'] %}
+        {% if classroom.planId|default(null) %}
+          {% set tasks = data('TodayUserTasks',{'userId':app.user.id, 'taskType':'studyplan', 'batchId':classroom.planId, 'count':4}) %}
+        {% endif %}
+
+        {% if tasks|default(null) %}
+          {% for task in tasks %}
+            {% if task.targetType == 'homework' %}
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_homework_start_do', {courseId:task.meta.courseId,homeworkId:task.targetId}) }}" target="_blank">{{ task.title }}</a></li>
+            {% else %}
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_learn', {id:task.meta.courseId}) ~ '#lesson/' ~ task.targetId }}" target="_blank">{{ task.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% elseif classroom['lessons'] %}
           {% for lesson in classroom['lessons'] %}
             {% set status = lesson.isLearned %}
             {% if status %}
