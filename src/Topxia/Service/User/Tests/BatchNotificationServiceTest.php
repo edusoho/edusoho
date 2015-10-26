@@ -12,18 +12,22 @@ class BatchNotificationServiceTest extends BaseTestCase
 
 	public function testsendBatchNotification()
     {
-    	$fromId=1;
-    	$title='asmd';
-    	$content='sdncsdn';
-    	$createdTime = null;
-    	$targetType='global';
-    	$targetId = 0;
-    	$type = "text";
-    	$notification=$this->getBatchNotificationService()->sendBatchNotification($fromId, $title,$content,$createdTime,$targetType,$targetId,$type);
-    	$this->getBatchNotificationService()->sendBatchNotification($fromId, $title,$content,$createdTime,$targetType,$targetId,$type);
+        $fields = array(
+        'type' => 'text',
+    	'fromId'=>1,
+    	'title'=>'asmd',
+    	'content'=>'sdncsdn',
+    	'targetType'=>'global',
+    	'targetId' => 0,
+        'createdTime' => 0,
+        'sendedTime' => 0,
+        'published' =>0
+        );
+    	$notification=$this->getBatchNotificationService()->createBatchNotification($fields);
+    	$this->getBatchNotificationService()->createBatchNotification($fields);
     	//var_dump($notification);
-    	$notification1=$this->getBatchNotificationService()->getBatchNotificationById(1);
-        $notification2=$this->getBatchNotificationService()->getBatchNotificationById(2);
+    	$notification1=$this->getBatchNotificationService()->getBatchNotification(1);
+        $notification2=$this->getBatchNotificationService()->getBatchNotification(2);
         var_dump($notification2);
     	//var_dump($notification1);
     	$conditions=array('fromId'=>1);
@@ -32,10 +36,10 @@ class BatchNotificationServiceTest extends BaseTestCase
     	$notifications=$this->getBatchNotificationService()->searchBatchNotifications($conditions,array('createdTime','ASC'),0,9999);
     	//var_dump($notifications);
         $user = $this->createUser();
-        $result=$this->getBatchNotificationService()->checkoutBatchNotification($user);
-        $this->getBatchNotificationService()->deleteBatchNotificationById(1);
-        $notification2=$this->getBatchNotificationService()->getBatchNotificationById(1);
-        $notification3=$this->getBatchNotificationService()->getBatchNotificationById(2);
+        $result=$this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+        $this->getBatchNotificationService()->deleteBatchNotification(1);
+        $notification2=$this->getBatchNotificationService()->getBatchNotification(1);
+        $notification3=$this->getBatchNotificationService()->getBatchNotification(2);
         var_dump($notification2);
         var_dump($notification3);
         $notification3['content'] = empty($notification3['content']) ? 'aaaaaa' :'bbbbbb';
