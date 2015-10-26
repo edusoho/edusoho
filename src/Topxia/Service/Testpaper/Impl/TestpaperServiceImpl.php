@@ -562,6 +562,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $accuracy = $this->sumScore($itemResults);
         $fields['objectiveScore'] = $accuracy['sumScore'];
 
+        $fields['score'] = 0;
         if (!$this->isExistsEssay($itemResults)){
             $fields['score'] = $fields['objectiveScore'];
         }
@@ -680,7 +681,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'passedStatus' => $passedStatus
         ));
 
-        
+        $testpaper = $this->getTestpaperDao()->getTestpaper($testpaperResult['testId']);
         $this->dispatchEvent(
             'testpaper.reviewed', 
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
