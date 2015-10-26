@@ -14,15 +14,24 @@ use Topxia\Common\Paginator;
 class CardController extends BaseController
 {
 
-
-    // public function indexAction(Request $request)
-    // {
-    //     $user = $this->getCurrentUser();
-
-    // }
-    public function ShowCardsAction(Request $request)
+    public function indexAction(Request $request)
     {
-    	$conditions = $request->query->all();
+        $user = $this->getCurrentUser();
+        $cardType = $request->query->get('cardType');
+
+        if(!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        }
+
+        $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],$cardType);
+        $cardIds = ArrayToolkit::column($cardLists,'cardId');
+
+        $cardsDetail = $this->getCardService()->findCardsByCardTypeAndCardIds($cardIds,$cardType);
+
+        return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
+            'cards' => $cardsDetail
+        ));
+    	
         
     }
 

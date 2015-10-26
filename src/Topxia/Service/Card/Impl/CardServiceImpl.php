@@ -22,6 +22,12 @@ class CardServiceImpl extends BaseService implements CardService
 		
 	}
 
+	public function searchCards($conditions,$sort,$start,$limit)
+	{
+
+	}
+
+
 	public function findCardsByUserIdAndCardType($userId,$cardType)
 	{
 		if (empty($cardType)) {
@@ -30,11 +36,21 @@ class CardServiceImpl extends BaseService implements CardService
 		return $this->getCardDao()->findCardsByUserIdAndCardType($userId,$cardType);
 	}
 
-	public function findCardsByCardTypeAndCardIds(array $ids,$cardType)
+	public function findCardsByCardTypeAndCardIds($ids,$cardType)
 	{
 		$processor = $this->getCardDetailProcessor($cardType);
 		$limit = count($ids);
-		return $processor->getCardDetailByCardIds($ids,array('deadline','DESC'),0,$limit);
+		$cardsDetail = $processor->getCardDetailByCardIds($ids,array('deadline','DESC'),0,$limit);
+
+		if ($cardType == 'coupon'){
+			$cards = ArrayToolkit::group($cardsDetail,'status');
+		}if($cardType == 'moneyCard'){
+			$cards == ArrayToolkit::group($cardDetail,'cardStatus');
+		}else{
+			throw $this->createServiceException('暂时没有更多类型的卡');
+		}
+		
+		return $cards;
 		
 	}
 

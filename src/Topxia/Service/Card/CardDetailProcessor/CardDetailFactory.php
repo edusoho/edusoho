@@ -3,19 +3,20 @@
 namespace Topxia\Service\Card\CardDetailProcessor;
 
 use Topxia\Service\Card\CardDetailProcessor\CardDetailProcessor;
+use Exception;
 
 class CardDetailFactory
 {
 	public static function create($cardType)
 	{
-		if(empty($target) || !in_array($target,array('coupon','moneyCard'))) {
+		if(empty($cardType) || !in_array($cardType,array('coupon','moneyCard'))) {
     		throw new Exception("卡的类型不存在");
     	}
     	if($cardType == 'moneyCard') {
-    		$cardType = 'money'
+    		$cardType = 'money';
     	}
 
-    	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'CardDetailProcessor';
+    	$class = __NAMESPACE__ . '\\' . ucfirst($cardType). 'CardDetailProcessor';
 
     	return new $class();
     	

@@ -26,9 +26,9 @@ class CardDaoImpl extends BaseDao implements CardDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function findCardsByUserIdAndCardType($userId,cardType)
+    public function findCardsByUserIdAndCardType($userId,$cardType)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND cardType = ? "
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND cardType = ? ";
         return $this->getConnection()->fetchAssoc($sql, array($userId,$cardType)) ?:array();
     }
 

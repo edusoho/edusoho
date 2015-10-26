@@ -4,7 +4,7 @@ namespace Topxia\Service\Card\CardDetailProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 
-class CouponDetailProcessor implements CardDetailProcessor
+class CouponCardDetailProcessor implements CardDetailProcessor
 {
 	public function getCardDetailByCardId($id)
 	{
@@ -20,6 +20,6 @@ class CouponDetailProcessor implements CardDetailProcessor
 
 	protected function getCouponService()
 	{
-		return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService')
+		return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService');
 	}
 }
