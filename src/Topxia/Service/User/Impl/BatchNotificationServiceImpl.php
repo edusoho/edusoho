@@ -86,7 +86,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
                     'batchId'  => $batchNotification['id'],
                     'createdTime'  =>  $batchNotification['sendedTime'],
                     );
-                $notification = $this->getNotificationDao()->addNotification(NotificationSerialize::serialize($notification));
+                $notification = $this->getNotificationDao()->addNotification(BatchNotificationSerialize::serialize($notification));
                 $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
             }
         }
@@ -142,7 +142,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         return $this->createDao('User.NotificationDao');
     }
 }
-class NotificationSerialize
+class BatchNotificationSerialize
 {
     public static function serialize(array $notification)
     {
