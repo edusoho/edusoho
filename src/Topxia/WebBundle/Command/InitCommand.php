@@ -66,9 +66,9 @@ class InitCommand extends BaseCommand
 
 		$setting = array(
             'maxRefundDays' => 10,
-            'applyNotification' => '您好，您退款的课程为{{course}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
-            'successNotification' => '您好，您申请退款课程{{course}} 审核通过，将为您退款{{amount}}元。',
-            'failedNotification' => '您好，您申请退款课程{{course}} 审核未通过，请与管理员再协商解决纠纷。',
+            'applyNotification' => '您好，您退款的项目为{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'successNotification' => '您好，您申请退款项目{{item}} 审核通过，将为您退款{{amount}}元。',
+            'failedNotification' => '您好，您申请退款项目{{item}} 审核未通过，请与管理员再协商解决纠纷。',
         );
         $setting = $this->getSettingService()->set('refund', $setting);
         $output->writeln(' ...<info>成功</info>');
