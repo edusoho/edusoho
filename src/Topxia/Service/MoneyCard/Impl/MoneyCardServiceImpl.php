@@ -94,6 +94,10 @@ class MoneyCardServiceImpl extends BaseService
         if (!$this->getMoneyCardDao()->isCardIdAvaliable(array_keys($moneyCardIds))) {
             throw $this->createServiceException('卡号有重复，生成失败，请重新生成！');
         }
+        $token = $this->getTokenService()->makeToken('money_card',array(
+           'duration' => strtotime($batch['deadline']) - time(),
+           ));
+        $batch['token'] = $token['token'];
         $batch = $this->getMoneyCardBatchDao()->addBatch($batch);
         $moneyCards = array();
         foreach ($moneyCardIds as $cardid => $cardPassword) {
@@ -311,5 +315,10 @@ class MoneyCardServiceImpl extends BaseService
     protected function getLogService ()
     {
         return $this->createService('System.LogService');
+    }
+
+    private function getTokenService()
+    {
+      return $this->createService('User.TokenService');
     }
 }
