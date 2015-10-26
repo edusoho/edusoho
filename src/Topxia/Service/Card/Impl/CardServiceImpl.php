@@ -40,7 +40,7 @@ class CardServiceImpl extends BaseService implements CardService
 	{
 		$processor = $this->getCardDetailProcessor($cardType);
 		$limit = count($ids);
-		$cardsDetail = $processor->getCardDetailByCardIds($ids,array('deadline','DESC'),0,$limit);
+		$cardsDetail = $processor->getCardsDetailByCardIds($ids,array('deadline','DESC'),0,$limit);
 
 		if ($cardType == 'coupon'){
 			$cards = ArrayToolkit::group($cardsDetail,'status');
