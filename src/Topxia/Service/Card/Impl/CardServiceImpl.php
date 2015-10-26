@@ -22,10 +22,10 @@ class CardServiceImpl extends BaseService implements CardService
 		
 	}
 
-	public function searchCards($conditions,$sort,$start,$limit)
-	{
+	// public function searchCards($conditions,$sort,$start,$limit)
+	// {
 
-	}
+	// }
 
 
 	public function findCardsByUserIdAndCardType($userId,$cardType)
