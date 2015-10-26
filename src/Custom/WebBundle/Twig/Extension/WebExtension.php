@@ -30,15 +30,21 @@ class WebExtension extends \Twig_Extension
     public function getFilters ()
     {
         return array(
-            'num2chinese' => new \Twig_Filter_Method($this, 'num2chinese')
+            'num2chinese' => new \Twig_Filter_Method($this, 'num2chinese'),
         );
     }
 
     public function getFunctions()
     {
+        $options = array('is_safe' => array('html'));
         return array(
-            
+            new \Twig_SimpleFunction('currentTime', array($this, 'getCurrentTime'), $options),
         );
+    }
+
+    function getCurrentTime()
+    {
+        return time();
     }
 
     function num2chinese($num){
