@@ -26,7 +26,7 @@ class Version20151026174121 extends AbstractMigration
                 `standardScore` int(10) unsigned NOT NULL COMMENT '达标分数',
                 `expectPublishTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '预计发布时间',
                 `publishType` enum('manual','auto') NOT NULL DEFAULT 'manual' COMMENT '发布类型：手动发布，自动发布',
-                `status` enum('unpublish','published') NOT NULL DEFAULT 'unpublish' COMMENT '成绩状态',
+                `status` enum('scoring','unpublish','published') NOT NULL DEFAULT 'scoring' COMMENT '成绩状态',
                 `publishTime` int(10) unsigned COMMENT '发布时间',
                 `createdTime` int(10) unsigned NOT NULL,
                 PRIMARY KEY  (`courseId`)
