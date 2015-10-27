@@ -15,8 +15,8 @@ class TaskEventSubscriber implements EventSubscriberInterface
             //'task.finished' => 'onFinished',
 
             'course.lesson_finish' => 'onLessonFinished',
-            //'homework.finish' => 'onHomeworkFinished',
-            //'homework.check' => 'onHomeworkCheck',
+            'homework.finish' => 'onHomeworkFinished',
+            'homework.check' => 'onHomeworkCheck',
             'testpaper.reviewed' => 'onTestPaperFinished',
             'testpaper.finish' => 'onTestPaperFinished',
         );
