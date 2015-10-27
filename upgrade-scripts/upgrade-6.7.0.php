@@ -135,6 +135,16 @@ use Symfony\Component\Yaml\Yaml;
         //$jianmoMeta2 = '{"title":"\\u7b80\\u58a8\\u4e3b\\u9898\\uff1a\\u9996\\u9875\\u4e2d\\u90e8\\u002e\\u6a2a\\u5e45","category":"jianmo","templateName":"@theme\/jianmo\/block\/middle_banner.template.html.twig","items":{"icon1":{"title":"\u4e2d\u90e8\u56fe\u6807\uff11","desc":"\u5efa\u8bae\u56fe\u7247\u5927\u5c0f\u4e3a130*130","count":1,"type":"img","default":[{"src":"\/assets\/v2\/img\/icon_introduction_1.png","alt":"\\u4e2d\\u90e8\\u6a2a\\u5e45"}]},"icon1title":{"title":"\u56fe\u6807\uff11\u6807\u9898","desc":"","count":1,"type":"text","default":[{"value":"\u7f51\u6821\u529f\u80fd\u5f3a\u5927"}]},"icon1introduction":{"title":"\u56fe\u6807\uff11\u4ecb\u7ecd","desc":"","count":1,"type":"textarea","default":[{"value":"\u4e00\u4e07\u591a\u5bb6\u7f51\u6821\u5171\u540c\u9009\u62e9\uff0c\u503c\u5f97\u4fe1\u8d56"}]},"icon2":{"title":"\u4e2d\u90e8\u56fe\u6807\uff12","desc":"\u5efa\u8bae\u56fe\u7247\u5927\u5c0f\u4e3a130*130","count":1,"type":"img","default":[{"src":"\/assets\/v2\/img\/icon_introduction_2.png","alt":"\u4e2d\u90e8\u6a2a\u5e45"}]},"icon2title":{"title":"\u56fe\u6807\uff12\u6807\u9898","desc":"","count":1,"type":"text","default":[{"value":"\u54cd\u5e94\u5f0f\u9875\u9762\u6280\u672f"}]},"icon2introduction":{"title":"\u56fe\u6807\uff12\u4ecb\u7ecd","desc":"","count":1,"type":"textarea","default":[{"value":"\u91c7\u7528\u54cd\u5e94\u5f0f\u6280\u672f\uff0c\u5b8c\u7f8e\u9002\u914d\u4efb\u610f\u7ec8\u7aef"}]},"icon3":{"title":"\u4e2d\u90e8\u56fe\u6807\uff13","desc":"\u5efa\u8bae\u56fe\u7247\u5927\u5c0f\u4e3a130*130","count":1,"type":"img","default":[{"src":"\/assets\/v2\/img\/icon_introduction_3.png","alt":"\u4e2d\u90e8\u6a2a\u5e45"}]},"icon3title":{"title":"\u56fe\u6807\uff13\u6807\u9898","desc":"","count":1,"type":"text","default":[{"value":"\u6559\u80b2\u4e91\u670d\u52a1\u652f\u6301"}]},"icon3introduction":{"title":"\u56fe\u6807\uff13\u4ecb\u7ecd","desc":"","count":1,"type":"textarea","default":[{"value":"\u5f3a\u529b\u6559\u80b2\u4e91\u652f\u6301\uff0c\u514d\u9664\u4f60\u7684\u540e\u987e\u4e4b\u5fe7"}]}}}';
         $connection->exec('update block set title="简墨主题：首页中部.横幅",meta="{$jianmoMeta2}" where code="jianmo:middle_banner"');
 
+        $cloudSmsSetting = $this->getSettingService()->get('cloud_sms', array());
+        if(isset($cloudSmsSetting['sms_enabled']) && $cloudSmsSetting['sms_enabled']) {
+            $cloudSmsSetting['sms_user_pay'] = '1';
+            $cloudSmsSetting['sms_bind'] = 'on';
+            $cloudSmsSetting['sms_forget_password'] = 'on';
+            $cloudSmsSetting['sms_forget_pay_password'] = 'on';
+            $cloudSmsSetting['sms_user_pay'] = 'on';
+            $this->getSettingService()->set('cloud_sms', $cloudSmsSetting);
+        }
+
     }
 
     private function unicodeEncode($name) {
