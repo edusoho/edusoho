@@ -304,10 +304,15 @@ class UserController extends BaseController
         $user['learningNum'] = $this->getCourseService()->findUserLearnCourseCount($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
+        $levels = array();
+        if ($this->isPluginInstalled('vip')) {
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
+        }
         return $this->render('TopxiaWebBundle:User:card-show.html.twig', array(
             'user' => $user,
             'profile' => $profile,
-            'isFollowed' => $isFollowed
+            'isFollowed' => $isFollowed,
+            'levels' => $levels,
         ));
     }
 
@@ -509,5 +514,10 @@ class UserController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }
