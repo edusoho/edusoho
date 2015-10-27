@@ -51,7 +51,7 @@ class EdusohoLiveClient
         $args = array(
             'liveId' => $liveId
         );
-        return CloudAPIFactory::create('leaf')->get('/lives/'.$liveId.'/get_max_online', $args);
+        return CloudAPIFactory::create('leaf')->get('/lives/'.$liveId.'/max_online', $args);
     }
 
     public function entryLive($args)
