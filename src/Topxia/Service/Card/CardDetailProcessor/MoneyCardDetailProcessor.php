@@ -13,7 +13,7 @@ class MoneyCardDetailProcessor implements CardDetailProcessor
 
 	public function getCardsDetailByCardIds($ids,$ids,$orderBy,$start,$limit)
 	{
-		return $this->getMoneyCardService()->getMoneyCardByIds($ids);
+		return $this->getMoneyCardService()->getMoneyCardByIds($ids,$orderBy,$start,$limit);
 		//此方法目前插件的远程分支不存在
 	}
 
