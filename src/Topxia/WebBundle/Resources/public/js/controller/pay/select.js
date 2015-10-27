@@ -1,6 +1,19 @@
 define(function(require, exports, module){
 	var Notify = require('common/bootstrap-notify');
+
     exports.run = function() {
+        
+        $modal = $('#modal');
+        $('#pay-form').on("submit",function(){
+            var payment = $(".active").attr('id');
+            if(payment == 'quickpay'){
+                $modal.modal('show');
+                $.get($('.pay-button').data('url'), function(html){
+                    $('#modal').html(html);
+                });
+                return false;
+            }   
+        })
 
         $(".order-pay .check ").on('click',  function() {
             $(this).addClass('active').siblings().removeClass('active').find('.icon').addClass('hide');
@@ -18,7 +31,6 @@ define(function(require, exports, module){
                 window.location.href = $(that).data('goto');
             });
         });
-
     };
 
 });

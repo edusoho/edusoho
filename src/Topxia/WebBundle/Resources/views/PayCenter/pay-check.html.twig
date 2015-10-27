@@ -1,0 +1,27 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}确认支付{% endblock %}
+{% block body %}
+
+  <form id="pay-form" method="post" action="">
+    <div class="form-group">
+      <div class="controls row" style="margin:20px auto;">
+        <div class = "col-md-7 col-md-offset-1" >
+          <input type="text" class="form-control" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required">    
+          <p class="help-block"></p>
+        </div>
+        <div class="col-md-4">
+          <a class="btn btn-default btn-sm js-sms-send disabled" data-url="">
+            <span id="js-time-left"></span>
+            <span id="js-fetch-btn-text">获取短信验证码</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+{% block footer %}
+    <button id="reward-btn" type="submit" class="btn btn-primary " data-toggle="form-submit" data-target="#reward-form">确定支付</button>
+  
+  <!--<script>app.load('rewardbundle/controller/reward-user/reward-modal')</script>-->
+{% endblock %}

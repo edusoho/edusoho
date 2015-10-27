@@ -83,6 +83,11 @@ class PayCenterController extends BaseController
 		return $this->render('TopxiaWebBundle:PayCenter:show.html.twig', $orderInfo);
 	}
 
+    public function sendPaySmsShowAction()
+    {
+        return $this->render('TopxiaWebBundle:PayCenter:pay-check.html.twig');
+    }
+
 	public function payAction(Request $request)
 	{
 		$fields = $request->request->all();
@@ -159,7 +164,7 @@ class PayCenterController extends BaseController
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
         
-        if ($name == 'alipay' || 'heepay') {
+        if ($name == 'alipay' || $name=='heepay') {
             $response = $this->createPaymentResponse($name, $request->request->all());
         }
         elseif ($name == 'wxpay') {
@@ -237,10 +242,10 @@ class PayCenterController extends BaseController
         $formRequest = $paymentRequest->form();
         $params = $formRequest['params'];
         $payment = $request->request->get('payment');
-        if ($payment == 'alipay' || $payment == 'heepay') {
+        if ($payment == 'alipay' || $payment == 'heepay' || $payment == 'quickpay') {
             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-                'form' => $paymentRequest->form(),
-                'order' => $order,
+                'form' => $formRequest,
+                'order' => $order
             ));
         }elseif ($payment == 'wxpay') {
             $returnXml = $paymentRequest->unifiedOrder();
@@ -344,6 +349,7 @@ class PayCenterController extends BaseController
         $request = Payment::createRequest($order['payment'], $options);
         $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
+            'userId'=>$order['userId'],
             'title' => $order['title'],
             'summary' => '',
             'mobile' =>$user_profile['mobile'],
@@ -400,6 +406,7 @@ class PayCenterController extends BaseController
         }else{
             $options = array(
                 'key' => $settings["{$payment}_key"],
+                'account'=>$settings["{$payment}_account"],
                 'secret' => $settings["{$payment}_secret"],
                 'aes'=>$settings["{$payment}_aes"]
             );
@@ -429,7 +436,7 @@ class PayCenterController extends BaseController
             return $enableds;
         }
 
-        $payNames = array('alipay','wxpay','heepay','quickpay');
+        $payNames = array('alipay','wxpay','quickpay','heepay');
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName . '_enabled'])) {
                 $enableds[$payName] = array(

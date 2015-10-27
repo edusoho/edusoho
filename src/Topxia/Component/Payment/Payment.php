@@ -23,6 +23,17 @@ class Payment {
         return new $class($options);
     }
 
+    public static function createAuthBankRequest($name, $options = array()) {
+        $name = ucfirst(strtolower($name));
+        $class = __NAMESPACE__ . "\\{$name}\\{$name}AuthBankRequest";
+
+        if (!class_exists($class)) {
+            throw new \Exception("Payment close trade request {$name} is not exist!");
+        }
+        return new $class($options);
+    }
+
+
     public static function createResponse($name, $options = array()) {
         $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__ . "\\{$name}\\{$name}Response";

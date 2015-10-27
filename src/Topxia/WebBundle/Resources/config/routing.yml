@@ -1631,6 +1631,14 @@ pay_center_pay:
     defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
     methods: [POST]
 
+pay_center_send_pay_sms:
+    path:   /pay/center/send/pay/sms
+    defaults: { _controller: TopxiaWebBundle:PayCenter:sendPaySms}
+
+pay_center_send_pay_sms_show:
+    path:   /pay/center/send/pay/sms/show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:sendPaySmsShow }
+
 pay_return:
     pattern:  /pay/center/pay/{name}/return
     defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }

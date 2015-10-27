@@ -36,7 +36,7 @@ class QuickpayRequest extends Request {
         }
         $aesArr = array();
         $aesArr['version']=1;
-        $aesArr['user_identity']='';
+        $aesArr['user_identity']=md5($this->options['account']."_".$params['userId']);
         $aesArr['hy_auth_uid']='';
         $aesArr['mobile']=$params['mobile'];
         $aesArr['device_type']=1;
@@ -62,44 +62,28 @@ class QuickpayRequest extends Request {
         $aesArr['timestamp']=time()*1000;
         $sign = $this->signParams($aesArr);
         $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($aesArr),$this->options['aes'])));        
+        
+        $this->getAuthBanks();
         $url = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
-
         $result = $this->curlRequest($url);
         $xml = simplexml_load_string($result);
         $redir=(string)$xml->encrypt_data;
         $redirurl=$this->Decrypt($redir,$this->options['aes']);
 
-        // parse_str($redirurl,$tip);
-        // if(!array_key_exists('redirect_url', $tip)){
-        //     throw new \RuntimeException(sprintf($tip['ret_msg']));
-        // }
-        // $this->submitUrl=$tip['redirect_url'];
-        // unset($tip['ret_code'],$tip['ret_msg'],$tip['redirect_url']);
-        // $converted = array();
-        // foreach ($tip as $key => $value) {
-        //     $converted[$key]=$value;
-        // }
+        parse_str($redirurl,$tip);
+        $this->submitUrl=$tip['redirect_url'];
+        unset($tip['ret_code'],$tip['ret_msg'],$tip['redirect_url']);
+        $converted = array();
+        $converted['agent_id']=$this->options['key'];
+        foreach ($tip as $key => $value) {
+            $converted[$key]=$value;
+        }
 
-        $arr=explode('redirect_url=', $redirurl);
-
-
-
-        //return $converted;
-
-
-        // if(count($arr)<2){
-        //     throw new \RuntimeException(sprintf('支付异常。'));
-        // }
-        //return $tip['redirect_url'];
-        // echo $arr[1];
-        // //header('Location:'.$arr[1]);
-        echo "<script>top.location='".$arr[1]."'</script>";
-        
+        return $converted;
     }
 
     private function curlRequest($url)
     {
-
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 500);

@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <form class="paystyle"  method="post" action="{{path('pay_center_pay')}}">
+          <form class="paystyle"  method="post" action="{{path('pay_center_pay')}}" id='pay-form'>
             <input type="hidden" name="orderId" value="{{order.id}}"/>
             {% for payment,options in payments %}
               {% if loop.index == 1 %}
@@ -65,17 +65,25 @@
             {% endfor %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
               
-          	<div class="form-group order-detail-bg ">
-              <div class="pay-type-lable">支付方式</div>
-              {% for payment, options in payments %}
-                <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
-                  {% set picture = 'assets/img/order/'~payment~'.png' %}
-                  <img src="{{ asset(picture) }}" />
-                  <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
-                </div>
-              {% else %}
-                <div class="pay-type-lable text-warning ">支付方式未开启，请联系管理员。</div>
-              {% endfor %}
+          	<div class="form-group order-detail-bg clearfix">
+              <div class="pay-type-lable pull-left" style="height:58px;line-height:58px;">支付方式</div>
+              <div class="pull-left">
+                  {% for payment, options in payments %}
+                  <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
+                    {% set picture = 'assets/img/order/'~payment~'.png' %}
+                    <img src="{{ asset(picture) }}" />
+                    <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
+                  </div>
+                {% else %}
+                  <div class="pay-type-lable text-warning ">支付方式未开启，请联系管理员。</div>
+                {% endfor %}
+                  <div style="margin-top:10px;">
+                    <select multiple class="form-control pay-bank">
+                      <option>农业银行－8899</option>
+                      <option>2</option>
+                    </select>
+                  </div>
+              </div>
             </div>
             <div class="form-group pay pay-amount ">
               <div class="total-price">
@@ -93,7 +101,7 @@
                 {% endif %}
                  class=" link-light  mrl " data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消
               </a>
-              <button class="pay-button btn btn-primary btn-high"  type="submit">确认支付</button>
+              <button class="pay-button btn btn-primary btn-high"  type="submit" data-url="{{path('pay_center_send_pay_sms_show')}}">确认支付</button>
             </div>
           </form>
         </div>

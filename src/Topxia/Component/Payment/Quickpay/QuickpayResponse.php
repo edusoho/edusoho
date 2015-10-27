@@ -14,7 +14,6 @@ class QuickpayResponse extends Response
         $params = $this->params;
         $aesStr= $this->Decrypt($params['encrypt_data'],$this->options['aes']);
         parse_str($aesStr,$returnArray);
-
         $result = $this->confirmSellerSendGoods($returnArray['agent_bill_id']);
         // if ($result['status'] != 'SUCCESS' || $result['status'] != 'WFPAYMENT' || $result['status'] != 'CANCEL'){
         //     throw new \RuntimeException('快捷支付失败');
@@ -35,7 +34,7 @@ class QuickpayResponse extends Response
         $data['amount'] = $returnArray['real_amt'];
         
         if (!empty($returnArray['hy_deal_time'])) {
-            $data['paidTime'] = $returnArray['hy_deal_time'];
+            $data['paidTime'] = strtotime($returnArray['hy_deal_time']);
         }else {
             $data['paidTime'] = time();
         }
