@@ -7,8 +7,6 @@ interface LessonDao
 
     public function getLesson($id);
 
-    public function setCourseLessonMaxOnlineNum($lessonId,$num);
-
     public function getLessonByCourseIdAndNumber($courseId, $number);
 
     public function findLessonsByCourseId($courseId);
