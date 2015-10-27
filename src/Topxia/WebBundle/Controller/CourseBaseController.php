@@ -21,7 +21,6 @@ abstract class CourseBaseController extends BaseController
         }
 
         $previewAs = $request->query->get('previewAs');
-
         $user = $this->getCurrentUser();
         $member = $user ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
 
@@ -53,7 +52,6 @@ abstract class CourseBaseController extends BaseController
         if (empty($user->id)) {
             return null;
         }
-
 
         if (in_array($as, array('member', 'guest'))) {
             if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {

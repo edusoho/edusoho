@@ -13,34 +13,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return $this->getJobDao()->getJob($id);
     }
 
-    public function searchJobs($conditions, $sort, $start, $limit)
-    {
-        $conditions = $this->prepareSearchConditions($conditions);
-
-        switch ($sort) {
-            case 'created':
-                $sort = array('createdTime','DESC');
-                break;
-            case 'createdByAsc':
-                $sort = array('createdTime','ASC');
-                break;
-
-            default:
-                throw $this->createServiceException('参数sort不正确。');
-                break;
-        }
-
-        $logs = $this->getJobDao()->searchJobs($conditions, $sort, $start, $limit);
-
-        return $logs;
-    }
-
-    public function searchJobsCount($conditions)
-    {
-        $conditions = $this->prepareSearchConditions($conditions);
-        return $this->getJobDao()->searchJobsCount($conditions);
-    }
-
     public function createJob($job)
     {
         $user = $this->getCurrentUser();
@@ -68,7 +40,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $this->setNextExcutedTime(0);
 
             $this->getJobDao()->getConnection()->beginTransaction();
-
             // 加锁
             $job = $this->getJob($id, true);
 
@@ -80,10 +51,8 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             }
 
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
-            $jobInstance = new $job['jobClass']();
-            $job['jobParams']['targetType'] = $job['targetType'];
-            $job['jobParams']['targetId'] = $job['targetId'];
 
+            $jobInstance = new $job['jobClass']();
             $jobInstance->execute($job['jobParams']);
 
             $this->afterJonExecute($job);
@@ -176,7 +145,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $fileContent = file_get_contents($filePath);
         $config = $yaml->parse($fileContent);
         return $config['crontab_next_executed_time'];
-
     }
 
     public function setNextExcutedTime($nextExcutedTime)
@@ -187,34 +155,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $fh = fopen($filePath,"w");
         fwrite($fh,$content);
         fclose($fh);
-    }
-
-    public function findJobByTargetTypeAndTargetId($targetType, $targetId)
-    {
-        return $this->getJobDao()->findJobByTargetTypeAndTargetId($targetType, $targetId);
-    }
-
-    protected function prepareSearchConditions($conditions)
-    {
-        if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
-            $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
-            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
-        } else {
-            unset($conditions['nextExcutedStartTime']);
-            unset($conditions['nextExcutedEndTime']);
-        }
-
-        if (empty($conditions['cycle'])) {
-            unset($conditions['cycle']);
-        }
-
-        if (empty($conditions['name'])) {
-            unset($conditions['name']);
-        } else {
-            $conditions['name'] = '%'.$conditions['name'].'%';
-        }
-
-        return $conditions;
     }
 
     protected function getJobDao()

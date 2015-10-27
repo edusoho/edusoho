@@ -64,13 +64,6 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function findJobByTargetTypeAndTargetId($targetType, $targetId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
-        $job = $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ? : array();
-        return $this->createSerializer()->unserialize($job, $this->serializeFields);
-    }
-
     protected function createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)

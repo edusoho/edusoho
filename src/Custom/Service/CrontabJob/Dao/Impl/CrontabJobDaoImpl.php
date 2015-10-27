@@ -19,4 +19,21 @@ class CrontabJobDaoImpl extends BaseDaoImpl implements CrontabJobDao
         $job = $this->getConnection()->fetchAssoc($sql, array($jobName, $targetType, $targetId)) ? : array();
         return $this->createSerializer()->unserialize($job, $this->serializeFields);
     }
+
+    public function findJobByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
+        $job = $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ? : array();
+        return $this->createSerializer()->unserialize($job, $this->serializeFields);
+    }
+
+    protected function createSearchQueryBuilder($conditions)
+    {
+        $builder = parent::createSearchQueryBuilder($conditions)
+            ->andWhere("name LIKE :name")
+            ->andWhere('nextExcutedTime <= :nextExcutedEndTime')
+            ->andWhere('nextExcutedTime >= :nextExcutedStartTime')
+            ;
+        return $builder;
+    }
 }

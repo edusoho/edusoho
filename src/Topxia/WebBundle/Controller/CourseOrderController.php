@@ -326,6 +326,7 @@ class CourseOrderController extends OrderController
             return null;
         }
 
+
         if (in_array($as, array('member', 'guest'))) {
             if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 $member = array(

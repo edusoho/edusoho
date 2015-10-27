@@ -82,7 +82,7 @@
     });
 
     Validator.addRule(
-        'mooc_mobile',
+        'mobile',
         /^1[3|5|7|8]\d{9}$/,
         "{{display}}手机格式不正确"
     );
@@ -119,7 +119,7 @@
     validator.addItem({
         element: '#mobile-field',
         required: true,
-        rule: 'mooc_mobile'
+        rule: 'mobile'
     });
 
     validator.addItem({
