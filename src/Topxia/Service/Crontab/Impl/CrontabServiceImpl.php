@@ -30,9 +30,9 @@ class CrontabServiceImpl extends BaseService implements CrontabService
                 break;
         }
 
-        $logs = $this->getJobDao()->searchJobs($conditions, $sort, $start, $limit);
+        $jobs = $this->getJobDao()->searchJobs($conditions, $sort, $start, $limit);
 
-        return $logs;
+        return $jobs;
     }
 
     public function searchJobsCount($conditions)
