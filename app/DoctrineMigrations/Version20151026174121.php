@@ -40,10 +40,10 @@ class Version20151026174121 extends AbstractMigration
                 `examScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '考试成绩',
                 `homeworkScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '作业成绩',
                 `otherScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '其它成绩',
+                `importOtherScore` float(10,1)  DEFAULT '0.0' COMMENT '导入的其它成绩',
                 `createdTime` int(10) unsigned NOT NULL,
                 PRIMARY KEY  (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课程学员得分表';
-            
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课程学员得分表';            
         "
         );
     }
