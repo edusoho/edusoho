@@ -28,7 +28,7 @@ class CopyInstallFilesCommand extends BaseCommand
 		$output->writeln('<info>copy-install-files开始</info>');
 		$version = $input->getArgument('version');
 		
-		$command = "rm -rf build/edusoho-{$version}.tar.gz";
+		$command = "rm -rf build/edusoho-mooc-{$version}.tar.gz";
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 
@@ -36,7 +36,7 @@ class CopyInstallFilesCommand extends BaseCommand
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 
-		$command = "cd build \n tar -czf edusoho-{$version}.tar.gz edusoho/";
+		$command = "cd build \n tar -czf edusoho-mooc-{$version}.tar.gz edusoho/";
 
 		$output->writeln("<info>{$command}</info>");
 		exec($command);

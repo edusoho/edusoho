@@ -1,0 +1,6 @@
+<h4>友情链接 :</h4>
+<ul>
+  {% for partner in partners|default('') %}
+    <li><a href="{{ partner.href }}" target="{{ partner.target }}">{{ partner.value }}</a></li>
+  {% endfor %}
+</ul>
