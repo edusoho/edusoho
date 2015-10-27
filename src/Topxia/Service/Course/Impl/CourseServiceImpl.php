@@ -1542,6 +1542,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
+
 	}
 
 	public function searchLearnCount($conditions)
@@ -1619,6 +1620,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return $statuses;
 	}
+
+	public function getLearnByUserIdAndLessonId($userId, $lessonId)
+	{
+		return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+	}
+	
 
 	public function findUserLearnedLessons($userId, $courseId)
 	{

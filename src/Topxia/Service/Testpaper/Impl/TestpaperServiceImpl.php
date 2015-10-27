@@ -672,7 +672,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         ));
 
         $this->dispatchEvent('testpaper.reviewed', $result);
-
+        
         return $result;
 
     }
