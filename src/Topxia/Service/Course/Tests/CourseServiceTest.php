@@ -94,11 +94,19 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindMobileVerifiedMemberCountByCourseId()
     {
+        //创建一个teacher并设置为当前用户
+        $teacher = $this->createTeacherUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($teacher);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
         $course = array(
             'title' => 'online test course1'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        
+        //创建一个普通用户，并设置为当前用户
         $user1 = $this->createNormalUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user1);
