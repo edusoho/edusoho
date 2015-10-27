@@ -1289,3 +1289,24 @@ admin_announcement_edit:
     pattern:  /announcement/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:Announcement:edit }
 
+admin_batch_notification:
+    pattern: /batch_notification
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:index }
+
+admin_batch_notification_create:
+    pattern: /batch_notification/create
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:create }
+
+admin_batch_notification_edit:
+    pattern: /batch_notification/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:edit }
+
+admin_batch_notification_delete:
+    pattern: /batch_notification/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:delete }
+    methods: [POST]
+
+admin_batch_notification_send:
+    pattern: /batch_notification/send/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
+    methods:  [POST]
