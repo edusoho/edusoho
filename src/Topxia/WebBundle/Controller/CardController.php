@@ -28,7 +28,7 @@ class CardController extends BaseController
 
         $cardsDetail = $this->getCardService()->findCardsByCardTypeAndCardIds($cardIds,$cardType);
 
-        return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
+        return $this->render('TopxiaWebBundle:Card:index.html.twig',array(
             'cards' => $cardsDetail
         ));
     	
