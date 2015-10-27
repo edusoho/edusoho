@@ -137,6 +137,22 @@ use Symfony\Component\Yaml\Yaml;
 
     }
 
+    private function unicodeEncode($name) {
+        $name = iconv('UTF-8', 'UCS-2', $name);
+        $len = strlen($name);
+        $str = '';
+        for ($i = 0; $i < $len - 1; $i = $i + 2) {
+            $c = $name[$i];
+            $c2 = $name[$i + 1];
+            if (ord($c) > 0) {
+                $str .= '\u'.base_convert(ord($c), 10, 16).str_pad(base_convert(ord($c2), 10, 16), 2, 0, STR_PAD_LEFT);
+            } else {
+                $str .= $c2;
+            }
+        }
+        return $str;
+    }
+
     private function updateCrontabSetting()
     {
         $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../app/data/crontab_config.yml");
