@@ -263,7 +263,6 @@ class LiveCourseController extends BaseController
         $client = new EdusohoLiveClient();
         if ($lesson['type'] == 'live') {
             $result = $client->getMaxOnline($lesson['mediaId']);
-            // var_dump($result);exit();
             $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'],$result);
         }
 
