@@ -4,7 +4,17 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
-
+		for (var i = 16; i >= 1; i--) {
+            var id = '#article-property-tips'+i;
+            var htmlId = id + '-html';
+            $(id).popover({
+                html: true,
+                trigger: 'hover',//'hover','click'
+                placement: 'left',//'bottom',
+                content: $(htmlId).html()
+            });
+        };
+        
 		if ($('#sms-form').length>0){	
 
 			$('[name="sms_enabled"]').click(function(){
