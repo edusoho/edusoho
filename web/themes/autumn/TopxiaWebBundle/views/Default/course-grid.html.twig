@@ -35,7 +35,9 @@
     <span class="teachers">
        主讲:
       {% for teacher in course.teachers %}
-       {{ web_macro.user_link(teacher, 'text-muted') }}
+       {% if loop.index <= 1 %}
+        {{ web_macro.user_link(teacher, 'text-muted') }}
+       {% endif %}
       {% endfor %}
     </span>
   </div>

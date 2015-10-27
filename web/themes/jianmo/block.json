@@ -1,7 +1,7 @@
 {
     "jianmo:home_top_banner":
     {
-        "title": "默认主题：首页顶部.轮播图 ",
+        "title": "简墨主题：首页顶部.轮播图 ",
         "category": "jianmo",
         "templateName": "@theme/jianmo/block/carousel.template.html.twig",
         "items": {
@@ -97,7 +97,7 @@
     },
     "jianmo:middle_banner":
     {
-        "title": "默认主题：首页中部.横幅",
+        "title": "简墨主题：首页中部.横幅",
         "category": "jianmo",
         "templateName": "@theme/jianmo/block/middle_banner.template.html.twig",
         "items": {
@@ -210,7 +210,7 @@
     },
     "jianmo:bottom_info":
     {
-        "title": "默认主题: 首页底部.链接区域",
+        "title": "简墨主题: 首页底部.链接区域",
         "category": "jianmo",
         "templateName": "@theme/jianmo/block/bottom_info.template.html.twig",
         "items": {

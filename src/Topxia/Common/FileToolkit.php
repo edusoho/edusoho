@@ -1001,10 +1001,4 @@ class FileToolkit
         return array($naturalSize, $scaledSize);
     }
 
-    public static function getMimeType(File $file)
-    {
-        $mimeType = finfo_file(finfo_open(FILEINFO_MIME),$file);
-        return $mimeType;
-    }
-
 }

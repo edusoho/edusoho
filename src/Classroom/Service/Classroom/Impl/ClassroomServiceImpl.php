@@ -358,6 +358,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !$members ? array() : ArrayToolkit::index(MemberSerialize::unserializes($members), 'classroomId');
     }
 
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
+    {
+        return $this->getClassroomMemberDao()->findMemberCountByclassroomIdAndHasVerifiedMobile($classroomId, $locked);
+    }
+
     public function findClassroomsByIds(array $ids)
     {
         return ArrayToolkit::index($this->getClassroomDao()->findClassroomsByIds($ids), 'id');
@@ -1171,6 +1176,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
+
         if ( empty($member) || !in_array('student', $member['role']) ) {
             throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，封锁学员失败。");
         }
@@ -1186,7 +1192,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#${$courseId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("班级(#${$classroomId})不存在，封锁学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
