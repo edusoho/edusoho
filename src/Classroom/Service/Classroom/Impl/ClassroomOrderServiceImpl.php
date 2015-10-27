@@ -121,6 +121,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
@@ -132,15 +133,22 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
             $setting = $this->getSettingService()->get('refund');
             $message = ( empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
+            $classroom = $this->getClassroomService()->getClassroom($order["targetId"]);
+            $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
             if ($message) {
-                $classroom = $this->getClassroomService()->getClassroom($order["targetId"]);
-                $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
                 $variables = array(
-                    'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
+                    'item' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
                 );
                 $message = StringToolkit::template($message, $variables);
-                $this->getNotificationService()->notify($refund['userId'], 'default', $message);
+                $this->getNotificationService()->notify($refund['userId'], 'default', $message);  
             }
+
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>".'班级，请审核。';
+            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
+                foreach ($admins as $key => $admin) {
+                    $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+                }
         } elseif ($refund['status'] == 'success') {
             $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);
         }
