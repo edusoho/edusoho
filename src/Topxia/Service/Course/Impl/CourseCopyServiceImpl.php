@@ -181,6 +181,9 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['copyId'] = $lesson['id'];
             $copiedLesson = $this->getLessonDao()->addLesson($fields);
+            if(array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['status'] == 'published') {
+                $this->createJob($lesson);
+            }
             $map[$lesson['id']] = $copiedLesson;
             if (array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"]>0 && in_array($copiedLesson["type"], array('video', 'audio', 'ppt'))) {
                 $this->getUploadFileDao()->waveUploadFile($copiedLesson["mediaId"],'usedCount',1);
@@ -196,6 +199,37 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         }
 
         return $map;
+    }
+
+    protected function createJob($lesson)
+    {
+        $daySmsType = 'sms_live_play_one_day';
+        $hourSmsType = 'sms_live_play_one_hour';
+        $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
+        $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
+        if ($dayIsOpen && $lesson['startTime'] >= (time() + 24*60*60)) {
+            $startJob = array(
+            'name' => "直播短信一天定时",
+            'cycle' => 'once',
+            'time' => $lesson['startTime'] - 24*60*60,
+            'jobClass' => 'Topxia\\Service\\Sms\\Job\\SmsSendOneDayJob',
+            'targetType' => 'lesson',
+            'targetId' => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }
+
+        if ($hourIsOpen && $lesson['startTime'] >= (time() + 60*60)) {
+            $startJob = array(
+            'name' => "直播短信一小时定时",
+            'cycle' => 'once',
+            'time' => $lesson['startTime'] - 60*60,
+            'jobClass' => 'Topxia\\Service\\Sms\\Job\\SmsSendOneHourJob',
+            'targetType' => 'lesson',
+            'targetId' => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }     
     }
 
     protected function copyChapters($courseId, $newCourse)
@@ -416,5 +450,15 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     protected function getAppService()
     {
         return $this->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab.CrontabService');
+    }
+
+    protected function getSmsService()
+    {
+        return $this->createService('Sms.SmsService');
     }
 }

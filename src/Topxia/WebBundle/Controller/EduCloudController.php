@@ -5,6 +5,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Respose;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
@@ -14,7 +16,6 @@ class EduCloudController extends BaseController
             if ($this->setting('cloud_sms.sms_enabled') != '1') {
                 return $this->createJsonResponse(array('error' => '短信服务被管理员关闭了'));
             }
-
             $currentUser = $this->getCurrentUser();
             $currentTime = time();
 
@@ -37,7 +38,11 @@ class EduCloudController extends BaseController
 
             if (in_array($smsType, array('sms_bind','sms_registration'))) {
                 $to = $request->request->get('to');
-
+                if ($smsType == 'sms_bind') {
+                    $description = '手机绑定';
+                } else {
+                    $description = '用户注册';
+                }
                 $hasVerifiedMobile = (isset($currentUser['verifiedMobile'])&&(strlen($currentUser['verifiedMobile'])>0));
                 if ($hasVerifiedMobile && ($to == $currentUser['verifiedMobile'])){
                     return $this->createJsonResponse(array('error' => "您已经绑定了该手机号码"));
@@ -49,6 +54,7 @@ class EduCloudController extends BaseController
             }
 
             if ($smsType == 'sms_forget_password') {
+                $description = '登录密码重置';
                 $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('to'));
                 if (empty($targetUser)){
                     return $this->createJsonResponse(array('error' => '用户不存在'));    
@@ -64,6 +70,11 @@ class EduCloudController extends BaseController
 
             if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
                 $user = $currentUser->toArray();
+                if ($smsType == 'sms_user_pay') {
+                    $description = '网站余额支付';
+                } else {
+                    $description = '支付密码重置';
+                }
                 if ((!isset($user['verifiedMobile']) || (strlen($user['verifiedMobile']) == 0))) {
                     return $this->createJsonResponse(array('error' => '用户没有被绑定的手机号'));
                 }
@@ -78,9 +89,10 @@ class EduCloudController extends BaseController
             }
 
             $smsCode = $this->generateSmsCode();
+            
             try {
                 $api = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'verify' => $smsCode, 'category' => $smsType));
+                $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'verify' => $smsCode));
 
                 if (isset($result['error'])) {
                     return $this->createJsonResponse(array('error' => "发送失败, {$result['error']}"));
@@ -145,6 +157,26 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('error'=>'accessKey error!'));
     }
 
+    public function smsCallBackAction(Request $request, $targetType, $targetId)
+    {
+        $index = $request->query->get('index');
+        $smsType = $request->query->get('smsType');
+        $originSign = rawurldecode($request->query->get('sign'));
+
+        $siteSetting = $this->getSettingService()->get('site');
+        $url = $siteSetting['url'];
+        $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
+        $url .= '?index='.$index.'&smsType='.$smsType;
+        $api = CloudAPIFactory::create('leaf');
+        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
+        if ($originSign != $sign) {
+            return $this->createJsonResponse(array('error'=>'sign不正确'));
+        }
+
+        $processor = SmsProcessorFactory::create($targetType);
+        return $this->createJsonResponse($processor->getSmsInfo($targetId, $index, $smsType));
+    }
+
     protected function generateSmsCode($length = 6)
     {
         $code = rand(0, 9);
@@ -176,7 +208,7 @@ class EduCloudController extends BaseController
         if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind','sms_user_pay', 'sms_forget_pay_password')))) {
             throw new \RuntimeException('用户未登录');
         }
-
+        
         if ( $this->setting("cloud_sms.{$smsType}") != 'on' && !$this->getUserService()->isMobileRegisterMode()) {
             throw new \RuntimeException('该使用场景未开启');
         }
@@ -196,4 +228,11 @@ class EduCloudController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
+
+
+    protected function getSignEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
+    }
+
 }

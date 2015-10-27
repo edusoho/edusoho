@@ -587,7 +587,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'testpaper.finish', 
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
-
+        
         return $testpaperResult;
     }
 
@@ -674,6 +674,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $this->dispatchEvent('testpaper.reviewed', $result);
 
         return $result;
+
     }
 
     public function submitTestpaperAnswer($id, $answers)
@@ -972,5 +973,4 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
-
 }

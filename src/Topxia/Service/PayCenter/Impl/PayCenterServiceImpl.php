@@ -7,6 +7,7 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 use Topxia\Component\Payment\Payment;
+use Topxia\Service\Common\ServiceEvent;
 
 class PayCenterServiceImpl extends BaseService implements PayCenterService
 {
@@ -38,6 +39,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 				return array(true, $order);
 			}
 
+
 			if($order["status"] == "created"){
 				$outflow = $this->proccessCashFlow($order);
 
@@ -53,6 +55,12 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 			}
 
             $connection->commit();
+            
+            if ($success) {
+				$this->dispatchEvent("order.pay.success", 
+					new ServiceEvent($order,array('targetType'=>$order["targetType"]))
+				);
+	    	}
             return array($success, $order);
 		} catch (\Exception $e) {
             $connection->rollback();
@@ -82,9 +90,11 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 	        if ($order['status'] == 'paid' && $processor) {
 	            $processor->doPaySuccess($success, $order);
 	        }
+
 	        if($lock){
 	        	$connection->commit();
 	    	}
+	    	
 	        return array($success, $order);
         }catch (\Exception $e) {
         	if($lock){
@@ -257,4 +267,5 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     {
         return $this->createService('Coupon:Coupon.CouponService');
     }
+
 }

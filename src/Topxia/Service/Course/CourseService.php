@@ -253,6 +253,8 @@ interface CourseService
 
 	public function findCourseStudentsByCourseIds($courseIds);
 
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
+
 	public function getCourseStudentCount($courseId);
 
 	public function findCourseTeachers($courseId);
