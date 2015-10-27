@@ -3657,7 +3657,12 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindCoursesByParentIdAndLocked()
     {
-        $course1 = array('title' => 'test-one','parentId'=>1,'locked'=>1);
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course1 = array('title' => 'test-one','parentId'=>1,'locked'=>1,'userId'=>$currentUser['id'],'createdTime'=>time(),);
         $course1 = $this->getCourseDao()->addCourse($course1);
         $result = $this->getCourseService()->findCoursesByParentIdAndLocked(1,1);
         $this->assertEquals(1,count($result));
