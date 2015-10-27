@@ -425,10 +425,19 @@ admin_cloud_bill:
     name: 云视频账单
     parent: admin_my_cloud
     router_name: admin_cloud_bill
+admin_batch_notification:
+    name: 全站站内通知
+    parent: admin_operation
+    before: admin_operation_block
+    group: 2
+admin_batch_notification_create:
+    name: 创建站内通知
+    parent: admin_batch_notification
+    group: 2
 admin_announcement:
     name: 网站公告管理
     parent: admin_operation
-    before: admin_operation_block
+    before: admin_batch_notification
     group: 2
 admin_announcement_create:
     name: 新增公告
