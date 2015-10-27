@@ -69,9 +69,7 @@ define(function(require, exports, module) {
             data.to = $('[name="'+this.get("dataTo")+'"]').val();   
             data.sms_type = this.get("smsType");  
             if (this.get('captcha')) {
-                var lastCaptcha = $('[name="'+this.get("captchaNum")+'"]');
-                lastCaptcha = lastCaptcha.eq(lastCaptcha.length - 1);
-                data.captcha_num = lastCaptcha.val();
+                data.captcha_num = $('[name="'+this.get("captchaNum")+'"]').val();
                 if (!this.get('captchaValidated')) {
                     return false;
                 }
