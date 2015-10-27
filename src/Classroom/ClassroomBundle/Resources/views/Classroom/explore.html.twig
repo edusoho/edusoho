@@ -85,7 +85,7 @@
               {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service} %}
             </div>
             <ul class="class-data clearfix">
-              <li><i class="es-icon es-icon-book"></i>{{allClassrooms[classroom.id].courseNum}}</li>
+              <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
               <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
               <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
             </ul>

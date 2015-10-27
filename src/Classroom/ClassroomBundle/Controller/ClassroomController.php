@@ -86,7 +86,6 @@ class ClassroomController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $allClassrooms = ArrayToolkit::index($classrooms, 'id');
         if(!$categoryArray){
             $categoryArrayDescription = array();
         } else {
@@ -108,7 +107,6 @@ class ClassroomController extends BaseController
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator' => $paginator,
             'classrooms' => $classrooms,
-            'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
             'category' => $category,
             'categoryArray' => $categoryArray,
