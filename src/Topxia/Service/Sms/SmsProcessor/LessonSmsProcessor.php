@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\NameCutterTookit;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 {
@@ -26,6 +27,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $container = $kernel->getContainer();
         $siteSetting = $this->getSettingService()->get('site');
         $hostName = $siteSetting['url'];
+        $api = CloudAPIFactory::create('root');
         for($i = 0; $i <= intval($count/1000); $i ++){
             $urls[$i] = $hostName;
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback',array('targetType' => 'lesson','targetId' => $targetId));
