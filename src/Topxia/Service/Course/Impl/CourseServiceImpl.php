@@ -930,6 +930,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num)
+	{
+		$this->getLessonDao()->setCourseLessonMaxOnlineNum($lessonId,$num);
+	}
+
 	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
 		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
