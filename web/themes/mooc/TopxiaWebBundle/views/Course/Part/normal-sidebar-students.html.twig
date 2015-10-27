@@ -1,3 +1,5 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
 {% if students %}
   <div class="es-panel student-column">
     <div class="panel-heading clearfix">最新学员<span class="student-icon"></span></div>
@@ -6,8 +8,7 @@
         {% for  student in students %}
           {% set user = data('User',{userId:student.id})%}
           <li>
-            <div class="avatar"><a href="{{ path('user_show', {id:user.id}) }}"><img class="avatar-sm" src="{{ filepath(user.smallAvatar, 'avatar.png') }}"></a></div>
-            <div class="student-name"><a href="{{ path('user_show', {id:user.id}) }}">{{user.nickname}}</a></div>
+            {{ web_macro.user_avatar(student, '', 'avatar-sm') }}
           </li>
         {% endfor %}
       </ul>
