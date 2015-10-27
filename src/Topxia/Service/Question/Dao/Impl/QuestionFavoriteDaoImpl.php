@@ -34,7 +34,12 @@ class QuestionFavoriteDaoImpl extends BaseDao
 	public function deleteFavorite ($favorite)
     {
         return $this->getConnection()->delete($this->table, $favorite);
-    } 
+    }
+
+    public function deleteFavoriteByQuestionId ($questionId)
+    {
+        return $this->getConnection()->delete($this->table, array("questionId"=>$questionId));
+    }
 
     public function findFavoriteQuestionsByUserId ($id, $start, $limit)
     {

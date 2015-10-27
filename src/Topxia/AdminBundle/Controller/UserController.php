@@ -49,7 +49,7 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+        
         $app = $this->getAppService()->findInstallApp("UserImporter");
         
         $showUserExport = false;
@@ -59,7 +59,7 @@ class UserController extends BaseController
 
         $userIds = ArrayToolkit::column($users,'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
+        
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users' => $users ,
             'paginator' => $paginator,

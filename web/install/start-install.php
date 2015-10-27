@@ -191,6 +191,7 @@ function install_step3($init_data = 0)
             $init->initArticleSetting();
             $init->initDefaultSetting();
             $init->initCrontabJob();
+            $init->initDeveloperSetting();
         } else {
             $init->deleteKey();
             $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
@@ -524,6 +525,12 @@ class SystemInit
         $this->getSettingService()->set('site', $default);
     }
 
+    public function initDeveloperSetting() 
+    {
+        $developer = $this->getSettingService()->get('developer', array());
+        $developer['cloud_api_failover'] = 1;
+        $this->getSettingService()->set('developer', $developer);
+    }
 
     public function initRegisterSetting($user)
     {
