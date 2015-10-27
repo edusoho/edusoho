@@ -15,8 +15,8 @@ class TaskEventSubscriber implements EventSubscriberInterface
             //'task.finished' => 'onFinished',
 
             'course.lesson_finish' => 'onLessonFinished',
-            'homework.finish' => 'onHomeworkFinished',
-            'homework.check' => 'onHomeworkCheck',
+            //'homework.finish' => 'onHomeworkFinished',
+            //'homework.check' => 'onHomeworkCheck',
             'testpaper.reviewed' => 'onTestPaperFinished',
             'testpaper.finish' => 'onTestPaperFinished',
         );
@@ -41,7 +41,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
     {
         $homework = $event->getSubject();
         $homeworkResult = $event->getArgument('homeworkResult');
-        $targetObject = array('id'=>$homework['id'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus']);
+        $targetObject = array('id'=>$homework['id'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus'],'userId'=>$homeworkResult['userId']);
 
         $this->_finishTask('studyplan', $targetObject);
     }
@@ -49,7 +49,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
     public function onHomeworkCheck(ServiceEvent $event)
     {
         $homeworkResult = $event->getSubject();
-        $targetObject = array('id'=>$homeworkResult['homeworkId'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus']);
+        $targetObject = array('id'=>$homeworkResult['homeworkId'], 'type'=>'homework','passedStatus'=>$homeworkResult['passedStatus'],'userId'=>$homeworkResult['userId']);
 
         $this->_finishTask('studyplan', $targetObject);
     }
@@ -63,7 +63,7 @@ class TaskEventSubscriber implements EventSubscriberInterface
         if (isset($target[3])) {
             $lesson = $this->getCourseService()->getLesson($target[3]);
 
-            $targetObject = array('id'=>$lesson['id'], 'type'=>'testpaper', 'passedStatus'=>$testpaperResult['passedStatus']);
+            $targetObject = array('id'=>$lesson['id'], 'type'=>'testpaper', 'passedStatus'=>$testpaperResult['passedStatus'],'userId'=>$testpaperResult['userId']);
             $this->_finishTask('studyplan',$targetObject);
         }
 
