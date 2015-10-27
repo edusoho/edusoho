@@ -36,11 +36,11 @@ class Version20151026174121 extends AbstractMigration
                 `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '成绩单ID',
                 `courseId` int(10) unsigned NOT NULL COMMENT 'course id',
                 `userId` int(10) unsigned NOT NULL COMMENT '学员ID',
-                `totalScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总分',
-                `examScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '考试成绩',
-                `homeworkScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '作业成绩',
-                `otherScore` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '其它成绩',
-                `importOtherScore` float(10,1)  DEFAULT '0.0' COMMENT '导入的其它成绩',
+                `totalScore` float(10,1) DEFAULT '0.0' COMMENT '总分',
+                `examScore` float(10,1) DEFAULT '0.0' COMMENT '考试成绩',
+                `homeworkScore` float(10,1) DEFAULT '0.0' COMMENT '作业成绩',
+                `otherScore` float(10,1)  DEFAULT '0.0' COMMENT '其它成绩',
+                `importOtherScore` float(10,1)  COMMENT '导入的其它成绩',
                 `createdTime` int(10) unsigned NOT NULL,
                 PRIMARY KEY  (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课程学员得分表';            
