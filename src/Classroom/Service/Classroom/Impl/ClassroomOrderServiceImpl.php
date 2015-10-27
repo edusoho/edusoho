@@ -42,9 +42,10 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             }
 
             $order = array();
-
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomName = isset($classroomSetting['name'])?$classroomSetting['name']:'班级';
             $order['userId'] = $user['id'];
-            $order['title'] = "购买班级《{$classroom['title']}》";
+            $order['title'] = "购买".$classroomName."《{$classroom['title']}》";
             $order['targetType'] = 'classroom';
             $order['targetId'] = $classroom['id'];
             $order['payment'] = $info['payment'];

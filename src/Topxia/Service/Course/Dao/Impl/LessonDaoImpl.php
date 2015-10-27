@@ -14,6 +14,11 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
+    public function setCourseLessonMaxOnlineNum($lessonId,$num)
+    {
+        $sql = "UPDATE {$this->table} SET maxOnlineNum =  ? WHERE id = ?";
+        return $this->getConnection()->executeQuery($sql, array($num, $lessonId));
+    }
 
     public function getLessonByCourseIdAndNumber($courseId, $number)
     {

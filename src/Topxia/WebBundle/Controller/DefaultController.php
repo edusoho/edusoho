@@ -41,7 +41,10 @@ class DefaultController extends BaseController
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
-
+        $user = $this->getCurrentUser();
+        if(!empty($user['id'])){
+            $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+        }
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
@@ -277,6 +280,11 @@ class DefaultController extends BaseController
     protected function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.BatchNotificationService');
     }
 
     private function getBlacklistService() 

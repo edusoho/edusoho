@@ -102,7 +102,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime)
 	{
-	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
+	    return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
 	}
 
 	public function analysisCourseSumByTime($endTime)
@@ -930,6 +930,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num)
+	{
+		$this->getLessonDao()->setCourseLessonMaxOnlineNum($lessonId,$num);
+	}
+
 	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
 		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
@@ -1217,9 +1222,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
+		$updatedLesson['fields']=$lesson;
 		$this->dispatchEvent("course.lesson.update",array('argument'=>$argument,'lesson'=>$updatedLesson));
 		
-
 		return $updatedLesson;
 	}
 
@@ -1541,6 +1547,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
+
 	}
 
 	public function searchLearnCount($conditions)
@@ -1618,6 +1625,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return $statuses;
 	}
+
+	public function getLearnByUserIdAndLessonId($userId, $lessonId)
+	{
+		return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+	}
+	
 
 	public function findUserLearnedLessons($userId, $courseId)
 	{
@@ -1928,6 +1941,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseStudentCount($courseId)
 	{
 		return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+	}
+
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
+	{
+		return $this->getMemberDao()->findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 	}
 
 	public function findCourseTeachers($courseId)

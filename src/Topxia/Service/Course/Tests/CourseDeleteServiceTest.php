@@ -121,8 +121,6 @@ class CourseDeleteServiceTest extends BaseTestCase
 
         $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
         $this->assertEquals('Test',$testpaper[0]['name']);
-
-        
         
         $types = array('questions','testpapers','materials','chapters','drafts','lessons','lessonLearns','lessonReplays','lessonViews','favorites','notes','threads','reviews','announcements','statuses','members','course');
         foreach($types as $type){
