@@ -5,6 +5,8 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\NameCutterTookit;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
 {
@@ -25,16 +27,20 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $container = $kernel->getContainer();
         $siteSetting = $this->getSettingService()->get('site');
         $hostName = $siteSetting['url'];
+        $api = CloudAPIFactory::create('root');
         for($i = 0; $i <= intval($count/1000); $i ++){
             $urls[$i] = $hostName;
             $urls[$i] .= $container->get('router')->generate('edu_cloud_sms_send_callback',array('targetType' => 'lesson','targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
+            $sign = $this->getSignEncoder()->encodeSign($urls[$i], $api->getAccessKey());
+            $sign = rawurlencode($sign);
+            $urls[$i] .= '&sign='.$sign;
         }
         return array('count' => $count, 'urls' => $urls);
     }
     
-	public function getSmsInfo($targetId, $index, $smsType)
+    public function getSmsInfo($targetId, $index, $smsType)
     {
         global $kernel;
         $siteSetting = $this->getSettingService()->get('site');
@@ -107,6 +113,11 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    protected function getSignEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 
 }
