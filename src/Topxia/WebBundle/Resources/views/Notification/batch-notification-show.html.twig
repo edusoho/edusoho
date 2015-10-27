@@ -1,0 +1,33 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}系统通知{% endblock %}
+
+{% set notification = notification|default(null) %}
+
+{% block body %}
+<div class="row"> 
+  <div class="col-md-14 col-md-offset-1"> 
+    {% if batchnotification %}
+      <div class="row">
+        <h2 class="col-md-11">
+          {{ batchnotification.title }} 
+        </h2>
+      </div>
+       <div class="row">
+        <div class="col-md-11 text-muted fsn mrm">
+          <p>
+            发布时间 ：{{ batchnotification.sendedTime|date_format }}  
+          </p> 
+        </div>
+       </div>
+      <div class="row"> 
+        <h4 class="col-md-11 editor-text"> 
+          {{ batchnotification.content|raw }} 
+        </h4> 
+      </div>
+    {% else %} 
+      <div class="col-md-11 col-md-offset-4">通知已经被管理员删除</div> 
+    {% endif %} 
+  </div> 
+</div> 
+{% endblock %}

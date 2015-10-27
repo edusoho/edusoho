@@ -1135,6 +1135,10 @@ notification:
     pattern: /notification
     defaults: { _controller: TopxiaWebBundle:Notification:index }
 
+batch_notification_show:
+    pattern: /notification/{id}
+    defaults: { _controller:TopxiaWebBundle:Notification:show }
+
 my:
     pattern: /my
     defaults: { _controller: TopxiaWebBundle:MyCourse:index }
