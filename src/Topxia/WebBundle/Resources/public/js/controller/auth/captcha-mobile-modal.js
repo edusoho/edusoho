@@ -34,7 +34,7 @@ define(function(require, exports, module) {
                         
                         if (response.success) {
                             $form.parents('.modal').modal('hide');
-                            $form.find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
+                            // $form.find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
                             self._captchaValidated = true;
 
                             var smsSender = new SmsSender({
