@@ -49,19 +49,22 @@
         </a>
       </li>
     </ul>
-    <div class="filter">
+    <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
         <div class="btn-group">
-          <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i>会员课程</button>
+          <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i>
+            {% if (currentLevelId == 'all') %}会员课程{% endif %}
+            {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
+          </button>
           <ul class="dropdown-menu" role="menu">
           <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">全部</a></li>
-          {% for level in levels%}
+          {% for level in levels %}
             <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
           </ul>
         </div>
       {% endif %}
-      <label class="checkbox-inline btn">
+      <label class="checkbox-inline">
         <input type="checkbox" {% if type == 'live'%}checked="true" {% endif %} id="live" value="
         {% if type == 'all'%}
           {{ path('course_explore', {category:category, fliter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }} 
@@ -69,7 +72,7 @@
           {{ path('course_explore', {category:category, fliter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }} 
         {% endif %}"> 直播课程
       </label>
-      <label class="checkbox-inline btn">
+      <label class="checkbox-inline">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
           {{ path('course_explore', {category:category, fliter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}

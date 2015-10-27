@@ -17,10 +17,12 @@
       padding: 10px 15px;
       color: @gray-dark;
       .es-transition;
-      &.active,
-      &:hover {
+      &.active {
         color: #fff;
         background-color: @brand-primary;
+      }
+      &:hover {
+        color: @brand-primary;
         .es-transition;
       }
     }
@@ -38,12 +40,22 @@
     .btn {
       background: none;
       padding: 10px 0;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
       >i {
         font-size: 18px;
       }
     }
     label {
-      margin-left: 20px;
+      margin-left: 15px;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
     }
   }
 }
