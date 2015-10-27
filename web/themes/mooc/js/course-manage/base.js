@@ -101,32 +101,6 @@ define(function(require, exports, module) {
             rule: 'date_check'
         });
 
-        validator.addItem({
-            element: '[name=maxStudentNum]',
-            rule: 'integer',
-            onItemValidated: function(error, message, elem) {
-                if (error) {
-                    return ;
-                }
-
-                var current = parseInt($(elem).val());
-                var capacity = parseInt($(elem).data('liveCapacity'));
-                if (current > capacity) {
-                    message = '网校可支持最多' + capacity +'人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
-                    if ($(elem).parent().find('.alert-warning').length > 0) {
-                        $(elem).parent().find('.alert-warning').html(message).show();
-                    } else {
-                        $(elem).parent().append('<div class="alert alert-warning mts">' + message + '</div>');
-                    }
-                } else {
-                    $(elem).parent().find('.alert-warning').hide();
-                }
-
-
-
-            }
-        });
-
 
         var now = new Date();
 

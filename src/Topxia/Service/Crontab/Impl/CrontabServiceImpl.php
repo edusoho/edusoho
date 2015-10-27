@@ -40,7 +40,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $this->setNextExcutedTime(0);
 
             $this->getJobDao()->getConnection()->beginTransaction();
-            
+
             // 加锁
             $job = $this->getJob($id, true);
 
@@ -146,7 +146,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $fileContent = file_get_contents($filePath);
         $config = $yaml->parse($fileContent);
         return $config['crontab_next_executed_time'];
-        
+
     }
 
     public function setNextExcutedTime($nextExcutedTime)

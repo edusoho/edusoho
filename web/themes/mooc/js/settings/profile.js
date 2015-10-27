@@ -9,6 +9,13 @@ define(function(require, exports, module) {
         /\d{5,12}$/,
         "{{display}}必须为5到12位数字"
     );
+
+    Validator.addRule(
+        'mooc_mobile',
+        /^1[3|5|7|8]\d{9}$/,
+        "{{display}}手机格式不正确"
+    );
+
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
     require('ckeditor');
@@ -83,7 +90,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="profile[mobile]"]',
-            rule: 'mobile'
+            rule: 'mooc_mobile'
         });
 
         validator.addItem({

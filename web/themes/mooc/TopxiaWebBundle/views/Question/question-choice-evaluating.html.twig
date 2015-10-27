@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {% if question.type == 'single_choice' %}（单选）
+  {% elseif question.type == 'choice' %}（多选）
+  {% endif %}
+  {{ question.stem|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+  {% include 'TopxiaWebBundle:Question:question-choice-options-result.html.twig' %}
+
+{% if itemResult.answer|default(null) or itemResult.answer == 0 %}
+  {% set choiceIndex = itemResult.answer %}
+{% endif %}
+
+<div class="homework-question-result">
+
+    {% if itemResult.status == 'right' %}
+     <span class="glyphicon glyphicon-ok question-text-success"></span>
+    {% elseif itemResult.status == 'wrong' %}
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 选择了<strong class="question-text-danger">
+        {% for key,choice in choiceIndex %}
+          {% if choice != '-1' %}
+          {{ (65+choice)|chr }}
+          {% endif %}
+        {% endfor %}
+       </strong>
+  {% elseif itemResult.status == 'partRight' %}
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 部分答对,选择了<strong class="question-text-danger">
+       {% for key,choice in choiceIndex %}
+          {% if choice != '-1' %}
+          {{ (65+choice)|chr }}
+          {% endif %}
+        {% endfor %}
+       </strong>
+    {% elseif itemResult.status == 'noAnswer' %}
+　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>未答题
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
