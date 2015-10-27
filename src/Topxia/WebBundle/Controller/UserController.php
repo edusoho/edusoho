@@ -313,6 +313,7 @@ class UserController extends BaseController
             'profile' => $profile,
             'isFollowed' => $isFollowed,
             'levels' => $levels,
+            'nowTime' => time(),
         ));
     }
 
