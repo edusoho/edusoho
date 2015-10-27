@@ -30,7 +30,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $code = 'Homework';
             $homework = $this->getAppService()->findInstallApp($code);
-            $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+            $isCopyHomework = $homework && version_compare($homework['version'], "1.4.0", ">=");
 
             if ($isCopyHomework) {
                 $newHomeworks = $this->copyHomeworks($course['id'], $newCourse, $newLessons, $newQuestions);
