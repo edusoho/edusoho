@@ -360,7 +360,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
     {
-        return $this->getClassroomMemberDao()->findMemberCountByclassroomIdAndHasVerifiedMobile($classroomId, $locked);
+        return $this->getClassroomMemberDao()->findMobileVerifiedMemberCountByClassroomId($classroomId, $locked);
     }
 
     public function findClassroomsByIds(array $ids)
