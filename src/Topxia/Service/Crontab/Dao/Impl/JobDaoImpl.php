@@ -68,13 +68,10 @@ class JobDaoImpl extends BaseDao implements JobDao
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
-            ->andWhere("name LIKE :name")
             ->andWhere("cycle = :cycle")
             ->andWhere('jobClass = :jobClass')
             ->andWhere('executing = :executing')
             ->andWhere('nextExcutedTime <= :nextExcutedTime')
-            ->andWhere('nextExcutedTime <= :nextExcutedEndTime')
-            ->andWhere('nextExcutedTime >= :nextExcutedStartTime')
             ->andWhere('creatorId = :creatorId');
         return $builder;
     }
