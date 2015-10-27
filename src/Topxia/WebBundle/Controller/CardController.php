@@ -16,20 +16,20 @@ class CardController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        $cardType = $request->query->get('cardType');
+        // $user = $this->getCurrentUser();
+        // $cardType = $request->query->get('cardType');
 
-        if(!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，请先登录！');
-        }
+        // if(!$user->isLogin()) {
+        //     return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        // }
 
-        $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],$cardType);
-        $cardIds = ArrayToolkit::column($cardLists,'cardId');
+        // $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],$cardType);
+        // $cardIds = ArrayToolkit::column($cardLists,'cardId');
 
-        $cardsDetail = $this->getCardService()->findCardsByCardTypeAndCardIds($cardIds,$cardType);
+        // $cardsDetail = $this->getCardService()->findCardsByCardTypeAndCardIds($cardIds,$cardType);
 
-        return $this->render('TopxiaWebBundle:Coin:index.html.twig',array(
-            'cards' => $cardsDetail
+        return $this->render('TopxiaWebBundle:Card:index.html.twig',array(
+            // 'cards' => $cardsDetail
         ));
     	
         
