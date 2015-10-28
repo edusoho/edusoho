@@ -106,6 +106,7 @@ class MoneyCardDaoImpl extends BaseDao
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'money_card')
+            ->andWhere('userId = :userId')
             ->andWhere('cardId = :cardId')
             ->andWhere('deadline = :deadline')
             ->andWhere('batchId = :batchId')

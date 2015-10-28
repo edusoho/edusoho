@@ -304,50 +304,50 @@ class MoneyCardServiceImpl extends BaseService
 
     public function receiveMoneyCard($token,$userId)
     {
-        $token =$this->getTokenService()->verifyToken('coupon',$token);
+        $token =$this->getTokenService()->verifyToken('money_card',$token);
         if(!$token){
             return false;
         }
         try{
-            $this->getMoneyCardDao()->getConnection()->beginTransaction();
-            $batch = $this->getCouponBatchDao()->getBatchByToken($token['token'],true);
+            $this->getMoneyCardBatchDao()->getConnection()->beginTransaction();
+            $batch = $this->getMoneyCardBatchDao()->getBatchByToken($token['token'],true);
             $conditions = array(
                 'userId' => $userId,
                 'batchId' => $batch['id']
                 );
-            $coupon = $this->getCouponDao()->searchCoupons($conditions,array('id','DESC'),0,1);
-            if(!empty($coupon))
+            $moneyCard = $this->getMoneyCardDao()->searchMoneyCards($conditions,array('id','DESC'),0,1);
+            if(!empty($moneyCard))
             {
-                $this->getCouponBatchDao()->getConnection()->commit();
+                $this->getMoneyCardBatchDao()->getConnection()->commit();
                 return false;
             }
             $conditions = array(
                 'userId' => 0,
                 'batchId' => $batch['id']
                 );
-            $coupons = $this->getCouponDao()->searchCoupons($conditions,array('id','ASC'),0,1);
-            if(empty($coupons))
+            $moneyCards = $this->getMoneyCardDao()->searchMoneyCards($conditions,array('id','ASC'),0,1);
+            if(empty($moneyCards))
             {
-                $this->getCouponBatchDao()->getConnection()->commit();
+                $this->getMoneyCardBatchDao()->getConnection()->commit();
                 return false;
             }
-            $coupon = $this->getCouponDao()->getCoupon($coupons[0]['id']);
-            if(!empty($coupon)){
-                $coupon = $this->getCouponDao()->updateCoupon($coupon['id'],array(
+            $moneyCard = $this->getMoneyCardDao()->getMoneyCard($moneyCards[0]['id']);
+            if(!empty($moneyCard)){
+                $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'],array(
                     'userId' => $userId,
                     'status' => 'receive'
                     ));
-                if(empty($coupon))
+                if(empty($moneyCard))
                 {
-                    $this->getCouponBatchDao()->getConnection()->commit();
+                    $this->getMoneyCardBatchDao()->getConnection()->commit();
                     return false;
                 }
-                $this->dispatchEvent("coupon.receive",$coupon);
+                $this->dispatchEvent("moneyCard.receive",$moneyCard);
             }
-            $this->getCouponBatchDao()->getConnection()->commit();
+            $this->getMoneyCardBatchDao()->getConnection()->commit();
             return  true;
         } catch (\Exception $e) {
-            $this->getCouponBatchDao()->getConnection()->rollback();      
+            $this->getMoneyCardBatchDao()->getConnection()->rollback();      
             throw $e;
         }
     }
