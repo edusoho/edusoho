@@ -137,6 +137,9 @@ class DefaultController extends BaseController
         $siteSetting = $this->getSettingService()->get('site');
         $settingUrl = $this->generateUrl('admin_setting_site');
         $fliter = array('http://','https://');
+        if (substr($siteSetting['url'], -1, 1) == '/') {
+            $siteSetting['url'] = substr($siteSetting['url'],0,-1);
+        }
         if ($currentHost != str_replace($fliter,"",$siteSetting['url'])) {
             return array(
                 'status' => 'fail',
