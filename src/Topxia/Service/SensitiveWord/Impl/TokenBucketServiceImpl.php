@@ -9,17 +9,42 @@ use Topxia\Service\Common\KeywordFilter;
 
 class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 {
-	public function getToken($ip)
+	public function getToken($ip, $type)
 	{
 		if(in_array($ip, $this->getBlacklist())) {
 			return false;
 		}
-		return true;
+
+		return $this->hasToken($ip, $type);
+
+	}
+
+	protected function hasToken($ip, $type)
+	{
+		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
+		if(empty($recentPostNum)) {
+			return true;
+		} 
+
+		$postNumSetting = $this->getSettingService()->get('post_num_setting');
+		if((time() - $recentPostNum['createdTime']) > $postNumSetting[""]) {
+			
+		}
 	}
 
 	protected function getBlacklist()
 	{
-
+		return array();
 	}
+
+	protected function getRecentPostNumDao()
+    {
+        return $this->createDao('SensitiveWord.RecentPostNumDao');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createDao('System.SettingService');
+    }
 
 }
