@@ -311,34 +311,35 @@ class MoneyCardServiceImpl extends BaseService
         try{
             $this->getMoneyCardBatchDao()->getConnection()->beginTransaction();
             $batch = $this->getMoneyCardBatchDao()->getBatchByToken($token['token'],true);
-            $conditions = array(
-                'userId' => $userId,
-                'batchId' => $batch['id']
-                );
-            $moneyCard = $this->getMoneyCardDao()->searchMoneyCards($conditions,array('id','DESC'),0,1);
-            if(!empty($moneyCard))
-            {
+            if($batch['batchStatus'] == 'invalid'){
                 $this->getMoneyCardBatchDao()->getConnection()->commit();
                 return false;
             }
             $conditions = array(
-                'userId' => 0,
+                'rechargeUserId' => $userId,
+                'batchId' => $batch['id']
+                );
+            $moneyCard = $this->getMoneyCardDao()->searchMoneyCards($conditions,array('id','DESC'),0,1);
+            if(!empty($moneyCard)){
+                $this->getMoneyCardBatchDao()->getConnection()->commit();
+                return false;
+            }
+            $conditions = array(
+                'rechargeUserId' => 0,
                 'batchId' => $batch['id']
                 );
             $moneyCards = $this->getMoneyCardDao()->searchMoneyCards($conditions,array('id','ASC'),0,1);
-            if(empty($moneyCards))
-            {
+            if(empty($moneyCards)){
                 $this->getMoneyCardBatchDao()->getConnection()->commit();
                 return false;
             }
             $moneyCard = $this->getMoneyCardDao()->getMoneyCard($moneyCards[0]['id']);
             if(!empty($moneyCard)){
                 $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'],array(
-                    'userId' => $userId,
-                    'status' => 'receive'
+                    'rechargeUserId' => $userId,
+                    'cardStatus' => 'receive'
                     ));
-                if(empty($moneyCard))
-                {
+                if(empty($moneyCard)){
                     $this->getMoneyCardBatchDao()->getConnection()->commit();
                     return false;
                 }
