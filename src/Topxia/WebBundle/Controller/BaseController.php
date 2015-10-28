@@ -89,7 +89,7 @@ abstract class BaseController extends Controller
             return ;
         }
 
-        $sessionId = $this->_createToken($this->container->get('request'));
+        $sessionId = $this->_createToken($this->getRequest());
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
     }
 
