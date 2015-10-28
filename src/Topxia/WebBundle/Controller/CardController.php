@@ -30,7 +30,6 @@ class CardController extends BaseController
         $cardIds = ArrayToolkit::column($cardLists,'cardId');
 
         $cardsDetail = $this->getCardService()->findCardsByCardTypeAndCardIds($cardIds,$cardType);
-        var_dump($cardsDetail);
         return $this->render('TopxiaWebBundle:Card:index.html.twig',array(
             'cards' => $cardsDetail
         ));
