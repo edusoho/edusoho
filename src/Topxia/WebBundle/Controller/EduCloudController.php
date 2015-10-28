@@ -164,6 +164,8 @@ class EduCloudController extends BaseController
         $originSign = rawurldecode($request->query->get('sign'));
 
         $siteSetting = $this->getSettingService()->get('site');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
         $url = $siteSetting['url'];
         $url .= $this->generateUrl('edu_cloud_sms_send_callback',array('targetType' => $targetType,'targetId' => $targetId));
         $url .= '?index='.$index.'&smsType='.$smsType;

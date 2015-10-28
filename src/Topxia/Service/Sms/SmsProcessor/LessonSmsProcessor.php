@@ -26,6 +26,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         global $kernel;
         $container = $kernel->getContainer();
         $siteSetting = $this->getSettingService()->get('site');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
         $hostName = $siteSetting['url'];
         $api = CloudAPIFactory::create('root');
         for($i = 0; $i <= intval($count/1000); $i ++){
@@ -44,6 +46,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     {
         global $kernel;
         $siteSetting = $this->getSettingService()->get('site');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
         $hostName = $siteSetting['url'];
         $lesson = $this->getCourseService()->getLesson($targetId);
         if (empty($lesson)) {
