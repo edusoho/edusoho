@@ -6,8 +6,8 @@
 <!-- 卡包列表 -->
 <div class="clearfix mbl mhm">
 	<ul class="nav nav-pills inline-block" role="active">
-		<li role="presentation" class="active"><a href="javascript:;">优惠劵</a></li>
-		<li role="presentation"><a href="javascript:;">学习卡</a></li>
+		<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
+		<li role="presentation" {% if app.request.query.get('status')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
 	</ul>
 	<div class="pull-right mtm hidden-xs">
 		<label class="checkbox-inline">
@@ -23,87 +23,12 @@
 </div>
 <div class="jm-card-list">
 	<div class="row">
-		{% if is_plugin_installed('Coupon') %}
-			{% if cards.receive is defined %}
-				{% for card in cards.receive %}
-					<!--正常优惠码-->
-					<div class="col-lg-4 col-md-6 col-sm-6">
-						<div class="jm-card-item">
-							<div class="jm-card-img {% if card.deadline < time_stamp() %}yhjed{% else %}yhjing{% endif %}">
-								<div class="jm-card-info">
-									{% if card.targetType == "course" %}
-										{% if card.targetId == 0 %}
-											<p class="title">可用于抵扣全站课程</p>
-										{% else %}
-											<p class="title">用于抵扣指定课程</p>
-										{% endif %}
-									{% endif %}
-
-									{% if card.targetType == "classroom" %}
-										<p class="title">可用于抵扣全站班级</p>
-									{% endif %}
-
-									{% if card.targetType == "vip" %}
-										{% if card.targetId == 0 %}
-											<p class="title">可用于抵扣全站会员</p>
-										{% else %}
-											<p class="title">用于抵扣指定会员</p>
-										{% endif %}
-									{% endif %}
-									<p class="price">
-										<strong>{% if card.type == "minus" %}￥{% endif %}{{ card.rate }}{% if card.type == "discount" %}折{% endif %}</strong>
-									</p>
-									<p>有效期截止：<span>{{ card.deadline|date('Y年n月d日') }}</span></p>
-								</div>
-								{% if card.deadline < time_stamp() %}<div class="carded"></div>{% endif %}
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			{% endif %}
-
-			{% if cards.used is defined %}
-				{% for card in cards.used %}
-					<div class="col-lg-4 col-md-6 col-sm-6">
-						<div class="jm-card-item">
-							<div class="jm-card-img yhjing">
-								<div class="jm-card-info">
-									{% if card.targetType == "course" %}
-										{% if card.targetId == 0 %}
-											<p class="title">可用于抵扣全站课程</p>
-										{% else %}
-											<p class="title">用于抵扣指定课程</p>
-										{% endif %}
-									{% endif %}
-
-									{% if card.targetType == "classroom" %}
-										<p class="title">可用于抵扣全站班级</p>
-									{% endif %}
-
-									{% if card.targetType == "vip" %}
-										{% if card.targetId == 0 %}
-											<p class="title">可用于抵扣全站会员</p>
-										{% else %}
-											<p class="title">用于抵扣指定会员</p>
-										{% endif %}
-									{% endif %}
-									<p class="price">
-										<strong>{% if card.type == "minus" %}￥{% endif %}{{ card.rate }}{% if card.type == "discount" %}折{% endif %}</strong>
-									</p>
-									<p>有效期截止：<span>{{ card.deadline|date('Y年n月d日') }}</span></p>
-								</div>
-								<!--优惠劵已使用-->
-								<div class="card-done"></div>
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			{% endif %}
-
-		{% else %}
-			<p>空空如也，您的口袋里还没有优惠卡</p>
+		{% if app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon' %}
+			{% include 'TopxiaWebBundle:Card:card-coupon.html.twig' %}
 		{% endif %}
-		
+		{% if app.request.query.get('cardType') == 'moneyCard' %}
+			{% include 'TopxiaWebBundle:Card:card-money.html.twig' %}
+		{% endif %}
 	  <!-- 正常学习卡-->
 	  <div class="col-lg-4 col-md-6 col-sm-6">
 			<div class="jm-card-item">
