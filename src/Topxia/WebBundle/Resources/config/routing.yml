@@ -457,10 +457,6 @@ course_review_list:
     pattern:  /course/{id}/reviews/
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
 
-course_teacher_info:
-    pattern:  /course/{courseId}/teacher/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:teacherInfo }
-
 course_members:
    pattern: /course/{id}/members
    defaults: { _controller: TopxiaWebBundle:Course:members }
