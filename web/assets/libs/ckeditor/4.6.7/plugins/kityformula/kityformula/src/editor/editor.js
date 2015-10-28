@@ -233,6 +233,8 @@ define( function ( require ) {
                 .replace(/\\downdownarrows/g, '\\downarrow\\downarrow')
                 .replace(/\\leftrightarrows/g, '_\\rightarrow^\\leftarrow')
                 .replace(/\\rightleftarrows/g, '_\\leftarrow ^\\rightarrow')
+                //组合
+                .replace(/\{\\{ \}/g, '\\{')
                 ;
             return $source;
         }
