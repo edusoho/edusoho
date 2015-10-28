@@ -148,9 +148,19 @@ class CloudSettingController extends BaseController
 
     public function keyCopyrightAction(Request $request)
     {
-
         $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
+        try{
+            $copyright = $this->getSettingService()->get('copyright',array());
+            if(isset($info['thirdCopyright']) and $info['thirdCopyright'] == '1'){
+                $copyright["thirdCopyright"] = 1;
+            } else {
+                $copyright["thirdCopyright"] = 0;
+            }
+            $this->getSettingService()->set('copyright',$copyright);
+        } catch(\Exception $e){
+            throw $e;
+        }
 
         if (empty($info['copyright'])) {
             throw $this->createAccessDeniedException('您无权操作!');
@@ -266,7 +276,6 @@ class CloudSettingController extends BaseController
 
         return new Response(json_encode($response));
     }
-
 
     public function videoWatermarkRemoveAction(Request $request)
     {
