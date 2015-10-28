@@ -235,6 +235,15 @@ define( function ( require ) {
                 .replace(/\\rightleftarrows/g, '_\\leftarrow ^\\rightarrow')
                 //组合
                 .replace(/\{\\{ \}/g, '\\{')
+                //(x)
+                .replace(/\\left \(/g, '\{\(')
+                .replace(/\\right \)/g, '\)\}')
+                //[x]
+                .replace(/\\left \[/g, '\{\[')
+                .replace(/\\right \]/g, '\]\}')
+                //|x|
+                .replace(/\\left \|/g, '\{\|')
+                .replace(/\\right \|/g, '\|\}')
                 ;
             return $source;
         }
