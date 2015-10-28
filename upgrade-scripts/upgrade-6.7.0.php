@@ -79,7 +79,7 @@ use Symfony\Component\Yaml\Yaml;
                     `published` int(10) NOT NULL DEFAULT '0' COMMENT '是否已经发送',
                     `sendedTime` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知的发送时间',
                     PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='群发通知表';
+                ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='群发通知表';
             ");
         }
 
