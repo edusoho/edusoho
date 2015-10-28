@@ -18,7 +18,9 @@ class CardController extends BaseController
     {
         $user = $this->getCurrentUser();
         $cardType = $request->query->get('cardType');
-        
+        if(empty($cardType)) {
+            $cardType = "coupon";
+        }
 
         if(!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
@@ -28,7 +30,7 @@ class CardController extends BaseController
         $cardIds = ArrayToolkit::column($cardLists,'cardId');
 
         $cardsDetail = $this->getCardService()->findCardsByCardTypeAndCardIds($cardIds,$cardType);
-
+        var_dump($cardsDetail);
         return $this->render('TopxiaWebBundle:Card:index.html.twig',array(
             'cards' => $cardsDetail
         ));

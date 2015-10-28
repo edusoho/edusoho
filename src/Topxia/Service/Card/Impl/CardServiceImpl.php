@@ -43,7 +43,7 @@ class CardServiceImpl extends BaseService implements CardService
 		$cardsDetail = $processor->getCardsDetailByCardIds($ids,0,$limit);
 
 		$cardsDetail = $this ->sortArrayByField($cardsDetail,'deadline');
-		var_dump($cardsDetail);
+
 
 		if ($cardType == 'coupon'){
 			$cards = ArrayToolkit::group($cardsDetail,'status');
@@ -62,7 +62,7 @@ class CardServiceImpl extends BaseService implements CardService
             if ($a[$field] == $b[$field]) {
                 return 0;
             }
-            return ($a[$field] < $b[$field]) ? -1 : 1;
+            return ($a[$field] < $b[$field]) ? 1 : -1;
 	    });
 
 	    return $afterArray = $beforeArray;
@@ -74,7 +74,7 @@ class CardServiceImpl extends BaseService implements CardService
 			if ($a[$key] == $b[$key]) {
 				return 0;
 			}
-			return ($a[$key] < $b[$key]) ? -1 : 1;
+			return ($a[$key] < $b[$key]) ? 1 : -1;
 		});
 		return $afterArray = $beforeArray;
 	}
