@@ -8,25 +8,144 @@ use Topxia\Common\ArrayToolkit;
 
 class Exercise extends BaseResource
 {
-    public function get(Application $app, Request $request, $id)
-    {
-        $isHomeworkInstalled = $this->getAppService()->getAppByCode('Homework');
-        if (empty($isHomeworkInstalled)) {
-            return $this->error('500', '网校不支持作业练习功能!');
+     public function get(Application $app, Request $request, $id) 
+     {
+        $idType = $request->query->get('_idType');
+        if ('lesson' == $idType) {
+            $exercise = $this->getExerciseService()->getExerciseByLessonId($id);
+        } else {
+            $exercise = $this->getExerciseService()->getExercise($id);
         }
-
-        $exerciseService = $this->getExerciseService();
-        $exercise = $exerciseService->getExercise($id);
+        
         if (empty($exercise)) {
-            return $this->error('404', '该练习不存在!');
-        }
-        $itemSet = $exerciseService->getItemSetByExerciseId($id);
-
-        if (empty($itemSet['items'])) {
-            $itemSet = $this->doStart($exercise);
+            $exercise = array();
+            return $exercise;
         }
 
-        return array_merge($exercise, $itemSet);
+        $course = $this->getCorrseService()->getCourse($exercise['courseId']);
+        $exercise['courseTitle'] = $course['title'];
+        $lesson = $this->getCorrseService()->getLesson($exercise['lessonId']);
+        $exercise['lessonTitle'] = $lesson['title'];
+        $exercise['description'] = $lesson['title'];
+
+        if ('lesson' != $idType) {
+            $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id']);
+            $indexdItems = $items['questionIds'];
+            $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
+            $exercise['items'] = $this->filterItem($questions, null);
+        }
+        
+        return $this->filter($exercise);
+    }
+
+    public function result(Application $app, Request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+        $exerciseResult = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($id,$user->id);
+        $exercise = $this->getExerciseService()->getExercise($id);
+
+        $course = $this->getCorrseService()->getCourse($exercise['courseId']);
+        $exercise['courseTitle'] = $course['title'];
+        $lesson = $this->getCorrseService()->getLesson($exercise['lessonId']);
+        $exercise['lessonTitle'] = $lesson['title'];
+        $exercise["description"] = $lesson['title'];
+
+        $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id'])['items'];
+        $indexdItems = ArrayToolkit::index($items, 'questionId');
+        $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
+
+        $itemSetResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($id,$user->id)['items'];
+        $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
+
+        $exercise['items'] = $this->filterItem($questions, $itemSetResults);
+
+        return $this->filter($exercise);
+    }
+
+    private function filterItem($items, $itemSetResults)
+    {
+        $newItmes = array();
+        $materialMap = array();
+        foreach ($items as $item) {
+            $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
+            if (empty($item['metas'])) {
+                $item['metas'] = array();
+            }
+            if (isset($item['metas']['choices'])) {
+                $metas = array_values($item['metas']['choices']);
+                $item['metas'] = $metas;
+            }
+
+            $item['answer'] = $this->filterAnswer($item, $itemSetResults);
+
+            if ('material' == $item['type']) {
+                $materialMap[$item['id']] = array();
+            }
+
+            if ($itemSetResults) {
+                $item['result'] = $itemSetResults[$item['id']];
+            }
+            
+            $item['stem'] = $this->coverDescription($item['stem']);
+            if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
+                $materialMap[$item['parentId']][] = $item;
+                continue;
+            }
+            
+            $item['items'] = array();
+            $newItmes[$item['id']] = $item;
+        }
+
+        foreach ($materialMap as $id => $material) {
+            $newItmes[$id]['items'] = $material;
+        }
+
+        return array_values($newItmes);
+    }
+
+     public function filter(&$res)
+    {
+        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+        return $res;
+    }
+
+     private function filterAnswer($item, $itemSetResults) {
+
+        if (empty($itemSetResults)) {
+            if ('fill' == $item['type']) {
+                return array_map(function($answer) {
+                    return "";
+                }, $item['answer']);
+            }
+            return null;
+        }
+
+        return $this->coverAnswer($item['answer']);
+    }
+
+    private function coverAnswer($answer) {
+            if (is_array($answer)) {
+                $answer = array_map(function($answerValue){
+                    if (is_array($answerValue)) {
+                        return implode('|', $answerValue);
+                    }
+                    return $answerValue;
+                }, $answer);
+                return $answer;
+            }
+
+            return array();
+        }
+
+    private function coverDescription($stem)
+    {
+        $ext = $this;
+        $stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($ext) {
+            $url = $ext->getFileUrl($matches[1]);
+            return "<img src='{$url}' />";
+        }, $stem);
+
+        return $stem;
     }
 
     public function getByLesson(Application $app, Request $request, $id)
@@ -90,11 +209,6 @@ class Exercise extends BaseResource
         return array_merge($exercise, $itemSetResult);
     }
 
-    public function filter(&$res)
-    {
-        return $res;
-    }
-
     private function doStart($exercise)
     {
         $typeRange = $exercise['questionTypeRange'];
@@ -148,5 +262,10 @@ class Exercise extends BaseResource
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    protected function getCorrseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
