@@ -7,6 +7,6 @@ interface CardDetailProcessor
 
 	public function getCardDetailByCardId($id);
 
-	public function getCardsDetailByCardIds($ids,$orderBy,$start,$limit);
+	public function getCardsDetailByCardIds($ids,$start,$limit);
 
 }

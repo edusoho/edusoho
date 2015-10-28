@@ -8,14 +8,12 @@ class CouponCardDetailProcessor implements CardDetailProcessor
 {
 	public function getCardDetailByCardId($id)
 	{
-		return $this->getCouponService()->getCouponById($id);
-		//此方法目前插件的远程分支不存在
+		return $this->getCouponService()->getCoupon($id);
 	}
 
-	public function getCardsDetailByCardIds($ids,$orderBy,$start,$limit)
+	public function getCardsDetailByCardIds($ids,$start,$limit)
 	{
-		return $this->getCouponService()->getCouponByIds($ids,$orderBy,$start,$limit);
-		//此方法目前插件的远程分支不存在
+		return $this->getCouponService()->getCouponsByIds($ids,$start,$limit);
 	}
 
 	protected function getCouponService()
