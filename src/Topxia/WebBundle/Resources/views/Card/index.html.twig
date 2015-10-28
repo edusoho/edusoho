@@ -3,81 +3,32 @@
 {% set main_nav = 'cards' %}
 
 {% block main_body %}
-<!-- 卡包列表 -->
-<div class="clearfix mbl mhm">
-	<ul class="nav nav-pills inline-block" role="active">
-		<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
-		<li role="presentation" {% if app.request.query.get('status')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
-	</ul>
-	<div class="pull-right mtm hidden-xs">
-		<label class="checkbox-inline">
-		  <input type="checkbox" id="inlineCheckbox1" value="option1">未抵扣
-		</label>
-		<label class="checkbox-inline">
-		  <input type="checkbox" id="inlineCheckbox2" value="option2">已抵扣
-		</label>
-		<label class="checkbox-inline">
-		  <input type="checkbox" id="inlineCheckbox3" value="option3">已过期
-		</label>
-	</div>
-</div>
-<div class="jm-card-list">
-	<div class="row">
-		{% if app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon' %}
-			{% include 'TopxiaWebBundle:Card:card-coupon.html.twig' %}
-		{% endif %}
-		{% if app.request.query.get('cardType') == 'moneyCard' %}
-			{% include 'TopxiaWebBundle:Card:card-money.html.twig' %}
-		{% endif %}
-	  <!-- 正常学习卡-->
-	  <div class="col-lg-4 col-md-6 col-sm-6">
-			<div class="jm-card-item">
-				<div class="jm-card-img xxking">
-					<div class="jm-card-info">
-						<h4>学习卡</h4>
-						<p class="title">仅用于抵扣测试直播课程</p>
-						<p class="price">
-							<strong>￥400</strong>
-						</p>
-						<p>有效期：<span>2015年11月12日</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- 过期学习卡-->
-	  <div class="col-lg-4 col-md-6 col-sm-6">
-			<div class="jm-card-item">
-				<div class="jm-card-img xxked">
-					<div class="jm-card-info">
-						<h4>学习卡</h4>
-						<p class="title">仅用于抵扣测试直播课程</p>
-						<p class="price">
-							<strong>￥400</strong>
-						</p>
-						<p>有效期：<span>2015年11月12日</span></p>
-					</div>
-					<!--学习卡已过期-->
-					<div class="carded"></div>
-				</div>
-			</div>
-		</div>
-		<!-- 已使用学习卡-->
-	  <div class="col-lg-4 col-md-6 col-sm-6">
-			<div class="jm-card-item">
-				<div class="jm-card-img xxking">
-					<div class="jm-card-info">
-						<h4>学习卡</h4>
-						<p class="title">仅用于抵扣测试直播课程</p>
-						<p class="price">
-							<strong>￥400</strong>
-						</p>
-						<p>有效期：<span>2015年11月12日</span></p>
-					</div>
-					<!--学习卡已过期-->
-					<div class="card-done"></div>
-				</div>
-			</div>
+	<!-- 卡包列表 -->
+	<div class="clearfix mbl mhm">
+		<ul class="nav nav-pills inline-block" role="active">
+			<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
+			<li role="presentation" {% if app.request.query.get('status')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
+		</ul>
+		<div class="pull-right mtm hidden-xs">
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="inlineCheckbox1" value="option1">未抵扣
+			</label>
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="inlineCheckbox2" value="option2">已抵扣
+			</label>
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="inlineCheckbox3" value="option3">已过期
+			</label>
 		</div>
 	</div>
-</div>
+	<div class="jm-card-list">
+		<div class="row">
+			{% if app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon' %}
+				{% include 'TopxiaWebBundle:Card:card-coupon.html.twig' %}
+			{% endif %}
+			{% if app.request.query.get('cardType') == 'moneyCard' %}
+				{% include 'TopxiaWebBundle:Card:card-money.html.twig' %}
+			{% endif %}
+		</div>
+	</div>
 {% endblock %}
