@@ -1844,6 +1844,10 @@ my_cards:
     pattern:  /my/cards
     defaults: { _controller: TopxiaWebBundle:Card:index }
 
+order_coupon_cards:
+    pattern: /order/coupon
+    defaults: { _controller: TopxiaWebBundle:Card:showUsableCards }
+
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history
