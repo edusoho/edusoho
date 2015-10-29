@@ -40,18 +40,43 @@ class CardServiceImpl extends BaseService implements CardService
 	{
 		$processor = $this->getCardDetailProcessor($cardType);
 		$limit = count($ids);
-		$cardsDetail = $processor->getCardsDetailByCardIds($ids,array('deadline','DESC'),0,$limit);
+		$cardsDetail = $processor->getCardsDetailByCardIds($ids,0,$limit);
+
+		$cardsDetail = $this ->sortArrayByField($cardsDetail,'deadline');
+
 
 		if ($cardType == 'coupon'){
 			$cards = ArrayToolkit::group($cardsDetail,'status');
-		}if($cardType == 'moneyCard'){
+		} elseif ($cardType == 'moneyCard'){
 			$cards == ArrayToolkit::group($cardDetail,'cardStatus');
-		}else{
+		} else {
 			throw $this->createServiceException('暂时没有更多类型的卡');
 		}
-		
 		return $cards;
 		
+	}
+
+	protected function sortArrayByField(array $beforeArray,$field)
+	{
+		uasort($beforeArray , function ($a,$b) use ($field) {
+            if ($a[$field] == $b[$field]) {
+                return 0;
+            }
+            return ($a[$field] < $b[$field]) ? 1 : -1;
+	    });
+
+	    return $afterArray = $beforeArray;
+	}
+
+	protected function sortArrayByKey(array $beforeArray,$key)
+	{
+		uksort($beforeArray , function ($a,$b) use ($key) {
+			if ($a[$key] == $b[$key]) {
+				return 0;
+			}
+			return ($a[$key] < $b[$key]) ? 1 : -1;
+		});
+		return $afterArray = $beforeArray;
 	}
 
 	protected function getCardDao()

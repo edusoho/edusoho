@@ -3,7 +3,6 @@
 .js-user-card {
   display: inline-block;
 }
-
 .es-card {
   width: 330px;
   max-width: 330px;
@@ -69,5 +68,71 @@
         border: none;
       }
     }
+  }
+}
+
+//卡包优惠劵
+.jm-card-list{
+  .jm-card-item{
+    margin-bottom: 30px;
+  }
+  .col-lg-4,.col-md-6{
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .jm-card-img{
+    position: relative;
+    width: 254px;
+    height: 172px;
+    @media(max-width:@screen-md-max){
+      margin: 0 30px;
+    }
+  }
+  .jm-card-img.yhjing{
+    background: url('../img/card.png') no-repeat;
+  }
+  .jm-card-img.yhjed{
+    background: url('../img/card.png') no-repeat 0 -174px;
+  }
+  .jm-card-img.xxking{
+    background: url('../img/card.png') no-repeat -260px 0;
+  }
+  .jm-card-img.xxked{
+    background: url('../img/card.png') no-repeat -260px -174px;
+  }
+  .jm-card-info{
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    strong{
+      font-size: 36px;
+      font-weight: normal;
+    }
+    h4{
+      position: absolute;
+      font-size: 18px;
+      left: 18px;
+    }
+    p{
+      margin-bottom: 0;
+    }
+    .title{
+      padding-top: 52px;
+    }
+    .price{
+      margin-bottom: 20px;
+    }
+  }
+  .card-done,.carded{
+    display: inline-block;
+    width: 132px;
+    height: 132px;
+    background: url('../img/card.png') no-repeat -140px -349px;
+    position: absolute;
+    bottom: 11px;
+    left: 18px;
+  }
+  .carded{
+    background: url('../img/card.png') no-repeat 0 -349px;
   }
 }
