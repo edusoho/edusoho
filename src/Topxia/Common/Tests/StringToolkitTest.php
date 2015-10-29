@@ -12,7 +12,13 @@ class StringToolkitTest extends BaseTestCase
         $message = '{{item}}'.'++++'.'前面的item里的内容是可更换的';
     	$variables = array('item' => "我",);
         $message = StringToolkit::template($message, $variables);
-        $this->assertEquals($message,"我++++前面的item里的内容是可更换的");    	
+        $this->assertEquals($message,"我++++前面的item里的内容是可更换的");  
+
+        //测试特殊字符
+        $message = '{{item}}'.'++++'.'前面的item里的内容是可更换的';
+        $variables = array('item' => "!@#$%^&*()-+~`1234567890",);
+        $message = StringToolkit::template($message, $variables);
+        $this->assertEquals($message,"!@#$%^&*()-+~`1234567890++++前面的item里的内容是可更换的");  	
     }
 
     public function testTemplateWithHTML() 	//替换字符串中的HTML
@@ -42,12 +48,12 @@ class StringToolkitTest extends BaseTestCase
 
     public function testSecondsToTextToHour()	//字符串中的数字当做秒来转换成一小时内的时间
     {//方法不能识别所传的是分还是秒
-		$time = '3599';//字符串中的的数字不应大于3599
+        $time = '3599';//字符串中的的数字不应大于3599
 		$result = StringToolkit::secondsToText($time);
 		$this->assertEquals($result,'59:59');
     }
 
-    public function testSecondsToTextToDAy()	//字符串中的时间当做分来转换成一天的时间,
+    public function testSecondsToTextToDay()	//字符串中的时间当做分来转换成一天的时间,
     {//方法不能识别所传的是分还是秒
     	$time = '1439';//字符串中的的数字不应大于1439
 		$result = StringToolkit::secondsToText($time);
@@ -106,16 +112,16 @@ class StringToolkitTest extends BaseTestCase
     public function testJsonPettryWithArray()
     {
         $array = array('a'=>'1','b'=>'2','c'=>'3');
-        $Jstring = json_encode($array);
-        $Jstring = '['.$Jstring.']';
-        $result = StringToolkit::jsonPettry($Jstring);
-        $this->assertGreaterThan($result,$Jstring);
+        $jstring = json_encode($array);
+        $jstring = '['.$jstring.']';
+        $result = StringToolkit::jsonPettry($jstring);
+        $this->assertGreaterThan($result,$jstring);
     }
     public function testJsonPettryWithString()
     {
         $string = "hello,I'm stefaine.";
-        $Jstring = json_encode($string);
-        $result = StringToolkit::jsonPettry($Jstring);
-        $this->assertEquals($Jstring,$result);
+        $jstring = json_encode($string);
+        $result = StringToolkit::jsonPettry($jstring);
+        $this->assertEquals($jstring,$result);
     }
 }
