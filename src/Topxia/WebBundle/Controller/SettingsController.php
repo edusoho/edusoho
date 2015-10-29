@@ -464,7 +464,7 @@ class SettingsController extends BaseController
 
  			if (!$isAnswerRight){
  				$this->setFlashMessage('danger', '回答错误。');
- 				return $this->findPayPasswordActionReturn($userSecureQuestions);
+ 				return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
  			}
 
  			$this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
