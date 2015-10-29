@@ -128,9 +128,9 @@ use Symfony\Component\Yaml\Yaml;
         $developerSetting['failedNotification'] = '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。';
         $this->getSettingService()->set('refund', $developerSetting);
 
-        $connection->exec('update block set title="简墨主题：首页顶部.轮播图" where code="jianmo:home_top_banner"');
-        $connection->exec('update block set title="简墨主题: 首页底部.链接区域" where code="jianmo:bottom_info"');
-        $connection->exec('update block set title="简墨主题：首页中部.横幅" where code="jianmo:middle_banner"');
+        $connection->exec("update block set title='简墨主题：首页顶部.轮播图' where code='jianmo:home_top_banner'");
+        $connection->exec("update block set title='简墨主题: 首页底部.链接区域' where code='jianmo:bottom_info'");
+        $connection->exec("update block set title='简墨主题：首页中部.横幅' where code='jianmo:middle_banner'");
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms', array());
         if(isset($cloudSmsSetting['sms_enabled']) && $cloudSmsSetting['sms_enabled']) {
