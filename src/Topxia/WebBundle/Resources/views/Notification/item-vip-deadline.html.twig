@@ -5,10 +5,10 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      您购买的会员将在{{data.endtime}}到期。
+      {{'您购买的会员将在'|trans}}{{data.endtime}}{{'到期。'|trans}}
     </div>
     <div class="notification-footer">
-     {{ notification.createdTime|date_format }}  
+     {{ notification.createdTime|date_format }}
     </div>
   </div>
 </li>

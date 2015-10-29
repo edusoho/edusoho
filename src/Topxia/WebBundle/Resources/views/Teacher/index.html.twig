@@ -1,10 +1,10 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
-{% block title %}师资介绍 - {{ parent() }}{% endblock %}
+{% block title %}{{'师资介绍'|trans}} - {{ parent() }}{% endblock %}
 
-{% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
-{% block description %}{{ setting('site.name') }}的师资介绍。{% endblock %}
+{% block keywords %}{{'师资介绍'|trans}} {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ setting('site.name') }}{{'的师资介绍。'|trans}}{% endblock %}
 
 
 {% set bodyClass = 'teacherpage bg-blank' %}
@@ -14,7 +14,7 @@
   <div class="es-banner">
     <div class="container">
       <div class="title">
-        <i class="es-icon es-icon-permcontactcal"></i>所有教师
+        <i class="es-icon es-icon-permcontactcal"></i>{{'所有教师'|trans}}
       </div>
     </div>
   </div>

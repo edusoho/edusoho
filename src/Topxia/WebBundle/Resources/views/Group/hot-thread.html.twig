@@ -4,6 +4,6 @@
         <li style="border-bottom:none;background:url('{{asset('assets/img/default/triangle.png')}}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;"><a  href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{thread.title|sub_text(textNum|default('15'))}}</a></li>
         {% endfor %}
     {% else %}
-        <div class="empty">暂无话题信息！</div>
+        <div class="empty">{{'暂无话题信息！'|trans}}</div>
     {% endif %}
 </ul>

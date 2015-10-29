@@ -1,12 +1,12 @@
 {% extends 'TopxiaWebBundle:CourseQuestionManage:question-form-layout.html.twig' %}
 
-{% set question_stem_label = '材料' %}
+{% set question_stem_label = '材料'|trans %}
 
 {% block question_buttons %}
   {% if not question.id %}
-    <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue_sub">保存并添加子题</button>
+    <button type="submit" data-role="submit" class="btn btn-primary" data-submission="continue_sub">{{'保存并添加子题'|trans}}</button>
   {% else %}
-    <button type="submit" data-role="submit" class="btn btn-primary">保存</button>
+    <button type="submit" data-role="submit" class="btn btn-primary">{{'保存'|trans}}</button>
   {% endif %}
 
 {% endblock %}

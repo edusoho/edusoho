@@ -11,14 +11,14 @@
           <div class="media-body">
             <div class="title"><a  class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></div>
             <div class="metas">
-              {{group.memberNum}}个成员&nbsp;
-              {{group.threadNum}}个话题
+              {{group.memberNum}}{{'个成员'|trans}}&nbsp;
+              {{group.threadNum}}{{'个话题'|trans}}
             </div>
           </div>
-        </div>       
+        </div>
       {% endif %}
     {% endfor %}
   {% else %}
-    <div class="empty">暂无小组信息！</div>
+    <div class="empty">{{'暂无小组信息！'|trans}}</div>
   {% endif %}
 </div>

@@ -3,9 +3,9 @@
 {% block question_extra_fields %}
 
   <div class="form-group">
-    <div class="col-md-2 control-label"><label>答案</label></div>
+    <div class="col-md-2 control-label"><label>{{'答案'|trans}}</label></div>
     <div class="col-md-8 controls radios ">
-      {{ radios('answer[]', {'1':'正确', '0':'错误'}, question.answer|default(['-1'])|join) }}
+      {{ radios('answer[]', {'1':'正确'|trans, '0':'错误'|trans}, question.answer|default(['-1'])|join) }}
     </div>
   </div>
 

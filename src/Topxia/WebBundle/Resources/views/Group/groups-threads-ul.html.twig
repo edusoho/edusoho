@@ -10,20 +10,20 @@
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
         <div class="media-heading">
           {% if thread.isStick and not group %}
-            <span class="label label-danger">置顶</span>
+            <span class="label label-danger">{{'置顶'|trans}}</span>
           {% endif %}
           <a class="title" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isElite %}
-            <span class="label label-warning">精</span>
+            <span class="label label-warning">{{'精'|trans}}</span>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}
             {% if thread.type == 'reward' and thread.rewardCoin > 0 %}
-              <span class="label label-danger">奖</span>
+              <span class="label label-danger">{{'奖'|trans}}</span>
             {% endif %}
           {% endif %}
         </div>
-        
+
         <div class="metas">
           {% if group %}
             <a class="link-muted" href="{{path('group_show',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
@@ -34,12 +34,12 @@
           {{thread.createdTime|smart_time}}
           {% if thread.lastPostTime %}
             <span class="divider">•</span>
-            最后回复 {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }} {{ thread.lastPostTime|smart_time}}
+            {{'最后回复'|trans}} {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }} {{ thread.lastPostTime|smart_time}}
           {% endif %}
-        </div> 
+        </div>
       </div>
     </li>
   {% else %}
-    <li class="empty">暂无话题！</li>
+    <li class="empty">{{'暂无话题！'|trans}}</li>
   {% endfor %}
 </ul>

@@ -1,4 +1,4 @@
-{% set groupNav = groupNav|default(null) %} 
+{% set groupNav = groupNav|default(null) %}
 
 <div class="group-header">
   <div class="group-header-inner" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
@@ -11,7 +11,7 @@
       <div class="media-body">
         <h2 class="media-heading">{{groupinfo.title}}</h2>
         <div class="media-metas">
-          {{groupinfo.memberNum}}个成员
+          {{groupinfo.memberNum}}{{'个成员'|trans}}
         </div>
       </div>
     </div>

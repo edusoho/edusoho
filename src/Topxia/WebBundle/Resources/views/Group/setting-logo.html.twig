@@ -2,14 +2,14 @@
 
 {% set script_controller = 'group/group_logo' %}
 
-{% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
+{% block title %}{{groupinfo.title}}{{'小组'|trans}} - {{ parent() }}{% endblock %}
 
 {% set settingNav = 'logo' %}
 
 {% block group_setting_body %}
   <form class="form-horizontal">
     <div class="form-group">
-      <label class="col-md-2 control-label">当前图标</label>
+      <label class="col-md-2 control-label">{{'当前图标'|trans}}</label>
       <div class="controls col-md-8 controls">
         <img class="avatar-square-md" src="{{ filepath(logo, 'group.png')}}">
       </div>
@@ -24,10 +24,10 @@
     <div class="form-group">
       <div class="col-md-2 control-label"></div>
       <div class="controls col-md-8 controls">
-        <a id="group-save-btn" 
+        <a id="group-save-btn"
         data-upload-token="{{ upload_token('tmp', 'image') }}"
         data-goto-url="{{path('group_setLogoCrop', {id: id, page:'logoCrop'})}}"
-        class="btn btn-primary">上传新图标</a>
+        class="btn btn-primary">{{'上传新图标'|trans}}</a>
       </div>
     </div>
   </form>

@@ -1,7 +1,7 @@
 {% set recentLiveLessons = data('RecentLiveLessons',{userId : app.user.id, count:2 }) %}
 {% if recentLiveLessons %}
   <div class="text-line gray small">
-    <h5><span>预告板</span></h5>
+    <h5><span>{{'预告板'|trans}}</span></h5>
     <div class="line"></div>
   </div>
 

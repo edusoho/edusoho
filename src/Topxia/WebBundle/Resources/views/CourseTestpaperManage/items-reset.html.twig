@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 {% import 'TopxiaWebBundle::macro.html.twig' as macro %}
 
-{% block title %}重新生成试卷题目 - {{ parent() }}{% endblock %}
+{% block title %}{{'重新生成试卷题目'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'testpaper' %}
 {% set script_controller = 'testpaper/testpaper-form' %}
@@ -9,13 +9,13 @@
 {% block main %}
 
 <div class="panel panel-default panel-col test-creator">
-  <div class="panel-heading clearfix">重新生成试卷题目</div>
-  
+  <div class="panel-heading clearfix">{{'重新生成试卷题目'|trans}}</div>
+
   <div class="panel-body">
 
     <ol class="breadcrumb">
-      <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">试卷管理</a></li>
-      <li class="active">重新生成试卷题目</li>
+      <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">{{'试卷管理'|trans}}</a></li>
+      <li class="active">{{'重新生成试卷题目'|trans}}</li>
     </ol>
 
     <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-build-check-url="{{ path('course_manage_testpaper_build_check', {courseId:course.id})}}" data-have-build-fields="true" data-course-id="{{course.id}}">
@@ -24,8 +24,8 @@
 
       <div class="form-group mbm">
         <div class="col-md-8 col-md-offset-2">
-          <button type="submit" class="btn btn-primary" >保存，下一步</button>
-          <a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}" class="btn btn-link  ">返回</a>
+          <button type="submit" class="btn btn-primary" >{{'保存，下一步'|trans}}</button>
+          <a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}" class="btn btn-link  ">{{'返回'|trans}}</a>
         </div>
       </div>
 
@@ -38,4 +38,3 @@
 
 
 
- 
