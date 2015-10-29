@@ -131,11 +131,15 @@ class Exercise extends BaseResource
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
         $items = $res['items'];
         foreach ($items as &$item) {
-
             unset($item['result']['score']);
             unset($item['result']['missScore']);
             unset($item['result']['question']);
             $item['result']=$item['result']['itemResult'];
+            if (!empty($item['items'])) {
+                foreach ($item['items'] as &$item) {
+                    $item['result']=$item['result']['itemResult'];
+                }
+            }
         }
         $res['items']=$items;
         return $res;
