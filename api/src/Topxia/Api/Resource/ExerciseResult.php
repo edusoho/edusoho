@@ -16,8 +16,11 @@ class ExerciseResult extends BaseResource
         $questionIds = ArrayToolkit::column($questionItems, "questionId");
 
         $answers = !empty($answers['data']) ? $answers['data'] : array();
-        $result = $this->getExerciseService()->startExercise($exerciseId,$questionIds);
-        $this->getExerciseService()->submitExercise($result['id'], $answers);
+        $exercise = $this->getExerciseService()->getExercise($exerciseId);
+        $result = $this->getExerciseService()->submitExercise($exerciseId,$answers);
+        $course = $this->getCourseService()->getCourse($exercise['courseId']);
+        $lesson = $this->getCourseService()->getCourseLesson($exercise['courseId'],$result['lessonId']);
+        $this->getExerciseService()->finishExercise($course,$lesson,$exercise['courseId'],$exerciseId);
         $res = array(
             'id' => $result['id'],
         );
@@ -35,11 +38,6 @@ class ExerciseResult extends BaseResource
         if (empty($exerciseResults)) {
             throw $this->createNotFoundException ('无法查看练习结果！');
         }
-        var_dump($exerciseResults);
-
-        // $itemSetResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($exercise['id'],$user->id)['items'];
-        // $exerciseResults['items'] = $this->filterItem($itemSetResults);
-        // return $this->filter($exerciseResults);
         return $exerciseResults;
     }
 
@@ -95,5 +93,9 @@ class ExerciseResult extends BaseResource
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

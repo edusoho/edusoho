@@ -29,9 +29,11 @@ class Exercise extends BaseResource
         $exercise['description'] = $lesson['title'];
 
         if ('lesson' != $idType) {
-            $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id']);
-            $indexdItems = $items['questionIds'];
-            $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
+            $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id'])['items'];
+            $items = $this->filterQuestion($items);
+            
+            $indexdItems = ArrayToolkit::index($items, 'questionId');
+            $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
             $exercise['items'] = $this->filterItem($questions, null);
         }
         
@@ -51,15 +53,15 @@ class Exercise extends BaseResource
         $exercise["description"] = $lesson['title'];
 
         $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id'])['items'];
+        $items = $this->filterQuestion($items);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
 
         $itemSetResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($id,$user->id)['items'];
+        $itemSetResults = $this->filterQuestion($itemSetResults);
         $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
-
         $exercise['items'] = $this->filterItem($questions, $itemSetResults);
-
-        return $this->filter($exercise);
+        return $this->filterResult($exercise);
     }
 
     private function filterItem($items, $itemSetResults)
@@ -103,9 +105,39 @@ class Exercise extends BaseResource
         return array_values($newItmes);
     }
 
+    public function filterQuestion(&$res){
+        foreach ($res as &$value) {
+            $value['questionType']=$value['question']['type'];
+            unset($value['question']);
+            if (array_key_exists('subItems',$value)) {
+                foreach ($value['subItems'] as &$subItem) {
+                    $subItemId = $subItem['question']['id'];
+                    $res[$subItemId] = $subItem;
+                }
+                unset($value['subItems']);
+            }
+        }
+        return $res;
+    }
+
      public function filter(&$res)
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+        return $res;
+    }
+
+    public function filterResult(&$res)
+    {
+        $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+        $items = $res['items'];
+        foreach ($items as &$item) {
+
+            unset($item['result']['score']);
+            unset($item['result']['missScore']);
+            unset($item['result']['question']);
+            $item['result']=$item['result']['itemResult'];
+        }
+        $res['items']=$items;
         return $res;
     }
 
