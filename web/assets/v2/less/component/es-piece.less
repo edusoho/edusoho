@@ -1,11 +1,29 @@
 .es-piece {
   margin-bottom: 30px;
+  &.piece-lg {
+    .piece-header {
+      font-size: 22px;
+      border-width: 3px;
+      font-weight: 500;
+      line-height: 1;
+      padding-left: 15px;
+      .more {
+        font-size: 14px;
+      }
+    }
+  }
   .piece-header {
+    position: relative;
     margin: 5px auto 20px auto;
     padding: 0 10px;
     color: @gray-dark;
     font-size: 16px;
     border-left: 2px solid @brand-primary;
+    .more {
+      position: absolute;
+      right: 0;
+      top: 5px;
+    }
   }
   .piece-body {
     .piece-body-list {
