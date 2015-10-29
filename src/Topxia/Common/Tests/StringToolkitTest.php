@@ -5,7 +5,7 @@ namespace Topxia\Common\Tests;
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\StringToolkit;
 
-class BlockTookitTest extends BaseTestCase
+class StringToolkitTest extends BaseTestCase
 {
     public function testTemplate() 	//替换字符串中的模板
     {
@@ -68,7 +68,7 @@ class BlockTookitTest extends BaseTestCase
     	$this->assertEquals($result,'863');
     }
 
-    public function testTextToSecondsThird()	//只能传一小时内的数据,多了没用
+    public function testTextToSecondsWidthEmptycolon()	//只能传一小时内的数据,多了没用
     {
     	$stringTime = '101231';
     	$result = StringToolkit::textToSeconds($stringTime);
@@ -89,11 +89,33 @@ class BlockTookitTest extends BaseTestCase
     	$this->assertEquals($result,'EduSo...');
     }
 
-    public function testJsonPettry()
+    public function testJsonPettryWithEmptyString()
     {
-    	$string = '{"a":"aName","b":"bName"\n//\\n}';
-    	var_dump($string);
+    	$string = '';
     	$result = StringToolkit::jsonPettry($string);
-    	var_dump($result);
+        $this->assertEquals($result,'');
+    }
+
+    public function testJsonPettryWithOneChar()
+    {
+        $string = 'x';
+        $result = StringToolkit::jsonPettry($string);
+        $this->assertEquals($result,$string);
+    }
+
+    public function testJsonPettryWithArray()
+    {
+        $array = array('a'=>'1','b'=>'2','c'=>'3');
+        $Jstring = json_encode($array);
+        $Jstring = '['.$Jstring.']';
+        $result = StringToolkit::jsonPettry($Jstring);
+        $this->assertGreaterThan($result,$Jstring);
+    }
+    public function testJsonPettryWithString()
+    {
+        $string = "hello,I'm stefaine.";
+        $Jstring = json_encode($string);
+        $result = StringToolkit::jsonPettry($Jstring);
+        $this->assertEquals($Jstring,$result);
     }
 }
