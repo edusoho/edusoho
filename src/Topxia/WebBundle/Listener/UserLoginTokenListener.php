@@ -26,8 +26,8 @@ class UserLoginTokenListener
             return;
         }
 
-        //$userLoginToken = $request->getSession()->getId();
-        $userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
+        $userLoginToken = $request->getSession()->getId();
+        //$userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
         $user = $this->getUserService()->getCurrentUser();
 
         if(isset($user['locked']) && $user['locked'] == 1){
