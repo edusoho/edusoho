@@ -51,6 +51,9 @@ class TimeMachineTest extends BaseTestCase
         $diff = $timeMachine->diffDays(1443628800, 1445582204);
         $this->assertEquals(22, $diff);
 
+        $diff = $timeMachine->diffDays(1445582204, 1443628800);
+        $this->assertEquals(22, $diff);
+
     }
 
     private function getTimeMachine()
