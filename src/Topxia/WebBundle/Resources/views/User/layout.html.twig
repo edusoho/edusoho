@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{% if pageNav == 'teach' %}{{'在教课程'|trans}} - {% elseif pageNav == 'learn' %}{{'在学课程'|trans}} - {% elseif pageNav == 'favorited' %}{{'收藏的课程'|trans}} - {% elseif pageNav == 'group' %}{{'加入的小组'|trans}} - {% elseif pageNav == 'friend' %}{{'关注/粉丝'|trans}} - {% else %}{{''}}{% endif %}{{user.nickname}}{{'的个人主页'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{% if pageNav == 'teach' %}{{'在教课程'|trans}} - {% elseif pageNav == 'learn' %}{{'在学课程'|trans}} - {% elseif pageNav == 'favorited' %}{{'收藏的课程'|trans}} - {% elseif pageNav == 'group' %}{{'加入的小组'|trans}} - {% elseif pageNav == 'friend' %}{{'关注/粉丝'|trans}} - {% else %}{{''}}{% endif %}{{user.nickname}}的个人主页 - {{ parent() }}{% endblock %}
 
 {% block keywords %}{{ user.title }}{% endblock %}
 {% block description %}{{ user.about|default('')|plain_text(100) }}{% endblock %}
