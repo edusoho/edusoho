@@ -67,7 +67,7 @@ class BuildCommand extends BaseCommand
 
 		chdir($this->buildDirectory);
 
-		$command = "tar czvf edusoho-" . System::VERSION . ".tar.gz edusoho/";
+		$command = "tar czvf edusoho-mooc-" . System::VERSION . ".tar.gz edusoho/";
 		exec($command);
 	}
 
@@ -157,6 +157,7 @@ class BuildCommand extends BaseCommand
 	public function buildPluginsDirectory()
 	{
 		$this->output->writeln('build plugins/ .');
+		//$this->filesystem->mirror("{$this->rootDirectory}/plugins", "{$this->distDirectory}/plugins");
 		$this->filesystem->mkdir("{$this->distDirectory}/plugins");
 	}
 
@@ -184,8 +185,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/PluginCreateCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/PluginCreateCommand.php");
 		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/PluginRefreshCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/PluginRefreshCommand.php");
 		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php");
-		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php");
-
+		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->distDirectory}/src/");
@@ -318,6 +318,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/autumn", "{$this->distDirectory}/web/themes/autumn");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/jianmo", "{$this->distDirectory}/web/themes/jianmo");
+		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/mooc", "{$this->distDirectory}/web/themes/mooc");
 		$this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
 		$this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
 
@@ -370,7 +371,7 @@ class BuildCommand extends BaseCommand
         $this->generateBlcokContent("{$themeDir}/default/block.json");
         $this->generateBlcokContent("{$themeDir}/autumn/block.json");
         $this->generateBlcokContent("{$themeDir}/jianmo/block.json");
-
+        $this->generateBlcokContent("{$themeDir}/mooc/block.json");
 	}
 
 	private function generateBlcokContent($metaFilePath)
