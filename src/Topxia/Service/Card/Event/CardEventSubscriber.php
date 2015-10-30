@@ -12,7 +12,9 @@ class CardEventSubscriber implements EventSubscriberInterface
 	public static function getSubscribedEvents()
     {
         return array(
-            'card.add' => 'onCardAdd'
+            'card.add' => 'onCardAdd',
+            'card.update' => 'onCardUpdate',
+            'card.delete' => 'onCardDelete'
         );
     }
 
@@ -21,6 +23,16 @@ class CardEventSubscriber implements EventSubscriberInterface
     	$fields = $event->getSubject();
         $card = ArrayToolkit::parts($fields, array('cardType', 'cardId', 'deadline', 'userId'));
     	$this->getCardService()->addCard($card);
+
+    }
+
+    public function onCardUpdate()
+    {
+
+    }
+
+    public function onCardDelete()
+    {
 
     }
 

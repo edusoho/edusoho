@@ -1,0 +1,31 @@
+<div class="col-lg-4 col-md-6 col-sm-6">
+	<div class="jm-card-item">
+		<div class="jm-card-img yhjing">
+			<div class="jm-card-info">
+				{% if cardDetail.targetType == "course" %}
+					{% if cardDetail.targetId == 0 %}
+						<p class="title">可用于抵扣全站课程</p>
+					{% else %}
+						<p class="title">用于抵扣指定课程</p>
+					{% endif %}
+				{% endif %}
+
+				{% if cardDetail.targetType == "classroom" %}
+					<p class="title">可用于抵扣全站班级</p>
+				{% endif %}
+
+				{% if cardDetail.targetType == "vip" %}
+					{% if cardDetail.targetId == 0 %}
+						<p class="title">可用于抵扣全站会员</p>
+					{% else %}
+						<p class="title">用于抵扣指定会员</p>
+					{% endif %}
+				{% endif %}
+				<p class="price">
+					<strong>{% if cardDetail.type == "minus" %}￥{% endif %}{{ cardDetail.rate }}{% if cardDetail.type == "discount" %}折{% endif %}</strong>
+				</p>
+				<p>有效期截止：<span>{{ card.deadline|date('Y年n月d日') }}</span></p>
+			</div>
+		</div>
+	</div>
+</div>

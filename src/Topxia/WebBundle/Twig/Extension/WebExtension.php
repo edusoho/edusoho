@@ -106,7 +106,7 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
              new \Twig_SimpleFunction('is_trial',array($this,'isTrial')),
-             new \Twig_SimpleFunction('time_stamp',array($this,'timeStamp')),
+             new \Twig_SimpleFunction('timestamp',array($this,'timestamp')),
         );
     }
     public function getParametersFromUrl($url)
@@ -1159,7 +1159,7 @@ class WebExtension extends \Twig_Extension
         return false;
     }
 
-    public function timeStamp()
+    public function timestamp()
     {
         return time();
     }

@@ -20,6 +20,16 @@ class MoneyCardDaoImpl extends BaseDao
 
         return $this->getConnection()->fetchAssoc($sql, array($cardId)) ? : null;
     }    
+
+    public function getMoneyCardByIds($ids)
+    {
+        if(empty($ids)){
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
     public function getMoneyCardByPassword($password)
     {
         $sql = "SELECT * FROM {$this->table} WHERE password = ? LIMIT 1";
@@ -106,6 +116,7 @@ class MoneyCardDaoImpl extends BaseDao
         $conditions = array_filter($conditions);
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'money_card')
+            ->andWhere('id = :id')
             ->andWhere('cardId = :cardId')
             ->andWhere('deadline = :deadline')
             ->andWhere('batchId = :batchId')
