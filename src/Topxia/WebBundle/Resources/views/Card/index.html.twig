@@ -3,7 +3,6 @@
 {% set main_nav = 'cards' %}
 
 {% block main_body %}
-	<!-- 卡包列表 -->
 	<div class="clearfix mbl mhm">
 		<ul class="nav nav-pills inline-block" role="active">
 			<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
@@ -42,5 +41,6 @@
 				<div class="empty">没有搜索到符合条件的卡</div>
 			{% endif %}
 		</div>
+
 	</div>
 {% endblock %}
