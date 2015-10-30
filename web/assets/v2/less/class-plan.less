@@ -52,7 +52,6 @@
 }
 
 .course-bar {
-  margin-top: 15px;
   border: 1px solid @gray-light;
   background-color: #fff;
   color: @gray;
@@ -65,8 +64,8 @@
       color: @brand-danger;
     }
   }
-  &:first-child {
-    margin-top: 0;
+  + .course-bar {
+    margin-top: 15px;
   }
   &:hover {
     cursor: pointer;
