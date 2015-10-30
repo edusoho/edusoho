@@ -4,7 +4,7 @@ namespace Topxia\Service\Sms\SmsProcessor;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\CurlToolkit;
-use Topxia\Common\NameCutterTookit;
+use Topxia\Common\StringToolkit;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
@@ -26,6 +26,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         global $kernel;
         $container = $kernel->getContainer();
         $siteSetting = $this->getSettingService()->get('site');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
         $hostName = $siteSetting['url'];
         $api = CloudAPIFactory::create('root');
         for($i = 0; $i <= intval($count/1000); $i ++){
@@ -44,6 +46,8 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
     {
         global $kernel;
         $siteSetting = $this->getSettingService()->get('site');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
         $hostName = $siteSetting['url'];
         $lesson = $this->getCourseService()->getLesson($targetId);
         if (empty($lesson)) {
@@ -67,12 +71,12 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $studentIds = ArrayToolkit::column($students, 'userId');
         $to = $this->getUsersMobile($studentIds);
     
-        $lesson['title'] = NameCutterTookit::cutter($lesson['title'], 20, 15, 4);
+        $lesson['title'] = StringToolkit::cutter($lesson['title'], 20, 15, 4);
         $parameters['lesson_title'] = '课时：《'.$lesson['title'].'》';
         if ($lesson['type'] == 'live') {
             $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
         }
-        $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
+        $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
         $parameters['course_title'] = '课程：《'.$course['title'].'》';
         if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
             $description = $parameters['course_title'].' '.$parameters['lesson_title'].'发布';
