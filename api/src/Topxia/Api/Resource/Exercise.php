@@ -29,7 +29,8 @@ class Exercise extends BaseResource
         $exercise['description'] = $lesson['title'];
 
         if ('lesson' != $idType) {
-            $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id'])['items'];
+            $rawItems = $this->getExerciseService()->getItemSetByExerciseId($exercise['id']);
+            $items = $rawItems['items'];
             $items = $this->filterQuestion($items);
             
             $indexdItems = ArrayToolkit::index($items, 'questionId');
@@ -52,12 +53,14 @@ class Exercise extends BaseResource
         $exercise['lessonTitle'] = $lesson['title'];
         $exercise["description"] = $lesson['title'];
 
-        $items = $this->getExerciseService()->getItemSetByExerciseId($exercise['id'])['items'];
+        $rawItems = $this->getExerciseService()->getItemSetByExerciseId($exercise['id']);
+        $items = $rawItems['items'];
         $items = $this->filterQuestion($items);
         $indexdItems = ArrayToolkit::index($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
 
-        $itemSetResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($id,$user->id)['items'];
+        $rawItemSetResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($id,$user->id);
+        $itemSetResults = $rawItemSetResults['items'];
         $itemSetResults = $this->filterQuestion($itemSetResults);
         $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
         $exercise['items'] = $this->filterItem($questions, $itemSetResults);

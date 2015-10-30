@@ -12,7 +12,8 @@ class ExerciseResult extends BaseResource
     {
         $answers = $request->request->all();
 
-        $questionItems = $this->getExerciseService()->getItemSetByExerciseId($exerciseId)['items'];
+        $rawQuestionItems = $this->getExerciseService()->getItemSetByExerciseId($exerciseId);
+        $questionItems = $rawQuestionItems['items'];
         $questionIds = ArrayToolkit::column($questionItems, "questionId");
 
         $answers = !empty($answers['data']) ? $answers['data'] : array();
