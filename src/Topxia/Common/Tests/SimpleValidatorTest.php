@@ -104,16 +104,27 @@ class SimpleValidatorTest extends BaseTestCase
     		$this->assertEquals(false,$result);
     		$result = SimpleValidator::numbers("sss");
     		$this->assertEquals(false,$result);
+            $result = SimpleValidator::numbers("3,111,000");
+            $this->assertEquals(true,$result);
+            $result = SimpleValidator::numbers("3,029,000,");
+            $this->assertEquals(false,$result);
+
     }
 
+    //固定电话号码
     public function testPhone()
-    {
+    {   
     		$result = SimpleValidator::phone("157-57125300");
     		$this->assertEquals(true,$result);
-    		$result = SimpleValidator::phone("157-5712530");
+    		$result = SimpleValidator::phone("0571-5712530");
     		$this->assertEquals(true,$result);
-    		$result = SimpleValidator::phone("1575-7125301");
+    		$result = SimpleValidator::phone("010-1234567");
     		$this->assertEquals(true,$result);
+            $result = SimpleValidator::phone("021-12345678");
+            $this->assertEquals(true,$result);
+            //手机号
+            $result = SimpleValidator::phone("15757125300");
+            $this->assertEquals(false,$result);
     		$result = SimpleValidator::phone("15757-125301");
     		$this->assertEquals(false,$result);
     		$result = SimpleValidator::phone("1575-7125301111");
@@ -128,8 +139,12 @@ class SimpleValidatorTest extends BaseTestCase
     		$this->assertEquals(true,$result);
     		$result = SimpleValidator::date("2014-01-31");
     		$this->assertEquals(true,$result);
+            $result = SimpleValidator::date("2014-1-31");
+            $this->assertEquals(true,$result);
     		$result = SimpleValidator::date("2014-35-13");
     		$this->assertEquals(false,$result);
+            $result = SimpleValidator::date("2014-02-32");
+            $this->assertEquals(false,$result);
     		$result = SimpleValidator::date("4-35-13");
     		$this->assertEquals(false,$result);
     }
@@ -150,6 +165,8 @@ class SimpleValidatorTest extends BaseTestCase
     {
     		$result = SimpleValidator::integer("-9");
     		$this->assertEquals(true,$result);
+            $result = SimpleValidator::integer("123456");
+            $this->assertEquals(true,$result);
     		$result = SimpleValidator::integer("+9");
     		$this->assertEquals(true,$result);
     		$result = SimpleValidator::integer("9");
@@ -190,6 +207,10 @@ class SimpleValidatorTest extends BaseTestCase
 
     public function testSite()
     {
+            $result = SimpleValidator::site("http://www.google.com/");
+            $this->assertEquals(true,$result);
+            $result = SimpleValidator::site("http://www.ba1du.com/");
+            $this->assertEquals(true,$result);
     		$result = SimpleValidator::site("http://e2/we#&/");
     		$this->assertEquals(true,$result);
     		$result = SimpleValidator::site("https://e2/we#&/");
@@ -200,5 +221,9 @@ class SimpleValidatorTest extends BaseTestCase
     		$this->assertEquals(true,$result);
     		$result = SimpleValidator::site("http://ew2/we#&/");
     		$this->assertEquals(true,$result);
+            $result = SimpleValidator::site("ftp://www.ba1du.com/");
+            $this->assertEquals(false,$result);
+            $result = SimpleValidator::site("www.g.com/");
+            $this->assertEquals(false,$result);
     }
 }
