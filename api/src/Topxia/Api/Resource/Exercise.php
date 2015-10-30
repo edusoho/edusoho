@@ -16,17 +16,24 @@ class Exercise extends BaseResource
         } else {
             $exercise = $this->getExerciseService()->getExercise($id);
         }
-        
-        if (empty($exercise)) {
-            $exercise = array();
-            return $exercise;
-        }
 
         $course = $this->getCorrseService()->getCourse($exercise['courseId']);
         $exercise['courseTitle'] = $course['title'];
         $lesson = $this->getCorrseService()->getLesson($exercise['lessonId']);
         $exercise['lessonTitle'] = $lesson['title'];
         $exercise['description'] = $lesson['title'];
+
+        $typeRange = $exercise['questionTypeRange'];
+        $typeRange = $this->getquestionTypeRangeStr($typeRange);
+        $excludeIds = $this->getRandQuestionIds($typeRange,$exercise['itemCount'],$exercise['source'],$course['id'],$exercise['lessonId']);
+
+        $result = $this->getExerciseService()->startExercise($exercise['id'],$excludeIds);
+        
+        if (empty($exercise)) {
+            $exercise = array();
+            return $exercise;
+        }
+
 
         if ('lesson' != $idType) {
             $rawItems = $this->getExerciseService()->getItemSetByExerciseId($exercise['id']);
