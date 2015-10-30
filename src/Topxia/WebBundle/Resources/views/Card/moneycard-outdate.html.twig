@@ -5,9 +5,9 @@
 						<h4>学习卡</h4>
 						<p class="title">仅用于抵扣测试直播课程</p>
 						<p class="price">
-							<strong>￥400</strong>
+							<strong>{{ cardDetail.coin }}虚拟币</strong>
 						</p>
-						<p>有效期：<span>2015年11月12日</span></p>
+						<p>有效期截止：<span>{{ cardDetail.deadline|date('Y年n月d日') }}</span></p>
 					</div>
 					<!--学习卡已过期-->
 					<div class="carded"></div>

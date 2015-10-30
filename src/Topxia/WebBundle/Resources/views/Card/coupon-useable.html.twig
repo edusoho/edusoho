@@ -22,7 +22,7 @@
 					{% endif %}
 				{% endif %}
 				<p class="price">
-					<strong>{% if cardDetail.type == "minus" %}￥{% endif %}{{ cardDetail.rate }}{% if cardDetail.type == "discount" %}折{% endif %}</strong>
+					<strong>{% if cardDetail.type == "minus" %}￥{% endif %}{{ cardDetail.rate }}{% if cardDetail.type == "discount" %}折{% endif %}</strong><a href="">立即使用></a>
 				</p>
 				<p>有效期截止：<span>{{ card.deadline|date('Y年n月d日') }}</span></p>
 			</div>

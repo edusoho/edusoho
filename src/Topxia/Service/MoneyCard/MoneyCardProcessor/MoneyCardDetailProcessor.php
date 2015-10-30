@@ -14,8 +14,12 @@ class MoneyCardDetailProcessor implements DetailProcessor
 
 	public function getCardDetailsByCardIds($ids)
 	{
-		return $this->getMoneyCardService()->getMoneyCardByIds($ids);
-		//此方法目前插件的远程分支不存在
+		$moneyCards = $this->getMoneyCardService()->getMoneyCardByIds($ids);
+		foreach ($moneyCards as $key => $card) {
+			$batch = $this->getmoneyCardService()->getBatch($card['batchId']);
+			$moneyCards[$key]['coin'] = $batch['coin'];
+		}
+		return  $moneyCards;
 	}
 
 	protected function getMoneyCardService()

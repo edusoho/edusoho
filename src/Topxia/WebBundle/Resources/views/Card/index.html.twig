@@ -6,9 +6,10 @@
 	<div class="clearfix mbl mhm">
 		<ul class="nav nav-pills inline-block" role="active">
 			<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
-			<li role="presentation" {% if app.request.query.get('status')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
+			<li role="presentation" {% if app.request.query.get('cardType')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
 		</ul>
 		<div class="pull-right mtm hidden-xs">
+		
 			<label class="radio-inline">
 			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option1">全部
 			</label>
