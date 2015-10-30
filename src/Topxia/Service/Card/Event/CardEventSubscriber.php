@@ -12,9 +12,7 @@ class CardEventSubscriber implements EventSubscriberInterface
 	public static function getSubscribedEvents()
     {
         return array(
-            'card.add' => 'onCardAdd',
-            'card.update' => 'onCardUpdate',
-            'card.delete' => 'onCardDelete'
+            'card.add' => 'onCardAdd'
         );
     }
 
@@ -26,15 +24,6 @@ class CardEventSubscriber implements EventSubscriberInterface
 
     }
 
-    public function onCardUpdate()
-    {
-
-    }
-
-    public function onCardDelete()
-    {
-
-    }
 
     protected function getCardService()
     {
