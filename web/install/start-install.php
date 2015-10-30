@@ -300,7 +300,7 @@ function _create_database($config, $replace)
 
             $pdo->exec("USE `{$config['database_name']}`;");
 
-            $sql = file_get_contents('./edusoho.sql');
+            $sql = file_get_contents('./edusoho-mooc.sql');
             $result = $pdo->exec($sql);
             if ($result === false) {
                 return "创建数据库表结构失败，请删除数据库后重试！";
@@ -469,7 +469,7 @@ class SystemInit
         if (empty($users) or empty($users[0])) {
             return array('error' => '管理员账号不存在，创建Key失败');
         }
-        $keys = $applier->applyKey($users[0], 'opensource', 'install');
+        $keys = $applier->applyKey($users[0], 'mooc', 'install');
 
         if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
             return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
@@ -752,7 +752,7 @@ EOD;
 
     public function initThemes()
     {
-        $this->getSettingService()->set('theme', array('uri' => 'jianmo'));
+        $this->getSettingService()->set('theme', array('uri' => 'mooc'));
     }
 
     public function initBlocks()
@@ -761,9 +761,7 @@ EOD;
 
         $metaFiles = array(
             'system' => "{$themeDir}/block.json",
-            'default' => "{$themeDir}/default/block.json",
-            'autumn' => "{$themeDir}/autumn/block.json",
-            'jianmo' => "{$themeDir}/jianmo/block.json"
+            'mooc' => "{$themeDir}/mooc/block.json"
         );
 
         foreach ($metaFiles as $category => $file) {

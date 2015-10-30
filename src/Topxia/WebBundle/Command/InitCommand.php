@@ -66,9 +66,9 @@ class InitCommand extends BaseCommand
 
 		$setting = array(
             'maxRefundDays' => 10,
-            'applyNotification' => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
-            'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
-            'failedNotification' => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。',
+            'applyNotification' => '您好，您退款的课程为{{course}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'successNotification' => '您好，您申请退款课程{{course}} 审核通过，将为您退款{{amount}}元。',
+            'failedNotification' => '您好，您申请退款课程{{course}} 审核未通过，请与管理员再协商解决纠纷。',
         );
         $setting = $this->getSettingService()->set('refund', $setting);
         $output->writeln(' ...<info>成功</info>');
@@ -404,7 +404,7 @@ EOD;
     {
     	$output->write('  初始化主题');
     	
-        $this->getSettingService()->set('theme', array('uri' => 'default'));
+        $this->getSettingService()->set('theme', array('uri' => 'mooc'));
 
         $output->writeln(' ...<info>成功</info>');
     }
@@ -430,9 +430,8 @@ EOD;
         $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/autumn/block.json';
         BlockToolkit::init($json, $this->getContainer());
 
-        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/jianmo/block.json';
+        $json = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/mooc/block.json';
         BlockToolkit::init($json, $this->getContainer());
-
     }
 
     public function initCrontabJob($output){

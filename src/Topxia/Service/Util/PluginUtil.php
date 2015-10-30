@@ -34,7 +34,7 @@ class PluginUtil
         );
 
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ($app['code'] == 'MOOCMAIN') {
                 continue;
             }
 
@@ -66,7 +66,7 @@ class PluginUtil
         $config = '';
 
         foreach ($apps as $app) {
-            if ($app['code'] == 'MAIN') {
+            if ($app['code'] == 'MOOCMAIN') {
                 continue;
             }
             $code = $app['code'];

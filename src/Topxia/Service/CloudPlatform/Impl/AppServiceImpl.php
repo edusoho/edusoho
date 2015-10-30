@@ -57,7 +57,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function getMainVersion()
     {   
-        $app=$this->getAppDao()->getAppByCode('MAIN');
+        $app=$this->getAppDao()->getAppByCode('MOOCMAIN');
 
         return  $app['version'];
     }
@@ -88,7 +88,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function checkAppUpgrades()
     {
-        $mainApp = $this->getAppDao()->getAppByCode('MAIN');
+        $mainApp = $this->getAppDao()->getAppByCode('MOOCMAIN');
         if (empty($mainApp)) {
             $this->addEduSohoMainApp();
         }
@@ -620,7 +620,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function getPackageRootDirectory($package, $packageDir) 
     {
-        if ($package['product']['code'] == 'MAIN') {
+        if ($package['product']['code'] == 'MOOCMAIN') {
             return $this->getSystemRootDirectory();
         }
 
@@ -655,9 +655,9 @@ class AppServiceImpl extends BaseService implements AppService
     protected function addEduSohoMainApp()
     {
         $app = array(
-            'code' => 'MAIN',
-            'name' => 'EduSoho主系统',
-            'description' => 'EduSoho主系统',
+            'code' => 'MOOCMAIN',
+            'name' => 'EduSoho慕课版',
+            'description' => 'EduSoho慕课版',
             'icon' => '',
             'version' => System::VERSION,
             'fromVersion' => '0.0.0',
