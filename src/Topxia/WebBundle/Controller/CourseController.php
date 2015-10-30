@@ -56,7 +56,7 @@ class CourseController extends CourseBaseController
 
 		if ($this->isPluginInstalled('Vip')) {
 			$levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
-			if (!$fliter['currentLevelId'] != 'all') {
+			if ($fliter['currentLevelId'] != 'all') {
 				$vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
             	$conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
 			}
