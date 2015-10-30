@@ -185,7 +185,7 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/PluginCreateCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/PluginCreateCommand.php");
 		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/PluginRefreshCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/PluginRefreshCommand.php");
 		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php");
-		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}
+		$this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php");
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->distDirectory}/src/");
