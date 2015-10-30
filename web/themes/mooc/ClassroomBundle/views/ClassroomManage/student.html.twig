@@ -1,0 +1,56 @@
+  {% extends 'ClassroomBundle:ClassroomManage:students.html.twig' %}
+
+{% block title %}学员管理 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'student' %}
+
+{% set script_controller = 'classroombundle/controller/classroom/students' %}
+
+{% block maincontent %}
+
+      <form class="form-inline well well-sm " action="" method="get" novalidate>
+
+        <div class="form-group">
+          <input class="form-control " type="text" placeholder="请输入用户名" name="nickname" value="{{ app.request.get('nickname') }}">
+
+          <select class="form-control" name="organizationId">
+            {% set tree = data('OrganizationTree',{}) %}
+            {% set selectId = app.request.query.get('organizationId') %}
+            <option value=0>选择院系/专业</option>
+            {% for item in tree %}
+              <option value="{{ item.id }}" {% if item.id == selectId %}selected{% endif %}>{% for i in 0..(item.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ item.name }}</option>
+            {% endfor %}
+          </select>
+          <input type="hidden" name="includeChildren" value="true">
+          <button class="btn btn-primary">搜索</button>
+        </div>
+        <div class="clearfix"></div>
+        
+
+    </form>
+    <table class="table table-striped" id="course-student-list">
+      <thead>
+        <tr>
+          <th width="25%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</th>
+          <th width="20%">院系/专业</th>
+          <th width="30%">学习进度</th>
+          <th width="25%">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% set organizations = data('Organization', {all:1}) %}
+        {% for student in students %}
+          {% set user = users[student.userId] %}
+          {% set progress = progresses[student.userId] %}
+          {% include 'ClassroomBundle:ClassroomManage:tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ web_macro.paginator(paginator) }}
+
+
+
+{% endblock %}

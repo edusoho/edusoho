@@ -52,6 +52,7 @@ app/data/plugin_installed.php
 !/web/themes/default-b
 !/web/themes/jianmo
 !/web/themes/block.json
+!/web/themes/mooc
 edusoho.komodoproject
 .project
 .settings
