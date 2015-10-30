@@ -136,9 +136,9 @@
                     <div class="media-left">
                       <a href="{{ path('group_show',{id:group.id}) }}">
                         {% if group.logo %}
-                          <img class="avatar-square-md" src="{{file_path(group.logo)}}">
+                          <img class="avatar-square-md" src="{{file_path(group.logo)}}" alt="{{ group.title }}">
                         {% else %}
-                          <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}">
+                          <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}"  alt="{{ group.title }}">
                         {% endif %}
                       </a>
                     </div>

@@ -66,7 +66,16 @@
 			</tr>
 
 			<tr>
-				<td>{{'完成课时学习数'|trans}}</td>
+				<td>购买班级数</td>
+				<td><span class="pull-right">{{todayBuyClassroomNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayBuyClassroomNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_classroom_paid',{tab:"trend",analysisDateType:'paidClassroom'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_classroom_paid',{tab:"detail",analysisDateType:'paidClassroom'})}}">详情</a></td>
+			{% endif %}
+			</tr>
+
+			<tr>
+				<td>完成课时学习数</td>
 				<td><span class="pull-right">{{todayFinishedLessonNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayFinishedLessonNum}}</span></td>
 			{% if is_granted('ROLE_SUPER_ADMIN') %}

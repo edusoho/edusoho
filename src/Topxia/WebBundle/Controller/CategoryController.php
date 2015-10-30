@@ -17,7 +17,7 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($data);
     }
 
-    public function treeNavAction(Request $request, $category, $path, $fliter = 'ALL', $orderBy = 'latest')
+    public function treeNavAction(Request $request, $category, $path, $fliter = array('price'=>'all','type'=>'all', 'currentLevelId'=>'all'), $orderBy = 'latest')
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($category, 'course');
         

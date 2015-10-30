@@ -120,4 +120,15 @@ class StringToolkit
 
         return $result;
     }
+
+    public static function cutter($name, $leastLength, $prefixLength, $suffixLength)
+    {
+        $afterCutName = $name;
+        $length=mb_strlen($name,'UTF-8');
+        if ($length > $leastLength) {
+            $afterCutName = mb_substr($name, 0, $prefixLength, 'utf-8').'…';
+            $afterCutName .= mb_substr($name, $length-$suffixLength, $length, 'utf-8');
+        }
+        return $afterCutName;
+    }
 }

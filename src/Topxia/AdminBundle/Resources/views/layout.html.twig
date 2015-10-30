@@ -10,7 +10,6 @@
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
 {% set menu_hiddens = setting('menu_hiddens', []) %}
-{% if hiddenMenus() %}{% endif %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -52,7 +51,6 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 </head>
-
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -74,18 +72,18 @@
                {% endif %}
             {% endif %}
 
-            {% if m.code != "admin_system" %}
-              {% if not in_menu_blacklist(m.code) %}
+            {% if m.code == "admin_system" %}
+              {% if is_granted('ROLE_SUPER_ADMIN') %}
+              <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {{ self_macro.menu_link_html(_context, m) }}
+              </li>
+              {% endif %}
+            {% else %}
+              {% if not (m.code == 'admin_app' and setting('copyright.thirdCopyright') == 1) %}
                 <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
               {% endif %}
-            {% else %}
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                  <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ self_macro.menu_link_html(_context, m) }}
-                  </li>
-                {% endif %}
             {% endif %}
 
           {% endfor %}
@@ -165,7 +163,7 @@
           {% endif %}
 
           {% block content_header %}{% endblock %}
-          
+
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}

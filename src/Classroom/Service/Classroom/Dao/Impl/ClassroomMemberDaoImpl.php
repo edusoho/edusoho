@@ -123,6 +123,18 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getConnection()->delete($this->table, array('classroomId' => $classroomId, 'userId' => $userId));
     }
 
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
+    {
+        $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
+        $sql .= " JOIN  `user` As c ON m.classroomId = ?";
+        if ($locked) {
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1";
+        } else {
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
+        }
+        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+    }
+
     public function findMembersByClassroomIdAndRole($classroomId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

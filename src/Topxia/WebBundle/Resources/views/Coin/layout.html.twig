@@ -23,6 +23,11 @@
           <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
             <a href="{{path('my_orders')}}">{{'我的订单'|trans}}</a>
           </li>
+          {% if is_plugin_installed('Vip')%}
+          <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
+            <a href="{{path('vip_history')}}">{{'会员记录'|trans}}</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     {% endblock %}

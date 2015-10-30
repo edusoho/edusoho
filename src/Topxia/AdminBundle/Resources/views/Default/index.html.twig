@@ -4,10 +4,10 @@
 {% set script_controller = 'default/index' %}
 {% block content %}
 
+{{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
 <div class="page-header">
   <h1>{{'管理中心'|trans}}  </h1>
 </div>
-
 {% if is_granted('ROLE_ADMIN') %}
 
   <div class="row">
