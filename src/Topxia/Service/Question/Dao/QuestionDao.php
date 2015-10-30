@@ -12,7 +12,7 @@ interface QuestionDao
 
     public function findQuestionsByParentIds(array $ids);
 
-    public function findQuestionsByPIdAndLockedTarget($pId,$lockedTarget);
+    public function findQuestionsByCopyIdAndLockedTarget($copyId,$lockedTarget);
 
     public function findQuestionsbyTypes($types, $start, $limit);
 

@@ -9,7 +9,7 @@
       </div>
     {% endif %}
     <div class="media-body">
-      <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('dateType',thread.startTime|date('N')) ~ thread.startTime|date(' H:i') }}</p>
+      <p>时间：{{ thread.startTime|date('Y 年 m 月 d 日 ') ~ '周' ~ dict_text('week',thread.startTime|date('N')) ~ thread.startTime|date(' H:i') }}</p>
       {% if thread.location %}
         <p>地点： {{ thread.location }}</p>
       {% endif %}

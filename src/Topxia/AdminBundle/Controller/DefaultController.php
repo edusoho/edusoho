@@ -110,6 +110,47 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function inspectAction(Request $request)
+    {
+        $inspectList = array();
+        $inspectList = array($this->addInspectRole('host',$this->hostInspect($request)));
+
+        $inspectList = array_filter($inspectList);
+        return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
+            'inspectList' => $inspectList
+        ));
+    }
+
+
+    private function addInspectRole($name, $value)
+    {
+        if ($value['status'] == 'ok') {
+            return array();
+        }
+
+        return array('name' => $name,'value' => $value);
+    }
+
+    private function hostInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_setting_site');
+        $fliter = array('http://','https://');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
+        if ($currentHost != str_replace($fliter,"",$siteSetting['url'])) {
+            return array(
+                'status' => 'fail',
+                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl
+                );
+        }
+        return array('status' => 'ok','except' => $siteSetting['url'],'actually' => $currentHost,'settingUrl' => $settingUrl);
+    }
+
     public function getCloudNoticesAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
@@ -253,9 +294,13 @@ class DefaultController extends BaseController
 
         $yesterdayJoinLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid"));
     
-        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00"));
+        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'course'));
 
-        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00"));
+        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'course'));
+
+        $todayBuyClassroomNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'));
+
+        $yesterdayBuyClassroomNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'));
 
         $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
 
@@ -316,6 +361,10 @@ class DefaultController extends BaseController
             'yesterdayJoinLessonNum'=>$yesterdayJoinLessonNum,
             'todayBuyLessonNum'=>$todayBuyLessonNum,
             'yesterdayBuyLessonNum'=>$yesterdayBuyLessonNum,
+
+            'todayBuyClassroomNum'=>$todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum'=>$yesterdayBuyClassroomNum,
+
             'todayFinishedLessonNum'=>$todayFinishedLessonNum,
             'yesterdayFinishedLessonNum'=>$yesterdayFinishedLessonNum,
 
