@@ -311,7 +311,10 @@ class MoneyCardServiceImpl extends BaseService
     {
         $token = $this->getTokenService()->verifyToken('money_card', $token);
         if (!$token) {
-            return false;
+            return array(
+                'code' => 'failed',
+                'message' => '无效的链接'
+                );
         }
         try {
             $this->getMoneyCardBatchDao()->getConnection()->beginTransaction();
@@ -319,7 +322,10 @@ class MoneyCardServiceImpl extends BaseService
             if ($batch['batchStatus'] == 'invalid') {
                 $this->getMoneyCardBatchDao()->getConnection()->commit();
 
-                return false;
+                return array(
+                'code' => 'failed',
+                'message' => '该学习卡已经作废'
+                );
             }
             $conditions = array(
                 'rechargeUserId' => $userId,
@@ -329,7 +335,10 @@ class MoneyCardServiceImpl extends BaseService
             if (!empty($moneyCard)) {
                 $this->getMoneyCardBatchDao()->getConnection()->commit();
 
-                return false;
+                return array(
+                'code' => 'failed',
+                'message' => '您已经领取该批学习卡'
+                );
             }
             $conditions = array(
                 'rechargeUserId' => 0,
@@ -339,7 +348,10 @@ class MoneyCardServiceImpl extends BaseService
             if (empty($moneyCards)) {
                 $this->getMoneyCardBatchDao()->getConnection()->commit();
 
-                return false;
+                return array(
+                'code' => 'failed',
+                'message' => '该批学习卡已经被领完'
+                );
             }
             $moneyCard = $this->getMoneyCardDao()->getMoneyCard($moneyCards[0]['id']);
             if (!empty($moneyCard)) {
@@ -351,13 +363,19 @@ class MoneyCardServiceImpl extends BaseService
                 if (empty($moneyCard)) {
                     $this->getMoneyCardBatchDao()->getConnection()->commit();
 
-                    return false;
+                    return array(
+                    'code' => 'failed',
+                    'message' => '学习卡领取失败'
+                    );
                 }
                 $this->dispatchEvent('moneyCard.receive', $moneyCard);
             }
             $this->getMoneyCardBatchDao()->getConnection()->commit();
 
-            return  true;
+            return  array(
+                'code' => 'success',
+                'message' => '领取成功，请在卡包中查看'
+                );
         } catch (\Exception $e) {
             $this->getMoneyCardBatchDao()->getConnection()->rollback();
             throw $e;
