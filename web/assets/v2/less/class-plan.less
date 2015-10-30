@@ -161,6 +161,26 @@
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     color: @gray-darker;
+    overflow: hidden;
+    &:hover .mask {
+      top: 0;
+      .es-transition;
+    }
+    .mask {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: 70px;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+      background: #000;
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      color: #fff;
+      .es-transition;
+    }
     .study-num {
       color: @brand-primary;
       font-size: 18px;
@@ -268,12 +288,13 @@
   }
   .plan-title {
     padding-top: 25px;
-    padding-bottom: 25px;
+    padding-bottom: 20px;
     font-size: 16px;
     color: @gray-darker;
     small {
       margin-left: 20px;
       color: @gray;
+      font-size: 12px;
     }
   }
   .plan-body {
@@ -282,7 +303,7 @@
     >li {
       position: relative;
       position: relative;
-      padding-bottom: 25px;
+      padding-bottom: 20px;
       list-style-type: none;
       &:last-child {
         border-bottom: 1px solid @gray-lighter;
@@ -307,9 +328,19 @@
           background-color: @brand-primary;
         }
       }
+      &.open .plan-period-list {
+        display: block;
+      }
+      >div {
+        padding: 3px 5px;
+        &:hover {
+          cursor: pointer;
+          background-color: @bg-color;
+        }
+      }
       .icon-plan-state {
         position: absolute;
-        top: 4px;
+        top: 8px;
         left: -35px;
         width: 10px;
         height: 10px;
@@ -321,7 +352,7 @@
       .icon-arrow {
         position: absolute;
         right: 0;
-        top: 0;
+        top: 4px;
       }
     }
   }
