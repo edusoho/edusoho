@@ -8,7 +8,6 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Common\NameCutterTookit;
 
 class SmsEventSubscriber implements EventSubscriberInterface
 {
@@ -37,8 +36,8 @@ class SmsEventSubscriber implements EventSubscriberInterface
             if ($target[0] == 'course') {
                 $courseId = $target[1];
                 $course = $this->getCourseService()->getCourse($courseId);
-                $testpaperResult['paperName'] = NameCutterTookit::cutter($testpaperResult['paperName'], 20, 15, 4);
-                $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
+                $testpaperResult['paperName'] = StringToolkit::cutter($testpaperResult['paperName'], 20, 15, 4);
+                $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
                 $parameters['lesson_title'] = '《'.$testpaperResult['paperName'].'》'.'试卷';
                 $parameters['course_title'] = '《'.$course['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
@@ -61,7 +60,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $user = $this->getUserService()->getUser($userId);
             $parameters = array();
             $parameters['order_title'] = $order['title'];
-            $parameters['order_title'] = NameCutterTookit::cutter($parameters['order_title'], 20, 15, 4);
+            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
             if ($targetType == 'coin') {
                 $parameters['totalPrice'] = $order['amount'].'元';
             } else {
