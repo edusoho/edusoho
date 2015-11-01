@@ -8,5 +8,5 @@ interface CardService
 
     public function findCardsByUserIdAndCardType($userId,$cardType);
 
-    public function findCardsByCardTypeAndCardIds($ids,$cardType);
+    public function findCardDetailsByCardTypeAndCardIds($cardType,$ids);
 }

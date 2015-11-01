@@ -16,6 +16,11 @@ class MoneyCardServiceImpl extends BaseService
         return $this->getMoneyCardDao()->getMoneyCardByCardId($cardId);
     }
 
+    public function getMoneyCardByIds($ids)
+    {
+        return $this->getMoneyCardDao()->getMoneyCardByIds($ids);
+    }
+
     public function getMoneyCardByPassword($password)
     {
         return $this->getMoneyCardDao()->getMoneyCardByPassword($password);

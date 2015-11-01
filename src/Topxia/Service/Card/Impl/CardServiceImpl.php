@@ -4,7 +4,7 @@ namespace Topxia\Service\Card\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Card\CardService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Card\CardDetailProcessor\CardDetailFactory;
+use Topxia\Service\Card\DetailProcessor\DetailFactory;
 
 class CardServiceImpl extends BaseService implements CardService
 {
@@ -36,47 +36,38 @@ class CardServiceImpl extends BaseService implements CardService
 		return $this->getCardDao()->findCardsByUserIdAndCardType($userId,$cardType);
 	}
 
-	public function findCardsByCardTypeAndCardIds($ids,$cardType)
+	public function findCardDetailsByCardTypeAndCardIds($cardType,$ids)
 	{
-		$processor = $this->getCardDetailProcessor($cardType);
+		$processor = $this->getDetailProcessor($cardType);
 		$limit = count($ids);
-		$cardsDetail = $processor->getCardsDetailByCardIds($ids,0,$limit);
+		$cardsDetail = $processor->getCardDetailsByCardIds($ids);//修改过
 
-		$cardsDetail = $this ->sortArrayByField($cardsDetail,'deadline');
-
-
-		if ($cardType == 'coupon'){
-			$cards = ArrayToolkit::group($cardsDetail,'status');
-		} elseif ($cardType == 'moneyCard'){
-			$cards == ArrayToolkit::group($cardDetail,'cardStatus');
-		} else {
-			throw $this->createServiceException('暂时没有更多类型的卡');
-		}
-		return $cards;
+		// $cardsDetail = $this ->sortArrayByField($cardsDetail,'deadline');
+		return $cardsDetail;
 		
 	}
 
-	protected function sortArrayByField(array $beforeArray,$field)
+	public function sortArrayByField(array $array,$field)
 	{
-		uasort($beforeArray , function ($a,$b) use ($field) {
+		uasort($array , function ($a,$b) use ($field) {
             if ($a[$field] == $b[$field]) {
                 return 0;
             }
             return ($a[$field] < $b[$field]) ? 1 : -1;
 	    });
 
-	    return $afterArray = $beforeArray;
+	    return $array;
 	}
 
-	protected function sortArrayByKey(array $beforeArray,$key)
+	public function sortArrayByKey(array $array,$key)
 	{
-		uksort($beforeArray , function ($a,$b) use ($key) {
+		uksort($array , function ($a,$b) use ($key) {
 			if ($a[$key] == $b[$key]) {
 				return 0;
 			}
 			return ($a[$key] < $b[$key]) ? 1 : -1;
 		});
-		return $afterArray = $beforeArray;
+		return $array;
 	}
 
 	protected function getCardDao()
@@ -84,10 +75,9 @@ class CardServiceImpl extends BaseService implements CardService
 		return $this->createDao('Card.CardDao');
 	}
 
-	protected function getCardDetailProcessor($cardType)
+	protected function getDetailProcessor($cardType)
 	{
-		$processor = CardDetailFactory::create($cardType);
-		return $processor;
+		return DetailFactory::create($cardType);
 	}
 
 

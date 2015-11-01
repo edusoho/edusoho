@@ -3,32 +3,45 @@
 {% set main_nav = 'cards' %}
 
 {% block main_body %}
-	<!-- 卡包列表 -->
 	<div class="clearfix mbl mhm">
 		<ul class="nav nav-pills inline-block" role="active">
 			<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
-			<li role="presentation" {% if app.request.query.get('status')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
+			<li role="presentation" {% if app.request.query.get('cardType')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
 		</ul>
 		<div class="pull-right mtm hidden-xs">
-			<label class="checkbox-inline">
-			  <input type="checkbox" id="inlineCheckbox1" value="option1">未抵扣
+		
+			<label class="radio-inline">
+			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option1">全部
 			</label>
-			<label class="checkbox-inline">
-			  <input type="checkbox" id="inlineCheckbox2" value="option2">已抵扣
+			<label class="radio-inline">
+			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option1">未使用
 			</label>
-			<label class="checkbox-inline">
-			  <input type="checkbox" id="inlineCheckbox3" value="option3">已过期
+			<label class="radio-inline">
+			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option2">已使用
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option3">已过期
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option3">已作废
 			</label>
 		</div>
 	</div>
 	<div class="jm-card-list">
 		<div class="row">
-			{% if app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon' %}
-				{% include 'TopxiaWebBundle:Card:card-coupon.html.twig' %}
-			{% endif %}
-			{% if app.request.query.get('cardType') == 'moneyCard' %}
-				{% include 'TopxiaWebBundle:Card:card-money.html.twig' %}
+			{% if cards is not null %}
+				{% for card in cards %}
+					{% if card.cardType == 'coupon' and is_plugin_installed('coupon') %}
+						{% include 'TopxiaWebBundle:Card:coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+					{% endif %}
+					{% if card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}	
+						{% include 'TopxiaWebBundle:Card:moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<div class="empty">没有搜索到符合条件的卡</div>
 			{% endif %}
 		</div>
+
 	</div>
 {% endblock %}
