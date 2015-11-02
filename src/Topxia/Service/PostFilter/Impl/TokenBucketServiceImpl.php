@@ -35,7 +35,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 			if($key == $type) {
 				$rules = $postNumRules['rules'][$key];
 				foreach ($rules as $ruleName => $rule) {
-					if(!$this->confirmRule($ip, $ruleName, $rule)){
+					if(!$this->confirmRule($ip, "{$key}.{$ruleName}", $rule)){
 						return false;
 					}
 				}
