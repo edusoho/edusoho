@@ -67,7 +67,10 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 	protected function getIpBlacklist()
 	{
 		$postNumRules = $this->getSettingService()->get("post_num_rules");
-		return $postNumRules["ipBlackList"];
+		if(isset($postNumRules["ipBlackList"])) {
+			return $postNumRules["ipBlackList"];
+		}
+		return array();
 	}
 
 	protected function getRecentPostNumDao()
