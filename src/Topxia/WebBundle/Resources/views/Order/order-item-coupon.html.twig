@@ -9,7 +9,7 @@
 
   {% if coupons is not null %}
     <div class="col-md-3 controls">
-      <select class="form-control" id="coupon-select" name="couponCodes">
+      <select class="form-control" id="coupon-select" name="couponCode">
           {% for coupon in coupons %}
             {% if coupon.type == 'minus' %}
               <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
