@@ -26,12 +26,15 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 		}
 
 		$postNumRules = $this->getSettingService()->get("post_num_rules");
+
+		if(isset($postNumRules['global']) && !$this->confirmGlobalRule($ip, 'global', $postNumRules['global'])){
+			return false;
+		}
+		
 		if(!isset($postNumRules[$type])) {
 			return true;
 		}
-
 		$postNumRules = $postNumRules[$type];
-
 		foreach ($postNumRules as $key => $postNumRule) {
 			$ruleType = "{$type}.{$key}";
 			if(!$this->confirmRule($ip, $ruleType, $postNumRule)){
@@ -40,6 +43,11 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 		}
 
 		return true;
+	}
+
+	protected function confirmGlobalRule($ip, $ruleType, $postNumRule)
+	{
+		return $this->confirmRule($ip, $ruleType, $postNumRule);
 	}
 
 	protected function confirmRule($ip, $type, $postNumRule)
