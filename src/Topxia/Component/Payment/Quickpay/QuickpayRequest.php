@@ -11,13 +11,14 @@ class QuickpayRequest extends Request {
     public function form()
     {
         $form = array();
-        $form['method'] = 'get';
+        $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
         $form['action'] = $this->submitUrl;
         return $form;
     }
  
     public function signParams($params) {
+
         $params['key']=$this->options['secret'];
         $params['agent_id']=$this->options['key'];
         ksort($params);
@@ -31,46 +32,7 @@ class QuickpayRequest extends Request {
 
     protected function convertParams($params)
     {
-        if(empty($params) ||!array_key_exists('mobile',$params)){
-            throw new \RuntimeException(sprintf('参数传递错误。'));
-        }
-        $aesArr = array();
-        $aesArr['version']=1;
-        $aesArr['user_identity']=md5($this->options['account']."_".$params['userId']);
-        $aesArr['hy_auth_uid']='';
-        $aesArr['mobile']=$params['mobile'];
-        $aesArr['device_type']=1;
-        $aesArr['device_id']='';
-        $aesArr['custom_page']=0;
-        $aesArr['display']=1;
-        if (!empty($params['returnUrl'])) {
-            $aesArr['return_url']=$params['returnUrl'];
-        }
-        if (!empty($params['notifyUrl'])) {
-            $aesArr['notify_url']=$params['notifyUrl'];
-        }
-        $aesArr['agent_bill_id']=$params['orderSn'];
-        $aesArr['agent_bill_time']=date("YmdHis",time());
-        $aesArr['pay_amt']=$params['amount'];
-        $aesArr['goods_name']=mb_substr($this->filterText($params['title']), 0, 50, 'gb2312');
-        $aesArr['goods_note']='';
-        $aesArr['goods_num']=1;
-        $aesArr['user_ip']=$this->get_client_ip();
-        $aesArr['ext_param1']='';
-        $aesArr['ext_param2']='';
-        $aesArr['auth_card_type']=0;
-        $aesArr['timestamp']=time()*1000;
-        $sign = $this->signParams($aesArr);
-        $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($aesArr),$this->options['aes'])));        
-        
-        $this->getAuthBanks();
-        $url = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
-        $result = $this->curlRequest($url);
-        $xml = simplexml_load_string($result);
-        $redir=(string)$xml->encrypt_data;
-        $redirurl=$this->Decrypt($redir,$this->options['aes']);
-
-        parse_str($redirurl,$tip);
+        $tip = $this->createOrder();
         $this->submitUrl=$tip['redirect_url'];
         unset($tip['ret_code'],$tip['ret_msg'],$tip['redirect_url']);
         $converted = array();
@@ -80,6 +42,53 @@ class QuickpayRequest extends Request {
         }
 
         return $converted;
+
+    }
+
+    protected function createOrder()
+    {
+        $params = $this->params;
+        $converted = array();
+        $converted['version']=1;
+        $converted['user_identity']=$this->options['key']."_".$params['userId'];
+        $converted['hy_auth_uid']='';
+        if(!empty($params['authBank']['bank_auth']){
+            $converted['hy_auth_uid']=$params['authBank']['bank_auth'];
+        }
+        $converted['mobile']=$params['mobile'];
+        $converted['device_type']=1;
+        $converted['device_id']='';
+        $converted['custom_page']=0;
+        $converted['display']=1;
+        if (!empty($params['returnUrl'])) {
+            $converted['return_url']=$params['returnUrl'];
+        }
+        if (!empty($params['notifyUrl'])) {
+            $converted['notify_url']=$params['notifyUrl'];
+        }
+        $converted['agent_bill_id']=$params['orderSn'].'_'.time();
+        $converted['agent_bill_time']=date("YmdHis",time());
+        $converted['pay_amt']=$params['amount'];
+        $converted['goods_name']=mb_substr($this->filterText($params['title']), 0, 50, 'utf-8');
+        $converted['goods_note']='';
+        $converted['goods_num']=1;
+        $converted['user_ip']=$this->get_client_ip();
+        $converted['ext_param1']='';
+        $converted['ext_param2']='';
+        $converted['auth_card_type']=0;
+        $converted['timestamp']=time()*1000;
+        $sign = $this->signParams($converted);
+        $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($aesArr),$this->options['aes'])));        
+
+        $url = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
+        $result = $this->curlRequest($url);
+        $xml = simplexml_load_string($result);
+        $redir=(string)$xml->encrypt_data;
+        $redirurl=$this->Decrypt($redir,$this->options['aes']);
+        parse_str($redirurl,$tip);
+
+        return $tip;
+
     }
 
     private function curlRequest($url)

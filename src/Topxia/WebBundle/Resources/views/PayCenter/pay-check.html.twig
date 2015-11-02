@@ -2,26 +2,44 @@
 {% block title %}确认支付{% endblock %}
 {% block body %}
 
-  <form id="pay-form" method="post" action="">
+  <form id="verify-form" method="post" action="{{ path('pay_center_pay') }}" style="display:none;">
+    <div class="form-group verification">
+      <div class="controls row" style="margin:20px auto;">
+        <div class = "col-md-7 col-md-offset-1">
+          <input type="text" class="form-control" id="captcha_code" name="captcha_code" maxlength="5" placeholder="验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
+        </div>
+        <div class="col-md-4">
+          <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;height:34px;width:100%" >
+        </div>
+        <div class="col-md-11 col-md-offset-1 help-block"></div>  
+      </div>
+    </div>
+    <input type="hidden" name="payAgreementId" value="{{ payAgreementId }}">
+    <input type="hidden" name="orderId" value="{{ orderId }}">
+    <input type="hidden" name="payment" value="{{ payment }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+  <form id="pay-check-form" method="post" action="{{ path('pay_center_confirm_pay') }}">
     <div class="form-group">
       <div class="controls row" style="margin:20px auto;">
         <div class = "col-md-7 col-md-offset-1" >
-          <input type="text" class="form-control" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required">    
+          <input type="text" class="form-control" id="verify_code" name="verify_code" placeholder="填写你的短信验证码" required="required" data-url="{{ path('pay_center_pay') }}">    
           <p class="help-block"></p>
         </div>
         <div class="col-md-4">
-          <a class="btn btn-default btn-sm js-sms-send disabled" data-url="">
+          <a class="btn btn-default js-sms-send">
             <span id="js-time-left"></span>
             <span id="js-fetch-btn-text">获取短信验证码</span>
           </a>
         </div>
       </div>
     </div>
+    <input type="hidden" name="orderId" value="{{ orderId }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 {% endblock %}
 {% block footer %}
-    <button id="reward-btn" type="submit" class="btn btn-primary " data-toggle="form-submit" data-target="#reward-form">确定支付</button>
-  
-  <!--<script>app.load('rewardbundle/controller/reward-user/reward-modal')</script>-->
+    <button id="pay-check-btn" type="submit" class="btn btn-primary disabled" data-toggle="form-submit" data-target="#verify-form">确定提交</button>  
+    <script>app.load('pay/pay-check');</script>
 {% endblock %}

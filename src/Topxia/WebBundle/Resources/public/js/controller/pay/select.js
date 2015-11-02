@@ -5,18 +5,26 @@ define(function(require, exports, module){
         
         $modal = $('#modal');
         $('#pay-form').on("submit",function(){
-            var payment = $(".active").attr('id');
-            if(payment == 'quickpay'){
+            var payment = $("input[name=payment]").val();
+            var payAgreementId = $('.pay-bank option:selected').val();
+            var orderId = $('input[name=orderId]').val();
+            if(payment == 'quickpay' && payAgreementId){
                 $modal.modal('show');
-                $.get($('.pay-button').data('url'), function(html){
+                $.post($('.pay-button').data('url'),{'payAgreementId':payAgreementId,'orderId':orderId,'payment':payment},function(html){
                     $('#modal').html(html);
                 });
                 return false;
-            }   
+            }
+            return true; 
         })
 
         $(".order-pay .check ").on('click',  function() {
             $(this).addClass('active').siblings().removeClass('active').find('.icon').addClass('hide');
+            if($(this).attr('id') == 'quickpay'){
+                $('.pay-agreement').show();
+            }else{
+                $('.pay-agreement').hide();
+            }
             $(this).find('.icon').removeClass('hide');
             $("input[name='payment']").val($(this).attr("id"));
         });

@@ -237,4 +237,20 @@ interface UserService
      */
     public function parseAts($text);
 
+    /**
+    *
+    *用户授权
+    */
+
+    public function getUserPayAgreement($id);
+
+    public function createUserPayAgreement($field);
+
+    public function updateUserPayAgreement($bankAuth,$fields);
+
+    public function getUserPayAgreementByBankAuth($bankAuth);
+
+    public function findUserPayAgreementsByUserId($userId);
+
+    public function getUserPayAgreementByUserId($userId);
 }

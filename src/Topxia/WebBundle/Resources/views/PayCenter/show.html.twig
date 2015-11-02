@@ -77,12 +77,15 @@
                 {% else %}
                   <div class="pay-type-lable text-warning ">支付方式未开启，请联系管理员。</div>
                 {% endfor %}
-                  <div style="margin-top:10px;">
-                    <select multiple class="form-control pay-bank">
-                      <option>农业银行－8899</option>
-                      <option>2</option>
-                    </select>
-                  </div>
+                <div style="margin-top:10px;display:none;" class="pay-agreement">
+                  <select multiple class="form-control pay-bank">
+                    {% if payAgreements is not empty %}
+                      {% for payAgreement in payAgreements %}
+                        <option value="{{payAgreement.id}}">{{payAgreement.bankName}}－{{payAgreement.bankNumber}}</option>
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                </div>
               </div>
             </div>
             <div class="form-group pay pay-amount ">

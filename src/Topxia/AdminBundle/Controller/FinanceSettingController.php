@@ -34,12 +34,10 @@ class FinanceSettingController extends BaseController
             'heepay_enabled' => 0,
             'heepay_key' => '',
             'heepay_secret' => '',
-            'heepay_account' => '',
             'quickpay_enabled' => 0,
             'quickpay_key'=>'',
             'quickpay_secret'=>'',
-            'quickpay_aes'=>'',
-            'quickpay_account'=>''
+            'quickpay_aes'=>''
         );
 
         $payment = array_merge($default, $payment);
@@ -51,6 +49,9 @@ class FinanceSettingController extends BaseController
             $payment['wxpay_secret'] = trim($payment['wxpay_secret']);
             $payment['heepay_key'] = trim($payment['heepay_key']);
             $payment['heepay_secret'] = trim($payment['heepay_secret']);
+            $payment['quickpay_key'] = trim($payment['quickpay_key']);
+            $payment['quickpay_secret'] = trim($payment['quickpay_secret']);
+            $payment['quickpay_aes'] = trim($payment['quickpay_secret']);
 
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);

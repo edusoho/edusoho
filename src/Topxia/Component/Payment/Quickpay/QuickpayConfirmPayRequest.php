@@ -3,32 +3,36 @@ namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
 
-class QuickpayAuthBankRequest extends Request 
+class QuickpayConfirmPayRequest extends Request 
 {
-	protected $url = 'Https://Pay.Heepay.com/API/ShortPay/ShortPayQueryAuthBanks.aspx';
+	protected $url = 'Https://Pay.Heepay.com/ShortPay/SendPaySMS.aspx';
 	
 	public function form()
     {        
     	$encrypt_data = $this->convertParams($this->params);
     	$sign = $this->signParams($this->params);
+        var_dump($this->params);
+        exit();
         $url = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
         $result = $this->curlRequest($url);
 
         $xml = simplexml_load_string($result);
         $redir=(string)$xml->encrypt_data;
         $redirurl=$this->Decrypt($redir,$this->options['aes']);
-        parse_str($redirurl,$authBanks);
-
-        return $this->getListBank($authBanks);
+        parse_str($redirurl,$confirmPay);
+        return $confirmPay;
     }
 
-	public function signParams($params) {
+	public function signParams($params) 
+    {
 
         $signStr='';
         $signStr  = $signStr . 'agent_id=' . $this->options['key'];
+        $signStr  = $signStr . '&hy_auth_uid=' . $params['hy_auth_uid'];
+        $signStr  = $signStr . '&hy_token_id=' . $params['hy_token_id'];
         $signStr  = $signStr . '&key=' . $this->options['secret'];
         $signStr  = $signStr . '&timestamp=' . time()*1000;
-        $signStr  = $signStr . '&user_identity=' .$this->options['account']."_".$params['userId'];
+        $signStr  = $signStr . '&verify_code=' . $params['verify_code'];
         $signStr  = $signStr . '&version=' . 1;
         $sign=md5(strtolower($signStr));
 
@@ -39,13 +43,14 @@ class QuickpayAuthBankRequest extends Request
     {
         $converted = array();
         $converted['agent_id']=$this->options['key'];
-        $converted['timestamp']=time()*1000;
         $converted['version']=1;
-        $converted['user_identity']=$this->options['account']."_".$params['userId'];
+        $converted['hy_auth_uid']=$params['hy_auth_uid'];
+        $converted['timestamp']=time()*1000;
+        $converted['hy_token_id']=$params['hy_token_id'];
+        $converted['verify_code']=$params['verify_code'];   
         $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($converted),$this->options['aes'])));
 
         return $encrypt_data;
-
     }
 
 	
@@ -61,26 +66,6 @@ class QuickpayAuthBankRequest extends Request
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;
-    }
-
-    private function getListBank($authBanks)
-    {
-
-        $user_bank = array();
-        if(array_key_exists('auth_uid_Info', $authBanks)){
-            $authBanks['auth_uid_Info'] = trim($authBanks['auth_uid_Info'],';');
-            $banks = explode(";",$authBanks['auth_uid_Info']);
-            foreach ($banks as $key=>$bank) {
-                $bankInfos = explode("_",$bank);
-                $data = array();
-                foreach ($bankInfos as $bankInfo) {
-                    $data[]= $bankInfo;
-                }
-                list($user_bank[$key]['bankId'],$user_bank[$key]['bankName'],$user_bank[$key]['bankNumber'],$user_bank[$key]['type'],$user_bank[$key]['bankAuth'])=$data;
-            }
-        }
-
-        return $user_bank;
     }
 
     private function Encrypt($data,$key){
