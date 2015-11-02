@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle:Card:layout.html.twig' %}
 
 {% set main_nav = 'cards' %}
+{% set script_controller = 'couponbundle/controller/coupon/index' %}
 
 {% block main_body %}
 	<div class="clearfix mbl mhm">
@@ -11,19 +12,19 @@
 		<div class="pull-right mtm hidden-xs">
 		
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option1">全部
+			  <input type="radio" id="filter-change" data-filter="all" name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}">全部
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option1">未使用
+			  <input type="radio" id="filter-change" data-filter="useable" name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}">未使用
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option2">已使用
+			  <input type="radio" id="filter-change" data-filter="used" name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}">已使用
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option3">已过期
+			  <input type="radio" id="filter-change" data-filter="outdate" name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}">已过期
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" name="inlineRadioOptions" value="option3">已作废
+			  <input type="radio" id="filter-change" data-filter="invalid" name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}">已作废
 			</label>
 		</div>
 	</div>
