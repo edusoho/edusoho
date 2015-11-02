@@ -8,16 +8,6 @@ use Topxia\Service\Common\KeywordFilter;
 
 class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 {
-	public function getToken($ip, $type)
-	{
-		if(in_array($ip, $this->getBlacklist())) {
-			return false;
-		}
-
-		return $this->hasToken($ip, $type);
-
-	}
-
 	protected function createRecentPostNum($ip, $type)
 	{
 		$fields = array(
@@ -29,8 +19,12 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 		return $this->getRecentPostNumDao()->addRecentPostNum($fields);
 	}
 
-	protected function hasToken($ip, $type)
+	public function hasToken($ip, $type)
 	{
+		if(in_array($ip, $this->getBlacklist())) {
+			return false;
+		}
+
 		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
 		if(empty($recentPostNum)) {
 			$recentPostNum = $this->createRecentPostNum($ip, $type);
@@ -64,7 +58,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
 	protected function getRecentPostNumDao()
     {
-        return $this->createDao('SensitiveWord.RecentPostNumDao');
+        return $this->createDao('PostFilter.RecentPostNumDao');
     }
 
     protected function getSettingService()

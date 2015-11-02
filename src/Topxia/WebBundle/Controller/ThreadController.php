@@ -113,7 +113,7 @@ class ThreadController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
 
-            if(!$this->getTokenBucketService()->getToken($request->getClientIp(), 'thread')) {
+            if(!$this->getTokenBucketService()->hasToken($request->getClientIp(), 'thread')) {
                 return $this->createMessageResponse('error', '发帖次数过多，请稍后尝试！', '发帖错误', 3);
             }
 

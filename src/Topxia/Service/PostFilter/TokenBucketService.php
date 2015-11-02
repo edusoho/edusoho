@@ -3,5 +3,5 @@ namespace Topxia\Service\PostFilter;
 
 interface TokenBucketService
 {
-	public function getToken($ip, $type);
+	public function hasToken($ip, $type);
 }
