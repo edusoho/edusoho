@@ -1146,6 +1146,69 @@ class AnalysisController extends BaseController
         ));
     }
 
+    public function vipIncomeAction(Request $request,$tab)
+    {
+        $data=array();
+        $vipStartDate="";
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+
+        if(!$timeRange) {
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_vip_income', array(
+            'tab' => "trend",
+            )));
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"vip","amount"=>"0.00")),
+            20
+        );
+
+        $vipIncomeDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"vip","amount"=>'0.00'),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+        $vipIncomeData="";
+
+        if($tab=="trend"){
+            $vipIncomeData=$this->getOrderService()->analysisvipAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+
+            $data=$this->fillAnalysisData($condition,$vipIncomeData);
+        }
+
+        $courseIds = ArrayToolkit::column($vipIncomeDetail, 'targetId');
+
+        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+
+        $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $vipIncomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00","targetType"=>"vip"),"early",0,1);
+
+        foreach ($vipIncomeStartData as $key) {
+            $vipIncomeStartDate=date("Y-m-d",$key['createdTime']);
+        }
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:vipIncome.html.twig",array(
+            'vipIncomeDetail'=>$vipIncomeDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'data'=>$data,
+            'courses'=>$courses,
+            'users'=>$users,
+            'vipIncomeStartDate'=>$vipIncomeStartDate,
+            'dataInfo'=>$dataInfo,
+        ));
+    }
+
     protected function fillAnalysisUserSum($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);

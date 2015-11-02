@@ -43,6 +43,8 @@ interface OrderDao
 
     public function analysisClassroomAmountDataByTime($startTime,$endTime);
 
+    public function analysisVipAmountDataByTime($startTime,$endTime);
+
     public function analysisExitCourseOrderDataByTime($startTime,$endTime);
 
 }

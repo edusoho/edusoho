@@ -211,6 +211,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql);
     }
 
+    public function analysisVipAmountDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='vip'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
     public function analysisExitCourseOrderDataByTime($startTime,$endTime)
     {
         $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} AND `createdTime`<={$endTime} AND `status`<>'paid' AND `status`<>'created' AND targetType='course' group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";

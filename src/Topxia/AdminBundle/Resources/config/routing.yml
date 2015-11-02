@@ -1141,6 +1141,10 @@ admin_operation_analysis_classroom_income:
     pattern:  /operation/analysis/classroom/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:classroomIncome }
 
+admin_operation_analysis_vip_income:
+    pattern:  /operation/analysis/vip/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:vipIncome }
+
 admin_operation_analysis_course_sum:
     pattern:  /operation/analysis/course/sum/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseSum }

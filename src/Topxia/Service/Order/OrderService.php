@@ -78,6 +78,8 @@ interface OrderService
 
     public function analysisClassroomAmountDataByTime($startTime,$endTime);
 
+    public function analysisVipAmountDataByTime($startTime,$endTime);
+
     public function updateOrderCashSn($id, $cashSn);
 
     public function createPayRecord($id, $payDate);
