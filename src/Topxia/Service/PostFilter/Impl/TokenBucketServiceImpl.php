@@ -21,7 +21,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
 	public function hasToken($ip, $type)
 	{
-		if(in_array($ip, $this->getBlacklist())) {
+		if(in_array($ip, $this->getIpBlacklist())) {
 			return false;
 		}
 
@@ -31,19 +31,19 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 			return true;
 		} 
 
-		$postNumSetting = $this->getSettingService()->get("post_num_rules");
-		if(!isset($postNumSetting[$type])) {
+		$postNumRules = $this->getSettingService()->get("post_num_rules");
+		if(!isset($postNumRules[$type])) {
 			return true;
 		}
 
-		$postNumSetting = $postNumSetting[$type];
-		if((time() - $recentPostNum['createdTime']) > $postNumSetting["interval"]) {
+		$postNumRules = $postNumRules[$type];
+		if((time() - $recentPostNum['createdTime']) > $postNumRules["interval"]) {
 			$this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
 			$recentPostNum = $this->createRecentPostNum($ip, $type);
 			return true;
 		}
 
-		if($recentPostNum['num'] < $postNumSetting['postNum']) {
+		if($recentPostNum['num'] < $postNumRules['postNum']) {
 			$this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
 			return true;
 		}
@@ -51,7 +51,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 		return false;
 	}
 
-	protected function getBlacklist()
+	protected function getIpBlacklist()
 	{
 		return array();
 	}
