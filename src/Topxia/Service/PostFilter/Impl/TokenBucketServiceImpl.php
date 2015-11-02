@@ -27,27 +27,22 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
 		$postNumRules = $this->getSettingService()->get("post_num_rules");
 
-		if(isset($postNumRules['global']) && !$this->confirmGlobalRule($ip, 'global', $postNumRules['global'])){
-			return false;
-		}
-		
-		if(!isset($postNumRules[$type])) {
+		if(!isset($postNumRules['rules'])) {
 			return true;
 		}
-		$postNumRules = $postNumRules[$type];
-		foreach ($postNumRules as $key => $postNumRule) {
-			$ruleType = "{$type}.{$key}";
-			if(!$this->confirmRule($ip, $ruleType, $postNumRule)){
-				return false;
+
+		foreach ($postNumRules['rules'] as $key => $value) {
+			if($key == $type) {
+				$rules = $postNumRules['rules'][$key];
+				foreach ($rules as $ruleName => $rule) {
+					if(!$this->confirmRule($ip, $ruleName, $rule)){
+						return false;
+					}
+				}
 			}
 		}
 
 		return true;
-	}
-
-	protected function confirmGlobalRule($ip, $ruleType, $postNumRule)
-	{
-		return $this->confirmRule($ip, $ruleType, $postNumRule);
 	}
 
 	protected function confirmRule($ip, $type, $postNumRule)
