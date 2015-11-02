@@ -65,4 +65,5 @@ web/assets/img/default/video.png
 /app/data/api_server.json
 /installFiles
 /app/data/trial.lock
+/app/data/session_gc_time.data
 

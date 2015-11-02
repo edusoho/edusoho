@@ -13,6 +13,15 @@ legend {
   padding: 8px 20px;
 }
 
+.editor-text {
+  word-wrap: break-word;
+}
+
+.editor-text  img {
+  max-width: 100%;
+  height: auto;
+}
+
 .width-input {
   display: inline-block !important;
   margin-right: 6px;
