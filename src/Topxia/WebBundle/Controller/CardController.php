@@ -55,16 +55,34 @@ class CardController extends BaseController
     public function showUsableCardsAction($targetType,$targetId,$totalPrice,$priceType)
     {
         $user = $this->getCurrentUser();
-        $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],'coupon');
-        $cardIds = ArrayToolkit::column($cardLists,'cardId');
-        var_dump($cardIds);
-        $cardsDetail = $this->getCardService->findCardsByCardTypeAndCardIds($cardIds,'coupon');
-        var_dump($cardsDetail);
+        $cards = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],'coupon');
+        $cards = $this->sortCards($cards);
+        $groupCards = ArrayToolkit::group($cards,'status');
+        $cardIds = ArrayToolkit::column($groupCards['useable'],'cardId');
+        $cardDetails = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon',$cardIds);
+        if (!empty($cardDetails)) {
+            $useableCards =array();
+            foreach ($cardDetails as $key => $value)
+            {
+                if ($value['targetType'] == $targetType && ($value['targetId'] == 0 || $value['targetId'] == $targetId)) {
+                    if ($value['type'] == 'minus') {
+                        $cardDetails[$key]['truePrice'] = $totalPrice > $value['rate'] ? $totalPrice - $value['rate'] : 0;
+                        $useableCards[] = $cardDetails[$key];
+                    } else {
+                        $cardDetails[$key]['truePrice'] = $totalPrice * ($value['rate'] / 10);
+                        $useableCards[] = $cardDetails[$key];
+                    }
+                }
+
+            }
+            $useableCards = array_reverse($this->getCardService()->sortArrayByField($useableCards,'truePrice'));
+        }
         return $this->render('TopxiaWebBundle:Order:order-item-coupon.html.twig',array(
             'targetType' => $targetType,
             'targetId' => $targetId,
             'totalPrice' => $totalPrice,
-            'priceType' => $priceType
+            'priceType' => $priceType,
+            'coupons' => $useableCards
             ));
     }
 

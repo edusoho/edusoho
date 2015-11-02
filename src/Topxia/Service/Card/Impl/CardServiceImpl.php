@@ -40,9 +40,8 @@ class CardServiceImpl extends BaseService implements CardService
 	{
 		$processor = $this->getDetailProcessor($cardType);
 		$limit = count($ids);
-		$cardsDetail = $processor->getCardDetailsByCardIds($ids);//修改过
+		$cardsDetail = $processor->getCardDetailsByCardIds($ids);
 
-		// $cardsDetail = $this ->sortArrayByField($cardsDetail,'deadline');
 		return $cardsDetail;
 		
 	}

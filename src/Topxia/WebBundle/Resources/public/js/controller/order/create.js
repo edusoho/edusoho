@@ -233,6 +233,32 @@ define(function(require, exports, module) {
 				conculatePrice();
 			})
 		})
+	
+		$('#coupon-select').change(function(e){
+			//新添加js
+			var coupon = $(this).children('option:selected');
+			data = {};
+			if(coupon.data('code') =="")
+			{
+				return;
+			}
+			data.targetType = coupon.data('targetType');
+			data.targetId = coupon.data('targetId');
+			data.amount = coupon.data('amount');
+			data.code = coupon.data('code');
+			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
+				$('[role="code-notify"]').css("display","inline-block");
+				if(data.useable == "no") {
+					$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").text(data.message);
+				} else if(data.useable == "yes"){
+					$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
+					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
+					$('[role="coupon-code-verified"]').val(couponCode.val());
+				}
+				conculatePrice();
+			})
+
+		})
 
  		var totalPrice = parseFloat($('[role="total-price"]').text());
  		if($('[role="coinNum"]').length>0) {
