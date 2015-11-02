@@ -1840,6 +1840,10 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+my_cards:
+    pattern:  /my/cards
+    defaults: { _controller: TopxiaWebBundle:Card:index }
+
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history
