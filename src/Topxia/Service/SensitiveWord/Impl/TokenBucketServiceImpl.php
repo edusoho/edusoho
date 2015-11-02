@@ -26,10 +26,22 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 			return true;
 		} 
 
-		$postNumSetting = $this->getSettingService()->get('post_num_setting');
-		if((time() - $recentPostNum['createdTime']) > $postNumSetting[""]) {
-			
+		$postNumSetting = $this->getSettingService()->get("post_num_setting.{$type}");
+		if((time() - $recentPostNum['createdTime']) > $postNumSetting["interval"]) {
+			$this->getRecentPostNumDao()->deleteRecentPostNum($postNumSetting["id"]);
+			$fields = array(
+				'' => , 
+			);
+			$this->getRecentPostNumDao()->addRecentPostNum($fields);
+			return true;
 		}
+
+		if($recentPostNum[''] < $postNumSetting["postNum"]) {
+			$this->getRecentPostNumDao()->waveRecentPostNum($id, $field, $diff);
+			return true;
+		}
+
+		return false;
 	}
 
 	protected function getBlacklist()
