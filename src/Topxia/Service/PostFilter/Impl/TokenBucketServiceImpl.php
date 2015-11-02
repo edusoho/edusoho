@@ -25,25 +25,38 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 			return false;
 		}
 
-		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
-		if(empty($recentPostNum)) {
-			$recentPostNum = $this->createRecentPostNum($ip, $type);
-			return true;
-		} 
-
 		$postNumRules = $this->getSettingService()->get("post_num_rules");
 		if(!isset($postNumRules[$type])) {
 			return true;
 		}
 
 		$postNumRules = $postNumRules[$type];
-		if((time() - $recentPostNum['createdTime']) > $postNumRules["interval"]) {
+
+		foreach ($postNumRules as $key => $postNumRule) {
+			$ruleType = "{$type}.{$key}";
+			if(!$this->confirmRule($ip, $ruleType, $postNumRule)){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	protected function confirmRule($ip, $type, $postNumRule)
+	{
+		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
+		if(empty($recentPostNum)) {
+			$recentPostNum = $this->createRecentPostNum($ip, $type);
+			return true;
+		}
+
+		if((time() - $recentPostNum['createdTime']) > $postNumRule["interval"]) {
 			$this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
 			$recentPostNum = $this->createRecentPostNum($ip, $type);
 			return true;
 		}
 
-		if($recentPostNum['num'] < $postNumRules['postNum']) {
+		if($recentPostNum['num'] < $postNumRule['postNum']) {
 			$this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
 			return true;
 		}
