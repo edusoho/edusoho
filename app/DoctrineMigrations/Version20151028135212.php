@@ -19,7 +19,7 @@ class Version20151028135212 extends AbstractMigration
         $this->addSql("CREATE TABLE `recent_post_num` (
                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
                  `ip` varchar(20) NOT NULL COMMENT 'IP',
-                 `type` varchar(20) NOT NULL COMMENT '类型',
+                 `type` varchar(255) NOT NULL COMMENT '类型',
                  `num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'post次数',
                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次更新时间',
                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',

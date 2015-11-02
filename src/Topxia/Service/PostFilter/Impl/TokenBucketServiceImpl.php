@@ -13,10 +13,34 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 		$fields = array(
 			'ip' => $ip,
 			'type' => $type,
-			'num' => 1,
+			'num' => 0,
 			'createdTime' => time(), 
 		);
 		return $this->getRecentPostNumDao()->addRecentPostNum($fields);
+	}
+
+	public function incrToken($ip, $type)
+	{
+		$postNumRules = $this->getSettingService()->get("post_num_rules");
+
+		if(!isset($postNumRules['rules'])) {
+			return;
+		}
+
+		foreach ($postNumRules['rules'] as $key => $value) {
+			if($key == $type) {
+				$rules = $postNumRules['rules'][$key];
+				foreach ($rules as $ruleName => $rule) {
+					$ruleName = "{$key}.{$ruleName}";
+					$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $ruleName);
+					if(empty($recentPostNum)) {
+						$recentPostNum = $this->createRecentPostNum($ip, $ruleName);
+					}
+					$this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
+				}
+			}
+		}
+
 	}
 
 	public function hasToken($ip, $type)
@@ -49,18 +73,15 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 	{
 		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
 		if(empty($recentPostNum)) {
-			$recentPostNum = $this->createRecentPostNum($ip, $type);
 			return true;
 		}
 
 		if((time() - $recentPostNum['createdTime']) > $postNumRule["interval"]) {
 			$this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
-			$recentPostNum = $this->createRecentPostNum($ip, $type);
 			return true;
 		}
 
 		if($recentPostNum['num'] < $postNumRule['postNum']) {
-			$this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
 			return true;
 		}
 

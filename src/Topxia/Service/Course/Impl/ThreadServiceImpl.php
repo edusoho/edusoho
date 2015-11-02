@@ -155,6 +155,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function createThread($thread)
 	{
+		$event = $this->dispatchEvent('courseThread.beforeCreate', $thread);
+		if($event->isPropagationStopped()){
+			throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+		}
+
 		if (empty($thread['courseId'])) {
 			throw $this->createServiceException('Course ID can not be empty.');
 		}
@@ -194,6 +199,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 				'courseTitle' => $course['title'],
 			));
 		}
+
+		$event = $this->dispatchEvent('courseThread.create', $thread);
 
 		return $thread;
 	}

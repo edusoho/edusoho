@@ -118,6 +118,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
+        $event = $this->dispatchEvent('thread.beforeCreate', $thread);
+        if($event->isPropagationStopped()){
+            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+        }
+
         $this->tryAccess('thread.create', $thread);
         if (empty($thread['title'])) {
             throw $this->createServiceException("标题名称不能为空！");

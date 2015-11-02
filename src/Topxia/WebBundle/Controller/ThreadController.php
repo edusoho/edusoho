@@ -112,19 +112,19 @@ class ThreadController extends BaseController
     public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            $data['targetType'] = $target['type'];
-            $data['targetId'] = $target['id'];
+            try{
+                $data = $request->request->all();
+                $data['targetType'] = $target['type'];
+                $data['targetId'] = $target['id'];
 
-            if(!$this->getTokenBucketService()->hasToken($request->getClientIp(), 'thread')) {
-                return $this->createMessageResponse('error', '发帖次数过多，请稍后尝试！', '发帖错误');
+                $thread = $this->getThreadService()->createThread($data);
+                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                   "{$target['type']}Id" => $thread['targetId'],
+                   'threadId' => $thread['id'],
+                )));
+            } catch (\Exception $e){
+                return $this->createMessageResponse('error', $e->getMessage(), '发帖错误');
             }
-
-            $thread = $this->getThreadService()->createThread($data);
-            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
-               "{$target['type']}Id" => $thread['targetId'],
-               'threadId' => $thread['id'],
-            )));
         }
 
         return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
