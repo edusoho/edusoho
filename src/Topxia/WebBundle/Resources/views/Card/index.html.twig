@@ -11,19 +11,19 @@
 		<div class="pull-right mtm hidden-xs">
 		
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" data-filter="all" name="inlineRadioOptions" value="option1">全部
+			  <input type="radio" id="inlineRadio1" data-filter="all" name="inlineRadioOptions" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}">全部
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" data-filter="useable" name="inlineRadioOptions" value="option1">未使用
+			  <input type="radio" id="inlineRadio1" data-filter="useable" name="inlineRadioOptions" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}">未使用
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" data-filter="used" name="inlineRadioOptions" value="option2">已使用
+			  <input type="radio" id="inlineRadio1" data-filter="used" name="inlineRadioOptions" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}">已使用
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" data-filter="outdate" name="inlineRadioOptions" value="option3">已过期
+			  <input type="radio" id="inlineRadio1" data-filter="outdate" name="inlineRadioOptions" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}">已过期
 			</label>
 			<label class="radio-inline">
-			  <input type="radio" id="inlineRadio1" data-filter="invalid" name="inlineRadioOptions" value="option3">已作废
+			  <input type="radio" id="inlineRadio1" data-filter="invalid" name="inlineRadioOptions" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}">已作废
 			</label>
 		</div>
 	</div>
