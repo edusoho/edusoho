@@ -141,6 +141,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
@@ -153,16 +154,22 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
             $setting = $this->getSettingService()->get('refund');
             $message = (empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
+            $course = $this->getCourseService()->getCourse($order["targetId"]);
+            $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
             if ($message) {
-                $course = $this->getCourseService()->getCourse($order["targetId"]);
-                $courseUrl = $container->get('router')->generate('course_show', array('id' => $course['id']));
                 $variables = array(
-                    'course' => "<a href='{$courseUrl}'>{$course['title']}</a>"
+                    'item' => "<a href='{$courseUrl}'>{$course['title']}</a>"
                 );
                 $message = StringToolkit::template($message, $variables);
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
 
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$courseUrl}'>{$course['title']}</a>".'课程，请审核。';
+            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
+                foreach ($admins as $key => $admin) {
+                    $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+                }
         } elseif ($refund['status'] == 'success') {
             $this->getCourseService()->removeStudent($order['targetId'], $order['userId']);
         }

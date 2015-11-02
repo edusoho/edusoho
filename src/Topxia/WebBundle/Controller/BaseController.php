@@ -69,6 +69,7 @@ abstract class BaseController extends Controller
         ));
     }
 
+    //TODO 即将删除
     protected function authenticateUser ($user)
     {
         $user['currentIp'] = $this->container->get('request')->getClientIp();
@@ -89,7 +90,19 @@ abstract class BaseController extends Controller
         }
 
         $sessionId = $this->container->get('request')->getSession()->getId();
+        //$sessionId = $this->_createToken($this->container->get('request'));
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
+    }
+
+    // TODO 即将删除
+    private function _createToken($request)
+    {
+        $userLoginToken = $request->cookies->get('U_LOGIN_TOKEN');
+        if (empty($userLoginToken)) {
+            $userLoginToken = md5($request->getSession()->getId());
+            setcookie('U_LOGIN_TOKEN', $userLoginToken, time()+3600*24*365);
+        }
+        return $userLoginToken;
     }
 
     protected function setFlashMessage ($level, $message)

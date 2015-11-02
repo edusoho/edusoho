@@ -243,9 +243,12 @@ class ClassroomManageController extends BaseController
                 throw $this->createNotFoundException("用户已经是学员，不能添加！");
             }
 
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomName = isset($classroomSetting['name'])?$classroomSetting['name']:'班级';
+
             $order = $this->getOrderService()->createOrder(array(
                 'userId' => $user['id'],
-                'title' => "购买班级《{$classroom['title']}》(管理员添加)",
+                'title' => "购买".$classroomName."《{$classroom['title']}》(管理员添加)",
                 'targetType' => 'classroom',
                 'targetId' => $classroom['id'],
                 'amount' => $data['price'],
