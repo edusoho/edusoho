@@ -6,13 +6,10 @@
     <span role="no-use-coupon-code">
     （没有使用优惠码）</span>
   </div>
-  <div class="row form-group">
-<!--     <div class="col-md-2 control-label">
-      <label for="target">使用对象</label>
-    </div> -->
+
+  {% if coupons is not null %}
     <div class="col-md-3 controls">
-      <select class="form-control" id="coupon-select" name="targetType">
-        {% if coupons is not null %}
+      <select class="form-control" id="coupon-select" name="couponCodes">
           {% for coupon in coupons %}
             {% if coupon.type == 'minus' %}
               <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
@@ -23,10 +20,10 @@
             {% endif %}
           {% endfor %}
           <option value="">不使用优惠码</option>
-        {% endif %}
       </select>
     </div>
-  </div>
+  {% endif %}
+
   <div class="order-item-detail  coupon-detail" >
     <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">输入优惠码</a>
     {% if targetType in ['course','vip','classroom'] %}

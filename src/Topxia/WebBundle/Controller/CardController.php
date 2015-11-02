@@ -58,9 +58,9 @@ class CardController extends BaseController
         $cards = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],'coupon');
         $cards = $this->sortCards($cards);
         $groupCards = ArrayToolkit::group($cards,'status');
-        $cardIds = ArrayToolkit::column($groupCards['useable'],'cardId');
-        $cardDetails = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon',$cardIds);
-        if (!empty($cardDetails)) {
+        if (isset($groupCards['useable'])){
+            $cardIds = ArrayToolkit::column($groupCards['useable'],'cardId');
+            $cardDetails = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon',$cardIds);
             $useableCards =array();
             foreach ($cardDetails as $key => $value)
             {
@@ -77,12 +77,13 @@ class CardController extends BaseController
             }
             $useableCards = array_reverse($this->getCardService()->sortArrayByField($useableCards,'truePrice'));
         }
+        
         return $this->render('TopxiaWebBundle:Order:order-item-coupon.html.twig',array(
             'targetType' => $targetType,
             'targetId' => $targetId,
             'totalPrice' => $totalPrice,
             'priceType' => $priceType,
-            'coupons' => $useableCards
+            'coupons' => isset($useableCards) ? $useableCards : null
             ));
     }
 
