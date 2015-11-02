@@ -112,6 +112,11 @@ class ThreadController extends BaseController
     public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
         if ($request->getMethod() == 'POST') {
+
+            if(!$this->getTokenBucketService()->getToken($request->getClientIp(), 'thread')) {
+                return $this->createMessageResponse('error', '发帖次数过多，请稍后尝试！', '发帖错误', 3);
+            }
+
             $data = $request->request->all();
             $data['targetType'] = $target['type'];
             $data['targetId'] = $target['id'];
@@ -368,6 +373,11 @@ class ThreadController extends BaseController
         }
 
         return $text;
+    }
+
+    protected function getTokenBucketService()
+    {
+        return $this->getServiceKernel()->createService('PostFilter.TokenBucketService');
     }
 
     protected function getNotifiactionService()

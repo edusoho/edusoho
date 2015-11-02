@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\SensitiveWord\Tests;
+namespace Topxia\Service\PostFilter\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Common\ArrayToolkit;
@@ -33,7 +33,7 @@ class SensitiveWordServiceTest extends BaseTestCase
 
     protected function getSensitiveWordService()
     {
-        return $this->getServiceKernel()->createService('SensitiveWord.SensitiveWordService');
+        return $this->getServiceKernel()->createService('PostFilter.SensitiveWordService');
     }
 
 }

@@ -631,6 +631,10 @@ admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
+admin_setting_developer_post_num_rules:
+    pattern:  /setting/developer/post_num_rules
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:postNumRules }
+
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }

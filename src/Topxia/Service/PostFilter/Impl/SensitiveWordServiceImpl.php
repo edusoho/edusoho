@@ -1,9 +1,9 @@
 <?php
-namespace Topxia\Service\SensitiveWord\Impl;
+namespace Topxia\Service\PostFilter\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\SensitiveWord\SensitiveWordService;
-use Topxia\Service\SensitiveWord\Type\QuestionTypeFactory;
+use Topxia\Service\PostFilter\SensitiveWordService;
+use Topxia\Service\PostFilter\Type\QuestionTypeFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\KeywordFilter;
 

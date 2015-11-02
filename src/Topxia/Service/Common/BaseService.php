@@ -73,7 +73,7 @@ abstract class BaseService
             return $text;
         }
 
-        return $this->createService("SensitiveWord.SensitiveWordService")->filter($text);
+        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
     }
 
     protected function createServiceException($message = 'Service Exception', $code = 0)

@@ -90,6 +90,25 @@ class DeveloperSettingController extends BaseController
         ));
     }
 
+    public function postNumRulesAction(Request $request)
+    {
+
+        if ($request->getMethod() == 'POST') {
+            $setting = $request->request->get('setting', '{}');
+            $setting = json_decode($setting, true);
+            $this->getSettingService()->set('post_num_rules', $setting);
+            $this->getLogService()->info('system', 'update_settings', "更新PostNumSetting设置", $setting);
+            $this->setFlashMessage('success', '设置已保存！');
+        }
+
+        $setting = $this->getSettingService()->get('post_num_rules', array());
+        $setting = $this->prettyPrint(json_encode($setting));
+
+        return $this->render('TopxiaAdminBundle:DeveloperSetting:post-num-rules.html.twig', array(
+            'setting' => $setting,
+        ));
+    }
+
     protected function prettyPrint( $json )
     {
         $result = '';

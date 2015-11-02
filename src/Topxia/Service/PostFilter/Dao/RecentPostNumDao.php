@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\SensitiveWord\Dao;
+namespace Topxia\Service\PostFilter\Dao;
 
 interface RecentPostNumDao
 {

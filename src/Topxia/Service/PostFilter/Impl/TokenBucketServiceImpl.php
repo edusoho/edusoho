@@ -1,9 +1,8 @@
 <?php
-namespace Topxia\Service\SensitiveWord\Impl;
+namespace Topxia\Service\PostFilter\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\SensitiveWord\TokenBucketService;
-use Topxia\Service\SensitiveWord\Type\QuestionTypeFactory;
+use Topxia\Service\PostFilter\TokenBucketService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\KeywordFilter;
 
@@ -19,25 +18,39 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
 	}
 
+	protected function createRecentPostNum($ip, $type)
+	{
+		$fields = array(
+			'ip' => $ip,
+			'type' => $type,
+			'num' => 1,
+			'createdTime' => time(), 
+		);
+		return $this->getRecentPostNumDao()->addRecentPostNum($fields);
+	}
+
 	protected function hasToken($ip, $type)
 	{
 		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
 		if(empty($recentPostNum)) {
+			$recentPostNum = $this->createRecentPostNum($ip, $type);
 			return true;
 		} 
 
-		$postNumSetting = $this->getSettingService()->get("post_num_setting.{$type}");
-		if((time() - $recentPostNum['createdTime']) > $postNumSetting["interval"]) {
-			$this->getRecentPostNumDao()->deleteRecentPostNum($postNumSetting["id"]);
-			$fields = array(
-				'' => , 
-			);
-			$this->getRecentPostNumDao()->addRecentPostNum($fields);
+		$postNumSetting = $this->getSettingService()->get("post_num_rules");
+		if(!isset($postNumSetting[$type])) {
 			return true;
 		}
 
-		if($recentPostNum[''] < $postNumSetting["postNum"]) {
-			$this->getRecentPostNumDao()->waveRecentPostNum($id, $field, $diff);
+		$postNumSetting = $postNumSetting[$type];
+		if((time() - $recentPostNum['createdTime']) > $postNumSetting["interval"]) {
+			$this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
+			$recentPostNum = $this->createRecentPostNum($ip, $type);
+			return true;
+		}
+
+		if($recentPostNum['num'] < $postNumSetting['postNum']) {
+			$this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
 			return true;
 		}
 

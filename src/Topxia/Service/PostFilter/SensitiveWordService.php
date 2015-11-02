@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\SensitiveWord;
+namespace Topxia\Service\PostFilter;
 
 interface SensitiveWordService
 {

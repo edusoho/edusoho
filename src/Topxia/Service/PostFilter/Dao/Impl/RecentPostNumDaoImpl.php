@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\Service\SensitiveWord\Dao;
+namespace Topxia\Service\PostFilter\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\SensitiveWord\Dao\RecentPostNumDao;
+use Topxia\Service\PostFilter\Dao\RecentPostNumDao;
 
 class RecentPostNumDaoImpl  extends BaseDao implements RecentPostNumDao
 {
@@ -11,7 +11,7 @@ class RecentPostNumDaoImpl  extends BaseDao implements RecentPostNumDao
 
     public function getRecentPostNumByIpAndType($ip, $type)
     {
-    	$sql = "SELECT * FROM {$this->table} WHERE ip = ?, type = ? LIMIT 1";
+    	$sql = "SELECT * FROM {$this->table} WHERE ip = ? and type = ? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($ip, $type)) ? : null;
     }
 
@@ -42,9 +42,11 @@ class RecentPostNumDaoImpl  extends BaseDao implements RecentPostNumDao
         if (!in_array($field, $fields)) {
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
-        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+
+        $currentTime = time();
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = ?  WHERE id = ? LIMIT 1";
         
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        return $this->getConnection()->executeQuery($sql, array($diff, $currentTime, $id));
     }
 
 }
