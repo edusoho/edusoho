@@ -186,6 +186,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
     }
 
+    public function analysisClassroomAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisClassroomAmountDataByTime($startTime,$endTime);
+    }
+
     protected function generateOrderSn($order)
     {
         $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];

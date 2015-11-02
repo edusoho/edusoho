@@ -1083,6 +1083,69 @@ class AnalysisController extends BaseController
         ));
     }
 
+    public function classroomIncomeAction(Request $request,$tab)
+    {
+        $data=array();
+        $classroomIncomeStartDate="";
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+
+        if(!$timeRange) {
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_classroom_income', array(
+            'tab' => "trend",
+            )));
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"classroom","amount"=>"0.00")),
+            20
+        );
+
+        $classroomIncomeDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"classroom","amount"=>'0.00'),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+        $classroomIncomeData="";
+
+        if($tab=="trend"){
+            $classroomIncomeData=$this->getOrderService()->analysisClassroomAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+
+            $data=$this->fillAnalysisData($condition,$classroomIncomeData);
+        }
+
+        $courseIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
+
+        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+
+        $userIds = ArrayToolkit::column($classroomIncomeDetail, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $classroomIncomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00","targetType"=>"classroom"),"early",0,1);
+
+        foreach ($classroomIncomeStartData as $key) {
+            $classroomIncomeStartDate=date("Y-m-d",$key['createdTime']);
+        }
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:classroomIncome.html.twig",array(
+            'classroomIncomeDetail'=>$classroomIncomeDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'data'=>$data,
+            'courses'=>$courses,
+            'users'=>$users,
+            'classroomIncomeStartDate'=>$classroomIncomeStartDate,
+            'dataInfo'=>$dataInfo,
+        ));
+    }
+
     protected function fillAnalysisUserSum($condition,$currentData)
     {
         $dates=$this->getDatesByCondition($condition);
