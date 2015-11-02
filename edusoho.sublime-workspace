@@ -20,92 +20,84 @@
 	"buffers":
 	[
 		{
-			"file": "src/Topxia/WebBundle/Resources/views/Settings/security-questions.html.twig",
+			"contents": "Searching 43 files for \"'EduSoho''|copyright_less\"\n\n0 matches\n\nSearching 8756 files for \"'EduSoho''|copyright_less\"\n\n/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/translations/messages.ug_CN.yml:\n  472  个: 个\n  473  '当前域名{{ currentHost }} 与授权域名不符，将会影响': '当前域名{{ currentHost }} 与授权域名不符，将会影响'\n  474: 'EduSoho''|copyright_less }}{{''系统功能的使用；请使用授权域名访问此系统。': 'EduSoho''|copyright_less }}{{''系统功能的使用；请使用授权域名访问此系统。'\n  475  版权名称: 版权名称\n  476  '填写版权名称后，网站前台页面底部将会显示“Powered By 你的版权名称”，为空则不显示版权信息。': '填写版权名称后，网站前台页面底部将会显示“Powered By 你的版权名称”，为空则不显示版权信息。'\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml:\n 1064  视频转码类型：: 视频转码类型：\n 1065  选择你要上传的视频文件：: يۈكلىمەكچى بولغان ھۆججەتنى تاللاڭ:\n 1066: 'EduSoho''|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ ''EduSoho''|copyright_less }}{{''云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。': 'EduSoho''|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ ''EduSoho''|copyright_less }}{{''云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'\n 1067  暂无视频文件，请先上传。: ھازىرچە فىلىم ھۆججىتى يوق، ئاۋال يۈكلەڭ.\n 1068  支持优酷、土豆、腾讯、网易公开课的视频页面地址导入: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入\n\n6 matches across 2 files\n\n\nSearching 8756 files for \"云视频,点击<a href=\"http://open.edusoho.com/sh\"\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml:\n 1064  视频转码类型：: 视频转码类型：\n 1065  选择你要上传的视频文件：: يۈكلىمەكچى بولغان ھۆججەتنى تاللاڭ:\n 1066: 'EduSoho''|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ ''EduSoho''|copyright_less }}{{''云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。': 'EduSoho''|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ ''EduSoho''|copyright_less }}{{''云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'\n 1067  暂无视频文件，请先上传。: ھازىرچە فىلىم ھۆججىتى يوق، ئاۋال يۈكلەڭ.\n 1068  支持优酷、土豆、腾讯、网易公开课的视频页面地址导入: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseFileManage/batch-upload.html.twig:\n   76          {% else %}\n   77            <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>\n   78:           <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情。</li>\n   79          {% endif %}\n   80        </ul>\n   ..\n  112            <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>\n  113          {% else %}\n  114:           <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情。</li>\n  115          {% endif %}\n  116        </ul>\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseFileManage/modal-upload-course-files.html.twig:\n   49          {% else %}\n   50            <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>\n   51:           <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情。</li>\n   52          {% endif %}\n   53        </ul>\n   ..\n   84            <li>文件将上传到<strong>云服务器</strong>。</li>\n   85          {% else %}\n   86:           <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情。</li>\n   87          {% endif %}\n   88        </ul>\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseLessonManage/media-choose.html.twig:\n  124                    <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>\n  125                    <li>\n  126:                     视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}{{'云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'|trans}}\n  127                    </li>\n  128                  {% endif %}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseMaterialManage/file-chooser.html.twig:\n   45                  <li>文件将上传到<strong>云服务器</strong></li>\n   46                {% else %}\n   47:                 <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情。</li>\n   48                {% endif %}\n   49              </ul>\n\n8 matches across 5 files\n\n\nSearching 8756 files for \"云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验\"\n\n/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/translations/messages.ug_CN.yml:\n  816  只能选择系统中已注册的用户: 只能选择系统中已注册的用户\n  817  的: 的\n  818: EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击: EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击\n  819  了解详情。: 了解详情。\n  820  保存设置: 保存设置\n\n/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/CloudSetting/video.html.twig:\n   28  \n   29          <div class=\"help-block\">\n   30:           {{'EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击'|trans}}<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">{{'这里'|trans}}</a>{{'了解详情。'|trans}}\n   31          </div>\n   32  \n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml:\n 1064  视频转码类型：: 视频转码类型：\n 1065  选择你要上传的视频文件：: يۈكلىمەكچى بولغان ھۆججەتنى تاللاڭ:\n 1066: 'EduSoho''|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ ''EduSoho''|copyright_less }}{{''云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。': 'EduSoho''|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ ''EduSoho''|copyright_less }}{{''云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'\n 1067  暂无视频文件，请先上传。: ھازىرچە فىلىم ھۆججىتى يوق، ئاۋال يۈكلەڭ.\n 1068  支持优酷、土豆、腾讯、网易公开课的视频页面地址导入: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseLessonManage/media-choose.html.twig:\n  124                    <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>\n  125                    <li>\n  126:                     视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}{{'云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'|trans}}\n  127                    </li>\n  128                  {% endif %}\n\n6 matches across 4 files\n",
 			"settings":
 			{
-				"buffer_size": 4907,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/Topxia/WebBundle/Resources/views/User/layout.html.twig",
-			"settings":
-			{
-				"buffer_size": 2166,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/Topxia/WebBundle/Resources/views/Settings/password.html.twig",
-			"settings":
-			{
-				"buffer_size": 2479,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Searching 8680 files for \"form.newPassword\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/public/js/controller/settings/password.js:\n   20  \n   21          validator.addItem({\n   22:             element: '[name=\"form[newPassword]\"]',\n   23              required: true,\n   24              rule: 'minlength{min:5} maxlength{max:20}'\n   ..\n   28              element: '[name=\"form[confirmPassword]\"]',\n   29              required: true,\n   30:             rule: 'confirmation{target:#form_newPassword}'\n   31          });\n   32      };\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/password.html.twig:\n   39  \n   40          <div class=\"form-group\">\n   41:           <div class=\"col-md-2 control-label\">{{ form_label(form.newPassword, '新密码'|trans) }}</div>\n   42            <div class=\"controls col-md-8 controls\">\n   43:             {{ form_widget(form.newPassword, {attr:{class:'form-control'}}) }}\n   44            </div>\n   45          </div>\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n4 matches across 2 files\n\n\nSearching 8680 files for \"邮箱验证邮件发送失败，请联系管理员\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/SettingsController.php:\n  758  		} catch (\\Exception $e) {\n  759  			$this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:' . $e->getMessage());\n  760: 			$this->setFlashMessage('danger',\"邮箱验证邮件发送失败，请联系管理员。\");\n  761  		}\n  762  \n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n1 match in 1 file\n\n\nSearching 8680 files for \"新登录邮箱\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/email.html.twig:\n   39  \n   40          <div class=\"form-group\">\n   41:           <div class=\"col-md-2 control-label\">{{ form_label(form.email, '新登录邮箱'|trans) }}</div>\n   42            <div class=\"col-md-8 controls\">\n   43              {{ form_widget(form.email, {attr:{class:'form-control'}}) }}\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n1 match in 1 file\n\n\nSearching 8680 files for \"密码不正确，请重试\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/AuthController.php:\n   29              $isPasswordOk = $this->getAuthService()->checkPassword($user['id'], $data['password']);\n   30              if (!$isPasswordOk) {\n   31:                 $this->setFlashMessage('danger', '密码不正确，请重试。');\n   32                  return $this->redirect($this->generateUrl('auth_email_confirm', array('token' => $token['token'])));\n   33              }\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/LoginBindController.php:\n  267              $response = array('success' => false, 'message' => $message);\n  268          } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {\n  269:             $response = array('success' => false, 'message' => '密码不正确，请重试！');\n  270          } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {\n  271              $response = array('success' => false, 'message' => \"该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！\");\n  ...\n  301              $response = array('success' => false, 'message' => $message);\n  302          } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {\n  303:             $response = array('success' => false, 'message' => '密码不正确，请重试！');\n  304          } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {\n  305              $response = array('success' => false, 'message' => '该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！');\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/SettingsController.php:\n  283  				$passwords = $form->getData();\n  284  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {\n  285: 					$this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');\n  286  					return $this->redirect($this->generateUrl('settings_pay_password'));\n  287  				} else {\n  ...\n  320  				$passwords = $form->getData();\n  321  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {\n  322: 					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));\n  323  				} else {\n  324  					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);\n  ...\n  351  				if ( !($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']) ) ) \n  352  				{\n  353: 					$this->setFlashMessage('danger', '支付密码不正确，请重试！');\n  354  				}				\n  355  				else \n  ...\n  663  				$passwords = $form->getData();\n  664  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {\n  665: 					$this->setFlashMessage('danger', '当前密码不正确，请重试！');\n  666  				} else {\n  667  					$this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);\n  ...\n  699  \n  700  				if (!$isPasswordOk) {\n  701: 					$this->setFlashMessage('danger', '密码不正确，请重试。');\n  702  					return $this->redirect($this->generateUrl('settings_email'));\n  703  				}\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n8 matches across 3 files\n\n\nSearching 8680 files for \"用户登录密码\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/SettingsController.php:\n  283  				$passwords = $form->getData();\n  284  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {\n  285: 					$this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');\n  286  					return $this->redirect($this->generateUrl('settings_pay_password'));\n  287  				} else {\n  ...\n  320  				$passwords = $form->getData();\n  321  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {\n  322: 					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));\n  323  				} else {\n  324  					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);\n  ...\n  413  	                return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');\n  414  	            }else{\n  415: 	            	$this->setFlashMessage('danger', '用户登录密码错误。');\n  416  	            }\n  417              }\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml:\n  949  修改手机号？: 修改手机号？\n  950  请再输入一次支付密码: 请再输入一次支付密码\n  951: 请输入用户登录密码: ئابونت كىرىش پارولىنى كىرگۈزۈڭ\n  952  重设支付密码: 重设支付密码\n  953  安全问题: بىخەتەرلىك سۇئالى\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/pay-password-modal.html.twig:\n    9  \n   10          <div class=\"form-group\">\n   11:           <div class=\"col-md-3 col-md-offset-1 control-label\">{{ form_label(form.currentUserLoginPassword, '用户登录密码'|trans) }}</div>\n   12            <div class=\"controls col-md-6 controls\">\n   13              {{ form_widget( form.currentUserLoginPassword,{attr:{ class:'form-control', 'data-url':path('settings_check_login_password')}}) }}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/pay-password.html.twig:\n   29  \n   30          <div class=\"form-group\">\n   31:           <div class=\"col-md-2 control-label\">{{ form_label(form.currentUserLoginPassword, '用户登录密码'|trans) }}</div>\n   32            <div class=\"controls col-md-8 controls\">\n   33              {{ form_widget(form.currentUserLoginPassword, {attr:{class:'form-control'}}) }}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/reset-pay-password.html.twig:\n   30  \n   31          {# <div class=\"form-group\">\n   32:           <div class=\"col-md-3 control-label\">{{ form_label(form.currentUserLoginPassword, '用户登录密码') }}</div>\n   33            <div class=\"controls col-md-8 controls\">\n   34              {{ form_widget(form.currentUserLoginPassword, {attr:{class:'form-control'}}) }}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/update-pay-password-from-email-or-secure-questions.html.twig:\n   42          <div class=\"form-group\">\n   43            <div class=\"col-md-3 control-label\">\n   44:             {{ form_label(form.currentUserLoginPassword, '用户登录密码'|trans) }}\n   45            </div>\n   46            <div class=\"col-md-8 controls\">\n   47              {{ form_widget(form.currentUserLoginPassword, {attr:{class:'form-control'}}) }}\n   48:             <p class=\"help-block\">{{'请输入用户登录密码'|trans}}</p>\n   49            </div>\n   50          </div>\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n9 matches across 6 files\n\n\nSearching 8680 files for \"新支付密码\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/SettingsController.php:\n  268  \n  269  		if ($hasPayPassword){\n  270: 			$this->setFlashMessage('danger', '不能直接设置新支付密码。');\n  271  			return $this->redirect($this->generateUrl('settings_reset_pay_password'));\n  272  		}\n  ...\n  287  				} else {\n  288  					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);\n  289: 					$this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');\n  290  				}\n  291  \n  ...\n  306  \n  307  		if ($hasPayPassword){\n  308: 			return $this->createJsonResponse('不能直接设置新支付密码。');\n  309  		}\n  310  \n  ...\n  323  				} else {\n  324  					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);\n  325: 					return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));\n  326  				}\n  327  			}\n  ...\n  468   			}\n  469  \n  470:  			$this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');\n  471   			return $this->setPayPasswordPage($request, $user['id']);\n  472  \n  ...\n  505  			list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);\n  506  			if ($result) {\n  507: 				$this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');\n  508   				return $this->setPayPasswordPage($request, $currentUser['id']);\n  509  			}else{\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml:\n  932  安全设置: بىخەتەرلىك تەڭشىكى\n  933  重设支付密码成功: 重设支付密码成功\n  934: 新支付密码设置成功。: 新支付密码设置成功。\n  935  返回安全设置: 返回安全设置\n  936  第三方登录: 第三方登录\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/pay-password-modal.html.twig:\n   16  \n   17          <div class=\"form-group\">\n   18:           <div class=\"col-md-3 col-md-offset-1 control-label\">{{ form_label(form.newPayPassword, '新支付密码'|trans) }}</div>\n   19            <div class=\"controls col-md-6 controls\">\n   20              {{ form_widget(form.newPayPassword, {attr:{class:'form-control'}}) }}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/pay-password-success.html.twig:\n    7      <div class=\"panel panel-default panel-page\">\n    8        <div class=\"panel-heading\"><h2>{{'重设支付密码成功'|trans}}</h2></div>\n    9:           <p class=\"text-success\">{{'新支付密码设置成功。'|trans}}</p>\n   10            <p>\n   11              <a href=\"{{ path('settings_security') }}\">{{'返回安全设置'|trans}}</a>\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/pay-password.html.twig:\n   36  \n   37          <div class=\"form-group\">\n   38:           <div class=\"col-md-2 control-label\">{{ form_label(form.newPayPassword, '新支付密码'|trans) }}</div>\n   39            <div class=\"controls col-md-8 controls\">\n   40              {{ form_widget(form.newPayPassword, {attr:{class:'form-control'}}) }}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/reset-pay-password.html.twig:\n   47  \n   48          <div class=\"form-group\">\n   49:           <div class=\"col-md-3 control-label\">{{ form_label(form.newPayPassword, '新支付密码'|trans) }}</div>\n   50            <div class=\"controls col-md-8 controls\">\n   51              {{ form_widget(form.newPayPassword, {attr:{class:'form-control'}}) }}\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/update-pay-password-from-email-or-secure-questions.html.twig:\n   22          <div class=\"form-group\">\n   23            <div class=\"col-md-3 control-label\">\n   24:             {{ form_label(form.payPassword, '新支付密码'|trans) }}\n   25            </div>\n   26            <div class=\"col-md-8 controls\">\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n13 matches across 7 files\n\n\nSearching 8680 files for \"settings_check_login_password\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/config/routing.yml:\n 1784      defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }\n 1785  \n 1786: settings_check_login_password:\n 1787      pattern:  /settings/check_login_password\n 1788      defaults: { _controller: TopxiaWebBundle:Settings:passwordCheck }\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/bind-mobile.html.twig:\n   30  	        <div  class=\"col-md-3 control-label\"><label for=\"password\">{{'您的登录密码'|trans}}</label></div>\n   31  	        <div class=\"col-md-4 controls\">\n   32: 	        	<input type=\"password\" id=\"password\" name=\"password\" class=\"form-control\" value=\"\"  data-url=\"{{ path('settings_check_login_password') }}\">\n   33  	        </div>\n   34  	    	</div>\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/pay-password-modal.html.twig:\n   11            <div class=\"col-md-3 col-md-offset-1 control-label\">{{ form_label(form.currentUserLoginPassword, '用户登录密码'|trans) }}</div>\n   12            <div class=\"controls col-md-6 controls\">\n   13:             {{ form_widget( form.currentUserLoginPassword,{attr:{ class:'form-control', 'data-url':path('settings_check_login_password')}}) }}\n   14            </div>\n   15          </div>\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n3 matches across 3 files\n\n\nSearching 8680 files for \"当前用户登录密码不正确，请重试\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Controller/SettingsController.php:\n  283  				$passwords = $form->getData();\n  284  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {\n  285: 					$this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');\n  286  					return $this->redirect($this->generateUrl('settings_pay_password'));\n  287  				} else {\n  ...\n  320  				$passwords = $form->getData();\n  321  				if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {\n  322: 					return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));\n  323  				} else {\n  324  					$this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n2 matches in 1 file\n\n\nSearching 8680 files for \"本课程内容与原课程\" (regex)\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml:\n   37  已添加教师: 'ئوقۇتقۇچى قوشۇلدى'\n   38  显示: كۆرسۈتۈش\n   39: 本课程内容与原课程: 本课程内容与原课程\n   40  实时同步中。如需更改内容可以选择对原课程进行更改。: 实时同步中。如需更改内容可以选择对原课程进行更改。\n   41  如需解除同步单独编辑本课程，可点击下方按钮解除同步。: 如需解除同步单独编辑本课程，可点击下方按钮解除同步。\n\n/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseManage/courseSync.html.twig:\n   26    <div class=\"panel-body\">\n   27      <div class=\"panel-locked\">\n   28:       <h5><p>{{'本课程内容与原课程'|trans}}\n   29          <a href=\"{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% elseif type == 'question_plumber' %}{{path(url,{courseId:parentCourse.id,type:'import'})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}\" target=\"_blank\">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>\n   30          {{'实时同步中。如需更改内容可以选择对原课程进行更改。'|trans}}\n\nUnable to open ~/www/edusoho/web/bundles/framework\nUnable to open ~/www/edusoho/web/bundles/sensiodistribution\n3 matches across 2 files\n",
-			"settings":
-			{
-				"buffer_size": 16341,
+				"buffer_size": 6776,
 				"line_ending": "Unix",
 				"name": "Find Results",
 				"scratch": true
 			}
 		},
 		{
-			"file": "src/Topxia/WebBundle/Resources/views/CourseManage/courseSync.html.twig",
+			"file": "src/Topxia/WebBundle/Resources/views/Announcement/announcement-block.html.twig",
 			"settings":
 			{
-				"buffer_size": 1384,
+				"buffer_size": 772,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "web/assets/v2/bootstrap/css/rtl/bootstrap.css",
+			"file": "web/themes/loulan/block.json",
 			"settings":
 			{
-				"buffer_size": 132205,
+				"buffer_size": 14916,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Topxia/WebBundle/Resources/views/Settings/pay-password-modal.html.twig",
+			"file": "src/Topxia/WebBundle/Resources/views/Default/stylesheet.html.twig",
 			"settings":
 			{
-				"buffer_size": 1812,
+				"buffer_size": 453,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Topxia/WebBundle/Controller/SettingsController.php",
+			"file": "web/themes/loulan/theme.json",
 			"settings":
 			{
-				"buffer_size": 32591,
+				"buffer_size": 175,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Topxia/WebBundle/Resources/public/js/controller/settings/password.js",
+			"file": "src/Topxia/WebBundle/Resources/views/CourseLessonManage/media-choose.html.twig",
 			"settings":
 			{
-				"buffer_size": 1000,
+				"buffer_size": 23105,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml",
+			"file": "src/Topxia/AdminBundle/Resources/views/CloudSetting/video.html.twig",
 			"settings":
 			{
-				"buffer_size": 25828,
+				"buffer_size": 9440,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Topxia/WebBundle/Resources/views/Course/explore.html.twig",
+			"file": "src/Topxia/WebBundle/Resources/views/CourseFileManage/modal-upload-course-files.html.twig",
 			"settings":
 			{
-				"buffer_size": 4342,
+				"buffer_size": 4034,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Topxia/WebBundle/Resources/views/CourseMaterialManage/file-chooser.html.twig",
+			"settings":
+			{
+				"buffer_size": 3939,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Topxia/WebBundle/Resources/views/CourseFileManage/batch-upload.html.twig",
+			"settings":
+			{
+				"buffer_size": 5051,
 				"line_ending": "Unix"
 			}
 		}
@@ -117,10 +109,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 38.0,
-		"last_filter": "",
+		"height": 354.0,
+		"last_filter": "html",
 		"selected_items":
 		[
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
 			[
 				"gitdiff",
 				"Git: Diff"
@@ -154,15 +150,11 @@
 				"Package Control: Install Package"
 			],
 			[
-				"html",
-				"Set Syntax: HTML"
-			],
-			[
 				"instal",
 				"Package Control: Install Package"
 			]
 		],
-		"width": 601.0
+		"width": 575.0
 	},
 	"console":
 	{
@@ -184,21 +176,56 @@
 	"expanded_folders":
 	[
 		"/home/exmetjan/www/edusoho",
-		"/home/exmetjan/www/edusoho/installFiles",
 		"/home/exmetjan/www/edusoho/src",
 		"/home/exmetjan/www/edusoho/src/Topxia",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/css",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/css/rtl",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/js",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/js/controller",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/js/controller/default",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/translations",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Block",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/DependencyInjection",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Default",
 		"/home/exmetjan/www/edusoho/web",
-		"/home/exmetjan/www/edusoho/web/assets",
-		"/home/exmetjan/www/edusoho/web/assets/v2",
-		"/home/exmetjan/www/edusoho/web/assets/v2/bootstrap",
-		"/home/exmetjan/www/edusoho/web/assets/v2/bootstrap/css",
-		"/home/exmetjan/www/edusoho/web/assets/v2/bootstrap/css/rtl"
+		"/home/exmetjan/www/edusoho/web/themes",
+		"/home/exmetjan/www/edusoho/web/themes/autumn",
+		"/home/exmetjan/www/edusoho/web/themes/autumn/TopxiaWebBundle",
+		"/home/exmetjan/www/edusoho/web/themes/loulan"
 	],
 	"file_history":
 	[
+		"/home/exmetjan/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/User/index.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/CourseFileManage/batch-upload.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/Default/cloud-notice.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/MyTeaching/teaching.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Extensions/data_dict.yml",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/App/cloud-account.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/App/cloud-combo.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Command/TransGenerateCommand.php",
+		"/home/exmetjan/桌面/untitled.html",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/translations/messages.ug_CN.yml",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/config/menus_admin.yml",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/ArticleCategory/index.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/System/auth.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Controller/UserController.php",
+		"/home/exmetjan/www/edusoho/src/Classroom/ClassroomBundle/Resources/config/menus_admin.yml",
+		"/home/exmetjan/www/edusoho/src/Topxia/MobileBundleV2/Resources/public/libs/ionic/1.0.0/js/ionic.bundle.js",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/views/layout.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/css/rtl/admin.css",
+		"/home/exmetjan/www/edusoho/src/Topxia/AdminBundle/Resources/public/css/rtl/admin_v2.css",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Course/create.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Handler/AuthenticationFailureHandler.php",
+		"/home/exmetjan/www/edusoho/web/assets/libs/gallery2/bootstrap/3.1.1/css/rtl/bootstrap.css",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/security-questions.html.twig",
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Course/explore.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Search/index.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/approval.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Settings/avatar-crop.html.twig",
@@ -260,7 +287,6 @@
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/User/header-block.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/User/layout.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/weixin-alert.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/do-test-pause-modal.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/do-test.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/flag.html.twig",
@@ -301,42 +327,19 @@
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PasswordReset/success.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PasswordReset/update.html.twig",
 		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PayCenter/pay-return.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PayCenter/wxpay-qrcode.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Player/show.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-actions.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-choice-doing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-choice-finished.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-choice-reviewing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-determine-doing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-determine-finished.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-determine-reviewing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-essay-doing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-essay-finished.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-essay-reviewing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-fill-finished.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-fill-reviewing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-set-item.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-single_choice-finished.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-single_choice-reviewing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-uncertain_choice-doing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/Question/question-uncertain_choice-reviewing.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/do-test-choice.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/do-test-determine.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/do-test-essay.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/QuizQuestionTest/do-test-fill.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PayCenter/resultNotice.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PayCenter/show.html.twig",
-		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/MyTeaching/threads.html.twig"
+		"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Resources/views/PayCenter/wxpay-qrcode.html.twig"
 	],
 	"find":
 	{
-		"height": 109.0
+		"height": 84.0
 	},
 	"find_in_files":
 	{
-		"height": 136.0,
+		"height": 200.0,
 		"where_history":
 		[
+			"",
+			"/home/exmetjan/www/edusoho/src/Topxia/WebBundle/Command",
 			""
 		]
 	},
@@ -345,30 +348,31 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"glyphicon-envelope",
-			"glyphicon glyphicon-envelope",
-			"本课程内容与原课程",
-			"当前用户登录密码不正确，请重试",
-			"请输入",
-			"passwordCheck",
-			"settings_check_login_password",
-			"新支付密码",
-			"用户登录密码",
-			"密码不正确，请重试",
-			"新登录邮箱",
-			"邮箱验证邮件发送失败，请联系管理员",
-			"form.newPassword",
-			"请输入",
-			"的长度必须大于或等于",
-			"的长度必须大于或等于5",
-			"当前密码",
-			"Trans",
+			"jianmo",
+			"天山",
+			"简墨",
+			"云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验",
+			"云视频,点击<a href=\"http://open.edusoho.com/sh",
+			"'EduSoho''|copyright_less",
 			"WebBundle",
-			"的个人主页",
-			"{{user.nickname}}",
-			"'''}}{% endif %}{{user.nickname}}",
-			"{{user.nickname}}{{''的个人主页'",
-			"在教课程",
+			"TopxiaWebBundle",
+			"学员有效期",
+			"您已欠费超过",
+			"date(\"Y年",
+			"courseStatus:html",
+			"未发布",
+			"admin_user_manage",
+			"admin_user",
+			"{{'用户'|trans}}",
+			"{{'话题管理'|trans}}",
+			"admin_operation_article_category",
+			"draft",
+			"未发布",
+			"{{'请输入你在'|trans}}",
+			"Bad credentials",
+			"help-block",
+			"../fonts/glyphicons-halflings-regular",
+			"body",
 			"CategoryParent.name|default('''') ",
 			"([\\x{4e00}-\\x{9fa5}，。、【】！？《》：]+)",
 			"([\\x{4e00}-\\x{9fa5}，。、！？《》：]+)",
@@ -391,9 +395,13 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
+			"loulan",
+			"楼兰",
+			"天山",
+			"../../fonts/glyphicons-halflings-regular",
 			"\\{\\{'$1'\\|trans\\}\\}",
 			"edusoho.dev",
 			"\\{\\{'$1'\\|trans\\}\\}",
@@ -409,287 +417,15 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/Topxia/WebBundle/Resources/views/Settings/security-questions.html.twig",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4907,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4907,
-								4907
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9738.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/Topxia/WebBundle/Resources/views/User/layout.html.twig",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2166,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1268,
-								1268
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 733.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/Topxia/WebBundle/Resources/views/Settings/password.html.twig",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2479,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1630,
-								1630
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 8997.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 16341,
+						"buffer_size": 6776,
 						"regions":
 						{
 							"match":
@@ -698,180 +434,84 @@
 								"regions":
 								[
 									[
-										233,
-										249
+										311,
+										336
 									],
 									[
-										502,
-										518
+										367,
+										392
 									],
 									[
-										763,
-										779
+										735,
+										760
 									],
 									[
-										895,
-										911
+										851,
+										876
 									],
 									[
-										1449,
-										1466
+										924,
+										949
 									],
 									[
-										1882,
-										1887
+										1040,
+										1065
 									],
 									[
-										2496,
-										2505
+										1538,
+										1579
 									],
 									[
-										2992,
-										3001
+										1727,
+										1768
 									],
 									[
-										3512,
-										3521
+										2383,
+										2424
 									],
 									[
-										4030,
-										4039
+										2699,
+										2740
 									],
 									[
-										4392,
-										4401
+										3222,
+										3263
 									],
 									[
-										4742,
-										4751
+										3529,
+										3570
 									],
 									[
-										4988,
-										4997
+										4052,
+										4093
 									],
 									[
-										5239,
-										5248
+										4575,
+										4616
 									],
 									[
-										5806,
-										5812
+										4972,
+										5009
 									],
 									[
-										6168,
-										6174
+										5021,
+										5058
 									],
 									[
-										6539,
-										6545
+										5272,
+										5309
 									],
 									[
-										6749,
-										6755
+										5781,
+										5818
 									],
 									[
-										7108,
-										7114
+										5970,
+										6007
 									],
 									[
-										7585,
-										7591
-									],
-									[
-										8020,
-										8026
-									],
-									[
-										8490,
-										8496
-									],
-									[
-										8727,
-										8733
-									],
-									[
-										9146,
-										9151
-									],
-									[
-										9464,
-										9469
-									],
-									[
-										9604,
-										9609
-									],
-									[
-										9883,
-										9888
-									],
-									[
-										10007,
-										10012
-									],
-									[
-										10280,
-										10285
-									],
-									[
-										10540,
-										10545
-									],
-									[
-										10552,
-										10557
-									],
-									[
-										10862,
-										10867
-									],
-									[
-										11314,
-										11319
-									],
-									[
-										11678,
-										11683
-									],
-									[
-										12089,
-										12094
-									],
-									[
-										12541,
-										12546
-									],
-									[
-										13004,
-										13033
-									],
-									[
-										13537,
-										13566
-									],
-									[
-										14030,
-										14059
-									],
-									[
-										14587,
-										14602
-									],
-									[
-										14949,
-										14964
-									],
-									[
-										15461,
-										15470
-									],
-									[
-										15472,
-										15481
-									],
-									[
-										15799,
-										15808
+										6636,
+										6673
 									]
 								],
 								"scope": ""
@@ -880,8 +520,8 @@
 						"selection":
 						[
 							[
-								15803,
-								15803
+								6651,
+								6651
 							]
 						],
 						"settings":
@@ -889,642 +529,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"default_dir": "/home/exmetjan/www/edusoho",
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 9,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 108965.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/Topxia/WebBundle/Resources/views/CourseManage/courseSync.html.twig",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1384,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								538,
-								538
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2714.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "web/assets/v2/bootstrap/css/rtl/bootstrap.css",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 132205,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1143,
-								1145
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 12191.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/Topxia/WebBundle/Resources/views/Settings/pay-password-modal.html.twig",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1812,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								640,
-								640
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1562.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/Topxia/WebBundle/Controller/SettingsController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 32591,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9715,
-								9715
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"is_xml": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 36368.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/Topxia/WebBundle/Resources/public/js/controller/settings/password.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1000,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								660,
-								660
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1050.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "src/Topxia/WebBundle/Resources/translations/messages.ug_CN.yml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 25828,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								267,
-								267
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
-							"syntax": "Packages/YAML/YAML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/Topxia/WebBundle/Resources/views/Course/explore.html.twig",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4342,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								386,
-								386
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
@@ -1535,46 +579,6 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
@@ -1582,6 +586,102 @@
 								"bh_tag_content"
 							],
 							"color_scheme": "Packages/User/Color Highlighter/themes/Material-Theme.tmTheme",
+							"default_dir": "/home/exmetjan/www/edusoho",
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 4,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4563.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/Topxia/WebBundle/Resources/views/Announcement/announcement-block.html.twig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 772,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								593,
+								593
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
 							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
@@ -1590,7 +690,717 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "web/themes/loulan/block.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14916,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14520,
+								14520
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": true,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1092.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/Topxia/WebBundle/Resources/views/Default/stylesheet.html.twig",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 453,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								453,
+								453
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "web/themes/loulan/theme.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 175,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								61,
+								61
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": true,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/Topxia/WebBundle/Resources/views/CourseLessonManage/media-choose.html.twig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 23105,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5783,
+								5783
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5084.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/Topxia/AdminBundle/Resources/views/CloudSetting/video.html.twig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9440,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								915,
+								915
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 716.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/Topxia/WebBundle/Resources/views/CourseFileManage/modal-upload-course-files.html.twig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4034,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1666,
+								1666
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1652.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/Topxia/WebBundle/Resources/views/CourseMaterialManage/file-chooser.html.twig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3939,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2419,
+								2419
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1418.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/Topxia/WebBundle/Resources/views/CourseFileManage/batch-upload.html.twig",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5051,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4601,
+								4601
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4343.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -1598,7 +1408,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 44.0
+		"height": 46.0
 	},
 	"input":
 	{
@@ -1643,7 +1453,7 @@
 	"project": "edusoho.sublime-project",
 	"replace":
 	{
-		"height": 138.0
+		"height": 142.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1653,12 +1463,16 @@
 		"selected_items":
 		[
 			[
-				"settingsc",
-				"src/Topxia/WebBundle/Controller/SettingsController.php"
+				"announcement-block.html.twig",
+				"src/Topxia/WebBundle/Resources/views/Announcement/announcement-block.html.twig"
 			],
 			[
-				"password",
-				"src/Topxia/WebBundle/Resources/views/Settings/password.html.twig"
+				"menu_ad",
+				"src/Topxia/AdminBundle/Resources/config/menus_admin.yml"
+			],
+			[
+				"admin_m",
+				"src/Topxia/AdminBundle/Resources/config/menus_admin.yml"
 			],
 			[
 				"adminbundle/resources/views/coin/coin-model.html.twig",

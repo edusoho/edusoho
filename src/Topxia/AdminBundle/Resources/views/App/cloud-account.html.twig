@@ -9,8 +9,8 @@
                 <span class="text-danger balance">{{content.account.cash|default(0) }}</span>{{'元'|trans}}
               {% endif %}
               <a href="{{path('admin_cloud_recharge')}}" class="btn-recharge btn btn-warning" target="_blank">{{'充值'|trans}}</a>
-              <a href="{{path('admin_cloud_detail')}}" class="btn btn-link" target="_blank">{{'查看账单'|trans}}</a>  
-            </p> 
+              <a href="{{path('admin_cloud_detail')}}" class="btn btn-link" target="_blank">{{'查看账单'|trans}}</a>
+            </p>
             {% if account %}
             <!--不足50元-->
             {% if 0 < content.account.cash|default(0) and content.account.cash|default(0) < 50 %}
@@ -18,11 +18,11 @@
             {% endif %}
             <!--欠费7天预留保护期-->
             {% if content.account.cash|default(0) < 0 and 0 < day|default(0) and day|default(0) <= 7 %}
-            <p class="text-danger text-sm">{{('您已欠费，还剩' ~ {{7-day}} ~ '天的预留保护期，请尽快充值！')|trans}}</p>
+            <p class="text-danger text-sm">您已欠费，还剩{{7-day}}天的预留保护期，请尽快充值！</p>
             {% endif %}
             <!--欠费冻结-->
             {% if content.account.cash|default(0) < 0 and 10 <= day|default(0) %}
-            <p class="text-danger text-sm">{{('您已欠费超过' ~ {{day}} ~ '天，教育云服务已暂停，请尽快充值！')|trans}}</p>
+            <p class="text-danger text-sm">您已欠费超过{{day}}天，教育云服务已暂停，请尽快充值！</p>
             {% endif %}
             {% endif %}
-          </div>    
+          </div>
