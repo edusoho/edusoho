@@ -208,6 +208,12 @@ class TestpaperController extends BaseController
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        
+        if(!$testpaper){
+            throw $this->createNotFoundException("试卷不存在");
+        }
+        
         if (in_array($testpaperResult['status'], array('doing', 'paused'))){
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
         }
@@ -291,7 +297,7 @@ class TestpaperController extends BaseController
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return $this->createJsonResponse(true);
         }
-
+        
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $answers = array_key_exists('data', $data) ? $data['data'] : array();
@@ -351,7 +357,10 @@ class TestpaperController extends BaseController
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-
+        
+        if(!$testpaper){
+            throw $this->createNotFoundException("试卷不存在");
+        }
 
         if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
             throw $this->createAccessDeniedException('无权批阅试卷！');

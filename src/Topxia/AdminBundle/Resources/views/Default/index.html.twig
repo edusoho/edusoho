@@ -4,10 +4,10 @@
 {% set script_controller = 'default/index' %}
 {% block content %}
 
+{{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
 <div class="page-header">
   <h1>管理中心  </h1>
 </div>
-
 {% if is_granted('ROLE_ADMIN') %}
   
   <div class="row">
@@ -16,7 +16,8 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       </div>
     </div>
-{% if hidden.cloud_notice|default(null) != '1' %}
+
+{% if setting('copyright.thirdCopyright')|default(null) == 0 and setting('copyright')|default(null) == 0 %}
   <div class="col-md-12">
         {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
     </div>
@@ -49,7 +50,7 @@
         </div>
       </div>
     </div> #}
-    {% if hidden.system_status|default(null) != '1' %}
+    {% if setting('copyright.thirdCopyright')|default(null) != 1  %}
     <div class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">

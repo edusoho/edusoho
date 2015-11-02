@@ -99,6 +99,15 @@ dateType:
     this_month: 本月
     last_month: 上月
 
+week:
+      1: 一
+      2: 二
+      3: 三
+      4: 四
+      5: 五
+      6: 六
+      7: 日
+
 contentStatus:
     published: 已发布
     unpublished: 未发布
@@ -160,6 +169,12 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
 
+jobCycle:
+    once: 一次
+    everyhour: 每小时
+    everyday: 每天
+    everymouth: 每月
+
 logLevel:
     info: 提示
     warning: 警告
@@ -178,6 +193,7 @@ analysisDateType:
     lesson: 新增课时数
     joinLesson: 加入学习数
     paidLesson: 购买课程数
+    paidClassroom: 购买班级数
     finishedLesson: 完成课时学习数
     videoViewed: 视频观看数
     cloudVideoViewed: └─ 云视频观看数
@@ -192,6 +208,9 @@ analysisDateType:
 userType:
     default: 网站注册
     weibo: 微博登录
+    web_email: 网站邮箱注册
+    web_mobile: 网站手机注册
+    import: 手动导入
     renren: 人人连接
     qq: QQ登录
     weixin: 微信登录
@@ -304,4 +323,3 @@ passedStatus:
     good: 良好
     passed: 合格
     unpassed: 不合格
-

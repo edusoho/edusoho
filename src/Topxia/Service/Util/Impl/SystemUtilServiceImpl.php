@@ -13,22 +13,21 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	{
 		$targets = $this->getSystemUtilDao()->getCourseIdsWhereCourseHasDeleted();
 		if(empty($targets)){
-			return ;
+			return 0;
 		}
 		$targets = $this->plainTargetId($targets);
-		foreach ($targets as $target) {
-	        $conditions = array(
-	            'targetType'=> 'courselesson', 
-	            'targetId'=>$target
-	        );
-        	$uploadFiles = $this->getUploadFileService()->searchFiles(
-	            $conditions,
-	            'latestCreated',
-	            0,
-	            1000
-	        );
-			$this->removeUploadFiles($uploadFiles);
-		}
+		$conditions = array(
+            'targetType'=> 'courselesson', 
+            'targets'=>$targets
+	   	);
+    	$uploadFiles = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            'latestCreated',
+            0,
+            500
+        );
+        return $this->removeUploadFiles($uploadFiles);
+		
 	}
 
 	protected function plainTargetId($targets)
@@ -42,9 +41,12 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 
 	protected function removeUploadFiles($uploadFiles)
 	{
+		$count = 0;
 		foreach ($uploadFiles as $file) {
-			$this->getUploadFileService()->deleteFile($file['id']);
+			$result = $this->getUploadFileService()->deleteFile($file['id']);
+			$count+= $result;
 		}
+		return $count;
 	}
 	
 
