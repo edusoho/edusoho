@@ -12,10 +12,10 @@ interface QuestionService
     public function findQuestionsByParentId($id);
 
     /*
-        findQuestionsByPIdAndLockedTarget
+        findQuestionsByCopyIdAndLockedTarget
         course　表中locked 为　１的课程
     */
-    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget);
+    public function findQuestionsByCopyIdAndLockedTarget($copyId, $lockedTarget);
 
     public function findQuestionsByParentIds($ids);
 
@@ -37,11 +37,7 @@ interface QuestionService
 
     public function createQuestion($fields);
 
-    public function addQuestion($fields);
-
     public function updateQuestion($id, $fields);
-
-    public function editQuestion($id,$fields);
 
     public function deleteQuestion($id);
 

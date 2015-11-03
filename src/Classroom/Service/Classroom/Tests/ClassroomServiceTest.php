@@ -16,8 +16,10 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $textClassroom = array(
             'title' => 'test',
+            'status' => 'draft',
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
 
         $this->assertEquals(1, $classroom['id']);
 
@@ -51,6 +53,35 @@ class ClassroomServiceTest extends BaseTestCase
     public function testSearchClassrooms()
     {
         
+    }
+
+    public function testFindMobileVerifiedMemberCountByClassroomId()
+    {
+        $textClassroom = array(
+            'title' => 'test1'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'],$textClassroom);
+        
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getUserService()->changeMobile($currentUser['id'], '13456520930');
+        $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 0);
+        $this->assertEquals(1,$result);
+        $this->getUserService()->lockUser($currentUser['id']);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
+        $this->assertEquals(0,$result);
+        $this->getUserService()->unlockUser($currentUser['id']);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
+        $this->assertEquals(1,$result);
+        $this->getClassroomService()->lockStudent($classroom['id'], $currentUser['id']);
+        $result = $this->getClassroomService()->findMobileVerifiedMemberCountByClassroomId($classroom['id'], 1);
+        $this->assertEquals(0,$result);
+
     }
 
     public function testSearchClassroomsCount()
@@ -1123,9 +1154,9 @@ class ClassroomServiceTest extends BaseTestCase
             'roles' => array('ROLE_USER','ROLE_SUPER_ADMIN'),
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
-
+       
         $enabled = $this->getClassroomService()->canLookClassroom($classroom['id']);
-
+       
         $this->assertEquals(true, $enabled);
 
         $currentUser->fromArray(array(

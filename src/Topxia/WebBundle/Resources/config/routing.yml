@@ -827,10 +827,6 @@ course_manage_test_teacher_check:
     pattern: /test/{id}/teacher/check
     defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheck }
 
-course_manage_test_teacher_finish_check:
-    pattern: /test/teacher/check/finish
-    defaults: { _controller: TopxiaWebBundle:DoTest:testFinishCheck }
-
 course_manage_list_teacher_test_reviewing:
     pattern: /my/teacher/reviewing/test/list
     defaults: { _controller: TopxiaWebBundle:Testpaper:listReviewingTest }
@@ -1131,9 +1127,17 @@ notification:
     pattern: /notification
     defaults: { _controller: TopxiaWebBundle:Notification:index }
 
+batch_notification_show:
+    pattern: /notification/{id}
+    defaults: { _controller:TopxiaWebBundle:Notification:show }
+
 my:
     pattern: /my
     defaults: { _controller: TopxiaWebBundle:MyCourse:index }
+
+my_task_calendar:
+   pattern: /my/task
+   defaults: { _controller: TopxiaWebBundle:MyTask:index }
 
 my_teaching_courses:
     pattern: /my/teaching/courses/{filter}
@@ -1779,6 +1783,10 @@ edu_cloud_sms_check:
     pattern:  /edu_cloud/sms_check/{type}
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
 
+edu_cloud_sms_send_callback:
+    pattern:  /edu_cloud/sms/callback/{targetType}/{targetId}
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
+
 settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
@@ -1840,6 +1848,17 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+sms_prepare:
+    pattern:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: TopxiaWebBundle:Sms:prepare }
+
+publish_sms_send:
+    pattern:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: TopxiaWebBundle:Sms:send }
+
+generate_short_link:
+    pattern:  /generate/short/link
+    defaults: { _controller: TopxiaWebBundle:Sms:changeLink }
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

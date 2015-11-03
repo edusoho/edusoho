@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Dao\Impl;
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Course\Dao\CourseMemberDao;
 use Topxia\Service\Course\Dao\CourseDao;
+use Topxia\Service\User\Dao\UserDao;
 
 class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 {
@@ -161,6 +162,18 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND role = ?";
         return $this->getConnection()->fetchColumn($sql, array($courseId, $role));
+    }
+
+    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
+    {
+        $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
+        $sql .= " JOIN  `user` As c ON m.courseId = ?";
+        if ($locked) {
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1 ";
+        } else {
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
+        }
+        return $this->getConnection()->fetchColumn($sql, array($courseId));
     }
 
     public function searchMemberCount($conditions)
