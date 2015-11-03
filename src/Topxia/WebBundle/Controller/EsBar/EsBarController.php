@@ -393,6 +393,13 @@ class EsBarController extends BaseController{
                         $classroom['allLessonNum'] = $classroomLessonNum;
                     }
 
+                    if ($this->isPluginInstalled('ClassroomPlan')) {
+                        $classroomPlan = $this->getClassroomPlanService()->getPlanByClassroomId($classroom['id']);
+                        if ($classroomPlan) {
+                            $sortedClassrooms[$key]['planId'] = $classroomPlan['id'];
+                        }
+                    }
+
                 }else{
                     unset($sortedClassrooms[$key]);
                 }
@@ -425,6 +432,11 @@ class EsBarController extends BaseController{
     protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getClassroomPlanService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
     }
 
 }
