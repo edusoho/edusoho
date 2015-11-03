@@ -14,9 +14,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         if(!isset($fields['targetId'])){
             $fields['targetId'] = 0;
         }
-        if(empty($fields['type'])){
-            $fields['type'] = 'text';
-        }
+        $fields['type'] = 'text';
         if(!isset($fields['published'])){
             $fields['published'] = 0;
         }
@@ -106,6 +104,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     public function updateBatchNotification($id,$batchNotification)
     {
         if(!empty($batchNotification)){
+            $batchNotification['type'] = 'text';
             $this->getBatchNotificationDao()->updateBatchNotification($id,$batchNotification);
         }
         return true;
