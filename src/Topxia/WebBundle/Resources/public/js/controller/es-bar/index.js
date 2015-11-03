@@ -40,8 +40,8 @@ define(function(require, exports, module) {
 
         var $this = $(this);
 
-
-        if($("#notLogin").length>0){
+        // 判断是否登录
+        if($("meta[name='is-login']").attr("content")==0){
             isNotLogin();
             return;
         }
