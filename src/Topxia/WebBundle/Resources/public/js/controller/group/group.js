@@ -315,7 +315,7 @@
 
             if ($('#group').length > 0) {
                 var editor = CKEDITOR.replace('group', {
-                    toolbar: 'Simple',
+                    toolbar: 'Detail',
                     filebrowserImageUploadUrl: $('#group').data('imageUploadUrl')
                 });
 

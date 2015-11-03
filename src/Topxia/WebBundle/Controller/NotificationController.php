@@ -36,6 +36,14 @@ class NotificationController extends BaseController
         ));
     }
 
+    public function showAction(Request $request,$id)
+    {
+        $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
+        return $this->render('TopxiaWebBundle:Notification:batch-notification-show.html.twig',array(
+            'batchnotification' => $batchnotification
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -50,4 +58,8 @@ class NotificationController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
+    protected function getBatchNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.BatchNotificationService');
+    }   
 }

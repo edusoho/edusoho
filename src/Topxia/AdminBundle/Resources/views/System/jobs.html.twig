@@ -1,0 +1,64 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_jobs' %}
+
+{% set script_controller = 'job/list' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-sm form-inline">
+
+  <div class="form-group">
+    <input type="text" id="nextExcutedStartTime" value="{{app.request.query.get('nextExcutedStartTime')}}" name="nextExcutedStartTime" class="form-control" placeholder="下一次执行时间范围" style="width:160px;">
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="nextExcutedEndTime" value="{{app.request.query.get('nextExcutedEndTime')}}" name="nextExcutedEndTime" class="form-control" placeholder="下一次执行时间范围" style="width:160px;">
+  </div>
+
+
+  <div class="form-group">
+    <input type="text" id="name" name="name" value="{{app.request.query.get('name')}}" class="form-control" placeholder="任务名称" style="width:100px;">
+  </div>
+
+  <div class="form-group">
+    <select class="form-control" name="cycle">
+        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), '--执行周期--') }}
+    </select>
+  </div>
+
+  <button class="btn btn-primary">搜索</button>
+
+</form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="25%">任务名称</th>
+      <th width="25%">执行周期</th>
+      <th width="25%">下一次执行时间</th>
+      <th width="25%">创建时间</th>
+    </tr>   
+    {% for job in jobs %}
+      <tr>
+        <td>
+          {{ job.name }}
+        <td>
+          {{ dict_text('jobCycle',job.cycle) }}
+        </td>
+        <td>
+          {{ job.nextExcutedTime|date('Y-m-d H:i:s') }}
+        </td>
+        <td>
+          {% if job.createdTime %}{{ job.createdTime|date('Y-m-d H:i:s') }}{% else %}--{% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">无定时任务记录</tr>
+    {% endfor %}
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

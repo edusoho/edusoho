@@ -160,6 +160,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
     }
 
+    public function analysisPaidClassroomOrderDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisPaidClassroomOrderDataByTime($startTime,$endTime);
+    }
+
     public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)
     {
         return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime,$endTime);

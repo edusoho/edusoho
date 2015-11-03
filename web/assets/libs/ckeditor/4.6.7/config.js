@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.toolbar_Detail = [
         { items: [ 'FontSize'] },
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source'] }
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] }
     ];
 
     config.toolbar_Full = [
