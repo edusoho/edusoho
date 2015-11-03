@@ -391,12 +391,12 @@ class EsBarController extends BaseController{
                         $classroom['lessons'] = $notLearnedLessons;
                         $classroom['learnedLessonNum'] = count($finishIds);
                         $classroom['allLessonNum'] = $classroomLessonNum;
-                    }
 
-                    if ($this->isPluginInstalled('ClassroomPlan')) {
-                        $classroomPlan = $this->getClassroomPlanService()->getPlanByClassroomId($classroom['id']);
-                        if ($classroomPlan) {
-                            $sortedClassrooms[$key]['planId'] = $classroomPlan['id'];
+                        if ($this->isPluginInstalled('ClassroomPlan')) {
+                            $classroomPlan = $this->getClassroomPlanService()->getPlanByClassroomId($classroom['id']);
+                            if ($classroomPlan) {
+                                $sortedClassrooms[$key]['planId'] = $classroomPlan['id'];
+                            }
                         }
                     }
 
