@@ -10,6 +10,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\JsonToolkit;
 
 class DeveloperSettingController extends BaseController
 {
@@ -83,89 +84,12 @@ class DeveloperSettingController extends BaseController
         }
 
         $setting = $this->getSettingService()->get('magic', array());
-        $setting = $this->prettyPrint(json_encode($setting));
+        $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:magic.html.twig', array(
             'setting' => $setting,
         ));
     }
-
-    public function postNumRulesAction(Request $request)
-    {
-
-        if ($request->getMethod() == 'POST') {
-            $setting = $request->request->get('setting', '{}');
-            $setting = json_decode($setting, true);
-            $this->getSettingService()->set('post_num_rules', $setting);
-            $this->getLogService()->info('system', 'update_settings', "更新PostNumSetting设置", $setting);
-            $this->setFlashMessage('success', '设置已保存！');
-        }
-
-        $setting = $this->getSettingService()->get('post_num_rules', array());
-        $setting = $this->prettyPrint(json_encode($setting));
-
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:post-num-rules.html.twig', array(
-            'setting' => $setting,
-        ));
-    }
-
-    protected function prettyPrint( $json )
-    {
-        $result = '';
-        $level = 0;
-        $inQuotes = false;
-        $inEscape = false;
-        $endsLineLevel = NULL;
-        $jsonLength = strlen( $json );
-
-        for( $i = 0; $i < $jsonLength; $i++ ) {
-            $char = $json[$i];
-            $newLineLevel = NULL;
-            $post = "";
-            if( $endsLineLevel !== NULL ) {
-                $newLineLevel = $endsLineLevel;
-                $endsLineLevel = NULL;
-            }
-            if ( $inEscape ) {
-                $inEscape = false;
-            } else if( $char === '"' ) {
-                $inQuotes = !$inQuotes;
-            } else if( ! $inQuotes ) {
-                switch( $char ) {
-                    case '}': case ']':
-                        $level--;
-                        $endsLineLevel = NULL;
-                        $newLineLevel = $level;
-                        break;
-
-                    case '{': case '[':
-                        $level++;
-                    case ',':
-                        $endsLineLevel = $level;
-                        break;
-
-                    case ':':
-                        $post = " ";
-                        break;
-
-                    case " ": case "\t": case "\n": case "\r":
-                        $char = "";
-                        $endsLineLevel = $newLineLevel;
-                        $newLineLevel = NULL;
-                        break;
-                }
-            } else if ( $char === '\\' ) {
-                $inEscape = true;
-            }
-            if( $newLineLevel !== NULL ) {
-                $result .= "\n".str_repeat( "\t", $newLineLevel );
-            }
-            $result .= $char.$post;
-        }
-
-        return $result;
-    }
-
 
     protected function getSettingService()
     {

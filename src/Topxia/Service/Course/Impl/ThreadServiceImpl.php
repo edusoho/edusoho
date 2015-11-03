@@ -155,7 +155,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function createThread($thread)
 	{
-		$event = $this->dispatchEvent('courseThread.beforeCreate', $thread);
+		$event = $this->dispatchEvent('courseThread.before_create', $thread);
 		if($event->isPropagationStopped()){
 			throw $this->createServiceException('发帖次数过多，请稍候尝试。');
 		}
@@ -343,6 +343,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
 	public function createPost($post)
 	{
+		$event = $this->dispatchEvent('courseThread.before_post_create', $post);
+		if($event->isPropagationStopped()){
+			throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+		}
+
 		$requiredKeys = array('courseId', 'threadId', 'content');
 		if (!ArrayToolkit::requireds($post, $requiredKeys)) {
 			throw $this->createServiceException('参数缺失');
@@ -370,6 +375,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			'latestPostTime' => $post['createdTime'],
 		);
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
+
+		$this->dispatchEvent('courseThread.post_create', $post);
 
 		return $post;
 	}
@@ -411,6 +418,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$this->getThreadPostDao()->deletePost($post['id']);
 		$this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
 	}
+
+	protected function filterSensitiveWord($text)
+    {
+        if(empty($text)) {
+            return $text;
+        }
+
+        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
+    }
 
 	protected function getThreadDao()
 	{

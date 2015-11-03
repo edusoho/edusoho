@@ -12,11 +12,17 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
 	public static function getSubscribedEvents()
     {
         return array(
-            'thread.beforeCreate' => 'before',
+            'thread.before_create' => 'before',
             'thread.create' => 'incrToken',
 
-            'courseThread.beforeCreate' => 'before',
+            'thread.before_create_post' => 'before',
+            'thread.post_create' => 'incrToken',
+
+            'courseThread.before_create' => 'before',
             'courseThread.create' => 'incrToken',
+
+            'courseThread.before_ceate_post' => 'before',
+            'courseThread.post_create' => 'incrToken',
         );
     }
 

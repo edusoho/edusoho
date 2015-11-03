@@ -118,7 +118,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
-        $event = $this->dispatchEvent('thread.beforeCreate', $thread);
+        $event = $this->dispatchEvent('thread.before_create', $thread);
         if($event->isPropagationStopped()){
             throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
@@ -375,6 +375,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($fields)
     {
+        $event = $this->dispatchEvent('thread.before_create_post', $fields);
+        if($event->isPropagationStopped()){
+            throw $this->createServiceException('回复次数过多，请稍候尝试。');
+        }
+
         $user = $this->getCurrentUser();
         $thread = null;
         if (!empty($fields['threadId'])) {
@@ -676,6 +681,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $class = __NAMESPACE__."\\".ucfirst($resource['targetType']).'ThreadFirewall';
 
         return new $class();
+    }
+
+    protected function filterSensitiveWord($text)
+    {
+        if(empty($text)) {
+            return $text;
+        }
+
+        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
     }
 
     protected function getThreadDao()

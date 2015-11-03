@@ -106,7 +106,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     }
 
     public function addThread($thread) 
-    {     
+    {   
+        $event = $this->dispatchEvent('groupThread.before_create', $thread);
+        if($event->isPropagationStopped()){
+            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+        }
+
         if (empty($thread['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
         }
@@ -131,6 +136,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $this->getGroupService()->waveMember($thread['groupId'],$thread['userId'],'threadNum',+1);
         
         $this->hideThings($thread['content'],$thread['id']);
+        $this->dispatchEvent('groupThread.create', $thread);
 
         return $thread;
     }
@@ -469,10 +475,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
     {
         return $this->createService('Content.FileService');
     }
+
+    protected function filterSensitiveWord($text)
+    {
+        if(empty($text)) {
+            return $text;
+        }
+
+        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
+    }
+
     protected function getThreadPostDao()
     {
         return $this->createDao('Group.ThreadPostDao');
     }
+
     protected function getThreadCollectDao()
     {
         return $this->createDao('Group.ThreadCollectDao');
