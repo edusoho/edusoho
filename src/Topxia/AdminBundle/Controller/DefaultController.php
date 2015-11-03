@@ -316,6 +316,14 @@ class DefaultController extends BaseController
 
         $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
 
+        $todayClassroomIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"classroom"))+0.00;
+
+        $yesterdayClassroomIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"classroom"))+0.00;
+
+        $todayVipIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"vip"))+0.00;
+
+        $yesterdayVipIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"vip"))+0.00;
+
         $storageSetting = $this->getSettingService()->get('storage');
 
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
@@ -366,6 +374,10 @@ class DefaultController extends BaseController
             'yesterdayIncome'=>$yesterdayIncome,
             'todayCourseIncome'=>$todayCourseIncome,
             'yesterdayCourseIncome'=>$yesterdayCourseIncome,
+            'todayClassroomIncome'=>$todayClassroomIncome,
+            'yesterdayClassroomIncome'=>$yesterdayClassroomIncome,
+            'todayVipIncome'=>$todayVipIncome,
+            'yesterdayVipIncome'=>$yesterdayVipIncome,
             'todayExitLessonNum'=>$todayExitLessonNum,
             'yesterdayExitLessonNum'=>$yesterdayExitLessonNum,
             'keyCheckResult'=>$keyCheckResult,
