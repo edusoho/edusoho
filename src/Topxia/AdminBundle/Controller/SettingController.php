@@ -29,7 +29,7 @@ class SettingController extends BaseController
         $setting = $this->getSettingService()->get('post_num_rules', array());
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:post-num-rules.html.twig', array(
+        return $this->render('TopxiaAdminBundle:System:post-num-rules.html.twig', array(
             'setting' => $setting,
         ));
     }
