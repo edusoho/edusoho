@@ -143,35 +143,13 @@ define(function(require, exports, module) {
         });
     }();
 
-    $("#bar-homework").on('click','#bar-practice-review',function(){
-        var url = $("#bar-practice-review").data('url');
-        $.get(url,function(html){
-            $("#bar-homework").html(html);
-            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
-        })
-    });
+    $(".es-bar").on('click','.btn-action >a',function(){
+        var $this = $(this);
+        var url = $this.data('url');
 
-    $("#bar-homework").on('click','#bar-practice-finish',function(){
-        var url = $("#bar-practice-finish").data('url');
         $.get(url,function(html){
-            $("#bar-homework").html(html);
-            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
-        })
-    });
-
-    $("#bar-course-list").on('click','#bar-course-btn',function(){
-        var url = $("#bar-course-btn").data('url');
-        $.get(url,function(html){
-            $("#bar-course-list").html(html);
-            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
-        })
-    });
-
-    $("#bar-course-list").on('click','#bar-classroom-btn',function(){
-        var url = $("#bar-classroom-btn").data('url');
-        $.get(url,function(html){
-            $("#bar-course-list").html(html);
-            $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
+            $this.closest('.es-bar-main').html(html);
+            $this.closest('.bar-main-body').perfectScrollbar({wheelSpeed:50});
         })
     });
 
