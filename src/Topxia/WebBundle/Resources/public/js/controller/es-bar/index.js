@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     
     require('jquery.perfect-scrollbar');
 
-    $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
+    
 
     if ($('.es-bar [data-toggle="tooltip"]').length > 0) {
         $('.es-bar [data-toggle="tooltip"]').tooltip({container: '.es-bar'});
@@ -46,6 +46,8 @@ define(function(require, exports, module) {
             return;
         }
 
+        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
+
         if($this.find(".dot")) {
           $this.find(".dot").remove();  
         }
@@ -65,51 +67,22 @@ define(function(require, exports, module) {
     });
 
     function isNotLogin(){
-        $('.modal').modal('hide');
+        var $loginModal = $("#login-modal");
 
-        $("#login-modal").modal('show');
-        $.get($('#login-modal').data('url'), function(html){
-            $("#login-modal").html(html);
+        $loginModal.modal('show');
+        $.get($loginModal.data('url'), function(html){
+            $loginModal.html(html);
         });
     }
 
     function clickBar($this){
-        switch ($this.data('id')){
-            case '#bar-course-list':
-                var url = $("#bar-course-btn").data('url');
-                
-                if(!$("#bar-course-list").data('isLoad')){
-                    $.get(url,function(html){
-                        $("#bar-course-list").html(html);
-                        $("#bar-course-list").data('isLoad', true);
-                        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
-                    })
-                }
-                break;
-            case '#bar-history':
-                var url = $("#bar-my-history").data('url');
-                $.get(url,function(html){
-                    $("#bar-history-list").html(html);
-                })
-                break;
-            case '#bar-message':
-                var url = $("#bar-message-btn").data('url');
-                $.get(url,function(html){
-                    $(".bar-message").html(html);
-                })
-                break
-            case '#bar-homework':
-                var url = $("#bar-practice-review").data('url');
-                if(!$("#bar-homework").data('isLoad')) {
-                    $.get(url, function (html) {
-                        $("#bar-homework").html(html);
-                        $("#bar-homework").data('isLoad', true);
-                        $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
-                    })
-                }
-                break;
-            default :
-                break;
+        if(typeof($this.find('a').data('url')) != 'undefined' ) {
+            var url = $this.find('a').data('url');
+
+            $.get(url,function(html){
+                $($this.data('id')).html(html);
+                $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
+            })
         }
     }
 
