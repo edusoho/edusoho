@@ -437,34 +437,33 @@ EOD;
 
     public function initCrontabJob($output){
         $output->write('  初始化CrontabJob');
-        $this->getCrontabService()->createJob(array(
-            'name'=>'CancelOrderJob', 
-            'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
-            'jobParams'=>'',
-            'nextExcutedTime'=>time(),
-            'createdTime'=>time()
-        ));
 
-        $this->getCrontabService()->createJob(array(
-            'name'=>'DeleteExpiredTokenJob', 
-            'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
-            'jobParams'=>'',
-            'nextExcutedTime'=>time(),
-            'createdTime'=>time()
-        ));
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'CancelOrderJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteExpiredTokenJob', 
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
 
         // $this->getCrontabService()->createJob(array(
         //     'name'=>'DeleteSessionJob', 
         //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteSessionJob',
         //     'jobParams'=>'',
         //     'nextExcutedTime'=>time(),
         //     'createdTime'=>time()
         // ));
         
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+        $this->getCrontabService()->setNextExcutedTime(time());
 
         $output->writeln(' ...<info>成功</info>');
     }

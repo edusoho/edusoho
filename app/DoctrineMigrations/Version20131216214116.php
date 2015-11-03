@@ -497,13 +497,6 @@ class Version20131216214116 extends AbstractMigration
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-			CREATE TABLE `session` (
-			  `session_id` varchar(255) NOT NULL,
-			  `session_value` text NOT NULL,
-			  `session_time` int(11) NOT NULL,
-			  PRIMARY KEY (`session_id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 			CREATE TABLE `setting` (
 			  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `name` varchar(255) NOT NULL DEFAULT '',
