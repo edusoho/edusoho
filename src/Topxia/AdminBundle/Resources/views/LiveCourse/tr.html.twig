@@ -10,7 +10,8 @@
 	    {% endif %}
 	  </div>
   </td>
-  <td>{{ lesson.startTime|date('Y-m-d H:i') }}-{{ lesson.endTime|date('H:i') }}</td>
+  <td>{{ lesson.startTime|date('Y-m-d H:i') }}</td>
+  <td>{{ lesson.length }}</td>
   <td>
   	{% if course %}
   		{{ course.maxStudentNum }}
@@ -18,5 +19,6 @@
   		<span class="text-muted">课程已删除</div>
   	{% endif %}
   </td>
+  <td>{{ lesson.maxOnlineNum }}</td>
   <td></td>
 </tr>

@@ -131,7 +131,7 @@ admin_live_course_add:
 admin_live_course:
     name: 直播管理
     parent: admin_course
-    router_params: {'status': 'underway'}
+    router_params: {'status': 'coming'}
 admin_course_thread:
     name: 话题管理
     parent: admin_course
