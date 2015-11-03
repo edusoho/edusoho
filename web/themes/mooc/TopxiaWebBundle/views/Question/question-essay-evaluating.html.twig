@@ -15,26 +15,35 @@
 
 </div>
 <div class="question-eassy-form-control">
-	 {% for rightAnswer in question.answer %}
-			 <div class="question-eassy-rightanswer"><strong>正确答案</strong></div> <p class="question-text-success">{{ rightAnswer|bbCode2Html|raw }}</p>
+	{% for rightAnswer in question.answer %}
+		<div class="question-eassy-rightanswer"><strong>正确答案</strong></div> <p class="question-text-success">{{ rightAnswer|bbCode2Html|raw }}</p>
 	{% endfor %}
-
 </div>
-
 	{% if behavior|default('view') == 'view' %}
 		{% if itemsEvaluateGroup[itemResult.id]|default(null) %}
 			<div class="quetion-eassy-form-control question-evaluate-score-input">
-				{% for itemsEvaluate in itemsEvaluateGroup[itemResult.id] %}
-					{% if app.user.isTeacher() %}
-						<strong>评价人：{{ users[evaluates[itemsEvaluate.evaluateId].fromUserId].nickname }}</strong>
-						<p >分数：{{ itemsEvaluate.score }}分</p>
-						<p >评价：{{ itemsEvaluate.comment }}</p>
-						<br>
+				<table class="question-evaluate-table table">
+					<thead>
+					<tr>
+						<th class="width-4">评价人</th>
+						<th class="width-2">分数</th>
+						<th>评价</th>
+					</tr>
+					</thead>
+					{% for itemsEvaluate in itemsEvaluateGroup[itemResult.id] %}
+						<tr>
+							{% if app.user.isTeacher() %}
+							<th class="width-4">{{ users[evaluates[itemsEvaluate.evaluateId].fromUserId].nickname }}</th>
+							<th class="width-2">{{ itemsEvaluate.score }}</th>
+							<th>{{ itemsEvaluate.comment }}</th>
+						</tr>
 					{% else %}
-						<strong >分数：{{ itemsEvaluate.score }}分</strong><br>
-						<strong >评价：{{ itemsEvaluate.comment }}</strong>
+						<th class="width-4">用户{{ loop.index }}</th>
+						<th class="width-2">{{ itemsEvaluate.score }}</th>
+						<th>{{ itemsEvaluate.comment }}</th>
 					{% endif %}
-				{% endfor %}
+					{% endfor %}
+				</table>
 			</div>
 		{% endif %}
 	{% else %}
@@ -49,7 +58,6 @@
 			<div class="teacher-say-help help-block" style="display:none;"></div>
 		</div>
 	{% endif %}
-
 
 {% endblock %}
 

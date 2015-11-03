@@ -58,3 +58,7 @@ course_manage_students:
 course_manage_student_export_csv:
     pattern:  /course/{id}/manage/student/export
     defaults: { _controller: CustomWebBundle:CourseStudentManage:exportCsv }
+
+mobile:
+    pattern: /mobile/
+    defaults: { _controller: CustomWebBundle:Mobile:index }

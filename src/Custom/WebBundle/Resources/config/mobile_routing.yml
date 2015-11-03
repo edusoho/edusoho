@@ -1,0 +1,8 @@
+mapi_mobile_esmobile_app:
+    pattern:  /mobile/main
+    defaults: { _controller: CustomWebBundle:CustomMobileApp:index }
+
+mapi_mobile_api:
+    pattern:  /{service}/{method}
+    defaults: { _controller: CustomWebBundle:MobileApi:index }
+    methods: [GET, POST]

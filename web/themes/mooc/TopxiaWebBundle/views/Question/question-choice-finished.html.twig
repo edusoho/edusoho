@@ -15,29 +15,33 @@
   {% set choiceIndex = itemResult.answer %}
 {% endif %}
   <div class="homework-question-result">
-    <span>该题得分{{ itemResult.score }}</span>
     {% if itemResult.status == 'right' %}
-     <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
+      <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
     {% elseif itemResult.status == 'wrong' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">
-       {% for key,choice in choiceIndex %}
+      <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了
+      <strong class="question-text-danger">
+        {% for key,choice in choiceIndex %}
           {% if choice != '-1' %}
-          {{ (65+choice)|chr }}
+            {{ (65+choice)|chr }}
           {% endif %}
         {% endfor %}
-       </strong>
-  {% elseif itemResult.status == 'partRight' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> 你部分答对,你选择了<strong class="question-text-danger">
-           {% for key,choice in choiceIndex %}
+      </strong>
+    {% elseif itemResult.status == 'partRight' %}
+      <span class="glyphicon glyphicon-remove question-text-danger"></span> 你部分答对,你选择了
+      <strong class="question-text-danger">
+        {% for key,choice in choiceIndex %}
           {% if choice != '-1' %}
-          {{ (65+choice)|chr }}
+            {{ (65+choice)|chr }}
           {% endif %}
         {% endfor %}
-       </strong>
+      </strong>
     {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove question-text-danger pull-left">你未答题</span>
+      <span class="glyphicon glyphicon-remove question-text-danger pull-left">你未答题</span>
     {% endif %}
-</div>
+    <br/>得分：
+    <p class="text-primary">{{ itemResult.score }} 分</p>
+  </div>
+
 
 {% endblock %}
 
