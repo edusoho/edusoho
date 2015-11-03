@@ -19,6 +19,7 @@ class SmsSendOneHourJob implements Job
             $processor = SmsProcessorFactory::create($targetType);
             if ($targetType == 'lesson') {
                 $lesson = $this->getCourseService()->getLesson($targetId);
+                $course = $this->getCourseService()->getCourse($lesson['courseId']);
             }
             $return = $processor->getUrls($targetId, $smsType);
             $callbackUrls = $return['urls'];
