@@ -17,6 +17,9 @@ class SmsSendOneHourJob implements Job
             $targetType = $params['targetType'];
             $targetId = $params['targetId'];
             $processor = SmsProcessorFactory::create($targetType);
+            if ($targetType == 'lesson') {
+                $lesson = $this->getCourseService()->getLesson($targetId);
+            }
             $return = $processor->getUrls($targetId, $smsType);
             $callbackUrls = $return['urls'];
             $count = ceil($return['count'] / 1000);
@@ -29,14 +32,28 @@ class SmsSendOneHourJob implements Job
         }
     }
 
+    protected function push($title, $content, $from, $to, $body)
+    {
+        $message = array(
+            'title' => $title,
+            'content' => $content,
+            'custom' => array(
+                'from' => $from,
+                'to' => $to,
+                'body' => $body,
+            )
+        );
+
+        $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
+    }
+
     protected function getSmsService()
     {
         return ServiceKernel::instance()->createService('Sms.SmsService');
     }
 
-    protected function getServiceKernel()
+    protected function getCourseService()
     {
-        return ServiceKernel::instance();
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
-
 }
