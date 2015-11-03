@@ -4,7 +4,7 @@
 </div>
 
 {% if classrooms or courses %}
-  {% for classroom in classrooms %}
+  {% for classroom in classrooms if classrooms %}
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
@@ -39,7 +39,7 @@
       </ul>
     </div>
   {% endfor %}
-  {% for course in courses %}
+  {% for course in courses if courses %}
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
