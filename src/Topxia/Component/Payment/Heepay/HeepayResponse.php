@@ -17,7 +17,7 @@ class HeepayResponse extends Response
 
         $params = $this->params;
         $data['payment'] = 'heepay';
-        $data['sn'] = $params['agent_bill_id'];
+        $data['token'] = $params['agent_bill_id'];
         $result = $this->confirmSellerSendGoods();
         $returnArray = $this->toArray($result);
         if ($returnArray['result'] != 1) {
@@ -98,7 +98,7 @@ class HeepayResponse extends Response
     {
         $data = explode("|", $result);
         if(count($data)<=1){
-           throw new \RuntimeException(sprintf('该笔单据查询次数超过一次，请过15分钟之后再查询')); 
+          throw new \RuntimeException(sprintf('该笔单据查询超过１次,请过15分钟之后查询'));  
         }
         $param = array();
         if(is_array($data)){

@@ -237,6 +237,7 @@ interface UserService
      */
     public function parseAts($text);
 
+
     /**
     *
     *用户授权

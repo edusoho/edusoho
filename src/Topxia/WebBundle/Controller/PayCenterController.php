@@ -153,10 +153,14 @@ class PayCenterController extends BaseController
             else{
                 throw new \RuntimeException($returnArray['return_msg']);
             }
+        }elseif($payment == 'heepay'){
+             $order = $this->generateOrderToken($order,$params);
+             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+                'form' => $formRequest,
+                'order' => $order
+            ));
         }elseif($payment == 'quickpay'){
-        
             $order = $this->generateOrderToken($order,$params);
-
             $this->updateBankAuth($order,$params);
 
             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
@@ -202,11 +206,19 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
         }
 
+
+        if($payData['payment'] =='heepay'){
+            $order = $this->getOrderService()->getOrderByToken($payData['token']);
+            $payData['sn']=$order['sn'];
+        }
+
         if($payData['payment'] =='quickpay'){
             $order = $this->getOrderService()->getOrderByToken($payData['token']);
             $payData['sn']=$order['sn'];
             $this->createUserAuth($name,$payData);
         }
+
+        
 
         list($success, $order) = $this->getPayCenterService()->pay($payData);
 
@@ -221,7 +233,7 @@ class PayCenterController extends BaseController
 
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig',array(
             'goto'=> $goto,
-            ));
+        ));
     }
 
     public function createUserAuth($name,$params)
@@ -247,6 +259,7 @@ class PayCenterController extends BaseController
     public function payNotifyAction(Request $request, $name)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
+
     
         if($name == 'wxpay'){
             $returnXml = $GLOBALS['HTTP_RAW_POST_DATA'];
@@ -279,7 +292,7 @@ class PayCenterController extends BaseController
 
         if($payData['status'] == "created") {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->createPayRecord($order["id"], $payDate);
+            $this->getOrderService()->createPayRecord($order["id"], $payData);
             return new Response('success');
         }
 
@@ -318,6 +331,12 @@ class PayCenterController extends BaseController
         }
 
         return $this->createJsonResponse($response);
+    }
+
+
+    public function generateOrderToken($order,$params)
+    {
+       return $this->getOrderService()->updateOrder($order['id'],array('token' => $params['agent_bill_id']));
     }
 
     public function wxpayRollAction(Request $request)

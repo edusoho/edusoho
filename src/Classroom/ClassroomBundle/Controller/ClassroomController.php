@@ -24,10 +24,9 @@ class ClassroomController extends BaseController
 
     public function exploreAction(Request $request, $category)
     {
-        $conditions = array(
-            'status' => 'published',
-            'showable' => 1,
-        );
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+        $conditions['showable'] = 1;
 
         $categoryArray = array();
         if (!empty($category)) {
@@ -37,6 +36,43 @@ class ClassroomController extends BaseController
             $conditions['categoryIds'] = $categoryIds;
         }
 
+        if(!isset($conditions['fliter'])){
+            $conditions['fliter'] =array(
+                'price' => 'all',
+                'currentLevelId' => 'all',
+            );
+        }
+
+        $fliter = $conditions['fliter'];
+        if ($fliter['price'] == 'free') {
+            $coinSetting = $this->getSettingService()->get("coin");
+            $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $priceType = "RMB";
+            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
+                $priceType = $coinSetting["price_type"];
+            }
+
+            if($priceType == 'RMB'){
+                $conditions['price'] = '0.00';
+            } else {
+                $conditions['coinPrice'] = '0.00';
+            }
+        }
+        unset($conditions['fliter']);
+        $levels = array();
+        if ($this->isPluginInstalled('Vip')) {
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
+            if (!$fliter['currentLevelId'] != 'all') {
+                $vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            }
+        }
+
+        $orderBy = !isset($conditions['orderBy']) ? 'createdTime' : $conditions['orderBy'];
+        unset($conditions['orderBy']);
+        
+        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
@@ -45,43 +81,40 @@ class ClassroomController extends BaseController
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('createdTime', 'desc'),
+            array($orderBy, 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        // $classroomIds = ArrayToolkit::column($classrooms, 'id');
-
-        $allClassrooms = ArrayToolkit::index($classrooms, 'id');
         if(!$categoryArray){
             $categoryArrayDescription = array();
-        }
-        else{
-        $categoryArrayDescription = $categoryArray['description'];
-        $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
-        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
-        $categoryArrayDescription = substr( $categoryArrayDescription, 0, 100 );
+        } else {
+            $categoryArrayDescription = $categoryArray['description'];
+            $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+            $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+            $categoryArrayDescription = substr( $categoryArrayDescription, 0, 100 );
         } 
         if(!$categoryArray){
-            $CategoryParent = '';
-        }
-        else{
+            $categoryParent = '';
+        } else {
             if(!$categoryArray['parentId']){
-                    $CategoryParent = '';
-                }
-                else{
-                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+                $categoryParent = '';
+            } else {
+                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
+
         return $this->render("ClassroomBundle:Classroom:explore.html.twig", array(
             'paginator' => $paginator,
             'classrooms' => $classrooms,
-            'allClassrooms' => $allClassrooms,
             'path' => 'classroom_explore',
             'category' => $category,
             'categoryArray' => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
-            'CategoryParent' => $CategoryParent
+            'categoryParent' => $categoryParent,
+            'fliter' => $fliter,
+            'levels' => $levels,
+            'orderBy' => $orderBy,
         ));
     }
     public function keywordsAction($classroom)
@@ -298,9 +331,15 @@ class ClassroomController extends BaseController
         $classroomDescription = $classroom['about'];
         $classroomDescription = strip_tags($classroomDescription,'');
         $classroomDescription = preg_replace("/ /","",$classroomDescription);
-    }
+        }
+
+        $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+        if ($member && !$member['locked']) {
+            $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+        }
         return $this->render("ClassroomBundle:Classroom:introduction.html.twig", array(
             'introduction' => $introduction,
+            'layout' => $layout,
             'classroom' => $classroom,
             'member' => $member,
             'classroomDescription' => $classroomDescription
@@ -735,7 +774,7 @@ class ClassroomController extends BaseController
     private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-        if (!$classroomSetting['discount_buy']) {
+        if (empty($classroomSetting['discount_buy'])) {
             return false;
         }
 
@@ -933,6 +972,11 @@ class ClassroomController extends BaseController
         return $enableds;
     }
 
+    public function memberIdsAction(Request $request, $id)
+    {
+        $ids = $this->getClassroomService()->findMemberUserIdsByClassroomId($id);
+        return $this->createJsonResponse($ids);
+    }
 
     protected function getThreadService()
     {

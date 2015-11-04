@@ -96,10 +96,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->searchUserCount($conditions);
     }
 
-
-
-
-
     public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit)
     {
         $profiles = $this->getProfileDao()->searchProfiles($conditions, $orderBy, $start, $limit);
@@ -695,7 +691,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return null;
         }
@@ -713,7 +709,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function deleteToken($type, $token)
     {
-        $token = $this->getUserTokenDao()->findTokenByToken($token);
+        $token = $this->getUserTokenDao()->getTokenByToken($token);
         if (empty($token) || $token['type'] != $type) {
             return false;
         }

@@ -1,0 +1,14 @@
+<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+<link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
+<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/main.css') }}" />
+
+{% if setting("developer.balloon_player")|default(0) %}
+  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+{% endif %}
+<style type="text/css">
+  .lesson-content-audio {
+    padding-top: 10%;
+    text-align: center;
+  }
+</style>
+

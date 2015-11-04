@@ -872,7 +872,7 @@ class FileToolkit
     {   
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov'))) {
+        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov','m4v', 'rmvb'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';
@@ -943,7 +943,7 @@ class FileToolkit
         if($resizeWidth>0 && $resizeHeight>0){
             $image->resize(new Box($resizeWidth, $resizeHeight));
         }
-        $image->save($targetPath, array('quality' => 90));
+        $image->save($targetPath, array('quality' => 100));
 
         return $image;
     }
@@ -951,7 +951,7 @@ class FileToolkit
     public static function resize($image, $targetPath, $resizeWidth=0, $resizeHeight=0)
     {
         $image->resize(new Box($resizeWidth, $resizeHeight));
-        $image->save($targetPath, array('quality' => 90));
+        $image->save($targetPath, array('quality' => 100));
         return $image;
     }
 

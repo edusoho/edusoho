@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <tr id="student-{{ user.id }}-tr">
-  <td class="media">
+  <td class="media" style="vertical-align: middle;">
     {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
     <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
     {% if student.remark %}
@@ -8,15 +8,15 @@
     {% endif %}
     <div class="text-muted text-sm">加入时间：{{ student.createdTime|date('Y-n-d H:i') }}</div>
   </td>
-  <td>
+  <td style="vertical-align: middle;">
     {% if role == 'student' %}
-      <div class="progress mtm" title="已学{{ progress.number }}课程">
+      <div class="progress mvm" title="已学{{ progress.number }}课程">
         <div class="progress-bar" style="width: {{ progress.percent }}" data-toggle="tooltip" data-placement="right" data-original-title="{{ progress.percent }}">
         </div>
       </div>
     {% endif %}
   </td>
-  <td>
+  <td style="vertical-align: middle;">
     <div class="btn-group">
       {% if app.user.id != user.id %}
         <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>

@@ -19,10 +19,6 @@ class Version20151104134308 extends AbstractMigration
         $this->addSql(" ALTER TABLE `orders` CHANGE `payment` `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
         $this->addSql(" ALTER TABLE `cash_orders` CHANGE `payment` `payment` ENUM('none','alipay','wxpay','heepay','quickpay') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
         $this->addSql(" ALTER TABLE `cash_flow` CHANGE `payment` `payment` ENUM('alipay','wxpay','heepay','quickpay') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL"); 
-        if (!$this->isFieldExist('orders', 'token')) {
-            $this->addSql("ALTER TABLE `orders` ADD `token` VARCHAR(50) NOT NULL COMMENT '令牌' AFTER `discount`");
-        }
-
     }
 
     /**
@@ -32,13 +28,5 @@ class Version20151104134308 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
-    }
-
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->connection->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
     }
 }

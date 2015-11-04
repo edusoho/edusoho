@@ -41,7 +41,10 @@ class DefaultController extends BaseController
         $categories = $this->getCategoryService()->findGroupRootCategories('course');
         
         $blocks = $this->getBlockService()->getContentsByCodes(array('home_top_banner'));
-
+        $user = $this->getCurrentUser();
+        if(!empty($user['id'])){
+            $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+        }
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
             'courses' => $courses,
             'categories' => $categories,
@@ -209,18 +212,20 @@ class DefaultController extends BaseController
             unset($conditions['categoryId']);
         }
         $orderBy = $conditions['orderBy'];
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
+        if ($orderBy == 'recommendedSeq') {  
+           $conditions['recommended'] = 1; 
         }
         unset($conditions['orderBy']);
 
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy, 0, 12);
+
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig',array(
             'orderBy' => $orderBy,
             'categoryId' => $categoryId,
             'courses' => $courses
         ));
     }
+
 
     protected function calculateUserLearnProgress($course, $member)
     {
@@ -275,6 +280,11 @@ class DefaultController extends BaseController
     protected function getClassroomService() 
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.BatchNotificationService');
     }
 
     private function getBlacklistService() 

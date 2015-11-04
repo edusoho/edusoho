@@ -10,7 +10,9 @@ interface QuestionFavoriteDao
 
 	public function getFavoriteByQuestionIdAndTargetAndUserId ($favorite);
 
-	public function deleteFavorite ($favorite); 
+	public function deleteFavorite ($favorite);
+
+	public function deleteFavoriteByQuestionId ($questionId); 
 
     public function findFavoriteQuestionsByUserId ($id, $start, $limit);
 

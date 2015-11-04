@@ -16,6 +16,8 @@ class CourseController extends CourseBaseController
 	{
 		$conditions = $request->query->all();
 		$categoryArray = array();
+		$levels = array();
+
 		$conditions['code'] = $category;
         if (!empty($conditions['code'])) {
             $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
@@ -26,8 +28,14 @@ class CourseController extends CourseBaseController
         unset($conditions['code']);
 
 		if(!isset($conditions['fliter'])){
-			$conditions['fliter'] ='all';
-		} elseif ($conditions['fliter'] == 'free') {
+			$conditions['fliter'] =array(
+				'type' => 'all',
+				'price' => 'all',
+				'currentLevelId' => 'all',
+			);
+		}
+		$fliter = $conditions['fliter'];
+		if ($fliter['price'] == 'free') {
 			$coinSetting = $this->getSettingService()->get("coin");
 	        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
 	        $priceType = "RMB";
@@ -40,10 +48,20 @@ class CourseController extends CourseBaseController
 			} else {
 				$conditions['coinPrice'] = '0.00';
 			}
-		} elseif ($conditions['fliter'] == 'live'){
+		}
+
+		if ($fliter['type'] == 'live'){
 			$conditions['type'] = 'live';
 		}
-		$fliter = $conditions['fliter'];
+
+		if ($this->isPluginInstalled('Vip')) {
+			$levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
+			if ($fliter['currentLevelId'] != 'all') {
+				$vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
+            	$conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+			}
+		}
+
 		unset($conditions['fliter']);
 
 		$courseSetting = $this->getSettingService()->get('course', array());
@@ -77,22 +95,20 @@ class CourseController extends CourseBaseController
 		}
 		if(!$categoryArray){
 			$categoryArrayDescription = array();
-		}
-		else{
-		$categoryArrayDescription = $categoryArray['description'];
-		$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
-        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
-        $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
+		} else{
+			$categoryArrayDescription = $categoryArray['description'];
+			$categoryArrayDescription = strip_tags($categoryArrayDescription,'');
+	        $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+	        $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         } 
         if(!$categoryArray){
-            $CategoryParent = '';
-        }
-        else{
+            $categoryParent = '';
+        } else {
             if(!$categoryArray['parentId']){
-                    $CategoryParent = '';
+                    $categoryParent = '';
                 }
                 else{
-                $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
 		return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
@@ -107,7 +123,8 @@ class CourseController extends CourseBaseController
 			'categoryArray' => $categoryArray,
 			'group' => $group,
 			'categoryArrayDescription' => $categoryArrayDescription,
-			'CategoryParent' => $CategoryParent
+			'categoryParent' => $categoryParent,
+			'levels' => $levels,
 		));	
 	}
 
@@ -506,6 +523,7 @@ class CourseController extends CourseBaseController
 			$lesson = $this->getCourseService()->getLesson($lessonId);
 			$course = $this->getCourseService()->getCourse($lesson['courseId']);
 			$watchLimitTime = $course['watchLimit'] * $lesson['length'];
+
 			if ($lesson['type'] == 'video' && ($course['watchLimit'] > 0) && ($learn['watchTime'] >= $watchLimitTime)) {
 				$learn['watchLimited'] = true;
 			}
@@ -565,7 +583,6 @@ class CourseController extends CourseBaseController
 		} else {
 			$canExit = false;
 		}
-
 		return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
 			'course' => $course,
 			'canManage' => $this->getCourseService()->canManageCourse($course['id']),
@@ -778,7 +795,7 @@ class CourseController extends CourseBaseController
 	public function relatedCoursesBlockAction($course)
 	{   
 
-		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('Rating' , 'DESC'), 0, 4);
+		$courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc' , ''), 0, 4);
 		
 		return $this->render("TopxiaWebBundle:Course:related-courses-block.html.twig", array(
 			'courses' => $courses,
@@ -801,6 +818,12 @@ class CourseController extends CourseBaseController
 		return $this->render('TopxiaWebBundle:Course:list-view.html.twig', array(
 
 		));
+	}
+
+	public function memberIdsAction(Request $request, $id)
+	{
+		$ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+		return $this->createJsonResponse($ids);
 	}
 
 	protected function getUserService()
@@ -851,5 +874,10 @@ class CourseController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    public function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

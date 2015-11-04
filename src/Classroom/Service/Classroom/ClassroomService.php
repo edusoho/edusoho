@@ -98,6 +98,8 @@ interface ClassroomService
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
+    public function findMemberUserIdsByClassroomId($classroomId);
+
     public function getClassroomMember($classroomId, $userId);
 
     public function remarkStudent($classroomId, $userId, $remark);
@@ -132,6 +134,8 @@ interface ClassroomService
     public function findActiveCoursesByClassroomId($classroomId);
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds);
+
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked);
 
     public function findClassroomStudents($classroomId, $start, $limit);
 
