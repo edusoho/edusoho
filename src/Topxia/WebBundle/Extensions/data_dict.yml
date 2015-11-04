@@ -99,6 +99,15 @@ dateType:
     this_month: 本月
     last_month: 上月
 
+week:
+      1: 一
+      2: 二
+      3: 三
+      4: 四
+      5: 五
+      6: 六
+      7: 日
+
 contentStatus:
     published: 已发布
     unpublished: 未发布
@@ -160,6 +169,12 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
 
+jobCycle:
+    once: 一次
+    everyhour: 每小时
+    everyday: 每天
+    everymouth: 每月
+
 logLevel:
     info: 提示
     warning: 警告
@@ -178,6 +193,7 @@ analysisDateType:
     lesson: 新增课时数
     joinLesson: 加入学习数
     paidLesson: 购买课程数
+    paidClassroom: 购买班级数
     finishedLesson: 完成课时学习数
     videoViewed: 视频观看数
     cloudVideoViewed: └─ 云视频观看数

@@ -71,7 +71,6 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'notification')
             ->andWhere('userId = :userId')
-            ->andWhere('content LIKE :content')
             ->andWhere('type = :type');
     }
     

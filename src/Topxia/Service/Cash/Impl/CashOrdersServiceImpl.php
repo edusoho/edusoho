@@ -4,6 +4,7 @@ namespace Topxia\Service\Cash\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Cash\CashOrdersService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 {
@@ -86,7 +87,9 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                     $coinInFlow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
                     $success = true;
-
+                    $this->dispatchEvent("order.pay.success", 
+                        new ServiceEvent($order,array('targetType'=>'coin'))
+                    );
                 } else {
                     $this->_createLog($order['id'], 'pay_ignore', '订单已处理', $payData);
                 }

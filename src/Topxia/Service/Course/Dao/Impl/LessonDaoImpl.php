@@ -31,7 +31,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
+    public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds)
     {
         if(empty($courseIds)){
             return array();
@@ -39,9 +39,9 @@ class LessonDaoImpl extends BaseDao implements LessonDao
        
        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
        
-       $parmaters = array_merge(array($parentId), $courseIds);
+       $parmaters = array_merge(array($copyId), $courseIds);
              
-       $sql = "SELECT * FROM {$this->table} WHERE  parentId = ? AND courseId IN ({$marks})";
+       $sql = "SELECT * FROM {$this->table} WHERE  copyId = ? AND courseId IN ({$marks})";
        
        return $this->getConnection()->fetchAll($sql,$parmaters); 
     }
