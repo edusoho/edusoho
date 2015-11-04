@@ -113,10 +113,14 @@ class MoneyCardDaoImpl extends BaseDao
 
     protected function createMoneyCardQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions);
+        if(!isset($conditions['rechargeUserId']))
+        {
+            $conditions = array_filter($conditions);
+        }
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'money_card')
             ->andWhere('id = :id')
+            ->andWhere('rechargeUserId = :rechargeUserId')
             ->andWhere('cardId = :cardId')
             ->andWhere('deadline = :deadline')
             ->andWhere('batchId = :batchId')

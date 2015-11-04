@@ -46,13 +46,14 @@ class CardEventSubscriber implements EventSubscriberInterface
     }
 
     public function onMoneyCardAdd(ServiceEvent $event)
-    {
+    {   
+        $user = $this->getCurrentUser();
         $moneyCard = $event->getSubject();
         $card = array(
             'cardId' => $moneyCard['id'],
             'cardType' => 'moneyCard',
             'deadline' => strtotime($moneyCard['deadline']),
-            'userId' => $moneyCard['userId'],
+            'userId' => $user['id'],
         );
         $this->getCardService()->addCard($card);
 
@@ -68,6 +69,11 @@ class CardEventSubscriber implements EventSubscriberInterface
             'useTime' => $moneyCard['rechargeTime'],
         );
         $this->getCardService()->updateCard($moneyCard['id'],'moneyCard',$card);
+    }
+
+    protected function getCurrentUser()
+    {
+        return ServiceKernel::instance()->createService('User.UserService')->getCurrentUser();
     }
 
     protected function getCardService()
