@@ -10,6 +10,7 @@ use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Util\PluginUtil;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\CloudClientFactory;
@@ -114,7 +115,7 @@ class UpgradeCommand extends BaseCommand
 
 	protected function getPackageRootDirectory($code, $packageDir) 
     {
-        if (in_array($code, array('MAIN', 'MOOC')) {
+        if (in_array($code, array('MAIN', 'MOOC'))) {
             return $this->getSystemRootDirectory();
         }
 
@@ -189,11 +190,16 @@ class UpgradeCommand extends BaseCommand
 
 	protected function getAppDao ()
     {
-        return $this->createDao('CloudPlatform.CloudAppDao');
+        return $this->getServiceKernel()->createDao('CloudPlatform.CloudAppDao');
     }
 
 	protected function getAppService()
 	{
 		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
 	}
+
+    protected function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
+    }
 }
