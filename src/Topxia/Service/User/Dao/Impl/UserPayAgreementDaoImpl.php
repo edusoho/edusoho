@@ -14,20 +14,28 @@ class UserPayAgreementDaoImpl extends BaseDao implements UserPayAgreementDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
 	}
 
+    public function getUserPayAgreementByBankAuth($bankAuth)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE bankAuth = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($bankAuth)) ? : null;
+    }
+
+    public function getUserPayAgreementByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
+    }
+
 	public function addUserPayAgreement($field)
     {
-        return $this->getConnection()->insert($this->table, $field);
+        $this->getConnection()->insert($this->table, $field);
+        return $this->getUserPayAgreement($this->getConnection()->lastInsertId());
     }
 
     public function updateUserPayAgreementByBankAuth($bankAuth,$fields)
     {
-    	return $this->getConnection()->update($this->table, $fields, array('bankAuth' => $bankAuth));
-    }
-
-    public function getUserPayAgreementByBankAuth($bankAuth)
-    {
-    	$sql = "SELECT * FROM {$this->table} WHERE bankAuth = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($bankAuth)) ? : null;
+    	$this->getConnection()->update($this->table, $fields, array('bankAuth' => $bankAuth));
+        return $this->getUserPayAgreementByBankAuth($bankAuth);
     }
 
     public function findUserPayAgreementsByUserId($userId)
@@ -35,10 +43,5 @@ class UserPayAgreementDaoImpl extends BaseDao implements UserPayAgreementDao
     	$sql = "SELECT * FROM {$this->table} WHERE userId = ? ";
         return $this->getConnection()->fetchAll($sql, array($userId)) ? : array();
     }
-
-    public function getUserPayAgreementByUserId($userId)
-    {
-    	$sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId)) ? : null;
-    }
+ 
 }

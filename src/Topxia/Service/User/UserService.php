@@ -245,13 +245,14 @@ interface UserService
 
     public function getUserPayAgreement($id);
 
+    public function getUserPayAgreementByBankAuth($bankAuth);
+
+    public function getUserPayAgreementByUserId($userId);
+
     public function createUserPayAgreement($field);
 
     public function updateUserPayAgreementByBankAuth($bankAuth,$fields);
 
-    public function getUserPayAgreementByBankAuth($bankAuth);
-
     public function findUserPayAgreementsByUserId($userId);
-
-    public function getUserPayAgreementByUserId($userId);
+  
 }
