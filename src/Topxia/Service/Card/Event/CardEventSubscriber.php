@@ -13,7 +13,9 @@ class CardEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'coupon.receive' => 'onCouponAdd',
-            'coupon.use' => 'onCouponUse'
+            'coupon.use' => 'onCouponUse',
+            'moneyCard.receive' => 'onMoneyCardAdd',
+            'moneyCard.use' => 'onMoneyCardUse',
         );
     }
 
@@ -43,6 +45,30 @@ class CardEventSubscriber implements EventSubscriberInterface
 
     }
 
+    public function onMoneyCardAdd(ServiceEvent $event)
+    {
+        $moneyCard = $event->getSubject();
+        $card = array(
+            'cardId' => $moneyCard['id'],
+            'cardType' => 'moneyCard',
+            'deadline' => strtotime($moneyCard['deadline']),
+            'userId' => $moneyCard['userId'],
+        );
+        $this->getCardService()->addCard($card);
+
+    }
+
+    public function onMoneyCardUse(ServiceEvent $event)
+    {
+        $moneyCard = $event->getSubject();
+        $card = array(
+            'cardId' => $moneyCard['id'],
+            'cardType' => 'moneyCard',
+            'status' => 'used',
+            'useTime' => $moneyCard['rechargeTime'],
+        );
+        $this->getCardService()->updateCard($moneyCard['id'],'moneyCard',$card);
+    }
 
     protected function getCardService()
     {

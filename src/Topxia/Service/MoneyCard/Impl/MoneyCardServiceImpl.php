@@ -4,6 +4,7 @@ namespace Topxia\Service\MoneyCard\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceEvent;
 
 class MoneyCardServiceImpl extends BaseService
 {
@@ -301,6 +302,13 @@ class MoneyCardServiceImpl extends BaseService
         $moneyCard = $this->getMoneyCard($id);
         $this->getLogService()->info('money_card', 'update', "update卡号为{$moneyCard['cardId']}的充值卡");
         return $this->getMoneyCardDao()->updateMoneyCard($id, $fields);
+    }
+
+    public function useMoneyCard($id,$fields)
+    {
+        $usedMoneyCard = $this->updateMoneyCard($id,$fields);
+        $this->dispatchEvent("moneyCard.use",$moneyCard);
+        return $usedMoneyCard;
     }
 
     protected function getMoneyCardDao()

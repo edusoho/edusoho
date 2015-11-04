@@ -38,7 +38,6 @@ class CardController extends BaseController
                 $cards = isset($groupCards['used']) ? $groupCards['used'] : null ;
             } elseif ($filter == 'outdate') {
                 $cards = isset($groupCards['outdate']) ? $groupCards['outdate'] : null ;
-                var_dump($groupCards['outdate']);
             } elseif ($filter == 'invalid') {
                 $cards = isset($groupCards['invalid']) ? $groupCards['invalid'] : null ;
             }
