@@ -135,6 +135,11 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
         }
 
+        if($payData['payment'] =='heepay'){
+            $order = $this->getOrderService()->getOrderByToken($payData['token']);
+            $payData['sn']=$order['sn'];
+        }
+
         list($success, $order) = $this->getPayCenterService()->pay($payData);
 
         if(!$success) {
@@ -237,12 +242,7 @@ class PayCenterController extends BaseController
         $formRequest = $paymentRequest->form();
         $params = $formRequest['params'];
         $payment = $request->request->get('payment');
-        if ($payment == 'alipay' || 'heepay') {
-            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-                'form' => $paymentRequest->form(),
-                'order' => $order,
-            ));
-        }elseif ($payment == 'wxpay') {
+        if($payment == 'wxpay'){
             $returnXml = $paymentRequest->unifiedOrder();
             if(!$returnXml){
                 throw new \RuntimeException("xml数据异常！");
@@ -254,11 +254,27 @@ class PayCenterController extends BaseController
                     'url' => $url,
                     'order' => $order,
                 ));
-            }
-            else{
+            }else{
                 throw new \RuntimeException($returnArray['return_msg']);
             }
+        }elseif($payment == 'heepay'){
+             $order = $this->generateOrderToken($order,$params);
+             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+                'form' => $formRequest,
+                'order' => $order
+            ));
+        }else{
+            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+                'form' => $paymentRequest->form(),
+                'order' => $order,
+            ));
         }
+
+    }
+
+    public function generateOrderToken($order,$params)
+    {
+       return $this->getOrderService()->updateOrder($order['id'],array('token' => $params['agent_bill_id']));
     }
 
     public function wxpayRollAction(Request $request)

@@ -34,7 +34,7 @@ class HeepayRequest extends Request {
         $converted = array();
         $converted['version'] = 1;
         $converted['agent_id'] = $this->options['key'];
-        $converted['agent_bill_id']= strtolower($params['orderSn']);
+        $converted['agent_bill_id']= strtolower($this->generateOrderToken());
         $converted['agent_bill_time']=date("YmdHis",time());
         $converted['pay_type']='20';
         $converted['pay_code']='0';
@@ -55,6 +55,11 @@ class HeepayRequest extends Request {
     protected function filterText($text)
     {
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
+    }
+
+    private function generateOrderToken()
+    {
+        return  'heepay_' . date('YmdHis', time()) . mt_rand(10000,99999);
     }
 
     private function get_client_ip()

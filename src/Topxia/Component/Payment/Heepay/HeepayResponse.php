@@ -17,7 +17,7 @@ class HeepayResponse extends Response
 
         $params = $this->params;
         $data['payment'] = 'heepay';
-        $data['sn'] = $params['agent_bill_id'];
+        $data['token'] = $params['agent_bill_id'];
         $result = $this->confirmSellerSendGoods();
         $returnArray = $this->toArray($result);
         if ($returnArray['result'] != 1) {
