@@ -427,6 +427,10 @@ course_lesson_plugin_question_show:
     pattern:  /lessonplugin/question/show
     defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:show }
 
+course_lesson_plugin_question_ask:
+    pattern:  /lessonplugin/question/ask
+    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:ask }
+
 course_lesson_plugin_question_create:
     pattern:  /lessonplugin/question/create
     defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:create }

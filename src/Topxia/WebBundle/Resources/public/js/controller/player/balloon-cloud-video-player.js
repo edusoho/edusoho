@@ -9,7 +9,8 @@ define(function(require, exports, module) {
             fingerprint: '',
             watermark: '',
             url: '',
-            dynamicSource: ''
+            dynamicSource: '',
+            markers: ''
         },
 
         events: {},
@@ -36,6 +37,18 @@ define(function(require, exports, module) {
                             ypos: 0,
                             xrepeat: 0,
                             opacity: 0.5
+                        }
+                    });
+                }
+
+                if(self.get('markers') != '') {
+                    plugins = $.extend(plugins, {
+                      markers: {
+                            markers: self.get('markers'),
+                            onMarkerClick: function(marker){
+                                console.log(marker['id']);
+                            }
+
                         }
                     });
                 }
@@ -75,6 +88,8 @@ define(function(require, exports, module) {
                         dynamic_source : self.get('url')
                     });
 
+                    
+
                 });
 
                 player.on('changeRes', function() {
@@ -100,17 +115,23 @@ define(function(require, exports, module) {
                 player.on("pause", function(e){
                     self.trigger("paused", e);
                 });
+                
 
                 self.set('player', player);
 
                 BalloonCloudVideoPlayer.superclass.setup.call(self);
-                
-            }, 'json');
 
+            }, 'json');
+            
+            window.BalloonPlayer = this;
         },
 
         play: function(){
             this.get("player").play();
+        },
+
+        pause: function(){
+            this.get("player").pause();
         },
 
         _onEnded: function(e) {
@@ -126,6 +147,10 @@ define(function(require, exports, module) {
 
         getDuration: function() {
             return this.get("player").duration();
+        },
+
+        getMarkers: function() {
+            return this.get('markers');
         },
 
         setCurrentTime: function(time) {

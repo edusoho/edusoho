@@ -25,6 +25,7 @@ define(function(require, exports, module) {
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
+        var markers = videoHtml.data('markers');
 
         var html = "";
 
@@ -66,7 +67,13 @@ define(function(require, exports, module) {
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
-                watermark: watermark
+                watermark: watermark,
+                markers: [
+                 {id: 1,time: 9.5, text: "this"},
+                 {id: 2,time: 16,  text: "is"},
+                 {id: 3,time: 23.6,text: "so"},
+                 {id: 4,time: 28,  text: "cool"}
+              ]
             }
         );
 

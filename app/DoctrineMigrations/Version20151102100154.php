@@ -16,7 +16,7 @@ class Version20151102100154 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `course_thread` ADD `marker` INT NOT NULL DEFAULT '0' COMMENT '视频驻点' AFTER `followNum`; ");
+        $this->addSql("ALTER TABLE `course_thread` ADD `marker` INT NOT NULL DEFAULT '-1' COMMENT '视频驻点' AFTER `followNum`; ");
     }
 
     /**
