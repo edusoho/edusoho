@@ -44,6 +44,10 @@ class CurlToolkit
 
         curl_close($curl);
 
+        if(isset($conditions['plain']) && $conditions['plain']) {
+            return $response;
+        }
+        
         $response = json_decode($response, true);
         return $response;
     }
