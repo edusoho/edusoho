@@ -14,12 +14,20 @@ class CardServiceImpl extends BaseService implements CardService
 			throw $this->createServiceException('缺少必要字段，新创建卡失败！');
 		}
 
-        $card['status'] = 'normal';
         $card['createdTime'] = time();
-
 
 		return $this->getCardDao()->addCard($card);
 		
+	}
+
+	public function getCard($id)
+	{
+		return $this->getCardDao()->getCard($id);
+	}
+
+	public function updateCard($cardId,$cardType,$fields)
+	{
+		return $this->getCardDao()->updateCard($cardId,$cardType,$fields);
 	}
 
 	// public function searchCards($conditions,$sort,$start,$limit)

@@ -12,15 +12,34 @@ class CardEventSubscriber implements EventSubscriberInterface
 	public static function getSubscribedEvents()
     {
         return array(
-            'card.add' => 'onCardAdd'
+            'coupon.receive' => 'onCouponAdd',
+            'coupon.use' => 'onCouponUse'
         );
     }
 
-    public function onCardAdd(ServiceEvent $event)
+    public function onCouponAdd(ServiceEvent $event)
     {
-    	$fields = $event->getSubject();
-        $card = ArrayToolkit::parts($fields, array('cardType', 'cardId', 'deadline', 'userId'));
+    	$coupon = $event->getSubject();
+        $card = array(
+            'cardId' => $coupon['id'],
+            'cardType' => 'coupon',
+            'deadline' => $coupon['deadline'],
+            'userId' => $coupon['userId']
+        );
     	$this->getCardService()->addCard($card);
+
+    }
+
+    public function onCouponUse(ServiceEvent $event)
+    {
+        $coupon = $event->getSubject();
+        $card = array(
+            'cardId' => $coupon['id'],
+            'cardType' => 'coupon',
+            'status' => 'used',
+            'useTime' => $coupon['orderTime']
+        );
+        $this->getCardService()->updateCard($coupon['id'],'coupon',$card);
 
     }
 

@@ -38,6 +38,7 @@ class CardController extends BaseController
                 $cards = isset($groupCards['used']) ? $groupCards['used'] : null ;
             } elseif ($filter == 'outdate') {
                 $cards = isset($groupCards['outdate']) ? $groupCards['outdate'] : null ;
+                var_dump($groupCards['outdate']);
             } elseif ($filter == 'invalid') {
                 $cards = isset($groupCards['invalid']) ? $groupCards['invalid'] : null ;
             }
@@ -45,7 +46,7 @@ class CardController extends BaseController
         
         $cardsDetail = $this->getCardService()->findCardDetailsByCardTypeAndCardIds($cardType,$cardIds);
         return $this->render('TopxiaWebBundle:Card:index.html.twig',array(
-            'cards' => $cards,
+            'cards' => empty($cards) ? null : $cards,
             'cardDetails' => ArrayToolkit::index($cardsDetail,'id')
         ));
     	
