@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Common\CurlToolkit;
 
 class DefaultController extends BaseController
 {
@@ -153,21 +154,8 @@ class DefaultController extends BaseController
     }
 
     private function getNoticesFromOpen(){
-        $userAgent = 'Open EduSoho App Client 1.0';
-        $connectTimeout = 10;
-        $timeout = 10;
         $url = "http://open.edusoho.com/api/v1/context/notice";
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_URL, $url );
-        $notices = curl_exec($curl);
-        curl_close($curl);
-        $notices = json_decode($notices, true);
-        return $notices;
+        return CurlToolkit::request('GET', $url);
     }
 
     public function officialMessagesAction()
