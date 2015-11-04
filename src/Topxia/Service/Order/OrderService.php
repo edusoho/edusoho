@@ -80,6 +80,8 @@ interface OrderService
 
     public function updateOrderCashSn($id, $cashSn);
 
+    public function updateOrder($id, $orderFileds);
+
     public function createPayRecord($id, $payDate);
 
     public function createOrderLog($orderId, $type, $message = '', array $data = array());
