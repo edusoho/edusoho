@@ -29,7 +29,18 @@ class SmsSendOneHourJob implements Job
                     $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
                 } catch (\RuntimeException $e) {
                     throw new \RuntimeException("发送失败！");
-            }   
+            }
+            $from = array(
+                'type' => 'course',
+                'id' => $course['id'],
+                'image' => $this->getFileUrl($course['smallPicture']),                              
+            );
+
+            $to = array('type' => 'course', 'id' => $course['id']);
+
+            $body = array('type' => 'live.notify','id' => $lesson['id'], 'lessonType' => $lesson['type']);
+
+            return $this->push($course['title'], $lesson['title'], $from, $to, $body);
         }
     }
 
@@ -56,5 +67,16 @@ class SmsSendOneHourJob implements Job
     protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getFileUrl($path)
+    {
+        if (empty($path)) {
+            return $path;
+        }
+        $path = str_replace('public://', '', $path);
+        $path = str_replace('files/', '', $path);
+        $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
+        return $path;
     }
 }
