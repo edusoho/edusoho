@@ -15,13 +15,13 @@ class QuickpayResponse extends Response
         $aesStr= $this->Decrypt($params['encrypt_data'],$this->options['aes']);
         parse_str($aesStr,$returnArray);
         $result = $this->confirmSellerSendGoods($returnArray['agent_bill_id']);
-        // if ($result['status'] != 'SUCCESS' || $result['status'] != 'WFPAYMENT' || $result['status'] != 'CANCEL'){
-        //     throw new \RuntimeException('快捷支付失败');
-        // }
+        if (!in_array($result['status'], array('SUCCESS','WFPAYMENT','CANCEL'))){
+            throw new \RuntimeException('快捷支付失败');
+        }
 
         $data = array();
-        $data['payment'] = 'Quickpay';
-        $data['sn'] = $returnArray['agent_bill_id'];
+        $data['payment'] = 'quickpay';
+        $data['token'] = $result["agent_bill_id"];
         if(in_array($result['status'], array('SUCCESS'))) {
             $data['status'] = 'success';
         } else if (in_array($result['status'], array('CLOSED'))) {
@@ -42,58 +42,50 @@ class QuickpayResponse extends Response
         $data['raw'] = $returnArray;
 
         return $data;
-        // $data['payment'] = 'heepay';
-        // $data['sn'] = $params['agent_bill_id'];
-        // $result = $this->confirmSellerSendGoods();
-        // $returnArray = $this->toArray($result);
-        // if ($returnArray['result'] != 1) {
-        //     throw new \RuntimeException('网银支付失败');
-        // }
-        // if(in_array($returnArray['result'], array(1))) {
-        //     $data['status'] = 'success';
-        // } else {
-        //     $data['status'] = 'unknown';
-        // }
-        // $data['amount'] = $params['pay_amt'];
-        // $data['paidTime'] = time();
-
-        // $data['raw'] = $params;
-
-        // return $data;
     }
 
     private function confirmSellerSendGoods($sn)
     {
         $params = $this->params;
-        $data = array();
-        $data['agent_bill_id']=$sn;
-        $data['agent_id']=$params['agent_id'];
-        $data['timestamp']=time()*1000;
-        $data['version']=1;
-        $sign=$this->signParams($data);
-        $aesArr = array('version'=>1,'agent_bill_id'=>$sn,'timestamp'=>$data['timestamp']);
+        $converted = array();
+        $converted['agent_bill_id']=$sn;
+        $converted['agent_id']=$params['agent_id'];
+        $converted['timestamp']=time()*1000;
+        $converted['version']=1;
+
+        $sign=$this->signParams($converted);
+        $aesArr = array('version'=>1,'agent_bill_id'=>$sn,'timestamp'=>$converted['timestamp']);
         $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($aesArr),$this->options['aes'])));
-
+       
         $url = $this->url."?agent_id=".$params['agent_id']."&encrypt_data=".$encrypt_data."&sign=".$sign;
-
         $result = $this->curlRequest($url);
         $xml = simplexml_load_string($result);
         $redir=(string)$xml->encrypt_data;
         $redirurl=$this->Decrypt($redir,$this->options['aes']);
         parse_str($redirurl,$tip);
+        
         return $tip;
     }
 
     private function curlRequest($url)
     {
-        $curl = curl_init();
+       $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+        curl_setopt($curl, CURLOPT_URL,$url);
+
         $response = curl_exec($curl);
+
         curl_close($curl);
+
         return $response;
     }
 

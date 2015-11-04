@@ -11,8 +11,6 @@ class QuickpayConfirmPayRequest extends Request
     {        
     	$encrypt_data = $this->convertParams($this->params);
     	$sign = $this->signParams($this->params);
-        var_dump($this->params);
-        exit();
         $url = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
         $result = $this->curlRequest($url);
 

@@ -8,6 +8,8 @@ interface OrderService
 
     public function getOrderBySn($sn, $lock=false);
 
+    public function getOrderByToken($token);
+
     public function findOrdersByIds(array $ids);
 
     public function findOrdersBySns(array $sns);

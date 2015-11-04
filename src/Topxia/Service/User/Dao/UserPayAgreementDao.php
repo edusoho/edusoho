@@ -9,7 +9,7 @@ interface UserPayAgreementDao
 	
     public function addUserPayAgreement($field);
 
-    public function updateUserPayAgreement($bankAuth,$fields);
+    public function updateUserPayAgreementByBankAuth($bankAuth,$fields);
 
     public function getUserPayAgreementByBankAuth($bankAuth);
 

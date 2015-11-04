@@ -11,7 +11,7 @@ class QuickpayRequest extends Request {
     public function form()
     {
         $form = array();
-        $form['method'] = 'post';
+        $form['method'] = 'get';
         $form['params'] = $this->convertParams($this->params);
         $form['action'] = $this->submitUrl;
         return $form;
@@ -32,28 +32,12 @@ class QuickpayRequest extends Request {
 
     protected function convertParams($params)
     {
-        $tip = $this->createOrder();
-        $this->submitUrl=$tip['redirect_url'];
-        unset($tip['ret_code'],$tip['ret_msg'],$tip['redirect_url']);
-        $converted = array();
-        $converted['agent_id']=$this->options['key'];
-        foreach ($tip as $key => $value) {
-            $converted[$key]=$value;
-        }
-
-        return $converted;
-
-    }
-
-    protected function createOrder()
-    {
-        $params = $this->params;
         $converted = array();
         $converted['version']=1;
         $converted['user_identity']=$this->options['key']."_".$params['userId'];
         $converted['hy_auth_uid']='';
-        if(!empty($params['authBank']['bank_auth']){
-            $converted['hy_auth_uid']=$params['authBank']['bank_auth'];
+        if(isset($params['authBank']['bankAuth'])){
+            $converted['hy_auth_uid']=$params['authBank']['bankAuth'];
         }
         $converted['mobile']=$params['mobile'];
         $converted['device_type']=1;
@@ -66,7 +50,7 @@ class QuickpayRequest extends Request {
         if (!empty($params['notifyUrl'])) {
             $converted['notify_url']=$params['notifyUrl'];
         }
-        $converted['agent_bill_id']=$params['orderSn'].'_'.time();
+        $converted['agent_bill_id']=$this->generateOrderToken();
         $converted['agent_bill_time']=date("YmdHis",time());
         $converted['pay_amt']=$params['amount'];
         $converted['goods_name']=mb_substr($this->filterText($params['title']), 0, 50, 'utf-8');
@@ -78,8 +62,7 @@ class QuickpayRequest extends Request {
         $converted['auth_card_type']=0;
         $converted['timestamp']=time()*1000;
         $sign = $this->signParams($converted);
-        $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($aesArr),$this->options['aes'])));        
-
+        $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($converted),$this->options['aes'])));        
         $url = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
         $result = $this->curlRequest($url);
         $xml = simplexml_load_string($result);
@@ -87,20 +70,42 @@ class QuickpayRequest extends Request {
         $redirurl=$this->Decrypt($redir,$this->options['aes']);
         parse_str($redirurl,$tip);
 
-        return $tip;
+        $this->submitUrl=$tip['redirect_url'];
+        unset($tip['ret_code'],$tip['ret_msg'],$tip['redirect_url']);
+        $converted = array();
+        $converted['agent_id']=$this->options['key'];
+        foreach ($tip as $key => $value) {
+            $converted[$key]=$value;
+        }
 
+        return $converted;
     }
+
+    private function generateOrderToken()
+    {
+        return  'heepay_' . date('YmdHis', time()) . mt_rand(10000,99999);
+    }
+
 
     private function curlRequest($url)
     {
         $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+        curl_setopt($curl, CURLOPT_URL,$url);
+
         $response = curl_exec($curl);
+
         curl_close($curl);
+
         return $response;
     }
 

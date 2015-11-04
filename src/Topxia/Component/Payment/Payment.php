@@ -33,27 +33,6 @@ class Payment {
         return new $class($options);
     }
 
-    public static function createSendSmsRequest($name, $options = array()) {
-        $name = ucfirst(strtolower($name));
-        $class = __NAMESPACE__ . "\\{$name}\\{$name}SendSmsRequest";
-        
-        if (!class_exists($class)) {
-            throw new \Exception("Payment close trade request {$name} is not exist!");
-        }
-        return new $class($options);
-    }
-
-    public static function createConfirmPayRequest($name, $options = array()) {
-        $name = ucfirst(strtolower($name));
-        $class = __NAMESPACE__ . "\\{$name}\\{$name}ConfirmPayRequest";
-        
-        if (!class_exists($class)) {
-            throw new \Exception("Payment close trade request {$name} is not exist!");
-        }
-        return new $class($options);
-    }
-
-
     public static function createResponse($name, $options = array()) {
         $name = ucfirst(strtolower($name));
         $class = __NAMESPACE__ . "\\{$name}\\{$name}Response";

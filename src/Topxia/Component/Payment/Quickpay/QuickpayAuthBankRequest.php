@@ -28,7 +28,7 @@ class QuickpayAuthBankRequest extends Request
         $signStr  = $signStr . 'agent_id=' . $this->options['key'];
         $signStr  = $signStr . '&key=' . $this->options['secret'];
         $signStr  = $signStr . '&timestamp=' . time()*1000;
-        $signStr  = $signStr . '&user_identity=' .$this->options['account']."_".$params['userId'];
+        $signStr  = $signStr . '&user_identity=' .$this->options['key']."_".$params['userId'];
         $signStr  = $signStr . '&version=' . 1;
         $sign=md5(strtolower($signStr));
 
@@ -41,11 +41,10 @@ class QuickpayAuthBankRequest extends Request
         $converted['agent_id']=$this->options['key'];
         $converted['timestamp']=time()*1000;
         $converted['version']=1;
-        $converted['user_identity']=$this->options['account']."_".$params['userId'];
+        $converted['user_identity']=$this->options['key']."_".$params['userId'];
         $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($converted),$this->options['aes'])));
 
         return $encrypt_data;
-
     }
 
 	
