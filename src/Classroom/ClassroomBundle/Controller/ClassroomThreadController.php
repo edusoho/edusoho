@@ -43,18 +43,28 @@ class ClassroomThreadController extends BaseController
 
     public function createAction(Request $request, $classroomId, $type)
     {
+        if(!in_array($type, array('discussion', 'question', 'event'))) {
+            throw $this->createAccessDeniedException('类型参数有误!');
+        }
+
+        $user = $this->getCurrentUser();
+        if(!$user->isLogin()) {
+            $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', array('classroomId'=>$classroomId,'type' => $type)));
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
             throw $this->createAccessDeniedException('无权限创建活动!');
+        } else if (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
+            throw $this->createAccessDeniedException('无权限创建话题!');
         }
 
         if ($request->getMethod() == 'POST') {
             return $this->forward('TopxiaWebBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
         }
 
-        $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
