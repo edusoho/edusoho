@@ -15,24 +15,23 @@
         {% endfor %}
       </div>
       {% if categories %}
-      {% for l,cs in categories if cs %}
-        <div class="tab-content">
-          <div class="tab-pane active">
-            <ul class="clearfix">
-              {% for c in cs %}
-                {% if loop.index == 1 %}
-                  <li class="all"><a href="{{ path(path, {category:nextCode,fliter:fliter,orderBy:orderBy}) }}">全部</a>
-                  </li>
-                {% endif %}
-                <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a
-                      href="{{ path(path, {category:c.code,fliter:fliter,orderBy:orderBy}) }}">{{ c.name }}</a></li>
-              {% endfor %}
-            </ul>
+        {% for l,cs in categories if cs %}
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <ul class="clearfix">
+                {% for c in cs %}
+                  {% if loop.index == 1 %}
+                    <li class="all"><a href="{{ path(path, {category:nextCode,fliter:fliter,orderBy:orderBy}) }}">全部</a>
+                    </li>
+                  {% endif %}
+                  <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a
+                        href="{{ path(path, {category:c.code,fliter:fliter,orderBy:orderBy}) }}">{{ c.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
-        </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div> 
   </div>
-</div>
 </div>
