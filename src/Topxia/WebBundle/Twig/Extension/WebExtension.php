@@ -106,7 +106,13 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
              new \Twig_SimpleFunction('is_trial',array($this,'isTrial')),
              new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
+             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
         );
+    }
+
+    public function isWithoutNetwork()
+    {
+        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/network.lock');
     }
 
     public function getUserVipLevel($userId)

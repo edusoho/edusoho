@@ -79,8 +79,18 @@ class AbstractCloudAPI
         return $this;
     }
 
+    protected function isWithoutNetwork()
+    {
+        $file = realpath(dirname(__FILE__) . '/../../../../../app/data/network.lock');
+        return file_exists($file);
+    }
+
     protected function _request($method, $uri, $params, $headers)
     {
+        if($this->isWithoutNetwork()) {
+            return array();
+        }
+
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl . '/' . self::VERSION . $uri;

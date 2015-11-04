@@ -145,12 +145,14 @@ class DefaultController extends BaseController
                 "trialTime" => (isset($result)) ? $result : null,
             ));
 
+        } else if($this->getWebExtension()->isWithoutNetwork()){
+            $notices = array();
         } else {
             $notices = $this->getNoticesFromOpen();
-            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
-                "notices" => $notices,
-            ));
         }
+        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+            "notices" => $notices,
+        ));
     }
 
     private function getNoticesFromOpen(){

@@ -65,7 +65,7 @@ class DeveloperSettingController extends BaseController
 
         if(isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
             $fileSystem->touch($networkLock);
-        } else {
+        } else if(!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0){
             $fileSystem->remove($networkLock);
         }
     }
