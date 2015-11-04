@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\FileToolkit;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Common\CurlToolkit;
 
 
 class EditorController extends BaseController
@@ -69,17 +70,11 @@ class EditorController extends BaseController
         if (empty($token)) {
             throw new \RuntimeException("上传授权码已过期，请刷新页面后重试！");
         }
-
-
-        $curl = curl_init($url);
-        
         $name = date("Ymdhis")."_formula.jpg";
         $path = $this->getServiceKernel()->getParameter('topxia.upload.public_directory') . '/tmp/' . $name;
-        
-        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-        $imageData = curl_exec($curl);
-        curl_close($curl);
+
+        $imageData = CurlToolkit::postRequest($url,array());
+
         $tp = @fopen($path, 'a');
         fwrite($tp, $imageData);
         fclose($tp);
