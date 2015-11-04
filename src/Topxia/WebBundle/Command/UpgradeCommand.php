@@ -159,7 +159,7 @@ class UpgradeCommand extends BaseCommand
 
     protected function updateApp($code, $version)
     {
-        $app = $this->getAppDao()->getAppByCode($code);
+        $app = $this->getAppService()->getAppByCode($code);
 
         $newApp = array(
             'code' => $code,
@@ -168,6 +168,7 @@ class UpgradeCommand extends BaseCommand
             'updatedTime' => time(),
         );
 
+        $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
         return $this->getAppDao()->updateApp($app['id'], $newApp);
     }
 
@@ -185,6 +186,11 @@ class UpgradeCommand extends BaseCommand
 		));
 		$serviceKernel->setCurrentUser($currentUser);
 	}
+
+	protected function getAppDao ()
+    {
+        return $this->createDao('CloudPlatform.CloudAppDao');
+    }
 
 	protected function getAppService()
 	{
