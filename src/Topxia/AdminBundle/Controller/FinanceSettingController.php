@@ -33,8 +33,7 @@ class FinanceSettingController extends BaseController
             'wxpay_account' => '',
             'heepay_enabled' => 0,
             'heepay_key' => '',
-            'heepay_secret' => '',
-            'heepay_account' => ''
+            'heepay_secret' => ''
         );
 
         $payment = array_merge($default, $payment);
