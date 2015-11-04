@@ -94,7 +94,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-             new \Twig_SimpleFunction('getUserNickNameById', array($this, 'getUserNickNameById')),
              new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
              new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
              new \Twig_SimpleFunction('sub_str', array($this, 'subStr')),
@@ -241,12 +240,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $time;
-    }
-
-    public function getUserNickNameById($userId)
-    {
-        $user = $this->getUserById($userId);
-        return $user['nickname'];
     }
 
     private function getUserById($userId)

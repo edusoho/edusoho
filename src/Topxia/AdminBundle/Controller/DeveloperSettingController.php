@@ -31,6 +31,7 @@ class DeveloperSettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
+
             $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
             $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $this->getSettingService()->set('storage', $storageSetting);
@@ -38,9 +39,8 @@ class DeveloperSettingController extends BaseController
 
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
 
-            $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/api_server.json';
-            $fileSystem = new Filesystem();
-            $fileSystem->remove($serverConfigFile);
+            $this->dealServerConfigFile();
+            $this->dealNetworkLockFile($developerSetting);
 
             $this->setFlashMessage('success', '开发者已保存！');
         }
@@ -49,6 +49,25 @@ class DeveloperSettingController extends BaseController
             'developerSetting' => $developerSetting,
         ));
 
+    }
+
+    protected function dealServerConfigFile()
+    {
+        $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/api_server.json';
+        $fileSystem = new Filesystem();
+        $fileSystem->remove($serverConfigFile);
+    }
+
+    protected function dealNetworkLockFile($developerSetting)
+    {
+        $networkLock = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/network.lock';
+        $fileSystem = new Filesystem();
+
+        if(isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
+            $fileSystem->touch($networkLock);
+        } else {
+            $fileSystem->remove($networkLock);
+        }
     }
 
     public function versionAction(Request $request)
