@@ -6,14 +6,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 
-use Symfony\Component\ClassLoader\ApcClassLoader;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\PluginUtil;
 
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Util\CloudClientFactory;
 
 class UpgradeCommand extends BaseCommand
 {
