@@ -20,5 +20,9 @@
   	{% endif %}
   </td>
   <td>{{ lesson.maxOnlineNum }}</td>
-  <td></td>
+  <td>
+  {% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live'  %}
+    <a class="btn btn-link replay-lesson-btn" title="录制后获取在线人数峰值  " href="{{ path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-facetime-video"></span></a>
+  {% endif %}
+  </td>
 </tr>
