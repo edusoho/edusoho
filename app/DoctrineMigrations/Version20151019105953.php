@@ -23,7 +23,7 @@ class Version20151019105953 extends AbstractMigration
                   `cardType` varchar(255) NOT NULL DEFAULT '' COMMENT '卡的类型',
                   `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间',
                   `useTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
-                  `status` enum('normal','invalid','recharged') NOT NULL DEFAULT 'normal' COMMENT '使用状态',
+                  `status` enum('used','receive','invalid','deleted') NOT NULL DEFAULT 'receive' COMMENT '使用状态',
                   `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '使用者',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '领取时间',
                   PRIMARY KEY (`id`)
