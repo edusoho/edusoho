@@ -62,7 +62,7 @@
       	<div class="form-group order-detail-bg ">
           <div class="pay-type-label">支付方式</div>
           {% for payment, options in payments %}
-            <div class="check {% if loop.index == 1 %} active {% endif %}" id="{{payment}}">
+            <div class="check" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>
