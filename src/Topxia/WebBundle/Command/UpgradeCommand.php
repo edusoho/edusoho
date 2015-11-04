@@ -10,7 +10,7 @@ use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Util\PluginUtil;
+use Topxia\Service\Util\PluginUtil;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Util\CloudClientFactory;
