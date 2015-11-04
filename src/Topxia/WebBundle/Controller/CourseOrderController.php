@@ -130,7 +130,7 @@ class CourseOrderController extends OrderController
             if ($courseVip) {
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
                 if($vipStatus == 'ok') {
-                    $formData['becomeUseMember'] = true;
+                    $data['becomeUseMember'] = true;
                 }
             }
         }
