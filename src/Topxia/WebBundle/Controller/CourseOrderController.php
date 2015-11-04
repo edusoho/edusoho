@@ -144,7 +144,8 @@ class CourseOrderController extends OrderController
         if (($coinEnable && isset($coinSetting['price_type']) && $coinSetting['price_type'] == "Coin" && $course['coinPrice'] == 0 ) 
             || ((!isset($coinSetting['price_type']) || $coinSetting['price_type'] == "RMB") && $course['price'] == 0 ) || $vipStatus == 'ok') {
             
-            $data = array("price" => 0, "remark"=>'');
+            $data['price'] = 0;
+            $data['remark'] = '';
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course['id'], $data);
             if(isset($formData['lessonId']) && !empty($formData['lessonId'])){
                 return $this->redirect($this->generateUrl('course_learn', array('id' => $course['id'])).'#lesson/'.$formData['lessonId']);
