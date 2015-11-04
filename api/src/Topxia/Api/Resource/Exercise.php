@@ -20,7 +20,7 @@ class Exercise extends BaseResource
         if (empty($exercise)) {
             return $this->error('404', '该练习不存在!');
         }
-        
+
         $course = $this->getCorrseService()->getCourse($exercise['courseId']);
         $exercise['courseTitle'] = $course['title'];
         $lesson = $this->getCorrseService()->getLesson($exercise['lessonId']);
@@ -37,7 +37,6 @@ class Exercise extends BaseResource
             $exercise = array();
             return $exercise;
         }
-
 
         if ('lesson' != $idType) {
             $result = $this->doStart($exercise);

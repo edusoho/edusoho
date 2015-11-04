@@ -18,8 +18,7 @@ class Homework extends BaseResource
         }
 
         if (empty($homework)) {
-            $homework = array();
-            return $homework;
+            return $this->error('404', '该作业不存在!');
         }
 
         $course = $this->getCorrseService()->getCourse($homework['courseId']);
