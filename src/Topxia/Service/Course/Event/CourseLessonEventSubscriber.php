@@ -45,8 +45,19 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
         if($courseIds){
             $argument['copyId'] = $lesson['id'];
-            foreach ($courseIds as $courseId)
+            if(array_key_exists('type',$argument) && $argument['type'] == 'testpaper'){
+                $lockedTarget = '';
+                foreach ($courseIds as $courseId) {
+                        $lockedTarget .= "'course-".$courseId."',";
+                }
+                $lockedTarget = "(".trim($lockedTarget,',').")";
+                $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'],$lockedTarget),'id'); 
+            }
+            foreach ($courseIds as $key=>$courseId)
             {   
+                if(array_key_exists('type',$argument) && $argument['type'] == 'testpaper'){
+                    $argument['mediaId']=$testpaperIds[$key];
+                }
                 $argument['courseId']=$courseId;
                 $this->getCourseService()->createLesson($argument);
             }
@@ -307,5 +318,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+    
+    protected function getMaterialService()
+    {
+        return ServiceKernel::instance()->createService('Course.MaterialService');
     }
 }

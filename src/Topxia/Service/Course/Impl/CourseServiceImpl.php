@@ -102,7 +102,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime)
 	{
-	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
+	    return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
 	}
 
 	public function analysisCourseSumByTime($endTime)
@@ -930,6 +930,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num)
+	{
+		$this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
+	}
+
 	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
 		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
@@ -1168,6 +1173,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'content' => '',
 			'media' => array(),
 			'mediaId' => 0,
+			'number'=>0,
+			'seq'=>0,
+			'chapterId'=>0,
 			'free' => 0,
 			'length' => 0,
 			'startTime' => 0,
@@ -1182,11 +1190,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		if ($fields['type'] == 'live') {
+		if ($fields['type'] == 'live' && isset($fields['startTime'])) {
 			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
 		}
 		
-		$this->fillLessonMediaFields($fields);
+		if(array_key_exists('media', $fields)){
+			$this->fillLessonMediaFields($fields);
+		}
+		
 		
 		$updatedLesson = LessonSerialize::unserialize(
 			$this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
@@ -1195,25 +1206,26 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
 		));
-
 		// Update link count of the course lesson file, if the lesson file is changed
-		if($fields['mediaId'] != $lesson['mediaId']){
-			// Incease the link count of the new selected lesson file
-			if(!empty($fields['mediaId'])){
-				$this->getUploadFileService()->waveUploadFile($fields['mediaId'],'usedCount',1);
-			}
+		if(array_key_exists('mediaId', $fields)){
+			if($fields['mediaId'] != $lesson['mediaId']){
+				// Incease the link count of the new selected lesson file
+				if(!empty($fields['mediaId'])){
+					$this->getUploadFileService()->waveUploadFile($fields['mediaId'],'usedCount',1);
+				}
 
-			// Decrease the link count of the original lesson file
-			if(!empty($lesson['mediaId'])){
-				$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
+				// Decrease the link count of the original lesson file
+				if(!empty($lesson['mediaId'])){
+					$this->getUploadFileService()->waveUploadFile($lesson['mediaId'],'usedCount',-1);
+				}
 			}
 		}
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
 		$updatedLesson['fields']=$lesson;
 		$this->dispatchEvent("course.lesson.update",array('argument'=>$argument,'lesson'=>$updatedLesson));
 		
-
 		return $updatedLesson;
 	}
 
@@ -1535,6 +1547,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
 		);
+
 	}
 
 	public function searchLearnCount($conditions)
@@ -1613,6 +1626,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $statuses;
 	}
 
+	public function getLearnByUserIdAndLessonId($userId, $lessonId)
+	{
+		return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+	}
+	
+
 	public function findUserLearnedLessons($userId, $courseId)
 	{
 		return ArrayToolkit::index($this->getLessonLearnDao()->findLearnsByUserIdAndCourseId($userId, $courseId) ? : array(), 'lessonId');
@@ -1680,7 +1699,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($chapter)) {
 			throw $this->createServiceException("章节#{$chapterId}不存在！");
 		}
-		$fields = ArrayToolkit::parts($fields, array('title'));
+		$fields = ArrayToolkit::parts($fields, array('title','number','seq','parentId'));
 		$chapter = $this->getChapterDao()->updateChapter($chapterId, $fields);
 
 		$this->dispatchEvent("chapter.update",array('argument'=>$argument,'chapter'=>$chapter));
@@ -1764,7 +1783,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 	{
 		$items = $this->getCourseItems($courseId);
 		$existedItemIds = array_keys($items);
-
 		if (count($itemIds) != count($existedItemIds)) {
 			throw $this->createServiceException('itemdIds参数不正确');
 		}
@@ -1786,25 +1804,24 @@ class CourseServiceImpl extends BaseService implements CourseService
 					$item = $items[$itemId];
 					$fields = array('number' => $lessonNum, 'seq' => $seq, 'chapterId' => $currentChapter['id']);
 					if ($fields['number'] != $item['number'] || $fields['seq'] != $item['seq'] || $fields['chapterId'] != $item['chapterId']) {
-						$lesson = $this->getLessonDao()->updateLesson($item['id'], $fields);
-						$this->dispatchEvent("course.lesson.update",array('argument'=>$fields,'lesson'=>$lesson));	
+						$this->updateLesson($courseId,$item['id'], $fields);
 					}
 					break;
 				case 'chapter':
 					$item = $currentChapter = $items[$itemId];
+					$chapter = $this->getChapter($courseId, $item['id']);
 				    if ($item['type'] == 'unit') {
 				    	$unitNum ++;
-						$fields = array('number' => $unitNum, 'seq' => $seq, 'parentId' => $rootChapter['id']);
+						$fields = array('number' => $unitNum, 'seq' => $seq, 'parentId' => $rootChapter['id'],'title'=>$chapter['title']);
 				    } else {
 				    	$chapterNum ++;
 				    	$unitNum = 0;
 						$rootChapter = $item;
-						$fields = array('number' => $chapterNum, 'seq' => $seq, 'parentId' => 0);
+						$fields = array('number' => $chapterNum, 'seq' => $seq, 'parentId' => 0,'title'=>$chapter['title']);
 				    }
 					if ($fields['parentId'] != $item['parentId'] || $fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
 						$argument = $fields;
-						$chapter = $this->getChapterDao()->updateChapter($item['id'], $fields);
-						$this->dispatchEvent("chapter.update",array('argument'=>$fields,'chapter'=>$chapter));
+						$this->updateChapter($courseId,$item['id'], $fields);
 					}
 
 					break;
@@ -1924,6 +1941,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 	public function getCourseStudentCount($courseId)
 	{
 		return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
+	}
+
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
+	{
+		return $this->getMemberDao()->findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 	}
 
 	public function findCourseTeachers($courseId)

@@ -23,7 +23,9 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         } else {
             $this->getUserService()->markLoginSuccess($userId, $request->getClientIp());
         }
-        $sessionId = $this->createToken($request);
+
+        $sessionId = $request->getSession()->getId();
+        //$sessionId = $this->createToken($request);
         $this->getUserService()->rememberLoginSessionId($userId, $sessionId);
 
         if ($request->isXmlHttpRequest()) {

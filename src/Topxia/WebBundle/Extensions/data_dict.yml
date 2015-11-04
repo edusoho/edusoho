@@ -20,6 +20,7 @@ couponType:
 couponStatus:
     used: 已使用
     unused: 未使用
+    receive: 已领取
 
 fileType:
     video: 视频
@@ -169,6 +170,12 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
 
+jobCycle:
+    once: 一次
+    everyhour: 每小时
+    everyday: 每天
+    everymouth: 每月
+
 logLevel:
     info: 提示
     warning: 警告
@@ -195,6 +202,8 @@ analysisDateType:
     netVideoViewed: └─ 网络视频观看数
     income: 营收额
     courseIncome: └─ 课程营收额
+    classroomIncome: └─ 班级营收额
+    vipIncome: └─ 会员营收额
     courseSum: 课程总数
     userSum: 用户总数
     # exitLesson: 退出学习数
