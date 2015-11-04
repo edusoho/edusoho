@@ -16,7 +16,7 @@ class CurlToolkit
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $conditions['connectTimeout']);
         curl_setopt($curl, CURLOPT_TIMEOUT, $conditions['timeout']);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_HEADER, 1);
 
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
@@ -41,15 +41,23 @@ class CurlToolkit
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
 
         $response = curl_exec($curl);
+        $curlinfo = curl_getinfo($curl);
+
+        $header = substr($response, 0, $curlinfo['header_size']);
+        $body = substr($response, $curlinfo['header_size']);
 
         curl_close($curl);
 
-        if(isset($conditions['plain']) && $conditions['plain']) {
-            return $response;
+        if(empty($curlinfo['namelookup_time'])) {
+            return array();
+        }
+
+        if(isset($conditions['contentType']) && $conditions['contentType'] == 'plain') {
+            return $body;
         }
         
-        $response = json_decode($response, true);
-        return $response;
+        $body = json_decode($body, true);
+        return $body;
     }
 
 }

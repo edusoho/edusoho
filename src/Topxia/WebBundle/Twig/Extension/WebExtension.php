@@ -136,8 +136,7 @@ class WebExtension extends \Twig_Extension
             $parameters = array();
             $parameters[0]= $parameter;
             }
-        }
-        else{
+        } else{
             return null;
         }
         return  $parameters;

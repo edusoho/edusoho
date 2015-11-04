@@ -894,7 +894,7 @@ class SettingsController extends BaseController
 
 	public function fetchAvatar($url)
 	{
-		return CurlToolkit::request('GET', $url, $params, array('plain'=>true));
+		return CurlToolkit::request('GET', $url, $params, array('contentType'=>'plain'));
 	}
 
 	protected function createOAuthClient($type)
