@@ -8,15 +8,21 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20140831062546 extends AbstractMigration
+class Version20150910143701 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE  `session` CHANGE  `user_id`  `user_id` INT UNSIGNED NOT NULL DEFAULT  '0'");
-        $this->addSql("RENAME TABLE `session` TO `session2` ;");
+        $this->addSql("ALTER TABLE  `crontab_job` ADD  `targetType` VARCHAR( 64 ) NOT NULL DEFAULT  '' AFTER  `jobParams`");
+        $this->addSql("ALTER TABLE  `crontab_job` ADD  `targetId` INT UNSIGNED NOT NULL DEFAULT  '0' AFTER  `targetType`");
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs

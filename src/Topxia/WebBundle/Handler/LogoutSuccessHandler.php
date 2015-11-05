@@ -28,7 +28,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             $url = $url . '?' . http_build_query($queries);
             return $this->httpUtils->createRedirectResponse($request, $url);
         }
-        setcookie("U_LOGIN_TOKEN", '', -1);
+        //setcookie("U_LOGIN_TOKEN", '', -1);
         return parent::onLogoutSuccess($request);
     }
 

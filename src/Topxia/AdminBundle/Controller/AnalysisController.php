@@ -77,6 +77,7 @@ class AnalysisController extends BaseController
     {      
         $data=array();
         $userSumStartDate="";
+        $userSumDetail = array();
 
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);

@@ -110,6 +110,8 @@ interface CourseService
 
 	public function getLesson($id);
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num);
+
 	public function findLessonsByIds(array $ids);
 
 	public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds);
@@ -254,6 +256,8 @@ interface CourseService
 	public function findCourseStudents($courseId, $start, $limit);
 
 	public function findCourseStudentsByCourseIds($courseIds);
+
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 
 	public function getCourseStudentCount($courseId);
 

@@ -88,26 +88,49 @@ class DefaultController extends BaseController
     }
 
     public function indexAction(Request $request)
-    { 
-        $result = CloudAPIFactory::create('leaf')->get('/me');
+    {   
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+    }
 
-        $hidden = array();
-        if(isset($result['thirdCopyright']) and $result['thirdCopyright'] == '1'){
-            $hidden = array(
-                'cloud_notice' => '1',
-                'system_status' => '1',
-            );
+    public function inspectAction(Request $request)
+    {
+        $inspectList = array();
+        $inspectList = array($this->addInspectRole('host',$this->hostInspect($request)));
+
+        $inspectList = array_filter($inspectList);
+        return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
+            'inspectList' => $inspectList
+        ));
+    }
+
+
+    private function addInspectRole($name, $value)
+    {
+        if ($value['status'] == 'ok') {
+            return array();
         }
 
-        if(isset($result['copyright']) and $result['copyright'] == '1'){  
-            $hidden = array(
-                'cloud_notice' => '1'
-            );
-        }       
+        return array('name' => $name,'value' => $value);
+    }
 
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig',array(
-            'hidden' => $hidden
-        ));
+    private function hostInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_setting_site');
+        $fliter = array('http://','https://');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
+        if ($currentHost != str_replace($fliter,"",$siteSetting['url'])) {
+            return array(
+                'status' => 'fail',
+                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl
+                );
+        }
+        return array('status' => 'ok','except' => $siteSetting['url'],'actually' => $currentHost,'settingUrl' => $settingUrl);
     }
 
     public function getCloudNoticesAction(Request $request)
