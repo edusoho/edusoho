@@ -377,6 +377,14 @@ admin_setting_ip_blacklist:
     name: IP黑名单
     parent: admin_system
     group: 2
+admin_setting_sensitive_word:
+    name: 敏感词过滤
+    parent: admin_system
+    group: 2
+admin_setting_post_num_rules:
+    name: 访问次数限制设置
+    parent: admin_system
+    group: 2
 admin_logs:
     name: 系统日志
     parent: admin_system

@@ -115,6 +115,11 @@
                                 } else {
                                     window.location.reload();
                                 }
+                            },
+                            error: function(data) {
+                                data = data.responseText;
+                                data = $.parseJSON(data);
+                                Notify.danger(data.error.message);
                             }
                         });
                     }
