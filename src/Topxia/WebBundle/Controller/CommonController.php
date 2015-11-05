@@ -30,6 +30,10 @@ class CommonController extends BaseController
     public function parseQrcodeAction(Request $request,$token)
     {
         $token = $this->getTokenService()->verifyToken('qrcode',$token);
+        if(strpos(strtolower($request->headers->get('User-Agent')), 'kuozhi') > -1) {
+            return $this->redirect($token['data']['appUrl']);
+        }
+
         $currentUser = $this->getUserService()->getCurrentUser();
         if (!empty($token['userId']) && !$currentUser->isLogin() && $currentUser['id'] != $token['userId'] ){
             $user = $this->getUserService()->getUser($token['userId']);
