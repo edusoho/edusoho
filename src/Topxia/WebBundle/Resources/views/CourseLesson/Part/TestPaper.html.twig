@@ -1,0 +1,29 @@
+
+{% if member %}
+  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+{% else %}
+  {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
+{% endif %}
+<li class="section">
+    <i class="es-icon es-icon-toc"></i>
+    <span class="title">
+         第 {{ item.number }} 
+      {% if setting('default.chapter_name') %}
+        {{setting('default.chapter_name')|default('章')}}
+      {% else %}
+        章
+      {% endif %}：
+
+      {% if item.status == 'published' %}
+          <a {% if member %}href="{{ lessonUrl }}" data-toggle="tooltip" data-placement="bottom" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
+          title="{{ item.title }}">
+          <span class="title">{{ item.title }}</span>
+          {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %} 
+          </a>
+        {% else %}   
+          <span class="title">{{ item.title }}</span>
+          {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %} 
+        {% endif %}
+      </span>
+    </span>
+  </li>
