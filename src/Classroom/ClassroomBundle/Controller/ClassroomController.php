@@ -774,6 +774,7 @@ class ClassroomController extends BaseController
     public function qrcodeAction(Request $request, $id)
     {
         $user = $this->getUserService()->getCurrentUser();
+
         if (!$user->isLogin()){
             $url = $this->generateUrl('classroom_show',array('id'=>$id),true);
         } else {

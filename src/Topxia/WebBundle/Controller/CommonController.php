@@ -31,7 +31,7 @@ class CommonController extends BaseController
     {
         $token = $this->getTokenService()->verifyToken('qrcode',$token);
         $currentUser = $this->getUserService()->getCurrentUser();
-        if (!$currentUser->isLogin() || $currentUser['id'] != $token['userId']){
+        if (!empty($token['userId']) && !$currentUser->isLogin() && $currentUser['id'] != $token['userId'] ){
             $user = $this->getUserService()->getUser($token['userId']);
             $this->authenticateUser($user);
         }
