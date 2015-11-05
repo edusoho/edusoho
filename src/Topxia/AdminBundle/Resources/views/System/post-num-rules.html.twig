@@ -1,0 +1,88 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_post_num_rules' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <fieldset>
+    <legend>班级讨论区设置</legend>
+
+    <div class="form-group">
+      <div class="col-md-6 control-label">
+        <label for="setting[rules][thread][fiveMuniteRule][postNum]">同一IP，5分钟内最多发帖次数（包含回复数）</label>
+      </div>
+      <div class="controls col-md-2">
+        <input type="hidden" name="setting[rules][thread][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input type="text" name="setting[rules][thread][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.thread.fiveMuniteRule.postNum|default('')}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-6 control-label">
+        <label for="setting[rules][threadLoginedUser][fiveMuniteRule][postNum]">同一用户，5分钟内最多发帖次数（包含回复数）</label>
+      </div>
+      <div class="controls col-md-2">
+        <input type="hidden" name="setting[rules][threadLoginedUser][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input type="text" name="setting[rules][threadLoginedUser][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.threadLoginedUser.fiveMuniteRule.postNum|default('')}}">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>课程讨论区设置</legend>
+    <div class="form-group">
+      <div class="col-md-6 control-label">
+        <label for="setting[rules][courseThread][fiveMuniteRule][postNum]">同一IP，5分钟内最多发帖次数（包含回复数）</label>
+      </div>
+      <div class="controls col-md-2">
+        <input type="hidden" name="setting[rules][courseThread][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input type="text" name="setting[rules][courseThread][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.courseThread.fiveMuniteRule.postNum|default('')}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-6 control-label">
+        <label for="setting[rules][courseThreadLoginedUser][fiveMuniteRule][postNum]">同一用户，5分钟内最多发帖次数（包含回复数）</label>
+      </div>
+      <div class="controls col-md-2">
+        <input type="hidden" name="setting[rules][courseThreadLoginedUser][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input type="text" name="setting[rules][courseThreadLoginedUser][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.courseThreadLoginedUser.fiveMuniteRule.postNum|default('')}}">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>小组讨论区设置</legend>
+    <div class="form-group">
+      <div class="col-md-6 control-label">
+        <label for="setting[rules][groupThread][fiveMuniteRule][postNum]">同一IP，5分钟内最多发帖次数（包含回复数）</label>
+      </div>
+      <div class="controls col-md-2">
+        <input type="hidden" name="setting[rules][groupThread][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input type="text" name="setting[rules][groupThread][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.groupThread.fiveMuniteRule.postNum|default('')}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-6 control-label">
+        <label for="setting[rules][groupThreadLoginedUser][fiveMuniteRule][postNum]">同一用户，5分钟内最多发帖次数（包含回复数）</label>
+      </div>
+      <div class="controls col-md-2">
+        <input type="hidden" name="setting[rules][groupThreadLoginedUser][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input type="text" name="setting[rules][groupThreadLoginedUser][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.groupThreadLoginedUser.fiveMuniteRule.postNum|default('')}}">
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-4 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
