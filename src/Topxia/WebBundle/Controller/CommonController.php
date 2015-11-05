@@ -54,36 +54,59 @@ class CommonController extends BaseController
         }else {
             if ($routeType == 'classroom-qrcode' && isset($data['classroomId'])){
                 $classroomId = (int)$data['classroomId'];
-                $token = $this->getTokenService()->makeToken('classroom-qrcode',array('userId'=>$user['id'],'data' => array('classroomId'=>$classroomId), 'times' => 0, 'duration' => 3600));    
+                $token = $this->getTokenService()->makeToken('qrcode',array(
+                    'userId'=>$user['id'],
+                    'data' => array(
+                        'classroomId'=>$classroomId
+                    ), 
+                    'times' => 0, 
+                    'duration' => 3600
+                ));    
             }elseif ($routeType == 'course-qrcode' && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
-                $token = $this->getTokenService()->makeToken('course-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId), 'times' => 0, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('qrcode',array(
+                    'userId'=>$user['id'],
+                    'data' => array(
+                        'courseId'=>$courseId
+                    ), 
+                    'times' => 0, 
+                    'duration' => 3600
+                ));
             }elseif ($routeType == 'lesson-qrcode' && isset($data['lessonId']) && isset($data['courseId'])) {
                 $courseId = (int)$data['courseId'];
                 $lessonId = (int)$data['lessonId'];
-                $token = $this->getTokenService()->makeToken('lesson-qrcode',array('userId'=>$user['id'],'data' => array('courseId'=>$courseId,'lessonId'=>$lessonId), 'times' => 0, 'duration' => 3600));
+                $token = $this->getTokenService()->makeToken('qrcode',array(
+                    'userId'=>$user['id'],
+                    'data' => array(
+                        'courseId'=>$courseId,
+                        'lessonId'=>$lessonId,
+                        'routeType' => $routeType
+                    ), 
+                    'times' => 0, 
+                    'duration' => 3600
+                ));
             }else {
                 throw $this->createNotFoundException('参数错误，无法找到指定二维码');
             }
             $routePath = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
         }
-        $url = $routePath.'?type='.$data['type']; 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$routePath),true)
         );
         return $this->createJsonResponse($response);
     }
 
     public function parseLearnCodeAction(Request $request,$token)
     {
-        $routeType = $request->get('type');
-        $token = $this->getTokenService()->verifyToken($routeType,$token);
+        $token = $this->getTokenService()->verifyToken('qrcode',$token);
         $pcUserId = $token['userId'];
         $user = $this->getUserService()->getUser($pcUserId);
         $currentUser = $this->getUserService()->getCurrentUser();
         if (!$currentUser->isLogin() || $currentUser['id']!==$pcUserId){
             $this->authenticateUser($user);
         }
+
+        $routeType = $token['data']['routeType'];
         if (isset($routeType) && $routeType == 'course-qrcode' && !empty($token['data']['courseId'])){
             $courseId = $token['data']['courseId'];
             $gotoUrl = $this->generateUrl('course_show',array('id'=>$courseId),true);
