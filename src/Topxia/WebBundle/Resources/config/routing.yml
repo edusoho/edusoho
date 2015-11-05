@@ -286,6 +286,10 @@ course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
 
+course_qrcode:
+    pattern:  /course/{id}/qrcode
+    defaults: { _controller: TopxiaWebBundle:Course:qrcode }
+
 course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: TopxiaWebBundle:Course:info }
@@ -364,6 +368,10 @@ course_lesson_detail_data:
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
+
+course_lesson_qrcode:
+    pattern:  /course/{courseId}/lesson/{lessonId}/qrcode
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:qrcode }
 
 course_lesson_player:
     pattern:  /course/{courseId}/lesson/{lessonId}/player
@@ -1829,13 +1837,9 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
-common_learn_qrcode:
-    pattern: /qrcode/generate
-    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
-
 common_parse_qrcode:
     pattern: /qrcode/parse/{token}
-    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
+    defaults: {_controller: TopxiaWebBundle:Common:parseQrcode}
 
 esbar_my_classroom:
     pattern:  /esbar/my/classroom

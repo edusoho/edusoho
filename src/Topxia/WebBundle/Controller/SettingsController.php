@@ -10,6 +10,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Util\UploadToken;
 use Topxia\Common\SmsToolkit;
+use Topxia\Common\CurlToolkit;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -893,25 +894,7 @@ class SettingsController extends BaseController
 
 	public function fetchAvatar($url)
 	{
-
-		$curl = curl_init();
-
-		curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
-
-		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-		curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_HEADER, 0);
-
-		curl_setopt($curl, CURLOPT_URL, $url );
-
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-
-		$response = curl_exec($curl);
-
-		curl_close($curl);
-
-		return $response;
+		return CurlToolkit::request('GET', $url, $params, array('contentType'=>'plain'));
 	}
 
 	protected function createOAuthClient($type)
