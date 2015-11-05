@@ -1,6 +1,6 @@
 <?php
 
-namespace Mooc\Bundle\AdminBundle;
+namespace Mooc\AdminBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
