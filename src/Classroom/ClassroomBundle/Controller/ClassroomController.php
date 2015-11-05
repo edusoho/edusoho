@@ -14,11 +14,21 @@ class ClassroomController extends BaseController
     public function dashboardAction($nav, $classroom, $member)
     {
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroom["id"]);
+
+        $planMember = array();
+        if ($this->isPluginInstalled('ClassroomPlan')) {
+            $plan = $this->getClassroomPlanService()->getPlanByClassroomId($classroom['id']);
+            if ($plan && $plan['status'] == 'published') {
+                $planMember = $this->getClassroomPlanMemberService()->getPlanMemberByPlanId($plan['id'], $member['userId']);
+            }
+        }
+
         return $this->render("ClassroomBundle:Classroom:dashboard-nav.html.twig",array(
             'canManageClassroom' => $canManageClassroom,
             'classroom' => $classroom,
             'nav' => $nav,
-            'member' => $member
+            'member' => $member,
+            'planMember' => $planMember
         ));
     }
 
@@ -1059,4 +1069,15 @@ class ClassroomController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
 
     }
+
+    protected function getClassroomPlanService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+
+    protected function getClassroomPlanMemberService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
+    }
+
 }
