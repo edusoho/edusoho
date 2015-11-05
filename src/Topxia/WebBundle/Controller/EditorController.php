@@ -73,7 +73,7 @@ class EditorController extends BaseController
         $name = date("Ymdhis")."_formula.jpg";
         $path = $this->getServiceKernel()->getParameter('topxia.upload.public_directory') . '/tmp/' . $name;
 
-        $imageData = CurlToolkit::request('POST',$url,array());
+        $imageData = CurlToolkit::request('POST',$url,array(),array('contentType'=>'plain'));
 
         $tp = @fopen($path, 'a');
         fwrite($tp, $imageData);
