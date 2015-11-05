@@ -41,7 +41,6 @@
           </div>
         {% endif %}
 
-<<<<<<< HEAD
         <div class="form-group mbl">
           <label class="control-label required" for="register_nickname">用户名</label>
           <div class="controls">
@@ -56,22 +55,6 @@
             <p class="help-block"></p>
           </div>
         </div>
-=======
-          {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
-            <div class="form-group mb40 js-captcha">
-              <label class="control-label required" for="captcha_code">验证码</label>
-              <div class="controls row">
-                <div class = "col-xs-7">
-                  <input type="text" class="form-control" id="captcha_code" name="captcha_code" maxlength="5" placeholder="验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
-                </div>
-                <div class="col-xs-5">
-                  <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;height:34px;width:100%" >
-                </div>
-                <div class="col-md-12 help-block"></div>  
-              </div>
-            </div>    
-          {% endif %}
->>>>>>> develop
 
         {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
           <div class="form-group mbl js-captcha">
