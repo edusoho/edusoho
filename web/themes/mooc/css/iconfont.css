@@ -15,8 +15,9 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
-.icon-bianji:before { content: "\e604"; }
-.icon-paper:before { content: "\e603"; }
+.icon-xiangqing:before { content: "\e605"; }
+.icon-edit:before { content: "\e607"; }
 .icon-time:before { content: "\e600"; }
 .icon-xiala:before { content: "\e601"; }
 .icon-xunzhang:before { content: "\e602"; }
+.icon-wendangkeshi:before { content: "\e606"; }

@@ -3,12 +3,13 @@
 {% set menu = 'admin_user_manage' %}
 
 {% set script_controller = 'theme/user/list' %}
-{% set organizations = data('Organization', {all:1}) %}
-
+{% set organizations = data('OrganizationZtree', {all:1}) %}
+{% set script_arguments = {
+        ztreeDates : organizations
+      } %}
 {% block main %}
 
   {{ web_macro.flash_messages() }}
-
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
       <div class="form-group">
@@ -18,15 +19,12 @@
       </div>
 
       <div class="form-group">
-        <select class="form-control" name="organizationId">
-          {% set tree = data('OrganizationTree',{}) %}
-          {% set selectId = app.request.query.get('organizationId') %}
-          <option value=0>--选择院系/专业--</option>
-          {% for item in tree %}
-            <option value="{{ item.id }}" {% if item.id == selectId %}selected{% endif %}>{% for i in 0..(item.depth-1)*2 %}&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}└─ {{ item.name }}</option>
-          {% endfor %}
-        </select>
+       <input  class="form-control" name="orgName" id ="orgName"  value= "{{app.request.query.get('orgName','--选择院系/专业--')}}" autocomplete="off"  >
+        <input  type ="hidden" class="form-control" name="organizationId" id ="organizationId"  value= "{{app.request.query.get('organizationId') }}" >
         <input type="hidden" name="includeChildren" value="true">
+        <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+          <ul id="organizationZtree" class="ztree" style="margin-top:0; width:196px;"></ul>
+        </div>
       </div>
 
       <span class="divider"></span>
@@ -48,7 +46,7 @@
       </div>
 
       <button class="btn btn-primary">搜索</button>
-
+      
       {% if is_granted('ROLE_SUPER_ADMIN') %}
         {% if showUserExport %}
           <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal" data-url="{{path('admin_user_export')}}">导出搜索结果</a>
