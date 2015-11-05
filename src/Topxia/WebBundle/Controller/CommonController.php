@@ -30,6 +30,10 @@ class CommonController extends BaseController
     public function parseQrcodeAction(Request $request,$token)
     {
         $token = $this->getTokenService()->verifyToken('qrcode',$token);
+        if(empty($token) || !isset($token['data']['url'])) {
+            return $this->redirect($this->generateUrl('homepage',array(),true));
+        }
+
         if(strpos(strtolower($request->headers->get('User-Agent')), 'kuozhi') > -1) {
             return $this->redirect($token['data']['appUrl']);
         }
