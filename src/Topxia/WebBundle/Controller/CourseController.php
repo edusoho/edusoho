@@ -454,8 +454,15 @@ class CourseController extends CourseBaseController
 		}catch(Exception $e){
 			throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
 		}
+
+		$classroom = array();
+		if ($course['parentId']) {
+			$classroom = $this->getClassroomService()->findClassroomByCourseId($id);
+		}
+		
 		return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
 			'course' => $course,
+			'classroom' => $classroom
 		));
 	}
 
