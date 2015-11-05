@@ -1195,7 +1195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		if ($fields['type'] == 'live') {
+		if ($fields['type'] == 'live' && isset($fields['startTime'])) {
 			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
 			$fields['suggestHours'] = $fields['length'] / 60;
 		}
