@@ -318,7 +318,7 @@ class CourseLessonManageController extends BaseController
 			$lesson['type'] = 'testpaper';
 			$lesson['courseId'] = $course['id'];
 			$lesson = $this->getCourseService()->createLesson($lesson);
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+			return $this->render('TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
 			));
@@ -363,7 +363,7 @@ class CourseLessonManageController extends BaseController
 		if($request->getMethod() == 'POST') {
 			$fields = $request->request->all();
 			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+			return $this->render('TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig', array(
 				'course' => $course,
 				'lesson' => $lesson,
 			));
