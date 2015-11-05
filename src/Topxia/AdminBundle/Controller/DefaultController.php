@@ -88,26 +88,8 @@ class DefaultController extends BaseController
     }
 
     public function indexAction(Request $request)
-    { 
-        $result = CloudAPIFactory::create('leaf')->get('/me');
-
-        $hidden = array();
-        if(isset($result['thirdCopyright']) and $result['thirdCopyright'] == '1'){
-            $hidden = array(
-                'cloud_notice' => '1',
-                'system_status' => '1',
-            );
-        }
-
-        if(isset($result['copyright']) and $result['copyright'] == '1'){  
-            $hidden = array(
-                'cloud_notice' => '1'
-            );
-        }       
-
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig',array(
-            'hidden' => $hidden
-        ));
+    {   
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
 
     public function getCloudNoticesAction(Request $request)
