@@ -126,18 +126,18 @@ define(function (require, exports, module) {
         function RealTimeTestpaper(){
 
             var that = this;
-            this.init = function(){
+            this._init = function(){
                 that._$testStartTime = $('#lesson-testpaper-start-time-field');
                 that._$testStartTimeDiv = $('#testpaper-start-time-div');
                 that._isRealTimeTestpaper = $('#real-time-testpaper').val() == 1 ? true:false;
                 that._testStartTime = new Date(that._$testStartTime.val());
                 that.validator = validator;
-                that.$isRealTimeTestpaper = $('[name=isRealTimeTestpaper]');
+                that._$isRealTimeTestpaper = $('[name=isRealTimeTestpaper]');
 
             };
-            this.init();
+            this._init();
             this.run = function(){
-                that.$isRealTimeTestpaper.on('click', function(){
+                that._$isRealTimeTestpaper.on('click', function(){
                     var $this = $(this);
                     if($this.val() == 1){
                         that._addTestStartTimeValidatorItem();
@@ -158,13 +158,13 @@ define(function (require, exports, module) {
                 }
 
                 that._$testStartTimeDiv.show();
-                console.log(that._testStartTime);
                 var now = new Date();
                 if(that._testStartTime < now){
-                    that._$testStartTime.next('.help-block').show();
+                    that._$isRealTimeTestpaper.attr("disabled",true);
                     that._$testStartTime.attr("disabled",true);
                 }
-
+                that._addTestStartTimeValidatorItem();
+                that._addTimePicker();
             };
 
             this._addTestStartTimeValidatorItem = function(){
