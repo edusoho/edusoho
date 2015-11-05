@@ -375,7 +375,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($fields)
     {
-        $event = $this->dispatchEvent('thread.before_create_post', $fields);
+        $event = $this->dispatchEvent('thread.post.before_create', $fields);
         if($event->isPropagationStopped()){
             throw $this->createServiceException('回复次数过多，请稍候尝试。');
         }
@@ -442,7 +442,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
 
-        $this->dispatchEvent('thread.post_create', $post);
+        $this->dispatchEvent('thread.post.create', $post);
 
         return $post;
     }

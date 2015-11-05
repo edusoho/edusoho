@@ -15,14 +15,20 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
             'thread.before_create' => 'before',
             'thread.create' => 'incrToken',
 
-            'thread.before_create_post' => 'before',
-            'thread.post_create' => 'incrToken',
+            'thread.post.before_create' => 'before',
+            'thread.post.create' => 'incrToken',
 
             'courseThread.before_create' => 'before',
             'courseThread.create' => 'incrToken',
 
-            'courseThread.before_ceate_post' => 'before',
-            'courseThread.post_create' => 'incrToken',
+            'courseThread.post.before_ceate' => 'before',
+            'courseThread.post.create' => 'incrToken',
+
+            'groupThread.before_create' => 'before',
+            'groupThread.create' => 'incrToken',
+
+            'groupThread.post.before_ceate' => 'before',
+            'groupThread.post.create' => 'incrToken',
         );
     }
 
@@ -34,9 +40,11 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
         $eventName = $event->getName();
         $names = explode('.', $eventName);
 
-        if(!$this->getTokenBucketService()->hasToken($currentIp, $names[0])){
+        if(!$this->getTokenBucketService()->hasToken($currentIp, $names[0])
+            ||!$this->getTokenBucketService()->hasToken($currentUser['id'], $names[0].'LoginedUser')){
     	   $event->stopPropagation();
         }
+
     }
 
     public function incrToken(ServiceEvent $event)
@@ -48,6 +56,7 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
         $currentIp = $currentUser->currentIp;
 
         $this->getTokenBucketService()->incrToken($currentIp, $names[0]);
+        $this->getTokenBucketService()->incrToken($currentUser['id'], $names[0].'LoginedUser');
     }
 
     public function getTokenBucketService()
