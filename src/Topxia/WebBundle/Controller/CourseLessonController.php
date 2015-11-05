@@ -595,19 +595,24 @@ class CourseLessonController extends BaseController
     public function qrcodeAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getUserService()->getCurrentUser();
-        if (!$user->isLogin()){
-            $url = $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId;
+        $host = $request->getSchemeAndHttpHost();
+
+        if($user->isLogin()) {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$lessonId}";
         } else {
-            $token = $this->getTokenService()->makeToken('qrcode',array(
-                'userId'=>$user['id'],
-                'data' => array(
-                    'url' => $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId
-                ), 
-                'times' => 0, 
-                'duration' => 3600
-            ));
-            $url = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$id}";
         }
+
+        $token = $this->getTokenService()->makeToken('qrcode',array(
+            'userId'=>$user['id'],
+            'data' => array(
+                'url' => $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId,
+                'appUrl' => $appUrl
+            ), 
+            'times' => 0, 
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
