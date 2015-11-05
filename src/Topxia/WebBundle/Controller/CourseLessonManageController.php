@@ -40,7 +40,6 @@ class CourseLessonManageController extends BaseController
 		$mediaIds = array_keys($mediaMap);
 
 		$files = $this->getUploadFileService()->findFilesByIds($mediaIds);
-
 		foreach ($files as $file) {
 			$lessonIds = $mediaMap[$file['id']];
 			foreach ($lessonIds as $lessonId) {
@@ -328,7 +327,7 @@ class CourseLessonManageController extends BaseController
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+		return $this->render('TopxiaWebBundle:CourseTestpaperManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
 									   'features' => $features,
@@ -372,7 +371,7 @@ class CourseLessonManageController extends BaseController
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+		return $this->render('TopxiaWebBundle:CourseTestpaperManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'lesson' => $lesson,
 			'paperOptions' => $paperOptions,
