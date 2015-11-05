@@ -58,7 +58,7 @@ define(function(require, exports, module) {
             }); 
 
             validator.addItem({
-                element: '[name="captcha_num"]',
+                element: '[name="captcha_code"]',
                 required: true,
                 rule: 'alphanumeric remote',
                 onItemValidated: function(error, message, eleme) {
@@ -153,7 +153,7 @@ define(function(require, exports, module) {
                     display: '短信验证码'           
                 });
 
-                validator.removeItem('[name="captcha_num"]');
+                validator.removeItem('[name="captcha_code"]');
 
                 $form.on('click','.js-sms-send',function(e){
                     var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');

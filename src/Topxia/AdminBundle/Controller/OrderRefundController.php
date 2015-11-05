@@ -136,7 +136,8 @@ class OrderRefundController extends BaseController
 
         $targetUrl = $this->generateUrl($order["targetType"].'_show', array('id' => $order['targetId']));
         $variables = array(
-            "{$order['targetType']}" => "<a href='{$targetUrl}'>{$target['title']}</a>",
+            "item" => "<a href='{$targetUrl}'>{$target['title']}</a>",
+            // "{$order['targetType']}" => "<a href='{$targetUrl}'>{$target['title']}</a>",
             "amount" => $data["amount"],
             "note" => $data["note"],
         );

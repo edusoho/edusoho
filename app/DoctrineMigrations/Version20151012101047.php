@@ -8,15 +8,16 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150602200953 extends AbstractMigration
+class Version20151012101047 extends AbstractMigration
 {
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
+        $this->addSql("ALTER TABLE `batch_notification` ADD `published` int(10) NOT NULL DEFAULT '0' COMMENT '是否已经发送' AFTER `createdTime`; ");
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("INSERT INTO `crontab_job`(`name`, `cycle`, `cycleTime`, `jobClass`, `jobParams`, `executing`, `nextExcutedTime`, `latestExecutedTime`, `creatorId`, `createdTime`) VALUES ('DeleteSessionJob','everyhour',0,'Topxia\\Service\\User\\Job\\DeleteSessionJob','','1',".time().",0,0,0)");
+
     }
 
     /**

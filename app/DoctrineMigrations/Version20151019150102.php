@@ -8,15 +8,21 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20140831062546 extends AbstractMigration
+class Version20151019150102 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
+        $this->addSql("ALTER TABLE `batch_notification` ADD `sendedTime` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知的发送时间' AFTER `createdTime`; ");
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE  `session` CHANGE  `user_id`  `user_id` INT UNSIGNED NOT NULL DEFAULT  '0'");
-        $this->addSql("RENAME TABLE `session` TO `session2` ;");
+
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
