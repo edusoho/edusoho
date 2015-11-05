@@ -997,6 +997,10 @@ class AnalysisController extends BaseController
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
+        $classroomIds = ArrayToolkit::column($incomeDetail, 'targetId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
         $userIds = ArrayToolkit::column($incomeDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -1014,6 +1018,7 @@ class AnalysisController extends BaseController
             'tab'=>$tab,
             'data'=>$data,
             'courses'=>$courses,
+            'classrooms'=>$classrooms,
             'users'=>$users,
             'incomeStartDate'=>$incomeStartDate,
             'dataInfo'=>$dataInfo,    
@@ -1119,9 +1124,9 @@ class AnalysisController extends BaseController
             $data=$this->fillAnalysisData($condition,$classroomIncomeData);
         }
 
-        $courseIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
+        $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
 
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         $userIds = ArrayToolkit::column($classroomIncomeDetail, 'userId');
 
@@ -1139,7 +1144,7 @@ class AnalysisController extends BaseController
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
-            'courses'=>$courses,
+            'classrooms'=>$classrooms,
             'users'=>$users,
             'classroomIncomeStartDate'=>$classroomIncomeStartDate,
             'dataInfo'=>$dataInfo,
@@ -1182,9 +1187,6 @@ class AnalysisController extends BaseController
             $data=$this->fillAnalysisData($condition,$vipIncomeData);
         }
 
-        $courseIds = ArrayToolkit::column($vipIncomeDetail, 'targetId');
-
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
         $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
 
@@ -1202,7 +1204,6 @@ class AnalysisController extends BaseController
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
-            'courses'=>$courses,
             'users'=>$users,
             'vipIncomeStartDate'=>$vipIncomeStartDate,
             'dataInfo'=>$dataInfo,
@@ -1368,4 +1369,8 @@ class AnalysisController extends BaseController
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip.VipService');
+    }
 }
