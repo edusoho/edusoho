@@ -21,13 +21,13 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
             'courseThread.before_create' => 'before',
             'courseThread.create' => 'incrToken',
 
-            'courseThread.post.before_ceate' => 'before',
+            'courseThread.post.before_create' => 'before',
             'courseThread.post.create' => 'incrToken',
 
             'groupThread.before_create' => 'before',
             'groupThread.create' => 'incrToken',
 
-            'groupThread.post.before_ceate' => 'before',
+            'groupThread.post.before_create' => 'before',
             'groupThread.post.create' => 'incrToken',
         );
     }
@@ -40,8 +40,8 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
         $eventName = $event->getName();
         $names = explode('.', $eventName);
 
-        if(!$this->getTokenBucketService()->hasToken($currentIp, $names[0])
-            ||!$this->getTokenBucketService()->hasToken($currentUser['id'], $names[0].'LoginedUser')){
+        if(!($this->getTokenBucketService()->hasToken($currentIp, $names[0])
+            && $this->getTokenBucketService()->hasToken($currentUser['id'], $names[0].'LoginedUser'))){
     	   $event->stopPropagation();
         }
 

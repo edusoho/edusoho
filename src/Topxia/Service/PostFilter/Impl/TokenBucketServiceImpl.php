@@ -50,7 +50,6 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 		}
 
 		$postNumRules = $this->getSettingService()->get("post_num_rules");
-
 		if(!isset($postNumRules['rules'])) {
 			return true;
 		}
@@ -71,6 +70,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
 	protected function confirmRule($ip, $type, $postNumRule)
 	{
+
 		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
 		if(empty($recentPostNum)) {
 			return true;
