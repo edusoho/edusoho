@@ -9,6 +9,8 @@ class PushNotificationOneHourJob implements Job
 {
   public function execute($params)
     {
+        $targetType = $params['targetType'];
+        $targetId = $params['targetId'];
         if ($targetType == 'lesson') {
             $lesson = $this->getCourseService()->getLesson($targetId);
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
