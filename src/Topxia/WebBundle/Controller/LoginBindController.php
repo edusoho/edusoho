@@ -27,7 +27,7 @@ class LoginBindController extends BaseController
         $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
-        if ($bind) {
+        /*if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
                 $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
@@ -45,7 +45,7 @@ class LoginBindController extends BaseController
                 $response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);
-            }
+            }*/
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
 
