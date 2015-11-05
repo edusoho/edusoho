@@ -1,0 +1,64 @@
+course_create:
+    pattern:  /mooc/course/create
+    defaults: { _controller: MoocWebBundle:Course:create }
+
+course_next_round:
+    pattern: /course/{id}/nextRound
+    defaults: { _controller: MoocWebBundle:Course:nextRound }
+
+course_rounding:
+    pattern: /course/{id}/rounding
+    defaults: { _controller: MoocWebBundle:Course:rounding }
+
+course_explore:
+    pattern:  /mooc/course/explore/{category}
+    defaults: { _controller: MoocWebBundle:Course:explore, category:'' }
+
+classroom_courses_pick:
+    pattern: /classroom/{classroomId}/course/pick
+    defaults: { _controller: MoocWebBundle:Classroom\Course:pick }
+
+classroom_course_search:
+    pattern: /classroom/{classroomId}/course/search
+    defaults: { _controller: MoocWebBundle:Classroom\Course:search }
+
+classroom_manage_students:
+    pattern: /classroom/{id}/manage/students
+    defaults: { _controller: MoocWebBundle:Classroom\ClassroomManage:students }
+
+classroom_manage_aduitor:
+    pattern: /classroom/{id}/manage/aduitor
+    defaults: { _controller: MoocWebBundle:Classroom\ClassroomManage:aduitor }
+
+classroom_manage_student_export_csv:
+    pattern:  /classroom/{id}/manage/student/export/{role}
+    defaults: { _controller: MoocWebBundle:Classroom\ClassroomManage:exportCsv }
+
+
+search:
+    pattern:  /search
+    defaults: { _controller: MoocWebBundle:Search:index }
+
+homepage:
+    pattern:  /
+    defaults: { _controller: MoocWebBundle:Default:index }
+
+homepage_recommend_courses:
+    pattern:  /recommend-courses
+    defaults: { _controller: MoocWebBundle:Default:recommedCourses}
+
+register_staffNo_check:
+    pattern:  /register/staff-no/check
+    defaults: { _controller: MoocWebBundle:Register:checkStaffNo }
+
+course_manage_students:
+    pattern:  /course/{id}/manage/students
+    defaults: { _controller: MoocWebBundle:CourseStudentManage:index }
+
+course_manage_student_export_csv:
+    pattern:  /course/{id}/manage/student/export
+    defaults: { _controller: MoocWebBundle:CourseStudentManage:exportCsv }
+
+mobile:
+    pattern: /mobile/
+    defaults: { _controller: MoocWebBundle:Mobile:index }

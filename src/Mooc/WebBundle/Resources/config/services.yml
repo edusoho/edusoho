@@ -1,0 +1,17 @@
+parameters:
+#    mooc_web.example.class: Mooc\WebBundle\Example
+    topxia_services:
+        'Course.CourseService' : 'Mooc\Service\Course\Impl\CourseServiceImpl'
+        'Crontab.CrontabService' : 'Mooc\Service\Crontab\Impl\CrontabServiceImpl'
+    topxia_daos:
+        'Course.CourseDao' : 'Mooc\Service\Course\Dao\Impl\CourseDaoImpl'
+services:
+#    mooc_web.example:
+#        class: %mooc_web.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    mooc.twig.web_extension:
+        class: Mooc\WebBundle\Twig\Extension\WebExtension
+        arguments:    [@service_container]
+        tags:
+            - { name: twig.extension }

@@ -34,6 +34,8 @@ class AppKernel extends Kernel
             new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Classroom\ClassroomBundle\ClassroomBundle(),
+            new Mooc\WebBundle\MoocWebBundle(),
+            new Mooc\AdminBundle\MoocAdminBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
