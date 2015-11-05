@@ -124,7 +124,6 @@ define(function (require, exports, module) {
         });
 
         function RealTimeTestpaper(){
-
             var that = this;
             this._init = function(){
                 that._$testStartTime = $('#lesson-testpaper-start-time-field');
@@ -133,7 +132,6 @@ define(function (require, exports, module) {
                 that._testStartTime = new Date(that._$testStartTime.val());
                 that.validator = validator;
                 that._$isRealTimeTestpaper = $('[name=isRealTimeTestpaper]');
-
             };
             this._init();
             this.run = function(){
@@ -146,7 +144,6 @@ define(function (require, exports, module) {
                         that._$testStartTimeDiv.show();
                     }else {
                         that._isRealTimeTestpaper = false;
-                        that._$testStartTime.val('');
                         that._removeTestStartTimeValidatorItem();
                         that._removeTimePicker();
                         that._$testStartTimeDiv.hide();
@@ -176,7 +173,6 @@ define(function (require, exports, module) {
                         display:"考试开始时间"
                     });
                 }
-
             };
 
             this._addTimePicker = function(){
@@ -204,7 +200,6 @@ define(function (require, exports, module) {
                     that.validator.removeItem(that._$testStartTime);
                 }
             }
-
         }
 
         new RealTimeTestpaper().run();
