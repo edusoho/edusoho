@@ -15,25 +15,8 @@ class MyTaskController extends BaseController
 
 		if($tasks){
 			foreach($tasks as $key => $task){
-				$tasksevents[$key]['title'] = $task['title'];
-				$tasksevents[$key]['start'] = date("Y-m-d H:i:s",$task['taskStartTime']);
-				$tasksevents[$key]['end'] = date("Y-m-d H:i:s",strtotime('+1 day', $task['taskEndTime']));
-				$tasksevents[$key]['id'] = $task['id'];
-				if($task['taskType']=='studyplan'){
-					if ($task['targetType'] == 'homework') {
-						$tasksevents[$key]['url'] = $this->generateUrl('course_homework_start_do', array(
-							'courseId'=>$task['meta']['courseId'],'homeworkId'=>$task['targetId']));
-					} else {
-						$tasksevents[$key]['url'] = $this->generateUrl('course_learn',array(
-						'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
-					}
-				}
-
-				if($task['status']=='completed'){
-					$tasksevents[$key]['color']='#46c37b';
-				}else{
-					$tasksevents[$key]['color']='#919191';
-				}
+				$taskSames = $this->_prepareTask($task);
+				$tasksevents = array_merge($tasksevents,$taskSames);
 			}/*else{//其他扩展任务url
 				}*/
 		}else{
@@ -53,8 +36,70 @@ class MyTaskController extends BaseController
         ));
 	}
 
+	private  function _prepareTask($task)
+	{
+		$taskSames = array();
+		$taskNew['title'] = $task['title'];
+		$taskNew['start'] = date("Y-m-d H:i:s",$task['taskStartTime']);
+		$taskNew['id'] = $task['id'];
+
+		if($task['status']=='completed'){
+			$taskNew['color']='#46c37b';
+		}else{
+			$taskNew['color']='#919191';
+		}
+
+		if($task['taskType']=='studyplan'){
+			if ($task['targetType'] == 'homework') {
+				$taskNew['url'] = $this->generateUrl('course_homework_start_do', array(
+					'courseId'=>$task['meta']['courseId'],'homeworkId'=>$task['targetId']));
+			} else {
+				$taskNew['url'] = $this->generateUrl('course_learn',array(
+				'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
+			}
+		}
+
+		$dayDiff = ceil(($task['taskEndTime'] - $task['taskStartTime']) / (3600 * 24));
+		if ($dayDiff == 1) {
+			$taskNew['end'] = date("Y-m-d H:i:s",strtotime('+1 day', $task['taskEndTime']));
+		} else {
+			$taskNew['end'] = date("Y-m-d H:i:s",strtotime('+1 day', $task['taskEndTime']));
+
+			if ($task['taskType']=='studyplan' && $this->isPluginInstalled('ClassroomPlan')) {
+
+				$userPlanMember = $this->getClassroomPlanMemberService()->getPlanMemberByPlanId($task['batchId'],$task['userId']);
+				//切割任务，把跨天的任务分割成每日单独的任务
+				if ($userPlanMember && count($userPlanMember['metas']['availableDate']) < 7) {
+					$taskNew['end'] = date("Y-m-d",strtotime('+1 day', $task['taskStartTime'])).' 23:59:59';
+					
+					for($i=1; $i<$dayDiff; $i++) {
+						$taskSame = $taskNew;
+
+						$week = date('w', strtotime("+{$i} day", strtotime($taskNew['start'])));
+						if (!in_array($week, $userPlanMember['metas']['availableDate'])) {
+							continue;
+						}
+						$taskSame['start'] = date('Y-m-d H:i:s', strtotime("+{$i} day", strtotime($taskNew['start'])));
+						$taskSame['end'] = date('Y-m-d H:i:s', strtotime("+{$i} day", strtotime($taskNew['end'])));
+
+						$taskSames[] = $taskSame;
+					}
+				}
+			}
+		}
+
+		$taskSames[] = $taskNew;
+
+		return $taskSames;
+	}
+
 	protected function getTaskService()
 	{
 		return $this->getServiceKernel()->createService('Task.TaskService');
 	}
+
+	protected function getClassroomPlanMemberService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
+    }
 }
