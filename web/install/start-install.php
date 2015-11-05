@@ -824,7 +824,6 @@ EOD;
             'name'=>'CancelOrderJob', 
             'cycle'=>'everyhour',
             'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
-            'jobParams'=>'',
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
         ));
@@ -833,7 +832,6 @@ EOD;
             'name'=>'DeleteExpiredTokenJob', 
             'cycle'=>'everyhour',
             'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams'=>'',
             'nextExcutedTime'=>time(),
             'createdTime'=>time()
         ));
