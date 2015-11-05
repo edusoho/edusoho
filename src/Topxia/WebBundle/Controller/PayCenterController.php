@@ -177,25 +177,7 @@ class PayCenterController extends BaseController
         }
     }
 
-    public function updateBankAuth($order,$params)
-    {
-        $order = $this->getOrderService()->getOrderBySn($order['sn']);
-        $userAuth = array('hy_auth_uid'=>$params['hy_auth_uid'],'hy_token_id'=>$params['hy_token_id']);
-        $userAuth = json_encode($userAuth);
-        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($order['userId']);
-        if(!empty($authBanks)){
-            foreach ($authBanks as $authBank) {
-                $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'],array('userAuth'=>$userAuth,'updatedTime'=>time())); 
-            } 
-        }
-
-    }
-
-    public function generateOrderToken($order,$params)
-    {
-       return $this->getOrderService()->updateOrder($order['id'],array('token' => $params['agent_bill_id']));
-    }
-
+    
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {   
         $this->getLogService()->info('order', 'pay_result',  "{$name}页面跳转支付通知", $request->query->all());
@@ -236,20 +218,7 @@ class PayCenterController extends BaseController
         ));
     }
 
-    public function createUserAuth($name,$params)
-    {
-        $order = $this->getOrderService()->getOrderBySn($params['sn']);
-        $authBankRequest = $this->createAuthBankRequest($name,$params);
-        $authBanks = $authBankRequest->form();
-        foreach ($authBanks as $authBank) {
-            $bankAuth = $this->getUserService()->getUserPayAgreementByBankAuth($authBank['bankAuth']);
-            if(empty($bankAuth)){
-                $field = array('userId'=>$order['userId'],'type'=>$authBank['type'],'bankName'=>$authBank['bankName'],'bankNumber'=>$authBank['bankNumber'],'bankAuth'=>$authBank['bankAuth'],'otherId'=>$authBank['bankId'],'createdTime'=>time());
-                $this->getUserService()->createUserPayAgreement($field);
-            }
-            
-        }
-    }
+
 
     public function payErrorAction(Request $request)
     {
@@ -331,12 +300,6 @@ class PayCenterController extends BaseController
         }
 
         return $this->createJsonResponse($response);
-    }
-
-
-    public function generateOrderToken($order,$params)
-    {
-       return $this->getOrderService()->updateOrder($order['id'],array('token' => $params['agent_bill_id']));
     }
 
     public function wxpayRollAction(Request $request)
@@ -455,6 +418,41 @@ class PayCenterController extends BaseController
         $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
 
         return $orderInfo;
+    }
+
+    public function updateBankAuth($order,$params)
+    {
+        $order = $this->getOrderService()->getOrderBySn($order['sn']);
+        $userAuth = array('hy_auth_uid'=>$params['hy_auth_uid'],'hy_token_id'=>$params['hy_token_id']);
+        $userAuth = json_encode($userAuth);
+        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($order['userId']);
+        if(!empty($authBanks)){
+            foreach ($authBanks as $authBank) {
+                $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'],array('userAuth'=>$userAuth,'updatedTime'=>time())); 
+            } 
+        }
+
+    }
+
+    public function createUserAuth($name,$params)
+    {
+        $order = $this->getOrderService()->getOrderBySn($params['sn']);
+        $authBankRequest = $this->createAuthBankRequest($name,$params);
+        $authBanks = $authBankRequest->form();
+        foreach ($authBanks as $authBank) {
+            $bankAuth = $this->getUserService()->getUserPayAgreementByBankAuth($authBank['bankAuth']);
+            if(empty($bankAuth)){
+                $field = array('userId'=>$order['userId'],'type'=>$authBank['type'],'bankName'=>$authBank['bankName'],'bankNumber'=>$authBank['bankNumber'],'bankAuth'=>$authBank['bankAuth'],'otherId'=>$authBank['bankId'],'createdTime'=>time());
+                $this->getUserService()->createUserPayAgreement($field);
+            }
+            
+        }
+    }
+
+
+    public function generateOrderToken($order,$params)
+    {
+       return $this->getOrderService()->updateOrder($order['id'],array('token' => $params['agent_bill_id']));
     }
 
     protected function getPaymentOptions($payment)
