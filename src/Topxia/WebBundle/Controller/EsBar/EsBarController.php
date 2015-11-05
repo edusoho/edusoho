@@ -393,8 +393,22 @@ class EsBarController extends BaseController{
                         $classroom['allLessonNum'] = $classroomLessonNum;
 
                         if ($this->isPluginInstalled('ClassroomPlan')) {
+                            
                             $classroomPlan = $this->getClassroomPlanService()->getPlanByClassroomId($classroom['id']);
                             if ($classroomPlan) {
+                                $classroom['learnedLessonNum'] = $this->getTaskService()->searchTaskCount(array(
+                                    'batchId' => $classroomPlan['id'],
+                                    'userId' => $user['id'],
+                                    'taskType' => 'studyplan',
+                                    'status' => 'completed')
+                                );
+
+                                $classroom['allLessonNum'] = $this->getTaskService()->searchTaskCount(array(
+                                    'batchId' => $classroomPlan['id'],
+                                    'userId' => $user['id'],
+                                    'taskType' => 'studyplan')
+                                );
+
                                 $sortedClassrooms[$key]['planId'] = $classroomPlan['id'];
                             }
                         }
@@ -437,6 +451,11 @@ class EsBarController extends BaseController{
     protected function getClassroomPlanService()
     {
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task.TaskService');
     }
 
 }
