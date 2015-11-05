@@ -176,7 +176,6 @@ define(function (require, exports, module) {
             };
 
             this._addTimePicker = function(){
-                console.log('addTimePicker');
                 that._$testStartTime.datetimepicker({
                     language:'zh-CN',
                     autoclose: true,
