@@ -14,7 +14,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'testpaper.reviewed' => 'onTestPaperReviewed',
-            'course.lesson.pubilsh' => 'onLessonPubilsh',
+            'course.lesson.publish' => 'onLessonPubilsh',
             'course.publish' => 'onCoursePublish',
             'course.close' => 'onCourseClose',
             'announcement.create' => 'onAnnouncementCreate',
@@ -84,7 +84,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'course.open');
 
-        return $this->push($course['title'], '课程被关闭!', $from, $to, $body);
+        return $this->push($course['title'], '课程已发布!', $from, $to, $body);
 
     }
 
