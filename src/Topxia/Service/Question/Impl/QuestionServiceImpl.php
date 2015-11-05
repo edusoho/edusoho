@@ -69,7 +69,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     
     public function searchQuestions($conditions, $orderBy, $start, $limit)
     {
-        return $this->getQuestionDao()->searchQuestions($conditions, $orderBy, $start, $limit);
+        $questions = $this->getQuestionDao()->searchQuestions($conditions, $orderBy, $start, $limit);
+        foreach ($questions as &$question) {
+            $question['includeImg'] = false;
+            if (preg_match('/<img (.*?)>/', $question['stem'])) {
+                $question['includeImg'] = true;
+            }
+        }
+        return $questions;
     }
 
     public function searchQuestionsCount($conditions)
