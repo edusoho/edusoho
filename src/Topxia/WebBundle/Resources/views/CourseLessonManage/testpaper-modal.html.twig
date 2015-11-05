@@ -33,6 +33,24 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">实时考试</label></div>
+        <div class="col-md-9 controls">
+          {{ radios('isRealTimeTestpaper', {0:'关闭'}, lesson.isRealTimeTestpaper|default(0)) }}
+          {{ radios('isRealTimeTestpaper', {1:'开启'}, lesson.isRealTimeTestpaper|default(0)) }}
+          <input type="hidden" id="real-time-testpaper" value="{{ lesson.isRealTimeTestpaper|default(0) }}">
+        </div>
+      </div>
+
+      <div class="form-group " id="testpaper-start-time-div" style="display: none">
+        <div class="col-md-2 control-label">
+          <label>开始时间</label>
+        </div>
+        <div class="col-md-9 controls">
+          <input id="lesson-testpaper-start-time-field" class="form-control" type="text" name="testpaperStartTime" value="{% if lesson.testpaperStartTime|default(null) %} {{ lesson.testpaperStartTime|date('Y-m-d H:i') }}{% endif %}">
+        </div>
+      </div>
+
       {% if 'lesson_credit' in features %}
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-title-field">限制学分</label></div>
@@ -42,7 +60,6 @@
         </div>
       </div>
       {% endif %}
-
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>

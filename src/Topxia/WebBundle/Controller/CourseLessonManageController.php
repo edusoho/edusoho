@@ -296,7 +296,23 @@ class CourseLessonManageController extends BaseController
 	public function createTestPaperAction(Request $request, $id)
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
-						  $parentId = $request->query->get('parentId');
+
+		if($request->getMethod() == 'POST') {
+			$lesson = $request->request->all();
+			$lesson['type'] = 'testpaper';
+			$lesson['courseId'] = $course['id'];
+			$lesson['testpaperStartTime'] = strtotime($lesson['testpaperStartTime']);
+			if (!$lesson['testpaperStartTime']){
+				unset($lesson['testpaperStartTime']);
+			}
+			$lesson = $this->getCourseService()->createLesson($lesson);
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+					'course' => $course,
+					'lesson' => $lesson,
+			));
+		}
+
+		$parentId = $request->query->get('parentId');
 		$conditions = array();
 		$conditions['target'] = "course-{$course['id']}";
 		$conditions['status'] = 'open';
@@ -313,26 +329,13 @@ class CourseLessonManageController extends BaseController
 			$paperOptions[$testpaper['id']] = $testpaper['name'];
 		}
 
-		if($request->getMethod() == 'POST') {
-
-			$lesson = $request->request->all();
-			$lesson['type'] = 'testpaper';
-			$lesson['courseId'] = $course['id'];
-			$lesson = $this->getCourseService()->createLesson($lesson);
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-				'course' => $course,
-				'lesson' => $lesson,
-			));
-
-		}
-
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
-									   'features' => $features,
-									   'parentId' =>$parentId
+			'features' => $features,
+			'parentId' =>$parentId
 		));
 	}
 
@@ -363,6 +366,10 @@ class CourseLessonManageController extends BaseController
 
 		if($request->getMethod() == 'POST') {
 			$fields = $request->request->all();
+			$fields['testpaperStartTime'] = strtotime($fields['testpaperStartTime']);
+			if (!$fields['testpaperStartTime']){
+				unset($fields['testpaperStartTime']);
+			}
 			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
 				'course' => $course,
