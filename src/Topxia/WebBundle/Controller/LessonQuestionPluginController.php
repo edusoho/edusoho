@@ -94,12 +94,15 @@ class LessonQuestionPluginController extends BaseController
             'threadId' => $thread['id'],
         ));
 
+         $isManager = $this->getCourseService()->canManageCourse($course['id']);
+
         return $this->render('TopxiaWebBundle:LessonQuestionPlugin:show.html.twig', array(
             'course' => $course,
             'thread' => $thread,
             'threader' => $threader,
             'posts' => $posts,
             'users' => $users,
+            'isManager' => $isManager,
             'form' => $form->createView(),
         ));
     }

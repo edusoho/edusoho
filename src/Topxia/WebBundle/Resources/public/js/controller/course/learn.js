@@ -71,13 +71,15 @@ define(function(require, exports, module) {
               var balloonVideoPlayer = $('#lesson-video-content').data('balloonPlayer');
               var fileType = $('#lesson-video-content').data('fileType');
               var currentTime = -1;
+              console.log(this._toolbar);
              if (balloonVideoPlayer) {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 currentTime = Math.floor(player.getCurrentTime());
                 player.pause();
                 $('#modal').on('hidden.bs.modal', function (e) {
                   player.play();
-                })
+
+                });
              }
 
              var url = '/lessonplugin/question/ask?courseId=' + this.get('courseId') + '&lessonId=' + this.get('lessonId') + '&marker='+currentTime;
