@@ -41,7 +41,8 @@ class LoginBindController extends BaseController
             }
         } else {
             if ($type == 'weixinmob') {
-                $response = $this->autobind($request,$type);
+                //$response = $this->autobind($request,$type);
+                $response['_target_path'] = $this->generateUrl('login_bind_choose', array('type' => $type)
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);
             }
@@ -105,7 +106,7 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        /*$user = $this->generateUser($type, $token, $oauthUser,$setData=array());
+        $user = $this->generateUser($type, $token, $oauthUser,$setData=array());
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
@@ -114,8 +115,8 @@ class LoginBindController extends BaseController
         if (!empty($oauthUser['name']) && !empty($oauthUser['email'])) {
             $this->getUserService()->setupAccount($user['id']);
         }
-        $this->authenticateUser($user);*/
-        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('login_bind_choose', array('type' => $type))));
+        $this->authenticateUser($user);
+        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
         if (!$response['_target_path']) {
             $response['_target_path'] = $this->generateUrl('homepage');
         }
