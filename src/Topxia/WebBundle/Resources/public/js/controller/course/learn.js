@@ -71,7 +71,6 @@ define(function(require, exports, module) {
               var balloonVideoPlayer = $('#lesson-video-content').data('balloonPlayer');
               var fileType = $('#lesson-video-content').data('fileType');
               var currentTime = -1;
-              console.log(this._toolbar);
              if (balloonVideoPlayer) {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 currentTime = Math.floor(player.getCurrentTime());
@@ -93,7 +92,6 @@ define(function(require, exports, module) {
              }
 
              var url = '/lessonplugin/question/ask?courseId=' + this.get('courseId') + '&lessonId=' + this.get('lessonId') + '&marker='+currentTime;
-             console.log(url);
              $.get(url, '', function(data){
                 $('#modal').html(data).modal({
                     backdrop:true,
@@ -314,6 +312,13 @@ define(function(require, exports, module) {
                             var player = that.get("player");
                             player.playing = false;
                             that.set("player", player);
+                        });
+
+                        $("#lesson-video-content").on('onMarkerTimeClick', function (e,markerTime) {
+                            if (markerTime>0) {
+                               var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                               player.setCurrentTime(markerTime);
+                            }
                         });
 
                         that.set("player", {});

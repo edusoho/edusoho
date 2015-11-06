@@ -11,7 +11,7 @@
 	</div>
 	{% if thread.marker|default(0) >0 %}
 		提问于
-		<span class="btn btn-link">
+		<span class="btn btn-link" data-role="marker-time" data-marker-time="{{ thread.marker}}">
 			<span class="glyphicon glyphicon-time "> {{ thread.marker|duration }}</span>
 		</span>
 	{% endif %}

@@ -45,10 +45,15 @@ define(function(require, exports, module) {
                     plugins = $.extend(plugins, {
                       markers: {
                             markers: self.get('markers'),
-                            onMarkerClick: function(marker){
-                                console.log(marker['id']);
-                            }
-
+                            markerTip: {
+                               display: true,
+                               text: function(marker) {
+                                  return self.durationFormat(marker.time) +" "+ marker.text;
+                               },
+                               time: function(marker) {
+                                  return marker.time;
+                               }
+                            },
                         }
                     });
                 }
@@ -155,13 +160,11 @@ define(function(require, exports, module) {
 
         setMarkers: function(markers) {
             var player = this.get("player");
-            console.log(player.markers);
             player.markers.reset(markers);
         },
 
         addMarker: function(marker) {
             var player = this.get("player");
-            console.log(player.markers);
             player.markers.add(marker);
         },
 
@@ -174,6 +177,12 @@ define(function(require, exports, module) {
                 return !this.get("player").paused();
             }
             return false;
+        },
+
+        durationFormat: function(secondTime) {
+            var minutes = parseInt(secondTime / 60);
+            var seconds = secondTime - minutes * 60;
+            return minutes + ':' +seconds;
         },
 
         destroy: function() {
