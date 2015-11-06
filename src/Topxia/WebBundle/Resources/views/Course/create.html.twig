@@ -42,6 +42,14 @@
             </div>
           </div>
 
+      <div class="form-group">
+        <label class="col-md-2 control-label">课程购买</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('buyable', {'1':'开启', '0':'关闭'}, course.buyable|default(1) ) }}
+           <div class="help-block">关闭后课程将无法在线购买加入、由教师/管理员后台导入。</div>
+        </div>
+      </div>
+
           <div class="form-group">
             <div class="col-md-offset-2 col-md-8 controls">
               <input id="course-create-btn" data-submiting-text="正在创建" class="btn btn-fat btn-primary" type="submit" value="创建">

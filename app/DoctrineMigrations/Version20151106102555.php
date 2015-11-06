@@ -15,7 +15,8 @@ class Version20151106102555 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->addSql("ALTER TABLE `course` ADD `limitJoin` ENUM('opened','closed') NOT NULL DEFAULT 'closed' COMMENT '是否限制加入课程' AFTER `maxRate`;");
+        
+        $this->addSql("ALTER TABLE course ADD buyable tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买' AFTER `status`;");
 
     }
 
