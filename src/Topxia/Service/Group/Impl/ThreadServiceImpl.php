@@ -397,6 +397,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
     public function updatePost($id,$fields)
     {
+        if(!empty($fields['content'])) {
+            $fields['content'] = $this->purifyHtml($fields['content']);
+        }
         return $this->getThreadPostDao()->updatePost($id,$fields);
     }
 
