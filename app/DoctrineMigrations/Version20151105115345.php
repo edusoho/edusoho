@@ -15,11 +15,11 @@ class Version20151105115345 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if (!$this->isFieldExist('course_lesson', 'isRealTimeTestpaper')) {
+        if (!$this->isFieldExist('course_lesson', 'testMode')) {
             $this->addSql("ALTER TABLE `course_lesson` ADD `testMode` ENUM('normal', 'realTime') NULL DEFAULT 'normal' COMMENT '考试模式'");
         }
 
-        if (!$this->isFieldExist('course_lesson', 'testpaperStartTime')) {
+        if (!$this->isFieldExist('course_lesson', 'testStartTime')) {
             $this->addSql("ALTER TABLE `course_lesson` ADD `testStartTime` INT(10) NULL DEFAULT '0' COMMENT '实时考试开始时间'");
         }
     }
