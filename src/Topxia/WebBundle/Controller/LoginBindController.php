@@ -42,7 +42,7 @@ class LoginBindController extends BaseController
         } else {
             if ($type == 'weixinmob') {
                 //$response = $this->autobind($request,$type);
-                $response['_target_path'] = $this->generateUrl('login_bind_choose', array('type' => $type)
+                $response['_target_path'] = $this->generateUrl('login_bind_choose', array('type' => $type));
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);
             }
