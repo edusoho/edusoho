@@ -476,7 +476,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'watchLimit' => 0,
 			'approval' => 0,
 			'maxRate' => 0,
-			'locked' =>0
+			'locked' =>0,
+			'limitJoin' => 'closed'
 		));
 
 		if (!empty($fields['about'])) {

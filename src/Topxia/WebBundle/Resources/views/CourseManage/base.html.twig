@@ -44,6 +44,14 @@
         </div>
       </div>
 
+        <div class="form-group">
+        <label class="col-md-2 control-label">限制学员加入</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('limitJoin', {'opened':'开启', 'closed':'关闭'}, course.limitJoin|default('closed') ) }}
+           <div class="help-block">开启限制学员加入后，学员不能主动加入课程。由教师/管理员后台导入。</div>
+        </div>
+      </div>
+
       {% if course.type == 'live' %}
 
       <div class="form-group">
