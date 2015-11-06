@@ -13,23 +13,23 @@ define(function(require, exports, module) {
         var lastValue = "";
 
         function zTreeOnClick(event, treeId, treeNode) {
-            zTree.expandNode(treeNode, true, true, true); //展开当前选择的第一个节点（包括其全部子节点）
+            zTree.expandNode(treeNode, true, true, false); //展开当前选择的第一个节点（包括其全部子节点）
             // zTree.expandNode(treeNode); //展开当前选择的第一个节点（包括其全部子节点）
             node = zTree.getSelectedNodes()[0],
                 $clickObj.val(node.name);
             $valueObj.val(node.id);
             lastValue = node.name;
         };
+        //
         $clickObj.bind("focus", focusKey).bind("blur", blurKey).bind('click input propertychange', function() {
             zTree.expandAll(false);
             showMenu();
-            //  if (lastValue === oldValue) return;
             lastValue = $clickObj.val();
             if ($clickObj.val() == "") return;
             updateNodes(false);
             nodeList = zTree.getNodesByParamFuzzy('name', $clickObj.val());
             nodes = zTree.getNodes();
-            checkAllParents(nodeList[0]);
+           checkAllParents(nodeList[0]);
             updateNodes(true)
         });
 
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 
         function checkAllParents(treeNode) {
             if (treeNode == null || treeNode.parentId == null) {
-                zTree.expandNode(treeNode, true, true, true);
+                zTree.expandNode(treeNode, true, true, false,true);
             } else {
                 checkAllParents(treeNode.getParentNode());
             }
@@ -96,7 +96,7 @@ define(function(require, exports, module) {
                     selectedMulti: false
                 },
                 callback: {
-                    onClick: zTreeOnClick,
+                    onClick: zTreeOnClick
                 },
                 data: {
                     simpleData: {
