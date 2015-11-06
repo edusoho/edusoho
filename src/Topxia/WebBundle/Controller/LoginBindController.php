@@ -16,7 +16,8 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
-
+        var_dump($url);
+        exit();
         return $this->redirect($url);
     }
 
@@ -28,26 +29,27 @@ class LoginBindController extends BaseController
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
         if ($bind) {
+            return array('bind'=>'bind');
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
                 $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
                 return $this->redirect($this->generateUrl('register'));
             }
             $this->authenticateUser($user);
-            //if ($this->getAuthService()->hasPartnerAuth()) {
-             //   return $this->redirect($this->generateUrl('partner_login', array('goto'=>$request->getSession()->get('_target_path', ''))));
-            //} else {
-            //    $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
-           //     return $this->redirect($goto);
-          //  }
-        } //else {
-            //if ($type == 'weixinmob') {
-             //   $response = $this->autobind($request,$type);
-             //   $_target_path = $response['_target_path'];
-            //    return $this->redirect($_target_path);
-           // }
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                return $this->redirect($this->generateUrl('partner_login', array('goto'=>$request->getSession()->get('_target_path', ''))));
+            } else {
+                $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
+                return $this->redirect($goto);
+            }
+        } else {
+            if ($type == 'weixinmob') {
+                $response = $this->autobind($request,$type);
+                $_target_path = $response['_target_path'];
+                return $this->redirect($_target_path);
+            }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
-        //}
+        }
 
     }
 
