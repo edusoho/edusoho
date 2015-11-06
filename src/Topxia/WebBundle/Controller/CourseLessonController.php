@@ -42,6 +42,10 @@ class CourseLessonController extends BaseController
         if (empty($lesson)) {
             throw $this->createNotFoundException();
         }
+        //开启限制加入
+        if(empty($lesson['free'])  && !empty($course['limitJoin']) && $course['limitJoin'] == 'opened' ){
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
+        }
 
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
@@ -50,6 +54,7 @@ class CourseLessonController extends BaseController
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
         $user = $this->getCurrentUser();
+
 
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
         if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
