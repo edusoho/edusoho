@@ -465,6 +465,7 @@ define(function(require, exports, module) {
                             };
 
                             if(testStartRightSeconds > 60*10){
+                                clearInterval(iID);
                                 $testNotice = "<p>实时考试开始时间已经超过10分钟，不能进入考试</p>";
                                 $countDown = '';
                             }
