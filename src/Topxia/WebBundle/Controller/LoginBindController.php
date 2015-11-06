@@ -117,7 +117,7 @@ class LoginBindController extends BaseController
         $this->authenticateUser($user);
         $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
         if (!$response['_target_path']) {
-            $response['_target_path'] = $this->generateUrl('homepage');
+            $response['_target_path'] = generateUrl('login_bind_choose', array('type' => $type));
         }
         response:
         return $response;
