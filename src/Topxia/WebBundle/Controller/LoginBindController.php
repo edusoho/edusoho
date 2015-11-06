@@ -29,6 +29,7 @@ class LoginBindController extends BaseController
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
         if ($bind) {
+            return array('bind'=>'bind');
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
                 $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
