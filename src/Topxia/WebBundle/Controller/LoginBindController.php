@@ -16,8 +16,6 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
-        var_dump($url);
-        exit();
         return $this->redirect($url);
     }
 
@@ -29,7 +27,6 @@ class LoginBindController extends BaseController
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
         if ($bind) {
-            return array('bind'=>'bind');
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
                 $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
@@ -108,7 +105,7 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        $user = $this->generateUser($type, $token, $oauthUser,$setData=array());
+        /*$user = $this->generateUser($type, $token, $oauthUser,$setData=array());
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
@@ -117,8 +114,8 @@ class LoginBindController extends BaseController
         if (!empty($oauthUser['name']) && !empty($oauthUser['email'])) {
             $this->getUserService()->setupAccount($user['id']);
         }
-        $this->authenticateUser($user);
-        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+        $this->authenticateUser($user);*/
+        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('login_bind_choose', array('type' => $type))));
         if (!$response['_target_path']) {
             $response['_target_path'] = $this->generateUrl('homepage');
         }
