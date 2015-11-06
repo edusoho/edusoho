@@ -25,36 +25,19 @@ class LiveCourseController extends BaseController
 
         $conditions['type']="live";
 
-        if(!empty($conditions['courseId']) && !empty($conditions['lessonId'])){
-            $course = $this->getCourseService()->tryManageCourse($conditions['courseId']);
-            $lesson = $this->getCourseService()->getCourseLesson($conditions['courseId'], $conditions['lessonId']);
-            $client = new EdusohoLiveClient();
-            if ($lesson['type'] == 'live') {
-                $result = $client->getMaxOnline($lesson['mediaId']);
-                $lesson = $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'],$result['onLineNum']);
-            } 
-        }//如果有courseId，应该unset掉,否则影响搜索lesson
-        unset($conditions['courseId']);
-                
-        switch ($status) {
-            case 'coming':
-                $conditions['startTimeGreaterThan'] = time();
-                break;
-            case 'end':
-                $conditions['endTimeLessThan'] = time();
-                break;
-            case 'underway':
-                $conditions['startTimeLessThan'] = time();
-                $conditions['endTimeGreaterThan'] = time();
-                break;
+        if($status == 'coming'){
+            $conditions['startTimeGreaterThan'] = $conditions['startDateTime']?strtotime($conditions['startDateTime']):time();
+            $conditions['startTimeLessThan'] = $conditions['endDateTime']?strtotime($conditions['endDateTime']):null;
         }
-        //有搜索时间条件的时候unset之前给的搜索时间信息
-        if(!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])){
-            if($status == 'end'){ unset($conditions['endTimeLessThan']);}
-            if($status == 'underway'){ unset($conditions['endTimeGreaterThan']);}
-            $conditions['startTimeGreaterThan'] = strtotime($conditions['startDateTime']);
-            $conditions['startTimeLessThan'] = strtotime($conditions['endDateTime']);
+        if($status == 'end'){
+            $conditions['endTimeLessThan'] = $conditions['endDateTime']?strtotime($conditions['endDateTime']):time();
+            $conditions['startTimeGreaterThan'] = $conditions['startDateTime']?strtotime($conditions['startDateTime']):null;
         }
+        if($status == 'underway'){
+            $conditions['startDateTime'] = $conditions['startDateTime']?strtotime($conditions['startDateTime']):time();
+            $conditions['endTimeLessThan'] = $conditions['endDateTime']?strtotime($conditions['endDateTime']):time();
+        }
+
 
         $conditions['courseIds'] = $courseIds;
         $conditions['status'] ='published';
@@ -87,6 +70,22 @@ class LiveCourseController extends BaseController
             'paginator' => $paginator,
             'default'=> $default,
         ));
+    }
+
+    public function getMaxOnlineAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        if(!empty($conditions['courseId']) && !empty($conditions['lessonId'])){
+            $lesson = $this->getCourseService()->getCourseLesson($conditions['courseId'], $conditions['lessonId']);
+
+            $client = new EdusohoLiveClient();
+            if ($lesson['type'] == 'live') {
+                $result = $client->getMaxOnline($lesson['mediaId']);
+                $lesson = $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'],$result['onLineNum']);
+            } 
+        }
+
+        return $this->createJsonResponse($lesson);
     }
 
     protected function getCourseService()
