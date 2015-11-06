@@ -26,16 +26,16 @@ class LiveCourseController extends BaseController
         $conditions['type']="live";
 
         if($status == 'coming'){
-            $conditions['startTimeGreaterThan'] = $conditions['startDateTime']?strtotime($conditions['startDateTime']):time();
-            $conditions['startTimeLessThan'] = $conditions['endDateTime']?strtotime($conditions['endDateTime']):null;
+            $conditions['startTimeGreaterThan'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
+            $conditions['startTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):null;
         }
         if($status == 'end'){
-            $conditions['endTimeLessThan'] = $conditions['endDateTime']?strtotime($conditions['endDateTime']):time();
-            $conditions['startTimeGreaterThan'] = $conditions['startDateTime']?strtotime($conditions['startDateTime']):null;
+            $conditions['endTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
+            $conditions['startTimeGreaterThan'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):null;
         }
         if($status == 'underway'){
-            $conditions['startDateTime'] = $conditions['startDateTime']?strtotime($conditions['startDateTime']):time();
-            $conditions['endTimeLessThan'] = $conditions['endDateTime']?strtotime($conditions['endDateTime']):time();
+            $conditions['startDateTime'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
+            $conditions['endTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
         }
 
 
