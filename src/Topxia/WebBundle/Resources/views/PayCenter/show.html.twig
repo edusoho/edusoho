@@ -48,58 +48,6 @@
               订单价格：<span class="pay-rmb">￥{{order.amount}}</span>
             </p>
           </div>
-          <form class="paystyle"  method="post" action="{{path('pay_center_pay')}}" id='pay-form'>
-            <input type="hidden" name="orderId" value="{{order.id}}"/>
-            {% for payment,options in payments %}
-              {% if loop.index == 1 %}
-                <input type="hidden" name="payment" value={{payment}}>
-              {% endif %}
-            {% endfor %}
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-              
-          	<div class="form-group order-detail-bg clearfix">
-              <div class="pay-type-lable pull-left" style="height:58px;line-height:58px;">支付方式</div>
-              <div class="pull-left">
-                  {% for payment, options in payments %}
-                  <div class="check {% if loop.index == 1 %} active {% endif %}" id={{payment}}>
-                    {% set picture = 'assets/img/order/'~payment~'.png' %}
-                    <img src="{{ asset(picture) }}" />
-                    <span class="icon {% if loop.index > 1 %}hide {% endif %}"></span>
-                  </div>
-                {% else %}
-                  <div class="pay-type-lable text-warning ">支付方式未开启，请联系管理员。</div>
-                {% endfor %}
-                {% if payAgreements is not empty %}
-                  <div style="margin-top:10px;display:none;" class="pay-agreement">
-                    <select multiple class="form-control pay-bank" name='payAgreementId'>
-                        {% for payAgreement in payAgreements %}
-                          <option value="{{payAgreement.id}}">{{payAgreement.bankName}}－{{payAgreement.bankNumber}}</option>
-                        {% endfor %}
-                    </select>
-                  </div>
-                {% endif %}
-              </div>
-            </div>
-            <div class="form-group pay pay-amount ">
-              <div class="total-price">
-                应付金额：
-                <span role="pay-rmb" class="pay-rmb">￥{{order.amount}}</span>
-              </div>
-             <a 
-                href="javascript:;"
-                {% if targetType == "course" and course|default(null) %}
-                  data-goto="{{ path('course_show', {id:course.id}) }}" 
-                {% elseif targetType == "vip" %}
-                  data-goto="{{ path('vip_renew') }}"
-                {% elseif targetType == "classroom" %}
-                  data-goto="{{ path('classroom_show', {id:classroom.id}) }}"
-                {% endif %}
-                 class=" link-light  mrl " data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消
-              </a>
-              <button class="pay-button btn btn-primary btn-high"  type="submit">确认支付</button>
-            </div>
-          </form>
-
         </div>
       </div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
@@ -111,7 +59,7 @@
         {% endfor %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           
-      	<div class="form-group order-detail-bg ">
+        <div class="form-group order-detail-bg ">
           <div class="pay-type-label">支付方式</div>
           {% for payment, options in payments %}
             <div class="check {% if loop.index == 1 %} active {% endif %}" id="{{payment}}">
@@ -122,6 +70,15 @@
           {% else %}
             <div class="pay-type-label text-warning ">支付方式未开启，请联系管理员。</div>
           {% endfor %}
+          {% if payAgreements is not empty %}
+            <div style="margin-top:10px;display:none;" class="pay-agreement">
+              <select multiple class="form-control pay-bank" name='payAgreementId'>
+                {% for payAgreement in payAgreements %}
+                <option value="{{payAgreement.id}}">{{payAgreement.bankName}}－{{payAgreement.bankNumber}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
         </div>
         <div class="form-group">
           <div class="total-price">
