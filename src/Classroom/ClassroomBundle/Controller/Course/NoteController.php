@@ -9,6 +9,11 @@ class NoteController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
@@ -19,7 +24,7 @@ class NoteController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -68,5 +73,10 @@ class NoteController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

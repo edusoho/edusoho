@@ -12,6 +12,11 @@ class OrderController extends BaseController
 {
     public function showAction(Request $request)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
@@ -27,7 +32,7 @@ class OrderController extends BaseController
         if($targetType == 'classroom'){
             $classroom = $this->getClassroomService()->getClassroom($targetId);
             if(!$classroom['buyable']){
-                return $this->createMessageResponse('error', '该班级不可购买，如有需要，请联系客服');
+                return $this->createMessageResponse('error', "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
             }
         }
         $processor = OrderProcessorFactory::create($targetType);
@@ -246,5 +251,8 @@ class OrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-    
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 }

@@ -52,6 +52,11 @@ class CourseController extends BaseController
 
     public function listAction(Request $request, $classroomId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $previewAs = "";
 
@@ -76,7 +81,7 @@ class CourseController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
         if ($request->query->get('previewAs')) {
             if ($this->getClassroomService()->canManageClassroom($classroomId)) {
@@ -225,5 +230,10 @@ class CourseController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

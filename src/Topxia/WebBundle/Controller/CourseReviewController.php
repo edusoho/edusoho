@@ -11,11 +11,16 @@ class CourseReviewController extends CourseBaseController
 
     public function listAction(Request $request, $id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
              if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
             }
         }
         $paginator = new Paginator(
@@ -65,6 +70,10 @@ class CourseReviewController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

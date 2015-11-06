@@ -42,11 +42,16 @@ class NoteController extends CourseBaseController
 
     public function showListAction(Request $request, $courseId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级课程，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}课程，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
             }
         }
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
@@ -168,6 +173,11 @@ class NoteController extends CourseBaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

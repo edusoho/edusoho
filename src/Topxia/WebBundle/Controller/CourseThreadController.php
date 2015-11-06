@@ -57,11 +57,16 @@ class CourseThreadController extends CourseBaseController
 
     public function showAction(Request $request, $courseId, $threadId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
             }
         }
         $user = $this->getCurrentUser();
@@ -321,11 +326,16 @@ class CourseThreadController extends CourseBaseController
 
     public function postAction(Request $request, $courseId, $id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
             }
         }
         $thread = $this->getThreadService()->getThread($course['id'], $id);
@@ -569,6 +579,11 @@ class CourseThreadController extends CourseBaseController
             ->add('courseId', 'hidden')
             ->add('threadId', 'hidden')
             ->getForm();
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

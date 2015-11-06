@@ -11,6 +11,11 @@ class ReviewController extends BaseController
 {
     public function listAction(Request $request, $id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
@@ -20,7 +25,7 @@ class ReviewController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
 
         $conditions = array(
@@ -110,5 +115,10 @@ class ReviewController extends BaseController
     private function getClassroomReviewService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

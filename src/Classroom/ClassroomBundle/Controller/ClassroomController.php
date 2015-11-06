@@ -317,12 +317,17 @@ class ClassroomController extends BaseController
 
     public function introductionAction(Request $request, $id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
         if(!$classroom){
             $classroomDescription = array();
@@ -566,6 +571,11 @@ class ClassroomController extends BaseController
 
     public function exitAction(Request $request, $id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $user = $this->getCurrentUser();
 
         $member = $this->getClassroomService()->getClassroomMember($id, $user["id"]);
@@ -588,6 +598,11 @@ class ClassroomController extends BaseController
 
     public function becomeAuditorAction(Request $request, $id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+        
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
@@ -600,7 +615,7 @@ class ClassroomController extends BaseController
         }
         
         if(!$classroom['buyable']){
-            return $this->createMessageResponse('info', '非常抱歉，该班级不允许加入，如有需要请联系客服','',3,$this->generateUrl('homepage')); 
+            return $this->createMessageResponse('info', "非常抱歉，该{$classroomSetting['name']}不允许加入，如有需要请联系客服",'',3,$this->generateUrl('homepage')); 
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -704,6 +719,10 @@ class ClassroomController extends BaseController
 
     public function modifyUserInfoAction(Request $request)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
 
         $formData = $request->request->all();
 
@@ -714,7 +733,7 @@ class ClassroomController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', '班级不存在，不能购买。');
+            return $this->createMessageResponse('error', "{$classroomSetting['name']}不存在，不能购买。");
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(

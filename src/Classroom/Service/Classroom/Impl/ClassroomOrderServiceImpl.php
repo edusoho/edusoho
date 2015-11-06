@@ -99,6 +99,11 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function doSuccessPayOrder($id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order) || $order['targetType'] != 'classroom') {
             throw $this->createServiceException('非课程订单，加入课程失败。');
@@ -112,8 +117,8 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
-            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
+            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
         }
 
         return;
@@ -121,6 +126,11 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
         $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
@@ -143,7 +153,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);  
             }
 
-            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>".'班级，请审核。';
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>"."{$classroomSetting['name']}，请审核。";
             $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
             $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
                 foreach ($admins as $key => $admin) {

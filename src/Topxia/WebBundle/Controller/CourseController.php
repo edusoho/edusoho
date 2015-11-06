@@ -211,11 +211,16 @@ class CourseController extends CourseBaseController
 
 	public function infoAction(Request $request, $id)
 	{
+		$classroomSetting = $this->getSettingService()->get('classroom');
+		if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
 		list($course, $member) = $this->buildCourseLayoutData($request, $id);
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-            	return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            	return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         	}
         }
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
@@ -266,11 +271,16 @@ class CourseController extends CourseBaseController
 
 	public function showAction(Request $request, $id)
 	{
+		$classroomSetting = $this->getSettingService()->get('classroom');
+		if (empty($classroomSetting['name'])){
+            $classroomSetting['name']='班级';
+        }
+
 		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
              if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-            	return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            	return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         	}
         }
 		if(empty($member)) {
