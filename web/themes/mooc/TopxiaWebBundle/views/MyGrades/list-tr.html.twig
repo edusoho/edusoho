@@ -1,0 +1,37 @@
+<tr id="course-tr-{{ course.id }}">
+  <td>{{ course.title }}</td>
+  <td>公布时间：{{ settings[course.id].expectPublishTime|date('Y-m-d H:i') }}</td>
+  <td>
+    {% if settings[course.id].status == 'published'%}
+  	{{ scores[course.id].totalScore }}</td>
+  	{% else %}
+  	  --
+  	{% endif %}
+  <td>
+  	{% if settings[course.id].status == 'published'%}
+  	   {% if scores[course.id].totalScore >= settings[course.id].standardScore %}
+  		   通过
+  	   {% else %}
+  		   <span class="text-danger">未通过</span>
+  	   {% endif %}
+  	{% else %}
+  	 --
+  	{% endif %}
+  </td>
+  <td>
+  	{% if scores[course.id].totalScore >= settings[course.id].standardScore %}
+  		+{{ settings[course.id].credit }}
+  	{% else %}
+  		--
+    {% endif %}
+  </td>
+  <td>
+    <div class="btn-group">
+        {% if settings[course.id].status == 'published'%}
+          <a class="btn btn-default btn-sm" href="{{ path('my_grades_cards', {courseId:course.id}) }}">查看成绩单</a>
+        {% else %}
+        	<a class="btn btn-disabled btn-sm">成绩未公布</a>
+        {% endif %}
+    </div>
+  </td>              
+</tr>

@@ -1,0 +1,97 @@
+<div class="mooc-report-detail panel panel-default">
+	<div class="panel-heading">
+		<h4>{% if previewAs|default() %}{{ userProfile.truename }}{% else %}我{% endif %}的成绩</h4>
+	</div>
+	<div class="panel-body">
+		<div class="clearfix">
+			<div class="report-title">
+				<span class="bg-blue"><i class="iconfont icon-wendangkeshi"></i></span>
+				<strong>{{ course.title }}</strong>
+				<div class="pull-right">
+				<span>学分：<strong>{{ course.giveCredit }}学分</strong></span>
+				<span>课时：<strong>{{ learnedLessonsNum }}课时</strong></span>
+				<span>总成绩：<i class="es-icon es-icon-help text-primary js-icon"></i><strong class="text-primary">{{ scores.totalScore|default(0) }}分</strong></span>
+				</div>
+			</div>
+			<div class="report-intro">
+				<p><i class="es-icon es-icon-help"></i>考试成绩：<span >{{ scores.examScore|default(0) }}分</span>；作业成绩<span >{{ scores.homeworkScore|default(0) }}分</span>；其他：<span >{{ scores.otherScore|default(0) }}分</span>；</p>
+			</div>
+				<div class="hover-model">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4>总成绩计算公式</h4>
+						</div>
+						<div class="panel-body">
+							<div class="alert alert-info" role="alert">
+								<span>{{ courseSetting.examWeight }}%</span>*考试成绩+<span>{{ courseSetting.homeworkWeight }}%</span>作业成绩+<span>{{ courseSetting.otherWeight }}%</span>*其他
+							</div>
+							<p class="content">
+								<i class="es-icon es-icon-info"></i>{{ courseSetting.score_template }}
+							</p>
+						</div> 			
+					</div> 
+				</div> 
+			</div>
+		</div>
+</div>
+<div class="mooc-report-tab panel panel-default">
+	<div class="panel-body">
+		<ul role="tablist" class="detail-nav clearfix">
+			<li role="presentation" class="active">
+				<a href="#homework" role="tab" data-toggle="tab">作业</a>
+			</li>
+			<li role="presentation" >
+				<a href="#test" role="tab" data-toggle="tab">考试</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="homework">
+				<div class="mooc-report-table panel ">
+					<div class="panel-body">
+						<table class="table report-table-body">
+							<tbody>
+							<tr>
+								<th>作业名称</th>
+								<th>所属课时</th>
+								<th>状态</th>
+								<th>总分</th>
+								<th>得分</th>
+							</tr>
+							{% if homeworks %}
+								{% for homework in homeworks %}
+									{% include 'TopxiaWebBundle:MyGrades:homework-tr.html.twig' %}
+								{% endfor %}
+							{% else %}
+								<tr><td colspan="20"><div class="empty">暂无作业记录</div></td></tr>
+							{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="test">
+				<div class="mooc-report-table panel ">
+					<div class="panel-body">
+						<table class="table report-table-body table-responsive">
+							<tbody>
+							<tr>
+								<th>考试名称</th>
+								<th>状态</th>
+								<th>总分</th>
+								<th>得分</th>
+							</tr>
+							{% if testpapers %}
+								{% for testpaper in testpapers %}
+									{% include 'TopxiaWebBundle:MyGrades:testpaper-tr.html.twig' %}
+								{% endfor %}
+							{% else %}
+								<tr><td colspan="20"><div class="empty">暂无考试记录</div></td></tr>
+							{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

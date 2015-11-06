@@ -15,4 +15,9 @@ class CourseMemberDaoImpl extends BaseCourseMemberDaoImpl
         return $builder;
     }
 
+    public function findMembersAllByCourseIdAndRole($courseId, $role)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ?";
+        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
+    }
 }

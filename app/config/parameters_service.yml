@@ -1,13 +1,13 @@
 parameters:
     topxia_services:
-        'Course.CourseService' : 'Custom\Service\Course\Impl\CourseServiceImpl'
-        'User.UserService' : 'Custom\Service\User\Impl\UserServiceImpl'
-        'User.AuthService' : 'Custom\Service\User\Impl\AuthServiceImpl'
-        'Classroom:Classroom.ClassroomService' : 'Custom\Service\Classroom\Impl\ClassroomServiceImpl'
-        'Crontab.CrontabService' : 'Custom\Service\CrontabJob\Impl\CrontabJobServiceImpl'
+        'Course.CourseService' : 'Mooc\Service\Course\Impl\CourseServiceImpl'
+        'User.UserService' : 'Mooc\Service\User\Impl\UserServiceImpl'
+        'User.AuthService' : 'Mooc\Service\User\Impl\AuthServiceImpl'
+        'Classroom:Classroom.ClassroomService' : 'Mooc\Service\Classroom\Impl\ClassroomServiceImpl'
+        'Crontab.CrontabService' : 'Mooc\Service\CrontabJob\Impl\CrontabJobServiceImpl'
     topxia_daos:
-        'Course.CourseDao' : 'Custom\Service\Course\Dao\Impl\CourseDaoImpl'
-        'User.UserDao' : 'Custom\Service\User\Dao\Impl\UserDaoImpl'
-        'Course.CourseMemberDao' : 'Custom\Service\Course\Dao\Impl\CourseMemberDaoImpl'
-        'Classroom:Classroom.ClassroomMemberDao' : 'Custom\Service\Classroom\Dao\Impl\ClassroomMemberDaoImpl'
-        'Crontab.JobDao' : 'Custom\Service\CrontabJob\Dao\Impl\CrontabJobDaoImpl'
+        'Course.CourseDao' : 'Mooc\Service\Course\Dao\Impl\CourseDaoImpl'
+        'User.UserDao' : 'Mooc\Service\User\Dao\Impl\UserDaoImpl'
+        'Course.CourseMemberDao' : 'Mooc\Service\Course\Dao\Impl\CourseMemberDaoImpl'
+        'Classroom:Classroom.ClassroomMemberDao' : 'Mooc\Service\Classroom\Dao\Impl\ClassroomMemberDaoImpl'
+        'Crontab.JobDao' : 'Mooc\Service\CrontabJob\Dao\Impl\CrontabJobDaoImpl'

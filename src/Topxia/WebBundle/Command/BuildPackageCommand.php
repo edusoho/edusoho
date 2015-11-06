@@ -160,6 +160,14 @@ class BuildPackageCommand extends BaseCommand
             return str_ireplace('src/Custom/WebBundle/Resources/public', 'web/bundles/customweb', $file);
         }
 
+        if (stripos($file, 'src/Mooc/AdminBundle/Resources/public') === 0) {
+            return str_ireplace('src/Mooc/AdminBundle/Resources/public', 'web/bundles/moocadmin', $file);
+        }
+
+        if (stripos($file, 'src/Mooc/WebBundle/Resources/public') === 0) {
+            return str_ireplace('src/Mooc/WebBundle/Resources/public', 'web/bundles/moocweb', $file);
+        }
+
         return null;
     }
 
