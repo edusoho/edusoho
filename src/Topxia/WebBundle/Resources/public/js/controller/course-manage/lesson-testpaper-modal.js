@@ -1,5 +1,5 @@
 define(function (require, exports, module) {
-
+    var Widget = require('widget');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('jquery.bootstrap-datetimepicker');
@@ -14,9 +14,47 @@ define(function (require, exports, module) {
         "考试结束日期不得早于当前日期"
     );
 
-    exports.run = function () {
+    Validator.addRule(
+        'date_and_time',
+        /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
+        '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm'
+    );
 
-        var sortList = function ($list) {
+    var Testpaper = Widget.extend({
+
+        events: {
+            'change #lesson-mediaId-field': '_changeLessonMedia',
+            'click [name=testMode]' : '_onSwitchTestMode',
+        },
+
+        setup : function(){
+            this._init();
+        },
+
+        _init :function(){
+            this.set('_$testStartTime', $('#lesson-testpaper-start-time-field'));
+            this.set('_$testStartTimeDiv', $('#testpaper-start-time-div'));
+            this.set('_isRealTimeTestpaper', $('#real-time-testpaper').val() == 'realTime' ? true:false);
+            this.set('_testStartTime', new Date(this.get('_$testStartTime').val()));
+            this.set('_$testMode', $('[name=testMode]'));
+
+            this._initValidator();
+
+            if(!this.get('_isRealTimeTestpaper')){
+                return;
+            }
+
+            this.get('_$testStartTimeDiv').show();
+            var now = new Date();
+            if(this.get('_testStartTime') < now){
+                this.get('_$testMode').attr("disabled",true);
+                this.get('_$testStartTime').attr("disabled",true);
+            }
+            this._addTestStartTimeValidatorItem();
+            this._addTimePicker();
+        },
+
+        _sortList : function($list){
             var data = $list.sortable("serialize").get();
             $.post($list.data('sortUrl'), {ids: data}, function (response) {
                 var lessonNum = chapterNum = unitNum = 0;
@@ -37,172 +75,156 @@ define(function (require, exports, module) {
 
                 });
             });
-        };
-        $('#lesson-mediaId-field').change(function () {
+        },
+
+        _changeLessonMedia : function(){
             var mediaId = $('#lesson-mediaId-field').find('option:selected').val();
             if (mediaId != '') {
                 $('#lesson-title-field').val($('#lesson-mediaId-field').find('option:selected').text());
             } else {
                 $('#lesson-title-field').val('');
             }
-        });
+        },
 
-        validator = new Validator({
-            element: '#course-lesson-form',
-            autoSubmit: false
-        });
-
-        validator.addItem({
-            element: '#lesson-mediaId-field',
-            required: true,
-            errormessageRequired: '请选择试卷'
-        });
-
-        validator.addItem({
-            element: '#lesson-title-field',
-            required: true
-        });
-
-        validator.on('formValidated', function (error, msg, $form) {
-            if (error) {
-                return;
-            }
-            $('#course-testpaper-btn').button('submiting').addClass('disabled');
-
-            var $panel = $('.lesson-manage-panel');
-            $.post($form.attr('action'), $form.serialize(), function (html) {
-
-                var id = '#' + $(html).attr('id'),
-                    $item = $(id);
-                var $parent = $('#' + $form.data('parentid'));
-                if ($item.length) {
-                    $item.replaceWith(html);
-                    Notify.success('试卷课时已保存');
-                } else {
-                    $panel.find('.empty').remove();
-
-                    if ($parent.length) {
-                        var add = 0;
-                        if ($parent.hasClass('item-chapter  clearfix')) {
-                            $parent.nextAll().each(function () {
-                                if ($(this).hasClass('item-chapter  clearfix')) {
-                                    $(this).before(html);
-                                    add = 1;
-                                    return false;
-                                }
-                            });
-                            if (add != 1) {
-                                $("#course-item-list").append(html);
-                                add = 1;
-                            }
-
-                        } else {
-                            $parent.nextAll().each(function () {
-                                if ($(this).hasClass('item-chapter  clearfix'))
-                                    return false;
-                                if ($(this).hasClass('item-chapter item-chapter-unit clearfix')) {
-                                    $(this).before(html);
-                                    add = 1;
-                                    return false;
-                                }
-                            });
-                        }
-                        if (add != 1) {
-                            $("#course-item-list").append(html);
-                        }
-                        var $list = $("#course-item-list");
-                        sortList($list);
-                    } else {
-                        $("#course-item-list").append(html);
-                    }
-                    Notify.success('添加试卷课时成功');
-                }
-                $(id).find('.btn-link').tooltip();
-                $form.parents('.modal').modal('hide');
+        _initValidator : function(){
+            var that = this;
+            validator = new Validator({
+                element: '#course-lesson-form',
+                autoSubmit: false
             });
 
-        });
+            validator.addItem({
+                element: '#lesson-mediaId-field',
+                required: true,
+                errormessageRequired: '请选择试卷'
+            });
 
-        function RealTimeTestpaper(){
-            var that = this;
-            this._init = function(){
-                that._$testStartTime = $('#lesson-testpaper-start-time-field');
-                that._$testStartTimeDiv = $('#testpaper-start-time-div');
-                that._isRealTimeTestpaper = $('#real-time-testpaper').val() == 1 ? true:false;
-                that._testStartTime = new Date(that._$testStartTime.val());
-                that.validator = validator;
-                that._$isRealTimeTestpaper = $('[name=isRealTimeTestpaper]');
-            };
-            this._init();
-            this.run = function(){
-                that._$isRealTimeTestpaper.on('click', function(){
-                    var $this = $(this);
-                    if($this.val() == 1){
-                        that._addTestStartTimeValidatorItem();
-                        that._isRealTimeTestpaper = true;
-                        that._addTimePicker();
-                        that._$testStartTimeDiv.show();
-                    }else {
-                        that._isRealTimeTestpaper = false;
-                        that._removeTestStartTimeValidatorItem();
-                        that._removeTimePicker();
-                        that._$testStartTimeDiv.hide();
-                    }
-                });
+            validator.addItem({
+                element: '#lesson-title-field',
+                required: true
+            });
 
-                if(!that._isRealTimeTestpaper){
+            validator.on('formValidated', function (error, msg, $form) {
+                if (error) {
                     return;
                 }
+                $('#course-testpaper-btn').button('submiting').addClass('disabled');
 
-                that._$testStartTimeDiv.show();
-                var now = new Date();
-                if(that._testStartTime < now){
-                    that._$isRealTimeTestpaper.attr("disabled",true);
-                    that._$testStartTime.attr("disabled",true);
-                }
-                that._addTestStartTimeValidatorItem();
-                that._addTimePicker();
-            };
+                var $panel = $('.lesson-manage-panel');
+                $.post($form.attr('action'), $form.serialize(), function (html) {
 
-            this._addTestStartTimeValidatorItem = function(){
-                if (that.validator instanceof Validator){
-                    that.validator.addItem({
-                        element: that._$testStartTime,
-                        required: true,
-                        rule: 'gt_current_time',
-                        display:"考试开始时间"
-                    });
-                }
-            };
+                    var id = '#' + $(html).attr('id'),
+                        $item = $(id);
+                    var $parent = $('#' + $form.data('parentid'));
+                    if ($item.length) {
+                        $item.replaceWith(html);
+                        Notify.success('试卷课时已保存');
+                    } else {
+                        $panel.find('.empty').remove();
 
-            this._addTimePicker = function(){
-                that._$testStartTime.datetimepicker({
-                    language:'zh-CN',
-                    autoclose: true,
-                    format: 'yyyy-mm-dd hh:ii'
-                }).on('hide',function(){
-                    that._testStartTime = new Date(that._$testStartTime.val());
-                    that.validator.query(that._$testStartTime).execute();
+                        if ($parent.length) {
+                            var add = 0;
+                            if ($parent.hasClass('item-chapter  clearfix')) {
+                                $parent.nextAll().each(function () {
+                                    if ($(this).hasClass('item-chapter  clearfix')) {
+                                        $(this).before(html);
+                                        add = 1;
+                                        return false;
+                                    }
+                                });
+                                if (add != 1) {
+                                    $("#course-item-list").append(html);
+                                    add = 1;
+                                }
+
+                            } else {
+                                $parent.nextAll().each(function () {
+                                    if ($(this).hasClass('item-chapter  clearfix'))
+                                        return false;
+                                    if ($(this).hasClass('item-chapter item-chapter-unit clearfix')) {
+                                        $(this).before(html);
+                                        add = 1;
+                                        return false;
+                                    }
+                                });
+                            }
+                            if (add != 1) {
+                                $("#course-item-list").append(html);
+                            }
+                            var $list = $("#course-item-list");
+                            that._sortList($list);
+                        } else {
+                            $("#course-item-list").append(html);
+                        }
+                        Notify.success('添加试卷课时成功');
+                    }
+                    $(id).find('.btn-link').tooltip();
+                    $form.parents('.modal').modal('hide');
                 });
 
-                $( "#modal" ).scroll(function() {
-                    that._$testStartTime.datetimepicker('place');
-                });
-            };
+            });
 
-            this._removeTimePicker = function(){
-                that._$testStartTime.datetimepicker('remove');
-            };
+            this.set('_validator', validator);
+        },
 
-            this._removeTestStartTimeValidatorItem = function(){
-                if (that.validator instanceof Validator){
-                    that.validator.removeItem(that._$testStartTime);
-                }
+        _onSwitchTestMode: function(event){
+            var $this = $(event.currentTarget);
+            if($this.val() == 'realTime'){
+                this._addTestStartTimeValidatorItem();
+                this.set('_isRealTimeTestpaper', true);
+                this._addTimePicker();
+                this.get('_$testStartTimeDiv').show();
+            }else {
+                this.set('_isRealTimeTestpaper', false);
+                this._removeTestStartTimeValidatorItem();
+                this._removeTimePicker();
+                this.get('_$testStartTimeDiv').hide();
             }
+        },
+
+        _addTimePicker : function(){
+            var that = this;
+            this.get('_$testStartTime').datetimepicker({
+                language:'zh-CN',
+                autoclose: true,
+                format: 'yyyy-mm-dd hh:ii'
+            }).on('hide',function(){
+                that.set('_testStartTime', new Date(that.get('_$testStartTime').val()));
+                that.get('_validator').query(that.get('_$testStartTime')).execute();
+            });
+
+            $( "#modal" ).scroll(function() {
+                that.get('_$testStartTime').datetimepicker('place');
+            });
+        },
+
+        _addTestStartTimeValidatorItem : function(){
+            if (this.get('_validator') instanceof Validator){
+                this.get('_validator').addItem({
+                    element: this.get('_$testStartTime'),
+                    required: true,
+                    rule: 'gt_current_time date_and_time',
+                    display:"考试开始时间"
+                });
+            }
+        },
+
+        _removeTestStartTimeValidatorItem : function(){
+            if (this.get('_validator') instanceof Validator){
+                this.get('_validator').removeItem(this.get('_$testStartTime'));
+            }
+        },
+
+        _removeTimePicker : function(){
+            this.get('_$testStartTime').datetimepicker('remove');
         }
 
-        new RealTimeTestpaper().run();
+    });
 
+    exports.run = function () {
+        var testpaper = new Testpaper({
+            element: '#course-lesson-form'
+        }).render();
     };
 });
 

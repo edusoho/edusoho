@@ -1005,8 +1005,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'requireCredit' => 0,
 			'liveProvider' => 'none',
 			'copyId'=>0,
-			'isRealTimeTestpaper' => 0,
-			'testpaperStartTime' => 0,
+			'testMode' => 'normal',
+			'testStartTime' => 0,
 		));
 
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1185,8 +1185,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'requireCredit' => 0,
 			'homeworkId' => 0,
 			'exerciseId' => 0,
-			'isRealTimeTestpaper' => 0,
-			'testpaperStartTime' => 0,
+			'testMode' => 'normal',
+			'testStartTime' => 0,
 		));
 
 		if (isset($fields['title'])) {

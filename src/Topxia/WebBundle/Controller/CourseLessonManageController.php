@@ -301,9 +301,9 @@ class CourseLessonManageController extends BaseController
 			$lesson = $request->request->all();
 			$lesson['type'] = 'testpaper';
 			$lesson['courseId'] = $course['id'];
-			$lesson['testpaperStartTime'] = strtotime($lesson['testpaperStartTime']);
-			if (!$lesson['testpaperStartTime']){
-				unset($lesson['testpaperStartTime']);
+			$lesson['testStartTime'] = strtotime($lesson['testStartTime']);
+			if (!$lesson['testStartTime']){
+				unset($lesson['testStartTime']);
 			}
 			$lesson = $this->getCourseService()->createLesson($lesson);
 			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
@@ -348,6 +348,18 @@ class CourseLessonManageController extends BaseController
 			throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
 		}
 
+		if($request->getMethod() == 'POST') {
+			$fields = $request->request->all();
+			if (!empty($fields['testStartTime'])){
+				$fields['testStartTime'] = strtotime($fields['testStartTime']);
+			}
+			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+					'course' => $course,
+					'lesson' => $lesson,
+			));
+		}
+
 		$conditions = array();
 		$conditions['target'] = "course-{$course['id']}";
 		$conditions['status'] = 'open';
@@ -364,18 +376,6 @@ class CourseLessonManageController extends BaseController
 			$paperOptions[$paper['id']] = $paper['name'];
 		}
 
-		if($request->getMethod() == 'POST') {
-			$fields = $request->request->all();
-			$fields['testpaperStartTime'] = strtotime($fields['testpaperStartTime']);
-			if (!$fields['testpaperStartTime']){
-				unset($fields['testpaperStartTime']);
-			}
-			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-				'course' => $course,
-				'lesson' => $lesson,
-			));
-		}
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
