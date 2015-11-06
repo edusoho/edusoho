@@ -193,7 +193,7 @@ define(function(require, exports, module) {
             var $textarea = $form.find('textarea[name=content]');
             if($textarea.data('imageUploadUrl')) {
                 var editor = CKEDITOR.replace($textarea.attr('id'), {
-                    toolbar: 'Simple',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
                 });
             }

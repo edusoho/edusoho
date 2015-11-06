@@ -26,7 +26,7 @@ define(function(require, exports, module) {
             },
             _initValidator: function() {
                 var editor = CKEDITOR.replace('thread-content-field', {
-                    toolbar: 'Simple',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread-content-field').data('imageUploadUrl')
                 });
 
