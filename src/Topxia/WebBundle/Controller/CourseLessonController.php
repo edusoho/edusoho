@@ -19,6 +19,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $context = array();
+
+        $context['markerUrl'] = $this->generateUrl('course_lesson_plugin_question_markers', array('lessonId' => $lessonId));
+
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
         if(!$lesson["free"] && empty($timelimit)) {
@@ -27,7 +31,8 @@ class CourseLessonController extends BaseController
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id' => $lesson["mediaId"],
-            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : ''
+            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : '',
+            'context' =>$context,
         ));
     }
 

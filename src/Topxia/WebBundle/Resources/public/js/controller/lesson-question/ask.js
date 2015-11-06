@@ -12,7 +12,7 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $.post($form.attr('action'), $form.serialize(), function(json) {
-                   // window.location.reload();
+                   $("#modal").trigger("onAskQuestionSuccess",json);
                    $("#modal").modal('hide');
                 }, 'json');
             }

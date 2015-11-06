@@ -431,6 +431,10 @@ course_lesson_plugin_question_ask:
     pattern:  /lessonplugin/question/ask
     defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:ask }
 
+course_lesson_plugin_question_markers:
+    pattern:  /lessonplugin/{lessonId}/question/markers
+    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:markers }
+
 course_lesson_plugin_question_create:
     pattern:  /lessonplugin/question/create
     defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:create }

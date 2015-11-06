@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $mode = '')
+    public function showAction(Request $request, $id, $mode = '', $context)
     {
         $agentInWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
 
@@ -39,6 +39,7 @@ class PlayerController extends BaseController
             'file' => $file,
             'url' => $url,
             'player' => $player,
+            'context' => $context,
             'agentInWhiteList' => $agentInWhiteList,
         ));
     }

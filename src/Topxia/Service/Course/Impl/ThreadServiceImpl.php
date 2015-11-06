@@ -417,7 +417,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'markerLargerThan' => -1,
         );
 
-        return  $this->getThreadDao()->searchThreads($conditions, array(array('marker', 'asc')), 0, 100);
+        return  MarkerSerialize::unserializes($this->getThreadDao()->searchThreads($conditions, array(array('marker', 'asc')), 0, 100));
     }
 
     protected function getThreadDao()
@@ -448,5 +448,26 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+}
+
+class MarkerSerialize
+{
+    public static function unserialize(array $thread)
+    {
+        return empty($thread) ? '' :  array(
+            'id'=> $thread['id'],
+            'time' => $thread['marker'],
+            'text' => $thread['title'],
+            );
+    }
+
+    public static function unserializes(array $threads)
+    {
+        $markers = array();
+        foreach ($threads as $key => $thread) {
+        	$markers[$key] = MarkerSerialize::unserialize($thread);
+        }
+        return $markers;
     }
 }

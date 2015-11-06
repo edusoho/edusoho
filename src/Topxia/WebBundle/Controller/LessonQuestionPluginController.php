@@ -166,9 +166,9 @@ class LessonQuestionPluginController extends BaseController
             if ($form->isValid()) {
                 $question = $form->getData();
                 $question['type'] = 'question';
-                $this->getThreadService()->createThread($question);
+                $thread = $this->getThreadService()->createThread($question);
 
-                return $this->createJsonResponse('success');
+                return $this->createJsonResponse($thread);
             }
         }
         $form = $this->createQuestionForm(array(
@@ -180,6 +180,14 @@ class LessonQuestionPluginController extends BaseController
         return $this->render("TopxiaWebBundle:LessonQuestionPlugin:ask-modal.html.twig", array(
                 'form' => $form->createView(),
             ));
+    }
+
+    public function markersAction(Request $request, $lessonId)
+    {
+
+        $markers = $this->getThreadService()->getMyMarkersByLessonId($lessonId);
+
+        return $this->createJsonResponse($markers);
     }
 
     protected function createQuestionForm($data = array())

@@ -80,6 +80,16 @@ define(function(require, exports, module) {
                   player.play();
 
                 });
+                $('#modal').on('onAskQuestionSuccess', function (e,result) {
+                    if (result.id) {
+                        var marker = {
+                            'id' : result.id,
+                            'time': result.marker,
+                            'text' : result.title
+                        };
+                        player.addMarker(new Array(marker));
+                    }
+                });
              }
 
              var url = '/lessonplugin/question/ask?courseId=' + this.get('courseId') + '&lessonId=' + this.get('lessonId') + '&marker='+currentTime;

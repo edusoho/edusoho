@@ -18,6 +18,7 @@ define(function(require, exports, module) {
         var lessonId = videoHtml.data("lessonId");
         var watchLimit = videoHtml.data('watchLimit');
 
+        var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
         var watermark = videoHtml.data('watermark');
@@ -25,12 +26,12 @@ define(function(require, exports, module) {
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
-        var markers = videoHtml.data('markers');
+        var markerUrl = videoHtml.data('markerurl');
 
+        var markers = "";
         var html = "";
-
         if(fileType == 'video'){
-            if (videoHtml.data('player') == 'local-video-player'){
+            if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
@@ -55,25 +56,33 @@ define(function(require, exports, module) {
             return;
         }
 
+        if (balloonVideoPlayer && markerUrl) {
+            $.ajax({
+                type: "GET",
+                url: markerUrl,
+                async: false, 
+                success: function (result) {
+                    if (result != null) {
+                         markers = result;
+                    }
+                }
+            });
+        }
+
         videoHtml.html(html);
         videoHtml.show();
 
         var PlayerFactory = require('./player-factory');
         var playerFactory = new PlayerFactory();
         var player = playerFactory.create(
-            videoHtml.data('player'),
+            playerType,
             {
                 element: '#lesson-player',
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
-                markers: [
-                 {id: 1,time: 9.5, text: "this"},
-                 {id: 2,time: 16,  text: "is"},
-                 {id: 3,time: 23.6,text: "so"},
-                 {id: 4,time: 28,  text: "cool"}
-              ]
+                markers: markers
             }
         );
 

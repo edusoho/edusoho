@@ -28,10 +28,21 @@
         {{ thread.createdTime|smart_time }}
         <span class="bullet mhs">•</span>
         {{ thread.hitNum}} 次浏览
+        {% if thread.marker|default(0) >0 %}
+        <span class="bullet mhs">•</span>
+        提问于
+        <span class="btn btn-link">
+          <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}/starttime/{{ thread.marker }}" target="_blank">
+          <span class="glyphicon glyphicon-time "> {{ thread.marker|duration }}</span>
+          </a>
+        </span>
+
+      {% endif %}
         {% if lesson %}
           <span class="bullet mhs">•</span>
           <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">课时{{lesson.number}}</a>
         {% endif %}
+
       </div>
     </div>
     <div class="thread-body">{{ thread.content|raw }}</div>

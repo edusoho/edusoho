@@ -32,6 +32,7 @@
           class="local-video-player "
           {% elseif setting("developer.balloon_player")|default(0) %}
           class="ballon-video-player"
+          data-markerurl="{{ context.markerUrl|default('')}}"
           {% endif %}
         {% elseif file.type == 'audio' %}
           class="lesson-content-audio"

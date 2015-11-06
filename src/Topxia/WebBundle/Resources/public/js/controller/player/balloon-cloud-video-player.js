@@ -153,6 +153,18 @@ define(function(require, exports, module) {
             return this.get('markers');
         },
 
+        setMarkers: function(markers) {
+            var player = this.get("player");
+            console.log(player.markers);
+            player.markers.reset(markers);
+        },
+
+        addMarker: function(marker) {
+            var player = this.get("player");
+            console.log(player.markers);
+            player.markers.add(marker);
+        },
+
         setCurrentTime: function(time) {
             this.get("player").currentTime(time);
         },
