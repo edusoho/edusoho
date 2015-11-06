@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-
+    require('./organizationZtree.js').run();
     exports.run = function() {
 
         var $table = $('#user-table');

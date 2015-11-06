@@ -30,6 +30,7 @@ class UserDaoImpl extends BaseUserDao implements UserDao
 
         $builder = parent::createUserQueryBuilder($conditions)
             ->andWhere('staffNo LIKE :staffNo')
+            ->andWhere('organizationId = :organizationId')
             ->andWhere('organizationId IN (:organizationIds)');
 
         return $builder;

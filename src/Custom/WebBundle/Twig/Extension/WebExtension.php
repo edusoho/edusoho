@@ -1,7 +1,6 @@
 <?php
 namespace Custom\WebBundle\Twig\Extension;
 
-use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Common\ArrayToolkit;
@@ -40,7 +39,6 @@ class WebExtension extends \Twig_Extension
         $options = array('is_safe' => array('html'));
         return array(
             new \Twig_SimpleFunction('currentTime', array($this, 'getCurrentTime'), $options),
-            new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist')),
         );
     }
 
@@ -78,23 +76,6 @@ class WebExtension extends \Twig_Extension
         }
         return $retval;
 
-    }
-
-    public function inMenuBlacklist($code = '')
-    {
-        if(empty($code)){
-            return false;
-        }
-        $filename = $this->container->getParameter('kernel.root_dir') . '/../app/config/menu_blacklist.yml';
-        if(!file_exists($filename)){
-            return false;
-        }
-        $yaml = new Yaml();
-        $blackList = $yaml->parse(file_get_contents($filename));
-        if(empty($blackList)){
-            $blackList = array();
-        }
-        return in_array($code, $blackList);
     }
 }
 

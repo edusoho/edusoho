@@ -169,6 +169,8 @@ class BuildCommand extends BaseCommand
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/AdminBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/WebBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Topxia/MobileBundle/Resources/public");
+		$this->filesystem->remove("{$this->distDirectory}/src/Mooc/AdminBundle/Resources/public");
+		$this->filesystem->remove("{$this->distDirectory}/src/Mooc/WebBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Custom/AdminBundle/Resources/public");
 		$this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
 
@@ -342,7 +344,7 @@ class BuildCommand extends BaseCommand
 
 		$finder = new Finder();
 		$finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-		$needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom');
+		$needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'moocweb', 'moocadmin', 'topxiamobilebundlev2', 'classroom');
 		foreach ($finder as $dir) {
 			if (!in_array($dir->getFilename(), $needs)) {
 				continue;

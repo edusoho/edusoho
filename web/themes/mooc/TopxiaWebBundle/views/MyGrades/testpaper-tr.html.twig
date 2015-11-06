@@ -1,0 +1,18 @@
+<tr id="testpaper-tr-{{ testpaper.id }}">
+	<td>{{ testpaper.name }}</td>
+	<td>
+	{% if testpaperResults and testpaperResults[testpaper.id]|default(null) %}
+		已完成
+	{% else %}
+		<span class="text-danger">未完成</span>
+	{% endif %}
+	</td>
+	<td>{{ testpaper.score }}</td>
+	<td>
+	{% if testpaperResults and testpaperResults[testpaper.id]|default(null) %}
+		{{ testpaperResults[testpaper.id].score }}
+	{% else %}
+		--
+	{% endif %}
+	</td>
+</tr>

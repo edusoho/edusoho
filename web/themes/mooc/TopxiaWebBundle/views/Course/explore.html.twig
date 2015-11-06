@@ -19,11 +19,9 @@
 {% endblock %}
 
 {% block content %}
-  {% set type = fliter.type|default('all') %}
-  {% set price = fliter.price|default('all')%}
+  {% set fliter = fliter|default('all') %}
   {% set orderBy = orderBy|default('latest')%}
-  {% set currentLevelId = fliter.currentLevelId|default('all')%}
-  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:{type: type,price: price,currentLevelId: currentLevelId},orderBy:orderBy})) }}
+  {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
   <div class="category-filters">
     <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'latest'}) }}" class=" {% if (orderBy == 'latest') %} selected {% endif %}">最近更新</a>        
     <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'studentNum'}) }}" class=" {% if (orderBy == 'studentNum') %} selected {% endif %}">最热课程</a>

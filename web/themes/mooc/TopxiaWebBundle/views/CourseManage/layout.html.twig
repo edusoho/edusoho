@@ -87,6 +87,14 @@
                 <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% endif %}管理
               </a>
             </li>
+            
+            {% if course.type == 'periodic'%}
+              <li class="list-group-item {% if side_nav == 'course_manage_score' %}active{% endif %}">
+              <a href="{{ path('course_manage_score', {courseId:course.id}) }}">
+                <span></span>评分标准
+              </a>
+            </li>
+            {% endif %}
           </ul>
 
           <ul class="list-group">
@@ -139,6 +147,12 @@
               <a href="{{path('course_manage_data',{id:course.id})}}">
                 <span></span>课程学习数据</a>
             </li>
+            {% if course.type == 'periodic'%}
+            <li class="list-group-item {% if side_nav == 'transcripts' %}active{% endif %}">
+              <a href="{{path('course_manage_transcripts',{courseId:course.id})}}">
+                <span></span>成绩单</a>
+            </li>
+            {% endif %}
 
             {#{% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
               <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
