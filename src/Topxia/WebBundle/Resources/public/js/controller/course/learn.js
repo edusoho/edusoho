@@ -40,6 +40,7 @@ define(function(require, exports, module) {
             courseUri: null,
             dashboardUri: null,
             lessonId: null,
+            type: null,
             watchLimit: false
         },
 
@@ -68,28 +69,29 @@ define(function(require, exports, module) {
         },
 
         onAskQuestion: function(e) {
-              var balloonVideoPlayer = $('#lesson-video-content').data('balloonPlayer');
-              var fileType = $('#lesson-video-content').data('fileType');
               var currentTime = -1;
-             if (balloonVideoPlayer) {
+              var lessonType = this.get("type");
+             if (lessonType == "video") {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 currentTime = Math.floor(player.getCurrentTime());
                 player.pause();
-                $('#modal').on('hidden.bs.modal', function (e) {
-                  player.play();
-
-                });
-                $('#modal').on('onAskQuestionSuccess', function (e,result) {
-                    if (result.id) {
-                        var marker = {
-                            'id' : result.id,
-                            'time': result.marker,
-                            'text' : result.title
-                        };
-                        player.addMarker(new Array(marker));
-                    }
-                });
              }
+
+             $('#modal').on('hidden.bs.modal', function (e) {
+                if (lessonType == "video") {
+                     player.play();
+                 }
+              });
+             $('#modal').on('onAskQuestionSuccess', function (e,result) {
+                if (lessonType == "video" && result.id) {
+                    var marker = {
+                        'id' : result.id,
+                        'time': result.marker,
+                        'text' : result.title
+                    };
+                    player.addMarker(new Array(marker));
+                }
+             });
 
              var url = '/lessonplugin/question/ask?courseId=' + this.get('courseId') + '&lessonId=' + this.get('lessonId') + '&marker='+currentTime;
              $.get(url, '', function(data){
@@ -226,8 +228,7 @@ define(function(require, exports, module) {
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
                 
-                that.element.find('[data-role=lesson-title]').html(lesson.title);
-
+                that.set('type',lesson.type);
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 var $titleStr = "";
