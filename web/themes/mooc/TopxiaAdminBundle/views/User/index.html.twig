@@ -3,9 +3,9 @@
 {% set menu = 'admin_user_manage' %}
 
 {% set script_controller = 'theme/user/list' %}
-{% set organizations = data('OrganizationZtree', {all:1}) %}
+{% set organizations = data('Organization', {all:1}) %}
 {% set script_arguments = {
-        ztreeDates : organizations
+        ztreeDates : data('OrganizationZtree', {all:1}) 
       } %}
 {% block main %}
 
