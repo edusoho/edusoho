@@ -1,4 +1,4 @@
-{% if course.limitJoin == "opened" |default('closed')%}
+{% if course.buyable|default(true) == false %}
   该课程为限制课程，请联系客服
 {% else %}
   <a class="btn btn-primary btn-lg" 

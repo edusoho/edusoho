@@ -43,14 +43,14 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        //开启限制加入
+        if(empty($lesson['free'])  && empty($course['buyable']) ){
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
+        }
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
-        //开启限制加入
-        if(empty($lesson['free'])  && !empty($course['buyable']) && $course['buyable'] ){
-            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
-        }
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
         $user = $this->getCurrentUser();
