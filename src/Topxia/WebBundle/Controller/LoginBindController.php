@@ -16,8 +16,6 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
-        var_dump($url);
-        exit();
         return $this->redirect($url);
     }
 
@@ -29,7 +27,6 @@ class LoginBindController extends BaseController
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
         if ($bind) {
-            return array('bind'=>'bind');
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
                 $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
