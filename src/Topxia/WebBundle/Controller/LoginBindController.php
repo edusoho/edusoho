@@ -47,7 +47,7 @@ class LoginBindController extends BaseController
             //    return $this->redirect($_target_path);
            // }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
-        }
+        //}
 
     }
 
