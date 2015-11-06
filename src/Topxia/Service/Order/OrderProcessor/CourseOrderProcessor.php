@@ -19,11 +19,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             return array('error' => '已经是课程的学员了!');
         }
         $course = $this->getCourseService()->getCourse($targetId);
-        if( $course['status'] != 'published') {
-            return array('error' =>'不能加入未发布课程!');
-        }
          if(!$course['buyable']){
             return array('error'=>'该课程不可购买，如有需要，请联系客服');
+        }
+        if( $course['status'] != 'published') {
+            return array('error' =>'不能加入未发布课程!');
         }
 
         if($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
