@@ -12,7 +12,7 @@
           <tbody>
             {% if incomeDetail %}
             {% for data in incomeDetail %}
-            {% if courses[data.targetId].price|default(null)%}
+            {% if data.totalPrice|default(null) %}
               <tr>
                     <td>{{data.title}}<br>订单号:{{data.sn}}</td>
                     <td class="text-danger">{{data.amount}}</td>

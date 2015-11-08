@@ -985,6 +985,21 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
          );
 
+        $courseDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>"course"),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+        $classroomDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>"classroom"),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+
         $incomeData="";
 
         if($tab=="trend"){
@@ -992,12 +1007,12 @@ class AnalysisController extends BaseController
     
             $data=$this->fillAnalysisData($condition,$incomeData);          
         }
-
-        $courseIds = ArrayToolkit::column($incomeDetail, 'targetId');
+        
+        $courseIds = ArrayToolkit::column($courseDetail, 'targetId');
 
         $courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
-        $classroomIds = ArrayToolkit::column($incomeDetail, 'targetId');
+        $classroomIds = ArrayToolkit::column($classroomDetail, 'targetId');
 
         $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
 
@@ -1369,8 +1384,4 @@ class AnalysisController extends BaseController
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
-    protected function getVipService()
-    {
-        return $this->getServiceKernel()->createService('Vip.VipService');
-    }
 }
