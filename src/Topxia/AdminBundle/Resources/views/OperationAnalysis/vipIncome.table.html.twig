@@ -11,7 +11,7 @@
           </thead>
           <tbody>
             {% if vipIncomeDetail %}
-            {% for data in vipIncomeDetail %}
+            {% for data in vipIncomeDetail|default(null) %}
             {% if data.totalPrice%}
               <tr>
                    <td>{{data.title}}<br>订单号:{{data.sn}}</td>
