@@ -27,7 +27,7 @@ define(function(require, exports, module) {
     );
 
     exports.run = function() {
-        $('#set-bind-btn').on('click', function() {
+        $('#set-bind-new-btn').on('click', function() {
             var $btn = $(this);
 
             if ($('#user_terms').length != 0) {
@@ -107,7 +107,7 @@ define(function(require, exports, module) {
         });*/
 
 
-        if ($('#set-bind-exist-form').length > 0) {
+        /*if ($('#set-bind-exist-form').length > 0) {
             var $formSet = $('#set-bind-exist-form');
 
             var validatorSet = new Validator({
