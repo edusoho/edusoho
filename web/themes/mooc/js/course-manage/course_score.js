@@ -40,6 +40,7 @@ define(function(require, exports, module) {
             required: true,
             errormessageDataAfter: '预发布时间不能小于或等于课程结束时间' + $('[name=course_endTime]').val()
         });
+        var now = new Date();
         $("[name=expectPublishTime]").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
@@ -48,6 +49,7 @@ define(function(require, exports, module) {
         }).on('hide', function(ev) {
             validator.query('[name=expectPublishTime]').execute();
         });
+        $('[name=expectPublishTime]').datetimepicker('setStartDate', now);
     };
     Validator.addRule('dataAfter', function(options, commit) {
         var startTime = $('[name=course_endTime]').val();

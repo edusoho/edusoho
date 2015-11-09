@@ -48,7 +48,7 @@ class CourseScoreController extends BaseController
                     $data['msg'] = "未到课程预期发布时间，不能发布成绩！";
                 }
 
-                $postDates = array('status' => 'published');
+                $postDates = array('status' => 'published','publishTime' => time());
                 if($this->getCourseScoreService()->updateScoreSetting($courseId, $postDates)){
                     $data['type'] = 'success';
                     $data['msg'] = "课程成绩发布成功！";
