@@ -66,17 +66,15 @@
                 <th>总分</th>
                 <th>得分</th>
               </tr>
-              {% if homeworks %}
                 {% for homework in homeworks %}
                   {% include 'TopxiaWebBundle:MyGrades:homework-tr.html.twig' %}
+                {% else %}
+                  <tr>
+                    <td colspan="20">
+                      <div class="empty">暂无作业记录</div>
+                    </td>
+                  </tr>
                 {% endfor %}
-              {% else %}
-                <tr>
-                  <td colspan="20">
-                    <div class="empty">暂无作业记录</div>
-                  </td>
-                </tr>
-              {% endif %}
               </tbody>
             </table>
           </div>
@@ -93,17 +91,15 @@
                 <th>总分</th>
                 <th>得分</th>
               </tr>
-              {% if testpapers %}
                 {% for testpaper in testpapers %}
                   {% include 'TopxiaWebBundle:MyGrades:testpaper-tr.html.twig' %}
+                {% else %}
+                  <tr>
+                    <td colspan="20">
+                      <div class="empty">暂无考试记录</div>
+                    </td>
+                  </tr>
                 {% endfor %}
-              {% else %}
-                <tr>
-                  <td colspan="20">
-                    <div class="empty">暂无考试记录</div>
-                  </td>
-                </tr>
-              {% endif %}
               </tbody>
             </table>
           </div>
