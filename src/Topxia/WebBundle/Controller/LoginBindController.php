@@ -127,7 +127,7 @@ class LoginBindController extends BaseController
 
     public function weixinIndexAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
+        return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
     }
