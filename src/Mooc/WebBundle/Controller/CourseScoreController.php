@@ -176,9 +176,10 @@ class CourseScoreController extends BaseController
         if (empty($parameters) || (isset($parameters) && empty($parameters['staffNo']) && empty($parameters['organizationId']))) {
             $usersScore = $this->getCourseScoreService()->findAllMemberScore($courseId);
         } else {
+            $organizationIds = $this->getOrganizationService()->findOrganizationChildrenIds($parameters['organizationId']);
             $fields = array(
                 'staffNo' => $parameters['staffNo'],
-                'organizationId' => $parameters['organizationId']
+                'organizationIds' => $organizationIds
             );
             $usersScore = $this->getCourseScoreService()->findUsersScoreBySqlJoinUser($fields);
         }

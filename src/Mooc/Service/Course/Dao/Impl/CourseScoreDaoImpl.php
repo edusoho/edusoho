@@ -50,8 +50,11 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
         }
         if(isset($fields['organizationId']) && !empty($fields['organizationId']))
         {
-            $sql .= " u.organizationId = ? ";
-            $parmaters[] = $fields['organizationId'];
+            $marks = str_repeat('?,', count($fields['organizationIds']) - 1) . '?';
+            $sql .= " u.organizationId IN ({$marks}) ";
+            array_map(function($item) use (&$parmaters){
+                $parmaters[] = $item;
+            }, $fields['organizationIds']);
         }
         $sql .= " ORDER BY u.staffNo ASC ";
         return $this->getConnection()->fetchAll($sql,$parmaters);
