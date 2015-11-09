@@ -431,8 +431,6 @@ define(function(require, exports, module) {
 
                             if (0<testStartLeftSeconds && testStartLeftSeconds < 7200) {
                                 $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束，考试开始后10分钟将无法进入考试。</p>";
-
-                                $countDown = "<p>还剩: <strong class='text-info'>"+ hours + "</strong>小时<strong class='text-info'>"+ minutes+ "</strong>分钟<strong class='text-info'>"+seconds + "</strong>秒<br><br>";
                             };
 
                             if (testStartLeftSeconds <= 0 && testStartRightSeconds <= 60*10) {
