@@ -1,0 +1,31 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_teacher' %}
+
+{% set script_controller = 'user/teacher-list' %}
+
+{% block main %}
+
+<table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+    <tr>
+      <th>用户名</th>
+      <th>教师姓名</th>
+      <th>教职工号</th>
+      <th>推荐教师</th>
+      <th>最近登录</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if users %}
+      {% for user in users %}
+        {% include 'TopxiaAdminBundle:Teacher:tr.html.twig' with {user:user} %}
+      {% endfor %}
+    {% else %}
+       <tr><td colspan="20"><div class="empty">暂无教师记录</div></td></tr>
+    {% endif %}
+  </tbody>
+</table>
+ {{ web_macro.paginator(paginator) }} 
+{% endblock %}
