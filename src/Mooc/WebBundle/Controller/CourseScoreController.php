@@ -107,7 +107,6 @@ class CourseScoreController extends BaseController
             'usersScore' => $usersScore,
             'course' => $course,
             'courseScoreSetting' => $courseScoreSetting,
-            'organizations' => $organizations,
             'paginator' => $paginator
         ));
     }
