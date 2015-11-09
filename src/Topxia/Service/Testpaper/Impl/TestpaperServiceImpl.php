@@ -930,7 +930,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
 
 
-
 	protected function getTestpaperDao()
     {
         return $this->createDao('Testpaper.TestpaperDao');

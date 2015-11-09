@@ -35,6 +35,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $lesson = $context['lesson'];
 
+        $this->createRealTimeTestCrontab($lesson);
+
         $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($lesson['courseId']);
         foreach ($classroomIds as  $classroomId) {
             $classroom = $this->getClassroomService()->getClassroom($classroomId);
@@ -69,8 +71,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public function onCourseLessonDelete(ServiceEvent $event)
     {
         $context = $event->getSubject();
-
+        $lesson = $context["lesson"];
         $courseId = $context["courseId"];
+
+        $this->deleteRealTimeTestCrontab($lesson);
 
         $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
         foreach ($classroomIds as $key => $value) {
@@ -82,7 +86,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
 
         if ($courseIds) {
-            $lesson = $context["lesson"];
+
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
             foreach ($lessonIds as $key=>$lessonId) {
                 $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
@@ -107,6 +111,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $argument = $context['argument'];
         $lesson = $context['lesson'];
+        $this->updateRealTimeTestCrontab($lesson);
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'],1),'id');
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'],$courseIds),'id');
@@ -295,6 +300,47 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    private function createRealTimeTestCrontab($lesson)
+    {
+        if(!$this->isRealTimeTest()){
+            return;
+        }
+        $testPaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+        $second = $testPaper['limitedTime'] * 60 + 3600;
+
+        $updateRealTimeTestResultStatusJob = array(
+            'name'=>'updateRealTimeTestResultStatus',
+            'cycle'=>'once',
+            'jobClass'=>'Topixa\\Service\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
+            'jobParams'=>'',
+            'targetType' => "lesson",
+            'targetId' => $lesson['id'],
+            'time'=> $lesson['testStartTime'] + $second
+        );
+
+        $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);
+
+    }
+
+    private function deleteRealTimeTestCrontab($lesson)
+    {
+        if(!$this->isRealTimeTest()){
+            return;
+        }
+    }
+
+    private function updateRealTimeTestCrontab($lesson)
+    {
+        if(!$this->isRealTimeTest()){
+            return;
+        }
+    }
+
+    private function isRealTimeTest($lesson)
+    {
+        return $lesson['type'] == 'testpaper' && !empty($lesson['testMode']) && $lesson['testMode'] == 'realTime';
+    }
+
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
@@ -318,5 +364,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    protected function getCrontabJobService()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 }
