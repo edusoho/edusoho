@@ -45,7 +45,23 @@ class LoginBindController extends BaseController
                 /*$response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);*/
-                return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
+                $client = $this->createOAuthClient($type);
+                try {
+                    $oauthUser = $client->getUserInfo($token);
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
+                    if ($message == 'unaudited') {
+                        $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientMeta['name'].'登录连接的审核还未通过。';
+                    } else {
+                        $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+                    }
+                    $this->setFlashMessage('danger', $message);
+                    return $this->redirect($this->generateUrl('login'));
+                }
+                return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+                    'oauthUser' => $oauthUser,
+                    'type' => $type,
+                ));
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
