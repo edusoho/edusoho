@@ -12,12 +12,19 @@ class LiveCourseController extends BaseController
 
     public function indexAction (Request $request, $status)
     {
-        $conditions = $request->query->all();
-        if(empty($conditions['titleLike'])){
-            unset($conditions['titleLike']);
+        $file = $request->query->all();
+        $coursesTitle = null;
+
+        if(!empty($file['keywordType'])){
+            if($file['keywordType'] == 'courseTitle') {
+                $coursesTitle = $file['keyword'];
+            }
+            if($file['keywordType'] == 'lessonTitle') {
+                $conditions['titleLike'] = $file['keyword'];
+            }
         }
             
-        $courses = $this->getCourseService()->searchCourses(array('type' => 'live','status' => 'published'), $sort = 'latest', 0, 1000);
+        $courses = $this->getCourseService()->searchCourses(array('type' => 'live','status' => 'published','title'=>$coursesTitle,), $sort = 'latest', 0, 1000);
 
         $courseIds = ArrayToolkit::column($courses, 'id');
 
@@ -26,26 +33,32 @@ class LiveCourseController extends BaseController
         $conditions['type']="live";
 
         if($status == 'coming'){
-            $conditions['startTimeGreaterThan'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
-            $conditions['startTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):null;
+            $conditions['startTimeGreaterThan'] = !empty($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
+            $conditions['startTimeLessThan'] = !empty($conditions['endDateTime'])?strtotime($conditions['endDateTime']):null;
         }
         if($status == 'end'){
-            $conditions['endTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
-            $conditions['startTimeGreaterThan'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):null;
+            $conditions['endTimeLessThan'] = !empty($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
+            $conditions['startTimeGreaterThan'] = !empty($conditions['startDateTime'])?strtotime($conditions['startDateTime']):null;
         }
         if($status == 'underway'){
-            $conditions['startDateTime'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
-            $conditions['endTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
+            $conditions['startTimeLessThan'] = !empty($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
+            $conditions['endTimeGreaterThan'] = !empty($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
         }
 
 
-        $conditions['courseIds'] = $courseIds;
+        if(empty($courseIds)){//这里不设置会默认搜出所有的courses
+            $conditions['courseIds'] = array(
+            '0'
+            );
+        }else{
+            $conditions['courseIds'] = $courseIds;
+        }
         $conditions['status'] ='published';
 
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchLessonCount($conditions),
+            $ass = $this->getCourseService()->searchLessonCount($conditions),
             20
         );
         if ($status == 'end') {
@@ -62,7 +75,6 @@ class LiveCourseController extends BaseController
             );
         }
         $default = $this->getSettingService()->get('default', array());
-
         return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
             'status' => $status,
             'lessons' => $lessons,
