@@ -21,9 +21,9 @@
     </div>
     <div class="form-group">
     直播开始时间:
-    <input class="form-control" type="text" id="startDate" name="startDateTime" placeholder="开始时间">
+    <input class="form-control" type="text" id="startDate" name="startDateTime" placeholder="开始时间" value="{{ app.request.get('startDateTime') }}">
     <div class="form-group">-</div>
-    <input class="form-control" type="text" id="endDate" name="endDateTime" placeholder="结束时间">
+    <input class="form-control" type="text" id="endDate" name="endDateTime" placeholder="结束时间" value="{{ app.request.get('endDateTime') }}">
     </div>
     <button class="btn btn-primary">搜索</button>
   </form>
