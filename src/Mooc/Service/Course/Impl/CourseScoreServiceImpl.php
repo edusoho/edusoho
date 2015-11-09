@@ -80,6 +80,7 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
     public function updateUserCourseScore($id, $fields)
     {
         $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($id);
+        $fields['courseScoreId'] = $userCourseScore['id'];
         $fields['courseId'] = $userCourseScore['courseId'];
         $fields = $this->filterFields($fields);
 
