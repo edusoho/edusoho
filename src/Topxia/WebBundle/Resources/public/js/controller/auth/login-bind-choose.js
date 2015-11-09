@@ -124,10 +124,10 @@ define(function(require, exports, module) {
                         nickname = $('#set-bind-nickname-field').val();
                     }
 
-                    /*var emailOrMobile = ''
-                    if ($('#email_or_mobile_remote').length >0 ) {
-                        emailOrMobile = $('#set-bind-email-field').val();
-                    }*/
+                    var emailOrMobile = '';
+                    if ($('#set_bind_email').length >0 ) {
+                        emailOrMobile = $('#set_bind_email').val();
+                    }
 
                     $.post($formSet.attr('action'), $formSet.serialize(), function(response) {
                         if (!response.success) {
@@ -135,6 +135,7 @@ define(function(require, exports, module) {
                             return ;
                         }
                         Notify.success('登录成功，正在跳转至首页！');
+                        console.log(response._target_path);
                         window.location.href = response._target_path;
 
                     }, 'json').fail(function() {
