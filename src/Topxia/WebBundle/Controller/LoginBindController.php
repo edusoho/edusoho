@@ -14,6 +14,8 @@ class LoginBindController extends BaseController
             $request->getSession()->set('_target_path', $request->query->get('_target_path'));
         }
         $client = $this->createOAuthClient($type);
+        var_dump($type);
+        exit();
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $url = $client->getAuthorizeUrl($callbackUrl);
         return $this->redirect($url);
