@@ -55,11 +55,17 @@ class MyGradesController extends BaseController
 
 	public function gradesCardsAction(Request $request, $courseId)
 	{
+		$user = $this->getCurrentUser();
+
+		if(!$user->isLogin()){
+			$this->createAccessDeniedException('用户未登录');
+		}
+
 		$courseSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
 		if ($courseSetting['status'] != 'published') {
 			throw $this->createNotFoundException("课程成绩尚未发布!");
 		}
-		$user = $this->getCurrentUser();
+
 
 		$course = $this->getCourseService()->getCourse($courseId);
 		$courseMember = $this->getCourseService()->getCourseMember($courseId,$user['id']);
