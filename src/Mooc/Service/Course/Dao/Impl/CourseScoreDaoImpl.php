@@ -39,8 +39,8 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
 
     public function findUsersScoreBySqlJoinUser($fields)
     {
-        $sql = "SELECT s.* FROM {$this->table} s JOIN user u ON s.userId = u.id WHERE ";
-        $parmaters = array();
+        $sql = "SELECT s.* FROM {$this->table} s JOIN user u ON s.userId = u.id WHERE s.courseId = ?";
+        $parmaters = array($fields['courseId']);
         if(isset($fields['staffNo']) && !empty($fields['staffNo'])){
             $sql .= " u.staffNo LIKE ? ";
             $parmaters[] = '%'.$fields['staffNo'].'%';

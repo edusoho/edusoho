@@ -179,7 +179,8 @@ class CourseScoreController extends BaseController
             $organizationIds = $this->getOrganizationService()->findOrganizationChildrenIds($parameters['organizationId']);
             $fields = array(
                 'staffNo' => $parameters['staffNo'],
-                'organizationIds' => $organizationIds
+                'organizationIds' => $organizationIds,
+                'courseId' => $courseId
             );
             $usersScore = $this->getCourseScoreService()->findUsersScoreBySqlJoinUser($fields);
         }
