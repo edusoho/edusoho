@@ -339,20 +339,8 @@ define(function(require, exports, module) {
                             $replayGuid += "<br>";
                         }
 
-
-                        $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
-
-                        if (days == 0) {
-                            $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (hours == 0 && days != 0) {
-                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (hours == 0 && days == 0) {
-                            $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
+                        $countDown =  that._getCountDown(days,hours,minutes,seconds);
+   
 
                         if (0< startLeftSeconds && startLeftSeconds < 7200) {
                              $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
@@ -393,7 +381,6 @@ define(function(require, exports, module) {
                     }
 
                     generateHtml();
-
                     iID = setInterval(generateHtml, 1000);
 
                     $("#lesson-live-content").show();
@@ -425,7 +412,7 @@ define(function(require, exports, module) {
 
                         var intervalSecond = 0;
 
-                        function generateHtml() {
+                        function generateTestHtml() {
                             var nowDate = lesson.nowDate + intervalSecond;
                             var testStartLeftSeconds = parseInt(testStartTime - nowDate);
                             var testEndLeftSeconds = parseInt(testEndTime - nowDate);
@@ -438,30 +425,19 @@ define(function(require, exports, module) {
                             var seconds = modulo % 60;
                             var rightMinutes  = Math.floor(testStartRightSeconds / 60 );
                             var rightSeconds = (testStartRightSeconds % 60)
+                            
+                            $countDown = that._getCountDown(days,hours,minutes,seconds);
 
-                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
-
-                            if (days == 0) {
-                                $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                            };
-
-                            if (hours == 0 && days != 0) {
-                                $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                            };
-
-                            if (hours == 0 && days == 0) {
-                                $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                            };
 
                             if (0<testStartLeftSeconds && testStartLeftSeconds < 7200) {
-                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束，请在考试前10分钟内提早进入。</p>";
+                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束，考试开始后10分钟将无法进入考试。</p>";
 
                                 $countDown = "<p>还剩: <strong class='text-info'>"+ hours + "</strong>小时<strong class='text-info'>"+ minutes+ "</strong>分钟<strong class='text-info'>"+seconds + "</strong>秒<br><br>";
                             };
 
                             if (testStartLeftSeconds <= 0 && testStartRightSeconds <= 60*10) {
                                 $testNotice = "<p>实时考试已经开始，10分钟后不能进入考试， 考试将于 <strong>"+testEndTimeFormat+"</strong> 结束。<a class='btn btn-primary' href='" + url + "' target='_blank'>开始实时考试</a></p>";
-                                $countDown = "开始已开始: <strong class='text-info'>" + rightMinutes + "</strong>分钟<strong class='text-info'>" + rightSeconds + "</strong>秒<br><br>";
+                                $countDown = "考试已开始: <strong class='text-info'>" + rightMinutes + "</strong>分钟<strong class='text-info'>" + rightSeconds + "</strong>秒<br><br>";
                             };
 
                             if(testStartRightSeconds > 60*10){
@@ -471,6 +447,7 @@ define(function(require, exports, module) {
                             }
 
                             if (testEndLeftSeconds <= 0) {
+                                clearInterval(iID);
                                 $testNotice = "<p>实时考试已经结束</p>";
                             };
 
@@ -479,9 +456,9 @@ define(function(require, exports, module) {
                             intervalSecond++;
                         }
 
-                        generateHtml();
+                        generateTestHtml();
 
-                        iID = setInterval(generateHtml, 1000);
+                        iID = setInterval(generateTestHtml, 1000);
 
                         $("#lesson-testpaper-content").show();
                         $("#lesson-testpaper-content").perfectScrollbar({wheelSpeed:50});
@@ -683,6 +660,24 @@ define(function(require, exports, module) {
            this.chapterAnimate = new chapterAnimate({
             'element': this.element
            });
+        },
+
+        _getCountDown: function(days,hours,minutes,seconds){
+            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
+
+            if (days == 0) {
+                $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+            };
+
+            if (hours == 0 && days != 0) {
+                $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+            };
+
+            if (hours == 0 && days == 0) {
+                $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+            };  
+
+            return $countDown;          
         }
 
     });
