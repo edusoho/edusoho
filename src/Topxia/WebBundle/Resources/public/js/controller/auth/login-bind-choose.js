@@ -135,7 +135,6 @@ define(function(require, exports, module) {
                             return ;
                         }
                         Notify.success('登录成功，正在跳转至首页！');
-                        console.log(response._target_path);
                         window.location.href = response._target_path;
 
                     }, 'json').fail(function() {
