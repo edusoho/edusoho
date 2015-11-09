@@ -29,7 +29,7 @@ define(function(require, exports, module) {
         }
         if($("#status").val()== 'coming'){
             $("#startDate").datetimepicker('setStartDate',now);
-            // $("#endDate").datetimepicker('setEndDate',now);//只用开始时间搜,不考虑结束时间
+            $("#endDate").datetimepicker('setStartDate',now);//只用开始时间搜,不考虑结束时间
         }
         if($("#status").val()== 'underway'){
             $("#startDate").datetimepicker('setEndDate',now);

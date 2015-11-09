@@ -37,6 +37,7 @@ class LiveCourseController extends BaseController
             $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):null;
         }
         if($status == 'end'){
+
             $conditions['endTimeLessThan'] = time();
             $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):null;
             $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):null;
@@ -53,8 +54,8 @@ class LiveCourseController extends BaseController
         }else{
         $conditions['courseIds'] = $courseIds;
         }
-        $conditions['status'] ='published';
 
+        $conditions['status'] ='published';
 
         $paginator = new Paginator(
             $request,
