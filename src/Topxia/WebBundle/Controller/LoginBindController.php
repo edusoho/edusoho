@@ -27,7 +27,7 @@ class LoginBindController extends BaseController
         $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
         $request->getSession()->set('oauth_token', $token);
-        /*if ($bind) {
+        if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
                 $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
@@ -40,7 +40,7 @@ class LoginBindController extends BaseController
                 $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
                 return $this->redirect($goto);
             }
-        } else {*/
+        } else {
             if ($type == 'weixinmob') {
                 /*$response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
@@ -65,7 +65,7 @@ class LoginBindController extends BaseController
                 ));
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
-        //}
+        }
 
     }
 
