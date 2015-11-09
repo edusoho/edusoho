@@ -4,12 +4,8 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Topxia\Service\Util\CloudClientFactory;
 
 class CourseSettingController extends BaseController
 {
@@ -42,7 +38,7 @@ class CourseSettingController extends BaseController
             "userinfoFieldNameArray" => array(),
             "copy_enabled" => '0',
             "testpaperCopy_enabled" => '0',
-            "custom_chapter_enabled" =>'0',
+            "custom_chapter_enabled" => '1',
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -65,14 +61,14 @@ class CourseSettingController extends BaseController
                 $defaultSetting['part_name'] = '节';
             }
 
-            $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
+            $courseDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
                 'chapter_name',
-                'part_name'
+                'part_name',
             ));
             $this->getSettingService()->set('course_default', $courseDefaultSetting);
 
             $default = $this->getSettingService()->get('default', array());
-            $defaultSetting = array_merge($default,$userDefaultSetting,$courseDefaultSetting);
+            $defaultSetting = array_merge($default, $userDefaultSetting, $courseDefaultSetting);
             $this->getSettingService()->set('default', $defaultSetting);
 
             $courseSetting = $request->request->all();
@@ -85,7 +81,7 @@ class CourseSettingController extends BaseController
                 $courseSetting['userinfoFieldNameArray'] = array();
             }
 
-            $courseSetting = array_merge($courseSetting,$liveCourseSetting);
+            $courseSetting = array_merge($courseSetting, $liveCourseSetting);
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
@@ -119,12 +115,12 @@ class CourseSettingController extends BaseController
 
             $defaultSetting = $request->request->all();
 
-            $courseDefaultSetting =  ArrayToolkit::parts($defaultSetting, array(
-                'defaultCoursePicture'
+            $courseDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
+                'defaultCoursePicture',
             ));
 
             $default = $this->getSettingService()->get('default', array());
-            $defaultSetting = array_merge($default,$courseDefaultSetting);
+            $defaultSetting = array_merge($default, $courseDefaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
 
@@ -156,7 +152,7 @@ class CourseSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $liveCourseSetting = $request->request->all();
             $liveCourseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-            $setting = array_merge($courseSetting,$liveCourseSetting);
+            $setting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $setting);
 
@@ -177,7 +173,7 @@ class CourseSettingController extends BaseController
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
         return $this->render('TopxiaAdminBundle:System:live-course-setting.html.twig', array(
             'courseSetting' => $setting,
-            'capacity' => $capacity
+            'capacity' => $capacity,
         ));
     }
 
@@ -200,7 +196,7 @@ class CourseSettingController extends BaseController
 
         return $this->render('TopxiaAdminBundle:System:questions-setting.html.twig');
     }
-    
+
     protected function getCourseDefaultSet()
     {
         $default = array(

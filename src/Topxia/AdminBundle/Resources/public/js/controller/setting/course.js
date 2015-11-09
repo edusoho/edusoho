@@ -11,16 +11,7 @@ define(function(require, exports, module) {
         $(".buy-userinfo-list").sortable({
             'distance': 20
         });
-        var initChapterStatus = function(){
-             if($( "input[name='custom_chapter_enabled']:checked").val() ==0){
-                $("#chapter_name").attr("disabled", false);
-                $("#part_name").attr("disabled", false);
-            }else{
-                $("#chapter_name").attr("disabled", true);
-                $("#part_name").attr("disabled", true);
-            }
-        }
-        initChapterStatus();
+      
         if ($("[name=buy_fill_userinfo]:checked").val() == 1) $("#buy-userinfo-list").hide();
         if ($("[name=buy_fill_userinfo]:checked").val() == 0) {
             $("#buy-userinfo-list").hide();
@@ -29,12 +20,9 @@ define(function(require, exports, module) {
 
         $("[name=buy_fill_userinfo]").on("click", function() {
             if ($("[name=buy_fill_userinfo]:checked").val() == 1) {
-                $("#show-list").show();
-                $("#buy-userinfo-list").hide();
-            }
-            if ($("[name=buy_fill_userinfo]:checked").val() == 0) {
-                $("#buy-userinfo-list").hide();
-                $("#show-list").hide();
+                $("#show_course_chapter_name").show()
+            }else{
+               $("#show_course_chapter_name").hide();
             }
         });
 
@@ -48,14 +36,15 @@ define(function(require, exports, module) {
             $("#show-list").hide();
         });
 
-        $( "input[name='custom_chapter_enabled']").on('click',function(){
-            if($( "input[name='custom_chapter_enabled']:checked").val() ==0){
-                $("#chapter_name").attr("disabled", false);
-                $("#part_name").attr("disabled", false);
+        var initChapterStatus = function(use_chapter_name){
+            if(use_chapter_name ==1){
+                $("#show_course_chapter_name").show();
             }else{
-                $("#chapter_name").attr("disabled", true);
-                $("#part_name").attr("disabled", true);
+                $("#show_course_chapter_name").hide();
             }
+        }
+        $( "input[name='custom_chapter_enabled']").on('click',function(){
+          initChapterStatus($( "input[name='custom_chapter_enabled']:checked").val());
         });
         
 
