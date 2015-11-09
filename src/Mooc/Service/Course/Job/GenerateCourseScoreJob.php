@@ -25,11 +25,11 @@ class GenerateCourseScoreJob implements Job
         }
 
         $homeworks = array();
-        if (PluginToolkit::isPluginInstalled('homework')) {
+        if (PluginToolkit::isPluginInstalled('Homework')) {
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseId($courseId);
         }
-        $testpaperPercentage  = 90 / 100;
-        $homeworkPercentage   = 10 / 100;
+        $testpaperPercentage  = $scoreSetting['examWeight'] / 100;
+        $homeworkPercentage   = $scoreSetting['homeworkWeight'] / 100;
         $students             = $this->getCourseService()->findCourseStudentsAll($courseId);
         $conditions           = array();
         $conditions['target'] = "course-{$course['id']}";
