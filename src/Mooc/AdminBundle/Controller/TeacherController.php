@@ -2,11 +2,11 @@
 namespace Mooc\AdminBUndle\Controller;
 
 use Symfony\Component\Httpfoundation\Request;
-use Topxia\AdminBundle\Controller\TeacherController as BaseController;
+use Topxia\AdminBundle\Controller\TeacherController as BaseTeacherController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
-class TeacherController extends BaseController
+class TeacherController extends BaseTeacherController
 {
 
     public function indexAction(Request $request)
