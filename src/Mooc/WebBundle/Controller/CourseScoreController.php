@@ -100,7 +100,7 @@ class CourseScoreController extends BaseController
     public function transcriptsListAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
+        list($users, $usersProfile, $usersScore, $courseScoreSetting, $paginator) = $this->getTranscripts($request, $courseId);
         return $this->render('TopxiaWebBundle:CourseScore:transcripts_list.html.twig', array(
             'users' => $users,
             'usersProfile' => $usersProfile,
