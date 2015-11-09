@@ -110,7 +110,7 @@ class MyGradesController extends BaseController
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Mooc:Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
     protected function getAppService()
