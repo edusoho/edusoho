@@ -5,17 +5,25 @@
 
 {% if classrooms or courses %}
   {% for classroom in classrooms if classrooms %}
+    {% if is_plugin_installed('ClassroomPlan') %}
+      {% set classroomPlan = data('GetClassroomPlanByClassroomId',{'classroomId':classroom.id})|default(null) %}
+      {% set userPlanTaskNumInfo = data('UserClassroomPlanTaskNumInfo',{'classroomId':classroom.id, 'userId':app.user.id})|default(null) %}
+    {% endif %}
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
           {{ setting('classroom.name')|default("班级") }}: {{ classroom.title }}
-          <span>{{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}</span>
+          {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo|default(null) %}
+            <span>{{ userPlanTaskNumInfo.allDoneNum ~ '/' ~ userPlanTaskNumInfo.tasksNum }}</span>
+          {% else %}
+            <span>{{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}</span>
+          {% endif %}
         </div>
       </div>
 
       <ul class="bar-time-line">
-        {% if classroom.planId|default(null) %}
-          {% set tasks = data('TodayUserTasks',{'userId':app.user.id, 'taskType':'studyplan', 'batchId':classroom.planId, 'count':4}) %}
+        {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo %}
+          {% set tasks = data('TodayUserTasks',{'userId':app.user.id, 'taskType':'studyplan', 'batchId':classroomPlan.id, 'count':4}) %}
         {% endif %}
 
         {% if tasks|default(null) %}
