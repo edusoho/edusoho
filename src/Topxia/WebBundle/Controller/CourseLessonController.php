@@ -20,6 +20,7 @@ class CourseLessonController extends BaseController
         }
 
         $context = array();
+        $context['starttime'] = $request->query->get('starttime');
 
         $context['markerUrl'] = $this->generateUrl('course_lesson_plugin_question_markers', array('lessonId' => $lessonId));
 

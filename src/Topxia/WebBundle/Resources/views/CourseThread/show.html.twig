@@ -32,7 +32,7 @@
         <span class="bullet mhs">•</span>
         提问于
         <span class="btn btn-link">
-          <a href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}/starttime/{{ thread.marker }}" target="_blank">
+          <a href="{{ path('course_learn', {id:thread.courseId}) }}?starttime={{ thread.marker }}#lesson/{{thread.lessonId}}" target="_blank">
           <span class="glyphicon glyphicon-time "> {{ thread.marker|duration }}</span>
           </a>
         </span>

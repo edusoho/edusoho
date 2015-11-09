@@ -33,6 +33,7 @@
           {% elseif setting("developer.balloon_player")|default(0) %}
           class="ballon-video-player"
           data-markerurl="{{ context.markerUrl|default('')}}"
+          data-starttime="{{ context.starttime|default('')}}"
           {% endif %}
         {% elseif file.type == 'audio' %}
           class="lesson-content-audio"

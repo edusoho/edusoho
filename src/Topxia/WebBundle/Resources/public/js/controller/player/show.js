@@ -27,6 +27,7 @@ define(function(require, exports, module) {
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
+        var starttime = videoHtml.data('starttime');
 
         var markers = "";
         var html = "";
@@ -82,7 +83,8 @@ define(function(require, exports, module) {
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
-                markers: markers
+                markers: markers,
+                starttime: starttime
             }
         );
 
@@ -104,6 +106,10 @@ define(function(require, exports, module) {
                 player.setCurrentTime(DurationStorage.get(userId, fileId));
             }
             player.play();
+        });
+
+        player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
         });
 
         player.on("paused", function(){

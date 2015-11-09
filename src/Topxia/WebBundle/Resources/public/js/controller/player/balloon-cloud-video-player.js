@@ -10,7 +10,8 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: ''
+            markers: '',
+            starttime: '0'
         },
 
         events: {},
@@ -72,6 +73,7 @@ define(function(require, exports, module) {
                     controls: true,
                     autoplay: false,
                     preload: 'none',
+                    starttime: self.get('starttime'),
                     language: 'zh-CN',
                     width:'100%',
                     height:'100%',
@@ -92,9 +94,6 @@ define(function(require, exports, module) {
                         default_res : currentRes,
                         dynamic_source : self.get('url')
                     });
-
-                    
-
                 });
 
                 player.on('changeRes', function() {
@@ -170,6 +169,10 @@ define(function(require, exports, module) {
 
         setCurrentTime: function(time) {
             this.get("player").currentTime(time);
+        },
+
+        setStartTime:function(time) {
+             //this.get("player").setStartTime(time);
         },
 
         isPlaying: function() {

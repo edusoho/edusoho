@@ -41,7 +41,8 @@ define(function(require, exports, module) {
             dashboardUri: null,
             lessonId: null,
             type: null,
-            watchLimit: false
+            watchLimit: false,
+            starttime: null
         },
 
         setup: function() {
@@ -160,7 +161,7 @@ define(function(require, exports, module) {
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
             this.set('watchLimit', this.element.data('watchLimit'));
-
+            this.set('starttime', this.element.data('starttime'));
         },
 
         _initToolbar: function() {
@@ -284,6 +285,9 @@ define(function(require, exports, module) {
                         }
 
                         var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                        if(self.get('starttime')){
+                            playerUrl += "?starttime=" + self.get('starttime');
+                        }
                         var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
                         $("#lesson-video-content").show();
@@ -294,6 +298,13 @@ define(function(require, exports, module) {
                             project: 'PlayerProject',
                             children: [ document.getElementById('viewerIframe') ],
                             type: 'parent'
+                        });
+
+                        messenger.on("ready", function(){
+                            if (self.get('starttime') && lesson.type == 'video') {
+                                var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                                player.setStartTime(self.get('starttime'));
+                            }
                         });
 
                         messenger.on("ended", function(){
