@@ -5,12 +5,12 @@
 {% endif %}
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
   {% if item.status == 'published' %}
-    {% if ('periodic'== course.type and "now"|date('U') < course.startTime) %}
+    {% if member %}
+      <a href="{{ lessonUrl }}">
+    {% elseif ('periodic'== course.type and "now"|date('U') < course.startTime) %}
       <a class='course-before-open'>
     {% elseif ('periodic'== course.type and "now"|date('U') > course.endTime) %}
       <a class='course-ended'>
-    {% elseif member %}
-      <a href="{{ lessonUrl }}">
     {% else %}
       <a href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}">
     {% endif %}
