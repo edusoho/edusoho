@@ -37,6 +37,7 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
                 //return $this->redirect($this->generateUrl('partner_login', array('goto'=>$request->getSession()->get('_target_path', ''))));
             } else {
+                return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
                 $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
                 return $this->redirect($goto);
             }
