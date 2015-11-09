@@ -161,7 +161,10 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
 
     private function filterFields($fields)
     {
-        $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($fields['courseScoreId']);
+        $userCourseScore = array();
+        if(!empty($fields['courseScoreId'])){
+            $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($fields['courseScoreId']);
+        }
         $courseScoreSetting = $this->getScoreSettingByCourseId($fields['courseId']);
         $fields = ArrayToolkit::filter($fields, array(
             'courseId' => 0,
