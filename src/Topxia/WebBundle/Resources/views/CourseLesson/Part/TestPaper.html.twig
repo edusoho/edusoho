@@ -7,13 +7,6 @@
 <li class="section">
     <i class="es-icon es-icon-toc"></i>
     <span class="title">
-         第 {{ item.number }} 
-      {% if setting('default.chapter_name') %}
-        {{setting('default.chapter_name')|default('章')}}
-      {% else %}
-        章
-      {% endif %}：
-
       {% if item.status == 'published' %}
           <a {% if member %}href="{{ lessonUrl }}" data-toggle="tooltip" data-placement="bottom" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
           title="{{ item.title }}">
