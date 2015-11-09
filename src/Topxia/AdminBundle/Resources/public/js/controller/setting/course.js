@@ -11,7 +11,16 @@ define(function(require, exports, module) {
         $(".buy-userinfo-list").sortable({
             'distance': 20
         });
-
+        var initChapterStatus = function(){
+             if($( "input[name='custom_chapter_enabled']:checked").val() ==0){
+                $("#chapter_name").attr("disabled", false);
+                $("#part_name").attr("disabled", false);
+            }else{
+                $("#chapter_name").attr("disabled", true);
+                $("#part_name").attr("disabled", true);
+            }
+        }
+        initChapterStatus();
         if ($("[name=buy_fill_userinfo]:checked").val() == 1) $("#buy-userinfo-list").hide();
         if ($("[name=buy_fill_userinfo]:checked").val() == 0) {
             $("#buy-userinfo-list").hide();
