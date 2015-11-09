@@ -40,11 +40,11 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            if ($type == 'weixinmob') {
+            /*if ($type == 'weixinmob') {
                 $response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);
-            }
+            }*/
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
 
@@ -117,7 +117,7 @@ class LoginBindController extends BaseController
         $this->authenticateUser($user);
         $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
         if (!$response['_target_path']) {
-            $response['_target_path'] = generateUrl('login_bind_choose', array('type' => $type));
+            $response['_target_path'] = $this->generateUrl('homepage');
         }
         response:
         return $response;
@@ -141,7 +141,8 @@ class LoginBindController extends BaseController
             }
             unset($setData['set_bind_emailOrMobile']);
         }
-        
+        $setData['name'] = $setData['nickname'];
+        unset($setData['nickname']);
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
             $response = array('success' => false, 'message' => '页面已过期，请重新登录。');

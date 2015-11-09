@@ -27,7 +27,7 @@ define(function(require, exports, module) {
     );
 
     exports.run = function() {
-        $('#bind-new-btn').on('click', function() {
+        /*$('#set-bind-new-btn').on('click', function() {
             var $btn = $(this);
 
             if ($('#user_terms').length != 0) {
@@ -64,9 +64,9 @@ define(function(require, exports, module) {
             };
         });
 
-        var $form = $('#bind-exist-form');
+        //var $form = $('#set-bind-exist-form');
 
-        var validator = new Validator({
+        /*var validator = new Validator({
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
@@ -104,7 +104,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#bind-password-field',
             required: true
-        });
+        });*/
 
 
         if ($('#set-bind-exist-form').length > 0) {
@@ -119,12 +119,12 @@ define(function(require, exports, module) {
                         return false;
                     }
 
-                    /*var nickname = '';
+                    var nickname = '';
                     if ($('#set-bind-nickname-field').length >0 ) {
                         nickname = $('#set-bind-nickname-field').val();
                     }
 
-                    var emailOrMobile = ''
+                    /*var emailOrMobile = ''
                     if ($('#email_or_mobile_remote').length >0 ) {
                         emailOrMobile = $('#set-bind-email-field').val();
                     }*/
@@ -153,7 +153,7 @@ define(function(require, exports, module) {
                 });
             }
 
-            if ($('#set_bind_mobile').length > 0) {
+            /*if ($('#set_bind_mobile').length > 0) {
                 validatorSet.addItem({
                     element: '#set_bind_mobile',
                     required: true,
@@ -167,7 +167,7 @@ define(function(require, exports, module) {
                         }
                     }
                 });
-            }
+            }*/
 
             if ($('#set_bind_emailOrMobile').length > 0) {
                 validatorSet.addItem({
@@ -192,7 +192,7 @@ define(function(require, exports, module) {
                 rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
             });
 
-            if ($('input[name="sms_code"]').length > 0) {
+            /*if ($('input[name="sms_code"]').length > 0) {
                 validatorSet.addItem({
                     element: '[name="sms_code"]',
                     required: true,
