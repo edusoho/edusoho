@@ -27,7 +27,7 @@ define(function(require, exports, module) {
     );
 
     exports.run = function() {
-        $('#set-bind-new-btn').on('click', function() {
+        $('#set-bind-btn').on('click', function() {
             var $btn = $(this);
 
             if ($('#user_terms').length != 0) {
