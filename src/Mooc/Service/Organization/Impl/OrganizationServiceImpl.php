@@ -17,6 +17,18 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
         return $this->getOrganizationDao()->getOrganization($id);
     }
 
+    public function findOrganizationsByIds(array $ids)
+    {
+        if(empty($ids)){
+            return array();
+        }
+
+        $conditions = array('organizationIds' => $ids);
+        $orderBy = array('createdTime', 'DESC');
+        $count = $this->getOrganizationDao()->searchOrganizationCount($conditions);
+        return $this->getOrganizationDao()->searchOrganizations($conditions, $orderBy, 0, $count);
+    }
+
     public function findOrganizationsByParentId($parentId)
     {
         $conditions = array('parentId' => $parentId);

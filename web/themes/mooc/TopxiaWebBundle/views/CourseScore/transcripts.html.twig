@@ -3,7 +3,6 @@
 {% block title %}成绩单 - {{ parent() }}{% endblock %}
 {% set side_nav = 'transcripts' %}
 {% set script_controller = 'theme/course-score/transcripts-list' %}
-{% set organizations = data('Organization', {all:1}) %}
 {% set script_arguments = {
 	ztreeDates : data('OrganizationZtree', {all:1})
 } %}

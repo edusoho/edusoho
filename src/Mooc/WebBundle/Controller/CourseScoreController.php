@@ -81,7 +81,7 @@ class CourseScoreController extends BaseController
         list($studentNum, $passStudentNum, $averageScore, $passingRate) = $this->getCourseOverview($courseId);
         //transcripts
         $course = $this->getCourseService()->getCourse($courseId);
-        list($users, $usersProfile, $usersScore, $courseScoreSetting, $paginator) = $this->getTranscripts($request, $courseId);
+        list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
 
         return $this->render('TopxiaWebBundle:CourseScore:transcripts.html.twig', array(
             'studentNum' => $studentNum,
@@ -93,6 +93,7 @@ class CourseScoreController extends BaseController
             'usersProfile' => $usersProfile,
             'usersScore' => $usersScore,
             'courseScoreSetting' => $courseScoreSetting,
+            'organizations' => $organizations,
             'paginator' => $paginator
         ));
     }
@@ -100,13 +101,14 @@ class CourseScoreController extends BaseController
     public function transcriptsListAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        list($users, $usersProfile, $usersScore, $courseScoreSetting, $paginator) = $this->getTranscripts($request, $courseId);
+        list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
         return $this->render('TopxiaWebBundle:CourseScore:transcripts_list.html.twig', array(
             'users' => $users,
             'usersProfile' => $usersProfile,
             'usersScore' => $usersScore,
             'course' => $course,
             'courseScoreSetting' => $courseScoreSetting,
+            'organizations' => $organizations,
             'paginator' => $paginator
         ));
     }
@@ -211,12 +213,15 @@ class CourseScoreController extends BaseController
         } else {
             $users = array();
         }
+        $organizationIds = ArrayToolkit::column($users, 'organizationId');
+        $organizations = $this->getOrganizationService()->findOrganizationsByIds($organizationIds);
 
         return array(
             $users,
             $usersProfile,
             $usersScore,
             $courseScoreSetting,
+            $organizations,
             $paginator
         );
     }

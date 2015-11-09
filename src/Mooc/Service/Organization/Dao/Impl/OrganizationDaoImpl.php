@@ -75,6 +75,7 @@ class OrganizationDaoImpl extends BaseDao implements OrganizationDao
             ->andWhere('code = :code')
             ->andWhere('name = :name')
             ->andWhere('parentId = :parentId')
+            ->andWhere('id IN (:organizationIds)')
             ;
 
         return $builder;
