@@ -42,16 +42,14 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
         $sql = "SELECT s.* FROM {$this->table} s JOIN user u ON s.userId = u.id WHERE s.courseId = ?";
         $parmaters = array($fields['courseId']);
         if(isset($fields['staffNo']) && !empty($fields['staffNo'])){
-            $sql .= " u.staffNo LIKE ? ";
+            $sql .= " AND u.staffNo LIKE ? ";
             $parmaters[] = '%'.$fields['staffNo'].'%';
         }
-        if(isset($fields['staffNo']) && !empty($fields['staffNo']) && isset($fields['organizationIds']) && !empty($fields['organizationIds'])){
-            $sql .= " AND ";
-        }
+        
         if(isset($fields['organizationIds']) && !empty($fields['organizationIds']))
         {
             $marks = str_repeat('?,', count($fields['organizationIds']) - 1) . '?';
-            $sql .= " u.organizationId IN ({$marks}) ";
+            $sql .= " AND u.organizationId IN ({$marks}) ";
             array_map(function($item) use (&$parmaters){
                 $parmaters[] = $item;
             }, $fields['organizationIds']);
