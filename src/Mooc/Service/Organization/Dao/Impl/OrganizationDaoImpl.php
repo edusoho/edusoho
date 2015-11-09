@@ -31,7 +31,7 @@ class OrganizationDaoImpl extends BaseDao implements OrganizationDao
             ->select('COUNT(*)')
             ;
 
-        return $builder->execute()->fetchAll() ? : array();
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function searchOrganizations($conditions, $orderBy, $start, $limit)
