@@ -45,10 +45,10 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
             $sql .= " u.staffNo LIKE ? ";
             $parmaters[] = '%'.$fields['staffNo'].'%';
         }
-        if(isset($fields['staffNo']) && !empty($fields['staffNo']) && isset($fields['organizationId']) && !empty($fields['organizationId'])){
+        if(isset($fields['staffNo']) && !empty($fields['staffNo']) && isset($fields['organizationIds']) && !empty($fields['organizationIds'])){
             $sql .= " AND ";
         }
-        if(isset($fields['organizationId']) && !empty($fields['organizationId']))
+        if(isset($fields['organizationIds']) && !empty($fields['organizationIds']))
         {
             $marks = str_repeat('?,', count($fields['organizationIds']) - 1) . '?';
             $sql .= " u.organizationId IN ({$marks}) ";
