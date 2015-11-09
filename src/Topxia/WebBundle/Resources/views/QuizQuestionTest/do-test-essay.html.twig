@@ -99,9 +99,10 @@
 		  	{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
 		  </div>
 	  </div>
-
-
-	  {% if (questionPreview|default(false) and setting('questions.testpaper_answers_show_mode') == 'hide')  or (setting('questions.testpaper_answers_show_mode') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
+	  {{dump(paperResult.status|default('sss'))}}
+	  {% if (questionPreview|default(false)) 
+	  or (setting('questions.testpaper_answers_show_mode') == 'reviewed'  and paperResult.status|default(null) == 'finished') 
+	  or (setting('questions.testpaper_answers_show_mode') == 'submitted' and paperResult.status|default(null) == 'finished')  %}
 	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <div class="testpaper-question-result-suggested">
