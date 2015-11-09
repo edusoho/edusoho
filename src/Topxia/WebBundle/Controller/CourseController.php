@@ -79,7 +79,7 @@ class CourseController extends CourseBaseController
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions),
-			12
+			20
 		);
 		$courses = $this->getCourseService()->searchCourses(
 			$conditions, 
