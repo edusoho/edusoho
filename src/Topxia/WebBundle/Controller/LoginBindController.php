@@ -181,6 +181,8 @@ class LoginBindController extends BaseController
         }
 
         $user = $this->generateUser($type, $token, $oauthUser,$setData);
+        var_dump($user);
+        exit();
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
