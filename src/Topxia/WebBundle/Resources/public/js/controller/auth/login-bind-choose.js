@@ -27,7 +27,7 @@ define(function(require, exports, module) {
     );
 
     exports.run = function() {
-        /*$('#set-bind-new-btn').on('click', function() {
+        $('#set-bind-new-btn').on('click', function() {
             var $btn = $(this);
 
             if ($('#user_terms').length != 0) {
@@ -108,7 +108,6 @@ define(function(require, exports, module) {
 
 
         if ($('#set-bind-exist-form').length > 0) {
-            alert(3333);
             var $formSet = $('#set-bind-exist-form');
 
             var validatorSet = new Validator({
@@ -133,14 +132,12 @@ define(function(require, exports, module) {
                     $.post($formSet.attr('action'), $formSet.serialize(), function(response) {
                         if (!response.success) {
                             $('#bind-new-form-error').html(response.message).show();
-                            alert(1111);
                             return ;
                         }
                         Notify.success('登录成功，正在跳转至首页！');
                         window.location.href = response._target_path;
 
                     }, 'json').fail(function() {
-                        alert(2222);
                         Notify.danger('登录失败，请重新登录后再试！');
                     }).always(function() {
                        $('#set-bind-new-btn').button('reset');
