@@ -61,6 +61,7 @@ class CourseScoreController extends BaseController
     {
         $id = $request->request->get('id');
         $otherScore = $request->request->get('otherScore');
+
         $fields = array(
             'otherScore' => $otherScore
         );
