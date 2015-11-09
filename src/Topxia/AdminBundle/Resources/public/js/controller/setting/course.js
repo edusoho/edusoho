@@ -39,6 +39,17 @@ define(function(require, exports, module) {
             $("#show-list").hide();
         });
 
+        $( "input[name='custom_chapter_enabled']").on('click',function(){
+            if($( "input[name='custom_chapter_enabled']:checked").val() ==0){
+                $("#chapter_name").attr("disabled", false);
+                $("#part_name").attr("disabled", false);
+            }else{
+                $("#chapter_name").attr("disabled", true);
+                $("#part_name").attr("disabled", true);
+            }
+        });
+        
+
         var $form = $("#course-form");
 
         if($('#live-course-logo-upload').length>0) {
