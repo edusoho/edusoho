@@ -972,6 +972,14 @@ class AnalysisController extends BaseController
             'tab' => "trend",
             )));
         }
+
+        $incomeData="";
+        if($tab=="trend"){
+            $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $data=$this->fillAnalysisData($condition,$incomeData);          
+        }
+
+        
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
@@ -983,41 +991,23 @@ class AnalysisController extends BaseController
             "latest",
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-         );
+        );
 
-        $courseDetail=$this->getOrderService()->searchOrders(
-            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>"course"),
-            "latest",
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-         );
+        $incomeDetailByGroup = ArrayToolkit::group($incomeDetail, 'targetType');
 
-        $classroomDetail=$this->getOrderService()->searchOrders(
-            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00","targetType"=>"classroom"),
-            "latest",
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-         );
+        $courses = array();
+        if(isset($incomeDetailByGroup['course'])) {
+            $courseIds = ArrayToolkit::column($incomeDetailByGroup['course'], 'targetId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        }
 
-
-        $incomeData="";
-
-        if($tab=="trend"){
-            $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
-    
-            $data=$this->fillAnalysisData($condition,$incomeData);          
+        $classrooms = array();
+        if(isset($incomeDetailByGroup['classroom'])) {
+            $classroomIds = ArrayToolkit::column($incomeDetailByGroup['classroom'], 'targetId');
+            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
         }
         
-        $courseIds = ArrayToolkit::column($courseDetail, 'targetId');
-
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-
-        $classroomIds = ArrayToolkit::column($classroomDetail, 'targetId');
-
-        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
-
         $userIds = ArrayToolkit::column($incomeDetail, 'userId');
-
         $users = $this->getUserService()->findUsersByIds($userIds);
         
         $incomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00"),"early",0,1);
