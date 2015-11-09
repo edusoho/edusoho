@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class MobileAppController extends MobileBaseController
 {
+	const API_VERSIN = '1.2.0';
+
 	public function indexAction(Request $request)
 	{
 		$userAgent = $request->headers->get("user-agent");
