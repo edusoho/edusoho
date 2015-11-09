@@ -15,7 +15,7 @@ class LiveCourseController extends BaseController
         $file = $request->query->all();
         $coursesTitle = null;
 
-        if(!empty($file['keywordType'])){
+        if(!empty($file['keywordType']) and !empty($file['keyword'])){
             if($file['keywordType'] == 'courseTitle') {
                 $coursesTitle = $file['keyword'];
             }
@@ -24,7 +24,7 @@ class LiveCourseController extends BaseController
             }
         }
             
-        $courses = $this->getCourseService()->searchCourses(array('type' => 'live','status' => 'published','title'=>$coursesTitle,), $sort = 'latest', 0, 1000);
+        $courses = $this->getCourseService()->searchCourses(array('type' => 'live','status' => 'published','titleLike'=>$coursesTitle,), $sort = 'latest', 0, 1000);
 
         $courseIds = ArrayToolkit::column($courses, 'id');
 
@@ -33,25 +33,25 @@ class LiveCourseController extends BaseController
         $conditions['type']="live";
 
         if($status == 'coming'){
-            $conditions['startTimeGreaterThan'] = !empty($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
-            $conditions['startTimeLessThan'] = !empty($conditions['endDateTime'])?strtotime($conditions['endDateTime']):null;
+            $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):time();
+            $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):null;
         }
         if($status == 'end'){
-            $conditions['endTimeLessThan'] = !empty($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
-            $conditions['startTimeGreaterThan'] = !empty($conditions['startDateTime'])?strtotime($conditions['startDateTime']):null;
+            $conditions['endTimeLessThan'] = time();
+            $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):null;
+            $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):null;
         }
         if($status == 'underway'){
-            $conditions['startTimeLessThan'] = !empty($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
-            $conditions['endTimeGreaterThan'] = !empty($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
+            $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):time();
+            $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):time();
         }
 
-
-        if(empty($courseIds)){//这里不设置会默认搜出所有的courses
+        if(empty($courseIds)){//课时名出错时,这里不设置会默认搜出所有的courses
             $conditions['courseIds'] = array(
             '0'
             );
         }else{
-            $conditions['courseIds'] = $courseIds;
+        $conditions['courseIds'] = $courseIds;
         }
         $conditions['status'] ='published';
 
