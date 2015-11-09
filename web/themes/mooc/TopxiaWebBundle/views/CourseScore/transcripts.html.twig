@@ -3,10 +3,10 @@
 {% block title %}成绩单 - {{ parent() }}{% endblock %}
 {% set side_nav = 'transcripts' %}
 {% set script_controller = 'theme/course-score/transcripts-list' %}
-{% set organizations = data('OrganizationZtree', {all:1}) %}
+{% set organizations = data('Organization', {all:1}) %}
 {% set script_arguments = {
-        ztreeDates : organizations
-      } %}
+	ztreeDates : data('OrganizationZtree', {all:1})
+} %}
 {% block main %}
   <div class="mooc-report-header clearfix">
   	<div class="report-title">
