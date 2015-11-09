@@ -45,8 +45,8 @@ class LoginBindController extends BaseController
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);
             }*/
-            var_dump($this->generateUrl('login_bind_choose', array('type' => $type)));
-            exit();
+            //var_dump($this->generateUrl('login_bind_choose', array('type' => $type)));
+            //exit();
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
 
