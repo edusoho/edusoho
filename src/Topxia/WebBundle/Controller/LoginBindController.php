@@ -61,7 +61,7 @@ class LoginBindController extends BaseController
                 return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
                     'oauthUser' => $oauthUser,
                     'type' => $type,
-                    'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
+                    'hasPartnerAuth' => '',
                 ));
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
