@@ -34,7 +34,6 @@ define(function(require, exports, module) {
             $('.thread-post-list').find('li.empty').remove();
             var $form = $("#thread-post-form");
 
-            $form.find('[type=submit]').attr('disabled', 'disabled');
             $.ajax({
                 'url':$form.attr('action'), 
                 'type':'post',
@@ -50,7 +49,11 @@ define(function(require, exports, module) {
                 },
                 'error': function(data) {
                     data = $.parseJSON(data.responseText);
-                    Notify.danger(data.error.message);
+                    if(data.error) {
+                        Notify.danger(data.error.message);
+                    } else {
+                        Notify.danger('发表回复失败，请重试');
+                    }
                 }
             });
 
