@@ -81,7 +81,6 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
     {
         $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($id);
         $fields['courseId'] = $userCourseScore['courseId'];
-        $fields['userId'] = $userCourseScore['userId'];
         $fields = $this->filterFields($fields);
 
         return $this->getCourseScoreDao()->updateUserCourseScore($id, $fields);
@@ -161,7 +160,7 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
 
     private function filterFields($fields)
     {
-        $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($fields['userId']);
+        $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($fields['courseScoreId']);
         $courseScoreSetting = $this->getScoreSettingByCourseId($fields['courseId']);
         $fields = ArrayToolkit::filter($fields, array(
             'courseId' => 0,

@@ -63,7 +63,8 @@ class CourseScoreController extends BaseController
         $otherScore = $request->request->get('otherScore');
 
         $fields = array(
-            'otherScore' => $otherScore
+            'otherScore' => $otherScore,
+            'courseScoreId' => $id
         );
         $userScore = $this->getCourseScoreService()->updateUserCourseScore($id, $fields);
         $courseScoreSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($userScore['courseId']);
