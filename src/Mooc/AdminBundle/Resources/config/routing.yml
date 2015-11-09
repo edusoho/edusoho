@@ -33,3 +33,7 @@ admin_organization_edit:
 admin_organization_delete:
     pattern:  /organization/{id}/delete
     defaults: { _controller: MoocAdminBundle:Organization:delete}
+
+admin_teacher:
+    pattern:  /teacher
+    defaults: { _controller: MoocAdminBundle:Teacher:index }
