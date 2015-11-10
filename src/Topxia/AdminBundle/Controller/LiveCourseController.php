@@ -59,7 +59,7 @@ class LiveCourseController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $ass = $this->getCourseService()->searchLessonCount($conditions),
+            $this->getCourseService()->searchLessonCount($conditions),
             20
         );
         if ($status == 'end') {
