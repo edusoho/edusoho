@@ -90,7 +90,6 @@
                         if (error) {
                             return false;
                         }
-                        $('#post-thread-btn').button('submiting').addClass('disabled');
 
                         $.ajax({
                             url: $("#post-thread-form").attr('post-url'),
@@ -119,7 +118,11 @@
                             error: function(data) {
                                 data = data.responseText;
                                 data = $.parseJSON(data);
-                                Notify.danger(data.error.message);
+                                if(data.error) {
+                                    Notify.danger(data.error.message);
+                                } else {
+                                    Notify.danger('发表回复失败，请重试');
+                                }
                             }
                         });
                     }
