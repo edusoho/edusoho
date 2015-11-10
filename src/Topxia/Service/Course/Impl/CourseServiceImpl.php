@@ -932,7 +932,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function setCourseLessonMaxOnlineNum($lessonId,$num)
 	{
-		$this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
+		return $this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
 	}
 
 	public function findCourseDraft($courseId,$lessonId, $userId)
@@ -2143,7 +2143,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($fields['remark'])) {
 			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
 		}
-
 		$member = $this->getMemberDao()->addMember($fields);
 
         $this->setMemberNoteNumber(
