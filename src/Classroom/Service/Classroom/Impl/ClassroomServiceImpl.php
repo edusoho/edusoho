@@ -1363,11 +1363,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createService('User.StatusService');
     }
 
-    protected function getAppService()
-    {
-        return $this->createService('CloudPlatform.AppService');
-    }
-
 }
 
 class MemberSerialize
