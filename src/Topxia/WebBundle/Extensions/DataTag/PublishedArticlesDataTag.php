@@ -5,7 +5,7 @@ namespace Topxia\WebBundle\Extensions\DataTag;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
-class AllArticlesDataTag extends CourseBaseDataTag implements DataTag  
+class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag  
 {
 
     /**
@@ -13,7 +13,10 @@ class AllArticlesDataTag extends CourseBaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
-     *
+     *   sort:     created 创建时间
+     *             published 发布时间,带置顶
+     *             normal 发布时间
+     *             popular 热门
      * @param  array $arguments 参数
      * @return array 资讯列表
      */
@@ -21,6 +24,7 @@ class AllArticlesDataTag extends CourseBaseDataTag implements DataTag
     {	
         $this->checkCount($arguments);
         $conditions['status'] = 'published';
+        $sort = isset($arguments['sort'])?$arguments['sort']:'published';
     	$articles = $this->getArticleService()->searchArticles($conditions,'published', 0, $arguments['count']);
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
