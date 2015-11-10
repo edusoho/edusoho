@@ -2,52 +2,50 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\BlockToolkit;
-use Symfony\Component\Yaml\Yaml;
 
- class EduSohoUpgrade extends AbstractUpdater
- {
-     public function update()
-     {
-         $this->getConnection()->beginTransaction();
-         try {
-             $this->updateScheme();
-             $this->getConnection()->commit();
+class EduSohoUpgrade extends AbstractUpdater
+{
+    public function update()
+    {
+        $this->getConnection()->beginTransaction();
+        try {
+            $this->updateScheme();
+            $this->getConnection()->commit();
 
-             $this->updateCrontabSetting();
-         } catch (\Exception $e) {
-             $this->getConnection()->rollback();
-             throw $e;
-         }
+            $this->updateCrontabSetting();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollback();
+            throw $e;
+        }
 
         try {
-             $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/install");
-             $filesystem = new Filesystem();
+            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir') . "/../web/install");
+            $filesystem = new Filesystem();
 
-             if (!empty($dir)) {
-                 $filesystem->remove($dir);
-             }
+            if (!empty($dir)) {
+                $filesystem->remove($dir);
+            }
         } catch (\Exception $e) {
         }
 
-         $developerSetting = $this->getSettingService()->get('developer', array());
-         $developerSetting['debug'] = 0;
+        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting['debug'] = 0;
 
-         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
-         ServiceKernel::instance()->createService('Crontab.CrontabService')->setNextExcutedTime(time());
+        ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
+        ServiceKernel::instance()->createService('Crontab.CrontabService')->setNextExcutedTime(time());
 
     }
 
     private function updateScheme()
     {
         $connection = $this->getConnection();
-        
-        if(!$this->isFieldExist('money_card_batch', 'token')){
+
+        if (!$this->isFieldExist('money_card_batch', 'token')) {
             $connection->exec("ALTER TABLE `money_card_batch` ADD `token` varchar(64) NOT NULL DEFAULT '0'  AFTER `rechargedNumber`;");
         }
 
         $connection->exec("ALTER TABLE `money_card` CHANGE `cardStatus` `cardStatus` ENUM('normal','invalid','recharged','receive') NOT NULL DEFAULT 'invalid';");
-        if(!$this->isFieldExist('money_card', 'receiveTime')){
+        if (!$this->isFieldExist('money_card', 'receiveTime')) {
             $connection->exec("ALTER TABLE `money_card` ADD `receiveTime` int(10) NOT NULL DEFAULT '0' COMMENT '领取学习卡时间' AFTER `cardStatus`; ");
         }
 
@@ -65,11 +63,28 @@ use Symfony\Component\Yaml\Yaml;
             );
         }
 
+        $setting = array(
+            'rules' => array(
+                'thread' => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum' => 100,
+                    ),
+                ),
+                'threadLoginedUser' => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum' => 50,
+                    ),
+                ),
+            ),
+        );
+        ServiceKernel::instance()->createService('System.SettingService')->set('post_num_rules', $setting);
     }
 
     private function updateCrontabSetting()
     {
-        $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../app/data/crontab_config.yml");
+        $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir') . "/../app/data/crontab_config.yml");
         $filesystem = new Filesystem();
 
         if (!empty($dir)) {
@@ -91,39 +106,35 @@ use Symfony\Component\Yaml\Yaml;
         return empty($result) ? false : true;
     }
 
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
+    }
 
-     private function getSettingService()
-     {
-         return ServiceKernel::instance()->createService('System.SettingService');
-     }
+}
 
-
- }
-
- abstract class AbstractUpdater
- {
+abstract class AbstractUpdater
+{
     protected $kernel;
-     public function __construct($kernel)
-     {
-         $this->kernel = $kernel;
-     }
+    public function __construct($kernel)
+    {
+        $this->kernel = $kernel;
+    }
 
-     public function getConnection()
-     {
-         return $this->kernel->getConnection();
-     }
+    public function getConnection()
+    {
+        return $this->kernel->getConnection();
+    }
 
-     protected function createService($name)
-     {
-         return $this->kernel->createService($name);
-     }
+    protected function createService($name)
+    {
+        return $this->kernel->createService($name);
+    }
 
-     protected function createDao($name)
-     {
-         return $this->kernel->createDao($name);
-     }
+    protected function createDao($name)
+    {
+        return $this->kernel->createDao($name);
+    }
 
-   
-
-     abstract public function update();
- }
+    abstract public function update();
+}
