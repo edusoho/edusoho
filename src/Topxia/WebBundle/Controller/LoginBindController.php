@@ -41,10 +41,10 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            if ($type == 'weixinmob') {
+            /*if ($type == 'weixinmob') {
                 /*$response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
-                return $this->redirect($_target_path);*/
+                return $this->redirect($_target_path);
                 $client = $this->createOAuthClient($type);
                 try {
                     $oauthUser = $client->getUserInfo($token);
@@ -63,7 +63,7 @@ class LoginBindController extends BaseController
                     'type' => $type,
                     'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
                 ));
-            }
+            }*/
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
 
