@@ -3,9 +3,9 @@
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\WebBundle\Extensions\DataTag\AllArticlesDataTag;
+use Topxia\WebBundle\Extensions\DataTag\PublishedArticlesDataTag;
 
-class AllArticlesDataTagTest extends BaseTestCase
+class PublishedArticlesDataTagTest extends BaseTestCase
 {   
 
     public function testGetData()
