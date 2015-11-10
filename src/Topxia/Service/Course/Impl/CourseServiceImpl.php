@@ -1287,9 +1287,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"lesson"=>$lesson
 		));
 
-		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $this->dispatchEvent('studyplan.task.delete', new ServiceEvent($lesson));
-        }
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
