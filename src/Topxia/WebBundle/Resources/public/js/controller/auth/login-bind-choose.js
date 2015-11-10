@@ -107,8 +107,8 @@ define(function(require, exports, module) {
         });*/
 
 
-        if ($('#set-bind-exist-form').length > 0) {
-            var $formSet = $('#set-bind-exist-form');
+        //if ($('#set-bind-exist-form').length > 0) {
+            var $formSet = $('#set-bind-new-form');
 
             var validatorSet = new Validator({
 
@@ -119,7 +119,7 @@ define(function(require, exports, module) {
                         return false;
                     }
 
-                    var nickname = '';
+                    /*var nickname = '';
                     if ($('#set-bind-nickname-field').length >0 ) {
                         nickname = $('#set-bind-nickname-field').val();
                     }
@@ -127,13 +127,13 @@ define(function(require, exports, module) {
                     var emailOrMobile = '';
                     if ($('#set_bind_email').length >0 ) {
                         emailOrMobile = $('#set_bind_email').val();
-                    }
-                    if ($('#user_terms').length != 0) {
+                    }*/
+                    //if ($('#user_terms').length != 0) {
                         if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
                             Notify.danger('勾选同意此服务协议，才能继续注册！');
                             return ;
                         }
-                    }
+                    //}
 
                     $.post($formSet.attr('action'), $formSet.serialize(), function(response) {
                         if (!response.success) {
@@ -159,13 +159,13 @@ define(function(require, exports, module) {
                 };
             });
 
-            if ($('#set_bind_email').length > 0) {
+            //if ($('#set_bind_email').length > 0) {
                 validatorSet.addItem({
                     element: '#set_bind_email',
                     required: true,
                     rule: 'email email_remote'
                 });
-            }
+            //}
 
             /*if ($('#set_bind_mobile').length > 0) {
                 validatorSet.addItem({
@@ -249,7 +249,7 @@ define(function(require, exports, module) {
                     }      
                 });
             }*/
-        }
+        //}
 
     };
 
