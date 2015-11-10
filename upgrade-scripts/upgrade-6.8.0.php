@@ -40,6 +40,17 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
+        if ($this->isTableExist('money_card_batch') && !$this->isFieldExist('money_card_batch', 'token')) {
+            $connection->exec("ALTER TABLE `money_card_batch` ADD `token` varchar(64) NOT NULL DEFAULT '0'  AFTER `rechargedNumber`;");
+        }
+
+        if ($this->isTableExist('money_card')) {
+            $connection->exec("ALTER TABLE `money_card` CHANGE `cardStatus` `cardStatus` ENUM('normal','invalid','recharged','receive') NOT NULL DEFAULT 'invalid';");
+            if (!$this->isFieldExist('money_card', 'receiveTime')) {
+                $connection->exec("ALTER TABLE `money_card` ADD `receiveTime` int(10) NOT NULL DEFAULT '0' COMMENT '领取学习卡时间' AFTER `cardStatus`; ");
+            }
+        }
+
         if (!$this->isTableExist('recent_post_num')) {
             $connection->exec(
                 "CREATE TABLE `recent_post_num` (
