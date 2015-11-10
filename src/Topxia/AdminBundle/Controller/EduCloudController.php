@@ -101,7 +101,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
-
             $defaultSetting = array(
                 'sms_enabled' => '0',
                 'sms_registration' => 'off',
@@ -109,7 +108,31 @@ class EduCloudController extends BaseController
                 'sms_user_pay' => 'off',
                 'sms_forget_pay_password' => 'off',
                 'sms_bind' => 'off',
+                'sms_classroom_publish' => 'off',
+                'sms_course_publish' => 'off',
+                'sms_normal_lesson_publish' => 'off',
+                'sms_live_lesson_publish' => 'off',
+                'sms_live_play_one_day' => 'off',
+                'sms_live_play_one_hour' => 'off',
+                'sms_homework_check' => 'off',
+                'sms_testpaper_check' => 'off',
+                'sms_order_pay_success' => 'off',
+                'sms_course_buy_notify' => 'off',
+                'sms_classroom_buy_notify' => 'off',
+                'sms_vip_buy_notify' => 'off',
+                'sms_coin_buy_notify' => 'off',
             );
+            if ($dataUserPosted['sms_order_pay_success'] == 'on') {
+                $dataUserPosted['sms_course_buy_notify'] = 'on';
+                $dataUserPosted['sms_classroom_buy_notify'] = 'on';
+                $dataUserPosted['sms_vip_buy_notify'] = 'on';
+                $dataUserPosted['sms_coin_buy_notify'] = 'on';
+            } else {
+                $dataUserPosted['sms_course_buy_notify'] = 'off';
+                $dataUserPosted['sms_classroom_buy_notify'] = 'off';
+                $dataUserPosted['sms_vip_buy_notify'] = 'off';
+                $dataUserPosted['sms_coin_buy_notify'] = 'off';
+            }
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
 
             $dataUserPosted = array_merge($dataUserPosted, $schoolNames);
@@ -117,7 +140,7 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('cloud_sms', $dataUserPosted);
             
             if ('1' == $dataUserPosted['sms_enabled']) {
-                $this->setFlashMessage('success', '短信功能开启成功，每条短信0.07元。');
+                $this->setFlashMessage('success', '短信功能开启成功，短信最低￥0.055/条。');
             } else {
                 $this->setFlashMessage('success', '设置成功。');
             }

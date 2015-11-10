@@ -585,16 +585,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             new ServiceEvent($testpaper, array('testpaperResult' => $testpaperResult))
         );
 
-        if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $targetArr = explode('/',$testpaperResult['target']);
-            $lessonInfo = explode('-',$targetArr[1]);
-            $this->dispatchEvent(
-                'task.finished', 
-                new ServiceEvent(array('id'=>$lessonInfo[1],'type'=>'testpaper','passedStatus'=>$testpaperResult['passedStatus']), 
-                    array('taskType'=>'studyPlan', 'userId'=>$userId))
-            );
-        }
-
         return $testpaperResult;
     }
 
@@ -688,6 +678,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
 
         return $testPaperResult;
+
     }
 
     public function submitTestpaperAnswer($id, $answers)
@@ -990,8 +981,4 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->createService('Classroom:Classroom.ClassroomService');
     }
 
-    protected function getAppService()
-    {
-        return $this->createService('CloudPlatform.AppService');
-    }
 }

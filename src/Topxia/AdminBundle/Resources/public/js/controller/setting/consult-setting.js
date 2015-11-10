@@ -1,27 +1,23 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Uploader = require('upload');
-
+    var WebUploader = require('edusoho.webuploader');
     exports.run = function() {
 
         var $form = $("#consult-setting-form");
-        var uploader = new Uploader({
-            trigger: '#consult-upload',
-            name: 'consult',
-            action: $('#consult-upload').data('url'),
-            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
-            error: function(file) {
-                Notify.danger('上传微信二维码失败，请重试！')
-            },
-            success: function(response) {
-                response = $.parseJSON(response);
-                $("#consult-container").html('<img src="' + response.url + '?'+ (new Date()).getTime() + '">');
-                $form.find('[name=webchatURI]').val(response.path);
+        var uploader = new WebUploader({
+            element: '#consult-upload'
+        });
+
+        uploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#consult-upload").data("gotoUrl");
+
+            $.post(url, response ,function(data){
+                $("#consult-container").html('<img src="' + data.url + '">');
+                $form.find('[name=webchatURI]').val(data.path);
                 $("#consult-webchat-del").show();
                 Notify.success('上传微信二维码成功！');
-            }
+            });    
         });
 
         $('[data-role=item-add]').on('click',function(){

@@ -275,7 +275,7 @@ CREATE TABLE `course_chapter` (
   `seq` int(10) unsigned NOT NULL COMMENT '章节序号',
   `title` varchar(255) NOT NULL COMMENT '章节名称',
   `createdTime` int(10) unsigned NOT NULL COMMENT '章节创建时间',
-  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id',
+  `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制章节的id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -332,10 +332,11 @@ CREATE TABLE `course_lesson` (
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
   `memberNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时加入人数',
   `replayStatus` enum('ungenerated','generating','generated') NOT NULL DEFAULT 'ungenerated',
+  `maxOnlineNum` INT NULL DEFAULT '0' COMMENT '直播在线人数峰值',
   `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
-  `parentId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
+  `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -398,7 +399,7 @@ CREATE TABLE `course_material` (
   `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
-  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
+  `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -691,6 +692,7 @@ CREATE TABLE `notification` (
   `userId` int(10) unsigned NOT NULL COMMENT '被通知的用户ID',
   `type` varchar(64) NOT NULL DEFAULT 'default' COMMENT '通知类型',
   `content` text COMMENT '通知内容',
+  `batchId` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知表中的ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '通知时间',
   `isRead` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已读',
   PRIMARY KEY (`id`)
@@ -778,7 +780,7 @@ CREATE TABLE `question` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
+  `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='问题表';
 
@@ -804,13 +806,13 @@ CREATE TABLE `question_favorite` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `session2`;
- CREATE TABLE `session2` (
-  `session_id` varchar(255) NOT NULL,
-  `session_value` text NOT NULL,
-  `session_time` int(11) NOT NULL,
-  `user_id` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`session_id`)
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE `sessions` (
+  `sess_id` VARBINARY(128) NOT NULL PRIMARY KEY,
+  `sess_user_id` INT UNSIGNED NOT NULL DEFAULT  '0',
+  `sess_data` BLOB NOT NULL,
+  `sess_time` INTEGER UNSIGNED NOT NULL,
+  `sess_lifetime` MEDIUMINT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `setting`;
@@ -878,7 +880,7 @@ CREATE TABLE `testpaper` (
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改人',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   `metas` text COMMENT '题型排序',
-  `pId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
+  `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -1392,6 +1394,8 @@ CREATE TABLE `crontab_job` (
   `cycleTime` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '任务执行时间',
   `jobClass` varchar(1024) NOT NULL COMMENT '任务的Class名称',
   `jobParams` text NOT NULL COMMENT '任务参数',
+  `targetType` VARCHAR( 64 ) NOT NULL DEFAULT  '',
+  `targetId` INT UNSIGNED NOT NULL DEFAULT  '0',
   `executing` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行状态',
   `nextExcutedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务下次执行的时间',
   `latestExecutedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务最后执行的时间',
@@ -1518,4 +1522,39 @@ CREATE TABLE `blacklist` (
 `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入黑名单时间',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
+
+DROP TABLE IF EXISTS `task`;
+CREATE TABLE `task` (
+`id` int(10) NOT NULL AUTO_INCREMENT,
+`title` varchar(255) DEFAULT NULL COMMENT '任务标题',
+`description` text COMMENT '任务描述',
+`meta` text COMMENT '任务元信息',
+`userId` int(10) NOT NULL DEFAULT '0',
+`taskType` varchar(100) NOT NULL COMMENT '任务类型',
+`batchId` int(10) NOT NULL DEFAULT '0' COMMENT '批次Id',
+`targetId` int(10) NOT NULL DEFAULT '0' COMMENT '类型id,可以是课时id,作业id等',
+`targetType` varchar(100) DEFAULT NULL COMMENT '类型,可以是课时,作业等',
+`taskStartTime` int(10) NOT NULL DEFAULT '0' COMMENT '任务开始时间',
+`taskEndTime` int(10) NOT NULL DEFAULT '0' COMMENT '任务结束时间',
+`status` enum('active','completed') NOT NULL DEFAULT 'active',
+`required` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为必做任务,0否,1是',
+`completedTime` int(10) NOT NULL DEFAULT '0' COMMENT '任务完成时间',
+`createdTime` int(10) NOT NULL DEFAULT '0',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `batch_notification`;
+CREATE TABLE `batch_notification` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '群发通知id',
+  `type` enum('text', 'image', 'video', 'audio')  NOT NULL DEFAULT 'text' COMMENT '通知类型' ,
+  `title` text NOT NULL COMMENT '通知标题',
+  `fromId` int(10) unsigned NOT NULL COMMENT '发送人id',
+  `content` text NOT NULL COMMENT '通知内容',
+  `targetType` text NOT NULL COMMENT '通知发送对象group,global,course,classroom等',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '通知发送对象ID',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发送通知时间',
+  `published` int(10) NOT NULL DEFAULT '0' COMMENT '是否已经发送',
+  `sendedTime` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知的发送时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='群发通知表';
 

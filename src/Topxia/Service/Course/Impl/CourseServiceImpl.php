@@ -102,7 +102,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function findCoursesCountByLessThanCreatedTime($endTime)
 	{
-	        	return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
+	    return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
 	}
 
 	public function analysisCourseSumByTime($endTime)
@@ -930,6 +930,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return LessonSerialize::unserialize($lesson);
 	}
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num)
+	{
+		return $this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
+	}
+
 	public function findCourseDraft($courseId,$lessonId, $userId)
 	{
 		$draft = $this->getCourseDraftDao()->findCourseDraft($courseId,$lessonId, $userId);
@@ -1190,7 +1195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		if ($fields['type'] == 'live') {
+		if ($fields['type'] == 'live' && isset($fields['startTime'])) {
 			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
 			$fields['suggestHours'] = $fields['length'] / 60;
 		}
@@ -1207,7 +1212,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->updateCourseCounter($course['id'], array(
 			'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id']),
 		));
-
 		// Update link count of the course lesson file, if the lesson file is changed
 		if(array_key_exists('mediaId', $fields)){
 			if($fields['mediaId'] != $lesson['mediaId']){
@@ -1224,6 +1228,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
+		$updatedLesson['fields']=$lesson;
 		$this->dispatchEvent("course.lesson.update",array('argument'=>$argument,'lesson'=>$updatedLesson));
 
 		return $updatedLesson;
@@ -1552,10 +1558,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			new ServiceEvent($lesson, array('course' => $course))
 		);
 
-		$this->dispatchEvent(
-			'task.finished', 
-			new ServiceEvent($lesson, array('taskType'=>'studyPlan', 'userId'=>$member['userId']))
-		);
 	}
 
 	public function searchLearnCount($conditions)
@@ -1633,6 +1635,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		return $statuses;
 	}
+
+	public function getLearnByUserIdAndLessonId($userId, $lessonId)
+	{
+		return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+	}
+	
 
 	public function findUserLearnedLessons($userId, $courseId)
 	{
@@ -1945,6 +1953,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		return $this->getMemberDao()->findMemberCountByCourseIdAndRole($courseId, 'student');
 	}
 
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked = 0)
+	{
+		return $this->getMemberDao()->findMobileVerifiedMemberCountByCourseId($courseId, $locked);
+	}
+
 	public function findCourseTeachers($courseId)
 	{
 		return $this->getMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, self::MAX_TEACHER);
@@ -2140,7 +2153,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($fields['remark'])) {
 			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
 		}
-
 		$member = $this->getMemberDao()->addMember($fields);
 
         $this->setMemberNoteNumber(

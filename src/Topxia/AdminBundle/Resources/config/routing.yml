@@ -2,6 +2,10 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_inspect:
+    pattern:  /inspect
+    defaults: { _controller: TopxiaAdminBundle:Default:inspect }
+
 admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
@@ -372,6 +376,10 @@ admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
 
+admin_live_get_max_online:
+    pattern: /livecourse/get/maxOnline
+    defaults: { _controller: TopxiaAdminBundle:LiveCourse:getMaxOnline }
+
 admin_order:
     pattern: /order
     defaults: { _controller: TopxiaAdminBundle:Order:index }
@@ -553,6 +561,10 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_setting_sensitive_word:
+    pattern:  /setting/sensitive_word
+    defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
+
 admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
@@ -623,6 +635,10 @@ admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
+admin_setting_post_num_rules:
+    pattern:  /setting/post_num_rules
+    defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
+
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
@@ -660,6 +676,9 @@ admin_optimize_remove_show_progressbar:
     pattern:  /setting/optimize/show-progressbar
     defaults: { _controller: TopxiaAdminBundle:Optimize:showProgressbar }
 
+admin_jobs:
+    pattern: /setting/jobs
+    defaults: { _controller: TopxiaAdminBundle:Job:index }
 admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
@@ -1130,6 +1149,14 @@ admin_operation_analysis_course_income:
     pattern:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
 
+admin_operation_analysis_classroom_income:
+    pattern:  /operation/analysis/classroom/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:classroomIncome }
+
+admin_operation_analysis_vip_income:
+    pattern:  /operation/analysis/vip/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:vipIncome }
+
 admin_operation_analysis_course_sum:
     pattern:  /operation/analysis/course/sum/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseSum }
@@ -1289,3 +1316,24 @@ admin_announcement_edit:
     pattern:  /announcement/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:Announcement:edit }
 
+admin_batch_notification:
+    pattern: /batch_notification
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:index }
+
+admin_batch_notification_create:
+    pattern: /batch_notification/create
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:create }
+
+admin_batch_notification_edit:
+    pattern: /batch_notification/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:edit }
+
+admin_batch_notification_delete:
+    pattern: /batch_notification/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:delete }
+    methods: [POST]
+
+admin_batch_notification_send:
+    pattern: /batch_notification/send/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
+    methods:  [POST]

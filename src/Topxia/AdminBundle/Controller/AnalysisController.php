@@ -77,6 +77,7 @@ class AnalysisController extends BaseController
     {      
         $data=array();
         $userSumStartDate="";
+        $userSumDetail = array();
 
         $condition=$request->query->all();
         $timeRange=$this->getTimeRange($condition);
@@ -971,6 +972,14 @@ class AnalysisController extends BaseController
             'tab' => "trend",
             )));
         }
+
+        $incomeData="";
+        if($tab=="trend"){
+            $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $data=$this->fillAnalysisData($condition,$incomeData);          
+        }
+
+        
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
@@ -982,22 +991,23 @@ class AnalysisController extends BaseController
             "latest",
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-         );
+        );
 
-        $incomeData="";
+        $incomeDetailByGroup = ArrayToolkit::group($incomeDetail, 'targetType');
 
-        if($tab=="trend"){
-            $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
-    
-            $data=$this->fillAnalysisData($condition,$incomeData);          
+        $courses = array();
+        if(isset($incomeDetailByGroup['course'])) {
+            $courseIds = ArrayToolkit::column($incomeDetailByGroup['course'], 'targetId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         }
 
-        $courseIds = ArrayToolkit::column($incomeDetail, 'targetId');
-
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-
+        $classrooms = array();
+        if(isset($incomeDetailByGroup['classroom'])) {
+            $classroomIds = ArrayToolkit::column($incomeDetailByGroup['classroom'], 'targetId');
+            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        }
+        
         $userIds = ArrayToolkit::column($incomeDetail, 'userId');
-
         $users = $this->getUserService()->findUsersByIds($userIds);
         
         $incomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00"),"early",0,1);
@@ -1013,6 +1023,7 @@ class AnalysisController extends BaseController
             'tab'=>$tab,
             'data'=>$data,
             'courses'=>$courses,
+            'classrooms'=>$classrooms,
             'users'=>$users,
             'incomeStartDate'=>$incomeStartDate,
             'dataInfo'=>$dataInfo,    
@@ -1079,6 +1090,128 @@ class AnalysisController extends BaseController
             'users'=>$users,
             'courseIncomeStartDate'=>$courseIncomeStartDate,
             'dataInfo'=>$dataInfo,              
+        ));
+    }
+
+    public function classroomIncomeAction(Request $request,$tab)
+    {
+        $data=array();
+        $classroomIncomeStartDate="";
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+
+        if(!$timeRange) {
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_classroom_income', array(
+            'tab' => "trend",
+            )));
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"classroom","amount"=>"0.00")),
+            20
+        );
+
+        $classroomIncomeDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"classroom","amount"=>'0.00'),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+        $classroomIncomeData="";
+
+        if($tab=="trend"){
+            $classroomIncomeData=$this->getOrderService()->analysisClassroomAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+
+            $data=$this->fillAnalysisData($condition,$classroomIncomeData);
+        }
+
+        $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
+
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        $userIds = ArrayToolkit::column($classroomIncomeDetail, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $classroomIncomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00","targetType"=>"classroom"),"early",0,1);
+
+        foreach ($classroomIncomeStartData as $key) {
+            $classroomIncomeStartDate=date("Y-m-d",$key['createdTime']);
+        }
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:classroomIncome.html.twig",array(
+            'classroomIncomeDetail'=>$classroomIncomeDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'data'=>$data,
+            'classrooms'=>$classrooms,
+            'users'=>$users,
+            'classroomIncomeStartDate'=>$classroomIncomeStartDate,
+            'dataInfo'=>$dataInfo,
+        ));
+    }
+
+    public function vipIncomeAction(Request $request,$tab)
+    {
+        $data=array();
+        $vipStartDate="";
+
+        $condition=$request->query->all();
+        $timeRange=$this->getTimeRange($condition);
+
+        if(!$timeRange) {
+            $this->setFlashMessage("danger","输入的日期有误!");
+            return $this->redirect($this->generateUrl('admin_operation_analysis_vip_income', array(
+            'tab' => "trend",
+            )));
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"vip","amount"=>"0.00")),
+            20
+        );
+
+        $vipIncomeDetail=$this->getOrderService()->searchOrders(
+            array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","targetType"=>"vip","amount"=>'0.00'),
+            "latest",
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+         );
+
+        $vipIncomeData="";
+
+        if($tab=="trend"){
+            $vipIncomeData=$this->getOrderService()->analysisvipAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+
+            $data=$this->fillAnalysisData($condition,$vipIncomeData);
+        }
+
+
+        $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $vipIncomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00","targetType"=>"vip"),"early",0,1);
+
+        foreach ($vipIncomeStartData as $key) {
+            $vipIncomeStartDate=date("Y-m-d",$key['createdTime']);
+        }
+
+        $dataInfo=$this->getDataInfo($condition,$timeRange);
+        return $this->render("TopxiaAdminBundle:OperationAnalysis:vipIncome.html.twig",array(
+            'vipIncomeDetail'=>$vipIncomeDetail,
+            'paginator'=>$paginator,
+            'tab'=>$tab,
+            'data'=>$data,
+            'users'=>$users,
+            'vipIncomeStartDate'=>$vipIncomeStartDate,
+            'dataInfo'=>$dataInfo,
         ));
     }
 

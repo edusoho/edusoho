@@ -872,7 +872,7 @@ class FileToolkit
     {   
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov','m4v'))) {
+        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov','m4v', 'rmvb'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';
@@ -999,12 +999,6 @@ class FileToolkit
         $scaledSize = $naturalSize->widen($width)->heighten($height);
 
         return array($naturalSize, $scaledSize);
-    }
-
-    public static function getMimeType(File $file)
-    {
-        $mimeType = finfo_file(finfo_open(FILEINFO_MIME),$file);
-        return $mimeType;
     }
 
 }

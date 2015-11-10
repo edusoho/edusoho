@@ -112,15 +112,19 @@ class ThreadController extends BaseController
     public function createAction(Request $request, $target, $type = 'discussion', $thread = null)
     {
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            $data['targetType'] = $target['type'];
-            $data['targetId'] = $target['id'];
+            try{
+                $data = $request->request->all();
+                $data['targetType'] = $target['type'];
+                $data['targetId'] = $target['id'];
 
-            $thread = $this->getThreadService()->createThread($data);
-            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
-               "{$target['type']}Id" => $thread['targetId'],
-               'threadId' => $thread['id'],
-            )));
+                $thread = $this->getThreadService()->createThread($data);
+                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                   "{$target['type']}Id" => $thread['targetId'],
+                   'threadId' => $thread['id'],
+                )));
+            } catch (\Exception $e){
+                return $this->createMessageResponse('error', $e->getMessage(), '发帖错误');
+            }
         }
 
         return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
@@ -368,6 +372,11 @@ class ThreadController extends BaseController
         }
 
         return $text;
+    }
+
+    protected function getTokenBucketService()
+    {
+        return $this->getServiceKernel()->createService('PostFilter.TokenBucketService');
     }
 
     protected function getNotifiactionService()

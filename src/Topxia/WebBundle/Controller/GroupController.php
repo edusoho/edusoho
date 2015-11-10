@@ -598,7 +598,7 @@ class GroupController extends BaseController
         }
         
         $fileId = $request->getSession()->get("fileId");
-        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 1140, 150);
 
         return $this->render('TopxiaWebBundle:Group:setting-logo-crop.html.twig',array(
             'groupinfo' => $group,
