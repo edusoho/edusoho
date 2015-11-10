@@ -972,6 +972,14 @@ class AnalysisController extends BaseController
             'tab' => "trend",
             )));
         }
+
+        $incomeData="";
+        if($tab=="trend"){
+            $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
+            $data=$this->fillAnalysisData($condition,$incomeData);          
+        }
+
+        
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount(array("paidStartTime"=>$timeRange['startTime'],"paidEndTime"=>$timeRange['endTime'],"status"=>"paid","amount"=>"0.00")),
@@ -983,22 +991,23 @@ class AnalysisController extends BaseController
             "latest",
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-         );
+        );
 
-        $incomeData="";
+        $incomeDetailByGroup = ArrayToolkit::group($incomeDetail, 'targetType');
 
-        if($tab=="trend"){
-            $incomeData=$this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'],$timeRange['endTime']);
-    
-            $data=$this->fillAnalysisData($condition,$incomeData);          
+        $courses = array();
+        if(isset($incomeDetailByGroup['course'])) {
+            $courseIds = ArrayToolkit::column($incomeDetailByGroup['course'], 'targetId');
+            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         }
 
-        $courseIds = ArrayToolkit::column($incomeDetail, 'targetId');
-
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
-
+        $classrooms = array();
+        if(isset($incomeDetailByGroup['classroom'])) {
+            $classroomIds = ArrayToolkit::column($incomeDetailByGroup['classroom'], 'targetId');
+            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        }
+        
         $userIds = ArrayToolkit::column($incomeDetail, 'userId');
-
         $users = $this->getUserService()->findUsersByIds($userIds);
         
         $incomeStartData=$this->getOrderService()->searchOrders(array("status"=>"paid","amount"=>"0.00"),"early",0,1);
@@ -1014,6 +1023,7 @@ class AnalysisController extends BaseController
             'tab'=>$tab,
             'data'=>$data,
             'courses'=>$courses,
+            'classrooms'=>$classrooms,
             'users'=>$users,
             'incomeStartDate'=>$incomeStartDate,
             'dataInfo'=>$dataInfo,    
@@ -1119,9 +1129,9 @@ class AnalysisController extends BaseController
             $data=$this->fillAnalysisData($condition,$classroomIncomeData);
         }
 
-        $courseIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
+        $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
 
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
+        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
 
         $userIds = ArrayToolkit::column($classroomIncomeDetail, 'userId');
 
@@ -1139,7 +1149,7 @@ class AnalysisController extends BaseController
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
-            'courses'=>$courses,
+            'classrooms'=>$classrooms,
             'users'=>$users,
             'classroomIncomeStartDate'=>$classroomIncomeStartDate,
             'dataInfo'=>$dataInfo,
@@ -1182,9 +1192,6 @@ class AnalysisController extends BaseController
             $data=$this->fillAnalysisData($condition,$vipIncomeData);
         }
 
-        $courseIds = ArrayToolkit::column($vipIncomeDetail, 'targetId');
-
-        $courses=$this->getCourseService()->findCoursesByIds($courseIds);
 
         $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
 
@@ -1202,7 +1209,6 @@ class AnalysisController extends BaseController
             'paginator'=>$paginator,
             'tab'=>$tab,
             'data'=>$data,
-            'courses'=>$courses,
             'users'=>$users,
             'vipIncomeStartDate'=>$vipIncomeStartDate,
             'dataInfo'=>$dataInfo,
