@@ -9,15 +9,7 @@ class AllArticlesDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
-     * 获取最新资讯列表
-     *
-     * 可传入的参数：
-     *   count    必需 课程数量，取值不能超过100
-     *   
-     *   type:  featured  可选  是否头条
-     *          promoted  可选  是否推荐
-     *          sticky    可选  是否置顶
-     *   categoryId: 分类ID
+     * 获取全部资讯列表
      *
      * @param  array $arguments 参数
      * @return array 资讯列表
