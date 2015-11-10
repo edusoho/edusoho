@@ -1,23 +1,20 @@
 <?php
+
 namespace Topxia\WebBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Topxia\System;
 use Topxia\Common\BlockToolkit;
 
 class BuildPluginAppCommand extends BaseCommand
 {
-
     protected $output;
 
     protected function configure()
     {
-        $this->setName ( 'build:plugin-app' )
+        $this->setName('build:plugin-app')
             ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
     }
 
@@ -48,7 +45,7 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _copySource($name, $pluginDir, $distDir)
     {
-        $sourceTargetDir = $distDir . '/source/' . $name;
+        $sourceTargetDir = $distDir.'/source/'.$name;
         $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($pluginDir, $sourceTargetDir);
 
@@ -63,7 +60,7 @@ class BuildPluginAppCommand extends BaseCommand
     {
         if (is_dir("{$sourceDistDir}/.git/")) {
             $this->output->writeln("<info>    * 移除'.git'目录：{$sourceDistDir}/.git/</info>");
-            $this->filesystem->remove("{$sourceDistDir}/.git/"); 
+            $this->filesystem->remove("{$sourceDistDir}/.git/");
         } else {
             $this->output->writeln("<comment>    * 移除'.git'目录： 无");
         }
@@ -77,12 +74,12 @@ class BuildPluginAppCommand extends BaseCommand
             $this->filesystem->mirror($scriptDir, $distScriptDir);
             $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
         } else {
-            $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
+            $this->output->writeln('<comment>    * 拷贝脚本：无</comment>');
         }
 
-        $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
+        $this->output->writeln('<info>    * 生成安装引导脚本：Upgrade.php</info>');
 
-        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+        $this->filesystem->copy(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
     }
 
     private function _copyMeta($pluginDir, $distDir)
@@ -108,12 +105,12 @@ class BuildPluginAppCommand extends BaseCommand
         exec($command);
 
         $zipPath = "{$buildDir}/{$filename}.zip";
-        $this->output->writeln("<question>    * ZIP包大小：" . intval(filesize($zipPath)/1024) . ' Kb');
+        $this->output->writeln('<question>    * ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
     }
 
     private function _makeDistDirectory($name, $version)
     {
-        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}-{$version}";
+        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}")."/build/{$name}-{$version}";
 
         if ($this->filesystem->exists($distDir)) {
             $this->output->writeln("<info>    清理目录：{$distDir}</info>");
@@ -127,25 +124,25 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _generateBlocks($pluginDir, $distDir, $container)
     {
-        if (file_exists($pluginDir . '/block.json')) {
-            $this->filesystem->copy($pluginDir . '/block.json', $distDir . '/block.json');
-            BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $distDir . '/blocks', $container);
+        if (file_exists($pluginDir.'/block.json')) {
+            $this->filesystem->copy($pluginDir.'/block.json', $distDir.'/block.json');
+            BlockToolkit::generateBlcokContent($pluginDir.'/block.json', $distDir.'/blocks', $container);
         }
     }
 
     private function getPluginVersion($name, $pluginDir)
     {
-         $meta = json_decode(file_get_contents($pluginDir . '/plugin.json'), true);
-         if (empty($meta) || empty($meta['version'])) {
+        $meta = json_decode(file_get_contents($pluginDir.'/plugin.json'), true);
+        if (empty($meta) || empty($meta['version'])) {
             throw new \RuntimeException('获取插件版本号失败！');
-         }
+        }
 
-         return $meta['version'];
+        return $meta['version'];
     }
 
     private function getPluginDirectory($name)
     {
-        $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../plugins/' . $name);
+        $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../plugins/'.$name);
 
         if (empty($pluginDir)) {
             throw new \RuntimeException("${pluginDir}目录不存在");
@@ -153,5 +150,4 @@ class BuildPluginAppCommand extends BaseCommand
 
         return $pluginDir;
     }
-
 }

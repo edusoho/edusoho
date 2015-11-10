@@ -106,9 +106,9 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 		$parentId = $request->query->get('parentId');
-			if($request->getMethod() == 'POST') {
-				$lesson = $request->request->all();
-				$lesson['courseId'] = $course['id'];
+		if($request->getMethod() == 'POST') {
+			$lesson = $request->request->all();
+			$lesson['courseId'] = $course['id'];
 
 			if ($lesson['media']) {
 				$lesson['media'] = json_decode($lesson['media'], true);
