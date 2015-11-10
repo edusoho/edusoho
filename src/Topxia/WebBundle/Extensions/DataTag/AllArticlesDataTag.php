@@ -11,6 +11,9 @@ class AllArticlesDataTag extends CourseBaseDataTag implements DataTag
     /**
      * 获取全部资讯列表
      *
+     * 可传入的参数：
+     *   count    必需 课程数量，取值不能超过100
+     *
      * @param  array $arguments 参数
      * @return array 资讯列表
      */
