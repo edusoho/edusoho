@@ -45,7 +45,7 @@ class LoginBindController extends BaseController
                 /*$response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);*/
-                /*$client = $this->createOAuthClient($type);
+                $client = $this->createOAuthClient($type);
                 try {
                     $oauthUser = $client->getUserInfo($token);
                 } catch (\Exception $e) {
@@ -57,10 +57,10 @@ class LoginBindController extends BaseController
                     }
                     $this->setFlashMessage('danger', $message);
                     return $this->redirect($this->generateUrl('login'));
-                }*/
-                return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
-                    //'oauthUser' => $oauthUser,
-                    //'type' => $type,
+                }
+                return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+                    'oauthUser' => $oauthUser,
+                    'type' => $type,
                     'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
                 ));
             }
@@ -337,7 +337,7 @@ class LoginBindController extends BaseController
         }
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
+        return $this->render('TopxiaWebBundle:Login:bind-choose-exist.html.twig', array(
             'oauthUser' => $oauthUser,
             'type' => $type,
             'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
