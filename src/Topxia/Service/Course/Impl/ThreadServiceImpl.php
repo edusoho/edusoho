@@ -175,6 +175,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		$thread['private'] = $course['status'] == 'published' ? 0 : 1;
 		$thread = $this->getThreadDao()->addThread($thread);
 
+		$this->dispatchEvent('thread.create', new ServiceEvent($thread));
+
 		foreach ($course['teacherIds'] as $teacherId) {
 			if ($teacherId == $thread['userId']) {
 				continue;
@@ -269,6 +271,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 		}
 
 		$this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
+
+		$this->dispatchEvent('thread.elite',new ServiceEvent($thread));
 	}
 
 	public function uneliteThread($courseId, $threadId)
@@ -363,6 +367,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 			'latestPostTime' => $post['createdTime'],
 		);
 		$this->getThreadDao()->updateThread($thread['id'], $threadFields);
+
+		$this->dispatchEvent('post.create', new ServiceEvent($thread));
 
 		return $post;
 	}

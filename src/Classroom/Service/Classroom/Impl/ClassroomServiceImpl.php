@@ -717,7 +717,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             } else {
                 $this->getClassroomMemberDao()->addMember($fields);
             }
+            $this->dispatchEvent('classMaster.become',new ServiceEvent($member));
         }
+
     }
 
     public function updateAssistants($classroomId, $userIds)

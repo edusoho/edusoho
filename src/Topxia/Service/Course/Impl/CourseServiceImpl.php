@@ -793,6 +793,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function uploadCourseFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null)
 	{
+		$target = array(
+            'targetId' => $targetId,
+            'targetType' => $targetType,
+            'targetName' => ''
+        );
+        $this->dispatchEvent('teacher.uploadCourseFile',new ServiceEvent($target));
+        
 		return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
 	}
 

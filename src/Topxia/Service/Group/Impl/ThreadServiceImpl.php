@@ -44,6 +44,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         if(!empty($collectThread)) {
             throw $this->createServiceException('不允许重复收藏!');
         }
+        $this->dispatchEvent('groupDiscuss.collect',new ServiceEvent($thread));
+
         return $this->getThreadCollectDao()->addThreadCollect(array(
             "userId"=>$userId,
             "threadId"=>$threadId,
@@ -131,6 +133,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         $this->getGroupService()->waveMember($thread['groupId'],$thread['userId'],'threadNum',+1);
         
         $this->hideThings($thread['content'],$thread['id']);
+
+        $this->dispatchEvent('groupDiscuss.add',new ServiceEvent($thread));
 
         return $thread;
     }
@@ -345,7 +349,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
         if ($postId == 0) {
             $this->waveThread($threadId,'postNum',+1);
         }
-        $thread=$this->getThread($threadId); 
+        $thread=$this->getThread($threadId);
+        $this->dispatchEvent('groupDiscuss.post',new ServiceEvent($thread));
+
         return $post;
     }
 

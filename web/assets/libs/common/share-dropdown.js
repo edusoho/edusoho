@@ -6,6 +6,9 @@ define(function(require, exports, module) {
         var params = $btn.parents('.js-social-share-params').data();
 
         var url = '';
+        if($(".point-share-url").length>0) {
+            $.post($(".point-share-url").val(), function () {});
+        }
         switch(type) {
             case 'weibo':
                 url = weibo(params);

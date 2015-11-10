@@ -161,6 +161,8 @@ class GroupServiceImpl extends BaseService implements GroupService {
 
         $this->reCountGroupMember($groupId);
 
+        $this->dispatchEvent('group.join',new ServiceEvent($group));
+
         return $member;
     }
         
