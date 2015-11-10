@@ -2,46 +2,69 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use Topxia\Common\Paginator;
 use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveCourseController extends BaseController
 {
 
-    public function indexAction (Request $request, $status)
+    public function indexAction(Request $request, $status)
     {
-        $conditions = $request->query->all();
-        if(empty($conditions['titleLike'])){
-            unset($conditions['titleLike']);
-        }
-            
-        $courses = $this->getCourseService()->searchCourses(array('type' => 'live','status' => 'published'), $sort = 'latest', 0, 1000);
+        $query = $request->query->all();
 
+        $default = $this->getSettingService()->get('default', array());
+
+        $courseCondition = array(
+            'type' => 'live',
+            'status' => 'published',
+        );
+
+        if (!empty($query['keywordType']) && !empty($query['keyword'])) {
+            if ($query['keywordType'] == 'courseTitle') {
+                $courseCondition['titleLike'] = $query['keyword'];
+            }
+            if ($query['keywordType'] == 'lessonTitle') {
+                $conditions['titleLike'] = $query['keyword'];
+            }
+        }
+
+        $courses = $this->getCourseService()->searchCourses($courseCondition, $sort = 'latest', 0, 1000);
         $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $courses = ArrayToolkit::index($courses, 'id');
-
-        $conditions['type']="live";
-
-        if($status == 'coming'){
-            $conditions['startTimeGreaterThan'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
-            $conditions['startTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):null;
+        if (empty($courseIds)) {
+            return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
+                'status' => $status,
+                'lessons' => array(),
+                'courses' => array(),
+                'paginator' => new Paginator(
+                    $request,
+                    0,
+                    20
+                ),
+                'default' => $default,
+            ));
         }
-        if($status == 'end'){
-            $conditions['endTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
-            $conditions['startTimeGreaterThan'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):null;
-        }
-        if($status == 'underway'){
-            $conditions['startDateTime'] = isset($conditions['startDateTime'])?strtotime($conditions['startDateTime']):time();
-            $conditions['endTimeLessThan'] = isset($conditions['endDateTime'])?strtotime($conditions['endDateTime']):time();
-        }
-
 
         $conditions['courseIds'] = $courseIds;
-        $conditions['status'] ='published';
 
+        $conditions['type'] = "live";
+
+        if ($status == 'coming') {
+            $conditions['startTimeGreaterThan'] = !empty($query['startDateTime']) ? strtotime($query['startDateTime']) : time();
+            $conditions['startTimeLessThan'] = !empty($query['endDateTime']) ? strtotime($query['endDateTime']) : null;
+        }
+        if ($status == 'end') {
+            $conditions['endTimeLessThan'] = time();
+            $conditions['startTimeLessThan'] = !empty($query['endDateTime']) ? strtotime($query['endDateTime']) : null;
+            $conditions['startTimeGreaterThan'] = !empty($query['startDateTime']) ? strtotime($query['startDateTime']) : null;
+        }
+        if ($status == 'underway') {
+            $conditions['endTimeGreaterThan'] = time();
+            $conditions['startTimeLessThan'] = !empty($query['endDateTime']) ? strtotime($query['endDateTime']) : time();
+            $conditions['startTimeGreaterThan'] = !empty($query['startDateTime']) ? strtotime($query['startDateTime']) : null;
+        }
+
+        $conditions['status'] = 'published';
 
         $paginator = new Paginator(
             $request,
@@ -55,34 +78,33 @@ class LiveCourseController extends BaseController
                 $paginator->getPerPageCount()
             );
         } else {
-            $lessons = $this->getCourseService()->searchLessons($conditions, 
-                array('startTime', 'ASC'), 
+            $lessons = $this->getCourseService()->searchLessons($conditions,
+                array('startTime', 'ASC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         }
-        $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaAdminBundle:LiveCourse:index.html.twig', array(
             'status' => $status,
             'lessons' => $lessons,
-            'courses' => $courses,
+            'courses' => ArrayToolkit::index($courses, 'id'),
             'paginator' => $paginator,
-            'default'=> $default,
+            'default' => $default,
         ));
     }
 
     public function getMaxOnlineAction(Request $request)
     {
         $conditions = $request->query->all();
-        if(!empty($conditions['courseId']) && !empty($conditions['lessonId'])){
+        if (!empty($conditions['courseId']) && !empty($conditions['lessonId'])) {
             $lesson = $this->getCourseService()->getCourseLesson($conditions['courseId'], $conditions['lessonId']);
 
             $client = new EdusohoLiveClient();
             if ($lesson['type'] == 'live') {
                 $result = $client->getMaxOnline($lesson['mediaId']);
-                $lesson = $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'],$result['onLineNum']);
-            } 
+                $lesson = $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'], $result['onLineNum']);
+            }
         }
 
         return $this->createJsonResponse($lesson);
