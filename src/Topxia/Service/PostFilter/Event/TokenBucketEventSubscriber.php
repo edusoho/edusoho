@@ -2,14 +2,12 @@
 namespace Topxia\Service\PostFilter\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\StringToolkit;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
 class TokenBucketEventSubscriber implements EventSubscriberInterface
 {
-	public static function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
         return array(
             'thread.before_create' => 'before',
@@ -35,32 +33,41 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
     public function before(ServiceEvent $event)
     {
         $currentUser = ServiceKernel::instance()->getCurrentUser();
-        $currentIp = $currentUser->currentIp;
+        if ($currentUser->isAdmin() || $currentUser->isSuperAdmin() || $currentUser->isTeacher()) {
+            return;
+        }
 
+        $currentIp = $currentUser->currentIp;
         $eventName = $event->getName();
+
         $names = explode('.', $eventName);
 
-        if(!($this->getTokenBucketService()->hasToken($currentIp, $names[0])
-            && $this->getTokenBucketService()->hasToken($currentUser['id'], $names[0].'LoginedUser'))){
-    	   $event->stopPropagation();
+        if (!($this->getTokenBucketService()->hasToken($currentIp, $names[0])
+            && $this->getTokenBucketService()->hasToken($currentUser['id'], $names[0] . 'LoginedUser'))) {
+            $event->stopPropagation();
         }
 
     }
 
     public function incrToken(ServiceEvent $event)
     {
+
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
+        if ($currentUser->isAdmin() || $currentUser->isSuperAdmin() || $currentUser->isTeacher()) {
+            return;
+        }
+
         $eventName = $event->getName();
         $names = explode('.', $eventName);
 
-        $currentUser = ServiceKernel::instance()->getCurrentUser();
         $currentIp = $currentUser->currentIp;
 
         $this->getTokenBucketService()->incrToken($currentIp, $names[0]);
-        $this->getTokenBucketService()->incrToken($currentUser['id'], $names[0].'LoginedUser');
+        $this->getTokenBucketService()->incrToken($currentUser['id'], $names[0] . 'LoginedUser');
     }
 
     public function getTokenBucketService()
     {
-    	return ServiceKernel::instance()->createService('PostFilter.TokenBucketService');
+        return ServiceKernel::instance()->createService('PostFilter.TokenBucketService');
     }
 }
