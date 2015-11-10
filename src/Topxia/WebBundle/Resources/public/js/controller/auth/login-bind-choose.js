@@ -146,7 +146,7 @@ define(function(require, exports, module) {
                     }, 'json').fail(function() {
                         Notify.danger('登录失败，请重新登录后再试！');
                     }).always(function() {
-                       $('#set-bind-new-btn').button('reset');
+                       $formSet.find('[type=submit]').button('reset');
                     });
                 }
             });
@@ -183,7 +183,7 @@ define(function(require, exports, module) {
                 });
             }*/
 
-            if ($('#set_bind_emailOrMobile').length > 0) {
+            //if ($('#set_bind_emailOrMobile').length > 0) {
                 validatorSet.addItem({
                     element: '#set_bind_emailOrMobile',
                     required: true,
@@ -197,7 +197,7 @@ define(function(require, exports, module) {
                         }
                     }
                 });
-            }
+            //}
             
 
             validatorSet.addItem({
