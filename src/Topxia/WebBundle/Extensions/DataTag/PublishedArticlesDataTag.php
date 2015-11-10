@@ -25,7 +25,7 @@ class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
         $conditions['status'] = 'published';
         $sort = isset($arguments['sort'])?$arguments['sort']:'published';
-    	$articles = $this->getArticleService()->searchArticles($conditions,'published', 0, $arguments['count']);
+    	$articles = $this->getArticleService()->searchArticles($conditions,$sort, 0, $arguments['count']);
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
 
