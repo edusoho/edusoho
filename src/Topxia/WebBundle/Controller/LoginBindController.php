@@ -59,9 +59,9 @@ class LoginBindController extends BaseController
                     return $this->redirect($this->generateUrl('login'));
                 }
                 return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
-                    'oauthUser' => $oauthUser,
+                    //'oauthUser' => $oauthUser,
                     'type' => $type,
-                    'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
+                    //'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
                 ));
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
@@ -287,7 +287,7 @@ class LoginBindController extends BaseController
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
-            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+            $response = array('success' => true, '_target_path' =>  $this->generateUrl('homepage'));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }

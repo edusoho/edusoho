@@ -128,6 +128,12 @@ define(function(require, exports, module) {
                     if ($('#set_bind_email').length >0 ) {
                         emailOrMobile = $('#set_bind_email').val();
                     }
+                    if ($('#user_terms').length != 0) {
+                        if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
+                            Notify.danger('勾选同意此服务协议，才能继续注册！');
+                            return ;
+                        };
+                    };
 
                     $.post($formSet.attr('action'), $formSet.serialize(), function(response) {
                         if (!response.success) {
@@ -135,7 +141,6 @@ define(function(require, exports, module) {
                             return ;
                         }
                         Notify.success('登录成功，正在跳转至首页！');
-                        alert(response._target_path);
                         window.location.href = response._target_path;
 
                     }, 'json').fail(function() {
@@ -145,7 +150,15 @@ define(function(require, exports, module) {
                     });
                 }
             });
-            
+
+            $('#user_terms').on('click', 'input[type=checkbox]', function() {
+                if($(this).attr('checked')) {
+                    $(this).attr('checked',false);
+                } else {
+                    $(this).attr('checked',true);
+                };
+            });
+
             if ($('#set_bind_email').length > 0) {
                 validatorSet.addItem({
                     element: '#set_bind_email',
