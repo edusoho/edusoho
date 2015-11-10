@@ -58,16 +58,11 @@ class LoginBindController extends BaseController
                     $this->setFlashMessage('danger', $message);
                     return $this->redirect($this->generateUrl('login'));
                 }
-
-                return $this->redirect($this->generateUrl('login_bind_choose', array(
-                    'oauthUser' => $oauthUser,
-                    'type' => $type,
-                    'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),)));
-                /*return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+                return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
                     'oauthUser' => $oauthUser,
                     'type' => $type,
                     'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
-                ));*/
+                ));
             }
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
