@@ -91,6 +91,17 @@ class CourseServiceImpl extends BaseCourseServiceImpl
         return ArrayToolkit::index($courses, 'periods');
     }
 
+    public function deleteCourse($id)
+    {   
+        $course = $this->getCourse($id);
+        parent::deleteCourse($id);
+
+        if ($course['type'] == 'periodic') {
+            $this->getCourseDao()->updateCoursePeriods($course['rootId'], $course['periods']);
+        }
+        return true;
+    }
+
     public function loadCourse($id)
     {
         if (empty($id)) {
