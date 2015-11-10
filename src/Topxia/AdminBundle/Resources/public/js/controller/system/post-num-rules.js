@@ -27,29 +27,6 @@ define(function(require, exports, module) {
             rule:'min{min:0} integer'
         });
 
-        validator.addItem({
-            element: '[name="setting[rules][courseThread][fiveMuniteRule][postNum]"]',
-            required: true,
-            rule:'min{min:0} integer'
-        });
-
-        validator.addItem({
-            element: '[name="setting[rules][courseThreadLoginedUser][fiveMuniteRule][postNum]"]',
-            required: true,
-            rule:'min{min:0} integer'
-        });
-
-        validator.addItem({
-            element: '[name="setting[rules][groupThread][fiveMuniteRule][postNum]"]',
-            required: true,
-            rule:'min{min:0} integer'
-        });
-
-        validator.addItem({
-            element: '[name="setting[rules][groupThreadLoginedUser][fiveMuniteRule][postNum]"]',
-            required: true,
-            rule:'min{min:0} integer'
-        });
 
 
     }
