@@ -252,6 +252,16 @@
                                         return;
                                     }
                                     window.location.reload();
+                                },
+                                error: function(data) {
+                                    data = data.responseText;
+                                    data = $.parseJSON(data);
+                                    if(data.error) {
+                                        Notify.danger(data.error.message);
+                                    } else {
+                                        Notify.danger('发表回复失败，请重试');
+                                    }
+                                    $this.button('reset').removeClass('disabled');
                                 }
                             });
                         }
