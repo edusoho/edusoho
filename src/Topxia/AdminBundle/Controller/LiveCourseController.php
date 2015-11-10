@@ -22,10 +22,10 @@ class LiveCourseController extends BaseController
 
         if (!empty($query['keywordType']) && !empty($query['keyword'])) {
             if ($query['keywordType'] == 'courseTitle') {
-                $courseCondition['titleLike'] = $query['keyword'];
+                $courseCondition['title'] = $query['keyword'];
             }
             if ($query['keywordType'] == 'lessonTitle') {
-                $conditions['titleLike'] = $query['keyword'];
+                $conditions['title'] = $query['keyword'];
             }
         }
 
