@@ -29,7 +29,7 @@ define(function(require, exports, module) {
         var markerUrl = videoHtml.data('markerurl');
         var starttime = videoHtml.data('starttime');
 
-        var markers = "";
+        var markers = [{'id':0,text:'',time:-1}];
         var html = "";
         if(fileType == 'video'){
             if (playerType == 'local-video-player'){
@@ -57,18 +57,7 @@ define(function(require, exports, module) {
             return;
         }
 
-        if (balloonVideoPlayer && markerUrl) {
-            $.ajax({
-                type: "GET",
-                url: markerUrl,
-                async: false, 
-                success: function (result) {
-                    if (result != null) {
-                         markers = result;
-                    }
-                }
-            });
-        }
+        
 
         videoHtml.html(html);
         videoHtml.show();
@@ -107,6 +96,22 @@ define(function(require, exports, module) {
             }
             player.play();
         });
+
+        player.on("firstplay", function(){
+             if (balloonVideoPlayer && markerUrl) {
+                $.ajax({
+                    type: "GET",
+                    url: markerUrl,
+                    async: true, 
+                    success: function (result) {
+                        if (result != null) {
+                            player.setMarkers(result);
+                        }
+                    }
+                });
+            }
+        });
+        
 
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
