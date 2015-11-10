@@ -158,6 +158,7 @@ control positioning and full window mode. **
   left: 0;
   top: 0;
   margin-left: -5px;
+  z-index: 1;
 }
 .ballon-video-player .vjs-default-skin .vjs-slider-handle:before {
   content: "\e009";
@@ -660,7 +661,7 @@ control positioning and full window mode. **
     -moz-transform: rotate(0deg);
   }
   100% {
-    -moz-transform: rotate(359deg);
+    -moz-transform: rotate(-359deg);
   }
 }
 @-webkit-keyframes spin {
@@ -668,7 +669,7 @@ control positioning and full window mode. **
     -webkit-transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(359deg);
+    -webkit-transform: rotate(-359deg);
   }
 }
 @-o-keyframes spin {
@@ -684,7 +685,7 @@ control positioning and full window mode. **
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(359deg);
+    transform: rotate(-359deg);
   }
 }
 .ballon-video-player .vjs-default-skin .vjs-menu-button {
@@ -1031,10 +1032,10 @@ are just basic styles to make it look ok with plain text.
   width: 80px;
   margin-top: -40px;
   margin-left: -40px;
-  border: 2px solid #46c37b;
+  border: 4px solid #a3a3a3;
+  border-color: rgba(163, 163, 163, 0.8);
   box-shadow: none;
-  background-color: #1a1a1a;
-  background-color: rgba(26, 26, 26, 0.8);
+  background: none;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
   -o-transition: all .3s ease;
@@ -1057,30 +1058,33 @@ are just basic styles to make it look ok with plain text.
   }
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-big-play-button:hover {
+  border-color: #a3a3a3;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
   -o-transition: all .3s ease;
   transition: all .3s ease;
-  background-color: #46c37b;
-  background-color: rgba(36, 209, 140, 0.7);
+}
+.ballon-video-player .video-js.vjs-default-skin .vjs-big-play-button:hover:before {
+  color: #11aa4a;
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-big-play-button:before {
-  font-size: 30px;
-  line-height: 80px;
+  font-size: 40px;
+  line-height: 76px;
   box-shadow: none;
   text-shadow: none;
-  color: #fff;
+  color: #11aa4a;
+  color: rgba(17, 170, 74, 0.8);
 }
 @media (min-width: 1200px) {
   .ballon-video-player .video-js.vjs-default-skin .vjs-big-play-button:before {
-    font-size: 35px;
-    line-height: 100px;
+    font-size: 45px;
+    line-height: 96px;
   }
 }
 @media (max-width: 767px) {
   .ballon-video-player .video-js.vjs-default-skin .vjs-big-play-button:before {
-    font-size: 25px;
-    line-height: 60px;
+    font-size: 35px;
+    line-height: 56px;
   }
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-progress-control {
@@ -1095,7 +1099,7 @@ are just basic styles to make it look ok with plain text.
   }
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-play-progress {
-  background-color: #46c37b;
+  background-color: #11aa4a;
   background-image: none;
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-progress-control .vjs-slider-handle:before {
@@ -1196,12 +1200,13 @@ are just basic styles to make it look ok with plain text.
 .ballon-video-player .video-js.vjs-default-skin .vjs-volume-control {
   width: 100px;
   float: right;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 @media (max-width: 767px) {
   .ballon-video-player .video-js.vjs-default-skin .vjs-volume-control {
     height: 30px;
     width: 60px;
+    margin-right: 10px;
   }
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-slider {
@@ -1227,7 +1232,7 @@ are just basic styles to make it look ok with plain text.
   border-radius: 10px;
   height: 10px;
   background: none;
-  background-color: #46c37b;
+  background-color: #11aa4a;
 }
 @media (max-width: 767px) {
   .ballon-video-player .video-js.vjs-default-skin .vjs-volume-level {
@@ -1250,45 +1255,8 @@ are just basic styles to make it look ok with plain text.
     font-size: 12px;
   }
 }
-.ballon-video-player .video-js.vjs-default-skin .vjs-marker {
-  border-radius: 0  !important;
-  background-color: #46c37b !important;
-}
-.ballon-video-player .video-js.vjs-default-skin .vjs-marker:hover {
-  -webkit-transform: scale(1, 1);
-  -moz-transform: scale(1, 1);
-  -o-transform: scale(1, 1);
-  -ms-transform: scale(1, 1);
-  transform: scale(1, 1);
-}
-.ballon-video-player .video-js.vjs-default-skin .vjs-tip {
-  bottom: 20px;
-  font-size: 12px;
-}
-.ballon-video-player .video-js.vjs-default-skin .vjs-tip .vjs-tip-arrow {
-  display: none;
-}
-.ballon-video-player .video-js.vjs-default-skin .vjs-tip .vjs-tip-inner {
-  background-color: #46c37b !important;
-}
-.ballon-video-player .video-js.vjs-default-skin .vjs-tip .vjs-tip-inner:after {
-  top: 100%;
-  left: 50%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-color: #24d18c;
-  border-color: rgba(36, 209, 140, 0);
-  border-top-color: #24d18c;
-  border-width: 5px;
-  margin-left: -5px;
-  margin-top: -5px;
-}
 .ballon-video-player .video-js .vjs-captions {
-  color: #46c37b;
+  color: #11aa4a;
   font-size: 16px;
 }
 .ballon-video-player .video-js .vjs-text-track {
@@ -1392,7 +1360,10 @@ are just basic styles to make it look ok with plain text.
 }
 .ballon-video-player .vjs-default-skin .vjs-mute-control:before,
 .ballon-video-player .vjs-default-skin .vjs-volume-menu-button:before {
-  content: "\e611" !important;
+  content: "\e617" !important;
+}
+.ballon-video-player .vjs-default-skin .vjs-mute-control.vjs-vol-0:before {
+  content: "\e618" !important;
 }
 .ballon-video-player .vjs-default-skin .vjs-fullscreen-control:before {
   content: "\e612" !important;
@@ -1406,7 +1377,7 @@ are just basic styles to make it look ok with plain text.
 }
 .ballon-video-player .vjs-default-skin .vjs-loading-spinner:before {
   font-family: ESCloudPlayer !important;
-  content: "\e60b" !important;
+  content: "\e614" !important;
 }
 .ballon-video-player .vjs-error .vjs-error-display::before {
   font-family: ESCloudPlayer !important;
@@ -1452,14 +1423,6 @@ are just basic styles to make it look ok with plain text.
 .ballon-video-player .vjs-error-display div {
   bottom: 5em;
 }
-.ballon-video-player .vjs-default-skin .vjs-menu-button {
-  width: 60px;
-}
-@media (max-width: 767px) {
-  .ballon-video-player .vjs-default-skin .vjs-menu-button {
-    width: 40px !important;
-  }
-}
 .ballon-video-player .vjs-res-button .vjs-control-text {
   width: 50px;
   left: 0;
@@ -1476,6 +1439,74 @@ are just basic styles to make it look ok with plain text.
 }
 .ballon-video-player .vjs-res-button .vjs-control-text:hover {
   color: #fff;
+}
+.ballon-video-player .vjs-marker {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 1;
+  height: 100%;
+  background: #fff !important;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+.ballon-video-player .vjs-marker:hover {
+  cursor: pointer;
+  background-color: #1a1a1a !important;
+  background-color: rgba(26, 26, 26, 0.8) !important;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+.ballon-video-player .vjs-tip {
+  visibility: hidden;
+  display: block;
+  opacity: 0.8;
+  padding: 5px 12px;
+  position: absolute;
+  bottom: 16px;
+  z-index: 100000;
+  font-size: 12px;
+}
+.ballon-video-player .vjs-tip .vjs-tip-arrow {
+  display: none;
+}
+.ballon-video-player .vjs-tip .vjs-tip-inner {
+  background-color: #1a1a1a !important;
+  background-color: rgba(26, 26, 26, 0.8) !important;
+  padding: 10px;
+  color: white;
+  max-width: 200px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.ballon-video-player .vjs-tip .vjs-tip-inner:after {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-top-color: #1a1a1a;
+  border-top-color: rgba(26, 26, 26, 0.8);
+  border-width: 5px;
+  margin-left: -5px;
+  margin-top: -6px;
+}
+.ballon-video-player .vjs-break-overlay {
+  visibility: hidden;
+  position: absolute;
+  z-index: 100000;
+  top: 0;
+}
+.ballon-video-player .vjs-break-overlay .vjs-break-overlay-text {
+  padding: 9px;
+  text-align: center;
 }
 .lt-ie9 .ballon-video-player .vjs-default-skin.vjs-user-inactive.vjs-playing .vjs-control-bar :before {
   content: "" !important;

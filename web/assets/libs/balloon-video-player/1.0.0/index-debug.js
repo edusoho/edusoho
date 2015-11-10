@@ -12698,7 +12698,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               
               // margin-left needs to minus the padding length to align correctly with the marker
               markerTip.css({"left" : getPosition(marker) + '%',
-                             "margin-left" : -parseFloat(markerTip.css("width"))/2 - 5 + 'px',
+                             "margin-left" : -parseFloat(markerTip.css("width"))/2 - 1 + 'px',
                              "visibility"  : "visible"});
               
            }).on('mouseout',function(){

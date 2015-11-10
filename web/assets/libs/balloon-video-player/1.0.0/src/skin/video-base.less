@@ -124,6 +124,7 @@ The control icons are from a custom font. Each icon corresponds to a character
   left: 0;
   top: 0;
   margin-left: -5px;
+  z-index: 1;
 }
 
 .vjs-default-skin .vjs-slider-handle:before {
@@ -723,11 +724,11 @@ easily in the skin designer. http://designer.videojs.com/
 
 @-moz-keyframes spin {
   0% { -moz-transform: rotate(0deg); }
-  100% { -moz-transform: rotate(359deg); }
+  100% { -moz-transform: rotate(-359deg); }
 }
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(359deg); }
+  100% { -webkit-transform: rotate(-359deg); }
 }
 @-o-keyframes spin {
   0% { -o-transform: rotate(0deg); }
@@ -735,7 +736,7 @@ easily in the skin designer. http://designer.videojs.com/
 }
 @keyframes spin {
   0% { transform: rotate(0deg); }
-  100% { transform: rotate(359deg); }
+  100% { transform: rotate(-359deg); }
 }
 
 /* Menu Buttons (Captions/Subtitles/etc.)
