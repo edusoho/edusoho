@@ -342,7 +342,7 @@ control positioning and full window mode. **
   /* Assumes volume starts at 1.0. If you change the size of the
      handle relative to the volume bar, you'll need to update this value
      too. */
-  left: 4.5em;
+  left: 94%;
 }
 .ballon-video-player .vjs-default-skin .vjs-volume-handle:before {
   font-size: 0.9em;
