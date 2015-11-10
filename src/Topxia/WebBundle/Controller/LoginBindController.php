@@ -45,7 +45,22 @@ class LoginBindController extends BaseController
                 /*$response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);*/
+                /*$client = $this->createOAuthClient($type);
+                try {
+                    $oauthUser = $client->getUserInfo($token);
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
+                    if ($message == 'unaudited') {
+                        $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientMeta['name'].'登录连接的审核还未通过。';
+                    } else {
+                        $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
+                    }
+                    $this->setFlashMessage('danger', $message);
+                    return $this->redirect($this->generateUrl('login'));
+                }*/
                 return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
+                    //'oauthUser' => $oauthUser,
+                    //'type' => $type,
                     'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
                 ));
             }
@@ -312,6 +327,21 @@ class LoginBindController extends BaseController
         }
 
         return $this->createJsonResponse($response);
+    }
+
+    public function changeToExistAction(Request $request,$type)
+    {
+        $token = $request->getSession()->get('oauth_token');
+        if (empty($token)) {
+            return $this->createMessageResponse('error','页面已过期，请重新登录。');
+        }
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
+        return $this->render('TopxiaWebBundle:Login:bind-weixin.html.twig', array(
+            'oauthUser' => $oauthUser,
+            'type' => $type,
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
+        ));
     }
 
     protected function createOAuthClient($type)
