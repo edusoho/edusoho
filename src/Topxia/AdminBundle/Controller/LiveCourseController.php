@@ -37,14 +37,14 @@ class LiveCourseController extends BaseController
             $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):null;
         }
         if($status == 'end'){
-
             $conditions['endTimeLessThan'] = time();
             $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):null;
             $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):null;
         }
         if($status == 'underway'){
+            $conditions['endTimeGreaterThan'] = time();
             $conditions['startTimeLessThan'] = !empty($file['endDateTime'])?strtotime($file['endDateTime']):time();
-            $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):time();
+            $conditions['startTimeGreaterThan'] = !empty($file['startDateTime'])?strtotime($file['startDateTime']):null;
         }
 
         if(empty($courseIds)){//课时名出错时,这里不设置会默认搜出所有的courses
