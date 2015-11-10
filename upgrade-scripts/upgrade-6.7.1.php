@@ -41,14 +41,9 @@ use Symfony\Component\Yaml\Yaml;
     private function updateScheme()
     {
         $connection = $this->getConnection();
-        
-        
 
-        if (!$this->isFieldExist('crontab_job', 'targetType')) {
-            $connection->exec("DELETE FROM thread WHERE userid = 0;");
-        }
+        $connection->exec("DELETE FROM thread WHERE userid = 0;");
         
-
     }
 
     private function updateCrontabSetting()
