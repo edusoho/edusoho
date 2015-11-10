@@ -17,13 +17,16 @@
       padding: 10px 15px;
       color: @gray-dark;
       .es-transition;
-      &.active {
-        color: #fff;
-        background-color: @brand-primary;
-      }
       &:hover {
         color: @brand-primary;
         .es-transition;
+      }
+      &.active {
+        color: #fff;
+        background-color: @brand-primary;
+        &:hover {
+          color: #fff;
+        }
       }
     }
   }
@@ -51,6 +54,8 @@
     }
     label {
       margin-left: 15px;
+      margin-top: 10px;
+      vertical-align: top;
       .es-transition;
       &:hover {
         color: @brand-primary;

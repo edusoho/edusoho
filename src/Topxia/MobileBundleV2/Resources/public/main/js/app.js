@@ -8,6 +8,7 @@ var app = angular.module('app', [
             'pasvaz.bindonce'
   ]);
 
+app.version = "1.1.0";
 app.viewFloder = "/bundles/topxiamobilebundlev2/main/";
 
 app.config(['$httpProvider', function($httpProvider) {

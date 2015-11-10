@@ -27,7 +27,7 @@ class SystemUtil
 	public static function getSystemRootPath()
 	{
 		$realPath = ServiceKernel::instance()->getParameter('kernel.root_dir');
-		return dirname($realPath).DIRECTORY_SEPARATOR;
+		return dirname($realPath);
 	}
 
 	public static function getUploadTmpPath()
