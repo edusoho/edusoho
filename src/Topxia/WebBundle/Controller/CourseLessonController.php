@@ -8,7 +8,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\Task\TaskProcessor\TaskProcessorFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -778,11 +777,6 @@ class CourseLessonController extends BaseController
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 
-    protected function getTaskProcessor($taskType)
-    {
-        return TaskProcessorFactory::create($taskType);
-    }
-
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
@@ -793,8 +787,4 @@ class CourseLessonController extends BaseController
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
     }
     
-    protected function getClassroomPlanMemberService()
-    {
-        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
-    }
 }
