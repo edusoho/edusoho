@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: '',
+            markers: [],
             starttime: '0'
         },
 
@@ -42,22 +42,21 @@ define(function(require, exports, module) {
                     });
                 }
 
-                if(self.get('markers') != '') {
-                    plugins = $.extend(plugins, {
-                      markers: {
-                            markers: self.get('markers'),
-                            markerTip: {
-                               display: true,
-                               text: function(marker) {
-                                  return self.durationFormat(marker.time) +" "+ marker.text;
-                               },
-                               time: function(marker) {
-                                  return marker.time;
-                               }
-                            },
-                        }
-                    });
-                }
+                plugins = $.extend(plugins, {
+                  markers: {
+                        markers: self.get('markers'),
+                        markerTip: {
+                           display: true,
+                           text: function(marker) {
+                              return self.durationFormat(marker.time) +" "+ marker.text;
+                           },
+                           time: function(marker) {
+                              return marker.time;
+                           }
+                        },
+                    }
+                });
+                
 
                 if(self.get('fingerprint') != '') {
                     plugins = $.extend(plugins, {
@@ -110,6 +109,10 @@ define(function(require, exports, module) {
 
                 player.on("ended", function(e){
                     self.trigger("ended", e);
+                });
+
+                player.on("firstplay", function(e){
+                    self.trigger("firstplay", e);
                 });
 
                 player.on("play", function(e){
@@ -169,10 +172,6 @@ define(function(require, exports, module) {
 
         setCurrentTime: function(time) {
             this.get("player").currentTime(time);
-        },
-
-        setStartTime:function(time) {
-             //this.get("player").setStartTime(time);
         },
 
         isPlaying: function() {
