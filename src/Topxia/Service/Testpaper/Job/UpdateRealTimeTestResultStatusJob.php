@@ -4,6 +4,7 @@
 namespace Topxia\Service\Testpaper\Job;
 
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Crontab\Job;
 
 class UpdateRealTimeTestResultStatusJob implements Job
@@ -20,8 +21,8 @@ class UpdateRealTimeTestResultStatusJob implements Job
             return;
         }
 
-
-
+        $fields['status'] = 'reviewing';
+        $this->getTestpaperService()->updateTestResultsByLessonId($lesson['id'], $fields);
 
     }
 

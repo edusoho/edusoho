@@ -302,7 +302,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function createRealTimeTestCrontab($lesson)
     {
-        if(!$this->isRealTimeTest()){
+        if(!$this->isRealTimeTest($lesson)){
             return;
         }
         $testPaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
@@ -311,7 +311,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $updateRealTimeTestResultStatusJob = array(
             'name'=>'updateRealTimeTestResultStatus',
             'cycle'=>'once',
-            'jobClass'=>'Topixa\\Service\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
+            'jobClass'=>'Topxia\\Service\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
             'jobParams'=>'',
             'targetType' => "lesson",
             'targetId' => $lesson['id'],
@@ -324,16 +324,37 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     private function deleteRealTimeTestCrontab($lesson)
     {
-        if(!$this->isRealTimeTest()){
+        $jobName = 'updateRealTimeTestResultStatus';
+
+        $crontabJob = $this->getCrontabJobService()->findJobByNameAndTargetTypeAndTargetId($jobName, 'lesson', $lesson['id']);
+
+        if(empty($crontabJob)){
             return;
         }
+
+        $this->getCrontabJobService()->deleteJob($crontabJob['id']);
     }
 
     private function updateRealTimeTestCrontab($lesson)
     {
-        if(!$this->isRealTimeTest()){
+        if(!$this->isRealTimeTest($lesson)){
+            $this->deleteRealTimeTestCrontab($lesson);
             return;
         }
+
+        $jobName = 'updateRealTimeTestResultStatus';
+
+        $crontabJob = $this->getCrontabJobService()->findJobByNameAndTargetTypeAndTargetId($jobName, 'lesson', $lesson['id']);
+
+        if(empty($crontabJob)){
+            $this->createRealTimeTestCrontab($lesson);
+            return;
+        }
+
+        $testPaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+        $fields['nextExcutedTime'] = $lesson['testStartTime'] + $testPaper['limitedTime'] * 60 + 3600;;
+        $this->getCrontabJobService()->updateJob($crontabJob['id'], $fields);
+
     }
 
     private function isRealTimeTest($lesson)
