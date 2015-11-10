@@ -167,9 +167,14 @@ define(function(require, exports, module) {
                         var $subpostsNum = $form.parents('.thread-post').find('.subposts-num');
                         $subpostsNum.text(parseInt($subpostsNum.text()) +1);
                         $subpostsNum.parent().removeClass('hide');
-                    }).error(function(){
+                    }).error(function(data){
                         $btn.button('reset');
-                        Notify.danger('发表回复失败，请重试');
+                        data = $.parseJSON(data.responseText);
+                        if(data.error) {
+                            Notify.danger(data.error.message);
+                        } else {
+                            Notify.danger('发表回复失败，请重试');
+                        }
                     });
                 }
 
