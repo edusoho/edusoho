@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-    var SmsSender = require('../widget/sms-sender');
+    //var SmsSender = require('../widget/sms-sender');
 
     Validator.addRule(
         'email_or_mobile_check',
@@ -132,8 +132,8 @@ define(function(require, exports, module) {
                         if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
                             Notify.danger('勾选同意此服务协议，才能继续注册！');
                             return ;
-                        };
-                    };
+                        }
+                    }
 
                     $.post($formSet.attr('action'), $formSet.serialize(), function(response) {
                         if (!response.success) {
