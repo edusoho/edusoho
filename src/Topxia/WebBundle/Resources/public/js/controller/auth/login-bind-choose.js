@@ -13,11 +13,11 @@ define(function(require, exports, module) {
             var result =false;
             var isEmail = reg_email.test(emailOrMobile);
             var isMobile = reg_mobile.test(emailOrMobile);
-            if(isMobile){
+            /*if(isMobile){
                 $(".email_mobile_msg").removeClass('hidden');
             }else {
                 $(".email_mobile_msg").addClass('hidden');
-            }
+            }*/
             if (isEmail || isMobile) {
                 result = true;
             }
@@ -184,7 +184,7 @@ define(function(require, exports, module) {
             }*/
 
             //if ($('#set_bind_emailOrMobile').length > 0) {
-                validatorSet.addItem({
+                /*validatorSet.addItem({
                     element: '#set_bind_emailOrMobile',
                     required: true,
                     rule: 'email_or_mobile_check email_or_mobile_remote',
@@ -197,7 +197,7 @@ define(function(require, exports, module) {
                         }
                     }
                 });
-            //}
+            //}*/
             
 
             validatorSet.addItem({

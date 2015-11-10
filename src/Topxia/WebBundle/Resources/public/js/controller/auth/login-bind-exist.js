@@ -25,7 +25,7 @@ define(function(require, exports, module) {
                     }
 
                     Notify.success('绑定帐号成功，正在跳转至首页！');
-                    window.location.href = response._target_path;;
+                    window.location.href = response._target_path;
 
                 }, 'json').fail(function() {
                     Notify.danger('绑定失败，请重新登录后再试。');
