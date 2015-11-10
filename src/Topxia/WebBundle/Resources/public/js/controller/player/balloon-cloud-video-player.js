@@ -42,6 +42,7 @@ define(function(require, exports, module) {
                     });
                 }
 
+                console.log(self.get('markers'));
                 plugins = $.extend(plugins, {
                   markers: {
                         markers: self.get('markers'),
@@ -51,7 +52,7 @@ define(function(require, exports, module) {
                               return self.durationFormat(marker.time) +" "+ marker.text;
                            },
                            time: function(marker) {
-                              return marker.time;
+                              return marker&&marker.time?marker.time:0;
                            }
                         },
                     }
