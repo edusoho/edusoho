@@ -2143,7 +2143,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($fields['remark'])) {
 			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
 		}
-
 		$member = $this->getMemberDao()->addMember($fields);
 
         $this->setMemberNoteNumber(

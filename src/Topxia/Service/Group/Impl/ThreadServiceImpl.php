@@ -314,7 +314,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService {
 
         $this->getThreadGoodsDao()->deleteGoodsByThreadId($id,'content');
         $this->hideThings($fields['content'],$id);
+
+        $fields['title'] = $this->filterSensitiveWord($this->purifyHtml($fields['title']));
         $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+
         
         return $this->getThreadDao()->updateThread($id,$fields);
     }

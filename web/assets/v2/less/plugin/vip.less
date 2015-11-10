@@ -70,11 +70,11 @@
 
 .vip-user {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 10px;
+  bottom: 10px;
   right: 10px;
   width: 270px;
-  padding: 40px 20px;
+  padding: 30px 20px;
   background-color: #fff;
   text-align: center;
   @media(max-width: @screen-md-max) {
@@ -151,9 +151,12 @@
     &.equal-10 {
       width: 10%;
     }
-    &.active,
-    &:hover {
+    &.active {
       background-color: #fff;
+      .es-transition;
+    }
+    &:hover {
+      background-color: #d1d1d1;
       .es-transition;
     }
     &.active:hover {
@@ -214,17 +217,18 @@
   .vip-operation {
     float: left;
     width: 20%;
-    padding-top: 60px;
+    padding-top: 40px;
     text-align: center;
-    @media (max-width: @screen-sm-max) {
+    @media (max-width: @screen-md-max) {
       padding-top: 30px;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      // text-align: left;
+      text-align: right;
       padding-top: 0;
     }
     .price {
+      color: @brand-danger;
       font-size: 18px;
       @media (max-width: @screen-sm-max) {
         font-size: 14px;
@@ -246,7 +250,6 @@
     font-size: 32px;
     color: #fff;
     margin-bottom: 50px; 
-    
   }
   .member-list {
     margin-bottom: 30px;
