@@ -24,12 +24,7 @@ class OrderController extends BaseController
         if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createMessageResponse('error', '参数不正确');
         }
-        if($targetType == 'classroom'){
-            $classroom = $this->getClassroomService()->getClassroom($targetId);
-            if(!$classroom['buyable']){
-                return $this->createMessageResponse('error', '该班级不可购买，如有需要，请联系客服');
-            }
-        }
+   
         $processor = OrderProcessorFactory::create($targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
         if (isset($checkInfo['error'])) {
