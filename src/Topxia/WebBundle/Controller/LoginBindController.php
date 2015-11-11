@@ -155,6 +155,9 @@ class LoginBindController extends BaseController
     public function newSetAction(Request $request, $type)
     {
         $setData = $request->request->all();
+
+        
+
         if (isset($setData['set_bind_emailOrMobile']) && !empty($setData['set_bind_emailOrMobile'])) {
             if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
                $setData['email'] = $setData['set_bind_emailOrMobile'];
