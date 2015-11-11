@@ -276,7 +276,7 @@ define(function(require, exports, module) {
             }
         }
 
-        var updateDuration = function (type, length) {
+        var updateDuration = function (length) {
             length = parseInt(length);
             if (isNaN(length) || length == 0) {
                 return ;

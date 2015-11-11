@@ -1287,9 +1287,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"lesson"=>$lesson
 		));
 
-		if ($this->getAppService()->findInstallApp('ClassroomPlan')) {
-            $this->dispatchEvent('studyplan.task.delete', new ServiceEvent($lesson));
-        }
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
@@ -1556,11 +1553,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->dispatchEvent(
 			'course.lesson_finish', 
 			new ServiceEvent($lesson, array('course' => $course))
-		);
-
-		$this->dispatchEvent(
-			'task.finished', 
-			new ServiceEvent($lesson, array('taskType'=>'studyPlan', 'userId'=>$member['userId']))
 		);
 	}
 

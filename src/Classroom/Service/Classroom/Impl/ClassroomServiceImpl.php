@@ -1183,7 +1183,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#${$classroomId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1361,11 +1361,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getStatusService()
     {
         return $this->createService('User.StatusService');
-    }
-
-    protected function getAppService()
-    {
-        return $this->createService('CloudPlatform.AppService');
     }
 
 }
