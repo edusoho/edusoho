@@ -46,6 +46,8 @@ class LoginBindController extends BaseController
                 $_target_path = $response['_target_path'];
                 return $this->redirect($_target_path);*/
                 $client = $this->createOAuthClient($type);
+                $clientMetas = OAuthClientFactory::clients();
+                $clientMeta = $clientMetas[$type];
                 try {
                     $oauthUser = $client->getUserInfo($token);
                 } catch (\Exception $e) {
@@ -61,6 +63,7 @@ class LoginBindController extends BaseController
                 return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
                     'oauthUser' => $oauthUser,
                     'type' => $type,
+                    'clientMeta' => $clientMeta,
                     'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
                 ));
             }
