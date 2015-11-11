@@ -11,15 +11,17 @@ define(function(require, exports, module) {
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
+
+                Notify.success('登录成功');
                 if (error) {
                     return false;
                 }
-                Notify.success('登录成功');
 
-                if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
-                    Notify.danger('勾选同意此服务协议，才能继续注册！');
-                    return ;
-                }
+
+                // if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
+                //     Notify.danger('勾选同意此服务协议，才能继续注册！');
+                //     return ;
+                // }
                 $form.find('[type=submit]').button('loading');
                 $("#bind-new-form-error").hide();
 
@@ -39,13 +41,13 @@ define(function(require, exports, module) {
             }
         });
 
-        $('#user_terms input[type=checkbox]').on('click', function() {
-            if($(this).attr('checked')) {
-                $(this).attr('checked',false);
-            } else {
-                $(this).attr('checked',true);
-            };
-        });
+        // $('#user_terms input[type=checkbox]').on('click', function() {
+        //     if($(this).attr('checked')) {
+        //         $(this).attr('checked',false);
+        //     } else {
+        //         $(this).attr('checked',true);
+        //     };
+        // });
 
         validator.addItem({
             element: '#set_bind_email',
