@@ -35,7 +35,7 @@ class AuthServiceTest extends BaseTestCase
         ),'discuz');
         $this->assertEquals($user['email'],'test@edusoho.com');
     }
-
+    //同步功能需要Discuz的安装支持，暂时不能测
     // public function testSyncLogin()
     // {
     // 	$this->getSettingService()->set('user_partner',array('mode' => 'discuz'));
@@ -93,39 +93,28 @@ class AuthServiceTest extends BaseTestCase
 
     public function testChangePayPassword()
     {
-    	$this->getSettingService()->set('user_partner',array('mode' => 'discuz'));
-    	$makeToken = $this->getUserService()->makeToken('discuz');
-    	$getToken = $this->getUserService()->getToken('discuz',$makeToken);
     	$user = $this->getAuthService()->register(array(
             'email' => 'test@edusoho.com',
             'nickname' => 'test',
             'password' => '123456',
-            'token' => $getToken,
-        ),'discuz');
+        ));
 
         $this->getAuthService()->changePayPassword($user['id'],'123456','930919');
         $newUser = $this->getUserService()->getUser($user['id']);
         $this->assertNotEquals($user['payPassword'],$newUser['payPassword']);
-        $this->getSettingService()->delete('user_partner');
     }
 
     public function testChangePayPasswordWithoutLoginPassword()
     {
-    	$this->getSettingService()->set('user_partner',array('mode' => 'discuz'));
-    	$setting = $this->getSettingService()->get('user_partner');
-    	$makeToken = $this->getUserService()->makeToken('discuz');
-    	$getToken = $this->getUserService()->getToken('discuz',$makeToken);
     	$user = $this->getAuthService()->register(array(
             'email' => 'test@edusoho.com',
             'nickname' => 'test',
             'password' => '123456',
-            'token' => $getToken,
-        ),'discuz');
+        ));
 
         $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'],'930919');
         $newUser = $this->getUserService()->getUser($user['id']);
         $this->assertNotEquals($user['payPassword'],$newUser['payPassword']);
-        $this->getSettingService()->delete('user_partner');
     }
 
     public function testRefillFormDataWithoutNicknameAndEmail()
@@ -140,37 +129,217 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->delete('auth');
     }
 
-    public function testCheckUserName()
+    public function testCheckUserNameWithUnexistName()
     {
+    	$result = $this->getAuthService()->checkUserName('yyy');
+    	$this->assertEquals('success',$result[0]);
+    	$this->assertEquals('',$result[1]);
 
     }
 
-
-
-    private function createUser()
+    public function testCheckUserNameWithExistName()
     {
-        $user = array();
-        $user['email'] = "user@user.com";
-        $user['nickname'] = "user";
-        $user['password'] = "user";
-        $user =  $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
-        return $user;
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+
+        $result = $this->getAuthService()->checkUserName('test');
+        $this->assertEquals('error_duplicate',$result[0]);
+        $this->assertEquals('名称已存在!',$result[1]);
 
     }
 
-    private function createNormalUser()
+    public function testCheckEmailWithUnexistEmail()
     {
-        $user = array();
-        $user['email'] = "normal@user.com";
-        $user['nickname'] = "normal";
-        $user['password'] = "user";
-        $user =  $this->getUserService()->register($user);
-        $user['currentIp'] = '127.0.0.1';
-        $user['roles'] = array('ROLE_USER');
-        return $user;
+    	$result = $this->getAuthService()->checkEmail('test@yeah.net');
+    	$this->assertEquals('success',$result[0]);
+    	$this->assertEquals('',$result[1]);
     }
+
+    public function testCheckEmailWithExistEmail()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+
+        $result = $this->getAuthService()->checkEmail('test@edusoho.com');
+        $this->assertEquals('error_duplicate',$result[0]);
+        $this->assertEquals('Email已存在!',$result[1]);
+    }
+
+    public function testCheckMobileWithUnexistMobile()
+    {
+    	$result = $this->getAuthService()->checkMobile('18989492142');
+    	$this->assertEquals('success',$result[0]);
+    	$this->assertEquals('',$result[1]);
+    }
+
+    public function testCheckMobileWithExistMobile()
+    {
+    	$value = array('register_mode' => 'mobile');
+    	$this->getSettingService()->set('auth',$value);
+    	$user = $this->getAuthService()->register(array(
+            'password' => '123456',
+            'mobile' => '18989492142',
+        ));
+        $result = $this->getAuthService()->checkMobile('18989492142');
+        $this->assertEquals('error_duplicate',$result[0]);
+        $this->assertEquals('手机号码已存在!',$result[1]);
+        $this->getSettingService()->delete('auth');
+
+    }
+
+    public function testCheckEmailOrMobileWithUnexistEmailOrMobile()
+    {
+    	$result = $this->getAuthService()->checkEmailOrMobile('18989492142');
+    	$this->assertEquals('success',$result[0]);
+    	$this->assertEquals('',$result[1]);
+    }
+
+    public function testCheckEmailOrMobileWithExistMobile()
+    {
+    	$value = array('register_mode' => 'email_or_mobile');
+    	$this->getSettingService()->set('auth',$value);
+    	$user = $this->getAuthService()->register(array(
+            'password' => '123456',
+            'emailOrMobile' => '18989492142',
+        ));
+        $result = $this->getAuthService()->checkEmailOrMobile('18989492142');
+        $this->assertEquals('error_duplicate',$result[0]);
+        $this->assertEquals('手机号码已存在!',$result[1]);
+        $this->getSettingService()->delete('auth');
+    }
+
+    public function testCheckEmailOrMobileWithExistEmail()
+    {
+    	$value = array('register_mode' => 'email_or_mobile');
+    	$this->getSettingService()->set('auth',$value);
+    	$user = $this->getAuthService()->register(array(
+            'password' => '123456',
+            'emailOrMobile' => 'test@edusoho.com',
+        ));
+        $result = $this->getAuthService()->checkEmailOrMobile('test@edusoho.com');
+        $this->assertEquals('error_duplicate',$result[0]);
+        $this->assertEquals('Email已存在!',$result[1]);
+        $this->getSettingService()->delete('auth');
+    }
+
+
+    public function testCheckPasswordByTrue()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+
+        $result = $this->getAuthService()->checkPassword($user['id'],'123456');
+        $this->assertTrue($result);
+    }
+
+    public function testChangePasswordByFalse()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '12456',
+        ));
+
+        $result = $this->getAuthService()->checkPassword($user['id'],'123456');
+        $this->assertFalse($result);
+    }
+
+    public function testCheckPayPasswordByTrue()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+        $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'],'123456');
+        $result = $this->getAuthService()->checkPayPassword($user['id'],'123456');
+        $this->assertTrue($result);
+    }
+
+    public function testCheckPayPasswordByFalse()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+        $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'],'123456');
+        $result = $this->getAuthService()->checkPayPassword($user['id'],'654321');
+        $this->assertFalse($result);
+
+    }
+    /* 以下的带有partner的都需要访问Discuz等的API，默认default 返回false */
+    public function testCheckPartnerLoginById()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+
+        $result = $this->getAuthService()->checkPartnerLoginById($user['id'],'123456');
+        $this->assertFalse($result);
+    }
+
+    public function testCheckPartnerLoginByNickname()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+
+        $result = $this->getAuthService()->checkPartnerLoginByNickname($user['id'],'test');
+        $this->assertFalse($result);
+    }
+
+    public function testCheckPartnerLoginByEmail()
+    {
+    	$user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
+            'nickname' => 'test',
+            'password' => '123456',
+        ));
+
+        $result = $this->getAuthService()->checkPartnerLoginByEmail($user['id'],'test@edusoho.com');
+        $this->assertFalse($result);
+    }
+
+    public function testIsRegisterEnabledWithOtherTypeByTrue()
+	{
+		$value = array('register_mode' => 'email_or_mobile');
+    	$this->getSettingService()->set('auth',$value);
+    	$result = $this->getAuthService()->isRegisterEnabled();
+    	$this->assertTrue($result);
+    	$this->getSettingService()->delete('auth');
+
+	}
+
+	public function testIsRegisterEnabledWithOtherTypeByFalse()
+	{
+		$value = array('register_mode' => 'testNotTrue');
+    	$this->getSettingService()->set('auth',$value);
+    	$result = $this->getAuthService()->isRegisterEnabled();
+    	$this->assertFalse($result);
+    	$this->getSettingService()->delete('auth');
+
+	}
+
+	public function testIsRegisterEnabledWithDefaultType()
+	{	
+		$this->getSettingService()->delete('auth');
+		$result = $this->getAuthService()->isRegisterEnabled();
+    	$this->assertTrue($result);
+	}
 
 
     protected function getAuthService()
