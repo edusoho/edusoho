@@ -41,11 +41,11 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            if ($type == 'weixinmob') {
+            //if ($type == 'weixinmob') {
                 /*$response = $this->autobind($request,$type);
                 $_target_path = $response['_target_path'];
-                return $this->redirect($_target_path);*/
-                $client = $this->createOAuthClient($type);
+                /*return $this->redirect($_target_path);*/
+                /*$client = $this->createOAuthClient($type);
                 $clientMetas = OAuthClientFactory::clients();
                 $clientMeta = $clientMetas[$type];
                 try {
@@ -66,7 +66,7 @@ class LoginBindController extends BaseController
                     'clientMeta' => $clientMeta,
                     'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
                 ));
-            }
+            }*/
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
 
@@ -154,7 +154,7 @@ class LoginBindController extends BaseController
 
     public function newSetAction(Request $request, $type)
     {
-        $setData = $request->request->all();
+        /*$setData = $request->request->all();
         if (isset($setData['set_bind_emailOrMobile']) && !empty($setData['set_bind_emailOrMobile'])) {
             if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
                $setData['email'] = $setData['set_bind_emailOrMobile'];
@@ -193,11 +193,11 @@ class LoginBindController extends BaseController
             $this->getUserService()->setupAccount($user['id']);
         }
         
-        $this->authenticateUser($user);
+        $this->authenticateUser($user);*/
 
-        $response = array('success' => true, '_target_path' =>  $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+        $response = array('success' => true, '_target_path' =>  $this->generateUrl('homepage'));
 
-        response:
+        //response:
         return $this->createJsonResponse($response);
     }
 

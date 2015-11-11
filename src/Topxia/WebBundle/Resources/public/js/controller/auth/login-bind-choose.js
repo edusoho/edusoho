@@ -4,10 +4,10 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
+
         var $form = $('#set-bind-new-form');
 
-        var validatorSet = new Validator({
-
+        var validator = new Validator({
             element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
@@ -38,7 +38,7 @@ define(function(require, exports, module) {
             }
         });
 
-        $('#user_terms').on('click', 'input[type=checkbox]', function() {
+        $('#user_terms').on('click', function() {
             if($(this).attr('checked')) {
                 $(this).attr('checked',false);
             } else {
@@ -46,13 +46,13 @@ define(function(require, exports, module) {
             };
         });
 
-        validatorSet.addItem({
+        validator.addItem({
             element: '#set_bind_email',
             required: true,
             rule: 'email email_remote'
         });
 
-        validatorSet.addItem({
+        validator.addItem({
             element: '#set-bind-nickname-field',
             required: true,
             rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
