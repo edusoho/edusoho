@@ -5,100 +5,98 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MyTaskController extends BaseController
 {
-	public function indexAction(Request $request)
-	{
-		$user = $this->getCurrentUser();
-		$conditions=array('userId' => $user['id']);
+    public function indexAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $conditions = array('userId' => $user['id']);
 
-		$tasks = $this->getTaskService()->searchTasks($conditions,array('taskStartTime','ASC'),0,9999);
-		$tasksevents = array();
+        $tasks = $this->getTaskService()->searchTasks($conditions, array('taskStartTime', 'ASC'), 0, 9999);
+        $tasksevents = array();
 
-		if($tasks){
-			foreach($tasks as $key => $task){
-				$taskSames = $this->_prepareTask($task);
-				$tasksevents = array_merge($tasksevents,$taskSames);
-			}/*else{//其他扩展任务url
-				}*/
-		}else{
-			$tasksevents = array(array(
-				'title'=>'并没有任务',
-				'start' => date("Y-m-d",time()),
-				'end' => date("Y-m-d",time()),
-			));
-		}
+        if ($tasks) {
+            foreach ($tasks as $key => $task) {
+                $taskSames = $this->_prepareTaskDays($task);
+                $tasksevents = array_merge($tasksevents, $taskSames);
+            } /*else{//其他扩展任务url
+        }*/
+        } else {
+            $tasksevents = array(array(
+                'title' => '并没有任务',
+                'start' => date("Y-m-d", time()),
+                'end' => date("Y-m-d", time()),
+            ));
+        }
 
-		$jsontasks = json_encode($tasksevents);
+        $jsontasks = json_encode($tasksevents);
 
-		return $this->render('TopxiaWebBundle:MyTask:index.html.twig', array(
-	        'user' => $user,
-	        'taskjson' => $jsontasks,
-	        'today' =>date("Y-m-d",time()),
+        return $this->render('TopxiaWebBundle:MyTask:index.html.twig', array(
+            'user' => $user,
+            'taskjson' => $jsontasks,
+            'today' => date("Y-m-d", time()),
         ));
-	}
+    }
 
-	private  function _prepareTask($task)
-	{
-		$taskSames = array();
-		$taskNew['title'] = $task['title'];
-		$taskNew['start'] = date("Y-m-d H:i:s",$task['taskStartTime']);
-		$taskNew['id'] = $task['id'];
+    private function _prepareTaskDays($task)
+    {
+        $taskSames = array();
+        $taskNew['title'] = $task['title'];
+        $taskNew['start'] = date("Y-m-d H:i:s", $task['taskStartTime']);
+        $taskNew['id'] = $task['id'];
 
-		if($task['status']=='completed'){
-			$taskNew['color']='#46c37b';
-		}else{
-			$taskNew['color']='#919191';
-		}
+        if ($task['status'] == 'completed') {
+            $taskNew['color'] = '#46c37b';
+        } else {
+            $taskNew['color'] = '#919191';
+        }
 
-		if($task['taskType']=='studyplan'){
-			if ($task['targetType'] == 'homework') {
-				$taskNew['url'] = $this->generateUrl('course_homework_start_do', array(
-					'courseId'=>$task['meta']['courseId'],'homeworkId'=>$task['targetId']));
-			} else {
-				$taskNew['url'] = $this->generateUrl('course_learn',array(
-				'id' => $task['meta']['courseId'])).'#lesson/'.$task['targetId'];
-			}
-		}
+        if ($task['taskType'] == 'studyplan') {
+            if ($task['targetType'] == 'homework') {
+                $taskNew['url'] = $this->generateUrl('course_homework_start_do', array(
+                    'courseId' => $task['meta']['courseId'], 'homeworkId' => $task['targetId']));
+            } else {
+                $taskNew['url'] = $this->generateUrl('course_learn', array(
+                    'id' => $task['meta']['courseId'])) . '#lesson/' . $task['targetId'];
+            }
+        }
 
-		$dayDiff = ceil(($task['taskEndTime'] - $task['taskStartTime']) / (3600 * 24));
-		if ($dayDiff == 1) {
-			$taskNew['end'] = date("Y-m-d H:i:s",strtotime('+1 day', $task['taskEndTime']));
-		} else {
-			$taskNew['end'] = date("Y-m-d H:i:s",strtotime('+1 day', $task['taskEndTime']));
+        $taskNew['end'] = date("Y-m-d H:i:s", strtotime('+1 day', $task['taskEndTime']));
+        $dayDiff = ceil(($task['taskEndTime'] - $task['taskStartTime']) / (3600 * 24));
 
-			if ($task['taskType']=='studyplan' && $this->isPluginInstalled('ClassroomPlan')) {
+        if ($task['taskType'] == 'studyplan'
+            && $this->isPluginInstalled('ClassroomPlan')
+            && $dayDiff > 1) {
 
-				$userPlanMember = $this->getClassroomPlanMemberService()->getPlanMemberByPlanId($task['batchId'],$task['userId']);
-				//切割任务，把跨天的任务分割成每日单独的任务
-				if ($userPlanMember && count($userPlanMember['metas']['availableDate']) < 7) {
-					$taskNew['end'] = date("Y-m-d",strtotime('+1 day', $task['taskStartTime'])).' 23:59:59';
-					
-					for($i=1; $i<$dayDiff; $i++) {
-						$taskSame = $taskNew;
+            $userPlanMember = $this->getClassroomPlanMemberService()->getPlanMemberByPlanId($task['batchId'], $task['userId']);
+            //切割任务，把跨天的任务分割成每日单独的任务
+            if ($userPlanMember && count($userPlanMember['metas']['availableDate']) < 7) {
+                $taskNew['end'] = date("Y-m-d", strtotime('+1 day', $task['taskStartTime'])) . ' 23:59:59';
 
-						$week = date('w', strtotime("+{$i} day", strtotime($taskNew['start'])));
-						if (!in_array($week, $userPlanMember['metas']['availableDate'])) {
-							continue;
-						}
-						$taskSame['start'] = date('Y-m-d H:i:s', strtotime("+{$i} day", strtotime($taskNew['start'])));
-						$taskSame['end'] = date('Y-m-d H:i:s', strtotime("+{$i} day", strtotime($taskNew['end'])));
+                for ($i = 1; $i < $dayDiff; $i++) {
+                    $taskSame = $taskNew;
 
-						$taskSames[] = $taskSame;
-					}
-				}
-			}
-		}
+                    $week = date('w', strtotime("+{$i} day", strtotime($taskNew['start'])));
+                    if (!in_array($week, $userPlanMember['metas']['availableDate'])) {
+                        continue;
+                    }
+                    $taskSame['start'] = date('Y-m-d H:i:s', strtotime("+{$i} day", strtotime($taskNew['start'])));
+                    $taskSame['end'] = date('Y-m-d H:i:s', strtotime("+{$i} day", strtotime($taskNew['end'])));
 
-		$taskSames[] = $taskNew;
+                    $taskSames[] = $taskSame;
+                }
+            }
+        }
 
-		return $taskSames;
-	}
+        $taskSames[] = $taskNew;
 
-	protected function getTaskService()
-	{
-		return $this->getServiceKernel()->createService('Task.TaskService');
-	}
+        return $taskSames;
+    }
 
-	protected function getClassroomPlanMemberService()
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task.TaskService');
+    }
+
+    protected function getClassroomPlanMemberService()
     {
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanMemberService');
     }
