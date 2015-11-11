@@ -179,6 +179,17 @@ class CourseLessonController extends BaseController
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider'] = $lesson["liveProvider"];
         $json['nowDate'] = time();
+        $json['testMode'] = $lesson['testMode'];
+        $json['testStartTime'] = $lesson['testStartTime'];
+        $json['testStartTimeFormat'] = date("m-d H:i", $lesson['testStartTime']);
+
+        if($lesson['testMode'] == 'realTime'){
+            $testpaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+            $json['limitedTime'] = $testpaper['limitedTime'];
+            $minute = '+'.$testpaper['limitedTime'].'minute';
+            $json['testEndTime'] = strtotime($minute,$lesson['testStartTime']);
+            $json['testEndTimeFormat'] = date("m-d H:i", $json['testEndTime']);
+        }
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if (!empty($app)) {
