@@ -38,7 +38,7 @@ define(function(require, exports, module) {
             }
         });
 
-        $('#user_terms').on('click', function() {
+        $('#user_terms input[type=checkbox]').on('click', function() {
             if($(this).attr('checked')) {
                 $(this).attr('checked',false);
             } else {
