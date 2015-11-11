@@ -131,7 +131,7 @@ admin_live_course_add:
 admin_live_course:
     name: 直播管理
     parent: admin_course
-    router_params: {'status': 'underway'}
+    router_params: {'status': 'coming'}
 admin_course_thread:
     name: 话题管理
     parent: admin_course
@@ -369,8 +369,16 @@ admin_optimize:
     name: 优化和备份
     parent: admin_system
     group: 2
+admin_jobs:
+    name: 定时任务
+    parent: admin_system
+    group: 2
 admin_setting_ip_blacklist:
     name: IP黑名单
+    parent: admin_system
+    group: 2
+admin_setting_post_num_rules:
+    name: 发帖限制设置
     parent: admin_system
     group: 2
 admin_logs:

@@ -6,27 +6,19 @@
 
 {% block body %}
 <div class="row"> 
-  <div class="col-md-14 col-md-offset-1"> 
+  <div class="col-md-10 col-md-offset-1"> 
     {% if batchnotification %}
-      <div class="row">
-        <h2 class="col-md-11">
-          {{ batchnotification.title }} 
-        </h2>
-      </div>
-       <div class="row">
-        <div class="col-md-11 text-muted fsn mrm">
-          <p>
-            发布时间 ：{{ batchnotification.sendedTime|date_format }}  
-          </p> 
-        </div>
-       </div>
-      <div class="row"> 
-        <h4 class="col-md-11 editor-text"> 
-          {{ batchnotification.content|raw }} 
-        </h4> 
-      </div>
+      <h2 style="margin-top:0">
+        {{ batchnotification.title }} 
+      </h2>
+      <p class="text-muted">
+        发布时间 ：{{ batchnotification.sendedTime|date_format }}  
+      </p> 
+      <div class="editor-text"> 
+        {{ batchnotification.content|raw }} 
+      </div> 
     {% else %} 
-      <div class="col-md-11 col-md-offset-4">通知已经被管理员删除</div> 
+      <div class="empty">通知已经被管理员删除</div> 
     {% endif %} 
   </div> 
 </div> 

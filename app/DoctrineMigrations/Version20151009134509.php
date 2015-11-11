@@ -27,7 +27,7 @@ class Version20151009134509 extends AbstractMigration
                 `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '通知发送对象ID',
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发送通知时间',
                 PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='群发通知表';
+            ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='群发通知表';
         ");
 
     }

@@ -92,6 +92,34 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result[1]['title'],$course_like['title']);
     }
 
+    public function testFindMobileVerifiedMemberCountByCourseId()
+    {
+        //创建一个teacher并设置为当前用户
+        $teacher = $this->createTeacherUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($teacher);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course = array(
+            'title' => 'online test course1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $publishCourse = $this->getCourseService()->publishCourse($createCourse['id']);
+        
+        //创建一个普通用户，并设置为当前用户
+        $user1 = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user1);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $this->getUserService()->changeMobile($user1['id'], '13456520930');
+        $addCourse = $this->getCourseService()->becomeStudent($createCourse['id'],$user1['id']);
+        $count = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id']);
+        $this->assertEquals(1, $count);
+        $this->getUserService()->lockUser($user1['id']);
+        $count = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id'], 1);
+        $this->assertEquals(0, $count);
+    }
+
     public function testFindMinStartTimeByCourseId()
     {
         $course = array(
@@ -3637,7 +3665,12 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindCoursesByParentIdAndLocked()
     {
-        $course1 = array('title' => 'test-one','parentId'=>1,'locked'=>1);
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course1 = array('title' => 'test-one','parentId'=>1,'locked'=>1,'userId'=>$currentUser['id'],'createdTime'=>time(),);
         $course1 = $this->getCourseDao()->addCourse($course1);
         $result = $this->getCourseService()->findCoursesByParentIdAndLocked(1,1);
         $this->assertEquals(1,count($result));

@@ -61,9 +61,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function finishTask(array $targetObject, $taskType)
     {
         $user = $this->getCurrentUser();
+        $userId = $user->id;
+        if ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper') {
+            $userId = $targetObject['userId'];
+        }
 
         $conditions = array(
-            'userId' => $user->id,
+            'userId' => $userId,
             'taskType' => $taskType,
             'targetId' => $targetObject['id'],
             'targetType' => $targetObject['type'],

@@ -197,6 +197,11 @@ editor_upload:
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
     methods: [POST]
 
+editor_download:
+    pattern:  /editor/download
+    defaults: { _controller: TopxiaWebBundle:Editor:download }
+    methods: [POST]
+
 live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
@@ -281,6 +286,10 @@ course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
 
+course_qrcode:
+    pattern:  /course/{id}/qrcode
+    defaults: { _controller: TopxiaWebBundle:Course:qrcode }
+
 course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: TopxiaWebBundle:Course:info }
@@ -359,6 +368,10 @@ course_lesson_detail_data:
 course_lesson_show:
     pattern:  /course/{courseId}/lesson/{lessonId}
     defaults: { _controller: TopxiaWebBundle:CourseLesson:show }
+
+course_lesson_qrcode:
+    pattern:  /course/{courseId}/lesson/{lessonId}/qrcode
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:qrcode }
 
 course_lesson_player:
     pattern:  /course/{courseId}/lesson/{lessonId}/player
@@ -456,10 +469,6 @@ course_review_create:
 course_review_list:
     pattern:  /course/{id}/reviews/
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
-
-course_teacher_info:
-    pattern:  /course/{courseId}/teacher/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:teacherInfo }
 
 course_members:
    pattern: /course/{id}/members
@@ -826,10 +835,6 @@ course_manage_test_results:
 course_manage_test_teacher_check:
     pattern: /test/{id}/teacher/check
     defaults: { _controller: TopxiaWebBundle:Testpaper:teacherCheck }
-
-course_manage_test_teacher_finish_check:
-    pattern: /test/teacher/check/finish
-    defaults: { _controller: TopxiaWebBundle:DoTest:testFinishCheck }
 
 course_manage_list_teacher_test_reviewing:
     pattern: /my/teacher/reviewing/test/list
@@ -1787,6 +1792,10 @@ edu_cloud_sms_check:
     pattern:  /edu_cloud/sms_check/{type}
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsCheck }
 
+edu_cloud_sms_send_callback:
+    pattern:  /edu_cloud/sms/callback/{targetType}/{targetId}
+    defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
+
 settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
@@ -1824,13 +1833,9 @@ course_note_cancel_like:
     defaults: { _controller: TopxiaWebBundle:Course/Note:cancelLike }
     methods: [POST]
 
-common_learn_qrcode:
-    pattern: /qrcode/generate
-    defaults: {_controller: TopxiaWebBundle:Common:generateLearnQrcode }
-
 common_parse_qrcode:
     pattern: /qrcode/parse/{token}
-    defaults: {_controller: TopxiaWebBundle:Common:parseLearnCode}
+    defaults: {_controller: TopxiaWebBundle:Common:parseQrcode}
 
 esbar_my_classroom:
     pattern:  /esbar/my/classroom
@@ -1848,6 +1853,17 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+sms_prepare:
+    pattern:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: TopxiaWebBundle:Sms:prepare }
+
+publish_sms_send:
+    pattern:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: TopxiaWebBundle:Sms:send }
+
+generate_short_link:
+    pattern:  /generate/short/link
+    defaults: { _controller: TopxiaWebBundle:Sms:changeLink }
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history
