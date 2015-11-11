@@ -42,7 +42,6 @@ define(function(require, exports, module) {
                     });
                 }
 
-                console.log(self.get('markers'));
                 plugins = $.extend(plugins, {
                   markers: {
                         markers: self.get('markers'),
