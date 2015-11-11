@@ -15,8 +15,6 @@ class ClassroomController extends BaseController
     {
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroom["id"]);
 
-        $planMember = array();
-
         return $this->render("ClassroomBundle:Classroom:dashboard-nav.html.twig",array(
             'canManageClassroom' => $canManageClassroom,
             'classroom' => $classroom,
