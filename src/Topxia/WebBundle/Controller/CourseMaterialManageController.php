@@ -9,6 +9,7 @@ class CourseMaterialManageController extends BaseController
 
 	public function indexAction(Request $request, $courseId, $lessonId)
 	{
+        exit();
 		$course = $this->getCourseService()->tryManageCourse($courseId);
 		$lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 		$materials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
