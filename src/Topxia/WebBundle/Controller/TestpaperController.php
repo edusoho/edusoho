@@ -86,7 +86,7 @@ class TestpaperController extends BaseController
         }
 
         //学习计划任务
-        if ($this->getAppService()->findInstallApp('classroomPlan')) {
+        if ($this->isPluginInstalled('ClassroomPlan')) {
             $taskProcessor = $this->getTaskProcessor('studyPlan');
             $canFinish = $taskProcessor->canFinish($targetId, 'testpaper', $userId);
 
@@ -674,11 +674,6 @@ class TestpaperController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    protected function getAppService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
     protected function getTaskProcessor($taskType)

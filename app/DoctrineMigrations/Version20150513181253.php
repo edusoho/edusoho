@@ -24,7 +24,7 @@ class Version20150513181253 extends AbstractMigration
             $this->addSql("UPDATE `course_lesson` SET `suggestHours` = CEIL(length/60) WHERE type IN('live') AND length is not Null");
         }
         
-        if ($this->isFieldExist('course_lesson', 'suggestHours')) {
+        if ($this->isFieldExist('testpaper_result', 'passedStatus')) {
             $this->addSql("alter table testpaper_result modify passedStatus enum('none','excellent','good','passed','unpassed')");
         }
     }
