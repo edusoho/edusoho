@@ -5,13 +5,6 @@
 {% do load_script('search/search') %}
 
 {% block top_content %}
-  <!-- <div class="course-banner es-banner">
-    <div class="container">
-      <div class="title">
-        <span>搜索</span>SEARCH
-      </div>
-    </div>
-  </div> -->
   <div class="search-banner">
     <div class="container">
       <div class="input-group search-input-group">
@@ -28,9 +21,46 @@
 {% endblock %}
 
 {% block content %}
-  
-  <!-- 核心内容区 -->
 
+  <div class="row">
+    <div class="col-md-8">
+      <div class="es-section">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active"><a href="javascript:;">课程</a></li>
+          <li><a href="javascript:;">教师</a></li>
+          <li><a href="javascript:;">话题</a></li>
+          <li><a href="javascript:;">资讯</a></li>
+        </ul>
+        <div class="search-result">
+          <!-- 课程 -->
+          {% include 'TopxiaWebBundle:Search:search-course.html.twig' %}
+          <!-- 教师 -->
+          {#{% include 'TopxiaWebBundle:Search:search-teacher.html.twig' %}#}
+          <!-- 资讯 -->
+          {#{% include 'TopxiaWebBundle:Search:search-article.html.twig' %}#}
+          <!-- 话题 -->
+          {#{% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}#}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">常用关键词</h3>
+        </div>
+        <div class="panel-body">
+          <a href="javascript:;" class="btn-tag">在线教育</a>
+          <a href="javascript:;" class="btn-tag">在线教育</a>
+          <a href="javascript:;" class="btn-tag">在线教育</a>
+          <a href="javascript:;" class="btn-tag">在线教育</a>
+          <a href="javascript:;" class="btn-tag">在线教育</a>
+          <a href="javascript:;" class="btn-tag">在线教育</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{#
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
       共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
@@ -97,6 +127,5 @@
     {% endif %}
   </nav>
 
-  <!-- /核心内容区 -->
-
+#}
 {% endblock %}

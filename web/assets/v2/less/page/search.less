@@ -8,6 +8,8 @@
       height: 50px;
       border: none;
       padding-right: 50px;
+      font-size: 16px;
+      color: #000;
     }
     .input-wrap {
       position: relative;
@@ -30,6 +32,46 @@
       height: 50px;
       width: 120px;
       border: none;
+      &:hover {
+        z-index: 1;
+      }
+    }
+  }
+}
+
+.search-course-list {
+  .course-item {
+    padding: 25px 0;
+    border-bottom: 1px solid @gray-lighter;
+    .course-img {
+      float: left;
+      width: 35%;
+      @media(max-width: @screen-xs-max) {
+        width: 100%;
+        float: none;
+      }
+    }
+    .course-info {
+      float: left;
+      width: 65%;
+      padding-left: 15px;
+      @media(max-width: @screen-xs-max) {
+        width: 100%;
+        float: none;
+        padding-left: 0;
+        margin-top: 10px;
+      }
+    }
+    .title {
+      margin-top: 0;
+    }
+    .ul-lesson {
+      margin-top: 10px;
+      padding: 0;
+      li {
+        list-style-type: none;
+        margin-bottom: 5px;
+      }
     }
   }
 }
