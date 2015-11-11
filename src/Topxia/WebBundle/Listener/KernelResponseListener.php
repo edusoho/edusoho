@@ -41,6 +41,7 @@ class KernelResponseListener
                 '/login/bind/qq/newset', '/login/bind/weibo/newset', '/login/bind/renren/newset',
                 '/login/bind/qq/exist', '/login/bind/weibo/exist','/login/bind/renren/exist',
                 '/login/bind/weixinweb/exist', '/login/bind/weixinmob/exist',
+                '/login/bind/weixinmob/choose','/login/bind/weixinmob/changetoexist',
                 '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
                 '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
                 '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
