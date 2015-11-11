@@ -41,7 +41,7 @@ class CardEventSubscriber implements EventSubscriberInterface
             'status' => 'used',
             'useTime' => $coupon['orderTime']
         );
-        $this->getCardService()->updateCard($coupon['id'],'coupon',$card);
+        $this->getCardService()->updateCardByCardIdAndType($coupon['id'],'coupon',$card);
 
     }
 
@@ -68,7 +68,7 @@ class CardEventSubscriber implements EventSubscriberInterface
             'status' => 'used',
             'useTime' => $moneyCard['rechargeTime'],
         );
-        $this->getCardService()->updateCard($moneyCard['id'],'moneyCard',$card);
+        $this->getCardService()->updateCardByCardIdAndType($moneyCard['id'],'moneyCard',$card);
     }
 
     protected function getCurrentUser()

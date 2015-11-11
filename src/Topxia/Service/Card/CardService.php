@@ -8,7 +8,7 @@ interface CardService
 
     public function getCard($id);
 
-    public function updateCard($cardId,$cardType,$fields);
+    public function updateCardByCardIdAndType($cardId,$cardType,$fields);
 
     public function findCardsByUserIdAndCardType($userId,$cardType);
 
