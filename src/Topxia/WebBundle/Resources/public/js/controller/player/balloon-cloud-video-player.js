@@ -181,15 +181,22 @@ define(function(require, exports, module) {
             return false;
         },
 
+        destroy: function() {
+            this.get("player").dispose();
+        },
+
         durationFormat: function(secondTime) {
             var minutes = parseInt(secondTime / 60);
             var seconds = secondTime - minutes * 60;
-            return minutes + ':' +seconds;
+            return this.pad(minutes,2) + ':' +this.pad(seconds,2);
         },
 
-        destroy: function() {
-            this.get("player").dispose();
+        pad: function(num,len) {
+            return (new Array(len >(''+num).length ? (len - (''+num).length+1) : 0).join('0') + num);
         }
+        
+
+
     });
 
     module.exports = BalloonCloudVideoPlayer;
