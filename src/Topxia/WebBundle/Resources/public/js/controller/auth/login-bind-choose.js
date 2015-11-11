@@ -12,16 +12,13 @@ define(function(require, exports, module) {
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
 
-                Notify.success('登录成功');
                 if (error) {
                     return false;
                 }
-
-
-                 if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
-                     Notify.danger('勾选同意此服务协议，才能继续注册！');
-                     return ;
-                 }
+                if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
+                 Notify.danger('勾选同意此服务协议，才能继续注册！');
+                 return ;
+                }
                 $form.find('[type=submit]').button('loading');
                 $("#bind-new-form-error").hide();
 
