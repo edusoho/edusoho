@@ -9,8 +9,8 @@ class CourseController extends BaseController
     public function deleteAction(Request $request, $courseId, $type)
     {
         $currentUser = $this->getCurrentUser();
-        if (!$currentUser->isSuperAdmin()) {
-            throw $this->createAccessDeniedException('您不是超级管理员！');
+        if (!$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException('您不是管理员！');
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
