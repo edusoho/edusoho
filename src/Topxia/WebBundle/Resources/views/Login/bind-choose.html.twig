@@ -7,6 +7,16 @@
 <div class="es-section login-section">
   <div class="section-header">
     <h1><i class="es-icon text-primary mrs text-xlg"></i>登录</h1>
+    <div class="well well-sm">
+      <div class="media">
+        <a class="pull-left" href="javascript:">
+          <img class="media-object" src="{{ oauthUser.smallAvatar }}">
+        </a>
+        <div class="media-body">
+          <div><strong>{{ oauthUser.name }}</strong></div>
+          <div class="text-muted">您正在使用<strong class="text-primary"> {{ clientMeta.name }} </strong>登录{{ setting('site.name') }}</div>
+        </div>
+      </div>
   </div>
   <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" ata-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
     <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
