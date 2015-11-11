@@ -939,7 +939,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function setCourseLessonMaxOnlineNum($lessonId,$num)
 	{
-		$this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
+		return $this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
 	}
 
 	public function findCourseDraft($courseId,$lessonId, $userId)
@@ -1011,7 +1011,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'liveProvider' => 'none',
-			'copyId'=>0
+			'copyId'=>0,
+			'suggestHours' => '0.0'
 		));
 
 		if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1053,6 +1054,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
 		if ($lesson['type'] == 'live') {
 			$lesson['endTime'] = $lesson['startTime'] + $lesson['length']*60;
+			$lesson['suggestHours'] = $lesson['length'] / 60;
 		}
 		if(array_key_exists('copyId', $lesson)){
 			$lesson['copyId']=$lesson['copyId'];
@@ -1075,6 +1077,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
 		$this->dispatchEvent("course.lesson.create", array('argument'=>$argument,'lesson'=>$lesson));
 
+		
 		return $lesson;
 	}
 
@@ -1189,7 +1192,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'giveCredit' => 0,
 			'requireCredit' => 0,
 			'homeworkId' => 0,
-			'exerciseId' => 0
+			'exerciseId' => 0,
+			'suggestHours' => '1.0',
+
 		));
 
 		if (isset($fields['title'])) {
@@ -1199,6 +1204,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		$fields['type'] = $lesson['type'];
 		if ($fields['type'] == 'live' && isset($fields['startTime'])) {
 			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
+			$fields['suggestHours'] = $fields['length'] / 60;
 		}
 		
 		if(array_key_exists('media', $fields)){
@@ -1232,7 +1238,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 		$updatedLesson['fields']=$lesson;
 		$this->dispatchEvent("course.lesson.update",array('argument'=>$argument,'lesson'=>$updatedLesson));
-		
+
 		return $updatedLesson;
 	}
 
@@ -1287,6 +1293,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			"courseId"=>$courseId, 
 			"lesson"=>$lesson
 		));
+
 	}
 
 	public function findLearnsCountByLessonId($lessonId)
@@ -2150,7 +2157,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($fields['remark'])) {
 			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
 		}
-
 		$member = $this->getMemberDao()->addMember($fields);
 
         $this->setMemberNoteNumber(
@@ -2458,6 +2464,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+		
 		if ($member && in_array($member['role'], array('teacher', 'student'))) {
 			return true;
 		}

@@ -36,56 +36,6 @@ define(function(require, exports, module) {
                 })
             });
         }
-   
-
-        $('#testpaper-navbar').affix({
-            offset: {
-              top: 200
-            }
-
-        });
-
-     $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
-  
-      if ($('#testpaper-navbar').length > 0) {
-            var $navbarTop=$('#testpaper-navbar').offset().top;
-            $(window).scroll(function(){
-         
-            if ($('#testpaper-navbar').offset().top > $navbarTop) {
-                var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
-                var $cardHeadingHeight= $(".testpaper-card").find('.panel-heading').css('height').replace('px','');
-                var $testpaperNavbarHeight= $(".testpaper-card").find('.panel-heading').css('height').replace('px','');
-                    $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-$cardHeadingHeight-$testpaperNavbarHeight-40,"height": "auto","overflow": "auto"});
-                } else {
-                    $(".testpaper-card").find(".panel-body").scrollTop(0);
-                     $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
-                }
-            });
-
-            $('.testpaper-card').affix({
-                offset: {
-                  top: 200
-                }
-            });
-      } else {
-        var $testpaperHeadingHeight=$('.testpaper-heading').height();
-
-        $(window).scroll(function(){
-            if ($(window).scrollTop() > $testpaperHeadingHeight) {
-                var $cardFooterHeight= $(".testpaper-card").find('.panel-footer').css('height').replace('px','');
-                $(".testpaper-card").find(".panel-body").css({"max-height":$(window).height()-$cardFooterHeight-80,"height": "auto","overflow": "auto"});
-            } else {
-                $(".testpaper-card").find(".panel-body").scrollTop(0);
-                 $(".testpaper-card").find(".panel-body").css({"height": "auto","overflow": "hidden"});
-            }
-        });
-
-        $('.testpaper-card').affix({
-            offset: {
-              top: 400
-            }
-        });
-      }
 
 
         $('.testpaper-card').on('click', '.btn-index', function() {
@@ -451,7 +401,7 @@ define(function(require, exports, module) {
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
-                toolbar: 'Simple',
+                toolbar: 'Minimal',
                 filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
             });
 
@@ -506,7 +456,7 @@ define(function(require, exports, module) {
 
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
-                toolbar: 'Simple',
+                toolbar: 'Thread',
                 filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
             });
 
@@ -575,6 +525,16 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+
+                var scoreTotal = 0;
+                $('[name^="score_"]').each(function(){
+                    var score = $(this).data('score');
+                    scoreTotal = scoreTotal + score;
+                });
+
+                var objectiveScore = Number($("#objectiveScore").html());
+                var temp = Number(scoreTotal) + Number(objectiveScore);
+                $("#objectiveScore").html(temp);
                 $('#testpaper-checked-dialog').modal('show');
             });
         });
@@ -589,9 +549,11 @@ define(function(require, exports, module) {
         });
 
         $('#testpaper-teacherSay-btn').on('click', function(){
-            val = $('#testpaper-teacherSay-input').val();
+            var val = $('#testpaper-teacherSay-input').val();
             $('#teacherSay').val(val);
 
+            var passedStatus = $('input[type="radio"][name="passedStatus"]:checked').val();
+            $('#passedStatus').val(passedStatus);
             $form = $('#teacherCheckForm');
 
             $.post($('#testpaper-teacherSay-btn').data('post-url'), $form.serialize(), function(response) {

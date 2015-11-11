@@ -93,8 +93,18 @@ define(function(require, exports, module) {
 
             var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
             $.post(url, function(response) {
+
                 if (response.isLearned) {
                     $('#course-learned-modal').modal('show');
+                }
+
+                if (!response.canFinish) {
+                    $("#modal").html(response.html);
+                    $("#modal").modal('show');
+                    return false;
+                } else if (response.canFinish && response.html != '') {
+                    $("#modal").html(response.html);
+                    $("#modal").modal('show');
                 }
 
                 $btn.addClass('btn-success');
@@ -683,7 +693,7 @@ define(function(require, exports, module) {
             }else {
                 $.ajax({
                     type: "post",
-                    url: $this.data("url")+"&lessonId="+id[1],
+                    url: $this.data("url")+"/lesson/"+id[1]+"/qrcode",
                     dataType: "json",
                     success:function(data){
                         $this.find(".qrcode-popover img").attr("src",data.img);

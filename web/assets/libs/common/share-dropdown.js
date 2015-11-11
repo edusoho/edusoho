@@ -74,7 +74,7 @@ define(function(require, exports, module) {
         var query = {};
         query.url = params.url;
         query.title = params.message;
-        query.pic = params.picture;
+        query.pic = document.domain + params.picture; 
         return 'http://service.weibo.com/share/share.php?' + buildUrlQuery(query);
     }
 

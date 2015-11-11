@@ -565,6 +565,17 @@ class CourseLessonController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        if ($this->isPluginInstalled('ClassroomPlan')) {
+
+            $modalInfo = $this->getClassroomPlanService()->getFinishModalContent($this->container, $lessonId);
+            if ($modalInfo['canFinish']) {
+                $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
+            }
+
+            return $this->createJsonResponse($modalInfo);
+        }
+       
+
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
@@ -590,6 +601,34 @@ class CourseLessonController extends BaseController
         $result = $this->getCourseService()->waveWatchNum($user['id'], $lessonId, 1);
 
         return $this->createJsonResponse($result);
+    }
+
+    public function qrcodeAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getUserService()->getCurrentUser();
+        $host = $request->getSchemeAndHttpHost();
+
+        if($user->isLogin()) {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$lessonId}";
+        } else {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$id}";
+        }
+
+        $token = $this->getTokenService()->makeToken('qrcode',array(
+            'userId'=>$user['id'],
+            'data' => array(
+                'url' => $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId,
+                'appUrl' => $appUrl
+            ), 
+            'times' => 0, 
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
+        );
+        return $this->createJsonResponse($response);
     }
 
     protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
@@ -737,4 +776,15 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+    
+    protected function getClassroomPlanService()
+    {
+        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+    
 }

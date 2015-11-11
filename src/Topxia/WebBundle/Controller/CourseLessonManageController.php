@@ -106,9 +106,9 @@ class CourseLessonManageController extends BaseController
 	{
 		$course = $this->getCourseService()->tryManageCourse($id);
 		$parentId = $request->query->get('parentId');
-			if($request->getMethod() == 'POST') {
-				$lesson = $request->request->all();
-				$lesson['courseId'] = $course['id'];
+		if($request->getMethod() == 'POST') {
+			$lesson = $request->request->all();
+			$lesson['courseId'] = $course['id'];
 
 			if ($lesson['media']) {
 				$lesson['media'] = json_decode($lesson['media'], true);
@@ -327,12 +327,12 @@ class CourseLessonManageController extends BaseController
 		}
 
 		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
-
+		
 		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
 			'course' => $course,
 			'paperOptions' => $paperOptions,
-									   'features' => $features,
-									   'parentId' =>$parentId
+			'features' => $features,
+			'parentId' =>$parentId,
 		));
 	}
 

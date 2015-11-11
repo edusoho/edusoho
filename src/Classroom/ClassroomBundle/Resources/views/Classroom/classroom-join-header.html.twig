@@ -21,7 +21,7 @@
         <div class="class-info">
           <h2 class="title">
             {{ classroom.title }}
-            <span class="es-qrcode top" data-url="{{path('common_learn_qrcode',{classroomId: classroom.id,type:"classroom-qrcode"})}}">
+            <span class="es-qrcode top" data-url="{{path('classroom_qrcode',{id: classroom.id})}}">
               <i class="es-icon es-icon-qrcode"></i>
               <span class="qrcode-popover">
                 <img src="" alt="">
@@ -123,3 +123,7 @@
     </div>
   </div>
 </section>
+
+{% if is_plugin_installed('ClassroomPlan') %}
+  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
+{% endif %}

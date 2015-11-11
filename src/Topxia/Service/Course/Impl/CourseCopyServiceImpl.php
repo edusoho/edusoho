@@ -169,7 +169,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
 
         foreach ($lessons as $lesson) {
-            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId','replayStatus'));
+            $fields = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId','replayStatus', 'suggestHours'));
             $fields['courseId'] = $newCourse['id'];
             if ($lesson['chapterId']) {
                 $fields['chapterId'] = $chapters[$lesson['chapterId']]['id'];
@@ -209,7 +209,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24*60*60)) {
             $startJob = array(
-            'name' => "直播短信一天定时",
+            'name' => "SmsSendOneDayJob",
             'cycle' => 'once',
             'time' => $lesson['startTime'] - 24*60*60,
             'jobClass' => 'Topxia\\Service\\Sms\\Job\\SmsSendOneDayJob',
@@ -221,7 +221,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60*60)) {
             $startJob = array(
-            'name' => "直播短信一小时定时",
+            'name' => "SmsSendOneHourJob",
             'cycle' => 'once',
             'time' => $lesson['startTime'] - 60*60,
             'jobClass' => 'Topxia\\Service\\Sms\\Job\\SmsSendOneHourJob',
