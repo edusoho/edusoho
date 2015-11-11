@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
         // group: 'course'
         var editor = CKEDITOR.replace('post_content', {
-            toolbar: 'Simple',
+            toolbar: 'Thread',
             filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl'),
             height: 300
         });

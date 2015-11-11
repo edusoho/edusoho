@@ -52,6 +52,7 @@ class CourseMemberServiceImpl extends BaseService implements CourseMemberService
 		$info = array(
 			'orderId' => $order['id'],
 			'note'  => $data['remark'],
+			'becomeUseMember' => isset($data['becomeUseMember']) ? $data['becomeUseMember']: false
 		);
 
 		$this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
