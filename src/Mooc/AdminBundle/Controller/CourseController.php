@@ -9,8 +9,17 @@ class CourseController extends BaseController
     public function deleteAction(Request $request, $courseId, $type)
     {
         $currentUser = $this->getCurrentUser();
-        if (!$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您不是管理员！');
+        if (!$currentUser->isSuperAdmin()) {
+            throw $this->createAccessDeniedException('您不是超级管理员！');
+        }
+
+        //判断作业插件版本号
+        $homework = $this->getAppService()->findInstallApp("Homework");
+        if(!empty($homework)){
+           $isDeleteHomework = $homework && version_compare($homework['version'], "1.0.1", ">=");
+            if(!$isDeleteHomework){
+                return $this->createJsonResponse(array('code' =>1, 'message' => '作业插件未升级'));
+            } 
         }
 
         $course = $this->getCourseService()->getCourse($courseId);
