@@ -17,6 +17,7 @@
           <div class="text-muted">您正在使用<strong class="text-primary"> {{ clientMeta.name }} </strong>登录{{ setting('site.name') }}</div>
         </div>
       </div>
+    </div>
   </div>
   <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
     <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
