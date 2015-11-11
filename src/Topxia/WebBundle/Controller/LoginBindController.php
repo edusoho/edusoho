@@ -192,7 +192,7 @@ class LoginBindController extends BaseController
         
         $this->authenticateUser($user);
 
-        $response = array('success' => true, '_target_path' =>  $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+        $response = array('success' => true, '_target_path' =>   $this->generateUrl('homepage'));
 
         response:
         return $this->createJsonResponse($response);
