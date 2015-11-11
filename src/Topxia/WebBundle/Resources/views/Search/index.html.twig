@@ -5,10 +5,20 @@
 {% do load_script('search/search') %}
 
 {% block top_content %}
-  <div class="course-banner es-banner">
+  <!-- <div class="course-banner es-banner">
     <div class="container">
       <div class="title">
         <span>搜索</span>SEARCH
+      </div>
+    </div>
+  </div> -->
+  <div class="search-banner">
+    <div class="container">
+      <div class="input-group search-input-group">
+        <input type="text" class="form-control" placeholder="搜索">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button">搜索</button>
+        </span>
       </div>
     </div>
   </div>
