@@ -19,9 +19,9 @@ define(function(require, exports, module) {
         //     });
         // };
         
-        $("#course-item-list").on('click', '.lesson-item', function(e) {
-            window.location.href = $(this).find('.title').attr('href');
-        });
+        // $("#course-item-list").on('click', '.lesson-item', function(e) {
+        //     window.location.href = $(this).find('.title').attr('href');
+        // });
 
         $('.js-exit-course').on('click', function(){
             var self = $(this);
@@ -30,18 +30,18 @@ define(function(require, exports, module) {
             });
         });
 
-        function checkWidth(){
-                if($(this).width()<400){
-                $('.name').hide();         
-                $('.course-item-list-wrap').css('margin-left','20px');
-                $('.pie').css('margin-left','70px');
-            }            
-            if($(this).width()>=400){
-                $('.name').show();
-                $('.course-item-list-wrap').css('margin-left','99px');
-                $('.pie').css('margin-left','0px');
-            }
-        }
+        // function checkWidth(){
+        //     if($(this).width()<400){
+        //         $('.name').hide();         
+        //         $('.course-item-list-wrap').css('margin-left','20px');
+        //         $('.pie').css('margin-left','70px');
+        //     }            
+        //     if($(this).width()>=400){
+        //         $('.name').show();
+        //         $('.course-item-list-wrap').css('margin-left','99px');
+        //         $('.pie').css('margin-left','0px');
+        //     }
+        // }
         /*$('.announcement-list').on('click', '[data-role=delete]', function(){
             if (confirm('真的要删除该公告吗？')) {
                 $.post($(this).data('url'), function(){
@@ -50,13 +50,13 @@ define(function(require, exports, module) {
             }
             return false;
         });*/
-        $(document).ready(function(){
-           checkWidth();
+        // $(document).ready(function(){
+        //    checkWidth();
 
-        });
-        $(window).resize(function(){         
-           checkWidth();
-        });
+        // });
+        // $(window).resize(function(){         
+        //    checkWidth();
+        // });
 
     };
 
