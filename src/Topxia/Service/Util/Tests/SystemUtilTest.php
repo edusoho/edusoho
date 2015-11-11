@@ -13,48 +13,41 @@ class SystemUtilTest extends BaseTestCase
       public function testGetDownloadPath()
       {
               $testDownloadPath = SystemUtil::getDownloadPath();
-              $downloadPath = '/var/www/edusoho/app/data/upgrade';
+              $downloadPath = SystemUtil::getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'upgrade';
               $this->assertEquals($downloadPath,$testDownloadPath);
       }
 
       public function testGetBackUpPath()
       {
               $testBackUpPath = SystemUtil::getBackUpPath();
-              $backUpPath = '/var/www/edusoho/app/data/backup';
+              $backUpPath = SystemUtil::getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'backup';
               $this->assertEquals($backUpPath,$testBackUpPath);
       }
 
       public function testGetCachePath()
       {
       	       $testCachePath = SystemUtil::getCachePath();
-      	       $cachePath = '/var/www/edusoho/app/cache';
+              $cachePath = SystemUtil::getSystemRootPath().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'cache';
       	       $this->assertEquals($cachePath,$testCachePath);
       }
 
       public function testGetSystemRootPath()
       {
       	      $testSystemRootPath = SystemUtil::getSystemRootPath();
-      	      $systemRootPath = '/var/www/edusoho/';
+             $systemRootPath = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
       	      $this->assertEquals($systemRootPath,$testSystemRootPath);
       }
 
       public function testGetUploadTmpPath()
       {
              $testUploadTmpPath = SystemUtil::getUploadTmpPath();
-             $uploadTmpPath  = '/var/www/edusoho//web/files/tmp';
+             $uploadTmpPath = SystemUtil::getSystemRootPath().DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'tmp';
              $this->assertEquals($uploadTmpPath,$testUploadTmpPath);
       }
 
       public function testBackupdb()
       {
-             $testBackUpdir = '/var/www/edusoho/web/files/tmp';
-             $testBackUpdir .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.txt'.'.gz';
-	      $testDbSetting = array('exclude'=>array('session','cache'));
-             $testDump = new MySQLDumper(ServiceKernel::instance()->getConnection(),$testDbSetting);
-             $testTarget =  $testDump->export($testBackUpdir);
+             $testTarget = SystemUtil::backupdb();
              $this->assertFileExists($testTarget);
-
-             // $testTarget = SystemUtil::backupdb();
-             // $this->assertFileExists($testTarget);
       }
 }
