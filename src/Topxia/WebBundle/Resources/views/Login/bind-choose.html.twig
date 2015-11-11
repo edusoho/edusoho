@@ -6,7 +6,7 @@
 {% block content %}
 <div class="es-section login-section">
   <div class="section-header">
-    <h1><i class="es-icon text-primary mrs text-xlg"></i>登录</h1>
+    <h1>登录</h1>
     <div class="well well-sm">
       <div class="media">
         <a class="pull-left" href="javascript:">
@@ -50,8 +50,8 @@
     <div class="form-group text-right">
       <a class="btn btn-link" href="{{ path('login_bind_change', {type: type}) }}">绑定已有帐号</a>
     </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </div>
 
 {# 做好请删除
