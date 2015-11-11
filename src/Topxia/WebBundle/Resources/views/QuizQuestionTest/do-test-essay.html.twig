@@ -49,7 +49,7 @@
 
 			</div>
 
-		{% else %}
+		{% elseif setting('questions.testpaper_answers_show_mode') == 'submitted' or paperResult.status == 'finished' %}
 			<div class="testpaper-question-footer clearfix">
 			  <div class="testpaper-question-result">
 			    <div class="testpaper-question-result-suggested">
@@ -65,11 +65,11 @@
 			  		<div class="testpaper-question-result-title">得分：<strong>{{ item.question.testResult.score }} 分</strong></div>
 			  	</div>
 			  	{% if item.question.testResult.teacherSay != '' %}
-			  	<div class="testpaper-question-teacherSay mtl">
-					<div class="testpaper-question-result-title">评语：</div>
-					<div>{{ item.question.testResult.teacherSay|bbCode2Html|raw }}</div>
-				</div>
-				{% endif %}
+			  		<div class="testpaper-question-teacherSay mtl">
+							<div class="testpaper-question-result-title">评语：</div>
+							<div>{{ item.question.testResult.teacherSay|bbCode2Html|raw }}</div>
+						</div>
+					{% endif %}
 			  {% else %}
 			  	<div class="testpaper-question-score mtl">
 			  		<div class="testpaper-question-result-title">老师正在批阅！</div>
@@ -100,8 +100,8 @@
 		  </div>
 	  </div>
 
+	  {% if (questionPreview|default(false)) %}
 
-	  {% if (questionPreview|default(false) and setting('questions.testpaper_answers_show_mode') == 'hide')  or (setting('questions.testpaper_answers_show_mode') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 	  <div class="testpaper-preview-answer clearfix mtl mbl">
 	  	<div class="testpaper-question-result">
 		    <div class="testpaper-question-result-suggested">
