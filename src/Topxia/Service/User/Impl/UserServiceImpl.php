@@ -1373,6 +1373,13 @@ class UserSerialize
             return null;
         }
         $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|')) ;
+
+        if(!empty($user['roles'][1]) && $user['roles'][1] == 'ROLE_USER'){
+            $temp = $user['roles'][1];
+            $user['roles'][1] = $user['roles'][0];
+            $user['roles'][0] = $temp;
+        }
+        
         return $user;
     }
 
