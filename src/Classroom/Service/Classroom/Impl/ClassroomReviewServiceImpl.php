@@ -5,7 +5,7 @@ namespace Classroom\Service\Classroom\Impl;
 use Topxia\Service\Common\BaseService;
 use Classroom\Service\Classroom\ClassroomReviewService;
 use Topxia\Common\ArrayToolkit;
-
+use Topxia\Service\Common\ServiceEvent;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
 {

@@ -7,6 +7,7 @@ use Topxia\Service\Group\GroupService;
 use Topxia\Service\Group\ThreadService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Service\Common\ServiceEvent;
 
 class ThreadServiceImpl extends BaseService implements ThreadService {
 

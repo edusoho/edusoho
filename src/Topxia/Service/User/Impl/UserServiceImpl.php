@@ -288,7 +288,6 @@ class UserServiceImpl extends BaseService implements UserService
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
-
         $this->dispatchEvent('mobile.change',new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
@@ -556,7 +555,6 @@ class UserServiceImpl extends BaseService implements UserService
     public function updateUserProfile($id, $fields)
     {
         $user = $this->getUser($id);
-
         if (empty($user)) {
             throw $this->createServiceException('用户不存在，更新用户失败。');
         }
@@ -649,7 +647,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $userProfile =  $this->getProfileDao()->updateProfile($id, $fields);
 
-        $this->dispatchEvent('profile.update',new ServiceEvent(array('user' => $user, 'userProfile' => $userProfile)));
+        $this->dispatchEvent('profile.update',new ServiceEvent(array('user' => $user, 'fields' => $fields)));
 
         return $userProfile;
     }
