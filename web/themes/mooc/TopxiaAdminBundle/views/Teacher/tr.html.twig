@@ -7,10 +7,10 @@
     {% endif %}
   </td>
    <td>
-    {{ user.truename}}
+    {{ user.truename|default("--")}}
   </td>
    <td>
-   {{ user.staffNo }}
+   {{ user.staffNo|default("--")}}
   </td>
   <td>
     {% if user.promoted %}
