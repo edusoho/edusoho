@@ -3,29 +3,12 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
 
-    Validator.addRule(
-        'email_or_mobile_check',
-        function(options, commit) {
-            var emailOrMobile = options.element.val();
-            var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            var reg_mobile = /^1\d{10}$/;
-            var result =false;
-            var isEmail = reg_email.test(emailOrMobile);
-            var isMobile = reg_mobile.test(emailOrMobile);
-            if (isEmail || isMobile) {
-                result = true;
-            }
-            return  result;  
-        },
-            "{{display}}格式错误"
-    );
-
     exports.run = function() {
-        var $formSet = $('#set-bind-new-form');
+        var $form = $('#set-bind-new-form');
 
         var validatorSet = new Validator({
 
-            element: $formSet,
+            element: $form,
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
@@ -39,7 +22,7 @@ define(function(require, exports, module) {
                 $form.find('[type=submit]').button('loading');
                 $("#bind-new-form-error").hide();
 
-                $.post($formSet.attr('action'), $formSet.serialize(), function(response) {
+                $.post($form.attr('action'), $form.serialize(), function(response) {
                     if (!response.success) {
                         $('#bind-new-form-error').html(response.message).show();
                         return ;
@@ -50,7 +33,7 @@ define(function(require, exports, module) {
                 }, 'json').fail(function() {
                     Notify.danger('登录失败，请重新登录后再试！');
                 }).always(function() {
-                   $formSet.find('[type=submit]').button('reset');
+                   $form.find('[type=submit]').button('reset');
                 });
             }
         });

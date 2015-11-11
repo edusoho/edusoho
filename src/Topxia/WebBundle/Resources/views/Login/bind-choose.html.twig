@@ -18,7 +18,7 @@
         </div>
       </div>
   </div>
-  <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" ata-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
+  <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
     <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
 
     <div class="form-group mbl">
