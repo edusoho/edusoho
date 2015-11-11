@@ -1,3 +1,7 @@
+admin_course_delete:
+    pattern:  /course/{courseId}/delete/{type}
+    defaults: { _controller: MoocAdminBundle:Course:delete, type:'' }
+
 admin_course_next_round:
     pattern: /course/{id}/nextRound
     defaults: { _controller: MoocAdminBundle:RoundCourse:nextRound }
