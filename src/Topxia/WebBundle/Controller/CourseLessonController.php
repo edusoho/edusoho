@@ -565,7 +565,7 @@ class CourseLessonController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($this->getAppService()->findInstallApp('classroomPlan')) {
+        if ($this->isPluginInstalled('ClassroomPlan')) {
 
             $modalInfo = $this->getClassroomPlanService()->getFinishModalContent($this->container, $lessonId);
             if ($modalInfo['canFinish']) {
