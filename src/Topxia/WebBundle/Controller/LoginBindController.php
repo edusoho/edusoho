@@ -114,7 +114,7 @@ class LoginBindController extends BaseController
             $this->getUserService()->setupAccount($user['id']);
         }
         $this->authenticateUser($user);
-        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
         if (!$response['_target_path']) {
             $response['_target_path'] = $this->generateUrl('homepage');
         }
@@ -172,7 +172,7 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
-        $response = array('success' => true, '_target_path' => $this->generateUrl('homepage'));
+        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
 
         response:
         return $this->createJsonResponse($response);
@@ -192,7 +192,7 @@ class LoginBindController extends BaseController
             if ($type == 'weixinmob' || $type == 'weixinweb') {
                 $tempType = 'weixin';
             }
-            $oauthUser['name'] = "{$tempType}".substr($randString, 9, 3);
+            $oauthUser['name'] = $tempType.substr($randString, 9, 3);
         }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
@@ -260,7 +260,7 @@ class LoginBindController extends BaseController
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
-            $response = array('success' => true, '_target_path' => $this->generateUrl('homepage'));
+            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }
