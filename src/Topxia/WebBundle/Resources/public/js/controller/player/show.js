@@ -1,13 +1,11 @@
 define(function(require, exports, module) {
 
-	
-	var Store = require('store');
-	var Class = require('class');
+    var Store = require('store');
+    var Class = require('class');
     var Messenger = require('./messenger');
     var swfobject = require('swfobject');
 
-	exports.run = function() {
-
+    exports.run = function() {
 
         var videoHtml = $('#lesson-video-content');
 
@@ -56,8 +54,6 @@ define(function(require, exports, module) {
 
             return;
         }
-
-        
 
         videoHtml.html(html);
         videoHtml.show();
@@ -130,9 +126,9 @@ define(function(require, exports, module) {
             DurationStorage.del(userId, fileId);
         });
 
-	};
+    };
 
-	var DurationStorage = {
+    var DurationStorage = {
         set: function(userId,fileId,duration) {
             var durations = Store.get("durations");
             if(!durations || !(durations instanceof Array)){
