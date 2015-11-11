@@ -7,6 +7,24 @@
     .form-control {
       height: 50px;
       border: none;
+      padding-right: 50px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .es-icon {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 20px;
+      z-index: 3;
+      color: @gray-light;
+      .es-transition;
+      &:hover {
+        cursor: pointer;
+        color: @gray-medium;
+        .es-transition;
+      }
     }
     .btn {
       height: 50px;
