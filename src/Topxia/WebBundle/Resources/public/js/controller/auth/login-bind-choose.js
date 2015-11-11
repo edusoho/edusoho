@@ -33,7 +33,7 @@ define(function(require, exports, module) {
                 }, 'json').fail(function() {
                     Notify.danger('登录失败，请重新登录后再试！');
                 }).always(function() {
-                   $form.find('[type=submit]').button('reset');
+                   $form.find('button[type=submit]').button('reset');
                 });
             }
         });
