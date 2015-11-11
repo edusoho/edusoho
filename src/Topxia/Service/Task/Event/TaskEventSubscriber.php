@@ -15,9 +15,9 @@ class TaskEventSubscriber implements EventSubscriberInterface
             //'task.finished' => 'onFinished',
 
             'course.lesson_finish' => 'onLessonFinished',
-            //'homework.finish' => 'onHomeworkFinished',
-            //'homework.check' => 'onHomeworkCheck',
-            //'testpaper.reviewed' => 'onTestPaperFinished',
+            'homework.finish' => 'onHomeworkFinished',
+            'homework.check' => 'onHomeworkCheck',
+            'testpaper.reviewed' => 'onTestPaperFinished',
             'testpaper.finish' => 'onTestPaperFinished',
         );
     }
@@ -60,8 +60,8 @@ class TaskEventSubscriber implements EventSubscriberInterface
         $testpaperResult = $event->getArgument('testpaperResult');
         $target = explode('-', $testpaperResult['target']);
         
-        if (isset($target[3])) {
-            $lesson = $this->getCourseService()->getLesson($target[3]);
+        if (isset($target[2])) {
+            $lesson = $this->getCourseService()->getLesson($target[2]);
 
             $targetObject = array('id'=>$lesson['id'], 'type'=>'testpaper', 'passedStatus'=>$testpaperResult['passedStatus'],'userId'=>$testpaperResult['userId']);
             $this->_finishTask('studyplan',$targetObject);

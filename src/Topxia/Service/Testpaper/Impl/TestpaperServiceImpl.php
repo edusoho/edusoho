@@ -678,7 +678,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
 
         return $testPaperResult;
-
     }
 
     public function submitTestpaperAnswer($id, $answers)
