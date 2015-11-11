@@ -28,7 +28,7 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 		return $course;
 	}
 
-	public function updatePeriodicCoursePeriodsByDeleteCourse($rootId, $periods)
+	public function decrPeriodsByRootId($rootId, $fromPeriods)
     {
         $sql = "UPDATE {$this->getTablename()} SET periods = periods - 1 WHERE rootId = ? AND periods > ?;";
         return $this->getConnection()->executeQuery($sql, array($rootId, $periods));
