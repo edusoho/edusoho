@@ -11,15 +11,8 @@ use Topxia\Common\Paginator;
 
 class DefaultController extends BaseController
 {
-
-    public function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
     public function indexAction ()
     {
-        //$this->getThreadService()->createPost(3,array('title' => 'dddd','qq' => '123456'));
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
         $orderBy = 'recommendedSeq';
