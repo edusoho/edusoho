@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -7,8 +8,7 @@ use Topxia\Common\SimpleValidator;
 
 class LoginBindController extends BaseController
 {
-
-    public function indexAction (Request $request, $type)
+    public function indexAction(Request $request, $type)
     {
         if ($request->query->has('_target_path')) {
             $request->getSession()->set('_target_path', $request->query->get('_target_path'));
@@ -17,6 +17,7 @@ class LoginBindController extends BaseController
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
 
         $url = $client->getAuthorizeUrl($callbackUrl);
+
         return $this->redirect($url);
     }
 
@@ -30,46 +31,21 @@ class LoginBindController extends BaseController
         if ($bind) {
             $user = $this->getUserService()->getUser($bind['toId']);
             if (empty($user)) {
-                $this->setFlashMessage('danger','绑定的用户不存在，请重新绑定。');
+                $this->setFlashMessage('danger', '绑定的用户不存在，请重新绑定。');
+
                 return $this->redirect($this->generateUrl('register'));
             }
             $this->authenticateUser($user);
             if ($this->getAuthService()->hasPartnerAuth()) {
-                return $this->redirect($this->generateUrl('partner_login', array('goto'=>$request->getSession()->get('_target_path', ''))));
+                return $this->redirect($this->generateUrl('partner_login', array('goto' => $request->getSession()->get('_target_path', ''))));
             } else {
-                $goto = $request->getSession()->get('_target_path', '') ? : $this->generateUrl('homepage');
+                $goto = $request->getSession()->get('_target_path', '') ?: $this->generateUrl('homepage');
+
                 return $this->redirect($goto);
             }
         } else {
-            //if ($type == 'weixinmob') {
-                /*$response = $this->autobind($request,$type);
-                $_target_path = $response['_target_path'];
-                return $this->redirect($_target_path);*/
-                /*$client = $this->createOAuthClient($type);
-                $clientMetas = OAuthClientFactory::clients();
-                $clientMeta = $clientMetas[$type];
-                try {
-                    $oauthUser = $client->getUserInfo($token);
-                } catch (\Exception $e) {
-                    $message = $e->getMessage();
-                    if ($message == 'unaudited') {
-                        $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$clientMeta['name'].'登录连接的审核还未通过。';
-                    } else {
-                        $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
-                    }
-                    $this->setFlashMessage('danger', $message);
-                    return $this->redirect($this->generateUrl('login'));
-                }
-                return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
-                    'oauthUser' => $oauthUser,
-                    'type' => $type,
-                    'clientMeta' => $clientMeta,
-                    'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
-                ));
-            }*/
             return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
         }
-
     }
 
     public function chooseAction(Request $request, $type)
@@ -89,6 +65,7 @@ class LoginBindController extends BaseController
                 $message = '抱歉！暂时无法通过第三方帐号登录。原因：'.$message;
             }
             $this->setFlashMessage('danger', $message);
+
             return $this->redirect($this->generateUrl('login'));
         }
 
@@ -105,7 +82,7 @@ class LoginBindController extends BaseController
         return $this->createJsonResponse($this->autobind($request, $type));
     }
 
-    private function autobind(Request $request,$type)
+    private function autobind(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
@@ -116,18 +93,18 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $oauthUser['createdIp'] = $request->getClientIp();
-        
+
         if (empty($oauthUser['id'])) {
             $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
             goto response;
         }
 
-        if(!$this->getAuthService()->isRegisterEnabled()) {
+        if (!$this->getAuthService()->isRegisterEnabled()) {
             $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
             goto response;
         }
 
-        $user = $this->generateUser($type, $token, $oauthUser,$setData=array());
+        $user = $this->generateUser($type, $token, $oauthUser, $setData = array());
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
@@ -155,14 +132,11 @@ class LoginBindController extends BaseController
     public function newSetAction(Request $request, $type)
     {
         $setData = $request->request->all();
-
-        
-
         if (isset($setData['set_bind_emailOrMobile']) && !empty($setData['set_bind_emailOrMobile'])) {
-            if(SimpleValidator::email($setData['set_bind_emailOrMobile'])){
-               $setData['email'] = $setData['set_bind_emailOrMobile'];
-            }else if(SimpleValidator::mobile($setData['set_bind_emailOrMobile'])){
-               $setData['mobile'] = $setData['set_bind_emailOrMobile'];
+            if (SimpleValidator::email($setData['set_bind_emailOrMobile'])) {
+                $setData['email'] = $setData['set_bind_emailOrMobile'];
+            } elseif (SimpleValidator::mobile($setData['set_bind_emailOrMobile'])) {
+                $setData['mobile'] = $setData['set_bind_emailOrMobile'];
             }
             unset($setData['set_bind_emailOrMobile']);
         }
@@ -175,18 +149,18 @@ class LoginBindController extends BaseController
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $oauthUser['createdIp'] = $request->getClientIp();
-        
+
         if (empty($oauthUser['id'])) {
             $response = array('success' => false, 'message' => '网络超时，获取用户信息失败，请重试。');
             goto response;
         }
 
-        if(!$this->getAuthService()->isRegisterEnabled()) {
+        if (!$this->getAuthService()->isRegisterEnabled()) {
             $response = array('success' => false, 'message' => '注册功能未开启，请联系管理员！');
             goto response;
         }
 
-        $user = $this->generateUser($type, $token, $oauthUser,$setData);
+        $user = $this->generateUser($type, $token, $oauthUser, $setData);
         if (empty($user)) {
             $response = array('success' => false, 'message' => '登录失败，请重试！');
             goto response;
@@ -195,23 +169,22 @@ class LoginBindController extends BaseController
         if (!$user['setup']) {
             $this->getUserService()->setupAccount($user['id']);
         }
-        
+
         $this->authenticateUser($user);
 
-        $response = array('success' => true, '_target_path' =>  $this->generateUrl('homepage'));
+        $response = array('success' => true, '_target_path' => $this->generateUrl('homepage'));
 
         response:
         return $this->createJsonResponse($response);
     }
 
-    protected function generateUser($type, $token, $oauthUser,$setData)
+    protected function generateUser($type, $token, $oauthUser, $setData)
     {
         $registration = array();
         $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
         if (!SimpleValidator::nickname($oauthUser['name'])) {
-            
             $oauthUser['name'] = '';
         }
         $tempType = $type;
@@ -219,7 +192,7 @@ class LoginBindController extends BaseController
             if ($type == 'weixinmob' || $type == 'weixinweb') {
                 $tempType = 'weixin';
             }
-            $oauthUser['name'] = "{$tempType}" . substr($randString, 9, 3);
+            $oauthUser['name'] = "{$tempType}".substr($randString, 9, 3);
         }
 
         $nameLength = mb_strlen($oauthUser['name'], 'utf-8');
@@ -231,13 +204,12 @@ class LoginBindController extends BaseController
             $registration['nickname'] = $setData['nickname'];
             $registration['email'] = $setData['email'];
             $registration['emailOrMobile'] = $setData['email'];
-
         } else {
             $nicknames = array();
             $nicknames[] = isset($setData['nickname']) ? $setData['nickname'] : $oauthUser['name'];
-            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 0, 3);
-            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 3, 3);
-            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 0, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 3, 3);
+            $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 6, 3);
 
             foreach ($nicknames as $name) {
                 if ($this->getUserService()->isNicknameAvaliable($name)) {
@@ -247,10 +219,10 @@ class LoginBindController extends BaseController
             }
 
             if (empty($registration['nickname'])) {
-                return null;
+                return;
             }
 
-            $registration['email'] = 'u_' . substr($randString, 0, 12) . '@edusoho.net';
+            $registration['email'] = 'u_'.substr($randString, 0, 12).'@edusoho.net';
         }
         $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
         $registration['token'] = $token;
@@ -260,13 +232,8 @@ class LoginBindController extends BaseController
             $registration['mobile'] = $setData['mobile'];
             $registration['emailOrMobile'] = $setData['mobile'];
         }
-
-        /*if($this->setting("auth.register_mode", "email") == "email_or_mobile") {
-            $registration['emailOrMobile'] = $registration['email'];
-            unset($registration['email']);
-        }*/
-
         $user = $this->getAuthService()->register($registration, $type);
+
         return $user;
     }
 
@@ -278,22 +245,22 @@ class LoginBindController extends BaseController
         $data = $request->request->all();
 
         $message = 'Email地址或手机号码输入错误';
-        if(SimpleValidator::email($data['emailOrMobile'])){
-           $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
-           $message = '该Email地址尚未注册';
-        }else if(SimpleValidator::mobile($data['emailOrMobile'])){
-           $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
-           $message = '该手机号码尚未注册';
+        if (SimpleValidator::email($data['emailOrMobile'])) {
+            $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+            $message = '该Email地址尚未注册';
+        } elseif (SimpleValidator::mobile($data['emailOrMobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+            $message = '该手机号码尚未注册';
         }
 
         if (empty($user)) {
             $response = array('success' => false, 'message' => $message);
-        } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
+        } elseif (!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => '密码不正确，请重试！');
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
-            $response = array('success' => true, '_target_path' =>  $this->generateUrl('homepage'));
+            $response = array('success' => true, '_target_path' => $this->generateUrl('homepage'));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }
@@ -304,25 +271,25 @@ class LoginBindController extends BaseController
     public function existBindAction(Request $request)
     {
         $token = $request->getSession()->get('oauth_token');
-        $type = "weixinmob";
+        $type = 'weixinmob';
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
         $olduser = $this->getCurrentUser();
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
-        $data = $request->request->all();       
+        $data = $request->request->all();
 
         $message = 'Email地址或手机号码输入错误';
-        if(SimpleValidator::email($data['emailOrMobile'])){
-           $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
-           $message = '该Email地址尚未注册';
-        }else if(SimpleValidator::mobile($data['emailOrMobile'])){
-           $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
-           $message = '该手机号码尚未注册或绑定';
+        if (SimpleValidator::email($data['emailOrMobile'])) {
+            $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+            $message = '该Email地址尚未注册';
+        } elseif (SimpleValidator::mobile($data['emailOrMobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+            $message = '该手机号码尚未注册或绑定';
         }
 
         if (empty($user)) {
             $response = array('success' => false, 'message' => $message);
-        } elseif(!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
+        } elseif (!$this->getUserService()->verifyPassword($user['id'], $data['password'])) {
             $response = array('success' => false, 'message' => '密码不正确，请重试！');
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => '该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！');
@@ -335,14 +302,15 @@ class LoginBindController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function changeToExistAction(Request $request,$type)
+    public function changeToExistAction(Request $request, $type)
     {
         $token = $request->getSession()->get('oauth_token');
         if (empty($token)) {
-            return $this->createMessageResponse('error','页面已过期，请重新登录。');
+            return $this->createMessageResponse('error', '页面已过期，请重新登录。');
         }
         $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
+
         return $this->render('TopxiaWebBundle:Login:bind-choose-exist.html.twig', array(
             'oauthUser' => $oauthUser,
             'type' => $type,
@@ -352,7 +320,7 @@ class LoginBindController extends BaseController
 
     protected function createOAuthClient($type)
     {
-        $settings = $this->setting('login_bind');        
+        $settings = $this->setting('login_bind');
 
         if (empty($settings)) {
             throw new \RuntimeException('第三方登录系统参数尚未配置，请先配置。');
@@ -376,5 +344,4 @@ class LoginBindController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }
