@@ -68,7 +68,7 @@ class KernelResponseListener
 
         if (strpos($user_agent,'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             $route = 'login_bind';
-            $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/choose','/login/bind/weixinmob/changetoexist','/login/bind/weixinmob/existbind','/register','/partner/login');
+            $whiteList = array('/login/bind/weixinmob','/login/bind/weixinmob/callback','/login/bind/weixinmob/new','/login/bind/weixinmob/newset','/login/bind/weixinmob/choose','/login/bind/weixinmob/changetoexist','/login/bind/weixinmob/existbind','/register','/partner/login','/register/nickname/check','/register/email/check');
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return ;
             }
