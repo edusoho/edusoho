@@ -14,6 +14,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+                Notify.success('登录成功');
 
                 if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
                     Notify.danger('勾选同意此服务协议，才能继续注册！');
