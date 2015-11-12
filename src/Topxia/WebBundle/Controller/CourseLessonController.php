@@ -566,16 +566,11 @@ class CourseLessonController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($this->isPluginInstalled('ClassroomPlan')) {
-
-            $modalInfo = $this->getClassroomPlanService()->getFinishModalContent($this->container, $lessonId);
-            if ($modalInfo['canFinish']) {
-                $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
-            }
-
-            return $this->createJsonResponse($modalInfo);
+            return $this->forward('ClassroomPlanBundle:ClassroomPlan:lessonFinishModal', array(
+                'lessonId' => $lessonId
+            ));
         }
        
-
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
@@ -780,11 +775,6 @@ class CourseLessonController extends BaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-    
-    protected function getClassroomPlanService()
-    {
-        return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
     }
     
 }
