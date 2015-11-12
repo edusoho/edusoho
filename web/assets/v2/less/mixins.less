@@ -59,34 +59,43 @@
 
 // 字体颜色变化，一般用于a标签
 .link-dark {
-  color: @gray-darker;
+  color: @gray-darker !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
     .es-transition;
   }
 }
 .link-light {
-  color: @gray-dark;
+  color: @gray-dark !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
     .es-transition;
   }
 }
 .link-lighter {
-  color: @gray;
+  color: @gray !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
     .es-transition;
   }
 }
 .link-white {
-  color: #fff;
+  color: #fff !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+
+.link-primary {
+  color: @brand-primary !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
     .es-transition;
   }
 }
