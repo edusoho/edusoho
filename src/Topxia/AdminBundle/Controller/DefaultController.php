@@ -6,12 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Common\CurlToolkit;
 
 class DefaultController extends BaseController
 {
     public function popularCoursesAction(Request $request)
     {
         $dateType = $request->query->get('dateType');
+        $currentDay = $this->weekday(time());
 
         if($dateType == "today"){
             $startTime = strtotime('today'); 
@@ -24,13 +26,24 @@ class DefaultController extends BaseController
         }
 
         if($dateType == "this_week"){
-            $startTime = strtotime('Monday this week');
-            $endTime = strtotime('Monday next week');
+            if($currentDay == '星期日'){
+                $startTime = strtotime('Monday last week');
+                $endTime = strtotime('Monday this week');
+            }else{
+                $startTime = strtotime('Monday this week');
+                $endTime = strtotime('Monday next week');
+            }
+            
         }
 
         if($dateType == "last_week"){
-            $startTime = strtotime('Monday last week');
-            $endTime = strtotime('Monday this week');
+            if($currentDay == '星期日'){
+                $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
+                $endTime = strtotime('Monday this week') - (7 * 24 * 60 * 60);
+            }else{
+                $startTime = strtotime('Monday last week');
+                $endTime = strtotime('Monday this week');
+            }
         }
 
         if($dateType == "this_month"){
@@ -76,48 +89,75 @@ class DefaultController extends BaseController
     }
 
     public function indexAction(Request $request)
-    { 
-        $result = CloudAPIFactory::create('leaf')->get('/me');
+    {   
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+    }
 
-        $hidden = array();
-        if(isset($result['thirdCopyright']) and $result['thirdCopyright'] == '1'){
-            $hidden = array(
-                'cloud_notice' => '1',
-                'system_status' => '1',
-            );
+    public function inspectAction(Request $request)
+    {
+        $inspectList = array();
+        $inspectList = array($this->addInspectRole('host',$this->hostInspect($request)));
+
+        $inspectList = array_filter($inspectList);
+        return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
+            'inspectList' => $inspectList
+        ));
+    }
+
+
+    private function addInspectRole($name, $value)
+    {
+        if ($value['status'] == 'ok') {
+            return array();
         }
 
-        if(isset($result['copyright']) and $result['copyright'] == '1'){  
-            $hidden = array(
-                'cloud_notice' => '1'
-            );
-        }       
+        return array('name' => $name,'value' => $value);
+    }
 
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig',array(
-            'hidden' => $hidden
-        ));
+    private function hostInspect($request)
+    {
+        $currentHost = $request->server->get('HTTP_HOST');
+        $siteSetting = $this->getSettingService()->get('site');
+        $settingUrl = $this->generateUrl('admin_setting_site');
+        $fliter = array('http://','https://');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'],'/');
+        if ($currentHost != str_replace($fliter,"",$siteSetting['url'])) {
+            return array(
+                'status' => 'fail',
+                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'except' => $siteSetting['url'],
+                'actually' => $currentHost,
+                'settingUrl' => $settingUrl
+                );
+        }
+        return array('status' => 'ok','except' => $siteSetting['url'],'actually' => $currentHost,'settingUrl' => $settingUrl);
     }
 
     public function getCloudNoticesAction(Request $request)
     {
-        $userAgent = 'Open EduSoho App Client 1.0';
-        $connectTimeout = 10;
-        $timeout = 10;
-        $url = "http://open.edusoho.com/api/v1/context/notice";
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_URL, $url );
-        $notices = curl_exec($curl);
-        curl_close($curl);
-        $notices = json_decode($notices, true);
-        
+        if ($this->getWebExtension()->isTrial()) {
+            $domain = $this->generateUrl('homepage',array(),true);
+            $api = CloudAPIFactory::create('root');
+            $result = $api->get('/trial/remainDays',array('domain' => $domain));
+
+            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+                "trialTime" => (isset($result)) ? $result : null,
+            ));
+
+        } else if($this->getWebExtension()->isWithoutNetwork()){
+            $notices = array();
+        } else {
+            $notices = $this->getNoticesFromOpen();
+        }
         return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
-            "notices"=>$notices,
+            "notices" => $notices,
         ));
+    }
+
+    private function getNoticesFromOpen(){
+        $url = "http://open.edusoho.com/api/v1/context/notice";
+        return CurlToolkit::request('GET', $url);
     }
 
     public function officialMessagesAction()
@@ -226,9 +266,13 @@ class DefaultController extends BaseController
 
         $yesterdayJoinLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid"));
     
-        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00"));
+        $todayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'course'));
 
-        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00"));
+        $yesterdayBuyLessonNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'course'));
+
+        $todayBuyClassroomNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$todayTimeStart,"paidEndTime"=>$todayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'));
+
+        $yesterdayBuyClassroomNum=$this->getOrderService()->searchOrderCount(array("paidStartTime"=>$yesterdayTimeStart,"paidEndTime"=>$yesterdayTimeEnd,"status"=>"paid","amount"=>"0.00","targetType"=>'classroom'));
 
         $todayFinishedLessonNum=$this->getCourseService()->searchLearnCount(array("startTime"=>$todayTimeStart,"endTime"=>$todayTimeEnd,"status"=>"finished"));
 
@@ -262,6 +306,14 @@ class DefaultController extends BaseController
 
         $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
 
+        $todayClassroomIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"classroom"))+0.00;
+
+        $yesterdayClassroomIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"classroom"))+0.00;
+
+        $todayVipIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"vip"))+0.00;
+
+        $yesterdayVipIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"vip"))+0.00;
+
         $storageSetting = $this->getSettingService()->get('storage');
 
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
@@ -289,6 +341,10 @@ class DefaultController extends BaseController
             'yesterdayJoinLessonNum'=>$yesterdayJoinLessonNum,
             'todayBuyLessonNum'=>$todayBuyLessonNum,
             'yesterdayBuyLessonNum'=>$yesterdayBuyLessonNum,
+
+            'todayBuyClassroomNum'=>$todayBuyClassroomNum,
+            'yesterdayBuyClassroomNum'=>$yesterdayBuyClassroomNum,
+
             'todayFinishedLessonNum'=>$todayFinishedLessonNum,
             'yesterdayFinishedLessonNum'=>$yesterdayFinishedLessonNum,
 
@@ -308,6 +364,10 @@ class DefaultController extends BaseController
             'yesterdayIncome'=>$yesterdayIncome,
             'todayCourseIncome'=>$todayCourseIncome,
             'yesterdayCourseIncome'=>$yesterdayCourseIncome,
+            'todayClassroomIncome'=>$todayClassroomIncome,
+            'yesterdayClassroomIncome'=>$yesterdayClassroomIncome,
+            'todayVipIncome'=>$todayVipIncome,
+            'yesterdayVipIncome'=>$yesterdayVipIncome,
             'todayExitLessonNum'=>$todayExitLessonNum,
             'yesterdayExitLessonNum'=>$yesterdayExitLessonNum,
             'keyCheckResult'=>$keyCheckResult,
@@ -398,6 +458,16 @@ class DefaultController extends BaseController
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
     }
 
+    public function weekday($time)
+    {
+        if(is_numeric($time))
+        {
+            $weekday = array('星期日','星期一','星期二','星期三','星期四','星期五','星期六');
+            return $weekday[date('w', $time)];
+        }
+        return false;
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -441,5 +511,10 @@ class DefaultController extends BaseController
     protected function getCashService(){
       
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

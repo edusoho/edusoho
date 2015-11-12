@@ -16,10 +16,9 @@
   <form id="course-buy-form" class="form-horizontal" method="post" 
   action="{{ path('course_buy_modify_user_info') }}"
   >
-
     <div class="form-group">
-      <div class="col-md-3 control-label">课程名称</div>
-      <div class="col-md-9 controls">
+      <div class="col-sm-3 control-label">课程名称</div>
+      <div class="col-sm-9 controls">
       	<span class="control-text text-muted">《{{ course.title }}》</span>
         <input type="hidden" name="lessonId" value="{{ lessonId}}">
       </div>
@@ -27,8 +26,8 @@
 
     {% if billable %}
     <div class="form-group">
-      <div class="col-md-3 control-label">价格</div>
-      <div class="col-md-9 controls money-text">
+      <div class="col-sm-3 control-label">价格</div>
+      <div class="col-sm-9 controls money-text">
       	<span class="control-text">
           {% if vipStatus == 'ok' %}
             会员免费
@@ -51,15 +50,11 @@
         <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
       {% endif %}
     {% else %}
-      <div class="row">
-        <div class="col-md-12">
-          {% if avatarAlert %}
-            <div class="alert alert-warning">您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
-          {% else %}
-            <div class="alert alert-info">此课程为免费课程，无需购买，可直接加入学习。</div>
-          {% endif %}
-        </div>
-      </div>
+      {% if avatarAlert %}
+        <div class="alert alert-warning">您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
+      {% else %}
+        <div class="alert alert-info">此课程为免费课程，无需购买，可直接加入学习。</div>
+      {% endif %}
     {% endif %}
     <input type="hidden" name="targetId" value="{{ course.id }}" />
     <input type="hidden" name="payment" value="alipay" />

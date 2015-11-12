@@ -70,8 +70,6 @@ interface CourseService
 
 	public function updateCourse($id, $fields);
 
-	public function editCourse($id, $fields);
-
 	public function updateCourseCounter($id, $counter);
 
 	public function changeCoursePicture ($courseId, $files);
@@ -112,9 +110,11 @@ interface CourseService
 
 	public function getLesson($id);
 
+	public function setCourseLessonMaxOnlineNum($lessonId,$num);
+
 	public function findLessonsByIds(array $ids);
 
-	public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds);
+	public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds);
 
 	public function getCourseLesson($courseId, $lessonId);
 
@@ -132,15 +132,11 @@ interface CourseService
 
 	public function createLesson($lesson);
 
-	public function addLesson($lesson);
-
 	public function getCourseDraft($id);
 
 	public function createCourseDraft($draft);
 
 	public function updateLesson($courseId, $lessonId, $fields);
-
-	public function editLesson($lessonId, $fields);
 
 	public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
 
@@ -171,6 +167,8 @@ interface CourseService
 	public function getUserLearnLessonStatus($userId, $courseId, $lessonId);
 
 	public function getUserLearnLessonStatuses($userId, $courseId);
+
+	public function getLearnByUserIdAndLessonId($userId, $lessonId);
 
 	public function findUserLearnedLessons($userId, $courseId);
 
@@ -203,7 +201,6 @@ interface CourseService
 	public function searchWatchTime($conditions);
 
 	public function checkWatchNum($userId, $lessonId);
-
 	/**
 	 * Chapter API
 	 */
@@ -214,17 +211,13 @@ interface CourseService
 
 	public function createChapter($chapter);
 
-	public function addChapter($chapter);
-
 	public function updateChapter($courseId, $chapterId, $fields);
-
-	public function editChapter($chapterId, $fields);
 
 	public function deleteChapter($courseId, $chapterId);
 
 	public function getNextChapterNumber($courseId);
 
-	public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds);
+	public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
 	/**
 	 * 获得课程的目录项
@@ -239,7 +232,6 @@ interface CourseService
 	/**
 	 * Member API
 	 */
-	public function createMember($member);
 
 	public function searchMembers($conditions, $orderBy, $start, $limit);
 
@@ -264,6 +256,8 @@ interface CourseService
 	public function findCourseStudents($courseId, $start, $limit);
 
 	public function findCourseStudentsByCourseIds($courseIds);
+
+	public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 
 	public function getCourseStudentCount($courseId);
 

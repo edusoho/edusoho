@@ -30,7 +30,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $code = 'Homework';
             $homework = $this->getAppService()->findInstallApp($code);
-            $isCopyHomework = $homework && version_compare($homework['version'], "1.0.4", ">=");
+            $isCopyHomework = $homework && version_compare($homework['version'], "1.4.0", ">=");
 
             if ($isCopyHomework) {
                 $newHomeworks = $this->copyHomeworks($course['id'], $newCourse, $newLessons, $newQuestions);
@@ -72,7 +72,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields['target'] = "course-{$newCourse['id']}";
             $fields['createdTime'] = time();
             $fields['updatedTime'] = time();
-            $fields['pId'] = $testpaper['id'];
+            $fields['copyId'] = $testpaper['id'];
             unset($fields['id']);
             $newTestpaper = $this->getTestpaperDao()->addTestpaper($fields);
             $map[$testpaper['id']] = $newTestpaper;
@@ -86,8 +86,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     'questionType' => $item['questionType'],
                     'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
                     'score' => $item['score'],
-                    'missScore' => $item['missScore'],
-                    'pId'=>$item['id']
+                    'missScore' => $item['missScore']
                 );
 
                 $this->getTestpaperItemDao()->addItem($fields);
@@ -132,7 +131,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['updatedTime'] = time();
             $fields['createdTime'] = time();
-            $fields['pId'] = $question['id'];
+            $fields['copyId'] = $question['id'];
             $question = $this->getQuestionDao()->addQuestion($fields);
 
             $map[$oldQuestionId] = $question;
@@ -144,7 +143,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     $fields['parentId'] = $question['id'];
                     $fields['updatedTime'] = time();
                     $fields['createdTime'] = time();
-                    $fields['pId'] = $subQuestion['id'];
+                    $fields['copyId'] = $subQuestion['id'];
                     if (strpos($subQuestion['target'], 'lesson') > 0) {
                         $pos = strrpos($subQuestion['target'], '-');
                         $oldLessonId = substr($subQuestion['target'], $pos+1);
@@ -180,11 +179,14 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
 
-            $fields['parentId'] = $lesson['id'];
+            $fields['copyId'] = $lesson['id'];
             $copiedLesson = $this->getLessonDao()->addLesson($fields);
+            if(array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['status'] == 'published') {
+                $this->createJob($lesson);
+            }
             $map[$lesson['id']] = $copiedLesson;
             if (array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"]>0 && in_array($copiedLesson["type"], array('video', 'audio', 'ppt'))) {
-                $this->getUploadFileDao()->updateFileUsedCount(array($copiedLesson["mediaId"]), 1);
+                $this->getUploadFileDao()->waveUploadFile($copiedLesson["mediaId"],'usedCount',1);
             }
             if(array_key_exists('type', $lesson) && $lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated' && !empty($copiedLesson)){
                 $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId($courseId,$lesson['id']);
@@ -199,6 +201,37 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         return $map;
     }
 
+    protected function createJob($lesson)
+    {
+        $daySmsType = 'sms_live_play_one_day';
+        $hourSmsType = 'sms_live_play_one_hour';
+        $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
+        $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
+        if ($dayIsOpen && $lesson['startTime'] >= (time() + 24*60*60)) {
+            $startJob = array(
+            'name' => "SmsSendOneDayJob",
+            'cycle' => 'once',
+            'time' => $lesson['startTime'] - 24*60*60,
+            'jobClass' => 'Topxia\\Service\\Sms\\Job\\SmsSendOneDayJob',
+            'targetType' => 'lesson',
+            'targetId' => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }
+
+        if ($hourIsOpen && $lesson['startTime'] >= (time() + 60*60)) {
+            $startJob = array(
+            'name' => "SmsSendOneHourJob",
+            'cycle' => 'once',
+            'time' => $lesson['startTime'] - 60*60,
+            'jobClass' => 'Topxia\\Service\\Sms\\Job\\SmsSendOneHourJob',
+            'targetType' => 'lesson',
+            'targetId' => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }     
+    }
+
     protected function copyChapters($courseId, $newCourse)
     {
         $chapters = $this->getCourseChapterDao()->findChaptersByCourseId($courseId);
@@ -211,7 +244,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             }
 
             $orgChapterId = $chapter['id'];
-            $chapter['pId'] = $chapter['id'];
+            $chapter['copyId'] = $chapter['id'];
 
             $chapter['courseId'] = $newCourse['id'];
             $chapter['createdTime'] = time();
@@ -264,7 +297,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields = ArrayToolkit::parts($material, array('title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'userId'));
 
             $fields['courseId'] = $newCourse['id'];
-            $fields['pId'] = $material['id'];
+            $fields['copyId'] = $material['id'];
             if ($material['lessonId']) {
                 $fields['lessonId'] = $newLessons[$material['lessonId']]['id'];
             } else {
@@ -277,7 +310,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $map[$material['id']] = $copiedMaterial;
 
             if (array_key_exists("fileId", $copiedMaterial) && $copiedMaterial["fileId"]>0) {
-                $this->getUploadFileDao()->updateFileUsedCount(array($copiedMaterial["fileId"]), 1);
+                $this->getUploadFileDao()->waveUploadFile($copiedMaterial["fileId"],'usedCount',1);
             }
         }
 
@@ -290,7 +323,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
         $map = array();
         foreach ($homeworks as $homework) {
-            $fields = ArrayToolkit::parts($homework, array('description', 'itemCount', 'createdUserId', 'updatedUserId'));
+            $fields = ArrayToolkit::parts($homework, array('description', 'itemCount', 'createdUserId', 'updatedUserId', 'correctPercent'));
 
             $fields['courseId'] = $newCourse['id'];
             if ($homework['lessonId']) {
@@ -301,7 +334,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
             $fields['updatedTime'] = time();
-            $fields['pId'] = $homework['id'];
+            $fields['copyId'] = $homework['id'];
             $newHomework = $this->getHomeworkDao()->addHomework($fields);
             $map[$homework['id']] =  $newHomework;
 
@@ -313,8 +346,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
                     'questionId' => empty($newQuestions[$item['questionId']]['id']) ? 0 : $newQuestions[$item['questionId']]['id'],
                     'score' => $item['score'],
                     'missScore' => $item['missScore'],
-                    'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id'],
-                    'pId'=>$item['id']
+                    'parentId' => empty($newQuestions[$item['parentId']]['id']) ? 0 : $newQuestions[$item['parentId']]['id']
                 );
 
                 $this->getHomeworkItemDao()->addItem($fields);
@@ -342,7 +374,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
             $fields['createdTime'] = time();
 
-            $fields['pId'] = $exercise['id'];
+            $fields['copyId'] = $exercise['id'];
 
             $map[$exercise['id']] = $this->getExerciseDao()->addExercise($fields);
         }
@@ -418,5 +450,15 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
     protected function getAppService()
     {
         return $this->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab.CrontabService');
+    }
+
+    protected function getSmsService()
+    {
+        return $this->createService('Sms.SmsService');
     }
 }

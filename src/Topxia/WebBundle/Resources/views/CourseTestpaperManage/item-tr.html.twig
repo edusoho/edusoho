@@ -6,6 +6,7 @@
   </td>
   <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
   <td>
+    {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{question['stem']|plain_text(40) }}
     <div class="text-muted text-sm">
       从属：

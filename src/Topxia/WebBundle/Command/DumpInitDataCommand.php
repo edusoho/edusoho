@@ -47,7 +47,7 @@ class DumpInitDataCommand extends BaseCommand
 
 		$time = time();
 
-		$command = "ssh -l root {$domain} 'mysqldump -u{$user} -p{$password} {$database} --no-create-info --complete-insert --skip-comments --extended-insert --skip-add-locks --ignore-table=exam.edusoho.cn.cache --ignore-table=exam.edusoho.cn.cloud_app_logs --ignore-table=exam.edusoho.cn.log --ignore-table=exam.edusoho.cn.session2 --ignore-table=exam.edusoho.cn.user_token --skip-disable-keys --skip-set-charset --skip-tz-utc --skip-debug-check > edusoho_init.{$time}.sql'";
+		$command = "ssh -l root {$domain} 'mysqldump -u{$user} -p{$password} {$database} --no-create-info --complete-insert --skip-comments --extended-insert --skip-add-locks --ignore-table={$database}.cache --ignore-table={$database}.cloud_app_logs --ignore-table={$database}.log --ignore-table={$database}.session2 --ignore-table={$database}.user_token --skip-disable-keys --skip-set-charset --skip-tz-utc --skip-debug-check > edusoho_init.{$time}.sql'";
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 
@@ -65,7 +65,7 @@ class DumpInitDataCommand extends BaseCommand
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 
-		$command = "ssh -l root {$domain} 'cd /var/www/{$domain} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk web/files'";
+		$command = "ssh -l root {$domain} 'cd /var/www/{$domain} \n zip -r ~/data.{$time}.zip app/data/private_files app/data/udisk'";
 		$output->writeln("<info>{$command}</info>");
 		exec($command);
 

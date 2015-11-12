@@ -40,7 +40,7 @@
             if ($('#thread_content').length > 0) {
                 // group: group
                 var editor_thread = CKEDITOR.replace('thread_content', {
-                    toolbar: 'Group',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
                 });
 
@@ -78,7 +78,7 @@
             if ($('#post-thread-form').length > 0) {
 
                 var editor = CKEDITOR.replace('post_content', {
-                    toolbar: 'Group',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
                 });
 
@@ -90,7 +90,6 @@
                         if (error) {
                             return false;
                         }
-                        $('#post-thread-btn').button('submiting').addClass('disabled');
 
                         $.ajax({
                             url: $("#post-thread-form").attr('post-url'),
@@ -114,6 +113,15 @@
                                     }
                                 } else {
                                     window.location.reload();
+                                }
+                            },
+                            error: function(data) {
+                                data = data.responseText;
+                                data = $.parseJSON(data);
+                                if(data.error) {
+                                    Notify.danger(data.error.message);
+                                } else {
+                                    Notify.danger('发表回复失败，请重试');
                                 }
                             }
                         });
@@ -244,6 +252,16 @@
                                         return;
                                     }
                                     window.location.reload();
+                                },
+                                error: function(data) {
+                                    data = data.responseText;
+                                    data = $.parseJSON(data);
+                                    if(data.error) {
+                                        Notify.danger(data.error.message);
+                                    } else {
+                                        Notify.danger('发表回复失败，请重试');
+                                    }
+                                    $this.button('reset').removeClass('disabled');
                                 }
                             });
                         }
@@ -315,7 +333,7 @@
 
             if ($('#group').length > 0) {
                 var editor = CKEDITOR.replace('group', {
-                    toolbar: 'Simple',
+                    toolbar: 'Detail',
                     filebrowserImageUploadUrl: $('#group').data('imageUploadUrl')
                 });
 

@@ -2,6 +2,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 
@@ -138,12 +139,72 @@ class CourseController extends BaseController
     {
         return $this->searchFuncUsedBySearchActionAndSearchToFillBannerAction($request, 'TopxiaAdminBundle:Course:search-to-fill-banner.html.twig');
     }
+    /*
+    code 状态编号
+    1:　删除班级课程
+    2: 移除班级课程
+    0: 删除未发布课程成功
+    */
+    public function deleteAction(Request $request, $courseId ,$type)
+    {   
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isSuperAdmin()) {
+           throw $this->createAccessDeniedException('您不是超级管理员！');
+        }
+        
+        
+        $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1);
+        if(!empty($subCourses)){
+             return $this->createJsonResponse(array('code' =>2, 'message' => '请先删除班级课程'));
+        } else {
+           $course = $this->getCourseService()->getCourse($courseId);
+           if($course['status'] == 'closed'){
+                $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+                if($classroomCourse){
+                    return $this->createJsonResponse(array('code' =>3, 'message' => '当前课程未移除,请先移除班级课程'));
+                }
 
-    public function deleteAction(Request $request, $id)
-    {
-        $result = $this->getCourseService()->deleteCourse($id);
+                //判断作业插件版本号
+                $homework = $this->getAppService()->findInstallApp("Homework");
+                if(!empty($homework)){
+                   $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
+                    if(!$isDeleteHomework){
+                        return $this->createJsonResponse(array('code' =>1, 'message' => '作业插件未升级'));
+                    } 
+                }
+                
+                if($type){
+                    $isCheckPassword = $request->getSession()->get('checkPassword');
+                    if(!$isCheckPassword){
+                        throw $this->createAccessDeniedException('未输入正确的校验密码！');
+                    }
+                    $result = $this->getCourseDeleteService()->delete($courseId,$type);  
+                    return $this->createJsonResponse($this->returnDeleteStatus($result,$type));
+                }
+           }else if($course['status'] == 'draft'){
+                $result = $this->getCourseService()->deleteCourse($courseId);
+                return $this->createJsonResponse(array('code' =>0, 'message' => '删除课程成功'));
+           }
+        }
+        return $this->render('TopxiaAdminBundle:Course:delete.html.twig',array('course'=>$course));
+    }
 
-        return $this->createJsonResponse(true);
+    public function checkPasswordAction(Request $request)
+    {   
+        if($request->getMethod() == 'POST'){
+            $password = $request->request->get('password');
+            $currentUser = $this->getCurrentUser();
+            $password = $this->getPasswordEncoder()->encodePassword($password, $currentUser->salt);
+            if($password == $currentUser->password){
+                $response = array('success' => true, 'message' => '密码正确');
+                $request->getSession()->set('checkPassword',true); 
+            }else{
+                $response = array('success' => false, 'message' => '密码错误');
+            }
+
+            return $this->createJsonResponse($response);
+        }
+
     }
 
     public function publishAction(Request $request, $id)
@@ -411,9 +472,35 @@ class CourseController extends BaseController
         ));
     }
 
+    protected function returnDeleteStatus($result,$type)
+    {
+        $dataDictionary = array('questions'=>'问题','testpapers'=>'试卷','materials'=>'课时资料','chapters'=>'课时章节','drafts'=>'课时草稿','lessons'=>'课时','lessonLearns'=>'课时时长','lessonReplays'=>'课时录播','lessonViews'=>'课时播放时长','homeworks'=>'课时作业','exercises'=>'课时练习','favorites'=>'课时收藏','notes'=>'课时笔记','threads'=>'课程话题','reviews'=>'课程评价','announcements'=>'课程公告','statuses'=>'课程动态','members'=>'课程成员','course'=>'课程');
+        if($result>0){
+            $message = $dataDictionary[$type]."数据删除";
+            return array('success'=>true,'message'=>$message);
+        }else{
+            if($type == "homeworks" || $type == "exercises"){
+               $message = $dataDictionary[$type]."数据删除失败或插件未安装或插件未升级";
+               return array('success'=>false,'message'=>$message);
+            }else if($type =='course'){
+               $message = $dataDictionary[$type]."数据删除";
+               return array('success'=>false,'message'=>$message);
+            }else{
+                $message = $dataDictionary[$type]."数据删除失败";
+                return array('success'=>false,'message'=>$message);
+            }
+        }
+
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCourseDeleteService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseDeleteService');
     }
 
     protected function getCourseCopyService()
@@ -439,5 +526,10 @@ class CourseController extends BaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getPasswordEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 }

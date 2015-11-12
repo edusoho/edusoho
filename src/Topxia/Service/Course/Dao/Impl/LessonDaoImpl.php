@@ -39,7 +39,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findLessonsByParentIdAndLockedCourseIds($parentId ,array $courseIds)
+    public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds)
     {
         if(empty($courseIds)){
             return array();
@@ -47,9 +47,9 @@ class LessonDaoImpl extends BaseDao implements LessonDao
        
        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
        
-       $parmaters = array_merge(array($parentId), $courseIds);
+       $parmaters = array_merge(array($copyId), $courseIds);
              
-       $sql = "SELECT * FROM {$this->table} WHERE  parentId = ? AND courseId IN ({$marks})";
+       $sql = "SELECT * FROM {$this->table} WHERE  copyId = ? AND courseId IN ({$marks})";
        
        return $this->getConnection()->fetchAll($sql,$parmaters); 
     }
@@ -64,12 +64,6 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         });
     }
 
-    public function findMinStartTimeByCourseId($courseId)
-    {
-        $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
-        return $this->getConnection()->fetchAll($sql,array($courseId));
-    }
-
     public function findLessonsByCourseId($courseId)
     {
         $that = $this;
@@ -78,6 +72,12 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? ORDER BY seq ASC";
             return $that->getConnection()->fetchAll($sql, array($courseId));
         });
+    }
+
+    public function findMinStartTimeByCourseId($courseId)
+    {
+        $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
+        return $this->getConnection()->fetchAll($sql,array($courseId));
     }
 
     public function findLessonIdsByCourseId($courseId)
@@ -207,6 +207,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
+        }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
@@ -241,5 +245,4 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $sql="SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
-
 }

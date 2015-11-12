@@ -2,177 +2,172 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Service\Course\CourseService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 
 class LiveCourseLessonManageController extends BaseController
 {
-	
-	public function createAction(Request $request,$id)
-	{
-		$liveCourse = $this->getCourseService()->tryManageCourse($id);
-		$parentId = $request->query->get('parentId');
-		if($request->getMethod() == 'POST') {
+    public function createAction(Request $request, $id)
+    {
+        $liveCourse = $this->getCourseService()->tryManageCourse($id);
+        $parentId = $request->query->get('parentId');
+        if ($request->getMethod() == 'POST') {
 
-			$liveLesson = $request->request->all();
-			$liveLesson['type'] = 'live';
-			$liveLesson['courseId'] = $liveCourse['id'];
-			$liveLesson['startTime'] = strtotime($liveLesson['startTime']);
-			$liveLesson['length'] = $liveLesson['timeLength'];
-			//$reservationIds = isset($liveLesson['reservationIds']) ? $liveLesson['reservationIds'] : array();
+            $liveLesson = $request->request->all();
+            $liveLesson['type'] = 'live';
+            $liveLesson['courseId'] = $liveCourse['id'];
+            $liveLesson['startTime'] = strtotime($liveLesson['startTime']);
+            $liveLesson['length'] = $liveLesson['timeLength'];
+            //$reservationIds = isset($liveLesson['reservationIds']) ? $liveLesson['reservationIds'] : array();
 
-			$speakerId = current($liveCourse['teacherIds']);
-			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
-			$speaker = $speaker ? $speaker['nickname'] : '老师';
+            $speakerId = current($liveCourse['teacherIds']);
+            $speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
+            $speaker = $speaker ? $speaker['nickname'] : '老师';
 
-			$liveLogo = $this->getSettingService()->get('course');
-	        $liveLogoUrl = "";
-	        if(!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])){
-	            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
-	        }
+            $liveLogo = $this->getSettingService()->get('course');
+            $liveLogoUrl = "";
+            if (!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])) {
+                $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl') . "/" . $liveLogo["live_logo"];
+            }
 
-			$client = new EdusohoLiveClient();
-			$live = $client->createLive(array(
-				'summary' => $liveLesson['summary'],
-				'title' => $liveLesson['title'],
-				'speaker' => $speaker,
-				'startTime' => $liveLesson['startTime'] . '',
-				'endTime' => ($liveLesson['startTime'] + $liveLesson['length']*60) . '',
-				'authUrl' => $this->generateUrl('live_auth', array(), true),
-				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
-				'liveLogoUrl' => $liveLogoUrl
-			));
+            $client = new EdusohoLiveClient();
+            $live = $client->createLive(array(
+                'summary' => $liveLesson['summary'],
+                'title' => $liveLesson['title'],
+                'speaker' => $speaker,
+                'startTime' => $liveLesson['startTime'] . '',
+                'endTime' => ($liveLesson['startTime'] + $liveLesson['length'] * 60) . '',
+                'authUrl' => $this->generateUrl('live_auth', array(), true),
+                'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
+                'liveLogoUrl' => $liveLogoUrl,
+            ));
 
-			if (empty($live) || isset($live['error'])) {
-				throw new \RuntimeException('创建直播教室失败，请重试！');
-			}
+            if (empty($live) || isset($live['error'])) {
+                throw new \RuntimeException('创建直播教室失败，请重试！');
+            }
 
+            $liveLesson['mediaId'] = $live['id'];
+            $liveLesson['liveProvider'] = $live['provider'];
+            $liveLesson = $this->getCourseService()->createLesson($liveLesson);
 
-			$liveLesson['mediaId'] = $live['id'];
-			$liveLesson['liveProvider'] = $live['provider'];
-			$liveLesson = $this->getCourseService()->createLesson($liveLesson);
+            /** LiveReservation **/
+            //$this->reservationLesson($liveLesson, $reservationIds);
 
-			/** LiveReservation **/
-			//$this->reservationLesson($liveLesson, $reservationIds);
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $liveCourse,
+                'lesson' => $liveLesson,
+            ));
+        }
 
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-				'course' => $liveCourse,
-				'lesson' => $liveLesson,
-			));
-		}
-		
-		return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-lesson-modal.html.twig',array(
-			'liveCourse' => $liveCourse,
-			'parentId'=>$parentId,
-		));
-	}
+        return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-lesson-modal.html.twig', array(
+            'liveCourse' => $liveCourse,
+            'parentId' => $parentId,
+        ));
+    }
 
-	public function editAction(Request $request,$courseId,$lessonId)
-	{
-		$liveCourse = $this->getCourseService()->tryManageCourse($courseId);
-		$liveLesson = $this->getCourseService()->getCourseLesson($liveCourse['id'], $lessonId);
+    public function editAction(Request $request, $courseId, $lessonId)
+    {
+        $liveCourse = $this->getCourseService()->tryManageCourse($courseId);
+        $liveLesson = $this->getCourseService()->getCourseLesson($liveCourse['id'], $lessonId);
 
-		if($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
 
-			$editLiveLesson = $request->request->all();
-			
-			$liveLesson['type'] = 'live';
-			$liveLesson['title'] = $editLiveLesson['title'];
-			$liveLesson['summary'] = $editLiveLesson['summary'];
-			$liveLesson['courseId'] = $liveCourse['id'];
-			$liveLesson['startTime'] = empty($editLiveLesson['startTime']) ? $liveLesson['startTime'] : strtotime($editLiveLesson['startTime']);
-			$liveLesson['free'] = empty($editLiveLesson['free']) ? 0 : $editLiveLesson['free'];
-			$liveLesson['length'] = empty($editLiveLesson['timeLength']) ? $liveLesson['length'] : $editLiveLesson['timeLength'];
-			$liveLesson['reservationIds'] = isset($editLiveLesson['reservationIds']) ? $editLiveLesson['reservationIds'] : array();
+            $editLiveLesson = $request->request->all();
 
-			$speakerId = current($liveCourse['teacherIds']);
-			$speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
-			$speaker = $speaker ? $speaker['nickname'] : '老师';
+            $liveLesson['type'] = 'live';
+            $liveLesson['title'] = $editLiveLesson['title'];
+            $liveLesson['summary'] = $editLiveLesson['summary'];
+            $liveLesson['courseId'] = $liveCourse['id'];
+            $liveLesson['startTime'] = empty($editLiveLesson['startTime']) ? $liveLesson['startTime'] : strtotime($editLiveLesson['startTime']);
+            $liveLesson['free'] = empty($editLiveLesson['free']) ? 0 : $editLiveLesson['free'];
+            $liveLesson['length'] = empty($editLiveLesson['timeLength']) ? $liveLesson['length'] : $editLiveLesson['timeLength'];
+            $liveLesson['reservationIds'] = isset($editLiveLesson['reservationIds']) ? $editLiveLesson['reservationIds'] : array();
 
-			$liveParams = array(
-				'liveId' => $liveLesson['mediaId'],
-				'provider' => $liveLesson['liveProvider'],
-				'summary' => $editLiveLesson['summary'],
-				'title' => $editLiveLesson['title'],
-				'speaker' => $speaker,
-				'authUrl' => $this->generateUrl('live_auth', array(), true),
-				'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
-			);
+            $speakerId = current($liveCourse['teacherIds']);
+            $speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
+            $speaker = $speaker ? $speaker['nickname'] : '老师';
 
-			if(array_key_exists('startTime', $editLiveLesson)) {
-				$liveParams['startTime'] = strtotime($editLiveLesson['startTime']);
-			}
-			if(array_key_exists('startTime', $editLiveLesson) && array_key_exists('timeLength', $editLiveLesson)) {
-				$liveParams['endTime'] = (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength']*60) . '';
-			}
+            $liveParams = array(
+                'liveId' => $liveLesson['mediaId'],
+                'provider' => $liveLesson['liveProvider'],
+                'summary' => $editLiveLesson['summary'],
+                'title' => $editLiveLesson['title'],
+                'speaker' => $speaker,
+                'authUrl' => $this->generateUrl('live_auth', array(), true),
+                'jumpUrl' => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true),
+            );
 
-			$client = new EdusohoLiveClient();
-			$live = $client->updateLive($liveParams);
+            if (array_key_exists('startTime', $editLiveLesson)) {
+                $liveParams['startTime'] = strtotime($editLiveLesson['startTime']);
+            }
+            if (array_key_exists('startTime', $editLiveLesson) && array_key_exists('timeLength', $editLiveLesson)) {
+                $liveParams['endTime'] = (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength'] * 60) . '';
+            }
 
-			$liveLesson = $this->getCourseService()->updateLesson($courseId,$lessonId,$liveLesson);
+            $client = new EdusohoLiveClient();
+            $live = $client->updateLive($liveParams);
 
-			/** LiveReservation **/
-			//$this->reservationLesson($liveLesson, $reservationIds);
-			
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-				'course' => $liveCourse,
-				'lesson' => $liveLesson,
-			));
-		}
-			
-		return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-lesson-modal.html.twig',array(
-			'liveCourse' => $liveCourse,
-			'liveLesson' => $liveLesson
-		));
-	}
+            $liveLesson = $this->getCourseService()->updateLesson($courseId, $lessonId, $liveLesson);
 
-	public function lessonTimeCheckAction(Request $request,$id)
-	{
-		$data = $request->query->all();
+            /** LiveReservation **/
+            //$this->reservationLesson($liveLesson, $reservationIds);
 
-		$startTime = $data['startTime'];
-		$length = $data['length'];
-		$lessonId = empty($data['lessonId']) ? "" : $data['lessonId'];
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $liveCourse,
+                'lesson' => $liveLesson,
+            ));
+        }
 
-		list($result, $message) = $this->getCourseService()->liveLessonTimeCheck($id,$lessonId,$startTime,$length);
+        return $this->render('TopxiaWebBundle:LiveCourseLessonManage:live-lesson-modal.html.twig', array(
+            'liveCourse' => $liveCourse,
+            'liveLesson' => $liveLesson,
+        ));
+    }
 
-		if ($result == 'success') {
-			$response = array('success' => true, 'message' => '这个时间段的课时可以创建');
-		} else {
-			$response = array('success' => false, 'message' => $message);
-		}
-		
-		return $this->createJsonResponse($response);
-	}
+    public function lessonTimeCheckAction(Request $request, $id)
+    {
+        $data = $request->query->all();
 
-	public function calculateLeftCapacityAction(Request $request, $courseId)
-	{
-		$data = $request->query->all();
+        $startTime = $data['startTime'];
+        $length = $data['length'];
+        $lessonId = empty($data['lessonId']) ? "" : $data['lessonId'];
 
-		$startTime = strtotime($data['startTime']);
-		$length = $data['length'];
-		$endTime = $startTime + $length*60;
-		$lessonId = empty($data['lessonId']) ? "" : $data['lessonId'];
+        list($result, $message) = $this->getCourseService()->liveLessonTimeCheck($id, $lessonId, $startTime, $length);
 
-		$leftCapacity = $this->getCourseService()->calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $lessonId);
+        if ($result == 'success') {
+            $response = array('success' => true, 'message' => '这个时间段的课时可以创建');
+        } else {
+            $response = array('success' => false, 'message' => $message);
+        }
 
-		return $this->createJsonResponse($leftCapacity);
-	}
+        return $this->createJsonResponse($response);
+    }
 
-	protected function getCourseService()
-	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
-	}
+    public function calculateLeftCapacityAction(Request $request, $courseId)
+    {
+        $data = $request->query->all();
 
-	protected function getSettingService()
+        $startTime = strtotime($data['startTime']);
+        $length = $data['length'];
+        $endTime = $startTime + $length * 60;
+        $lessonId = empty($data['lessonId']) ? "" : $data['lessonId'];
+
+        $leftCapacity = $this->getCourseService()->calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $lessonId);
+
+        return $this->createJsonResponse($leftCapacity);
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     private function getReservationService()
     {
-    	return $this->getServiceKernel()->createService('LiveReservation:LiveReservation.LiveReservationService');
+        return $this->getServiceKernel()->createService('LiveReservation:LiveReservation.LiveReservationService');
     }
 }

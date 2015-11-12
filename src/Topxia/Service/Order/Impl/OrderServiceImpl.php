@@ -160,6 +160,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
     }
 
+    public function analysisPaidClassroomOrderDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisPaidClassroomOrderDataByTime($startTime,$endTime);
+    }
+
     public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)
     {
         return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime,$endTime);
@@ -179,6 +184,16 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function analysisCourseAmountDataByTime($startTime,$endTime)
     {
         return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisClassroomAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisClassroomAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisVipAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisVipAmountDataByTime($startTime,$endTime);
     }
 
     protected function generateOrderSn($order)
@@ -240,7 +255,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function createPayRecord($id, $payData)
     {
-        $this->getOrderService()->updateOrder($id, array('data'=>json_encode($payData)));
+        $payData = array('data'=>json_encode($payData));
+        $order =$this->updateOrder($id,$payData);
         $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
     }
 
