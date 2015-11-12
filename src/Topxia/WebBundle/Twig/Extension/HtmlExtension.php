@@ -12,6 +12,7 @@ class HtmlExtension extends \Twig_Extension
             new \Twig_SimpleFunction('radios', array($this, 'radios'), $options),
             new \Twig_SimpleFunction('checkboxs', array($this, 'checkboxs'), $options),
             new \Twig_SimpleFunction('field_value', array($this, 'fieldValue'), $options),
+            new \Twig_SimpleFunction('countdown', array($this, 'countdown'), $options),
         );
     }
 
@@ -84,6 +85,27 @@ class HtmlExtension extends \Twig_Extension
             }
         }
         return $html;
+    }
+
+    public function countdown($timestamp)
+    {
+        $countdown = $timestamp - time();
+        $endStr =  '';
+        $result = '';
+        if($countdown >= 86400){
+            $endStr = '天';
+            $result = $countdown / 86400;
+        }elseif ($countdown >= 3600) {
+            $endStr = '小时';
+            $result = $countdown / 3600;          
+        }else{
+            $endStr = '分钟';
+            $result = $countdown / 60;  
+        }
+
+
+        $result = intval($result + 0.5);
+        return $result.$endStr;
     }
 
     public function getName ()

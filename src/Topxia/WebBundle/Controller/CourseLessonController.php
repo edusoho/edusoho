@@ -673,6 +673,10 @@ class CourseLessonController extends BaseController
             $lessonLearns = array();
         }
 
+        list($testpapers, $itemsIndex) = $this->findTestpapersAction($courseId, $items);
+
+        $now=time();
+
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
@@ -684,7 +688,28 @@ class CourseLessonController extends BaseController
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'mode' => $mode,
+            'now' => $now,
+            'testpapers' => $testpapers,
+            'itemsIndex' => $itemsIndex
         ));
+    }
+
+    public function findTestpapersAction($courseId, $items)
+    {
+        $conditions = array(
+           'target' => "course-" . $courseId
+        );
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            0, 
+            $count =$this->getTestpaperService()->searchTestpapersCount($conditions)
+            );
+        $testpapers = ArrayToolkit::index($testpapers, 'id');
+        $itemsIndex = ArrayToolkit::column($items, 'mediaId');
+
+        return array($testpapers, $itemsIndex);
+
     }
 
     protected function getCourseService()

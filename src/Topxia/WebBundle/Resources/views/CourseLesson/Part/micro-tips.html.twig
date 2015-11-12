@@ -40,9 +40,22 @@
   {% endif %}
   
   {% if item.type == 'testpaper' %}
+    {% if item.testMode == 'realTime' %}
+      {% set endTime = (testpapers[item.mediaId].limitedTime * 60) + item.testStartTime %}
+      <span class="pull-right">
+        {% if now < item.testStartTime %}
+          距离开始考试还有：{{ countdown(item.testStartTime) }} 
+        {% elseif now > endTime %}
+          考试已结束
+        {% else %}
+          考试已开始
+        {% endif %}
+      </span>
+    {% endif %}     
     <span class="course-type">
       <i class="es-icon es-icon-check" data-toggle="tooltip" data-placement="top" title="试卷" data-original-title="试卷"></i>
     </span>
+    
   {% endif %}
 
   {% if item.type == 'ppt' %}
