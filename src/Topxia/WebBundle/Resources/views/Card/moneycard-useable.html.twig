@@ -5,7 +5,7 @@
 				<h4>学习卡</h4>
 				<p class="title">学习卡可以用于账户充值</p>
 				<p class="price">
-					<strong>{{ cardDetail.coin }}虚拟币</strong><a href="">立即使用 ></a>
+					<strong>{{ cardDetail.coin }}虚拟币</strong><a href="{{ path('money_card_use',{ id:cardDetail.id,filter:app.request.query.get('filter') }) }}">立即使用 ></a>
 				</p>
 				<p>有效期截止：<span>{{ cardDetail.deadline|date('Y年n月d日') }}</span></p>
 			</div>
