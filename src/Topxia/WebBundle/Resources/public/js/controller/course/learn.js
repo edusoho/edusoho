@@ -389,7 +389,7 @@ define(function(require, exports, module) {
                     $("#lesson-live-content").perfectScrollbar('update');
 
                 } else if (lesson.type == 'testpaper') {
-                    var url = '../../test/' + lesson.mediaId + '/do?targetType=lesson&targetId=' + id;
+                    var url = '../../lesson/' + id + '/test/' + lesson.mediaId + '/do';
                     var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
                     var html = '<span class="text-info">正在载入，请稍等...</span>';
                     $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
@@ -430,23 +430,18 @@ define(function(require, exports, module) {
 
 
                             if (0<testStartLeftSeconds && testStartLeftSeconds < 7200) {
-                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束，考试开始后10分钟将无法进入考试。</p>";
+                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束。</p>";
                             };
 
                             if (testStartLeftSeconds <= 0 && testStartRightSeconds <= 60*10) {
-                                $testNotice = "<p>实时考试已经开始，10分钟后不能进入考试， 考试将于 <strong>"+testEndTimeFormat+"</strong> 结束。<a class='btn btn-primary' href='" + url + "' target='_blank'>开始实时考试</a></p>";
+                                $testNotice = "<p>实时考试已经开始， 考试将于 <strong>"+testEndTimeFormat+"</strong> 结束。<a class='btn btn-primary' href='" + url + "' target='_blank'>开始实时考试</a></p>";
                                 $countDown = "考试已开始: <strong class='text-info'>" + rightMinutes + "</strong>分钟<strong class='text-info'>" + rightSeconds + "</strong>秒<br><br>";
                             };
-
-                            if(testStartRightSeconds > 60*10){
-                                clearInterval(iID);
-                                $testNotice = "<p>实时考试开始时间已经超过10分钟，不能进入考试</p>";
-                                $countDown = '';
-                            }
 
                             if (testEndLeftSeconds <= 0) {
                                 clearInterval(iID);
                                 $testNotice = "<p>实时考试已经结束</p>";
+                                $countDown = '';
                             };
 
                             $("#lesson-testpaper-content").find('.lesson-content-text-body').html($testNotice  + $countDown);
@@ -471,7 +466,7 @@ define(function(require, exports, module) {
                                 if (result.status == 'nodo') {
                                     html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
                                 } else if (result.status == 'finished') {
-                                    var redoUrl = '../../test/' + lesson.mediaId + '/redo?targetType=lesson&targetId=' + id;
+                                    var redoUrl = '../../lesson/' + id + 'test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
                                     html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
                                 } else if (result.status == 'doing' || result.status == 'paused') {
