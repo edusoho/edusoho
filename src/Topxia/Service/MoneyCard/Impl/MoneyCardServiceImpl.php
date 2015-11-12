@@ -318,9 +318,12 @@ class MoneyCardServiceImpl extends BaseService
 
     public function useMoneyCard($id,$fields)
     {
-        $usedMoneyCard = $this->updateMoneyCard($id,$fields);
-        $this->dispatchEvent("moneyCard.use",$moneyCard);
-        return $usedMoneyCard;
+        $moneyCard = $this->updateMoneyCard($id,$fields);
+        $this->getCardService()->updateCardByCardIdAndType($moneyCard['id'],'moneyCard',array(
+            'status' => 'used',
+            'useTime' => $moneyCard['rechargeTime']
+        ));
+        return $moneyCard;
     }
     public function receiveMoneyCard($token, $userId)
     {
@@ -383,7 +386,14 @@ class MoneyCardServiceImpl extends BaseService
                     'message' => '学习卡领取失败'
                     );
                 }
-                $this->dispatchEvent('moneyCard.receive', $moneyCard);
+
+                $this->getCardService()->addCard(array(
+                    'cardId' => $moneyCard['id'],
+                    'cardType' => 'moneyCard',
+                    'deadline' => strtotime($moneyCard['deadline']),
+                    'userId' => $userId
+                ));
+
             }
             $this->getMoneyCardBatchDao()->getConnection()->commit();
 
@@ -401,6 +411,11 @@ class MoneyCardServiceImpl extends BaseService
     {
         return $this->createDao('MoneyCard.MoneyCardDao');
     }
+
+    protected function getCardService()
+    {
+        return $this->createService('Card.CardService');
+    } 
 
     protected function getMoneyCardBatchDao()
     {
