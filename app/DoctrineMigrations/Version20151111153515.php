@@ -16,7 +16,7 @@ class Version20151111153515 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `card` CHANGE `status` `status` ENUM('used','receive','invalid','deleted') NOT NULL DEFAULT 'receive' COMMENT '使用状态'; ")
+        $this->addSql("ALTER TABLE `card` CHANGE `status` `status` ENUM('used','receive','invalid','deleted') NOT NULL DEFAULT 'receive' COMMENT '使用状态'; ");
     }
 
     /**
