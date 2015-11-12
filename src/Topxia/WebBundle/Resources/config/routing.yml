@@ -1857,9 +1857,9 @@ my_cards:
     pattern:  /my/cards
     defaults: { _controller: TopxiaWebBundle:Card:index }
 
-order_coupon_cards:
-    pattern: /order/coupon
-    defaults: { _controller: TopxiaWebBundle:Card:showUsableCards }
+my_useable_coupons:
+    pattern: /my/useable_coupons
+    defaults: { _controller: TopxiaWebBundle:Card:useableCoupons }
 
 sms_prepare:
     pattern:  /sms/prepare/{targetType}/{id}
