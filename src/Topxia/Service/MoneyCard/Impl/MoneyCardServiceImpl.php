@@ -319,10 +319,38 @@ class MoneyCardServiceImpl extends BaseService
     public function useMoneyCard($id,$fields)
     {
         $moneyCard = $this->updateMoneyCard($id,$fields);
-        $this->getCardService()->updateCardByCardIdAndType($moneyCard['id'],'moneyCard',array(
-            'status' => 'used',
-            'useTime' => $moneyCard['rechargeTime']
-        ));
+
+        $batch = $this->getBatch((int) $moneyCard['batchId']);
+
+        $flow = array(
+                'userId' => $fields['rechargeUserId'],
+                'amount' => $batch['coin'],
+                'name' => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
+                'orderSn' => '',
+                'category' => 'inflow',
+                'note' => '',
+            );
+
+        $this->getCashService()->inflowByCoin($flow);
+        $batch['rechargedNumber'] += 1;
+        $this->updateBatch($batch['id'], $batch);
+        if (!empty($this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'],'moneyCard'))) {
+            $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'],'moneyCard',array(
+                'status' => 'used',
+                'useTime' => $moneyCard['rechargeTime']
+            ));
+        } else {
+            $this->getCardService()->addCard(array(
+                'cardId' => $moneyCard['id'],
+                'cardType' => 'moneyCard',
+                'status' => 'used',
+                'deadline' => strtotime($moneyCard['deadline']),
+                'useTime' => $moneyCard['rechargeTime'],
+                'userId' => $moneyCard['rechargeUserId'],
+                'createdTime' => time()
+            ));
+        }
+        
         return $moneyCard;
     }
     public function receiveMoneyCard($token, $userId)
@@ -425,6 +453,11 @@ class MoneyCardServiceImpl extends BaseService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getCashService()
+    {
+        return $this->createService('Cash.CashService');
     }
 
     private function getTokenService()

@@ -26,7 +26,7 @@ class CardDaoImpl extends BaseDao implements CardDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function updateCardByCardIdAndType($cardId,$cardType,$fields)
+    public function updateCardByCardIdAndCardType($cardId,$cardType,$fields)
     {
         $this->getConnection()->update($this->table, $fields, array('cardId' => $cardId,'cardType' => $cardType));
         return $this->getCardByCardIdAndCardType($cardId,$cardType);

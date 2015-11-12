@@ -25,9 +25,14 @@ class CardServiceImpl extends BaseService implements CardService
 		return $this->getCardDao()->getCard($id);
 	}
 
-	public function updateCardByCardIdAndType($cardId,$cardType,$fields)
+	public function getCardByCardIdAndCardType($cardId,$cardType)
 	{
-		return $this->getCardDao()->updateCardByCardIdAndType($cardId,$cardType,$fields);
+		return $this->getCardDao()->getCardByCardIdAndCardType($cardId,$cardType);
+	}
+
+	public function updateCardByCardIdAndCardType($cardId,$cardType,$fields)
+	{
+		return $this->getCardDao()->updateCardByCardIdAndCardType($cardId,$cardType,$fields);
 	}
 
 	// public function searchCards($conditions,$sort,$start,$limit)
