@@ -442,7 +442,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
 
-        $this->dispatchEvent('thread.post_create', $post);
+        $this->dispatchEvent('thread.post.create', $post);
 
         return $post;
     }
