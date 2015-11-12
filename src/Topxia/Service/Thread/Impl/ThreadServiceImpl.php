@@ -483,7 +483,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->waveThread($post['threadId'], 'postNum', 0-$totalDeleted);
 
-        $this->dispatchEvent("thread.post_delete", new ServiceEvent($post, array('deleted' => $totalDeleted)));
+        $this->dispatchEvent("thread.post.delete", new ServiceEvent($post, array('deleted' => $totalDeleted)));
     }
 
     public function searchPostsCount($conditions)

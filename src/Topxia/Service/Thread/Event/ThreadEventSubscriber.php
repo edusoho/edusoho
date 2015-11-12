@@ -15,9 +15,9 @@ class ThreadEventSubscriber implements EventSubscriberInterface
             'thread.create' => 'onThreadCreate',
             'thread.nice' => 'onThreadNice',
             'thread.sticky' => 'onThreadSticky',
-            'thread.post_create' => 'onPostCreate',
-            'thread.post_delete' => 'onPostDelete',
-            'thread.post_vote' => 'onPostVote',
+            'thread.post.create' => 'onPostCreate',
+            'thread.post.delete' => 'onPostDelete',
+            'thread.post.vote' => 'onPostVote',
         );
     }
 
