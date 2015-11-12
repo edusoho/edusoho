@@ -211,11 +211,6 @@ class CourseController extends CourseBaseController
 
 	public function infoAction(Request $request, $id)
 	{
-		$classroomSetting = $this->getSettingService()->get('classroom');
-		if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
 		list($course, $member) = $this->buildCourseLayoutData($request, $id);
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -271,11 +266,6 @@ class CourseController extends CourseBaseController
 
 	public function showAction(Request $request, $id)
 	{
-		$classroomSetting = $this->getSettingService()->get('classroom');
-		if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
 		list ($course, $member) = $this->buildCourseLayoutData($request, $id);
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);

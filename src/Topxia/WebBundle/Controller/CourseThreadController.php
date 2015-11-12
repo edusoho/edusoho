@@ -57,11 +57,6 @@ class CourseThreadController extends CourseBaseController
 
     public function showAction(Request $request, $courseId, $threadId)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])) {
-            $classroomSetting['name'] = '班级';
-        }
-
         list($course, $member) = $this->buildLayoutDataWithTakenAccess($request, $courseId);
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -329,11 +324,6 @@ class CourseThreadController extends CourseBaseController
 
     public function postAction(Request $request, $courseId, $id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])) {
-            $classroomSetting['name'] = '班级';
-        }
-
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -582,11 +572,6 @@ class CourseThreadController extends CourseBaseController
                     ->add('courseId', 'hidden')
                     ->add('threadId', 'hidden')
                     ->getForm();
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
 }

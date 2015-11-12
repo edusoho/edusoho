@@ -11,11 +11,6 @@ class CourseReviewController extends CourseBaseController
 
     public function listAction(Request $request, $id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -71,9 +66,5 @@ class CourseReviewController extends CourseBaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
+   
 }

@@ -9,11 +9,6 @@ class NoteController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
@@ -73,10 +68,5 @@ class NoteController extends BaseController
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

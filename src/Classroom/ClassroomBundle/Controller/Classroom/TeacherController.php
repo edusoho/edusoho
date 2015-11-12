@@ -9,11 +9,6 @@ class TeacherController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $headTeacher = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
 
@@ -100,10 +95,5 @@ class TeacherController extends BaseController
     private function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

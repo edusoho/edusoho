@@ -11,11 +11,6 @@ class ReviewController extends BaseController
 {
     public function listAction(Request $request, $id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
@@ -115,10 +110,5 @@ class ReviewController extends BaseController
     private function getClassroomReviewService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomReviewService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

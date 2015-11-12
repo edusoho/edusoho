@@ -42,11 +42,6 @@ class NoteController extends CourseBaseController
 
     public function showListAction(Request $request, $courseId)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -174,10 +169,4 @@ class NoteController extends CourseBaseController
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
 }

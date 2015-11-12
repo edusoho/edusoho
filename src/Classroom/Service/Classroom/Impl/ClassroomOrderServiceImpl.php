@@ -99,11 +99,6 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function doSuccessPayOrder($id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order) || $order['targetType'] != 'classroom') {
             throw $this->createServiceException('非课程订单，加入课程失败。');
@@ -126,11 +121,6 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {

@@ -317,11 +317,6 @@ class ClassroomController extends BaseController
 
     public function introductionAction(Request $request, $id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $classroom = $this->getClassroomService()->getClassroom($id);
         $introduction = $classroom['about'];
         $user = $this->getCurrentUser();
@@ -571,11 +566,6 @@ class ClassroomController extends BaseController
 
     public function exitAction(Request $request, $id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $user = $this->getCurrentUser();
 
         $member = $this->getClassroomService()->getClassroomMember($id, $user["id"]);
@@ -598,11 +588,6 @@ class ClassroomController extends BaseController
 
     public function becomeAuditorAction(Request $request, $id)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-        
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
@@ -719,11 +704,6 @@ class ClassroomController extends BaseController
 
     public function modifyUserInfoAction(Request $request)
     {
-        $classroomSetting = $this->getSettingService()->get('classroom');
-        if (empty($classroomSetting['name'])){
-            $classroomSetting['name']='班级';
-        }
-
         $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
