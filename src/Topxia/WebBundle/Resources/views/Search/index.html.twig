@@ -26,20 +26,20 @@
     <div class="col-md-8">
       <div class="es-section">
         <ul class="nav nav-tabs" role="tablist">
-          <li class="active"><a href="javascript:;">课程</a></li>
-          <li><a href="javascript:;">教师</a></li>
-          <li><a href="javascript:;">话题</a></li>
-          <li><a href="javascript:;">资讯</a></li>
+          <li class="active"><a href="javascript:;" data-url="">课程</a></li>
+          <li><a href="javascript:;" data-url="">教师</a></li>
+          <li><a href="javascript:;" data-url="">话题</a></li>
+          <li><a href="javascript:;" data-url="">资讯</a></li>
         </ul>
         <div class="search-result">
           <!-- 课程 -->
-          {% include 'TopxiaWebBundle:Search:search-course.html.twig' %}
+          {#{% include 'TopxiaWebBundle:Search:search-course.html.twig' %}#}
           <!-- 教师 -->
           {#{% include 'TopxiaWebBundle:Search:search-teacher.html.twig' %}#}
           <!-- 资讯 -->
           {#{% include 'TopxiaWebBundle:Search:search-article.html.twig' %}#}
           <!-- 话题 -->
-          {#{% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}#}
+          {% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}
         </div>
       </div>
     </div>
