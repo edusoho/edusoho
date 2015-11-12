@@ -84,8 +84,7 @@ class DefaultController extends BaseController
       }
         return $this->render('TopxiaAdminBundle:Default:popular-courses-table.html.twig', array(
             'sortedCourses' => $sortedCourses
-        ));
-        
+        ));    
     }
 
     public function indexAction(Request $request)
@@ -456,6 +455,20 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
+    }
+
+    public function sendQuestionAction()
+    {
+       $site = $this->getSettingService()->get('site');
+       $site = array('name'=>$site['name'],'url'=>$site['url'],'token'=>md5($this->getToken()));
+       $site=urlencode(http_build_query($site));
+       return $this->render('TopxiaAdminBundle:Default:sendQuestion.html.twig',array('site'=>$site)); 
+    }
+
+    private function getToken()
+    {
+        $site = $this->getSettingService()->get('site');
+        return  'token_' . date('Ymd', time()) . $site['url'];
     }
 
     public function weekday($time)
