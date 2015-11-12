@@ -14,12 +14,25 @@ class CardServiceImpl extends BaseService implements CardService
 			throw $this->createServiceException('缺少必要字段，新创建卡失败！');
 		}
 
-        $card['status'] = 'normal';
         $card['createdTime'] = time();
-
 
 		return $this->getCardDao()->addCard($card);
 		
+	}
+
+	public function getCard($id)
+	{
+		return $this->getCardDao()->getCard($id);
+	}
+
+	public function getCardByCardIdAndCardType($cardId,$cardType)
+	{
+		return $this->getCardDao()->getCardByCardIdAndCardType($cardId,$cardType);
+	}
+
+	public function updateCardByCardIdAndCardType($cardId,$cardType,$fields)
+	{
+		return $this->getCardDao()->updateCardByCardIdAndCardType($cardId,$cardType,$fields);
 	}
 
 	// public function searchCards($conditions,$sort,$start,$limit)
@@ -40,9 +53,8 @@ class CardServiceImpl extends BaseService implements CardService
 	{
 		$processor = $this->getDetailProcessor($cardType);
 		$limit = count($ids);
-		$cardsDetail = $processor->getCardDetailsByCardIds($ids);//修改过
+		$cardsDetail = $processor->getCardDetailsByCardIds($ids);
 
-		// $cardsDetail = $this ->sortArrayByField($cardsDetail,'deadline');
 		return $cardsDetail;
 		
 	}

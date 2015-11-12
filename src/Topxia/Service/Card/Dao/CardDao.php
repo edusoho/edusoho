@@ -9,6 +9,10 @@ interface CardDao
 
 	public function getCard($id);
 
+	public function updateCardByCardIdAndCardType($cardId,$cardType,$fields);
+
+	public function getCardByCardIdAndCardType($cardId,$cardType);
+
 	public function findCardsByUserIdAndCardType($userId,$cardType);
 
 	 

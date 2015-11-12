@@ -80,7 +80,7 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('dict_text', array($this, 'getDictText'), array('is_safe' => array('html'))),
              new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
              new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
-             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstaled')),
+             new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
              new \Twig_SimpleFunction('plugin_version', array($this, 'getPluginVersion')),
              new \Twig_SimpleFunction('version_compare', array($this, 'versionCompare')),
              new \Twig_SimpleFunction('is_exist_in_subarray_by_id', array($this, 'isExistInSubArrayById')),
@@ -273,7 +273,7 @@ class WebExtension extends \Twig_Extension
         return '';
     }
 
-    public function isPluginInstaled($name)
+    public function isPluginInstalled($name)
     {
         $plugins = $this->container->get('kernel')->getPlugins();
         foreach ($plugins as $plugin) {

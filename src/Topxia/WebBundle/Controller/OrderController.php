@@ -138,7 +138,7 @@ class OrderController extends BaseController
             }
 
             //价格比较
-            if(intval($amount*100) != intval($shouldPayMoney*100)) {
+            if(intval($amount*100) !=  intval($shouldPayMoney*100)) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
