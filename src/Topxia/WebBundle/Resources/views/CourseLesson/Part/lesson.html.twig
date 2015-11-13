@@ -4,7 +4,7 @@
   {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
 {% endif %}
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
-        {% if item.status == 'published'  and course.buyable|default(true) == true  %}
+  {% if item.status == 'published'  and( item.free or  course.buyable|default(true) == true ) %}
     <a {% if member %}href="{{ lessonUrl }}" data-toggle="tooltip" data-placement="bottom" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
     title="{{ item.title }}">
     {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
