@@ -2,6 +2,7 @@ define(function (require, exports, module) {
     var Widget = require('widget');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
+    require('common/validator-rules').inject(Validator);
     require('jquery.bootstrap-datetimepicker');
 
     Validator.addRule(
@@ -39,7 +40,7 @@ define(function (require, exports, module) {
             this.set('_$testMode', $('[name=testMode]'));
 
             this._initValidator();
-
+            this._addChoiceTestValidator();
             if(!this.get('_isRealTimeTestpaper')){
                 return;
             }
@@ -91,12 +92,6 @@ define(function (require, exports, module) {
             validator = new Validator({
                 element: '#course-lesson-form',
                 autoSubmit: false
-            });
-
-            validator.addItem({
-                element: '#lesson-mediaId-field',
-                required: true,
-                errormessageRequired: '请选择试卷'
             });
 
             validator.addItem({
@@ -173,11 +168,13 @@ define(function (require, exports, module) {
                 this._addTestStartTimeValidatorItem();
                 this.set('_isRealTimeTestpaper', true);
                 this._addTimePicker();
+                this._addChoiceTestValidator();
                 this.get('_$testStartTimeDiv').show();
             }else {
                 this.set('_isRealTimeTestpaper', false);
                 this._removeTestStartTimeValidatorItem();
                 this._removeTimePicker();
+                this._addChoiceTestValidator();
                 this.get('_$testStartTimeDiv').hide();
             }
         },
@@ -217,8 +214,31 @@ define(function (require, exports, module) {
 
         _removeTimePicker : function(){
             this.get('_$testStartTime').datetimepicker('remove');
-        }
+        },
 
+        _addChoiceTestValidator : function () {
+            if(!this.get('_validator')){
+                return;
+            }
+
+            this.get('_validator').removeItem('#lesson-mediaId-field');
+
+            if(this.get('_isRealTimeTestpaper')){
+                this.get('_validator').addItem({
+                    element: '#lesson-mediaId-field',
+                    required: true,
+                    rule: 'remote',
+                    errormessageRequired: '请选择试卷'
+                });
+            }else {
+                this.get('_validator').addItem({
+                    element: '#lesson-mediaId-field',
+                    required: true,
+                    errormessageRequired: '请选择试卷'
+                });
+            }
+
+        }
     });
 
     exports.run = function () {

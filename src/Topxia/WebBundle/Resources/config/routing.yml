@@ -787,6 +787,10 @@ course_manage_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
+course_manage_real_time_testpaper_check:
+    pattern:  /testpaper/real-time/check
+    defaults: { _controller: TopxiaWebBundle:Testpaper:realTimeCheck}
+
 course_manage_do_test:
     pattern: /test/{testId}/do
     defaults: { _controller: TopxiaWebBundle:Testpaper:doTestpaper }
