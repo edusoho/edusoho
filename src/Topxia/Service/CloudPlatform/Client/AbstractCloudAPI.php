@@ -123,6 +123,7 @@ class AbstractCloudAPI
 
         $response = curl_exec($curl);
         $curlinfo = curl_getinfo($curl);
+
         $header = substr($response, 0, $curlinfo['header_size']);
         $body = substr($response, $curlinfo['header_size']);
 
@@ -137,6 +138,11 @@ class AbstractCloudAPI
             'HEADER' => $header,
             'BODY' => $body,
         );
+
+        if(empty($curlinfo['namelookup_time'])) {
+            $this->logger && $this->logger->error("[{$requestId}] NAME_LOOK_UP_TIMEOUT", $context);
+            return array();
+        }
 
         if (empty($curlinfo['connect_time'])) {
             $this->logger && $this->logger->error("[{$requestId}] API_CONNECT_TIMEOUT", $context);

@@ -401,7 +401,7 @@ define(function(require, exports, module) {
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
-                toolbar: 'Simple',
+                toolbar: 'Minimal',
                 filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
             });
 
@@ -456,7 +456,7 @@ define(function(require, exports, module) {
 
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
-                toolbar: 'Simple',
+                toolbar: 'Thread',
                 filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
             });
 

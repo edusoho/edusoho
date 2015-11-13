@@ -771,6 +771,28 @@ class ClassroomController extends BaseController
         
     }
 
+    public function qrcodeAction(Request $request, $id)
+    {
+        $user = $this->getUserService()->getCurrentUser();
+        $host = $request->getSchemeAndHttpHost();
+
+        $token = $this->getTokenService()->makeToken('qrcode',array(
+            'userId'=>$user['id'],
+            'data' => array(
+                'url' => $this->generateUrl('classroom_show',array('id'=>$id),true),
+                'appUrl' => "{$host}/mapi_v2/mobile/main#/classroom/{$id}"
+            ), 
+            'times' => 0, 
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
+        );
+        return $this->createJsonResponse($response);
+    }
+
     private function canFreeJoin($classroom, $courses, $user)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
@@ -1033,6 +1055,10 @@ class ClassroomController extends BaseController
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
 
     protected function getCashAccountService()
     {
