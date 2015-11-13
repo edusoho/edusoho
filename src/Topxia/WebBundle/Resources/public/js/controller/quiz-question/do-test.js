@@ -106,7 +106,7 @@ define(function(require, exports, module) {
         });
 
 // 做试卷
-        var interval = 600;
+        var interval = 60;
 
         var changeAnswers = {};
 
