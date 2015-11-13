@@ -390,7 +390,7 @@ define(function(require, exports, module) {
                     $("#lesson-live-content").perfectScrollbar('update');
 
                 } else if (lesson.type == 'testpaper') {
-                    var url = '../../test/' + lesson.mediaId + '/do?targetType=lesson&targetId=' + id;
+                    var url = '../../lesson/' + id + '/test/' + lesson.mediaId + '/do';
                     var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
                     var html = '<span class="text-info">正在载入，请稍等...</span>';
                     $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
@@ -431,23 +431,18 @@ define(function(require, exports, module) {
 
 
                             if (0<testStartLeftSeconds && testStartLeftSeconds < 7200) {
-                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束，考试开始后10分钟将无法进入考试。</p>";
+                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束。</p>";
                             };
 
                             if (testStartLeftSeconds <= 0 && testStartRightSeconds <= 60*10) {
-                                $testNotice = "<p>实时考试已经开始，10分钟后不能进入考试， 考试将于 <strong>"+testEndTimeFormat+"</strong> 结束。<a class='btn btn-primary' href='" + url + "' target='_blank'>开始实时考试</a></p>";
+                                $testNotice = "<p>实时考试已经开始， 考试将于 <strong>"+testEndTimeFormat+"</strong> 结束。<a class='btn btn-primary' href='" + url + "' target='_blank'>开始实时考试</a></p>";
                                 $countDown = "考试已开始: <strong class='text-info'>" + rightMinutes + "</strong>分钟<strong class='text-info'>" + rightSeconds + "</strong>秒<br><br>";
                             };
-
-                            if(testStartRightSeconds > 60*10){
-                                clearInterval(iID);
-                                $testNotice = "<p>实时考试开始时间已经超过10分钟，不能进入考试</p>";
-                                $countDown = '';
-                            }
 
                             if (testEndLeftSeconds <= 0) {
                                 clearInterval(iID);
                                 $testNotice = "<p>实时考试已经结束</p>";
+                                $countDown = '';
                             };
 
                             $("#lesson-testpaper-content").find('.lesson-content-text-body').html($testNotice  + $countDown);
@@ -475,7 +470,7 @@ define(function(require, exports, module) {
                              // html = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>欢迎参加考试，本考试离开考还有<span class="gray-darker plm">1天</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">01</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">08</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">32</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;"> 47</span>秒</p>   <p class="text-center color-gray">考试开始后，请点击<a class="mlm mrm btn btn-sm btn-default" disabled>开始考试</a>进入</p>';
                                
                                 } else if (result.status == 'finished') {
-                                    var redoUrl = '../../test/' + lesson.mediaId + '/redo?targetType=lesson&targetId=' + id;
+                                    var redoUrl = '../../lesson/' + id + 'test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
                                     html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
                                 } else if (result.status == 'doing' || result.status == 'paused') {
