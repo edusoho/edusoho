@@ -33,13 +33,16 @@
   </div>
   <div data-role="template" style="display:none">
     <div class="row form-group has-feedback">
-      <div class="controls col-md-4 col-md-offset-3">
+      <div class="controls col-md-4 col-md-offset-1">
         <input type="text" name="" class="form-control" value="" placeholder="">
       </div>
       <div class="controls col-md-4">
         <input type="text" name="" class="form-control" value="" placeholder="">
         <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button></input>
       </div>
+      <div class="controls col-md-3">
+          <input type="checkbox" name="" value="" />是否营销QQ
+        </div>
     </div>
   </div>
 
@@ -63,21 +66,23 @@
     <div id="consult-qq">
       {% for qq in consult.qq %}
       <div class="row form-group has-feedback">
-        <div class="controls col-md-4 col-md-offset-3">
-          <input type="checkbox" name="market" value="yes" />是否营销QQ
+        <div class="controls col-md-4 col-md-offset-1">
           <input type="text" name="qq[{{loop.index0}}][name]" class="form-control" value="{{qq.name}}" placeholder="QQ客服名称">
         </div>
         <div class="controls col-md-4">
-          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" value="{{qq.number}}" placeholder="QQ号">
+          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" {% if qq.number is defined %}value="{{qq.number}}{% endif %}" placeholder="QQ号">
           {% if loop.index0 > 0 %}
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
           {% endif %}
+        </div>
+        <div class="controls col-md-3">
+          <input type="checkbox" name="qq[{{loop.index0}}][market]" value="yes" {% if qq.market is defined and qq.market == 'yes' %}checked='checked'{% endif %} />是否营销QQ
         </div>
       </div>
       {% endfor %}
     </div>
     <div class="row form-group">
-      <div class="controls col-md-4 col-md-offset-3">
+      <div class="controls col-md-4 col-md-offset-1">
         <span  class="btn-link" data-role="item-add" data-parentId='consult-qq' data-length='{{consult.qq | length}}'>新增</span>
       </div>
     </div>
