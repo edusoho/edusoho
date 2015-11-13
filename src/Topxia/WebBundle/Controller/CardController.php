@@ -14,12 +14,24 @@ class CardController extends BaseController
         $user     = $this->getCurrentUser();
         $cardType = $request->query->get('cardType');
 
-        if (empty($cardType)) {
-            $cardType = "coupon";
-        }
-
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        }
+
+        if (($cardType == 'coupon' || empty($cardType)) && !$this->isPluginInstalled('Coupon')) {
+            return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                'cards' => null
+            ));
+        }
+
+        if ($cardType == 'moneyCard' && !$this->isPluginInstalled('moneyCard')) {
+            return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                'cards' => null
+            ));
+        }
+
+        if (empty($cardType) || !ArrayToolkit::requireds(array($cardType), array('coupon', 'moneyCard'))) {
+            $cardType = "coupon";
         }
 
         $cards   = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], $cardType);
@@ -38,6 +50,8 @@ class CardController extends BaseController
                 $cards = isset($groupCards['outdate']) ? $groupCards['outdate'] : null;
             } elseif ($filter == 'invalid') {
                 $cards = isset($groupCards['invalid']) ? $groupCards['invalid'] : null;
+            } else {
+                $cards = isset($groupCards['useable']) ? $groupCards['useable'] : null;
             }
         }
 
