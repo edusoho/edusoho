@@ -788,7 +788,8 @@ class CourseLessonController extends BaseController
 
     public function doTestpaperAction(Request $request, $lessonId, $testId)
     {
-        $message = $this->checkTestPaper($lessonId, $testId);
+        $status  = 'do';
+        $message = $this->checkTestPaper($lessonId, $testId, $status);
 
         if (!empty($message)) {
             return $this->createMessageResponse('info', $message);
@@ -799,7 +800,8 @@ class CourseLessonController extends BaseController
 
     public function reDoTestpaperAction(Request $request, $lessonId, $testId)
     {
-        $message = $this->checkTestPaper($lessonId, $testId);
+        $status  = 'redo';
+        $message = $this->checkTestPaper($lessonId, $testId, $status);
 
         if (!empty($message)) {
             return $this->createMessageResponse('info', $message);
@@ -808,7 +810,7 @@ class CourseLessonController extends BaseController
         return $this->forward('TopxiaWebBundle:Testpaper:reDoTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
     }
 
-    private function checkTestPaper($lessonId, $testId)
+    private function checkTestPaper($lessonId, $testId, $status)
     {
         $user = $this->getCurrentUser();
 
@@ -836,8 +838,7 @@ class CourseLessonController extends BaseController
         $lesson = $this->getCourseService()->getLesson($lessonId);
 
         if ($lesson['testMode'] == 'realTime') {
-            $testpaper       = $this->getTestpaperService()->getTestpaper($testId);
-            $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
+            $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
             $testEndTime = $lesson['testStartTime'] + $testpaper['limitedTime'] * 60;
 
@@ -845,8 +846,14 @@ class CourseLessonController extends BaseController
                 return $message = '实时考试已经结束!';
             }
 
-            if ($testpaperResult) {
-                return $message = '您已经提交试卷，不能再考一次!';
+            if ($status == 'do') {
+                $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
+
+                if ($testpaperResult) {
+                    return $message = '您已经提交试卷，不能继续考试!';
+                }
+            } else {
+                return $message = '实时考试，不能再考一次!';
             }
         }
     }
