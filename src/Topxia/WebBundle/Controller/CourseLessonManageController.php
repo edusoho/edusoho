@@ -306,25 +306,7 @@ class CourseLessonManageController extends BaseController
 
     public function createTestPaperAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
-        if ($request->getMethod() == 'POST') {
-            $lesson                  = $request->request->all();
-            $lesson['type']          = 'testpaper';
-            $lesson['courseId']      = $course['id'];
-            $lesson['testStartTime'] = strtotime($lesson['testStartTime']);
-
-            if (!$lesson['testStartTime']) {
-                unset($lesson['testStartTime']);
-            }
-
-            $lesson = $this->getCourseService()->createLesson($lesson);
-            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-                'course' => $course,
-                'lesson' => $lesson
-            ));
-        }
-
+        $course               = $this->getCourseService()->tryManageCourse($id);
         $parentId             = $request->query->get('parentId');
         $conditions           = array();
         $conditions['target'] = "course-{$course['id']}";
@@ -344,10 +326,16 @@ class CourseLessonManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $lesson             = $request->request->all();
-            $lesson['type']     = 'testpaper';
-            $lesson['courseId'] = $course['id'];
-            $lesson             = $this->getCourseService()->createLesson($lesson);
+            $lesson                  = $request->request->all();
+            $lesson['type']          = 'testpaper';
+            $lesson['courseId']      = $course['id'];
+            $lesson['testStartTime'] = strtotime($lesson['testStartTime'])
+
+            if (!$lesson['testStartTime']) {
+                unset($lesson['testStartTime']);
+            }
+
+            $lesson = $this->getCourseService()->createLesson($lesson);
             return $this->render('TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson
