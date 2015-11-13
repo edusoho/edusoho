@@ -191,6 +191,93 @@ class CourseLessonManageController extends BaseController
     }
 
     // @todo refactor it.
+    public function createAction(Request $request, $id)
+    {
+        $course   = $this->getCourseService()->tryManageCourse($id);
+        $parentId = $request->query->get('parentId');
+
+        if ($request->getMethod() == 'POST') {
+            $lesson             = $request->request->all();
+            $lesson['courseId'] = $course['id'];
+
+            if ($lesson['media']) {
+                $lesson['media'] = json_decode($lesson['media'], true);
+            }
+
+            if (is_numeric($lesson['second'])) {
+                $lesson['length'] = $this->textToSeconds($lesson['minute'], $lesson['second']);
+                unset($lesson['minute']);
+                unset($lesson['second']);
+            }
+
+            $lesson = $this->getCourseService()->createLesson($lesson);
+
+            $file = false;
+
+            if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+                if ($file['type'] == "document" && $file['convertStatus'] == "none") {
+                    $convertHash = $this->getUploadFileService()->reconvertFile(
+                        $file['id'],
+                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                    );
+                }
+
+                $lesson['mediaStatus'] = $file['convertStatus'];
+            }
+
+            //  if ($shortcut == 'true')
+            //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();
+            //else
+            $lessonId = 0;
+            $this->getCourseService()->deleteCourseDrafts($id, $lessonId, $this->getCurrentUser()->id);
+
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $course,
+                'lesson' => $lesson,
+                'file'   => $file
+            ));
+        }
+
+        $user       = $this->getCurrentUser();
+        $userId     = $user['id'];
+        $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+        $filePath   = "courselesson/{$course['id']}";
+        $fileKey    = "{$filePath}/".$randString;
+        $convertKey = $randString;
+
+        $targetType = 'courselesson';
+        $targetId   = $course['id'];
+        $draft      = $this->getCourseService()->findCourseDraft($targetId, 0, $userId);
+        $setting    = $this->setting('storage');
+        //      if ($setting['upload_mode'] == 'local') {
+        //          $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+        //           'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+        //           'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+        // );
+
+        //      } else {
+
+        //      }
+
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
+            'course'         => $course,
+            'targetType'     => $targetType,
+            'targetId'       => $targetId,
+            'filePath'       => $filePath,
+            'fileKey'        => $fileKey,
+            'convertKey'     => $convertKey,
+            'storageSetting' => $setting,
+            'features'       => $features,
+            'parentId'       => $parentId,
+            'draft'          => $draft
+        ));
+    }
+
+    // @todo refactor it.
     public function editAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
@@ -329,7 +416,7 @@ class CourseLessonManageController extends BaseController
             $lesson                  = $request->request->all();
             $lesson['type']          = 'testpaper';
             $lesson['courseId']      = $course['id'];
-            $lesson['testStartTime'] = strtotime($lesson['testStartTime'])
+            $lesson['testStartTime'] = strtotime($lesson['testStartTime']);
 
             if (!$lesson['testStartTime']) {
                 unset($lesson['testStartTime']);
