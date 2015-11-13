@@ -682,6 +682,16 @@ class CourseLessonController extends BaseController
         } else {
             $lessonLearns = array();
         }
+        $testpaperIds = array();
+        array_walk($items, function($item, $key)use(&$testpaperIds){
+            if($item['type'] == 'testpaper'){
+                array_push($testpaperIds, $item['mediaId']);
+            }
+        });
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
+        $now=time();
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
@@ -694,6 +704,8 @@ class CourseLessonController extends BaseController
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'mode' => $mode,
+            'now' => $now,
+            'testpapers' => $testpapers
         ));
     }
 
