@@ -13,7 +13,11 @@
       <div class="text-muted text-sm">有效期至：{{ student.deadline|date('Y-n-d H:i') }} ({{ student.deadline|remain_time }})</div>
     {% endif %}#}
   </td>
-
+  <td style="vertical-align: middle;">
+    <div>
+      {{ user.truename|default('--') }}
+    </div>
+  </td>
   <td style="vertical-align: middle;">
     <div>
       {{ organizations[user.organizationId].name|default('--') }}

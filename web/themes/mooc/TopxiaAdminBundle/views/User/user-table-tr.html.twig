@@ -14,9 +14,6 @@
     </span>
   </td>
   <td>
-    {{user.truename|default("--")}}
-  </td>
-  <td>
     {% if user.verifiedMobile %}
       {{ user.verifiedMobile }}<span class="text-success">(已绑定)</span>
     {% elseif profile.mobile %}
