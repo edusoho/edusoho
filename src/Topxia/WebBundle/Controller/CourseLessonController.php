@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
+use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 
 class CourseLessonController extends BaseController
@@ -21,13 +20,13 @@ class CourseLessonController extends BaseController
 
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
-        if(!$lesson["free"] && empty($timelimit)) {
+        if (!$lesson["free"] && empty($timelimit)) {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         }
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id' => $lesson["mediaId"],
-            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : ''
+            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : '',
         ));
     }
 
@@ -57,10 +56,10 @@ class CourseLessonController extends BaseController
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-            if($course["parentId"]>0){
+            if ($course["parentId"] > 0) {
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
-            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true , 'lessonId' => $lesson['id']) );
+            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
         }
 
         //在可预览情况下查看网站设置是否可匿名预览
@@ -80,7 +79,7 @@ class CourseLessonController extends BaseController
                 }
                 return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
             }
-            
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client = $factory->createClient();
@@ -122,7 +121,7 @@ class CourseLessonController extends BaseController
             }
         }
 
-         //判断用户是否为VIP            
+        //判断用户是否为VIP
         $vipStatus = $courseVip = null;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
@@ -137,14 +136,14 @@ class CourseLessonController extends BaseController
             'lesson' => $lesson,
             'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
             'hlsUrl' => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
-            'vipStatus' => $vipStatus
+            'vipStatus' => $vipStatus,
         ));
     }
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        
+
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json = array();
         $json['number'] = $lesson['number'];
@@ -179,6 +178,17 @@ class CourseLessonController extends BaseController
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider'] = $lesson["liveProvider"];
         $json['nowDate'] = time();
+        $json['testMode'] = $lesson['testMode'];
+        $json['testStartTime'] = $lesson['testStartTime'];
+        $json['testStartTimeFormat'] = date("m-d H:i", $lesson['testStartTime']);
+
+        if ($lesson['testMode'] == 'realTime') {
+            $testpaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+            $json['limitedTime'] = $testpaper['limitedTime'];
+            $minute = '+' . $testpaper['limitedTime'] . 'minute';
+            $json['testEndTime'] = strtotime($minute, $lesson['testStartTime']);
+            $json['testEndTimeFormat'] = date("m-d H:i", $json['testEndTime']);
+        }
 
         $app = $this->getAppService()->findInstallApp('Homework');
         if (!empty($app)) {
@@ -220,10 +230,10 @@ class CourseLessonController extends BaseController
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data' => $file['id'], 
-                                'times' => 3, 
+                                'data' => $file['id'],
+                                'times' => 3,
                                 'duration' => 3600,
-                                'userId' => $this->getCurrentUser()->getId()
+                                'userId' => $this->getCurrentUser()->getId(),
                             ));
 
                             $url = array(
@@ -312,7 +322,7 @@ class CourseLessonController extends BaseController
 
         return $this->createJsonResponse($json);
     }
-    
+
     public function mediaAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -332,7 +342,7 @@ class CourseLessonController extends BaseController
         if ($file['storage'] == 'cloud') {
             throw $this->createNotFoundException();
         }
-        
+
         return $this->createLocalMediaResponse($request, $file, false);
     }
 
@@ -344,7 +354,7 @@ class CourseLessonController extends BaseController
         $count = $this->getCourseService()->searchLearnCount(array('courseId' => $courseId, 'lessonId' => $lessonId));
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $learns = $this->getCourseService()->searchLearns(array('courseId' => $courseId, 'lessonId' => $lessonId), array('startTime', 'ASC'), $paginator->getOffsetCount(),  $paginator->getPerPageCount());
+        $learns = $this->getCourseService()->searchLearns(array('courseId' => $courseId, 'lessonId' => $lessonId), array('startTime', 'ASC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         foreach ($learns as $key => $learn) {
             $user = $this->getUserService()->getUser($learn['userId']);
@@ -362,13 +372,13 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $lesson['length'] = intval($lesson['length']/60);
+        $lesson['length'] = intval($lesson['length'] / 60);
 
         return $this->render('TopxiaWebBundle:CourseLesson:lesson-data-modal.html.twig', array(
             'lesson' => $lesson,
             'paginator' => $paginator,
             'students' => $students,
-            ));
+        ));
     }
 
     public function mediaDownloadAction(Request $request, $courseId, $lessonId)
@@ -425,7 +435,7 @@ class CourseLessonController extends BaseController
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
 
-        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
+        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'] . '');
 
         return $this->createJsonResponse($result);
     }
@@ -501,7 +511,7 @@ class CourseLessonController extends BaseController
 
         $factory = new CloudClientFactory();
         $client = $factory->createClient();
-        
+
         if ($file["hashId"]) {
             $url = $client->generateFileUrl($client->getBucket(), $file["hashId"], 3600);
             $result['mediaUri'] = $url['url'];
@@ -600,9 +610,9 @@ class CourseLessonController extends BaseController
         if ($isDownload) {
             $file['filename'] = urlencode($file['filename']);
             if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+                $response->headers->set('Content-Disposition', 'attachment; filename="' . $file['filename'] . '"');
             } else {
-                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''" . $file['filename']);
             }
         }
 
@@ -628,11 +638,11 @@ class CourseLessonController extends BaseController
         //判断手机发送的客户端标志,兼容性有待提高
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $clientkeywords = array('nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
-                    'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
-                    'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
-                    'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile', );
+                'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
+                'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
+                'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile');
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
-            if (preg_match("/(".implode('|', $clientkeywords).")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
         }
@@ -656,15 +666,15 @@ class CourseLessonController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
 
         $homeworkPlugin = $this->getAppService()->findInstallApp('Homework');
-        $homeworkLessonIds =array();
-        $exercisesLessonIds =array();
+        $homeworkLessonIds = array();
+        $exercisesLessonIds = array();
 
-        if($homeworkPlugin) {
+        if ($homeworkPlugin) {
             $lessonIds = ArrayToolkit::column($items, 'id');
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseIdAndLessonIds($course['id'], $lessonIds);
             $exercises = $this->getExerciseService()->findExercisesByLessonIds($lessonIds);
-            $homeworkLessonIds = ArrayToolkit::column($homeworks,'lessonId');
-            $exercisesLessonIds = ArrayToolkit::column($exercises,'lessonId');
+            $homeworkLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
+            $exercisesLessonIds = ArrayToolkit::column($exercises, 'lessonId');
         }
 
         if ($this->setting('magic.lesson_watch_limit')) {
@@ -672,6 +682,16 @@ class CourseLessonController extends BaseController
         } else {
             $lessonLearns = array();
         }
+        $testpaperIds = array();
+        array_walk($items, function($item, $key)use(&$testpaperIds){
+            if($item['type'] == 'testpaper'){
+                array_push($testpaperIds, $item['mediaId']);
+            }
+        });
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
+        $now=time();
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
@@ -684,7 +704,64 @@ class CourseLessonController extends BaseController
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'mode' => $mode,
+            'now' => $now,
+            'testpapers' => $testpapers
         ));
+    }
+
+    public function doTestpaperAction(Request $request, $lessonId, $testId)
+    {
+        $message = $this->checkTestPaper($lessonId, $testId);
+        if (!empty($message)) {
+            return $this->createMessageResponse('info', $message);
+        }
+        return $this->forward('TopxiaWebBundle:Testpaper:doTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
+
+    }
+
+    public function reDoTestpaperAction(Request $request, $lessonId, $testId)
+    {
+        $message = $this->checkTestPaper($lessonId, $testId);
+        if (!empty($message)) {
+            return $this->createMessageResponse('info', $message);
+        }
+        return $this->forward('TopxiaWebBundle:Testpaper:reDoTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
+
+    }
+
+    private function checkTestPaper($lessonId, $testId)
+    {
+        $message = '';
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        if ($targets[$testpaper['target']]['type'] != 'course') {
+            throw $this->createAccessDeniedException('试卷只能属于课程');
+        }
+
+        $courseId = $targets[$testpaper['target']]['id'];
+
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            return $message = '试卷所属课程不存在！';
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $message = '不是试卷所属课程老师或学生';
+        }
+
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        if ($lesson['testMode'] == 'realTime') {
+
+            $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+            $testEndTime = $lesson['testStartTime'] + $testpaper['limitedTime'] * 60;
+
+            if ($testEndTime < time()) {
+                return $message = '实时考试已经结束!';
+            }
+        }
     }
 
     protected function getCourseService()
@@ -731,8 +808,8 @@ class CourseLessonController extends BaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
-    } 
-    
+    }
+
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');

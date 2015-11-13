@@ -7,7 +7,7 @@ use Topxia\Common\Paginator;
 
 class TestpaperController extends BaseController
 {
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -23,26 +23,26 @@ class TestpaperController extends BaseController
             $paginator->getPerPageCount()
         );
         $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
-        $testpapersTargets = ArrayToolkit::column($testpaperResults,'target');
+        $testpapersTargets = ArrayToolkit::column($testpaperResults, 'target');
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
         $testpapers = ArrayToolkit::index($testpapers, 'id');
 
         $targets = ArrayToolkit::column($testpapers, 'target');
-        $courseIds = array_map(function($target){
+        $courseIds = array_map(function ($target) {
             $course = explode('/', $target);
             $course = explode('-', $course[0]);
             return $course[1];
         }, $targets);
-        $lessonIds = array_map(function($target){
+        $lessonIds = array_map(function ($target) {
             $lesson = explode('/', $target);
             $lesson = explode('-', $lesson[1]);
             return $lesson[1];
         }, $testpapersTargets);
 
         foreach ($testpaperResults as $ke => &$value) {
-               $value['lessonId'] =  $lessonIds[$ke];
+            $value['lessonId'] = $lessonIds[$ke];
         }
-  
+
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         return $this->render('TopxiaWebBundle:MyQuiz:my-quiz.html.twig', array(
@@ -51,34 +51,16 @@ class TestpaperController extends BaseController
             'myTestpaperResults' => $testpaperResults,
             'myTestpapers' => $testpapers,
             'courses' => $courses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
-    public function doTestpaperAction (Request $request, $testId)
+    public function doTestpaperAction(Request $request, $targetType, $targetId, $testId)
     {
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
 
         $userId = $this->getCurrentUser()->id;
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
-
-        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            throw $this->createAccessDeniedException('试卷只能属于课程');
-        }
-
-        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
-
-        if (empty($course)) {
-            return $this->createMessageResponse('info', '试卷所属课程不存在！');
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', '不是试卷所属课程老师或学生');
-        }
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
@@ -107,35 +89,14 @@ class TestpaperController extends BaseController
         }
     }
 
-    public function reDoTestpaperAction (Request $request, $testId)
+    public function reDoTestpaperAction(Request $request, $targetType, $targetId, $testId)
     {
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-
         $userId = $this->getCurrentUser()->id;
-
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
-
-        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
-
-        if ($targets[$testpaper['target']]['type'] != 'course') {
-            throw $this->createAccessDeniedException('试卷只能属于课程');
-        }
-
-        $course = $this->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
-
-        if (empty($course)) {
-            return $this->createMessageResponse('info', '试卷所属课程不存在！');
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            return $this->createMessageResponse('info', '不是试卷所属课程老师或学生');
-        }
 
         if (empty($testpaper)) {
             throw $this->createNotFoundException();
         }
-
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
@@ -153,6 +114,7 @@ class TestpaperController extends BaseController
 
         return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
     }
+
 
     public function realTimeCheckAction(Request $request)
     {
@@ -173,11 +135,11 @@ class TestpaperController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function previewTestAction (Request $request, $testId)
+    public function previewTestAction(Request $request, $testId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
 
-        if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
+        if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {
             throw $this->createAccessDeniedException('无权预览试卷！');
         }
 
@@ -191,11 +153,11 @@ class TestpaperController extends BaseController
             'paper' => $testpaper,
             'id' => 0,
             'isPreview' => 'preview',
-            'total' => $total
+            'total' => $total,
         ));
     }
 
-    public function showTestAction (Request $request, $id)
+    public function showTestAction(Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
         if (in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
@@ -203,15 +165,26 @@ class TestpaperController extends BaseController
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        
+
         $canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($id);
-        
+
         $result = $this->getTestpaperService()->showTestpaper($id);
         $items = $result['formatItems'];
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
         $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
+        //试卷对应的考试（课时）
+        if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
+            $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
+
+            if ($target['testMode'] == 'realTime') {
+
+                $testpaperResult['usedTime'] = time() - $target['testStartTime'];
+
+            }
+        }
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-show.html.twig', array(
             'items' => $items,
             'limitTime' => $testpaperResult['limitedTime'] * 60,
@@ -220,20 +193,21 @@ class TestpaperController extends BaseController
             'favorites' => ArrayToolkit::column($favorites, 'questionId'),
             'id' => $id,
             'total' => $total,
+            'target' => $target,
         ));
     }
 
-    public function testResultAction (Request $request, $id)
+    public function testResultAction(Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        
-        if(!$testpaper){
+
+        if (!$testpaper) {
             throw $this->createNotFoundException("试卷不存在");
         }
-        
-        if (in_array($testpaperResult['status'], array('doing', 'paused'))){
+
+        if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
         }
 
@@ -254,6 +228,13 @@ class TestpaperController extends BaseController
 
         $student = $this->getUserService()->getUser($testpaperResult['userId']);
 
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
+
+        //获取试卷载体
+        if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
+            $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
+        }
+
         return $this->render('TopxiaWebBundle:QuizQuestionTest:testpaper-result.html.twig', array(
             'items' => $items,
             'accuracy' => $accuracy,
@@ -263,12 +244,13 @@ class TestpaperController extends BaseController
             'id' => $id,
             'total' => $total,
             'student' => $student,
-            'source' => $request->query->get('source','course'),
-            'targetId' => $request->query->get('targetId',0)
+            'source' => $request->query->get('source', 'course'),
+            'targetId' => $request->query->get('targetId', 0),
+            'target' => $target,
         ));
     }
 
-    public function testSuspendAction (Request $request, $id)
+    public function testSuspendAction(Request $request, $id)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
         if (!$testpaperResult) {
@@ -293,7 +275,7 @@ class TestpaperController extends BaseController
 
     }
 
-    public function submitTestAction (Request $request, $id)
+    public function submitTestAction(Request $request, $id)
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -308,7 +290,7 @@ class TestpaperController extends BaseController
         }
     }
 
-    public function finishTestAction (Request $request, $id)
+    public function finishTestAction(Request $request, $id)
     {
 
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
@@ -316,7 +298,7 @@ class TestpaperController extends BaseController
         if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
             return $this->createJsonResponse(true);
         }
-        
+
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $answers = array_key_exists('data', $data) ? $data['data'] : array();
@@ -343,12 +325,12 @@ class TestpaperController extends BaseController
                 $user = $this->getCurrentUser();
 
                 $message = array(
-                    'id'=>$testpaperResult['id'],
+                    'id' => $testpaperResult['id'],
                     'name' => $testpaperResult['paperName'],
-                    'userId' =>$user['id'],
-                    'userName' =>$user['nickname'],
-                    'type' => 'perusal'
-                );  
+                    'userId' => $user['id'],
+                    'userName' => $user['nickname'],
+                    'type' => 'perusal',
+                );
                 foreach ($course['teacherIds'] as $receiverId) {
                     $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
                 }
@@ -369,19 +351,19 @@ class TestpaperController extends BaseController
         }
     }
 
-    public function teacherCheckAction (Request $request, $id)
+    public function teacherCheckAction(Request $request, $id)
     {
         //身份校验?
 
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        
-        if(!$testpaper){
+
+        if (!$testpaper) {
             throw $this->createNotFoundException("试卷不存在");
         }
 
-        if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])){
+        if (!$teacherId = $this->getTestpaperService()->canTeacherCheck($testpaper['id'])) {
             throw $this->createAccessDeniedException('无权批阅试卷！');
         }
 
@@ -397,15 +379,15 @@ class TestpaperController extends BaseController
             $user = $this->getCurrentUser();
 
             $message = array(
-                'id'=>$testpaperResult['id'],
+                'id' => $testpaperResult['id'],
                 'name' => $testpaperResult['paperName'],
-                'userId' =>$user['id'],
-                'userName' =>$user['nickname'],
-                'type' => 'read'
-            );  
+                'userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'type' => 'read',
+            );
 
             $result = $this->getNotificationService()->notify($testpaperResult['userId'], 'test-paper', $message);
-            
+
             return $this->createJsonResponse(true);
         }
 
@@ -415,18 +397,18 @@ class TestpaperController extends BaseController
 
         $total = $this->makeTestpaperTotal($testpaper, $items);
 
-        $types =array();
-        if (in_array('essay', $testpaper['metas']['question_type_seq'])){
+        $types = array();
+        if (in_array('essay', $testpaper['metas']['question_type_seq'])) {
             array_push($types, 'essay');
         }
-        if (in_array('material', $testpaper['metas']['question_type_seq'])){
-            
+        if (in_array('material', $testpaper['metas']['question_type_seq'])) {
+
             foreach ($items['material'] as $key => $item) {
 
                 $questionTypes = ArrayToolkit::index(empty($item['items']) ? array() : $item['items'], 'questionType');
 
-                if(array_key_exists('essay', $questionTypes)){
-                    if(!in_array('material', $types)) {
+                if (array_key_exists('essay', $questionTypes)) {
+                    if (!in_array('material', $types)) {
                         array_push($types, 'material');
                     }
                 }
@@ -447,18 +429,17 @@ class TestpaperController extends BaseController
             'types' => $types,
             'student' => $student,
             'questionsSetting' => $questionsSetting,
-            'source' => $request->query->get('source','course'),
-            'targetId' => $request->query->get('targetId',0)
+            'source' => $request->query->get('source', 'course'),
+            'targetId' => $request->query->get('targetId', 0),
         ));
     }
 
     public function pauseTestAction(Request $request)
     {
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig'); 
+        return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig');
     }
 
-
-    protected function makeTestpaperTotal ($testpaper, $items)
+    protected function makeTestpaperTotal($testpaper, $items)
     {
         $total = array();
         foreach ($testpaper['metas']['question_type_seq'] as $type) {
@@ -469,8 +450,8 @@ class TestpaperController extends BaseController
             } else {
                 $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
-                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper["metas"]["missScore"])){
-                    $total[$type]['missScore'] =  $testpaper["metas"]["missScore"][$type];
+                if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper["metas"]["missScore"])) {
+                    $total[$type]['missScore'] = $testpaper["metas"]["missScore"][$type];
                 } else {
                     $total[$type]['missScore'] = 0;
                 }
@@ -480,20 +461,16 @@ class TestpaperController extends BaseController
         return $total;
     }
 
-
-
-
-
-    public function listReviewingTestAction (Request $request)
+    public function listReviewingTestAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        
-        if(!$user->isTeacher()) {
+
+        if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $courses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, PHP_INT_MAX,false);
-        $courseIds=ArrayToolkit::column($courses,'id');
+        $courses = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, PHP_INT_MAX, false);
+        $courseIds = ArrayToolkit::column($courses, 'id');
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
@@ -509,7 +486,7 @@ class TestpaperController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
@@ -519,7 +496,7 @@ class TestpaperController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $targets = ArrayToolkit::column($testpapers, 'target');
-        $courseIds = array_map(function($target){
+        $courseIds = array_map(function ($target) {
             $course = explode('/', $target);
             $course = explode('-', $course[0]);
             return $course[1];
@@ -534,20 +511,20 @@ class TestpaperController extends BaseController
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'teacher' => $user,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
-    public function listFinishedTestAction (Request $request)
+    public function listFinishedTestAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
-        if(!$user->isTeacher()) {
+        if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
-        $courses = $this->getCourseService()->findUserTeachCourses(array('userId'=>$user['id']), 0, PHP_INT_MAX,false);
-        $courseIds=ArrayToolkit::column($courses,'id');
+        $courses = $this->getCourseService()->findUserTeachCourses(array('userId' => $user['id']), 0, PHP_INT_MAX, false);
+        $courseIds = ArrayToolkit::column($courses, 'id');
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
@@ -563,7 +540,7 @@ class TestpaperController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        
+
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
@@ -573,7 +550,7 @@ class TestpaperController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $targets = ArrayToolkit::column($testpapers, 'target');
-        $courseIds = array_map(function($target){
+        $courseIds = array_map(function ($target) {
             $course = explode('/', $target);
             $course = explode('-', $course[0]);
             return $course[1];
@@ -588,11 +565,11 @@ class TestpaperController extends BaseController
             'courses' => ArrayToolkit::index($courses, 'id'),
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'teacher' => $user,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
-    public function teacherCheckInCourseAction (Request $request, $id, $status)
+    public function teacherCheckInCourseAction(Request $request, $id, $status)
     {
         $user = $this->getCurrentUser();
 
@@ -621,7 +598,6 @@ class TestpaperController extends BaseController
 
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
 
-
         return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
             'status' => $status,
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
@@ -629,10 +605,10 @@ class TestpaperController extends BaseController
             'course' => $course,
             'users' => $users,
             'teachers' => ArrayToolkit::index($teachers, 'id'),
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
-    
+
     public function userResultJsonAction(Request $request, $id)
     {
         $user = $this->getCurrentUser()->id;
@@ -645,7 +621,7 @@ class TestpaperController extends BaseController
             return $this->createJsonResponse(array('error' => '试卷已删除，请联系管理员。'));
         }
 
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive( $id, $user);
+        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user);
 
         if (empty($testResult)) {
             return $this->createJsonResponse(array('status' => 'nodo'));
@@ -669,7 +645,7 @@ class TestpaperController extends BaseController
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    protected function getCourseService ()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }

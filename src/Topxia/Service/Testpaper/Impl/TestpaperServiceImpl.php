@@ -928,7 +928,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperDao()->findTestpaperByTargets($targets);
     }
 
-
+    public function updateTestResultsByLessonId($lessonId, $fields)
+    {
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        if(empty($lesson)){
+            throw $this->createNotFoundException('课时不存在!');
+        }
+        $target = 'course-'.$lesson['courseId'].'/lesson-'.$lesson['id'];
+        $this->getTestpaperResultDao()->updateTestResultsByTarget($target, $fields);
+    }
 
 
 	protected function getTestpaperDao()
