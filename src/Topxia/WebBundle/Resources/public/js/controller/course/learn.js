@@ -754,7 +754,7 @@ define(function(require, exports, module) {
             }else {
                 $.ajax({
                     type: "post",
-                    url: $this.data("url")+"&lessonId="+id[1],
+                    url: $this.data("url")+"/lesson/"+id[1]+"/qrcode",
                     dataType: "json",
                     success:function(data){
                         $this.find(".qrcode-popover img").attr("src",data.img);

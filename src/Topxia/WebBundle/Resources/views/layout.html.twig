@@ -39,7 +39,7 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-
+{{dump(setting('classroom.name'))}}
   <div class="es-wrap">
 
     {% block header %}

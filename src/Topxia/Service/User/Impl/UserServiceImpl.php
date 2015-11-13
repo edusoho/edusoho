@@ -1373,6 +1373,9 @@ class UserSerialize
             return null;
         }
         $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|')) ;
+
+        $user = UserSerialize::_userRolesSort($user);
+
         return $user;
     }
 
@@ -1381,5 +1384,16 @@ class UserSerialize
         return array_map(function($user) {
             return UserSerialize::unserialize($user);
         }, $users);
+    }
+
+    private static function _userRolesSort($user)
+    {
+        if(!empty($user['roles'][1]) && $user['roles'][1] == 'ROLE_USER'){
+            $temp = $user['roles'][1];
+            $user['roles'][1] = $user['roles'][0];
+            $user['roles'][0] = $temp;
+        }   //交换学员角色跟roles数组第0个的位置;
+
+        return $user;
     }
 }
