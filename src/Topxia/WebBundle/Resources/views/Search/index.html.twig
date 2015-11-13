@@ -7,15 +7,15 @@
 {% block top_content %}
   <div class="search-banner">
     <div class="container">
-      <div class="input-group search-input-group">
+      <form class="input-group search-input-group" id="search-input-group" action="/search" method="get">
         <div class="input-wrap">
-          <input type="text" class="form-control" placeholder="搜索">
+          <input type="text" name="q" class="form-control" placeholder="搜索">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
           <button class="btn btn-primary" type="button">搜索</button>
         </span>
-      </div>
+      </form>
     </div>
   </div>
 {% endblock %}
@@ -25,21 +25,21 @@
   <div class="row">
     <div class="col-md-8">
       <div class="es-section">
-        <ul class="nav nav-tabs" role="tablist">
-          <li class="active"><a href="javascript:;" data-url="">课程</a></li>
-          <li><a href="javascript:;" data-url="">教师</a></li>
-          <li><a href="javascript:;" data-url="">话题</a></li>
-          <li><a href="javascript:;" data-url="">资讯</a></li>
+        <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
+          <li class="active"><a href="javascript:;" data-type="course" data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}">课程</a></li>
+          <li><a href="javascript:;" data-type="teacher" data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}">教师</a></li>
+          <li><a href="javascript:;" data-type="topic" data-url="123">话题</a></li>
+          <li><a href="javascript:;" data-type="article" data-url="">资讯</a></li>
         </ul>
-        <div class="search-result">
+        <div class="search-result" id="search-result">
           <!-- 课程 -->
-          {#{% include 'TopxiaWebBundle:Search:search-course.html.twig' %}#}
+          {% include 'TopxiaWebBundle:Search:search-course.html.twig' %}
           <!-- 教师 -->
           {#{% include 'TopxiaWebBundle:Search:search-teacher.html.twig' %}#}
           <!-- 资讯 -->
           {#{% include 'TopxiaWebBundle:Search:search-article.html.twig' %}#}
           <!-- 话题 -->
-          {% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}
+          {#{% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}#}
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
     </div>
   </div>
   
-{#
+{#  原来老的
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
       共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
@@ -102,23 +102,21 @@
         </li>
       </ul>
     </div>
-
   </div>
 
     <!-- 课程列表 -->
   <div class="course-list">
-      {% if courses %}
-        <div class="row">
-          {% for course in courses %}
-            <div class="col-lg-3 col-md-4 col-sm-6">
-              {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
-      {% endif %}
-
+    {% if courses %}
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-sm-6">
+            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
+    {% endif %}
   </div>
 
   <nav class="text-center">

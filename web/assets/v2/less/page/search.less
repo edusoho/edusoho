@@ -1,3 +1,37 @@
+.course-filter.search-filter {
+  padding-right: 0;
+  .nav-pills {
+    float: right;
+    >li {
+      margin: 0 0 10px 20px;
+    }
+  }
+  .result-declare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 48px;
+    span {
+      color: red;
+      padding: 0 10px;
+    }
+  }
+  .btn-group {
+    >.btn-primary {
+      float: right;   
+    }
+    >.dropdown-menu {
+      left: inherit;
+      right:0;
+      >li >a {
+        text-align: center;
+      }
+    }
+  }
+}
+
+
+// 教育云搜索
 .search-banner {
   background: url('@{img-src}banner_search.jpg') top center no-repeat;
   height: 200px;
@@ -15,6 +49,7 @@
       position: relative;
     }
     .es-icon {
+      display: none;
       position: absolute;
       top: 15px;
       right: 15px;
@@ -80,6 +115,17 @@
         list-style-type: none;
         margin-bottom: 5px;
       }
+    }
+  }
+}
+
+.search-result {
+  .loading {
+    padding: 50px;
+    margin: 0 auto;
+    text-align: center;
+    >i {
+      font-size: 40px;
     }
   }
 }
