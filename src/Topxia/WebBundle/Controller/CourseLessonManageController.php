@@ -3,9 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Topxia\Common\Paginator;
 
 class CourseLessonManageController extends BaseController
 {
@@ -59,46 +57,46 @@ class CourseLessonManageController extends BaseController
 	}
 
 	public function viewDraftAction(Request $request)
-	    {
-	        $params =  $request->query->all();
+    {
+        $params =  $request->query->all();
 
-	        $courseId = $params['courseId'];
-	        if(array_key_exists('lessonId', $params)){
-	            $lessonId = $params['lessonId'];
-	        } else {
-	            $lessonId = 0;
-	        }
+        $courseId = $params['courseId'];
+        if(array_key_exists('lessonId', $params)){
+            $lessonId = $params['lessonId'];
+        } else {
+            $lessonId = 0;
+        }
 
-	        $user = $this->getCurrentUser();
-	        $userId = $user['id'];
-	        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
-	        $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);         
-	        return $this->createJsonResponse($listdrafts);
-	    }
+        $user = $this->getCurrentUser();
+        $userId = $user['id'];
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
+        $listdrafts=array("title"=>$drafts['title'],"summary"=>$drafts['summary'],"content"=>$drafts['content']);
+        return $this->createJsonResponse($listdrafts);
+    }
 
-	    public function draftCreateAction(Request $request)
-	    {
-	        $formData = $request->request->all();
-	        $user = $this->getCurrentUser();
-	        $userId = $user['id'];
-	        $courseId = $formData['courseId'];
-	        if(array_key_exists('lessonId', $formData)){
-	            $lessonId = $formData['lessonId'];
-	        } else {
-	            $lessonId = 0;
-	            $formData['lessonId'] = 0;
-	        }
+    public function draftCreateAction(Request $request)
+    {
+        $formData = $request->request->all();
+        $user = $this->getCurrentUser();
+        $userId = $user['id'];
+        $courseId = $formData['courseId'];
+        if(array_key_exists('lessonId', $formData)){
+            $lessonId = $formData['lessonId'];
+        } else {
+            $lessonId = 0;
+            $formData['lessonId'] = 0;
+        }
 
-	        $content = $formData['content'];
+        $content = $formData['content'];
 
-	        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
-	        if($drafts) {
-	            $draft = $this->getCourseService()->updateCourseDraft($courseId,$lessonId,$userId,$formData);
-	        } else {
-	            $draft = $this->getCourseService()->createCourseDraft($formData);
-	        }
-	        return $this->createJsonResponse(true);
-	    }
+        $drafts = $this->getCourseService()->findCourseDraft($courseId,$lessonId,$userId);
+        if($drafts) {
+            $draft = $this->getCourseService()->updateCourseDraft($courseId,$lessonId,$userId,$formData);
+        } else {
+            $draft = $this->getCourseService()->createCourseDraft($formData);
+        }
+        return $this->createJsonResponse(true);
+    }
 
 
 	// @todo refactor it.
@@ -293,94 +291,97 @@ class CourseLessonManageController extends BaseController
 		));
 	}
 
-	public function createTestPaperAction(Request $request, $id)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
-						  $parentId = $request->query->get('parentId');
-		$conditions = array();
-		$conditions['target'] = "course-{$course['id']}";
-		$conditions['status'] = 'open';
+    public function createTestPaperAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+        $parentId = $request->query->get('parentId');
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
 
-		$testpapers = $this->getTestpaperService()->searchTestpapers(
-			$conditions,
-			array('createdTime' ,'DESC'),
-			0,
-			1000
-		);
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime' ,'DESC'),
+            0,
+            1000
+        );
 
-		$paperOptions = array();
-		foreach ($testpapers as $testpaper) {
-			$paperOptions[$testpaper['id']] = $testpaper['name'];
-		}
+        $paperOptions = array();
+        foreach ($testpapers as $testpaper) {
+            $paperOptions[$testpaper['id']] = $testpaper['name'];
+        }
 
-		if($request->getMethod() == 'POST') {
+        if($request->getMethod() == 'POST') {
 
-			$lesson = $request->request->all();
-			$lesson['type'] = 'testpaper';
-			$lesson['courseId'] = $course['id'];
-			$lesson = $this->getCourseService()->createLesson($lesson);
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-				'course' => $course,
-				'lesson' => $lesson,
-			));
+            $lesson = $request->request->all();
+            $lesson['type'] = 'testpaper';
+            $lesson['courseId'] = $course['id'];
+            $lesson = $this->getCourseService()->createLesson($lesson);
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ));
 
-		}
+        }
 
-		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
-			'course' => $course,
-			'paperOptions' => $paperOptions,
-									   'features' => $features,
-									   'parentId' =>$parentId
-		));
-	}
+        return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
+            'course' => $course,
+            'paperOptions' => $paperOptions,
+            'features' => $features,
+            'parentId' =>$parentId
+        ));
+    }
 
-	public function editTestpaperAction(Request $request, $courseId, $lessonId)
-	{
-		$course = $this->getCourseService()->tryManageCourse($courseId);
+    public function editTestpaperAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
-		$lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
-		if (empty($lesson)) {
-			throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
-		}
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
 
-		$conditions = array();
-		$conditions['target'] = "course-{$course['id']}";
-		$conditions['status'] = 'open';
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            if (!empty($fields['testStartTime'])) {
+                $fields['testStartTime'] = strtotime($fields['testStartTime']);
+            }
+            $lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course' => $course,
+                'lesson' => $lesson,
+            ));
+        }
 
-		$testpapers = $this->getTestpaperService()->searchTestpapers(
-			$conditions,
-			array('createdTime' ,'DESC'),
-			0,
-			1000
-		);
+        $conditions = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
 
-		$paperOptions = array();
-		foreach ($testpapers as $paper) {
-			$paperOptions[$paper['id']] = $paper['name'];
-		}
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            0,
+            1000
+        );
 
-		if($request->getMethod() == 'POST') {
-			$fields = $request->request->all();
-			$lesson = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
-			return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-				'course' => $course,
-				'lesson' => $lesson,
-			));
-		}
+        $paperOptions = array();
+        foreach ($testpapers as $paper) {
+            $paperOptions[$paper['id']] = $paper['name'];
+        }
 
-		$features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-		return $this->render('TopxiaWebBundle:CourseLessonManage:testpaper-modal.html.twig', array(
-			'course' => $course,
-			'lesson' => $lesson,
-			'paperOptions' => $paperOptions,
-			'features' => $features,
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:testpaper-modal.html.twig', array(
+            'course' => $course,
+            'lesson' => $lesson,
+            'paperOptions' => $paperOptions,
+            'features' => $features,
 
-		));
+        ));
 
-	}
+    }
 
 	public function publishAction(Request $request, $courseId, $lessonId)
 	{
@@ -448,32 +449,34 @@ class CourseLessonManageController extends BaseController
         	if(!empty($homework)) {
             	$this->getHomeworkService()->removeHomework($homework['id']);
         	}
+
             $this->getExerciseService()->deleteExercisesByLessonId($lesson['id']);
         }
-		return $this->createJsonResponse(true);
-	}
+        return $this->createJsonResponse(true);
+    }
 
-	protected function secondsToText($value)
-	{
-		$minutes = intval($value / 60);
-		$seconds = $value - $minutes * 60;
-		return array($minutes, $seconds);
-	}
+    protected function secondsToText($value)
+    {
+        $minutes = intval($value / 60);
+        $seconds = $value - $minutes * 60;
+        return array($minutes, $seconds);
+    }
 
-	protected function textToSeconds($minutes, $seconds)
-	{
-		return intval($minutes) * 60 + intval($seconds);
-	}
+    protected function textToSeconds($minutes, $seconds)
+    {
+        return intval($minutes) * 60 + intval($seconds);
+    }
 
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-    
-    protected function getAppService(){
-		return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
-    
+
     protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
@@ -493,7 +496,7 @@ class CourseLessonManageController extends BaseController
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
-    
+
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
@@ -511,11 +514,11 @@ class CourseLessonManageController extends BaseController
 
     protected function getHomeworkService()
     {
-    	return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 
     protected function getExerciseService()
     {
-    	return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }
 }

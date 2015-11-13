@@ -19,7 +19,7 @@
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-mediaId-field">试卷</label></div>
         <div class="col-md-9 controls">
-          <select id="lesson-mediaId-field" class="form-control" name="mediaId">
+          <select id="lesson-mediaId-field" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}">
             {{select_options(paperOptions, lesson.mediaId|default(0), '请选择试卷')}}
           </select>
           <div class="help-block">如果找不到试卷，请先确定该试卷已经发布</div>
@@ -33,6 +33,23 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">实时考试</label></div>
+        <div class="col-md-9 controls">
+          {{ radios('testMode', {'normal':'关闭', 'realTime':'开启'}, lesson.testMode|default('normal')) }}
+          <input type="hidden" id="real-time-testpaper" value="{{ lesson.testMode|default('normal') }}">
+        </div>
+      </div>
+
+      <div class="form-group " id="testpaper-start-time-div" style="display: none">
+        <div class="col-md-2 control-label">
+          <label>开始时间</label>
+        </div>
+        <div class="col-md-9 controls">
+          <input id="lesson-testpaper-start-time-field" class="form-control" type="text" name="testStartTime" value="{% if lesson.testStartTime|default(null) %} {{ lesson.testStartTime|date('Y-m-d H:i') }}{% endif %}">
+        </div>
+      </div>
+
       {% if 'lesson_credit' in features %}
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-title-field">限制学分</label></div>
@@ -42,7 +59,6 @@
         </div>
       </div>
       {% endif %}
-
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
