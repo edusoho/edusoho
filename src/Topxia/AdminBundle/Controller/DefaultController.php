@@ -89,7 +89,11 @@ class DefaultController extends BaseController
 
     public function indexAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
+        $site = $this->getSettingService()->get('site');
+        $user = $this->getCurrentUser();
+        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => md5($this->getToken()), 'username' => $user->nickname);
+        $site = urlencode(http_build_query($site));
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig', array('site' => $site));
     }
 
     public function inspectAction(Request $request)
@@ -462,15 +466,6 @@ class DefaultController extends BaseController
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
-    }
-
-    public function fedbackAction()
-    {
-        $site = $this->getSettingService()->get('site');
-        $user = $this->getCurrentUser();
-        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => md5($this->getToken()), 'username' => $user->nickname);
-        $site = urlencode(http_build_query($site));
-        return $this->render('TopxiaAdminBundle:Default:fedback.html.twig', array('site' => $site));
     }
 
     private function getToken()
