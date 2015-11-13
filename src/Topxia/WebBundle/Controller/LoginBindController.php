@@ -68,11 +68,11 @@ class LoginBindController extends BaseController
 
             return $this->redirect($this->generateUrl('login'));
         }
-
+        $name = $this->mateName($type);
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
             'oauthUser' => $oauthUser,
             'type' => $type,
-            'clientMeta' => $clientMeta,
+            'name' => $name,
             'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
     }
@@ -318,6 +318,29 @@ class LoginBindController extends BaseController
         ));
     }
 
+    protected function mateName($type)
+    {
+        switch($type){
+            case 'weixinweb':
+            return '微信';
+            break;
+            case 'weixinmob':
+            return '微信';
+            break;
+            case 'weibo':
+            return '微博';
+            break;
+            case 'qq':
+            return 'QQ';
+            break;
+            case 'renren':
+            return '人人';
+            break;
+            default:
+            return '';
+        }
+
+    }
     protected function createOAuthClient($type)
     {
         $settings = $this->setting('login_bind');
