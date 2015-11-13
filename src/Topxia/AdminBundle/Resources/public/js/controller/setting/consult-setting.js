@@ -42,13 +42,44 @@ define(function(require, exports, module) {
             lastname = lastname.replace(/\d/, nextIndex);
             $template.find('input:first').attr('placeholder', fisrtplaceholder);
             $template.find('input:eq(1)').attr('placeholder', middleplaceholder);
-            $template.find('input:eq(2)').attr('value',lastvalue)
+            $template.find('input:eq(2)').attr('value',lastvalue);
             $template.find('input:first').attr('name', firstname);
             $template.find('input:eq(1)').attr('name', middlename);
             $template.find('input:eq(2)').attr('name', lastname);
             $parent.append($template.html());
 
             $('[data-role=item-delete]').on('click',function(){
+                $(this).parent().parent().remove();
+            });
+            
+            nextIndex = nextIndex + 1;
+            $(this).attr('data-length', nextIndex);
+        });
+        
+        $('[data-role=phone-item-add]').on('click',function(){
+            var nextIndex = $(this).attr('data-length');
+            nextIndex = parseInt(nextIndex); 
+            if( nextIndex > 9 ) {
+                Notify.danger('最多设置10个..');
+                return;
+            }
+            var $parent = $('#'+$(this).attr('data-parentId'));
+            var $first = $parent.children(':first');
+            var $template = $('[data-role=phone-template]');
+
+            var fisrtplaceholder = $first.find('input:first').attr('placeholder');
+            var middleplaceholder = $first.find('input:eq(1)').attr('placeholder');
+            var firstname = $first.find('input:first').attr('name');
+            var middlename = $first.find('input:eq(1)').attr('name');
+            firstname = firstname.replace(/\d/, nextIndex);
+            middlename = middlename.replace(/\d/, nextIndex);
+            $template.find('input:first').attr('placeholder', fisrtplaceholder);
+            $template.find('input:eq(1)').attr('placeholder', middleplaceholder);
+            $template.find('input:first').attr('name', firstname);
+            $template.find('input:eq(1)').attr('name', middlename);
+            $parent.append($template.html());
+
+            $('[data-role=phone-item-delete]').on('click',function(){
                 $(this).parent().parent().remove();
             });
             
