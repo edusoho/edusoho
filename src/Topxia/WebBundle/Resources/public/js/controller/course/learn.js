@@ -397,7 +397,7 @@ define(function(require, exports, module) {
 
                     //类型是实时考试
                     if(lesson.testMode == 'realTime'){
-                        var testStartTimeFormat = lesson.testStartTimeFormat
+                        var testStartTimeFormat = lesson.testStartTimeFormat;
                         var testEndTimeFormat = lesson.testEndTimeFormat;
                         var testStartTime = lesson.testStartTime;
                         var testEndTime = lesson.testEndTime;
