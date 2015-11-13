@@ -19,7 +19,7 @@
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-mediaId-field">试卷</label></div>
         <div class="col-md-9 controls">
-          <select id="lesson-mediaId-field" class="form-control" name="mediaId">
+          <select id="lesson-mediaId-field" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}">
             {{select_options(paperOptions, lesson.mediaId|default(0), '请选择试卷')}}
           </select>
           <div class="help-block">如果找不到试卷，请先确定该试卷已经发布</div>

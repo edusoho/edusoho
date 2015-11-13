@@ -115,6 +115,26 @@ class TestpaperController extends BaseController
         return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
     }
 
+
+    public function realTimeCheckAction(Request $request)
+    {
+        $testId = $request->query->get('value');
+
+        $testPaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        if(empty($testPaper)){
+            $response = array('success' => false, 'message' => '试卷不存在');
+        }
+
+        if($testPaper['limitedTime'] == 0) {
+            $response = array('success' => false, 'message' => '该试卷考试时间未限制,请选择其他限制时长的试卷');
+        }else{
+            $response = array('success' => true, 'message' => '');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     public function previewTestAction(Request $request, $testId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testId);
