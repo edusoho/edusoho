@@ -225,6 +225,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $orderInfo['title'] .= "{$level['name']} x {$fields['duration']}";
             $orderInfo['title'] .= "{$unitNames[$fields['unitType']]}";
             $orderInfo['title'] .= "{$level['name']}会员";
+
             $orderInfo['snPrefix'] = 'V';
         }
 
