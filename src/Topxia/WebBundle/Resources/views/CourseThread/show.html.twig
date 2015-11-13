@@ -31,11 +31,9 @@
         {% if thread.marker|default(0) >0 %}
         <span class="bullet mhs">•</span>
         提问于
-        <span class="btn btn-link">
-          <a href="{{ path('course_learn', {id:thread.courseId}) }}?starttime={{ thread.marker }}#lesson/{{thread.lessonId}}" target="_blank">
-          <span class="glyphicon glyphicon-time "> {{ thread.marker|duration }}</span>
+          <a class="link-dark mhs" href="{{ path('course_learn', {id:thread.courseId}) }}?starttime={{ thread.marker }}#lesson/{{thread.lessonId}}" target="_blank">
+            <i class="es-icon es-icon-accesstime"></i> {{ thread.marker|duration }}
           </a>
-        </span>
 
       {% endif %}
         {% if lesson %}
