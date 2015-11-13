@@ -23,9 +23,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function findTestpapersByIds($ids)
     {
-        if(empty($ids)){
-            return array();
-        }
         $testpapers = $this->getTestpaperDao()->findTestpapersByIds($ids);
         return ArrayToolkit::index($testpapers, 'id');
     }

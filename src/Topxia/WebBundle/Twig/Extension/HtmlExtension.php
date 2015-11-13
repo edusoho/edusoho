@@ -90,22 +90,21 @@ class HtmlExtension extends \Twig_Extension
     public function countdown($timestamp)
     {
         $countdown = $timestamp - time();
-        $endStr =  '';
+        $unit =  '';
         $result = '';
         if($countdown >= 86400){
-            $endStr = '天';
+            $unit = '天';
             $result = $countdown / 86400;
         }elseif ($countdown >= 3600) {
-            $endStr = '小时';
+            $unit = '小时';
             $result = $countdown / 3600;          
         }else{
-            $endStr = '分钟';
+            $unit = '分钟';
             $result = $countdown / 60;  
         }
 
-
         $result = intval($result + 0.5);
-        return $result.$endStr;
+        return $result.$unit;
     }
 
     public function getName ()
