@@ -805,7 +805,7 @@ class CourseLessonController extends BaseController
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper       = $this->getTestpaperService()->getTestpaper($testId);
-            $testpaperResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaper['id'], $user['id']);
+            $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
 
             $testEndTime = $lesson['testStartTime'] + $testpaper['limitedTime'] * 60;
 
@@ -814,7 +814,7 @@ class CourseLessonController extends BaseController
             }
 
             if ($testpaperResult) {
-                return $message = '实时考试，不能再考一次!';
+                return $message = '您已经提交试卷，不能再考一次!';
             }
         }
     }
