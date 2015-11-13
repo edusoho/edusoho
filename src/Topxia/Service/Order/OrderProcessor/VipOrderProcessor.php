@@ -23,8 +23,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if ($memberLevel['seq'] > $targetLevel['seq']) {
             return array('error' => '已经是该等级会员了!');
-        } else {
-            return array();
         }
 
         return array();
@@ -223,9 +221,10 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $orderInfo['title']    = "升级会员到 {$level['name']}";
             $orderInfo['snPrefix'] = 'M';
         } else {
-            $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买')."{$level['name']} x {$fields['duration']}
-{$unitNames[$fields['unitType']]}
-{$level['name']}会员";
+            $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买');
+            $orderInfo['title'] =."{$level['name']} x {$fields['duration']}";
+            $orderInfo['title'] =."{$unitNames[$fields['unitType']]}";
+            $orderInfo['title'] =."{$level['name']}会员";
             $orderInfo['snPrefix'] = 'V';
         }
 
