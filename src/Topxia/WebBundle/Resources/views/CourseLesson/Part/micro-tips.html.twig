@@ -45,7 +45,7 @@
       <span class="pull-right">
         {% if now < item.testStartTime %}
           距离开始考试还有：{{ countdown(item.testStartTime) }} 
-        {% elseif now > endTime %}
+        {% elseif date().timestamp > endTime %}
           考试已结束
         {% else %}
           考试已开始

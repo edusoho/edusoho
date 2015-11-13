@@ -723,9 +723,7 @@ class CourseLessonController extends BaseController
         });
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
-
-        $now=time();
-
+        
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items' => $items,
             'course' => $course,
@@ -737,7 +735,6 @@ class CourseLessonController extends BaseController
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'mode' => $mode,
-            'now' => $now,
             'testpapers' => $testpapers
         ));
     }
