@@ -394,23 +394,6 @@ class CourseLessonManageController extends BaseController
     public function createTestPaperAction(Request $request, $id)
     {
         $course               = $this->getCourseService()->tryManageCourse($id);
-        $parentId             = $request->query->get('parentId');
-        $conditions           = array();
-        $conditions['target'] = "course-{$course['id']}";
-        $conditions['status'] = 'open';
-
-        $testpapers = $this->getTestpaperService()->searchTestpapers(
-            $conditions,
-            array('createdTime', 'DESC'),
-            0,
-            1000
-        );
-
-        $paperOptions = array();
-
-        foreach ($testpapers as $testpaper) {
-            $paperOptions[$testpaper['id']] = $testpaper['name'];
-        }
 
         if ($request->getMethod() == 'POST') {
             $lesson                  = $request->request->all();
@@ -427,6 +410,24 @@ class CourseLessonManageController extends BaseController
                 'course' => $course,
                 'lesson' => $lesson
             ));
+        }
+
+        $parentId             = $request->query->get('parentId');
+        $conditions           = array();
+        $conditions['target'] = "course-{$course['id']}";
+        $conditions['status'] = 'open';
+
+        $testpapers = $this->getTestpaperService()->searchTestpapers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            0,
+            1000
+        );
+
+        $paperOptions = array();
+
+        foreach ($testpapers as $testpaper) {
+            $paperOptions[$testpaper['id']] = $testpaper['name'];
         }
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
