@@ -70,7 +70,7 @@
           <input type="text" name="qq[{{loop.index0}}][name]" class="form-control" value="{{qq.name}}" placeholder="QQ客服名称">
         </div>
         <div class="controls col-md-4">
-          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" {% if qq.number is defined %}value="{{qq.number}}{% endif %}" placeholder="QQ号">
+          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" value="{{qq.number}}" placeholder="QQ号">
           {% if loop.index0 > 0 %}
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
           {% endif %}
