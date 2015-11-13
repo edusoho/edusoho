@@ -189,7 +189,6 @@ define(function(require, exports, module) {
 
             var that = this;
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-                console.log(lesson)
                 
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
 
