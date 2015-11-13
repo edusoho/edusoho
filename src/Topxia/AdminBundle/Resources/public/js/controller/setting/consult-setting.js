@@ -56,6 +56,9 @@ define(function(require, exports, module) {
             $(this).attr('data-length', nextIndex);
         });
         
+        $('[data-role=phone-item-delete]').on('click',function(){
+            $(this).closest('.has-feedback').remove();
+        });
         $('[data-role=phone-item-add]').on('click',function(){
             var nextIndex = $(this).attr('data-length');
             nextIndex = parseInt(nextIndex); 
@@ -78,9 +81,8 @@ define(function(require, exports, module) {
             $template.find('input:first').attr('name', firstname);
             $template.find('input:eq(1)').attr('name', middlename);
             $parent.append($template.html());
-
             $('[data-role=phone-item-delete]').on('click',function(){
-                $(this).parent().parent().remove();
+                $(this).closest('.has-feedback').remove();
             });
             
             nextIndex = nextIndex + 1;
