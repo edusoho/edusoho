@@ -40,12 +40,16 @@
   {% endif %}
   
   {% if item.type == 'testpaper' %}
-    {# 倒计时： #}
-    <span class="color-gray course-type ">
-    {#  考试倒计时:<span class="color-primary pls">16</span>天 #}
-
-     已结束
-    </span>
+    {% if item.testStartTime|default(0) and item.testMode == 'realTime' %}
+      <span class="color-gray course-type ">
+        {% if item.testStartTime <= date().timestamp %}
+          开始考试
+        {% else%}
+          考试倒计时:<span class="color-primary pls">{{item.testStartTime|remain_time}}</span>
+        {%endif %}
+      </span>
+    {% endif %}
+    
   {% endif %}
 
   {% if item.type == 'ppt' %}
