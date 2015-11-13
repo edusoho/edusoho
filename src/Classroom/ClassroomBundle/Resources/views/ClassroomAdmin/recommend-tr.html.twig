@@ -18,7 +18,7 @@
       </a>
       <ul class="dropdown-menu pull-right">
 
-        <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'recommendList'}) }}" title="取消班级推荐"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+        <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'recommendList'}) }}" title="取消{{setting("classroom.name")|default("班级")}}推荐"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
     
       </ul>
     </div>

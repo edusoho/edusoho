@@ -94,7 +94,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-             new \Twig_SimpleFunction('getUserNickNameById', array($this, 'getUserNickNameById')),
              new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
              new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
              new \Twig_SimpleFunction('sub_str', array($this, 'subStr')),
@@ -107,7 +106,13 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
              new \Twig_SimpleFunction('is_trial',array($this,'isTrial')),
              new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
+             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
         );
+    }
+
+    public function isWithoutNetwork()
+    {
+        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/network.lock');
     }
 
     public function getUserVipLevel($userId)
@@ -131,8 +136,7 @@ class WebExtension extends \Twig_Extension
             $parameters = array();
             $parameters[0]= $parameter;
             }
-        }
-        else{
+        } else{
             return null;
         }
         return  $parameters;
@@ -241,12 +245,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $time;
-    }
-
-    public function getUserNickNameById($userId)
-    {
-        $user = $this->getUserById($userId);
-        return $user['nickname'];
     }
 
     private function getUserById($userId)

@@ -43,6 +43,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        //开启限制加入
+        if(empty($lesson['free'])  && empty($course['buyable']) ){
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
+        }
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
@@ -50,6 +54,7 @@ class CourseLessonController extends BaseController
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
         $user = $this->getCurrentUser();
+
 
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
         if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
@@ -590,6 +595,34 @@ class CourseLessonController extends BaseController
         $result = $this->getCourseService()->waveWatchNum($user['id'], $lessonId, 1);
 
         return $this->createJsonResponse($result);
+    }
+
+    public function qrcodeAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getUserService()->getCurrentUser();
+        $host = $request->getSchemeAndHttpHost();
+
+        if($user->isLogin()) {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$lessonId}";
+        } else {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$id}";
+        }
+
+        $token = $this->getTokenService()->makeToken('qrcode',array(
+            'userId'=>$user['id'],
+            'data' => array(
+                'url' => $this->generateUrl('course_learn',array('id' => $courseId),true)."#lesson/".$lessonId,
+                'appUrl' => $appUrl
+            ), 
+            'times' => 0, 
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
+        );
+        return $this->createJsonResponse($response);
     }
 
     protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
