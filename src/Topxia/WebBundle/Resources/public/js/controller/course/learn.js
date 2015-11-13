@@ -423,28 +423,25 @@ define(function(require, exports, module) {
                             modulo = modulo % (60 * 60);
                             var minutes = Math.floor(modulo / 60);
                             var seconds = modulo % 60;
-                            var rightMinutes  = Math.floor(testStartRightSeconds / 60 );
-                            var rightSeconds = (testStartRightSeconds % 60)
-                            
-                            $countDown = that._getCountDown(days,hours,minutes,seconds);
+                            var limitedHouse = Math.floor(testEndLeftSeconds / (60 * 60) );
+                            var limitedMinutes  = Math.floor(testEndLeftSeconds % (60 * 60) / 60 );
+                            var limitedSeconds = (testEndLeftSeconds % 60)
 
-
-                            if (0<testStartLeftSeconds && testStartLeftSeconds < 7200) {
-                                $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，于 <strong>"+testEndTimeFormat+"</strong> 结束。</p>";
+                            if (0 < testStartLeftSeconds ) {
+                                $testNotice = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>欢迎参加考试，本考试离开考还有<span class="gray-darker plm">'+days+'天</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+days+'</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+hours+'</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+minutes+'</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+seconds+'</span>秒</p>   <p class="text-center color-gray">考试开始后，请点击<a class="mlm mrm btn btn-sm btn-default" disabled>开始考试</a>进入</p>';
                             };
 
-                            if (testStartLeftSeconds <= 0 && testStartRightSeconds <= 60*10) {
-                                $testNotice = "<p>实时考试已经开始， 考试将于 <strong>"+testEndTimeFormat+"</strong> 结束。<a class='btn btn-primary' href='" + url + "' target='_blank'>开始实时考试</a></p>";
-                                $countDown = "考试已开始: <strong class='text-info'>" + rightMinutes + "</strong>分钟<strong class='text-info'>" + rightSeconds + "</strong>秒<br><br>";
+                            if (0 < testStartRightSeconds) {
+                                $testNotice = '<p class="text-center mtl mbl"><i class="color-warning mrm es-icon es-icon-info" ></i>考试倒计时</p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">0</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedHouse+'</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedMinutes+'</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedSeconds+'</span>秒</p>   <p class="text-center color-gray">请点击<a href="' + url + '" class="mlm mrm btn btn-sm btn-default" style="background:#ffcb4b">开始考试</a>进入</p>';
                             };
 
                             if (testEndLeftSeconds <= 0) {
                                 clearInterval(iID);
-                                $testNotice = "<p>实时考试已经结束</p>";
-                                $countDown = '';
+                                $testNotice = '<p class="text-center mtl mbl color-gray"><i class="color-gray mrm es-icon es-icon-info"></i>考试已经结束</p><p class="text-center color-gray mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>秒</p>';
+
                             };
 
-                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html($testNotice  + $countDown);
+                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html($testNotice);
 
                             intervalSecond++;
                         }
@@ -464,7 +461,7 @@ define(function(require, exports, module) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
                             } else {
                                 if (result.status == 'nodo') {
-                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
+                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';                               
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + 'test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
@@ -756,7 +753,7 @@ define(function(require, exports, module) {
             }else {
                 $.ajax({
                     type: "post",
-                    url: $this.data("url")+"&lessonId="+id[1],
+                    url: $this.data("url")+"/lesson/"+id[1]+"/qrcode",
                     dataType: "json",
                     success:function(data){
                         $this.find(".qrcode-popover img").attr("src",data.img);

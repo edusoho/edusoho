@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\JsonToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
@@ -15,6 +16,24 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class SettingController extends BaseController
 {
+    public function postNumRulesAction(Request $request)
+    {
+
+        if ($request->getMethod() == 'POST') {
+            $setting = $request->request->get('setting', array());
+            $this->getSettingService()->set('post_num_rules', $setting);
+            $this->getLogService()->info('system', 'update_settings', "更新PostNumSetting设置", $setting);
+            $this->setFlashMessage('success', '设置已保存！');
+        }
+
+        $setting = $this->getSettingService()->get('post_num_rules', array());
+        $setting = JsonToolkit::prettyPrint(json_encode($setting));
+
+        return $this->render('TopxiaAdminBundle:System:post-num-rules.html.twig', array(
+            'setting' => $setting,
+        ));
+    }
+
     public function mobileAction(Request $request)
     {
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
@@ -62,7 +81,7 @@ class SettingController extends BaseController
         }
         
         //是否拥有定制app
-        $hasMobile = $result['hasMobile'] ?$result['hasMobile']:0;
+        $hasMobile = isset($result['hasMobile']) ?$result['hasMobile']:0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
             'mobileCode' => $mobileCode,

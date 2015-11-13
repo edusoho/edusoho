@@ -399,8 +399,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createServiceException('缺少必要字段，创建课程失败！');
 		}
 
-		$course = ArrayToolkit::parts($course, array('title', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
-
+		$course = ArrayToolkit::parts($course, array('title', 'buyable', 'type','about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
 		$course['status'] = 'draft';
         $course['about'] = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['tags'] = !empty($course['tags']) ? $course['tags'] : '';
@@ -432,13 +431,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($course)) {
 			throw $this->createServiceException('课程不存在，更新失败！');
 		}
-
 		$fields = $this->_filterCourseFields($fields);
 
 		$this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
 		$fields = CourseSerialize::serialize($fields);
-
 		$updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
 		$this->dispatchEvent("course.update",array('argument'=>$argument,'course'=>$updatedCourse));
@@ -476,7 +473,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 			'watchLimit' => 0,
 			'approval' => 0,
 			'maxRate' => 0,
-			'locked' =>0
+			'locked' =>0,
+			'buyable' => 0
 		));
 
 		if (!empty($fields['about'])) {
@@ -932,7 +930,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 	public function setCourseLessonMaxOnlineNum($lessonId,$num)
 	{
-		$this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
+		return $this->getLessonDao()->updateLesson($lessonId,array('maxOnlineNum' => $num));
 	}
 
 	public function findCourseDraft($courseId,$lessonId, $userId)
@@ -1194,7 +1192,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 		}
 
 		$fields['type'] = $lesson['type'];
-		if ($fields['type'] == 'live') {
+		if ($fields['type'] == 'live' && isset($fields['startTime'])) {
 			$fields['endTime'] = $fields['startTime'] + $fields['length']*60;
 		}
 		
@@ -2089,7 +2087,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 			throw $this->createNotFoundException();
 		}
 
-		if(!in_array($course['status'],array('published', 'closed'))) {
+		if(!in_array($course['status'],array('published'))) {
 			throw $this->createServiceException('不能加入未发布课程');
 		}
 
@@ -2147,7 +2145,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 		if (empty($fields['remark'])) {
 			$fields['remark'] = empty($info['note']) ? '' : $info['note'];
 		}
-
 		$member = $this->getMemberDao()->addMember($fields);
 
         $this->setMemberNoteNumber(

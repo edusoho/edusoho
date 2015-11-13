@@ -391,4 +391,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
+    
+    protected function getMaterialService()
+    {
+        return ServiceKernel::instance()->createService('Course.MaterialService');
+    }
 }

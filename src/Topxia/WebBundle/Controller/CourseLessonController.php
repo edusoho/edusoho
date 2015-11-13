@@ -45,6 +45,12 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        //开启限制加入
+
+        if (empty($lesson['free']) && empty($course['buyable'])) {
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
+        }
+
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
@@ -633,6 +639,34 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function qrcodeAction(Request $request, $courseId, $lessonId)
+    {
+        $user = $this->getUserService()->getCurrentUser();
+        $host = $request->getSchemeAndHttpHost();
+
+        if ($user->isLogin()) {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$lessonId}";
+        } else {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$id}";
+        }
+
+        $token = $this->getTokenService()->makeToken('qrcode', array(
+            'userId'   => $user['id'],
+            'data'     => array(
+                'url'    => $this->generateUrl('course_learn', array('id' => $courseId), true)."#lesson/".$lessonId,
+                'appUrl' => $appUrl
+            ),
+            'times'    => 0,
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
+        );
+        return $this->createJsonResponse($response);
+    }
+
     protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
@@ -736,8 +770,6 @@ class CourseLessonController extends BaseController
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
-        $now = time();
-
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items'              => $items,
             'course'             => $course,
@@ -749,8 +781,8 @@ class CourseLessonController extends BaseController
             'homeworkLessonIds'  => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'mode'               => $mode,
-            'now'                => $now,
             'testpapers'         => $testpapers
+
         ));
     }
 

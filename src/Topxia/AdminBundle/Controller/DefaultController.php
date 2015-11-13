@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Topxia\Common\CurlToolkit;
 
 class DefaultController extends BaseController
 {
@@ -88,26 +89,8 @@ class DefaultController extends BaseController
     }
 
     public function indexAction(Request $request)
-    { 
-        $result = CloudAPIFactory::create('leaf')->get('/me');
-
-        $hidden = array();
-        if(isset($result['thirdCopyright']) and $result['thirdCopyright'] == '1'){
-            $hidden = array(
-                'cloud_notice' => '1',
-                'system_status' => '1',
-            );
-        }
-
-        if(isset($result['copyright']) and $result['copyright'] == '1'){  
-            $hidden = array(
-                'cloud_notice' => '1'
-            );
-        }       
-
-        return $this->render('TopxiaAdminBundle:Default:index.html.twig',array(
-            'hidden' => $hidden
-        ));
+    {   
+        return $this->render('TopxiaAdminBundle:Default:index.html.twig');
     }
 
     public function inspectAction(Request $request)
@@ -162,30 +145,19 @@ class DefaultController extends BaseController
                 "trialTime" => (isset($result)) ? $result : null,
             ));
 
+        } else if($this->getWebExtension()->isWithoutNetwork()){
+            $notices = array();
         } else {
             $notices = $this->getNoticesFromOpen();
-            return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
-                "notices" => $notices,
-            ));
         }
+        return $this->render('TopxiaAdminBundle:Default:cloud-notice.html.twig',array(
+            "notices" => $notices,
+        ));
     }
 
     private function getNoticesFromOpen(){
-        $userAgent = 'Open EduSoho App Client 1.0';
-        $connectTimeout = 10;
-        $timeout = 10;
         $url = "http://open.edusoho.com/api/v1/context/notice";
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_URL, $url );
-        $notices = curl_exec($curl);
-        curl_close($curl);
-        $notices = json_decode($notices, true);
-        return $notices;
+        return CurlToolkit::request('GET', $url);
     }
 
     public function officialMessagesAction()
@@ -334,6 +306,14 @@ class DefaultController extends BaseController
 
         $yesterdayCourseIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"course"))+0.00;
 
+        $todayClassroomIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"classroom"))+0.00;
+
+        $yesterdayClassroomIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"classroom"))+0.00;
+
+        $todayVipIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time())),"paidEndTime"=>strtotime(date("Y-m-d",time()+24*3600)),"status"=>"paid","targetType"=>"vip"))+0.00;
+
+        $yesterdayVipIncome=$this->getOrderService()->analysisAmount(array("paidStartTime"=>strtotime(date("Y-m-d",time()-24*3600)),"paidEndTime"=>strtotime(date("Y-m-d",time())),"status"=>"paid","targetType"=>"vip"))+0.00;
+
         $storageSetting = $this->getSettingService()->get('storage');
 
         if (!empty($storageSetting['cloud_access_key']) && !empty($storageSetting['cloud_secret_key'])) {
@@ -384,6 +364,10 @@ class DefaultController extends BaseController
             'yesterdayIncome'=>$yesterdayIncome,
             'todayCourseIncome'=>$todayCourseIncome,
             'yesterdayCourseIncome'=>$yesterdayCourseIncome,
+            'todayClassroomIncome'=>$todayClassroomIncome,
+            'yesterdayClassroomIncome'=>$yesterdayClassroomIncome,
+            'todayVipIncome'=>$todayVipIncome,
+            'yesterdayVipIncome'=>$yesterdayVipIncome,
             'todayExitLessonNum'=>$todayExitLessonNum,
             'yesterdayExitLessonNum'=>$yesterdayExitLessonNum,
             'keyCheckResult'=>$keyCheckResult,

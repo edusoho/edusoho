@@ -1,5 +1,8 @@
 <li class="item-chapter  clearfix" id="lesson-{{ lesson.id }}" style="word-break: break-all;" >
-	<div class="item-content">第 <span class="number">{{ lesson.number }}</span> {% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}： {{ lesson.title }}
+	<div class="item-content">
+		{% if setting('course.custom_chapter_enabled') %} 
+          第 <span class="number">{{ lesson.number }}</span> {% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}：
+	    {% endif %}  {{ lesson.title }}
     	{% if lesson.status == 'unpublished' %}
 	      <span class="unpublish-warning text-warning">(未发布)</span>
 	    {% endif %}

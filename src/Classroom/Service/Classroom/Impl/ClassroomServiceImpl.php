@@ -83,9 +83,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function addClassroom($classroom)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $title = trim($classroom['title']);
         if (empty($title)) {
-            throw $this->createServiceException("班级名称不能为空！");
+            throw $this->createServiceException('班级名称不能为空！');
         }
 
         $classroom['createdTime'] = time();
@@ -191,14 +193,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function deleteClassroom($id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($id);
 
         if (empty($classroom)) {
-            throw $this->createServiceException("班级不存在，操作失败。");
+            throw $this->createServiceException('班级不存在，操作失败。');
         }
 
         if ($classroom['status'] != 'draft') {
-            throw $this->createServiceException("只有未发布班级可以删除，操作失败。");
+            throw $this->createServiceException('只有未发布班级可以删除，操作失败。');
         }
 
         $this->tryManageClassroom($id);
@@ -286,6 +290,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function changePicture($id, $data)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomDao()->getClassroom($id);
         if (empty($classroom)) {
             throw $this->createServiceException('班级不存在，图标更新失败！');
@@ -406,10 +412,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function removeStudent($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createServiceException("班级不存在，操作失败。");
+            throw $this->createServiceException('班级不存在，操作失败。');
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -466,6 +474,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     // becomeStudent的逻辑条件，写注释
     public function becomeStudent($classroomId, $userId, $info = array())
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
@@ -760,6 +770,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function becomeAuditor($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
@@ -803,6 +815,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function becomeAssistant($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
@@ -836,6 +850,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function becomeTeacher($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
@@ -1065,6 +1081,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     // @todo 写逻辑条件的注释
     public function exitClassroom($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
@@ -1170,6 +1188,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function lockStudent($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
             throw $this->createNotFoundException("班级(#${$classroomId})不存在，封锁学员失败。");
@@ -1190,6 +1210,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function unlockStudent($classroomId, $userId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
             throw $this->createNotFoundException("班级(#${$classroomId})不存在，封锁学员失败。");
@@ -1209,6 +1231,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function recommendClassroom($id, $number)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $this->tryAdminClassroom($id);
 
         if (!is_numeric($number)) {
@@ -1228,6 +1252,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function cancelRecommendClassroom($id)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $this->tryAdminClassroom($id);
 
         $classroom = $this->getClassroomDao()->updateClassroom($id, array(

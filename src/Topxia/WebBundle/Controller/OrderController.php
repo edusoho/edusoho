@@ -2,11 +2,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Component\Payment\Payment;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
-use Topxia\Common\SmsToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SmsToolkit;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderController extends BaseController
 {
@@ -21,15 +19,17 @@ class OrderController extends BaseController
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
 
-        if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
+        if (empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip", "classroom"))) {
             return $this->createMessageResponse('error', '参数不正确');
         }
-        if($targetType == 'classroom'){
+
+        if ($targetType == 'classroom') {
             $classroom = $this->getClassroomService()->getClassroom($targetId);
-            if(!$classroom['buyable']){
-                return $this->createMessageResponse('error', '该班级不可购买，如有需要，请联系客服');
+            if (!$classroom['buyable']) {
+                return $this->createMessageResponse('error', "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
             }
         }
+
         $processor = OrderProcessorFactory::create($targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
         if (isset($checkInfo['error'])) {
@@ -39,7 +39,7 @@ class OrderController extends BaseController
         $fields = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
-        if (((float)$orderInfo["totalPrice"]) == 0) {
+        if (((float) $orderInfo["totalPrice"]) == 0) {
             $formData = array();
             $formData['userId'] = $currentUser["id"];
             $formData["targetId"] = $fields["targetId"];
@@ -64,7 +64,7 @@ class OrderController extends BaseController
         }
 
         $verifiedMobile = '';
-        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile'])>0) ){
+        if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
             $verifiedMobile = $currentUser['verifiedMobile'];
         }
         $orderInfo['verifiedMobile'] = $verifiedMobile;
@@ -77,7 +77,7 @@ class OrderController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $verifiedMobile = '';
-        if ( (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile'])>0) ){
+        if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
             $verifiedMobile = $currentUser['verifiedMobile'];
         }
         return $this->render('TopxiaWebBundle:Order:order-sms-modal.html.twig', array(
@@ -87,10 +87,10 @@ class OrderController extends BaseController
 
     public function createAction(Request $request)
     {
-        $fields = $request->request->all(); 
-        if (isset($fields['coinPayAmount']) && $fields['coinPayAmount']>0){
+        $fields = $request->request->all();
+        if (isset($fields['coinPayAmount']) && $fields['coinPayAmount'] > 0) {
             $scenario = "sms_user_pay";
-            if ($this->setting('cloud_sms.sms_enabled') == '1'  && $this->setting("cloud_sms.{$scenario}") == 'on') {
+            if ($this->setting('cloud_sms.sms_enabled') == '1' && $this->setting("cloud_sms.{$scenario}") == 'on') {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
                 if (!$result) {
                     return $this->createMessageResponse('error', '短信验证失败。');
@@ -124,26 +124,26 @@ class OrderController extends BaseController
         $processor = OrderProcessorFactory::create($targetType);
 
         try {
-            if(isset($fields["couponCode"]) && $fields["couponCode"]=="请输入优惠码"){
+            if (isset($fields["couponCode"]) && $fields["couponCode"] == "请输入优惠码") {
                 $fields["couponCode"] = "";
-            } 
+            }
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount = (string) ((float) $amount);
             $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
 
             //价格比较
-            if(intval($totalPrice*100) != intval($fields["totalPrice"]*100)) {
+            if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
                 $this->createMessageResponse('error', "实际价格不匹配，不能创建订单!");
             }
 
             //价格比较
-            if(intval($amount*100) != intval($shouldPayMoney*100)) {
+            if (intval($amount * 100) != intval($shouldPayMoney * 100)) {
                 return $this->createMessageResponse('error', '支付价格不匹配，不能创建订单!');
             }
 
             //虚拟币抵扣率比较
-            if (isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
+            if (isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * 100) > intval($totalPrice * $maxRate * 100))) {
                 return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
             }
             if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes") {
@@ -161,17 +161,17 @@ class OrderController extends BaseController
                 'payment' => 'alipay',
                 'targetId' => $targetId,
                 'coupon' => empty($coupon) ? '' : $coupon,
-                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount
+                'couponDiscount' => empty($couponDiscount) ? 0 : $couponDiscount,
             );
-            
+
             $order = $processor->createOrder($orderFileds, $fields);
-            
-            if($order["status"] == "paid") {
+
+            if ($order["status"] == "paid") {
                 return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order["targetId"])));
             }
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn' => $order['sn']
+                'sn' => $order['sn'],
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
@@ -188,16 +188,16 @@ class OrderController extends BaseController
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
-        
+
         return $this->render('TopxiaWebBundle:Order:detail-modal.html.twig', array(
-            'order'=>$order,
-            'user'=>$user,
-            'orderLogs'=>$orderLogs,
-            'users' => $users
+            'order' => $order,
+            'user' => $user,
+            'orderLogs' => $orderLogs,
+            'users' => $users,
         ));
     }
 
-    public function couponCheckAction (Request $request, $type, $id)
+    public function couponCheckAction(Request $request, $type, $id)
     {
         if ($request->getMethod() == 'POST') {
             $code = $request->request->get('code');
@@ -246,5 +246,5 @@ class OrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-    
+   
 }

@@ -79,7 +79,7 @@ class CourseController extends CourseBaseController
 		$paginator = new Paginator(
 			$this->get('request'),
 			$this->getCourseService()->searchCourseCount($conditions),
-			12
+			20
 		);
 		$courses = $this->getCourseService()->searchCourses(
 			$conditions, 
@@ -215,7 +215,7 @@ class CourseController extends CourseBaseController
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
             if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-            	return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            	return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         	}
         }
 		$category = $this->getCategoryService()->getCategory($course['categoryId']);
@@ -270,7 +270,7 @@ class CourseController extends CourseBaseController
 		if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
              if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-            	return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            	return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         	}
         }
 		if(empty($member)) {
@@ -454,6 +454,7 @@ class CourseController extends CourseBaseController
 		}catch(Exception $e){
 			throw $this->createAccessDeniedException('抱歉，未发布课程不能学习！');
 		}
+		
 		return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
 			'course' => $course,
 		));
@@ -825,6 +826,32 @@ class CourseController extends CourseBaseController
 		$ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
 		return $this->createJsonResponse($ids);
 	}
+
+	public function qrcodeAction(Request $request, $id)
+	{
+		$user = $this->getUserService()->getCurrentUser();
+		$host = $request->getSchemeAndHttpHost();
+        $token = $this->getTokenService()->makeToken('qrcode',array(
+            'userId'=>$user['id'],
+            'data' => array(
+                'url' => $this->generateUrl('course_show',array('id'=>$id),true),
+                'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}"
+            ), 
+            'times' => 0, 
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode',array('token'=>$token['token']),true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode',array('text'=>$url),true)
+        );
+        return $this->createJsonResponse($response);
+	}
+
+	protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
 
 	protected function getUserService()
 	{

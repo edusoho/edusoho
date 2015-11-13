@@ -112,8 +112,8 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
-            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
+            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
         }
 
         return;
@@ -143,7 +143,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);  
             }
 
-            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>".'班级，请审核。';
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>"."{$classroomSetting['name']}，请审核。";
             $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
             $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
                 foreach ($admins as $key => $admin) {
