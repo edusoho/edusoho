@@ -1341,4 +1341,4 @@ admin_batch_notification_send:
 #提交问题反馈
 admin_send_question:
     pattern: /send/question
-    defaults: { _controller: TopxiaAdminBundle:Default:sendQuestion}
+    defaults: { _controller: TopxiaAdminBundle:Default:fedback}
