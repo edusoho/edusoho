@@ -64,6 +64,7 @@
       {% for qq in consult.qq %}
       <div class="row form-group has-feedback">
         <div class="controls col-md-4 col-md-offset-3">
+          <input type="checkbox" name="market" value="yes" />是否营销QQ
           <input type="text" name="qq[{{loop.index0}}][name]" class="form-control" value="{{qq.name}}" placeholder="QQ客服名称">
         </div>
         <div class="controls col-md-4">
