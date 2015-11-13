@@ -79,7 +79,7 @@
               </li>
               {% endif %}
             {% else %}    
-              {% if not (m.code == 'admin_app' and setting('copyright.thirdCopyright') == 1) %}
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
                 <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
@@ -109,7 +109,7 @@
       </div><!--/.navbar-collapse -->
     </div>
   </div>
-
+  
   <div class="container">
     <div class="row">
       {% block content %}
