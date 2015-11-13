@@ -28,8 +28,6 @@ class LessonLessonPluginController extends BaseController
 
         $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
-        $now=time();
-
         if($homeworkPlugin) {
             $lessons = $this->getCourseService()->getCourseLessons($course['id']);
             $lessonIds = ArrayToolkit::column($lessons, 'id');
@@ -48,8 +46,7 @@ class LessonLessonPluginController extends BaseController
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
             'member' => $member,
-            'testpapers' => $testpapers,
-            'now' => $now
+            'testpapers' => $testpapers
         ));
     }
 
