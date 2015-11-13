@@ -326,9 +326,10 @@ class CourseLessonManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $lesson             = $request->request->all();
-            $lesson['type']     = 'testpaper';
-            $lesson['courseId'] = $course['id'];
+            $lesson                  = $request->request->all();
+            $lesson['type']          = 'testpaper';
+            $lesson['courseId']      = $course['id'];
+            $lesson['testStartTime'] = strtotime($lesson['testStartTime'])
 
             if (!$lesson['testStartTime']) {
                 unset($lesson['testStartTime']);
