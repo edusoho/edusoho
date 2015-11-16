@@ -35,7 +35,7 @@
 
       <div class="form-group">
         <div class="col-md-2 control-label"><label for="lesson-is-real-time-field">实时考试</label></div>
-        <div class="col-md-9 controls">
+        <div class="col-md-9 controls radios">
           {{ radios('testMode', {'normal':'关闭', 'realTime':'开启'}, lesson.testMode|default('normal')) }}
           <input type="hidden" id="real-time-testpaper" value="{{ lesson.testMode|default('normal') }}">
         </div>
