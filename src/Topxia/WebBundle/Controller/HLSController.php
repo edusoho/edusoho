@@ -141,13 +141,15 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
 
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $isBalloonPlayer = $this->setting('developer.balloon_player', 0);
+
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $inWhiteList ? 0 : 1
+                'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
             ),
-            'times'    => $inWhiteList ? 0 : 1,
+            'times'    => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1,
             'duration' => 3600
         );
 
@@ -249,7 +251,7 @@ class HLSController extends BaseController
 
     protected function agentInWhiteList($userAgent)
     {
-        $whiteList = array("iPhone", "iPad", "Mac", "Android");
+        $whiteList = array("iPhone", "iPad", "Android");
 
         foreach ($whiteList as $value) {
             if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
