@@ -32,7 +32,7 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 	}
 
 	$scope.checkIsCoinMode = function() {
-		return !(platformUtil.ios || platformUtil.iPhone || platformUtil.iPad)
+		return platformUtil.ios || platformUtil.iPhone || platformUtil.iPad
 	}
 
 	$scope.changePayMode = function() {
@@ -347,31 +347,6 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 
 		self.changePrice($scope.payMode);
 	}
-
-	this.payOrder = function(payPassword) {
-
-		var payment = $scope.payMode;
-		OrderService.createOrder({
-			payment : payment,
-			payPassword : payPassword ? payPassword : "",
-			totalPrice : $scope.data.orderInfo.price,
-			couponCode : $scope.formData ? $scope.formData.code : "",
-			targetType : $stateParams.targetType,
-			targetId : $stateParams.targetId
-		}, function(data) {
-			if (data.status != "ok") {
-				$scope.toast(data.error.message);
-				return;
-			}
-
-			if (data.paid == true) {
-				window.history.back();
-			} else if (data.payUrl != "") {
-				cordovaUtil.pay($scope.orderLabel, data.payUrl);
-				self.showPayResultDlg();
-			}
-		});
-	};
 
 	$scope.pay = function() {
 		self.submitToPay($scope.data.orderInfo.price, null);
