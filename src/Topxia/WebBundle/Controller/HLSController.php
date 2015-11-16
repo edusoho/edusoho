@@ -143,7 +143,8 @@ class HLSController extends BaseController
 
         $tokenFields = array(
             'data'     => array(
-                'id' => $file['id']
+                'id'            => $file['id'],
+                'keyencryption' => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1
             ),
             'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
             'duration' => 3600
@@ -219,7 +220,15 @@ class HLSController extends BaseController
             return new Response($fakeKey);
         }
 
-        return new Response($file['convertParams']['hlsKey']);
+        $api = CloudAPIFactory::create('leaf');
+
+        if (!empty($token['data']['keyencryption'])) {
+            $stream = $api->get("/hls/clef/{$file['convertParams']['hlsKey']}/algo/1", array());
+            return new Response($stream['key']);
+        }
+
+        $stream = $api->get("/hls/clef/{$file['convertParams']['hlsKey']}/algo/0", array());
+        return new Response($stream['key']);
     }
 
     protected function getUploadFileService()
