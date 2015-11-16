@@ -11,4 +11,6 @@ interface CourseDao
      * @return 相关课程列表.
      */
     public function findOtherPeriods($course);
+
+    public function subPeriodsByRootId($rootId, $periods);
 }

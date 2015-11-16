@@ -32,7 +32,7 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
         return $course;
     }
 
-    public function decrPeriodsByRootId($rootId, $fromPeriods)
+    public function subPeriodsByRootId($rootId, $periods)
     {
         $sql = "UPDATE {$this->getTablename()} SET periods = periods - 1 WHERE rootId = ? AND periods > ?;";
         return $this->getConnection()->executeQuery($sql, array($rootId, $periods));
@@ -40,9 +40,7 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
-/*if(!isset($conditions['rootId'])){
-$conditions['rootId'] = 0;
-}*/
+
 
         if (isset($conditions['isPeriodic']) && true === $conditions['isPeriodic']) {
             unset($conditions['isPeriodic']);

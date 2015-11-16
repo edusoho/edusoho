@@ -98,10 +98,12 @@ class CourseServiceImpl extends BaseCourseServiceImpl
     public function deleteCourse($id)
     {
         $course = $this->getCourse($id);
-        parent::deleteCourse($id);
+        if(!parent::deleteCourse($id)){
+            throw $this->createServiceException('删除课程出错');
+        };
 
         if ('periodic' == $course['type']) {
-            $this->getCourseDao()->decrPeriodsByRootId($course['rootId'], $course['periods']);
+            $this->getCourseDao()->subPeriodsByRootId($course['rootId'], $course['periods']);
         }
 
         return true;
