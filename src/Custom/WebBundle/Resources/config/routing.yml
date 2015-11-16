@@ -1,3 +1,0 @@
-custom_time_line_test:
-    pattern:  /testpaper/timelime
-    defaults: { _controller: CustomWebBundle:Timeline:index }
