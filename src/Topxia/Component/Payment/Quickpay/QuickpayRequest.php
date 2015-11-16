@@ -34,6 +34,7 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
+        header("Content-type: text/html; charset=utf-8");
         $converted                  = array();
         $converted['version']       = 1;
         $converted['user_identity'] = $this->options['key']."_".$params['userId'];
