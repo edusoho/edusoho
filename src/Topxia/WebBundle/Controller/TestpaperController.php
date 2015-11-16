@@ -124,6 +124,7 @@ class TestpaperController extends BaseController
 
         if(empty($testPaper)){
             $response = array('success' => false, 'message' => '试卷不存在');
+            return $this->createJsonResponse($response);
         }
 
         if($testPaper['limitedTime'] == 0) {
