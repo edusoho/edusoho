@@ -3,8 +3,8 @@ define(function(require, exports, module) {
 		var ua = window.navigator.userAgent.toLowerCase(); 
 		if(ua.match(/MicroMessenger/i) == 'micromessenger'){ 
 			window.location.href = ('/login');
-		} else { 
-			return false; 
+		} else {
+			return false;
 		}
 	};
 });
