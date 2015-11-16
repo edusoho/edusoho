@@ -20,9 +20,10 @@ class CourseLessonController extends BaseController
         }
 
         $isPreview = $request->query->get('isPreview', '');
+        $timeLimit = $this->setting('magic.lesson_watch_time_limit')
 
         if (($isPreview && $lesson["free"])
-            || !empty($this->setting('magic.lesson_watch_time_limit'))) {
+            || !empty($timeLimit)) {
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id' => $lesson["mediaId"]
             ));
