@@ -1,48 +1,49 @@
 <?php
 namespace Mooc\Service\Organization\Impl;
 
-
 use Mooc\Service\Organization\OrganizationService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 
 class OrganizationServiceImpl extends BaseService implements OrganizationService
 {
-
     public function getOrganization($id)
     {
         if ($id <= 0) {
             return array();
         }
+
         return $this->getOrganizationDao()->getOrganization($id);
     }
 
     public function findOrganizationsByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
         $conditions = array('organizationIds' => $ids);
-        $orderBy = array('createdTime', 'DESC');
-        $count = $this->getOrganizationDao()->searchOrganizationCount($conditions);
+        $orderBy    = array('createdTime', 'DESC');
+        $count      = $this->getOrganizationDao()->searchOrganizationCount($conditions);
         return ArrayToolkit::index($this->getOrganizationDao()->searchOrganizations($conditions, $orderBy, 0, $count), 'id');
     }
 
     public function findOrganizationsByParentId($parentId)
     {
         $conditions = array('parentId' => $parentId);
-        $orderBy = array('createdTime', 'DESC');
-        $count = $this->getOrganizationDao()->searchOrganizationCount($conditions);
+        $orderBy    = array('createdTime', 'DESC');
+        $count      = $this->getOrganizationDao()->searchOrganizationCount($conditions);
         return $this->getOrganizationDao()->searchOrganizations($conditions, $orderBy, 0, $count);
     }
 
     public function deleteOrganization($id)
     {
         $organization = $this->getOrganization($id);
-        if(empty($organization)){
+
+        if (empty($organization)) {
             $this->createNotFoundException();
         }
+
         $this->dispatchEvent('organization.delete', $organization['id']);
         $this->getOrganizationDao()->deleteOrganization($organization['id']);
         $this->getLogService()->info('Organization', 'delete', "删除院系/组织,{$organization['name']}(#{$organization['id']})");
@@ -55,7 +56,6 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
         return $organization;
     }
 
-
     public function searchOrganizations($conditions, $orderBy, $start, $limit)
     {
         return $this->getOrganizationDao()->searchOrganizations($conditions, $orderBy, $start, $limit);
@@ -66,13 +66,14 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
         $organizations = $this->findAllOrganizations();
 
         $prepared = array();
+
         foreach ($organizations as $organization) {
             if (!isset($prepared[$organization['parentId']])) {
                 $prepared[$organization['parentId']] = array();
             }
+
             $prepared[$organization['parentId']][] = $organization;
         }
-
 
         $tree = array();
         $this->makeOrganizationTree($tree, $prepared, 0);
@@ -87,7 +88,7 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
 
     public function findAllOrganizations()
     {
-        return ArrayToolkit::index($this->getOrganizationDao()->findAllOrganizations(),'id');
+        return ArrayToolkit::index($this->getOrganizationDao()->findAllOrganizations(), 'id');
     }
 
     protected function makeOrganizationTree(&$tree, &$organizations, $parentId)
@@ -98,7 +99,7 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
             foreach ($organizations[$parentId] as $organization) {
                 $depth++;
                 $organization['depth'] = $depth;
-                $tree[] = $organization;
+                $tree[]                = $organization;
                 $this->makeOrganizationTree($tree, $organizations, $organization['id']);
                 $depth--;
             }
@@ -110,18 +111,22 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
     public function findOrganizationChildrenIds($id)
     {
         $organization = $this->getOrganization($id);
+
         if (empty($organization)) {
             return array();
         }
+
         $tree = $this->getOrganizationTree();
 
         $childrenIds = array();
-        $depth = 0;
+        $depth       = 0;
+
         foreach ($tree as $node) {
             if ($node['id'] == $organization['id']) {
                 $depth = $node['depth'];
                 continue;
             }
+
             if ($depth > 0 && $depth < $node['depth']) {
                 $childrenIds[] = $node['id'];
             }
@@ -143,5 +148,4 @@ class OrganizationServiceImpl extends BaseService implements OrganizationService
     {
         return $this->createDao('Mooc:Organization.OrganizationDao');
     }
-
 }

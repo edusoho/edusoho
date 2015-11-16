@@ -3,11 +3,9 @@ namespace Custom\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\WebBundle\Controller\MobileController as BaseMobileController;
 
 class MobileController extends BaseController
-{    
-    
+{
     public function indexAction(Request $request)
     {
         $mobile = $this->setting('mobile', array());
@@ -18,17 +16,16 @@ class MobileController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if(array_key_exists('ver',$mobile) && $mobile['ver']){
-            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho-mooc");
-        }else{
-            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho-mooc");  
+        if (array_key_exists('ver', $mobile) && $mobile['ver']) {
+            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho-mooc");
+        } else {
+            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho-mooc");
         }
 
         return $this->render('CustomWebBundle:Mobile:index.html.twig', array(
-            'host' => $request->getHttpHost(),
+            'host'       => $request->getHttpHost(),
             'mobileCode' => $mobileCode,
-            'mobile' => $mobile
+            'mobile'     => $mobile
         ));
     }
-
 }

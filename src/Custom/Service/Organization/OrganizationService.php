@@ -1,7 +1,6 @@
 <?php
 namespace Custom\Service\Organization;
 
-
 interface OrganizationService
 {
     public function getOrganization($id);

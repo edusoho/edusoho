@@ -9,7 +9,6 @@ use Topxia\Common\Paginator;
 
 class ClassroomManageController extends BaseClassroomManageController
 {
-
     public function studentsAction(Request $request, $id, $role = 'student')
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -19,7 +18,7 @@ class ClassroomManageController extends BaseClassroomManageController
 
         $conditions = array(
             'classroomId' => $id,
-            'role' => 'student'
+            'role'        => 'student'
         );
 
         $conditions = array_merge($conditions, $fields);
@@ -38,20 +37,21 @@ class ClassroomManageController extends BaseClassroomManageController
         );
 
         $studentUserIds = ArrayToolkit::column($students, 'userId');
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users          = $this->getUserService()->findUsersByIds($studentUserIds);
 
         $progresses = array();
+
         foreach ($students as $student) {
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student);
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:student.html.twig", array(
-            'classroom' => $classroom,
-            'students' => $students,
-            'users' => $users,
+            'classroom'  => $classroom,
+            'students'   => $students,
+            'users'      => $users,
             'progresses' => $progresses,
-            'paginator' => $paginator,
-            'role' => $role,
+            'paginator'  => $paginator,
+            'role'       => $role
         ));
     }
 
@@ -64,7 +64,7 @@ class ClassroomManageController extends BaseClassroomManageController
 
         $conditions = array(
             'classroomId' => $id,
-            'role' => 'auditor'
+            'role'        => 'auditor'
         );
 
         $conditions = array_merge($conditions, $fields);
@@ -83,27 +83,27 @@ class ClassroomManageController extends BaseClassroomManageController
         );
 
         $studentUserIds = ArrayToolkit::column($students, 'userId');
-        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users          = $this->getUserService()->findUsersByIds($studentUserIds);
 
         return $this->render("ClassroomBundle:ClassroomManage:auditor.html.twig", array(
             'classroom' => $classroom,
-            'students' => $students,
-            'users' => $users,
+            'students'  => $students,
+            'users'     => $users,
             'paginator' => $paginator,
-            'role' => $role,
+            'role'      => $role
         ));
     }
 
     public function exportCsvAction(Request $request, $id, $role)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $gender = array('female' => '女','male' => '男','secret' => '秘密');
+        $gender        = array('female' => '女', 'male' => '男', 'secret' => '秘密');
         $organizations = $this->getOrganizationService()->findAllOrganizations();
-        $classroom = $this->getClassroomService()->getClassroom($id);
+        $classroom     = $this->getClassroomService()->getClassroom($id);
 
-        $userinfoFields = array('truename','job','mobile','qq','company','gender','idcard','weixin');
+        $userinfoFields = array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin');
 
-        if ($role == 'student') {
+        if ('student' == $role) {
             $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 1000);
         } else {
             $classroomMembers = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['id'], 'role' => 'auditor'), array('createdTime', 'DESC'), 0, 1000);
@@ -112,6 +112,7 @@ class ClassroomManageController extends BaseClassroomManageController
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
         $fields['weibo'] = "微博";
+
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
         }
@@ -129,6 +130,7 @@ class ClassroomManageController extends BaseClassroomManageController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         $progresses = array();
+
         foreach ($classroomMembers as $student) {
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student);
         }
@@ -138,6 +140,7 @@ class ClassroomManageController extends BaseClassroomManageController
         foreach ($fields as $key => $value) {
             $str .= ",".$value;
         }
+
         $str .= "\r\n";
 
         $students = array();
@@ -146,11 +149,13 @@ class ClassroomManageController extends BaseClassroomManageController
             $member = "";
             $member .= $users[$classroomMember['userId']]['nickname'].",";
             $member .= $users[$classroomMember['userId']]['staffNo'] ? $users[$classroomMember['userId']]['staffNo']."," : "-,";
-            if(!empty($organizations[$users[$classroomMember['userId']]['organizationId']])){
+
+            if (!empty($organizations[$users[$classroomMember['userId']]['organizationId']])) {
                 $member .= $organizations[$users[$classroomMember['userId']]['organizationId']]['name'].",";
-            }else{
+            } else {
                 $member .= "-,";
             }
+
             $member .= $users[$classroomMember['userId']]['email'].",";
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).",";
             $member .= $progresses[$classroomMember['userId']]['percent'].",";
@@ -160,9 +165,11 @@ class ClassroomManageController extends BaseClassroomManageController
             $member .= $profiles[$classroomMember['userId']]['weixin'] ? $profiles[$classroomMember['userId']]['weixin']."," : "-".",";
             $member .= $profiles[$classroomMember['userId']]['mobile'] ? $profiles[$classroomMember['userId']]['mobile']."," : "-".",";
             $member .= $users[$classroomMember['userId']]['title'] ? $users[$classroomMember['userId']]['title']."," : "-".",";
+
             foreach ($fields as $key => $value) {
                 $member .= $profiles[$classroomMember['userId']][$key] ? $profiles[$classroomMember['userId']][$key]."," : "-".",";
             }
+
             $students[] = $member;
         }
 
@@ -184,20 +191,22 @@ class ClassroomManageController extends BaseClassroomManageController
 
     private function calculateUserLearnProgress($classroom, $member)
     {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courses            = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+        $courseIds          = ArrayToolkit::column($courses, 'id');
         $findLearnedCourses = array();
+
         foreach ($courseIds as $key => $value) {
             $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $member['userId']);
+
             if (!empty($learnedCourses)) {
                 $findLearnedCourses[] = $learnedCourses;
             }
         }
 
         $learnedCoursesCount = count($findLearnedCourses);
-        $coursesCount = count($courses);
+        $coursesCount        = count($courses);
 
-        if ($coursesCount == 0) {
+        if (0 == $coursesCount) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
@@ -205,8 +214,8 @@ class ClassroomManageController extends BaseClassroomManageController
 
         return array(
             'percent' => $percent,
-            'number' => $learnedCoursesCount,
-            'total' => $coursesCount,
+            'number'  => $learnedCoursesCount,
+            'total'   => $coursesCount
         );
     }
 
@@ -214,5 +223,4 @@ class ClassroomManageController extends BaseClassroomManageController
     {
         return $this->getServiceKernel()->createService('Custom:Organization.OrganizationService');
     }
-
 }

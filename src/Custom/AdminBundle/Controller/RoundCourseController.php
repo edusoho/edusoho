@@ -1,7 +1,6 @@
 <?php
 namespace Custom\AdminBundle\Controller;
 
-
 use Symfony\Component\HttpFoundation\Request;
 
 class RoundCourseController extends BaseController
@@ -11,22 +10,24 @@ class RoundCourseController extends BaseController
         $this->checkId($id);
         $course = $this->getCourseService()->getCourse($id);
         return $this->render('TopxiaAdminBundle:Course:next-round.html.twig', array(
-            'course' => $course,
+            'course' => $course
         ));
     }
 
     public function roundingAction(Request $request, $id)
     {
         $this->checkId($id);
-        $course = $this->getCourseService()->getCourse($id);
+        $course     = $this->getCourseService()->getCourse($id);
         $conditions = $request->request->all();
-        $startTime = strtotime($conditions['startTime']);
-        $endTime = strtotime($conditions['endTime']);
-        if($startTime < $course['endTime']){
+        $startTime  = strtotime($conditions['startTime']);
+        $endTime    = strtotime($conditions['endTime']);
+
+        if ($startTime < $course['endTime']) {
             return $this->createMessageResponse('info', '周期课程开课时间不得早于上一期课程的结课时间', '周期课程', 3, $this->generateUrl('admin_course'));
         }
+
         $course['startTime'] = $startTime;
-        $course['endTime'] = $endTime;
+        $course['endTime']   = $endTime;
 
         $this->getNextRoundService()->rounding($course);
 

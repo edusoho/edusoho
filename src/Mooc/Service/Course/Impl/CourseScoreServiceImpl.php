@@ -2,18 +2,19 @@
 namespace Mooc\Service\Course\Impl;
 
 use Mooc\Service\Course\CourseScoreService;
-use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
 
 class CourseScoreServiceImpl extends BaseService implements CourseScoreService
 {
-
     public function getUserScoreByUserIdAndCourseId($userId, $courseId)
     {
         $user = $this->getUserService()->getUser($userId);
+
         if (empty($user)) {
             throw $this->createNotFoundException("用户不存在!");
         }
+
         return $this->getCourseScoreDao()->getUserScoreByUserIdAndCourseId($user['id'], $courseId);
     }
 
@@ -30,37 +31,42 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
     public function findAllMemberScore($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
         if (empty($course)) {
             throw $this->createServiceException('课程不存在,无法获取成员成绩！');
         }
+
         return $this->getCourseScoreDao()->findAllMemberScore($courseId);
     }
 
     public function findUserScoreByIdsAndCourseId($userIds, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
         if (empty($course)) {
             throw $this->createServiceException('课程不存在,无法获取成员成绩！');
         }
+
         return $this->getCourseScoreDao()->findUserScoreByIdsAndCourseId($userIds, $courseId);
     }
 
     public function getCoursePassStudentCount($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
         if (empty($course)) {
             throw $this->createServiceException('课程不存在！');
         }
+
         $courseScoreSetting = $this->getScoreSettingByCourseId($courseId);
 
         $conditions = array(
-            'courseId' => $courseId,
+            'courseId'      => $courseId,
             'standardScore' => $courseScoreSetting['standardScore']
         );
 
         return $this->getCourseScoreDao()->searchMemberScoreCount($conditions);
     }
-
 
     public function searchMemberScoreCount($conditions)
     {
@@ -79,10 +85,10 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
 
     public function updateUserCourseScore($id, $fields)
     {
-        $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($id);
+        $userCourseScore         = $this->getCourseScoreDao()->getUserCourseScore($id);
         $fields['courseScoreId'] = $userCourseScore['id'];
-        $fields['courseId'] = $userCourseScore['courseId'];
-        $fields = $this->filterFields($fields);
+        $fields['courseId']      = $userCourseScore['courseId'];
+        $fields                  = $this->filterFields($fields);
 
         return $this->getCourseScoreDao()->updateUserCourseScore($id, $fields);
     }
@@ -96,16 +102,18 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
         if (!isset($scoreSetting['courseId'])) {
             throw $this->createServiceException('课程不存在，无法设置课程评分！');
         }
+
         $course = $this->getcourseService()->getCourse($scoreSetting['courseId']);
+
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，无法设置课程评分！');
         }
+
         $scoreSetting['createdTime'] = time();
-        $scoreSetting = $this->refilldatas($scoreSetting);
-        $scoreSetting = $this->getCourseScoreSettingDao()->addScoreSetting($scoreSetting);
+        $scoreSetting                = $this->refilldatas($scoreSetting);
+        $scoreSetting                = $this->getCourseScoreSettingDao()->addScoreSetting($scoreSetting);
         $this->dispatchEvent("scoreSetting.add", $scoreSetting);
         return $scoreSetting;
-
     }
 
     private function refilldatas($scoreSetting)
@@ -113,12 +121,15 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
         if (isset($scoreSetting['expectPublishTime']) && !empty($scoreSetting['expectPublishTime'])) {
             $scoreSetting['expectPublishTime'] = strtotime($scoreSetting['expectPublishTime']);
         }
+
         if (isset($scoreSetting['credit']) && empty($scoreSetting['credit'])) {
             unset($scoreSetting['credit']);
         }
+
         if (isset($scoreSetting['otherWeight']) && empty($scoreSetting['otherWeight'])) {
             unset($scoreSetting['otherWeight']);
         }
+
         return $scoreSetting;
     }
 
@@ -131,7 +142,8 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
         if (empty($course) || empty($scoreSetting)) {
             throw $this->createServiceException('课程不存在，无法更新设置课程评分！');
         }
-        $fields = $this->refilldatas($fields);
+
+        $fields       = $this->refilldatas($fields);
         $scoreSetting = $this->getCourseScoreSettingDao()->updateScoreSetting($courseId, $fields);
         $this->dispatchEvent("scoreSetting.update", $scoreSetting);
 
@@ -146,14 +158,19 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
     private function checkCourseAndUser($courseId, $userId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
         if (empty($course)) {
             throw $this->createNotFoundException("课程不存在,不能添加学员成绩!");
         }
+
         $user = $this->getUserService()->getUser($userId);
+
         if (empty($user)) {
             throw $this->createNotFoundException("用户不存在!");
         }
+
         $member = $this->getCourseService()->getCourseMember($courseId, $userId);
+
         if (empty($member)) {
             throw $this->createNotFoundException("用户不是课程学员!");
         }
@@ -162,18 +179,20 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
     private function filterFields($fields)
     {
         $userCourseScore = array();
-        if(!empty($fields['courseScoreId'])){
+
+        if (!empty($fields['courseScoreId'])) {
             $userCourseScore = $this->getCourseScoreDao()->getUserCourseScore($fields['courseScoreId']);
         }
+
         $courseScoreSetting = $this->getScoreSettingByCourseId($fields['courseId']);
-        $fields = ArrayToolkit::filter($fields, array(
-            'courseId' => 0,
-            'userId' => 0,
-            'totalScore' => 0.0,
-            'examScore' => 0.0,
-            'homeworkScore' => 0.0,
-            'otherScore' => 0.0,
-            'importOtherScore' => 0.0,
+        $fields             = ArrayToolkit::filter($fields, array(
+            'courseId'         => 0,
+            'userId'           => 0,
+            'totalScore'       => 0.0,
+            'examScore'        => 0.0,
+            'homeworkScore'    => 0.0,
+            'otherScore'       => 0.0,
+            'importOtherScore' => 0.0
         ));
 
         $fields['totalScore'] = 0.0;
@@ -230,5 +249,4 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
     {
         return $this->createService('Course.CourseService');
     }
-
 }
