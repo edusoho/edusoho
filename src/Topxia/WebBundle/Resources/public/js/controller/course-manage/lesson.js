@@ -61,6 +61,19 @@ define(function(require, exports, module) {
             }, 'json');
         });
 
+        $list.on('click', '.delete-test-paper-btn', function(e) {
+            if (!confirm('您真的要删除该试卷吗？')) {
+                return ;
+            }
+            var $btn = $(e.currentTarget);
+            $.post($(this).data('url'), function(response) {
+                $btn.parents('.item-chapter').remove();
+                sortList($list);
+                Notify.success('试卷已删除！');
+            }, 'json');
+        });
+
+
         $list.on('click', '.delete-chapter-btn', function(e) {
             var chapter_name = $(this).data('chapter') ;
             var part_name = $(this).data('part') ; 
