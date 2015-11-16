@@ -339,20 +339,8 @@ define(function(require, exports, module) {
                             $replayGuid += "<br>";
                         }
 
-
-                        $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
-
-                        if (days == 0) {
-                            $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (hours == 0 && days != 0) {
-                            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
-
-                        if (hours == 0 && days == 0) {
-                            $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-                        };
+                        $countDown =  that._getCountDown(days,hours,minutes,seconds);
+   
 
                         if (0< startLeftSeconds && startLeftSeconds < 7200) {
                              $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
@@ -393,7 +381,6 @@ define(function(require, exports, module) {
                     }
 
                     generateHtml();
-
                     iID = setInterval(generateHtml, 1000);
 
                     $("#lesson-live-content").show();
@@ -402,32 +389,96 @@ define(function(require, exports, module) {
                     $("#lesson-live-content").perfectScrollbar('update');
 
                 } else if (lesson.type == 'testpaper') {
-                    var url = '../../test/' + lesson.mediaId + '/do?targetType=lesson&targetId=' + id;
+                    var url = '../../lesson/' + id + '/test/' + lesson.mediaId + '/do';
                     var html = '<span class="text-info">请点击「开始考试」按钮，在新开窗口中完成考试。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a></span>';
                     var html = '<span class="text-info">正在载入，请稍等...</span>';
                     $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
                     $("#lesson-testpaper-content").show();
 
-                    $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
-                        if (result.error) {
-                            html = '<span class="text-danger">' + result.error + '</span>';
-                        } else {
-                            if (result.status == 'nodo') {
-                                html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
-                            } else if (result.status == 'finished') {
-                                var redoUrl = '../../test/' + lesson.mediaId + '/redo?targetType=lesson&targetId=' + id;
-                                var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
-                                html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
-                            } else if (result.status == 'doing' || result.status == 'paused') {
-                                html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
-                            } else if (result.status == 'reviewing') {
-                                html = '试卷正在批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看试卷</a>'
-                            }
+                    //类型是实时考试
+                    if(lesson.testMode == 'realTime'){
+                        var testStartTimeFormat = lesson.testStartTimeFormat;
+                        var testEndTimeFormat = lesson.testEndTimeFormat;
+                        var testStartTime = lesson.testStartTime;
+                        var testEndTime = lesson.testEndTime;
+                        var limitedTime = lesson.limitedTime;
+
+                        var courseId = lesson.courseId;
+                        var lessonId = lesson.id;
+                        var $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，将于<strong>"+testEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
+                        if(iID) {
+                            clearInterval(iID);
                         }
 
-                        $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+                        var intervalSecond = 0;
 
-                    }, 'json');
+                        function generateTestHtml() {
+                            var nowDate = lesson.nowDate + intervalSecond;
+                            var testStartLeftSeconds = parseInt(testStartTime - nowDate);
+                            var testEndLeftSeconds = parseInt(testEndTime - nowDate);
+                            var testStartRightSeconds = parseInt(nowDate - testStartTime);
+                            var days = Math.floor(testStartLeftSeconds / (60 * 60 * 24));
+                            var modulo = testStartLeftSeconds % (60 * 60 * 24);
+                            var hours = Math.floor(modulo / (60 * 60));
+                            modulo = modulo % (60 * 60);
+                            var minutes = Math.floor(modulo / 60);
+                            var seconds = modulo % 60;
+                            var limitedHouse = Math.floor(testEndLeftSeconds / (60 * 60) );
+                            var limitedMinutes  = Math.floor(testEndLeftSeconds % (60 * 60) / 60 );
+                            var limitedSeconds = (testEndLeftSeconds % 60)
+
+                            if (0 < testStartLeftSeconds ) {
+                                $testNotice = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>欢迎参加考试，本考试离开考还有<span class="gray-darker plm">'+days+'天</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+days+'</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+hours+'</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+minutes+'</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+seconds+'</span>秒</p>   <p class="text-center color-gray">考试开始后，请点击<a class="mlm mrm btn btn-sm btn-default" disabled>开始考试</a>进入</p>';
+                            };
+
+                            if (0 < testStartRightSeconds) {
+                                $testNotice = '<p class="text-center mtl mbl"><i class="color-warning mrm es-icon es-icon-info" ></i>考试倒计时</p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">0</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedHouse+'</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedMinutes+'</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedSeconds+'</span>秒</p>   <p class="text-center color-gray">请点击<a href="' + url + '" class="mlm mrm btn btn-sm btn-default" style="background:#ffcb4b">开始考试</a>进入</p>';
+                            };
+
+                            if (testEndLeftSeconds <= 0) {
+                                clearInterval(iID);
+                                $testNotice = '<p class="text-center mtl mbl color-gray"><i class="color-gray mrm es-icon es-icon-info"></i>考试已经结束</p><p class="text-center color-gray mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#e6e6e6;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">00</span>秒</p>';
+
+                            };
+
+                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html($testNotice);
+
+                            intervalSecond++;
+                        }
+
+                        generateTestHtml();
+
+                        iID = setInterval(generateTestHtml, 1000);
+
+                        $("#lesson-testpaper-content").show();
+                        $("#lesson-testpaper-content").perfectScrollbar({wheelSpeed:50});
+                        $("#lesson-testpaper-content").scrollTop(0);
+                        $("#lesson-testpaper-content").perfectScrollbar('update');
+
+                    }else{
+                        $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
+                            if (result.error) {
+                                html = '<span class="text-danger">' + result.error + '</span>';
+                            } else {
+                                if (result.status == 'nodo') {
+                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';                               
+                                } else if (result.status == 'finished') {
+                                    var redoUrl = '../../lesson/' + id + 'test/' + lesson.mediaId + '/redo';
+                                    var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
+                                    html = '试卷已批阅。' + '<a href="' + redoUrl + '" class="btn btn-default btn-sm" target="_blank">再做一次</a>' + '<a href="' + resultUrl + '" class="btn btn-link btn-sm" target="_blank">查看结果</a>';
+                                } else if (result.status == 'doing' || result.status == 'paused') {
+                                    html = '试卷未完全做完。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">继续考试</a>';
+                                } else if (result.status == 'reviewing') {
+                                    html = '试卷正在批阅。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">查看试卷</a>'
+                                }
+                            }
+
+                            $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+
+                        }, 'json');
+
+                    }
+
 
                 } else if (lesson.type == 'ppt') {
                     $.get(that.get('courseUri') + '/lesson/' + id + '/ppt', function(response) {
@@ -599,6 +650,24 @@ define(function(require, exports, module) {
            this.chapterAnimate = new chapterAnimate({
             'element': this.element
            });
+        },
+
+        _getCountDown: function(days,hours,minutes,seconds){
+            $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
+
+            if (days == 0) {
+                $countDown = "还剩: <strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+            };
+
+            if (hours == 0 && days != 0) {
+                $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+            };
+
+            if (hours == 0 && days == 0) {
+                $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
+            };  
+
+            return $countDown;          
         }
 
     });
@@ -649,6 +718,7 @@ define(function(require, exports, module) {
 
             var playing = this.dashboard.get("player").playing;
             var posted = false;
+
             if(mediaPlayingCounter >= this.interval || (mediaPlayingCounter>0 && !playing)){
                 var url="../../../../course/"+this.lessonId+'/watch/time/'+mediaPlayingCounter;
                 var self = this;

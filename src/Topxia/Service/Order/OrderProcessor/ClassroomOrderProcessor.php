@@ -19,6 +19,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
             return array('error' => '已经是班级的学员了!');
         }
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        if(!$classroom['buyable']){
+            return array('error' => '该班级不可购买，如有需要，请联系客服');
+        }
+        if( $classroom['status'] != 'published') {
+            return array('error' =>'不能加入未发布班级!');
+        }
 
         return array();
     }

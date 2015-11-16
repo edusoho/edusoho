@@ -197,6 +197,11 @@ editor_upload:
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
     methods: [POST]
 
+editor_download:
+    pattern:  /editor/download
+    defaults: { _controller: TopxiaWebBundle:Editor:download }
+    methods: [POST]
+
 live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
@@ -464,10 +469,6 @@ course_review_create:
 course_review_list:
     pattern:  /course/{id}/reviews/
     defaults: { _controller: TopxiaWebBundle:CourseReview:list }
-
-course_teacher_info:
-    pattern:  /course/{courseId}/teacher/{id}
-    defaults: { _controller: TopxiaWebBundle:Course:teacherInfo }
 
 course_members:
    pattern: /course/{id}/members
@@ -795,13 +796,17 @@ course_manage_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
-course_manage_do_test:
-    pattern: /test/{testId}/do
-    defaults: { _controller: TopxiaWebBundle:Testpaper:doTestpaper }
+course_manage_real_time_testpaper_check:
+    pattern:  /testpaper/real-time/check
+    defaults: { _controller: TopxiaWebBundle:Testpaper:realTimeCheck}
 
-course_manage_redo_test:
-    pattern: /test/{testId}/redo
-    defaults: { _controller: TopxiaWebBundle:Testpaper:reDoTestpaper }
+course_lesson_do_test:
+    pattern: /lesson/{lessonId}/test/{testId}/do
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:doTestpaper }
+
+course_lesson_redo_test:
+    pattern: /lesson/{lessonId}/test/{testId}/redo
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:reDoTestpaper }
 
 course_manage_show_test:
     pattern: /test/{id}/show
