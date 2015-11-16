@@ -31,7 +31,9 @@
       {% set userNotReady = setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
       {% set courseNotPublishedOrAlreadyFull = course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
       {% if course.buyable|default(true) == false %}
-       该课程为限制课程，请联系客服
+       <div class="alert alert-warning mbs" role="alert">
+          该课程为限制课程，请联系老师
+        </div>
       {% else %}  
       {% if 'periodic'==course.type %}
         {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
