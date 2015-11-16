@@ -123,7 +123,5 @@
     {% endif %}
   </div>
 </div>
-  {% if setting('login_bind.' ~ 'weixinmob' ~ '_set_fill_account') %}
     {% do load_script('auth/isWeiXin') %}
-  {% endif %}
 {% endblock %}
