@@ -30,6 +30,24 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 
+    public function searchChapterCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchChapters($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+        ->select('*')
+        ->orderBy($orderBy[0], $orderBy[1])
+        ->setFirstResult($start)
+        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array(); 
+    }
+
     public function getChapterCountByCourseIdAndType($courseId, $type)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ?";
@@ -77,7 +95,7 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
         return $this->getConnection()->executeUpdate($sql, array($courseId));
     }
 
-    public function findChaptersByChapterIdAndLockedCourseIds($pId, $courseIds)
+    public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
        if(empty($courseIds)){
             return array();
@@ -85,11 +103,19 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
        
         $marks = str_repeat('?,', count($courseIds) - 1) . '?';
        
-        $parmaters = array_merge(array($pId), $courseIds);
+        $parmaters = array_merge(array($copyId), $courseIds);
 
-        $sql ="SELECT * FROM {$this->table} WHERE pId= ? AND courseId IN ({$marks})";
+        $sql ="SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
         
         return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_chapter')
+            ->andWhere('courseId = :courseId');
+        return $builder;
     }
 
 }

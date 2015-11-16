@@ -27,7 +27,6 @@ interface TokenService
      * @return boolean 该Token值是否OK
      */
     public function verifyToken($type, $value);
-
     /**
      * 作废一个Token
      * 

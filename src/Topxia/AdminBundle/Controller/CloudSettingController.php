@@ -87,6 +87,9 @@ class CloudSettingController extends BaseController
     
     public function keyUpdateAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
+        }
         $settings = $this->getSettingService()->get('storage', array());
 
         if ($request->getMethod() == 'POST') {
@@ -145,10 +148,9 @@ class CloudSettingController extends BaseController
 
     public function keyCopyrightAction(Request $request)
     {
-
         $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
-
+        
         if (empty($info['copyright'])) {
             throw $this->createAccessDeniedException('您无权操作!');
         }
@@ -158,6 +160,7 @@ class CloudSettingController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned' => 1,
             'name' => $request->request->get('name', ''),
+            'thirdCopyright' => isset($info['thirdCopyright']) and $info['thirdCopyright'] == '1' ? 1:0
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
@@ -197,8 +200,8 @@ class CloudSettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
-            'storageSetting'=>$storageSetting,
-            'headLeader'=>$headLeader
+            'storageSetting' => $storageSetting,
+            'headLeader' => $headLeader
         ));
     }
 
@@ -264,7 +267,6 @@ class CloudSettingController extends BaseController
         return new Response(json_encode($response));
     }
 
-
     public function videoWatermarkRemoveAction(Request $request)
     {
         return $this->createJsonResponse(true);
@@ -300,5 +302,10 @@ class CloudSettingController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

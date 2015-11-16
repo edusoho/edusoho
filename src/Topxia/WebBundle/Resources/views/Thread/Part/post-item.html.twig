@@ -27,7 +27,7 @@
         <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="text-muted">还有{{ post.subposts - 5 }}条回复，</span><a href="javascript:;" class="js-post-more">点击查看</a></span>
       </div>
 
-      {% if service.canAccess('post.create', post) %}
+      {% if service.canAccess('post.create', post) and app.user %}
         {% if not postReplyUrl is defined %}
           {% set postReplyUrl =  path('thread_post_reply', {threadId:post.threadId, postId:post.id}) %}
         {% endif %}
@@ -42,6 +42,10 @@
             <button type="submit" data-loading-text="正在发表" class="btn btn-primary btn-sm pull-right">发表</button>
           </div>
         </form>
+      {% else %}
+        <div class="empty">
+          你还没有登录，请先<a href="{{ path('login') }}">登录</a>或<a href="{{ path('register') }}">注册</a>！
+        </div>
       {% endif %}
 
     </div>

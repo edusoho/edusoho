@@ -12,9 +12,8 @@ class HLSController extends BaseController
         $line          = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
         $returnJson    = $request->query->get('returnJson', false);
+        $levelParam    = $request->query->get('level', "");
         $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
-
-        $levelParam = $request->query->get('level', "");
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -33,7 +32,6 @@ class HLSController extends BaseController
         }
 
         $streams = array();
-        $mode    = is_array($token['data']) ? $token['data']['mode'] : '';
 
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
@@ -43,10 +41,9 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data'     => array(
-                        'id'   => $file['id'].$level,
-                        'mode' => $mode
+                        'id' => $file['id'].$level
                     ),
-                    'times'    => 1,
+                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600
                 );
 
@@ -138,28 +135,20 @@ class HLSController extends BaseController
         $params        = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        $mode      = is_array($token['data']) ? $token['data']['mode'] : '';
         $timelimit = $this->setting('magic.lesson_watch_time_limit');
 
-        if ($mode == 'preview' && !empty($timelimit)) {
+        if (!empty($timelimit)) {
             $params['limitSecond'] = $timelimit;
         }
 
         $tokenFields = array(
             'data'     => array(
-                'id'   => $file['id'],
-                'mode' => $mode
+                'id'            => $file['id'],
+                'keyencryption' => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1
             ),
-            'times'    => 1,
+            'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
             'duration' => 3600
         );
-
-        $manclient = $request->headers->get('manclient', '');
-        $userAgent = $request->headers->get('User-Agent', '');
-
-        if (strpos($userAgent, 'Android') === false && strpos($userAgent, 'Mac OS') === false) {
-            $tokenFields['data']['keyencryption'] = 1;
-        }
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
@@ -255,6 +244,19 @@ class HLSController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Mac", "Android");
+
+        foreach ($whiteList as $value) {
+            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getVideoBeginning($level, $userId = 0)

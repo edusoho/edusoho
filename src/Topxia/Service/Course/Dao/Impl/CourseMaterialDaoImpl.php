@@ -44,7 +44,7 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getMaterial($this->getConnection()->lastInsertId());
     }
 
-    public function findMaterialsByPIdAndLockedCourseIds($pId, $courseIds)
+    public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         if(empty($courseIds)){
             return array();
@@ -52,9 +52,9 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
        
         $marks = str_repeat('?,', count($courseIds) - 1) . '?';
        
-        $parmaters = array_merge(array($pId), $courseIds);
+        $parmaters = array_merge(array($copyId), $courseIds);
 
-        $sql ="SELECT * FROM {$this->table} WHERE pId= ? AND courseId IN ({$marks})";
+        $sql ="SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
         
         return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
     }

@@ -24,12 +24,15 @@ textarea {
 }
 
 .control-label span.required {
-  color: #f60;
+  color: @brand-primary;
 }
 
 .form-horizontal {
   .form-group {
     margin-bottom: 30px;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 15px;
+    }
   }
   .form-control {
     @media (max-width: @screen-xs-max) {

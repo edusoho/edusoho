@@ -118,19 +118,18 @@ class SiteSettingController extends BaseController
 
     public function consultUploadAction(Request $request)
     {
-        $file = $request->files->get('consult');
-        if (!FileToolkit::isImageFile($file)) {
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+        if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'webchat.' . $file->getClientOriginalExtension();
-
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $consult = $this->getSettingService()->get('consult', array());
 
-        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
 
         $this->getSettingService()->set('consult', $consult);
@@ -142,7 +141,7 @@ class SiteSettingController extends BaseController
             'url' => $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
         );
 
-        return new Response(json_encode($response));
+        return $this->createJsonResponse($response);
 
     }
 
@@ -215,6 +214,11 @@ class SiteSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
 }

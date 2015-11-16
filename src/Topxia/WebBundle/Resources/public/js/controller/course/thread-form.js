@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
         // group: 'default'
         var editor = CKEDITOR.replace('thread_content', {
-            toolbar: 'Simple',
+            toolbar: 'Thread',
             filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
         });
 

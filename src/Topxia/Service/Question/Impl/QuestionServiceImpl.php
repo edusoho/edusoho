@@ -14,12 +14,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function getQuestion($id)
     {
-        return $this->getQuestionDao()->getQuestion($id);
+        $question = $this->getQuestionDao()->getQuestion($id);
+        return QuestionSerialize::unserialize($question);
     }
 
     public function findQuestionsByIds(array $ids)
     {
-        return ArrayToolkit::index($this->getQuestionDao()->findQuestionsByIds($ids), 'id');
+        $questions = ArrayToolkit::index($this->getQuestionDao()->findQuestionsByIds($ids), 'id');
+        return QuestionSerialize::unserializes($questions);
     }
 
     public function findQuestionsByParentId($id)
@@ -27,9 +29,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
-    public function findQuestionsByPIdAndLockedTarget($pId, $lockedTarget)
+    public function findQuestionsByCopyIdAndLockedTarget($copyId, $lockedTarget)
     {
-        return $this->getQuestionDao()->findQuestionsByPIdAndLockedTarget($pId,$lockedTarget);
+        return $this->getQuestionDao()->findQuestionsByCopyIdAndLockedTarget($copyId,$lockedTarget);
     }
 
     public function findQuestionsbyTypes($types, $start, $limit)
@@ -69,7 +71,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     
     public function searchQuestions($conditions, $orderBy, $start, $limit)
     {
-        return $this->getQuestionDao()->searchQuestions($conditions, $orderBy, $start, $limit);
+        $questions = $this->getQuestionDao()->searchQuestions($conditions, $orderBy, $start, $limit);
+        return QuestionSerialize::unserializes($questions);
     }
 
     public function searchQuestionsCount($conditions)
@@ -82,8 +85,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         if (!in_array($fields['type'], $this->supportedQuestionTypes)) {
             throw $this->createServiceException('question type error！');
         }
-        $fields = QuestionTypeFactory::create($fields['type'])->filter($fields, 'create');
+        $argument = $fields;
 
+        $fields = QuestionTypeFactory::create($fields['type'])->filter($fields, 'create');
+        
         if ($fields['parentId'] > 0) {
             $parentQuestion = $this->getQuestion($fields['parentId']);
             if (empty($parentQuestion)) {
@@ -92,7 +97,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
                 $fields['target'] = $parentQuestion['target'];
             }
         }
-
         $question = $this->getQuestionDao()->addQuestion($fields);
 
         if ($question['parentId'] >0) {
@@ -100,20 +104,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->getQuestionDao()->updateQuestion($question['parentId'], array('subCount' => $subCount));
         }
 
-        $this->dispatchEvent("question.create",$question);
+        $this->dispatchEvent("question.create",array('argument'=>$argument,'question'=>$question));
 
         return $question;
-    }
-
-    public function addQuestion($fields)
-    {
-        return $this->getQuestionDao()->addQuestion($fields);
     }
 
     public function updateQuestion($id, $fields)
     {
         $question = $this->getQuestion($id);
-
+        $argument = array('question'=>$question,'fields'=>$fields);
         if (empty($question)) {
             throw $this->createServiceException("Question #{$id} is not exist.");
         }
@@ -123,18 +122,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             unset($fields['target']);
         }
 
-        $oldTarget = $question['target'];
-
         $question = $this->getQuestionDao()->updateQuestion($id, $fields);
 
-        $this->dispatchEvent('question.update', array('question'=>$question,'oldTarget' => $oldTarget));
+        $this->dispatchEvent('question.update', array('question'=>$question,'argument' => $argument));
 
         return $question;
-    }
-
-    public function editQuestion($id,$fields)
-    {
-        return $this->getQuestionDao()->updateQuestion($id, $fields);
     }
 
     public function statQuestionTimes ($answers)
@@ -334,4 +326,29 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->createDao('Question.QuestionFavoriteDao');
     }
 
+}
+
+class QuestionSerialize
+{
+    public static function serialize(array &$question)
+    {
+        return $question;
+    }
+
+
+    public static function unserialize(array $question = null)
+    {
+        $question['includeImg'] = false;
+        if (preg_match('/<img (.*?)>/', $question['stem'])) {
+            $question['includeImg'] = true;
+        }
+        return $question;
+    }
+
+    public static function unserializes(array $questions)
+    {
+        return array_map(function($question) {
+            return QuestionSerialize::unserialize($question);
+        }, $questions);
+    }
 }

@@ -94,7 +94,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-             new \Twig_SimpleFunction('getUserNickNameById', array($this, 'getUserNickNameById')),
              new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
              new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
              new \Twig_SimpleFunction('sub_str', array($this, 'subStr')),
@@ -105,8 +104,22 @@ class WebExtension extends \Twig_Extension
              new \Twig_SimpleFunction('crontab_next_executed_time', array($this, 'getNextExecutedTime')),
              new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
              new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
+             new \Twig_SimpleFunction('is_trial',array($this,'isTrial')),
+             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
+             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
         );
     }
+
+    public function isWithoutNetwork()
+    {
+        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/network.lock');
+    }
+
+    public function getUserVipLevel($userId)
+    {
+        return ServiceKernel::instance()->createService('Vip:Vip.VipService')->getMemberByUserId($userId);
+    }
+
     public function getParametersFromUrl($url)
     {
         $BaseUrl = parse_url($url);
@@ -123,8 +136,7 @@ class WebExtension extends \Twig_Extension
             $parameters = array();
             $parameters[0]= $parameter;
             }
-        }
-        else{
+        } else{
             return null;
         }
         return  $parameters;
@@ -233,12 +245,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $time;
-    }
-
-    public function getUserNickNameById($userId)
-    {
-        $user = $this->getUserById($userId);
-        return $user['nickname'];
     }
 
     private function getUserById($userId)
@@ -609,6 +615,9 @@ class WebExtension extends \Twig_Extension
             }
             return $url;
         }
+        if (strpos($uri, "http://") !== false) {
+            return $uri;
+        }
         $uri = $this->parseFileUri($uri);
         if ($uri['access'] == 'public') {
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /') . '/' . $uri['path'];
@@ -657,6 +666,9 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false)
     {
+        if (strpos($uri, "http://") !== false) {
+            return $uri;
+        }
         $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
         
@@ -1142,6 +1154,13 @@ class WebExtension extends \Twig_Extension
     public function getName ()
     {
         return 'topxia_web_twig';
+    }
+
+    public function isTrial() {
+        if (file_exists(__DIR__ . '/../../../../../app/data/trial.lock')) {
+            return true;
+        }
+        return false;
     }
 
     public function blur_phone_number($phoneNum)

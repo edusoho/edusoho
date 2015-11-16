@@ -28,6 +28,16 @@
   }
 }
 
+// 分割线
+.divider-line {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+// 限制最小高度
+.h400 {
+  min-height: 400px;
+}
+
 // table-cell引起的兼容问题
 .media-body .editor-text img {
   width: 100% \9;
@@ -58,6 +68,14 @@
 }
 .link-light {
   color: @gray-dark;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+.link-lighter {
+  color: @gray;
   .es-transition;
   &:hover {
     color: @brand-primary;
