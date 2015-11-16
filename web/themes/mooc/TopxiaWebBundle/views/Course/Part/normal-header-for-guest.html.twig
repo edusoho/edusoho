@@ -30,6 +30,9 @@
       {% set needToPay=((setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' and course.coinPrice > 0) or (( not setting('coin.coin_enabled') or setting('coin.price_type') != 'Coin') and course.price > 0)) %}
       {% set userNotReady = setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
       {% set courseNotPublishedOrAlreadyFull = course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      {% if course.buyable|default(true) == false %}
+       该课程为限制课程，请联系客服
+      {% else %}  
       {% if 'periodic'==course.type %}
         {% set courseFinished=("now"|date('U') > course.endTime ? true : false)%}
         {% set courseStarted=("now"|date('U') >= course.startTime) %}
@@ -70,6 +73,7 @@
           {% endif %}
         </a>
       {% endif %}
+    {% endif %}
       </a>
       {#多重情况
         <a class="btn btn-study">报名参加</a> 

@@ -4,7 +4,7 @@
   {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
 {% endif %}
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
-  {% if item.status == 'published' %}
+    {% if item.status == 'published'  and( item.free or  course.buyable|default(true) == true ) %}
     {% if member %}
       <a href="{{ lessonUrl }}">
     {% elseif ('periodic'== course.type and "now"|date('U') < course.startTime) %}
