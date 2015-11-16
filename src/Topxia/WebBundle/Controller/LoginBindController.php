@@ -363,7 +363,7 @@ class LoginBindController extends BaseController
                 return '微博创建新账号';
                 break;
             case 'qq':
-                return 'QQ绑创建账号';
+                return 'QQ创建新账号';
                 break;
             case 'renren':
                 return '人人创建新账号';
