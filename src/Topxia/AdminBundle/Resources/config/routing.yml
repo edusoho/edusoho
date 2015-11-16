@@ -1337,3 +1337,7 @@ admin_batch_notification_send:
     pattern: /batch_notification/send/{id}
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
     methods:  [POST]
+
+admin_feedback:
+    pattern: /feedback
+    defaults: { _controller: TopxiaAdminBundle:Default:feedback }
