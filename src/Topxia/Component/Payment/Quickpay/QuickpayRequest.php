@@ -34,7 +34,6 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        header("Content-type: text/html; charset=utf-8");
         $converted                  = array();
         $converted['version']       = 1;
         $converted['user_identity'] = $this->options['key']."_".$params['userId'];
@@ -74,8 +73,7 @@ class QuickpayRequest extends Request
         $url                          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
         $result                       = $this->curlRequest($url);
         $xml                          = simplexml_load_string($result);
-        var_dump($xml);
-        exit();
+
         $redir    = (string) $xml->encrypt_data;
         $redirurl = $this->Decrypt($redir, $this->options['aes']);
 
