@@ -770,7 +770,7 @@ class CourseLessonController extends BaseController
         $whiteList = array("iPhone", "iPad", "Mac", "Android");
 
         foreach ($whiteList as $value) {
-            if (strpos($userAgent, $value) > -1) {
+            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
                 return true;
             }
         }
