@@ -917,6 +917,10 @@ course_manage_chapter_delete:
     defaults: { _controller: TopxiaWebBundle:CourseChapterManage:delete }
     methods: [POST]
 
+course_manage_chapter_edit:
+    pattern:  /course/{courseId}/manage/chapter/{chapterId}/get
+    defaults: { _controller: TopxiaWebBundle:CourseChapterManage:get }
+
 course_manage_material:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/material
     defaults: { _controller: TopxiaWebBundle:CourseMaterialManage:index }

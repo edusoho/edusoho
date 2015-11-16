@@ -186,12 +186,19 @@ define(function(require, exports, module) {
             $('#lesson-video-content').html("");
 
             this.element.find('[data-role=lesson-content]').hide();
-
             var that = this;
+            var _readCourseTitle = function (lesson, name) { // chapter unit
+                var data={};
+                if(app.arguments.customChapter == 1){
+                    data.number = that.element.find('[data-role=' + name + '-number]');
+                    data.title =  name == 'chapter' ? lesson.chapterNumber : lesson.unitNumber;
+                }else{
+                    data.number = that.element.find('[data-role=custom-' + name + '-number]');
+                    data.title  =  name == 'chapter' ? (lesson.chapter == null ? "" :lesson.chapter.title) : (lesson.unit == null ? "":lesson.unit.title);
+                }
+                return data;
+            }
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-                
-                that.element.find('[data-role=lesson-title]').html(lesson.title);
-
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 var $titleStr = "";
@@ -200,17 +207,24 @@ define(function(require, exports, module) {
                     $titleStr += val + ' - ';
                 })
                 document.title = lesson.title + ' - ' + $titleStr.substr(0,$titleStr.length-3);
-                that.element.find('[data-role=lesson-number]').html(lesson.number);
+                if(app.arguments.customChapter == 1){
+                    that.element.find('[data-role=lesson-number]').html(lesson.number);
+                }
+               
                 if (parseInt(lesson.chapterNumber) > 0) {
-                    that.element.find('[data-role=chapter-number]').html(lesson.chapterNumber).parent().show().next().show();
+                    var data= _readCourseTitle(lesson, 'chapter');
+                    data.number.html(data.title).parent().show().next().show();
                 } else {
-                    that.element.find('[data-role=chapter-number]').parent().hide().next().hide();
+                  var data= _readCourseTitle(lesson, 'chapter');
+                  data.number.parent().hide().next().hide();
                 }
 
                 if (parseInt(lesson.unitNumber) > 0) {
-                    that.element.find('[data-role=unit-number]').html(lesson.unitNumber).parent().show().next().show();
+                    var data= _readCourseTitle(lesson, 'unit');
+                    data.number.html(data.title).parent().show().next().show();
                 } else {
-                    that.element.find('[data-role=unit-number]').parent().hide().next().hide();
+                    var data= _readCourseTitle(lesson, 'unit');
+                    data.number.parent().hide().next().hide();
                 }
 
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
