@@ -99,8 +99,7 @@ class CourseLessonController extends BaseController
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $token = $this->getTokenService()->makeToken('hls.playlist', array(
                         'data'     => array(
-                            'id'   => $file['id'],
-                            'mode' => 'preview'
+                            'id' => $file['id']
                         ),
                         'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
                         'duration' => 3600

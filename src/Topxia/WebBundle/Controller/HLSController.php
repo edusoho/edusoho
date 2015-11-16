@@ -145,7 +145,7 @@ class HLSController extends BaseController
             'data'     => array(
                 'id' => $file['id']
             ),
-            'times'    => 1,
+            'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
             'duration' => 3600
         );
 
