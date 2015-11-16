@@ -30,8 +30,9 @@ class CardController extends BaseController
             ));
         }
 
-        if (empty($cardType) || !ArrayToolkit::requireds(array($cardType), array('coupon', 'moneyCard'))) {
+        if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
             $cardType = "coupon";
+            var_dump($cardType);
         }
 
         $cards   = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], $cardType);
