@@ -141,12 +141,13 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
 
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1
+                'keyencryption' => $inWhiteList ? 0 : 1
             ),
-            'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+            'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
         );
 
