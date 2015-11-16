@@ -1377,6 +1377,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         return $this->createService('User.StatusService');
     }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
+    }
 }
 
 class MemberSerialize
