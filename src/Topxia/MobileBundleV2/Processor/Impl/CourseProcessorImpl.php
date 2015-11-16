@@ -1301,11 +1301,51 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
 
-        $tempCourses = $this->controller->filterLiveCourses($user, $start, $limit);
-        $resultLiveCourses = $this->controller->filterCourses(array_values($tempCourses));
+        $courses = $this->controller->getCourseService()->findUserLeaningCourses(
+            $user['id'], $start, 1000, array('type'=>'live')
+        );
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $conditions = array(
+            'status' => 'published',
+            'startTimeGreaterThan' => time(),
+            'courseIds' => $courseIds
+        );
+
+        $count = $this->controller->getCourseService()->searchLessonCount($conditions);
+
+        $lessons = $this->controller->getCourseService()->searchLessons(
+            $conditions,  
+            array('startTime', 'ASC'), 
+            $start,
+            $limit
+        );
+
+        $newCourses = array();
+
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        if (!empty($courses)) {
+            foreach ($lessons as $key => &$lesson) {
+                $newCourses[$key] = $courses[$lesson['courseId']];
+                $newCourses[$key]["liveLessonTitle"] = $lesson["title"];
+                $newCourses[$key]["liveStartTime"] = date("c", $lesson["startTime"]);
+                $newCourses[$key]["liveEndTime"] = date("c", $lesson["endTime"]);
+                unset($courses[$lesson['courseId']]);
+            }
+
+            foreach ($courses as $key => &$course) {
+                $course["liveLessonTitle"] = '';
+                $course["liveStartTime"] = '';
+                $course["liveEndTime"] = '';
+            }
+        }
+
+        $newCourses = array_merge($newCourses, $courses);
+        $resultLiveCourses = $this->controller->filterCourses(array_values($newCourses));
 
         return array(
-            "start" => $start,
+            "start" => $start + count($resultLiveCourses),
             "limit" => $limit,
             "data" => $resultLiveCourses);
     }
