@@ -282,8 +282,15 @@ class HLSController extends BaseController
                     continue;
                 }
 
-                $beginning['beginningKey']    = $beginnings[$level]['key'];
-                $token                        = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600, 'userId' => $userId));
+                $beginning['beginningKey'] = $beginnings[$level]['key'];
+                $token                     = $this->getTokenService()->makeToken('hls.clef', array(
+                    'data'     => array(
+                        'id' => $file['id']
+                    ),
+                    'times'    => 1,
+                    'duration' => 3600,
+                    'userId'   => $userId
+                ));
                 $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
                 break;
             }
