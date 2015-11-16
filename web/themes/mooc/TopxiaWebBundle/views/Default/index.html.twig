@@ -63,7 +63,7 @@
               <p class="info hidden-xs hidden-sm">{{classroom.about|striptags|raw}}</p>
               <p class="num"> <i class="es-icon es-icon-people mrm"></i>
                 {{classroom.studentNum + classroom.auditorNum }}人
-                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">班级详情</a>
+                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">{{setting('classroom.name')|default("班级") }}详情</a>
               </p>
             </div>
             <div class="class-teacher hidden-xs hidden-sm">
@@ -80,7 +80,7 @@
 
               </div>
               <div class="bottom">
-                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">班级详情</a>
+                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">{{setting('classroom.name')|default("班级") }}详情</a>
               </div>
             </div>
           </div>
