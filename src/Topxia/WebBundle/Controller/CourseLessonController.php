@@ -169,9 +169,11 @@ class CourseLessonController extends BaseController
 
         if ($chapter['type'] == 'unit') {
             $unit               = $chapter;
+            $json['unit']       = $unit;
             $json['unitNumber'] = $unit['number'];
 
             $chapter               = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
+            $json['chapter']       = $chapter;
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
         } else {
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];

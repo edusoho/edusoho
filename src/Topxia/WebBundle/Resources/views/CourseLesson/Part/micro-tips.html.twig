@@ -41,21 +41,19 @@
   
   {% if item.type == 'testpaper' %}
      {% set endTime = (testpapers[item.mediaId].limitedTime * 60) + item.testStartTime %}
-    {% if item.testStartTime|default(0) and item.testMode == 'realTime' %}
+    {% if item.testStartTime|default(null) and item.testMode == 'realTime' %}
       <span class="color-gray course-type ">
-        {% if date().timestamp >=item.testStartTime %}
-          {% if date().timestamp > endTime %}
-            考试已结束
-          {% else %}
+        {% if date().timestamp < item.testStartTime %}
+            考试倒计时:<span class="color-primary pls">{{item.testStartTime|remain_time}}</span>
+        {% endif %}
+        {% if date().timestamp >= item.testStartTime and date().timestamp < endTime %}
             考试已开始
-          {% endif %}
-        {% else%}
-          考试倒计时:<span class="color-primary pls">{{item.testStartTime|remain_time}}</span>
-        {%endif %}
+        {% else %}
+            考试已结束
+        {% endif %}
       </span>
     {% endif %}
-    {% endif %}
-
+  {% endif %}
   {% if item.type == 'ppt' %}
     <span class="course-type">
       <i class="es-icon es-icon-pptclass" data-toggle="tooltip" data-placement="top" title="PPT课程"></i>
