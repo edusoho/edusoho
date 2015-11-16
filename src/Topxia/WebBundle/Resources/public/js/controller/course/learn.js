@@ -186,12 +186,19 @@ define(function(require, exports, module) {
             $('#lesson-video-content').html("");
 
             this.element.find('[data-role=lesson-content]').hide();
-
             var that = this;
+            var _readCourseTitle = function (lesson, name) { // chapter unit
+                var data={};
+                if(app.arguments.customChapter == 1){
+                    data.number = that.element.find('[data-role=' + name + '-number]');
+                    data.title =  name == 'chapter' ? lesson.chapterNumber : lesson.unitNumber;
+                }else{
+                    data.number = that.element.find('[data-role=custom-' + name + '-number]');
+                    data.title  =  name == 'chapter' ? (lesson.chapter == null ? "" :lesson.chapter.title) : (lesson.unit == null ? "":lesson.unit.title);
+                }
+                return data;
+            }
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-                
-                that.element.find('[data-role=lesson-title]').html(lesson.title);
-
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 var $titleStr = "";
@@ -200,17 +207,24 @@ define(function(require, exports, module) {
                     $titleStr += val + ' - ';
                 })
                 document.title = lesson.title + ' - ' + $titleStr.substr(0,$titleStr.length-3);
-                that.element.find('[data-role=lesson-number]').html(lesson.number);
+                if(app.arguments.customChapter == 1){
+                    that.element.find('[data-role=lesson-number]').html(lesson.number);
+                }
+               
                 if (parseInt(lesson.chapterNumber) > 0) {
-                    that.element.find('[data-role=chapter-number]').html(lesson.chapterNumber).parent().show().next().show();
+                    var data= _readCourseTitle(lesson, 'chapter');
+                    data.number.html(data.title).parent().show().next().show();
                 } else {
-                    that.element.find('[data-role=chapter-number]').parent().hide().next().hide();
+                  var data= _readCourseTitle(lesson, 'chapter');
+                  data.number.parent().hide().next().hide();
                 }
 
                 if (parseInt(lesson.unitNumber) > 0) {
-                    that.element.find('[data-role=unit-number]').html(lesson.unitNumber).parent().show().next().show();
+                    var data= _readCourseTitle(lesson, 'unit');
+                    data.number.html(data.title).parent().show().next().show();
                 } else {
-                    that.element.find('[data-role=unit-number]').parent().hide().next().hide();
+                    var data= _readCourseTitle(lesson, 'unit');
+                    data.number.parent().hide().next().hide();
                 }
 
                 if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
@@ -432,7 +446,7 @@ define(function(require, exports, module) {
                             };
 
                             if (0 < testStartRightSeconds) {
-                                $testNotice = '<p class="text-center mtl mbl"><i class="color-warning mrm es-icon es-icon-info" ></i>考试倒计时</p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">0</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedHouse+'</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedMinutes+'</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+limitedSeconds+'</span>秒</p>   <p class="text-center color-gray">请点击<a href="' + url + '" class="mlm mrm btn btn-sm btn-default" style="background:#ffcb4b">开始考试</a>进入</p>';
+                                $testNotice = '<p class="text-center mtm mbm"><i class="color-warning mrm es-icon es-icon-info" ></i>考试剩余时间</p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">0</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedHouse + '</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedMinutes + '</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#ffcb4b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + limitedSeconds + '</span>秒</p>   <p class="text-center color-gray">请点击<a href="' + url + '" class="mlm mrm btn btn-sm  btn-primary" >开始考试</a>进入</p>';
                             };
 
                             if (testEndLeftSeconds <= 0) {
