@@ -7,31 +7,32 @@ use Topxia\Service\Common\BaseDao;
 
 class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
 {
-	protected $table = 'course_member_score';
+    protected $table = 'course_member_score';
 
-    public function getUserScoreByUserIdAndCourseId($userId,$courseId)
+    public function getUserScoreByUserIdAndCourseId($userId, $courseId)
     {
-    	$sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? LIMIT 1";
-    	return $this->getConnection()->fetchAssoc($sql,array($userId,$courseId))?:null;
-
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
     }
 
     public function getUserCourseScore($id)
     {
-    	$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-    	return $this->getConnection()->fetchAssoc($sql,array($id))?:null;
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
     public function addUserCourseScore($score)
     {
         $affected = $this->getConnection()->insert($this->table, $score);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert score error.');
         }
+
         return $this->getUserCourseScore($this->getConnection()->lastInsertId());
     }
 
-    public function updateUserCourseScore($id,$score)
+    public function updateUserCourseScore($id, $score)
     {
         $this->getConnection()->update($this->table, $score, array('id' => $id));
         return $this->getUserCourseScore($id);
@@ -39,41 +40,44 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
 
     public function findUsersScoreBySqlJoinUser($fields)
     {
-        $sql = "SELECT s.* FROM {$this->table} s JOIN user u ON s.userId = u.id WHERE ";
+        $sql       = "SELECT s.* FROM {$this->table} s JOIN user u ON s.userId = u.id WHERE ";
         $parmaters = array();
-        if(isset($fields['staffNo']) && !empty($fields['staffNo'])){
+
+        if (isset($fields['staffNo']) && !empty($fields['staffNo'])) {
             $sql .= " u.staffNo LIKE ? ";
             $parmaters[] = '%'.$fields['staffNo'].'%';
         }
-        if(isset($fields['staffNo']) && !empty($fields['staffNo']) && isset($fields['organizationId']) && !empty($fields['organizationId'])){
+
+        if (isset($fields['staffNo']) && !empty($fields['staffNo']) && isset($fields['organizationId']) && !empty($fields['organizationId'])) {
             $sql .= " AND ";
         }
-        if(isset($fields['organizationId']) && !empty($fields['organizationId']))
-        {
+
+        if (isset($fields['organizationId']) && !empty($fields['organizationId'])) {
             $sql .= " u.organizationId = ? ";
             $parmaters[] = $fields['organizationId'];
         }
+
         $sql .= " ORDER BY u.staffNo ASC ";
-        return $this->getConnection()->fetchAll($sql,$parmaters);
+        return $this->getConnection()->fetchAll($sql, $parmaters);
     }
 
     public function findAllMemberScore($courseId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ";
-        return $this->getConnection()->fetchAll($sql,array($courseId))?:null;
+        return $this->getConnection()->fetchAll($sql, array($courseId)) ?: null;
     }
 
-    public function findUserScoreByIdsAndCourseId($userIds,$courseId)
+    public function findUserScoreByIdsAndCourseId($userIds, $courseId)
     {
-        if(empty($userIds)) { 
-            return array(); 
+        if (empty($userIds)) {
+            return array();
         }
 
-        $marks = str_repeat('?,', count($userIds) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE userId IN ({$marks}) AND courseId = ?";
-        $parmaters = $userIds;
+        $marks       = str_repeat('?,', count($userIds) - 1).'?';
+        $sql         = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) AND courseId = ?";
+        $parmaters   = $userIds;
         $parmaters[] = $courseId;
-        return $this->getConnection()->fetchAll($sql,$parmaters)?:null;
+        return $this->getConnection()->fetchAll($sql, $parmaters) ?: null;
     }
 
     public function searchMemberScoreCount($conditions)
@@ -83,7 +87,7 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function searchMemberScore($conditions,$orderBy,$start, $limit)
+    public function searchMemberScore($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -92,19 +96,17 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ? : array(); 
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     protected function _createSearchQueryBuilder($conditions)
     {
-
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)     
+            ->from($this->table, $this->table)
             ->andWhere('courseId = :courseId')
             ->andWhere('userId  = :userId')
             ->andWhere('totalScore  >= :standardScore')
             ->andWhere('userId IN ( :userIds )');
-
 
         return $builder;
     }

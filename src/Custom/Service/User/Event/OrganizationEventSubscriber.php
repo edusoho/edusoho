@@ -1,7 +1,6 @@
 <?php
 namespace Custom\Service\User\Event;
 
-
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Common\ServiceEvent;
 

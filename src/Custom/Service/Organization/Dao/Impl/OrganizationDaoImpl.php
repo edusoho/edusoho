@@ -1,26 +1,27 @@
 <?php
 namespace Custom\Service\Organization\Dao\Impl;
 
-
 use Custom\Service\Organization\Dao\OrganizationDao;
 use Topxia\Service\Common\BaseDao;
 
 class OrganizationDaoImpl extends BaseDao implements OrganizationDao
 {
-    const TABLENAME = 'organization' ;
+    const TABLENAME = 'organization';
 
     public function getOrganization($id)
     {
         $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
     public function addOrganization($organization)
     {
         $affected = $this->getConnection()->insert(self::TABLENAME, $organization);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert organization error.');
         }
+
         return $this->getOrganization($this->getConnection()->lastInsertId());
     }
 
@@ -29,9 +30,9 @@ class OrganizationDaoImpl extends BaseDao implements OrganizationDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(*)')
-            ;
+        ;
 
-        return $builder->execute()->fetchAll() ? : array();
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchOrganizations($conditions, $orderBy, $start, $limit)
@@ -43,7 +44,7 @@ class OrganizationDaoImpl extends BaseDao implements OrganizationDao
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ? : array();
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function updateOrganization($id, $fields)
@@ -75,10 +76,8 @@ class OrganizationDaoImpl extends BaseDao implements OrganizationDao
             ->andWhere('code = :code')
             ->andWhere('name = :name')
             ->andWhere('parentId = :parentId')
-            ;
+        ;
 
         return $builder;
-
     }
-
 }

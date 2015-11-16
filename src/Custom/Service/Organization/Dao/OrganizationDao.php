@@ -1,10 +1,8 @@
 <?php
 namespace Custom\Service\Organization\Dao;
 
-
 interface OrganizationDao
 {
-
     public function addOrganization($organization);
 
     public function getOrganization($id);

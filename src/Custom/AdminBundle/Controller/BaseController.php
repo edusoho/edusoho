@@ -1,11 +1,11 @@
 <?php
 namespace Custom\AdminBundle\Controller;
 
-
 class BaseController extends \Topxia\AdminBundle\Controller\BaseController
 {
-    protected function checkId($id){
-        if($id <= 0){
+    protected function checkId($id)
+    {
+        if ($id <= 0) {
             throw $this->createNotFoundException();
         }
     }

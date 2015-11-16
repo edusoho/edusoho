@@ -100,7 +100,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl
         $course = $this->getCourse($id);
         parent::deleteCourse($id);
 
-        if ($course['type'] == 'periodic') {
+        if ('periodic' == $course['type']) {
             $this->getCourseDao()->decrPeriodsByRootId($course['rootId'], $course['periods']);
         }
 

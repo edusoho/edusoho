@@ -1,7 +1,6 @@
 <?php
 namespace Mooc\Service\Organization;
 
-
 interface OrganizationService
 {
     public function getOrganization($id);
