@@ -341,10 +341,11 @@ class LoginBindController extends BaseController
 
         $client    = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-
+        $name      = $this->mateExistName($type);
         return $this->render('TopxiaWebBundle:Login:bind-choose-exist.html.twig', array(
             'oauthUser'      => $oauthUser,
             'type'           => $type,
+            'name'           => $name,
             'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth()
         ));
     }
@@ -353,19 +354,42 @@ class LoginBindController extends BaseController
     {
         switch ($type) {
             case 'weixinweb':
-                return '微信';
+                return '微信绑定新账号';
                 break;
             case 'weixinmob':
-                return '微信';
+                return '微信绑定新账号';
                 break;
             case 'weibo':
-                return '微博';
+                return '微博绑定新账号';
                 break;
             case 'qq':
-                return 'QQ';
+                return 'QQ绑定新账号';
                 break;
             case 'renren':
-                return '人人';
+                return '人人绑定新账号';
+                break;
+            default:
+                return '';
+        }
+    }
+
+    protected function mateExistName($type)
+    {
+        switch ($type) {
+            case 'weixinweb':
+                return '微信绑定已有账号';
+                break;
+            case 'weixinmob':
+                return '微信绑定已有账号';
+                break;
+            case 'weibo':
+                return '微博绑定已有账号';
+                break;
+            case 'qq':
+                return 'QQ绑定已有账号';
+                break;
+            case 'renren':
+                return '人人绑定已有账号';
                 break;
             default:
                 return '';

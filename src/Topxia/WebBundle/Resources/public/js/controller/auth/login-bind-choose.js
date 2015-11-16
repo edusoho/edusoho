@@ -45,7 +45,7 @@ define(function(require, exports, module) {
                  $(this).attr('checked',true);
              };
          });
-         if($("#set_bind_email") == 'undifined'){
+         if($("#set_bind_email").val() == ''){
             validator.addItem({
                 element: '#set_bind_email',
                 required: true,

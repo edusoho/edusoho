@@ -6,7 +6,7 @@
 {% block content %}
 <div class="es-section login-section">
   <div class="section-header">
-    <h1>{{ name }}登录</h1>
+    <h1>{{ name }}</h1>
   </div>
     <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
       <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
@@ -18,13 +18,13 @@
         </div>
       </div>
       {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
-      <div class="form-group mbl">
-        <label class="control-label" for="set_bind_email">邮箱地址</label>
-        <div class="controls">
-          <input id="set_bind_email" class="form-control input-lg" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+        <div class="form-group mbl">
+          <label class="control-label" for="set_bind_email">邮箱地址</label>
+          <div class="controls">
+            <input id="set_bind_email" class="form-control input-lg" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+          </div>
         </div>
-      </div>
-     {% endif %}
+      {% endif %}
       <div class="form-group mbl">
         <label id="user_terms">
           <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
