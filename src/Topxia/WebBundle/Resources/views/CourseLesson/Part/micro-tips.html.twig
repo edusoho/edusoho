@@ -45,12 +45,13 @@
       <span class="color-gray course-type ">
         {% if date().timestamp < item.testStartTime %}
             考试倒计时:<span class="color-primary pls">{{item.testStartTime|remain_time}}</span>
-        {% endif %}
-        {% if date().timestamp >= item.testStartTime and date().timestamp < endTime %}
-            考试已开始
         {% else %}
-            考试已结束
-        {% endif %}
+          {% if date().timestamp < endTime %}
+              考试已开始
+          {% else %}
+              考试已结束
+          {% endif %}
+      {% endif %}
       </span>
     {% endif %}
   {% endif %}
