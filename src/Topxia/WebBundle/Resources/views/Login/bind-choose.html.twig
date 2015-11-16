@@ -8,40 +8,39 @@
   <div class="section-header">
     <h1>{{ name }}登录</h1>
   </div>
-  <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
-    <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
-
-    <div class="form-group mbl">
-      <label class="control-label" for="set-bind-nickname-field">用户名</label>
-      <div class="controls">
-        <input id="set-bind-nickname-field" class="form-control input-lg" type="text" name="nickname" value="{{ oauthUser.name }}" data-url="{{ path('register_nickname_check') }}" />
-        <p class="help-block">用户名最长18个英文或者9个汉字</p>
+    <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
+      <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
+      <div class="form-group mbl">
+        <label class="control-label" for="set-bind-nickname-field">用户名</label>
+        <div class="controls">
+          <input id="set-bind-nickname-field" class="form-control input-lg" type="text" name="nickname" value="{{ oauthUser.name }}" data-url="{{ path('register_nickname_check') }}" />
+          <p class="help-block">用户名最长18个英文或者9个汉字</p>
+        </div>
       </div>
-    </div>
-
-    <div class="form-group mbl">
-      <label class="control-label" for="set_bind_email">邮箱地址</label>
-      <div class="controls">
-        <input id="set_bind_email" class="form-control input-lg" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+      {% if setting('login_bind.' ~ type ~ '_set_fill_account') == 1 %}
+      <div class="form-group mbl">
+        <label class="control-label" for="set_bind_email">邮箱地址</label>
+        <div class="controls">
+          <input id="set_bind_email" class="form-control input-lg" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+        </div>
       </div>
-    </div>
+     {% endif %}
+      <div class="form-group mbl">
+        <label id="user_terms">
+          <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+        </label>
+      </div>
 
-    <div class="form-group mbl">
-      <label id="user_terms">
-        <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
-      </label>
-    </div>
+      <div class="form-group">
+        <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type="submit"  data-loading-text="正在登录...">确认登录</button>
+      </div>
 
-
-    <div class="form-group">
-      <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type="submit"  data-loading-text="正在登录...">确认登录</button>
-    </div>
-
-    <div class="form-group text-right">
-      <a href="{{ path('login_bind_change', {type: type}) }}">绑定已有帐号</a>
-    </div>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  </form>
+      
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <div class="form-group text-right">
+        <a href="{{ path('login_bind_change', {type: type}) }}">绑定已有帐号</a>
+      </div>
+    </form>
 </div>
 
 {% endblock %}

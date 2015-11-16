@@ -45,12 +45,13 @@ define(function(require, exports, module) {
                  $(this).attr('checked',true);
              };
          });
-
-        validator.addItem({
-            element: '#set_bind_email',
-            required: true,
-            rule: 'email email_remote'
-        });
+         if($("#set_bind_email") == 'undifined'){
+            validator.addItem({
+                element: '#set_bind_email',
+                required: true,
+                rule: 'email email_remote'
+            });
+        }
 
         validator.addItem({
             element: '#set-bind-nickname-field',
