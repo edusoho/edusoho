@@ -61,18 +61,6 @@ class CourseChapterManageController extends BaseController
         ));
     }
 
-    public function getAction(Request $request, $courseId, $chapterId)
-    {
-        $course  = $this->getCourseService()->tryManageCourse($courseId);
-        $chapter = $this->getCourseService()->getChapter($courseId, $chapterId);
-
-        if (empty($chapter)) {
-            throw $this->createNotFoundException("章节(#{$chapterId})不存在！");
-        }
-
-        return $this->createJsonResponse($chapter);
-    }
-
     public function deleteAction(Request $request, $courseId, $chapterId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
