@@ -24,7 +24,9 @@ class TaskEventSubscriber implements EventSubscriberInterface
     {
         $lesson = $event->getSubject();
 
-        $this->_finishTask('studyplan', $lesson);
+        if ($lesson['type'] != 'testpaper') {
+            $this->_finishTask('studyplan', $lesson);
+        }
     }
 
     public function onFinished(ServiceEvent $event)
