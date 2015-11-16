@@ -53,7 +53,6 @@ class FinanceSettingController extends BaseController
             $this->setFlashMessage('success', '支付方式设置已保存！');
         }
 
-        var_dump($payment);
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
             'payment' => $payment
         ));
