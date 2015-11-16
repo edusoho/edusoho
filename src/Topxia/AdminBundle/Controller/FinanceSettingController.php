@@ -48,12 +48,12 @@ class FinanceSettingController extends BaseController
             $payment['quickpay_key']    = trim($payment['quickpay_key']);
             $payment['quickpay_secret'] = trim($payment['quickpay_secret']);
             $payment['quickpay_aes']    = trim($payment['quickpay_aes']);
-
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
         }
 
+        var_dump($payment);
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
             'payment' => $payment
         ));
