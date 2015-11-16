@@ -29,7 +29,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             'watchLimit'    => 0,
             'approval'      => 0,
             'maxRate'       => 0,
-            'locked'        => 0
+            'locked'        => 0,
+            'buyable'       => 0
         ));
 
         if (!empty($fields['about'])) {
@@ -50,6 +51,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             array_walk($fields['tags'], function (&$item, $key) {
                 $item = (int) $item['id'];
             }
+
             );
         }
 

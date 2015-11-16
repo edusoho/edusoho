@@ -4,7 +4,7 @@
   {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
 {% endif %}
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
-  {% if item.status == 'published' %}
+    {% if item.status == 'published'  and( item.free or  course.buyable|default(true) == true ) %}
     {% if member %}
       <a href="{{ lessonUrl }}">
     {% elseif ('periodic'== course.type and "now"|date('U') < course.startTime) %}
@@ -15,12 +15,12 @@
       <a href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}">
     {% endif %}
       {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-      <span class="title">课时{{ item.number }}：{{ item.title }}</span>
+      {% if setting('course.custom_chapter_enabled') %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
       {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
     </a>
   {% else %}
     {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-    <span class="title">课时{{ item.number }}：{{ item.title }}</span>
+    {% if setting('course.custom_chapter_enabled') %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
     {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
   {% endif %}
 </li>

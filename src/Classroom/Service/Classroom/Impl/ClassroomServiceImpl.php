@@ -85,7 +85,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $title = trim($classroom['title']);
         if (empty($title)) {
-            throw $this->createServiceException("班级名称不能为空！");
+            throw $this->createServiceException('班级名称不能为空！');
         }
 
         $classroom['createdTime'] = time();
@@ -194,11 +194,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($id);
 
         if (empty($classroom)) {
-            throw $this->createServiceException("班级不存在，操作失败。");
+            throw $this->createServiceException('班级不存在，操作失败。');
         }
 
         if ($classroom['status'] != 'draft') {
-            throw $this->createServiceException("只有未发布班级可以删除，操作失败。");
+            throw $this->createServiceException('只有未发布班级可以删除，操作失败。');
         }
 
         $this->tryManageClassroom($id);
@@ -409,7 +409,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createServiceException("班级不存在，操作失败。");
+            throw $this->createServiceException('班级不存在，操作失败。');
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);

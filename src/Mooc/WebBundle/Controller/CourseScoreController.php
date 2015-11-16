@@ -98,6 +98,10 @@ class CourseScoreController extends BaseController
         $course                                                                                   = $this->getCourseService()->getCourse($courseId);
         list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
 
+        if(empty($courseScoreSetting)){
+            return $this->redirect($this->generateUrl('course_manage_score',array('courseId' => $course['id'])));
+        }
+
         return $this->render('TopxiaWebBundle:CourseScore:transcripts.html.twig', array(
             'studentNum'         => $studentNum,
             'passStudentNum'     => $passStudentNum,

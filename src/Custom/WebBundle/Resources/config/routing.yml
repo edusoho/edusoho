@@ -106,3 +106,7 @@ course_manage_student_score_edit:
 course_manage_student_grades_cards:
     pattern:  /course/{courseId}/student/{userId}/grades/cards
     defaults: { _controller: CustomWebBundle:CourseScore:studentGradesCards }
+
+custom_time_line_test:
+    pattern:  /testpaper/timelime
+    defaults: { _controller: CustomWebBundle:Timeline:index }
