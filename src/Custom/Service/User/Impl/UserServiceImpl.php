@@ -316,6 +316,9 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         }
 
         $user['roles'] = empty($user['roles']) ? array() : explode('|', trim($user['roles'], '|'));
+
+        $user = $this->_userRolesSort($user);
+
         return $user;
     }
 
@@ -342,5 +345,16 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             unset($conditions['organizationId']);
             unset($conditions['includeChildren']);
         }
+    }
+
+    private static function _userRolesSort($user)
+    {
+        if(!empty($user['roles'][1]) && $user['roles'][1] == 'ROLE_USER'){
+            $temp = $user['roles'][1];
+            $user['roles'][1] = $user['roles'][0];
+            $user['roles'][0] = $temp;
+        }   //交换学员角色跟roles数组第0个的位置;
+
+        return $user;
     }
 }
