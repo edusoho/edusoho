@@ -149,7 +149,7 @@ class HLSController extends BaseController
                 'id'            => $file['id'],
                 'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
             ),
-            'times'    => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1,
+            'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
         );
 
@@ -163,8 +163,8 @@ class HLSController extends BaseController
 
         $hideBeginning = $request->query->get('hideBeginning');
 
-        if (empty($hideBeginning)) {
-            $beginning = $this->getVideoBeginning($level, $token['userId']);
+        if (!$inWhiteList && empty($hideBeginning)) {
+            $beginning = $this->getVideoBeginning($request, $level, $token['userId']);
 
             if ($beginning['beginningKey']) {
                 $params = array_merge($params, $beginning);
@@ -262,7 +262,7 @@ class HLSController extends BaseController
         return false;
     }
 
-    protected function getVideoBeginning($level, $userId = 0)
+    protected function getVideoBeginning(Request $request, $level, $userId = 0)
     {
         $beginning = array(
             'beginningKey'    => null,
@@ -287,7 +287,7 @@ class HLSController extends BaseController
                     'data'     => array(
                         'id' => $file['id']
                     ),
-                    'times'    => 1,
+                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600,
                     'userId'   => $userId
                 ));
