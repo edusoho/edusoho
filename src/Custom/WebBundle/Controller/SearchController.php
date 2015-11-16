@@ -15,50 +15,51 @@ class SearchController extends BaseSearchController
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
-        $keywords=trim($keywords);
+        $keywords = trim($keywords);
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
 
         $currentUserVipLevel = "";
-        $vipLevelIds = "";
-        if($isShowVipSearch){
-            $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
+        $vipLevelIds         = "";
+
+        if ($isShowVipSearch) {
+            $currentUserVip      = $this->getVipService()->getMemberByUserId($currentUser['id']);
             $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-            $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-            $vipLevelIds = ArrayToolkit::column($vipLevels, "id");
+            $vipLevels           = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
+            $vipLevelIds         = ArrayToolkit::column($vipLevels, "id");
         }
 
-        $parentId = 0;
+        $parentId   = 0;
         $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
 
-        $categoryIds=array();
+        $categoryIds = array();
+
         foreach ($categories as $key => $category) {
             $categoryIds[$key] = $category['name'];
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $fliter = $request->query->get('fliter');
-
+        $fliter     = $request->query->get('fliter');
 
         $conditions = array(
-            'status' => 'published',
-            'title' => $keywords,
+            'status'     => 'published',
+            'title'      => $keywords,
             'categoryId' => $categoryId,
-            'parentId' => 0,
-            'table' => 'singleCourse'
+            'parentId'   => 0,
+            'table'      => 'singleCourse'
         );
 
-        if ($fliter == 'vip') {
+        if ('vip' == $fliter) {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } else if ($fliter == 'live') {
+        } elseif ('live' == $fliter) {
             $conditions['type'] = 'live';
-        } else if ($fliter == 'free'){
+        } elseif ('free' == $fliter) {
             $conditions['price'] = '0.00';
         }
 
-        $count = $this->getCourseService()->searchCourseCount($conditions);
+        $count     = $this->getCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $count
@@ -71,17 +72,15 @@ class SearchController extends BaseSearchController
             $paginator->getPerPageCount()
         );
 
-
         return $this->render('TopxiaWebBundle:Search:index.html.twig', array(
-            'courses' => $courses,
-            'paginator' => $paginator,
-            'keywords' => $keywords,
-            'isShowVipSearch' => $isShowVipSearch,
+            'courses'             => $courses,
+            'paginator'           => $paginator,
+            'keywords'            => $keywords,
+            'isShowVipSearch'     => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
-            'categoryIds' => $categoryIds,
-            'fliter' => $fliter,
-            'count' => $count,
+            'categoryIds'         => $categoryIds,
+            'fliter'              => $fliter,
+            'count'               => $count
         ));
     }
-
 }

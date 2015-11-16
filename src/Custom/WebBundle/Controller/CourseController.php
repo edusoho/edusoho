@@ -2,37 +2,32 @@
 namespace Custom\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\EdusohoLiveClient;
-
 
 class CourseController extends BaseController
 {
     public function createAction(Request $request)
     {
-        $user = $this->getUserService()->getCurrentUser();
+        $user        = $this->getUserService()->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
         $isLive = $request->query->get('flag');
-        $type = ($isLive == "isLive") ? 'live' : 'normal';
+        $type   = ("isLive" == $isLive) ? 'live' : 'normal';
 
-        if($isLive == "isLive"){
+        if ("isLive" == $isLive) {
             $type = 'live';
-        }elseif($isLive == "periodic"){
+        } elseif ("periodic" == $isLive) {
             $type = 'periodic';
-        }else{
+        } else {
             $type = 'normal';
         }
 
-        if ($type == 'live') {
-
+        if ('live' == $type) {
             $courseSetting = $this->setting('course', array());
 
             if (!empty($courseSetting['live_course_enabled'])) {
-                $client = new EdusohoLiveClient();
+                $client   = new EdusohoLiveClient();
                 $capacity = $client->getCapacity();
             } else {
                 $capacity = array();
@@ -58,8 +53,8 @@ class CourseController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
-            'userProfile'=>$userProfile,
-            'type'=>$type
+            'userProfile' => $userProfile,
+            'type'        => $type
         ));
     }
 
@@ -69,63 +64,69 @@ class CourseController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        if($course['type'] != 'periodic'){
+        if ('periodic' != $course['type']) {
             return $this->createMessageModalResponse('info', '非周期课程不可开设下一期', '周期课程', 3);
         }
 
         return $this->render('TopxiaWebBundle:Course:next-round.html.twig', array(
-            'course' => $course,
+            'course' => $course
         ));
     }
 
     public function exploreAction(Request $request, $category)
     {
-        $conditions = $request->query->all();
-        $categoryArray = array();
-        $conditions['code'] = $category;
+        $conditions          = $request->query->all();
+        $categoryArray       = array();
+        $conditions['code']  = $category;
         $conditions['table'] = 'singleCourse';
+
         if (!empty($conditions['code'])) {
-            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds = array_merge($childrenIds, array($categoryArray['id']));
+            $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
+            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
             $conditions['categoryIds'] = $categoryIds;
         }
+
         unset($conditions['code']);
 
-        if(!isset($conditions['fliter'])){
-            $conditions['fliter'] ='all';
-        } elseif ($conditions['fliter'] == 'free') {
+        if (!isset($conditions['fliter'])) {
+            $conditions['fliter'] = 'all';
+        } elseif ('free' == $conditions['fliter']) {
             $coinSetting = $this->getSettingService()->get("coin");
-            $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $priceType = "RMB";
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && 1 == $coinSetting["coin_enabled"];
+            $priceType   = "RMB";
+
             if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
                 $priceType = $coinSetting["price_type"];
             }
 
-            if($priceType == 'RMB'){
+            if ('RMB' == $priceType) {
                 $conditions['price'] = '0.00';
             } else {
                 $conditions['coinPrice'] = '0.00';
             }
-        } elseif ($conditions['fliter'] == 'live'){
+        } elseif ('live' == $conditions['fliter']) {
             $conditions['type'] = 'live';
         }
+
         $fliter = $conditions['fliter'];
         unset($conditions['fliter']);
 
         $courseSetting = $this->getSettingService()->get('course', array());
+
         if (!isset($courseSetting['explore_default_orderBy'])) {
             $courseSetting['explore_default_orderBy'] = 'latest';
         }
+
         $orderBy = $courseSetting['explore_default_orderBy'];
         $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
         unset($conditions['orderBy']);
 
-        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
+        $conditions['recommended'] = ('recommendedSeq' == $orderBy) ? 1 : null;
 
         $conditions['parentId'] = 0;
-        $conditions['status'] = 'published';
-        $paginator = new Paginator(
+        $conditions['status']   = 'published';
+        $paginator              = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions),
             12
@@ -137,59 +138,62 @@ class CourseController extends BaseController
             $paginator->getPerPageCount()
         );
         $group = $this->getCategoryService()->getGroupByCode('course');
+
         if (empty($group)) {
             $categories = array();
         } else {
             $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         }
-        if(!$categoryArray){
+
+        if (!$categoryArray) {
             $categoryArrayDescription = array();
-        }
-        else{
+        } else {
             $categoryArrayDescription = $categoryArray['description'];
-            $categoryArrayDescription = strip_tags($categoryArrayDescription,'');
-            $categoryArrayDescription = preg_replace("/ /","",$categoryArrayDescription);
+            $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
+            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
             $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         }
-        if(!$categoryArray){
+
+        if (!$categoryArray) {
             $CategoryParent = '';
-        }
-        else{
-            if(!$categoryArray['parentId']){
+        } else {
+            if (!$categoryArray['parentId']) {
                 $CategoryParent = '';
-            }
-            else{
+            } else {
                 $CategoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
             }
         }
+
         return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
-            'courses' => $courses,
-            'category' => $category,
-            'fliter' => $fliter,
-            'orderBy' => $orderBy,
-            'paginator' => $paginator,
-            'categories' => $categories,
-            'consultDisplay' => true,
-            'path' => 'course_explore',
-            'categoryArray' => $categoryArray,
-            'group' => $group,
+            'courses'                  => $courses,
+            'category'                 => $category,
+            'fliter'                   => $fliter,
+            'orderBy'                  => $orderBy,
+            'paginator'                => $paginator,
+            'categories'               => $categories,
+            'consultDisplay'           => true,
+            'path'                     => 'course_explore',
+            'categoryArray'            => $categoryArray,
+            'group'                    => $group,
             'categoryArrayDescription' => $categoryArrayDescription,
-            'CategoryParent' => $CategoryParent
+            'CategoryParent'           => $CategoryParent
         ));
     }
 
     public function roundingAction(Request $request, $id)
     {
         $this->checkId($id);
-        $course = $this->getCourseService()->getCourse($id);
+        $course     = $this->getCourseService()->getCourse($id);
         $conditions = $request->request->all();
-        $startTime = strtotime($conditions['startTime']);
-        $endTime = strtotime($conditions['endTime']);
-        if($startTime < $course['endTime']){
+        $startTime  = strtotime($conditions['startTime']);
+        $endTime    = strtotime($conditions['endTime']);
+
+        if ($startTime < $course['endTime']) {
             return $this->createMessageResponse('info', '周期课程开课时间不得早于上一期课程的结课时间', '周期课程', 3, $this->generateUrl('my_teaching_courses'));
         }
+
         $course['startTime'] = $startTime;
-        $course['endTime'] = $endTime;
+        $course['endTime']   = $endTime;
 
         $this->getNextRoundService()->rounding($course);
 
@@ -210,5 +214,4 @@ class CourseController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
-
 }

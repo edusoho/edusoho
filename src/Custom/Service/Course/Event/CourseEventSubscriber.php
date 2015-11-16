@@ -10,21 +10,25 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.update' => 'onCourseUpdate',
+            'course.update' => 'onCourseUpdate'
         );
     }
 
     public function onCourseUpdate(ServiceEvent $event)
     {
         $course = $event->getSubject();
+
         if (isset($course['course'])) {
             $course = $course['course'];
         }
+
         if (isset($course['endTime']) && strtotime('+1 day', $course['endTime']) > time()) {
             $oldJob = $this->getCrontabService()->getJobByNameAndTargetTypeAndTargetId('GenerateCourseScoreJob', 'course', $course['id']);
+
             if (!empty($oldJob)) {
                 $this->getCrontabService()->deleteJob($oldJob['id']);
             }
+
             $this->getCrontabService()->createJob(array(
                 'name'        => 'GenerateCourseScoreJob',
                 'cycle'       => 'once',
@@ -33,7 +37,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 'time'        => $course['endTime'],
                 'targetType'  => 'course',
                 'targetId'    => $course['id'],
-                'createdTime' => time(),
+                'createdTime' => time()
             ));
         }
     }

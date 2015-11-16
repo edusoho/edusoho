@@ -8,10 +8,12 @@ class MoocUserProcessorImpl extends UserProcessorImpl
     public function login()
     {
         $keyword = $this->getParam('_username');
-        $user = $this->getUserService()->getUserByLoginField($keyword);
+        $user    = $this->getUserService()->getUserByLoginField($keyword);
+
         if ($user) {
             $this->setParam('_username', $user['nickname']);
         }
+
         return parent::login();
     }
 }

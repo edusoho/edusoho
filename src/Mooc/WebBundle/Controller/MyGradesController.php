@@ -3,106 +3,106 @@
 namespace Mooc\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Util\EdusohoLiveClient;
 
 class MyGradesController extends BaseController
 {
-	public function indexAction(Request $request)
-	{
-		$user = $this->getCurrentUser();
+    public function indexAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
 
-		$conditions = array(
-			'userId' => $user['id'],
-		);
+        $conditions = array(
+            'userId' => $user['id']
+        );
 
-		$paginator = new Paginator(
+        $paginator = new Paginator(
             $request,
             $this->getCourseScoreService()->searchMemberScoreCount($conditions),
             10
         );
 
-		$courseScores = $this->getCourseScoreService()->searchMemberScore(
-			$conditions,
-			array('createdTime','DESC'),
-			$paginator->getOffsetCount(),
+        $courseScores = $this->getCourseScoreService()->searchMemberScore(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-		);
+        );
 
-		$scores = ArrayToolkit::index($courseScores, 'courseId');
+        $scores = ArrayToolkit::index($courseScores, 'courseId');
 
-		$courseIds = ArrayToolKit::column($courseScores, 'courseId');
+        $courseIds = ArrayToolKit::column($courseScores, 'courseId');
 
-		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
-		$courses = ArrayToolkit::index($courses, 'id');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::index($courses, 'id');
 
-		$scoreSettings = array();
-		$settings = array();
-		if (!empty($courses)) {
-			$scoreSettings = $this->getCourseScoreService()->findScoreSettingsByCourseIds($courseIds);
-			$settings = ArrayToolkit::index($scoreSettings, 'courseId');
-		}
+        $scoreSettings = array();
+        $settings      = array();
 
-		return $this->render('TopxiaWebBundle:MyGrades:layout.html.twig',array(
-			'courses' => $courses,
-			'scores' => $scores,
-			'settings' => $settings,
-			'paginator' => $paginator
-		));
-	}
+        if (!empty($courses)) {
+            $scoreSettings = $this->getCourseScoreService()->findScoreSettingsByCourseIds($courseIds);
+            $settings      = ArrayToolkit::index($scoreSettings, 'courseId');
+        }
 
-	public function gradesCardsAction(Request $request, $courseId)
-	{
-		$user = $this->getCurrentUser();
+        return $this->render('TopxiaWebBundle:MyGrades:layout.html.twig', array(
+            'courses'   => $courses,
+            'scores'    => $scores,
+            'settings'  => $settings,
+            'paginator' => $paginator
+        ));
+    }
 
-		if(!$user->isLogin()){
-			$this->createAccessDeniedException('用户未登录');
-		}
+    public function gradesCardsAction(Request $request, $courseId)
+    {
+        $user = $this->getCurrentUser();
 
-		$courseSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
-		if ($courseSetting['status'] != 'published') {
-			throw $this->createNotFoundException("课程成绩尚未发布!");
-		}
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户未登录');
+        }
 
+        $courseSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
 
-		$course = $this->getCourseService()->getCourse($courseId);
-		$courseMember = $this->getCourseService()->getCourseMember($courseId,$user['id']);
-		$learnedLessonsNum = $courseMember['learnedNum'];
+        if ('published' != $courseSetting['status']) {
+            throw $this->createNotFoundException("课程成绩尚未发布!");
+        }
 
-		$scores = $this->getCourseScoreService()->getUserScoreByUserIdAndCourseId($user['id'], $courseId);
-	
-		$testpapers = $this->getTestpaperService()->findAllTestpapersByTarget($courseId);
-		$testpaperIds = ArrayToolkit::column($testpapers, 'id');
-		
-		$testpaperResults = $this->getTestpaperService()->findUserTestpaperResultsByTestpaperIds($testpaperIds,$user['id']);
-		$testpaperResults = ArrayToolkit::index($testpaperResults, 'testId');
+        $course            = $this->getCourseService()->getCourse($courseId);
+        $courseMember      = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $learnedLessonsNum = $courseMember['learnedNum'];
 
-		$homeworkResults = array();
-		$homeworklessons = array();
-		if ($this->isPluginInstalled('Homework')) {
-			$homeworks = $this->getHomeworkService()->findHomeworksByCourseId($courseId);
+        $scores = $this->getCourseScoreService()->getUserScoreByUserIdAndCourseId($user['id'], $courseId);
 
-			$homeworkResults = $this->getHomeworkService()->findUserResultsByCourseId($courseId,$user['id']);
-			$homeworkResults = ArrayToolkit::index($homeworkResults, 'homeworkId');
+        $testpapers   = $this->getTestpaperService()->findAllTestpapersByTarget($courseId);
+        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
-			$homeworksLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
-			$homeworkLessons = $this->getCourseService()->findLessonsByIds($homeworksLessonIds);
-		}
+        $testpaperResults = $this->getTestpaperService()->findUserTestpaperResultsByTestpaperIds($testpaperIds, $user['id']);
+        $testpaperResults = ArrayToolkit::index($testpaperResults, 'testId');
 
-		return $this->render('TopxiaWebBundle:MyGrades:grades-cards.html.twig', array(
-			'course' => $course,
-			'learnedLessonsNum' => $learnedLessonsNum,
-			'scores' => $scores,
-			'courseSetting' => $courseSetting,
-			'testpapers' => $testpapers,
-			'testpaperResults' => $testpaperResults,
-			'homeworks' => $homeworks,
-			'homeworkResults' => $homeworkResults,
-			'homeworkLessons' => $homeworkLessons,
-		));
-	}
+        $homeworkResults = array();
+        $homeworklessons = array();
+
+        if ($this->isPluginInstalled('Homework')) {
+            $homeworks = $this->getHomeworkService()->findHomeworksByCourseId($courseId);
+
+            $homeworkResults = $this->getHomeworkService()->findUserResultsByCourseId($courseId, $user['id']);
+            $homeworkResults = ArrayToolkit::index($homeworkResults, 'homeworkId');
+
+            $homeworksLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
+            $homeworkLessons    = $this->getCourseService()->findLessonsByIds($homeworksLessonIds);
+        }
+
+        return $this->render('TopxiaWebBundle:MyGrades:grades-cards.html.twig', array(
+            'course'            => $course,
+            'learnedLessonsNum' => $learnedLessonsNum,
+            'scores'            => $scores,
+            'courseSetting'     => $courseSetting,
+            'testpapers'        => $testpapers,
+            'testpaperResults'  => $testpaperResults,
+            'homeworks'         => $homeworks,
+            'homeworkResults'   => $homeworkResults,
+            'homeworkLessons'   => $homeworkLessons
+        ));
+    }
 
     protected function getCourseScoreService()
     {
@@ -130,4 +130,3 @@ class MyGradesController extends BaseController
         return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     }
 }
-

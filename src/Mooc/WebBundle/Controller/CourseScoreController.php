@@ -1,9 +1,8 @@
 <?php
-nameSpace Mooc\WebBundle\Controller;
+namespace Mooc\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\TimeMachine;
 use Topxia\Common\Paginator;
 
 class CourseScoreController extends BaseController
@@ -11,63 +10,75 @@ class CourseScoreController extends BaseController
     public function scoreSettingAction(Request $request, $courseId)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
-            throw    $this->createAccessDeniedException('未登录用户，无权操作！');
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
+
         $course = $this->getCourseService()->getCourse($courseId);
-        if ($course['type'] != 'periodic') {
+
+        if ('periodic' != $course['type']) {
             throw $this->createNotFoundException("不是周期课程，没有该功能模块!");
         }
+
         $scoreSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
+
         if ($request->getMethod() == "POST") {
             $postDates = $request->request->all();
+
             if (isset($scoreSetting)) {
                 $scoreSetting = $this->getCourseScoreService()->updateScoreSetting($courseId, $postDates);
             } else {
                 $postDates['courseId'] = $courseId;
-                $scoreSetting = $this->getCourseScoreService()->addScoreSetting($postDates);
+                $scoreSetting          = $this->getCourseScoreService()->addScoreSetting($postDates);
             }
+
             $this->setFlashMessage('success', '课程评分信息已保存！');
         }
+
         return $this->render('TopxiaWebBundle:CourseScore:setting.html.twig', array(
             'course' => $course,
-            'score' => $scoreSetting
+            'score'  => $scoreSetting
         ));
     }
 
     public function scorePublishedAction(Request $request, $courseId)
     {
-        $data = array('msg' => '', 'type' => 'danger');
+        $data   = array('msg' => '', 'type' => 'danger');
         $course = $this->getCourseService()->getCourse($courseId);
-        if ($course['status'] != 'published') {
+
+        if ('published' != $course['status']) {
             $data['msg'] = "课程未发布,不能发布成绩！";
         }
+
         $scoreSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
+
         if (!$this->container->get('topxia.timemachine')->inSameDay($scoreSetting['expectPublishTime'], time())) {
             $data['msg'] = "未到课程预期发布时间，不能发布成绩！";
         }
 
         $postDates = array('status' => 'published');
+
         if ($this->getCourseScoreService()->updateScoreSetting($courseId, $postDates)) {
             $data['type'] = 'success';
-            $data['msg'] = "课程成绩发布成功！";
+            $data['msg']  = "课程成绩发布成功！";
         }
 
         return $this->createJsonResponse($data);
-
     }
 
     public function scoreEditAction(Request $request)
     {
-        $id = $request->request->get('id');
+        $id         = $request->request->get('id');
         $otherScore = $request->request->get('otherScore');
 
         $fields = array(
-            'otherScore' => $otherScore,
+            'otherScore'    => $otherScore,
             'courseScoreId' => $id
         );
-        $userScore = $this->getCourseScoreService()->updateUserCourseScore($id, $fields);
+        $userScore          = $this->getCourseScoreService()->updateUserCourseScore($id, $fields);
         $courseScoreSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($userScore['courseId']);
+
         if ($userScore) {
             return $this->createJsonResponse(array('userScore' => $userScore, 'courseScoreSetting' => $courseScoreSetting));
         }
@@ -76,42 +87,44 @@ class CourseScoreController extends BaseController
     public function transcriptsAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        if ($course['type'] != 'periodic') {
+
+        if ('periodic' != $course['type']) {
             throw $this->createNotFoundException("不是周期课程，没有该功能模块!");
         }
+
         //transcriptsHeader
         list($studentNum, $passStudentNum, $averageScore, $passingRate) = $this->getCourseOverview($courseId);
         //transcripts
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course                                                                                   = $this->getCourseService()->getCourse($courseId);
         list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
 
         return $this->render('TopxiaWebBundle:CourseScore:transcripts.html.twig', array(
-            'studentNum' => $studentNum,
-            'passStudentNum' => $passStudentNum,
-            'averageScore' => $averageScore,
-            'passingRate' => $passingRate,
-            'course' => $course,
-            'users' => $users,
-            'usersProfile' => $usersProfile,
-            'usersScore' => $usersScore,
+            'studentNum'         => $studentNum,
+            'passStudentNum'     => $passStudentNum,
+            'averageScore'       => $averageScore,
+            'passingRate'        => $passingRate,
+            'course'             => $course,
+            'users'              => $users,
+            'usersProfile'       => $usersProfile,
+            'usersScore'         => $usersScore,
             'courseScoreSetting' => $courseScoreSetting,
-            'organizations' => $organizations,
-            'paginator' => $paginator
+            'organizations'      => $organizations,
+            'paginator'          => $paginator
         ));
     }
 
     public function transcriptsListAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $course                                                                                   = $this->getCourseService()->tryManageCourse($courseId);
         list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
         return $this->render('TopxiaWebBundle:CourseScore:transcripts_list.html.twig', array(
-            'users' => $users,
-            'usersProfile' => $usersProfile,
-            'usersScore' => $usersScore,
-            'course' => $course,
+            'users'              => $users,
+            'usersProfile'       => $usersProfile,
+            'usersScore'         => $usersScore,
+            'course'             => $course,
             'courseScoreSetting' => $courseScoreSetting,
-            'organizations' => $organizations,
-            'paginator' => $paginator
+            'organizations'      => $organizations,
+            'paginator'          => $paginator
         ));
     }
 
@@ -120,20 +133,21 @@ class CourseScoreController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         $courseSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
-        if ($courseSetting['status'] != 'published') {
+
+        if ('published' != $courseSetting['status']) {
             throw $this->createNotFoundException("课程成绩尚未发布!");
         }
 
-        $user = $this->getUserService()->getUser($userId);
+        $user        = $this->getUserService()->getUser($userId);
         $userProfile = $this->getUserService()->getUserProfile($userId);
 
-        $course = $this->getCourseService()->getCourse($courseId);
-        $courseMember = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $course            = $this->getCourseService()->getCourse($courseId);
+        $courseMember      = $this->getCourseService()->getCourseMember($courseId, $user['id']);
         $learnedLessonsNum = $courseMember['learnedNum'];
 
         $scores = $this->getCourseScoreService()->getUserScoreByUserIdAndCourseId($user['id'], $courseId);
 
-        $testpapers = $this->getTestpaperService()->findAllTestpapersByTarget($courseId);
+        $testpapers   = $this->getTestpaperService()->findAllTestpapersByTarget($courseId);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $testpaperResults = $this->getTestpaperService()->findUserTestpaperResultsByTestpaperIds($testpaperIds, $user['id']);
@@ -141,29 +155,29 @@ class CourseScoreController extends BaseController
 
         $homeworkResults = array();
         $homeworklessons = array();
-        if ($this->isPluginInstalled('Homework')) {
 
+        if ($this->isPluginInstalled('Homework')) {
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseId($courseId);
 
             $homeworkResults = $this->getHomeworkService()->findUserResultsByCourseId($courseId, $user['id']);
             $homeworkResults = ArrayToolkit::index($homeworkResults, 'homeworkId');
 
             $homeworksLessonIds = ArrayToolkit::column($homeworks, 'lessonId');
-            $homeworkLessons = $this->getCourseService()->findLessonsByIds($homeworksLessonIds);
+            $homeworkLessons    = $this->getCourseService()->findLessonsByIds($homeworksLessonIds);
         }
 
         return $this->render('TopxiaWebBundle:CourseScore:student-grades-cards.html.twig', array(
-            'course' => $course,
+            'course'            => $course,
             'learnedLessonsNum' => $learnedLessonsNum,
-            'scores' => $scores,
-            'courseSetting' => $courseSetting,
-            'testpapers' => $testpapers,
-            'testpaperResults' => $testpaperResults,
-            'homeworks' => $homeworks,
-            'homeworkResults' => $homeworkResults,
-            'homeworkLessons' => $homeworkLessons,
-            'userProfile' => $userProfile,
-            'previewAs' => 'teacher'
+            'scores'            => $scores,
+            'courseSetting'     => $courseSetting,
+            'testpapers'        => $testpapers,
+            'testpaperResults'  => $testpaperResults,
+            'homeworks'         => $homeworks,
+            'homeworkResults'   => $homeworkResults,
+            'homeworkLessons'   => $homeworkLessons,
+            'userProfile'       => $userProfile,
+            'previewAs'         => 'teacher'
         ));
     }
 
@@ -177,10 +191,10 @@ class CourseScoreController extends BaseController
             $usersScore = $this->getCourseScoreService()->findAllMemberScore($courseId);
         } else {
             $organizationIds = $this->getOrganizationService()->findOrganizationChildrenIds($parameters['organizationId']);
-            $fields = array(
-                'staffNo' => $parameters['staffNo'],
+            $fields          = array(
+                'staffNo'         => $parameters['staffNo'],
                 'organizationIds' => $organizationIds,
-                'courseId' => $courseId
+                'courseId'        => $courseId
             );
             $usersScore = $this->getCourseScoreService()->findUsersScoreBySqlJoinUser($fields);
         }
@@ -188,7 +202,7 @@ class CourseScoreController extends BaseController
         $userIds = array();
 
         if (!empty($usersScore)) {
-            $userIds = ArrayToolkit::column($usersScore, 'userId');
+            $userIds    = ArrayToolkit::column($usersScore, 'userId');
             $usersScore = ArrayToolkit::index($usersScore, 'userId');
         }
 
@@ -217,8 +231,9 @@ class CourseScoreController extends BaseController
         } else {
             $users = array();
         }
+
         $organizationIds = ArrayToolkit::column($users, 'organizationId');
-        $organizations = $this->getOrganizationService()->findOrganizationsByIds($organizationIds);
+        $organizations   = $this->getOrganizationService()->findOrganizationsByIds($organizationIds);
 
         return array(
             $users,
@@ -232,16 +247,15 @@ class CourseScoreController extends BaseController
 
     private function getCourseOverview($courseId)
     {
-
         $studentNum = $this->getCourseService()->getCourseStudentCount($courseId);
 
         $passStudentNum = $this->getCourseScoreService()->getCoursePassStudentCount($courseId);
 
         $allMemberScore = $this->getCourseScoreService()->findAllMemberScore($courseId);
 
-        $totalScore = 0;
+        $totalScore   = 0;
         $averageScore = 0;
-        $passingRate = 0;
+        $passingRate  = 0;
 
         if ($allMemberScore) {
             foreach ($allMemberScore as $memberScore) {
@@ -252,8 +266,8 @@ class CourseScoreController extends BaseController
 
             $passingRate = round($passStudentNum / $studentNum, 3) * 100;
         }
-        return array($studentNum, $passStudentNum, $averageScore, $passingRate);
 
+        return array($studentNum, $passStudentNum, $averageScore, $passingRate);
     }
 
     protected function getCourseService()

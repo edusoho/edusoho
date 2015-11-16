@@ -1,7 +1,8 @@
 <?php
 namespace Mooc\WebBundle\Controller\Classroom;
-use Symfony\Component\HttpFoundation\Request;
+
 use Classroom\ClassroomBundle\Controller\Classroom\CourseController as BaseCourseController;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
@@ -14,8 +15,8 @@ class CourseController extends BaseCourseController
 
         $excludeIds = ArrayToolkit::column($actviteCourses, 'parentId');
         $conditions = array(
-            'status' => 'published',
-            'parentId' => 0,
+            'status'     => 'published',
+            'parentId'   => 0,
             'excludeIds' => $excludeIds,
             'isPeriodic' => false
         );
@@ -34,19 +35,20 @@ class CourseController extends BaseCourseController
         );
 
         $courseIds = ArrayToolkit::column($courses, 'id');
-        $userIds = array();
+        $userIds   = array();
+
         foreach ($courses as &$course) {
             $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds = array_merge($userIds, $course['teacherIds']);
+            $userIds        = array_merge($userIds, $course['teacherIds']);
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("ClassroomBundle:ClassroomManage/Course:course-pick-modal.html.twig", array(
-            'users' => $users,
-            'courses' => $courses,
+            'users'       => $users,
+            'courses'     => $courses,
             'classroomId' => $classroomId,
-            'paginator' => $paginator,
+            'paginator'   => $paginator
         ));
     }
 
@@ -55,11 +57,11 @@ class CourseController extends BaseCourseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $key = $request->request->get("key");
 
-        $conditions = array( "title" => $key );
-        $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
+        $conditions               = array("title" => $key);
+        $conditions['status']     = 'published';
+        $conditions['parentId']   = 0;
         $conditions['isPeriodic'] = false;
-        $courses = $this->getCourseService()->searchCourses(
+        $courses                  = $this->getCourseService()->searchCourses(
             $conditions,
             'latest',
             0,
@@ -69,16 +71,17 @@ class CourseController extends BaseCourseController
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $userIds = array();
+
         foreach ($courses as &$course) {
             $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds = array_merge($userIds, $course['teacherIds']);
+            $userIds        = array_merge($userIds, $course['teacherIds']);
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
-            'users' => $users,
-            'courses' => $courses,
+            'users'   => $users,
+            'courses' => $courses
         ));
     }
 

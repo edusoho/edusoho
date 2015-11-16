@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Mooc\Service\CrontabJob;
-
 
 interface CrontabJobService
 {

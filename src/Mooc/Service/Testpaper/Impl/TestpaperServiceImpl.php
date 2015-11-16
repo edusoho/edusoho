@@ -6,8 +6,8 @@ use Topxia\Service\Testpaper\Impl\TestpaperServiceImpl as BaseTestpaperServiceIm
 
 class TestpaperServiceImpl extends BaseTestpaperServiceImpl
 {
-	public function findUserTestpaperResultsByTestpaperIds(array $testpaperIds,$userId)
-	{
-		return $this->getTestpaperResultDao()->findUserTestpaperResultsByTestpaperIds($testpaperIds,$userId);
-	}
+    public function findUserTestpaperResultsByTestpaperIds(array $testpaperIds, $userId)
+    {
+        return $this->getTestpaperResultDao()->findUserTestpaperResultsByTestpaperIds($testpaperIds, $userId);
+    }
 }

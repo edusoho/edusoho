@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\Service\Course\Job;
 
+use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Crontab\Job;
-use Topxia\Common\PluginToolkit;
 
 class GenerateCourseScoreJob implements Job
 {
@@ -12,12 +12,14 @@ class GenerateCourseScoreJob implements Job
         if (empty($params['courseId'])) {
             throw \InvalidArgumentException("courseId参数不正确！");
         }
+
         $courseId = $params['courseId'];
         $course   = $this->getCourseService()->tryManageCourse($courseId);
 
         if (empty($course)) {
             throw \InvalidArgumentException("课程{$courseId}不存在！");
         }
+
         $scoreSetting = $this->getCourseScoreService()->getScoreSettingByCourseId($courseId);
 
         if (empty($scoreSetting)) {
@@ -25,9 +27,11 @@ class GenerateCourseScoreJob implements Job
         }
 
         $homeworks = array();
+
         if (PluginToolkit::isPluginInstalled('Homework')) {
             $homeworks = $this->getHomeworkService()->findHomeworksByCourseId($courseId);
         }
+
         $testpaperPercentage  = $scoreSetting['examWeight'] / 100;
         $homeworkPercentage   = $scoreSetting['homeworkWeight'] / 100;
         $students             = $this->getCourseService()->findCourseStudentsAll($courseId);
@@ -40,32 +44,30 @@ class GenerateCourseScoreJob implements Job
             1000
         );
 
-         
         foreach ($students as $student) {
             $testpaperScore = $this->getStudentTestpaperScore($student, $testpapers, $testpaperPercentage);
             $homeworkScore  = $this->getStudentHomeworkScore($student, $homeworks, $homeworkPercentage);
             $userScore      = $this->getCourseScoreService()->getUserScoreByUserIdAndCourseId($student['userId'], $courseId);
+
             if (empty($userScore)) {
                 $userScore = array(
                     'courseId'      => $courseId,
                     'userId'        => $student['userId'],
                     'totalScore'    => $testpaperScore + $homeworkScore,
                     'examScore'     => $testpaperScore,
-                    'homeworkScore' => $homeworkScore,
+                    'homeworkScore' => $homeworkScore
                 );
                 $this->getCourseScoreService()->addUserCourseScore($userScore);
-
             } else {
                 $userScore['examScore']     = $testpaperScore;
                 $userScore['homeworkScore'] = $homeworkScore;
                 $userScore['totalScore']    = $homeworkScore + $testpaperScore + $userScore['otherScore'];
                 $this->getCourseScoreService()->updateUserCourseScore($userScore['id'], $userScore);
             }
-
         }
 
-        if ($scoreSetting['status'] == 'scoring') {
-            $this->getCourseScoreService()->updateScoreSetting($courseId, array('status' =>'unpublish'));
+        if ('scoring' == $scoreSetting['status']) {
+            $this->getCourseScoreService()->updateScoreSetting($courseId, array('status' => 'unpublish'));
         }
     }
 
@@ -74,19 +76,24 @@ class GenerateCourseScoreJob implements Job
         $totalScore = 0;
         $count      = 0;
         $average    = 0;
+
         foreach ($homeworks as $homework) {
             $homeworkScore = 0;
             $result        = $this->getHomeworkService()->getResultByHomeworkIdAndUserId($homework['id'], $student['userId']);
+
             if (!empty($result)) {
                 $homeworkScore = $result['score'];
                 $homeworkScore = $homeworkScore / $homework['score'] * 100;
             }
+
             $count++;
             $totalScore = $totalScore + $homeworkScore;
         }
+
         if ($totalScore > 0 && $count > 0) {
             $average = $totalScore / $count;
         }
+
         $finalScore = $average * $homeworkPercentage;
         return $finalScore;
     }
@@ -96,19 +103,24 @@ class GenerateCourseScoreJob implements Job
         $totalScore = 0;
         $count      = 0;
         $average    = 0;
+
         foreach ($testpapers as $testpaper) {
             $testpaperScore = 0;
             $result         = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $student['userId'], array('finished'));
+
             if (!empty($result)) {
                 $testpaperScore = $result['score'];
                 $testpaperScore = $testpaperScore / $testpaper['score'] * 100;
             }
+
             $count++;
             $totalScore = $totalScore + $testpaperScore;
         }
+
         if ($totalScore > 0 && $count > 0) {
             $average = $totalScore / $count;
         }
+
         $finalScore = $average * $testpaperPercentage;
         return $finalScore;
     }

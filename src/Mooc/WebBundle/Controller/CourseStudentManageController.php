@@ -1,10 +1,10 @@
 <?php
 namespace Mooc\WebBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 use Topxia\WebBundle\Controller\CourseStudentManageController as BaseCourseStudentController;
 
 class CourseStudentManageController extends BaseCourseStudentController
@@ -70,7 +70,7 @@ class CourseStudentManageController extends BaseCourseStudentController
         $courseSetting = $this->getSettingService()->get('course', array());
         $organization  = $this->getOrganizationService()->findAllOrganizations();
 
-        if (isset($courseSetting['teacher_export_student']) && $courseSetting['teacher_export_student'] == "1") {
+        if (isset($courseSetting['teacher_export_student']) && "1" == $courseSetting['teacher_export_student']) {
             $course = $this->getCourseService()->tryManageCourse($id);
         } else {
             $course = $this->getCourseService()->tryAdminCourse($id);

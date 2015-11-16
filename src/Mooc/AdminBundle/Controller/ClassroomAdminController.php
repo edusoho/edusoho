@@ -1,5 +1,6 @@
 <?php
 namespace Mooc\AdminBundle\Controller;
+
 use Classroom\ClassroomBundle\Controller\ClassroomAdminController as BaseClassroomAdminController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,6 +26,7 @@ class ClassroomAdminController extends BaseClassroomAdminController
             $myClassroom = $request->request->all();
 
             $title = trim($myClassroom['title']);
+
             if (empty($title)) {
                 $this->setFlashMessage('danger', "班级名称不能为空！");
 
@@ -40,9 +42,9 @@ class ClassroomAdminController extends BaseClassroomAdminController
             }
 
             $classroom = array(
-                'title' => $myClassroom['title'],
+                'title'    => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
-                'buyable' => 1
+                'buyable'  => 1
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);

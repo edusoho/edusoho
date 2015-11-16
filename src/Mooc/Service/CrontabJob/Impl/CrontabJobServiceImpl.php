@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Mooc\Service\CrontabJob\Impl;
-
 
 use Mooc\Service\CrontabJob\CrontabJobService;
 use Topxia\Service\Crontab\Impl\CrontabServiceImpl as BaseServiceImpl;
@@ -16,7 +14,6 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
 
     public function updateJob($id, $fields)
     {
-
         $job = $this->getJobDao()->updateJob($id, $fields);
         $this->refreshNextExecutedTime();
         return $job;
@@ -28,10 +25,10 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
 
         switch ($sort) {
             case 'created':
-                $sort = array('createdTime','DESC');
+                $sort = array('createdTime', 'DESC');
                 break;
             case 'createdByAsc':
-                $sort = array('createdTime','ASC');
+                $sort = array('createdTime', 'ASC');
                 break;
 
             default:
@@ -61,7 +58,7 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
             // 加锁
             $job = $this->getJob($id, true);
 
-            // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
             if (empty($job) || $job['executing']) {
                 $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
                 $this->getJobDao()->getConnection()->commit();
@@ -70,9 +67,9 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
 
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
 
-            $jobInstance = new $job['jobClass']();
+            $jobInstance                    = new $job['jobClass']();
             $job['jobParams']['targetType'] = $job['targetType'];
-            $job['jobParams']['targetId'] = $job['targetId'];
+            $job['jobParams']['targetId']   = $job['targetId'];
 
             $jobInstance->execute($job['jobParams']);
 
@@ -81,15 +78,13 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
             $this->getJobDao()->getConnection()->commit();
 
             $this->refreshNextExecutedTime();
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->afterJonExecute($job);
             $this->getJobDao()->getConnection()->rollback();
             $message = $e->getMessage();
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
             $this->refreshNextExecutedTime();
         }
-
     }
 
     public function findJobByTargetTypeAndTargetId($targetType, $targetId)
@@ -101,7 +96,7 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
     {
         if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
             $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
-            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
+            $conditions['nextExcutedEndTime']   = strtotime($conditions['nextExcutedEndTime']);
         } else {
             unset($conditions['nextExcutedStartTime']);
             unset($conditions['nextExcutedEndTime']);
