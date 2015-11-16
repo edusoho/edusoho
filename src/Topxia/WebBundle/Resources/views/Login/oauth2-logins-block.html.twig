@@ -2,7 +2,18 @@
 
 {% for type, client in clients %}
   {% if settings[type ~ '_enabled']|default(false) and type != 'weixinmob'%}
-    <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default('')}) }}" class="social-login-btn">
+    <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default('')}) }}" class="social-icon icon-{{ client.icon_class }}">
+      {% if client.icon_class|default(null) %}
+        <i class="es-icon es-icon-{{ client.icon_class }}"></i>
+      {% endif %}
+    </a>
+  {% endif %}
+{% endfor %}
+
+{#
+{% for type, client in clients %}
+  {% if settings[type ~ '_enabled']|default(false) and type != 'weixinmob'%}
+    <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default('')}) }}" class="social-login-btn hidden">
       {% if client.icon_class|default(null) %}
         <i class="{{ client.icon_class }}"></i>
       {% elseif client.icon_img|default(null) %}
@@ -12,4 +23,4 @@
     </a>
   {% endif %}
 {% endfor %}
-
+#}
