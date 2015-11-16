@@ -9,7 +9,6 @@ class CourseServiceImpl extends BaseCourseServiceImpl
 {
     protected function _filterCourseFields($fields)
     {
-
         $fields = ArrayToolkit::filter($fields, array(
             'title'         => '',
             'subtitle'      => '',
@@ -31,6 +30,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             'approval'      => 0,
             'maxRate'       => 0,
             'locked'        => 0,
+            'buyable'       => 0
         ));
 
         if (!empty($fields['about'])) {
@@ -50,7 +50,9 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
                 $item = (int) $item['id'];
-            });
+            }
+
+            );
         }
 
         return $fields;
@@ -70,9 +72,11 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             $count                             = $this->getUserService()->searchUserCount($userConditions);
             $users                             = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $count);
             $conditions['userIds']             = ArrayToolkit::column($users, 'id');
+
             if (empty($conditions['userIds'])) {
                 $conditions['userIds'] = array(0);
             }
+
             unset($conditions['organizationId']);
             unset($conditions['includeChildren']);
         }
@@ -92,13 +96,14 @@ class CourseServiceImpl extends BaseCourseServiceImpl
     }
 
     public function deleteCourse($id)
-    {   
+    {
         $course = $this->getCourse($id);
         parent::deleteCourse($id);
 
         if ($course['type'] == 'periodic') {
             $this->getCourseDao()->decrPeriodsByRootId($course['rootId'], $course['periods']);
         }
+
         return true;
     }
 
@@ -107,10 +112,13 @@ class CourseServiceImpl extends BaseCourseServiceImpl
         if (empty($id)) {
             throw $this->createNotFoundException("课程关键字为空！");
         }
+
         $course = $this->getCourse($id);
+
         if (empty($course)) {
             throw $this->createNotFoundException("课程{id}不存在！");
         }
+
         return $course;
     }
 
@@ -119,10 +127,13 @@ class CourseServiceImpl extends BaseCourseServiceImpl
         if (empty($id)) {
             throw $this->createNotFoundException("课时关键字为空！");
         }
+
         $lesson = $this->getLesson($id);
+
         if (empty($lesson)) {
             throw $this->createNotFoundException("课时{id}不存在！");
         }
+
         return $lesson;
     }
 
@@ -136,7 +147,6 @@ class CourseServiceImpl extends BaseCourseServiceImpl
     {
         return $this->getMemberDao()->findMembersAllByCourseIdAndRole($courseId, 'student');
     }
-
 }
 
 class CourseSerialize
@@ -145,7 +155,7 @@ class CourseSerialize
     {
         if (isset($course['tags'])) {
             if (is_array($course['tags']) && !empty($course['tags'])) {
-                $course['tags'] = '|' . implode('|', $course['tags']) . '|';
+                $course['tags'] = '|'.implode('|', $course['tags']).'|';
             } else {
                 $course['tags'] = '';
             }
@@ -153,7 +163,7 @@ class CourseSerialize
 
         if (isset($course['goals'])) {
             if (is_array($course['goals']) && !empty($course['goals'])) {
-                $course['goals'] = '|' . implode('|', $course['goals']) . '|';
+                $course['goals'] = '|'.implode('|', $course['goals']).'|';
             } else {
                 $course['goals'] = '';
             }
@@ -161,7 +171,7 @@ class CourseSerialize
 
         if (isset($course['audiences'])) {
             if (is_array($course['audiences']) && !empty($course['audiences'])) {
-                $course['audiences'] = '|' . implode('|', $course['audiences']) . '|';
+                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
             } else {
                 $course['audiences'] = '';
             }
@@ -169,7 +179,7 @@ class CourseSerialize
 
         if (isset($course['teacherIds'])) {
             if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
-                $course['teacherIds'] = '|' . implode('|', $course['teacherIds']) . '|';
+                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
             } else {
                 $course['teacherIds'] = null;
             }
@@ -205,7 +215,6 @@ class CourseSerialize
         }
 
         return $course;
-
     }
 
     public static function unserializes(array $courses)
