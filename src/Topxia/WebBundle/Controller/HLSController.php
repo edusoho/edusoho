@@ -141,11 +141,13 @@ class HLSController extends BaseController
             $params['limitSecond'] = $timelimit;
         }
 
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $isBalloonPlayer = $this->setting('developer.balloon_player', 0);
+
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $inWhiteList ? 0 : 1
+                'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
@@ -161,8 +163,8 @@ class HLSController extends BaseController
 
         $hideBeginning = $request->query->get('hideBeginning');
 
-        if (empty($hideBeginning)) {
-            $beginning = $this->getVideoBeginning($level, $token['userId']);
+        if (!$inWhiteList && empty($hideBeginning)) {
+            $beginning = $this->getVideoBeginning($request, $level, $token['userId']);
 
             if ($beginning['beginningKey']) {
                 $params = array_merge($params, $beginning);
@@ -249,7 +251,7 @@ class HLSController extends BaseController
 
     protected function agentInWhiteList($userAgent)
     {
-        $whiteList = array("iPhone", "iPad", "Mac", "Android");
+        $whiteList = array("iPhone", "iPad", "Android");
 
         foreach ($whiteList as $value) {
             if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
@@ -260,7 +262,7 @@ class HLSController extends BaseController
         return false;
     }
 
-    protected function getVideoBeginning($level, $userId = 0)
+    protected function getVideoBeginning(Request $request, $level, $userId = 0)
     {
         $beginning = array(
             'beginningKey'    => null,
@@ -280,8 +282,15 @@ class HLSController extends BaseController
                     continue;
                 }
 
-                $beginning['beginningKey']    = $beginnings[$level]['key'];
-                $token                        = $this->getTokenService()->makeToken('hls.clef', array('data' => $file['id'], 'times' => 1, 'duration' => 3600, 'userId' => $userId));
+                $beginning['beginningKey'] = $beginnings[$level]['key'];
+                $token                     = $this->getTokenService()->makeToken('hls.clef', array(
+                    'data'     => array(
+                        'id' => $file['id']
+                    ),
+                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                    'duration' => 3600,
+                    'userId'   => $userId
+                ));
                 $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
                 break;
             }
