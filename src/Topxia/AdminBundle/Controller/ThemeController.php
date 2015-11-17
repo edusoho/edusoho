@@ -2,8 +2,8 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Request;
 
 class ThemeController extends BaseController
 {
@@ -14,8 +14,8 @@ class ThemeController extends BaseController
         $themes = $this->getThemes();
 
         return $this->render('TopxiaAdminBundle:Theme:index.html.twig', array(
-            'themes' => $themes,
-            'currentTheme' => $currentTheme,
+            'themes'       => $themes,
+            'currentTheme' => $currentTheme
         ));
     }
 
@@ -24,6 +24,7 @@ class ThemeController extends BaseController
         $themeUri = $request->query->get('uri');
 
         $theme = $this->getTheme($themeUri);
+
         if (empty($theme)) {
             return $this->createJsonResponse(false);
         }
@@ -31,6 +32,20 @@ class ThemeController extends BaseController
         $this->getSettingService()->set('theme', $theme);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function manageIndexAction(Request $request, $uri)
+    {
+        // if (!$this->getThemeService()->isAllowedConfig()) {
+        //     return $this->redirect($this->generateUrl('admin_setting_theme'));
+        // }
+        //$themeUri    = $request->query->get('uri');
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+
+        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
+            'themeConfig' => $themeConfig['config'],
+            'allConfig'   => $themeConfig['allConfig']
+        ));
     }
 
     protected function getTheme($uri)
@@ -48,6 +63,7 @@ class ThemeController extends BaseController
         }
 
         $theme = json_decode(file_get_contents($metaPath), true);
+
         if (empty($theme)) {
             return;
         }
@@ -61,8 +77,9 @@ class ThemeController extends BaseController
     {
         $themes = array();
 
-        $dir = $this->container->getParameter('kernel.root_dir').'/../web/themes';
+        $dir    = $this->container->getParameter('kernel.root_dir').'/../web/themes';
         $finder = new Finder();
+
         foreach ($finder->directories()->in($dir)->depth('== 0') as $directory) {
             $theme = $this->getTheme($directory->getBasename());
 
@@ -77,5 +94,10 @@ class ThemeController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 }
