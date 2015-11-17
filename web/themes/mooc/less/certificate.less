@@ -43,6 +43,7 @@
 
 .certificate-upload-table{
 	.panel-heading{
+		border:none;
 		h4{
 			display: inline-block;
 		}
@@ -67,4 +68,42 @@
 			}
 		}
 	}	
+	.panel-body{
+		padding: 0 30px;
+		ul{
+			padding: 0;
+			margin:0 0 30px 0;
+			border-bottom: 1px solid @little-gray;
+			li{
+				display: inline-block;
+			
+   		  padding: 0 10px;
+   		  line-height: 40px;
+				a{
+					color:@green-little;
+				}
+			}
+			li.active{
+				border-bottom: 1px solid @color-primary;
+				a{
+					color: @color-primary;
+				}
+			}
+		}
+		table{
+			thead{
+				background: #f0f5f9;
+				color: @green-little;
+			}
+			th,tr,td{
+				text-align: center;
+				font-weight: normal;
+				border:none;
+				i{
+					color: @green-little;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
 }
