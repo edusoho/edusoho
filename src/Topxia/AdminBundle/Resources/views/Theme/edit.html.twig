@@ -55,8 +55,6 @@
      <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
       <li class="active"><a href="#left" role="tab" data-toggle="tab">左侧</a></li>
-      <li><a href="#right" role="tab" data-toggle="tab">右侧</a></li>
-      <li><a href="#buttom" role="tab" data-toggle="tab">底部</a></li>
       <li><a href="#color" role="tab" data-toggle="tab">配色方案</a></li>
       <a href="{{ path('admin_reset_theme_config') }}" class="btn btn-primary pull-right">全部重置</a>
     </ul>
@@ -93,51 +91,6 @@
               {% endfor %}
             </ul>
           </div>
-      </div>
-
-      <div class="tab-pane" id="right">
-        <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading clearfix">
-              <div class="col-md-4 ">
-                挂件名称
-              </div>
-              <div class="col-md-4">
-                自定义名称
-              </div>
-
-            </div>
-
-            <!-- List group -->
-            <ul class="list-group module-item-list theme-edit-block theme-custom-right-block">
-              {% for pendant in themeConfig.blocks.right|default([]) %}
-
-                {% include 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true} %}
-                
-              {% endfor %}
-
-              {% for pendant in allConfig.blocks.right|default([]) %}
-                {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.right|default([])) %}
-
-                  {% include 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
-                
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
-      </div>
-
-      <div class="tab-pane" id="buttom">
-        <div class="panel panel-default">
-          <form class="panel-body radios theme-custom-bottom-block">
-            <label class="col-lg-3 check-box">
-              <input type="radio" checked="checked" name="bottom" value="simple" >简洁版
-            </label>
-            <label class="col-lg-3 check-box">
-              <input type="radio" name="bottom" value="complex" >多列表版
-            </label>
-          </form>
-        </div>
       </div>
 
       <div class="tab-pane" id="color">

@@ -575,7 +575,7 @@ admin_setting_theme_change:
     methods:  [POST]
 
 admin_theme_manage:
-    pattern:  /{uri}/index
+    pattern:  /{uri}/manage
     defaults: { _controller: TopxiaAdminBundle:Theme:manageIndex }
 
 admin_setting_user_center:
