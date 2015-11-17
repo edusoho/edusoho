@@ -35,6 +35,12 @@ class CourseScoreSettingDaoImpl extends BaseDao implements CourseScoreSettingDao
         return $this->getScoreSettingByCourseId($courseId);
     }
 
+    public function deleteSettingByCourseId($courseId)
+    {
+        return $this->getConnection()->delete($this->table, array('courseId' => $courseId));
+    }
+
+
     public function findScoreSettingsByCourseIds($courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';

@@ -155,6 +155,13 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
         return $this->getCourseScoreSettingDao()->getScoreSettingByCourseId($courseId);
     }
 
+    public function deleteCourseScoreByCourseId($courseId)
+    {
+        $this->getCourseScoreSettingDao()->deleteSettingByCourseId($courseId);
+        $this->getCourseScoreDao()->deleteScoresByCourseId($courseId);
+    }
+
+
     private function checkCourseAndUser($courseId, $userId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
