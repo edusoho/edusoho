@@ -28,7 +28,7 @@ define(function(require, exports, module) {
                     window.location.href = response._target_path;
 
                 }, 'json').fail(function() {
-                    Notify.danger('绑定失败，请重新登录后再试。');
+                    Notify.danger('绑定失败，帐号或密码错误。');
                 }).always(function(){
                     $form.find('[type=submit]').button('reset');
                 });
