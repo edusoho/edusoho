@@ -79,6 +79,12 @@ class CourseScoreDaoImpl extends BaseDao implements CourseScoreDao
         return $this->getConnection()->fetchAll($sql, $parmaters) ?: null;
     }
 
+    public function deleteScoresByCourseId($courseId)
+    {
+        return $this->getConnection()->delete($this->table, array('courseId' => $courseId));
+    }
+
+
     public function searchMemberScoreCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)

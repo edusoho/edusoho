@@ -33,4 +33,11 @@ interface CourseScoreService
 
     public function findScoreSettingsByCourseIds($courseIds);
 
+    /**
+     * 删除课程分数设置和课程学员分数
+     * @param $courseId
+     * @return mixed
+     */
+    public function deleteCourseScoreByCourseId($courseId);
+
 }

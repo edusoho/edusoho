@@ -20,4 +20,6 @@ interface CourseScoreDao
     public function findAllMemberScore($courseId);
 
     public function findUserScoreByIdsAndCourseId($userIds, $courseId);
+
+    public function deleteScoresByCourseId($courseId);
 }

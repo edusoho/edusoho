@@ -10,4 +10,6 @@ interface CourseScoreSettingDao
     public function addScoreSetting($scoreSetting);
 
     public function updateScoreSetting($courseId, $fields);
+
+    public function deleteSettingByCourseId($courseId);
 }
