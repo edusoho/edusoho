@@ -353,8 +353,9 @@ class MoneyCardServiceImpl extends BaseService
         $this->getCashService()->inflowByCoin($flow);
         $batch['rechargedNumber'] += 1;
         $this->updateBatch($batch['id'], $batch);
+        $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
-        if (!empty($this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard'))) {
+        if (!empty($card)) {
             $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array(
                 'status'  => 'used',
                 'useTime' => $moneyCard['rechargeTime']
