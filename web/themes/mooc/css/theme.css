@@ -3333,6 +3333,12 @@ footer .footer-attr p i {
 .certificate-upload-table .panel-heading h4 {
   display: inline-block;
 }
+.certificate-upload-table .panel-heading .apply-btn {
+  padding: 6px 8px;
+  color: #8a9197;
+  border: 1px solid #0fbe8a;
+  background: #f4fdf8;
+}
 .certificate-upload-table .panel-heading .navbar-form {
   padding: 0;
 }
