@@ -4,7 +4,7 @@
 
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{classroomId:classroom.id})|default(null) %}
-      {% if classroomPlan|default(null) and classroomPlan.status == 'published' %}
+      {% if classroomPlan|default(null) and classroomPlan.status == 'published' and app.user %}
         {% set planMember = data('UserClassroomPlanTaskNumInfo',{classroomId:classroom.id, userId:app.user.id})|default(null) %}
       {% endif %}
     {% endif %}

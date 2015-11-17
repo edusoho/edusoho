@@ -98,7 +98,7 @@ define(function(require, exports, module) {
                     $('#course-learned-modal').modal('show');
                 }
 
-                if (!response.canFinish) {
+                if (!response.canFinish && response.html) {
                     $("#modal").html(response.html);
                     $("#modal").modal('show');
                     return false;
