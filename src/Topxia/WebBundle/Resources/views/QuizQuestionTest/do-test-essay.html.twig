@@ -42,22 +42,11 @@
 						</div>
 
 					</div>
-
-
-
 				</div>
 
 			</div>
-		{% elseif paperResult.status == 'reviewing' %}
-			<div class="testpaper-question-footer clearfix">
-			  <div class="testpaper-question-result">
-			    <div class="testpaper-question-result-your">
-				    <div class="testpaper-question-result-title">你的回答：</div>
-						<div>{{ item.question.testResult.answer[0]|default('未回答')|bbCode2Html|raw }}</div>
-			    </div>
-			  </div>
-			</div>
-		{% elseif setting('questions.testpaper_answers_show_mode') == 'submitted' or paperResult.status == 'finished' %}
+
+		{% elseif setting('questions.testpaper_answers_show_mode') == 'submitted' or paperResult.status == 'finished' or paperResult.status == 'reviewing' %}
 			<div class="testpaper-question-footer clearfix">
 			  <div class="testpaper-question-result">
 			    <div class="testpaper-question-result-suggested">
