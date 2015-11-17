@@ -34,7 +34,7 @@ class ThemeController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function manageIndexAction(Request $request)
+    public function manageIndexAction(Request $request, $uri)
     {
         // if (!$this->getThemeService()->isAllowedConfig()) {
         //     return $this->redirect($this->generateUrl('admin_setting_theme'));
