@@ -205,7 +205,8 @@ class BuildCommand extends BaseCommand
 
         $directories = array(
             'composer',
-            'silex',
+            'silex/silex/src',
+            'pimple/pimple/lib',
             'doctrine/annotations/lib',
             'doctrine/cache/lib',
             'doctrine/collections/lib',
