@@ -63,6 +63,8 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
  *
  *
  *
+ *
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Michael Williams <michael.williams@funsational.com>
  * @author Tobias Schultze <http://tobion.de>
@@ -216,25 +218,22 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     public function __construct($pdoOrDsn = null, array $options = array(), SecurityContext $context, $container)
     {
-        $request = $container->get('request');
-
+        $request   = $container->get('request');
         $userAgent = $request->headers->get("user-agent");
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
             $this->createable = false;
         }
 
-        {
-            if ($pdoOrDsn instanceof \PDO) {
-                if (\PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
-                    throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION))', __CLASS__));
-                }
-
-                $this->pdo    = $pdoOrDsn;
-                $this->driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
-            } else {
-                $this->dsn = $pdoOrDsn;
+        if ($pdoOrDsn instanceof \PDO) {
+            if (\PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
+                throw new \InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION))', __CLASS__));
             }
+
+            $this->pdo    = $pdoOrDsn;
+            $this->driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        } else {
+            $this->dsn = $pdoOrDsn;
         }
 
         $this->table             = isset($options['db_table']) ? $options['db_table'] : $this->table;
