@@ -253,7 +253,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
-    public function createPayRecord($id, $payData)
+    public function createPayRecord($id, array $payData)
     {
         $order = $this->getOrder($id);
         $data = $order['data'];
@@ -262,12 +262,8 @@ class OrderServiceImpl extends BaseService implements OrderService
             $data = json_decode($order['data'], true);
         }
 
-        if(is_array($payData)){
-            foreach($payData as $key => $value){
-                $data[$key] = $value;
-            }
-        }else{
-            array_push($data, $payData);
+        foreach($payData as $key => $value){
+            $data[$key] = $value;
         }
 
         $fields = array('data' => $data);
