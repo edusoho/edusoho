@@ -49,6 +49,20 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
  *
  *
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Michael Williams <michael.williams@funsational.com>
  * @author Tobias Schultze <http://tobion.de>
@@ -172,6 +186,10 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
     private $gcCalled = false;
 
     /**
+     * @var bool Whether session to create ,default is true
+     */
+    private $createable = true;
+    /**
      * Constructor.
      *
      * You can either pass an existing database connection as PDO instance or
@@ -203,7 +221,7 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
         $userAgent = $request->headers->get("user-agent");
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
-            //todo
+            $this->createable = false;
         }
 
         {
@@ -378,6 +396,10 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
+        if (!$this->createable) {
+            return false;
+        }
+
         $maxlifetime = self::MAX_LIFE_TIME;
 
         $token = $this->context->getToken();
