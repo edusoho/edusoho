@@ -262,8 +262,12 @@ class OrderServiceImpl extends BaseService implements OrderService
             $data = json_decode($order['data'], true);
         }
 
-        foreach($payData as $key => $value){
-            $data[$key] = $value;
+        if(is_array($payData)){
+            foreach($payData as $key => $value){
+                $data[$key] = $value;
+            }
+        }else{
+            array_push($data, $payData);
         }
 
         $fields = array('data' => $data);
