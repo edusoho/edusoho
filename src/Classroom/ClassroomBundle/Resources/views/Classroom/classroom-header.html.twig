@@ -115,4 +115,8 @@
       </div>
     </div>
   </div>
-</section>                
+</section>            
+
+{% if is_plugin_installed('ClassroomPlan') %}
+  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
+{% endif %}    

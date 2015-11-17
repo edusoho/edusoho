@@ -565,6 +565,12 @@ class CourseLessonController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        if ($this->isPluginInstalled('ClassroomPlan')) {
+            return $this->forward('ClassroomPlanBundle:ClassroomPlan:lessonFinishModal', array(
+                'lessonId' => $lessonId
+            ));
+        }
+       
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
@@ -765,4 +771,10 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+    
 }

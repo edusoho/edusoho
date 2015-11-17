@@ -3,7 +3,6 @@ namespace Topxia\Service\Task\Impl;
 
 use Topxia\Service\Task\TaskService;
 use Topxia\Service\Common\BaseService;
-use Topxia\Common\ArrayToolkit;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -14,7 +13,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function getTaskByParams(array $conditions)
     {
-        $tasks = $this->getTaskDao()->searchTasks($conditions, array('taskStartTime','ASC'), 0, 1);
+        $tasks = $this->getTaskDao()->searchTasks($conditions, array('taskStartTime', 'ASC'), 0, 1);
         return $tasks ? $tasks[0] : null;
     }
 
@@ -60,18 +59,19 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function finishTask(array $targetObject, $taskType)
     {
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
         $userId = $user->id;
+
         if ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper') {
             $userId = $targetObject['userId'];
         }
 
         $conditions = array(
-            'userId' => $userId,
-            'taskType' => $taskType,
-            'targetId' => $targetObject['id'],
+            'userId'     => $userId,
+            'taskType'   => $taskType,
+            'targetId'   => $targetObject['id'],
             'targetType' => $targetObject['type'],
-            'status' => 'active'
+            'status'     => 'active'
         );
         $getTask = $this->getTaskByParams($conditions);
 
@@ -79,10 +79,9 @@ class TaskServiceImpl extends BaseService implements TaskService
             $canFinished = $this->_canFinished($getTask, $targetObject);
 
             if ($canFinished) {
-                $updateInfo = array('status'=>'completed', 'completedTime'=>time());
+                $updateInfo = array('status' => 'completed', 'completedTime' => time());
                 return $this->updateTask($getTask['id'], $updateInfo);
             }
-            
         }
 
         return array();
@@ -91,12 +90,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     private function _canFinished($task, $targetObject)
     {
         $canFinished = true;
+
         if ($task['required'] && ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper')) {
             if ($targetObject['passedStatus'] == 'unpassed' || $targetObject['passedStatus'] == 'none') {
                 $canFinished = false;
             }
         }
-        
+
         return $canFinished;
     }
 
@@ -104,5 +104,4 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->createDao('Task.TaskDao');
     }
-
-}  
+}
