@@ -601,6 +601,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->refreshCoursesSeq($classroomId, $activeCourseIds);
 
             $this->getClassroomDao()->getConnection()->commit();
+
+            $this->dispatchEvent(
+                'classroom.course.delete',
+                new ServiceEvent($activeCourseIds, array('classroomId' => $classroomId))
+            );
+            
         } catch (\Exception $e) {
             $this->getClassroomDao()->getConnection()->rollback();
             throw $e;
@@ -1093,6 +1099,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $this->updateStudentNumAndAuditorNum($classroomId);
+
+        $this->dispatchEvent(
+            'classroom.quit',
+            new ServiceEvent($classroom, array('userId' => $userId))
+        );
     }
 
     private function removeStudentsFromClasroomCourses($classroomId, $userId)
@@ -1172,7 +1183,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#${$classroomId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
@@ -1192,11 +1203,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
-            throw $this->createNotFoundException("班级(#${$classroomId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
-        if (empty($member) || !in_array('student', $member['role'])) {
+        if (empty($member) || in_array('student', $member['role'])) {
             throw $this->createServiceException("用户(#{$userId})不是该班级(#{$classroomId})的学员，解封学员失败。");
         }
 
@@ -1327,30 +1338,31 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom:Classroom.ClassroomCourseDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->createService('Order.OrderService');
     }
 
-    private function getVipService()
+    protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
     }
 
-    private function getNoteDao()
+    protected function getNoteDao()
     {
         return $this->createDao('Course.CourseNoteDao');
     }
 
-    private function getStatusService()
+    protected function getStatusService()
     {
         return $this->createService('User.StatusService');
     }
+
 }
 
 class MemberSerialize
