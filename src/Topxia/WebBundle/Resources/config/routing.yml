@@ -1861,6 +1861,14 @@ esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
 
+my_cards:
+    pattern:  /my/cards
+    defaults: { _controller: TopxiaWebBundle:Card:index }
+
+my_useable_coupons:
+    pattern: /my/useable_coupons
+    defaults: { _controller: TopxiaWebBundle:Card:useableCoupons }
+
 sms_prepare:
     pattern:  /sms/prepare/{targetType}/{id}
     defaults: { _controller: TopxiaWebBundle:Sms:prepare }
