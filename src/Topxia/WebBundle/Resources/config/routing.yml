@@ -64,6 +64,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+login_bind_change:
+    pattern: /login/bind/{type}/changetoexist
+    defaults: { _controller: TopxiaWebBundle:LoginBind:changeToExist }
+
 common_qrcode:
     pattern:  /common/qrcode
     defaults: { _controller: TopxiaWebBundle:Common:qrcode }
