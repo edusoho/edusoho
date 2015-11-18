@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\Service\Course\Job;
 
+use Topxia\Service\Crontab\Job;
 use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Crontab\Job;
 
 class GenerateCourseScoreJob implements Job
 {
@@ -14,7 +14,7 @@ class GenerateCourseScoreJob implements Job
         }
 
         $courseId = $params['courseId'];
-        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        $course   = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             throw \InvalidArgumentException("课程{$courseId}不存在！");
