@@ -7,14 +7,18 @@
   {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
   {% if courses %}
   {% set mode = mode|default('default') %}
-    <ul class="row">
-      {% for course in courses %}
-        <li class="col-sm-6 col-md-4 es-course-list">
-          {% include 'TopxiaAdminBundle:Default:course-grid.html.twig' %}
-        </li>
-      {% endfor %}
-    </ul>
-
+  <div class="course-list">
+    <div class="row">
+      <ul class="row">
+        {% for course in courses %}
+          <li class="col-lg-3 col-md-4 col-sm-6">
+            {% include 'TopxiaAdminBundle:Default:course-grid.html.twig' %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+ 
 
   {% else %}
       <div class="empty">还没有发布的课程</div>

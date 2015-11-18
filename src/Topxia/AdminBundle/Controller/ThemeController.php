@@ -52,7 +52,7 @@ class ThemeController extends BaseController
     {
         //By Bellorchid
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        var_dump($themeConfig);
+        // var_dump($themeConfig);
         return $this->render('TopxiaAdminBundle:Default:show.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig'   => $themeConfig['allConfig'],
