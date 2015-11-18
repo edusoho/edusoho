@@ -19,15 +19,19 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $timelimit = $this->setting('magic.lesson_watch_time_limit');
+        $isPreview = $request->query->get('isPreview', '');
+        $timeLimit = $this->setting('magic.lesson_watch_time_limit');
 
-        if (!$lesson["free"] && empty($timelimit)) {
-            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        if (($isPreview && $lesson["free"]) || !empty($timeLimit)) {
+            return $this->forward('TopxiaWebBundle:Player:show', array(
+                'id' => $lesson["mediaId"]
+            ));
         }
 
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
         return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'   => $lesson["mediaId"],
-            'mode' => empty($lesson["free"]) ? $request->query->get('mode', '') : ''
+            'id' => $lesson["mediaId"]
         ));
     }
 
@@ -99,7 +103,13 @@ class CourseLessonController extends BaseController
                 $hls     = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
 
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => array('id' => $file['id'], 'mode' => 'preview'), 'times' => 3, 'duration' => 3600));
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                        'data'     => array(
+                            'id' => $file['id']
+                        ),
+                        'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
+                        'duration' => 3600
+                    ));
 
                     $hls = array(
                         'url' => $this->generateUrl('hls_playlist', array(
@@ -164,8 +174,7 @@ class CourseLessonController extends BaseController
         $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $json           = array();
         $json['number'] = $lesson['number'];
-
-        $chapter = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
+        $chapter        = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
 
         if ($chapter['type'] == 'unit') {
             $unit               = $chapter;
@@ -255,7 +264,7 @@ class CourseLessonController extends BaseController
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                 'data'     => $file['id'],
-                                'times'    => 3,
+                                'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
                                 'duration' => 3600,
                                 'userId'   => $this->getCurrentUser()->getId()
                             ));
@@ -619,7 +628,7 @@ class CourseLessonController extends BaseController
                 'lessonId' => $lessonId
             ));
         }
-       
+
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
@@ -866,6 +875,19 @@ class CourseLessonController extends BaseController
         }
     }
 
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Mac", "Android");
+
+        foreach ($whiteList as $value) {
+            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -921,5 +943,4 @@ class CourseLessonController extends BaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-    
 }

@@ -64,6 +64,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+login_bind_change:
+    pattern: /login/bind/{type}/changetoexist
+    defaults: { _controller: TopxiaWebBundle:LoginBind:changeToExist }
+
 common_qrcode:
     pattern:  /common/qrcode
     defaults: { _controller: TopxiaWebBundle:Common:qrcode }
@@ -1860,6 +1864,14 @@ esbar_my_notify:
 esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+my_cards:
+    pattern:  /my/cards
+    defaults: { _controller: TopxiaWebBundle:Card:index }
+
+my_useable_coupons:
+    pattern: /my/useable_coupons
+    defaults: { _controller: TopxiaWebBundle:Card:useableCoupons }
 
 sms_prepare:
     pattern:  /sms/prepare/{targetType}/{id}

@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.8.2
+        assets_version: 6.8.3
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -114,7 +114,7 @@ services:
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
