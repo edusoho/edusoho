@@ -3399,3 +3399,26 @@ footer .footer-attr p i {
   color: #7e9696;
   margin-right: 10px;
 }
+.mooc-certificate-sign {
+  position: relative;
+}
+.mooc-certificate-sign .m-certificate-1,
+.mooc-certificate-sign .m-certificate-2 {
+  display: inline-block;
+  width: 110px;
+  height: 56px;
+  background: url('../img/all-icons.png');
+  position: absolute;
+  top: 0;
+  left: -6px;
+  text-align: center;
+  line-height: 48px;
+  color: #ffffff;
+}
+.mooc-certificate-sign .m-certificate-2 {
+  background-position: 110px -196px;
+  right: -13px;
+  left: auto;
+  top: -31px;
+  line-height: 60px;
+}

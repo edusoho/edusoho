@@ -13,8 +13,9 @@
 {% endif %}
 
 {% macro picture(course) %}
-  <div class="course-header-img">
+  <div class="course-header-img mooc-certificate-sign">
     <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"></a>
+    <span class="m-certificate-1">发放电子证书</span>
   </div>
 {% endmacro %} 
 {% macro info(course, member) %}
