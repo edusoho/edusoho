@@ -1,2 +1,70 @@
-{% set courses = data('LiveCourses',{'count':count, 'categoryId':categoryId}) %}
-{% extends 'TopxiaWebBundle:Course:normal-show.html.twig' %}
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+{# 直播 #}
+<div class="es-box es-course">                
+  <h2>{{ config.title|default(config.defaultTitle) }}</h2>
+  {% set count = config.count %}
+  {% set courses = data('RecentLiveCourses',{'count':count}) %}
+  {% if courses %}
+    <ul class="row">
+      {% for course in courses %}
+        {% if course %}
+          <li class="col-sm-6 col-md-4 es-course-list">
+            <div>
+              <div class="course-top">
+                <a href="{{ path('course_show', {id:course.id}) }}">
+                  {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive thumb', '') }}
+                </a>
+                <span>直播:  {{ course.lesson.startTime|date('n月j日 H:i') }} </span>
+              </div>
+
+              <div class="course-bottom">
+                <h3>{{ course.lesson.title }}</h3>
+                <p>
+                  {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+                </p>
+                    
+                {% if setting('course.show_student_num_enabled', '1') == 1  %}
+                  <span class="student-num pull-right">{{ course.studentNum }}人报名</span>
+                {% endif %}
+
+                <span class="nickname clearfix">
+                  {% for teacher in course.teachers %}
+                  {% if loop.index <= 2 %}
+                  {{ web_macro.user_link(teacher, 'text-muted') }}
+                  {% endif %}
+                  {% endfor %}
+                  {% if course.teachers|length > 2 %}
+                    <span class="text-muted">等</span>
+                  {% else %}
+                    &nbsp;
+                  {% endif %}
+                </span>
+              </div>
+              {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ course.lesson.id %}
+     
+              <div class="mask">
+                <a href="{{ lessonUrl }}">
+                  {% set teacher = course.teachers|first %}
+                  <div class="teacher-info clearfix">
+                    {{ lazy_img(filepath(teacher.smallAvatar, 'avatar.png'), 'img-circle pull-left') }}
+                    <span>{{ teacher.nickname }}</span>
+                    <span>{{ teacher.title|plain_text(10) }}</span>
+                  </div>
+                  <p>{{ teacher.profile.about|plain_text(50) }}</p>
+                  <span class="iconfont icon-jiantou"></span>
+                  <h3 class="title">{{ course.title|plain_text(8) }}</h3>
+                </a>
+              </div>
+            </div>
+          </li>
+        {% endif %}  
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">还没有直播课程</div>
+  {% endif %}
+  {% if data('RecentLiveCourses',{'count':count})|length >= 1 %}
+    <a class="more" href="{{ path('live_course_explore') }}">更多&gt;</a>
+  {% endif %}
+</div>
