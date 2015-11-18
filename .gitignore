@@ -14,6 +14,7 @@ package.json
 /app/data/plugin_installed.php
 /app/data/crontab_config.yml
 /app/data/keywords.php
+/app/data/network.lock
 /app/logs/*
 /build
 /files

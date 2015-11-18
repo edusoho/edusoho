@@ -122,17 +122,15 @@
           <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control" value="{{loginConnect[type ~ '_secret']}}">
         </div>
       </div>
-      {% if type != 'weixinmob'%}
         <div class="form-group">
           <div class="col-md-3 control-label">
-            <label for="">登录时必须设置帐号和邮箱</label>
+            <label for="">登录时必须设置邮箱</label>
           </div>
             <div class="controls col-md-8 radios">    
               {{ radios(type ~ '_set_fill_account' , {1:'开启', 0:'关闭'}, loginConnect[type ~ '_set_fill_account']) }}
                 <p class="help-block">在{{ client.admin_name }}官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过</p>
             </div>
         </div>
-      {% endif %}
       {% if type != 'weixinmob' and type != 'weixinweb' %}
         <div class="form-group">
           <div class="col-md-3 control-label">
