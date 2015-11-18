@@ -43,10 +43,10 @@
           </div>
 
           <div class="form-group">
-            <label class="col-md-2 control-label">课程购买</label>
+            <label class="col-md-2 control-label">限制加入</label>
               <div class="col-md-8 controls radios">
-                {{ radios('buyable', {'1':'开启', '0':'关闭'}, course.buyable|default(1) ) }}
-               <div class="help-block">关闭后课程将无法在线购买加入、由教师/管理员后台导入。</div>
+                {{ radios('buyable', {'0':'开启', '1':'关闭'}, course.buyable|default(1) ) }}
+               <div class="help-block">开启后课程将无法在线加入、由教师/管理员后台导入。</div>
             </div>
           </div>
           
