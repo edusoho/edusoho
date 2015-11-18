@@ -1,7 +1,7 @@
 {% if item.type == 'unit' %}
   <li class="section">
     <span class="title">
-    {% if setting('course.custom_chapter_enabled') %} 
+    {% if setting('course.custom_chapter_enabled')|default(true) %} 
       第 {{ item.number }} 
       {% if setting('default.part_name') %}
         {{setting('default.part_name')|default('节')}}
@@ -16,7 +16,7 @@
   <li class="chapter clearfix">
     <i class="es-icon es-icon-toc"></i>
     <span class="title">
-      {% if setting('course.custom_chapter_enabled') %} 
+      {% if setting('course.custom_chapter_enabled')|default(true) %} 
         第 {{ item.number }} 
         {% if setting('default.chapter_name') %}
           {{setting('default.chapter_name')|default('章')}}
