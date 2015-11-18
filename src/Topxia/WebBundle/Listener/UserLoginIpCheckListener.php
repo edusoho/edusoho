@@ -38,24 +38,8 @@ class UserLoginIpCheckListener
         }
     }
 
-    private function makeHash($user)
-    {
-        $string = $user['id'].$user['email'].$this->container->getParameter('secret');
-        return md5($string);
-    }
-
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System.SettingService');
-    }
-
-    protected function getAuthService()
-    {
-        return ServiceKernel::instance()->createService('User.AuthService');
     }
 }
