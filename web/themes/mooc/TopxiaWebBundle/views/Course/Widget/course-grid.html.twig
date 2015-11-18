@@ -1,12 +1,16 @@
-<div class="course-img">
-  <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"  /></a>
+<div class="course-img ">
+  <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"  />
+  
+  </a>
 </div>
-<div class="course-info">
+<div class="course-info  mooc-certificate-sign" >
   <div class="title">
     <a href="{{ path('course_show', {id:course.id}) }}">
       {{course.title }}
+
     </a>
   </div>
+  <span class="m-certificate-3">电子证书</span>
   <div class="content">{{ course.about|plain_text(100) }}</div>
   <div class="metas">
     {% if 'periodic'== course.type %}
