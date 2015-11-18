@@ -95,6 +95,12 @@
               </a>
             </li>
             {% endif %}
+
+            {% if is_plugin_installed('Certificate') %}
+              <li class="list-group-item {% if side_nav == 'certificate_setting' %}active{% endif %}">
+                <a href="{{ path('certificate_setting', {courseId:course.id}) }}"><span></span>证书设置</a>
+              </li>
+            {% endif %}
           </ul>
 
           <ul class="list-group">
@@ -153,7 +159,7 @@
                 <span></span>成绩单</a>
             </li>
             {% endif %}
-
+            
             {#{% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
               <li class="list-group-item {% if side_nav == 'course_manage_order' %}active{% endif %}">
                 <a href="{{path('course_manage_order',{id:course.id})}}"><span></span>课程订单查询</a>
