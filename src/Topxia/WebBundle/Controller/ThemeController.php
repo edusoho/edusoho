@@ -1,4 +1,5 @@
 <?php
+
 namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -9,7 +10,8 @@ class ThemeController extends BaseController
     public function indexAction(Request $request)
     {
         $themeConfig = $this->getThemeService()->getCurrentThemeConfirmConfig();
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
+
+        return $this->render('TopxiaAdminBundle:Default:show.html.twig', array(
             'themeConfig'    => $themeConfig['confirmConfig'],
             'allConfig'      => $themeConfig['allConfig'],
             'isIndex'        => true,
@@ -32,7 +34,7 @@ class ThemeController extends BaseController
                 $category = $this->getCategoryService()->getCategory($config["categoryId"]);
             }
 
-            return $this->render("GracefulThemeBundle:Default:{$config['code']}.html.twig", array(
+            return $this->render("TopxiaAdminBundle:Default:{$config['code']}.html.twig", array(
                 'category' => $category,
                 'config'   => $config
             ));
@@ -49,7 +51,7 @@ class ThemeController extends BaseController
             $color = $config['config']['color'];
         }
 
-        return $this->render("GracefulThemeBundle:Default:color.html.twig", array(
+        return $this->render("TopxiaAdminBundle:Default:color.html.twig", array(
             'color' => $color
         ));
     }
@@ -64,7 +66,7 @@ class ThemeController extends BaseController
             $config = $config['config']['bottom'];
         }
 
-        return $this->render("GracefulThemeBundle:Default:{$config}-bottom.html.twig");
+        return $this->render("TopxiaAdminBundle:Default:{$config}-bottom.html.twig");
     }
 
     private function getThemeService()

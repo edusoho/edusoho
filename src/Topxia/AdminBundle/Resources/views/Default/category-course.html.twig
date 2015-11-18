@@ -1,0 +1,24 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!-- course -->
+<div class="es-box es-course">
+  <h2>{{ config.title|default(config.defaultTitle) }}</h2>
+  {% set count = config.count %}
+  {% set categoryId = config.categoryId|default(null) %}
+  {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
+  {% if courses %}
+  {% set mode = mode|default('default') %}
+    <ul class="row">
+      {% for course in courses %}
+        <li class="col-sm-6 col-md-4 es-course-list">
+          {% include 'TopxiaAdminBundle:Default:course-grid.html.twig' %}
+        </li>
+      {% endfor %}
+    </ul>
+
+
+  {% else %}
+      <div class="empty">还没有发布的课程</div>
+  {% endif %}
+  <a class="more" href="{{ path('course_explore',{category:category.code|default('')}) }}">更多&gt;</a>
+
+</div>

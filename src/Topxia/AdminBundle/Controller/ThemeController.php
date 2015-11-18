@@ -89,6 +89,18 @@ class ThemeController extends BaseController
         ));
     }
 
+    public function showAction(Request $request, $uri)
+    {
+        //By Bellorchid
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+        var_dump($themeConfig);
+        return $this->render('TopxiaAdminBundle:Default:show.html.twig', array(
+            'themeConfig' => $themeConfig['config'],
+            'allConfig'   => $themeConfig['allConfig'],
+            'isEditColor' => true
+        ));
+    }
+
     protected function getTheme($uri)
     {
         if (empty($uri)) {
