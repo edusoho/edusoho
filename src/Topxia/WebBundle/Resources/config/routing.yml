@@ -800,13 +800,17 @@ course_manage_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
-course_manage_do_test:
-    pattern: /test/{testId}/do
-    defaults: { _controller: TopxiaWebBundle:Testpaper:doTestpaper }
+course_manage_real_time_testpaper_check:
+    pattern:  /testpaper/real-time/check
+    defaults: { _controller: TopxiaWebBundle:Testpaper:realTimeCheck}
 
-course_manage_redo_test:
-    pattern: /test/{testId}/redo
-    defaults: { _controller: TopxiaWebBundle:Testpaper:reDoTestpaper }
+course_lesson_do_test:
+    pattern: /lesson/{lessonId}/test/{testId}/do
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:doTestpaper }
+
+course_lesson_redo_test:
+    pattern: /lesson/{lessonId}/test/{testId}/redo
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:reDoTestpaper }
 
 course_manage_show_test:
     pattern: /test/{id}/show
