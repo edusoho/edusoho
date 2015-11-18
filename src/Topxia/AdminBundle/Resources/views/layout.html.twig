@@ -67,14 +67,14 @@
 
            {% for m in menu_children('admin', 'admin', 1) %}
 
-            {% if m.code == "admin_system" %}
+            {% if m.code == "admin_system" or m.code == 'admin_app' %}
               {% if is_granted('ROLE_SUPER_ADMIN') %}
               <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
               {{ self_macro.menu_link_html(_context, m) }}
               </li>
               {% endif %}
             {% else %}    
-              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network()))  %}
                 <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
