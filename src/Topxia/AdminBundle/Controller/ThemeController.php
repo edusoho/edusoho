@@ -34,18 +34,9 @@ class ThemeController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function manageIndexAction(Request $request, $uri)
+    public function showAction(Request $request)
     {
-        // if (!$this->getThemeService()->isAllowedConfig()) {
-        //     return $this->redirect($this->generateUrl('admin_setting_theme'));
-        // }
-        //$themeUri    = $request->query->get('uri');
-        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-
-        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
-            'themeConfig' => $themeConfig['config'],
-            'allConfig'   => $themeConfig['allConfig']
-        ));
+        $themeUri = $request->query->get('uri');
     }
 
     protected function getTheme($uri)
@@ -94,10 +85,5 @@ class ThemeController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getThemeService()
-    {
-        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 }
