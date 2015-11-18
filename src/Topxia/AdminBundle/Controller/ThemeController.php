@@ -34,11 +34,33 @@ class ThemeController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function saveConfigAction(Request $request, $uri)
+    {
+        $config      = $request->request->get('config');
+        $currentData = $request->request->get('currentData');
+        $config      = $this->getThemeService()->saveCurrentThemeConfig($config);
+
+        if ($currentData) {
+            return $this->render('TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig', array(
+                'pendant' => $currentData
+            ));
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function confirmConfigAction(Request $request, $uri)
+    {
+        $this->getThemeService()->saveConfirmConfig();
+        return $this->redirect($this->generateUrl('admin_theme_manage', array('uri' => $uri), true));
+    }
+
     public function manageIndexAction(Request $request, $uri)
     {
         // if (!$this->getThemeService()->isAllowedConfig()) {
         //     return $this->redirect($this->generateUrl('admin_setting_theme'));
         // }
+
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
@@ -54,6 +76,17 @@ class ThemeController extends BaseController
         //exit();
         $this->getThemeService()->resetConfig();
         return $this->redirect($this->generateUrl('admin_theme_manage', array('uri' => $uri), true));
+    }
+
+    public function showAction(Request $request, $uri)
+    {
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
+            'themeConfig' => $themeConfig['config'],
+            'allConfig'   => $themeConfig['allConfig'],
+            'isEditColor' => true
+        ));
     }
 
     protected function getTheme($uri)

@@ -582,6 +582,19 @@ admin_reset_currentTheme_config:
     pattern:  /resets/{uri}/config
     defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
 
+admin_save_themes_config:
+    pattern:  /save/{uri}/config
+    defaults: { _controller: TopxiaAdminBundle:Theme:saveConfig }
+    methods:  [POST]
+
+admin_confirm_themes_config:
+    pattern:  /confirm/{uri}/config
+    defaults: { _controller: TopxiaAdminBundle:Theme:confirmConfig }
+
+admin_themes_show:
+    pattern:  /{uri}/show
+    defaults: { _controller: TopxiaAdminBundle:Theme:show }
+
 admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userCenter }
