@@ -48,6 +48,18 @@ class ThemeController extends BaseController
         ));
     }
 
+    public function showAction(Request $request, $uri)
+    {
+        //By Bellorchid
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+        var_dump($themeConfig);
+        return $this->render('TopxiaAdminBundle:Default:show.html.twig', array(
+            'themeConfig' => $themeConfig['config'],
+            'allConfig'   => $themeConfig['allConfig'],
+            'isEditColor' => true
+        ));
+    }
+
     protected function getTheme($uri)
     {
         if (empty($uri)) {
@@ -94,5 +106,10 @@ class ThemeController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 }

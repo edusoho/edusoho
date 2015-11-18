@@ -578,7 +578,7 @@ admin_theme_manage:
     pattern:  /{uri}/manage
     defaults: { _controller: TopxiaAdminBundle:Theme:manageIndex }
 
-admin_manage_theme_show:
+admin_themes_show:
     pattern:  /{uri}/show
     defaults: { _controller: TopxiaAdminBundle:Theme:show }
 

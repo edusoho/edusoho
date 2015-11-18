@@ -1,0 +1,40 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+      {% if course.discountId > 0 %}
+        {% if course.discount == 0 %}
+          <!-- 限免 -->
+          <span class="tag-discount free"></span>
+        {% else %}
+          <!-- 折扣 -->
+          <span class="tag-discount"></span>
+        {% endif %}
+      {% endif %}
+      {% if course.serializeMode == 'serialize' %}
+        <span class="tags"><span class="tag-serialing"></span></span>
+      {% elseif course.serializeMode == 'finished' %}
+        <span class="tags"><span class="tag-finished"></span></span>
+      {% endif %}
+      {% if course.type == 'live' %}
+        <span class="tags">
+          <span class="tag-live"></span>
+        </span>
+      {% endif %}
+      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+        {{ course.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+      <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+      {% endif %}
+      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
+      {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+    </div>
+  </div>
+</div>
