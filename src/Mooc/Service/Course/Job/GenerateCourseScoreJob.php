@@ -64,11 +64,18 @@ class GenerateCourseScoreJob implements Job
                 $userScore['totalScore']    = $homeworkScore + $testpaperScore + $userScore['otherScore'];
                 $this->getCourseScoreService()->updateUserCourseScore($userScore['id'], $userScore);
             }
+
+
         }
 
         if ('scoring' == $scoreSetting['status']) {
             $this->getCourseScoreService()->updateScoreSetting($courseId, array('status' => 'unpublish'));
         }
+
+        if(PluginToolkit::isPluginInstalled('Certificate')){
+            $this->getCertificateService()->generateCertificate($courseId);
+        }
+
     }
 
     protected function getStudentHomeworkScore($student, $homeworks, $homeworkPercentage)
@@ -148,5 +155,10 @@ class GenerateCourseScoreJob implements Job
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getCertificateService()
+    {
+        return $this->getServiceKernel()->createService('Certificate:Certificate.CertificateService');
     }
 }

@@ -22,3 +22,8 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
     staffNo: 学号/教工号
+
+certificateStatus:
+    published: 已发放
+    auditing: 审核中
+    unpublished: 未发放
