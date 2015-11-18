@@ -578,6 +578,10 @@ admin_theme_manage:
     pattern:  /{uri}/manage
     defaults: { _controller: TopxiaAdminBundle:Theme:manageIndex }
 
+admin_reset_currentTheme_config:
+    pattern:  /resets/{uri}/config
+    defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
+
 admin_setting_user_center:
     pattern:  /setting/user-center
     defaults: { _controller: TopxiaAdminBundle:UserSetting:userCenter }
