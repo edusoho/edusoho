@@ -38,7 +38,6 @@ class PlayerController extends BaseController
             'file'             => $file,
             'url'              => $url,
             'player'           => $player,
-            'context'          => $context,
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
     }
@@ -157,6 +156,19 @@ class PlayerController extends BaseController
         }
 
         return $response;
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android");
+
+        foreach ($whiteList as $value) {
+            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getTokenService()
