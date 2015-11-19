@@ -1,14 +1,14 @@
+<section class="course-list-section" id="course-list">
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <!-- course -->
 <div class="es-box es-course">
-  <h2>{{ config.title|default(config.defaultTitle) }}</h2>
   {% set count = config.count %}
   {% set categoryId = config.categoryId|default(null) %}
   {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
   {% set categoriesFirst = data('Categories',{'group':'course'})%}
 <div class="container">
   <div class="text-line">
-    <h5><span>网校课程</span><div class="line"></div></h5>
+    <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
     <!-- <div class="subtitle">精选网校课程，满足你的学习兴趣。</div> -->
   </div>
   <div class="course-filter" id="course-filter">
@@ -65,3 +65,4 @@
   <a class="more" href="{{ path('course_explore',{category:category.code|default('')}) }}">更多&gt;</a>
 
 </div>
+</section>
