@@ -193,34 +193,33 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $token   = $this->getTokenService()->verifyToken('hls.clef', $token);
-        $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
-            return new Response($fakeKey);
+            return $this->makeFakeTokenString();
         }
 
         if (!empty($token['userId'])) {
             if (!($this->getCurrentUser()->isLogin()
                 && $this->getCurrentUser()->getId() == $token['userId'])) {
-                return new Response($fakeKey);
+                return $this->makeFakeTokenString();
             }
         }
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
         if ($dataId != $id) {
-            return new Response($fakeKey);
+            return $this->makeFakeTokenString();
         }
 
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
-            return new Response($fakeKey);
+            return $this->makeFakeTokenString();
         }
 
         if (empty($file['convertParams']['hlsKey'])) {
-            return new Response($fakeKey);
+            return $this->makeFakeTokenString();
         }
 
         $api = CloudAPIFactory::create('leaf');
@@ -232,6 +231,12 @@ class HLSController extends BaseController
 
         $stream = $api->get("/hls/clef/{$file['convertParams']['hlsKey']}/algo/0", array());
         return new Response($stream['key']);
+    }
+
+    protected function makeFakeTokenString()
+    {
+        $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+        return new Response($fakeKey);
     }
 
     protected function getUploadFileService()
