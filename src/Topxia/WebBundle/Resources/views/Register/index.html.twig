@@ -123,5 +123,7 @@
     {% endif %}
   </div>
 </div>
+  {% if setting('weixinmob_enabled') %}
     {% do load_script('auth/isWeiXin') %}
+  {% endif %}
 {% endblock %}
