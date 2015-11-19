@@ -23,9 +23,11 @@
 			<label class="radio-inline">
 			  <input type="radio" id="filter-change" data-filter="outdate" {% if app.request.query.get('filter') == 'outdate' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}">已过期
 			</label>
-			<label class="radio-inline">
-			  <input type="radio" id="filter-change" data-filter="invalid" {% if app.request.query.get('filter') == 'invalid' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}">已作废
-			</label>
+			{% if app.request.query.get('cardType')=='moneyCard' %}
+				<label class="radio-inline">
+				  <input type="radio" id="filter-change" data-filter="invalid" {% if app.request.query.get('filter') == 'invalid' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}">已作废
+				</label>
+			{% endif %}
 		</div>
 	</div>
 	<div class="jm-card-list">
@@ -40,7 +42,7 @@
 					{% endif %}
 				{% endfor %}
 			{% else %}
-				<div class="empty">没有搜索到符合条件的卡</div>
+				<div class="empty">没有搜索到符合条件的{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}券{% else %}卡{% endif %}</div>
 			{% endif %}
 		</div>
 
