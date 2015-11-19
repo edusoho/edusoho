@@ -42,7 +42,7 @@ class PlayerController extends BaseController
             'file'             => $file,
             'url'              => $url,
             'player'           => $player,
-            'agentInWhiteList' => $agentInWhiteList
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
     }
 
