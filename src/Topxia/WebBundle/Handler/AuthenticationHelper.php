@@ -24,9 +24,9 @@ class AuthenticationHelper
             switch ($result['code']) {
                 case 'max_ip_failed_limit':
                     $result['message'] = "您当前IP下帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试。";
+                    break;
                 case 'max_failed_limit':
                     $result['message'] = "帐号或密码输入错误过多，请在{$setting['temporary_lock_minutes']}分钟后再试，您可以通过找回并重置密码来解除封禁。";
-
                     break;
                 default:
                     $result['message'] = "帐号或密码输入错误过多，您已被禁止登录。";
