@@ -123,7 +123,7 @@
     {% endif %}
   </div>
 </div>
-  {% if setting('loginConnect.weixinmob_enabled') == '1' %}
+  {% if setting('login_bind.weixinmob_enabled') == '1' %}
     {% do load_script('auth/isWeiXin') %}
   {% endif %}
 {% endblock %}
