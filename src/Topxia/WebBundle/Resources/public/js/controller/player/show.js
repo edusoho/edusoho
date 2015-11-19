@@ -1,13 +1,11 @@
 define(function(require, exports, module) {
 
-	
-	var Store = require('store');
-	var Class = require('class');
+    var Store = require('store');
+    var Class = require('class');
     var Messenger = require('./messenger');
     var swfobject = require('swfobject');
 
-	exports.run = function() {
-
+    exports.run = function() {
 
         var videoHtml = $('#lesson-video-content');
 
@@ -18,17 +16,20 @@ define(function(require, exports, module) {
         var lessonId = videoHtml.data("lessonId");
         var watchLimit = videoHtml.data('watchLimit');
 
+        var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
+        var markerUrl = videoHtml.data('markerurl');
+        var starttime = videoHtml.data('starttime');
 
+        var markers = [{'id':0,text:'',time:-1}];
         var html = "";
-
         if(fileType == 'video'){
-            if (videoHtml.data('player') == 'local-video-player'){
+            if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
@@ -59,13 +60,15 @@ define(function(require, exports, module) {
         var PlayerFactory = require('./player-factory');
         var playerFactory = new PlayerFactory();
         var player = playerFactory.create(
-            videoHtml.data('player'),
+            playerType,
             {
                 element: '#lesson-player',
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
-                watermark: watermark
+                watermark: watermark,
+                markers: markers,
+                starttime: starttime
             }
         );
 
@@ -89,6 +92,26 @@ define(function(require, exports, module) {
             player.play();
         });
 
+        player.on("firstplay", function(){
+             if (balloonVideoPlayer && markerUrl) {
+                $.ajax({
+                    type: "GET",
+                    url: markerUrl,
+                    async: true, 
+                    success: function (result) {
+                        if (result != null) {
+                            player.setMarkers(result);
+                        }
+                    }
+                });
+            }
+        });
+        
+
+        player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
+        });
+
         player.on("paused", function(){
             messenger.sendToParent("paused", {pause: true});
         });
@@ -102,9 +125,9 @@ define(function(require, exports, module) {
             DurationStorage.del(userId, fileId);
         });
 
-	};
+    };
 
-	var DurationStorage = {
+    var DurationStorage = {
         set: function(userId,fileId,duration) {
             var durations = Store.get("durations");
             if(!durations || !(durations instanceof Array)){

@@ -29,9 +29,13 @@ class CourseLessonController extends BaseController
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $context               = array();
+        $context['starttime']  = $request->query->get('starttime');
+        $context['markerUrl']  = $this->generateUrl('course_lesson_plugin_question_markers', array('lessonId' => $lessonId));
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id' => $lesson["mediaId"]
+            'id'      => $lesson["mediaId"],
+            'context' => $context
         ));
     }
 
