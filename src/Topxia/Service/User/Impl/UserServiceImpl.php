@@ -946,10 +946,6 @@ class UserServiceImpl extends BaseService implements UserService
             return array('status' => 'ok');
         }
 
-        if ($user && $setting['temporary_lock_enabled'] && (time() > $user['lockDeadline'])) {
-            return array('status' => 'ok');
-        }
-
         $ipFailedCount = $this->getIpBlacklistService()->getIpFailedCount($ip);
 
         if ($ipFailedCount >= $setting['ip_temporary_lock_allowed_times']) {
@@ -960,7 +956,7 @@ class UserServiceImpl extends BaseService implements UserService
             return array('status' => 'error', 'code' => 'max_failed_limit');
         }
 
-        if ($user && $setting['temporary_lock_enabled'] && ($user['consecutivePasswordErrorTimes'] >= $setting['temporary_lock_allowed_times'])) {
+        if ($user && $setting['temporary_lock_enabled'] && ($user['consecutivePasswordErrorTimes'] >= $setting['temporary_lock_allowed_times']) && ($user['lockDeadline'] > time())) {
             return array('status' => 'error', 'code' => 'max_failed_limit');
         }
 
