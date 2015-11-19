@@ -272,11 +272,11 @@ class UserSettingController extends BaseController
         $commomFieldsKeys = array_keys($commomFields);
 
         if (isset($auth['registerFieldNameArray'])) {
-            $auth['registerFieldNameArray'] = array_merge($auth['registerFieldNameArray'], $commomFieldsKeys);
+            $auth['registerFieldNameArray'] = array_unique(array_merge($auth['registerFieldNameArray'], $commomFieldsKeys));
         }
 
         if (isset($courseSetting['userinfoFieldNameArray'])) {
-            $courseSetting['userinfoFieldNameArray'] = array_merge($courseSetting['userinfoFieldNameArray'], $commomFieldsKeys);
+            $courseSetting['userinfoFieldNameArray'] = array_unique(array_merge($courseSetting['userinfoFieldNameArray'], $commomFieldsKeys));
         }
 
         $userPartner = $this->getSettingService()->get('user_partner', array());
