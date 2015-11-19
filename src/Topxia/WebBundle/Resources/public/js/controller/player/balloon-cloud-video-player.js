@@ -9,7 +9,9 @@ define(function(require, exports, module) {
             fingerprint: '',
             watermark: '',
             url: '',
-            dynamicSource: ''
+            dynamicSource: '',
+            markers: [],
+            starttime: '0'
         },
 
         events: {},
@@ -40,6 +42,22 @@ define(function(require, exports, module) {
                     });
                 }
 
+                plugins = $.extend(plugins, {
+                  markers: {
+                        markers: self.get('markers'),
+                        markerTip: {
+                           display: true,
+                           text: function(marker) {
+                              return self.durationFormat(marker.time) +" "+ marker.text;
+                           },
+                           time: function(marker) {
+                              return marker&&marker.time?marker.time:0;
+                           }
+                        },
+                    }
+                });
+                
+
                 if(self.get('fingerprint') != '') {
                     plugins = $.extend(plugins, {
                         fingerprint: {
@@ -54,6 +72,7 @@ define(function(require, exports, module) {
                     controls: true,
                     autoplay: false,
                     preload: 'none',
+                    starttime: self.get('starttime'),
                     language: 'zh-CN',
                     width:'100%',
                     height:'100%',
@@ -75,7 +94,6 @@ define(function(require, exports, module) {
                         default_res : currentRes,
                         dynamic_source : self.get('url')
                     });
-
                 });
 
                 player.on('changeRes', function() {
@@ -94,6 +112,10 @@ define(function(require, exports, module) {
                     self.trigger("ended", e);
                 });
 
+                player.on("firstplay", function(e){
+                    self.trigger("firstplay", e);
+                });
+
                 player.on("play", function(e){
                     self.trigger("playing", e);
                 });
@@ -101,17 +123,23 @@ define(function(require, exports, module) {
                 player.on("pause", function(e){
                     self.trigger("paused", e);
                 });
+                
 
                 self.set('player', player);
 
                 BalloonCloudVideoPlayer.superclass.setup.call(self);
-                
-            }, 'json');
 
+            }, 'json');
+            
+            window.BalloonPlayer = this;
         },
 
         play: function(){
             this.get("player").play();
+        },
+
+        pause: function(){
+            this.get("player").pause();
         },
 
         _onEnded: function(e) {
@@ -129,6 +157,20 @@ define(function(require, exports, module) {
             return this.get("player").duration();
         },
 
+        getMarkers: function() {
+            return this.get('markers');
+        },
+
+        setMarkers: function(markers) {
+            var player = this.get("player");
+            player.markers.reset(markers);
+        },
+
+        addMarker: function(marker) {
+            var player = this.get("player");
+            player.markers.add(marker);
+        },
+
         setCurrentTime: function(time) {
             this.get("player").currentTime(time);
         },
@@ -142,7 +184,20 @@ define(function(require, exports, module) {
 
         destroy: function() {
             this.get("player").dispose();
+        },
+
+        durationFormat: function(secondTime) {
+            var minutes = parseInt(secondTime / 60);
+            var seconds = secondTime - minutes * 60;
+            return this.pad(minutes,2) + ':' +this.pad(seconds,2);
+        },
+
+        pad: function(num,len) {
+            return (new Array(len >(''+num).length ? (len - (''+num).length+1) : 0).join('0') + num);
         }
+        
+
+
     });
 
     module.exports = BalloonCloudVideoPlayer;

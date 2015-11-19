@@ -48,7 +48,7 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label">
-          <label >班级展示</label>
+          <label >{{setting("classroom.name")|default("班级")}}展示</label>
         </div>
         <div class="col-md-8 controls radios">
           <label>
@@ -57,14 +57,14 @@
           <label>
             <input id="showable-close" type="radio" name="showable" value="0"> 关闭
           </label>
-          <div class="help-block">关闭后，班级将彻底隐藏，无法在前台查看到。</div>
+          <div class="help-block">关闭后，{{setting("classroom.name")|default("班级")}}将彻底隐藏，无法在前台查看到。</div>
         </div>
 
       </div>
       <div class="row form-group">
       <div id='buyable'>
         <div class="col-md-2 control-label">
-          <label >班级购买</label>
+          <label >{{setting("classroom.name")|default("班级")}}购买</label>
         </div>
         <div class="col-md-8 controls radios">
           <label>
@@ -73,7 +73,7 @@
           <label>
             <input id="buyable-close" type="radio" name="buyable" value="0"> 关闭
           </label>
-          <div class="help-block">关闭后班级将无法在线购买加入。</div>
+          <div class="help-block">关闭后{{setting("classroom.name")|default("班级")}}将无法在线购买加入。</div>
         </div>
         </div>
       </div>

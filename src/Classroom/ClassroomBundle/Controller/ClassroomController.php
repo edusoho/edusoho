@@ -332,7 +332,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
         if(!$classroom){
             $classroomDescription = array();
@@ -610,7 +610,7 @@ class ClassroomController extends BaseController
         }
         
         if(!$classroom['buyable']){
-            return $this->createMessageResponse('info', '非常抱歉，该班级不允许加入，如有需要请联系客服','',3,$this->generateUrl('homepage')); 
+            return $this->createMessageResponse('info', "非常抱歉，该{$classroomSetting['name']}不允许加入，如有需要请联系客服",'',3,$this->generateUrl('homepage')); 
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -714,7 +714,6 @@ class ClassroomController extends BaseController
 
     public function modifyUserInfoAction(Request $request)
     {
-
         $formData = $request->request->all();
 
         $user = $this->getCurrentUser();
@@ -724,7 +723,7 @@ class ClassroomController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', '班级不存在，不能购买。');
+            return $this->createMessageResponse('error', "{$classroomSetting['name']}不存在，不能购买。");
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(

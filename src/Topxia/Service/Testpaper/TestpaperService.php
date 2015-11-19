@@ -87,6 +87,8 @@ interface TestpaperService
 
     public function updateTestpaperResult($id, $usedTime);
 
+    public function updateTestResultsByLessonId($lessonId, $fields);
+
     public function findTeacherTestpapersByTeacherId ($teacherId);
 
     /**
