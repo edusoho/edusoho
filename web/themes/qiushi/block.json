@@ -1,0 +1,48 @@
+{
+    "qiushi:home_top_banner": 
+    {
+        "title": "求是主题：首页轮播图",
+        "category": "qiushi",
+        "templateName": "@theme/qiushi/block/poster.template.html.twig",
+        "items": {
+            "posters":{
+                "title":"海报",
+                "desc":"首页海报",
+                "count":1,
+                "type":"poster",
+                "default":[
+                    {
+                        "src" : "\/themes\/qiushi\/img\/new\/poster.jpg",
+                        "alt" : "海报1",
+                        "layout" : "tile",
+                        "background" : "#fff",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/qiushi\/img\/new\/poster.jpg",
+                        "alt" : "海报2",
+                        "layout" : "tile",
+                        "background" : "#fff",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/qiushi\/img\/new\/poster.jpg",
+                        "alt" : "海报3",
+                        "layout" : "tile",
+                        "background" : "#fff",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    }
+                ]
+            }
+        }
+    }
+}

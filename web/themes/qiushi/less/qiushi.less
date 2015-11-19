@@ -1,0 +1,134 @@
+@import 'variables.less';
+@import 'reset.less';
+
+// reset
+.nav-pills > li > a {
+  padding: 8px 20px;
+  .border-radius(20px);
+}
+
+.qs-header {
+  height: 90px;
+  background-color: #fff;
+  .container {
+    position: relative;
+  }
+  .logo {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    margin-left: -100px;
+    z-index: 1;
+  }
+  .nav-left {
+    float: left;
+    width: 50%;
+    padding-right: 150px;
+    .navbar-nav {
+      float: right;
+    }
+  }
+  .nav-right {
+    float: right;
+    width: 50%;
+    padding-left: 150px;
+    .navbar-nav {
+      float: left;
+    }
+  }
+  .navbar-nav {
+    >li>a {
+      font-size: 16px;
+      padding: 35px 20px;
+      color: @gray-dark;
+      &:hover {
+        color: @brand-primary;
+      }
+    }
+  }
+}
+
+.qs-section-header {
+  padding-top: 70px;
+  text-align: center;
+  margin-bottom: 30px;
+  .title {
+    font-size: 28px;
+    color: @gray-darker;
+    margin-bottom: 15px;
+  }
+  .subtitle {
+    color: #ccc;
+  }
+}
+
+.course-filter .more {
+  position: absolute;
+  top: 10px;
+  right: 0;
+}
+
+.qs-live-course-list {
+  .course-item {
+    padding: 10px;
+    .border-radius;
+    background-color: #fff;
+  }
+  .course-img {
+    position: relative;
+    margin-bottom: 10px;
+    overflow: hidden;
+    &:hover {
+      .mask {
+        .opacity(1);
+        .es-transition;
+      }
+      .btn {
+        top: 50%;
+        margin-top: -17px;
+        .es-transition;
+      }
+    }
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #111;
+      background-color: rgba(0, 0, 0, 0.8);
+      .opacity(0);
+      .es-transition;
+    }
+    .btn {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -40px;
+      .es-transition;
+    }
+  }
+  .title {
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .metas {
+    font-size: 12px;
+  }
+}
+
+// 组件
+.qs-tag {
+  font-size: 12px;
+  padding: 3px 5px; 
+  .border-radius;
+  &.qs-tag-danger {
+    color: @brand-danger;
+    background-color: #fce7e7;
+  }
+  &.qs-tag-info {
+    color: @brand-info;
+    background-color: #e7f2fc;
+  }
+}
