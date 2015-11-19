@@ -1,8 +1,8 @@
 <ul class="course-wide-list">
   {% for course in courses %}
-    <li class="course-item clearfix">
+    <li class="course-item clearfix mooc-certificate-sign">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}"><span class="m-certificate-1">电子证书</span>
       </a>
 
       <div class="course-body">
