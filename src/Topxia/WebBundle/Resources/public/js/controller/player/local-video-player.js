@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         setup: function() {
         	
             var techOrder = ['flash','html5'];
-            if(this.checkHtml5()) {
+            if(this.get("agentInWhiteList")) {
                 techOrder = ['html5', 'flash'];
             }
 
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
 			player.src(this.get("url"));
 
 			player.on('error', function(error){
-			    this.set("hasPlayerError", true);
+			    that.set("hasPlayerError", true);
 			    var message = '您的浏览器不能播放当前视频。';
 			    Notify.danger(message, 60);
 			});
