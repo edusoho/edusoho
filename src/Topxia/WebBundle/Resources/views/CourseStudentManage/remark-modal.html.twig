@@ -2,10 +2,10 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'备注'|trans}}{% endblock %}
+{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'备注'|trans}}{% endblock %}
 {% block body %}
 
-<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}" data-user="{{default.user_name|default('学员'|trans)}}">
+<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}" data-user="{{default.user_name|default('学员')|trans}}">
 
   <div class="form-group">
     <div class="controls">
