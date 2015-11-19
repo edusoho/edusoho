@@ -16,7 +16,7 @@
          {{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵扣{{ coupon.rate }}元</option>
             {% endif %}
             {% if coupon.type == 'discount' %}
-              <option value="{{ coupon.coin }}">优惠码 抵价{{ coupon.rate }}折</option>
+              <option value="{{ coupon.code }}">优惠码 抵价{{ coupon.rate }}折</option>
             {% endif %}
           {% endfor %}
           <option data-code="" value="">不使用优惠码</option>
