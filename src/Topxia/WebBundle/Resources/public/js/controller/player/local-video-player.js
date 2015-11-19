@@ -16,9 +16,14 @@ define(function(require, exports, module) {
 
         setup: function() {
         	
+            var techOrder = ['flash','html5'];
+            if(this.checkHtml5()) {
+                techOrder = ['html5', 'flash'];
+            }
+
     		var that = this;
     		var player = VideoJS(this.element.attr("id"), {
-				techOrder: ['flash','html5'],
+				techOrder: techOrder,
 				autoplay: false
     		});
 			player.dimensions('100%', '100%');
@@ -61,6 +66,14 @@ define(function(require, exports, module) {
 
 			LocalVideoPlayer.superclass.setup.call(this);
     	},
+
+        checkHtml5: function() {
+            if (window.applicationCache) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     	
     	play: function(){
     		this.get("player").play();
