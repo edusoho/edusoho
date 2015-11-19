@@ -105,7 +105,7 @@ class CardController extends BaseController
 
     protected function sortCards($cards)
     {
-        $cards       = $this->getCardService()->sortArrayByfield($cards, 'deadline');
+        $cards       = $this->getCardService()->sortArrayByfield($cards, 'cardId');
         $cards       = ArrayToolkit::group($cards, 'status');
         $sortedCards = array();
 
