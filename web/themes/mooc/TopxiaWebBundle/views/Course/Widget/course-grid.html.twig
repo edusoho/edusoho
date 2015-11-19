@@ -1,8 +1,8 @@
-<div class="course-img {% if course.certi %}mooc-certificate-sign{% endif %}">
+<div class="course-img">
   <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"  /></a>
   
 </div>
-<div class="course-info  mooc-certificate-sign" >
+<div class="course-info {% if course.certi %}mooc-certificate-sign{% endif %}" >
   <div class="title">
     <a href="{{ path('course_show', {id:course.id}) }}">
       {{ course.title }}
