@@ -186,7 +186,7 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        if (!$user['setup']) {
+        if (!$user['setup'] && isset($setData['email']) && stripos($setData['email'], '@edusoho.net') != false) {
             $this->getUserService()->setupAccount($user['id']);
         }
 
