@@ -6,9 +6,11 @@
          <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
         </a>
       </div>
-      <div class="course-caption mooc-certificate-sign">
+      <div class="course-caption {% if course.certi %}mooc-certificate-sign{% endif %}">
         <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
+        {% if course.certi %}
         <span class="m-certificate-2">发放电子证书</span>
+        {% endif %}
         <div class="metas clearfix">
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
