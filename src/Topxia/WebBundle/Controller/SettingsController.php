@@ -235,7 +235,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (empty($user['setup']) || stripos($user['email'], '@eduoho.net') === false) {
+        if (!$user['setup'] || stripos($user['email'], '@eduoho.net') != false) {
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 

@@ -13,7 +13,7 @@ class PasswordResetController extends BaseController
         $data = array('email' => '');
 
         if ($user->isLogin()) {
-            if (empty($user['setup']) || stripos($user['email'], '@edusoho.net') === false) {
+            if (!$user['setup'] || stripos($user['email'], '@edusoho.net') != false) {
                 return $this->redirect($this->generateUrl('settings_setup'));
             } else {
                 $data['email'] = $user['email'];
