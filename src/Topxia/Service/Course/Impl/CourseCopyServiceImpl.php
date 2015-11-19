@@ -272,6 +272,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $chapter['courseId']    = $newCourse['id'];
             $chapter['parentId']    = $map[$chapter['parentId']]['id'];
             $chapter['createdTime'] = time();
+            $chapter['copyId']      = $chapter['id'];
             unset($chapter['id']);
             $map[$orgChapterId] = $this->getCourseChapterDao()->addChapter($chapter);
         }
