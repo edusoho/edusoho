@@ -88,7 +88,6 @@ class ThemeRegisterCommand extends BaseCommand
         if (empty($meta['code']) || empty($meta['name']) || empty($meta['version'])) {
             throw new \RuntimeException("插件元信息必须包含code、name、version属性");
         }
-
         if ($meta['code'] != $code) {
             throw new \RuntimeException("插件元信息code的值`{$meta['code']}`不正确，应为`{$code}`。");
         }

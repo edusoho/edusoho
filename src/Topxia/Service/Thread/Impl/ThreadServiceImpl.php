@@ -118,6 +118,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
+        $event = $this->dispatchEvent('thread.before_create', $thread);
+        if($event->isPropagationStopped()){
+            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+        }
+
         $this->tryAccess('thread.create', $thread);
         if (empty($thread['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
@@ -129,7 +134,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['content'])) {
             throw $this->createServiceException("话题内容不能为空！");
         }
-        $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
+        $thread['content'] = $this->filterSensitiveWord($this->purifyHtml(empty($thread['content'])) ? '' : $thread['content']);
         $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         if (empty($thread['targetId'])) {
@@ -370,6 +375,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($fields)
     {
+        $event = $this->dispatchEvent('thread.post.before_create', $fields);
+        if($event->isPropagationStopped()){
+            throw $this->createServiceException('回复次数过多，请稍候尝试。');
+        }
+
         $user = $this->getCurrentUser();
         $thread = null;
         if (!empty($fields['threadId'])) {
@@ -383,7 +393,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.create', $fields);
 
-        $fields['content'] = $this->purifyHtml($fields['content']);
+        $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
         $fields['ats'] = $this->getUserService()->parseAts($fields['content']);
         $fields['userId'] = $user['id'];
         $fields['createdTime'] = time();
@@ -432,7 +442,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
         }
 
-        $this->dispatchEvent('thread.post_create', $post);
+        $this->dispatchEvent('thread.post.create', $post);
 
         return $post;
     }
@@ -473,7 +483,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadDao()->waveThread($post['threadId'], 'postNum', 0-$totalDeleted);
 
-        $this->dispatchEvent("thread.post_delete", new ServiceEvent($post, array('deleted' => $totalDeleted)));
+        $this->dispatchEvent("thread.post.delete", new ServiceEvent($post, array('deleted' => $totalDeleted)));
     }
 
     public function searchPostsCount($conditions)
@@ -671,6 +681,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $class = __NAMESPACE__."\\".ucfirst($resource['targetType']).'ThreadFirewall';
 
         return new $class();
+    }
+
+    protected function filterSensitiveWord($text)
+    {
+        if(empty($text)) {
+            return $text;
+        }
+
+        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
     }
 
     protected function getThreadDao()

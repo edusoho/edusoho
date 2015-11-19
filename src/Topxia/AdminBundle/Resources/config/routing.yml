@@ -376,6 +376,10 @@ admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
 
+admin_live_get_max_online:
+    pattern: /livecourse/get/maxOnline
+    defaults: { _controller: TopxiaAdminBundle:LiveCourse:getMaxOnline }
+
 admin_order:
     pattern: /order
     defaults: { _controller: TopxiaAdminBundle:Order:index }
@@ -557,6 +561,10 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_setting_sensitive_word:
+    pattern:  /setting/sensitive_word
+    defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
+
 admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
@@ -626,6 +634,10 @@ admin_setting_developer_version:
 admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
+
+admin_setting_post_num_rules:
+    pattern:  /setting/post_num_rules
+    defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
 
 admin_setting_cdn:
     pattern:  /setting/cdn
@@ -1137,6 +1149,14 @@ admin_operation_analysis_course_income:
     pattern:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
 
+admin_operation_analysis_classroom_income:
+    pattern:  /operation/analysis/classroom/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:classroomIncome }
+
+admin_operation_analysis_vip_income:
+    pattern:  /operation/analysis/vip/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:vipIncome }
+
 admin_operation_analysis_course_sum:
     pattern:  /operation/analysis/course/sum/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseSum }
@@ -1317,3 +1337,7 @@ admin_batch_notification_send:
     pattern: /batch_notification/send/{id}
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
     methods:  [POST]
+
+admin_feedback:
+    pattern: /feedback
+    defaults: { _controller: TopxiaAdminBundle:Default:feedback }

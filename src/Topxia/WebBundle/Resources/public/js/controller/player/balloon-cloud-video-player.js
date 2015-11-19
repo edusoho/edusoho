@@ -87,6 +87,7 @@ define(function(require, exports, module) {
                     });
                     var currentRes = Cookie.get("currentRes");
                     if(currentRes == undefined){
+                        resArray.reverse();
                         currentRes = resArray.join(",");
                     }
                     player.resolutionSelector({

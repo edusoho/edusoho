@@ -22,7 +22,6 @@ define(function(require, exports, module) {
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
-        var agentInWhiteList = videoHtml.data('agentInWhiteList');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
         var markerUrl = videoHtml.data('markerurl');
         var starttime = videoHtml.data('starttime');
@@ -41,19 +40,19 @@ define(function(require, exports, module) {
             html += '</audio>';
         }
 
-        if (balloonVideoPlayer && fileType == 'video' && !swfobject.hasFlashPlayerVersion('11') && !agentInWhiteList) {
-            html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
-            html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-            html += '<span aria-hidden="true">×</span>';
-            html += '</button>';
-            html += '您的浏览器未安装Flash播放器或版本太低，请先安装Flash播放器，';
-            html += '或前往<a href="/mobile" target="parent">下载App</a>。';
-            html += '</div>';
-            videoHtml.html(html);
-            videoHtml.show();
+        // if (balloonVideoPlayer && fileType == 'video' && !swfobject.hasFlashPlayerVersion('11')) {
+        //     html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+        //     html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+        //     html += '<span aria-hidden="true">×</span>';
+        //     html += '</button>';
+        //     html += '您的浏览器未安装Flash播放器或版本太低，请先安装Flash播放器，';
+        //     html += '或前往<a href="/mobile" target="parent">下载App</a>。';
+        //     html += '</div>';
+        //     videoHtml.html(html);
+        //     videoHtml.show();
 
-            return;
-        }
+        //     return;
+        // }
 
         videoHtml.html(html);
         videoHtml.show();
