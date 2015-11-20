@@ -977,6 +977,10 @@ search:
     pattern:  /search
     defaults: { _controller: TopxiaWebBundle:Search:index }
 
+cloud_search:
+    pattern:  /cloud/search
+    defaults: { _controller: TopxiaWebBundle:Search:cloudSearch }
+
 note_show:
     pattern:  /note/{id}
     defaults: { _controller: TopxiaWebBundle:CourseNote:index }
