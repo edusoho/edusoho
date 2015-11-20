@@ -1,6 +1,76 @@
 parameters:
-#    topxia_admin.example.class: Topxia\AdminBundle\Example
 
+  theme_jianmo_name: "简墨"
+
+  theme_jianmo_default:
+    color: default
+    blocks:
+      left:
+        - title: ""
+          count: "12"
+          orderBy: "latest"
+          categoryId: "all"
+          code: course-grid-with-condition-index
+          defaultTitle: "最新课程"
+          id: latestCourse
+        - title: ""
+          count: "8"
+          categoryId: ""
+          code: "live-course"
+          defaultTitle: "最新直播课程"
+          id: "RecentLiveCourses"
+        - title: ""
+          count: ""
+          code: "middle-banner"
+          defaultTitle: "中部banner"
+          id: "middle-banner"
+        - title: ""
+          count: "6"
+          code: "groups"
+          defaultTitle: "最热小组"
+          id: "hotGroups"
+        - title: ""
+          count: "3"
+          categoryId: ""
+          code: "recommend-teacher"
+          defaultTitle: "热门教师"
+          id: "latestCourse"
+    bottom: simple
+
+  theme_jianmo_all:
+    color: default
+    blocks:
+      left:
+        - title: ""
+          count: "12"
+          orderBy: "latest"
+          categoryId: "all"
+          code: course-grid-with-condition-index
+          defaultTitle: "最新课程"
+          id: latestCourse
+        - title: ""
+          count: "8"
+          categoryId: ""
+          code: "live-course"
+          defaultTitle: "最新直播课程"
+          id: "RecentLiveCourses"
+        - title: ""
+          count: ""
+          code: "middle-banner"
+          defaultTitle: "中部banner"
+          id: "middle-banner"
+        - title: ""
+          count: "6"
+          code: "groups"
+          defaultTitle: "最热小组"
+          id: "hotGroups"
+        - title: ""
+          count: "3"
+          categoryId: ""
+          code: "recommend-teacher"
+          defaultTitle: "热门教师"
+          id: "latestCourse"
+    bottom: simple
 services:
 #    topxia_admin.example:
 #        class: %topxia_admin.example.class%
