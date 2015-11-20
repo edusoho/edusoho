@@ -524,6 +524,7 @@ class MoneyCardServiceImpl extends BaseService
 
             $conditions = array(
                 'rechargeUserId' => 0,
+                'cardStatus'     => 'normal',
                 'batchId'        => $batch['id']
             );
             $moneyCards = $this->getMoneyCardDao()->searchMoneyCards($conditions, array('id', 'ASC'), 0, 1);
