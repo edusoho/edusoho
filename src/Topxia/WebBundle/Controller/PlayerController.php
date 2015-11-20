@@ -39,9 +39,10 @@ class PlayerController extends BaseController
         $url = $this->getPlayUrl($id);
 
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
-            'file'   => $file,
-            'url'    => $url,
-            'player' => $player
+            'file'             => $file,
+            'url'              => $url,
+            'player'           => $player,
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
     }
 
@@ -146,6 +147,19 @@ class PlayerController extends BaseController
         }
 
         return $response;
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android");
+
+        foreach ($whiteList as $value) {
+            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getTokenService()
