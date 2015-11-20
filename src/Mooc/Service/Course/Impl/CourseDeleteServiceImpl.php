@@ -50,6 +50,6 @@ class CourseDeleteServiceImpl extends BaseCourseDeleteService
 
     protected function getCertificateService()
     {
-        return $this->createService('Certificate:CertificateService');
+        return $this->createService('Certificate:Certificate.CertificateService');
     }
 }
