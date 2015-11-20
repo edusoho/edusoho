@@ -242,18 +242,10 @@ class MoneyCardServiceImpl extends BaseService
             1000
         );
 
-        $this->getMoneyCardDao()->updateBatchByCardStatus(
-            array(
-                'batchId'    => $batch['id'],
-                'cardStatus' => 'receive'
-            ),
-            array('cardStatus' => 'invalid')
-        );
-
         foreach ($moneyCards as $moneyCard) {
             $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
-            if (!empty($card) && $card['status'] == 'receive') {
+            if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
 
                 $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员作废，详情请联系管理员。';
@@ -261,6 +253,14 @@ class MoneyCardServiceImpl extends BaseService
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
         }
+
+        $this->getMoneyCardDao()->updateBatchByCardStatus(
+            array(
+                'batchId'    => $batch['id'],
+                'cardStatus' => 'receive'
+            ),
+            array('cardStatus' => 'invalid')
+        );
 
         $batch = $this->updateBatch($batch['id'], array('batchStatus' => 'invalid'));
         $this->getLogService()->info('money_card_batch', 'lock', "作废了批次为{$batch['id']}的充值卡");
