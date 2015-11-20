@@ -231,7 +231,7 @@ class ExtensionManager
         $finder->files()->name('item-*.html.twig')->depth('== 0');
         $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
 
-        foreach ($this->bundles['StatusTemplate'] as $bundle) {
+        foreach ($this->bundles['Notification'] as $bundle) {
             $directory = $bundle->getPath().'/Resources/views/Notification';
 
             if (!is_dir($directory)) {
