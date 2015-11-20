@@ -133,12 +133,24 @@ class MoneyCardServiceImpl extends BaseService
             throw $this->createServiceException('充值卡不存在，作废失败！');
         }
 
-        if ($moneyCard['cardStatus'] == 'normal') {
+        if ($moneyCard['cardStatus'] == 'normal' || $moneyCard['cardStatus'] == 'receive') {
+            if ($moneyCard['cardStatus'] == 'receive') {
+                $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+
+                $batch = $this->getBatch($moneyCard['batchId']);
+
+                $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
+
+                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员作废，详情请联系管理员。';
+
+                $this->getNotificationService()->notify($card['userId'], 'default', $message);
+            }
+
             $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'invalid'));
 
             $this->getLogService()->info('money_card', 'lock', "作废了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
-            throw $this->createServiceException('只能作废正常状态的充值卡！');
+            throw $this->createServiceException('不能作废已使用状态的充值卡！');
         }
 
         return $moneyCard;
@@ -158,8 +170,18 @@ class MoneyCardServiceImpl extends BaseService
             throw $this->createServiceException('批次刚刚被别人作废，在批次被作废的情况下，不能启用批次下的充值卡！');
         }
 
-        if ($moneyCard['cardStatus'] == 'invalid' && $moneyCard['rechargeUserId'] == 0) {
-            $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
+        if ($moneyCard['cardStatus'] == 'invalid') {
+            $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+
+            if (!empty($card)) {
+                $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
+                $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
+                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员启用。';
+
+                $this->getNotificationService()->notify($card['userId'], 'default', $message);
+            } else {
+                $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array('cardStatus' => 'normal'));
+            }
 
             $this->getLogService()->info('money_card', 'unlock', "启用了卡号为{$moneyCard['cardId']}的充值卡");
         } else {
@@ -172,14 +194,26 @@ class MoneyCardServiceImpl extends BaseService
     public function deleteMoneyCard($id)
     {
         $moneyCard = $this->getMoneyCard($id);
+        $batch     = $this->getBatch($moneyCard['batchId']);
+        $this->getMoneyCardDao()->deleteMoneyCard($id);
+        $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
 
-        if ($moneyCard['cardStatus'] != 'recharged') {
-            $this->getMoneyCardDao()->deleteMoneyCard($id);
+        if (!empty($card)) {
+            $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
-            $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
-        } else {
-            throw $this->createServiceException('不能删除已经充值的充值卡！');
+            $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员删除，详情请联系管理员。';
+
+            $this->getNotificationService()->notify($card['userId'], 'default', $message);
         }
+
+        $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
+        // if ($moneyCard['cardStatus'] != 'recharged') {
+        //     $this->getMoneyCardDao()->deleteMoneyCard($id);
+
+        //     $this->getLogService()->info('money_card', 'delete', "删除了卡号为{$moneyCard['cardId']}的充值卡");
+        // } else {
+        //     throw $this->createServiceException('不能删除已经充值的充值卡！');
+        // }
     }
 
     public function lockBatch($id)
@@ -197,6 +231,37 @@ class MoneyCardServiceImpl extends BaseService
             ),
             array('cardStatus' => 'invalid')
         );
+
+        $moneyCards = $this->searchMoneyCards(
+            array(
+                'batchId'    => $batch['id'],
+                'cardStatus' => 'receive'
+            ),
+            array('id', 'ASC'),
+            0,
+            1000
+        );
+
+        $this->getMoneyCardDao()->updateBatchByCardStatus(
+            array(
+                'batchId'    => $batch['id'],
+                'cardStatus' => 'receive'
+            ),
+            array('cardStatus' => 'invalid')
+        );
+
+        foreach ($moneyCards as $moneyCard) {
+            $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+
+            if (!empty($card) && $card['status'] == 'receive') {
+                $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
+
+                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员作废，详情请联系管理员。';
+
+                $this->getNotificationService()->notify($card['userId'], 'default', $message);
+            }
+        }
+
         $batch = $this->updateBatch($batch['id'], array('batchStatus' => 'invalid'));
         $this->getLogService()->info('money_card_batch', 'lock', "作废了批次为{$batch['id']}的充值卡");
 
@@ -211,6 +276,16 @@ class MoneyCardServiceImpl extends BaseService
             throw $this->createServiceException('批次不存在，作废失败！');
         }
 
+        $moneyCards = $this->searchMoneyCards(
+            array(
+                'batchId'    => $batch['id'],
+                'cardStatus' => 'invalid'
+            ),
+            array('id', 'ASC'),
+            0,
+            1000
+        );
+
         $this->getMoneyCardDao()->updateBatchByCardStatus(
             array(
                 'batchId'        => $batch['id'],
@@ -219,6 +294,19 @@ class MoneyCardServiceImpl extends BaseService
             ),
             array('cardStatus' => 'normal')
         );
+
+        foreach ($moneyCards as $moneyCard) {
+            $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+
+            if (!empty($card) && $card['status'] == 'invalid') {
+                $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
+                $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
+                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员启用。';
+
+                $this->getNotificationService()->notify($card['userId'], 'default', $message);
+            }
+        }
+
         $batch = $this->updateBatch($batch['id'], array('batchStatus' => 'normal'));
         $this->getLogService()->info('money_card_batch', 'unlock', "启用了批次为{$batch['id']}的充值卡");
 

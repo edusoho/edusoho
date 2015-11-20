@@ -124,6 +124,7 @@ class MoneyCardDaoImpl extends BaseDao
                     ->andWhere('id = :id')
                     ->andWhere('rechargeUserId = :rechargeUserId')
                     ->andWhere('cardId = :cardId')
+                    ->andWhere('cardStatus = :cardStatus')
                     ->andWhere('deadline = :deadline')
                     ->andWhere('batchId = :batchId')
                     ->andWhere('deadline <= :deadlineSearchEnd')
