@@ -241,7 +241,7 @@ class DefaultController extends BaseController
         //var_dump($config);
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig', array(
             'orderBy'    => $orderBy,
-            'categoryId' => $config['categoryId'],
+            'categoryId' => $categoryId,
             'courses'    => $courses,
             'config'     => $config
         ));

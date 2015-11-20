@@ -13,10 +13,7 @@
 
   {{ block_show('jianmo:home_top_banner') }}
 
-<div class="container">
-  
 
-  <div class="row">
     {% for pendant in themeConfig.blocks.left|default([]) %}
 
       {{ render(controller('TopxiaWebBundle:Theme:pendant', {config:pendant})) }}
@@ -24,6 +21,4 @@
       
     {% endfor %}
 
-  </div>
-</div>
 {% endblock %}
