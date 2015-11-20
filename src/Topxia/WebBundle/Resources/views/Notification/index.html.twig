@@ -13,8 +13,11 @@
 
       <ul class="media-list notification-list">
         {% for notification in notifications %}
+          {% if notification.type == 'teacher-audit' %}
+          {% include 'TeacherAuditBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
+          {% else %}
           {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
-
+          {% endif %}
         {% else %}
           <li class="empty">暂无通知</li>
         {% endfor %}

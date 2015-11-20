@@ -62,7 +62,7 @@
 							{% elseif  app.user.approvalStatus == 'unapprove' %}
 								<p class="text-warning" > 
 									您尚未实名认证，<strong><a href="{{ path('setting_approval_submit') }}">点此认证</a>。
-									</strong>
+									</strong>{% if is_plugin_installed('TeacherAudit') %}若您想成为教师，请去教师资格申请{% endif %}
 								</p>
 							{% elseif app.user.approvalStatus == 'approve_fail' %}
 								 <p class="text-danger" > 
