@@ -498,6 +498,15 @@ class MoneyCardServiceImpl extends BaseService
             $this->getMoneyCardBatchDao()->getConnection()->beginTransaction();
             $batch = $this->getMoneyCardBatchDao()->getBatchByToken($token['token'], true);
 
+            if (empty($batch)) {
+                $this->getMoneyCardBatchDao()->getConnection()->commit();
+
+                return array(
+                    'code'    => 'failed',
+                    'message' => '该链接不存在或已被删除'
+                );
+            }
+
             if ($batch['batchStatus'] == 'invalid') {
                 $this->getMoneyCardBatchDao()->getConnection()->commit();
 
