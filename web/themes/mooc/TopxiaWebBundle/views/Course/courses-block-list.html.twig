@@ -1,10 +1,10 @@
 <ul class="course-wide-list">
   {% for course in courses %}
-    <li class="course-item clearfix">
+    <li class="course-item clearfix {% if course.certi %}mooc-certificate-sign{% endif %}">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">{% if course.certi %}<span class="m-certificate-1">电子证书</span>{% endif %}
       </a>
-
+      
       <div class="course-body">
 
         <div style="float:right;" class="text-muted mrm mls">

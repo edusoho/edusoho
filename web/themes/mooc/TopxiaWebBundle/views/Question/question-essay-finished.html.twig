@@ -19,8 +19,10 @@
 	 	</div>
 	 	<p  class="question-text-success ">{{ rightAnswer|bbCode2Html|raw }}</p>
 	{% endfor %}
-	得分：
-	<p class="text-primary">{{ itemResult.score }} 分</p>
+	{% if itemResult.score|default(null) %}
+		得分：	
+		<p class="text-primary">{{ itemResult.score }} 分</p>
+	{% endif %}
 	{% if itemResult.teacherSay|default(null) %}
 		<div  class="question-eassy-form-control question-teacher-say-input">
 			<div class="teacher-say-text">老师评语:</div>
@@ -35,7 +37,9 @@
 				<thead>
 				<tr>
 					<th class="width-4">评价人</th>
-					<th class="width-2">分数</th>
+					{% if itemResult.score|default(null) %}
+						<th class="width-2">分数</th>
+					{% endif %}
 					<th>评价</th>
 				</tr>
 				</thead>

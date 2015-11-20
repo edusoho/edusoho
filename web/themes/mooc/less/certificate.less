@@ -113,3 +113,40 @@
 		}
 	}
 }
+.mooc-certificate-sign{
+	position: relative;
+	.m-certificate-1,.m-certificate-2,.m-certificate-3{
+		display: inline-block;
+		width: 84px;
+    	height: 36px;
+		background: url('../img/all-icons.png');
+		position: absolute;
+		top: 0;
+		left: -6px;
+		text-align: center;
+		line-height: 30px;
+		color: @white;
+	}
+	.m-certificate-2{
+		background-position: -83px -14px;
+		right: -13px;
+	    left: auto;
+	    top: -21px;
+	    line-height: 45px;
+	}
+	.m-certificate-3{
+		background-position: -83px -14px;
+
+		bottom: -18px;
+	    left: -77px;
+	    top: auto;
+	    line-height: 42px;
+	     @media (max-width: @screen-sm-max)  {
+	       background-position: 0 0;
+	       bottom: auto;
+	       left: -7px;
+	       top:-46px;
+	       line-height: 33px;
+	      }
+	}
+}
