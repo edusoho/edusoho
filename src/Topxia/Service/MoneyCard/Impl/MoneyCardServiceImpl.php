@@ -227,8 +227,28 @@ class MoneyCardServiceImpl extends BaseService
 
     public function deleteBatch($id)
     {
+        $batch = $this->getBatch($id);
+
+        if (empty($batch)) {
+            throw $this->createServiceException(sprintf('学习卡批次不存在或已被删除'));
+        }
+
+        $moneyCards = $this->getMoneyCardDao()->searchMoneyCards(array('batchId' => $id), array('id', 'ASC'), 0, 1000);
+
         $this->getMoneyCardBatchDao()->deleteBatch($id);
-        $this->getMoneyCardDao()->deleteBatchByCardStatus(array($id, 'recharged'));
+        $this->getMoneyCardDao()->deleteMoneyCardsByBatchId($id);
+
+        foreach ($moneyCards as $moneyCard) {
+            $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+
+            if (!empty($card)) {
+                $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
+
+                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员删除，详情请联系管理员。';
+
+                $this->getNotificationService()->notify($card['userId'], 'default', $message);
+            }
+        }
 
         $this->getLogService()->info('money_card_batch', 'delete', "删除了批次为{$id}的充值卡");
     }
@@ -495,5 +515,10 @@ class MoneyCardServiceImpl extends BaseService
     private function getTokenService()
     {
         return $this->createService('User.TokenService');
+    }
+
+    private function getNotificationService()
+    {
+        return $this->createService('User.NotificationService');
     }
 }

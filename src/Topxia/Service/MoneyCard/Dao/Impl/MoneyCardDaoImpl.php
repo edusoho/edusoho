@@ -102,6 +102,11 @@ class MoneyCardDaoImpl extends BaseDao
         $this->getConnection()->update($this->table, $fields, $identifier);
     }
 
+    public function deleteMoneyCardsByBatchId($id)
+    {
+        return $this->getConnection()->delete($this->table, array('batchId' => $id));
+    }
+
     public function deleteBatchByCardStatus($fields)
     {
         $sql = "DELETE FROM ".$this->table." WHERE batchId = ? AND cardStatus != ?";
