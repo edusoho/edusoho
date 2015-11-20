@@ -14,8 +14,11 @@
 	  {% elseif itemResult.status == 'noAnswer' %}
 　　　 <span class="glyphicon glyphicon-remove question-text-danger pull-left">你未答题</span>
     {% endif %}
-    <br/>得分：
-    <p class="text-primary">{{ itemResult.score }} 分</p>
+    <br/>
+    {% if itemResult.score|default(null) %}
+      得分：
+      <p class="text-primary">{{ itemResult.score }} 分</p>
+    {% endif %}
   </div>
 {% endif %}
 
