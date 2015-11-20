@@ -1,13 +1,16 @@
 {% for course in courses %}
   <div class="col-md-4 col-sm-6">
     <div class="course-item">
-      <div class="course-img">
+      <div class="course-img ">
         <a href="{{ path('course_show', {id:course.id}) }}">
          <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
         </a>
       </div>
-      <div class="course-caption">
+      <div class="course-caption {% if course.certi %}mooc-certificate-sign{% endif %}">
         <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
+        {% if course.certi %}
+        <span class="m-certificate-2">电子证书</span>
+        {% endif %}
         <div class="metas clearfix">
           {% set teacher = course.teachers|first|default(null) %}
           {% if teacher %}
