@@ -1,10 +1,12 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
   <div class="question-heading mc-heading">{% block heading %}{% endblock %}
+  {% if item.score != 0 %}
     <span class="question-set-item-score" style="
       border: 1px solid #eee;
       padding: 2px 5px;
       margin-left: 10px;
     ">{{ item.score }}分</span>
+  {% endif %}
   </div>
 
   <div class="question-body clearfix">{% block body %}{% endblock %}</div>

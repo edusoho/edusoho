@@ -45,8 +45,11 @@
               </li>
           {% endfor %}
         </ul>
-        <br/>得分：
-        <p class="text-primary">{{ itemResult.score }} 分</p>
+        <br/>
+        {% if itemResult.score|default(null) %}
+          得分：
+          <p class="text-primary">{{ itemResult.score }} 分</p>
+        {% endif %}
       </div>
     </div>
   </div>
