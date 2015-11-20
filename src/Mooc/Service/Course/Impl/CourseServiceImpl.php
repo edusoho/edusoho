@@ -70,7 +70,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             $userConditions['organizationId']  = $conditions['organizationId'];
             $userConditions['includeChildren'] = $conditions['includeChildren'];
             $count                             = $this->getUserService()->searchUserCount($userConditions);
-            $users                             = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DEsubPeriodsByRootId'), 0, $count);
+            $users                             = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $count);
             $conditions['userIds']             = ArrayToolkit::column($users, 'id');
 
             if (empty($conditions['userIds'])) {
