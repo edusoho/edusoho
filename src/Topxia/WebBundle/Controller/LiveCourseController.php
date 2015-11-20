@@ -196,12 +196,8 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播已结束!');
         }
 
-        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']));
-
         $params = array(
-            'liveId' => $lesson['mediaId'], 
-            'provider' => $lesson['liveProvider'],
-            'user' => $user['email'],
+            'id' => $user['id'],
             'nickname' => $user['nickname'],
         );
 
@@ -212,6 +208,8 @@ class LiveCourseController extends BaseController
         } else {
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
+
+        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
 
         if($this->setting("developer.cloud_api_failover", 0)) {
             $client = new EdusohoLiveClient();

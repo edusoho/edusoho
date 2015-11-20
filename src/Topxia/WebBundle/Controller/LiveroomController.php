@@ -9,11 +9,10 @@ class LiveroomController extends BaseController
 {
     public function _entryAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
+        $user = $request->query->all();
+        $user['device'] = $this->getDevice($request);
 
-        $params = array('id' => $user['id'], 'nickname' => $user['nickname'], 'role' => 'teacher', 'device' => $this->getDevice($request));
-
-        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$id}/tickets", $params);
+        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$id}/tickets", $user);
 
         return $this->render("TopxiaWebBundle:Liveroom:entry.html.twig", array(
             'roomId' => $id,
