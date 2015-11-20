@@ -13,7 +13,9 @@
 
       <ul class="media-list notification-list">
         {% for notification in notifications %}
-          {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
+          {% set notificationTemplate = get_notification_template(notification.type) %}
+
+          {% include notificationTemplate %}
 
         {% else %}
           <li class="empty">暂无通知</li>

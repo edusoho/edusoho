@@ -2,9 +2,9 @@
 
 namespace Topxia\Common;
 
+use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
 use Topxia\Common\ExtensionalBundle;
-use Symfony\Component\Yaml\Yaml;
 
 class ExtensionManager
 {
@@ -26,17 +26,19 @@ class ExtensionManager
 
     private function __construct($kernel)
     {
-        $this->kernel = $kernel;
+        $this->kernel  = $kernel;
         $this->bundles = array(
-            'DataTag' => array(),
+            'DataTag'        => array(),
             'StatusTemplate' => array(),
-            'DataDict' => array(),
+            'DataDict'       => array(),
+            'Notification'   => array()
         );
-        $this->booted = false;
+        $this->booted          = false;
         $this->statusTemplates = array();
-        $this->dataDict = array();
+        $this->dataDict        = array();
         $this->dataTagClassmap = array();
-        $this->dataTags = array();
+        $this->dataTags        = array();
+        $this->notifications   = array();
     }
 
     public static function init($kernel)
@@ -55,6 +57,7 @@ class ExtensionManager
         if (empty(self::$_instance)) {
             throw new \RuntimeException('ExtensionManager尚未实例化。');
         }
+
         return self::$_instance;
     }
 
@@ -91,8 +94,6 @@ class ExtensionManager
 
         $this->loadDataTagClassmap();
 
-
-
         if (!isset($this->dataTagClassmap[$name])) {
             throw new \RuntimeException("数据标签`{$name}`尚未定义。");
         }
@@ -104,10 +105,25 @@ class ExtensionManager
         return $this->dataTags[$name];
     }
 
+    public function getNotification($type)
+    {
+        if (isset($this->notifications[$type])) {
+            return $this->notifications[$type];
+        }
+
+        $this->loadNotifications();
+
+        if (!isset($this->notifications[$type])) {
+            throw new \RuntimeException("通知类型`{$type}`尚未定义。");
+        }
+
+        return $this->notifications[$type];
+    }
+
     private function boot()
     {
         if ($this->booted) {
-            return ;
+            return;
         }
 
         $this->getExtensionalBundles();
@@ -124,22 +140,25 @@ class ExtensionManager
         $finder = new Finder();
         $finder->files()->name('*DataTag.php')->depth('== 0');
 
-        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
 
         $dirNamespaces = array();
-        foreach($this->bundles['DataTag'] as $bundle) {
-            $directory = $bundle->getPath() . '/Extensions/DataTag';
+
+        foreach ($this->bundles['DataTag'] as $bundle) {
+            $directory = $bundle->getPath().'/Extensions/DataTag';
+
             if (!is_dir($directory)) {
                 continue;
             }
-            $dirNamespaces[$directory] = $bundle->getNamespace() . "\\Extensions\\DataTag";
+
+            $dirNamespaces[$directory] = $bundle->getNamespace()."\\Extensions\\DataTag";
 
             $finder->in($directory);
         }
 
         foreach ($finder as $file) {
-            $name = $file->getBasename('DataTag.php');
-            $this->dataTagClassmap[$name] = $dirNamespaces[$file->getPath()] . "\\{$name}DataTag";
+            $name                         = $file->getBasename('DataTag.php');
+            $this->dataTagClassmap[$name] = $dirNamespaces[$file->getPath()]."\\{$name}DataTag";
         }
 
         return $this->dataTagClassmap;
@@ -154,11 +173,14 @@ class ExtensionManager
         }
 
         $files = array();
-        foreach($this->bundles['DataDict'] as $bundle) {
-            $file = $bundle->getPath() . '/Extensions/data_dict.yml';
+
+        foreach ($this->bundles['DataDict'] as $bundle) {
+            $file = $bundle->getPath().'/Extensions/data_dict.yml';
+
             if (!file_exists($file)) {
                 continue;
             }
+
             $this->dataDict = array_merge($this->dataDict, Yaml::parse(file_get_contents($file)));
         }
 
@@ -176,10 +198,11 @@ class ExtensionManager
         $finder = new Finder();
         $finder->files()->name('*.tpl.html.twig')->depth('== 0');
 
-        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
 
-        foreach($this->bundles['StatusTemplate'] as $bundle) {
-            $directory = $bundle->getPath() . '/Extensions/StatusTemplate';
+        foreach ($this->bundles['StatusTemplate'] as $bundle) {
+            $directory = $bundle->getPath().'/Extensions/StatusTemplate';
+
             if (!is_dir($directory)) {
                 continue;
             }
@@ -188,12 +211,43 @@ class ExtensionManager
         }
 
         foreach ($finder as $file) {
-            $type = $file->getBasename('.tpl.html.twig');
-            $path = str_replace($root, '@root', $file->getRealPath());
+            $type                         = $file->getBasename('.tpl.html.twig');
+            $path                         = str_replace($root, '@root', $file->getRealPath());
             $this->statusTemplates[$type] = $path;
         }
 
         return $this->statusTemplates;
+    }
+
+    private function loadNotifications()
+    {
+        $this->boot();
+
+        if (!empty($this->notifications)) {
+            return $this->notifications;
+        }
+
+        $finder = new Finder();
+        $finder->files()->name('item-*.html.twig')->depth('== 0');
+        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
+
+        foreach ($this->bundles['StatusTemplate'] as $bundle) {
+            $directory = $bundle->getPath().'/Resources/views/Notification';
+
+            if (!is_dir($directory)) {
+                continue;
+            }
+
+            $finder->in($directory);
+        }
+
+        foreach ($finder as $file) {
+            $type                       = substr($file->getBasename('item-*.html.twig'), 5, -10);
+            $path                       = str_replace($root, '@root', $file->getRealPath());
+            $this->notifications[$type] = $path;
+        }
+
+        return $this->notifications;
     }
 
     private function getExtensionalBundles()
@@ -204,15 +258,16 @@ class ExtensionManager
             }
 
             $enableds = $bundle->getEnabledExtensions();
+
             foreach (array_keys($this->bundles) as $enabled) {
                 if (!in_array($enabled, $enableds)) {
                     continue;
                 }
+
                 $this->bundles[$enabled][] = $bundle;
             }
         }
 
         return $this->bundles;
     }
-
 }
