@@ -221,7 +221,7 @@ class DefaultController extends BaseController
             unset($conditions['config']);
         }
 
-        var_dump($categoryId);
+        //var_dump($conditions);
 
         if ($conditions['categoryId'] != 'all') {
             $conditions['categoryId'] = intval($conditions['categoryId']);
@@ -237,11 +237,11 @@ class DefaultController extends BaseController
 
         unset($conditions['orderBy']);
 
-        $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 12);
-
+        $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $config['count']);
+        //var_dump($config);
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig', array(
             'orderBy'    => $orderBy,
-            'categoryId' => $categoryId,
+            'categoryId' => $config['categoryId'],
             'courses'    => $courses,
             'config'     => $config
         ));

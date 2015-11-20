@@ -34,6 +34,7 @@ class ThemeController extends BaseController
                 $category = $this->getCategoryService()->getCategory($config["categoryId"]);
             }
 
+            //var_dump($config);
             return $this->render("TopxiaWebBundle:Default:{$config['code']}.html.twig", array(
                 'category' => $category,
                 'config'   => $config
