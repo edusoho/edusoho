@@ -37,6 +37,27 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         $this->getUserDao()->updateUser($user['id'], $fields);
     }
 
+    public function getUserByTrueName($trueName, $isNeedProfile = false)
+    {
+        $conditions = array(
+            'truename' => $trueName
+        );
+        $orderBy = array('id', 'DESC');
+        $profiles = $this->searchUserProfiles($conditions, $orderBy, 0, 1);
+
+        $profile = array_shift($profiles);
+
+        if(empty($profile)){
+            return array();
+        }
+
+        $user = $this->getUser($profile['id']);
+        if($isNeedProfile){
+            array_push($user, array('profile' => $profile));
+        }
+        return $user;
+    }
+
     public function updateUserProfile($id, $fields)
     {
         $user = $this->getUser($id);

@@ -27,3 +27,7 @@ certificateStatus:
     published: 已发放
     auditing: 审核中
     unpublished: 未发放
+
+certificateKeyWordType:
+    teacher: 教师
+    course: 课程
