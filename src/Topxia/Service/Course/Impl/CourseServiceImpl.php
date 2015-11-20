@@ -42,6 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    // todo 和searchCourses合并
     public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
     {
         $courses = CourseSerialize::unserializes(
@@ -50,6 +51,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         $courses = CourseSerialize::unserializes(
@@ -85,11 +87,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
     }
 
-    public function getCoursesCount()
-    {
-        return $this->getCourseDao()->getCoursesCount();
-    }
-
+    // TODO searchCoursesCount
     public function findCoursesCountByLessThanCreatedTime($endTime)
     {
         return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
@@ -107,15 +105,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($sort == 'popular') {
             $orderBy = array('hitNum', 'DESC');
         } else
+
         if ($sort == 'recommended') {
             $orderBy = array('recommendedTime', 'DESC');
         } else
+
         if ($sort == 'Rating') {
             $orderBy = array('Rating', 'DESC');
         } else
+
         if ($sort == 'hitNum') {
             $orderBy = array('hitNum', 'DESC');
         } else
+
         if ($sort == 'studentNum') {
             $orderBy = array('studentNum', 'DESC');
         } elseif ($sort == 'recommendedSeq') {
@@ -144,6 +146,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
             return !empty($value);
         }
+
         );
 
         if (isset($conditions['date'])) {
@@ -210,6 +213,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $conditions;
     }
 
+    // TODO searchCoursesCount
     public function findUserLearnCourses($userId, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
@@ -228,6 +232,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // TODO searchCourse
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
@@ -237,6 +242,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // TODO 和findUserLearnCourseCountNotInClassroom合并
     public function findUserLearnCourseCount($userId, $onlyPublished = true)
     {
         return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
@@ -453,6 +459,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
+    // TODO refactor
     public function updateCourseCounter($id, $counter)
     {
         $fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum', 'giveCredit'));
@@ -499,6 +506,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             array_walk($fields['tags'], function (&$item, $key) {
                 $item = (int) $item['id'];
             }
+
             );
         }
 
@@ -575,6 +583,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    // TODO hitCourse 和 waveCourse合并
     public function hitCourse($id)
     {
         $checkCourse = $this->getCourse($id);
@@ -1863,6 +1872,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
         }
+
         );
         return $items;
     }
