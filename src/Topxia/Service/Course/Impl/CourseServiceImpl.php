@@ -43,15 +43,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     // todo 和searchCourses合并
-    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
-    {
-        $courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByTagIdsAndStatus($tagIds, $status, $start, $limit)
-        );
-        return ArrayToolkit::index($courses, 'id');
-    }
-
-    // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         $courses = CourseSerialize::unserializes(
@@ -104,21 +95,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($sort == 'popular') {
             $orderBy = array('hitNum', 'DESC');
-        } else
-
-        if ($sort == 'recommended') {
+        } elseif ($sort == 'recommended') {
             $orderBy = array('recommendedTime', 'DESC');
-        } else
-
-        if ($sort == 'Rating') {
+        } elseif ($sort == 'Rating') {
             $orderBy = array('Rating', 'DESC');
-        } else
-
-        if ($sort == 'hitNum') {
+        } elseif ($sort == 'hitNum') {
             $orderBy = array('hitNum', 'DESC');
-        } else
-
-        if ($sort == 'studentNum') {
+        } elseif ($sort == 'studentNum') {
             $orderBy = array('studentNum', 'DESC');
         } elseif ($sort == 'recommendedSeq') {
             $orderBy = array('recommendedSeq', 'ASC');

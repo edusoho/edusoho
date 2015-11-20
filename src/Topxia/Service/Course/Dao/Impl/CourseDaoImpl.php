@@ -61,19 +61,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
     }
 
-    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
-    {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE status = ?";
-
-        foreach ($tagIds as $tagId) {
-            $sql .= " AND tags LIKE '%|$tagId|%'";
-        }
-
-        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array($status));
-    }
-
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         if (empty($tagIds)) {
@@ -176,20 +163,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagId']);
         }
 
-        if (isset($conditions['tagIds'])) {
-            $tagIds                 = $conditions['tagIds'];
-            $conditions['tagsLike'] = '%|';
-
-            if (!empty($tagIds)) {
-                foreach ($tagIds as $tagId) {
-                    $conditions['tagsLike'] .= "{$tagId}|";
-                }
-            }
-
-            $conditions['tagsLike'] .= '%';
-            unset($conditions['tagIds']);
-        }
-
         if (empty($conditions['status']) || $conditions['status'] == "") {
             unset($conditions['status']);
         }
@@ -227,6 +200,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                         ->andWhere('id NOT IN ( :excludeIds )')
                         ->andWhere('id IN ( :courseIds )')
                         ->andWhere('locked = :locked');
+
+        if (isset($conditions['tagIds'])) {
+            $tagIds = $conditions['tagIds'];
+
+            foreach ($tagIds as $key => $tagId) {
+                $conditions['tagIds_'.$key] = '%|'.$tagId.'|%';
+                $builder->andWhere('tags LIKE :tagIds_'.$key);
+            }
+
+            unset($conditions['tagIds']);
+        }
 
         return $builder;
     }

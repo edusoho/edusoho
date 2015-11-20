@@ -124,7 +124,9 @@ class CourseServiceTest extends BaseTestCase
             'tags'  => array('1', '2')
         );
         $createCourse = $this->getCourseService()->createCourse($course);
-        $result       = $this->getCourseService()->findCoursesByTagIdsAndStatus(array('1'), 'draft', 0, 1);
+
+        $conditions = array('tagIds' => array('1'), 'status' => 'draft');
+        $result     = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, 1);
         $this->assertNotEmpty($result);
         $this->assertEquals($result[1]['title'], $course['title']);
         // print_r($result);
