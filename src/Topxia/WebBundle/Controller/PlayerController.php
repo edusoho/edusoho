@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $mode = '', $context)
+    public function showAction(Request $request, $id)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -32,7 +32,7 @@ class PlayerController extends BaseController
             $player = "audio-player";
         }
 
-        $url = $this->getPlayUrl($id, $mode);
+        $url = $this->getPlayUrl($id);
 
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
@@ -55,7 +55,7 @@ class PlayerController extends BaseController
         return false;
     }
 
-    protected function getPlayUrl($id, $mode = '')
+    protected function getPlayUrl($id)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
