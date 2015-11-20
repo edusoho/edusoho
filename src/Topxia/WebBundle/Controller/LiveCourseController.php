@@ -196,6 +196,8 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播已结束!');
         }
 
+        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']));
+
         $params = array(
             'liveId' => $lesson['mediaId'], 
             'provider' => $lesson['liveProvider'],
