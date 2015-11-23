@@ -105,9 +105,7 @@ define(function(require, exports, module) {
 
         onFinishLesson: function(e) {
             var $btn = this.element.find('[data-role=finish-lesson]');
-            if ($btn.hasClass('btn-success')) {
-                this._onCancelLearnLesson();
-            } else {
+            if (!$btn.hasClass('btn-success')) {
                 this._onFinishLearnLesson();
             }
         },
@@ -145,6 +143,7 @@ define(function(require, exports, module) {
                 }
 
                 $btn.addClass('btn-success');
+                $btn.attr('disabled', true);
                 $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 
@@ -672,9 +671,11 @@ define(function(require, exports, module) {
                 var $finishButton = that.element.find('[data-role=finish-lesson]');
                 if (json.status != 'finished') {
                     $finishButton.removeClass('btn-success');
+                    $finishButton.attr('disabled',false);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 } else {
                     $finishButton.addClass('btn-success');
+                    $finishButton.attr('disabled',true);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 }
             }, 'json');
