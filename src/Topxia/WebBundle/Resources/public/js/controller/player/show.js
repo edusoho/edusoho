@@ -95,18 +95,7 @@ define(function(require, exports, module) {
         });
 
         player.on("firstplay", function(){
-             if (balloonVideoPlayer && markerUrl) {
-                $.ajax({
-                    type: "GET",
-                    url: markerUrl,
-                    async: true, 
-                    success: function (result) {
-                        if (result != null) {
-                            player.setMarkers(result);
-                        }
-                    }
-                });
-            }
+ 
         });
         
 
