@@ -103,6 +103,22 @@ class CardController extends BaseController
         ));
     }
 
+    public function receiveShowAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $cardType = $request->query->get('cardType');
+        $cardId   = $request->query->get('cardId');
+        return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+            'cardType' => $cardType,
+            'cardId'   => $cardId
+        ));
+    }
+
     protected function sortCards($cards)
     {
         $cards       = $this->getCardService()->sortArrayByfield($cards, 'createdTime');

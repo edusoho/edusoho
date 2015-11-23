@@ -577,6 +577,7 @@ class MoneyCardServiceImpl extends BaseService
             $this->getMoneyCardBatchDao()->getConnection()->commit();
 
             return array(
+                'id'      => $moneyCard['id'],
                 'code'    => 'success',
                 'message' => '领取成功，请在卡包中查看'
             );

@@ -1,9 +1,12 @@
 {% extends 'TopxiaWebBundle:Card:layout.html.twig' %}
 
 {% set main_nav = 'cards' %}
-{% set script_controller = 'couponbundle/controller/coupon/index' %}
+{% set script_controller = 'topxiawebbundle/controller/card/index' %}
 
 {% block main_body %}
+	{% if app.request.query.get('receive') == 'success' %}
+		<a href="#modal" data-toggle="modal" data-url="{{ path('my_receive_card',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" type="hide">dw</a>
+	{% endif %}
 	<div class="clearfix mbl mhm">
 		<ul class="nav nav-pills inline-block" role="active">
 			<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠券</a></li>
