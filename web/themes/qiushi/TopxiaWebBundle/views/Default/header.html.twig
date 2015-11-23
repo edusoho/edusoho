@@ -1,9 +1,28 @@
 <div class="qs-header">
   <div class="container">
-    <a class="logo" href=""><img src="{{asset('themes/qiushi/img/new/logo.png')}}" alt=""></a>
+    <a class="logo" href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/logo.png')}}" alt=""></a>
+    <div class="visible-xs  navbar-mobile">
+      <a href="javascript:;" class="navbar-more js-navbar-more">
+        <i class="es-icon es-icon-menu"></i>
+      </a>
+      <div class="html-mask"></div>
+      <div class="nav-mobile">
+        <form class="navbar-form" action="/search" method="get">
+          <div class="form-group">
+            <input class="form-control" placeholder="搜索" name="q">
+            <button class="button es-icon es-icon-search"></button>
+          </div>
+        </form>
+        <ul class="nav navbar-nav">
+          <li class="">
+            <a href="http://demo.edusoho.com">首页 </a>
+          </li>
+        </ul>
+      </div>
+    </div>
     <nav class="collapse navbar-collapse">
       <div class="nav-left clearfix">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav qs-nav">
           <li><a href="">首页</a></li>
           <li><a href="">进班级</a></li>
           <li><a href="">选课程</a></li>
@@ -11,10 +30,10 @@
         </ul>
       </div>
       <div class="nav-right clearfix">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav qs-nav">
           <li><a href="">找老师</a></li>
           <li><a href="">逛论坛</a></li>
-          <li><a href="">最新资讯</a></li>
+          <li><a href="">资讯</a></li>
           <li><a href="">登录/注册</a></li>
         </ul>
       </div>

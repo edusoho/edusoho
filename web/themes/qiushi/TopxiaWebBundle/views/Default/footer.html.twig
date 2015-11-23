@@ -1,29 +1,31 @@
-<!--页面底部开始-->
-<div class="footer-sec">
-  <div class="container clearfix">
-    <div class="copyright hidden-sm hidden-xs" style="height:150px">
-
-      {{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}
-
-      <div style="width: 115px;float: right;margin-top: 10px;margin-right: 20px;">
-        <img src="http://www.qswangxiao.com/files/system/webchat.jpg?5.2.5" width="115" height="115" class="img-responsive" style="position: initial;">
-        <p style="position: initial;">关注微信公众号</p>
-      </div>
-      <div style="float: right;margin-top:10px;margin-right:50px;">
-        <img src="/themes/qiushi/img/web-bottom.jpg" height="130">
-      </div>
-      {{ setting('site.analytics')|raw }} 
-    </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align: center;">
-      <div class="site-footer-links" >
-        <div class="text-center hidden-lg hidden-md">{{ render(controller('TopxiaWebBundle:Default:footNavigation')) }}</div>
-      {% include "TopxiaWebBundle::powered-by.html.twig" %}
-        {% if setting('site.copyright') %}<p class="text-center">Copyright©2003-2013 <a href="/">{{ setting('site.copyright') }}</a> All Rights Reserve</p>{% endif %}
-        {% if setting('site.icp') %} <p class="text-center"><a href="http://www.miibeian.gov.cn/" target="_blank">{{ setting('site.icp') }}</a></p>{% endif %}
+<footer class="es-footer">
+  <div class="footer-link">
+    <div class="container">
+      <div class="row">
+        {{ block_show('qiushi:footer') }}
       </div>
     </div>
-
   </div>
-</div>
-<!--页面底部结束--> 
+
+  <div class="copyright">
+    <div class="container">
+      {% include "TopxiaWebBundle::powered-by.html.twig" %}
+      {{ setting('site.analytics')|raw }} 
+      <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
+      <div class="mts">
+        {% if setting('site.copyright') %}
+          课程内容版权均归
+          <a href="/">
+            {{ setting('site.copyright') }}
+          </a>
+          所有
+        {% endif %}
+        {% if setting('site.icp') %}
+          <a class="mlm" href="http://www.miibeian.gov.cn/" target="_blank">
+            {{ setting('site.icp') }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</footer>

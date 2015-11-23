@@ -11,14 +11,14 @@
   {{block_show('qiushi:home_top_banner')}}
 
   {# 直播公开课 #}
-  <section class="live-course-list">
+  <section class="qs-section">
     <div class="container">
       <div class="qs-section-header">
         <div class="title">直播公开课</div>
         <div class="subtitle">LIVE COURSE</div>
       </div>
       <div class="course-filter">
-        <ul class="nav nav-pills hidden-xs">
+        <ul class="nav nav-pills">
           <li class="active"><a href="">全部课程</a></li>
           <li><a href="">高三</a></li>
           <li><a href="">高三</a></li>
@@ -28,8 +28,8 @@
         <div class="more"><a href="" class="link-lighter">更多</a></div>
       </div>
       <div class="qs-live-course-list row">
-        <div class="col-md-3">
-          <div class="course-item">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
               <div class="mask">
@@ -37,23 +37,23 @@
               </div>
             </div>
             <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
-            <div class="metas clearfix">主讲人：陈林 <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span></div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="course-item">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
               <div class="mask">
-                <a href="" class="btn btn-info">正在直播</a>
+                <a href="" class="btn btn-info">往期回顾</a>
               </div>
             </div>
             <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
-            <div class="metas clearfix">主讲人：陈林 <span class="qs-tag qs-tag-info pull-right">今天 22:30</span></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-info pull-right">今天 22:30</span></div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="course-item">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
               <div class="mask">
@@ -61,19 +61,19 @@
               </div>
             </div>
             <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
-            <div class="metas clearfix">主讲人：陈林 <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span></div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="course-item">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
               <div class="mask">
-                <a href="" class="btn btn-info">正在直播</a>
+                <a href="" class="btn btn-info">往期回顾</a>
               </div>
             </div>
             <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
-            <div class="metas clearfix">主讲人：陈林 <span class="qs-tag qs-tag-info pull-right">今天 22:30</span></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-info pull-right">今天 22:30</span></div>
           </div>
         </div>
       </div>
@@ -81,5 +81,547 @@
   </section>
 
   {#人气课程#}
-  
+  <section class="qs-section section-white">
+    <div class="container">
+      <div class="qs-section-header">
+        <div class="title">人气课程</div>
+        <div class="subtitle">HOT COURSE</div>
+      </div>
+      <div class="qs-hot-course-list">
+        <div class="qs-course-block clearfix">
+          <div class="course-img">
+            <a href="">
+              <img class="img-responsive" src="{{asset('themes/qiushi/img/new/course_2.jpg')}}" alt="">
+              <span class="course-tag-hot"></span>
+            </a>
+          </div>
+          <div class="course-info">
+            <div class="title"><a class="link-light" href=""> <i class="es-icon es-icon-whatshot color-danger"></i>新高考改革权威解读</a></div>
+            <p><span class="qs-tag qs-tag-info">累计已有10234人学过</span></p>
+            <div class="content">
+              浙江省高考综合改革方案一发布，引起社会强烈关注。求是高考课堂特别开设新高考改革解读免费公开课，为此邀请了浙江省教育界的两位专家为你详细…
+            </div>
+            <div class="metas">
+              <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a><a class="link-light mlm" href="">黄国峰</a>
+            </div>
+          </div>
+          <div class="course-action">
+            <div class="price">抢购价 <span>¥299</span></div>
+            <p class="text-center"><a href="" class="btn">查看详情</a></p>
+          </div>
+        </div>
+        <div class="qs-course-block clearfix">
+          <div class="course-img">
+            <a href="">
+              <img class="img-responsive" src="{{asset('themes/qiushi/img/new/course_2.jpg')}}" alt="">
+              <span class="course-tag-hot"></span>
+            </a>
+          </div>
+          <div class="course-info">
+            <div class="title"><a class="link-light" href=""> <i class="es-icon es-icon-whatshot color-danger"></i>新高考改革权威解读</a></div>
+            <p><span class="qs-tag qs-tag-info">累计已有10234人学过</span></p>
+            <div class="content">
+              浙江省高考综合改革方案一发布，引起社会强烈关注。求是高考课堂特别开设新高考改革解读免费公开课，为此邀请了浙江省教育界的两位专家为你详细…
+            </div>
+            <div class="metas">
+              <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a><a class="link-light mlm" href="">黄国峰</a>
+            </div>
+          </div>
+          <div class="course-action">
+            <div class="price">抢购价 <span>¥299</span></div>
+            <p class="text-center"><a href="" class="btn">查看详情</a></p>
+          </div>
+        </div>
+        <div class="qs-course-block clearfix">
+          <div class="course-img">
+            <a href="">
+              <img class="img-responsive" src="{{asset('themes/qiushi/img/new/course_2.jpg')}}" alt="">
+              <span class="course-tag-hot"></span>
+            </a>
+          </div>
+          <div class="course-info">
+            <div class="title"><a class="link-light" href=""> <i class="es-icon es-icon-whatshot color-danger"></i>新高考改革权威解读</a></div>
+            <p><span class="qs-tag qs-tag-info">累计已有10234人学过</span></p>
+            <div class="content">
+              浙江省高考综合改革方案一发布，引起社会强烈关注。求是高考课堂特别开设新高考改革解读免费公开课，为此邀请了浙江省教育界的两位专家为你详细…
+            </div>
+            <div class="metas">
+              <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a><a class="link-light mlm" href="">黄国峰</a>
+            </div>
+          </div>
+          <div class="course-action">
+            <div class="price">抢购价 <span>¥299</span></div>
+            <p class="text-center"><a href="" class="btn">查看详情</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="section-more"><a class="btn btn-ghost-default" href="">更多课程</a></div>
+    </div>
+  </section>
+
+  {# 精品课程 #}
+  <section class="qs-section">
+    <div class="container">
+      <div class="qs-section-header">
+        <div class="title">精品课程</div>
+        <div class="subtitle">EXELLENT COURSE</div>
+      </div>
+      <div class="qs-course-cat">
+        <ul class="nav nav-pills">
+          <li class="active"><a href="">全部课程</a></li>
+          <li><a href="">高三</a></li>
+          <li><a href="">高三</a></li>
+          <li><a href="">高三</a></li>
+          <li><a href="">高三</a></li>
+        </ul>
+      </div>
+
+      <div class="qs-exellent-course-list row">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-course-item">
+            <div class="course-img">
+              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
+              <div class="mask">
+                <a href="" class="btn btn-primary">立即学习</a>
+              </div>
+            </div>
+            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
+            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature-banner">
+    <div class="container">
+      <img class="img-responsive" src="{{asset('themes/qiushi/img/new/banner.jpg')}}" alt="">
+    </div>
+  </section>
+
+  {# 推荐班级 #}
+  <section class="qs-section section-white">
+    <div class="container">
+      <div class="qs-section-header">
+        <div class="title">推荐班级</div>
+        <div class="subtitle">RECOMMEND CLASS</div>
+      </div>
+      <div class="qs-recommend-class-list row">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-class-item">
+            <div class="class-img">
+              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
+            </div>
+            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
+            <div class="metas clearfix">共有6门课程 <span class="price">¥369</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-class-item">
+            <div class="class-img">
+              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
+            </div>
+            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
+            <div class="metas clearfix">共有6门课程 <span class="price free">免费</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-class-item">
+            <div class="class-img">
+              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
+            </div>
+            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
+            <div class="metas clearfix">共有6门课程 <span class="price">¥369</span></div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-class-item">
+            <div class="class-img">
+              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
+            </div>
+            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
+            <div class="metas clearfix">共有6门课程 <span class="price free">免费</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-more"><a class="btn btn-ghost-default" href="">更多班级</a></div>
+    </div>
+  </section>
+
+  {# 资讯和评价 #}
+  <section class="qs-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="qs-article-panel">
+            <div class="qs-panel-title">最新资讯<small>NEWS</small> <a class="more link-light" href="">更多</a></div>
+            <div class="qs-panel-body clearfix">
+              <div class="qs-recommend-article">
+                <div class="qs-article-block">
+                  <a href="">
+                    <img class="img-responsive" src="{{asset('themes/qiushi/img/new/article_1.jpg')}}" alt="">
+                    <div class="image-overlay"></div>
+                    <div class="title">名师上门送教 引领高校课</div>
+                  </a>
+                </div>
+                <div class="qs-article-block">
+                  <a href="">
+                    <img class="img-responsive" src="{{asset('themes/qiushi/img/new/article_1.jpg')}}" alt="">
+                    <div class="image-overlay"></div>
+                    <div class="title">名师上门送教 引领高校课</div>
+                  </a>
+                </div>
+              </div>
+              <ul class="qs-new-article">
+                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="qs-evaluate-panel">
+            <div class="qs-panel-title">教学评价<small>EVALUATION</small></div>
+            <div class="qs-panel-body">
+              <div class="media media-dynamic">
+                <div class="media-left">
+                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
+                </div>
+                <div class="media-body">
+                  <div class="title"><a class="link-light" href="">玉婷</a> 发布于《高中物理课程最新学习案例》</div>
+                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
+                  <span class="date">09.20</span>
+                </div>
+              </div>
+              <div class="media media-dynamic">
+                <div class="media-left">
+                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
+                </div>
+                <div class="media-body">
+                  <div class="title"><a class="link-light" href="">玉婷</a> 发布于《高中物理课程最新学习案例》</div>
+                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
+                  <span class="date">09.20</span>
+                </div>
+              </div>
+              <div class="media media-dynamic">
+                <div class="media-left">
+                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
+                </div>
+                <div class="media-body">
+                  <div class="title"><a class="link-light" href="">玉婷</a> 发布于《高中物理课程最新学习案例》</div>
+                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
+                  <span class="date">09.20</span>
+                </div>
+              </div>
+              <div class="media media-dynamic">
+                <div class="media-left">
+                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
+                </div>
+                <div class="media-body">
+                  <div class="title">
+                    <a class="link-light" href="">玉婷</a> 
+                    <span class="score">
+                      <i class="es-icon es-icon-star"></i>
+                      <i class="es-icon es-icon-star"></i>
+                      <i class="es-icon es-icon-star"></i>
+                      <i class="es-icon es-icon-star"></i>
+                      <i class="es-icon es-icon-star"></i>
+                    </span>
+                    发布于《高中物理课程最新学习案例》
+                  </div>
+                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
+                  <span class="date">09.20</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# 求是名师 #}
+  <section class="qs-section section-white">
+    <div class="container">
+      <div class="qs-section-header">
+        <div class="title">求是名师</div>
+        <div class="subtitle">OUR TEACHERS</div>
+      </div>
+      <div class="qs-teacher-list row">
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="qs-teacher-item">
+            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
+            <div class="teacher-name">陈琳</div>
+            <div class="teacher-position">高中地理在职教师</div>
+            <div class="teacher-bottom">
+              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
+            </div>
+            <div class="mask">
+              <div class="slogan">
+                <p class="slogan-title">觉得老师不错？</p>
+                <p>立即学习课程活着预约辅导吧！</p>
+              </div>
+              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-more"><a class="btn btn-ghost-default" href="">更多名师</a></div>
+    </div>
+  </section>
 {% endblock %}

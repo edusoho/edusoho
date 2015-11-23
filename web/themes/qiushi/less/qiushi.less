@@ -1,30 +1,59 @@
 @import 'variables.less';
 @import 'reset.less';
 
+body {
+  background: #F5F6F7;
+}
+
 // reset
 .nav-pills > li > a {
   padding: 8px 20px;
   .border-radius(20px);
 }
 
+.color-danger {
+  color: @brand-danger;
+}
+
+.score i {
+  color: @brand-warning;
+}
+
+// 头部
 .qs-header {
   height: 90px;
   background-color: #fff;
+  @media(max-width: @screen-sm-max) {
+    height: 70px;
+  }
+  .navbar-mobile .navbar-more {
+    color: @brand-primary;
+  }
   .container {
     position: relative;
   }
   .logo {
     position: absolute;
-    top: -11px;
+    top: -1px;
     left: 50%;
     margin-left: -100px;
-    z-index: 1;
+    z-index: 2;
+    @media(max-width: @screen-sm-max) {
+      width: 150px;
+      margin-left: -75px;
+    }
   }
   .nav-left {
     float: left;
     width: 50%;
     padding-right: 150px;
-    .navbar-nav {
+    @media(max-width: @screen-md-max) {
+      padding-right: 120px;
+    }
+    @media(max-width: @screen-sm-max) {
+      padding-right: 90px;
+    }
+    .qs-nav {
       float: right;
     }
   }
@@ -32,15 +61,28 @@
     float: right;
     width: 50%;
     padding-left: 150px;
-    .navbar-nav {
+    @media(max-width: @screen-md-max) {
+      padding-left: 120px;
+    }
+    @media(max-width: @screen-sm-max) {
+      padding-left: 90px;
+    }
+    .qs-nav {
       float: left;
     }
   }
-  .navbar-nav {
+  .qs-nav {
     >li>a {
       font-size: 16px;
       padding: 35px 20px;
       color: @gray-dark;
+      @media(max-width: @screen-md-max) {
+        padding: 35px 10px;
+      }
+      @media(max-width: @screen-sm-max) {
+        padding: 25px 8px;
+        font-size: 14px;
+      }
       &:hover {
         color: @brand-primary;
       }
@@ -48,8 +90,19 @@
   }
 }
 
+// 模块
+.qs-section {
+  padding: 50px 0;
+  &.section-white {
+    background: #fff;
+  }
+  .section-more {
+    margin-top: 40px;
+    text-align: center;
+  }
+}
+
 .qs-section-header {
-  padding-top: 70px;
   text-align: center;
   margin-bottom: 30px;
   .title {
@@ -68,12 +121,26 @@
   right: 0;
 }
 
-.qs-live-course-list {
-  .course-item {
-    padding: 10px;
-    .border-radius;
-    background-color: #fff;
+.qs-course-cat {
+  margin-bottom: 20px;
+  text-align: center;
+  .nav {
+    display: inline-block;
   }
+}
+
+.feature-banner {
+  background: #e2133a;
+}
+
+
+
+// 共同课程模块
+.qs-course-item {
+  padding: 10px;
+  margin-bottom: 20px;
+  .border-radius;
+  background-color: #fff;
   .course-img {
     position: relative;
     margin-bottom: 10px;
@@ -116,12 +183,315 @@
   .metas {
     font-size: 12px;
   }
+  .course-teacher {
+    display: inline-block;
+    margin-top: 5px;
+  }
+  .price {
+    color: @brand-primary;
+    font-size: 16px;
+  }
 }
+
+.qs-course-block {
+  margin-bottom: 20px;
+  background-color: #eee;
+  border: 1px solid @gray-light;
+  .course-img {
+    position: relative;
+    float: left;
+    width: 40%;
+    .course-tag-hot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      background: url('@{img-src}new/tag_hot.png') center center no-repeat;
+    }
+  }
+  .course-info {
+    float: left;
+    width: 39%;
+    padding: 15px;
+    .title {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .content {
+      color: @gray;
+      margin-bottom: 20px;
+    }
+  }
+  .course-action {
+    position: relative;
+    float: right;
+    width: 21%;
+    background-color: #FEBA5B;
+    z-index: 1;
+    &:after {
+      position: absolute;
+      content: '';
+      width: 147px;
+      height: 165px;
+      bottom: 0;
+      right: 0;
+      background: url('@{img-src}new/course_action_bg.png') top left no-repeat;
+      z-index: -1;
+    }
+    .price {
+      position: absolute;
+      top: 30px;
+      right: -10px;
+      background: @brand-danger;
+      .border-radius(4px);
+      padding: 8px 20px;
+      color: #fff;
+      span {
+        font-size: 28px;
+      }
+      &:after {
+        right: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-right-color: @brand-danger;
+        border-width: 28px;
+        margin-top: -28px;
+        margin-right: -1px;
+      }
+    }
+    p {
+      margin: 140px auto 70px auto;
+    }
+    .btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: 2px solid #fff;
+      color: #fff;
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+}
+
+.qs-class-item {
+  position: relative;
+  border: 1px solid @gray-light;
+  padding: 10px;
+  margin-top: 10px;
+  &:before,
+  &:after {
+    position: absolute;
+    content: '';
+    height: 2px;
+    background: #eee;
+  }
+  &:before {
+    top: -6px;
+    left: 5px;
+    right: 5px;
+  }
+  &:after {
+    top: -11px;
+    left: 10px;
+    right: 10px;
+  }
+  .class-img {
+    margin-bottom: 10px;
+  }
+  .title {
+    margin-bottom: 10px;
+    .text-overflow;
+  }
+  .metas {
+    color: @gray;
+  }
+  .price {
+    float: right;
+    color: @brand-primary;
+    &.free {
+      color: #75BC00;
+    }
+  }
+}
+
+.qs-panel-title {
+  position: relative;
+  color: @gray-dark;
+  font-size: 24px;
+  margin-bottom: 20px;
+  small {
+    font-size: 14px;
+    color: #ccc;
+    margin-left: 10px;
+  }
+  .more {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    font-size: 14px;
+  }
+}
+
+.qs-article-panel {
+  .qs-recommend-article {
+    float: left;
+    width: 40%;
+  }
+  .qs-article-block {
+    margin-bottom: 10px;
+    img {
+      width: 100%;
+    }
+  }
+  .qs-new-article {
+    float: left;
+    width: 60%;
+    padding-left: 20px;
+    .date {
+      float: right;
+      color: @gray-light;
+    }
+    li {
+      margin-bottom: 25px;
+    }
+  }
+}
+
+.qs-article-block {
+  position: relative;
+  .title {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    right: 10px;
+    color: #fff;
+    .text-overflow;
+  }
+}
+
+.media-dynamic {
+  .avatar-sm {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .title {
+    margin-bottom: 5px;
+    a {
+      font-size: 14px !important;
+    }
+  }
+  .date {
+    font-size: 14px;
+  }
+  .media-body {
+    border: none;
+  }
+}
+
+.qs-teacher-item {
+  position: relative;
+  margin-bottom: 20px;
+  text-align: center;
+  background: #F3F7F6;
+  .border-radius(4px);
+  overflow: hidden;
+  .teacher-img {
+    padding-top: 25px;
+    padding-bottom: 20px;
+  }
+  .teacher-name {
+    font-size: 22px;
+    color: #626B80;
+    margin-bottom: 10px;
+  }
+  .teacher-position {
+    color: #99A0B4;
+    margin-bottom: 25px;
+    .text-overflow;
+  }
+  .teacher-bottom {
+    background: #E8ECF6;
+    text-align: left;
+    color: #383B48;
+    font-size: 12px;
+    padding: 35px 20px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    p {
+      height: 30px;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+  }
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 100px 30px;
+    .opacity(0);
+    color: #fff;
+    background: #40475a;
+    background: rgba(64, 71, 90, 0.9);
+    .border-radius(4px);
+    .es-transition;
+  }
+  .slogan {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #fff;
+  }
+  .slogan-title {
+    font-size: 22px;
+    margin-bottom: 5px;
+  }
+  .teacher-action .btn {
+    margin: 10px;
+  }
+  &:hover .mask {
+    .opacity(1);
+    .es-transition;
+  }
+}
+
+// 页脚
+.es-footer .footer-link {
+  background: #3D4450;
+  border: none;
+}
+
+.footer-logo {
+  margin-top: 50px;
+  >a>img {
+    height: auto;
+  }
+}
+
+.footer-main h3 {
+  color: #A2AAB7;
+}
+
+.footer-main a {
+  color: #fff;
+}
+
+.es-footer .copyright {
+  border: none;
+}
+
+
 
 // 组件
 .qs-tag {
-  font-size: 12px;
-  padding: 3px 5px; 
+  display: inline-block;
+  padding: 4px 10px; 
   .border-radius;
   &.qs-tag-danger {
     color: @brand-danger;
@@ -132,3 +502,37 @@
     background-color: #e7f2fc;
   }
 }
+
+.btn-ghost-default {
+  padding: 8px 25px;
+  border: 1px solid #ccc;
+  color: @gray;
+  .border-radius(20px);
+  &:hover {
+    border-color: @brand-primary;
+    color: @brand-primary;
+  }
+}
+
+.btn-ghost-primary {
+  background: @brand-primary;
+  color: #fff;
+  border-color: @brand-primary;
+  .border-radius(20px);
+  &:hover {
+    color: #fff;
+    background: darken(@brand-primary, 8%);
+    border-color: darken(@brand-primary, 8%);
+  }
+}
+
+.htn-ghost-white {
+  color: #fff;
+  border: 2px solid #fff;
+  .border-radius(20px);
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
