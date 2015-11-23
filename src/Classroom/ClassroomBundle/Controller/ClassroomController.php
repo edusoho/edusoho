@@ -221,9 +221,14 @@ class ClassroomController extends BaseController
             $price += $course['price'];
         }
 
-        $canFreeJoin        = $this->canFreeJoin($classroom, $courses, $user, $classroom);
-        $breadcrumbs        = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
-        $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
+        $canFreeJoin = $this->canFreeJoin($classroom, $courses, $user, $classroom);
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($classroom['categoryId']);
+
+        if (!empty($member['role'])) {
+            $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
+        } else {
+            $isclassroomteacher = false;
+        }
 
         if ($member && !$member["locked"]) {
             return $this->render("ClassroomBundle:Classroom:classroom-join-header.html.twig", array(
