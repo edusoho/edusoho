@@ -23,9 +23,11 @@
           <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
             <a href="{{path('my_orders')}}">我的订单</a> 
           </li>  
-          <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
-            <a href="{{path('my_cards')}}">我的卡包</a> 
-          </li> 
+          {% if (is_plugin_installed('MoneyCard') and version_compare(plugin_version('moneyCard'),'1.1.0','>')) or (is_plugin_installed('Coupon') and version_compare(plugin_version('Coupon'),'1.3.3','>')) %}
+            <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
+              <a href="{{path('my_cards')}}">我的卡包</a> 
+            </li> 
+          {% endif %}
           </li>
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">

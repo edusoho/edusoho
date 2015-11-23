@@ -195,7 +195,8 @@ define(function(require, exports, module) {
 			$('[role="coupon-code-input"]').focus();
 			// $('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
-			$('#coupon-select').hide();
+			$('[role="null-coupon-code"]').hide();
+			console.log($('#coupon-select'));
 			// $('[role="code-notify"]').show();
 			$(this).hide();
 		})
@@ -209,7 +210,7 @@ define(function(require, exports, module) {
 			$('[role="coupon-code"]').hide();
 			// $('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
-			$('#coupon-select').show();
+			$('[role="null-coupon-code"]').show();
 			$('[role="code-notify"]').hide();
 			$('[role="coupon-price"]').find("[role='price']").text("0.00");
 			$('[role="code-notify"]').text("");

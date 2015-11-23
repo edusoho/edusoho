@@ -7,26 +7,28 @@
     （没有使用优惠码）</span> -->
   </div>
 
-  {% if coupons is not null %}
-    <div class="col-md-3 controls">
-      <select class="form-control" id="coupon-select" name="couponCode">
-          {% for coupon in coupons %}
-            {% if coupon.type == 'minus' %}
-              <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
-         {{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵扣{{ coupon.rate }}元</option>
-            {% endif %}
-            {% if coupon.type == 'discount' %}
-              <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
-         {{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵价{{ coupon.rate }}折</option>
-            {% endif %}
-          {% endfor %}
-          <option data-code="" value="">不使用优惠码</option>
-      </select>
-    </div>
-  {% endif %}
 
-  <div class="order-item-detail  coupon-detail" >
-    <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">输入优惠码</a>
+
+  <div class="order-item-detail  coupon-detail">
+    {% if coupons is not null %}
+      <div role="null-coupon-code">
+        <select class="form-control width-input width-input-large" id="coupon-select" name="couponCode">
+            {% for coupon in coupons %}
+              {% if coupon.type == 'minus' %}
+                <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
+           {{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵扣{{ coupon.rate }}元</option>
+              {% endif %}
+              {% if coupon.type == 'discount' %}
+                <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
+           {{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵价{{ coupon.rate }}折</option>
+              {% endif %}
+            {% endfor %}
+            <option data-code="" value="">不使用优惠码</option>
+        </select>
+        <a id="coupon-code-btn" class="btn btn-primary" href="javascript:;">输入优惠码</a>
+      </div>
+    {% endif %}
+    
     {% if targetType in ['course','vip','classroom'] %}
       <div role="coupon-code" class="input-group" style="display: none;">
         <input role="coupon-code-verified" name="couponCode" type="hidden"/>
@@ -37,6 +39,7 @@
           <a href="javascript:;" class="btn btn-link" role="cancel-coupon">取消</a>
       </div>
     {% endif %}
+
     <div role="code-notify" class="alert alert-success alert-xs mtm" style="display:none;line-height:20px;"></div>
   </div>
   <div class="order-item-price" role="coupon-price">
