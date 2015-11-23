@@ -181,6 +181,10 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
+        }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)

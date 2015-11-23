@@ -56,7 +56,7 @@ define(function(require, exports, module) {
         });
 
 // 做试卷
-        var interval = 600;
+        var interval = 60;
 
         var changeAnswers = {};
 
@@ -401,7 +401,7 @@ define(function(require, exports, module) {
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
-                toolbar: 'Simple',
+                toolbar: 'Minimal',
                 filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
             });
 
@@ -456,7 +456,7 @@ define(function(require, exports, module) {
 
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
-                toolbar: 'Simple',
+                toolbar: 'Thread',
                 filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
             });
 
@@ -525,6 +525,16 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+
+                var scoreTotal = 0;
+                $('[name^="score_"]').each(function(){
+                    var score = $(this).data('score');
+                    scoreTotal = scoreTotal + score;
+                });
+
+                var objectiveScore = Number($("#objectiveScore").html());
+                var temp = Number(scoreTotal) + Number(objectiveScore);
+                $("#objectiveScore").html(temp);
                 $('#testpaper-checked-dialog').modal('show');
             });
         });
@@ -539,9 +549,11 @@ define(function(require, exports, module) {
         });
 
         $('#testpaper-teacherSay-btn').on('click', function(){
-            val = $('#testpaper-teacherSay-input').val();
+            var val = $('#testpaper-teacherSay-input').val();
             $('#teacherSay').val(val);
 
+            var passedStatus = $('input[type="radio"][name="passedStatus"]:checked').val();
+            $('#passedStatus').val(passedStatus);
             $form = $('#teacherCheckForm');
 
             $.post($('#testpaper-teacherSay-btn').data('post-url'), $form.serialize(), function(response) {
