@@ -2,10 +2,10 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ImgConverToData;
-use Topxia\Common\Paginator;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserApprovalController extends BaseController
 {
@@ -90,9 +90,7 @@ class UserApprovalController extends BaseController
 
             if ($data['form_status'] == 'success') {
                 $this->getUserService()->passApproval($id, $data['note']);
-            } else
-
-            if ($data['form_status'] == 'fail') {
+            } elseif ($data['form_status'] == 'fail') {
                 if (($this->isPluginInstalled('TeacherAudit'))
                     && (!empty($this->getTeacherAuditService()->getApprovalByUserId($user['id'])))) {
                     $this->getTeacherAuditService()->rejectApproval($user['id'], '教师资格申请因实名认证未通过而失败');
