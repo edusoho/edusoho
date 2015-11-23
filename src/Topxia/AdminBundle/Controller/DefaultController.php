@@ -94,10 +94,11 @@ class DefaultController extends BaseController
 
     public function feedbackAction(Request $request)
     {
-        $site = $this->getSettingService()->get('site');
-        $user = $this->getCurrentUser();
-        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => trim($this->postRequest("http://www.edusoho.com/question/get/token"), '"'), 'username' => $user->nickname);
-        $site = urlencode(http_build_query($site));
+        $site  = $this->getSettingService()->get('site');
+        $user  = $this->getCurrentUser();
+        $token = trim($this->postRequest("http://www.edusoho.com/question/get/token"), '"');
+        $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
+        $site  = urlencode(http_build_query($site));
         return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
