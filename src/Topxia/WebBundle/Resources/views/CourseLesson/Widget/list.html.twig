@@ -7,8 +7,10 @@
       {% include 'TopxiaWebBundle:CourseLesson/Part:chapter.html.twig' %}
     {% elseif 'lesson' in id  and  item.type != 'testpaper' %}
       {% include 'TopxiaWebBundle:CourseLesson/Part:lesson.html.twig'%}
-    {% elseif  item.type == 'testpaper'  %}
-      {% include 'TopxiaWebBundle:CourseLesson/Part:TestPaper.html.twig' %}
+    {# 
+      {% elseif  item.type == 'testpaper'  %}
+        {% include 'TopxiaWebBundle:CourseLesson/Part:TestPaper.html.twig' %}
+    #}
     {% endif %}
   {% endfor %}
 {% endif %}
