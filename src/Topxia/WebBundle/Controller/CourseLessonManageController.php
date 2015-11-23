@@ -129,7 +129,7 @@ class CourseLessonManageController extends BaseController
             $lesson                  = $request->request->all();
             $lesson['type']          = 'testpaper';
             $lesson['courseId']      = $course['id'];
-            $lesson['testStartTime'] = strtotime($lesson['testStartTime']);
+            $lesson['testStartTime'] = isset($lesson['testStartTime']) ? strtotime($lesson['testStartTime']) : 0;
 
             if (!$lesson['testStartTime']) {
                 unset($lesson['testStartTime']);
