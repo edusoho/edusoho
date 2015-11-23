@@ -14,7 +14,6 @@ define(function(require, exports, module) {
 			events: {
 				'click .js-btn-clear':  'OnBtnClear',
 				'click .pagination>li>a': 'Onpagination',
-				'click .js-nav-pills>li>a': 'OnNavPills'
 			},
 			setup: function() {
 				Lazyload.init();
@@ -39,8 +38,8 @@ define(function(require, exports, module) {
 						if ($currentItem.hasClass('active')) {
 							return;
 						}
-						callback && callback(currentItem);
-						that._getSearchData($currentItem);
+						//callback && callback(currentItem);
+						//that._getSearchData($currentItem);
 					}
 		        });
 			},
@@ -87,14 +86,7 @@ define(function(require, exports, module) {
 				var $this = $(e.currentTarget);
 				var url = $this.attr("herf");
 
-				this._searchAjax(url,null);
-			},
-			// 话题Tab切换
-			OnNavPills: function(e) {
-				var $this = $(e.currentTarget);
-				var url = $this.data("url");
-
-				this._searchAjax(url,null);
+				//this._searchAjax(url,null);
 			}
 			
 		});

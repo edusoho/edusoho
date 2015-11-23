@@ -16,12 +16,14 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
+        $type    = $request->query->get('type', 'course');
         $pattern = $this->setting('magic.cloud_search');
 
         if ($pattern) {
-            return $this->forward('TopxiaWebBundle:Search:cloudSearch', array(
-                'q' => $keywords
-            ));
+            return $this->redirect($this->generateUrl('cloud_search', array(
+                'q'    => $keywords,
+                'type' => $type
+            )));
         }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
@@ -99,6 +101,25 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
+        $type = $request->query->get('type', 'course');
+
+        return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
+            'keywords' => $keywords,
+            'type'     => $type
+        ));
+    }
+
+    public function cloudSearchCourseAction(Request $request)
+    {
+        $courses = $paginator = null;
+
+        $currentUser = $this->getCurrentUser();
+
+        $keywords = $request->query->get('q');
+        $keywords = trim($keywords);
+
+        $type = $request->query->get('type', 'course');
+
         $vip = $this->getAppService()->findInstallApp('Vip');
 
         $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
@@ -153,7 +174,8 @@ class SearchController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
+        return $this->render('TopxiaWebBundle:Search:search-course.html.twig', array(
+            'type'                => $type,
             'courses'             => $courses,
             'paginator'           => $paginator,
             'keywords'            => $keywords,
@@ -162,6 +184,61 @@ class SearchController extends BaseController
             'categoryIds'         => $categoryIds,
             'fliter'              => $fliter,
             'count'               => $count
+        ));
+    }
+
+    public function cloudSearchTeacherAction(Request $request, $type)
+    {
+        $courses = $paginator = null;
+
+        $currentUser = $this->getCurrentUser();
+
+        $keywords = $request->query->get('q');
+        $keywords = trim($keywords);
+
+        $type = $request->query->get('type', 'course');
+
+        return $this->render('TopxiaWebBundle:Search:search-teacher.html.twig', array(
+            'keywords' => $keywords,
+            'type'     => $type,
+            'teachers' => array()
+        ));
+    }
+
+    public function cloudSearchTopicAction(Request $request, $type)
+    {
+        $courses = $paginator = null;
+
+        $currentUser = $this->getCurrentUser();
+
+        $keywords = $request->query->get('q');
+        $keywords = trim($keywords);
+
+        $type = $request->query->get('type', 'course');
+
+        return $this->render('TopxiaWebBundle:Search:search-topic.html.twig', array(
+            'keywords' => $keywords,
+            'type'     => $type,
+            'courses'  => array(),
+            'topics'   => array()
+        ));
+    }
+
+    public function cloudSearchArticleAction(Request $request, $type)
+    {
+        $courses = $paginator = null;
+
+        $currentUser = $this->getCurrentUser();
+
+        $keywords = $request->query->get('q');
+        $keywords = trim($keywords);
+
+        $type = $request->query->get('type', 'course');
+
+        return $this->render('TopxiaWebBundle:Search:search-article.html.twig', array(
+            'keywords' => $keywords,
+            'type'     => $type,
+            'articles' => array()
         ));
     }
 

@@ -9,11 +9,12 @@
     <div class="container">
       <form class="input-group search-input-group" id="search-input-group" action="/search" method="get">
         <div class="input-wrap">
+          <input type="hidden" name="type" value="{{type}}" >
           <input type="text" name="q" class="form-control" placeholder="搜索">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="button">搜索</button>
+          <button class="btn btn-primary" type="submit">搜索</button>
         </span>
       </form>
     </div>
@@ -26,20 +27,21 @@
     <div class="col-md-8">
       <div class="es-section">
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
-          <li class="active"><a href="javascript:;" data-type="course" data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}">课程</a></li>
-          <li><a href="javascript:;" data-type="teacher" data-url="{{path('homepage_category',{categoryId : 'all',orderBy : orderBy|default('latest')}) }}">教师</a></li>
-          <li><a href="javascript:;" data-type="topic" data-url="123">话题</a></li>
-          <li><a href="javascript:;" data-type="article" data-url="">资讯</a></li>
+          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >课程</a></li>
+          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >教师</a></li>
+          <li {% if type == 'topic' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'topic'}) }}" data-type="topic" >话题</a></li>
+          <li {% if type == 'article' %}class="article" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >资讯</a></li>
         </ul>
         <div class="search-result" id="search-result">
-          <!-- 课程 -->
-          {% include 'TopxiaWebBundle:Search:search-course.html.twig' %}
-          <!-- 教师 -->
-          {#{% include 'TopxiaWebBundle:Search:search-teacher.html.twig' %}#}
-          <!-- 资讯 -->
-          {#{% include 'TopxiaWebBundle:Search:search-article.html.twig' %}#}
-          <!-- 话题 -->
-          {#{% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}#}
+        {% if type == 'course' %}
+        {{ render(controller('TopxiaWebBundle:Search:cloudSearchCourse',{q:keywords|default(''), type:type})) }}
+        {% elseif type == 'teacher' %}
+        {{ render(controller('TopxiaWebBundle:Search:cloudSearchTeacher',{q:keywords|default(''), type:type})) }}
+        {% elseif type == 'topic' %}
+        {{ render(controller('TopxiaWebBundle:Search:cloudSearchTopic',{q:keywords|default(''), type:type})) }}
+        {% elseif type == 'article' %}
+        {{ render(controller('TopxiaWebBundle:Search:cloudSearchArticle',{q:keywords|default(''), type:type})) }}
+        {% endif %}
         </div>
       </div>
     </div>
@@ -60,70 +62,4 @@
     </div>
   </div>
   
-{#  原来老的
-  <div class="course-filter search-filter" id="course-filter">
-    <div class="result-declare">
-      共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
-    </div>
-    <ul class="nav nav-pills hidden-xs" role="tablist">
-      <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
-      {% if isShowVipSearch  %}
-        {% if currentUserVipLevel  %}
-          <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
-          </li>
-        {% endif %}
-      {% endif %}
-      <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
-          <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
-      </li>
-      <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
-          <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
-      </li>
-    </ul>
-    <div class="btn-group visible-xs">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }} 
-      <span class="caret"></span></button>
-
-      <ul class="dropdown-menu" role="menu">
-        <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">全部课程</a></li>
-        {% if isShowVipSearch  %}
-            {% if currentUserVipLevel  %}
-              <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
-                <a href="{{ path('search',{fliter:'vip'}) }}">会员课程</a>
-              </li>
-          {% endif %}
-        {% endif %}
-        <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'free'}) }}">免费课程</a>
-        </li>
-        <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'live'}) }}">直播课程</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-    <!-- 课程列表 -->
-  <div class="course-list">
-    {% if courses %}
-      <div class="row">
-        {% for course in courses %}
-          <div class="col-lg-3 col-md-4 col-sm-6">
-            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="empty">没有搜到相关课程，请换个关键词试试！</div>
-    {% endif %}
-  </div>
-
-  <nav class="text-center">
-    {% if courses %}
-    {{ web_macro.paginator(paginator) }} 
-    {% endif %}
-  </nav>
-
-#}
 {% endblock %}
