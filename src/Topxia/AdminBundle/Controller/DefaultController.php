@@ -96,7 +96,7 @@ class DefaultController extends BaseController
     {
         $site  = $this->getSettingService()->get('site');
         $user  = $this->getCurrentUser();
-        $token = trim($this->postRequest("http://www.edusoho.com/question/get/token"), '"');
+        $token = $this->postRequest("http://www.edusoho.com/question/get/token");
         var_dump($token);
         // $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
         // $site  = urlencode(http_build_query($site));
@@ -117,12 +117,17 @@ class DefaultController extends BaseController
     private function postRequest($url)
     {
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_URL, $url);
+
+        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
         $response = curl_exec($curl);
 
