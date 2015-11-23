@@ -14,7 +14,7 @@ parameters:
           defaultTitle: "精品课程"
           id: latestCourse
         - title: ""
-          count: "8"
+          count: "4"
           categoryId: ""
           code: "live-course"
           defaultTitle: "直播课程"
@@ -49,7 +49,7 @@ parameters:
           defaultTitle: "精品课程"
           id: latestCourse
         - title: ""
-          count: "8"
+          count: "4"
           categoryId: ""
           code: "live-course"
           defaultTitle: "直播课程"
