@@ -97,10 +97,9 @@ class DefaultController extends BaseController
         $site  = $this->getSettingService()->get('site');
         $user  = $this->getCurrentUser();
         $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
-        return $this->createJsonResponse($token);
-        // $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
-        // $site  = urlencode(http_build_query($site));
-        //return $this->redirect("http://www.edusoho.com/question?site=".$site."");
+        $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
+        $site  = urlencode(http_build_query($site));
+        return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
     public function inspectAction(Request $request)
