@@ -30,7 +30,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             'approval'      => 0,
             'maxRate'       => 0,
             'locked'        => 0,
-            'buyable'       => 0
+            'buyable'       => 0,
+            'certi'         => 0
         ));
 
         if (!empty($fields['about'])) {
@@ -98,7 +99,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl
     public function deleteCourse($id)
     {
         $course = $this->getCourse($id);
-        if(!parent::deleteCourse($id)){
+
+        if (!parent::deleteCourse($id)) {
             throw $this->createServiceException('删除课程出错');
         };
 
