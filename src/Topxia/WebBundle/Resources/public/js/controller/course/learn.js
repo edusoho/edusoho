@@ -74,17 +74,20 @@ define(function(require, exports, module) {
               var lessonType = this.get("type");
              if (lessonType == "video") {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                currentTime = Math.floor(player.getCurrentTime());
-                player.pause();
+                if(player != undefined) {
+                    currentTime = Math.floor(player.getCurrentTime());
+                    player.pause();
+                }
+                
              }
 
              $('#modal').on('hidden.bs.modal', function (e) {
-                if (lessonType == "video") {
+                if (lessonType == "video" &&player != undefined) {
                      player.play();
                  }
               });
              $('#modal').on('onAskQuestionSuccess', function (e,result) {
-                if (lessonType == "video" && result.id) {
+                if (lessonType == "video" && result.id &&player != undefined) {
                     var marker = {
                         'id' : result.id,
                         'time': result.marker,
@@ -356,7 +359,9 @@ define(function(require, exports, module) {
                         $("#lesson-video-content").on('onMarkerTimeClick', function (e,markerTime) {
                             if (markerTime>0) {
                                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                               player.setCurrentTime(markerTime);
+                               if(player != undefined) {
+                                   player.setCurrentTime(markerTime);
+                               }
                             }
                         });
 
