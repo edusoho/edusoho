@@ -193,7 +193,7 @@ define(function(require, exports, module) {
 			conculatePrice();
 			$('[role="coupon-code"]').show();
 			$('[role="coupon-code-input"]').focus();
-			$('[role="no-use-coupon-code"]').hide();
+			// $('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
 			$('#coupon-select').hide();
 			// $('[role="code-notify"]').show();
@@ -207,7 +207,7 @@ define(function(require, exports, module) {
 				$('button[role="coupon-use"]').trigger('click');
 			}
 			$('[role="coupon-code"]').hide();
-			$('[role="no-use-coupon-code"]').show();
+			// $('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
 			$('#coupon-select').show();
 			$('[role="code-notify"]').hide();
