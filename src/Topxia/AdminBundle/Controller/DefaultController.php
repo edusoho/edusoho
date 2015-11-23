@@ -130,7 +130,7 @@ class DefaultController extends BaseController
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
         $response = curl_exec($curl);
-
+        var_dump(curl_getinfo($curl));
         curl_close($curl);
 
         return $response;
