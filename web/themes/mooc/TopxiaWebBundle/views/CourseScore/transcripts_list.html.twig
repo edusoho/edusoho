@@ -1,0 +1,44 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<table class="table table-striped report-table-body">
+  <tbody>
+  <tr>
+    <th>学员姓名</th>
+    <th>学号</th>
+    <th>院系/专业</th>
+    <th>课程总成绩</th>
+    <th>考试成绩</th>
+    <th>作业成绩</th>
+    <th>其他</th>
+    <th>学分</th>
+    <th></th>
+  </tr>
+    {% for user in users %}
+      <tr>
+        <td>{{ usersProfile[user.id].truename }}</td>
+        <td>{{ user.staffNo }}</td>
+        <td>{% if user.organizationId != 0 %}{{ organizations[user.organizationId].name }}{% endif %}</td>
+        <td name="totalScore">{% if usersScore %}{{ usersScore[user.id].totalScore }}{% endif %}</td>
+        <td>{% if usersScore %}{{ usersScore[user.id].examScore }}{% endif %}</td>
+        <td>{% if usersScore %}{{ usersScore[user.id].homeworkScore }}{% endif %}</td>
+        <td name="otherScore">{% if usersScore %}{{ usersScore[user.id].otherScore }}{% endif %}</td>
+        <td name="credit">{% if usersScore and usersScore[user.id].totalScore >= courseScoreSetting.standardScore %}{{ courseScoreSetting.credit|default(0) }}{% else %} -- {% endif %}</td>
+        <td><a id="score-edit" data-url="{{ path('course_manage_student_score_edit',{courseId:course.id}) }}"
+               data-id="{{ usersScore[user.id].id }}"><i class="iconfont icon-edit" data-toggle="tooltip"
+                                                         data-placement="top" title="编辑"></i></a>
+          <a href="{{ path('course_manage_student_grades_cards',{courseId:course.id,userId:user.id}) }}"><i
+                class="iconfont icon-wendangkeshi" data-toggle="tooltip" data-placement="top"
+                title="查看"></i></a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td>
+          <div class="empty">暂无成绩记录</div>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if users %}
+  {{ web_macro.paginator(paginator) }}
+{% endif %}

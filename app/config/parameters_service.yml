@@ -1,0 +1,16 @@
+parameters:
+    topxia_services:
+        'Course.CourseService' : 'Mooc\Service\Course\Impl\CourseServiceImpl'
+        'Course.CourseDeleteService' : 'Mooc\Service\Course\Impl\CourseDeleteServiceImpl'
+        'User.UserService' : 'Mooc\Service\User\Impl\UserServiceImpl'
+        'User.AuthService' : 'Mooc\Service\User\Impl\AuthServiceImpl'
+        'Classroom:Classroom.ClassroomService' : 'Mooc\Service\Classroom\Impl\ClassroomServiceImpl'
+        'Crontab.CrontabService' : 'Mooc\Service\CrontabJob\Impl\CrontabJobServiceImpl'
+        'Testpaper.TestpaperService' : 'Mooc\Service\Testpaper\Impl\TestpaperServiceImpl'
+    topxia_daos:
+        'Course.CourseDao' : 'Mooc\Service\Course\Dao\Impl\CourseDaoImpl'
+        'User.UserDao' : 'Mooc\Service\User\Dao\Impl\UserDaoImpl'
+        'Course.CourseMemberDao' : 'Mooc\Service\Course\Dao\Impl\CourseMemberDaoImpl'
+        'Classroom:Classroom.ClassroomMemberDao' : 'Mooc\Service\Classroom\Dao\Impl\ClassroomMemberDaoImpl'
+        'Crontab.JobDao' : 'Mooc\Service\CrontabJob\Dao\Impl\CrontabJobDaoImpl'
+        'Testpaper.TestpaperResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperResultDaoImpl'

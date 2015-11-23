@@ -1,0 +1,368 @@
+.mooc-report-header{
+	background: @white;
+	.report-title{
+		display: inline-block;
+	  .bg-blue{
+			background: @blue;
+			display: inline-block;
+			padding: 15px;
+		}
+		i{
+			font-size: 32px;
+			color: @white;
+		}
+		h4{
+			display: inline-block;
+			font-size: 14px;
+			margin-left: 30px;
+			color:@black;
+		}
+	}
+	.report-grade{
+		display: inline-block;
+		line-height: 75px;
+		.line{
+			color:#f1f5f9;
+
+		}
+	}
+}
+.mooc-report-content{
+	.alert-info{
+		color:@font-color;
+		font-size: 12px;
+		span{
+			font-size: 18px;
+			color:@blue;
+			padding-right: 6px;
+		}
+	}
+	.panel-body{
+		padding: 0;
+	}
+	.content{
+		font-size: 12px;
+		line-height: 24px;
+		i{
+			color: @blue;
+		}
+	}
+	.mooc-report-count{
+		padding:0;
+		ul{
+			padding:0;
+			margin: 0;
+			li{
+				padding: 28px 36px;
+				text-align: center;
+				border-left:1px dashed #f1f5f9;
+				border-bottom: 1px dashed #f1f5f9;
+				color:@font-color;
+				&:last-child{
+					border-bottom: none;
+				}
+				span{
+					display: block;
+					font-size: 12px;
+					padding-top: 15px;
+					color: @color-primary;
+					strong{
+						font-size: 16px;
+						font-weight: normal;
+						padding-right: 4px;
+					}
+				}
+			}
+		}
+	}
+}
+.mooc-report-table{
+	background: @white;
+	.panel-heading{
+		border:none;
+		h4{
+			color:@black;
+		}
+	}
+	.report-table-header{
+		.form-group{
+			float: left;
+			.form-control{
+				height: 36px;
+				width: 150px;
+			}
+			
+		}
+    .input-group-t{
+    	display: inline-block;
+    	width: 195px;
+    	position: relative;
+    	.input-group-text{
+    		width: 100%;
+			  outline: none;
+			  color: #7f949f;
+			  font-size: 12px;
+			  line-height: 30px;
+			  text-indent: 10px;
+			  background: #f9fbfd;
+    	}
+    	#orgName{
+    		width:196px;
+    	}
+    	.input-group-btn{
+    		position: absolute;
+			  top: 0;
+			  right: 22px;
+			  z-index: 2;
+			  .no-border{
+			  	line-height: 30px;
+				  border: none;
+				  background-color: transparent;
+				  outline: none;
+			  }
+			  .dropdown-menu{
+			  	  top: 35px;
+					  left: -82px;
+					  min-width: 106px;
+					  box-shadow: none;
+					  padding: 1px 0;
+					 li{
+					 	color:#f9fbfd;
+					 	border: 1px solid #e1e1e1;
+
+					 }
+			  }
+    	}
+
+    }
+    .input-group-b{
+    		background: @color-primary;
+    		border:none;
+    		outline: none;
+    		height: 36px;
+  			width: 36px;
+    		i{
+    			color:@white;
+      		font-size: 24px;
+    		}
+    }
+    .btn-right{
+    	line-height: 36px;
+    	a{
+    		color:#7f949f;
+    		background: #f4fef9;
+    		border:1px solid #dbf5ee;
+    		padding: 13px;
+    		&:hover{
+    			border:1px solid #def9ea;
+    			color:@color-primary;
+    			background: #def9ea;
+    		}
+    	}
+    }
+	}
+	.report-table-body{
+		tr{
+			td{
+				a{
+					color:#97a8b1;
+					padding-right: 12px;
+				}
+			}
+		}
+
+	}
+}
+.report-table-body > tbody > {
+	tr{
+		&:first-child{
+			background: #f1f5f9;
+    	border:1px solid #f1f5f9;
+		}
+		&:hover{
+			background: #f1f5f9;
+    	
+		}
+		td,th{
+		text-align: center;
+		border-top: none;
+	}
+	  .disabled{
+	  	a,i{
+	  	color:#dbdbdb;
+	  }
+	  }
+	}
+
+	}
+.mooc-report-modal{
+	.report-title{
+		background: #f0f5f9;
+				span{
+			display: inline-block;
+			width: 19%;
+ 			text-align: center;
+			strong{
+				display: block;
+				font-weight: normal;
+				color:@black;
+				line-height: 28px;
+				overflow: hidden;
+ 				height: 24px;
+ 				position: relative;
+  			top: 10px;
+			}
+		}
+	}
+	.bg-blue{
+			background: @blue;
+			display: inline-block;
+			padding: 9px 17px;
+			i{
+			font-size: 48px;
+			color: @white;
+			}
+	}
+	.report-intro{
+		margin: 30px 0;
+		p{
+			font-size: 12px;
+			margin: 15px 0;
+			i{
+				padding-right: 10px;
+			}
+		.es-icon-info{
+			color: #00a8ff;
+		}
+		.es-icon-help{
+			color: @color-primary;
+		}
+		span{
+			font-size: 14px;
+		}
+	}
+	}
+	
+}
+.mooc-report-detail{
+	.panel-heading{
+		border:none;
+		h4{
+		color:@black;
+		}
+	}	
+	.report-title{
+		background: #f0f5f9;
+		.bg-blue{
+		  padding: 6px 12px;
+		  display: inline-block;
+			background: @blue;
+			margin-right:  18px;
+			i{
+				font-size: 36px;
+				color: @white;
+			}
+		}
+		.pull-right{
+			span{
+				display: inline-block;
+				width: 90px;
+ 			 padding: 10px 0;
+				strong{
+				display: block;
+				padding-top: 6px;
+				width: 90px;
+				overflow: hidden;
+			}
+			}
+			
+		}
+		strong{
+			font-weight: normal;
+			color:@black;
+		}
+	}
+	.report-intro{
+		margin: 20px 0;
+		p{
+			font-size: 12px;
+			color:@gray;
+			i{
+				color: @blue;
+				padding-right: 10px;
+			}
+			span{
+				font-size: 14px;
+				color:@black;
+			}
+		}
+	}
+	.panel-body{
+		position: relative;
+		.hover-model{
+			display: none;
+			position: absolute;
+			z-index: 22;
+			right: 23px;
+  		top: 39px;
+			.panel{
+				width: 380px;
+			}
+			.alert-info{
+				background: #f4fef9;
+				color:@font-color;
+				font-size: 12px;
+				text-align: center;
+				span{
+					color: #7f949f;
+					font-size: 14px;
+				}
+			}
+			.content{
+				i{
+					color:@blue;
+					padding-right: 8px;
+				}
+				font-size: 12px;
+				color:@gray;
+				line-height: 24px;
+				span{
+					color: #7f949f;
+				}
+			}
+		}
+	}
+
+}
+.mooc-report-tab{
+	padding: 0;
+	.panel-body{
+		padding: 0;
+	}
+	.detail-nav{
+		padding: 0;
+		margin: 0;
+		li{
+			float: left;
+			width: 50%;
+  		text-align: center;
+
+  		a{
+  			width: 100%;
+			  height: 50px;
+			  line-height: 50px;
+  			display: inline-block;
+  		}
+		}
+		li.active{
+			background: #f4fdf8;
+			border-bottom:1px solid @color-primary;
+			a{
+				color:@color-primary;
+			}
+		}
+	}
+	.mooc-report-table{
+		margin: 30px;
+	}
+}

@@ -1,0 +1,7 @@
+parameters:
+#    mooc_admin.example.class: Mooc\AdminBundle\Example
+
+services:
+#    mooc_admin.example:
+#        class: %mooc_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

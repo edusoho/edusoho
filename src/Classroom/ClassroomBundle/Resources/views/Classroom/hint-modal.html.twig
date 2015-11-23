@@ -6,13 +6,13 @@
 	{% if not classroom %}
 		<div style="height: 50px;text-align: center;">
 	        <p style="line-height: 50px;">
-	        	课程已从班级中移除
+	        	课程已从{{setting("classroom.name")|default("班级")}}中移除
 	        </p>
 	    </div>
 	{% else %}
 	    <div style="height: 50px;text-align: center;">
 	        <p style="line-height: 50px;">
-	        还不是班级成员,请先<a href="{{ path('classroom_show', {id:classroom.id}) }}">加入班级</a>
+	        还不是{{setting("classroom.name")|default("班级")}}成员,请先<a href="{{ path('classroom_show', {id:classroom.id}) }}">加入{{setting("classroom.name")|default("班级")}}</a>
 	        </p>
 	    </div>
 	{% endif %}

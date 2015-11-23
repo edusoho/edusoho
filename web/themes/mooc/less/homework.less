@@ -1,0 +1,147 @@
+.homework-time{
+	.homework-content{
+		display: inline-block;
+		
+		p{
+			font-size: 12px;
+			padding-left: 40px;
+		}
+		.red{
+			color: #ff0000;
+		}
+	}
+	.homework-btn{
+		float: right;
+    margin-top: 40px;
+     @media (max-width: @screen-xs-max) {
+     	float:none;
+     	margin-top: 0;
+     	margin-left: 40px;
+
+     }
+		a{
+			padding: 4px  6px;
+			border-radius:3px;
+			color: #fff;
+		}
+		.green{
+			background: @bg-primary;
+		}
+		.gary{
+			background: @gray;
+			cursor: default;
+		}
+		.btn-start,.btn-comment{
+			margin-bottom: 10px;
+		}
+	}
+}
+.enter-comment{
+	margin-top: 20px;
+	.t-comment{
+		width: 100%;
+		outline: none;
+	}
+}
+.h-Evaluate{
+	.media{
+		padding: 36px;
+		.media-left{
+			text-align: center;
+		  width: 120px;
+		  border-right:1px dashed #f1f1f1;
+			span{
+				display: block;
+				color:@black;
+			}
+			.num{
+				font-size: 36px;
+			}
+			.mininum{
+				font-size: 12px;
+				color:@gray;
+			}
+		}
+		.media-body{
+			padding-left: 30px;
+			width: auto;
+			p{
+				span{
+					color:@black;
+				}
+			}
+			.cutoff{
+				color:#ccc;
+			}
+		}
+	}
+  .h-Evaluate-result{
+		color: #34a263!important;
+		background: #fafafa;
+	}
+	.info{
+		padding-left: 0;
+		p{
+		color:#333!important;
+		.num{
+			color:#34a263;
+			}
+		}
+   
+	}
+	.h-lesson{
+		margin-top: 5px;
+	}
+	.btn-cut{
+		border:1px solid #ccc;
+		padding: 2px 4px;
+		color:#ccc;
+		background: #fff;
+	}
+	 .btn-sm{
+	   padding: 6px 8px;
+
+	 }
+	 .btn-begin{
+	 	border:1px solid #ffb400;
+		padding: 2px 4px;
+		color:#ffb400;
+		background: #fff;
+	 	
+	 }
+	 .btn-common{
+	 		border:1px solid @color-primary;
+		padding: 2px 4px;
+		color:@color-primary;
+		background: #fff;
+	 }
+
+}
+.question-evaluate-table{
+	th{
+		font-weight: normal;
+	}
+	thead{
+		border-top: 1px dashed #ddd;
+		>tr{
+			>th{
+				border-bottom: 1px dashed #ddd;
+				color: #1abc9c;
+			
+			}
+			.width-4{
+				width: 20%;
+			}
+			.width-2{
+				width: 15%;
+			}
+		}
+	}
+	tbody{
+		tr{
+			th{
+				border-top: none;
+			}
+		}
+	}
+}

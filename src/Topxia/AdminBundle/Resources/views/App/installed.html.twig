@@ -32,7 +32,7 @@
         {% if app.installed|default(0) or app.purchased or (app.userAccess|default(null) == "ok" ) and (app.price == 0 and not  app.licensed ) %}
         <tr>
           <td>
-              {% if app.code == "MAIN" %}
+              {% if app.code == "MOOCMAIN" %}
                 <img src="/assets/img/default/MAIN_icon.png" class="app-img pull-left mrl mtm"/>
               {% else %}
                 <img src="http://open.edusoho.com/files/product/{{ app.icon }}" class="app-img pull-left mrl mtm"/>
@@ -71,7 +71,7 @@
               </div>
               
               {% if app.installed|default(0) %}
-                  {% if app.code|lower != 'MAIN' %}
+                  {% if app.code|lower != 'MOOCMAIN' %}
                     {% set url = appMeta[app.code].manage_index|default('') %}
                   {% endif %}
               <div class="right-info pull-right">
@@ -79,7 +79,7 @@
                   <a href="{{url(url)}}"  class="btn btn-primary">管理</a>
                   {% endif %}
 
-                  {% if setting('developer.debug') and app.code|lower != 'main' %}
+                  {% if setting('developer.debug') and app.code|lower != 'moocmain' %}
                     <br>
                     <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn mtm">卸载</a>
                   {% endif %}

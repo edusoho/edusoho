@@ -1,0 +1,92 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}成绩单 - {{ parent() }}{% endblock %}
+{% set side_nav = 'transcripts' %}
+{% set script_controller = 'theme/course-score/transcripts-list' %}
+{% set script_arguments = {
+	ztreeDates : data('OrganizationZtree', {all:1})
+} %}
+{% block main %}
+  <div class="mooc-report-header clearfix">
+  	<div class="report-title">
+  		<span class="bg-blue"><i class="iconfont icon-wendangkeshi"></i></span>
+  		<h4>{{course.title}}课程成绩单</h4>
+  	</div>
+  	<div class="report-grade pull-right">
+  		<span class="prl">课程学分：<span class="text-primary">{{courseScoreSetting.credit|default(0)}} 学分</span></span>
+  		<span class="line prl">|</span>
+  		<span class="prl">平均分：<span class="text-primary">{{averageScore}} 分</span></span>
+  	</div>
+  </div>
+  <div class="mooc-report-content mtl">
+	  <div class="row">
+	  	<div class="col-md-7">
+	  		<div class="panel panel-default mooc-report-count">
+	  		<div class="row">
+	  			<div class="col-md-8" ><div style="height: 244px" id="graph"></div></div>
+	  			<input type="hidden" id="passNum" value="{{passStudentNum}}">
+	  			<input type="hidden" id="unPassNum" value="{{studentNum - passStudentNum}}">
+	  			<div class="col-md-4">
+	  				<ul>
+	  					<li>总人数<span><strong>{{studentNum}}</strong>人</span></li>
+	  					<li>通过率<span><strong>{{passingRate}}</strong>%</span></li>
+	  				</ul>
+	  			</div>
+	  		</div>
+	  		</div>
+	  	</div>
+	  	 <div class="col-md-5">
+	  		 <div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>总成绩计算公式</h4>
+					</div>
+					<div class="panel-body">
+						<div class="alert alert-info" role="alert">
+							<span>{{courseScoreSetting.examWeight|default(0)}}%</span>*考试成绩+<span>{{courseScoreSetting.homeworkWeight|default(0)}}%</span>*作业成绩+<span>{{courseScoreSetting.otherWeight|default(0)}}%</span>*其他
+						</div>
+						<p class="content">
+							<i class="es-icon es-icon-info"></i>
+							该课程成绩{{courseScoreSetting.standardScore|default(60)}}分为合格，成绩预计公布时间为{{courseScoreSetting.expectPublishTime|default(0)|date('Y年m月d日')}}。请大家及时完成作业及考试，以免影响最终成绩。
+						</p>
+					</div> 			
+	  		</div>  
+	  	</div> 
+	  </div>
+	</div>
+	<div class="mooc-report-table panel panel-default">
+		<div class="panel-body">
+			<div class="report-table-header clearfix">
+				<form class="clearfix inline-block" id="score-from" action="{{path('course_manage_transcripts_list',{courseId:course.id})}}">
+					<div class="form-group input-group-t">
+						 <input  class="form-control" name="major" id ="orgName"  value= "{{app.request.query.get('orgName','--选择院系/专业--')}}" autocomplete="off"  >
+
+						<input type="hidden" class="input-group-text"  id="organizationId" disabled="disabled">
+
+						<div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+							<ul id="organizationZtree" class="ztree" style="margin-top:0; width:196px;"></ul>
+						</div>
+
+					</div>
+					<div class="form-group">
+				    <label for="inputPassword2" class="sr-only">学号</label>
+				    <input type="text" class="form-control" id="staffNo" placeholder="学号">
+				  </div>
+				  <button id="search" type="submit" class="input-group-b pull-left"><i class="es-icon es-icon-search"></i></button>
+				</form>
+				<div class="btn-right pull-right">
+					<a href="{{path('course_manage_student_score_import',{id:course.id})}}">导入成绩</a>
+					{% if courseScoreSetting.publishType|default() == 'manual' and  courseScoreSetting.status|default() == 'unpublish' %}
+					<a id="score_publish" data-url="{{path('course_manage_score_published',{courseId:course.id})}}" href="#">发布成绩</a>
+				    {% endif %}
+					<a id="score_export" data-url="{{path('course_manage_student_score_export_csv',{id:course.id})}}" href="{{path('course_manage_student_score_export_csv',{id:course.id})}}">批量导出成绩</a>
+				</div>	
+			</div>
+			<div id="transcripts-list">
+			
+			   {% include 'TopxiaWebBundle:CourseScore:transcripts_list.html.twig' %}
+
+			</div>
+			
+		</div>
+	</div>
+{% endblock %}

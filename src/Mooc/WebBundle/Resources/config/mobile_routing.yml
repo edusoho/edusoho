@@ -1,0 +1,8 @@
+mapi_mobile_esmobile_app:
+    pattern:  /mobile/main
+    defaults: { _controller: MoocWebBundle:MoocMobileApp:index }
+
+mapi_mobile_api:
+    pattern:  /{service}/{method}
+    defaults: { _controller: MoocWebBundle:MobileApi:index }
+    methods: [GET, POST]

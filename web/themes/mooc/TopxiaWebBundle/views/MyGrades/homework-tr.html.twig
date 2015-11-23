@@ -1,0 +1,15 @@
+<tr id="homework-tr-{{ homework.id }}">
+	<td>作业{{ loop.index }}</td>
+	<td>{{ homeworkLessons[homework.lessonId].title|default('--') }}</td>
+	<td>
+		{% if homeworkResults[homework.id]|default(null) %}
+			已完成
+		{% else %}
+			<span class="text-danger">未完成</span>
+		{% endif %}
+		</td>
+	<td>{{ homework.score }}</td>
+	<td>
+		{{ homeworkResults[homework.id].score|default('--') }}
+	</td>
+</tr>

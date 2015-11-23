@@ -1,0 +1,152 @@
+.certificate-upload-img{
+	.panel-heading{
+		h4{
+			display: inline-block;
+		}
+		.certificate-btn-open,.certificate-btn-close{
+			line-height: 32px;
+			height: 32px;
+			width: 57px;
+			color:@blue;
+			text-align: center;
+			border:1px solid @blue;
+			background:@blue-little;
+			font-size: 13px;
+			&:hover{
+				background:@blue;
+				color: @white;	
+
+			}
+		}
+		.certificate-btn-open.hover,.certificate-btn-close.hover{
+			background:@blue;
+			color: @white;
+			line-height: 32px;
+			height: 32px;
+			width: 57px;
+			text-align: center;
+			font-size: 13px;
+		}
+		.certificate-btn-close{
+			color: #8a9197;
+			border:1px solid #8a9197;
+			background: #fafafa;
+		}
+		.certificate-btn-upload{
+			padding: 6px 8px;
+			color: #8a9197;
+			border:1px solid @bg-primary;
+			background:#f4fdf8;
+		}
+	}
+}
+
+.certificate-upload-table{
+	.panel-heading{
+		border:none;
+		h4{
+			display: inline-block;
+		}
+		.apply-btn{
+			padding: 6px 8px;
+			color: #8a9197;
+			border:1px solid @bg-primary;
+			background:#f4fdf8;
+		}
+		.navbar-form{
+			padding: 0;
+			.form-control{
+				height: 32px;
+				line-height: 32px;
+				background: @white;
+				border:1px solid @little-gray;
+			}
+			.button{
+				outline: none;
+				 width: 30px;
+   			 height: 30px;
+   			 top:1px;right: 1px;
+				background: @color-primary;
+				i{
+					color: @white;
+					font-size: 20px;
+				}
+			}
+		}
+	}	
+	.panel-body{
+		padding: 0 30px;
+		ul{
+			padding: 0;
+			margin:0 0 30px 0;
+			border-bottom: 1px solid @little-gray;
+			li{
+				display: inline-block;
+			
+   		  padding: 0 10px;
+   		  line-height: 40px;
+				a{
+					color:@green-little;
+				}
+			}
+			li.active{
+				border-bottom: 1px solid @color-primary;
+				a{
+					color: @color-primary;
+				}
+			}
+		}
+		table{
+			thead{
+				background: #f0f5f9;
+				color: @green-little;
+			}
+			th,tr,td{
+				text-align: center;
+				font-weight: normal;
+				border:none;
+				i{
+					color: @green-little;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+}
+.mooc-certificate-sign{
+	position: relative;
+	.m-certificate-1,.m-certificate-2,.m-certificate-3{
+		display: inline-block;
+		width: 84px;
+    	height: 36px;
+		background: url('../img/all-icons.png');
+		position: absolute;
+		top: 0;
+		left: -6px;
+		text-align: center;
+		line-height: 30px;
+		color: @white;
+	}
+	.m-certificate-2{
+		background-position: -83px -14px;
+		right: -13px;
+	    left: auto;
+	    top: -21px;
+	    line-height: 45px;
+	}
+	.m-certificate-3{
+		background-position: -83px -14px;
+
+		bottom: -18px;
+	    left: -77px;
+	    top: auto;
+	    line-height: 42px;
+	     @media (max-width: @screen-sm-max)  {
+	       background-position: 0 0;
+	       bottom: auto;
+	       left: -7px;
+	       top:-46px;
+	       line-height: 33px;
+	      }
+	}
+}

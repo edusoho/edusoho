@@ -1,0 +1,18 @@
+  <div class="teacher-img">
+    <a href="{{ path('user_show', {id:teacher.id}) }}">
+      <img class="img-responsive" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
+      {# {% if teacher.about %} #}
+        <div class="mask">
+          <div class="teacher-about">
+            {{teacher.about|plain_text(40) }}
+          </div>
+        </div>
+      {# {% endif %} #}
+    </a>
+  </div>
+  <div class="teacher-name">
+    <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+  </div>
+  <div class="teacher-position">
+      {{ teacher.title }}
+  </div>

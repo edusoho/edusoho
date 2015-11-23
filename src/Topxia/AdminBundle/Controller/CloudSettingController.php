@@ -106,7 +106,7 @@ class CloudSettingController extends BaseController
             }
 
             $user = $api->get('/me');
-            if ($user['edition'] != 'opensource') {
+            if ($user['edition'] != 'mooc') {
                 $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
                 goto render;
             }
@@ -148,9 +148,9 @@ class CloudSettingController extends BaseController
 
     public function keyCopyrightAction(Request $request)
     {
+
         $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
-        
         if (empty($info['copyright'])) {
             throw $this->createAccessDeniedException('您无权操作!');
         }
@@ -266,6 +266,7 @@ class CloudSettingController extends BaseController
 
         return new Response(json_encode($response));
     }
+
 
     public function videoWatermarkRemoveAction(Request $request)
     {

@@ -182,6 +182,9 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/Custom/AdminBundle/Resources/config/menus_{$position}.yml";
 
+        $configPaths[] = "{$rootDir}/src/Mooc/WebBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Mooc/AdminBundle/Resources/config/menus_{$position}.yml";
+
         $menus = array();
         foreach ($configPaths as $path) {
             if (!file_exists($path)) {

@@ -1,0 +1,10 @@
+services:
+#    mooc_web.example:
+#        class: %mooc_web.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    mooc.twig.web_extension:
+        class: Mooc\WebBundle\Twig\Extension\WebExtension
+        arguments:    [@service_container]
+        tags:
+            - { name: twig.extension }

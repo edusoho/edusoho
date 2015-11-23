@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+{% block title %}师资介绍 - {{ parent() }}{% endblock %}
+
+{% block keywords %}师资介绍 {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ setting('site.name') }}的师资介绍。{% endblock %}
+
+{% set bodyClass = 'teacherpage' %}
+{% do load_script('teacher/explore') %}
+{% block content %}
+	<div class="teacher-list" id="teacher-list">
+    <div class="row">
+    	{% for teacher in teachers %}
+    	{% set user = data('UserandProfiles',{userId:teacher.id})%} 
+    	 <div class="col-md-6">
+          <div class="teacher-item clearfix">
+            <div class="teacher-avatar">
+              <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
+                <img class="" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
+              </a>
+            </div>
+             <div class="teacher-info clearfix">
+              <a class="btn btn-mooc-primary pull-right" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
+              <div class="teacher-name">
+                <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+              </div>
+              <div class="teacher-position">
+                {% if teacher.title %}
+                  {{ teacher.title }}
+                {% else %}
+                  <span class="text-muted">请设置头衔</span>
+                {% endif %}
+              </div>
+              <div class="teacher-about">
+                {{ user['profiles']['about']|plain_text(80) }}
+              </div>
+          </div>
+          </div>
+
+        </div>    	
+		 {% endfor %} 
+    </div>
+	</div>
+{% endblock %}	
