@@ -88,12 +88,7 @@ define(function(require, exports, module) {
               });
              $('#modal').on('onAskQuestionSuccess', function (e,result) {
                 if (lessonType == "video" && result.id &&player != undefined) {
-                    var marker = {
-                        'id' : result.id,
-                        'time': result.marker,
-                        'text' : result.title
-                    };
-                    player.addMarker(new Array(marker));
+                    
                 }
              });
 
