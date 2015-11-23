@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $id, $context)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -37,6 +37,7 @@ class PlayerController extends BaseController
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => $url,
+            'context'          => $context,
             'player'           => $player,
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));

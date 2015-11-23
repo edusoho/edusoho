@@ -86,7 +86,11 @@ define(function(require, exports, module) {
                      player.play();
                  }
               });
+             var that = this;
              $('#modal').on('onAskQuestionSuccess', function (e,result) {
+                if(that._toolbar._currentPane == 'question'){
+                    that._toolbar.trigger("change:question");
+                }
                 if (lessonType == "video" && result.id &&player != undefined) {
                     
                 }
@@ -325,10 +329,6 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("ready", function(){
-                            if (self.get('starttime') && lesson.type == 'video') {
-                                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                                player.setStartTime(self.get('starttime'));
-                            }
                         });
 
                         messenger.on("ended", function(){

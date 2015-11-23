@@ -68,7 +68,6 @@ define(function(require, exports, module) {
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
-                markers: markers,
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList
             }
