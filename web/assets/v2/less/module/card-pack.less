@@ -1,0 +1,77 @@
+
+//卡包优惠劵
+.card-pack-list {
+  .coupon-item,
+  .card-item {
+    position: relative;
+    width: 254px;
+    height: 172px;
+    margin: 0 auto 30px auto;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+  }
+
+  h4 {
+    position: absolute;
+    font-size: 18px;
+    left: 18px;
+  }
+  p {
+    margin-bottom: 0;
+  }
+  .price {
+    margin-bottom: 15px;
+    strong {  
+      font-size: 36px;
+      font-weight: normal;
+    }
+    a {
+      color: #fff;
+      padding-left: 8px;
+    }
+  }
+  .stamp {
+    position: absolute;
+    display: inline-block;
+    width: 132px;
+    height: 132px;
+    bottom: 8px;
+    left: 15px;
+    &.stamp-outdate {
+      background: url('../img/card.png') no-repeat 0 -349px;
+    }
+    &.stamp-cancel {
+      background: url('../img/card.png') no-repeat -410px -351px;
+    }
+  }
+
+  .coupon-item {
+    background: url('../img/card.png') no-repeat;
+    &.useless {
+      background: url('../img/card.png') no-repeat 0 -174px;
+    }
+    .title {
+      padding-top: 38px;
+    }
+    .price {
+      margin: 10px 0;
+    }
+    .stamp-used {
+      background: url('../img/card.png') no-repeat -140px -349px;
+    }
+  }
+
+  .card-item {
+    background: url('../img/card.png') no-repeat -260px 0;
+    &.useless {
+      background: url('../img/card.png') no-repeat -260px -174px;
+    }
+    .title {
+      padding-top: 58px;
+    }
+    .stamp-used {
+      background: url('../img/card.png') no-repeat -275px -351px;
+    }
+  }
+}
