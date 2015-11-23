@@ -1,7 +1,32 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-<div class="modal-dialog clear-modal-dialog {% if modalClass|default(null) %}{{ modalClass }}{% endif %}">
+{#登录后#}
+<div class="modal-dialog modal-card-pack modal-logined">
   <div class="modal-content">
-    <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-    <div class="modal-body">{% block body %}{% endblock %}</div>
+    <div class="modal-body">
+      <div class="modal-info">
+        您领取了一张优惠券，已添加至“我的卡包“
+      </div>
+      {#卡券内容#}
+      {#{% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}#}
+      <div class="modal-action">
+        <a href="" class="btn btn-ghost-white btn-xlg">立即使用</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{#登录前#}
+<div class="modal-dialog modal-card-pack">
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="modal-info">
+        您领取了一张优惠券，请登录后查看！
+      </div>
+      {#卡券内容#}
+      {#{% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}#}
+      <div class="modal-action">
+        <a href="" class="btn btn-ghost-white btn-xlg">登录查看</a>
+      </div>
+    </div>
   </div>
 </div>

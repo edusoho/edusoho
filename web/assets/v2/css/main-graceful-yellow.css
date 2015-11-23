@@ -5573,6 +5573,16 @@ textarea.form-control-o {
 .btn > i {
   font-size: 14px;
 }
+.btn-ghost-white {
+  color: #fff;
+  border: 2px solid #fff;
+}
+.btn-ghost-white:hover,
+.btn-ghost-white:focus,
+.btn-ghost-white.focus {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.3);
+}
 .btn-link {
   color: #313131;
 }
@@ -7698,36 +7708,38 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.card-pack-list .coupon-item,
-.card-pack-list .card-item {
+.card-pack-list .card-pack-item {
+  margin: 0 auto 30px auto;
+}
+.card-pack-item {
   position: relative;
   width: 254px;
   height: 172px;
-  margin: 0 auto 30px auto;
+  margin: 0 auto;
   text-align: center;
   color: #fff;
   font-size: 12px;
 }
-.card-pack-list h4 {
+.card-pack-item h4 {
   position: absolute;
   font-size: 18px;
   left: 18px;
 }
-.card-pack-list p {
+.card-pack-item p {
   margin-bottom: 0;
 }
-.card-pack-list .price {
+.card-pack-item .price {
   margin-bottom: 15px;
 }
-.card-pack-list .price strong {
+.card-pack-item .price strong {
   font-size: 36px;
   font-weight: normal;
 }
-.card-pack-list .price a {
+.card-pack-item .price a {
   color: #fff;
   padding-left: 8px;
 }
-.card-pack-list .stamp {
+.card-pack-item .stamp {
   position: absolute;
   display: inline-block;
   width: 132px;
@@ -7735,38 +7747,65 @@ textarea {
   bottom: 8px;
   left: 15px;
 }
-.card-pack-list .stamp.stamp-outdate {
-  background: url('../img/card.png') no-repeat 0 -349px;
+.card-pack-item .stamp.stamp-outdate {
+  background: url('/assets/v2/img/card.png') no-repeat 0 -349px;
 }
-.card-pack-list .stamp.stamp-cancel {
-  background: url('../img/card.png') no-repeat -410px -351px;
+.card-pack-item .stamp.stamp-cancel {
+  background: url('/assets/v2/img/card.png') no-repeat -410px -351px;
 }
-.card-pack-list .coupon-item {
-  background: url('../img/card.png') no-repeat;
+.card-pack-item.coupon-item {
+  background: url('/assets/v2/img/card.png') no-repeat;
 }
-.card-pack-list .coupon-item.useless {
-  background: url('../img/card.png') no-repeat 0 -174px;
+.card-pack-item.coupon-item.useless {
+  background: url('/assets/v2/img/card.png') no-repeat 0 -174px;
 }
-.card-pack-list .coupon-item .title {
+.card-pack-item.coupon-item .title {
   padding-top: 38px;
 }
-.card-pack-list .coupon-item .price {
+.card-pack-item.coupon-item .price {
   margin: 10px 0;
 }
-.card-pack-list .coupon-item .stamp-used {
-  background: url('../img/card.png') no-repeat -140px -349px;
+.card-pack-item.coupon-item .stamp-used {
+  background: url('/assets/v2/img/card.png') no-repeat -140px -349px;
 }
-.card-pack-list .card-item {
-  background: url('../img/card.png') no-repeat -260px 0;
+.card-pack-item.card-item {
+  background: url('/assets/v2/img/card.png') no-repeat -260px 0;
 }
-.card-pack-list .card-item.useless {
-  background: url('../img/card.png') no-repeat -260px -174px;
+.card-pack-item.card-item.useless {
+  background: url('/assets/v2/img/card.png') no-repeat -260px -174px;
 }
-.card-pack-list .card-item .title {
+.card-pack-item.card-item .title {
   padding-top: 58px;
 }
-.card-pack-list .card-item .stamp-used {
-  background: url('../img/card.png') no-repeat -275px -351px;
+.card-pack-item.card-item .stamp-used {
+  background: url('/assets/v2/img/card.png') no-repeat -275px -351px;
+}
+.modal-card-pack.modal-logined .modal-content:after {
+  position: absolute;
+  width: 97px;
+  height: 96px;
+  top: 105px;
+  right: 90px;
+  content: '';
+  background: url('/assets/v2/img/card_user.png') center center no-repeat;
+}
+.modal-card-pack .modal-content {
+  position: relative;
+  padding: 30px;
+  background: url('/assets/v2/img/card_bg.png') #feba37 center center no-repeat;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+.modal-card-pack .modal-body .modal-info {
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+.modal-card-pack .modal-body .modal-action {
+  margin-top: 30px;
+  text-align: center;
 }
 .es-poster {
   position: relative;
