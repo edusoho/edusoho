@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $context)
+    public function showAction(Request $request, $id, $context = array())
     {
         $file = $this->getUploadFileService()->getFile($id);
 
