@@ -97,10 +97,9 @@ class DefaultController extends BaseController
         $site  = $this->getSettingService()->get('site');
         $user  = $this->getCurrentUser();
         $token = trim($this->postRequest("http://www.edusoho.com/question/get/token"), '"');
-        var_dump($token);
-        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
-        $site = urlencode(http_build_query($site));
-        return $this->redirect("http://www.edusoho.com/question?site=".$site."");
+        // $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
+        // $site  = urlencode(http_build_query($site));
+        // return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
     public function inspectAction(Request $request)
@@ -255,11 +254,7 @@ class DefaultController extends BaseController
 
     public function userCoinsRecordsBlockAction(Request $request)
     {
-        $userIds = $this->getCashService()->findUserIdsByFlows(
-            "outflow", "", "DESC",
-            0,
-            5
-        );
+        $userIds = $this->getCashService()->findUserIdsByFlows("outflow", "", "DESC", 0, 5);
 
         $userIds = ArrayToolkit::column($userIds, 'userId');
 
@@ -424,11 +419,7 @@ class DefaultController extends BaseController
 
     public function unsolvedQuestionsBlockAction(Request $request)
     {
-        $questions = $this->getThreadService()->searchThreads(
-            array('type' => 'question'),
-            'createdNotStick',
-            0, 5
-        );
+        $questions = $this->getThreadService()->searchThreads(array('type' => 'question'), 'createdNotStick', 0, 5);
 
         $unPostedQuestion = array();
 
@@ -490,8 +481,7 @@ class DefaultController extends BaseController
         );
 
         foreach ($course['teacherIds'] as $receiverId) {
-            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind',
-                $message);
+            $result = $this->getNotificationService()->notify($receiverId, 'questionRemind', $message);
         }
 
         return $this->createJsonResponse(array('success' => true, 'message' => 'ok'));
