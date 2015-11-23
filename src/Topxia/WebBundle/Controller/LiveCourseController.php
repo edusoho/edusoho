@@ -7,6 +7,7 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LiveCourseController extends BaseController
 {
