@@ -82,7 +82,7 @@ class CardController extends BaseController
             foreach ($cardDetails as $key => $value) {
                 if ($value['targetType'] == $targetType && ($value['targetId'] == 0 || $value['targetId'] == $targetId)) {
                     if ($value['type'] == 'minus') {
-                        $cardDetails[$key]['truePrice'] = $totalPrice > $value['rate'] ? $totalPrice - $value['rate'] : 0;
+                        $cardDetails[$key]['truePrice'] = $totalPrice - $value['rate'];
                         $useableCards[]                 = $cardDetails[$key];
                     } else {
                         $cardDetails[$key]['truePrice'] = $totalPrice * ($value['rate'] / 10);
@@ -91,7 +91,23 @@ class CardController extends BaseController
                 }
             }
 
-            $useableCards = array_reverse($this->getCardService()->sortArrayByField($useableCards, 'truePrice'));
+            $higherTop = array();
+            $lowerTop  = array();
+
+            foreach ($useableCards as $key => $useableCard) {
+                if ($useableCard['truePrice'] > 0) {
+                    $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
+                    $lowerTop[]                     = $useableCards[$key];
+                } else {
+                    $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
+                    $higherTop[]                    = $useableCards[$key];
+                }
+            }
+
+            $higherTop    = $this->getCardService()->sortArrayByField($higherTop, 'decrease');
+            $lowerTop     = $this->getCardService()->sortArrayByField($lowerTop, 'decrease');
+            $useableCards = array_merge(array_reverse($higherTop), $lowerTop);
+            // $useableCards = array_reverse($this->getCardService()->sortArrayByField($useableCards, 'truePrice'));
         }
 
         return $this->render('TopxiaWebBundle:Order:order-item-coupon.html.twig', array(
