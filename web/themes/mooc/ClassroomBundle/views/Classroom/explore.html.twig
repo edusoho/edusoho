@@ -58,15 +58,6 @@
           </ul>
         </div>
       {% endif %}
-      <label class="checkbox-inline hidden-xs">
-        <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
-        {% if price == 'all'%}
-          {{ path('classroom_explore', {category:category, fliter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
-        {% else %} 
-          {{ path('classroom_explore', {category:category, fliter: {price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
-        {% endif %}
-        "> 免费{{ setting('classroom.name')|default("班级") }}
-      </label>
     </div>
   </div>
   <div class="class-list row">
