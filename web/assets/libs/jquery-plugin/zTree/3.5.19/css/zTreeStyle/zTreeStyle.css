@@ -12,7 +12,8 @@ website:	http://code.google.com/p/jquerytree/
 .ztree {margin:0; padding:5px; color:#333}
 .ztree li{padding:0; margin:0; list-style:none; line-height:22px; text-align:left; white-space:nowrap; outline:0}
 
-.ztree li ul{ margin:0; padding:0 0 0 18px}
+.ztree li ul{ margin:0; padding:0 0 0 26px}
+.ztree li ul li ul{padding-left: 34px;}
 .ztree li ul.line{ background:url(./img/line_conn.gif) 0 0 repeat-y;}
 
 .ztree li a {padding:1px 3px 0 0; margin:0; cursor:pointer; height:17px; color:#333; background-color: transparent;
@@ -69,7 +70,7 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.roots_docu{background-position:-56px 0}
 .ztree li span.button.center_docu{background-position:-56px -18px}
 .ztree li span.button.bottom_docu{background-position:-56px -36px}
-.ztree li span.button.noline_docu{ background:none; margin-left: -18px;}
+.ztree li span.button.noline_docu{ background:none; margin-left: -20px;}
 
 .ztree li span.button.ico_open{margin-right:2px; background-position:-110px -16px; vertical-align:top; *vertical-align:middle}
 .ztree li span.button.ico_close{margin-right:2px; background-position:-110px 0; vertical-align:top; *vertical-align:middle}
