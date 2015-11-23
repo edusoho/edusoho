@@ -2,8 +2,8 @@
 
 namespace Topxia;
 
-class System 
+class System
 {
-	CONST VERSION = '6.7.3';
-	CONST RELEASE_NOTES = "http://www.edusoho.com/intro/13";
+    const VERSION       = '6.8.4';
+    const RELEASE_NOTES = "http://www.edusoho.com/intro/13";
 }

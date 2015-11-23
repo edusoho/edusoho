@@ -71,6 +71,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
             new \Twig_SimpleFunction('lazy_img', array($this, 'makeLazyImg'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('object_load', array($this, 'loadObject')),
+
             new \Twig_SimpleFunction('setting', array($this, 'getSetting')),
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
@@ -93,6 +94,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
+
             new \Twig_SimpleFunction('getUserNickNameById', array($this, 'getUserNickNameById')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
             new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
@@ -107,6 +109,11 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel'))
         );
+    }
+
+    public function isWithoutNetwork()
+    {
+        return file_exists(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/network.lock');
     }
 
     public function getUserVipLevel($userId)
@@ -250,12 +257,6 @@ class WebExtension extends \Twig_Extension
         return $time;
     }
 
-    public function getUserNickNameById($userId)
-    {
-        $user = $this->getUserById($userId);
-        return $user['nickname'];
-    }
-
     private function getUserById($userId)
     {
         return ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
@@ -284,7 +285,7 @@ class WebExtension extends \Twig_Extension
         return '';
     }
 
-    public function isPluginInstaled($name)
+    public function isPluginInstalled($name)
     {
         $plugins = $this->container->get('kernel')->getPlugins();
 
@@ -1224,6 +1225,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    public function timestamp()
+    {
+        return time();
     }
 
     public function blur_phone_number($phoneNum)

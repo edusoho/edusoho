@@ -79,7 +79,7 @@
               </li>
               {% endif %}
             {% else %}    
-              {% if not (m.code == 'admin_app' and setting('copyright.thirdCopyright') == 1) %}
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
                 <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
@@ -199,6 +199,12 @@
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
+  <div class="fixed-bar">
+    <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+      <i class="es-icon es-icon-help"></i>
+      <span>问题<br/>反馈</span>
+    </a>
+  </div>
 </body>
 </html>
 

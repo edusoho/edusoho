@@ -88,4 +88,5 @@ interface ThreadService
 
 	public function deletePost($courseId, $id);
 
+	public function getMyMarkersByLessonId($lessonId);
 }

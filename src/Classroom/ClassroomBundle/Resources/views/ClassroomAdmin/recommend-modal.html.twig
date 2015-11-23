@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}设置推荐班级{% endblock %}
+{% block title %}设置推荐{{setting("classroom.name")|default("班级")}}{% endblock %}
 {% block body %}
 
 <form id="classroom-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:ref}) }}">
