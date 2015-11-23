@@ -96,7 +96,7 @@ class DefaultController extends BaseController
     {
         $site = $this->getSettingService()->get('site');
         $user = $this->getCurrentUser();
-        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => md5($this->getToken()), 'username' => $user->nickname);
+        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => trim($this->postRequest("http://www.edusoho.com/question/get/token"), '"'), 'username' => $user->nickname);
         $site = urlencode(http_build_query($site));
         return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
@@ -110,6 +110,28 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
             'inspectList' => $inspectList
         ));
+    }
+
+    private function postRequest($url)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
     }
 
     private function addInspectRole($name, $value)
