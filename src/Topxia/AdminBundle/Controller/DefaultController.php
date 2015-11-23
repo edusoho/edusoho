@@ -96,7 +96,7 @@ class DefaultController extends BaseController
     {
         $site  = $this->getSettingService()->get('site');
         $user  = $this->getCurrentUser();
-        $token = $this->postRequest("http://www.edusoho.com/question/get/token");
+        $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
         return $this->createJsonResponse($token);
         // $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
         // $site  = urlencode(http_build_query($site));
@@ -112,25 +112,6 @@ class DefaultController extends BaseController
         return $this->render('TopxiaAdminBundle:Default:inspect.html.twig', array(
             'inspectList' => $inspectList
         ));
-    }
-
-    private function postRequest($url)
-    {
-        $curl = curl_init();
-
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_URL, $url);
-
-        $response = curl_exec($curl);
-        var_dump(curl_getinfo($curl));
-        curl_close($curl);
-
-        return $response;
     }
 
     private function addInspectRole($name, $value)
