@@ -15,7 +15,7 @@ class CourseReviewController extends CourseBaseController
         if($course['parentId']){
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
              if(!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])){ 
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
             }
         }
         $paginator = new Paginator(
@@ -66,5 +66,5 @@ class CourseReviewController extends CourseBaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
+   
 }

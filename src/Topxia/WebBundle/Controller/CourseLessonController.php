@@ -29,9 +29,13 @@ class CourseLessonController extends BaseController
         }
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $context               = array();
+        $context['starttime']  = $request->query->get('starttime');
+        $context['markerUrl']  = $this->generateUrl('course_lesson_plugin_question_markers', array('lessonId' => $lessonId));
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id' => $lesson["mediaId"]
+            'id'      => $lesson["mediaId"],
+            'context' => $context
         ));
     }
 
@@ -47,6 +51,12 @@ class CourseLessonController extends BaseController
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
+        }
+
+        //开启限制加入
+
+        if (empty($lesson['free']) && empty($course['buyable'])) {
+            return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
         if (!empty($course['status']) && $course['status'] == 'closed') {
@@ -171,9 +181,12 @@ class CourseLessonController extends BaseController
         $chapter        = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
 
         if ($chapter['type'] == 'unit') {
-            $unit                  = $chapter;
-            $json['unitNumber']    = $unit['number'];
+            $unit               = $chapter;
+            $json['unit']       = $unit;
+            $json['unitNumber'] = $unit['number'];
+
             $chapter               = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
+            $json['chapter']       = $chapter;
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
         } else {
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
@@ -198,6 +211,17 @@ class CourseLessonController extends BaseController
         $json['videoWatermarkEmbedded'] = 0;
         $json['liveProvider']           = $lesson["liveProvider"];
         $json['nowDate']                = time();
+        $json['testMode']               = $lesson['testMode'];
+        $json['testStartTime']          = $lesson['testStartTime'];
+        $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
+
+        if ($lesson['testMode'] == 'realTime') {
+            $testpaper                 = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+            $json['limitedTime']       = $testpaper['limitedTime'];
+            $minute                    = '+'.$testpaper['limitedTime'].'minute';
+            $json['testEndTime']       = strtotime($minute, $lesson['testStartTime']);
+            $json['testEndTimeFormat'] = date("m-d H:i", $json['testEndTime']);
+        }
 
         $app = $this->getAppService()->findInstallApp('Homework');
 
@@ -603,6 +627,12 @@ class CourseLessonController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        if ($this->isPluginInstalled('ClassroomPlan')) {
+            return $this->forward('ClassroomPlanBundle:ClassroomPlan:lessonFinishModal', array(
+                'lessonId' => $lessonId
+            ));
+        }
+
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
         $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
@@ -750,6 +780,17 @@ class CourseLessonController extends BaseController
             $lessonLearns = array();
         }
 
+        $testpaperIds = array();
+        array_walk($items, function ($item, $key) use (&$testpaperIds) {
+            if ($item['type'] == 'testpaper') {
+                array_push($testpaperIds, $item['mediaId']);
+            }
+        }
+
+        );
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
         return $this->Render('TopxiaWebBundle:CourseLesson/Widget:list.html.twig', array(
             'items'              => $items,
             'course'             => $course,
@@ -760,8 +801,82 @@ class CourseLessonController extends BaseController
             'currentTime'        => time(),
             'homeworkLessonIds'  => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
-            'mode'               => $mode
+            'mode'               => $mode,
+            'testpapers'         => $testpapers
+
         ));
+    }
+
+    public function doTestpaperAction(Request $request, $lessonId, $testId)
+    {
+        $status  = 'do';
+        $message = $this->checkTestPaper($lessonId, $testId, $status);
+
+        if (!empty($message)) {
+            return $this->createMessageResponse('info', $message);
+        }
+
+        return $this->forward('TopxiaWebBundle:Testpaper:doTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
+    }
+
+    public function reDoTestpaperAction(Request $request, $lessonId, $testId)
+    {
+        $status  = 'redo';
+        $message = $this->checkTestPaper($lessonId, $testId, $status);
+
+        if (!empty($message)) {
+            return $this->createMessageResponse('info', $message);
+        }
+
+        return $this->forward('TopxiaWebBundle:Testpaper:reDoTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
+    }
+
+    private function checkTestPaper($lessonId, $testId, $status)
+    {
+        $user = $this->getCurrentUser();
+
+        $message   = '';
+        $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+        $targets = $this->get('topxia.target_helper')->getTargets(array($testpaper['target']));
+
+        if ($targets[$testpaper['target']]['type'] != 'course') {
+            throw $this->createAccessDeniedException('试卷只能属于课程');
+        }
+
+        $courseId = $targets[$testpaper['target']]['id'];
+
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (empty($course)) {
+            return $message = '试卷所属课程不存在！';
+        }
+
+        if (!$this->getCourseService()->canTakeCourse($course)) {
+            return $message = '不是试卷所属课程老师或学生';
+        }
+
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+
+        if ($lesson['testMode'] == 'realTime') {
+            $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+
+            $testEndTime = $lesson['testStartTime'] + $testpaper['limitedTime'] * 60;
+
+            if ($testEndTime < time()) {
+                return $message = '实时考试已经结束!';
+            }
+
+            if ($status == 'do') {
+                $testpaperResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testpaper['id'], $user['id'], array('finished'));
+
+                if ($testpaperResult) {
+                    return $message = '您已经提交试卷，不能继续考试!';
+                }
+            } else {
+                return $message = '实时考试，不能再考一次!';
+            }
+        }
     }
 
     protected function agentInWhiteList($userAgent)
@@ -826,5 +941,10 @@ class CourseLessonController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }

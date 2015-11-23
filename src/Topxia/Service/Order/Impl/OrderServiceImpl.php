@@ -253,7 +253,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
-    public function createPayRecord($id, $payData)
+    public function createPayRecord($id, array $payData)
     {
         $order = $this->getOrder($id);
         $data = $order['data'];

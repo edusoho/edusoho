@@ -34,6 +34,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
 
+        $this->createRealTimeTestCrontab($lesson);
+
         $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($lesson['courseId']);
 
         foreach ($classroomIds as $classroomId) {
@@ -71,9 +73,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonDelete(ServiceEvent $event)
     {
-        $context = $event->getSubject();
-
+        $context  = $event->getSubject();
+        $lesson   = $context["lesson"];
         $courseId = $context["courseId"];
+
+        $this->deleteRealTimeTestCrontab($lesson);
 
         $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
@@ -327,6 +331,67 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    private function createRealTimeTestCrontab($lesson)
+    {
+        if (!$this->isRealTimeTest($lesson)) {
+            return;
+        }
+
+        $testPaper = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+        $second    = $testPaper['limitedTime'] * 60 + 3600;
+
+        $updateRealTimeTestResultStatusJob = array(
+            'name'       => 'updateRealTimeTestResultStatus',
+            'cycle'      => 'once',
+            'jobClass'   => 'Topxia\\Service\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
+            'jobParams'  => '',
+            'targetType' => "lesson",
+            'targetId'   => $lesson['id'],
+            'time'       => $lesson['testStartTime'] + $second
+        );
+
+        $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);
+    }
+
+    private function deleteRealTimeTestCrontab($lesson)
+    {
+        $jobName = 'updateRealTimeTestResultStatus';
+
+        $crontabJob = $this->getCrontabJobService()->findJobByNameAndTargetTypeAndTargetId($jobName, 'lesson', $lesson['id']);
+
+        if (empty($crontabJob)) {
+            return;
+        }
+
+        $this->getCrontabJobService()->deleteJob($crontabJob['id']);
+    }
+
+    private function updateRealTimeTestCrontab($lesson)
+    {
+        if (!$this->isRealTimeTest($lesson)) {
+            $this->deleteRealTimeTestCrontab($lesson);
+            return;
+        }
+
+        $jobName = 'updateRealTimeTestResultStatus';
+
+        $crontabJob = $this->getCrontabJobService()->findJobByNameAndTargetTypeAndTargetId($jobName, 'lesson', $lesson['id']);
+
+        if (empty($crontabJob)) {
+            $this->createRealTimeTestCrontab($lesson);
+            return;
+        }
+
+        $testPaper                 = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
+        $fields['nextExcutedTime'] = $lesson['testStartTime'] + $testPaper['limitedTime'] * 60 + 3600;
+        $this->getCrontabJobService()->updateJob($crontabJob['id'], $fields);
+    }
+
+    private function isRealTimeTest($lesson)
+    {
+        return $lesson['type'] == 'testpaper' && !empty($lesson['testMode']) && $lesson['testMode'] == 'realTime';
+    }
+
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
@@ -350,6 +415,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    protected function getCrontabJobService()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
     }
 
     protected function getMaterialService()

@@ -200,7 +200,6 @@ function install_step3($init_data = 0)
             $init->initArticleSetting();
             $init->initDefaultSetting();
             $init->initCrontabJob();
-            $init->initDeveloperSetting();
         } else {
             $init->deleteKey();
             $connection->exec("update `user_profile` set id = 1 where id = (select id from `user` where nickname = '".$_POST['nickname']."');");
@@ -405,14 +404,14 @@ function _create_connection()
 
     $connection = $factory->createConnection(
         array(
-            'dbname'                   => $parameters['database_name'],
-            'host'                     => $parameters['database_host'],
-            'port'                     => $parameters['database_port'],
-            'user'                     => $parameters['database_user'],
-            'password'                 => $parameters['database_password'],
-            'charset'                  => 'UTF8',
-            'driver'                   => $parameters['database_driver'], '
-            driverOptions' => array())
+            'dbname'        => $parameters['database_name'],
+            'host'          => $parameters['database_host'],
+            'port'          => $parameters['database_port'],
+            'user'          => $parameters['database_user'],
+            'password'      => $parameters['database_password'],
+            'charset'       => 'UTF8',
+            'driver'        => $parameters['database_driver'],
+            'driverOptions' => array())
         ,
         new \Doctrine\DBAL\Configuration(),
         null,
@@ -453,6 +452,28 @@ class SystemInit
         $defaultSetting = array_merge($default, $defaultSetting);
 
         $settingService->set('default', $defaultSetting);
+
+        $setting = array(
+            'rules' => array(
+                'thread'            => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum'  => 100
+                    )
+                ),
+                'threadLoginedUser' => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum'  => 50
+                    )
+                )
+            )
+        );
+        $settingService->set('post_num_rules', $setting);
+
+        $settingService->get('developer', array());
+        $developer['cloud_api_failover'] = 1;
+        $settingService->set('developer', $developer);
     }
 
     public function deleteKey()

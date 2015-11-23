@@ -26,13 +26,9 @@ class PlayerController extends BaseController
             } else {
                 $player = "cloud-video-player";
             }
-        } else
-
-        if ($file["storage"] == 'local' && $file["type"] == 'video') {
+        } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
             $player = "local-video-player";
-        } else
-
-        if ($file["type"] == 'audio') {
+        } elseif ($file["type"] == 'audio') {
             $player = "audio-player";
         }
 
@@ -44,6 +40,19 @@ class PlayerController extends BaseController
             'player'           => $player,
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android");
+
+        foreach ($whiteList as $value) {
+            if (strpos($userAgent, $value) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getPlayUrl($id)
@@ -147,19 +156,6 @@ class PlayerController extends BaseController
         }
 
         return $response;
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function getTokenService()
