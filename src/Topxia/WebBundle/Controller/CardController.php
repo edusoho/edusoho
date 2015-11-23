@@ -18,16 +18,20 @@ class CardController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
-        if (($cardType == 'coupon' || empty($cardType)) && !$this->isPluginInstalled('Coupon')) {
-            return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
-                'cards' => null
-            ));
+        if ($cardType == 'coupon' || empty($cardType)) {
+            if (!$this->isPluginInstalled('Coupon') || ($this->isPluginInstalled('Coupon') && version_compare($this->getWebExtension()->getPluginVersion('Coupon'), '1.3.3', '<='))) {
+                return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                    'cards' => null
+                ));
+            }
         }
 
-        if ($cardType == 'moneyCard' && !$this->isPluginInstalled('moneyCard')) {
-            return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
-                'cards' => null
-            ));
+        if ($cardType == 'moneyCard') {
+            if (!$this->isPluginInstalled('Coupon') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
+                return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                    'cards' => null
+                ));
+            }
         }
 
         if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
@@ -167,5 +171,10 @@ class CardController extends BaseController
     protected function getCardService()
     {
         return $this->getServiceKernel()->createService('Card.CardService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

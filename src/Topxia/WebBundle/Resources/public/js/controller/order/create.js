@@ -196,7 +196,7 @@ define(function(require, exports, module) {
 			// $('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
 			$('[role="null-coupon-code"]').hide();
-			console.log($('#coupon-select'));
+
 			// $('[role="code-notify"]').show();
 			$(this).hide();
 		})
