@@ -34,7 +34,7 @@ parameters:
           categoryId: ""
           code: "recommend-teacher"
           defaultTitle: "求是名师"
-          id: "latestCourse"
+          id: "RecommendTeachers"
     bottom: simple
 
   theme_jianmo_all:
@@ -69,7 +69,7 @@ parameters:
           categoryId: ""
           code: "recommend-teacher"
           defaultTitle: "求是名师"
-          id: "latestCourse"
+          id: "RecommendTeachers"
     bottom: simple
 services:
 #    topxia_admin.example:

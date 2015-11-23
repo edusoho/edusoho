@@ -73,8 +73,6 @@ class ThemeController extends BaseController
 
     public function resetConfigAction(Request $request, $uri)
     {
-        //var_dump($uri);
-        //exit();
         $this->getThemeService()->resetConfig();
         return $this->redirect($this->generateUrl('admin_theme_manage', array('uri' => $uri), true));
     }
