@@ -11,7 +11,7 @@
         {{ setting('course.name')|default("课程") }}列表
       </div>
       <a class="btn btn-primary btn-lg more" href="{{ path('classroom_explore') }}">
-        查看班级
+        查看{{setting('classroom.name')|default("班级") }}
       </a>
     </div>
   </div>

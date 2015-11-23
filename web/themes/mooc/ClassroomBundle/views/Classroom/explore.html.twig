@@ -30,10 +30,10 @@
     最新更新
     </a>
     <a href="{{ path('classroom_explore', {category:category, fliter: {price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %} selected {% endif %}">
-     最热班级
+     最热{{setting('classroom.name')|default("班级") }}
     </a>
     <a href="{{ path('classroom_explore', {category:category, fliter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} selected {% endif %}">
-     推荐班级
+     推荐{{setting('classroom.name')|default("班级") }}
     </a>
     <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
