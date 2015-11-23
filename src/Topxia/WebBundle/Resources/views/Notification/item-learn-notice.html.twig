@@ -6,7 +6,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
         {% if data.type == 'classroom' %}
-           【班级公告】
+           【{{setting("classroom.name")|default("班级")}}公告】
         {% elseif data.type == 'course' %}
            【课程公告】
         {% endif %}
