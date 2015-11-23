@@ -11,7 +11,7 @@
   <div class="col-md-3"></div>
   <div class="col-md-1">
     {% if pendant.code not in ['login-box'] %}
-      <button class="btn btn-primary btn-sm item-edit-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %} data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('admin_theme_config_edit', {config:pendant})}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+      <button class="btn btn-primary btn-sm item-edit-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %} data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('admin_themes_config_edit', {uri:uri|default(null),config:pendant})}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
     {% endif %}
   </div>
 </li>

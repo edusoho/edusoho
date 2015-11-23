@@ -42,7 +42,8 @@ class ThemeController extends BaseController
 
         if ($currentData) {
             return $this->render('TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig', array(
-                'pendant' => $currentData
+                'pendant' => $currentData,
+                'uri'     => $uri
             ));
         }
 
@@ -89,6 +90,27 @@ class ThemeController extends BaseController
         ));
     }
 
+    public function themeConfigEditAction(Request $request, $uri)
+    {
+        $config = $request->query->get('config');
+
+        $code = "edit".$this->fiterCode($config['code']);
+
+        return $this->$code($config);
+    }
+
+    protected function fiterCode($code)
+    {
+        $codes = explode('-', $code);
+        $code  = '';
+
+        foreach ($codes as $value) {
+            $code .= ucfirst($value);
+        }
+
+        return $code;
+    }
+
     protected function getTheme($uri)
     {
         if (empty($uri)) {
@@ -130,6 +152,13 @@ class ThemeController extends BaseController
         }
 
         return $themes;
+    }
+
+    private function editCourseGridWithConditionIndex($config)
+    {
+        return $this->render('TopxiaWebBundle:Theme:edit-course-grid-with-condition-index-modal.html.twig', array(
+            'config' => $config
+        ));
     }
 
     protected function getSettingService()
