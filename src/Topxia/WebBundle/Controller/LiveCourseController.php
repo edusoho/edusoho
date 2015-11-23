@@ -211,11 +211,17 @@ class LiveCourseController extends BaseController
             $params['id'] = $user['id'];
             $params['nickname'] = $user['nickname'];
             return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
-        } else {
-            $params['liveId'] = $lesson['mediaId'];
-            $params['provider'] = $lesson['liveProvider'];
-            $params['user'] = $user['email'];
-            $params['nickname'] = $user['nickname'];
+        }
+
+        $params['liveId'] = $lesson['mediaId'];
+        $params['provider'] = $lesson['liveProvider'];
+        $params['user'] = $user['email'];
+        $params['nickname'] = $user['nickname'];
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryLive($params);
+        if (empty($result) || isset($result['error'])) {
+            return $this->createMessageResponse('info', $result['errorMsg']);
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
