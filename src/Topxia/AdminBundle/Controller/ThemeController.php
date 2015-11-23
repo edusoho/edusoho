@@ -161,6 +161,27 @@ class ThemeController extends BaseController
         ));
     }
 
+    private function editGroups($config)
+    {
+        return $this->render('TopxiaWebBundle:Theme:edit-groups-modal.html.twig', array(
+            'config' => $config
+        ));
+    }
+
+    private function editLiveCourse($config)
+    {
+        return $this->render('TopxiaWebBundle:Theme:edit-live-course-modal.html.twig', array(
+            'config' => $config
+        ));
+    }
+
+    private function editRecommendTeacher($config)
+    {
+        return $this->render('TopxiaWebBundle:Theme:edit-recommend-teacher-modal.html.twig', array(
+            'config' => $config
+        ));
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
