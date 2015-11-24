@@ -3,9 +3,9 @@
 {% set main_nav = 'cards' %}
 {% set script_controller = 'topxiawebbundle/controller/card/index' %}
 
-{% block main_body %}{{ app.request.cookies.get('receive') }}
-  {% if app.request.query.get('receive') == 'success' and app.request.cookies.get('receive') is not null %}
-    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden" ><span class=""></span></a>
+{% block main_body %}
+  {% if app.request.query.get('receive') == "success" and not app.request.cookies.get('receive') %}
+    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" ><span class=""></span></a>
   {% endif %}
   <div class="clearfix mbl">
     <ul class="nav nav-pills inline-block">

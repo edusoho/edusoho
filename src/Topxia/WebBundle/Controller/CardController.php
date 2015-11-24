@@ -131,17 +131,17 @@ class CardController extends BaseController
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
 
-        if (!empty($cardDetail)) {
-            if ($cardType == "moneyCard") {
-                if ($cardDetail['cardStatus'] == "receive") {
-                    setcookie("receive", "success");
-                }
-            } else {
-                if ($cardDetail['status'] == "receive") {
-                    setcookie("receive", "success");
-                }
-            }
-        }
+        // if (!empty($cardDetail)) {
+        //     if ($cardType == "moneyCard") {
+        //         if ($cardDetail['cardStatus'] == "receive") {
+        //             setcookie("receive", "success");
+        //         }
+        //     } else {
+        //         if ($cardDetail['status'] == "receive") {
+        //             setcookie("receive", "success");
+        //         }
+        //     }
+        // }
 
         return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
             'cardType'   => $cardType,
@@ -161,6 +161,18 @@ class CardController extends BaseController
         $invalidCards = isset($cards['invalid']) ? $cards['invalid'] : array();
         $outDateCards = array();
         $receiveCards = array();
+
+        if (isset($cards['receive'])) {
+            foreach ($cards['receive'] as $card) {
+                if ($card['deadline'] + 86400 < $currentTime) {
+                    $card['status'] = 'outdate';
+                    $outDateCards[] = $card;
+                } else {
+                    $card['status'] = 'useable';
+                    $receiveCards[] = $card;
+                }
+            }
+        }
 
         $sortedCards = array_merge($receiveCards, $usedCards, $outDateCards, $invalidCards);
 
