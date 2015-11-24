@@ -5,5 +5,6 @@ define(function(require, exports, module) {
 			window.location.href = $(this).data('url');
 		});
 		$('.receive-modal').click();
+
 	};
 });

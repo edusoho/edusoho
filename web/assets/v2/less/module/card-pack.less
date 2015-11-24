@@ -22,10 +22,14 @@
   p {
     margin-bottom: 0;
   }
+  .title {
+    .text-overflow;
+  }
   .price {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
+    margin-top: 10px;
     strong {  
-      font-size: 36px;
+      font-size: 30px;
       font-weight: normal;
     }
     a {
@@ -54,9 +58,6 @@
     }
     .title {
       padding-top: 38px;
-    }
-    .price {
-      margin: 10px 0;
     }
     .stamp-used {
       background: url('@{img-src}card.png') no-repeat -140px -349px;
@@ -89,24 +90,37 @@
       right: 90px;
       content: '';
       background: url('@{img-src}card_user.png') center center no-repeat;
+      @media(max-width:@screen-xs-max) {
+        display: none;
+      }
     }
   }
   .modal-content {
     position: relative;
-    padding: 30px;
     background: url('@{img-src}card_bg.png') #feba37 center center no-repeat;
     .border-radius(20px);
   }
   .modal-body {
+    padding: 30px;
+    @media(max-width:@screen-xs-max) {
+      padding: 15px;
+    }
     .modal-info {
       text-align: center;
       color: #fff;
       font-size: 22px;
       margin-bottom: 30px;
+      @media(max-width:@screen-xs-max) {
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
     }
     .modal-action {
       margin-top: 30px;
       text-align: center;
+      @media(max-width:@screen-xs-max) {
+        margin-top: 20px;
+      }
     }
   }
 }

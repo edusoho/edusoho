@@ -142,7 +142,7 @@ class MoneyCardServiceImpl extends BaseService
 
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
 
-                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员作废，详情请联系管理员。';
+                $message = '您的一张价值为'.$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币").'的学习卡已经被管理员作废，详情请联系管理员。';
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -177,7 +177,7 @@ class MoneyCardServiceImpl extends BaseService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
                 $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
-                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员启用。';
+                $message = '您的一张价值为'.$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币").'的学习卡已经被管理员启用。';
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             } else {
@@ -202,7 +202,7 @@ class MoneyCardServiceImpl extends BaseService
         if (!empty($card)) {
             $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
-            $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员删除，详情请联系管理员。';
+            $message = '您的一张价值为'.$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币").'的学习卡已经被管理员删除，详情请联系管理员。';
 
             $this->getNotificationService()->notify($card['userId'], 'default', $message);
         }
@@ -249,7 +249,7 @@ class MoneyCardServiceImpl extends BaseService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'invalid'));
 
-                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员作废，详情请联系管理员。';
+                $message = '您的一张价值为'.$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币").'的学习卡已经被管理员作废，详情请联系管理员。';
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -302,7 +302,7 @@ class MoneyCardServiceImpl extends BaseService
             if (!empty($card) && $card['status'] == 'invalid') {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'receive'));
                 $this->updateMoneyCard($card['cardId'], array('cardStatus' => 'receive'));
-                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员启用。';
+                $message = '您的一张价值为'.$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币").'的学习卡已经被管理员启用。';
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -333,7 +333,7 @@ class MoneyCardServiceImpl extends BaseService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array('status' => 'deleted'));
 
-                $message = '您的一张价值为'.$batch['coin'].'的学习卡已经被管理员删除，详情请联系管理员。';
+                $message = '您的一张价值为'.$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币").'的学习卡已经被管理员删除，详情请联系管理员。';
 
                 $this->getNotificationService()->notify($card['userId'], 'default', $message);
             }
@@ -479,8 +479,6 @@ class MoneyCardServiceImpl extends BaseService
                 'userId'      => $moneyCard['rechargeUserId'],
                 'createdTime' => time()
             ));
-            $message = "您有一张价值为".$batch['coin']."的充值卡领取成功";
-            $this->getNotificationService()->notify($moneyCard['rechargeUserId'], 'default', $message);
         }
 
         return $moneyCard;
@@ -577,6 +575,8 @@ class MoneyCardServiceImpl extends BaseService
                     'deadline' => strtotime($moneyCard['deadline']),
                     'userId'   => $userId
                 ));
+                $message = "您有一张价值为".$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币")."的充值卡领取成功";
+                $this->getNotificationService()->notify($userId, 'default', $message);
             }
 
             $this->getMoneyCardBatchDao()->getConnection()->commit();
@@ -620,6 +620,11 @@ class MoneyCardServiceImpl extends BaseService
     private function getTokenService()
     {
         return $this->createService('User.TokenService');
+    }
+
+    private function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
     private function getNotificationService()

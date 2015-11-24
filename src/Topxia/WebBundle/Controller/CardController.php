@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -131,19 +132,26 @@ class CardController extends BaseController
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
 
-        if (!empty($cardDetail)) {
-            return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
-                'cardType'   => $cardType,
-                'cardId'     => $cardId,
-                'cardDetail' => $cardDetail
-            ));
-        } else {
-            return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
-                'cardType'   => $cardType,
-                'cardId'     => $cardId,
-                'cardDetail' => $cardDetail
-            ));
-        }
+        // if (!empty($cardDetail)) {
+        //     if ($cardType == "moneyCard") {
+        //         if ($cardDetail['cardStatus'] == "receive") {
+        //             setcookie("receive", "success");
+        //         }
+        //     } else {
+        //         if ($cardDetail['status'] == "receive") {
+        //             setcookie("receive", "success");
+        //         }
+        //     }
+        // }
+
+        $response = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+            'cardType'   => $cardType,
+            'cardId'     => $cardId,
+            'cardDetail' => $cardDetail
+        ));
+
+        $response->headers->setCookie(new Cookie("modalOpened", '0'));
+        return $response;
     }
 
     protected function sortCards($cards)

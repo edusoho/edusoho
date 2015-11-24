@@ -4,8 +4,8 @@
 {% set script_controller = 'topxiawebbundle/controller/card/index' %}
 
 {% block main_body %}
-  {% if app.request.query.get('receive') == 'success' %}
-    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden" ><span class=""></span></a>
+  {% if app.request.cookies.get('modalOpened') == 1 %}
+    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" ><span class=""></span></a>
   {% endif %}
   <div class="clearfix mbl">
     <ul class="nav nav-pills inline-block">
@@ -14,17 +14,14 @@
     </ul>
 
     <div class="pull-right btn-group">
-      <a role="filter-change" class="btn btn-default btn-sm {% if app.request.query.get('filter') == '' or app.request.query.get('filter') == 'all' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}'>全部</a>
-
-      <a role="filter-change" class="btn btn-default btn-sm {% if app.request.query.get('filter') == 'useable' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}'>未使用</a>
-
-      <a role="filter-change" class="btn btn-default btn-sm {% if app.request.query
+      <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == '' or app.request.query.get('filter') == 'all' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}'>全部</a>
+      <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'useable' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}'>未使用</a>
+      <a role="filter-change" class="btn btn-default {% if app.request.query
       .get('filter') == 'used' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}'>已使用</a>
-
-      <a role="filter-change" class="btn btn-default btn-sm {% if app.request.query.get('filter') == 'outdate' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}'>已过期</a>
-
-      <a role="filter-change" class="btn btn-default btn-sm {% if app.request.query.get('filter') == 'invalid' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}'>已作废</a>
-
+      <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'outdate' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}'>已过期</a>
+      {% if app.request.query.get('cardType') == "moneyCard" %}
+        <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'invalid' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}'>已作废</a> 
+      {% endif %}
     </div>
   </div>
   <div class="card-pack-list">
