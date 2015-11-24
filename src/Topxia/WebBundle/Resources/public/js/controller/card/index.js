@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
 	exports.run = function (){
-		$('input:radio[name=filter-change]').change(function(event){
-			window.location.href = $(this).val();
+		$('a[role=filter-change]').click(function(event){
+			window.location.href = $(this).data('url');
 		});
 	};
 });
