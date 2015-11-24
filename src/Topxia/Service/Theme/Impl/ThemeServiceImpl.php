@@ -39,6 +39,17 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return false;
     }
 
+    public function isAllowedGracefulConfig()
+    {
+        $currentTheme = $this->getSettingService()->get('theme');
+
+        if (in_array($currentTheme['name'], array('雅致简洁（商业主题）'))) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function getThemeConfigByName($name)
     {
         $config              = $this->getThemeConfigDao()->getThemeConfigByName($name);
