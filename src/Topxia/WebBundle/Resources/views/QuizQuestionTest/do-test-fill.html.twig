@@ -40,7 +40,7 @@
 			</div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
 	{% else %}
 	  <div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-fill-inputs">
@@ -68,7 +68,7 @@
 		    </ul>
 		</div>
 	  </div>
-	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}</div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw|nl2br }}</div>
 	  {% endif %}
 
 	{% endif %}

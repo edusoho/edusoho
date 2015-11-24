@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, $id, $context = array())
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -26,23 +26,34 @@ class PlayerController extends BaseController
             } else {
                 $player = "cloud-video-player";
             }
-        } else
-
-        if ($file["storage"] == 'local' && $file["type"] == 'video') {
+        } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
             $player = "local-video-player";
-        } else
-
-        if ($file["type"] == 'audio') {
+        } elseif ($file["type"] == 'audio') {
             $player = "audio-player";
         }
 
         $url = $this->getPlayUrl($id);
 
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
-            'file'   => $file,
-            'url'    => $url,
-            'player' => $player
+            'file'             => $file,
+            'url'              => $url,
+            'context'          => $context,
+            'player'           => $player,
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android");
+
+        foreach ($whiteList as $value) {
+            if (strpos($userAgent, $value) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getPlayUrl($id)

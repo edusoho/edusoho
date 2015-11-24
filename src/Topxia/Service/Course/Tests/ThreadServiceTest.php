@@ -1,5 +1,6 @@
 <?php
 namespace Topxia\Service\Course\Tests;
+
 use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\User\CurrentUser;
 
@@ -189,119 +190,118 @@ class ThreadServiceTest extends BaseTestCase
     /**
      * @group test
      */
-	public function testDeleteThread()
-	{
+    public function testDeleteThread()
+    {
         $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
         $thread = array(
             'courseId' => $course['id'],
-			'type' => 'discussion',
-			'title' => 'test thread',
-			'content' => 'test content',
-		);
-    	$createdThread = $this->getThreadService()->createThread($thread);
+            'type' => 'discussion',
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
 
-    	$post = array(
-    		'courseId' => $createdThread['courseId'],
-    		'threadId' => $createdThread['id'],
-    		'content' => 'post thread',
-		);
-		$createdPost = $this->getThreadService()->createPost($post);
+        $post = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content' => 'post thread',
+        );
+        $createdPost = $this->getThreadService()->createPost($post);
 
-    	$this->getThreadService()->deleteThread($createdThread['id']);
+        $this->getThreadService()->deleteThread($createdThread['id']);
 
-    	$foundThread = $this->getThreadService()->getThread($createdThread['courseId'], $createdThread['id']);
-    	$this->assertNull($foundThread);
+        $foundThread = $this->getThreadService()->getThread($createdThread['courseId'], $createdThread['id']);
+        $this->assertNull($foundThread);
 
-    	$foundPosts = $this->getThreadService()->findThreadPosts($createdThread['courseId'], $createdThread['id'], 'default', 0, 20);
-    	$this->assertTrue(is_array($foundPosts));
-    	$this->assertEmpty($foundPosts);
-
-	}
-
-	/**
-     * @group current 
-	 * @expectedException Topxia\Service\Common\ServiceException
-	 */
-    public function testPostOnNotExistThread()
-    {
-    	$notExistThread = array(
-    		'id' => 999,
-    		'courseId' => 888,
-    		'content' => 'not exist content',
-		);
-    	$post = array(
-    		'courseId' => $notExistThread['courseId'],
-    		'threadId' => $notExistThread['id'],
-    		'content' => 'post thread',
-		);
-		$createdPost = $this->getThreadService()->createPost($post);
+        $foundPosts = $this->getThreadService()->findThreadPosts($createdThread['courseId'], $createdThread['id'], 'default', 0, 20);
+        $this->assertTrue(is_array($foundPosts));
+        $this->assertEmpty($foundPosts);
     }
 
     /**
-     * @group current 
+     * @group current
+     * @expectedException Topxia\Service\Common\ServiceException
+     */
+    public function testPostOnNotExistThread()
+    {
+        $notExistThread = array(
+            'id' => 999,
+            'courseId' => 888,
+            'content' => 'not exist content',
+        );
+        $post = array(
+            'courseId' => $notExistThread['courseId'],
+            'threadId' => $notExistThread['id'],
+            'content' => 'post thread',
+        );
+        $createdPost = $this->getThreadService()->createPost($post);
+    }
+
+    /**
+     * @group current
      */
     public function testFindThreadPosts()
     {
         $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
         $thread = array(
             'courseId' => $course['id'],
-			'type' => 'discussion',
-			'title' => 'test thread',
-			'content' => 'test content',
-		);
-    	$createdThread = $this->getThreadService()->createThread($thread);
+            'type' => 'discussion',
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
 
-    	$post = array(
-    		'courseId' => $createdThread['courseId'],
-    		'threadId' => $createdThread['id'],
-    		'content' => 'post thread',
-		);
-		$this->getThreadService()->createPost($post);
-		$this->getThreadService()->createPost($post);
-		$this->getThreadService()->createPost($post);
+        $post = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content' => 'post thread',
+        );
+        $this->getThreadService()->createPost($post);
+        $this->getThreadService()->createPost($post);
+        $this->getThreadService()->createPost($post);
 
-		$foundPosts = $this->getThreadService()->findThreadPosts($thread['courseId'], $createdThread['id'], 'default', 0, 20);
-		$this->assertEquals(3, count($foundPosts));
-    	foreach ($foundPosts as $foundPost) {
-    		$this->assertEquals($post['threadId'], $foundPost['threadId']);
-    	}
+        $foundPosts = $this->getThreadService()->findThreadPosts($thread['courseId'], $createdThread['id'], 'default', 0, 20);
+        $this->assertEquals(3, count($foundPosts));
+        foreach ($foundPosts as $foundPost) {
+            $this->assertEquals($post['threadId'], $foundPost['threadId']);
+        }
     }
 
     /**
-     * @group current 
+     * @group current
      */
     public function testCreatePost()
     {
         $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
         $thread = array(
             'courseId' => $course['id'],
-			'type' => 'discussion',
-			'title' => 'test thread',
-			'content' => 'test content',
-		);
-    	$createdThread = $this->getThreadService()->createThread($thread);
+            'type' => 'discussion',
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
 
-    	$post = array(
-    		'courseId' => $createdThread['courseId'],
-    		'threadId' => $createdThread['id'],
-    		'content' => 'post thread',
-		);
-		$createdPost = $this->getThreadService()->createPost($post);
+        $post = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content' => 'post thread',
+        );
+        $createdPost = $this->getThreadService()->createPost($post);
 
-		$this->assertTrue(is_array($createdPost));
-		$this->assertEquals($post['courseId'], $createdPost['courseId']);
-		$this->assertEquals($post['threadId'], $createdPost['threadId']);
+        $this->assertTrue(is_array($createdPost));
+        $this->assertEquals($post['courseId'], $createdPost['courseId']);
+        $this->assertEquals($post['threadId'], $createdPost['threadId']);
 
-		$thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
-		$this->assertEquals(1, $thread['postNum']);
+        $thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
+        $this->assertEquals(1, $thread['postNum']);
     }
 
     /**
-     * @group current 
+     * @group current
      */
     public function testDeletePost()
     {
-        $user = $this->createUser(); 
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => $user['id'],
@@ -309,35 +309,88 @@ class ThreadServiceTest extends BaseTestCase
             'email' => $user['email'],
             'password' => $user['password'],
             'currentIp' => '127.0.0.1',
-            'roles' => $user['roles']
+            'roles' => $user['roles'],
         ));
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
         $thread = array(
             'courseId' => $course['id'],
-			'type' => 'discussion',
-			'title' => 'test thread',
-			'content' => 'test content',
-		);
-    	$createdThread = $this->getThreadService()->createThread($thread);
+            'type' => 'discussion',
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
 
-    	$post = array(
-    		'courseId' => $createdThread['courseId'],
-    		'threadId' => $createdThread['id'],
-    		'content' => 'post thread',
-		);
-		$createdPost = $this->getThreadService()->createPost($post);
+        $post = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content' => 'post thread',
+        );
+        $createdPost = $this->getThreadService()->createPost($post);
 
-		$this->getThreadService()->deletePost($createdPost['courseId'], $createdPost['id']);
+        $this->getThreadService()->deletePost($createdPost['courseId'], $createdPost['id']);
 
-		$foundPosts = $this->getThreadService()->findThreadPosts($createdPost['courseId'], $createdPost['threadId'], 'default', 0, 20);
+        $foundPosts = $this->getThreadService()->findThreadPosts($createdPost['courseId'], $createdPost['threadId'], 'default', 0, 20);
 
-		$this->assertTrue(is_array($foundPosts));
-		$this->assertEmpty($foundPosts);
+        $this->assertTrue(is_array($foundPosts));
+        $this->assertEmpty($foundPosts);
 
-		$thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
-		$this->assertEquals(0, $thread['postNum']);
+        $thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
+        $this->assertEquals(0, $thread['postNum']);
+    }
+
+    public function testGetMyMarkersByLessonId()
+    {
+        $user = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => $user['roles'],
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
+        $thread = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'type' => 'discussion',
+            'lessonId' => 1,
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $this->getThreadService()->createThread($thread);
+
+        $markers = $this->getThreadService()->GetMyMarkersByLessonId(1);
+        $this->assertEquals(0, count($markers));
+
+        $thread = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'type' => 'discussion',
+            'lessonId' => 1,
+            'title' => 'test thread',
+            'content' => 'test content',
+            'marker' => 10,
+        );
+        $this->getThreadService()->createThread($thread);
+
+        $thread = array(
+            'courseId' => $course['id'],
+            'userId' => $user['id'],
+            'type' => 'question',
+            'lessonId' => 1,
+            'title' => 'test thread2',
+            'content' => 'test content2',
+            'marker' => 20,
+        );
+        $this->getThreadService()->createThread($thread);
+        $markers = $this->getThreadService()->GetMyMarkersByLessonId(1);
+        $this->assertEquals(2, count($markers));
     }
 
     private function createUser()
@@ -355,10 +408,10 @@ class ThreadServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-    
+
     protected function getThreadService()
     {
-    	return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course.ThreadService');
     }
     private function getUserService()
     {

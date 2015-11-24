@@ -2,48 +2,37 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Filesystem\Filesystem;
-
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\Util\CloudClientFactory;
-
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Imagine\Image\ImageInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SystemDefaultSettingController extends BaseController
 {
     public function defaultAvatarCropAction(Request $request)
     {
-        if($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $data = $options["images"];
+            $data    = $options["images"];
 
             $fileIds = ArrayToolkit::column($data, "id");
-            $files = $this->getFileService()->getFilesByIds($fileIds);
+            $files   = $this->getFileService()->getFilesByIds($fileIds);
 
-            $files = ArrayToolkit::index($files, "id");
+            $files   = ArrayToolkit::index($files, "id");
             $fileIds = ArrayToolkit::index($data, "type");
 
-            $setting = $this->getSettingService()->get("default",array());
+            $setting = $this->getSettingService()->get("default", array());
 
             $oldAvatars = array(
-                'avatar.png' => !empty($setting['avatar.png']) ? $setting['avatar.png'] : null,
+                'avatar.png' => !empty($setting['avatar.png']) ? $setting['avatar.png'] : null
             );
-            
+
             $setting['defaultAvatar'] = 1;
             unset($setting['defaultAvatarFileName']);
             $setting['avatar.png'] = $files[$fileIds['avatar.png']['id']]['uri'];
-            $this->getSettingService()->set("default",$setting);
+            $this->getSettingService()->set("default", $setting);
 
             $fileService = $this->getFileService();
-            array_map(function($oldAvatar) use($fileService){
+            array_map(function ($oldAvatar) use ($fileService) {
                 if (!empty($oldAvatar)) {
                     $fileService->deleteFileByUri($oldAvatar);
                 }
@@ -52,42 +41,42 @@ class SystemDefaultSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_avatar'));
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
-        return $this->render('TopxiaAdminBundle:System:default-avatar-crop.html.twig',array(
-            'pictureUrl' => $pictureUrl,
+        return $this->render('TopxiaAdminBundle:System:default-avatar-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
+            'scaledSize'  => $scaledSize
         ));
     }
 
     public function defaultCoursePictureCropAction(Request $request)
-    {   
-        if($request->getMethod() == 'POST') {
+    {
+        if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $data = $options["images"];
+            $data    = $options["images"];
 
             $fileIds = ArrayToolkit::column($data, "id");
-            $files = $this->getFileService()->getFilesByIds($fileIds);
+            $files   = $this->getFileService()->getFilesByIds($fileIds);
 
-            $files = ArrayToolkit::index($files, "id");
+            $files   = ArrayToolkit::index($files, "id");
             $fileIds = ArrayToolkit::index($data, "type");
 
-            $setting = $this->getSettingService()->get("default",array());
+            $setting = $this->getSettingService()->get("default", array());
 
             $oldAvatars = array(
-                'course.png' => !empty($setting['course.png']) ? $setting['course.png'] : null,
+                'course.png' => !empty($setting['course.png']) ? $setting['course.png'] : null
             );
-            
+
             $setting['defaultCoursePicture'] = 1;
             unset($setting['defaultCoursePictureFileName']);
             $setting['course.png'] = $files[$fileIds["course.png"]["id"]]["uri"];
 
-            $this->getSettingService()->set("default",$setting);
+            $this->getSettingService()->set("default", $setting);
 
             $fileService = $this->getFileService();
-            array_map(function($oldAvatar) use($fileService){
+            array_map(function ($oldAvatar) use ($fileService) {
                 if (!empty($oldAvatar)) {
                     $fileService->deleteFileByUri($oldAvatar);
                 }
@@ -96,13 +85,13 @@ class SystemDefaultSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_course_avatar'));
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
-        return $this->render('TopxiaAdminBundle:System:default-course-picture-crop.html.twig',array(
-            'pictureUrl' => $pictureUrl,
+        return $this->render('TopxiaAdminBundle:System:default-course-picture-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
+            'scaledSize'  => $scaledSize
         ));
     }
 

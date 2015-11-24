@@ -61,7 +61,7 @@
         </div>
         <div class="class-operation">
           <ul class='class-data clearfix 
-          {% if classroom_permit(classroom.id, 'Take', true) and 'headTeacher' not in member.role %}
+          {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
           three-col
           {% else %}
           two-col
@@ -80,7 +80,7 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
-            {% if classroom_permit(classroom.id, 'Take', true) %}
+            {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
             {% if 'headTeacher' not in member.role %}
               <li>
                 <a type="button" 
