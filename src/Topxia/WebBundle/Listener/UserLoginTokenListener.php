@@ -71,6 +71,8 @@ class UserLoginTokenListener
             return;
         }
 
+        $user = $this->getUserService()->getUser($user['id']);
+
         if (empty($user['loginSessionId']) || strlen($user['loginSessionId']) <= 0) {
             $sessionId = $request->getSession()->getId();
             $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
