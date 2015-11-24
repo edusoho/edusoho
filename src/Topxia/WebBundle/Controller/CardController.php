@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -149,7 +150,7 @@ class CardController extends BaseController
             'cardDetail' => $cardDetail
         ));
 
-        $response->headers->removeCookie("modalOpened");
+        $response->headers->setCookie(new Cookie("modalOpened", '1'));
         return $response;
     }
 
