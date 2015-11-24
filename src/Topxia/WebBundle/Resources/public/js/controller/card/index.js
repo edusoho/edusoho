@@ -6,7 +6,10 @@ define(function(require, exports, module) {
 			window.location.href = $(this).data('url');
 		});
 		$('.receive-modal').click();
-			Cookie.set('receive',"");
+
+		$("#modal").on('hidden.bs.modal', function(){
+			Cookie.set('modalOpened',0);
+		})
 		// 
 	};
 });
