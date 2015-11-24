@@ -479,6 +479,8 @@ class MoneyCardServiceImpl extends BaseService
                 'userId'      => $moneyCard['rechargeUserId'],
                 'createdTime' => time()
             ));
+            $message = "您有一张价值为".$batch['coin']."的充值卡领取成功";
+            $this->getNotificationService()->notify($moneyCard['rechargeUserId'], 'default', $message);
         }
 
         return $moneyCard;

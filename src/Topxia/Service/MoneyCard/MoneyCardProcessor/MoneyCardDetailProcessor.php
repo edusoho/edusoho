@@ -9,9 +9,10 @@ class MoneyCardDetailProcessor implements DetailProcessor
 {
     public function getDetailById($id)
     {
-        $card  = $this->getMoneyCardService()->getMoneyCard($id);
-        $batch = $this->getmoneyCardService()->getBatch($card['batchId']);
-        return $batch;
+        $card         = $this->getMoneyCardService()->getMoneyCard($id);
+        $batch        = $this->getmoneyCardService()->getBatch($card['batchId']);
+        $card['coin'] = $batch['coin'];
+        return $card;
     }
 
     public function getCardDetailsByCardIds($ids)

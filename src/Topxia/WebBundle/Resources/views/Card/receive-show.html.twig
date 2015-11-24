@@ -29,6 +29,12 @@
       <div class="modal-info">
         您还没有登陆，请在登陆后领取。
       </div>
+      {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
+        {% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}
+      {% endif %}
+      {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
+        {% include 'TopxiaWebBundle:Card:moneycard-useable.html.twig' %}
+      {% endif %}
       <div class="modal-action">
         <a href="" class="btn btn-ghost-white btn-xlg" data-dismiss="modal" >登录查看</a>
       </div>
