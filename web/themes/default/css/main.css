@@ -3016,56 +3016,70 @@ select:-webkit-autofill {
   padding: 20px 0;
 }
 .link-dark {
-  color: #313131;
+  color: #313131 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-dark:hover {
-  color: #009966;
+  color: #009966 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-light {
-  color: #616161;
+  color: #616161 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-light:hover {
-  color: #009966;
+  color: #009966 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-lighter {
-  color: #919191;
+  color: #919191 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-lighter:hover {
-  color: #009966;
+  color: #009966 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-white {
-  color: #fff;
+  color: #fff !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .link-white:hover {
-  color: #009966;
+  color: #009966 !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.link-primary {
+  color: #009966 !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.link-primary:hover {
+  color: #009966 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -5403,6 +5417,9 @@ a.homework-essay-textarea-pack-up {
 .breadcrumb {
   background-color: #f1f1f1;
 }
+.breadcrumb.breadcrumb-o {
+  background: none;
+}
 .breadcrumb li.active {
   color: #919191;
 }
@@ -7728,11 +7745,19 @@ textarea {
 .card-pack-item p {
   margin-bottom: 0;
 }
+.card-pack-item .title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
 .card-pack-item .price {
-  margin-bottom: 15px;
+  margin-bottom: 18px;
+  margin-top: 10px;
 }
 .card-pack-item .price strong {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: normal;
 }
 .card-pack-item .price a {
@@ -7761,9 +7786,6 @@ textarea {
 }
 .card-pack-item.coupon-item .title {
   padding-top: 38px;
-}
-.card-pack-item.coupon-item .price {
-  margin: 10px 0;
 }
 .card-pack-item.coupon-item .stamp-used {
   background: url('/assets/v2/img/card.png') no-repeat -140px -349px;
@@ -11420,7 +11442,12 @@ textarea {
   display: block;
   margin: 75px auto;
 }
-@media (max-width: 991px) {
+@media (max-width: 1199px) {
+  .es-mobile .mobile-second .img-one {
+    margin: 50px auto;
+  }
+}
+@media (max-width: 767px) {
   .es-mobile .mobile-second .img-one {
     margin: 20px auto;
   }
@@ -11431,6 +11458,17 @@ textarea {
   width: 270px;
   height: auto;
   max-width: 100%;
+  border: 1px solid #f1f1f1;
+}
+@media (max-width: 1199px) {
+  .es-mobile .mobile-second .img-two {
+    width: 220px;
+  }
+}
+@media (max-width: 991px) {
+  .es-mobile .mobile-second .img-two {
+    margin-bottom: 20px;
+  }
 }
 .es-mobile .mobile-second .btn-android,
 .es-mobile .mobile-second .btn-apple {
@@ -11439,7 +11477,7 @@ textarea {
   width: 100%;
   text-align: center;
   font-size: 28px;
-  padding: 28px 20px;
+  padding: 37px 20px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -11455,11 +11493,11 @@ textarea {
 @media (max-width: 991px) and (min-width: 768px) {
   .es-mobile .mobile-second .btn-android,
   .es-mobile .mobile-second .btn-apple {
-    width: 49%;
+    width: 48%;
     padding: 20px 12px;
   }
 }
-@media (max-width: 991px) {
+@media (max-width: 767px) {
   .es-mobile .mobile-second .btn-android,
   .es-mobile .mobile-second .btn-apple {
     font-size: 20px;

@@ -19,7 +19,9 @@
     {% endif %}
   {% endif %}
   <p class="price">
-    <strong>{% if cardDetail.type == "minus" %}￥{% endif %}{{ cardDetail.rate }}{% if cardDetail.type == "discount" %}折{% endif %}</strong>{% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}<a href="{{ path('course_show',{ id : cardDetail.targetId }) }}">去购买课程 ></a>{% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}<a href="{{ path('course_explore') }}">去购买课程 ></a>{% elseif cardDetail.targetType == "vip" %}<a href="{{ path('vip') }}">去开通会员 ></a>{% else %}<a href="{{ path('classroom_explore') }}">去购买班级 ></a>{% endif %}
+
+    {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}折{% endif %}
+    {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}<a href="{{ path('course_show',{ id : cardDetail.targetId }) }}">去购买课程 ></a>{% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}<a href="{{ path('course_explore') }}">去购买课程 ></a>{% elseif cardDetail.targetType == "vip" %}<a href="{{ path('vip_buy') }}">去开通会员 ></a>{% else %}<a href="{{ path('classroom_explore') }}">去购买班级 ></a>{% endif %}
   </p>  
   <p>有效期截止：<span>{{ (cardDetail.deadline)|date('Y年n月d日') }}</span></p>
 </div>
