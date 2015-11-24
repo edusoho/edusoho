@@ -7,8 +7,7 @@ use Topxia\Common\ArrayToolkit;
 
 class LessonQuestionPluginController extends BaseController
 {
-
-    public function initAction (Request $request)
+    public function initAction(Request $request)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($request->query->get('courseId'));
 
@@ -33,13 +32,12 @@ class LessonQuestionPluginController extends BaseController
             'lessonId' => $lesson['id'],
         ));
 
-
-    	return $this->render('TopxiaWebBundle:LessonQuestionPlugin:index.html.twig', array(
-    		'threads' => $threads,
+        return $this->render('TopxiaWebBundle:LessonQuestionPlugin:index.html.twig', array(
+            'threads' => $threads,
             'lesson' => $lesson,
             'form' => $form->createView(),
             'users' => $users,
-		));
+        ));
     }
 
     public function listAction(Request $request)
@@ -96,15 +94,17 @@ class LessonQuestionPluginController extends BaseController
             'threadId' => $thread['id'],
         ));
 
+         $isManager = $this->getCourseService()->canManageCourse($course['id']);
+
         return $this->render('TopxiaWebBundle:LessonQuestionPlugin:show.html.twig', array(
             'course' => $course,
             'thread' => $thread,
             'threader' => $threader,
             'posts' => $posts,
             'users' => $users,
+            'isManager' => $isManager,
             'form' => $form->createView(),
         ));
-
     }
 
     public function createAction(Request $request)
@@ -117,6 +117,7 @@ class LessonQuestionPluginController extends BaseController
                 $question['type'] = 'question';
 
                 $thread = $this->getThreadService()->createThread($question);
+
                 return $this->render("TopxiaWebBundle:LessonQuestionPlugin:item.html.twig", array(
                     'thread' => $thread,
                     'user' => $this->getCurrentUser(),
@@ -157,6 +158,38 @@ class LessonQuestionPluginController extends BaseController
         ));
     }
 
+    public function askAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $form = $this->createQuestionForm();
+            $form->bind($request);
+            if ($form->isValid()) {
+                $question = $form->getData();
+                $question['type'] = 'question';
+                $thread = $this->getThreadService()->createThread($question);
+
+                return $this->createJsonResponse($thread);
+            }
+        }
+        $form = $this->createQuestionForm(array(
+                'courseId' => $request->query->get('courseId'),
+                'lessonId' => $request->query->get('lessonId'),
+                'marker' => $request->query->get('marker'),
+            ));
+
+        return $this->render("TopxiaWebBundle:LessonQuestionPlugin:ask-modal.html.twig", array(
+                'form' => $form->createView(),
+            ));
+    }
+
+    public function markersAction(Request $request, $lessonId)
+    {
+
+        $markers = $this->getThreadService()->getMyMarkersByLessonId($lessonId);
+
+        return $this->createJsonResponse($markers);
+    }
+
     protected function createQuestionForm($data = array())
     {
         return $this->createNamedFormBuilder('question', $data)
@@ -164,6 +197,7 @@ class LessonQuestionPluginController extends BaseController
             ->add('content', 'textarea')
             ->add('courseId', 'hidden')
             ->add('lessonId', 'hidden')
+            ->add('marker', 'hidden')
             ->getForm();
     }
 
@@ -185,6 +219,4 @@ class LessonQuestionPluginController extends BaseController
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-
-
 }
