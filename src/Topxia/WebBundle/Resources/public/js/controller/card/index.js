@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 		$('.receive-modal').click();
 
 		$("#modal").on('hidden.bs.modal', function(){
-			Cookie.remove('modalOpened');
+			Cookie.remove('modalOpened', {path: '/'});
 		})
 		// 
 	};
