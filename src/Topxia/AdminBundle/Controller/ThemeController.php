@@ -58,9 +58,9 @@ class ThemeController extends BaseController
 
     public function manageIndexAction(Request $request, $uri)
     {
-        // if (!$this->getThemeService()->isAllowedConfig()) {
-        //     return $this->redirect($this->generateUrl('admin_setting_theme'));
-        // }
+        if (!$this->getThemeService()->isAllowedConfig()) {
+            return $this->redirect($this->generateUrl('admin_setting_theme'));
+        }
 
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
