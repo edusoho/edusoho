@@ -150,7 +150,7 @@ class CardController extends BaseController
             'cardDetail' => $cardDetail
         ));
 
-        $response->headers->setCookie(new Cookie("modalOpened", '1'));
+        $response->headers->setCookie(new Cookie("modalOpened", '0'));
         return $response;
     }
 
