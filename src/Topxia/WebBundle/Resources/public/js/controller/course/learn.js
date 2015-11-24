@@ -69,44 +69,6 @@ define(function(require, exports, module) {
             }
         },
 
-        onAskQuestion: function(e) {
-              var currentTime = -1;
-              var lessonType = this.get("type");
-             if (lessonType == "video") {
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                if(player != undefined) {
-                    currentTime = Math.floor(player.getCurrentTime());
-                    player.pause();
-                }
-                
-             }
-
-             $('#modal').on('hidden.bs.modal', function (e) {
-                if (lessonType == "video" &&player != undefined) {
-                     player.play();
-                 }
-              });
-             var that = this;
-             $('#modal').on('onAskQuestionSuccess', function (e,result) {
-                if(that._toolbar._currentPane == 'question'){
-                    that._toolbar.trigger("change:question");
-                }
-                if (lessonType == "video" && result.id &&player != undefined) {
-                    
-                }
-             });
-
-             var url = '/lessonplugin/question/ask?courseId=' + this.get('courseId') + '&lessonId=' + this.get('lessonId') + '&marker='+currentTime;
-             $.get(url, '', function(data){
-                $('#modal').html(data).modal({
-                    backdrop:true,
-                    keyboard:true,
-                    show:true
-                });
-              });
-             
-        },
-
         onFinishLesson: function(e) {
             var $btn = this.element.find('[data-role=finish-lesson]');
             if (!$btn.hasClass('btn-success')) {
@@ -349,16 +311,6 @@ define(function(require, exports, module) {
                             player.playing = false;
                             that.set("player", player);
                         });
-
-                        $("#lesson-video-content").on('onMarkerTimeClick', function (e,markerTime) {
-                            if (markerTime>0) {
-                               var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                               if(player != undefined) {
-                                   player.setCurrentTime(markerTime);
-                               }
-                            }
-                        });
-
                         that.set("player", {});
 
                     } else {
