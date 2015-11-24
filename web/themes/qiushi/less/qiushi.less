@@ -38,6 +38,10 @@ body {
     left: 50%;
     margin-left: -100px;
     z-index: 2;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
     @media(max-width: @screen-sm-max) {
       width: 150px;
       margin-left: -75px;
@@ -72,6 +76,23 @@ body {
     }
   }
   .qs-nav {
+    // height: 90px;
+    // overflow: hidden;
+    // @media(max-width: @screen-sm-max) {
+    //   height: 70px;
+    // }
+    .user-li>a {
+      padding: 30px 20px !important;
+      @media(max-width: @screen-md-max) {
+        padding: 30px 10px !important;
+      }
+      @media(max-width: @screen-sm-max) {
+        padding: 20px 8px !important;
+      }
+      i {
+        margin-right: 5px;
+      }
+    }
     >li>a {
       font-size: 16px;
       padding: 35px 20px;
@@ -129,11 +150,9 @@ body {
   }
 }
 
-.feature-banner {
-  background: #e2133a;
-}
-
-
+// .feature-banner {
+//   background: #e2133a;
+// }
 
 // 共同课程模块
 .qs-course-item {
@@ -145,6 +164,9 @@ body {
     position: relative;
     margin-bottom: 10px;
     overflow: hidden;
+    img {
+      width: 100%;
+    }
     &:hover {
       .mask {
         .opacity(1);
@@ -201,6 +223,12 @@ body {
     position: relative;
     float: left;
     width: 40%;
+    img {
+      width: 100%;
+    }
+    @media(max-width:@screen-xs-max) {
+      width: 100%;
+    }
     .course-tag-hot {
       position: absolute;
       top: -1px;
@@ -214,17 +242,35 @@ body {
     float: left;
     width: 39%;
     padding: 15px;
+    @media(max-width:@screen-xs-max) {
+      width: 100%;
+    }
+    @media(max-width:@screen-md-max) {
+      padding: 10px;
+    }
     .title {
       font-size: 22px;
       margin-bottom: 20px;
+      @media(max-width:@screen-md-max) {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
       i {
         font-size: 22px;
         margin-right: 5px;
+        @media(max-width:@screen-md-max) {
+          font-size: 20px;
+        }
       }
     }
     .content {
       color: @gray;
       margin-bottom: 20px;
+      @media(max-width:@screen-sm-max) {
+        margin-bottom: 0;
+        max-height: 40px;
+        overflow: hidden;
+      }
     }
   }
   .course-action {
@@ -233,6 +279,10 @@ body {
     width: 21%;
     background-color: #FEBA5B;
     z-index: 1;
+    overflow: hidden;
+    @media(max-width:@screen-xs-max) {
+      width: 100%;
+    }
     &:after {
       position: absolute;
       content: '';
@@ -242,6 +292,11 @@ body {
       right: 0;
       background: url('@{img-src}new/course_action_bg.png') top left no-repeat;
       z-index: -1;
+      @media(max-width:@screen-md-max) {
+        background-size: 90%;
+        bottom: -20px;
+        right: -20px;
+      }
     }
     .course-price {
       position: absolute;
@@ -251,9 +306,18 @@ body {
       .border-radius(4px);
       padding: 8px 20px;
       color: #fff;
+      @media(max-width:@screen-md-max) {
+        padding: 5px 15px;
+      }
+      @media(max-width:@screen-sm-max) {
+        top: 20px;
+      }
       .price {
         color: #fff;
         font-size: 28px;
+        @media(max-width:@screen-md-max) {
+          font-size: 20px;
+        }
       }
       &:after {
         right: 100%;
@@ -268,16 +332,29 @@ body {
         border-width: 28px;
         margin-top: -28px;
         margin-right: -1px;
+        @media(max-width:@screen-md-max) {
+          border-width: 18px;
+          margin-top: -18px;
+        }
       }
     }
     p {
       margin: 136px auto 70px auto;
+      @media(max-width:@screen-md-max) {
+        margin: 100px auto 70px auto;
+      }
+      @media(max-width:@screen-sm-max) {
+        margin: 80px auto 40px auto;
+      }
     }
     .btn {
       padding: 12px 25px;
       font-size: 16px;
       border: 2px solid #fff;
       color: #fff;
+      @media(max-width:@screen-md-max) {
+        padding: 8px 20px;
+      }
       &:hover {
         background: rgba(255, 255, 255, 0.3);
       }
@@ -290,6 +367,7 @@ body {
   border: 1px solid @gray-light;
   padding: 10px;
   margin-top: 10px;
+  margin-bottom: 20px;
   &:before,
   &:after {
     position: absolute;
@@ -309,6 +387,9 @@ body {
   }
   .class-img {
     margin-bottom: 10px;
+    img {
+      width: 100%;
+    }
   }
   .title {
     margin-bottom: 10px;
@@ -348,6 +429,12 @@ body {
   .qs-recommend-article {
     float: left;
     width: 40%;
+    @media(max-width: @screen-md-max) {
+      width: 45%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+    }
   }
   .qs-article-block {
     margin-bottom: 10px;
@@ -359,6 +446,12 @@ body {
     float: left;
     width: 60%;
     padding-left: 20px;
+    @media(max-width: @screen-md-max) {
+      width: 55%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+    }
     .date {
       position: absolute;
       top: 0;
@@ -370,6 +463,7 @@ body {
       .text-overflow;
       margin-bottom: 25px;
       padding-right: 50px;
+      
     }
   }
 }
@@ -387,6 +481,9 @@ body {
 }
 
 .media-dynamic {
+  @media(max-width: @screen-md-max) {
+    margin-top: 10px;
+  }
   .avatar-sm {
     width: 50px !important;
     height: 50px !important;
@@ -394,6 +491,7 @@ body {
   .title {
     margin-bottom: 5px;
     color: @gray;
+    .text-overflow;
     a {
       font-size: 14px !important;
     }

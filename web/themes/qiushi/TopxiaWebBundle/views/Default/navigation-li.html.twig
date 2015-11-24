@@ -1,0 +1,3 @@
+<li class="{% if siteNav and siteNav == nav.url %} active {% endif %}">
+  <a href="{% if nav.url %}{{ nav.url|navigation_url }}{% else %}javascript:;{% endif %}" {% if nav.isNewWin %}target="_blank"{% endif %}>{{ nav.name }}</a>
+</li>

@@ -1,8 +1,11 @@
 @brand-primary:         #c30d22;
 
-a:hover, 
-a:focus {
+a {
   color: @brand-primary;
+  &:hover,
+  &:focus {
+    color: @brand-primary;
+  }
 }
 
 .link-dark:hover,
@@ -133,4 +136,58 @@ a:focus {
 
 .badge-primary {
   background-color: @brand-primary;
+}
+
+.es-filter  {
+  .nav-sort>li>a {
+    &:hover,
+    &.active {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+  }
+  .filter label:hover {
+    color: @brand-primary;
+  }
+}
+
+.class-header.after .class-data>li>a:hover {
+  color: @brand-primary;
+}
+
+.class-header .class-data>li .dropdown-toggle:hover {
+  color: @brand-primary;
+}
+
+.progress-bar,.rank_num{
+  background-color: @brand-primary;
+}
+
+.bar-task  {
+  .bar-task-header,
+  .bar-time-line>li:before{
+    background-color: @brand-primary;
+  }
+  .bar-time-line>li .es-icon {
+    color: @brand-primary;
+  }
+}
+
+.nav-filter .nav-pills>li.dropdown>a:hover  {
+  color: @brand-primary;
+}
+
+.dropdown-menu > .active > a, 
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu>li>a:hover {
+  background-color: @brand-primary;
+}
+
+.page-header .badge {
+  background-color: @brand-primary !important;
+}
+
+.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
+  color: @brand-primary;
 }

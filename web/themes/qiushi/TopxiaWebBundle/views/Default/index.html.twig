@@ -28,7 +28,7 @@
         <div class="more"><a href="" class="link-lighter">更多</a></div>
       </div>
       <div class="qs-live-course-list row">
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -40,7 +40,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -52,7 +52,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-info pull-right">今天 22:30</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -64,7 +64,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -89,86 +89,41 @@
         <div class="title">人气课程</div>
         <div class="subtitle">HOT COURSE</div>
       </div>
-        <div class="qs-hot-course-list">
-          {% for course in PopularCourses %}
-          <div class="qs-course-block clearfix">
-            <div class="course-img">
-              <a href="{{ path('course_show', {id:course.id}) }}">
-                {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive', course.title) }}
-                <span class="course-tag-hot"></span>
-              </a>
+      <div class="qs-hot-course-list">
+        {% for course in PopularCourses %}
+        <div class="qs-course-block clearfix">
+          <div class="course-img">
+            <a href="{{ path('course_show', {id:course.id}) }}">
+              {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive', course.title) }}
+              <span class="course-tag-hot"></span>
+            </a>
+          </div>
+          <div class="course-info">
+            <div class="title"><a class="link-light" href="{{ path('course_show', {id:course.id}) }}"> <i class="es-icon es-icon-whatshot color-danger"></i>{{ course.title }}</a></div>
+            <p><span class="qs-tag qs-tag-info">累计已有{{ course.studentNum }}人学过</span></p>
+            <div class="content">
+              {{ course.about|plain_text(100) }}
             </div>
-            <div class="course-info">
-              <div class="title"><a class="link-light" href="{{ path('course_show', {id:course.id}) }}"> <i class="es-icon es-icon-whatshot color-danger"></i>{{ course.title }}</a></div>
-              <p><span class="qs-tag qs-tag-info">累计已有{{ course.studentNum }}人学过</span></p>
-              <div class="content">
-                {{ course.about|raw }}
-              </div>
-              <div class="metas">
-                {% for teacher in course.teachers %}
-                  {% if loop.index <= 1 %}
-                    {{ web_macro.user_avatar(teacher, 'mlm') }}
-                    {{ web_macro.user_link(teacher, 'mlm') }}
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-            <div class="course-action">
-              <div class="course-price">
-                抢购价 
-                {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
-              </div>
-              <p class="text-center"><a href="{{ path('course_show', {id:course.id}) }}" class="btn">查看详情</a></p>
+            <div class="metas visible-lg">
+              {% for teacher in course.teachers %}
+                {% if loop.index <= 1 %}
+                  {{ web_macro.user_avatar(teacher, 'mlm') }}
+                  {{ web_macro.user_link(teacher, 'mlm') }}
+                {% endif %}
+              {% endfor %}
             </div>
           </div>
-          {% endfor %}
-          <!-- <div class="qs-course-block clearfix">
-            <div class="course-img">
-              <a href="">
-                <img class="img-responsive" src="{{asset('themes/qiushi/img/new/course_2.jpg')}}" alt="">
-                <span class="course-tag-hot"></span>
-              </a>
+          <div class="course-action">
+            <div class="course-price">
+              抢购价 
+              {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
             </div>
-            <div class="course-info">
-              <div class="title"><a class="link-light" href=""> <i class="es-icon es-icon-whatshot color-danger"></i>新高考改革权威解读</a></div>
-              <p><span class="qs-tag qs-tag-info">累计已有10234人学过</span></p>
-              <div class="content">
-                浙江省高考综合改革方案一发布，引起社会强烈关注。求是高考课堂特别开设新高考改革解读免费公开课，为此邀请了浙江省教育界的两位专家为你详细…
-              </div>
-              <div class="metas">
-                <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a><a class="link-light mlm" href="">黄国峰</a>
-              </div>
-            </div>
-            <div class="course-action">
-              <div class="price">抢购价 <span>¥299</span></div>
-              <p class="text-center"><a href="" class="btn">查看详情</a></p>
-            </div>
+            <p class="text-center"><a href="{{ path('course_show', {id:course.id}) }}" class="btn">查看详情</a></p>
           </div>
-          <div class="qs-course-block clearfix">
-            <div class="course-img">
-              <a href="">
-                <img class="img-responsive" src="{{asset('themes/qiushi/img/new/course_2.jpg')}}" alt="">
-                <span class="course-tag-hot"></span>
-              </a>
-            </div>
-            <div class="course-info">
-              <div class="title"><a class="link-light" href=""> <i class="es-icon es-icon-whatshot color-danger"></i>新高考改革权威解读</a></div>
-              <p><span class="qs-tag qs-tag-info">累计已有10234人学过</span></p>
-              <div class="content">
-                浙江省高考综合改革方案一发布，引起社会强烈关注。求是高考课堂特别开设新高考改革解读免费公开课，为此邀请了浙江省教育界的两位专家为你详细…
-              </div>
-              <div class="metas">
-                <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a><a class="link-light mlm" href="">黄国峰</a>
-              </div>
-            </div>
-            <div class="course-action">
-              <div class="price">抢购价 <span>¥299</span></div>
-              <p class="text-center"><a href="" class="btn">查看详情</a></p>
-            </div>
-          </div> -->
         </div>
-        <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('course_explore')}}">更多课程</a></div>
-      
+        {% endfor %}
+      </div>
+      <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('course_explore')}}">更多课程</a></div>
     </div>
   </section>
   {% endif %}
@@ -189,9 +144,8 @@
           <li><a href="">高三</a></li>
         </ul>
       </div>
-
       <div class="qs-exellent-course-list row">
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -203,7 +157,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -215,7 +169,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -227,7 +181,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -239,7 +193,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -251,7 +205,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -263,7 +217,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -275,7 +229,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -287,7 +241,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -299,7 +253,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -311,7 +265,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -323,7 +277,7 @@
             <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-course-item">
             <div class="course-img">
               <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
@@ -339,11 +293,7 @@
     </div>
   </section>
 
-  <section class="feature-banner">
-    <div class="container">
-      <img class="img-responsive" src="{{asset('themes/qiushi/img/new/banner.jpg')}}" alt="">
-    </div>
-  </section>
+  {{block_show('qiushi:home_middle_banner')}}
 
   {# 推荐班级 #}
   {% set RecommendClassrooms = data('RecommendClassrooms',{'count':4})%}
@@ -356,7 +306,7 @@
       </div>
       <div class="qs-recommend-class-list row">
         {% for classroom in RecommendClassrooms %}
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-class-item">
             <div class="class-img">
               <a href="{{ path('classroom_show', {id:classroom.id}) }}">
@@ -375,33 +325,6 @@
           </div>
         </div>
         {% endfor %}
-        <!-- <div class="col-md-3 col-sm-6">
-          <div class="qs-class-item">
-            <div class="class-img">
-              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
-            </div>
-            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
-            <div class="metas clearfix">共有6门课程 <span class="price free">免费</span></div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-class-item">
-            <div class="class-img">
-              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
-            </div>
-            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
-            <div class="metas clearfix">共有6门课程 <span class="price">¥369</span></div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-class-item">
-            <div class="class-img">
-              <a href=""><img class="img-responsive" src="{{asset('themes/qiushi/img/new/class_1.jpg')}}" alt=""></a>
-            </div>
-            <div class="title"><a class="link-dark" href="">高三 数学 第一轮同步复习 免费直播</a></div>
-            <div class="metas clearfix">共有6门课程 <span class="price free">免费</span></div>
-          </div>
-        </div> -->
       </div>
       <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('classroom_explore') }}">更多班级</a></div>
     </div>
@@ -478,7 +401,7 @@
       <div class="qs-teacher-list row">
         {% for teacher in teachers %}
         {% set profile = profiles[teacher.id] %}
-        <div class="col-md-3 col-sm-6">
+        <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-teacher-item">
             <div class="teacher-img"><img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></div>
             <div class="teacher-name">{{teacher.nickname}}</div>
@@ -507,23 +430,6 @@
           </div>
         </div>
         {% endfor %}
-        <!-- <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div> -->
       </div>
       <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('teacher') }}">更多名师</a></div>
     </div>

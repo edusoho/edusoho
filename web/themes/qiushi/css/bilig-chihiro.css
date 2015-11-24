@@ -97,7 +97,7 @@ a {
 .es-course-list h3 a {
   color: #222;
 }
-.navbar-nav .dropdown .dropdown-toggle {
+/*.navbar-nav .dropdown .dropdown-toggle {
   font-size: 14px;
   height: 54px;
   line-height: 54px;
@@ -128,7 +128,7 @@ a {
   display: block;
   width: 100%;
   line-height: 26px;
-}
+}*/
 .teacher-box .es-teacher-list {
   margin: 10px 0px!important;
 }
