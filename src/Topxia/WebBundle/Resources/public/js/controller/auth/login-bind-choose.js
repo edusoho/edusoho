@@ -8,7 +8,7 @@ define(function(require, exports, module) {
         var $form = $('#set-bind-new-form');
 
         var validator = new Validator({
-            element: $form,
+            element: '#set-bind-new-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
 
