@@ -1,4 +1,11 @@
-{% set categoriesFirst = data('Categories',{'group':'course'})%}
+<section class="course-list-section" id="course-list">
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<!-- course -->
+<div class="es-box es-course">
+  {% set count = config.count %}
+  {% set categoryId = config.categoryId|default(null) %}
+  {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
+  {% set categoriesFirst = data('Categories',{'group':'course'})%}
 <div class="container">
   <div class="text-line">
     <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
@@ -16,7 +23,7 @@
       {% endif %}
     </ul>
     <div class="btn-group visible-xs">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="tooltip" aria-expanded="false">全部课程 <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
         <li role="presentation" class="js-course-filter {% if (categoryId|default('all') == 'all') %}active {% endif %}" data-url="{{path('homepage_category',{config:config,categoryId : 'all',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
         {% if categoriesFirst%}
@@ -54,4 +61,4 @@
       更多课程 <i class="mrs-o es-icon es-icon-chevronright"></i>
     </a>
   </div>
-</div>
+</section>

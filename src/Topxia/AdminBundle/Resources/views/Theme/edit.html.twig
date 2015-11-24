@@ -29,7 +29,7 @@
 
 {% set nav = nav|default(null) %}
 {% set menu = menu|default(null) %}
-{% set script_controller = 'gracefulthemebundle/controller/theme-edit/edit' %}
+{% set script_controller = 'topxiawebbundle/controller/theme/edit' %}
 
 <body>
 
@@ -42,8 +42,8 @@
     <div class="col-md-10"> 
       <a class="navbar-brand">主题编辑</a>
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="{{ path('admin_app_installed', {postStatus: 'theme'}) }}"><i class="glyphicon glyphicon-remove"></i> 取消</a></li>
-      <li><a href="{{ path('admin_confirm_theme_config') }}"><i class="glyphicon glyphicon-ok"></i> 保存</a></li>
+      <li><a href="{{ path('admin_setting_theme') }}"><i class="glyphicon glyphicon-remove"></i> 取消</a></li>
+      <li><a href="{{ path('admin_confirm_themes_config',{uri:themeUri}) }}"><i class="glyphicon glyphicon-ok"></i> 保存</a></li>
       </ul>
     </div>
     <div class="col-md-1"></div>
@@ -56,11 +56,11 @@
     <ul class="nav nav-tabs" role="tablist">
       <li class="active"><a href="#left" role="tab" data-toggle="tab">左侧</a></li>
       <li><a href="#color" role="tab" data-toggle="tab">配色方案</a></li>
-      <a href="{{ path('admin_reset_theme_config') }}" class="btn btn-primary pull-right">全部重置</a>
+      <a href="{{ path('admin_reset_currentTheme_config', {uri:themeUri}) }}" class="btn btn-primary pull-right">全部重置</a>
     </ul>
 
     <!-- Tab panes -->
-    <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_theme_config') }}">
+    <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_save_themes_config',{uri:themeUri}) }}">
       <div class="tab-pane active" id="left">
           <div class="panel panel-default">
             <!-- Default panel contents -->
@@ -78,20 +78,21 @@
             <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
               {% for pendant in themeConfig.blocks.left|default([]) %}
 
-                {% include 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true} %}
+                {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true} %}
                 
               {% endfor %}
 
               {% for pendant in allConfig.blocks.left|default([]) %}
                 {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
 
-                  {% include 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
+                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false} %}
                 
                 {% endif %}
               {% endfor %}
             </ul>
           </div>
       </div>
+
 
       <div class="tab-pane" id="color">
         <div class="panel panel-default">
@@ -144,7 +145,7 @@
 </div>
 
 <div class="mod-preview-mask">
-  <iframe src="{{ path('admin_theme_show') }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" onload="SetCwinHeight(this)" >
+  <iframe src="{{ path('admin_themes_show',{uri:themeUri}) }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" onload="SetCwinHeight(this)" >
   </iframe>
   <div class="pm-iframe"></div>
 </div>
