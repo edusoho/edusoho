@@ -8,7 +8,7 @@ define(function(require, exports, module) {
         var $form = $('#set-bind-new-form');
 
         var validator = new Validator({
-            element: $form,
+            element: '#set-bind-new-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
 
@@ -52,6 +52,10 @@ define(function(require, exports, module) {
                 rule: 'email email_remote'
             });
         }
+
+        $('#set-bind-new-btn').click(function(){
+            $form.submit();
+        });
 
         validator.addItem({
             element: '#set-bind-nickname-field',
