@@ -1,6 +1,23 @@
-  <header class="navbar">
+  <header class="mooc-header navbar">
     <!-- <div class="container"> -->
       <div class="navbar-header">
+         <div class="visible-xs  navbar-mobile">
+          <a href="javascript:;" class="navbar-more js-navbar-more">
+            <i class="es-icon es-icon-menu"></i>
+          </a>
+          <div class="html-mask"></div>
+          <div class="nav-mobile">
+            <form class="navbar-form" action="{{ path('search') }}" method="get">
+              <div class="form-group">
+                <input class="form-control" placeholder="搜索" name="q">
+                <button class="button es-icon es-icon-search"></button>
+              </div>
+            </form>
+            <ul class="nav navbar-nav">
+              {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+            </ul>
+          </div>
+        </div>
         {% if setting('site.logo') %}
           <a class="navbar-brand" href="{{ path('homepage') }}">
             <img src="{{ asset(setting('site.logo')) }}">
@@ -8,15 +25,15 @@
         {% else %}
           <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
         {% endif %}
-        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+      {#   <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-        </button>
+        </button> #}
       </div>
-      <nav class="collapse navbar-collapse clearfix" role="navigation">
-         <ul class="nav navbar-nav">
+      <nav class="collapse navbar-collapse" role="navigation">
+         <ul class="nav navbar-nav clearfix hidden-xs ">
         {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
          </ul>
         <div class="nav-user clearfix">
@@ -32,9 +49,10 @@
             <div class="user">
               <a href="{{ path('user_show', {id:app.user.id}) }}">
                 <img src="{{filepath(app.user.smallAvatar, 'avatar.png')}}" />            
-                <span class="name">{{ app.user.nickname }}</span>
+                <span class="name hidden-sm hidden-xs">{{ app.user.nickname }}</span>
               </a>
               <ul class="dropdown-menu">
+                <li role="presentation" class="dropdown-header visible-sm visible-xs">{{ app.user.nickname }}</li>
                 <li>
                   <a href="{{ path('user_show', {id:app.user.id}) }}">
                     <span class="icons-user-1"></span>
@@ -56,6 +74,35 @@
                     <span>管理后台</span>
                   </a>
                 </li>
+                 <li class="divider "></li>
+                 <li>
+                  <a href="{{ path('my') }}" class="hidden-lg">
+                    <span class="icons-user-5"></span>
+                    <span>课程</span>
+                  </a>
+                </li>
+              <li class="divider hidden-lg"></li>
+              <li>
+                <a href="{{ path('message') }}" class="hidden-lg">
+                  <span class="icons-user-6">
+                    {% if app.user.newMessageNum > 0 %}
+                    <span class="message">{{ app.user.newMessageNum }}</span>
+                    {% endif %}
+                  </span>
+                  <span>私信</span>
+                </a>
+              </li>
+              <li class="divider hidden-lg"></li>
+              <li>
+                <a href="{{ path('notification') }}" class="hidden-lg">
+                  <span class="icons-user-7">
+                    {% if app.user.newNotificationNum > 0 %}
+                    <span class="message">{{ app.user.newNotificationNum }}</span>
+                    {% endif %}
+                  </span>
+                  <span>通知</span>
+                </a>
+              </li>
                 <li class="divider"></li>
                 {% endif  %}
                 <li>
@@ -66,7 +113,7 @@
                 </li>
               </ul>
             </div>
-            <ul class="hidden-sm">
+            <ul class="visible-lg">
               <li>
                 <a class="tooltop" href="{{ path('my') }}" data-toggle="tooltip" data-placement="bottom" title="课程">
                   <span class="icons-user-5"></span>

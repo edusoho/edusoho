@@ -6,7 +6,7 @@ define(function(require, exports, module) {
             $(".nav-mobile").removeClass("active");
             $(".html-mask").removeClass("active");
             $(".es-wrap").removeClass("nav-active")
-            $("html").removeClass("html-nav-active").css("height",'auto');
+            $("html").removeClass("nav-active").css("height",'auto');
         }
 
         $(".js-navbar-more").click(function(e){
@@ -22,7 +22,7 @@ define(function(require, exports, module) {
                 
                 $(".html-mask").addClass("active");
                 $(".es-wrap").addClass("nav-active");
-                $("html").addClass("html-nav-active");
+                $("html").addClass("nav-active");
             }
         });
 
