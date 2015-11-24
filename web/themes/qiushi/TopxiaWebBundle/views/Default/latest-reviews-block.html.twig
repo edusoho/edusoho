@@ -1,44 +1,23 @@
-
-        <!-- 学员评价开始 -->
-    <div class="es-course">
-      <div class="panel">
-        <div class="panel-heading">
-          <h3 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}评价</h3>
-          
-        </div>
-        <div class="panel-body" style ="margin-top:-13px!important;">
-          <ul class="row">
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% if reviews %}
 {% for review in reviews %}
-        {% set author = users[review.userId]|default(null) %}
-        {% set course = courses[review.courseId]|default(null) %}
-        {% if author and course %}
-
-            <li class="col-xs-12 col-sm-12 col-md-6 col-lg-6 es-comment-list">
-              <div class="media">
-                <div class="media-left">
-                  <a href="{{ path('user_show', {id:author.id}) }}">
-                    <img class="media-object img-circle" src="{{ default_path('avatar',author.smallAvatar, '') }}" alt="{{ author.nickname }}">
-                  </a>
-                </div>
-                <div class="media-body">
-                  <a href="{{ path('user_show', {id:author.id}) }}" class="com-author-link">{{ author.nickname }}</a>
-                  <span class="stars-{{review.rating }}"></span>
-
-                  <p class="user-comment">
-                    {{ review.content|plain_text(50) }}
-                  </p>
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="course-title">{{ course.title }}</a>
-                  <span class="pull-right comment-time">{{ author.createdTime|date('Y-m-d H:i') }}</span>
-                </div>
-              </div>
-            </li>
-        {% endif %}
-		{% else %}
-		<li class="empty">还没有评价</li>
-           {% endfor %}
-            
-          </ul>
-        </div>
-      </div>
+{% set author = users[review.userId]|default(null) %}
+{% set course = courses[review.courseId]|default(null) %}
+  {% if author and course %}
+  <div class="media media-dynamic">
+    <div class="media-left">
+      {{ web_macro.user_avatar(author,'','avatar-sm') }}
     </div>
-    <!-- 学员评价结束 -->
+    <div class="media-body">
+      <div class="title">
+        {{ web_macro.user_link(author,'link-light') }}
+        <span class="score">{{ web_macro.star(course.rating) }}</span>
+        发布于 <a href="{{ path('course_show', {id:course.id}) }}" class="link-light">《{{ course.title }}》</a>
+      </div>
+      <div class="content">{{ review.content|plain_text(50) }}</div>
+      <span class="date">{{review.createdTime|smart_time}}</span>
+    </div>
+  </div>
+  {% endif %}
+{% endfor %}
+{% endif %}

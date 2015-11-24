@@ -433,12 +433,13 @@
                 </div>
               </div>
               <ul class="qs-new-article">
-                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
-                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
-                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
-                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
-                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
-                <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li>
+                {% set articles = data('LatestArticles',{'count':6}) %}
+                {% if articles %}
+                  {% for article in articles %}
+                  <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">{{ article.title }}</a> <span class="date">{{ article.updatedTime|smart_time }}</span></li>
+                  {% endfor %}
+                {% endif %}
+                <!-- <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li> -->
               </ul>
             </div>
           </div>
@@ -447,7 +448,8 @@
           <div class="qs-evaluate-panel">
             <div class="qs-panel-title">教学评价<small>EVALUATION</small></div>
             <div class="qs-panel-body">
-              <div class="media media-dynamic">
+              {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:4})) }}
+              <!-- <div class="media media-dynamic">
                 <div class="media-left">
                   <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
                 </div>
@@ -456,47 +458,7 @@
                   <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
                   <span class="date">09.20</span>
                 </div>
-              </div>
-              <div class="media media-dynamic">
-                <div class="media-left">
-                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
-                </div>
-                <div class="media-body">
-                  <div class="title"><a class="link-light" href="">玉婷</a> 发布于《高中物理课程最新学习案例》</div>
-                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
-                  <span class="date">09.20</span>
-                </div>
-              </div>
-              <div class="media media-dynamic">
-                <div class="media-left">
-                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
-                </div>
-                <div class="media-body">
-                  <div class="title"><a class="link-light" href="">玉婷</a> 发布于《高中物理课程最新学习案例》</div>
-                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
-                  <span class="date">09.20</span>
-                </div>
-              </div>
-              <div class="media media-dynamic">
-                <div class="media-left">
-                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
-                </div>
-                <div class="media-body">
-                  <div class="title">
-                    <a class="link-light" href="">玉婷</a> 
-                    <span class="score">
-                      <i class="es-icon es-icon-star"></i>
-                      <i class="es-icon es-icon-star"></i>
-                      <i class="es-icon es-icon-star"></i>
-                      <i class="es-icon es-icon-star"></i>
-                      <i class="es-icon es-icon-star"></i>
-                    </span>
-                    发布于《高中物理课程最新学习案例》
-                  </div>
-                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
-                  <span class="date">09.20</span>
-                </div>
-              </div>
+              </div>-->
             </div>
           </div>
         </div>
@@ -515,6 +477,7 @@
       </div>
       <div class="qs-teacher-list row">
         {% for teacher in teachers %}
+        {% set profile = profiles[teacher.id] %}
         <div class="col-md-3 col-sm-6">
           <div class="qs-teacher-item">
             <div class="teacher-img"><img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></div>
@@ -523,121 +486,28 @@
               {% if teacher.title %}{{ teacher.title }}{% else %}暂无头衔{% endif %}
             </div>
             <div class="teacher-bottom">
-              <!-- <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p> -->
+              <div class="teacher-about">
+                {% if profile.about %}
+                  {{ profile.about|plain_text(50) }}
+                {% else %}
+                  <div class="text-center">暂无简介</div>
+                {% endif %}
+              </div>
             </div>
             <div class="mask">
               <div class="slogan">
                 <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
+                <p>立即学习课程或者预约辅导吧！</p>
               </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
+              <div class="teacher-action">
+                <a class="btn btn-ghost-primary" href="{{ path('user_show', {id:teacher.id}) }}">在教课程</a>
+                <a class="btn htn-ghost-white" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">预约辅导</a>
+              </div>
             </div>
           </div>
         </div>
         {% endfor %}
         <!-- <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="qs-teacher-item">
-            <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
-            <div class="teacher-name">陈琳</div>
-            <div class="teacher-position">高中地理在职教师</div>
-            <div class="teacher-bottom">
-              <p>教学风格：1.侧重于培养和提高学生观察问题、分析问题的能力，进行归纳和扩展</p>
-            </div>
-            <div class="mask">
-              <div class="slogan">
-                <p class="slogan-title">觉得老师不错？</p>
-                <p>立即学习课程活着预约辅导吧！</p>
-              </div>
-              <div class="teacher-action"><a class="btn btn-ghost-primary" href="">在线课程</a><a class="btn htn-ghost-white" href="">预约辅导</a></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
           <div class="qs-teacher-item">
             <div class="teacher-img"><img class="avatar-lg" src="{{asset('themes/qiushi/img/new/teacher_1.jpg')}}" alt=""></div>
             <div class="teacher-name">陈琳</div>
