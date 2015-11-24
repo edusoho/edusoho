@@ -24,7 +24,6 @@ class DeveloperSettingController extends BaseController
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
             'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
-            'cloud_api_failover' => '0',
             'hls_encrypted' => '1',
         );
 

@@ -206,6 +206,14 @@ editor_download:
     defaults: { _controller: TopxiaWebBundle:Editor:download }
     methods: [POST]
 
+liveroom_entry_waiting:
+    pattern:  /liveroom/{id}/entry_waiting
+    defaults: { _controller: TopxiaWebBundle:Liveroom:entryWaiting }
+
+liveroom_ticket:
+    pattern:  /liveroom/{id}/ticket
+    defaults: { _controller: TopxiaWebBundle:Liveroom:ticket }
+
 live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
@@ -233,10 +241,6 @@ live_classroom_replay_url:
 live_course_list:
     pattern:  /live/list/{category}
     defaults: { _controller: TopxiaWebBundle:LiveCourse:list, category:'' }
-
-live_classroom_iframe:
-    pattern: /live/classroom/course/{courseId}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:classroomIframe }
 
 live_course_create:
     pattern:  /livecourse/create
