@@ -3,7 +3,7 @@
 {% block title %}登录 - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/login' %}
 {% block content %}
-{% if app.request.query.get('receive') == 'success' %}
+{% if app.request.cookies.get('modalOpened') == 1 %}
   <a href="#modal" class=" hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden" ><span class="receive-modal"></span></a>
 {% endif %}
 <div class="es-section login-section">
