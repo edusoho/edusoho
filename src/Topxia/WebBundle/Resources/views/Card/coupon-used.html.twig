@@ -1,22 +1,12 @@
 <div class="card-pack-item coupon-item">
   {% if cardDetail.targetType == "course" %}
-    {% if cardDetail.targetId == 0 %}
-      <p class="title">可用于抵扣全站课程</p>
-    {% else %}
-      <p class="title">用于抵扣指定课程</p>
-    {% endif %}
-  {% endif %}
-
+    <p class="title">此课程优惠券已使用</p>
   {% if cardDetail.targetType == "classroom" %}
-    <p class="title">可用于抵扣全站班级</p>
+    <p class="title">此班级优惠券已使用</p>
   {% endif %}
 
   {% if cardDetail.targetType == "vip" %}
-    {% if cardDetail.targetId == 0 %}
-      <p class="title">可用于抵扣全站会员</p>
-    {% else %}
-      <p class="title">用于抵扣指定会员</p>
-    {% endif %}
+    <p class="title">此会员优惠券已使用</p>
   {% endif %}
   <p class="price">
     <strong>{% if cardDetail.type == "minus" %}￥{% endif %}{{ cardDetail.rate }}{% if cardDetail.type == "discount" %}折{% endif %}</strong>
