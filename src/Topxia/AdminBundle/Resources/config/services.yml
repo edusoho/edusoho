@@ -11,13 +11,13 @@ parameters:
           orderBy: "latest"
           categoryId: "all"
           code: course-grid-with-condition-index
-          defaultTitle: "精品课程"
+          defaultTitle: "课程组件"
           id: latestCourse
         - title: ""
           count: "4"
           categoryId: ""
           code: "live-course"
-          defaultTitle: "直播课程"
+          defaultTitle: "直播组件"
           id: "RecentLiveCourses"
         - title: ""
           count: ""
@@ -27,13 +27,13 @@ parameters:
         - title: ""
           count: "6"
           code: "groups"
-          defaultTitle: "小组动态"
+          defaultTitle: "动态"
           id: "hotGroups"
         - title: ""
           count: "4"
           categoryId: ""
           code: "recommend-teacher"
-          defaultTitle: "求是名师"
+          defaultTitle: "推荐教师"
           id: "RecommendTeachers"
     bottom: simple
 
@@ -46,13 +46,13 @@ parameters:
           orderBy: "latest"
           categoryId: "all"
           code: course-grid-with-condition-index
-          defaultTitle: "精品课程"
+          defaultTitle: "课程组件"
           id: latestCourse
         - title: ""
           count: "4"
           categoryId: ""
           code: "live-course"
-          defaultTitle: "直播课程"
+          defaultTitle: "直播组件"
           id: "RecentLiveCourses"
         - title: ""
           count: ""
@@ -62,13 +62,13 @@ parameters:
         - title: ""
           count: "6"
           code: "groups"
-          defaultTitle: "小组动态"
+          defaultTitle: "动态"
           id: "hotGroups"
         - title: ""
           count: "3"
           categoryId: ""
           code: "recommend-teacher"
-          defaultTitle: "求是名师"
+          defaultTitle: "推荐教师"
           id: "RecommendTeachers"
     bottom: simple
 services:
