@@ -11,7 +11,7 @@
   <p class="price">
     {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}折{% endif %}
   </p>
-  <p>有效期截止：<span>{{ cardDetail.deadline|date('Y年n月d日') }}</span></p>
+  <p>有效期截止：<span>{{ cardDetail.deadline|date('Y年m月d日') }}</span></p>
   <!--优惠劵已使用-->
   <div class="stamp stamp-used"></div>
 </div>
