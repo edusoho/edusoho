@@ -6,4 +6,5 @@ define(function(require, exports, module) {
 		});
 		$('.receive-modal').click();
 
+	};
 });
