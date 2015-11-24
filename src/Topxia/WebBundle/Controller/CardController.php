@@ -123,20 +123,27 @@ class CardController extends BaseController
         ));
     }
 
-    public function receiveShowAction(Request $request)
+    public function cardInfoAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return $this->redirect($this->generateUrl('login'));
-        }
-
         $cardType = $request->query->get('cardType');
         $cardId   = $request->query->get('cardId');
-        return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
-            'cardType' => $cardType,
-            'cardId'   => $cardId
-        ));
+        $card     = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
+
+        $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
+
+        if (!empty($cardDetail)) {
+            return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+                'cardType'   => $cardType,
+                'cardId'     => $cardId,
+                'cardDetail' => $cardDetail
+            ));
+        } else {
+            return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+                'cardType'   => $cardType,
+                'cardId'     => $cardId,
+                'cardDetail' => $cardDetail
+            ));
+        }
     }
 
     protected function sortCards($cards)

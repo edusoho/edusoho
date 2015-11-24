@@ -1,5 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {#登录后#}
+{% if app.user %}
 <div class="modal-dialog modal-card-pack modal-logined">
   <div class="modal-content">
     <div class="modal-body">
@@ -7,13 +8,19 @@
         您领取了一张优惠券，已添加至“我的卡包“
       </div>
       {#卡券内容#}
-      {#{% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}#}
+      {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
+        {% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}
+      {% endif %}
+      {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
+        {% include 'TopxiaWebBundle:Card:moneycard-useable.html.twig' %}
+      {% endif %}
       <div class="modal-action">
         <a href="" class="btn btn-ghost-white btn-xlg">立即使用</a>
       </div>
     </div>
   </div>
 </div>
+{% else %}
 
 {#登录前#}
 <div class="modal-dialog modal-card-pack">
@@ -22,11 +29,16 @@
       <div class="modal-info">
         您领取了一张优惠券，请登录后查看！
       </div>
-      {#卡券内容#}
-      {#{% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}#}
+      {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
+        {% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}
+      {% endif %}
+      {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
+        {% include 'TopxiaWebBundle:Card:moneycard-useable.html.twig' %}
+      {% endif %}
       <div class="modal-action">
         <a href="" class="btn btn-ghost-white btn-xlg">登录查看</a>
       </div>
     </div>
   </div>
 </div>
+{% endif %}

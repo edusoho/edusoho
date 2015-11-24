@@ -5,7 +5,7 @@
 
 {% block main_body %}
   {% if app.request.query.get('receive') == 'success' %}
-    <a href="#modal" data-toggle="modal" data-url="{{ path('my_receive_card',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" type="hide">dw</a>
+    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" class="hidden" ><span class=""></span></a>
   {% endif %}
   <div class="clearfix mbl">
     <ul class="nav nav-pills inline-block">

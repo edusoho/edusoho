@@ -4,5 +4,6 @@ define(function(require, exports, module) {
 		$('input:radio[name=filter-change]').change(function(event){
 			window.location.href = $(this).val();
 		});
+		$('.receive-modal').click();
 	};
 });

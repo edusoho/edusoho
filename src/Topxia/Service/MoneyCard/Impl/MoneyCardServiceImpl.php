@@ -517,19 +517,22 @@ class MoneyCardServiceImpl extends BaseService
                 );
             }
 
-            $conditions = array(
-                'rechargeUserId' => $userId,
-                'batchId'        => $batch['id']
-            );
-            $moneyCard = $this->getMoneyCardDao()->searchMoneyCards($conditions, array('id', 'DESC'), 0, 1);
-
-            if (!empty($moneyCard)) {
-                $this->getMoneyCardBatchDao()->getConnection()->commit();
-
-                return array(
-                    'code'    => 'failed',
-                    'message' => '您已经领取该批学习卡'
+            if (!empty($userId)) {
+                $conditions = array(
+                    'rechargeUserId' => $userId,
+                    'batchId'        => $batch['id']
                 );
+
+                $moneyCard = $this->getMoneyCardDao()->searchMoneyCards($conditions, array('id', 'DESC'), 0, 1);
+
+                if (!empty($moneyCard)) {
+                    $this->getMoneyCardBatchDao()->getConnection()->commit();
+
+                    return array(
+                        'code'    => 'failed',
+                        'message' => '您已经领取该批学习卡'
+                    );
+                }
             }
 
             $conditions = array(
@@ -550,7 +553,7 @@ class MoneyCardServiceImpl extends BaseService
 
             $moneyCard = $this->getMoneyCardDao()->getMoneyCard($moneyCards[0]['id']);
 
-            if (!empty($moneyCard)) {
+            if (!empty($moneyCard) && !empty($userId)) {
                 $moneyCard = $this->getMoneyCardDao()->updateMoneyCard($moneyCard['id'], array(
                     'rechargeUserId' => $userId,
                     'cardStatus'     => 'receive',
