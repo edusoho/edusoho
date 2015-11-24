@@ -95,7 +95,7 @@ class MoneyCardServiceImpl extends BaseService
         $batch['rechargedNumber'] = 0;
         $batch['userId']          = $this->getCurrentUser()->id;
         $batch['createdTime']     = time();
-        $batch['deadline']        = date("Y-m-d", strtotime($batch['deadline']) + 24 * 60 * 60);
+        $batch['deadline']        = date("Y-m-d", strtotime($batch['deadline']));
 
         $moneyCardIds = $this->makeRands($batch['cardLength'], $batch['number'], $batch['cardPrefix'], $moneyCardData['passwordLength']);
 
@@ -114,7 +114,7 @@ class MoneyCardServiceImpl extends BaseService
             $moneyCards[] = array(
                 'cardId'     => $cardid,
                 'password'   => $cardPassword,
-                'deadline'   => date('Y-m-d', strtotime($moneyCardData['deadline']) + 24 * 60 * 60),
+                'deadline'   => date('Y-m-d', strtotime($moneyCardData['deadline'])),
                 'cardStatus' => 'normal',
                 'batchId'    => $batch['id']
             );

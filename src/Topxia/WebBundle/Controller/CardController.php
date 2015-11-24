@@ -160,7 +160,7 @@ class CardController extends BaseController
 
         if (isset($cards['receive'])) {
             foreach ($cards['receive'] as $card) {
-                if ($card['deadline'] < $currentTime) {
+                if ($card['deadline'] + 86400 < $currentTime) {
                     $card['status'] = 'outdate';
                     $outDateCards[] = $card;
                 } else {
