@@ -53,6 +53,10 @@ define(function(require, exports, module) {
             });
         }
 
+        $('#set-bind-new-btn').click(function(){
+            $form.submit();
+        });
+
         validator.addItem({
             element: '#set-bind-nickname-field',
             required: true,
