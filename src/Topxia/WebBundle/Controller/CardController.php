@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -143,11 +144,14 @@ class CardController extends BaseController
         //     }
         // }
 
-        return $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+        $response = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
             'cardType'   => $cardType,
             'cardId'     => $cardId,
             'cardDetail' => $cardDetail
         ));
+
+        $response->headers->setCookie(new Cookie("modalOpened", '0'));
+        return $response;
     }
 
     protected function sortCards($cards)
