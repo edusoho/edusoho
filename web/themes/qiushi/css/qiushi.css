@@ -126,10 +126,10 @@ body {
   border-radius: 20px;
 }
 .color-danger {
-  color: #f55e5e;
+  color: #f55e5e !important;
 }
 .score i {
-  color: #f3b760;
+  color: #f3b760 !important;
 }
 .qs-header {
   height: 90px;
@@ -333,8 +333,8 @@ body {
 }
 .qs-course-block .course-img .course-tag-hot {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -1px;
+  left: -1px;
   width: 120px;
   height: 120px;
   background: url('/themes/qiushi/img/new/tag_hot.png') center center no-repeat;
@@ -347,6 +347,10 @@ body {
 .qs-course-block .course-info .title {
   font-size: 22px;
   margin-bottom: 20px;
+}
+.qs-course-block .course-info .title i {
+  font-size: 22px;
+  margin-right: 5px;
 }
 .qs-course-block .course-info .content {
   color: #919191;
@@ -369,7 +373,7 @@ body {
   background: url('/themes/qiushi/img/new/course_action_bg.png') top left no-repeat;
   z-index: -1;
 }
-.qs-course-block .course-action .price {
+.qs-course-block .course-action .course-price {
   position: absolute;
   top: 30px;
   right: -10px;
@@ -380,10 +384,11 @@ body {
   padding: 8px 20px;
   color: #fff;
 }
-.qs-course-block .course-action .price span {
+.qs-course-block .course-action .course-price .price {
+  color: #fff;
   font-size: 28px;
 }
-.qs-course-block .course-action .price:after {
+.qs-course-block .course-action .course-price:after {
   right: 100%;
   top: 50%;
   border: solid transparent;
@@ -398,7 +403,7 @@ body {
   margin-right: -1px;
 }
 .qs-course-block .course-action p {
-  margin: 140px auto 70px auto;
+  margin: 136px auto 70px auto;
 }
 .qs-course-block .course-action .btn {
   padding: 12px 25px;

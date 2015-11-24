@@ -1,7 +1,9 @@
 define(function(require, exports, module) {
     var Swiper = require('swiper');
-    
+    var Laryload = require('echo.js');
     exports.run = function() {
+        Laryload.init();
+        
         if ($(".es-poster .swiper-slide").length > 1) {
             var swiper = new Swiper('.es-poster.swiper-container', {
                 pagination: '.swiper-pager',

@@ -12,11 +12,11 @@ body {
 }
 
 .color-danger {
-  color: @brand-danger;
+  color: @brand-danger !important;
 }
 
 .score i {
-  color: @brand-warning;
+  color: @brand-warning !important;
 }
 
 // 头部
@@ -203,8 +203,8 @@ body {
     width: 40%;
     .course-tag-hot {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: -1px;
+      left: -1px;
       width: 120px;
       height: 120px;
       background: url('@{img-src}new/tag_hot.png') center center no-repeat;
@@ -217,6 +217,10 @@ body {
     .title {
       font-size: 22px;
       margin-bottom: 20px;
+      i {
+        font-size: 22px;
+        margin-right: 5px;
+      }
     }
     .content {
       color: @gray;
@@ -239,7 +243,7 @@ body {
       background: url('@{img-src}new/course_action_bg.png') top left no-repeat;
       z-index: -1;
     }
-    .price {
+    .course-price {
       position: absolute;
       top: 30px;
       right: -10px;
@@ -247,7 +251,8 @@ body {
       .border-radius(4px);
       padding: 8px 20px;
       color: #fff;
-      span {
+      .price {
+        color: #fff;
         font-size: 28px;
       }
       &:after {
@@ -266,7 +271,7 @@ body {
       }
     }
     p {
-      margin: 140px auto 70px auto;
+      margin: 136px auto 70px auto;
     }
     .btn {
       padding: 12px 25px;
