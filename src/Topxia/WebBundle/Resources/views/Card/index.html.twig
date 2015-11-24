@@ -15,16 +15,13 @@
 
     <div class="pull-right btn-group">
       <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == '' or app.request.query.get('filter') == 'all' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}'>全部</a>
-
       <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'useable' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}'>未使用</a>
-
       <a role="filter-change" class="btn btn-default {% if app.request.query
       .get('filter') == 'used' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}'>已使用</a>
-
       <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'outdate' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}'>已过期</a>
-
-      <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'invalid' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}'>已作废</a>
-
+      {% if app.request.query.get('cardType') == "moneyCard" %}
+        <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'invalid' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}'>已作废</a> 
+      {% endif %}
     </div>
   </div>
   <div class="card-pack-list">

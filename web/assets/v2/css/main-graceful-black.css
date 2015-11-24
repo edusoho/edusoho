@@ -7787,9 +7787,6 @@ textarea {
 .card-pack-item.coupon-item .title {
   padding-top: 38px;
 }
-.card-pack-item.coupon-item .price {
-  margin-bottom: 10px;
-}
 .card-pack-item.coupon-item .stamp-used {
   background: url('/assets/v2/img/card.png') no-repeat -140px -349px;
 }
