@@ -112,7 +112,6 @@ class CardController extends BaseController
             $higherTop    = $this->getCardService()->sortArrayByField($higherTop, 'decrease');
             $lowerTop     = $this->getCardService()->sortArrayByField($lowerTop, 'decrease');
             $useableCards = array_merge(array_reverse($higherTop), $lowerTop);
-            // $useableCards = array_reverse($this->getCardService()->sortArrayByField($useableCards, 'truePrice'));
         }
 
         return $this->render('TopxiaWebBundle:Order:order-item-coupon.html.twig', array(
@@ -131,18 +130,6 @@ class CardController extends BaseController
         $card     = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
-
-        // if (!empty($cardDetail)) {
-        //     if ($cardType == "moneyCard") {
-        //         if ($cardDetail['cardStatus'] == "receive") {
-        //             setcookie("receive", "success");
-        //         }
-        //     } else {
-        //         if ($cardDetail['status'] == "receive") {
-        //             setcookie("receive", "success");
-        //         }
-        //     }
-        // }
 
         $response = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
             'cardType'   => $cardType,
