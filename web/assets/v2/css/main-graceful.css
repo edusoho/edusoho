@@ -7811,13 +7811,25 @@ textarea {
   content: '';
   background: url('/assets/v2/img/card_user.png') center center no-repeat;
 }
+@media (max-width: 767px) {
+  .modal-card-pack.modal-logined .modal-content:after {
+    display: none;
+  }
+}
 .modal-card-pack .modal-content {
   position: relative;
-  padding: 30px;
   background: url('/assets/v2/img/card_bg.png') #feba37 center center no-repeat;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+}
+.modal-card-pack .modal-body {
+  padding: 30px;
+}
+@media (max-width: 767px) {
+  .modal-card-pack .modal-body {
+    padding: 15px;
+  }
 }
 .modal-card-pack .modal-body .modal-info {
   text-align: center;
@@ -7825,9 +7837,20 @@ textarea {
   font-size: 22px;
   margin-bottom: 30px;
 }
+@media (max-width: 767px) {
+  .modal-card-pack .modal-body .modal-info {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+}
 .modal-card-pack .modal-body .modal-action {
   margin-top: 30px;
   text-align: center;
+}
+@media (max-width: 767px) {
+  .modal-card-pack .modal-body .modal-action {
+    margin-top: 20px;
+  }
 }
 .es-poster {
   position: relative;
