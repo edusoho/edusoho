@@ -68,7 +68,6 @@ define(function(require, exports, module) {
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
-                markers: markers,
                 starttime: starttime,
                 agentInWhiteList: agentInWhiteList
             }
@@ -95,18 +94,7 @@ define(function(require, exports, module) {
         });
 
         player.on("firstplay", function(){
-             if (balloonVideoPlayer && markerUrl) {
-                $.ajax({
-                    type: "GET",
-                    url: markerUrl,
-                    async: true, 
-                    success: function (result) {
-                        if (result != null) {
-                            player.setMarkers(result);
-                        }
-                    }
-                });
-            }
+ 
         });
         
 

@@ -8,14 +8,6 @@
 	<div class="lesson-question-plugin-pane-thread">
 		<h5><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></h5>
 		<div class="lesson-question-plugin-pane-thread-content">{{ thread.content|raw }}</div>
-		{% if thread.marker|default(0) >0 %}
-		<p class="text-muted text-sm">
-			提问于
-			<a href="javascript:;" class="link-dark" data-role="marker-time" data-marker-time="{{ thread.marker}}">
-				<i class="es-icon es-icon-accesstime"></i> {{ thread.marker|duration }}
-			</a>
-		</p>
-		{% endif %}
 	</div>
 	
 	<div class="lesson-question-plugin-pane-posts">

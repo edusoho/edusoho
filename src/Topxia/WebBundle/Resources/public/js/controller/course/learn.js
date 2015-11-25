@@ -69,47 +69,9 @@ define(function(require, exports, module) {
             }
         },
 
-        onAskQuestion: function(e) {
-              var currentTime = -1;
-              var lessonType = this.get("type");
-             if (lessonType == "video") {
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                currentTime = Math.floor(player.getCurrentTime());
-                player.pause();
-             }
-
-             $('#modal').on('hidden.bs.modal', function (e) {
-                if (lessonType == "video") {
-                     player.play();
-                 }
-              });
-             $('#modal').on('onAskQuestionSuccess', function (e,result) {
-                if (lessonType == "video" && result.id) {
-                    var marker = {
-                        'id' : result.id,
-                        'time': result.marker,
-                        'text' : result.title
-                    };
-                    player.addMarker(new Array(marker));
-                }
-             });
-
-             var url = '/lessonplugin/question/ask?courseId=' + this.get('courseId') + '&lessonId=' + this.get('lessonId') + '&marker='+currentTime;
-             $.get(url, '', function(data){
-                $('#modal').html(data).modal({
-                    backdrop:true,
-                    keyboard:true,
-                    show:true
-                });
-              });
-             
-        },
-
         onFinishLesson: function(e) {
             var $btn = this.element.find('[data-role=finish-lesson]');
-            if ($btn.hasClass('btn-success')) {
-                this._onCancelLearnLesson();
-            } else {
+            if (!$btn.hasClass('btn-success')) {
                 this._onFinishLearnLesson();
             }
         },
@@ -147,6 +109,7 @@ define(function(require, exports, module) {
                 }
 
                 $btn.addClass('btn-success');
+                $btn.attr('disabled', true);
                 $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 
@@ -328,10 +291,6 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("ready", function(){
-                            if (self.get('starttime') && lesson.type == 'video') {
-                                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                                player.setStartTime(self.get('starttime'));
-                            }
                         });
 
                         messenger.on("ended", function(){
@@ -352,14 +311,6 @@ define(function(require, exports, module) {
                             player.playing = false;
                             that.set("player", player);
                         });
-
-                        $("#lesson-video-content").on('onMarkerTimeClick', function (e,markerTime) {
-                            if (markerTime>0) {
-                               var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                               player.setCurrentTime(markerTime);
-                            }
-                        });
-
                         that.set("player", {});
 
                     } else {
@@ -672,9 +623,11 @@ define(function(require, exports, module) {
                 var $finishButton = that.element.find('[data-role=finish-lesson]');
                 if (json.status != 'finished') {
                     $finishButton.removeClass('btn-success');
+                    $finishButton.attr('disabled',false);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 } else {
                     $finishButton.addClass('btn-success');
+                    $finishButton.attr('disabled',true);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 }
             }, 'json');

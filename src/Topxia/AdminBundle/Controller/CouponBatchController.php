@@ -1,58 +1,61 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class CouponBatchController extends BaseController 
-{	
-	public function indexAction (Request $request)
-	{	
+class CouponBatchController extends BaseController
+{
+    public function indexAction(Request $request)
+    {
         $conditions = $request->query->all();
 
-    	$paginator = new Paginator(
+        $paginator = new Paginator(
             $request,
             $this->getCouponService()->searchBatchsCount($conditions),
             20
         );
 
-    	$batchs = $this->getCouponService()->searchBatchs(
-    		$conditions, 
-    		array('createdTime', 'DESC'), 
-    		$paginator->getOffsetCount(),
-        	$paginator->getPerPageCount()
+        $batchs = $this->getCouponService()->searchBatchs(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
-		return $this->render('TopxiaAdminBundle:Coupon:index.html.twig', array(
-           'batchs' => $batchs,
-           'paginator' =>$paginator
-		));
-	}
+        return $this->render('TopxiaAdminBundle:Coupon:index.html.twig', array(
+            'batchs'    => $batchs,
+            'paginator' => $paginator
+        ));
+    }
 
-	public function deleteAction (Request $request,$id)
-	{
+    public function deleteAction(Request $request, $id)
+    {
         $result = $this->getCouponService()->deleteBatch($id);
         return $this->createJsonResponse(true);
-	}
+    }
 
-	public function checkPrefixAction(Request $request)
-	{
-		$prefix = $request->query->get('value');
-		$result = $this->getCouponService()->checkBatchPrefix($prefix);
+    public function checkPrefixAction(Request $request)
+    {
+        $prefix = $request->query->get('value');
+        $result = $this->getCouponService()->checkBatchPrefix($prefix);
+
         if ($result == true) {
             $response = array('success' => true, 'message' => '该前缀可以使用');
         } else {
             $response = array('success' => false, 'message' => '该前缀已存在');
         }
-        return $this->createJsonResponse($response);
-	}
 
-	public function generateAction (Request $request)
-	{   
+        return $this->createJsonResponse($response);
+    }
+
+    public function generateAction(Request $request)
+    {
         if ('POST' == $request->getMethod()) {
             $couponData = $request->request->all();
+
             if ($couponData['type'] == 'minus') {
                 $couponData['rate'] = $couponData['minus-rate'];
                 unset($couponData['minus-rate']);
@@ -63,8 +66,7 @@ class CouponBatchController extends BaseController
                 unset($couponData['discount-rate']);
             }
 
-            if ($couponData['targetType'] == 'course')
-            {
+            if ($couponData['targetType'] == 'course') {
                 $couponData['targetId'] = $couponData['courseId'];
                 unset($couponData['courseId']);
             }
@@ -73,10 +75,11 @@ class CouponBatchController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_coupon'));
         }
-		return $this->render('TopxiaAdminBundle:Coupon:generate.html.twig');
-	}
 
-    public function exportCsvAction(Request $request,$batchId)
+        return $this->render('TopxiaAdminBundle:Coupon:generate.html.twig');
+    }
+
+    public function exportCsvAction(Request $request, $batchId)
     {
         $batch = $this->getCouponService()->getBatch($batchId);
 
@@ -85,22 +88,23 @@ class CouponBatchController extends BaseController
             1,
             $batch['generatedNum']
         );
+        $coupons = array_map(function ($coupon) {
+            $exportCoupon['batchId'] = $coupon['batchId'];
+            $exportCoupon['deadline'] = date('Y-m-d', $coupon['deadline']);
+            $exportCoupon['code'] = $coupon['code'];
 
-        $coupons = array_map(function($coupon) {
-            $exportCoupon['batchId']  = $coupon['batchId'];
-            $exportCoupon['deadline'] = date('Y-m-d',$coupon['deadline']);
-            $exportCoupon['code']   = $coupon['code'];
             if ($coupon['status'] == 'unused') {
                 $exportCoupon['status'] = '未使用';
             } else {
-                $exportCoupon['status'] = '已使用'; 
+                $exportCoupon['status'] = '已使用';
             }
+
             return implode(',', $exportCoupon);
         }, $coupons);
 
         $exportFilename = "couponBatch-".$batchId."-".date("YmdHi").".csv";
 
-        $titles = array("批次","有效期至","优惠码","状态");
+        $titles = array("批次", "有效期至", "优惠码", "状态");
 
         $exportFile = $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
 
@@ -108,7 +112,7 @@ class CouponBatchController extends BaseController
     }
 
     protected function createExporteCSVResponse(array $header, array $data, $outputFilename)
-    {   
+    {
         $header = implode(',', $header);
 
         $str = $header."\r\n";
@@ -125,7 +129,7 @@ class CouponBatchController extends BaseController
     }
 
     public function detailAction(Request $request, $batchId)
-    {   
+    {
         $count = $this->getCouponService()->searchCouponsCount(array('batchId' => $batchId));
 
         $batch = $this->getCouponService()->getBatch($batchId);
@@ -135,18 +139,18 @@ class CouponBatchController extends BaseController
         $coupons = $this->getCouponService()->searchCoupons(
             array('batchId' => $batchId),
             array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),  
+            $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
+        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($coupons, 'targetId'));
 
         return $this->render('TopxiaAdminBundle:Coupon:coupon-modal.html.twig', array(
-            'coupons' => $coupons,
-            'batch' => $batch,
+            'coupons'   => $coupons,
+            'batch'     => $batch,
             'paginator' => $paginator,
-            'users' => $users,
-            'courses' => $courses
+            'users'     => $users,
+            'courses'   => $courses
         ));
     }
 
@@ -164,5 +168,4 @@ class CouponBatchController extends BaseController
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
-    
 }

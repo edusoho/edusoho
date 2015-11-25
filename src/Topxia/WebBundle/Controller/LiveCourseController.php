@@ -7,6 +7,7 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LiveCourseController extends BaseController
 {
@@ -196,13 +197,7 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播已结束!');
         }
 
-        $params = array(
-            'liveId' => $lesson['mediaId'], 
-            'provider' => $lesson['liveProvider'],
-            'user' => $user['email'],
-            'nickname' => $user['nickname'],
-        );
-
+        $params = array();
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             $params['role'] = 'teacher';
         } else if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
@@ -211,13 +206,22 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
 
-        if($this->setting("developer.cloud_api_failover", 0)) {
-            $client = new EdusohoLiveClient();
-            $result = $client->entryLive($params);
+        $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
+        if (!empty($liveAccount['provider']) && $liveAccount['provider'] == 'sanmang') {
+            $params['id'] = $user['id'];
+            $params['nickname'] = $user['nickname'];
+            return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
+        }
 
-            if (empty($result) || isset($result['error'])) {
-                return $this->createMessageResponse('info', $result['errorMsg']);
-            }
+        $params['liveId'] = $lesson['mediaId'];
+        $params['provider'] = $lesson['liveProvider'];
+        $params['user'] = $user['email'];
+        $params['nickname'] = $user['nickname'];
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryLive($params);
+        if (empty($result) || isset($result['error'])) {
+            return $this->createMessageResponse('info', $result['errorMsg']);
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
