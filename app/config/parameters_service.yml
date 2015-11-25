@@ -16,3 +16,4 @@ parameters:
         'Crontab.JobDao' : 'Mooc\Service\CrontabJob\Dao\Impl\CrontabJobDaoImpl'
         'Testpaper.TestpaperResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperResultDaoImpl'
         'Course.ThreadPostDao' : 'Mooc\Service\Course\Dao\Impl\ThreadPostDaoImpl'
+        'Course.ThreadDao' : 'Mooc\Service\Course\Dao\Impl\ThreadDaoImpl'
