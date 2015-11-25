@@ -71,7 +71,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('filepath', array($this, 'getFpath')),
             new \Twig_SimpleFunction('lazy_img', array($this, 'makeLazyImg'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('object_load', array($this, 'loadObject')),
-
             new \Twig_SimpleFunction('setting', array($this, 'getSetting')),
             new \Twig_SimpleFunction('set_price', array($this, 'getSetPrice')),
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
@@ -108,6 +107,9 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel'))
+            new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
+            new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
+            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork'))
         );
     }
 
@@ -1113,6 +1115,15 @@ class WebExtension extends \Twig_Extension
                 $default = "无";
             } else {
                 if ($order['amount'] > 0) {
+                    if ($order['payment'] == 'wxpay') {
+                        $default = "微信支付";
+                    } elseif ($order['payment'] == 'heepay') {
+                        $default = "网银支付";
+                    } elseif($order['payment'] == 'quickpay'){
+                        $default = "快捷支付";
+                    }else {
+                        $default = "支付宝";
+                    }
                 }
 
                 $default = "余额支付";
@@ -1128,7 +1139,7 @@ class WebExtension extends \Twig_Extension
                 } elseif ($order['payment'] == 'wxpay') {
                     $default = "微信支付";
                 } elseif ($order['payment'] == 'heepay') {
-                    $default = "在线支付";
+                    $default = "网银支付";
                 } elseif ($order['payment'] == 'quickpay') {
                     $default = "快捷支付";
                 } else {
