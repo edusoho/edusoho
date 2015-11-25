@@ -59,6 +59,7 @@ class LoginSuccessHandler
 
         $request   = $event->getRequest();
         $sessionId = $request->getSession()->getId();
+        $request->getSession()->set('loginIp', $request->getClientIp());
 
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
         $this->getUserService()->markLoginSuccess($user['id'], $request->getClientIp());
