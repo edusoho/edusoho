@@ -55,7 +55,7 @@
      <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
       <li class="active"><a href="#left" role="tab" data-toggle="tab">组件</a></li>
-      <li><a href="#color" role="tab" data-toggle="tab">配色方案</a></li>
+      <li><a href="#maincolor" role="tab" data-toggle="tab">配色方案</a></li>
       <a href="{{ path('admin_reset_currentTheme_config', {uri:themeUri}) }}" class="btn btn-primary pull-right">全部重置</a>
     </ul>
 
@@ -94,14 +94,14 @@
       </div>
 
 
-      <div class="tab-pane" id="color">
+      <div class="tab-pane" id="maincolor">
         <div class="panel panel-default">
           <form class="panel-body form-inline radios theme-custom-color-block">
             <div class="form-group">
               <div class="col-lg-3">
                 <label class="input-group check-box">
                   <span class="input-group-addon">
-                    <input type="radio" checked="checked" name="color" value="default">
+                    <input type="radio" checked="checked" name="maincolor" value="default">
                   </span>
                   <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#02b980; display:table-cell;height:35px"></div>
                 </label>
@@ -110,7 +110,7 @@
               <div class="col-lg-3">
                 <label class="input-group check-box">
                   <span class="input-group-addon">
-                    <input type="radio" name="color" value="black">
+                    <input type="radio" name="maincolor" value="black">
                   </span>
                   <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#333; display:table-cell;height:35px"></div>
                 </label>
@@ -119,7 +119,7 @@
               <div class="col-lg-3">
                 <label class="input-group check-box">
                   <span class="input-group-addon">
-                    <input type="radio" name="color" value="blue">
+                    <input type="radio" name="maincolor" value="blue">
                   </span>
                   <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#0093e8; display:table-cell;height:35px"></div>
                 </label>
@@ -128,7 +128,7 @@
               <div class="col-lg-3">
                 <label class="input-group check-box">
                   <span class="input-group-addon">
-                    <input type="radio" name="color" value="yellow">
+                    <input type="radio" name="maincolor" value="yellow">
                   </span>
                   <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#ffae00; display:table-cell;height:35px"></div>
                 </label>
@@ -138,7 +138,48 @@
           </form>
         </div>
 
+        <div class="panel panel-default">
+          <form class="panel-body form-inline radios theme-custom-navigationcolor-block">
+            <div class="form-group">
+              <div class="col-lg-3">
+                <label class="input-group check-box">
+                  <span class="input-group-addon">
+                    <input type="radio" checked="checked" name="navigationcolor" value="default">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#02b980; display:table-cell;height:35px"></div>
+                </label>
+              </div>
 
+              <div class="col-lg-3">
+                <label class="input-group check-box">
+                  <span class="input-group-addon">
+                    <input type="radio" name="navigationcolor" value="black">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#333; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+
+              <div class="col-lg-3">
+                <label class="input-group check-box">
+                  <span class="input-group-addon">
+                    <input type="radio" name="navigationcolor" value="blue">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#0093e8; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+             
+              <div class="col-lg-3">
+                <label class="input-group check-box">
+                  <span class="input-group-addon">
+                    <input type="radio" name="navigationcolor" value="yellow">
+                  </span>
+                  <div class="mod-cpanel-basic-color" data-color-scheme="orange" style="background:#ffae00; display:table-cell;height:35px"></div>
+                </label>
+              </div>
+
+            </div>  
+          </form>
+        </div>
       </div>
     </div>
   </div>

@@ -97,21 +97,6 @@ class ThemeController extends BaseController
         return $this->$code($config);
     }
 
-    public function getCurrentConfigColorAction($isEditColor = false)
-    {
-        $config = $this->getThemeService()->getCurrentThemeConfig();
-
-        if (!$isEditColor) {
-            $color = $config['confirmConfig']['color'];
-        } else {
-            $color = $config['config']['color'];
-        }
-
-        return $this->render("TopxiaWebBundle:Default:color.html.twig", array(
-            'color' => $color
-        ));
-    }
-
     protected function fiterCode($code)
     {
         $codes = explode('-', $code);
