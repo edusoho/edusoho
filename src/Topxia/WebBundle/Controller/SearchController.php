@@ -4,7 +4,6 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class SearchController extends BaseController
 {
@@ -110,159 +109,24 @@ class SearchController extends BaseController
             'page'        => $page
         );
 
-        $api    = CloudAPIFactory::create('root');
-        $result = $api->post('/spider/search', $conditions);
-
-        if (empty($result['success'])) {
-            throw new \RuntimeException('search不正确');
+        try {
+            list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
+        } catch (\Exception $e) {
+            return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
+                'keywords'     => $keywords,
+                'type'         => $type,
+                'errorMessage' => '搜索失败，请稍候再试.'
+            ));
         }
-
-        $courses = $result['data']['datas'];
-        $counts  = $result['data']['count'];
 
         $paginator = new Paginator($this->get('request'), $counts, 10);
 
         return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
             'keywords'  => $keywords,
             'type'      => $type,
-            'courses'   => $courses,
+            'resultSet' => $resultSet,
             'counts'    => $counts,
             'paginator' => $paginator
-        ));
-    }
-
-    public function cloudSearchCourseAction(Request $request)
-    {
-        $courses = $paginator = null;
-
-        $currentUser = $this->getCurrentUser();
-
-        $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
-
-        $type = $request->query->get('type', 'Course');
-
-        $conditions = array(
-            'category'    => $type,
-            'searchWords' => $keywords
-        );
-        var_dump($conditions);
-
-        $api    = CloudAPIFactory::create('root');
-        $result = $api->post('/spider/search', $conditions);
-
-        if (empty($result['success'])) {
-            throw new \RuntimeException('search不正确');
-        }
-
-        $courses = $result['data']['datas'];
-        $counts  = $result['data']['count'];
-        return $this->render('TopxiaWebBundle:Search:search-course.html.twig', array(
-            'type'     => $type,
-            'courses'  => $courses,
-            'keywords' => $keywords,
-            'counts'   => $counts
-        ));
-    }
-
-    public function cloudSearchTeacherAction(Request $request, $type)
-    {
-        $courses = $paginator = null;
-
-        $currentUser = $this->getCurrentUser();
-
-        $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
-
-        $type = $request->query->get('type', 'Teacher');
-
-        $conditions = array(
-            'category'    => $type,
-            'searchWords' => $keywords
-        );
-
-        $api    = CloudAPIFactory::create('root');
-        $result = $api->post('/spider/search', $conditions);
-
-        if (empty($result['success'])) {
-            throw new \RuntimeException('search不正确');
-        }
-
-        $teachers = $result['data']['datas'];
-        $counts   = $result['data']['count'];
-
-        return $this->render('TopxiaWebBundle:Search:search-teacher.html.twig', array(
-            'keywords' => $keywords,
-            'type'     => $type,
-            'teachers' => $teachers,
-            'counts'   => $counts
-        ));
-    }
-
-    public function cloudSearchTopicAction(Request $request, $type)
-    {
-        $courses = $paginator = null;
-
-        $currentUser = $this->getCurrentUser();
-
-        $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
-
-        $type = $request->query->get('type', 'Topic');
-
-        $conditions = array(
-            'category'    => $type,
-            'searchWords' => $keywords
-        );
-
-        $api    = CloudAPIFactory::create('root');
-        $result = $api->post('/spider/search', $conditions);
-
-        if (empty($result['success'])) {
-            throw new \RuntimeException('search不正确');
-        }
-
-        $topics = $result['data']['datas'];
-        $counts = $result['data']['count'];
-
-        return $this->render('TopxiaWebBundle:Search:search-topic.html.twig', array(
-            'keywords' => $keywords,
-            'type'     => $type,
-            'courses'  => array(),
-            'topics'   => $topics
-        ));
-    }
-
-    public function cloudSearchArticleAction(Request $request, $type)
-    {
-        $courses = $paginator = null;
-
-        $currentUser = $this->getCurrentUser();
-
-        $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
-
-        $type = $request->query->get('type', 'Article');
-
-        $conditions = array(
-            'category'    => $type,
-            'searchWords' => $keywords
-        );
-
-        $api    = CloudAPIFactory::create('root');
-        $result = $api->post('/spider/search', $conditions);
-
-        if (empty($result['success'])) {
-            throw new \RuntimeException('search不正确');
-        }
-
-        $articles = $result['data']['datas'];
-        $counts   = $result['data']['count'];
-
-        return $this->render('TopxiaWebBundle:Search:search-article.html.twig', array(
-            'keywords' => $keywords,
-            'type'     => $type,
-            'articles' => $articles
         ));
     }
 
@@ -294,5 +158,10 @@ class SearchController extends BaseController
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getSearchService()
+    {
+        return $this->getServiceKernel()->createService('Search.SearchService');
     }
 }
