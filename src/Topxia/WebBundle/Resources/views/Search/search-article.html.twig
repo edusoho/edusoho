@@ -1,9 +1,7 @@
 <div class="alert alert-blank alert-sm">
-  EduSoho教育云为您找到资讯结果约 <span class="color-danger">100,000</span>个
+  EduSoho教育云为您找到资讯结果约 <span class="color-danger">{{counts}}</span>个
 </div>
 {% for article in articles %}
 {% set category = categories[article.categoryId] %}
   {% include 'TopxiaWebBundle:Article/Widget:list-item.html.twig' %}
-{% else %}
-  <div class="empty">没有关于<span>'wqewqe'</span>的结果</div>
 {% endfor %}

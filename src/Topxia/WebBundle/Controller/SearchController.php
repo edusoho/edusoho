@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class SearchController extends BaseController
 {
@@ -16,7 +17,7 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type    = $request->query->get('type', 'course');
+        $type    = $request->query->get('type', 'Course');
         $pattern = $this->setting('magic.cloud_search');
 
         if ($pattern) {
@@ -101,11 +102,32 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type = $request->query->get('type', 'course');
+        $type       = $request->query->get('type', 'Course');
+        $page       = $request->query->get('page', '1');
+        $conditions = array(
+            'category'    => $type,
+            'searchWords' => $keywords,
+            'page'        => $page
+        );
+
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->post('/spider/search', $conditions);
+
+        if (empty($result['success'])) {
+            throw new \RuntimeException('search不正确');
+        }
+
+        $courses = $result['data']['datas'];
+        $counts  = $result['data']['count'];
+
+        $paginator = new Paginator($this->get('request'), $counts, 10);
 
         return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
-            'keywords' => $keywords,
-            'type'     => $type
+            'keywords'  => $keywords,
+            'type'      => $type,
+            'courses'   => $courses,
+            'counts'    => $counts,
+            'paginator' => $paginator
         ));
     }
 
@@ -118,72 +140,28 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type = $request->query->get('type', 'course');
-
-        $vip = $this->getAppService()->findInstallApp('Vip');
-
-        $isShowVipSearch = $vip && version_compare($vip['version'], "1.0.7", ">=");
-
-        $currentUserVipLevel = "";
-        $vipLevelIds         = "";
-
-        if ($isShowVipSearch) {
-            $currentUserVip      = $this->getVipService()->getMemberByUserId($currentUser['id']);
-            $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-            $vipLevels           = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-            $vipLevelIds         = ArrayToolkit::column($vipLevels, "id");
-        }
-
-        $parentId   = 0;
-        $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
-
-        $categoryIds = array();
-
-        foreach ($categories as $key => $category) {
-            $categoryIds[$key] = $category['name'];
-        }
-
-        $categoryId = $request->query->get('categoryIds');
-        $fliter     = $request->query->get('fliter');
+        $type = $request->query->get('type', 'Course');
 
         $conditions = array(
-            'status'     => 'published',
-            'title'      => $keywords,
-            'categoryId' => $categoryId,
-            'parentId'   => 0
+            'category'    => $type,
+            'searchWords' => $keywords
         );
+        var_dump($conditions);
 
-        if ($fliter == 'vip') {
-            $conditions['vipLevelIds'] = $vipLevelIds;
-        } elseif ($fliter == 'live') {
-            $conditions['type'] = 'live';
-        } elseif ($fliter == 'free') {
-            $conditions['price'] = '0.00';
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->post('/spider/search', $conditions);
+
+        if (empty($result['success'])) {
+            throw new \RuntimeException('search不正确');
         }
 
-        $count     = $this->getCourseService()->searchCourseCount($conditions);
-        $paginator = new Paginator(
-            $this->get('request'),
-            $count
-            , 12
-        );
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions,
-            'latest',
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
+        $courses = $result['data']['datas'];
+        $counts  = $result['data']['count'];
         return $this->render('TopxiaWebBundle:Search:search-course.html.twig', array(
-            'type'                => $type,
-            'courses'             => $courses,
-            'paginator'           => $paginator,
-            'keywords'            => $keywords,
-            'isShowVipSearch'     => $isShowVipSearch,
-            'currentUserVipLevel' => $currentUserVipLevel,
-            'categoryIds'         => $categoryIds,
-            'fliter'              => $fliter,
-            'count'               => $count
+            'type'     => $type,
+            'courses'  => $courses,
+            'keywords' => $keywords,
+            'counts'   => $counts
         ));
     }
 
@@ -196,12 +174,28 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type = $request->query->get('type', 'course');
+        $type = $request->query->get('type', 'Teacher');
+
+        $conditions = array(
+            'category'    => $type,
+            'searchWords' => $keywords
+        );
+
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->post('/spider/search', $conditions);
+
+        if (empty($result['success'])) {
+            throw new \RuntimeException('search不正确');
+        }
+
+        $teachers = $result['data']['datas'];
+        $counts   = $result['data']['count'];
 
         return $this->render('TopxiaWebBundle:Search:search-teacher.html.twig', array(
             'keywords' => $keywords,
             'type'     => $type,
-            'teachers' => array()
+            'teachers' => $teachers,
+            'counts'   => $counts
         ));
     }
 
@@ -214,13 +208,28 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type = $request->query->get('type', 'course');
+        $type = $request->query->get('type', 'Topic');
+
+        $conditions = array(
+            'category'    => $type,
+            'searchWords' => $keywords
+        );
+
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->post('/spider/search', $conditions);
+
+        if (empty($result['success'])) {
+            throw new \RuntimeException('search不正确');
+        }
+
+        $topics = $result['data']['datas'];
+        $counts = $result['data']['count'];
 
         return $this->render('TopxiaWebBundle:Search:search-topic.html.twig', array(
             'keywords' => $keywords,
             'type'     => $type,
             'courses'  => array(),
-            'topics'   => array()
+            'topics'   => $topics
         ));
     }
 
@@ -233,12 +242,27 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type = $request->query->get('type', 'course');
+        $type = $request->query->get('type', 'Article');
+
+        $conditions = array(
+            'category'    => $type,
+            'searchWords' => $keywords
+        );
+
+        $api    = CloudAPIFactory::create('root');
+        $result = $api->post('/spider/search', $conditions);
+
+        if (empty($result['success'])) {
+            throw new \RuntimeException('search不正确');
+        }
+
+        $articles = $result['data']['datas'];
+        $counts   = $result['data']['count'];
 
         return $this->render('TopxiaWebBundle:Search:search-article.html.twig', array(
             'keywords' => $keywords,
             'type'     => $type,
-            'articles' => array()
+            'articles' => $articles
         ));
     }
 
