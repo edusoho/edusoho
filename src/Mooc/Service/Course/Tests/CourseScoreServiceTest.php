@@ -1,8 +1,8 @@
 <?php
 namespace Mooc\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\BaseTestCase;
 
 class CourseScoreServiceTest extends BaseTestCase
 {
@@ -59,7 +59,7 @@ class CourseScoreServiceTest extends BaseTestCase
         $this->assertCount(1, $result);
     }
 
-    public function testFindUsersByOrganizationId()
+    public function testFindUsersScoreBySqlJoinUser()
     {
         list($user, $createCourse) = $this->publishCourse();
 
@@ -70,8 +70,9 @@ class CourseScoreServiceTest extends BaseTestCase
             'organizationId' => $organizationId,
             'about'          => 'test'
         );
-        $user   = $this->getUserService()->updateUserProfile($normalUser['id'], $fields);
-        $result = $this->getCourseScoreService()->findUsersByOrganizationId($organizationId);
+        $user = $this->getUserService()->updateUserProfile($normalUser['id'], $fields);
+
+        $result = $this->getCourseScoreService()->findUsersScoreBySqlJoinUser(array('courseId' => $createCourse['id'], 'organizationIds' => array($organizationId)));
         $this->assertEquals($result[0]['userId'], $user['id']);
     }
 
