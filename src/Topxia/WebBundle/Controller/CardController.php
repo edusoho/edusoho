@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,16 +19,20 @@ class CardController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
-        if (($cardType == 'coupon' || empty($cardType)) && !$this->isPluginInstalled('Coupon')) {
-            return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
-                'cards' => null
-            ));
+        if ($cardType == 'coupon' || empty($cardType)) {
+            if (!$this->isPluginInstalled('Coupon') || ($this->isPluginInstalled('Coupon') && version_compare($this->getWebExtension()->getPluginVersion('Coupon'), '1.3.3', '<='))) {
+                return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                    'cards' => null
+                ));
+            }
         }
 
-        if ($cardType == 'moneyCard' && !$this->isPluginInstalled('moneyCard')) {
-            return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
-                'cards' => null
-            ));
+        if ($cardType == 'moneyCard') {
+            if (!$this->isPluginInstalled('Coupon') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
+                return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
+                    'cards' => null
+                ));
+            }
         }
 
         if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
@@ -82,7 +87,7 @@ class CardController extends BaseController
             foreach ($cardDetails as $key => $value) {
                 if ($value['targetType'] == $targetType && ($value['targetId'] == 0 || $value['targetId'] == $targetId)) {
                     if ($value['type'] == 'minus') {
-                        $cardDetails[$key]['truePrice'] = $totalPrice > $value['rate'] ? $totalPrice - $value['rate'] : 0;
+                        $cardDetails[$key]['truePrice'] = $totalPrice - $value['rate'];
                         $useableCards[]                 = $cardDetails[$key];
                     } else {
                         $cardDetails[$key]['truePrice'] = $totalPrice * ($value['rate'] / 10);
@@ -91,7 +96,22 @@ class CardController extends BaseController
                 }
             }
 
-            $useableCards = array_reverse($this->getCardService()->sortArrayByField($useableCards, 'truePrice'));
+            $higherTop = array();
+            $lowerTop  = array();
+
+            foreach ($useableCards as $key => $useableCard) {
+                if ($useableCard['truePrice'] > 0) {
+                    $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
+                    $lowerTop[]                     = $useableCards[$key];
+                } else {
+                    $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
+                    $higherTop[]                    = $useableCards[$key];
+                }
+            }
+
+            $higherTop    = $this->getCardService()->sortArrayByField($higherTop, 'decrease');
+            $lowerTop     = $this->getCardService()->sortArrayByField($lowerTop, 'decrease');
+            $useableCards = array_merge(array_reverse($higherTop), $lowerTop);
         }
 
         return $this->render('TopxiaWebBundle:Order:order-item-coupon.html.twig', array(
@@ -103,9 +123,27 @@ class CardController extends BaseController
         ));
     }
 
+    public function cardInfoAction(Request $request)
+    {
+        $cardType = $request->query->get('cardType');
+        $cardId   = $request->query->get('cardId');
+        $card     = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
+
+        $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
+
+        $response = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+            'cardType'   => $cardType,
+            'cardId'     => $cardId,
+            'cardDetail' => $cardDetail
+        ));
+
+        $response->headers->setCookie(new Cookie("modalOpened", '0'));
+        return $response;
+    }
+
     protected function sortCards($cards)
     {
-        $cards       = $this->getCardService()->sortArrayByfield($cards, 'deadline');
+        $cards       = $this->getCardService()->sortArrayByfield($cards, 'createdTime');
         $cards       = ArrayToolkit::group($cards, 'status');
         $sortedCards = array();
 
@@ -117,7 +155,7 @@ class CardController extends BaseController
 
         if (isset($cards['receive'])) {
             foreach ($cards['receive'] as $card) {
-                if ($card['deadline'] < $currentTime) {
+                if ($card['deadline'] + 86400 < $currentTime) {
                     $card['status'] = 'outdate';
                     $outDateCards[] = $card;
                 } else {
@@ -135,5 +173,10 @@ class CardController extends BaseController
     protected function getCardService()
     {
         return $this->getServiceKernel()->createService('Card.CardService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

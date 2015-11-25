@@ -71,16 +71,19 @@ class UserLoginTokenListener
             return;
         }
 
-        if (empty($user['loginSessionId'])) {
+        $user = $this->getUserService()->getUser($user['id']);
+
+        if (empty($user['loginSessionId']) || strlen($user['loginSessionId']) <= 0) {
+            $sessionId = $request->getSession()->getId();
+            $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
+            $this->getUserService()->markLoginSuccess($user['id'], $request->getClientIp());
             return;
         }
 
-        if (empty($userLoginToken)) {
-            $REMEMBERME = $request->cookies->get('REMEMBERME');
+        $REMEMBERME = $request->cookies->get('REMEMBERME');
 
-            if (!empty($REMEMBERME)) {
-                return;
-            }
+        if (empty($userLoginToken) && !empty($REMEMBERME)) {
+            return;
         }
 
         if ($userLoginToken != $user['loginSessionId']) {

@@ -211,18 +211,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $thread;
     }
 
-    public function getMyMarkersByLessonId($lessonId)
-    {
-        $user       = $this->getCurrentUser();
-        $conditions = array(
-            'lessonId'         => $lessonId,
-            'userId'           => $user['id'],
-            'markerLargerThan' => -1
-        );
-
-        return MarkerSerialize::unserializes($this->getThreadDao()->searchThreads($conditions, array(array('marker', 'asc')), 0, 100));
-    }
-
     public function updateThread($courseId, $threadId, $fields)
     {
         $thread = $this->getThread($courseId, $threadId);
@@ -330,8 +318,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if ($sort == 'best') {
             $orderBy = array('score', 'DESC');
-        } else
-        if ($sort == 'elite') {
+        } elseif ($sort == 'elite') {
             $orderBy = array('createdTime', 'DESC', ',isElite', 'ASC');
         } else {
             $orderBy = array('createdTime', 'ASC');
@@ -491,28 +478,5 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
-    }
-}
-
-class MarkerSerialize
-{
-    public static function unserialize(array $thread)
-    {
-        return empty($thread) ? '' : array(
-            'id'   => $thread['id'],
-            'time' => $thread['marker'],
-            'text' => $thread['title']
-        );
-    }
-
-    public static function unserializes(array $threads)
-    {
-        $markers = array();
-
-        foreach ($threads as $key => $thread) {
-            $markers[$key] = MarkerSerialize::unserialize($thread);
-        }
-
-        return $markers;
     }
 }

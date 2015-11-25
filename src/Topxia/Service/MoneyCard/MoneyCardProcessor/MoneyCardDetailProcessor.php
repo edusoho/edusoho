@@ -7,23 +7,28 @@ use Topxia\Service\Card\DetailProcessor\DetailProcessor;
 
 class MoneyCardDetailProcessor implements DetailProcessor
 {
-	public function getDetailById($id)
-	{
-		return $this->getMoneyCardService()->getMoneyCard($id);
-	}
+    public function getDetailById($id)
+    {
+        $card         = $this->getMoneyCardService()->getMoneyCard($id);
+        $batch        = $this->getmoneyCardService()->getBatch($card['batchId']);
+        $card['coin'] = $batch['coin'];
+        return $card;
+    }
 
-	public function getCardDetailsByCardIds($ids)
-	{
-		$moneyCards = $this->getMoneyCardService()->getMoneyCardByIds($ids);
-		foreach ($moneyCards as $key => $card) {
-			$batch = $this->getmoneyCardService()->getBatch($card['batchId']);
-			$moneyCards[$key]['coin'] = $batch['coin'];
-		}
-		return  $moneyCards;
-	}
+    public function getCardDetailsByCardIds($ids)
+    {
+        $moneyCards = $this->getMoneyCardService()->getMoneyCardByIds($ids);
 
-	protected function getMoneyCardService()
-	{
-		return ServiceKernel::instance()->createService('MoneyCard.MoneyCardService');
-	}
+        foreach ($moneyCards as $key => $card) {
+            $batch                    = $this->getmoneyCardService()->getBatch($card['batchId']);
+            $moneyCards[$key]['coin'] = $batch['coin'];
+        }
+
+        return $moneyCards;
+    }
+
+    protected function getMoneyCardService()
+    {
+        return ServiceKernel::instance()->createService('MoneyCard.MoneyCardService');
+    }
 }
