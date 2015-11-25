@@ -46,7 +46,7 @@ class CourseMediaManageController extends BaseController
         return $this->createJsonResponse($files);
     }
 
-    public function importAction(Request $request, $id, $type = 'audio')
+    public function importAction(Request $request, $id)
     {
         $url = $request->query->get('url');
 
