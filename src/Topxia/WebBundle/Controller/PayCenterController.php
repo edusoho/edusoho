@@ -47,6 +47,14 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
 
+        if ($this->isPluginInstalled('Coupon') && !empty($order['coupon'])) {
+            $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
+
+            if ($result['useable'] == 'no') {
+                return $this->createMessageResponse('error', $result['message']);
+            }
+        }
+
         if ($order["amount"] == 0 && $order["coinAmount"] == 0) {
             $payData = array(
                 'sn'       => $order['sn'],
@@ -458,6 +466,11 @@ class PayCenterController extends BaseController
         }
 
         return $enableds;
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
     }
 
     protected function getAuthService()
