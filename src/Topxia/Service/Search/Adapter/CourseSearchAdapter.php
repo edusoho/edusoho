@@ -6,9 +6,18 @@ class CourseSearchAdapter extends AbstractSearchAdapter
     public function adapt(array $courses)
     {
         $adaptResult = array();
+        $user        = $this->getCurrentUser();
 
         foreach ($courses as $index => $course) {
-            array_push($adaptResult, $course);
+            $courseLocal = $this->getCourseService()->getCourse($course['courseId']);
+
+            if (!empty($courseLocal)) {
+                $course['rating']        = $courseLocal['rating'];
+                $course['ratingNum']     = $courseLocal['ratingNum'];
+                $course['studentNum']    = $courseLocal['studentNum'];
+                $course['middlePicture'] = $courseLocal['middlePicture'];
+                array_push($adaptResult, $course);
+            }
         }
 
         return $adaptResult;

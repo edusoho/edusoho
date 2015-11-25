@@ -8,11 +8,14 @@ class ArticleSearchAdapter extends AbstractSearchAdapter
         $adaptResult = array();
 
         foreach ($articles as $index => $article) {
-            $articleLocal             = $this->getArticleService()->getArticle($article['articleId']);
-            $article['publishedTime'] = $articleLocal['publishedTime'];
-            $article['thumb']         = $articleLocal['thumb'];
-            $article['category']      = array('name' => $article['category']);
-            array_push($adaptResult, $article);
+            $articleLocal = $this->getArticleService()->getArticle($article['articleId']);
+
+            if (!empty($articleLocal)) {
+                $article['publishedTime'] = $articleLocal['publishedTime'];
+                $article['thumb']         = $articleLocal['thumb'];
+                $article['category']      = array('name' => $article['category']);
+                array_push($adaptResult, $article);
+            }
         }
 
         return $adaptResult;
