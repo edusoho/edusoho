@@ -47,6 +47,42 @@ body {
       margin-left: -75px;
     }
   }
+  .navbar-mobile .nav a {
+    color: #fff;
+  }
+  .user-info {
+    position: absolute;
+    right: 50px;
+    top: 30px;
+    @media(max-width: @screen-sm-max) {
+      top: 20px;
+      right: 0;
+    }
+    .user-logined {
+      .dropdown-menu {
+        right: 0;
+        left: inherit;
+      }
+      >a {
+        padding: 30px 20px !important;
+        @media(max-width: @screen-md-max) {
+          padding: 30px 10px !important;
+        }
+        @media(max-width: @screen-sm-max) {
+          padding: 20px 8px !important;
+        }
+      }
+      i {
+        margin-right: 5px;
+      }
+    }
+    .user-login {
+      margin-top: 5px;
+      >a {
+        margin: 0 5px;
+      }
+    }
+  }
   .nav-left {
     float: left;
     width: 50%;
@@ -75,24 +111,14 @@ body {
       float: left;
     }
   }
+
   .qs-nav {
     // height: 90px;
     // overflow: hidden;
     // @media(max-width: @screen-sm-max) {
     //   height: 70px;
     // }
-    .user-li>a {
-      padding: 30px 20px !important;
-      @media(max-width: @screen-md-max) {
-        padding: 30px 10px !important;
-      }
-      @media(max-width: @screen-sm-max) {
-        padding: 20px 8px !important;
-      }
-      i {
-        margin-right: 5px;
-      }
-    }
+    
     >li>a {
       font-size: 16px;
       padding: 35px 20px;
