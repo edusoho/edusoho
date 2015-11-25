@@ -1,0 +1,25 @@
+.es-header {
+  background-color: #fff;
+}
+.es-header .nav.navbar-nav > li > a {
+  color: #616161;
+}
+.es-header .nav.navbar-nav > li.open.active > a,
+.es-header .nav.navbar-nav > li.open > a:hover,
+.es-header .nav.navbar-nav > li.open > a:focus,
+.es-header .nav.navbar-nav > li.open > a,
+.es-header .nav.navbar-nav > li.active > a,
+.es-header .nav.navbar-nav > li > a:hover,
+.es-header .nav.navbar-nav > li > a:focus {
+  color: #313131;
+}
+.es-header .nav.user-nav > li > a {
+  color: #616161;
+}
+.es-header .nav.user-nav > li > a:hover,
+.es-header .nav.user-nav > li > a:focus {
+  color: #313131;
+}
+.navbar-form .form-control:focus {
+  border-color: #e1e1e1;
+}
