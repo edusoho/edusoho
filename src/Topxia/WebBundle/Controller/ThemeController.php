@@ -46,12 +46,18 @@ class ThemeController extends BaseController
         $config = $this->getThemeService()->getCurrentThemeConfig();
 
         if (!$isEditColor) {
-            $color = $config['confirmConfig']['color'];
+            $color = array(
+                'maincolor'       => $config['confirmConfig']['maincolor'],
+                'navigationcolor' => $config['confirmConfig']['navigationcolor']
+            );
         } else {
-            $color = $config['config']['color'];
+            $color = array(
+                'maincolor'       => $config['config']['maincolor'],
+                'navigationcolor' => $config['config']['navigationcolor']
+            );
         }
 
-        return $this->render("TopxiaWebBundle:Default:color.html.twig", array(
+        return $this->render("TopxiaWebBundle:Default:stylesheet.html.twig", array(
             'color' => $color
         ));
     }
