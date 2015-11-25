@@ -97,8 +97,18 @@ class DefaultController extends BaseController
         $site  = $this->getSettingService()->get('site');
         $user  = $this->getCurrentUser();
         $token = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
-        $site  = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
-        $site  = urlencode(http_build_query($site));
+
+        if (empty($token)) {
+            return $this->render('TopxiaWebBundle:Default:message.html.twig', array(
+                'type'     => 'info',
+                'message'  => "访问次数过多，请稍候尝试",
+                'duration' => '',
+                'goto'     => ''
+            ));
+        }
+
+        $site = array('name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname);
+        $site = urlencode(http_build_query($site));
         return $this->redirect("http://www.edusoho.com/question?site=".$site."");
     }
 
