@@ -93,8 +93,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
-
-            new \Twig_SimpleFunction('getUserNickNameById', array($this, 'getUserNickNameById')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
             new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
             new \Twig_SimpleFunction('sub_str', array($this, 'subStr')),
@@ -106,7 +104,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('finger_print', array($this, 'getFingerprint')),
             new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
-            new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel'))
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork'))
@@ -1119,9 +1116,9 @@ class WebExtension extends \Twig_Extension
                         $default = "微信支付";
                     } elseif ($order['payment'] == 'heepay') {
                         $default = "网银支付";
-                    } elseif($order['payment'] == 'quickpay'){
+                    } elseif ($order['payment'] == 'quickpay') {
                         $default = "快捷支付";
-                    }else {
+                    } else {
                         $default = "支付宝";
                     }
                 }
