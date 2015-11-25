@@ -45,15 +45,27 @@ class ThemeController extends BaseController
     {
         $config = $this->getThemeService()->getCurrentThemeConfig();
 
+        if (!empty($config) && $config['name'] == '雅致简洁（商业主题）') {
+            if (!$isEditColor) {
+                $color = $config['confirmConfig']['color'];
+            } else {
+                $color = $config['config']['color'];
+            }
+
+            return $this->render("GracefulThemeBundle:Default:color.html.twig", array(
+                'color' => $color
+            ));
+        }
+
         if (!$isEditColor) {
             $color = array(
-                'maincolor'       => $config['confirmConfig']['maincolor'],
-                'navigationcolor' => $config['confirmConfig']['navigationcolor']
+                'maincolor'       => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['maincolor'],
+                'navigationcolor' => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['navigationcolor']
             );
         } else {
             $color = array(
-                'maincolor'       => $config['config']['maincolor'],
-                'navigationcolor' => $config['config']['navigationcolor']
+                'maincolor'       => empty($config['config']) ? '' : $config['config']['maincolor'],
+                'navigationcolor' => empty($config['config']) ? '' : $config['config']['navigationcolor']
             );
         }
 
