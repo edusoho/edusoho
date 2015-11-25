@@ -4,11 +4,11 @@
   <div class="modal-content">
     <div class="modal-body">
       <div class="modal-info">
-				<form class="form-horizontal" id="replay_manage_form" method="POST" action="{{ path('manage_replay_lesson') }}">
+				<form class="form-horizontal" id="replay_manage_form" method="POST" action="{{ path('manage_replay_lesson',{lessonId:lessonId,courseId:courseId}) }}">
 				  <div class="form-group">
 				  	{% for replayLesson in replayLessons %}
 				  		<label class="checkbox-inline">
-					  		<input type="checkbox" name="{{replayLesson.title}}" id="{{ replayLesson.id }}" value="{{ replayLesson.id }}"> {{ replayLesson.title }}
+					  		<input type="checkbox" name="{{replayLesson.id}}" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="visable"> {{ replayLesson.title }}
 						</label>
 				  	{% endfor %}
 				  </div>
@@ -17,7 +17,6 @@
 
 				 <button id="server-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#replay_manage_form">提交</button>
 				 <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
-				 <script>app.load('live-course-manage/replay-lesson-modal')</script>
 			</div>
 		</div>
 	</div>

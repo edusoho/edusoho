@@ -41,7 +41,7 @@
 		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 
 		{#{% if lesson.status =='published' and lesson.isEnd and lesson.type == 'live' and lesson.replayStatus == 'generated' %}#}
-			<a href="#modal" class="btn btn-link " title="编辑" data-toggle="modal" data-url="{{ path('show_replay_lessons',{ lessonId:lesson.id }) }}" ><span class="glyphicon glyphicon-eye-open"></span></a>
+			<a href="#modal" class="btn btn-link " title="编辑" data-toggle="modal" data-url="{{ path('show_replay_lessons',{ lessonId:lesson.id ,courseId:course.id}) }}" ><span class="glyphicon glyphicon-eye-open"></span></a>
 		{#{% endif %}#}
 
 		{% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live' and lesson.isEnd %}

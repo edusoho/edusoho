@@ -155,29 +155,33 @@ class LiveCourseLessonManageController extends BaseController
 
     public function replayLessonShowAction(Request $request, $lessonId)
     {
+        $courseId      = $request->query->get('courseId');
         $replayLessons = $this->getCourseService()->getCourseLessonReplayByLessonId($lessonId);
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:replay-lesson-modal.html.twig', array(
-            'replayLessons' => $replayLessons
+            'replayLessons' => $replayLessons,
+            'lessonId'      => $lessonId,
+            'courseId'      => $courseId
         ));
     }
 
     public function replayLessonManageAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $courseLessonReplayIds = $request->request->all();
+            $courseLessonReplay = $request->request->all();
+            $lessonId           = $request->query->get('lessonId');
+            $courseId           = $request->query->get('courseId');
+            $replayLessons      = $this->getCourseService()->getCourseLessonReplayByLessonId($lessonId);
 
-            foreach ($courseLessonReplayIds as $title => $id) {
-                $fields = array(
-                    'hidden' => 0
-                );
-                $this->getCourseService()->updateCourseLessonReplay($id, $fields);
+            foreach ($replayLessons as $replayLesson) {
+                $this->getCourseService()->updateCourseLessonReplay($replayLesson['id'], array('hidden' => 1));
             }
 
-            return $this->createJsonResponse(true);
+            foreach ($courseLessonReplay as $id => $hidden) {
+                $this->getCourseService()->updateCourseLessonReplay($id, array('hidden' => 0));
+            }
         }
 
-        return $this->render('AnywhereClientBundle:Setting:add-modal.html.twig', array(
-        ));
+        return $this->redirect($this->generateUrl('live_course_manage_replay', array('id' => $courseId)));
     }
 
     protected function getCourseService()
