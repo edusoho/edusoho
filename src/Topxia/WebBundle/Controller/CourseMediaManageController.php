@@ -48,28 +48,10 @@ class CourseMediaManageController extends BaseController
 
     public function importAction(Request $request, $id, $type = 'audio')
     {
-        $url  = $request->query->get('url');
-        $type = $request->query->get('type');
+        $url = $request->query->get('url');
 
-        if ($type == 'letv') {
-            $item = array(
-                "type"     => "video",
-                "source"   => "letv",
-                "uuid"     => "",
-                "name"     => "letv".md5(time().mt_rand(0, 1000)),
-                "summary"  => "",
-                "page"     => "",
-                "pictures" => array(
-                    "url" => ""),
-                "files"    => array(
-                    array(
-                        "url"  => $url,
-                        "type" => "swf"))
-            );
-        } else {
-            $proxy = new ParserProxy();
-            $item  = $proxy->parseItem($url);
-        }
+        $proxy = new ParserProxy();
+        $item  = $proxy->parseItem($url);
 
         return $this->createJsonResponse($item);
     }
