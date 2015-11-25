@@ -235,7 +235,16 @@ class CourseLessonController extends BaseController
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
 
         if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
-            $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+            $replaysLesson  = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+            $visableReplays = array();
+
+            foreach ($replaysLesson as $key => $value) {
+                if ($value['hidden'] == 1) {
+                    $visableReplays[] = $value;
+                }
+            }
+
+            $json['replays'] = $visableReplays;
 
             if (!empty($json['replays'])) {
                 foreach ($json['replays'] as $key => $value) {
