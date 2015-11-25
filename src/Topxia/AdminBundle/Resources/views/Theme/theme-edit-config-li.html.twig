@@ -10,8 +10,13 @@
   </div>
   <div class="col-md-3"></div>
   <div class="col-md-1">
-    {% if pendant.code not in ['login-box'] %}
-      <button class="btn btn-primary btn-sm item-edit-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %} data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('admin_theme_config_edit', {config:pendant})}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+    {% if pendant.code not in ['login-box']%}
+      {% if pendant.code != 'middle-banner' %}
+        <button class="btn btn-primary btn-sm item-edit-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %} data-title="Edit" data-toggle="modal" data-target="#modal" data-url="{{path('admin_themes_config_edit', {uri:uri|default(null),config:pendant})}}"><span class="glyphicon glyphicon-pencil"></span> 编辑</button>
+      {% elseif pendant.code == 'middle-banner' %}
+        <button class="btn btn-primary btn-sm" {% if not isChoiced|default(null) %}style="display:none;"{% endif %} id='middle-banner-edit' data-url="{{path('admin_block', {category:'all'|default('all')})}}"><span class="glyphicon glyphicon-wrench"></span> 设置</button>
+      {% endif %}
     {% endif %}
   </div>
+
 </li>

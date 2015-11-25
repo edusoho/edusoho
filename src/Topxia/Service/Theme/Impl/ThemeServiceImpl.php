@@ -2,7 +2,6 @@
 namespace Topxia\Service\Theme\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Theme\ThemeService;
 
 class ThemeServiceImpl extends BaseService implements ThemeService
@@ -10,35 +9,50 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     private $defaultConfig;
     private $allConfig;
     private $themeName;
-    public function __construct()  {
+    public function __construct()
+    {
         $currentTheme = $this->getSettingService()->get('theme');
 
         try {
-            $this->defaultConfig =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_default");
-            $this->allConfig =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_all");
-            $this->themeName =  $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_name");
+            $this->defaultConfig = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_default");
+            $this->allConfig     = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_all");
+            $this->themeName     = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_name");
         } catch (\Exception $e) {
             $this->defaultConfig = array();
-            $this->allConfig = array();
-            $this->themeName = null;
+            $this->allConfig     = array();
+            $this->themeName     = null;
         }
     }
+
     public function isAllowedConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
 
-        if(empty($this->themeName) && empty($this->defaultConfig)){
+        if (empty($this->themeName) && empty($this->defaultConfig)) {
             return false;
         }
+
         if (in_array($currentTheme['name'], array($this->themeName))) {
             return true;
         }
+
+        return false;
+    }
+
+    public function isAllowedGracefulConfig()
+    {
+        $currentTheme = $this->getSettingService()->get('theme');
+
+        if (in_array($currentTheme['name'], array('雅致简洁（商业主题）'))) {
+            return true;
+        }
+
         return false;
     }
 
     protected function getThemeConfigByName($name)
     {
-        $config = $this->getThemeConfigDao()->getThemeConfigByName($name);
+        $config              = $this->getThemeConfigDao()->getThemeConfigByName($name);
         $config['allConfig'] = $this->allConfig;
 
         if (empty($config['config'])) {
@@ -50,7 +64,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         }
 
         if (empty($config['name'])) {
-            $currentTheme = $this->getSettingService()->get('theme');
+            $currentTheme   = $this->getSettingService()->get('theme');
             $config['name'] = $currentTheme['name'];
         }
 
@@ -78,6 +92,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
             return $this->createThemeConfig($currentTheme['name'], $config);
         }
+
         return $this->editThemeConfig($currentTheme['name'], array(
             'config' => $config
         ));
@@ -91,7 +106,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             'confirmConfig' => $currentTheme['config']
         ));
     }
-    
+
     public function resetConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
@@ -101,25 +116,24 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     protected function createThemeConfig($name, $config)
     {
         return $this->getThemeConfigDao()->addThemeConfig(array(
-            'name' => $name,
-            'config' => $config,
-            'updatedTime' => time(),
-            'createdTime' => time(),
+            'name'          => $name,
+            'config'        => $config,
+            'updatedTime'   => time(),
+            'createdTime'   => time(),
             'updatedUserId' => $this->getCurrentUser()->id
         ));
     }
 
     protected function editThemeConfig($name, $config)
     {
-        $config['updatedTime'] = time();
+        $config['updatedTime']   = time();
         $config['updatedUserId'] = $this->getCurrentUser()->id;
         return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
     }
 
-
     protected function getThemeConfigDao()
     {
-        return $this->createDao('GracefulTheme:GracefulTheme.ThemeConfigDao');
+        return $this->createDao('Theme.ThemeConfigDao');
     }
 
     protected function getSettingService()

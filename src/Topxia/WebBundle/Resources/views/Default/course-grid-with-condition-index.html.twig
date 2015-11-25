@@ -6,6 +6,7 @@
   {% set categoryId = config.categoryId|default(null) %}
   {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
   {% set categoriesFirst = data('Categories',{'group':'course'})%}
+  {% set orderBy = config.orderBy|default(null)%}
 <div class="container">
   <div class="text-line">
     <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>

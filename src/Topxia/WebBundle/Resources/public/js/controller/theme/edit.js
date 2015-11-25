@@ -6,6 +6,10 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        $("#middle-banner-edit").on('click',function(){
+            window.open($(this).data('url'));
+        });
+
         var $list = $(".module-item-list").sortable({
             distance: 20,
             onDrop: function (item, container, _super) {
