@@ -239,7 +239,7 @@ class CourseLessonController extends BaseController
             $visableReplays = array();
 
             foreach ($replaysLesson as $key => $value) {
-                if ($value['hidden'] == 1) {
+                if ($value['hidden'] == 0) {
                     $visableReplays[] = $value;
                 }
             }
