@@ -369,4 +369,6 @@ interface CourseService
     public function deleteLessonReplayByLessonId($lessonId);
 
     public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+
+    public function updateCourseLessonReplay($id, $fields);
 }
