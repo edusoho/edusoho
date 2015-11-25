@@ -1,0 +1,24 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="modal-info">
+				<form class="form-horizontal" id="replay_manage_form" method="POST" action="{{ path('manage_replay_lesson') }}">
+				  <div class="form-group">
+				  	{% for replayLesson in replayLessons %}
+				  		<label class="checkbox-inline">
+					  		<input type="checkbox" name="{{replayLesson.title}}" id="{{ replayLesson.id }}" value="{{ replayLesson.id }}"> {{ replayLesson.title }}
+						</label>
+				  	{% endfor %}
+				  </div>
+				  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+				</form>
+
+				 <button id="server-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#replay_manage_form">提交</button>
+				 <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+				 <script>app.load('live-course-manage/replay-lesson-modal')</script>
+			</div>
+		</div>
+	</div>
+</div>

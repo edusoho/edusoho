@@ -2706,6 +2706,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courseMembers;
     }
 
+    public function updateCourseLessonReplay($id, $fields)
+    {
+        $argument     = $fields;
+        $replayCourse = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+
+        if (empty($replayCourse)) {
+            throw $this->createServiceException('录播回放不存在，更新失败！');
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('hidden'));
+
+        $updatedCourseLessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
+
+        return $updatedCourseLessonReplay;
+    }
+
     protected function isClassroomMember($course, $userId)
     {
         $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
