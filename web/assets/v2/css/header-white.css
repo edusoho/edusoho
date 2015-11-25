@@ -1,6 +1,9 @@
 .es-header {
   background-color: #fff;
 }
+.es-header .navbar-header .navbar-brand {
+  color: #313131;
+}
 .es-header .nav.navbar-nav > li > a {
   color: #616161;
 }
