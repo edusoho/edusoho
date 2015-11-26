@@ -106,14 +106,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
-            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
-            new \Twig_SimpleFunction('get_notification_template', array($this, 'getNotificationTemplate'))
+            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork'))
         );
-    }
-
-    public function getNotificationTemplate($type)
-    {
-        return ExtensionManager::instance()->getNotification($type);
     }
 
     public function isWithoutNetwork()

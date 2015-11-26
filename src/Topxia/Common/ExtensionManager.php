@@ -28,17 +28,17 @@ class ExtensionManager
     {
         $this->kernel  = $kernel;
         $this->bundles = array(
-            'DataTag'        => array(),
-            'StatusTemplate' => array(),
-            'DataDict'       => array(),
-            'Notification'   => array()
+            'DataTag'              => array(),
+            'StatusTemplate'       => array(),
+            'DataDict'             => array(),
+            'NotificationTemplate' => array()
         );
-        $this->booted          = false;
-        $this->statusTemplates = array();
-        $this->dataDict        = array();
-        $this->dataTagClassmap = array();
-        $this->dataTags        = array();
-        $this->notifications   = array();
+        $this->booted                = false;
+        $this->statusTemplates       = array();
+        $this->dataDict              = array();
+        $this->dataTagClassmap       = array();
+        $this->dataTags              = array();
+        $this->notificationTemplates = array();
     }
 
     public static function init($kernel)
@@ -63,7 +63,7 @@ class ExtensionManager
 
     public function renderStatus($status, $mode)
     {
-        $this->loadStatusTemplates();
+        $this->loadTemplates('statusTemplates');
 
         if (!isset($this->statusTemplates[$status['type']])) {
             return '无法显示该动态。';
@@ -105,19 +105,27 @@ class ExtensionManager
         return $this->dataTags[$name];
     }
 
-    public function getNotification($type)
+    public function renderNotifications($notification)
     {
-        if (isset($this->notifications[$type])) {
-            return $this->notifications[$type];
+        $this->loadTemplates('notificationTemplates');
+
+        if (!isset($this->notificationTemplates[$notification['type']])) {
+            return ' <li class="media">
+                      <div class="pull-left">
+                        <span class="glyphicon glyphicon-volume-down media-object"></span>
+                      </div>
+                      <div class="media-body">
+                        <div class="notification-body">
+                            无法显示该通知。
+                        </div>
+                      </div>
+                    </li>';
         }
 
-        $this->loadNotifications();
-
-        if (!isset($this->notifications[$type])) {
-            throw new \RuntimeException("通知类型`{$type}`尚未定义。");
-        }
-
-        return $this->notifications[$type];
+        return $this->kernel->getContainer()->get('templating')->render(
+            $this->notificationTemplates[$notification['type']],
+            array('notification' => $notification)
+        );
     }
 
     private function boot()
@@ -187,52 +195,22 @@ class ExtensionManager
         return $this->dataDict;
     }
 
-    private function loadStatusTemplates()
+    private function loadTemplates($type)
     {
         $this->boot();
 
-        if (!empty($this->statusTemplates)) {
-            return $this->statusTemplates;
+        if (!empty($this->$type)) {
+            return $this->$type;
         }
 
         $finder = new Finder();
         $finder->files()->name('*.tpl.html.twig')->depth('== 0');
 
-        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
+        $root       = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
+        $bundleName = substr(ucwords($type), 0, strlen(ucwords($type)) - 1);
 
-        foreach ($this->bundles['StatusTemplate'] as $bundle) {
-            $directory = $bundle->getPath().'/Extensions/StatusTemplate';
-
-            if (!is_dir($directory)) {
-                continue;
-            }
-
-            $finder->in($directory);
-        }
-
-        foreach ($finder as $file) {
-            $type                         = $file->getBasename('.tpl.html.twig');
-            $path                         = str_replace($root, '@root', $file->getRealPath());
-            $this->statusTemplates[$type] = $path;
-        }
-
-        return $this->statusTemplates;
-    }
-
-    private function loadNotifications()
-    {
-        $this->boot();
-
-        if (!empty($this->notifications)) {
-            return $this->notifications;
-        }
-
-        $finder = new Finder();
-        $finder->files()->name('item-*.html.twig')->depth('== 0');
-        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
-
-        foreach ($this->bundles['Notification'] as $bundle) {
-            $directory = $bundle->getPath().'/Resources/views/Notification';
+        foreach ($this->bundles[$bundleName] as $bundle) {
+            $directory = $bundle->getPath().'/Extensions/'.$bundleName;
 
             if (!is_dir($directory)) {
                 continue;
@@ -241,13 +219,21 @@ class ExtensionManager
             $finder->in($directory);
         }
 
+        $temp = array();
+
         foreach ($finder as $file) {
-            $type                       = substr($file->getBasename('item-*.html.twig'), 5, -10);
-            $path                       = str_replace($root, '@root', $file->getRealPath());
-            $this->notifications[$type] = $path;
+            $template        = $file->getBasename('.tpl.html.twig');
+            $path            = str_replace($root, '@root', $file->getRealPath());
+            $temp[$template] = $path;
         }
 
-        return $this->notifications;
+        if ($type == 'statusTemplates') {
+            $this->statusTemplates = $temp;
+        } elseif ($type == 'notificationTemplates') {
+            $this->notificationTemplates = $temp;
+        }
+
+        return $temp;
     }
 
     private function getExtensionalBundles()

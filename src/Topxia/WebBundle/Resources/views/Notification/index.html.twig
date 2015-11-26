@@ -12,11 +12,9 @@
       </div>
 
       <ul class="media-list notification-list">
+        {% set notifications = data('LastestNotifications', {notifications:notifications}) %}
         {% for notification in notifications %}
-          {% set notificationTemplate = get_notification_template(notification.type) %}
-
-          {% include notificationTemplate %}
-
+          {{ notification.message|raw }}
         {% else %}
           <li class="empty">暂无通知</li>
         {% endfor %}

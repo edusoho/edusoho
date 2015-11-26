@@ -8,7 +8,7 @@ class TopxiaWebBundle extends ExtensionalBundle
 {
     public function getEnabledExtensions()
     {
-        return array('DataTag', 'StatusTemplate', 'DataDict', 'Notification');
+        return array('DataTag', 'StatusTemplate', 'DataDict', 'NotificationTemplate');
     }
 
 }
