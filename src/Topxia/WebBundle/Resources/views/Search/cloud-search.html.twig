@@ -33,14 +33,8 @@
           <li {% if type == 'Article' %}class="article" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Article'}) }}" data-type="article" >资讯</a></li>
         </ul>
         <div class="search-result" id="search-result">
-        {% if type == 'Course' %}
-          {% include 'TopxiaWebBundle:Search:search-course.html.twig' %}
-        {% elseif type == 'Teacher' %}
-          {% include 'TopxiaWebBundle:Search:search-teacher.html.twig' %}
-        {% elseif type == 'Thread' %}
-          {% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}
-        {% elseif type == 'Article' %}
-          {% include 'TopxiaWebBundle:Search:search-article.html.twig' %}
+        {% if type %}
+          {% include 'TopxiaWebBundle:Search:search-' ~ type|lower ~ '.html.twig' %}
         {% endif %}
         </div>
         <nav class="text-center">

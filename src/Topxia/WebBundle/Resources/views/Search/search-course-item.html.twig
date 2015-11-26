@@ -1,9 +1,9 @@
 <div class="course-item clearfix">
     <div class="course-img">
-      <a href=""><img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt=""></a>
+      <a href="{{path('course_show',{id : course.courseId}) }}" target="_blank"><img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt=""></a>
     </div>
     <div class="course-info">
-      <h3 class="title"><a href="">{{course.title}}
+      <h3 class="title"><a href="{{path('course_show',{id : course.courseId}) }}" target="_blank">{{course.title}}
       {% if course.learning %}
         <small class="label label-primary label-xs">正在学</small>
       {% endif %}
@@ -16,7 +16,7 @@
       <ul class="ul-lesson">
       {% for lesson in course.lessons |slice(0, 3)%}
         <li>
-          <a class="link-light" href="">
+          <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
             <i class="es-icon es-icon-chevronright"></i>
             课时 {{lesson.number}}: {{lesson.title}}
           </a>
