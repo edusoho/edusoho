@@ -5,19 +5,18 @@
     <div class="modal-body">
       <div class="modal-info">
 				<form class="form-horizontal" id="replay_manage_form" method="POST" action="{{ path('manage_replay_lesson',{lessonId:lessonId,courseId:courseId}) }}">
-				  <div class="form-group">
 				  	{% for replayLesson in replayLessons %}
-				  		<label class="checkbox-inline">
+				  		<label class="checkbox-inline mlm">
 					  		<input type="checkbox" name="{{replayLesson.id}}" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="visable"> {{ replayLesson.title }}
 						</label>
 				  	{% endfor %}
-				  </div>
 				  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 				</form>
-
-				 <button id="server-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#replay_manage_form">提交</button>
-				 <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 			</div>
+		</div>
+		<div class="modal-footer">
+			<button id="server-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#replay_manage_form">提交</button>
+			<button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 		</div>
 	</div>
 </div>
