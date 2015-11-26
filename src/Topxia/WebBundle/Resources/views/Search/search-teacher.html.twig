@@ -3,12 +3,10 @@
 </div>
 <div class="teacher-list row">
   {% for teacher in resultSet %}
-  {% set profile = profiles[teacher.id] %}
-  {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
+  {% set profile = teacher.profile %}
+  {% set isFollowed = teacher.isFollowed|default(false) %}
     <div class="col-lg-3 col-md-4 col-sm-6">
       {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
     </div>
   {% endfor %}
 </div>
-
-

@@ -29,7 +29,7 @@
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
           <li {% if type == 'Course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Course'}) }}" data-type="course" >课程</a></li>
           <li {% if type == 'Teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Teacher'}) }}" data-type="teacher" >教师</a></li>
-          <li {% if type == 'Topic' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Topic'}) }}" data-type="topic" >话题</a></li>
+          <li {% if type == 'Thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Thread'}) }}" data-type="thread" >话题</a></li>
           <li {% if type == 'Article' %}class="article" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Article'}) }}" data-type="article" >资讯</a></li>
         </ul>
         <div class="search-result" id="search-result">
@@ -37,7 +37,7 @@
           {% include 'TopxiaWebBundle:Search:search-course.html.twig' %}
         {% elseif type == 'Teacher' %}
           {% include 'TopxiaWebBundle:Search:search-teacher.html.twig' %}
-        {% elseif type == 'Topic' %}
+        {% elseif type == 'Thread' %}
           {% include 'TopxiaWebBundle:Search:search-topic.html.twig' %}
         {% elseif type == 'Article' %}
           {% include 'TopxiaWebBundle:Search:search-article.html.twig' %}
