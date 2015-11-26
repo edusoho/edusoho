@@ -8,6 +8,7 @@ class ThreadSearchAdapter extends AbstractSearchAdapter
         $adaptResult = array();
 
         foreach ($threads as $index => $thread) {
+            $thread['id'] = $thread['threadId'];
             array_push($adaptResult, $thread);
         }
 
