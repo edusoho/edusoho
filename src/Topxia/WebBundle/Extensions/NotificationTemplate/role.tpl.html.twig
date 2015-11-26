@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+  	 您被<a href="{{path('user_show',{id:data.userId})}}">{{data.userName}}</a>设置为“{{data.role}}”身份。
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      您的打折活动<span class="text-success">「{{ data.name }}」</span>，已通过管理员审核。
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

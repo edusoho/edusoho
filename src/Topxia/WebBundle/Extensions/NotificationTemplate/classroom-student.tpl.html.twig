@@ -1,0 +1,34 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+
+      {% if data.type == 'create' %}
+          您被
+          <a href="{{ path('user_show', {id:data.userId}) }}" target='_blank'>
+            <strong>{{data.userName}}</strong>
+          </a>
+          加入{{setting("classroom.name")|default("班级")}}
+          <a href="{{ path('classroom_show', {id:data.classroomId}) }}" target='_blank'>
+             <strong>{{data.classroomTitle}}</strong>
+          </a>
+          成为正式学员
+      {% elseif data.type == 'remove'%}
+          您被
+          <a href="{{ path('user_show', {id:data.userId}) }}" target='_blank'>
+            <strong>{{data.userName}}</strong>
+          </a>
+          移出{{setting("classroom.name")|default("班级")}}
+          <a href="{{ path('classroom_show', {id:data.classroomId}) }}" target='_blank'>
+             <strong>{{data.classroomTitle}}</strong>
+          </a>
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>
