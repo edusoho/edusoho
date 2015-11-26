@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 			$(this).hide();
 			var replayId = $(this).data("replayId");
 			$("#replay-name-span-"+replayId).show();
-			$.post(self.data('url'), {id:replayId}, function(data){
+			$.post(self.data('url'), {id:replayId, title: self.val() }, function(data){
 				if(data == 'true'){
 					$("#replay-name-span-"+replayId).text(self.value);
 				}
