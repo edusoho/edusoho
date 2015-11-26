@@ -98,7 +98,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
         return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE code = ?  LIMIT 1";
             $block = $that->getConnection()->fetchAssoc($sql, array($code));
-            return $block ? $that->createSerializer()->unserialize($block, $this->serializeFields) : null;
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         }
         );
     }
