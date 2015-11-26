@@ -23,12 +23,9 @@ define(function(require, exports, module) {
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
-<<<<<<< HEAD
         var markerUrl = videoHtml.data('markerurl');
         var starttime = videoHtml.data('starttime');
-=======
         var agentInWhiteList = videoHtml.data('agentInWhiteList');
->>>>>>> release/6.8.4
 
         var markers = [{'id':0,text:'',time:-1}];
         var html = "";
@@ -71,12 +68,8 @@ define(function(require, exports, module) {
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
-<<<<<<< HEAD
-                markers: markers,
-                starttime: starttime
-=======
+                starttime: starttime,
                 agentInWhiteList: agentInWhiteList
->>>>>>> release/6.8.4
             }
         );
 
@@ -101,18 +94,7 @@ define(function(require, exports, module) {
         });
 
         player.on("firstplay", function(){
-             if (balloonVideoPlayer && markerUrl) {
-                $.ajax({
-                    type: "GET",
-                    url: markerUrl,
-                    async: true, 
-                    success: function (result) {
-                        if (result != null) {
-                            player.setMarkers(result);
-                        }
-                    }
-                });
-            }
+ 
         });
         
 

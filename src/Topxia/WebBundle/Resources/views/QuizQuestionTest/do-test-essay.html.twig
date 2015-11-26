@@ -78,7 +78,7 @@
 					{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 				</div>
 			</div>
-			<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|nl2br|raw }}</div>
+			<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
 		{% endif %}
 
 	{% else %}
@@ -107,7 +107,7 @@
 		    </div>
 		</div>
 	  </div>
-	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|nl2br|raw }}</div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw|nl2br }}</div>
 	  {% endif %}
 
 	  

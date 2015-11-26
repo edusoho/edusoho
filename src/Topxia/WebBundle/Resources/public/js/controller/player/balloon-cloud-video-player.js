@@ -42,22 +42,6 @@ define(function(require, exports, module) {
                     });
                 }
 
-                plugins = $.extend(plugins, {
-                  markers: {
-                        markers: self.get('markers'),
-                        markerTip: {
-                           display: true,
-                           text: function(marker) {
-                              return self.durationFormat(marker.time) +" "+ marker.text;
-                           },
-                           time: function(marker) {
-                              return marker&&marker.time?marker.time:0;
-                           }
-                        },
-                    }
-                });
-                
-
                 if(self.get('fingerprint') != '') {
                     plugins = $.extend(plugins, {
                         fingerprint: {

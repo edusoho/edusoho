@@ -183,18 +183,34 @@ define(function(require, exports, module) {
 		});
 
 		$("#coupon-code-btn").click(function(e){
+			// $('[role="cancel-coupon"]').trigger('click');
+			$('[role="coupon-price"]').find("[role='price']").text("0.00");
+			$('[role="code-notify"]').text("").removeClass('alert-success');
+			$('[role="coupon-code"]').val("");
+			$('[role="cancel-coupon"]').hide();
+			$('[role="coupon-code-verified"]').val("");
+			$('[role="coupon-code-input"]').val("");
+			conculatePrice();
 			$('[role="coupon-code"]').show();
 			$('[role="coupon-code-input"]').focus();
-			$('[role="no-use-coupon-code"]').hide();
+			// $('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
+			$('[role="null-coupon-code"]').hide();
+
 			// $('[role="code-notify"]').show();
 			$(this).hide();
 		})
 
 		$('[role="cancel-coupon"]').click(function(e){
+			if($('#coupon-select').val() != "") {
+				couponCode = $('[role="coupon-code-input"]');
+				couponCode.val(couponDefaultSelect);
+				$('button[role="coupon-use"]').trigger('click');
+			}
 			$('[role="coupon-code"]').hide();
-			$('[role="no-use-coupon-code"]').show();
+			// $('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
+			$('[role="null-coupon-code"]').show();
 			$('[role="code-notify"]').hide();
 			$('[role="coupon-price"]').find("[role='price']").text("0.00");
 			$('[role="code-notify"]').text("");
@@ -203,6 +219,7 @@ define(function(require, exports, module) {
 			$('[role="coupon-code-verified"]').val("");
 			$('[role="coupon-code-input"]').val("");
 			conculatePrice();
+
 		});
 
 		$('button[role="coupon-use"]').click(function(e){
@@ -233,11 +250,17 @@ define(function(require, exports, module) {
 				conculatePrice();
 			})
 		})
-	
+		
+		var couponDefaultSelect = $('#coupon-select').val();
+		if(couponDefaultSelect != "") {
+			couponCode = $('[role="coupon-code-input"]');
+			couponCode.val(couponDefaultSelect);
+			$('button[role="coupon-use"]').trigger('click');
+		}
+
 		$('#coupon-select').change(function(e){
 			//新添加js
 			var coupon = $(this).children('option:selected');
-			console.log(coupon);
 			if(coupon.data('code') == "")
 			{
 
@@ -248,6 +271,8 @@ define(function(require, exports, module) {
 			couponCode = $('[role="coupon-code-input"]');
 			couponCode.val(coupon.data('code'));
 			$('button[role="coupon-use"]').trigger('click');
+			$('[role="code-notify"]').removeClass('alert-success');
+
 
 			// data.targetType = coupon.data('targetType');
 			// data.targetId = coupon.data('targetId');

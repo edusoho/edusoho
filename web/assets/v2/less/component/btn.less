@@ -24,11 +24,22 @@
   // }
 }
 
+.btn-ghost-white {
+  color: #fff;
+  border: 2px solid #fff;
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
 .btn-link {
   color: @gray-darker;
   &:hover, 
   &:focus,
-  &.focus, {
+  &.focus {
     color: @brand-primary;
     text-decoration: none;
   }

@@ -102,6 +102,11 @@ class MoneyCardDaoImpl extends BaseDao
         $this->getConnection()->update($this->table, $fields, $identifier);
     }
 
+    public function deleteMoneyCardsByBatchId($id)
+    {
+        return $this->getConnection()->delete($this->table, array('batchId' => $id));
+    }
+
     public function deleteBatchByCardStatus($fields)
     {
         $sql = "DELETE FROM ".$this->table." WHERE batchId = ? AND cardStatus != ?";
@@ -119,6 +124,7 @@ class MoneyCardDaoImpl extends BaseDao
                     ->andWhere('id = :id')
                     ->andWhere('rechargeUserId = :rechargeUserId')
                     ->andWhere('cardId = :cardId')
+                    ->andWhere('cardStatus = :cardStatus')
                     ->andWhere('deadline = :deadline')
                     ->andWhere('batchId = :batchId')
                     ->andWhere('deadline <= :deadlineSearchEnd')
