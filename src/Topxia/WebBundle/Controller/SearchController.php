@@ -118,6 +118,11 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
+            return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
+                'keywords'     => $keywords,
+                'type'         => $type,
+                'errorMessage' => '搜索失败，请稍候再试.'
+            ));
         }
 
         $paginator = new Paginator($this->get('request'), $counts, 10);

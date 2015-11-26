@@ -20,6 +20,7 @@ class TeacherSearchAdapter extends AbstractSearchAdapter
         }
 
         foreach ($teachers as $index => $teacher) {
+            $teacher['id']          = $teacher['userId'];
             $teacher['profile']     = $userProfiles[$teacher['userId']];
             $teacher['largeAvatar'] = $users[$teacher['userId']]['largeAvatar'];
             $teacher['isFollowed']  = in_array($teacher['userId'], $myFollowings);
