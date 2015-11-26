@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
-		$("span[role='replay-name-span']").click(function(){
+		$("a[role='replay-name-span']").click(function(){
 			var replayId = $(this).data("replayId");
 			$(this).hide();
 			$("#replay-name-input-"+replayId).show();

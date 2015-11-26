@@ -178,7 +178,12 @@ class LiveCourseLessonManageController extends BaseController
 
     public function updateLessonReplayAction(Request $request, $courseId, $lessonId, $replayId)
     {
-        $title  = $request->request->get('title');
+        $title = $request->request->get('title');
+
+        if (empty($title)) {
+            return $this->createJsonResponse(false);
+        }
+
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $this->getCourseService()->updateCourseLessonReplay($replayId, array('title' => $title));
         return $this->createJsonResponse(true);
