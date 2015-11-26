@@ -3,9 +3,9 @@
 </div>
 
 <ul class="nav nav-pills mbl js-nav-pills">
-	<li class="active"><a href="{{path('cloud_search',{q : keywords,type : type})}}" data-url="">全部话题</a></li>
-	<li><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'group'})}}" data-url="">小组话题</a></li>
-	<li><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'common'})}}" data-url="">班级话题</a></li>
+	<li {% if not targetType %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type})}}" data-url="">全部话题</a></li>
+	<li {% if targetType =='group' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'group'})}}" data-url="">小组话题</a></li>
+	<li {% if targetType =='common' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'common'})}}" data-url="">班级话题</a></li>
 </ul>
 
 <div class="media-list">

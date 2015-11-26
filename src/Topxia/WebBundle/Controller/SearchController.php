@@ -103,6 +103,8 @@ class SearchController extends BaseController
 
         $type       = $request->query->get('type', 'Course');
         $page       = $request->query->get('page', '1');
+        $targetType = $request->query->get('targetType', '');
+
         $conditions = array(
             'category'    => $type,
             'searchWords' => $keywords,
@@ -112,6 +114,8 @@ class SearchController extends BaseController
         if ($type == 'Teacher') {
             $conditions['category'] = 'User';
             $conditions['role']     = 'ROLE_TEACHER';
+        } elseif ($type == 'Thread' && !empty($targetType)) {
+            $conditions['targetType'] = $targetType;
         }
 
         $counts = 0;
@@ -128,11 +132,12 @@ class SearchController extends BaseController
         $paginator = new Paginator($this->get('request'), $counts, 10);
 
         return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
-            'keywords'  => $keywords,
-            'type'      => $type,
-            'resultSet' => $resultSet,
-            'counts'    => $counts,
-            'paginator' => $paginator
+            'keywords'   => $keywords,
+            'type'       => $type,
+            'resultSet'  => $resultSet,
+            'counts'     => $counts,
+            'paginator'  => $paginator,
+            'targetType' => $targetType
         ));
     }
 
