@@ -42,6 +42,9 @@
             {% if theme.uri == 'jianmo' and currentTheme.uri == 'jianmo' %}
             <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >管理</a>
             {% endif %}
+            {% if theme.uri == 'graceful' and currentTheme.uri == 'graceful' %}
+            <a href="{{ path('admin_edit_theme') }}"class="btn btn-primary" >管理</a>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
