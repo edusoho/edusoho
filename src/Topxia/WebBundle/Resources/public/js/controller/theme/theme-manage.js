@@ -44,12 +44,13 @@ define(function(require, exports, module) {
         },
 
         _saveConfig: function() {
-            var configs = {color: '', blocks:{left:[], right:[]}, bottom: ''};
+            var configs = {maincolor: '',navigationcolor:'', blocks:{left:[], right:[]}, bottom: ''};
 
             configs.blocks.left = this._getBlockConfig(this.$('.theme-custom-left-block'));
             //configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
             //configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
-            configs.color = this._getColorConfig(this.$('.theme-custom-color-block'));
+            configs.maincolor = this._getColorConfig(this.$('.theme-custom-color-block'));
+            configs.navigationcolor = this._getColorConfig(this.$('.theme-custom-navigationcolor-block'));
             this.set('config', configs,{override: true});
         },
 
@@ -82,7 +83,8 @@ define(function(require, exports, module) {
 
         _setupColorConfig: function() {
             var config = this.get('config');
-            this.$('.theme-custom-color-block').find('input[type=radio][value='+config.color+']').prop('checked', true);
+            this.$('.theme-custom-color-block').find('input[type=radio][value='+config.maincolor+']').prop('checked', true);
+            this.$('.theme-custom-navigationcolor-block').find('input[type=radio][value='+config.navigationcolor+']').prop('checked', true);
         },
 
         _getBlockConfig: function($block) {

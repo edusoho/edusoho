@@ -51,9 +51,6 @@ a:focus {
 .course-detail-header .course-data > li > a:hover {
   color: #7cb132;
 }
-.score i {
-  color: #7cb132;
-}
 .es-tabs .tab-header > ul > li > a:hover {
   color: #7cb132;
 }
@@ -101,6 +98,43 @@ a:focus {
 }
 .badge-primary {
   background-color: #7cb132;
+}
+.es-filter .nav-sort > li > a:hover,
+.es-filter .nav-sort > li > a.active {
+  background-color: #7cb132;
+  color: #fff;
+}
+.es-filter .filter label:hover {
+  color: #7cb132;
+}
+.class-header.after .class-data > li > a:hover {
+  color: #7cb132;
+}
+.class-header .class-data > li .dropdown-toggle:hover {
+  color: #7cb132;
+}
+.progress-bar,
+.rank_num {
+  background-color: #7cb132;
+}
+.bar-task .bar-task-header,
+.bar-task .bar-time-line > li:before {
+  background-color: #7cb132;
+}
+.bar-task .bar-time-line > li .es-icon {
+  color: #7cb132;
+}
+.nav-filter .nav-pills > li.dropdown > a:hover {
+  color: #7cb132;
+}
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu > li > a:hover {
+  background-color: #7cb132;
+}
+.page-header .badge {
+  background-color: #7cb132 !important;
 }
 body {
   background-color: #f1f2f6;

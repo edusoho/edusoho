@@ -1,0 +1,34 @@
+@gray-base:             #000;
+@gray-darker:           #313131;
+@gray-dark:             #616161;
+@gray:                  #919191;
+@gray-medium:           #c1c1c1;
+@gray-light:            #e1e1e1;
+@gray-lighter:          #f1f1f1;
+@bg-color:              #fafafa;
+
+.es-header {
+  background-color: #ff8738;
+  .nav.navbar-nav > li {
+    >a {
+      color: #f1f1f1;
+    }
+    &.open.active >a,
+    &.open>a:hover, 
+    &.open>a:focus,
+    &.open>a,
+    &.active >a,
+    >a:hover, 
+    >a:focus {
+      color: #fff;
+    }
+  }
+  .nav.user-nav > li > a {
+    color: #f1f1f1;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+}
+

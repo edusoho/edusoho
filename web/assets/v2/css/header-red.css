@@ -1,0 +1,22 @@
+.es-header {
+  background-color: #ec483c;
+}
+.es-header .nav.navbar-nav > li > a {
+  color: #f1f1f1;
+}
+.es-header .nav.navbar-nav > li.open.active > a,
+.es-header .nav.navbar-nav > li.open > a:hover,
+.es-header .nav.navbar-nav > li.open > a:focus,
+.es-header .nav.navbar-nav > li.open > a,
+.es-header .nav.navbar-nav > li.active > a,
+.es-header .nav.navbar-nav > li > a:hover,
+.es-header .nav.navbar-nav > li > a:focus {
+  color: #fff;
+}
+.es-header .nav.user-nav > li > a {
+  color: #f1f1f1;
+}
+.es-header .nav.user-nav > li > a:hover,
+.es-header .nav.user-nav > li > a:focus {
+  color: #fff;
+}

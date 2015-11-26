@@ -3,7 +3,8 @@ parameters:
   theme_jianmo_name: "简墨"
 
   theme_jianmo_default:
-    color: default
+    maincolor: default
+    navigationcolor: default
     blocks:
       left:
         - title: ""
@@ -38,7 +39,8 @@ parameters:
     bottom: simple
 
   theme_jianmo_all:
-    color: default
+    maincolor: default
+    navigationcolor: default
     blocks:
       left:
         - title: ""
