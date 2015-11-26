@@ -83,7 +83,8 @@ define(function(require, exports, module) {
 
         _setupColorConfig: function() {
             var config = this.get('config');
-            this.$('.theme-custom-color-block').find('input[type=radio][value='+config.color+']').prop('checked', true);
+            this.$('.theme-custom-color-block').find('input[type=radio][value='+config.maincolor+']').prop('checked', true);
+            this.$('.theme-custom-navigationcolor-block').find('input[type=radio][value='+config.navigationcolor+']').prop('checked', true);
         },
 
         _getBlockConfig: function($block) {
