@@ -26,5 +26,5 @@ interface CourseLessonReplayDao
 
     public function updateCourseLessonReplay($id, $fields);
 
-    public function updateCourseLessonReplayByLessonId($lessonId, $fields)
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields);
 }
