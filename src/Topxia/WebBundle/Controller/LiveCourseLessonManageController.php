@@ -155,6 +155,12 @@ class LiveCourseLessonManageController extends BaseController
 
     public function editLessonReplayAction(Request $request, $lessonId, $courseId)
     {
+        $currentUser = $this->getCurrentUser();
+
+        if (empty($currentUser)) {
+            throw $this->createServiceException('用户不存在或者尚未登录，请先登录');
+        }
+
         if ($request->getMethod() == 'POST') {
             $courseLessonReplay = $request->request->all();
             $this->getCourseService()->updateCourseLessonReplayByLessonId($lessonId, array('hidden' => 1));
