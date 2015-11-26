@@ -9,10 +9,10 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
     protected function createRecentPostNum($ip, $type)
     {
         $fields = array(
-            'ip' => $ip,
-            'type' => $type,
-            'num' => 0,
-            'createdTime' => time(),
+            'ip'          => $ip,
+            'type'        => $type,
+            'num'         => 0,
+            'createdTime' => time()
         );
         return $this->getRecentPostNumDao()->addRecentPostNum($fields);
     }
@@ -28,21 +28,23 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
         foreach ($postNumRules['rules'] as $key => $value) {
             if ($key == $type) {
                 $rules = $postNumRules['rules'][$key];
+
                 foreach ($rules as $ruleName => $rule) {
                     if (empty($rule['postNum'])) {
                         continue;
                     }
 
-                    $ruleName = "{$key}.{$ruleName}";
+                    $ruleName      = "{$key}.{$ruleName}";
                     $recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $ruleName);
+
                     if (empty($recentPostNum)) {
                         $recentPostNum = $this->createRecentPostNum($ip, $ruleName);
                     }
+
                     $this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
                 }
             }
         }
-
     }
 
     public function hasToken($ip, $type)
@@ -52,6 +54,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
         }
 
         $postNumRules = $this->getSettingService()->get("post_num_rules");
+
         if (!isset($postNumRules['rules'])) {
             return true;
         }
@@ -59,10 +62,12 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
         foreach ($postNumRules['rules'] as $key => $value) {
             if ($key == $type) {
                 $rules = $postNumRules['rules'][$key];
+
                 foreach ($rules as $ruleName => $rule) {
                     if (empty($rule['postNum'])) {
                         continue;
                     }
+
                     if (!$this->confirmRule($ip, "{$key}.{$ruleName}", $rule)) {
                         return false;
                     }
@@ -75,8 +80,8 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
     protected function confirmRule($ip, $type, $postNumRule)
     {
-
         $recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
+
         if (empty($recentPostNum)) {
             return true;
         }
@@ -96,9 +101,11 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
     protected function getIpBlacklist()
     {
         $postNumRules = $this->getSettingService()->get("post_num_rules");
+
         if (isset($postNumRules["ipBlackList"])) {
             return $postNumRules["ipBlackList"];
         }
+
         return array();
     }
 
@@ -109,7 +116,6 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
     protected function getSettingService()
     {
-        return $this->createDao('System.SettingService');
+        return $this->createService('System.SettingService');
     }
-
 }
