@@ -181,7 +181,7 @@ class LiveCourseLessonManageController extends BaseController
         $title = $request->request->get('title');
 
         if (empty($title)) {
-            return $this->createJsonResponse(true);
+            return $this->createJsonResponse(false);
         }
 
         $course = $this->getCourseService()->tryManageCourse($courseId);
