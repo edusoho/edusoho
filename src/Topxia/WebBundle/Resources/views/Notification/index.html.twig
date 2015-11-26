@@ -12,12 +12,9 @@
       </div>
 
       <ul class="media-list notification-list">
+        {% set notifications = data('LastestNotifications', {notifications:notifications}) %}
         {% for notification in notifications %}
-          {% if notification.type == 'teacher-audit' %}
-          {% include 'TeacherAuditBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
-          {% else %}
-          {% include 'TopxiaWebBundle:Notification:item-' ~ notification.type ~ '.html.twig' %}
-          {% endif %}
+          {{ notification.message|raw }}
         {% else %}
           <li class="empty">暂无通知</li>
         {% endfor %}

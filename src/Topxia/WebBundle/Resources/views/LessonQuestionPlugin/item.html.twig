@@ -6,12 +6,6 @@
 		<div class="metas">
 			{{ web_macro.user_link(user) }} 发表于 {{ thread.createdTime|smart_time }}
 			<span class="bullet">•</span>
-			{% if thread.marker|default(0) >0 %}
-			提问于
-			<a href="javascript:;" class="link-dark mhs" data-role="marker-time" data-marker-time="{{ thread.marker}}">
-				<i class="es-icon es-icon-accesstime"></i> {{ thread.marker|duration }}
-			</a>
-			{% endif %}
 			<a href="#">{{ thread.postNum }}回答</a>
 		</div>
 	</div>
