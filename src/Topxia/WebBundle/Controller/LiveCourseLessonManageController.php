@@ -176,6 +176,17 @@ class LiveCourseLessonManageController extends BaseController
         ));
     }
 
+    public function updateLessonReplayAction(Request $request)
+    {
+        $data   = $request->request->all();
+        $replay = $this->getCourseService()->getCourseLessonReplay($data['id']);
+
+        $course = $this->getCourseService()->tryManageCourse($replay['courseId']);
+
+        $this->getCourseService()->updateCourseLessonReplay($data['id'], array('title' => $data['title']));
+        return $this->createJsonResponse(true);
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');

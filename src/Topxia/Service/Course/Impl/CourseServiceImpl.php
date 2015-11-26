@@ -2706,6 +2706,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courseMembers;
     }
 
+    public function getCourseLessonReplay($id)
+    {
+        return $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+    }
+
     public function updateCourseLessonReplay($id, $fields)
     {
         $replayCourse = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
@@ -2714,7 +2719,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException('录播回放不存在，更新失败！');
         }
 
-        $fields = ArrayToolkit::parts($fields, array('hidden'));
+        $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
 
         $updatedCourseLessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
 

@@ -7,7 +7,7 @@
 	  	{% for replayLesson in replayLessons %}
 	  		<label class="checkbox-inline mlm">
 		  		<input type="checkbox" name="visibleReplaies" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="{{replayLesson.id}}"> 
-		  		<span id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}">{{ replayLesson.title }}</span>
+		  		<span id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" data-replay-title="{{replayLesson.title}}" data-url="{{path('live_course_manage_lesson_replay_title_update')}}">{{ replayLesson.title }}</span>
 		  		<input id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' type="text" name="name" value="{{ replayLesson.title }}" style="display:none"> 
 			</label>
 	  	{% endfor %}
