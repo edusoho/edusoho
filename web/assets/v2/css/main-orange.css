@@ -6139,7 +6139,7 @@ textarea {
   margin-bottom: 10px;
 }
 .score i {
-  color: #ff8738;
+  color: #f3b760;
 }
 .score span {
   font-size: 12px;
@@ -6355,19 +6355,18 @@ textarea {
   display: inline-block;
   font-size: 12px;
   color: #fff;
-  background: #f4511e;
+  background: #e83d2c;
   height: 16px;
   line-height: 16px;
 }
 .course-price-widget .discount:before {
   content: "";
-  float: left;
   position: absolute;
   top: 0;
   left: -8px;
   width: 0;
   height: 0;
-  border-color: transparent #f4511e transparent transparent;
+  border-color: transparent #e83d2c transparent transparent;
   border-style: solid;
   border-width: 8px 8px 8px 0;
 }
@@ -6376,16 +6375,12 @@ textarea {
   position: absolute;
   top: 7px;
   left: 2px;
-  float: left;
   width: 4px;
   height: 4px;
-  -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
   border-radius: 2px;
   background: #fff;
-  -moz-box-shadow: -1px -1px 2px #8e0000;
-  -webkit-box-shadow: -1px -1px 2px #8e0000;
-  box-shadow: -1px -1px 2px #8e0000;
 }
 .table-striped .sort-handle {
   padding: 5px;
@@ -8509,37 +8504,18 @@ textarea {
   position: relative;
   margin-left: 12px;
   padding: 0 15px 0 15px;
-  display: inline-block;
   font-size: 14px;
-  color: #fff;
-  background-color: #ff8738;
   height: 24px;
   line-height: 24px;
 }
 .course-detail-header .discount-price .discount:before {
-  content: "";
-  float: left;
-  position: absolute;
   top: 0;
   left: -12px;
-  width: 0;
-  height: 0;
-  border-color: transparent #ff8738 transparent transparent;
-  border-style: solid;
   border-width: 12px 12px 12px 0;
 }
 .course-detail-header .discount-price .discount:after {
-  content: "";
-  position: absolute;
   top: 10px;
   left: 1px;
-  float: left;
-  width: 4px;
-  height: 4px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  background: #fff;
 }
 .course-detail-header .activity {
   margin-bottom: 0;
