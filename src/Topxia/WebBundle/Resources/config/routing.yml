@@ -1897,13 +1897,9 @@ generate_short_link:
     pattern:  /generate/short/link
     defaults: { _controller: TopxiaWebBundle:Sms:changeLink }
 
-show_replay_lessons:
-    pattern:  /show/replay_lessons/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:replayLessonShow }
-
-manage_replay_lesson:
-    pattern:  /manage/replay_lessons
-    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:replayLessonManage }
+live_course_manage_lesson_replay_edit:
+    pattern:  /livecourse/{courseId}/manage/{lessonId}/replay/edit
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:editLessonReplay }
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

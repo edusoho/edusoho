@@ -153,35 +153,25 @@ class LiveCourseLessonManageController extends BaseController
         return $this->createJsonResponse($leftCapacity);
     }
 
-    public function replayLessonShowAction(Request $request, $lessonId)
+    public function editLessonReplayAction(Request $request, $lessonId, $courseId)
     {
-        $courseId      = $request->query->get('courseId');
+        if ($request->getMethod() == 'POST') {
+            $courseLessonReplay = $request->request->all();
+            $this->getCourseService()->updateCourseLessonReplayByLessonId($lessonId, array('hidden' => 1));
+
+            foreach ($courseLessonReplay as $id => $hidden) {
+                $this->getCourseService()->updateCourseLessonReplay($id, array('hidden' => 0));
+            }
+
+            return $this->redirect($this->generateUrl('live_course_manage_replay', array('id' => $courseId)));
+        }
+
         $replayLessons = $this->getCourseService()->getCourseLessonReplayByLessonId($lessonId);
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:replay-lesson-modal.html.twig', array(
             'replayLessons' => $replayLessons,
             'lessonId'      => $lessonId,
             'courseId'      => $courseId
         ));
-    }
-
-    public function replayLessonManageAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $courseLessonReplay = $request->request->all();
-            $lessonId           = $request->query->get('lessonId');
-            $courseId           = $request->query->get('courseId');
-            $replayLessons      = $this->getCourseService()->getCourseLessonReplayByLessonId($lessonId);
-
-            foreach ($replayLessons as $replayLesson) {
-                $this->getCourseService()->updateCourseLessonReplay($replayLesson['id'], array('hidden' => 1));
-            }
-
-            foreach ($courseLessonReplay as $id => $hidden) {
-                $this->getCourseService()->updateCourseLessonReplay($id, array('hidden' => 0));
-            }
-        }
-
-        return $this->redirect($this->generateUrl('live_course_manage_replay', array('id' => $courseId)));
     }
 
     protected function getCourseService()
