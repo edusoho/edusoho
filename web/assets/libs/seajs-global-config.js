@@ -63,7 +63,11 @@ seajs.config({
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
         'video-player': 'balloon-video-player/1.0.0/index',
-        'underscore': 'gallery/underscore/1.8.2/underscore'
+        'underscore': 'gallery/underscore/1.8.2/underscore',
+        'gallery2.dc': 'gallery2/dc/2.0.0/js/dc-debug',
+        'gallery2.dc.css': 'gallery2/dc/2.0.0/css/dc.css',
+        'gallery2.d3': 'gallery2/d3/3.5.9/js/d3-debug',
+        'gallery2.crossfilter': 'gallery2/dc/2.0.0/js/crossfilter'
     },
 
 	// 预加载项

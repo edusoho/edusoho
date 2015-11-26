@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\Service\Course\Job;
 
+use Topxia\Service\Crontab\Job;
 use Topxia\Common\PluginToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Crontab\Job;
 
 class GenerateCourseScoreJob implements Job
 {
@@ -14,7 +14,7 @@ class GenerateCourseScoreJob implements Job
         }
 
         $courseId = $params['courseId'];
-        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        $course   = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             throw \InvalidArgumentException("课程{$courseId}不存在！");
@@ -64,11 +64,18 @@ class GenerateCourseScoreJob implements Job
                 $userScore['totalScore']    = $homeworkScore + $testpaperScore + $userScore['otherScore'];
                 $this->getCourseScoreService()->updateUserCourseScore($userScore['id'], $userScore);
             }
+
+
         }
 
         if ('scoring' == $scoreSetting['status']) {
             $this->getCourseScoreService()->updateScoreSetting($courseId, array('status' => 'unpublish'));
         }
+
+        if(PluginToolkit::isPluginInstalled('Certificate')){
+            $this->getCertificateService()->generateCertificate($courseId);
+        }
+
     }
 
     protected function getStudentHomeworkScore($student, $homeworks, $homeworkPercentage)
@@ -148,5 +155,10 @@ class GenerateCourseScoreJob implements Job
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    protected function getCertificateService()
+    {
+        return $this->getServiceKernel()->createService('Certificate:Certificate.CertificateService');
     }
 }
