@@ -149,6 +149,13 @@
 
           <ul class="list-group">
             <li class="list-group-heading">课程运营</li>
+
+            {% if is_plugin_installed('CourseDataStatistics') %}
+              <li class="list-group-item {% if side_nav == 'course_data_statistics' %}active{% endif %}">
+                <a href="{{path('course_staticis',{courseId:course.id})}}">
+                <span></span>数据统计</a>
+            </li>
+            {% endif %}
             <li class="list-group-item {% if side_nav == 'course_manage_data' %}active{% endif %}">
               <a href="{{path('course_manage_data',{id:course.id})}}">
                 <span></span>课程学习数据</a>
