@@ -1901,6 +1901,11 @@ live_course_manage_lesson_replay_edit:
     pattern:  /livecourse/{courseId}/manage/{lessonId}/replay/edit
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:editLessonReplay }
 
+live_course_manage_lesson_replay_title_update:
+    pattern:  /livecourse/manage/lesson/replay/update_title
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
+    methods: [POST]
+
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
