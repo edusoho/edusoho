@@ -158,10 +158,10 @@ class LiveCourseLessonManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if ($request->getMethod() == 'POST') {
-            $courseLessonReplay = $request->request->all();
+            $ids = $request->request->get("visibleReplaies");
             $this->getCourseService()->updateCourseLessonReplayByLessonId($lessonId, array('hidden' => 1));
 
-            foreach ($courseLessonReplay as $id => $hidden) {
+            foreach ($ids as $id) {
                 $this->getCourseService()->updateCourseLessonReplay($id, array('hidden' => 0));
             }
 
