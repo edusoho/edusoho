@@ -2726,7 +2726,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson = $this->getLesson($lessonId);
 
         if (empty($lesson)) {
-            throw $this->createServiceException('录播回放不存在，更新失败！');
+            throw $this->createServiceException('直播课时不存在，更新失败！');
         }
 
         $fields = ArrayToolkit::parts($fields, array('hidden'));
