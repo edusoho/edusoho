@@ -5,11 +5,13 @@
 {% block body %}
 	<form class="form-horizontal" id="replay_manage_form" method="POST" action="{{ path('live_course_manage_lesson_replay_edit',{lessonId:lessonId,courseId:courseId}) }}">
 	  	{% for replayLesson in replayLessons %}
-	  		<label class="checkbox-inline mlm">
-		  		<input type="checkbox" name="visibleReplaies" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="{{replayLesson.id}}"> 
-		  		<span id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" data-replay-title="{{replayLesson.title}}" >{{ replayLesson.title }}</span>
-		  		<input id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' data-url="{{path('live_course_manage_lesson_replay_title_update', {courseId:replayLesson.courseId, lessonId:replayLesson.lessonId, replayId:replayLesson.id})}}" type="text" name="name" value="{{ replayLesson.title }}" style="display:none"> 
-			</label>
+	  		<div class="col-sm-4" style="height:28px">
+	  			<label>
+		  			<input type="checkbox" name="visibleReplaies[]" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="{{replayLesson.id}}"> 	
+					</label>
+					<a class="link-light" href="javascript:;"><span id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" >{{ replayLesson.title }}</span></a>
+					<input id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' data-url="{{path('live_course_manage_lesson_replay_title_update', {courseId:replayLesson.courseId, lessonId:replayLesson.lessonId, replayId:replayLesson.id})}}" type="text" name="name" value="{{ replayLesson.title }}" style="display:none"> 
+	  		</div>
 	  	{% endfor %}
 	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
