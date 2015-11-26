@@ -374,5 +374,4 @@ interface CourseService
 
     public function updateCourseLessonReplayByLessonId($lessonId, $fields);
 
-    public function getCourseLessonReplay($id);
 }

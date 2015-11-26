@@ -2706,11 +2706,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courseMembers;
     }
 
-    public function getCourseLessonReplay($id)
-    {
-        return $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
-    }
-
     public function updateCourseLessonReplay($id, $fields)
     {
         $replayCourse = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);

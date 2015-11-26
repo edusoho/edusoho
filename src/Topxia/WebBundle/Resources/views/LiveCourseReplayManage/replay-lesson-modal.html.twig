@@ -7,8 +7,8 @@
 	  	{% for replayLesson in replayLessons %}
 	  		<label class="checkbox-inline mlm">
 		  		<input type="checkbox" name="visibleReplaies" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="{{replayLesson.id}}"> 
-		  		<span id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" data-replay-title="{{replayLesson.title}}" data-url="{{path('live_course_manage_lesson_replay_title_update')}}">{{ replayLesson.title }}</span>
-		  		<input id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' type="text" name="name" value="{{ replayLesson.title }}" style="display:none"> 
+		  		<span id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" data-replay-title="{{replayLesson.title}}" >{{ replayLesson.title }}</span>
+		  		<input id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' data-url="{{path('live_course_manage_lesson_replay_title_update', {courseId:replayLesson.courseId, lessonId:replayLesson.lessonId, replayId:replayLesson.id})}}" type="text" name="name" value="{{ replayLesson.title }}" style="display:none"> 
 			</label>
 	  	{% endfor %}
 	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
