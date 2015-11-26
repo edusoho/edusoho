@@ -16,13 +16,15 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = trim($keywords);
 
-        $type    = $request->query->get('type', 'Course');
         $pattern = $this->setting('magic.cloud_search');
 
         if ($pattern) {
+            $type       = $request->query->get('type', 'Course');
+            $targetType = $request->query->get('targetType', '');
             return $this->redirect($this->generateUrl('cloud_search', array(
-                'q'    => $keywords,
-                'type' => $type
+                'q'          => $keywords,
+                'type'       => $type,
+                'targetType' => $targetType
             )));
         }
 
