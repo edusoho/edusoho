@@ -62,7 +62,12 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
-        'video-player': 'balloon-video-player/1.0.0/index'
+        'video-player': 'balloon-video-player/1.0.0/index',
+        'crossfilter': 'dc/2.0.0/crossfilter',
+        'd3': 'dc/2.0.0/d3',
+        'dc': 'dc/2.0.0/dc',
+        'dc-css': 'dc/2.0.0/dc.css',
+        'underscore': 'gallery/underscore/1.8.2/underscore'
     },
 
 	// 预加载项
