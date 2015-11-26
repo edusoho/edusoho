@@ -167,9 +167,3 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
-
-    kernel.listener.admin_user_login_listener:
-        class: Topxia\WebBundle\Listener\UserLoginIpCheckListener
-        arguments:    [@service_container]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onUserLoginIpCheckListener}
