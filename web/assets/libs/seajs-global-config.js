@@ -67,7 +67,7 @@ seajs.config({
         'd3': 'dc/2.0.0/d3',
         'dc': 'dc/2.0.0/dc',
         'dc-css': 'dc/2.0.0/dc.css',
-        'underscore': 'gallery/underscore/1.4.4/underscore-debug'
+        'underscore': 'gallery/underscore/1.8.2/underscore'
     },
 
 	// 预加载项
