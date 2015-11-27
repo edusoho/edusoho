@@ -12,7 +12,6 @@
       </div>
 
       <ul class="media-list notification-list">
-        {% set notifications = data('LastestNotifications', {notifications:notifications}) %}
         {% for notification in notifications %}
           {{ notification.message|raw }}
         {% else %}

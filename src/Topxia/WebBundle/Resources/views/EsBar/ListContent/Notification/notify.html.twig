@@ -4,7 +4,6 @@
 
   {% if notifications %}
     {% set notificationsCount = 15  %}
-        {% set notifications = data('LastestNotifications', {notifications:notifications}) %}
     {% for notification in notifications %}
       {% set notificationsCount = loop.length  %}
       {{ notification.message|raw }}
