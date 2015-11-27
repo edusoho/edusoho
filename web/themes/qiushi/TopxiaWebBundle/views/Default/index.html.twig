@@ -310,13 +310,15 @@
               <div class="qs-recommend-article">
                 {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
                 {% for article in featuredArticles if article %}
-                  <div class="qs-article-block">
-                    <a href="{{ path('article_detail', {id:article.id}) }}">
-                      {{ lazy_img(filepath(article.thumb, ''), 'img-responsive', article.title, 'lazyload_class.png') }}
-                      <div class="image-overlay"></div>
-                      <div class="title">{{ article.title }}</div>
-                    </a>
-                  </div>
+                  {% if article.thumb|default(null) %}
+                    <div class="qs-article-block">
+                      <a href="{{ path('article_detail', {id:article.id}) }}">
+                        {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
+                        <div class="image-overlay"></div>
+                        <div class="title">{{ article.title }}</div>
+                      </a>
+                    </div>
+                  {% endif %}
                 {% endfor %}
               </div>
               <ul class="qs-new-article">
