@@ -24,7 +24,7 @@ class QuickpayResponse extends Response
 
         $data            = array();
         $data['payment'] = 'quickpay';
-        $data['sn']      = $this->getrderSn($result["agent_bill_id"]);
+        $data['sn']      = $this->getOrderSn($result["agent_bill_id"]);
 
         if (in_array($result['status'], array('SUCCESS'))) {
             $data['status'] = 'success';
@@ -159,7 +159,7 @@ class QuickpayResponse extends Response
         return $options;
     }
 
-    public function getrderSn($token)
+    public function getOrderSn($token)
     {
         $order = $this->getOrderService()->getOrderByToken($token);
         return $order['sn'];

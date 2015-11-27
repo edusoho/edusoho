@@ -34,6 +34,14 @@ define(function(require, exports, module){
                 window.location.href = $this.data('goto');
             });
         });
+
+        $(".closed").on("click",function(){
+            if(!confirm('确定解除绑定该银行卡吗')){
+                return;
+            }
+            var payAgreementId = $(this).parents(".pay-bank").find("input").val();
+
+        })
     };
 
 });

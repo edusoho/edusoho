@@ -72,11 +72,18 @@
           {% endfor %}
           {% if payAgreements is not empty %}
             <div style="margin-top:10px;display:none;" class="pay-agreement">
-              <select multiple class="form-control pay-bank" name='payAgreementId'>
+              {# <select class="form-control pay-bank" name='payAgreementId'>
                 {% for payAgreement in payAgreements %}
-                <option value="{{payAgreement.id}}">{{payAgreement.bankName}}－{{payAgreement.bankNumber}}</option>
+                  <option value="{{payAgreement.id}}">---<span class="closed">X</span></option>
                 {% endfor %}
-              </select>
+              </select> #}
+              {% for payAgreement in payAgreements %}
+                <div class="pay-bank">
+                  <input type="radio" name='payAgreementId' value="{{payAgreement.id}}"/>{{payAgreement.bankName}}－{{payAgreement.bankNumber}} <span class="closed">X</span>
+                </div>
+              {% endfor %}
+
+
             </div>
           {% endif %}
         </div>

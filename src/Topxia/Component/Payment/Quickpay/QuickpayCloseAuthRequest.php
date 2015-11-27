@@ -26,9 +26,11 @@ class QuickpayCloseAuthRequest extends Request
     {
         $signStr = '';
         $signStr = $signStr.'agent_id='.$this->options['key'];
+        $signStr = $signStr.'hy_auth_uid='.'';
         $signStr = $signStr.'&key='.$this->options['secret'];
+        $signStr = $signStr.'&mobile='.'';
+        $signStr = $signStr.'&pre_auth_uid='.'';
         $signStr = $signStr.'&timestamp='.time() * 1000;
-        $signStr = $signStr.'&user_identity='.$this->options['key']."_".$params['userId'];
         $signStr = $signStr.'&version='. 1;
         $sign    = md5(strtolower($signStr));
 
@@ -37,13 +39,13 @@ class QuickpayCloseAuthRequest extends Request
 
     protected function convertParams($params)
     {
-        $converted                  = array();
-        $converted['agent_id']      = $this->options['key'];
-        $converted['hy_auth_uid']   = '';
-        $converted['timestamp']     = time() * 1000;
-        $converted['version']       = 1;
-        $converted['user_identity'] = $this->options['key']."_".$params['userId'];
-        $encrypt_data               = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
+        $converted                = array();
+        $converted['agent_id']    = $this->options['key'];
+        $converted['version']     = 1;
+        $converted['hy_auth_uid'] = '';
+        $converted['timestamp']   = time() * 1000;
+        $converted['mobile']      = '';
+        $encrypt_data             = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
 
         return $encrypt_data;
     }

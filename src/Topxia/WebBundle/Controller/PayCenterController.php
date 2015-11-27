@@ -165,25 +165,20 @@ class PayCenterController extends BaseController
             } else {
                 throw new \RuntimeException($returnArray['return_msg']);
             }
-        } elseif ($payment == 'heepay') {
+        } elseif ($payment == 'heepay' || $payment == 'quickpay') {
             $order = $this->generateOrderToken($order, $params);
-            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-                'form'  => $formRequest,
-                'order' => $order
-            ));
-        } elseif ($payment == 'quickpay') {
-            $order = $this->generateOrderToken($order, $params);
-
-            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-                'form'  => $formRequest,
-                'order' => $order
-            ));
-        } else {
-            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-                'form'  => $formRequest,
-                'order' => $order
-            ));
         }
+
+        return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
+            'form'  => $formRequest,
+            'order' => $order
+        ));
+    }
+
+    public function closeAuthRequestAction(Request $request)
+    {
+        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
+        $formRequest    = $paymentRequest->form();
     }
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
