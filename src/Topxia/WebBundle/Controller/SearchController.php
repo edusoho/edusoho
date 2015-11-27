@@ -14,7 +14,7 @@ class SearchController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
+        $keywords = $this->filterKeyWord(trim($keywords));
 
         $pattern = $this->setting('magic.cloud_search');
 
@@ -101,7 +101,7 @@ class SearchController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
+        $keywords = $this->filterKeyWord(trim($keywords));
 
         $type       = $request->query->get('type', 'Course');
         $page       = $request->query->get('page', '1');
@@ -141,6 +141,17 @@ class SearchController extends BaseController
             'paginator'  => $paginator,
             'targetType' => $targetType
         ));
+    }
+
+    private function filterKeyWord($keyword)
+    {
+        $keyword = str_replace('<', '', $keyword);
+        $keyword = str_replace('>', '', $keyword);
+        $keyword = str_replace("'", '', $keyword);
+        $keyword = str_replace("\"", '', $keyword);
+        $keyword = str_replace('=', '', $keyword);
+        $keyword = str_replace('&', '', $keyword);
+        return $keyword;
     }
 
     protected function getCourseService()
