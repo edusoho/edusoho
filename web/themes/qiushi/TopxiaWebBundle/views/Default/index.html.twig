@@ -56,7 +56,9 @@
                 <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
                 <div class="metas clearfix">
                   <span class="course-teacher">主讲人：
-                    {{ course.teachers.0.nickname }}
+                    {% if course.teachers|default(null) %}
+                      {{ course.teachers.0.nickname }}
+                    {% endif %}
                   </span>
                   {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                     <span class="qs-tag qs-tag-danger pull-right">今天 {{ lesson.startTime|date('H:i') }}</span>
@@ -92,7 +94,9 @@
                     <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
                     <div class="metas clearfix">
                       <span class="course-teacher">主讲人：
-                        {{ course.teachers.0.nickname }}
+                        {% if course.teachers|default(null) %}
+                          {{ course.teachers.0.nickname }}
+                        {% endif %}
                       </span> 
                       <span class="qs-tag qs-tag-danger pull-right">今天 22:30</span>
                     </div>
@@ -195,7 +199,9 @@
                   <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
                   <div class="metas clearfix">
                     <span class="course-teacher">主讲人：
-                      {{ course.teachers.0.nickname }}
+                      {% if course.teachers|default(null) %}
+                        {{ course.teachers.0.nickname }}
+                      {% endif %}
                     </span> 
                     <span class="price pull-right">
                       {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
@@ -227,7 +233,9 @@
                       <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
                       <div class="metas clearfix">
                         <span class="course-teacher">主讲人：
-                          {{ course.teachers.0.nickname }}
+                          {% if course.teachers|default(null) %}
+                            {{ course.teachers.0.nickname }}
+                          {% endif %}
                         </span> 
                         <span class="price pull-right">
                           {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
