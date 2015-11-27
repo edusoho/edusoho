@@ -7,9 +7,11 @@ class MoneyCardDaoImpl extends BaseDao
 {
     protected $table = 'money_card';
 
-    public function getMoneyCard($id)
+    public function getMoneyCard($id, $lock = false)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+
+        $sql = $sql.($lock ? ' FOR UPDATE' : '');
 
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }

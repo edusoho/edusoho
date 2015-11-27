@@ -30,7 +30,7 @@ class UserLoginIpCheckListener
         }
 
         if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
-            if ($user['currentIp'] != $user['loginIp']) {
+            if ($user['currentIp'] != $request->getSession()->get('loginIp')) {
                 $goto     = $this->container->get('router')->generate('logout');
                 $response = new RedirectResponse($goto, '302');
                 $event->setResponse($response);
