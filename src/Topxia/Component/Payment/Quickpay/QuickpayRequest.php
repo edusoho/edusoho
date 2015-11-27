@@ -66,7 +66,7 @@ class QuickpayRequest extends Request
         $converted['user_ip']         = $this->get_client_ip();
         $converted['ext_param1']      = '';
         $converted['ext_param2']      = '';
-        $converted['auth_card_type']  = 0;
+        $converted['auth_card_type']  = -1;
         $converted['timestamp']       = time() * 1000;
         $sign                         = $this->signParams($converted);
         $encrypt_data                 = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
