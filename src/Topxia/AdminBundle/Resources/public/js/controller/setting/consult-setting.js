@@ -33,19 +33,20 @@ define(function(require, exports, module) {
 
             var fisrtplaceholder = $first.find('input:first').attr('placeholder');
             var middleplaceholder = $first.find('input:eq(1)').attr('placeholder');
-            var lastvalue = $first.find('input:eq(2)').attr('value');
+            var thirdplaceholder = $first.find('input:eq(2)').attr('placeholder');
             var firstname = $first.find('input:first').attr('name');
             var middlename = $first.find('input:eq(1)').attr('name');
-            var lastname = $first.find('input:eq(2)').attr('name');
+            var thirdname = $first.find('input:eq(2)').attr('name');
             firstname = firstname.replace(/\d/, nextIndex);
             middlename = middlename.replace(/\d/, nextIndex);
-            lastname = lastname.replace(/\d/, nextIndex);
+            thirdname = thirdname.replace(/\d/, nextIndex);
             $template.find('input:first').attr('placeholder', fisrtplaceholder);
             $template.find('input:eq(1)').attr('placeholder', middleplaceholder);
-            $template.find('input:eq(2)').attr('value',lastvalue);
+            $template.find('input:eq(2)').attr('placeholder', thirdplaceholder);
             $template.find('input:first').attr('name', firstname);
             $template.find('input:eq(1)').attr('name', middlename);
-            $template.find('input:eq(2)').attr('name', lastname);
+            $template.find('input:eq(2)').attr('name', thirdname);
+
             $parent.append($template.html());
 
             $('[data-role=item-delete]').on('click',function(){
