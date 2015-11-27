@@ -29,7 +29,7 @@
             {% endif %}
           {% endfor %}
         </ul>
-        <div class="more"><a href="" class="link-lighter">更多</a></div>
+        <div class="more"><a href="{{ path('course_explore') }}" class="link-lighter">更多</a></div>
       </div>
 
       <div class="qs-live-course-list tab-content">
@@ -41,12 +41,13 @@
             <div class="col-lg-3 col-md-4 col-sm-6">
               <div class="qs-course-item">
                 <div class="course-img">
-                  <a href="{{ path('course_show', {id:course.id}) }}"><img src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}"></a>
+                  <a href="{{ path('course_show', {id:course.id}) }}">
+                    {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
                   <div class="mask">
                     {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                       <a href="" class="btn btn-primary">正在直播</a>
                     {% elseif lesson and "now"|date("U") < lesson.startTime %}
-                      <a href="" class="btn btn-primary">即将直播</a>
+                      <a href="" class="btn btn-warning">即将直播</a>
                     {% elseif lesson and "now"|date("U") > lesson.endTime %}
                       <a href="" class="btn btn-info">往期回顾</a>
                     {% endif %}
@@ -60,7 +61,7 @@
                   {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                     <span class="qs-tag qs-tag-danger pull-right">今天 {{ lesson.startTime|date('H:i') }}</span>
                   {% elseif lesson and "now"|date("U") < lesson.startTime %}
-                    <span class="qs-tag qs-tag-danger pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
+                    <span class="qs-tag qs-tag-warning pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
                   {% else %}
                     <span class="qs-tag qs-tag-info pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
                   {% endif %}
@@ -82,7 +83,8 @@
                 <div class="col-lg-3 col-md-4 col-sm-6">
                   <div class="qs-course-item">
                     <div class="course-img">
-                      <a href="{{ path('course_show', {id:course.id}) }}"><img src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}"></a>
+                      <a href="{{ path('course_show', {id:course.id}) }}">
+                        {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
                       <div class="mask">
                         <a href="" class="btn btn-primary">正在直播</a>
                       </div>
@@ -177,14 +179,15 @@
         </ul>
       </div>
       <div class="qs-exellent-course-list tab-content">
-        {% set recommendCoursesAll = data('RecommendCourses',{ type:'normal', count:12}) %}
+        {% set recommendCoursesAll = data('RecommendCourses',{count:15}) %}
         <div role="tabpanel" class="tab-pane fade active in row" id="category-all" aria-labelledby="home-tab">
           {% for course in recommendCoursesAll if course %}
-            {# {% if loop.index > 3 %} #}
+            {% if loop.index > 3 %}
               <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="qs-course-item">
                   <div class="course-img">
-                    <a href="{{ default_path('coursePicture', course.middlePicture, 'large') }}"><img src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}"></a>
+                    <a href="{{ path('course_show', {id:course.id}) }}">
+                      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
                     <div class="mask">
                       <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">立即学习</a>
                     </div>
@@ -200,7 +203,7 @@
                   </div>
                 </div>
               </div>
-            {# {% endif %} #}
+            {% endif %}
           {% else %}
             <div class="empty">该分类下暂无精品课程</div>
           {% endfor %}
@@ -208,14 +211,15 @@
         
           {% for firstCat in firstCategories %}
             {% if firstCat.parentId == 0 %}
-              {% set recommendCourses = data('RecommendCourses',{ categoryId: firstCat.id, type:'normal', count:12}) %}
+              {% set recommendCourses = data('RecommendCourses',{ categoryId: firstCat.id, count:12}) %}
 
               <div role="tabpanel" class="tab-pane fade {% if loop.index == 1 %}active in{% endif %} row" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
                 {% for course in recommendCourses%}
                   <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="qs-course-item">
                       <div class="course-img">
-                        <a href="{{ path('course_show', {id:course.id}) }}"><img src="{{ default_path('coursePicture', course.middlePicture, 'large') }}" alt="{{ course.title }}"></a>
+                        <a href="{{ path('course_show', {id:course.id}) }}">
+                          {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
                         <div class="mask">
                           <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">立即学习</a>
                         </div>
@@ -237,21 +241,7 @@
               </div>
             {% endif %}
           {% endfor %}
-        
 
-
-       {#  <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="qs-course-item">
-            <div class="course-img">
-              <a href=""><img src="{{asset('themes/qiushi/img/new/course_1.jpg')}}" alt=""></a>
-              <div class="mask">
-                <a href="" class="btn btn-primary">立即学习</a>
-              </div>
-            </div>
-            <div class="title"><a href="" class="link-dark">高一化学专题：化学家严重的物质世界是怎样的？</a></div>
-            <div class="metas clearfix"><span class="course-teacher">主讲人：陈林</span> <span class="price pull-right">¥199</span></div>
-          </div>
-        </div> #}
       </div>
     </div>
   </section>
@@ -303,29 +293,24 @@
             <div class="qs-panel-title">最新资讯<small>NEWS</small> <a class="more link-light" href="">更多</a></div>
             <div class="qs-panel-body clearfix">
               <div class="qs-recommend-article">
-                <div class="qs-article-block">
-                  <a href="">
-                    <img class="img-responsive" src="{{asset('themes/qiushi/img/new/article_1.jpg')}}" alt="">
-                    <div class="image-overlay"></div>
-                    <div class="title">名师上门送教 引领高校课</div>
-                  </a>
-                </div>
-                <div class="qs-article-block">
-                  <a href="">
-                    <img class="img-responsive" src="{{asset('themes/qiushi/img/new/article_1.jpg')}}" alt="">
-                    <div class="image-overlay"></div>
-                    <div class="title">名师上门送教 引领高校课</div>
-                  </a>
-                </div>
+                {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
+                {% for article in featuredArticles if article %}
+                  <div class="qs-article-block">
+                    <a href="{{ path('article_detail', {id:article.id}) }}">
+                      {{ lazy_img(filepath(article.thumb, ''), 'img-responsive', article.title, 'lazyload_class.png') }}
+                      <div class="image-overlay"></div>
+                      <div class="title">{{ article.title }}</div>
+                    </a>
+                  </div>
+                {% endfor %}
               </div>
               <ul class="qs-new-article">
                 {% set articles = data('LatestArticles',{'count':6}) %}
                 {% if articles %}
                   {% for article in articles %}
-                  <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">{{ article.title }}</a> <span class="date">{{ article.updatedTime|smart_time }}</span></li>
+                  <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.updatedTime|smart_time }}</span></li>
                   {% endfor %}
                 {% endif %}
-                <!-- <li class="clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-light" href="">新学考“首秀”亮相周六，引起轰动</a> <span class="date">09.20</span></li> -->
               </ul>
             </div>
           </div>
@@ -335,16 +320,6 @@
             <div class="qs-panel-title">教学评价<small>EVALUATION</small></div>
             <div class="qs-panel-body">
               {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock',{number:4})) }}
-              <!-- <div class="media media-dynamic">
-                <div class="media-left">
-                  <a href=""><img class="avatar-sm" src="{{asset('themes/qiushi/img/new/avatar.jpg')}}" alt=""></a>
-                </div>
-                <div class="media-body">
-                  <div class="title"><a class="link-light" href="">玉婷</a> 发布于《高中物理课程最新学习案例》</div>
-                  <div class="content">凌老师上得非常好，条理清晰，难易适度。跟学生有互动！</div>
-                  <span class="date">09.20</span>
-                </div>
-              </div>-->
             </div>
           </div>
         </div>
@@ -387,7 +362,9 @@
               </div>
               <div class="teacher-action">
                 <a class="btn btn-ghost-primary" href="{{ path('user_show', {id:teacher.id}) }}">在教课程</a>
-                <a class="btn htn-ghost-white" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">预约辅导</a>
+                {% if is_plugin_installed('LiveReservation') %}
+                  <a class="btn htn-ghost-white" href="{{path('user_reservation', {id:teacher.id})}}">预约辅导</a>
+                {% endif %}
               </div>
             </div>
           </div>
