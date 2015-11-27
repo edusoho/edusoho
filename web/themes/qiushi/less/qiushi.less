@@ -23,7 +23,13 @@ body {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
+}
 
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
 }
 
 // 头部
@@ -539,23 +545,33 @@ body {
 
 .qs-teacher-list {
   position: relative;
+  &:hover {
+    .arrow-left,
+    .arrow-right {
+      .opacity(1);
+    }
+  }
   .arrow-left {
     background: url('@{img-src}new/arrows.png') no-repeat left top;
     position: absolute;
-    left: 10px;
+    left: -15px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
     height: 30px;
+    z-index: 1;
+    .opacity(0);
   }
   .arrow-right {
     background: url('@{img-src}new/arrows.png') no-repeat left bottom;
     position: absolute;
-    right: 10px;
+    right: -15px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
     height: 30px;
+    z-index: 1;
+    .opacity(0);
   }
 }
 

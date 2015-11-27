@@ -20,9 +20,9 @@ define(function(require, exports, module) {
         }
 
         if ($(".qs-teacher-list .swiper-slide").length > 4) {
-            var swiper = new Swiper('.qs-teacher-list.swiper-container', {
-                pagination: '.swiper-pager',
-                paginationClickable: true,
+            var swiper = new Swiper('.qs-teacher-list .swiper-container', {
+                // pagination: '.swiper-pager',
+                // paginationClickable: true,
                 // autoplay: 5000,
                 autoplayDisableOnInteraction: false,
                 loop: true,
@@ -33,6 +33,14 @@ define(function(require, exports, module) {
                    $(".swiper-slide").removeClass('swiper-hidden'); 
                 }
             });
+            $('.qs-teacher-list .arrow-left').on('click', function(e){
+                e.preventDefault();
+                swiper.swipePrev();
+            })
+            $('.qs-teacher-list .arrow-right').on('click', function(e){
+                e.preventDefault();
+                swiper.swipeNext();
+            })
         }
 
         $('#category-tab a:first').tab('show');

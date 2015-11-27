@@ -336,41 +336,46 @@
         <div class="title">求是名师</div>
         <div class="subtitle">OUR TEACHERS</div>
       </div>
-      <div class="qs-teacher-list  swiper-container">
-        <div class="swiper-wrapper row">
-          {% for teacher in teachers %}
-          {% set profile = profiles[teacher.id] %}
-          <div class="col-lg-3 col-md-4 col-sm-6 swiper-slide swiper-hidden">
-            <div class="qs-teacher-item">
-              <div class="teacher-img"><img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></div>
-              <div class="teacher-name">{{teacher.nickname}}</div>
-              <div class="teacher-position">
-                {% if teacher.title %}{{ teacher.title }}{% else %}暂无头衔{% endif %}
-              </div>
-              <div class="teacher-bottom">
-                <div class="teacher-about">
-                  {% if profile.about %}
-                    {{ profile.about|plain_text(50) }}
-                  {% else %}
-                    <div class="text-center">暂无简介</div>
-                  {% endif %}
+      <div class="qs-teacher-list">
+        <div class="swiper-container row">
+          <div class="swiper-wrapper">
+            {% for teacher in teachers %}
+            {% set profile = profiles[teacher.id] %}
+            <div class="col-lg-3 col-md-4 col-sm-6 swiper-slide swiper-hidden">
+              <div class="qs-teacher-item">
+                <div class="teacher-img"><img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></div>
+                <div class="teacher-name">{{teacher.nickname}}</div>
+                <div class="teacher-position">
+                  {% if teacher.title %}{{ teacher.title }}{% else %}暂无头衔{% endif %}
                 </div>
-              </div>
-              <div class="mask">
-                <div class="slogan">
-                  <p class="slogan-title">觉得老师不错？</p>
-                  <p>立即学习课程或者预约辅导吧！</p>
+                <div class="teacher-bottom">
+                  <div class="teacher-about">
+                    {% if profile.about %}
+                      {{ profile.about|plain_text(50) }}
+                    {% else %}
+                      <div class="text-center">暂无简介</div>
+                    {% endif %}
+                  </div>
                 </div>
-                <div class="teacher-action">
-                  <a class="btn btn-ghost-primary" href="{{ path('user_show', {id:teacher.id}) }}">在教课程</a>
-                  <a class="btn htn-ghost-white" href="{{path('user_reservation', {id:teacher.id})}}">预约辅导</a>
+                <div class="mask">
+                  <div class="slogan">
+                    <p class="slogan-title">觉得老师不错？</p>
+                    <p>立即学习课程或者预约辅导吧！</p>
+                  </div>
+                  <div class="teacher-action">
+                    <a class="btn btn-ghost-primary" href="{{ path('user_show', {id:teacher.id}) }}">在教课程</a>
+                    <a class="btn htn-ghost-white" href="{{path('user_reservation', {id:teacher.id})}}">预约辅导</a>
+                  </div>
                 </div>
               </div>
             </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
+        <a href="#" class="arrow-left"></a>
+        <a href="#" class="arrow-right"></a>
       </div>
+      
       <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('teacher') }}">更多名师</a></div>
     </div>
   </section>
