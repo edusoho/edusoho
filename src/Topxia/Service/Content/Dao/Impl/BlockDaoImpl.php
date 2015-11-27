@@ -9,7 +9,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 {
     protected $table = 'block';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'meta' => 'json',
         'data' => 'json'
     );
@@ -23,6 +23,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
             $block = $that->getConnection()->fetchAssoc($sql, array($id));
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         }
+
         );
     }
 
@@ -50,6 +51,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
             return true;
         }
+
         );
 
         if (isset($conditions['title'])) {
@@ -100,6 +102,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
             $block = $that->getConnection()->fetchAssoc($sql, array($code));
             return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
         }
+
         );
     }
 
