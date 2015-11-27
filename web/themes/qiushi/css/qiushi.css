@@ -84,8 +84,7 @@ a:focus {
   color: #c30d22;
 }
 .btn-tag:hover {
-  color: #c30d22;
-  border-color: #c30d22;
+  background-color: #c30d22;
 }
 .media-hot-comment .comments-info p a,
 .media-hot-comment .comments-info h5 a:hover {

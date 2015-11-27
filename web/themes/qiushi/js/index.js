@@ -23,14 +23,15 @@ define(function(require, exports, module) {
             var swiper = new Swiper('.qs-teacher-list .swiper-container', {
                 // pagination: '.swiper-pager',
                 // paginationClickable: true,
-                // autoplay: 5000,
+                autoplay: 5000,
                 autoplayDisableOnInteraction: false,
                 loop: true,
                 calculateHeight: true,
                 roundLengths: true,
                 slidesPerView: 4,
                 onInit: function(swiper) {
-                   $(".swiper-slide").removeClass('swiper-hidden'); 
+                    $(".qs-teacher-list").append('<a href="#" class="arrow-left"></a><a href="#" class="arrow-right"></a>');
+                    $(".swiper-slide").removeClass('swiper-hidden'); 
                 }
             });
             $('.qs-teacher-list .arrow-left').on('click', function(e){
