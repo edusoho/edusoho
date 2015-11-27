@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.9.0
+        assets_version: 6.9.2
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -167,9 +167,3 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
-
-    kernel.listener.admin_user_login_listener:
-        class: Topxia\WebBundle\Listener\UserLoginIpCheckListener
-        arguments:    [@service_container]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onUserLoginIpCheckListener}

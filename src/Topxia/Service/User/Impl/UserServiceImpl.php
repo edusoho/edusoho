@@ -781,7 +781,9 @@ class UserServiceImpl extends BaseService implements UserService
         $bind = $this->getUserBindByTypeAndUserId($type, $toId);
 
         if ($bind) {
-            $bind = $this->getUserBindDao()->deleteBind($bind['id']);
+            $bind        = $this->getUserBindDao()->deleteBind($bind['id']);
+            $currentUser = $this->getCurrentUser();
+            $this->getLogService()->info('user', 'unbind', "用户名{$user['nickname']}解绑成功，操作用户为{$currentUser['nickname']}");
         }
 
         return $bind;
@@ -1473,6 +1475,7 @@ class UserSerialize
             $user['roles'][1] = $user['roles'][0];
             $user['roles'][0] = $temp;
         }
+
         //交换学员角色跟roles数组第0个的位置;
 
         return $user;
