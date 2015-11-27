@@ -8,6 +8,7 @@ define(function(require, exports, module) {
 
         $("#middle-banner-edit").on('click',function(){
             window.open($(this).data('url'));
+            return;
         });
 
         var $list = $(".module-item-list").sortable({
