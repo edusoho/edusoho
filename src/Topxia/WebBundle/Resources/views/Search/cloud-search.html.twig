@@ -2,8 +2,7 @@
 
 {% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
 
-{% do load_script('search/search') %}
-
+{% do load_script('search/cloud-search') %}
 {% block top_content %}
   <div class="search-banner">
     <div class="container">
@@ -23,7 +22,6 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-md-8">
       <div class="es-section">
@@ -31,7 +29,7 @@
           <li {% if type == 'Course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Course'}) }}" data-type="course" >课程</a></li>
           <li {% if type == 'Teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Teacher'}) }}" data-type="teacher" >教师</a></li>
           <li {% if type == 'Thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Thread'}) }}" data-type="thread" >话题</a></li>
-          <li {% if type == 'Article' %}class="article" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Article'}) }}" data-type="article" >资讯</a></li>
+          <li {% if type == 'Article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Article'}) }}" data-type="article" >资讯</a></li>
         </ul>
         <div class="search-result" id="search-result">
         {% if type %}
