@@ -64,6 +64,10 @@ login_check_email:
     pattern:  /login/check/email
     defaults: { _controller: TopxiaWebBundle:Login:checkEmail }
 
+login_bind_change:
+    pattern: /login/bind/{type}/changetoexist
+    defaults: { _controller: TopxiaWebBundle:LoginBind:changeToExist }
+
 common_qrcode:
     pattern:  /common/qrcode
     defaults: { _controller: TopxiaWebBundle:Common:qrcode }
@@ -202,6 +206,14 @@ editor_download:
     defaults: { _controller: TopxiaWebBundle:Editor:download }
     methods: [POST]
 
+liveroom_entry_waiting:
+    pattern:  /liveroom/{id}/entry_waiting
+    defaults: { _controller: TopxiaWebBundle:Liveroom:entryWaiting }
+
+liveroom_ticket:
+    pattern:  /liveroom/{id}/ticket
+    defaults: { _controller: TopxiaWebBundle:Liveroom:ticket }
+
 live_auth:
     pattern:  /live/auth
     defaults: { _controller: TopxiaWebBundle:LiveAuth:index }
@@ -229,10 +241,6 @@ live_classroom_replay_url:
 live_course_list:
     pattern:  /live/list/{category}
     defaults: { _controller: TopxiaWebBundle:LiveCourse:list, category:'' }
-
-live_classroom_iframe:
-    pattern: /live/classroom/course/{courseId}/lesson/{lessonId}
-    defaults: { _controller: TopxiaWebBundle:LiveCourse:classroomIframe }
 
 live_course_create:
     pattern:  /livecourse/create
@@ -439,6 +447,10 @@ course_lesson_plugin_question_list:
 course_lesson_plugin_question_show:
     pattern:  /lessonplugin/question/show
     defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:show }
+
+course_lesson_plugin_question_ask:
+    pattern:  /lessonplugin/question/ask
+    defaults: { _controller: TopxiaWebBundle:LessonQuestionPlugin:ask }
 
 course_lesson_plugin_question_create:
     pattern:  /lessonplugin/question/create
@@ -796,13 +808,17 @@ course_manage_question_category_sort:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionCategoryManage:sort }
     methods: [POST]
 
-course_manage_do_test:
-    pattern: /test/{testId}/do
-    defaults: { _controller: TopxiaWebBundle:Testpaper:doTestpaper }
+course_manage_real_time_testpaper_check:
+    pattern:  /testpaper/real-time/check
+    defaults: { _controller: TopxiaWebBundle:Testpaper:realTimeCheck}
 
-course_manage_redo_test:
-    pattern: /test/{testId}/redo
-    defaults: { _controller: TopxiaWebBundle:Testpaper:reDoTestpaper }
+course_lesson_do_test:
+    pattern: /lesson/{lessonId}/test/{testId}/do
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:doTestpaper }
+
+course_lesson_redo_test:
+    pattern: /lesson/{lessonId}/test/{testId}/redo
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:reDoTestpaper }
 
 course_manage_show_test:
     pattern: /test/{id}/show
@@ -1856,6 +1872,18 @@ esbar_my_notify:
 esbar_my_practice:
     pattern:  /esbar/my/practice/{status}
     defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:practice }
+
+my_cards:
+    pattern:  /my/cards
+    defaults: { _controller: TopxiaWebBundle:Card:index }
+
+my_useable_coupons:
+    pattern: /my/useable_coupons
+    defaults: { _controller: TopxiaWebBundle:Card:useableCoupons }
+
+card_info:
+    pattern:  /card/info
+    defaults: { _controller: TopxiaWebBundle:Card:cardInfo }
 
 sms_prepare:
     pattern:  /sms/prepare/{targetType}/{id}

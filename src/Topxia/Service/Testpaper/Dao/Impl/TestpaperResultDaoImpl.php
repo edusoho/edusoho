@@ -139,6 +139,12 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
         return $this->getConnection()->executeQuery($sql, array($testId, $userId));
     }
 
+    public function updateTestResultsByTarget($target, $fields)
+    {
+        $this->getConnection()->update($this->table, $fields, array('target' => $target));
+    }
+
+
     public function deleteTestpaperResultByTestpaperId($testpaperId)
     {
         $sql = "DELETE FROM {$this->table} WHERE testId = ?";
@@ -167,7 +173,6 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
             ->andWhere('objectiveScore = :objectiveScore')
             ->andWhere('subjectiveScore = :subjectiveScore')
             ->andWhere('rightItemCount = :rightItemCount')
-            ->andWhere('passedStatus = :passedStatus')
             ->andWhere('status = :status');
             
         return $builder;

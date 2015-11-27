@@ -51,18 +51,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $orderBys   = $this->filterSort($sort);
         $conditions = $this->prepareThreadSearchConditions($conditions);
+
         return $this->getThreadDao()->searchThreads($conditions, $orderBys, $start, $limit);
     }
 
     public function searchThreadCount($conditions)
     {
         $conditions = $this->prepareThreadSearchConditions($conditions);
+
         return $this->getThreadDao()->searchThreadCount($conditions);
     }
 
     public function searchThreadCountInCourseIds($conditions)
     {
         $conditions = $this->prepareThreadSearchConditions($conditions);
+
         return $this->getThreadDao()->searchThreadCountInCourseIds($conditions);
     }
 
@@ -70,6 +73,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $orderBys   = $this->filterSort($sort);
         $conditions = $this->prepareThreadSearchConditions($conditions);
+
         return $this->getThreadDao()->searchThreadInCourseIds($conditions, $orderBys, $start, $limit);
     }
 
@@ -316,9 +320,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if ($sort == 'best') {
             $orderBy = array('score', 'DESC');
-        } else
-
-        if ($sort == 'elite') {
+        } elseif ($sort == 'elite') {
             $orderBy = array('createdTime', 'DESC', ',isElite', 'ASC');
         } else {
             $orderBy = array('createdTime', 'ASC');

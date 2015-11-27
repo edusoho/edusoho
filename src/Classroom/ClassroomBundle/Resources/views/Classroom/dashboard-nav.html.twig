@@ -4,11 +4,11 @@
 
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{classroomId:classroom.id})|default(null) %}
-      {% if classroomPlan|default(null) and classroomPlan.status == 'published' %}
+      {% if classroomPlan|default(null) and classroomPlan.status == 'published' and app.user %}
         {% set planMember = data('UserClassroomPlanTaskNumInfo',{classroomId:classroom.id, userId:app.user.id})|default(null) %}
       {% endif %}
     {% endif %}
-    {% if not planMember %}
+    {% if not planMember|default(null) %}
       <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">课程 <small class="text-muted">{% if classroom.courseNum != 0 %}( {{classroom.courseNum}} ){% endif %}</small></a></li>
     {% endif %}
 
