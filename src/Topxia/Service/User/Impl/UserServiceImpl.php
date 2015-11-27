@@ -1252,7 +1252,6 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException("用户#{$userId}不存在！");
         }
 
-        var_dump(111);
         $this->getUserDao()->updateUser($user['id'], array(
             'approvalStatus' => 'approved',
             'approvalTime'   => time()
