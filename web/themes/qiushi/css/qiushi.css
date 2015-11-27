@@ -750,6 +750,27 @@ body {
 .media-dynamic .media-body {
   border: none;
 }
+.qs-teacher-list {
+  position: relative;
+}
+.qs-teacher-list .arrow-left {
+  background: url('/themes/qiushi/img/new/arrows.png') no-repeat left top;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  margin-top: -15px;
+  width: 17px;
+  height: 30px;
+}
+.qs-teacher-list .arrow-right {
+  background: url('/themes/qiushi/img/new/arrows.png') no-repeat left bottom;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -15px;
+  width: 17px;
+  height: 30px;
+}
 .qs-teacher-item {
   position: relative;
   margin-bottom: 20px;
