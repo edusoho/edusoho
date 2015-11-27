@@ -151,6 +151,7 @@ class SearchController extends BaseController
         $keyword = str_replace("\"", '', $keyword);
         $keyword = str_replace('=', '', $keyword);
         $keyword = str_replace('&', '', $keyword);
+        $keyword = str_replace('/', '', $keyword);
         return $keyword;
     }
 
