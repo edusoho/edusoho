@@ -45,28 +45,24 @@ class ThemeController extends BaseController
     {
         $config = $this->getThemeService()->getCurrentThemeConfig();
 
-        if (!empty($config) && $config['name'] == '雅致简洁（商业主题）') {
-            if (!$isEditColor) {
+        if (!$isEditColor) {
+            if (!empty($config) && $config['name'] == '雅致简洁（商业主题）') {
                 $color = $config['confirmConfig']['color'];
             } else {
-                $color = $config['config']['color'];
+                $color = array(
+                    'maincolor'       => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['maincolor'],
+                    'navigationcolor' => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['navigationcolor']
+                );
             }
-
-            return $this->render("GracefulThemeBundle:Default:color.html.twig", array(
-                'color' => $color
-            ));
-        }
-
-        if (!$isEditColor) {
-            $color = array(
-                'maincolor'       => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['maincolor'],
-                'navigationcolor' => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['navigationcolor']
-            );
         } else {
-            $color = array(
-                'maincolor'       => empty($config['config']) ? '' : $config['config']['maincolor'],
-                'navigationcolor' => empty($config['config']) ? '' : $config['config']['navigationcolor']
-            );
+            if (!empty($config) && $config['name'] == '雅致简洁（商业主题）') {
+                $color = $config['config']['color'];
+            } else {
+                $color = array(
+                    'maincolor'       => empty($config['config']) ? '' : $config['config']['maincolor'],
+                    'navigationcolor' => empty($config['config']) ? '' : $config['config']['navigationcolor']
+                );
+            }
         }
 
         return $this->render("TopxiaWebBundle:Default:stylesheet.html.twig", array(
