@@ -167,7 +167,10 @@
     .img-one {
       display: block;
       margin: 75px auto;
-      @media(max-width: @screen-sm-max){
+      @media(max-width: @screen-md-max) {
+        margin: 50px auto;
+      }
+      @media(max-width: @screen-xs-max){
         margin: 20px auto;
       }
     }
@@ -177,6 +180,13 @@
       width: 270px;
       height: auto;
       max-width: 100%;
+      border: 1px solid @gray-lighter;
+      @media(max-width: @screen-md-max) {
+        width: 220px;
+      }
+      @media(max-width: @screen-sm-max){
+       margin-bottom: 20px;
+      }
     }
     .btn-android,
     .btn-apple {
@@ -185,17 +195,17 @@
       width: 100%;
       text-align: center;
       font-size: 28px;
-      padding: 28px 20px;
+      padding: 37px 20px;
       .es-transition;
       @media(max-width: @screen-md-max) {
         font-size: 22px;
         padding: 25px 15px; 
       }
       @media(max-width: @screen-sm-max) and (min-width: @screen-sm-min){
-        width: 49%;
+        width: 48%;
         padding: 20px 12px;
       }
-      @media(max-width: @screen-sm-max){
+      @media(max-width: @screen-xs-max){
         font-size: 20px;
         padding: 10px 10px;
       }

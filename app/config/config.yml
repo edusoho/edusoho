@@ -115,7 +115,7 @@ services:
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
@@ -162,7 +162,6 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: twig.extension }
-
 
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener
