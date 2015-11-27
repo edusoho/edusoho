@@ -18,5 +18,17 @@ define(function(require, exports, module) {
                 }
             });
         }
+
+        $('#category-tab a:first').tab('show');
+        $('#category-tab a').click(function(e){
+            e.preventDefault()
+            $(this).tab('show')
+        })
+
+        $('#live-category-tab a:first').tab('show');
+        $('#live-category-tab a').click(function(e){
+            e.preventDefault()
+            $(this).tab('show')
+        })
     }
 });
