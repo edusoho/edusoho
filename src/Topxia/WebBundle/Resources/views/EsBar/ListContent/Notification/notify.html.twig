@@ -6,6 +6,7 @@
     {% set notificationsCount = 15  %}
     {% for notification in notifications %}
       {% set notificationsCount = loop.length  %}
+      {% set notification = render_notification(notification) %}
       {{ notification.message|raw }}
     {% endfor %}
     {% if notificationsCount >= 15 %}

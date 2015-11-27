@@ -13,6 +13,7 @@
 
       <ul class="media-list notification-list">
         {% for notification in notifications %}
+          {% set notification = render_notification(notification) %}
           {{ notification.message|raw }}
         {% else %}
           <li class="empty">暂无通知</li>

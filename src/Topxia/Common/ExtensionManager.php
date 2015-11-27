@@ -105,7 +105,7 @@ class ExtensionManager
         return $this->dataTags[$name];
     }
 
-    public function renderNotifications($notification)
+    public function renderNotification($notification)
     {
         $this->loadTemplates('notificationTemplates');
 
@@ -219,21 +219,21 @@ class ExtensionManager
             $finder->in($directory);
         }
 
-        $temp = array();
+        $tempName = array();
 
         foreach ($finder as $file) {
-            $template        = $file->getBasename('.tpl.html.twig');
-            $path            = str_replace($root, '@root', $file->getRealPath());
-            $temp[$template] = $path;
+            $template            = $file->getBasename('.tpl.html.twig');
+            $path                = str_replace($root, '@root', $file->getRealPath());
+            $tempName[$template] = $path;
         }
 
         if ($type == 'statusTemplates') {
-            $this->statusTemplates = $temp;
+            $this->statusTemplates = $tempName;
         } elseif ($type == 'notificationTemplates') {
-            $this->notificationTemplates = $temp;
+            $this->notificationTemplates = $tempName;
         }
 
-        return $temp;
+        return $tempName;
     }
 
     private function getExtensionalBundles()

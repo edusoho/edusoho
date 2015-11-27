@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class NotificationController extends BaseController
@@ -28,15 +27,6 @@ class NotificationController extends BaseController
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         $user->clearNotifacationNum();
-
-        if ($notifications) {
-            $manager = ExtensionManager::instance();
-
-            foreach ($notifications as &$notification) {
-                $notification['message'] = $manager->renderNotifications($notification);
-                unset($notification);
-            }
-        }
 
         return $this->render('TopxiaWebBundle:Notification:index.html.twig', array(
             'notifications' => $notifications,

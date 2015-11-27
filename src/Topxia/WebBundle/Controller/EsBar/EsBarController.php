@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Controller\EsBar;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
@@ -163,15 +162,6 @@ class EsBarController extends BaseController
             15
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
-
-        if ($notifications) {
-            $manager = ExtensionManager::instance();
-
-            foreach ($notifications as &$notification) {
-                $notification['message'] = $manager->renderNotifications($notification);
-                unset($notification);
-            }
-        }
 
         return $this->render('TopxiaWebBundle:EsBar:ListContent/Notification/notify.html.twig', array(
             'notifications' => $notifications
