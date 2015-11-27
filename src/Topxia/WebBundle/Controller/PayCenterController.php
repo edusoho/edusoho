@@ -173,7 +173,6 @@ class PayCenterController extends BaseController
             ));
         } elseif ($payment == 'quickpay') {
             $order = $this->generateOrderToken($order, $params);
-            $this->updateBankAuth($order, $params);
 
             return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
                 'form'  => $formRequest,
@@ -195,17 +194,6 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
-        }
-
-        if ($payData['payment'] == 'heepay') {
-            $order         = $this->getOrderService()->getOrderByToken($payData['token']);
-            $payData['sn'] = $order['sn'];
-        }
-
-        if ($payData['payment'] == 'quickpay') {
-            $order         = $this->getOrderService()->getOrderByToken($payData['token']);
-            $payData['sn'] = $order['sn'];
-            $this->createUserAuth($name, $payData);
         }
 
         list($success, $order) = $this->getPayCenterService()->pay($payData);
@@ -398,14 +386,6 @@ class PayCenterController extends BaseController
         return $request->setParams($requestParams);
     }
 
-    protected function createAuthBankRequest($name, $params)
-    {
-        $options = $this->getPaymentOptions($name);
-        $request = Payment::createAuthBankRequest($name, $options);
-        $order   = $this->getOrderService()->getOrderByToken($params['token']);
-        return $request->setParams(array('userId' => $order['userId']));
-    }
-
     protected function getOrderInfo($order)
     {
         $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
@@ -422,36 +402,6 @@ class PayCenterController extends BaseController
         $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
 
         return $orderInfo;
-    }
-
-    public function updateBankAuth($order, $params)
-    {
-        $order     = $this->getOrderService()->getOrderBySn($order['sn']);
-        $userAuth  = array('hy_auth_uid' => $params['hy_auth_uid'], 'hy_token_id' => $params['hy_token_id']);
-        $userAuth  = json_encode($userAuth);
-        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($order['userId']);
-
-        if (!empty($authBanks)) {
-            foreach ($authBanks as $authBank) {
-                $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
-            }
-        }
-    }
-
-    public function createUserAuth($name, $params)
-    {
-        $order           = $this->getOrderService()->getOrderBySn($params['sn']);
-        $authBankRequest = $this->createAuthBankRequest($name, $params);
-        $authBanks       = $authBankRequest->form();
-
-        foreach ($authBanks as $authBank) {
-            $bankAuth = $this->getUserService()->getUserPayAgreementByBankAuth($authBank['bankAuth']);
-
-            if (empty($bankAuth)) {
-                $field = array('userId' => $order['userId'], 'type' => $authBank['type'], 'bankName' => $authBank['bankName'], 'bankNumber' => $authBank['bankNumber'], 'bankAuth' => $authBank['bankAuth'], 'otherId' => $authBank['bankId'], 'createdTime' => time());
-                $this->getUserService()->createUserPayAgreement($field);
-            }
-        }
     }
 
     public function generateOrderToken($order, $params)

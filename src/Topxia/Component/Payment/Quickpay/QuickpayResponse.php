@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Component\Payment\Quickpay;
 
+use Topxia\Component\Payment\Payment;
 use Topxia\Component\Payment\Response;
+use Topxia\Service\Common\ServiceKernel;
 
 class QuickpayResponse extends Response
 {
@@ -18,9 +20,11 @@ class QuickpayResponse extends Response
             throw new \RuntimeException('快捷支付失败');
         }
 
+        $this->createUserAuth('quickpay', $result);
+
         $data            = array();
         $data['payment'] = 'quickpay';
-        $data['token']   = $result["agent_bill_id"];
+        $data['sn']      = $this->getrderSn($result["agent_bill_id"]);
 
         if (in_array($result['status'], array('SUCCESS'))) {
             $data['status'] = 'success';
@@ -102,6 +106,65 @@ class QuickpayResponse extends Response
         return $sign;
     }
 
+    public function createUserAuth($name, $params)
+    {
+        $order           = $this->getOrderService()->getOrderByToken($params['agent_bill_id']);
+        $authBankRequest = $this->createAuthBankRequest($name, $params);
+        $authBanks       = $authBankRequest->form();
+
+        foreach ($authBanks as $authBank) {
+            $bankAuth = $this->getUserService()->getUserPayAgreementByBankAuth($authBank['bankAuth']);
+
+            if (empty($bankAuth)) {
+                $field = array('userId' => $order['userId'], 'type' => $authBank['type'], 'bankName' => $authBank['bankName'], 'bankNumber' => $authBank['bankNumber'], 'bankAuth' => $authBank['bankAuth'], 'otherId' => $authBank['bankId'], 'createdTime' => time());
+                $this->getUserService()->createUserPayAgreement($field);
+            }
+        }
+    }
+
+    protected function createAuthBankRequest($name, $params)
+    {
+        $options = $this->getPaymentOptions($name);
+        $request = Payment::createAuthBankRequest($name, $options);
+        $order   = $this->getOrderService()->getOrderByToken($params['agent_bill_id']);
+        return $request->setParams(array('userId' => $order['userId']));
+    }
+
+    protected function getPaymentOptions($payment)
+    {
+        $settings = $this->getSettingService()->get('payment');
+
+        if (empty($settings)) {
+            throw new \RuntimeException('支付参数尚未配置，请先配置。');
+        }
+
+        if (empty($settings['enabled'])) {
+            throw new \RuntimeException("支付模块未开启，请先开启。");
+        }
+
+        if (empty($settings[$payment.'_enabled'])) {
+            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
+        }
+
+        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
+            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
+        }
+
+        $options = array(
+            'key'    => $settings["{$payment}_key"],
+            'secret' => $settings["{$payment}_secret"],
+            'aes'    => $settings["{$payment}_aes"]
+        );
+
+        return $options;
+    }
+
+    public function getrderSn($token)
+    {
+        $order = $this->getOrderService()->getOrderByToken($token);
+        return $order['sn'];
+    }
+
     private function Encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
@@ -118,5 +181,25 @@ class QuickpayResponse extends Response
         $encrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv);
 
         return $encrypted;
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

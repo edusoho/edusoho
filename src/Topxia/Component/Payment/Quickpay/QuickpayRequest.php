@@ -2,6 +2,7 @@
 namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class QuickpayRequest extends Request
 {
@@ -79,6 +80,8 @@ class QuickpayRequest extends Request
 
         parse_str($redirurl, $tip);
 
+        $this->updateBankAuth($params['orderSn'], $tip);
+
         $this->submitUrl = $tip['redirect_url'];
         unset($tip['ret_code'], $tip['ret_msg'], $tip['redirect_url']);
         $converted             = array();
@@ -93,7 +96,21 @@ class QuickpayRequest extends Request
 
     private function generateOrderToken()
     {
-        return 'heepay_'.date('YmdHis', time()).mt_rand(10000, 99999);
+        return 'H'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function updateBankAuth($sn, $params)
+    {
+        $order     = $this->getOrderService()->getOrderBySn($sn);
+        $userAuth  = array('hy_auth_uid' => $params['hy_auth_uid'], 'hy_token_id' => $params['hy_token_id']);
+        $userAuth  = json_encode($userAuth);
+        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($order['userId']);
+
+        if (!empty($authBanks)) {
+            foreach ($authBanks as $authBank) {
+                $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
+            }
+        }
     }
 
     private function curlRequest($url)
@@ -154,5 +171,20 @@ class QuickpayRequest extends Request
         $encrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv);
 
         return $encrypted;
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
