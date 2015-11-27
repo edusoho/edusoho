@@ -175,6 +175,11 @@ body {
 .score i {
   color: #f3b760 !important;
 }
+.swiper-slide {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
 .qs-header {
   height: 90px;
   background-color: #fff;
@@ -816,7 +821,7 @@ body {
   margin-bottom: 5px;
 }
 .qs-teacher-item .teacher-action .btn {
-  margin: 10px;
+  margin: 10px 5px;
 }
 .qs-teacher-item:hover .mask {
   opacity: 1;
@@ -859,6 +864,10 @@ body {
 .qs-tag.qs-tag-info {
   color: #4a90e2;
   background-color: #e7f2fc;
+}
+.qs-tag.qs-tag-warning {
+  color: #f3b760;
+  background-color: #f1e6d2;
 }
 .btn-ghost-default {
   padding: 8px 25px;

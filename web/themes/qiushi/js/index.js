@@ -19,6 +19,22 @@ define(function(require, exports, module) {
             });
         }
 
+        if ($(".qs-teacher-list .swiper-slide").length > 4) {
+            var swiper = new Swiper('.qs-teacher-list.swiper-container', {
+                pagination: '.swiper-pager',
+                paginationClickable: true,
+                // autoplay: 5000,
+                autoplayDisableOnInteraction: false,
+                loop: true,
+                calculateHeight: true,
+                roundLengths: true,
+                slidesPerView: 4,
+                onInit: function(swiper) {
+                   $(".swiper-slide").removeClass('swiper-hidden'); 
+                }
+            });
+        }
+
         $('#category-tab a:first').tab('show');
         $('#category-tab a').click(function(e){
             e.preventDefault()

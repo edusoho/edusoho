@@ -19,6 +19,13 @@ body {
   color: @brand-warning !important;
 }
 
+.swiper-slide {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+
+}
+
 // 头部
 .qs-header {
   height: 90px;
@@ -588,7 +595,7 @@ body {
     margin-bottom: 5px;
   }
   .teacher-action .btn {
-    margin: 10px;
+    margin: 10px 5px;
   }
   &:hover .mask {
     .opacity(1);
@@ -622,7 +629,6 @@ body {
 }
 
 
-
 // 组件
 .qs-tag {
   display: inline-block;
@@ -635,6 +641,10 @@ body {
   &.qs-tag-info {
     color: @brand-info;
     background-color: #e7f2fc;
+  }
+  &.qs-tag-warning {
+    color: @brand-warning;
+    background-color: #f1e6d2;
   }
 }
 
