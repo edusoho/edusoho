@@ -115,7 +115,7 @@ define(function(require, exports, module) {
                 $('#'+$(html).attr('id')).data('config', currentData);
                 if (isChoiced) {
                     $('#'+$(html).attr('id')).find('.check-block').prop('checked', true);
-                    $('#'+$(html).attr('id')).find('.item-edit-btn').show();
+                    $('#'+$(html).attr('id')).find('.item-edit-btn,.item-set-btn').show();
                 }
                 var src = $iframe.attr('src') + "?t=" + Date.parse(new Date());
                 $iframe.attr('src', src);

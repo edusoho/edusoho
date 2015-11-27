@@ -6,10 +6,10 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        $("#middle-banner-edit").on('click',function(){
-            window.open($(this).data('url'));
-            return;
-        });
+        // $("#middle-banner-edit").on('click',function(){
+        //     window.open($(this).data('url'));
+        //     return;
+        // });
 
         var $list = $(".module-item-list").sortable({
             distance: 20,
@@ -45,14 +45,14 @@ define(function(require, exports, module) {
 
         $("#theme-edit-content").on("click", '.check-block', function(event){
             event.stopPropagation();
-
             themeManage.setCurrentItem($(this).parents('li.theme-edit-item'));
-            
+           
             if ($(this).prop('checked') == true) {
-                $(this).parents('li').find('.item-edit-btn').show();
+                $(this).parents('li').find('.item-edit-btn,.item-set-btn').show();
             } else {
-                $(this).parents('li').find('.item-edit-btn').hide();
+                $(this).parents('li').find('.item-edit-btn,.item-set-btn').hide();
             }
+
             themeManage.getElement().trigger('save_config');
         });
 
