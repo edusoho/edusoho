@@ -89,7 +89,13 @@
                       <a href="{{ path('course_show', {id:course.id}) }}">
                         {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
                       <div class="mask">
-                        <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">正在直播</a>
+                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">正在直播</a>
+                        {% elseif lesson and "now"|date("U") < lesson.startTime %}
+                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-warning">即将直播</a>
+                        {% elseif lesson and "now"|date("U") > lesson.endTime %}
+                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info">往期回顾</a>
+                        {% endif %}
                       </div>
                     </div>
                     <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
