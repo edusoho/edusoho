@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <!-- 小组动态 -->
-  {% set groups = data('HotGroup',{'count':config.count}) %}
+  {% set groups = data('HotGroup',{'count':config.count|default(6)}) %}
   {% if groups %}
     <section class="group-dynamic">
       <div class="container">

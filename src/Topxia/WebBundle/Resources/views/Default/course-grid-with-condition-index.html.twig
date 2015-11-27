@@ -2,7 +2,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <!-- course -->
 <div class="es-box es-course">
-  {% set count = config.count %}
+  {% set count = config.count|default(12) %}
   {% set categoryId = config.categoryId|default(null) %}
   {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
   {% set categoriesFirst = data('Categories',{'group':'course'})%}
