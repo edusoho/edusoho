@@ -88,6 +88,12 @@ class HeepayResponse extends Response
         return $response;
     }
 
+    public function getOrderSn($token)
+    {
+        $order = $this->getOrderService()->getOrderByToken($token);
+        return $order['sn'];
+    }
+
     private function signParams($params)
     {
         unset($params['sign'], $params['pay_message'], $params['remark']);
