@@ -27,7 +27,6 @@
 					{{path('classroom_thread_show',{classroomId:thread.targetId,threadId:thread.id})}}
 				{% elseif thread.targetType == 'course'%}
 					{{path('course_thread_show',{courseId:thread.targetId,threadId:thread.id})}}
-					
 				{% endif %}
 
 				" target="_blank">{{thread.title}}</a></div>
