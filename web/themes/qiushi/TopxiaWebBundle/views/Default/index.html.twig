@@ -80,7 +80,7 @@
           {% if firstCat.parentId == 0 %}
             {% set recentLiveCourses = data('LiveCourses',{ categoryId:firstCat.id, count:4 }) %}
             
-            <div role="tabpanel" class="tab-pane fade {% if loop.index == 1 %}active in{% endif %} row" id="live-category-{{firstCat.id}}" aria-labelledby="home-tab">
+            <div role="tabpanel" class="tab-pane fade row" id="live-category-{{firstCat.id}}" aria-labelledby="home-tab">
               {% for course in recentLiveCourses if course %}
                 {% set lesson = course['lesson']|default(null) %}
                 <div class="col-lg-3 col-md-4 col-sm-6">
