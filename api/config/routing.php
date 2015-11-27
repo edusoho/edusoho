@@ -19,9 +19,15 @@ $app->mount(_u('/messages'), include dirname(__DIR__) . '/src/messages.php' );
 $app->mount(_u('/files'), include dirname(__DIR__) . '/src/files.php' );
 
 
+
+
 /**
  * 新的路由配置方式
  */
+$app->get(_u('/users'), 'res.Users:get');
+$app->get(_u('/courses'), 'res.Courses:get');
+$app->get(_u('/courselessons'), 'res.CourseLessons:get');
+$app->get(_u('/threads'), 'res.Threads:get');
 $app->get(_u('/articles'), 'res.Articles:get');
 $app->get(_u('/articles/{id}'), 'res.Article:get');
 $app->get(_u('/article_categories'), 'res.ArticleCategories:get');

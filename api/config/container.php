@@ -10,6 +10,13 @@ $resources = array(
     'Classrooms',
     'MeChatroomes',
     'User',
+    'Users',
+    'Course',
+    'Courses',
+    'CourseLesson',
+    'CourseLessons',
+    'Thread',
+    'Threads',
     'Apps',
     'App'
 );
