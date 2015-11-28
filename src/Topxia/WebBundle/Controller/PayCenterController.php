@@ -183,15 +183,7 @@ class PayCenterController extends BaseController
         $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment']);
         $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
-
-        if ($formRequest['ret_code'] == '0000') {
-            $message = array("success" => true, 'message' => '解绑银行卡成功');
-            //$this->getUserService()->
-            return $this->createJsonResponse($message);
-        } else {
-            $message = array("success" => flase, 'message' => $formRequest['ret_msg']);
-            return $this->createJsonResponse($message);
-        }
+        return $this->createJsonResponse($formRequest);
     }
 
     public function payReturnAction(Request $request, $name, $successCallback = null)

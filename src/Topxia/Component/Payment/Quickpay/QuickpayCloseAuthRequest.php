@@ -2,6 +2,7 @@
 namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class QuickpayCloseAuthRequest extends Request
 {
@@ -9,15 +10,24 @@ class QuickpayCloseAuthRequest extends Request
 
     public function form()
     {
-        $encrypt_data = $this->convertParams($this->params);
-        $sign         = $this->signParams($this->params);
+        $params       = $this->params;
+        $encrypt_data = $this->convertParams($params);
+        $sign         = $this->signParams($params);
         $url          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
         $result       = $this->curlRequest($url);
 
         $xml      = simplexml_load_string($result);
         $redir    = (string) $xml->encrypt_data;
         $redirurl = $this->Decrypt($redir, $this->options['aes']);
-        parse_str($redirurl, $message);
+        parse_str($redirurl, $ret);
+
+        if ($ret['ret_code'] == '0000') {
+            $message = array("success" => true, 'message' => '解绑银行卡成功');
+            $this->getUserService()->deleteUserPayAgreements($params['authBank']['id']);
+        } else {
+            $message = array("success" => false, 'message' => $ret['ret_msg']);
+        }
+
         return $message;
     }
 
@@ -59,6 +69,16 @@ class QuickpayCloseAuthRequest extends Request
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
     private function Encrypt($data, $key)

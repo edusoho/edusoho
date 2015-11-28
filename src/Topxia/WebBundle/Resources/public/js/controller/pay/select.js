@@ -35,16 +35,23 @@ define(function(require, exports, module){
             });
         });
 
-        $(".closed").on("click",function(){
+        $(".pay-agreement").on('click', '.closed', function() {
             if(!confirm('确定解除绑定该银行卡吗')){
                 return;
             }
+
+            var self = $(this);
             var orderId = $("input[name='orderId']").val();
             var payAgreementId = $(this).parents(".pay-bank").find("input").val();
             var payment = $("input[name='payment']").val();
 
             $.post($(this).data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
-
+                if(response.success){
+                    self.parent('.pay-bank').remove();
+                    Notify.success(response.message);
+                }else{
+                    Notify.danger(response.message);
+                }
             })
         })
     };

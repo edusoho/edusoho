@@ -2226,10 +2226,10 @@ class UserServiceTest extends BaseTestCase
 
     public function testDeleteUserPayAgreements()
     {
-        $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'otherId' => 1);
-        $bank     = $this->getUserService()->createUserPayAgreement($field);
-        $authBank = $this->getUserService()->deleteUserPayAgreements(1);
-        //$this->assertEquals('农业银行', $authBank[0]['bankName']);
+        $field             = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'otherId' => 1);
+        $bank              = $this->getUserService()->createUserPayAgreement($field);
+        $userPayAgreements = $this->getUserService()->deleteUserPayAgreements(1);
+        $this->assertEquals(1, $userPayAgreements);
     }
 
     /**

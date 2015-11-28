@@ -133,24 +133,7 @@ class QuickpayResponse extends Response
     protected function getPaymentOptions($payment)
     {
         $settings = $this->getSettingService()->get('payment');
-
-        if (empty($settings)) {
-            throw new \RuntimeException('支付参数尚未配置，请先配置。');
-        }
-
-        if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
-        }
-
-        if (empty($settings[$payment.'_enabled'])) {
-            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
-        }
-
-        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
-        }
-
-        $options = array(
+        $options  = array(
             'key'    => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
             'aes'    => $settings["{$payment}_aes"]
