@@ -39,8 +39,13 @@ define(function(require, exports, module){
             if(!confirm('确定解除绑定该银行卡吗')){
                 return;
             }
+            var orderId = $("input[name='orderId']").val();
             var payAgreementId = $(this).parents(".pay-bank").find("input").val();
+            var payment = $("input[name='payment']").val();
 
+            $.post($(this).data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
+
+            })
         })
     };
 

@@ -1369,11 +1369,11 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function getUserPayAgreement($id)
     {
-       return $this->getUserPayAgreementDao()->getUserPayAgreement($id); 
+        return $this->getUserPayAgreementDao()->getUserPayAgreement($id);
     }
 
     public function getUserPayAgreementByBankAuth($bankAuth)
-    {   
+    {
         return $this->getUserPayAgreementDao()->getUserPayAgreementByBankAuth($bankAuth);
     }
 
@@ -1384,18 +1384,23 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function createUserPayAgreement($field)
     {
-        $field = ArrayToolkit::parts($field, array('userId','type','bankName','bankNumber','userAuth','bankAuth','otherId'));
+        $field = ArrayToolkit::parts($field, array('userId', 'type', 'bankName', 'bankNumber', 'userAuth', 'bankAuth', 'otherId'));
         return $this->getUserPayAgreementDao()->addUserPayAgreement($field);
     }
 
-    public function updateUserPayAgreementByBankAuth($bankAuth,$fields)
+    public function updateUserPayAgreementByBankAuth($bankAuth, $fields)
     {
-       return $this->getUserPayAgreementDao()->updateUserPayAgreementByBankAuth($bankAuth,$fields); 
+        return $this->getUserPayAgreementDao()->updateUserPayAgreementByBankAuth($bankAuth, $fields);
     }
 
     public function findUserPayAgreementsByUserId($userId)
     {
         return $this->getUserPayAgreementDao()->findUserPayAgreementsByUserId($userId);
+    }
+
+    public function deleteUserPayAgreements($id)
+    {
+        return $this->getUserPayAgreementDao()->deleteUserPayAgreements($id);
     }
 
     protected function getFriendDao()
@@ -1435,7 +1440,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     protected function getUserPayAgreementDao()
     {
-      return $this->createDao('User.UserPayAgreementDao');  
+        return $this->createDao('User.UserPayAgreementDao');
     }
 
     protected function getFileService()
@@ -1509,6 +1514,7 @@ class UserSerialize
             $user['roles'][1] = $user['roles'][0];
             $user['roles'][0] = $temp;
         }
+
         //交换学员角色跟roles数组第0个的位置;
 
         return $user;

@@ -17,19 +17,17 @@ class QuickpayCloseAuthRequest extends Request
         $xml      = simplexml_load_string($result);
         $redir    = (string) $xml->encrypt_data;
         $redirurl = $this->Decrypt($redir, $this->options['aes']);
-        parse_str($redirurl, $authBanks);
-
-        return $this->getListBank($authBanks);
+        parse_str($redirurl, $message);
+        return $message;
     }
 
     public function signParams($params)
     {
         $signStr = '';
         $signStr = $signStr.'agent_id='.$this->options['key'];
-        $signStr = $signStr.'hy_auth_uid='.'';
+        $signStr = $signStr.'&hy_auth_uid='.$params['authBank']['bankAuth'];
         $signStr = $signStr.'&key='.$this->options['secret'];
         $signStr = $signStr.'&mobile='.'';
-        $signStr = $signStr.'&pre_auth_uid='.'';
         $signStr = $signStr.'&timestamp='.time() * 1000;
         $signStr = $signStr.'&version='. 1;
         $sign    = md5(strtolower($signStr));
@@ -42,7 +40,7 @@ class QuickpayCloseAuthRequest extends Request
         $converted                = array();
         $converted['agent_id']    = $this->options['key'];
         $converted['version']     = 1;
-        $converted['hy_auth_uid'] = '';
+        $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
         $converted['timestamp']   = time() * 1000;
         $converted['mobile']      = '';
         $encrypt_data             = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
@@ -61,29 +59,6 @@ class QuickpayCloseAuthRequest extends Request
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;
-    }
-
-    private function getListBank($authBanks)
-    {
-        $user_bank = array();
-
-        if (array_key_exists('auth_uid_Info', $authBanks)) {
-            $authBanks['auth_uid_Info'] = trim($authBanks['auth_uid_Info'], ';');
-            $banks                      = explode(";", $authBanks['auth_uid_Info']);
-
-            foreach ($banks as $key => $bank) {
-                $bankInfos = explode("_", $bank);
-                $data      = array();
-
-                foreach ($bankInfos as $bankInfo) {
-                    $data[] = $bankInfo;
-                }
-
-                list($user_bank[$key]['bankId'], $user_bank[$key]['bankName'], $user_bank[$key]['bankNumber'], $user_bank[$key]['type'], $user_bank[$key]['bankAuth']) = $data;
-            }
-        }
-
-        return $user_bank;
     }
 
     private function Encrypt($data, $key)

@@ -175,10 +175,23 @@ class PayCenterController extends BaseController
         ));
     }
 
-    public function closeAuthRequestAction(Request $request)
+    public function closeAuthAction(Request $request)
     {
-        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
+        $field          = $request->request->all();
+        $order          = $this->getOrderService()->getOrder($field["orderId"]);
+        $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
+        $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment']);
+        $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
+
+        if ($formRequest['ret_code'] == '0000') {
+            $message = array("success" => true, 'message' => '解绑银行卡成功');
+            //$this->getUserService()->
+            return $this->createJsonResponse($message);
+        } else {
+            $message = array("success" => flase, 'message' => $formRequest['ret_msg']);
+            return $this->createJsonResponse($message);
+        }
     }
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
@@ -366,19 +379,24 @@ class PayCenterController extends BaseController
 
     protected function createPaymentRequest($order, $requestParams)
     {
-        $options      = $this->getPaymentOptions($order['payment']);
-        $user_profile = $this->getUserService()->getUserProfile($order['userId']);
-        $request      = Payment::createRequest($order['payment'], $options);
+        $options = $this->getPaymentOptions($order['payment']);
+        $request = Payment::createRequest($order['payment'], $options);
 
         $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
             'userId'  => $order['userId'],
             'title'   => $order['title'],
             'summary' => '',
-            'mobile'  => $user_profile['mobile'],
             'amount'  => $order['amount']
         ));
         return $request->setParams($requestParams);
+    }
+
+    protected function createCloseAuthBankRequest($order, $params)
+    {
+        $options = $this->getPaymentOptions($params['payment']);
+        $request = Payment::createCloseAuthRequest($params['payment'], $options);
+        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank']));
     }
 
     protected function getOrderInfo($order)

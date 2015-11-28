@@ -44,7 +44,7 @@ class QuickpayRequest extends Request
             $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
         }
 
-        $converted['mobile']      = $params['mobile'];
+        $converted['mobile']      = '';
         $converted['device_type'] = 1;
         $converted['device_id']   = '';
         $converted['custom_page'] = 0;

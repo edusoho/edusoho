@@ -79,7 +79,7 @@
               </select> #}
               {% for payAgreement in payAgreements %}
                 <div class="pay-bank">
-                  <input type="radio" name='payAgreementId' value="{{payAgreement.id}}"/>{{payAgreement.bankName}}－{{payAgreement.bankNumber}} <span class="closed">X</span>
+                  <input type="radio" name='payAgreementId' value="{{payAgreement.id}}"/>{{payAgreement.bankName}}－{{payAgreement.bankNumber}} <span class="closed" data-url="{{ path('pay_center_closeAuth')}}">X</span>
                 </div>
               {% endfor %}
 
