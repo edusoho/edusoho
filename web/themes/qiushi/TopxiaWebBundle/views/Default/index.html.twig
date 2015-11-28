@@ -122,7 +122,6 @@
           {% endif %}
         {% endfor %}
 
-
       </div>
     </div>
   </section>
@@ -232,8 +231,8 @@
             {% if firstCat.parentId == 0 %}
               {% set recommendCourses = data('RecommendCourses',{ categoryId: firstCat.id, count:12}) %}
 
-              <div role="tabpanel" class="tab-pane fade {% if loop.index == 1 %}active in{% endif %} row" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
-                {% for course in recommendCourses%}
+              <div role="tabpanel" class="tab-pane fade row" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
+                {% for course in recommendCourses if course %}
                   <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="qs-course-item">
                       <div class="course-img">
@@ -264,6 +263,7 @@
           {% endfor %}
 
       </div>
+      <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('course_explore')}}">更多课程</a></div>
     </div>
   </section>
 
