@@ -10,7 +10,12 @@ class Users extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-        $conditions = ArrayToolkit::parts($request->query->all(), array());
+        $conditions = $request->query->all();
+
+        // 兼容老接口，即将去除
+        if (!empty($conditions['q'])) {
+            return $this->matchUsers($conditions['q']);
+        }
 
         $sort = $request->query->get('sort', 'published');
         $start = $request->query->get('start', 0);
@@ -29,9 +34,12 @@ class Users extends BaseResource
 
     protected function multicallFilter($name, &$res)
     {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
-            $one['body'] = '';
+        $ids = ArrayToolkit::column($res, 'id');
+        $profiles = $this->getUserService()->findUserProfilesByIds($ids);
+
+        foreach ($res as &$user) {
+            $user['profile'] = $profiles[$user['id']];
+            $this->callFilter($name, $user);
         }
         return $res;
     }
@@ -39,5 +47,24 @@ class Users extends BaseResource
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    /**
+     * 用户模糊查询
+     */
+    private function matchUsers($q)
+    {
+        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id', 'DESC'), 0, 5);
+        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id', 'DESC'), 0, 5);
+
+        $mobileList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($mobileProfiles, 'id'));
+        $qqList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($qqProfiles, 'id'));
+        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('LENGTH(nickname)', 'ASC'), 0, 5);
+
+        return array(
+            'mobile' => filters($mobileList, 'user'),
+            'qq' => filters($qqList, 'user'),
+            'nickname' => filters($nicknameList, 'user'),
+        );
     }
 }

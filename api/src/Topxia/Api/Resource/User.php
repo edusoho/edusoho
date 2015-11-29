@@ -7,17 +7,61 @@ use Symfony\Component\HttpFoundation\Request;
 
 class User extends BaseResource
 {
+    private $_unsetFields = array(
+        'password', 'salt', 'payPassword', 'payPasswordSalt',
+    );
+
+    private $_publicFields = array(
+        'id', 'nickname' , 'title', 'isTeacher', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
+    );
+
+    private $_privateFields = array(
+        'id',  'nickname' , 'title', 'tags', 'type', 'isTeacher', 
+        'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
+        'email', 'emailVerified', 'roles', 'promoted', 'promotedTime', 
+        'locked', 'lockDeadline',
+        'loginTime', 'loginIp', 'approvalTime', 'approvalStatus', 'newMessageNum', 'newNotificationNum',
+        'createdIp', 'createdTime'
+    );
+
+    private $_profileFields = array(
+        'truename', 'idcard', 'gender', 'birthday', 'city', 'mobile', 'qq', 
+        'signature', 'about', 'company', 'job', 'school', 'class', 'weibo', 'weixin', 'site',
+    );
 
     public function filter(&$res)
     {
+        foreach ($this->_unsetFields as $key) {
+            unset($res[$key]);
+        }
 
-        unset($res['password']);
-        unset($res['salt']);
-        unset($res['payPassword']);
-        unset($res['payPasswordSalt']);
+        $res['isTeacher'] = in_array('ROLE_TEACHER', $res['roles']);
+        $res['about'] = $res['profile']['about'];
+
+        $currentUser = getCurrentUser();
+
+        $returnRes = array();
+        // if ($currentUser->isAdmin() || ($currentUser['id'] == $res['id'])) {
+
+            foreach ($this->_privateFields as $key) {
+                $returnRes[$key] = $res[$key];
+            }
+
+            foreach ($this->_profileFields as $key) {
+                $returnRes[$key] = $res['profile'][$key];
+            }
+
+        // } else {
+        //     foreach ($this->_publicFields as $key) {
+        //         $returnRes[$key] = $res[$key];
+        //     }
+        // }
+
+        $res = $returnRes;
+
+        return $returnRes;
        
         $res['promotedTime'] = date('c', $res['promotedTime']);
-        $res['lastPasswordFailTime'] = date('c', $res['lastPasswordFailTime']);
         $res['loginTime'] = date('c', $res['loginTime']);
         $res['approvalTime'] = date('c', $res['approvalTime']);
         $res['createdTime'] = date('c', $res['createdTime']);

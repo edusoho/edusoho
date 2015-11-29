@@ -17,21 +17,20 @@ use Symfony\Component\Debug\ExceptionHandler;
 // Debug::enable();
 ErrorHandler::register();
 ExceptionHandler::register();
-$config = include __DIR__ . '/config.php';
-$config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
+$paramaters = include __DIR__ . '/config/paramaters.php';
+$paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
 $connection = DriverManager::getConnection(array(
-    'dbname' => $config['database_name'],
-    'user' => $config['database_user'],
-    'password' => $config['database_password'],   
-    'host' => $config['database_host'],
-    'driver' => $config['database_driver'],
+    'dbname' => $paramaters['database_name'],
+    'user' => $paramaters['database_user'],
+    'password' => $paramaters['database_password'],   
+    'host' => $paramaters['database_host'],
+    'driver' => $paramaters['database_driver'],
     'charset' => 'utf8',
 ));
 
-
-$serviceKernel = ServiceKernel::create($config['environment'], true);
-$serviceKernel->setParameterBag(new ParameterBag($config));
+$serviceKernel = ServiceKernel::create($paramaters['environment'], true);
+$serviceKernel->setParameterBag(new ParameterBag($paramaters));
 $serviceKernel->setConnection($connection);
 // $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
@@ -45,47 +44,74 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app['debug'] = true;
 
 $app->view(function (array $result, Request $request) use ($app) {
+    // 兼容气球云搜索的接口
+    $documentType = $request->headers->get('X-Search-Document');
+    if ($documentType) {
+        $class = "Topxia\\Api\\SpecialResponse\\{$documentType}Response";
+        if (!class_exists($class)) {
+            throw new \RuntimeException("{$documentType}Response不存在！");
+        }
+
+        $obj = new $class();
+        $result = $obj->filter($result);
+    }
     return new JsonResponse($result);
 });
 
 include __DIR__ . '/config/container.php';
 
-
 $app->before(function (Request $request) use ($app) {
 
-    $whiteLists = include __DIR__ . '/whiteList.php';
-    $whiteLists = $request->getMethod() == 'GET' ? $whiteLists['get'] : $whiteLists['post'];
+    $path = rtrim($request->getPathInfo(), '/');
+
+    $whilelist = include __DIR__ . '/config/whitelist.php';
+
     $inWhiteList = 0;
-    foreach ($whiteLists as $whiteList) {
-        $path = $request->getPathInfo();
-        if (preg_match($whiteList, $request->getPathInfo())) {
+    foreach ($whilelist as $pattern) {
+        // var_dump($pattern);exit();
+        if (preg_match($pattern, $path)) {
             $inWhiteList = 1;
             break;
         }
     }
-    $token = $request->headers->get('Auth-Token', '');
-    if (!$inWhiteList && empty($token)) {
-        throw createNotFoundException("AuthToken is not exist.");
-    }
-    $userService = ServiceKernel::instance()->createService('User.UserService');
-    $token = $userService->getToken('mobile_login', $token);
 
-    if (!$inWhiteList && empty($token['userId'])) {
-        throw createAccessDeniedException("AuthToken is invalid.");
-    }
+    $authMethod = $request->headers->get('X-Auth-Method');
 
-    $user = $userService->getUser($token['userId']);
-    if (!$inWhiteList && empty($user)) {
-        throw createNotFoundException("Auth user is not found.");
+    if ($authMethod == 'key') {
+
+    } else {
+        $token = $request->headers->get('X-Auth-Token');
+        if (empty($token)) {
+            // 兼容老的协议，即将去除
+            $token = $request->headers->get('Auth-Token', '');
+        }
+
+        if (!$inWhiteList && empty($token)) {
+            throw createNotFoundException("AuthToken is not exist.");
+        }
+
+        $userService = ServiceKernel::instance()->createService('User.UserService');
+        $token = $userService->getToken('mobile_login', $token);
+
+        if (!$inWhiteList && empty($token['userId'])) {
+            throw createAccessDeniedException("AuthToken is invalid.");
+        }
+
+        $user = $userService->getUser($token['userId']);
+        if (!$inWhiteList && empty($user)) {
+            throw createNotFoundException("Auth user is not found.");
+        }
+
+        setCurrentUser($user);
     }
-    setCurrentUser($user);
 
 });
 
 $app->error(function (\Exception $e, $code) {
     return array(
         'code' => $code,
-        'message' => $e->getMessage()
+        'error' => $e->getMessage(),
+        'message' => $e->getMessage(), // 兼容老的协议，即将去除
     );
 });
 

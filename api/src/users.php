@@ -8,48 +8,6 @@ use Topxia\Service\Common\ServiceKernel;
 $api = $app['controllers_factory'];
 
 /*
-## 用户模糊查询
-
-GET /users
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| q | string | 是 | 用于匹配的字段值,分别模糊匹配手机,qq,昵称,每种匹配返回一个列表,每个列表最多五个 |
-
- ** 响应 **
-
-```
-{
-"mobile": [
-datalist
-],
-"qq": [
-datalist
-],
-"nickname": [
-datalist
-]
-}
-```
- */
-$api->get('/', function (Request $request) {
-	$field = $request->query->get('q');
-	$mobileProfiles = ServiceKernel::instance()->createService('User.UserService')->searchUserProfiles(array('mobile' => $field), array('id', 'DESC'), 0, 5);
-	$qqProfiles = ServiceKernel::instance()->createService('User.UserService')->searchUserProfiles(array('qq' => $field), array('id', 'DESC'), 0, 5);
-
-	$mobileList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($mobileProfiles, 'id'));
-	$qqList = ServiceKernel::instance()->createService('User.UserService')->findUsersByIds(ArrayToolkit::column($qqProfiles, 'id'));
-	$nicknameList = ServiceKernel::instance()->createService('User.UserService')->searchUsers(array('nickname' => $field), array('LENGTH(nickname)', 'ASC'), 0, 5);
-	return array(
-		'mobile' => filters($mobileList, 'user'),
-		'qq' => filters($qqList, 'user'),
-		'nickname' => filters($nicknameList, 'user'),
-	);
-});
-
-/*
 ## 分页获取全部用户
 
 GET /users/pages
