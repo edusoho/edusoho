@@ -4,6 +4,20 @@ define(function(require, exports, module) {
     var WebUploader = require('edusoho.webuploader');
     exports.run = function() {
 
+        $("#qq-property-tips").popover({
+            html: true,
+            trigger: 'hover',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#qq-property-tips-html").html()
+        });
+
+        $("#qq-group-property-tips").popover({
+            html: true,
+            trigger: 'hover',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#qq-group-property-tips-html").html()
+        });
+
         var $form = $("#consult-setting-form");
         var uploader = new WebUploader({
             element: '#consult-upload'

@@ -74,7 +74,16 @@
   </div>
 
   <fieldset>
-    <legend>QQ客服设置</legend>
+    <legend>QQ客服设置
+      <span class="glyphicon glyphicon-question-sign text-muted pull-right mll mts" id="qq-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+      <div id="qq-property-tips-html" style="display:none;">
+        <div style="width:250px;">
+          <span style="color:blue;">如何获取在线咨询链接？</span><br>
+          1，登录 <a target="_blank" href="http://id.b.qq.com">http://id.b.qq.com</a>。 <br>
+          2，营销QQ－>在线代码生成－>生成在线咨询链接。（包含“http：”）<br>
+        </div>
+      </div>
+    </legend>
     <div id="consult-qq">
       {% for qq in consult.qq %}
       <div class="row form-group has-feedback">
@@ -102,7 +111,16 @@
 
 
   <fieldset>
-    <legend>QQ群设置<a target="_blank" href="http://qun.qq.com/join.html">获取QQ群直接加入网页代码</a></legend>
+    <legend>QQ群设置
+      <span class="glyphicon glyphicon-question-sign text-muted pull-right mll mts" id="qq-group-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+      <div id="qq-group-property-tips-html" style="display:none;">
+        <div style="width:250px;">
+          <span style="color:blue;">如何获取在线咨询链接？</span><br>
+          1，访问<a target="_blank" href="http://qun.qq.com/join.html">http://qun.qq.com/join.html</a>获取QQ群直接加入网页代码。 <br>
+          2，一键加群代码只在侧边栏有效<br>
+        </div>
+      </div>
+    </legend>
     <div id="consult-qqgroup">
       {% for qqgroup in consult.qqgroup %}
       <div class="row form-group has-feedback">
@@ -125,7 +143,6 @@
       <div class="controls col-md-4 col-md-offset-2">
         <span class="btn-link" data-parentId='consult-qqgroup' data-length='{{consult.qqgroup | length}}'>新增</span>
       </div>
-      <p class="help-block">一键加群代码只在开启侧边栏有效。</p>
     </div>
   </fieldset>
 
