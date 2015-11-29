@@ -39,40 +39,6 @@ $api->get('/pages', function (Request $request) {
 	);
 });
 
-//根据id获取一个用户信息
-
-$api->get('/{id}', function (Request $request, $id) {
-	$user = convert($id, 'user');
-	return filter($user, 'user');
-});
-
-/*
-## 注册
-
-POST /users/
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| email | string | 是 | 邮箱 |
-| nickname | string | 是 | 昵称 |
-| password | string | 是 | 密码 |
-
- ** 响应 **
-
-```
-{
-"xxx": "xxx"
-}
-```
- */
-$api->post('/', function (Request $request) {
-	$fields = $request->request->all();
-	$user = ServiceKernel::instance()->createService('User.UserService')->register($fields);
-	return filter($user, 'user');
-});
-
 /*
 
 ## 登录

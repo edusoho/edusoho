@@ -109,9 +109,10 @@ $app->before(function (Request $request) use ($app) {
 
 $app->error(function (\Exception $e, $code) {
     return array(
-        'code' => $code,
-        'error' => $e->getMessage(),
-        'message' => $e->getMessage(), // 兼容老的协议，即将去除
+        'error' => array(
+            'code' => $code,
+            'message' => $e->getMessage(),
+        ),
     );
 });
 

@@ -18,8 +18,7 @@ class User extends BaseResource
     private $_privateFields = array(
         'id',  'nickname' , 'title', 'tags', 'type', 'isTeacher', 
         'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
-        'email', 'emailVerified', 'roles', 'promoted', 'promotedTime', 
-        'locked', 'lockDeadline',
+        'email', 'emailVerified', 'roles', 'promoted', 'promotedTime', 'locked', 'lockDeadline',
         'loginTime', 'loginIp', 'approvalTime', 'approvalStatus', 'newMessageNum', 'newNotificationNum',
         'createdIp', 'createdTime'
     );
@@ -28,6 +27,17 @@ class User extends BaseResource
         'truename', 'idcard', 'gender', 'birthday', 'city', 'mobile', 'qq', 
         'signature', 'about', 'company', 'job', 'school', 'class', 'weibo', 'weixin', 'site',
     );
+
+    public function get(Application $app, Request $request, $id)
+    {
+        $user = $this->getUserService()->getUser($id);
+        if (empty($user)) {
+            return $this->error(404, "用户(#{$id})不存在");
+        }
+        $user['profile'] = $this->getUserService()->getUserProfile($id);
+
+        return $this->filter($user);
+    }
 
     public function filter(&$res)
     {
@@ -41,7 +51,7 @@ class User extends BaseResource
         $currentUser = getCurrentUser();
 
         $returnRes = array();
-        // if ($currentUser->isAdmin() || ($currentUser['id'] == $res['id'])) {
+        if ($currentUser->isAdmin() || ($currentUser['id'] == $res['id'])) {
 
             foreach ($this->_privateFields as $key) {
                 $returnRes[$key] = $res[$key];
@@ -51,49 +61,24 @@ class User extends BaseResource
                 $returnRes[$key] = $res['profile'][$key];
             }
 
-        // } else {
-        //     foreach ($this->_publicFields as $key) {
-        //         $returnRes[$key] = $res[$key];
-        //     }
-        // }
+        } else {
+            foreach ($this->_publicFields as $key) {
+                $returnRes[$key] = $res[$key];
+            }
+        }
 
         $res = $returnRes;
 
-        return $returnRes;
-       
-        $res['promotedTime'] = date('c', $res['promotedTime']);
-        $res['loginTime'] = date('c', $res['loginTime']);
-        $res['approvalTime'] = date('c', $res['approvalTime']);
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['userId'] = $res['id'];
-        $res['mobile'] = $res['verifiedMobile'];
-        unset($res['id']);
-        unset($res['verifiedMobile']);
-        unset($res['uri']);
-        unset($res['type']);
-        unset($res['point']);
-        unset($res['coin']);
-        unset($res['emailVerified']);
-        unset($res['setup']);
-        unset($res['promoted']);
-        unset($res['promotedTime']);
-        unset($res['locked']);//TODO 是否需要处理
-        unset($res['lockDeadline']);//TODO 是否需要处理
-        unset($res['lastPasswordFailTime']);
-        unset($res['consecutivePasswordErrorTimes']);
-        unset($res['loginTime']);
-        unset($res['loginIp']);
-        unset($res['loginSessionId']);
-        unset($res['approvalTime']);
-        unset($res['approvalStatus']);
-        unset($res['newMessageNum']);
-        unset($res['newNotificationNum']);
-        unset($res['smallAvatar']);
-        unset($res['mediumAvatar']);
-        unset($res['largeAvatar']);
+        foreach (array('smallAvatar', 'mediumAvatar', 'largeAvatar') as $key) {
+            $res[$key] = $this->getFileUrl($res[$key]);
+        }
 
-        unset($res['createdIp']);
-
+        foreach (array('promotedTime', 'loginTime', 'approvalTime', 'createdTime', 'updatedTime') as $key) {
+            if (!isset($res[$key])) {
+                continue;
+            }
+            $res[$key] = date('c', $res[$key]);
+        }
 
         return $res;
     }
@@ -108,6 +93,11 @@ class User extends BaseResource
         $simple['avatar'] = $this->getFileUrl($res['smallAvatar']);
 
         return $simple;
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
 }

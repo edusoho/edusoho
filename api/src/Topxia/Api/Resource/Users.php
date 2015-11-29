@@ -12,7 +12,7 @@ class Users extends BaseResource
     {
         $conditions = $request->query->all();
 
-        // 兼容老接口，即将去除
+        // @deprecated 兼容老接口，即将去除
         if (!empty($conditions['q'])) {
             return $this->matchUsers($conditions['q']);
         }
@@ -25,6 +25,14 @@ class Users extends BaseResource
         $start = $start == -1 ? rand(0, $total - 1) : $start;  
         $users = $this->getUserService()->searchUsers($conditions, array('createdTime','DESC'), $start, $limit);
         return $this->wrap($this->filter($users), $total);
+    }
+
+    public function post(Application $app, Request $request)
+    {
+        $fields = $request->request->all();
+        $user = $this->getUserService()->register($fields);
+        $user['profile'] = $this->getUserService()->getUserProfile($user['id']);
+        return $this->callFilter('User', $user);
     }
 
     public function filter(&$res)
