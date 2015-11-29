@@ -10,9 +10,9 @@
       {% if countQq > 0 %}
       <div class="row mtm">
         {% for qq in consult.qq if qq.name is not empty %}
-          {% if qq.market is defined and qq.market == 'yes' %}
+          {% if qq.url|default(false) %}
             <div class="col-xs-6 mbm text-overflow">
-              <a class="link-light" href="http://crm2.qq.com/page/portalpage/wpa.php?uin={{ qq.number }}&aty=0&a=0&curl=&ty=1" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
+              <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
                 {{ qq.name }}
               </a>
             </div>
