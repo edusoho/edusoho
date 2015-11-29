@@ -36,5 +36,7 @@ interface TestpaperResultDao
 
     public function updateTestpaperResultActive($testId,$userId);
 
+    public function updateTestResultsByTarget($target, $fields);
+
     public function deleteTestpaperResultByTestpaperId($testpaperId);
 }

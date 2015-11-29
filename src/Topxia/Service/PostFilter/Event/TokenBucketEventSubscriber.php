@@ -2,14 +2,12 @@
 namespace Topxia\Service\PostFilter\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\StringToolkit;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 
 class TokenBucketEventSubscriber implements EventSubscriberInterface
 {
-	public static function getSubscribedEvents()
+    public static function getSubscribedEvents()
     {
         return array(
             'thread.before_create' => 'before',
@@ -18,49 +16,52 @@ class TokenBucketEventSubscriber implements EventSubscriberInterface
             'thread.post.before_create' => 'before',
             'thread.post.create' => 'incrToken',
 
-            'courseThread.before_create' => 'before',
-            'courseThread.create' => 'incrToken',
+            'course.thread.before_create' => 'before',
+            'course.thread.create' => 'incrToken',
 
-            'courseThread.post.before_create' => 'before',
-            'courseThread.post.create' => 'incrToken',
+            'course.thread.post.before_create' => 'before',
+            'course.thread.post.create' => 'incrToken',
 
-            'groupThread.before_create' => 'before',
-            'groupThread.create' => 'incrToken',
+            'group.thread.before_create' => 'before',
+            'group.thread.create' => 'incrToken',
 
-            'groupThread.post.before_create' => 'before',
-            'groupThread.post.create' => 'incrToken',
+            'group.thread.post.before_create' => 'before',
+            'group.thread.post.create' => 'incrToken',
         );
     }
 
     public function before(ServiceEvent $event)
     {
         $currentUser = ServiceKernel::instance()->getCurrentUser();
+        if ($currentUser->isAdmin() || $currentUser->isSuperAdmin() || $currentUser->isTeacher()) {
+            return;
+        }
+
         $currentIp = $currentUser->currentIp;
 
-        $eventName = $event->getName();
-        $names = explode('.', $eventName);
-
-        if(!($this->getTokenBucketService()->hasToken($currentIp, $names[0])
-            && $this->getTokenBucketService()->hasToken($currentUser['id'], $names[0].'LoginedUser'))){
-    	   $event->stopPropagation();
+        if (!($this->getTokenBucketService()->hasToken($currentIp, 'thread')
+            && $this->getTokenBucketService()->hasToken($currentUser['id'], 'threadLoginedUser'))) {
+            $event->stopPropagation();
         }
 
     }
 
     public function incrToken(ServiceEvent $event)
     {
-        $eventName = $event->getName();
-        $names = explode('.', $eventName);
 
         $currentUser = ServiceKernel::instance()->getCurrentUser();
+        if ($currentUser->isAdmin() || $currentUser->isSuperAdmin() || $currentUser->isTeacher()) {
+            return;
+        }
+
         $currentIp = $currentUser->currentIp;
 
-        $this->getTokenBucketService()->incrToken($currentIp, $names[0]);
-        $this->getTokenBucketService()->incrToken($currentUser['id'], $names[0].'LoginedUser');
+        $this->getTokenBucketService()->incrToken($currentIp, 'thread');
+        $this->getTokenBucketService()->incrToken($currentUser['id'], 'threadLoginedUser');
     }
 
     public function getTokenBucketService()
     {
-    	return ServiceKernel::instance()->createService('PostFilter.TokenBucketService');
+        return ServiceKernel::instance()->createService('PostFilter.TokenBucketService');
     }
 }

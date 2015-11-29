@@ -14,8 +14,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'testpaper.reviewed' => 'onTestPaperReviewed',
-            'course.lesson.pubilsh' => 'onLessonPubilsh',
+            'course.lesson.publish' => 'onLessonPubilsh',
             'course.publish' => 'onCoursePublish',
+            'course.lesson.delete' => 'onCourseLessonDelete',
+            'course.lesson.update' => 'onCourseLessonUpdate',
+            'course.lesson.unpublish' => 'onCourseLessonUnpublish',
             'course.close' => 'onCourseClose',
             'announcement.create' => 'onAnnouncementCreate',
             'classroom.join' => 'onClassroomJoin',
@@ -30,9 +33,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onTestPaperReviewed(ServiceEvent $event)
     {
-        $result = $event->getSubject();
-        $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
-
+        $testpaper = $event->getSubject();
+        $result = $event->getArgument('testpaperResult');
+        
         $testpaper['target'] = explode('-', $testpaper['target']);
 
         $target = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
@@ -67,7 +70,52 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'lesson.publish','id' => $lesson['id'], 'lessonType' => $lesson['type']);
 
-        return $this->push($course['title'], $lesson['title'], $from, $to, $body);
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ((!isset($mobileSetting['enable'])||$mobileSetting['enable'])&&$lesson['type'] == 'live') {
+            $this->createJob($lesson);
+        }
+    }
+
+    public function onCourseLessonUnpublish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+    }
+
+    public function onCourseLessonUpdate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $argument = $context['argument'];
+        $lesson = $context['lesson'];
+        $mobileSetting = $this->getSettingService()->get('mobile');
+        if ( $lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime']&& (!isset($mobileSetting['enable'])||$mobileSetting['enable'])) {
+            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+            if ($jobs) {
+                $this->deleteJob($jobs);
+            }
+            
+            if ($lesson['status'] == 'published') {
+                $this->createJob($lesson);
+            }
+        }
+
+    }
+
+    public function onCourseLessonDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson = $context['lesson'];
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
     }
 
     public function onCoursePublish(ServiceEvent $event)
@@ -84,7 +132,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'course.open');
 
-        return $this->push($course['title'], '课程被关闭!', $from, $to, $body);
+        return $this->push($course['title'], '课程已发布!', $from, $to, $body);
 
     }
 
@@ -333,9 +381,33 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $path;
     }
 
-    protected function plainText($text)
+    protected function plainText($text, $count)
     {
-        return $text;
+        return mb_substr($text, 0, $count, 'utf-8');
+    }
+
+    protected function createJob($lesson)
+    {
+        if ($lesson['startTime'] >= (time() + 60*60)) {
+            $startJob = array(
+            'name' => "PushNotificationOneHourJob",
+            'cycle' => 'once',
+            'time' => $lesson['startTime'] - 60*60,
+            'jobClass' => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
+            'targetType' => 'lesson',
+            'targetId' => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }     
+    }
+
+    protected function deleteJob($jobs)
+    {
+        foreach ($jobs as $key => $job) {
+            if ($job['name'] == 'PushNotificationOneHourJob') {
+                $this->getCrontabService()->deleteJob($job['id']);
+            }
+        }
     }
 
     protected function getCourseService()
@@ -356,6 +428,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function getTestpaperService()
     {
         return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getCrontabService()
+    {
+        return ServiceKernel::instance()->createService('Crontab.CrontabService');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
 }

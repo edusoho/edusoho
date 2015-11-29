@@ -75,7 +75,6 @@ $app->before(function (Request $request) use ($app) {
     }
 
     $user = $userService->getUser($token['userId']);
-    // $user = $userService->getUser(1);
     if (!$inWhiteList && empty($user)) {
         throw createNotFoundException("Auth user is not found.");
     }

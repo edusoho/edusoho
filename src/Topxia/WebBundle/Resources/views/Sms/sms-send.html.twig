@@ -11,7 +11,7 @@
       <label for="title">发送对象:</label>
     </div>
     <div class="col-md-7 controls">
-      <p class="help-block">{% if targetType == 'course' and item.parentId %}班级内{% else %}所有{% endif %}用户</p>
+      <p class="help-block">{% if targetType == 'course' and item.parentId %}{{setting("classroom.name")|default("班级")}}内{% else %}所有{% endif %}用户</p>
     </div>
   </div>
 
