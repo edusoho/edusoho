@@ -132,54 +132,60 @@ class QuickpayRequest extends Request
 
     public function isMobile()
     {
-        global $_G;
-        $mobile = array();
-        //各个触控浏览器中$_SERVER['HTTP_USER_AGENT']所包含的字符串数组
-        static $touchbrowser_list = array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
-            'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
-            'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
-            'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
-            'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
-            'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
-            'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
-        //window手机浏览器数组【猜的】
-        static $mobilebrowser_list = array('windows phone');
-        //wap浏览器中$_SERVER['HTTP_USER_AGENT']所包含的字符串数组
-        static $wmlbrowser_list = array('cect', 'compal', 'ctl', 'lg', 'nec', 'tcl', 'alcatel', 'ericsson', 'bird', 'daxian', 'dbtel', 'eastcom',
-            'pantech', 'dopod', 'philips', 'haier', 'konka', 'kejian', 'lenovo', 'benq', 'mot', 'soutec', 'nokia', 'sagem', 'sgh',
-            'sed', 'capitel', 'panasonic', 'sonyericsson', 'sharp', 'amoi', 'panda', 'zte');
-        $pad_list  = array('pad', 'gt-p1000');
-        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
-
-        if (dstrpos($useragent, $pad_list)) {
-            return false;
+        if (isset($_SERVER['HTTP_VIA'])) {
+            return true;
         }
 
-        if (($v = dstrpos($useragent, $mobilebrowser_list, true))) {
-            $_G['mobile'] = $v;
-            return '1';
+        if (isset($_SERVER['HTTP_X_NOKIA_CONNECTION_MODE'])) {
+            return true;
         }
 
-        if (($v = dstrpos($useragent, $touchbrowser_list, true))) {
-            $_G['mobile'] = $v;
-            return '2';
+        if (isset($_SERVER['HTTP_X_UP_CALLING_LINE_ID'])) {
+            return true;
         }
 
-        if (($v = dstrpos($useragent, $wmlbrowser_list))) {
-            $_G['mobile'] = $v;
-            return '3'; //wml版
+        if (strpos(strtoupper($_SERVER['HTTP_ACCEPT']), "VND.WAP.WML") > 0) {
+            // Check whether the browser/gateway says it accepts WML.
+            $br = "WML";
+        } else {
+            $browser = isset($_SERVER['HTTP_USER_AGENT']) ? trim($_SERVER['HTTP_USER_AGENT']) : '';
+
+            if (empty($browser)) {
+                return true;
+            }
+
+            $browser = substr($browser, 0, 4);
+
+            if ($browser == "Noki" || // Nokia phones and emulators
+                $browser == "Eric" || // Ericsson WAP phones and emulators
+                $browser == "WapI" || // Ericsson WapIDE 2.0
+                $browser == "MC21" || // Ericsson MC218
+                $browser == "AUR" || // Ericsson R320
+                $browser == "R380" || // Ericsson R380
+                $browser == "UP.B" || // UP.Browser
+                $browser == "WinW" || // WinWAP browser
+                $browser == "UPG1" || // UP.SDK 4.0
+                $browser == "upsi" || // another kind of UP.Browser ??
+                $browser == "QWAP" || // unknown QWAPPER browser
+                $browser == "Jigs" || // unknown JigSaw browser
+                $browser == "Java" || // unknown Java based browser
+                $browser == "Alca" || // unknown Alcatel-BE3 browser (UP based?)
+                $browser == "MITS" || // unknown Mitsubishi browser
+                $browser == "MOT-" || // unknown browser (UP based?)
+                $browser == "My S" || // unknown Ericsson devkit browser ?
+                $browser == "WAPJ" || // Virtual WAPJAG www.wapjag.de
+                $browser == "fetc" || // fetchpage.cgi Perl script from www.wapcab.de
+                $browser == "ALAV" || // yet another unknown UP based browser ?
+                $browser == "Wapa" || // another unknown browser (Web based "Wapalyzer"?)
+                $browser == "Oper") // Opera
+            {
+                $br = "WML";
+            } else {
+                $br = "HTML";
+            }
         }
 
-        $brower = array('mozilla', 'chrome', 'safari', 'opera', 'm3gate', 'winwap', 'openwave', 'myop');
-
-        if (dstrpos($useragent, $brower)) {
-            return false;
-        }
-
-        $_G['mobile'] = 'unknown';
-        //对于未知类型的浏览器，通过$_GET['mobile']参数来决定是否是手机浏览器
-
-        if (isset($_G['mobiletpl'][$_GET['mobile']])) {
+        if ($br == "WML") {
             return true;
         } else {
             return false;
