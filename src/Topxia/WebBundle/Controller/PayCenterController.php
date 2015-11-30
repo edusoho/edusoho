@@ -207,11 +207,19 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '不是您绑定的银行卡，取消绑定失败');
         }
 
-        $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
-        $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment'], 'userProfile' => $userProfile);
-        $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
-        $formRequest    = $paymentRequest->form();
-        return $this->createJsonResponse($formRequest);
+        // $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
+        // $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment'], 'userProfile' => $userProfile);
+        // $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
+        //$formRequest    = $paymentRequest->form();
+
+        try {
+            $this->getUserService()->deleteUserPayAgreements($field['payAgreementId']);
+        } catch (Exception $e) {
+            throw $this->createAccessDeniedException('抱歉，解绑银行卡失败！');
+        }
+
+        $message = array("success" => true, 'message' => '解绑银行卡成功');
+        return $this->createJsonResponse($message);
     }
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
