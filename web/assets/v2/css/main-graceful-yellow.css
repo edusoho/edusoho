@@ -6666,8 +6666,8 @@ textarea {
   border-color: #ffae00;
   color: #ffae00;
 }
-.es-step li.done .es-step-num,
-.es-step li.doing .es-step-num {
+.es-step li.done .number,
+.es-step li.doing .number {
   border-color: #ffae00;
 }
 .class-serve > ul {
@@ -10381,7 +10381,6 @@ textarea {
   }
 }
 .order-detail-bg {
-  padding: 3px;
   margin-bottom: 20px;
   border: 1px solid #e1e1e1;
 }
@@ -10406,7 +10405,7 @@ textarea {
   position: relative;
   height: 150px;
   width: auto;
-  background-color: #f1f1f1;
+  background-color: #fafafa;
 }
 @media (max-width: 767px) {
   .order-detail-bg .order-detail {
@@ -11112,6 +11111,11 @@ textarea {
   margin-right: 10%;
   font-size: 18px;
 }
+@media (max-width: 1199px) {
+  .form-paytype .pay-type-label {
+    font-size: 16px;
+  }
+}
 @media (max-width: 767px) {
   .form-paytype .pay-type-label {
     display: block;
@@ -11119,22 +11123,22 @@ textarea {
 }
 .form-paytype .check {
   cursor: pointer;
-  width: 150px;
-  height: 58px;
-  border: 2px solid #e1e1e1;
+  width: 144px;
+  height: 54px;
+  border: 2px solid #f1f1f1;
   position: relative;
   text-align: center;
   font-size: 16px;
-  line-height: 58px;
   display: inline-block;
   margin-right: 15px;
 }
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .form-paytype .check {
     margin-right: 5px;
     width: 100px;
     height: 40px;
-    line-height: 40px;
+    line-height: 32px;
+    margin-bottom: 10px;
   }
   .form-paytype .check img {
     width: 80%;
@@ -11150,8 +11154,8 @@ textarea {
 .form-paytype .check .icon {
   display: none;
   background: url('/assets/v2/img/old/pay-check-status.png') no-repeat;
-  top: -1px;
-  right: -1px;
+  top: -2px;
+  right: -2px;
   width: 23px;
   height: 26px;
   background-position: 0 -4px;
