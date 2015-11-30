@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxoa\Service\Util\Tests;
+namespace Topxia\Service\Util\Tests;
 
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\MySQLDumper;
