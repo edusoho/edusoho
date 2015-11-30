@@ -35,7 +35,7 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $ismobil = $this->ismobil();
+        $ismobile = $this->ismobile();
 
         $converted                  = array();
         $converted['version']       = 1;
@@ -48,9 +48,9 @@ class QuickpayRequest extends Request
 
         $converted['mobile'] = '';
 
-        if ($ismobil == 'Android') {
+        if ($ismobile == 'Android') {
             $converted['device_type'] = 2;
-        } elseif ($ismobil == 'iPhone' || $ismobil == 'iPad') {
+        } elseif ($ismobile == 'iPhone' || $ismobile == 'iPad') {
             $converted['device_type'] = 0;
         } else {
             $converted['device_type'] = 1;
@@ -59,7 +59,7 @@ class QuickpayRequest extends Request
         $converted['device_id']   = '';
         $converted['custom_page'] = 0;
 
-        if ($ismobil == 'pc') {
+        if ($ismobile == 'pc') {
             $converted['display'] = 1;
         } else {
             $converted['display'] = 0;
