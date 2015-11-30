@@ -59,5 +59,51 @@
   }
 }
 
+.pay-agreement-list {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding-left: 0;
+  li {
+    list-style-type: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid #e1e1e1;
+    &:hover {
+      border-color: @brand-primary;
+      cursor: pointer;
+    }
+    input {
+      margin-top: 0;
+    }
+    &.checked {
+      border-color: @brand-primary;
+    }
+    .closed {
+      float: right;
+    }
+    .name {
+      display: inline-block;
+      width: 200px;
+      @media(max-width: @screen-xs-max) {
+        width: 150px;
+      }
+    }
+    .number {
+      margin-right: 50px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 20px;
+      }
+    }
+  }
+}
+
+.add-pay-agreement {
+  a {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px dashed #e1e1e1;
+  }
+}
+
 
 
