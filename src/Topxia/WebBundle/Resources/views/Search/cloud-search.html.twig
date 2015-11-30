@@ -26,10 +26,10 @@
     <div class="col-md-8">
       <div class="es-section">
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
-          <li {% if type == 'Course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Course'}) }}" data-type="course" >课程</a></li>
-          <li {% if type == 'Teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Teacher'}) }}" data-type="teacher" >教师</a></li>
-          <li {% if type == 'Thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Thread'}) }}" data-type="thread" >话题</a></li>
-          <li {% if type == 'Article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'Article'}) }}" data-type="article" >资讯</a></li>
+          <li {% if type == 'Course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >课程</a></li>
+          <li {% if type == 'Teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >教师</a></li>
+          <li {% if type == 'Thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >话题</a></li>
+          <li {% if type == 'Article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >资讯</a></li>
         </ul>
         <div class="search-result" id="search-result">
         {% if type %}

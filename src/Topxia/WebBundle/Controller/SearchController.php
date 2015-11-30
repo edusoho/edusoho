@@ -19,7 +19,7 @@ class SearchController extends BaseController
         $pattern = $this->setting('magic.cloud_search');
 
         if ($pattern) {
-            $type       = $request->query->get('type', 'Course');
+            $type       = $request->query->get('type', 'course');
             $targetType = $request->query->get('targetType', '');
             return $this->redirect($this->generateUrl('cloud_search', array(
                 'q'          => $keywords,
@@ -103,21 +103,21 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
 
-        $type       = $request->query->get('type', 'Course');
+        $type       = $request->query->get('type', 'course');
         $page       = $request->query->get('page', '1');
         $targetType = $request->query->get('targetType', '');
 
         $conditions = array(
-            'category'    => $type,
-            'searchWords' => $keywords,
-            'page'        => $page
+            'type'  => $type,
+            'words' => $keywords,
+            'page'  => $page
         );
 
-        if ($type == 'Teacher') {
-            $conditions['category'] = 'User';
-            $conditions['role']     = 'ROLE_TEACHER';
-        } elseif ($type == 'Thread' && !empty($targetType)) {
-            $conditions['targetType'] = $targetType;
+        if ($type == 'teacher') {
+            $conditions['type']    = 'user';
+            $conditions['filters'] = array('role' => 'teacher');
+        } elseif ($type == 'thread' && !empty($targetType)) {
+            $conditions['filters'] = array('targetType' => $targetType);
         }
 
         $counts = 0;
