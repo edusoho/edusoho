@@ -7,4 +7,5 @@ return array(
     '/^\/api\/users\/pages$/',
     '/^\/api\/users\/\d+$/',
     '/^\/api\/mobileschools\/.+$/',
+    '/^\/api\/courses$/', // @临时
 );

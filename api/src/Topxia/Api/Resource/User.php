@@ -12,13 +12,13 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'nickname' , 'title', 'isTeacher', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
+        'id', 'nickname' , 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
     );
 
     private $_privateFields = array(
-        'id',  'nickname' , 'title', 'tags', 'type', 'isTeacher', 
+        'id',  'nickname' , 'title', 'tags', 'type', 'roles', 
         'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
-        'email', 'emailVerified', 'roles', 'promoted', 'promotedTime', 'locked', 'lockDeadline',
+        'email', 'emailVerified', 'promoted', 'promotedTime', 'locked', 'lockDeadline',
         'loginTime', 'loginIp', 'approvalTime', 'approvalStatus', 'newMessageNum', 'newNotificationNum',
         'createdIp', 'createdTime'
     );
@@ -45,7 +45,6 @@ class User extends BaseResource
             unset($res[$key]);
         }
 
-        $res['isTeacher'] = in_array('ROLE_TEACHER', $res['roles']);
         $res['about'] = $res['profile']['about'];
 
         $currentUser = getCurrentUser();
@@ -64,6 +63,12 @@ class User extends BaseResource
         } else {
             foreach ($this->_publicFields as $key) {
                 $returnRes[$key] = $res[$key];
+            }
+
+            if (in_array('ROLE_TEACHER', $returnRes['roles'])) {
+                $returnRes['roles'] = array('ROLE_TEACHER');
+            } else {
+                $returnRes['roles'] = array('ROLE_USER');
             }
         }
 

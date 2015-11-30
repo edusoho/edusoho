@@ -190,6 +190,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                         ->andWhere('vipLevelId = :vipLevelId')
                         ->andWhere('createdTime >= :startTime')
                         ->andWhere('createdTime <= :endTime')
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('categoryId = :categoryId')
                         ->andWhere('smallPicture = :smallPicture')
                         ->andWhere('categoryId IN ( :categoryIds )')

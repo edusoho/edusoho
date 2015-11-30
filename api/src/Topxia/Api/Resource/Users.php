@@ -17,14 +17,20 @@ class Users extends BaseResource
             return $this->matchUsers($conditions['q']);
         }
 
-        $sort = $request->query->get('sort', 'published');
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $total = $this->getUserService()->searchUserCount($conditions);
-        $start = $start == -1 ? rand(0, $total - 1) : $start;  
-        $users = $this->getUserService()->searchUsers($conditions, array('createdTime','DESC'), $start, $limit);
-        return $this->wrap($this->filter($users), $total);
+        if (isset($conditions['cursor'])) {
+            $conditions['updatedTime_GE'] = (int)$conditions['cursor'];
+            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $users);
+            return $this->wrap($this->filter($users), $next);
+        } else {
+            $users = $this->getUserService()->searchUsers($conditions, array('createdTime','DESC'), $start, $limit);
+            $total = $this->getUserService()->searchUserCount($conditions);
+            return $this->wrap($this->filter($users), $total);
+        }
+
     }
 
     public function post(Application $app, Request $request)

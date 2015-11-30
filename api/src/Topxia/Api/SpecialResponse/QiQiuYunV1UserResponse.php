@@ -7,6 +7,14 @@ class QiQiuYunV1UserResponse implements SpecialResponse
 {
     public function filter($data)
     {
+        foreach ($data['resources'] as &$user) {
+            if (in_array('ROLE_TEACHER', $user['roles'])) {
+                $user['roles'] = array('teacher');
+            } else {
+                $user['roles'] = array('student');
+            }
+        }
+
         return $data;
     }
 }

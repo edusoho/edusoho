@@ -10,16 +10,22 @@ class Courses extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-        $conditions = ArrayToolkit::parts($request->query->all(), array());
+        $conditions = $request->query->all();
 
-        $sort = $request->query->get('sort', 'published');
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $total = $this->getCourseService()->searchCourseCount($conditions);
-        $start = $start == -1 ? rand(0, $total - 1) : $start;
-        $users = $this->getCourseService()->searchCourses($conditions, array('createdTime','DESC'), $start, $limit);
-        return $this->wrap($this->filter($users), $total);
+        if (isset($conditions['cursor'])) {
+            $conditions['updatedTime_GE'] = (int)$conditions['cursor'];
+            $courses = $this->getCourseService()->searchCourses($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+            return $this->wrap($this->filter($courses), $next);
+        } else {
+            $total = $this->getCourseService()->searchCourseCount($conditions);
+            $users = $this->getCourseService()->searchCourses($conditions, array('createdTime','DESC'), $start, $limit);
+            return $this->wrap($this->filter($users), $total);
+        }
+
     }
 
     public function filter(&$res)
@@ -31,7 +37,6 @@ class Courses extends BaseResource
     {
         foreach ($res as &$one) {
             $this->callFilter($name, $one);
-            $one['body'] = '';
         }
         return $res;
     }

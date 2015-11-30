@@ -146,6 +146,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('level = :level')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
+            ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('approvalTime >= :startApprovalTime')
             ->andWhere('approvalTime <= :endApprovalTime')
             ->andWhere('loginTime >= :loginStartTime')

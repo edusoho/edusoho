@@ -22,3 +22,7 @@
 ## 响应类型
 
 X-QiQiuYun-Document: V1User
+
+/users?cursor=xxx$limit=xxx
+
+

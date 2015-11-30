@@ -43,9 +43,36 @@ abstract class BaseResource
 
     protected function wrap($resources, $total)
     {
-        return array('resources' => $resources, 'total' => $total);
+        if (is_array($total)) {
+            return array('resources' => $resources, 'next' => $total);
+        } else {
+            return array('resources' => $resources, 'total' => $total);
+        }
     }
 
+    protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
+    {
+        $end = end($currentRows);
+        if (empty($end) || count($currentRows) < $currentLimit) {
+            return array();
+        }
+
+        if ($end['updatedTime'] == $currentCursor) {
+            $next = array(
+                'cursor' => $currentCursor,
+                'start' => $currentStart + $currentLimit,
+                'limit' => (int) $currentLimit,
+            );
+        } else {
+            $next = array(
+                'cursor' => (int) $end['updatedTime'] + 1,
+                'start' => 0,
+                'limit' => (int)$currentLimit,
+            );
+        }
+
+        return $next;
+    }
 
     protected function filterHtml($text)
     {
