@@ -168,6 +168,9 @@ body {
   -moz-border-radius: 20px;
   border-radius: 20px;
 }
+.es-course .nav-tabs li a {
+  margin-bottom: 0;
+}
 .color-danger {
   color: #f55e5e !important;
 }
@@ -474,7 +477,6 @@ body {
   }
 }
 .qs-course-block .course-info .content {
-  color: #919191;
   margin-bottom: 15px;
 }
 @media (max-width: 1199px) {

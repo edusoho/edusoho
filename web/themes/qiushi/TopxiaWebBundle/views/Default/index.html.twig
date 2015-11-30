@@ -194,12 +194,12 @@
           {% endfor %}
         </ul>
       </div>
-      <div class="qs-exellent-course-list tab-content">
+      <div class="course-list qs-exellent-course-list tab-content">
         {% set recommendCoursesAll = data('RecommendCourses',{count:15}) %}
         <div role="tabpanel" class="tab-pane fade active in row" id="category-all" aria-labelledby="home-tab">
           {% for course in recommendCoursesAll if course %}
             {% if loop.index > 3 %}
-              <div class="col-lg-3 col-md-4 col-sm-6">
+              {#<div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="qs-course-item">
                   <div class="course-img">
                     <a href="{{ path('course_show', {id:course.id}) }}">
@@ -220,6 +220,9 @@
                     </span>
                   </div>
                 </div>
+              </div>#}
+              <div class="col-lg-3 col-md-4 col-sm-6">
+                {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
               </div>
             {% endif %}
           {% else %}
@@ -233,7 +236,7 @@
 
               <div role="tabpanel" class="tab-pane fade row" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
                 {% for course in recommendCourses if course %}
-                  <div class="col-lg-3 col-md-4 col-sm-6">
+                  {#<div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="qs-course-item">
                       <div class="course-img">
                         <a href="{{ path('course_show', {id:course.id}) }}">
@@ -254,6 +257,9 @@
                         </span>
                       </div>
                     </div>
+                  </div>#}
+                  <div class="col-lg-3 col-md-4 col-sm-6">
+                    {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
                   </div>
                 {% else %}
                   <div class="empty">该分类下暂无精品课程</div>
@@ -278,9 +284,9 @@
         <div class="title">推荐班级</div>
         <div class="subtitle">RECOMMEND CLASS</div>
       </div>
-      <div class="qs-recommend-class-list row">
+      <div class="recommend-class-list qs-recommend-class-list row">
         {% for classroom in RecommendClassrooms %}
-        <div class="col-lg-3 col-md-4 col-sm-6">
+        {#<div class="col-lg-3 col-md-4 col-sm-6">
           <div class="qs-class-item">
             <div class="class-img">
               <a href="{{ path('classroom_show', {id:classroom.id}) }}">
@@ -297,6 +303,9 @@
               {% endif %}
             </div>
           </div>
+        </div>#}
+        <div class="col-md-3 col-sm-6">
+          {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %} 
         </div>
         {% endfor %}
       </div>

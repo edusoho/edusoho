@@ -16,37 +16,35 @@
         <li><a href="{{ path('course_explore') }}">课程库</a></li>
         {% if category.id %}
         <li class="active">
-            <span style="display: inline-block"> 
-            {% if category.parentId == 0 %}
-              <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort }) }}">{{ category.name }}<i class="fa fa-times"></i> 
+          <span style="display: inline-block"> 
+          {% if category.parentId == 0 %}
+            <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort }) }}">{{ category.name }}<i class="fa fa-times"></i> 
+            </a>
+            {% elseif  category.parentId != 0 %}
+              <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort,first:first,category:category.parentId }) }}">{{ category.name }}<i class="fa fa-times"></i> 
               </a>
-              {% elseif  category.parentId != 0 %}
-                <a href="{{ path('course_explore', {kind:kind,material:material,sort:sort,first:first,category:category.parentId }) }}">{{ category.name }}<i class="fa fa-times"></i> 
-                </a>
-              {% endif %}
-            </span>
-         
+            {% endif %}
+          </span>
         </li>
-		{% endif %}	
+		    {% endif %}	
         {% if kind %}
         <li class="active">
-        <span style="display: inline-block">
-          <a href="{{ path('course_explore', {category:category.id,material:material,sort:sort,first:first }) }}">{{ kind }}
-          <i class="fa fa-times"></i>
-          </a>
-        </span> </li>
-		{% endif %}
-        {% if material %}
-      
-      <li class="active">
-        <span style="display: inline-block">
-          <a href="{{ path('course_explore', {category:category.id,kind:kind,sort:sort,first:first }) }}">{{ material }}
+          <span style="display: inline-block">
+            <a href="{{ path('course_explore', {category:category.id,material:material,sort:sort,first:first }) }}">{{ kind }}
             <i class="fa fa-times"></i>
-          </a>
-        </span>
-      </li>
-        
-		{% endif %}
+            </a>
+          </span> 
+        </li>
+		    {% endif %}
+        {% if material %}
+        <li class="active">
+          <span style="display: inline-block">
+            <a href="{{ path('course_explore', {category:category.id,kind:kind,sort:sort,first:first }) }}">{{ material }}
+              <i class="fa fa-times"></i>
+            </a>
+          </span>
+        </li>
+		    {% endif %}
       </ol>
     </div>
     <!--二级页面路径导航结束-->
@@ -96,18 +94,14 @@
         </ul>
         <div  class="tab-content">
           <div class="tab-pane fade active in">
-           {% if courses %}
-                   {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
-				   {{ web_macro.paginator(paginator) }} 
-                {% else %}
-        <div class="empty">该分类下无课程</div>
-      {% endif %}
+          {% if courses %}
+            {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
+				    {{ web_macro.paginator(paginator) }} 
+          {% else %}
+            <div class="empty">该分类下无课程</div>
+          {% endif %}
           </div>
-
         </div>
       </div>
-    <!--课程排序列表结束-->
-
-
 
 {% endblock %}
