@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -177,8 +178,34 @@ class PayCenterController extends BaseController
 
     public function closeAuthAction(Request $request)
     {
-        $field          = $request->request->all();
-        $order          = $this->getOrderService()->getOrder($field["orderId"]);
+        $field = $request->request->all();
+        $user  = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，支付失败。');
+        }
+
+        if (!array_key_exists("orderId", $field)) {
+            return $this->createMessageResponse('error', '缺少订单，支付失败');
+        }
+
+        if (!isset($field['payment'])) {
+            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
+        }
+
+        $order = $this->getOrderService()->getOrder($field["orderId"]);
+
+        if ($user["id"] != $order["userId"]) {
+            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
+        }
+
+        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
+        $authBanks = ArrayToolkit::column($authBanks, 'id');
+
+        if (!in_array($field['payAgreementId'], $authBanks)) {
+            return $this->createMessageResponse('error', '不是您绑定的银行卡，取消绑定失败');
+        }
+
         $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
         $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment']);
         $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
