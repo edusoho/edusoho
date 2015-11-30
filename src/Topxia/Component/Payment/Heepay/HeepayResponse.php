@@ -10,11 +10,11 @@ class HeepayResponse extends Response
 
     public function getPayData()
     {
-        $error = $this->hasError();
+        //$error = $this->hasError();
 
-        if ($error) {
-            throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
-        }
+        // if ($error) {
+        //     throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
+        // }
 
         $params          = $this->params;
         $data['payment'] = 'heepay';

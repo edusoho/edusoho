@@ -190,9 +190,7 @@ class PayCenterController extends BaseController
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
         $response = $this->createPaymentResponse($name, $request->query->all());
-        var_dump($request->query->all());
-        exit();
-        $payData = $response->getPayData();
+        $payData  = $response->getPayData();
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
