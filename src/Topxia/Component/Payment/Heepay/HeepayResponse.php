@@ -10,13 +10,13 @@ class HeepayResponse extends Response
 
     public function getPayData()
     {
-        //$error = $this->hasError();
+        $params = $this->params;
+        $error  = $this->hasError($params);
 
-        // if ($error) {
-        //     throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
-        // }
+        if ($error) {
+            throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
+        }
 
-        $params          = $this->params;
         $data['payment'] = 'heepay';
         $data['sn']      = $this->getOrderSn($params['agent_bill_id']);
         $result          = $this->confirmSellerSendGoods();
@@ -40,10 +40,8 @@ class HeepayResponse extends Response
         return $data;
     }
 
-    private function hasError()
+    private function hasError($params)
     {
-        $params = $this->params;
-
         if ($params['result'] != 1 && !empty($params['pay_message'])) {
             return $params['pay_message'];
         }

@@ -226,7 +226,7 @@ class PayCenterController extends BaseController
             $returnArray = $this->fromXml($returnXml);
             $response    = $this->createPaymentResponse($name, $returnArray);
         } else {
-            $response = $this->createPaymentResponse($name, $request->request->all());
+            $response = $this->createPaymentResponse($name, $request->query->all()));
         }
 
         $payData = $response->getPayData();
