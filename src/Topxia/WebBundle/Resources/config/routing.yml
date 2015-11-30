@@ -1554,6 +1554,9 @@ group_backgroundlogo_set:
 group_search:
     pattern:  /group/{id}/serach
     defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
+group_cloud_search:
+    pattern:  /group/{id}/cloudserach
+    defaults: { _controller: TopxiaWebBundle:GroupThread:cloudSearchResult }
 group_thread_post:
     pattern:  /group/thread/{groupId}/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }

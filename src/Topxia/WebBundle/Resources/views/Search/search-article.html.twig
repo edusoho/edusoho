@@ -3,5 +3,5 @@
 </div>
 {% for article in resultSet %}
 {% set category = article.category %}
-  {% include 'TopxiaWebBundle:Article/Widget:list-item.html.twig' %}
+  {% include 'TopxiaWebBundle:Search:search-article-item.html.twig' %}
 {% endfor %}

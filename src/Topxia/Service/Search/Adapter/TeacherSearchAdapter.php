@@ -9,22 +9,24 @@ class TeacherSearchAdapter extends AbstractSearchAdapter
     {
         $adaptResult  = array();
         $myFollowings = array();
-        $currentUser  = $this->getCurrentUser();
+        $user         = $this->getCurrentUser();
 
         $userIds      = ArrayToolkit::column($teachers, 'userId');
         $userProfiles = ArrayToolkit::index($this->getUserService()->findUserProfilesByIds($userIds), 'id');
         $users        = ArrayToolkit::index($this->getUserService()->findUsersByIds($userIds), 'id');
 
-        if (!empty($currentUser['id'])) {
-            $myFollowings = $this->getUserService()->filterFollowingIds($currentUser['id'], $userIds);
+        if (!empty($user['id'])) {
+            $myFollowings = $this->getUserService()->filterFollowingIds($user['id'], $userIds);
         }
 
         foreach ($teachers as $index => $teacher) {
-            $teacher['id']          = $teacher['userId'];
-            $teacher['profile']     = $userProfiles[$teacher['userId']];
-            $teacher['largeAvatar'] = $users[$teacher['userId']]['largeAvatar'];
-            $teacher['isFollowed']  = in_array($teacher['userId'], $myFollowings);
-            array_push($adaptResult, $teacher);
+            if (array_key_exists($teacher['userId'], $users)) {
+                $teacher['id']          = $teacher['userId'];
+                $teacher['profile']     = array_key_exists($teacher['userId'], $userProfiles) ? $userProfiles[$teacher['userId']] : array();
+                $teacher['largeAvatar'] = $users[$teacher['userId']]['largeAvatar'];
+                $teacher['isFollowed']  = in_array($teacher['userId'], $myFollowings);
+                array_push($adaptResult, $teacher);
+            }
         }
 
         return $adaptResult;

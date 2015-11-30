@@ -11,7 +11,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     public function cloudSearch($type, $conditions = array())
     {
         $api    = CloudAPIFactory::create('root');
-        $result = $api->post('/spider/search', $conditions);
+        $result = $api->post('/search', $conditions);
 
         if (empty($result['success'])) {
             throw new \RuntimeException("搜索失败，请稍候再试.", 1);
