@@ -19,17 +19,24 @@ class HeepayResponse extends Response
 
         $data['payment'] = 'heepay';
         $data['sn']      = $this->getOrderSn($params['agent_bill_id']);
-        $result          = $this->confirmSellerSendGoods();
-        $returnArray     = $this->toArray($result);
 
-        if ($returnArray['result'] != 1) {
-            throw new \RuntimeException('网银支付失败');
-        }
+        $order = $this->getOrderService()->getOrderBySn($data['sn']);
 
-        if (in_array($returnArray['result'], array(1))) {
+        if ($order['status'] == 'paid') {
             $data['status'] = 'success';
         } else {
-            $data['status'] = 'unknown';
+            $result      = $this->confirmSellerSendGoods();
+            $returnArray = $this->toArray($result);
+
+            if ($returnArray['result'] != 1) {
+                throw new \RuntimeException('网银支付失败');
+            }
+
+            if (in_array($returnArray['result'], array(1))) {
+                $data['status'] = 'success';
+            } else {
+                $data['status'] = 'unknown';
+            }
         }
 
         $data['amount']   = $params['pay_amt'];

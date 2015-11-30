@@ -35,6 +35,9 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
+        $isMobile   = $this->isMobile();
+        $mobileType = $this->mobileType();
+
         $converted                  = array();
         $converted['version']       = 1;
         $converted['user_identity'] = $this->options['key']."_".$params['userId'];
@@ -44,11 +47,24 @@ class QuickpayRequest extends Request
             $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
         }
 
-        $converted['mobile']      = '';
-        $converted['device_type'] = 1;
+        $converted['mobile'] = '';
+
+        if ($mobileType == 'Android') {
+            $converted['device_type'] = 2;
+        } elseif ($mobileType == 'IOS') {
+            $converted['device_type'] = 0;
+        } else {
+            $converted['device_type'] = 1;
+        }
+
         $converted['device_id']   = '';
         $converted['custom_page'] = 0;
-        $converted['display']     = 1;
+
+        if ($isMobile) {
+            $converted['display'] = 0;
+        } else {
+            $converted['display'] = 1;
+        }
 
         if (!empty($params['returnUrl'])) {
             $converted['return_url'] = $params['returnUrl'];
@@ -110,6 +126,26 @@ class QuickpayRequest extends Request
             foreach ($authBanks as $authBank) {
                 $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
             }
+        }
+    }
+
+    public function isMobile()
+    {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function mobileType()
+    {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
+            return 'IOS';
+        }
+
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+            return 'Android';
         }
     }
 

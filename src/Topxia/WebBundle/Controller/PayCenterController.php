@@ -193,7 +193,8 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order = $this->getOrderService()->getOrder($field["orderId"]);
+        $order       = $this->getOrderService()->getOrder($field["orderId"]);
+        $userProfile = $this->getUserService()->getUserProfile($order["userId"]);
 
         if ($user["id"] != $order["userId"]) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -207,7 +208,7 @@ class PayCenterController extends BaseController
         }
 
         $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
-        $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment']);
+        $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment'], 'userProfile' => $userProfile);
         $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
         return $this->createJsonResponse($formRequest);
@@ -216,8 +217,6 @@ class PayCenterController extends BaseController
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
         $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
-        var_dump($request->query->all());
-        exit();
         $response = $this->createPaymentResponse($name, $request->query->all());
         $payData  = $response->getPayData();
 
@@ -423,7 +422,7 @@ class PayCenterController extends BaseController
     {
         $options = $this->getPaymentOptions($params['payment']);
         $request = Payment::createCloseAuthRequest($params['payment'], $options);
-        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank']));
+        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'userProfile' => $params['userProfile']));
     }
 
     protected function getOrderInfo($order)
