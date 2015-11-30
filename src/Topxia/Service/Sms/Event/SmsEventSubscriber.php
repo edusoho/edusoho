@@ -29,9 +29,9 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $parameters = array();
         $smsType = 'sms_testpaper_check';
         if($this->getSmsService()->isOpen($smsType)){
-            $testpaperResult = $event->getSubject();
-            $testId = $testpaperResult['testId'];
-            $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+            $testpaper = $event->getSubject();
+            $testpaperResult = $event->getArgument('testpaperResult');
+
             $target = explode('-', $testpaper['target']);
             if ($target[0] == 'course') {
                 $courseId = $target[1];

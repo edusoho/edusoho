@@ -21,7 +21,7 @@
           {% if not lesson.free %}
             data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
           {% endif %}
-          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, mode:'preview'})}}"
+          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1})}}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
