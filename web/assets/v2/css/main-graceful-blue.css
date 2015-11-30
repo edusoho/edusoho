@@ -6634,6 +6634,42 @@ textarea {
 .icon-user-status.icon-md > i {
   font-size: 18px;
 }
+.es-step {
+  padding-left: 0;
+  margin-bottom: 30px;
+}
+.es-step.es-step-3 li {
+  width: 33.33%;
+}
+.es-step li {
+  float: left;
+  padding: 15px;
+  list-style-type: none;
+  border-bottom: 2px solid #c1c1c1;
+  color: #c1c1c1;
+  font-size: 16px;
+  text-align: center;
+}
+.es-step li .number {
+  width: 23px;
+  height: 23px;
+  line-height: 21px;
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid #c1c1c1;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.es-step li.done,
+.es-step li.doing {
+  border-color: #0093e8;
+  color: #0093e8;
+}
+.es-step li.done .es-step-num,
+.es-step li.doing .es-step-num {
+  border-color: #0093e8;
+}
 .class-serve > ul {
   padding: 20px 10px;
 }

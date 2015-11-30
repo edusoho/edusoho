@@ -4,11 +4,11 @@
 {% block esBar %}{% endblock %}
 {% set script_controller = 'pay/wxpay-roll' %}
 {% block content %}
-  <div class="order-nav hidden-xs clearfix">
-    <div>确认订单<b></b></div>
-    <div class="on"><span></span>订单支付<b></b></div>
-    <div><span></span>订单完成</div>
-  </div>
+  <ul class="es-step es-step-3 clearfix">
+    <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>订单确认</li>
+    <li class="doing"><span class="number">2</span>订单支付</li>
+    <li><span class="number">3</span>订单完成</li>
+  </ul>
   <div class="es-section section-wxpay">
     <div class="section-header">
       <h1>微信支付</h1>
