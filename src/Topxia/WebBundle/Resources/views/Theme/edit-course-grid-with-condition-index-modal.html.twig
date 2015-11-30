@@ -32,7 +32,7 @@
             <option value="">全部分类</option>
             {% if categoriesFirst%}
               {% for category in categoriesFirst  if (category.parentId == 0) %}
-                {% if ( loop.index0 < 4 ) %}
+                {% if ( loop.index0 < 5 ) %}
                   <option value='{{category.id}}'>
                       {{ category.name }}
                   </option>
@@ -43,6 +43,17 @@
           <div class="help-block" style="display:none;"></div>
         </div>
       </div>
+
+      <div class="form-group">
+          <label class="col-sm-3 control-label">课程分类数量设置</label>
+          <div class="col-sm-4">
+            <select class="form-control width-input-large" name="categoryCount">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+       </div>
 
       <div class="form-group">
         <label class="col-md-3 control-label">排序设置</label>

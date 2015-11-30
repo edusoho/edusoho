@@ -23,7 +23,7 @@
       <li role="presentation" class="{% if (categoryId|default('all') == 'all') %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{config:config,categoryId : 'all',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
       {% if categoriesFirst%}
         {% for category in categoriesFirst  if (category.parentId == 0) %}
-          {% if ( loop.index0 < 4 ) %}
+          {% if ( loop.index0 < config.categoryCount|default(4) ) %}
             <li role="presentation" class="{% if (categoryId|default('all') == category.id) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{config:config,categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
           {% endif %}
         {% endfor %}
@@ -35,7 +35,7 @@
         <li role="presentation" class="js-course-filter {% if (categoryId|default('all') == 'all') %}active {% endif %}" data-url="{{path('homepage_category',{config:config,categoryId : 'all',orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
         {% if categoriesFirst%}
           {% for category in categoriesFirst  if (category.parentId == 0) %}
-            {% if ( loop.index0 < 4 ) %}
+            {% if ( loop.index0 < config.categoryCount|default(4) ) %}
               <li role="presentation" class = "js-course-filter {% if (categoryId|default('all') == category.id) %}active {% endif %}" data-url="{{path('homepage_category',{config:config,categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
             {% endif %}
           {% endfor %}

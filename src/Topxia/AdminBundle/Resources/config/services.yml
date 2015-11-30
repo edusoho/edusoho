@@ -12,6 +12,7 @@ parameters:
           orderBy: "latest"
           categoryId: "all"
           code: course-grid-with-condition-index
+          categoryCount: "4"
           defaultTitle: "课程组件"
           id: latestCourse
         - title: ""
