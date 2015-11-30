@@ -35,7 +35,8 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $ismobile   = $this->ismobile();
+        $isMobile = $this->isMobile();
+
         $mobileType = $this->mobileType();
 
         $converted                  = array();
@@ -60,10 +61,10 @@ class QuickpayRequest extends Request
         $converted['device_id']   = '';
         $converted['custom_page'] = 0;
 
-        if ($ismobile) {
-            $converted['display'] = 1;
-        } else {
+        if ($isMobile) {
             $converted['display'] = 0;
+        } else {
+            $converted['display'] = 1;
         }
 
         if (!empty($params['returnUrl'])) {
@@ -131,26 +132,54 @@ class QuickpayRequest extends Request
 
     public function isMobile()
     {
-        $useragent               = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $useragent_commentsblock = preg_match('|\(.*?\)|', $useragent, $matches) > 0 ? $matches[0] : '';
-        function CheckSubstrs($substrs, $text)
-        {
-            foreach ($substrs as $substr) {
-                if (false !== strpos($text, $substr)) {
-                    return true;
-                }
-            }
+        global $_G;
+        $mobile = array();
+        //各个触控浏览器中$_SERVER['HTTP_USER_AGENT']所包含的字符串数组
+        static $touchbrowser_list = array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
+            'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
+            'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
+            'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
+            'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
+            'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
+            'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
+        //window手机浏览器数组【猜的】
+        static $mobilebrowser_list = array('windows phone');
+        //wap浏览器中$_SERVER['HTTP_USER_AGENT']所包含的字符串数组
+        static $wmlbrowser_list = array('cect', 'compal', 'ctl', 'lg', 'nec', 'tcl', 'alcatel', 'ericsson', 'bird', 'daxian', 'dbtel', 'eastcom',
+            'pantech', 'dopod', 'philips', 'haier', 'konka', 'kejian', 'lenovo', 'benq', 'mot', 'soutec', 'nokia', 'sagem', 'sgh',
+            'sed', 'capitel', 'panasonic', 'sonyericsson', 'sharp', 'amoi', 'panda', 'zte');
+        $pad_list  = array('pad', 'gt-p1000');
+        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 
+        if (dstrpos($useragent, $pad_list)) {
             return false;
         }
 
-        $mobile_os_list    = array('Google Wireless Transcoder', 'Windows CE', 'WindowsCE', 'Symbian', 'Android', 'armv6l', 'armv5', 'Mobile', 'CentOS', 'mowser', 'AvantGo', 'Opera Mobi', 'J2ME/MIDP', 'Smartphone', 'Go.Web', 'Palm', 'iPAQ');
-        $mobile_token_list = array('Profile/MIDP', 'Configuration/CLDC-', '160×160', '176×220', '240×240', '240×320', '320×240', 'UP.Browser', 'UP.Link', 'SymbianOS', 'PalmOS', 'PocketPC', 'SonyEricsson', 'Nokia', 'BlackBerry', 'Vodafone', 'BenQ', 'Novarra-Vision', 'Iris', 'NetFront', 'HTC_', 'Xda_', 'SAMSUNG-SGH', 'Wapaka', 'DoCoMo', 'iPhone', 'iPod');
+        if (($v = dstrpos($useragent, $mobilebrowser_list, true))) {
+            $_G['mobile'] = $v;
+            return '1';
+        }
 
-        $found_mobile = CheckSubstrs($mobile_os_list, $useragent_commentsblock) ||
-        CheckSubstrs($mobile_token_list, $useragent);
+        if (($v = dstrpos($useragent, $touchbrowser_list, true))) {
+            $_G['mobile'] = $v;
+            return '2';
+        }
 
-        if ($found_mobile) {
+        if (($v = dstrpos($useragent, $wmlbrowser_list))) {
+            $_G['mobile'] = $v;
+            return '3'; //wml版
+        }
+
+        $brower = array('mozilla', 'chrome', 'safari', 'opera', 'm3gate', 'winwap', 'openwave', 'myop');
+
+        if (dstrpos($useragent, $brower)) {
+            return false;
+        }
+
+        $_G['mobile'] = 'unknown';
+        //对于未知类型的浏览器，通过$_GET['mobile']参数来决定是否是手机浏览器
+
+        if (isset($_G['mobiletpl'][$_GET['mobile']])) {
             return true;
         } else {
             return false;
