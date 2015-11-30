@@ -52,7 +52,7 @@ class HeepayRequest extends Request
             $converted['return_url'] = $params['returnUrl'];
         }
 
-        $converted['user_ip']    = str_replace(".", "_", $this->get_client_ip());
+        $converted['user_ip']    = str_replace(".", "_", $this->getClientIp());
         $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 50, 'utf-8'));
         $converted['remark']     = '';
         $converted['sign']       = $this->signParams($converted);
@@ -67,20 +67,5 @@ class HeepayRequest extends Request
     private function generateOrderToken()
     {
         return 'H'.date('YmdHis', time()).mt_rand(10000, 99999);
-    }
-
-    private function get_client_ip()
-    {
-        if ($_SERVER['REMOTE_ADDR']) {
-            $cip = $_SERVER['REMOTE_ADDR'];
-        } elseif (getenv("REMOTE_ADDR")) {
-            $cip = getenv("REMOTE_ADDR");
-        } elseif (getenv("HTTP_CLIENT_IP")) {
-            $cip = getenv("HTTP_CLIENT_IP");
-        } else {
-            $cip = "unknown";
-        }
-
-        return $cip;
     }
 }

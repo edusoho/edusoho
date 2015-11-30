@@ -64,7 +64,7 @@ class QuickpayRequest extends Request
         $converted['goods_name']      = mb_substr($this->filterText($params['title']), 0, 50, 'utf-8');
         $converted['goods_note']      = '';
         $converted['goods_num']       = 1;
-        $converted['user_ip']         = $this->get_client_ip();
+        $converted['user_ip']         = $this->getClientIp();
         $converted['ext_param1']      = '';
         $converted['ext_param2']      = '';
         $converted['auth_card_type']  = -1;
@@ -138,21 +138,6 @@ class QuickpayRequest extends Request
     protected function filterText($text)
     {
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
-    }
-
-    private function get_client_ip()
-    {
-        if ($_SERVER['REMOTE_ADDR']) {
-            $cip = $_SERVER['REMOTE_ADDR'];
-        } elseif (getenv("REMOTE_ADDR")) {
-            $cip = getenv("REMOTE_ADDR");
-        } elseif (getenv("HTTP_CLIENT_IP")) {
-            $cip = getenv("HTTP_CLIENT_IP");
-        } else {
-            $cip = "unknown";
-        }
-
-        return $cip;
     }
 
     private function Encrypt($data, $key)
