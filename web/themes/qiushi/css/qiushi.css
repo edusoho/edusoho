@@ -477,9 +477,13 @@ body {
   color: #919191;
   margin-bottom: 15px;
 }
-@media (max-width: 991px) {
+@media (max-width: 1199px) {
   .qs-course-block .course-info .content {
     margin-bottom: 0;
+  }
+}
+@media (max-width: 991px) {
+  .qs-course-block .course-info .content {
     max-height: 40px;
     overflow: hidden;
   }
