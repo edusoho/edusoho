@@ -1380,6 +1380,11 @@
   margin: 0 auto;
   margin-bottom: 40px;
 }
+@media (max-width: 767px) {
+  .page-message-container {
+    width: 100%;
+  }
+}
 .modal .page-message-container {
   width: auto;
   margin: 20px 20px;
@@ -11119,6 +11124,7 @@ textarea {
 @media (max-width: 767px) {
   .form-paytype .pay-type-label {
     display: block;
+    margin-bottom: 10px;
   }
 }
 .form-paytype .check {
@@ -11164,7 +11170,6 @@ textarea {
 }
 .pay-agreement-list {
   margin-top: 30px;
-  margin-bottom: 20px;
   padding-left: 0;
 }
 .pay-agreement-list li {
@@ -11202,11 +11207,6 @@ textarea {
   .pay-agreement-list li .number {
     margin-right: 20px;
   }
-}
-.add-pay-agreement a {
-  display: inline-block;
-  padding: 5px 10px;
-  border: 1px dashed #e1e1e1;
 }
 .order-pay-state {
   padding: 40px 300px;

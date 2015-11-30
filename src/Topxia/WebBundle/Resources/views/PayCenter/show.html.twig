@@ -59,7 +59,7 @@
         {% endfor %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           
-        <div class="form-group order-detail-bg ">
+        <div class="form-group order-detail-bg">
           <div class="pay-type-label">支付方式</div>
           {% for payment, options in payments %}
             <div class="check {% if loop.index == 1 %} active {% endif %}" id="{{payment}}">
@@ -84,12 +84,9 @@
               {% endfor %}
               <li>
                 <input type="radio" name='payAgreementId' value=""/>
-                暂不选择
+                添加新卡
               </li>
             </ul>
-            <!-- <div class="add-pay-agreement">
-              <a class="link-light" href="">+ 银行卡</a>
-            </div> -->
           </div>
           {% endif %}
         </div>
