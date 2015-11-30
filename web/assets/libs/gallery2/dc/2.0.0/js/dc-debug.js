@@ -2203,6 +2203,7 @@ define("gallery2/dc/2.0.0/js/dc-debug", [], function (require, exports, module) 
                     } else {
                         _colors = d3.functor(colorScale);
                     }
+
                     return _chart;
                 };
 
@@ -2295,6 +2296,11 @@ define("gallery2/dc/2.0.0/js/dc-debug", [], function (require, exports, module) 
                     var newDomain = [d3.min(_chart.data(), _chart.colorAccessor()),
                         d3.max(_chart.data(), _chart.colorAccessor())
                     ];
+
+                    if(newDomain[0] == newDomain[1]){
+                        newDomain[1] = newDomain[0] + 1;
+                    }
+                    
                     _colors.domain(newDomain);
                     return _chart;
                 };
