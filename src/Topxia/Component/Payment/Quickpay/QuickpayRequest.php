@@ -35,9 +35,8 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $ismobile = $this->ismobile();
-        var_dump($ismobile);
-        exit();
+        $ismobile   = $this->ismobile();
+        $mobileType = $this->mobileType();
 
         $converted                  = array();
         $converted['version']       = 1;
@@ -50,9 +49,9 @@ class QuickpayRequest extends Request
 
         $converted['mobile'] = '';
 
-        if ($ismobile == 'Android') {
+        if ($mobileType == 'Android') {
             $converted['device_type'] = 2;
-        } elseif ($ismobile == 'iPhone' || $ismobile == 'iPad') {
+        } elseif ($mobileType == 'IOS') {
             $converted['device_type'] = 0;
         } else {
             $converted['device_type'] = 1;
@@ -61,7 +60,7 @@ class QuickpayRequest extends Request
         $converted['device_id']   = '';
         $converted['custom_page'] = 0;
 
-        if ($ismobile == 'pc') {
+        if ($ismobile) {
             $converted['display'] = 1;
         } else {
             $converted['display'] = 0;
@@ -155,6 +154,17 @@ class QuickpayRequest extends Request
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function mobileType()
+    {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
+            return 'IOS';
+        }
+
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+            return 'Android';
         }
     }
 
