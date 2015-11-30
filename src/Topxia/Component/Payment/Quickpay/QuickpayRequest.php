@@ -36,6 +36,8 @@ class QuickpayRequest extends Request
     protected function convertParams($params)
     {
         $ismobile = $this->ismobile();
+        var_dump($ismobile);
+        exit();
 
         $converted                  = array();
         $converted['version']       = 1;
@@ -128,31 +130,31 @@ class QuickpayRequest extends Request
         }
     }
 
-    protected function ismobile()
+    public function isMobile()
     {
-        //获取USER AGENT
-        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $useragent               = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $useragent_commentsblock = preg_match('|\(.*?\)|', $useragent, $matches) > 0 ? $matches[0] : '';
+        function CheckSubstrs($substrs, $text)
+        {
+            foreach ($substrs as $substr) {
+                if (false !== strpos($text, $substr)) {
+                    return true;
+                }
+            }
 
-        //分析数据
-        $is_pc      = (strpos($agent, 'windows nt')) ? true : false;
-        $is_iphone  = (strpos($agent, 'iphone')) ? true : false;
-        $is_ipad    = (strpos($agent, 'ipad')) ? true : false;
-        $is_android = (strpos($agent, 'android')) ? true : false;
-
-        if ($is_pc) {
-            return 'pc';
+            return false;
         }
 
-        if ($is_iphone) {
-            return 'iPhone';
-        }
+        $mobile_os_list    = array('Google Wireless Transcoder', 'Windows CE', 'WindowsCE', 'Symbian', 'Android', 'armv6l', 'armv5', 'Mobile', 'CentOS', 'mowser', 'AvantGo', 'Opera Mobi', 'J2ME/MIDP', 'Smartphone', 'Go.Web', 'Palm', 'iPAQ');
+        $mobile_token_list = array('Profile/MIDP', 'Configuration/CLDC-', '160×160', '176×220', '240×240', '240×320', '320×240', 'UP.Browser', 'UP.Link', 'SymbianOS', 'PalmOS', 'PocketPC', 'SonyEricsson', 'Nokia', 'BlackBerry', 'Vodafone', 'BenQ', 'Novarra-Vision', 'Iris', 'NetFront', 'HTC_', 'Xda_', 'SAMSUNG-SGH', 'Wapaka', 'DoCoMo', 'iPhone', 'iPod');
 
-        if ($is_ipad) {
-            return 'iPad';
-        }
+        $found_mobile = CheckSubstrs($mobile_os_list, $useragent_commentsblock) ||
+        CheckSubstrs($mobile_token_list, $useragent);
 
-        if ($is_android) {
-            return 'Android';
+        if ($found_mobile) {
+            return true;
+        } else {
+            return false;
         }
     }
 
