@@ -194,7 +194,7 @@ class PayCenterController extends BaseController
         }
 
         $order       = $this->getOrderService()->getOrder($field["orderId"]);
-        $userProfile = $this->getUserService()->getUserProfile($order['userId']);
+        $userProfile = $this->getUserService()->getUserProfile($order["userId"]);
 
         if ($user["id"] != $order["userId"]) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -422,7 +422,7 @@ class PayCenterController extends BaseController
     {
         $options = $this->getPaymentOptions($params['payment']);
         $request = Payment::createCloseAuthRequest($params['payment'], $options);
-        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank']));
+        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'userProfile' => $params['userProfile']));
     }
 
     protected function getOrderInfo($order)
