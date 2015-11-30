@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Common\CurlToolkit;
-use Topxia\Common\NameCutterTookit;
 use Topxia\Component\Payment\Payment;
 use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +36,7 @@ class SmsController extends BaseController
                 $verifiedMobileUserNum = $this->getUserService()->searchUserCount(array('hasVerifiedMobile' => true, 'locked' => 0));
             }
         }
-        $item['title'] = NameCutterTookit::cutter($item['title'], 20, 15, 4);
+        $item['title'] = StringToolkit::cutter($item['title'], 20, 15, 4);
         return $this->render('TopxiaWebBundle:Sms:sms-send.html.twig',array(
             'item' => $item,
             'targetType' => $targetType,
@@ -60,13 +59,13 @@ class SmsController extends BaseController
             $classroom = $this->getClassroomService()->getClassroom($id);
             $classroomSetting  = $this->getSettingService()->get("classroom");
             $classroomName = isset($classroomSetting['name'])?$classroomSetting['name']:'班级';
-            $classroom['title'] = NameCutterTookit::cutter($classroom['title'], 20, 15, 4);
+            $classroom['title'] = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
             $description = $parameters['classroom_title'].'发布';
             $students = $this->getUserService()->searchUsers(array('hasVerifiedMobile' => true),array('createdTime', 'DESC'),$index,$onceSendNum);
         } elseif ($targetType == 'course') {
             $course = $this->getCourseService()->getCourse($id);
-            $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
+            $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
             $parameters['course_title'] = '课程：《'.$course['title'].'》';
             $description = $parameters['course_title'].'发布';
             if ($course['parentId'] ) {
@@ -114,7 +113,7 @@ class SmsController extends BaseController
     {
         $url = $request->getHost();
         $url .= $request->query->get('url');
-        $arrResponse = json_decode(CurlToolkit::postRequest("http://dwz.cn/create.php",array('url' => $url)),true);
+        $arrResponse = CurlToolkit::request('POST', "http://dwz.cn/create.php",array('url' => $url));
         if ($arrResponse['status'] != 0) {
             throw new \RuntimeException("短链接生成失败!");
         }

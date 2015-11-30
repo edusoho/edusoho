@@ -8,7 +8,6 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Common\NameCutterTookit;
 
 class SmsEventSubscriber implements EventSubscriberInterface
 {
@@ -19,7 +18,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             'testpaper.reviewed' => 'onTestpaperReviewed',
             'order.pay.success' => 'onOrderPaySuccess',
             'course.lesson.publish' => 'onCourseLessonPublish',
-            'course.lesson.updateStartTime' => 'onCourseLessonUpdate',
+            'course.lesson.update' => 'onCourseLessonUpdate',
             'course.lesson.delete' => 'onCourseLessonDelete',
             'course.lesson.unpublish' => 'onCourseLessonUnpublish',
         );
@@ -30,15 +29,15 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $parameters = array();
         $smsType = 'sms_testpaper_check';
         if($this->getSmsService()->isOpen($smsType)){
-            $testpaperResult = $event->getSubject();
-            $testId = $testpaperResult['testId'];
-            $testpaper = $this->getTestpaperService()->getTestpaper($testId);
+            $testpaper = $event->getSubject();
+            $testpaperResult = $event->getArgument('testpaperResult');
+
             $target = explode('-', $testpaper['target']);
             if ($target[0] == 'course') {
                 $courseId = $target[1];
                 $course = $this->getCourseService()->getCourse($courseId);
-                $testpaperResult['paperName'] = NameCutterTookit::cutter($testpaperResult['paperName'], 20, 15, 4);
-                $course['title'] = NameCutterTookit::cutter($course['title'], 20, 15, 4);
+                $testpaperResult['paperName'] = StringToolkit::cutter($testpaperResult['paperName'], 20, 15, 4);
+                $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
                 $parameters['lesson_title'] = '《'.$testpaperResult['paperName'].'》'.'试卷';
                 $parameters['course_title'] = '《'.$course['title'].'》';
                 $description = $parameters['course_title'].' '.$parameters['lesson_title'].'试卷批阅提醒';
@@ -61,7 +60,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
             $user = $this->getUserService()->getUser($userId);
             $parameters = array();
             $parameters['order_title'] = $order['title'];
-            $parameters['order_title'] = NameCutterTookit::cutter($parameters['order_title'], 20, 15, 4);
+            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
             if ($targetType == 'coin') {
                 $parameters['totalPrice'] = $order['amount'].'元';
             } else {
@@ -114,14 +113,15 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $argument = $context['argument'];
         $lesson = $context['lesson'];
-        if ( $lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['startTime'] && $this->getSmsService()->isOpen('sms_live_lesson_publish')) {
+        if ( $lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && ($this->getSmsService()->isOpen('sms_live_play_one_day')||$this->getSmsService()->isOpen('sms_live_play_one_hour'))) {
+
             $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson',$lesson['id']);
 
             if ($jobs) {
                 $this->deleteJob($jobs);
             }
-            
-            if ($lesson['status'] == 'published' && $lesson['type'] == 'live') {
+
+            if ($lesson['status'] == 'published') {
                 $this->createJob($lesson);
             }
         }
@@ -146,7 +146,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
         $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24*60*60)) {
             $startJob = array(
-            'name' => "直播短信一天定时",
+            'name' => "SmsSendOneDayJob",
             'cycle' => 'once',
             'time' => $lesson['startTime'] - 24*60*60,
             'jobClass' => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneDayJob',
@@ -158,7 +158,7 @@ class SmsEventSubscriber implements EventSubscriberInterface
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60*60)) {
             $startJob = array(
-            'name' => "直播短信一小时定时",
+            'name' => "SmsSendOneHourJob",
             'cycle' => 'once',
             'time' => $lesson['startTime'] - 60*60,
             'jobClass' => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneHourJob',
@@ -172,7 +172,9 @@ class SmsEventSubscriber implements EventSubscriberInterface
     protected function deleteJob($jobs)
     {
         foreach ($jobs as $key => $job) {
-            $this->getCrontabService()->deleteJob($job['id']);
+            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
+                $this->getCrontabService()->deleteJob($job['id']);
+            }
         }
     }
 
