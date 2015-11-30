@@ -134,6 +134,7 @@ define(function(require, exports, module) {
 				}
 			}
 
+			totalPrice = totalPrice >= 0 ? totalPrice : 0;
 			shouldPay(totalPrice);
 		}
 
