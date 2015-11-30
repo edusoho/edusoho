@@ -610,11 +610,13 @@ class GroupThreadController extends BaseController
             list($threads, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
-                'keywords'     => $keywords,
+                'keywords'     => $keyWord,
                 'type'         => $type,
                 'errorMessage' => '搜索失败，请稍候再试.'
             ));
         }
+
+        $threads = $this->filterCloudSearch($threads);
 
         $paginator = new Paginator($this->get('request'), $counts, 10);
         $ownerIds  = ArrayToolkit::column($threads, 'userId');
@@ -632,6 +634,28 @@ class GroupThreadController extends BaseController
             'paginator'       => $paginator,
             'lastPostMembers' => $lastPostMembers,
             'is_groupmember'  => $this->getGroupMemberRole($id)));
+    }
+
+    private function filterCloudSearch($threads)
+    {
+        $localThreadIds = ArrayToolkit::column($threads, 'id');
+        $localThreads   = ArrayToolkit::index($this->getThreadService()->getThreadsByIds($localThreadIds), 'id');
+        $filterResult   = array();
+
+        foreach ($threads as $index => $thread) {
+            if (array_key_exists($thread['id'], $localThreads)) {
+                $localThread                = $localThreads[$thread['id']];
+                $thread['groupId']          = $localThread['groupId'];
+                $thread['isStick']          = $localThread['isStick'];
+                $thread['isElite']          = $localThread['isElite'];
+                $thread['lastPostTime']     = $localThread['lastPostTime'];
+                $thread['lastPostMemberId'] = $localThread['lastPostMemberId'];
+
+                array_push($adaptResult, $thread);
+            }
+        }
+
+        return $filterResult;
     }
 
     public function setEliteAction($threadId)
