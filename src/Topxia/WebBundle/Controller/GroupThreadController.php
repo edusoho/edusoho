@@ -602,7 +602,8 @@ class GroupThreadController extends BaseController
             'category'    => $type,
             'searchWords' => $keyWord,
             'page'        => $page,
-            'targetType'  => 'group'
+            'targetType'  => 'group',
+            'targetId'    => $id
         );
 
         try {
