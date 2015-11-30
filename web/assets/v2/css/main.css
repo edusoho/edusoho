@@ -11162,6 +11162,52 @@ textarea {
   position: absolute;
   overflow: hidden;
 }
+.pay-agreement-list {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding-left: 0;
+}
+.pay-agreement-list li {
+  list-style-type: none;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 2px solid #e1e1e1;
+}
+.pay-agreement-list li:hover {
+  border-color: #46c37b;
+  cursor: pointer;
+}
+.pay-agreement-list li input {
+  margin-top: 0;
+}
+.pay-agreement-list li.checked {
+  border-color: #46c37b;
+}
+.pay-agreement-list li .closed {
+  float: right;
+}
+.pay-agreement-list li .name {
+  display: inline-block;
+  width: 200px;
+}
+@media (max-width: 767px) {
+  .pay-agreement-list li .name {
+    width: 150px;
+  }
+}
+.pay-agreement-list li .number {
+  margin-right: 50px;
+}
+@media (max-width: 767px) {
+  .pay-agreement-list li .number {
+    margin-right: 20px;
+  }
+}
+.add-pay-agreement a {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px dashed #e1e1e1;
+}
 .order-pay-state {
   padding: 40px 300px;
   margin-bottom: 15px;

@@ -71,15 +71,26 @@
             <div class="pay-type-label text-warning ">支付方式未开启，请联系管理员。</div>
           {% endfor %}
           {% if payAgreements is not empty %}
-            <div style="margin-top:10px;display:none;" class="pay-agreement">
+          <div class="js-pay-agreement" style="display:none">
+            <ul class="pay-agreement-list">
               {% for payAgreement in payAgreements %}
-                <div class="pay-bank">
-                  <input type="radio" name='payAgreementId' value="{{payAgreement.id}}"/>{{payAgreement.bankName}}－{{payAgreement.bankNumber}} <span class="closed" data-url="{{ path('pay_center_closeAuth')}}">X</span>
-                </div>
+                <li class="js-pay-bank clearfix {% if loop.index0 == 0 %}checked{% endif %}">
+                  <input type="radio" name='payAgreementId' value="{{payAgreement.id}}"/ {% if loop.index0 == 0 %}checked{% endif %}>
+                  <span class="name">{{payAgreement.bankName}}</span>
+                  <span class="number">***{{payAgreement.bankNumber}}</span>
+                  <span class="hidden-xs">储蓄卡</span>
+                  <a href="javascript:;" class="closed link-light" data-url="{{ path('pay_center_closeAuth')}}">解绑</a>
+                </li>
               {% endfor %}
-
-
-            </div>
+              <li>
+                <input type="radio" name='payAgreementId' value=""/>
+                暂不选择
+              </li>
+            </ul>
+            <!-- <div class="add-pay-agreement">
+              <a class="link-light" href="">+ 银行卡</a>
+            </div> -->
+          </div>
           {% endif %}
         </div>
         <div class="form-group">
