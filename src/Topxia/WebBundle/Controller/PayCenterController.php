@@ -193,7 +193,8 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order = $this->getOrderService()->getOrder($field["orderId"]);
+        $order       = $this->getOrderService()->getOrder($field["orderId"]);
+        $userProfile = $this->getUserService()->getUserProfile($order['userId']);
 
         if ($user["id"] != $order["userId"]) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -207,7 +208,7 @@ class PayCenterController extends BaseController
         }
 
         $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
-        $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment']);
+        $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment'], 'userProfile' => $userProfile);
         $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
         return $this->createJsonResponse($formRequest);
