@@ -35,6 +35,8 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
+        $ismobil = $this->ismobil();
+
         $converted                  = array();
         $converted['version']       = 1;
         $converted['user_identity'] = $this->options['key']."_".$params['userId'];
@@ -44,11 +46,24 @@ class QuickpayRequest extends Request
             $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
         }
 
-        $converted['mobile']      = '';
-        $converted['device_type'] = 1;
+        $converted['mobile'] = '';
+
+        if ($ismobil == 'Android') {
+            $converted['device_type'] = 2;
+        } elseif ($ismobil == 'iPhone' || $ismobil == 'iPad') {
+            $converted['device_type'] = 0;
+        } else {
+            $converted['device_type'] = 1;
+        }
+
         $converted['device_id']   = '';
         $converted['custom_page'] = 0;
-        $converted['display']     = 1;
+
+        if ($ismobil == 'pc') {
+            $converted['display'] = 1;
+        } else {
+            $converted['display'] = 0;
+        }
 
         if (!empty($params['returnUrl'])) {
             $converted['return_url'] = $params['returnUrl'];
@@ -110,6 +125,34 @@ class QuickpayRequest extends Request
             foreach ($authBanks as $authBank) {
                 $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
             }
+        }
+    }
+
+    protected function ismobile()
+    {
+        //获取USER AGENT
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+        //分析数据
+        $is_pc      = (strpos($agent, 'windows nt')) ? true : false;
+        $is_iphone  = (strpos($agent, 'iphone')) ? true : false;
+        $is_ipad    = (strpos($agent, 'ipad')) ? true : false;
+        $is_android = (strpos($agent, 'android')) ? true : false;
+
+        if ($is_pc) {
+            return 'pc';
+        }
+
+        if ($is_iphone) {
+            return 'iPhone';
+        }
+
+        if ($is_ipad) {
+            return 'iPad';
+        }
+
+        if ($is_android) {
+            return 'Android';
         }
     }
 
