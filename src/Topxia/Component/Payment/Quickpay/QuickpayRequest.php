@@ -35,6 +35,8 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
+        var_dump($_SERVER['HTTP_USER_AGENT']);
+        exit();
         $isMobile = $this->isMobile();
 
         $mobileType = $this->mobileType();
