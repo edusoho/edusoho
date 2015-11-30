@@ -35,7 +35,7 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $isMobile = $this->isMobile();
+        $isMobile   = $this->isMobile();
         $mobileType = $this->mobileType();
 
         $converted                  = array();
@@ -131,9 +131,9 @@ class QuickpayRequest extends Request
 
     public function isMobile()
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
