@@ -96,7 +96,7 @@ class QuickpayRequest extends Request
 
     private function generateOrderToken()
     {
-        return 'H'.date('YmdHis', time()).mt_rand(10000, 99999);
+        return 'h'.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
     public function updateBankAuth($sn, $params)
