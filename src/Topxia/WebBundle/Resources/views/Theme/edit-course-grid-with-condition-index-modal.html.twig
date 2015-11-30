@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set modalSize = 'large' %}
-
+{% set categoriesFirst = data('Categories',{'group':'course'})%}
 {% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}编辑{% endblock %}
 {% block body %}
     <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
@@ -18,7 +18,6 @@
           <label class="col-sm-3 control-label">课程数量设置</label>
           <div class="col-sm-4">
             <select class="form-control width-input-large" name="count">
-              <option value="">课程数量</option>
               <option value="4">4</option>
               <option value="8">8</option>
               <option value="12">12</option>
@@ -30,7 +29,16 @@
         <label class="col-md-3 control-label">课程分类设置</label>
         <div class="col-md-4 controls">
           <select id="categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
-            {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '全部分类') }}
+            <option value="">全部分类</option>
+            {% if categoriesFirst%}
+              {% for category in categoriesFirst  if (category.parentId == 0) %}
+                {% if ( loop.index0 < 4 ) %}
+                  <option value='{{category.id}}'>
+                      {{ category.name }}
+                  </option>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
           </select>
           <div class="help-block" style="display:none;"></div>
         </div>
