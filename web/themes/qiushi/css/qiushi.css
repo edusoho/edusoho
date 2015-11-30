@@ -415,8 +415,8 @@ body {
 }
 .qs-course-block {
   margin-bottom: 20px;
-  background-color: #eee;
-  border: 1px solid #e1e1e1;
+  background-color: #fafafa;
+  border: 1px solid #eee;
 }
 .qs-course-block .course-img {
   position: relative;
@@ -475,7 +475,7 @@ body {
 }
 .qs-course-block .course-info .content {
   color: #919191;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 @media (max-width: 991px) {
   .qs-course-block .course-info .content {
@@ -537,7 +537,7 @@ body {
 }
 .qs-course-block .course-action .course-price .price {
   color: #fff;
-  font-size: 28px;
+  font-size: 24px;
 }
 @media (max-width: 1199px) {
   .qs-course-block .course-action .course-price .price {
