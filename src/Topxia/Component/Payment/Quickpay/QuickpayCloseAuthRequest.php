@@ -37,7 +37,7 @@ class QuickpayCloseAuthRequest extends Request
         $signStr = $signStr.'agent_id='.$this->options['key'];
         $signStr = $signStr.'&hy_auth_uid='.$params['authBank']['bankAuth'];
         $signStr = $signStr.'&key='.$this->options['secret'];
-        $signStr = $signStr.'&mobile='.'18757176074';
+        $signStr = $signStr.'&mobile='.'';
         $signStr = $signStr.'&timestamp='.time() * 1000;
         $signStr = $signStr.'&version='. 1;
         $sign    = md5(strtolower($signStr));
@@ -52,7 +52,7 @@ class QuickpayCloseAuthRequest extends Request
         $converted['version']     = 1;
         $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
         $converted['timestamp']   = time() * 1000;
-        $converted['mobile']      = '18757176074';
+        $converted['mobile']      = '';
         $encrypt_data             = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
 
         return $encrypt_data;
