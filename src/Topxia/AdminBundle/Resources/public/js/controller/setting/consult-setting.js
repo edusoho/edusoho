@@ -6,14 +6,14 @@ define(function(require, exports, module) {
 
         $("#qq-property-tips").popover({
             html: true,
-            trigger: 'hover',//'hover','click'
+            trigger: 'click',//'hover','click'
             placement: 'left',//'bottom',
             content: $("#qq-property-tips-html").html()
         });
 
         $("#qq-group-property-tips").popover({
             html: true,
-            trigger: 'hover',//'hover','click'
+            trigger: 'click',//'hover','click'
             placement: 'left',//'bottom',
             content: $("#qq-group-property-tips-html").html()
         });

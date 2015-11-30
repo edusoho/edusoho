@@ -80,7 +80,7 @@
         <div style="width:250px;">
           <span style="color:blue;">如何获取在线咨询链接？</span><br>
           1，登录 <a target="_blank" href="http://id.b.qq.com">http://id.b.qq.com</a>。 <br>
-          2，营销QQ－>在线代码生成－>生成在线咨询链接。（包含“http：”）<br>
+          2，营销QQ－>在线代码生成－>生成在线咨询链接。（包含“http://”）<br>
         </div>
       </div>
     </legend>
@@ -94,7 +94,7 @@
           <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" value="{{qq.number}}" placeholder="QQ号">
         </div>
         <div class="controls col-md-4">
-          <input type="text" name="qq[{{loop.index0}}][url]" class="form-control" value="{{qq.url|default('')}}" placeholder="如果为营销QQ请填入访问地址(http://)">
+          <input type="text" name="qq[{{loop.index0}}][url]" class="form-control" value="{{qq.url|default('')}}" placeholder="若使用营销QQ，请填入在线咨询链接">
           {% if loop.index0 > 0 %}
           <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
           {% endif %}
