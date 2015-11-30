@@ -180,6 +180,13 @@ class ThemeController extends BaseController
         ));
     }
 
+    private function editRecommendClassroom($config)
+    {
+        return $this->render('TopxiaWebBundle:Theme:edit-recommend-classroom-modal.html.twig', array(
+            'config' => $config
+        ));
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

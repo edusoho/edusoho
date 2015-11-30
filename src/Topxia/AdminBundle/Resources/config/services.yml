@@ -14,7 +14,7 @@ parameters:
           code: course-grid-with-condition-index
           categoryCount: "4"
           defaultTitle: "课程组件"
-          id: latestCourse
+          id: "latestCourse"
         - title: ""
           count: "4"
           categoryId: ""
@@ -26,6 +26,11 @@ parameters:
           code: "middle-banner"
           defaultTitle: "中部banner"
           id: "middle-banner"
+        - title: ""
+          count: "4"
+          code: "recommend-classroom"
+          defaultTitle: "班级组件"
+          id: "RecommendClassrooms"
         - title: ""
           count: "6"
           code: "groups"
