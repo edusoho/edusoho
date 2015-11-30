@@ -6,7 +6,7 @@
   {% set profile = teacher.profile %}
   {% set isFollowed = teacher.isFollowed|default(false) %}
     <div class="col-lg-4 col-md-6 col-sm-6">
-      {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
+      {% include 'TopxiaWebBundle:Search:search-teacher-item.html.twig' %}
     </div>
   {% endfor %}
 </div>
