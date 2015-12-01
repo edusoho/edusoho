@@ -47,6 +47,7 @@ class WxpayRequest extends Request
     {
         libxml_disable_entity_loader(true);
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        libxml_disable_entity_loader(false);
         return $array;
     }
 

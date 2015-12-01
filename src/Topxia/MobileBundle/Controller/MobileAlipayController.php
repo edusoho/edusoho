@@ -59,7 +59,7 @@ class MobileAlipayController extends MobileController
             libxml_disable_entity_loader(true);
             $doc = simplexml_load_string($_POST['notify_data']);
             $doc = (array) $doc;
-
+            libxml_disable_entity_loader(false);
             $requestParams = array();
 
             if (!empty($doc['out_trade_no'])) {

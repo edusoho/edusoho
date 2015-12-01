@@ -194,8 +194,9 @@ class AlipaySubmit
             //$doc = new \DOMDocument('1.0', 'UTF-8');
             //$doc->loadXML($para_text['res_data']);
             libxml_disable_entity_loader(true);
-            $doc                        = simplexml_load_string($para_text['res_data']);
-            $doc                        = (array) $doc;
+            $doc = simplexml_load_string($para_text['res_data']);
+            $doc = (array) $doc;
+            libxml_disable_entity_loader(false);
             $para_text['request_token'] = $doc['request_token'];
         }
 
