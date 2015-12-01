@@ -61,7 +61,7 @@ class HeepayRequest extends Request
 
     protected function filterText($text)
     {
-        return str_replace(array('#', '%', '&', '+', '《', '》'), array('＃', '％', '＆', '＋', ' ', ' '), $text);
+        return str_replace(array('#', '%', '&', '+', '《', '》'), array('＃', '％', '＆', '＋', '', ''), $text);
     }
 
     private function generateOrderToken()

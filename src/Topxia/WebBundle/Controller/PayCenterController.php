@@ -420,11 +420,12 @@ class PayCenterController extends BaseController
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order["targetType"]);
         $requestParams = array_merge($requestParams, array(
-            'orderSn' => $order['sn'],
-            'userId'  => $order['userId'],
-            'title'   => $processor->getTitle($order['targetId']),
-            'summary' => $processor->getSummary($order['targetId']),
-            'amount'  => $order['amount']
+            'orderSn'     => $order['sn'],
+            'userId'      => $order['userId'],
+            'title'       => $order['title'],
+            'targetTitle' => $processor->getTitle($order['targetId']),
+            'summary'     => $processor->getSummary($order['targetId']),
+            'amount'      => $order['amount']
         ));
         return $request->setParams($requestParams);
     }

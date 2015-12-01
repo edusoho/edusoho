@@ -77,7 +77,7 @@ class QuickpayRequest extends Request
         $converted['agent_bill_id']   = $this->generateOrderToken();
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
-        $converted['goods_name']      = mb_substr($this->filterText($params['title']), 0, 20, 'utf-8');
+        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 20, 'utf-8');
         $converted['goods_note']      = mb_substr($this->filterText($params['summary']), 0, 20, 'utf-8');
         $converted['goods_num']       = 1;
         $converted['user_ip']         = $this->getClientIp();
