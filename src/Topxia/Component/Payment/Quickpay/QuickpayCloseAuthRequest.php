@@ -10,15 +10,15 @@ class QuickpayCloseAuthRequest extends Request
 
     public function form()
     {
-        $params       = $this->params;
-        $encrypt_data = $this->convertParams($params);
-        $sign         = $this->signParams($params);
-        $url          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
-        $result       = $this->curlRequest($url);
+        $params      = $this->params;
+        $encryptData = $this->convertParams($params);
+        $sign        = $this->signParams($params);
+        $url         = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
+        $result      = $this->curlRequest($url);
 
         $xml      = simplexml_load_string($result);
         $redir    = (string) $xml->encrypt_data;
-        $redirurl = $this->Decrypt($redir, $this->options['aes']);
+        $redirurl = $this->decrypt($redir, $this->options['aes']);
         parse_str($redirurl, $ret);
 
         if ($ret['ret_code'] == '0000') {
@@ -53,9 +53,9 @@ class QuickpayCloseAuthRequest extends Request
         $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
         $converted['timestamp']   = time() * 1000;
         $converted['mobile']      = $params['userProfile']['mobile'];
-        $encrypt_data             = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
+        $encryptData              = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
 
-        return $encrypt_data;
+        return $encryptData;
     }
 
     private function curlRequest($url)
@@ -81,7 +81,7 @@ class QuickpayCloseAuthRequest extends Request
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function Encrypt($data, $key)
+    private function encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
         $iv        = substr($decodeKey, 0, 16);
@@ -89,7 +89,7 @@ class QuickpayCloseAuthRequest extends Request
         return $encrypted;
     }
 
-    private function Decrypt($data, $key)
+    private function decrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
         $data      = base64_decode($data);

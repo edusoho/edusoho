@@ -12,7 +12,7 @@ class QuickpayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        $aesStr = $this->Decrypt($params['encrypt_data'], $this->options['aes']);
+        $aesStr = $this->decrypt($params['encrypt_data'], $this->options['aes']);
         parse_str($aesStr, $returnArray);
         $result = $this->confirmSellerSendGoods($returnArray['agent_bill_id']);
 
@@ -58,15 +58,15 @@ class QuickpayResponse extends Response
         $converted['timestamp']     = time() * 1000;
         $converted['version']       = 1;
 
-        $sign         = $this->signParams($converted);
-        $aesArr       = array('version' => 1, 'agent_bill_id' => $sn, 'timestamp' => $converted['timestamp']);
-        $encrypt_data = urlencode(base64_encode($this->Encrypt(http_build_query($aesArr), $this->options['aes'])));
+        $sign        = $this->signParams($converted);
+        $aesArr      = array('version' => 1, 'agent_bill_id' => $sn, 'timestamp' => $converted['timestamp']);
+        $encryptData = urlencode(base64_encode($this->encrypt(http_build_query($aesArr), $this->options['aes'])));
 
-        $url      = $this->url."?agent_id=".$params['agent_id']."&encrypt_data=".$encrypt_data."&sign=".$sign;
+        $url      = $this->url."?agent_id=".$params['agent_id']."&encrypt_data=".$encryptData."&sign=".$sign;
         $result   = $this->curlRequest($url);
         $xml      = simplexml_load_string($result);
         $redir    = (string) $xml->encrypt_data;
-        $redirurl = $this->Decrypt($redir, $this->options['aes']);
+        $redirurl = $this->decrypt($redir, $this->options['aes']);
         parse_str($redirurl, $tip);
 
         return $tip;
@@ -148,7 +148,7 @@ class QuickpayResponse extends Response
         return $order['sn'];
     }
 
-    private function Encrypt($data, $key)
+    private function encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
         $iv        = substr($decodeKey, 0, 16);
@@ -156,7 +156,7 @@ class QuickpayResponse extends Response
         return $encrypted;
     }
 
-    private function Decrypt($data, $key)
+    private function decrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
         $data      = base64_decode($data);

@@ -86,13 +86,13 @@ class QuickpayRequest extends Request
         $converted['auth_card_type']  = -1;
         $converted['timestamp']       = time() * 1000;
         $sign                         = $this->signParams($converted);
-        $encrypt_data                 = urlencode(base64_encode($this->Encrypt(http_build_query($converted), $this->options['aes'])));
-        $url                          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encrypt_data."&sign=".$sign;
+        $encryptData                  = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
+        $url                          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
         $result                       = $this->curlRequest($url);
         $xml                          = simplexml_load_string($result);
 
         $redir    = (string) $xml->encrypt_data;
-        $redirurl = $this->Decrypt($redir, $this->options['aes']);
+        $redirurl = $this->decrypt($redir, $this->options['aes']);
 
         parse_str($redirurl, $tip);
 
@@ -176,7 +176,7 @@ class QuickpayRequest extends Request
         return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
     }
 
-    private function Encrypt($data, $key)
+    private function encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
         $iv        = substr($decodeKey, 0, 16);
@@ -184,7 +184,7 @@ class QuickpayRequest extends Request
         return $encrypted;
     }
 
-    private function Decrypt($data, $key)
+    private function decrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
         $data      = base64_decode($data);
