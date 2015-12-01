@@ -1,0 +1,48 @@
+{% extends 'TopxiaWebBundle:Card:layout.html.twig' %}
+
+{% set main_nav = 'cards' %}
+{% set script_controller = 'couponbundle/controller/coupon/index' %}
+
+{% block main_body %}
+	<div class="clearfix mbl mhm">
+		<ul class="nav nav-pills inline-block" role="active">
+			<li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">优惠劵</a></li>
+			<li role="presentation" {% if app.request.query.get('cardType')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">学习卡</a></li>
+		</ul>
+		<div class="pull-right mtm hidden-xs">
+		
+			<label class="radio-inline">
+			  <input type="radio" id="filter-change" data-filter="all" {% if app.request.query.get('filter') == '' or app.request.query.get('filter') == 'all' %} checked="checked" {% endif %} name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}">全部
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" id="filter-change" data-filter="useable" {% if app.request.query.get('filter') == 'useable' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}">未使用
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" id="filter-change" data-filter="used" {% if app.request.query.get('filter') == 'used' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}">已使用
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" id="filter-change" data-filter="outdate" {% if app.request.query.get('filter') == 'outdate' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}">已过期
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" id="filter-change" data-filter="invalid" {% if app.request.query.get('filter') == 'invalid' %} checked="checked" {% endif %}  name="filter-change" value="{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}">已作废
+			</label>
+		</div>
+	</div>
+	<div class="jm-card-list">
+		<div class="row">
+			{% if cards is not null %}
+				{% for card in cards %}
+					{% if card.cardType == 'coupon' and is_plugin_installed('coupon') %}
+						{% include 'TopxiaWebBundle:Card:coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+					{% endif %}
+					{% if card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}	
+						{% include 'TopxiaWebBundle:Card:moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<div class="empty">没有搜索到符合条件的卡</div>
+			{% endif %}
+		</div>
+
+	</div>
+{% endblock %}

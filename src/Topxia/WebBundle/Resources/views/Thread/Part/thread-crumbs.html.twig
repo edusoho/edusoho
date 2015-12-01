@@ -4,7 +4,7 @@
 <ul class="breadcrumb">
   <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'):target.id}) }}">
     {% if target.type == "classroom" %}
-    班级话题
+    {{setting("classroom.name")|default("班级")}}话题
     {% else %}
     讨论区
     {% endif %}

@@ -61,7 +61,7 @@
         </div>
         <div class="class-operation">
           <ul class='class-data clearfix 
-          {% if classroom_permit(classroom.id, 'Take', true) and 'headTeacher' not in member.role %}
+          {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
           three-col
           {% else %}
           two-col
