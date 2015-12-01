@@ -100,7 +100,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
-        if (!array_key_exists("orderId", $fields)) {
+        if (!array_key_exists('orderId', $fields)) {
             return $this->createMessageResponse('error', '缺少订单，支付失败');
         }
 
@@ -191,7 +191,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
-        if (!array_key_exists("orderId", $field)) {
+        if (!isset($field['orderId'])) {
             return $this->createMessageResponse('error', '缺少订单，支付失败');
         }
 
@@ -199,8 +199,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order       = $this->getOrderService()->getOrder($field["orderId"]);
-        $userProfile = $this->getUserService()->getUserProfile($order["userId"]);
+        $order = $this->getOrderService()->getOrder($field["orderId"]);
 
         if ($user["id"] != $order["userId"]) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -212,11 +211,6 @@ class PayCenterController extends BaseController
         if (!in_array($field['payAgreementId'], $authBanks)) {
             return $this->createMessageResponse('error', '不是您绑定的银行卡，取消绑定失败');
         }
-
-        // $authBank       = $this->getUserService()->getUserPayAgreement($field['payAgreementId']);
-        // $requestParams  = array('authBank' => $authBank, 'payment' => $field['payment'], 'userProfile' => $userProfile);
-        // $paymentRequest = $this->createCloseAuthBankRequest($order, $requestParams);
-        //$formRequest    = $paymentRequest->form();
 
         try {
             $this->getUserService()->deleteUserPayAgreements($field['payAgreementId']);
