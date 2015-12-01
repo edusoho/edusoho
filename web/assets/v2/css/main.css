@@ -6666,12 +6666,19 @@ textarea {
   -moz-border-radius: 50%;
   border-radius: 50%;
 }
-.es-step li.done,
+.es-step li.done {
+  border-color: #46c37b;
+  color: #46c37b;
+}
+.es-step li.done .number {
+  color: #fff;
+  background-color: #46c37b;
+  border-color: #46c37b;
+}
 .es-step li.doing {
   border-color: #46c37b;
   color: #46c37b;
 }
-.es-step li.done .number,
 .es-step li.doing .number {
   border-color: #46c37b;
 }
