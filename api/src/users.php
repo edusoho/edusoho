@@ -117,12 +117,12 @@ POST /users/
  */
 $api->post('/', function (Request $request) {
     $fields = $request->request->all();
-    $ip = $request->getClientIp();
 
     $authSettings = ServiceKernel::instance()->createService('System.SettingService')->get('auth', array());
 
     if (isset($authSettings['register_protective'])) {
         $type = $authSettings['register_protective'];
+        $ip = $request->getClientIp();
 
         switch ($type) {
             case 'middle':
