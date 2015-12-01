@@ -63,10 +63,8 @@ class MobileAlipayController extends MobileBaseController
             $order                      = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
             $requestParams['total_fee'] = $order['amount'];
         } else {
-            libxml_disable_entity_loader(true);
-            $doc = simplexml_load_string($_POST['notify_data']);
-            $doc = (array) $doc;
-            libxml_disable_entity_loader(false);
+            $doc           = simplexml_load_string($_POST['notify_data']);
+            $doc           = (array) $doc;
             $requestParams = array();
 
             if (!empty($doc['out_trade_no'])) {

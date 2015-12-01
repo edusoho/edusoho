@@ -56,10 +56,8 @@ class MobileAlipayController extends MobileController
         } else {
             $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知");
 
-            libxml_disable_entity_loader(true);
-            $doc = simplexml_load_string($_POST['notify_data']);
-            $doc = (array) $doc;
-            libxml_disable_entity_loader(false);
+            $doc           = simplexml_load_string($_POST['notify_data']);
+            $doc           = (array) $doc;
             $requestParams = array();
 
             if (!empty($doc['out_trade_no'])) {
