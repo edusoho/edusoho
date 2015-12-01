@@ -150,6 +150,8 @@ class PayCenterController extends BaseController
             $requestParams['authBank'] = $authBank;
         }
 
+        $requestParams['userAgent'] = $request->headers->get('User-Agent');
+
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
         $params         = $formRequest['params'];
@@ -264,12 +266,13 @@ class PayCenterController extends BaseController
         if ($name == 'wxpay') {
             $returnXml   = $GLOBALS['HTTP_RAW_POST_DATA'];
             $returnArray = $this->fromXml($returnXml);
-            $response    = $this->createPaymentResponse($name, $returnArray);
         } elseif ($name == 'heepay') {
-            $response = $this->createPaymentResponse($name, $request->query->all());
+            $returnArray = $request->query->all();
         } else {
-            $response = $this->createPaymentResponse($name, $request->request->all());
+            $returnArray = $request->request->all();
         }
+
+        $response = $this->createPaymentResponse($name, $returnArray);
 
         $payData = $response->getPayData();
 
