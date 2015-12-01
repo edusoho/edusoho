@@ -21,7 +21,15 @@
       border: 1px solid #c1c1c1;
       .border-radius(50%);
     }
-    &.done,
+    &.done {
+      border-color: @brand-primary;
+      color: @brand-primary;
+      .number {
+        color: #fff;
+        background-color: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
     &.doing {
       border-color: @brand-primary;
       color: @brand-primary;
