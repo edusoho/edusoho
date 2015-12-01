@@ -108,12 +108,6 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $authBank = array();
-
-        if (isset($fields['payAgreementId'])) {
-            $authBank = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
-        }
-
         $this->getOrderService()->updateOrder($fields["orderId"], array('payment' => $fields['payment']));
         $order = $this->getOrderService()->getOrder($fields["orderId"]);
 
@@ -131,8 +125,7 @@ class PayCenterController extends BaseController
             $payRequestParams = array(
                 'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
                 'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-                'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true),
-                'authBank'  => $authBank
+                'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
             );
             return $this->forward('TopxiaWebBundle:PayCenter:submitPayRequest', array(
                 'order'         => $order,
@@ -143,10 +136,23 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order, $requestParams)
     {
+        $payment = $request->request->get('payment');
+
+        if ($payment == 'quickpay') {
+            $authBank = array();
+
+            $payAgreementId = $request->request->get('payAgreementId', '');
+
+            if (!empty($payAgreementId)) {
+                $authBank = $this->getUserService()->getUserPayAgreement($payAgreementId);
+            }
+
+            $requestParams['authBank'] = $authBank;
+        }
+
         $paymentRequest = $this->createPaymentRequest($order, $requestParams);
         $formRequest    = $paymentRequest->form();
         $params         = $formRequest['params'];
-        $payment        = $request->request->get('payment');
 
         if ($payment == 'wxpay') {
             $returnXml = $paymentRequest->unifiedOrder();
