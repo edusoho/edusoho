@@ -10,28 +10,32 @@
     display: inline-block;
     margin-right: 10%;
     font-size: 18px;
+    @media(max-width: @screen-md-max) {
+      font-size: 16px;
+    }
     @media (max-width: @screen-xs-max) {
       display: block;
+      margin-bottom: 10px;
     }
   }
 }
 
 .form-paytype .check {
   cursor: pointer;
-  width: 150px;
-  height: 58px;
-  border: 2px solid @gray-light;
+  width: 144px;
+  height: 54px;
+  border: 2px solid #f1f1f1;
   position: relative;
   text-align: center;
   font-size: 16px;
-  line-height: 58px;
-  display:inline-block;
-  margin-right:15px;
-  @media(max-width: @screen-xs-max) {
+  display: inline-block;
+  margin-right: 15px;
+  @media(max-width: @screen-md-max) {
     margin-right: 5px;
     width: 100px;
     height: 40px;
-    line-height: 40px;
+    line-height: 32px;
+    margin-bottom: 10px;
     img {
       width: 80%;
       height: auto;
@@ -46,8 +50,8 @@
   .icon {
     display: none;
     background: url('@{img-src}old/pay-check-status.png') no-repeat;
-    top: -1px;
-    right: -1px;
+    top: -2px;
+    right: -2px;
     width: 23px;
     height: 26px;
     background-position: 0 -4px;
@@ -56,5 +60,40 @@
   }
 }
 
-
+.pay-agreement-list {
+  margin-top: 30px;
+  padding-left: 0;
+  li {
+    list-style-type: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid #e1e1e1;
+    &:hover {
+      border-color: @brand-primary;
+      cursor: pointer;
+    }
+    input {
+      margin-top: 0;
+    }
+    &.checked {
+      border-color: @brand-primary;
+    }
+    .closed {
+      float: right;
+    }
+    .name {
+      display: inline-block;
+      width: 200px;
+      @media(max-width: @screen-xs-max) {
+        width: 150px;
+      }
+    }
+    .number {
+      margin-right: 50px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 20px;
+      }
+    }
+  }
+}
 

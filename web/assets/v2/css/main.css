@@ -1380,6 +1380,11 @@
   margin: 0 auto;
   margin-bottom: 40px;
 }
+@media (max-width: 767px) {
+  .page-message-container {
+    width: 100%;
+  }
+}
 .modal .page-message-container {
   width: auto;
   margin: 20px 20px;
@@ -6634,6 +6639,49 @@ textarea {
 .icon-user-status.icon-md > i {
   font-size: 18px;
 }
+.es-step {
+  padding-left: 0;
+  margin-bottom: 30px;
+}
+.es-step.es-step-3 li {
+  width: 33.33%;
+}
+.es-step li {
+  float: left;
+  padding: 15px;
+  list-style-type: none;
+  border-bottom: 2px solid #c1c1c1;
+  color: #c1c1c1;
+  font-size: 16px;
+  text-align: center;
+}
+.es-step li .number {
+  width: 23px;
+  height: 23px;
+  line-height: 21px;
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid #c1c1c1;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.es-step li.done {
+  border-color: #46c37b;
+  color: #46c37b;
+}
+.es-step li.done .number {
+  color: #fff;
+  background-color: #46c37b;
+  border-color: #46c37b;
+}
+.es-step li.doing {
+  border-color: #46c37b;
+  color: #46c37b;
+}
+.es-step li.doing .number {
+  border-color: #46c37b;
+}
 .class-serve > ul {
   padding: 20px 10px;
 }
@@ -10345,7 +10393,6 @@ textarea {
   }
 }
 .order-detail-bg {
-  padding: 3px;
   margin-bottom: 20px;
   border: 1px solid #e1e1e1;
 }
@@ -10370,7 +10417,7 @@ textarea {
   position: relative;
   height: 150px;
   width: auto;
-  background-color: #f1f1f1;
+  background-color: #fafafa;
 }
 @media (max-width: 767px) {
   .order-detail-bg .order-detail {
@@ -11076,29 +11123,35 @@ textarea {
   margin-right: 10%;
   font-size: 18px;
 }
+@media (max-width: 1199px) {
+  .form-paytype .pay-type-label {
+    font-size: 16px;
+  }
+}
 @media (max-width: 767px) {
   .form-paytype .pay-type-label {
     display: block;
+    margin-bottom: 10px;
   }
 }
 .form-paytype .check {
   cursor: pointer;
-  width: 150px;
-  height: 58px;
-  border: 2px solid #e1e1e1;
+  width: 144px;
+  height: 54px;
+  border: 2px solid #f1f1f1;
   position: relative;
   text-align: center;
   font-size: 16px;
-  line-height: 58px;
   display: inline-block;
   margin-right: 15px;
 }
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .form-paytype .check {
     margin-right: 5px;
     width: 100px;
     height: 40px;
-    line-height: 40px;
+    line-height: 32px;
+    margin-bottom: 10px;
   }
   .form-paytype .check img {
     width: 80%;
@@ -11114,13 +11167,53 @@ textarea {
 .form-paytype .check .icon {
   display: none;
   background: url('/assets/v2/img/old/pay-check-status.png') no-repeat;
-  top: -1px;
-  right: -1px;
+  top: -2px;
+  right: -2px;
   width: 23px;
   height: 26px;
   background-position: 0 -4px;
   position: absolute;
   overflow: hidden;
+}
+.pay-agreement-list {
+  margin-top: 30px;
+  padding-left: 0;
+}
+.pay-agreement-list li {
+  list-style-type: none;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 2px solid #e1e1e1;
+}
+.pay-agreement-list li:hover {
+  border-color: #46c37b;
+  cursor: pointer;
+}
+.pay-agreement-list li input {
+  margin-top: 0;
+}
+.pay-agreement-list li.checked {
+  border-color: #46c37b;
+}
+.pay-agreement-list li .closed {
+  float: right;
+}
+.pay-agreement-list li .name {
+  display: inline-block;
+  width: 200px;
+}
+@media (max-width: 767px) {
+  .pay-agreement-list li .name {
+    width: 150px;
+  }
+}
+.pay-agreement-list li .number {
+  margin-right: 50px;
+}
+@media (max-width: 767px) {
+  .pay-agreement-list li .number {
+    margin-right: 20px;
+  }
 }
 .order-pay-state {
   padding: 40px 300px;

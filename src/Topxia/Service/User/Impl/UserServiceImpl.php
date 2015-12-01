@@ -1369,6 +1369,42 @@ class UserServiceImpl extends BaseService implements UserService
         return $ats;
     }
 
+    public function getUserPayAgreement($id)
+    {
+        return $this->getUserPayAgreementDao()->getUserPayAgreement($id);
+    }
+
+    public function getUserPayAgreementByBankAuth($bankAuth)
+    {
+        return $this->getUserPayAgreementDao()->getUserPayAgreementByBankAuth($bankAuth);
+    }
+
+    public function getUserPayAgreementByUserId($userId)
+    {
+        return $this->getUserPayAgreementDao()->getUserPayAgreementByUserId($userId);
+    }
+
+    public function createUserPayAgreement($field)
+    {
+        $field = ArrayToolkit::parts($field, array('userId', 'type', 'bankName', 'bankNumber', 'userAuth', 'bankAuth', 'otherId'));
+        return $this->getUserPayAgreementDao()->addUserPayAgreement($field);
+    }
+
+    public function updateUserPayAgreementByBankAuth($bankAuth, $fields)
+    {
+        return $this->getUserPayAgreementDao()->updateUserPayAgreementByBankAuth($bankAuth, $fields);
+    }
+
+    public function findUserPayAgreementsByUserId($userId)
+    {
+        return $this->getUserPayAgreementDao()->findUserPayAgreementsByUserId($userId);
+    }
+
+    public function deleteUserPayAgreements($id)
+    {
+        return $this->getUserPayAgreementDao()->deleteUserPayAgreements($id);
+    }
+
     protected function getFriendDao()
     {
         return $this->createDao("User.FriendDao");
@@ -1402,6 +1438,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getUserFortuneLogDao()
     {
         return $this->createDao('User.UserFortuneLogDao');
+    }
+
+    protected function getUserPayAgreementDao()
+    {
+        return $this->createDao('User.UserPayAgreementDao');
     }
 
     protected function getFileService()
