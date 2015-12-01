@@ -53,21 +53,33 @@ abstract class BaseResource
     protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
     {
         $end = end($currentRows);
-        if (empty($end) || count($currentRows) < $currentLimit) {
-            return array();
+        if (empty($end)) {
+            return array(
+                'cursor' => $currentCursor + 1,
+                'offset' => 0,
+                'eof' => true,
+            );
+        }
+
+        if (count($currentRows) < $currentLimit) {
+            return array(
+                'cursor' => $end['updatedTime'] + 1,
+                'offset' => 0,
+                'eof' => true,
+            );
         }
 
         if ($end['updatedTime'] == $currentCursor) {
             $next = array(
                 'cursor' => $currentCursor,
-                'start' => $currentStart + $currentLimit,
-                'limit' => (int) $currentLimit,
+                'offset' => $currentStart + $currentLimit,
+                'eof' => false,
             );
         } else {
             $next = array(
-                'cursor' => (int) $end['updatedTime'] + 1,
-                'start' => 0,
-                'limit' => (int)$currentLimit,
+                'cursor' => $end['updatedTime'] + 1,
+                'offset' => 0,
+                'eof' => false,
             );
         }
 
