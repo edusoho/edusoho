@@ -1,108 +1,115 @@
 <?php
 namespace Topxia\Service\Order\OrderProcessor;
 
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\NumberToolkit;
 use Exception;
+use Topxia\Common\NumberToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-	protected $router = "course_show";
+    protected $router = "course_show";
 
-	public function getRouter() {
-		return $this->router;
-	}
+    public function getRouter()
+    {
+        return $this->router;
+    }
 
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
             return array('error' => '已经是课程的学员了!');
         }
+
         $course = $this->getCourseService()->getCourse($targetId);
-         if(!$course['buyable']){
-            return array('error'=>'该课程不可购买，如有需要，请联系客服');
-        }
-        if( $course['status'] != 'published') {
-            return array('error' =>'不能加入未发布课程!');
+
+        if (!$course['buyable']) {
+            return array('error' => '该课程不可购买，如有需要，请联系客服');
         }
 
-        if($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
+        if ($course['status'] != 'published') {
+            return array('error' => '不能加入未发布课程!');
+        }
+
+        if ($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
             return array('error' => '名额已满，不能加入!');
         }
-
-
 
         return array();
     }
 
-	public function getOrderInfo($targetId, $fields)
-	{
-		$course = $this->getCourseService()->getCourse($targetId);
-        if(empty($course)) {
+    public function getOrderInfo($targetId, $fields)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+
+        if (empty($course)) {
             throw new Exception("找不到要购买课程!");
         }
 
-        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $users                                   = $this->getUserService()->findUsersByIds($course['teacherIds']);
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
-        
+
         $totalPrice = 0;
 
-        if(!$coinEnable) {
-        	$totalPrice = $course["price"];
-        	return array(
-				'totalPrice' => $totalPrice,
-				'targetId' => $targetId,
-            	'targetType' => "course",
+        if (!$coinEnable) {
+            $totalPrice = $course["price"];
+            return array(
+                'totalPrice' => $totalPrice,
+                'targetId'   => $targetId,
+                'targetType' => "course",
 
-				'course' => empty($course) ? null : $course,
-				'users' => $users,
-        	);
+                'course'     => empty($course) ? null : $course,
+                'users'      => $users
+            );
         }
 
         if ($priceType == "Coin") {
             $totalPrice = $course["coinPrice"];
-        } else if($priceType == "RMB") {
+        } elseif ($priceType == "RMB") {
             $totalPrice = $course["price"];
-            $maxCoin = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);        }
+            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);}
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
+
         if (!isset($maxCoin)) {
             $maxCoin = $coinPayAmount;
         }
-        return array(
-            'course' => empty($course) ? null : $course,
-            'users' => empty($users) ? null : $users,
-            'totalPrice' => $totalPrice,
-            'targetId' => $targetId,
-            'targetType' => "course",
-            'cashRate' => $cashRate,
-            'priceType' => $priceType,
-            'account' => $account,
-            'hasPayPassword' => $hasPayPassword,
-            'coinPayAmount' => $coinPayAmount,
-            'maxCoin' => $maxCoin,
-        );
-	}
 
-	public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
-	{
+        return array(
+            'course'         => empty($course) ? null : $course,
+            'users'          => empty($users) ? null : $users,
+            'totalPrice'     => $totalPrice,
+            'targetId'       => $targetId,
+            'targetType'     => "course",
+            'cashRate'       => $cashRate,
+            'priceType'      => $priceType,
+            'account'        => $account,
+            'hasPayPassword' => $hasPayPassword,
+            'coinPayAmount'  => $coinPayAmount,
+            'maxCoin'        => $maxCoin
+        );
+    }
+
+    public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
+    {
         $totalPrice = $this->getTotalPrice($targetId, $priceType);
 
         $amount = $totalPrice;
 
         //优惠码优惠价格
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
         $couponSetting = $this->getSettingService()->get("coupon");
-        if(!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+
+        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
-                $fields["couponCode"], 
+                $fields["couponCode"],
                 'course',
-                $targetId, 
-                $totalPrice, 
-                $priceType, 
+                $targetId,
+                $totalPrice,
+                $priceType,
                 $cashRate
             );
-            if(isset($couponResult["useable"]) && $couponResult["useable"]=="yes" && isset($couponResult["afterAmount"])){
+
+            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes" && isset($couponResult["afterAmount"])) {
                 $amount = $couponResult["afterAmount"];
             } else {
                 unset($couponResult);
@@ -110,60 +117,77 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         //虚拟币优惠价格
-        if(array_key_exists("coinPayAmount", $fields)) {
+
+        if (array_key_exists("coinPayAmount", $fields)) {
             $amount = $this->afterCoinPay(
-                $coinEnabled, 
-                $priceType, 
-                $cashRate, 
+                $coinEnabled,
+                $priceType,
+                $cashRate,
                 $amount,
-                $fields['coinPayAmount'], 
+                $fields['coinPayAmount'],
                 $fields["payPassword"]
             );
         }
 
         if ($priceType == "Coin") {
-            $amount = $amount/$cashRate;
+            $amount = $amount / $cashRate;
         }
-        if($amount<0){
+
+        if ($amount < 0) {
             $amount = 0;
         }
-        
+
         $totalPrice = NumberToolkit::roundUp($totalPrice);
-        $amount = NumberToolkit::roundUp($amount);
+        $amount     = NumberToolkit::roundUp($amount);
 
         return array(
-        	$amount, 
-        	$totalPrice, 
-        	empty($couponResult) ? null : $couponResult,
+            $amount,
+            $totalPrice,
+            empty($couponResult) ? null : $couponResult
         );
-	}
+    }
 
-	public function createOrder($orderInfo, $fields) 
-	{
-		return $this->getCourseOrderService()->createOrder($orderInfo);
-	}
+    public function createOrder($orderInfo, $fields)
+    {
+        return $this->getCourseOrderService()->createOrder($orderInfo);
+    }
+
+    public function getSummary($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        return strip_tags($course['about']);
+    }
+
+    public function getTitle($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        return strip_tags($course['title']);
+    }
 
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
-        $course = $this->getCourseService()->getCourse($targetId);
-        if($priceType == "RMB") {
+        $course     = $this->getCourseService()->getCourse($targetId);
+
+        if ($priceType == "RMB") {
             $totalPrice = $course["price"];
-        } else if ($priceType == "Coin") {
+        } elseif ($priceType == "Coin") {
             $totalPrice = $course["coinPrice"];
         }
-        $totalPrice = (float)$totalPrice;
+
+        $totalPrice = (float) $totalPrice;
         return $totalPrice;
     }
 
-	public function doPaySuccess($success, $order) {
+    public function doPaySuccess($success, $order)
+    {
         if (!$success) {
-            return ;
+            return;
         }
 
         $this->getCourseOrderService()->doSuccessPayOrder($order['id']);
 
-        return ;
+        return;
     }
 
     protected function getCouponService()
@@ -178,7 +202,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getCourseService()
     {
-    	return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
     protected function getSettingService()
@@ -191,7 +215,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-	protected function getCourseOrderService() {
-		return ServiceKernel::instance()->createService("Course.CourseOrderService");
-	}
+    protected function getCourseOrderService()
+    {
+        return ServiceKernel::instance()->createService("Course.CourseOrderService");
+    }
 }
