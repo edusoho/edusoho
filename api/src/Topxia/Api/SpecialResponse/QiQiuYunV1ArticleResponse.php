@@ -10,18 +10,18 @@ class QiQiuYunV1ArticleResponse implements SpecialResponse
     public function filter($data)
     {
         $resources = array();
-        foreach ($data['resources'] as $lesson) {
+        foreach ($data['resources'] as $article) {
             $resources[] = array(
-                'id' => $lesson['id'],
-                'title' => $lesson['title'],
-                'content' => $lesson['body'],
-                'tags' => ArrayToolkit::column($lesson['tags'], 'name'),
-                'category' => isset($lesson['category']['name']) ? $lesson['category']['name'] : '',
-                'hitNum' => $lesson['hits'],
-                'postNum' => $lesson['postNum'],
-                'upsNum' => $lesson['upsNum'],
-                'createdTime' => $lesson['createdTime'],
-                'updatedTime' => $lesson['updatedTime'],
+                'id' => $article['id'],
+                'title' => $article['title'],
+                'content' => $article['body'],
+                'tags' => ArrayToolkit::column($article['tags'], 'name'),
+                'category' => isset($article['category']['name']) ? $article['category']['name'] : '',
+                'hitNum' => $article['hits'],
+                'postNum' => $article['postNum'],
+                'upsNum' => $article['upsNum'],
+                'createdTime' => $article['createdTime'],
+                'updatedTime' => $article['updatedTime'],
             );
         }
 

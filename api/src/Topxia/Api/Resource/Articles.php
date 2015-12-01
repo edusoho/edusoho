@@ -77,7 +77,6 @@ class Articles extends BaseResource
     {
         foreach ($res as &$one) {
             $this->callFilter($name, $one);
-            $one['body'] = '';
         }
         return $res;
     }
