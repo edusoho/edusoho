@@ -48,6 +48,7 @@
           </div>
         </div>
       </div>
+      <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% for payment,options in payments %}
@@ -56,9 +57,8 @@
           {% endif %}
         {% endfor %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          
         <div class="form-group order-detail-bg">
-          <div class="pay-type-label">支付方式</div>
+          <!-- <div class="pay-type-label">支付方式</div> -->
           {% for payment, options in payments %}
             <div class="check {% if loop.index == 1 %} active {% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
