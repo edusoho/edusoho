@@ -2749,6 +2749,9 @@ select:-webkit-autofill {
 .color-gray {
   color: #919191 !important;
 }
+.gray-medium {
+  color: #c1c1c1 !important;
+}
 .gray-light {
   color: #e1e1e1 !important;
 }
@@ -6662,25 +6665,27 @@ textarea {
   display: inline-block;
   margin-right: 5px;
   border: 1px solid #c1c1c1;
+  background-color: #c1c1c1;
+  color: #fff;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
 }
-.es-step li.done {
+.es-step li.done,
+.es-step li.doing {
   border-color: #46c37b;
-  color: #46c37b;
 }
-.es-step li.done .number {
+.es-step li.done .number,
+.es-step li.doing .number {
   color: #fff;
   background-color: #46c37b;
   border-color: #46c37b;
 }
-.es-step li.doing {
-  border-color: #46c37b;
+.es-step li.done {
   color: #46c37b;
 }
-.es-step li.doing .number {
-  border-color: #46c37b;
+.es-step li.doing {
+  color: #616161;
 }
 .class-serve > ul {
   padding: 20px 10px;
@@ -11144,6 +11149,10 @@ textarea {
   font-size: 16px;
   display: inline-block;
   margin-right: 15px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 @media (max-width: 1199px) {
   .form-paytype .check {
@@ -11158,20 +11167,27 @@ textarea {
     height: auto;
   }
 }
+.form-paytype .check:hover {
+  border-color: #c1c1c1;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
 .form-paytype .check.active {
-  border: 2px solid #46c37b;
+  border: 2px solid #85cb4c;
 }
 .form-paytype .check.active .icon {
   display: block;
 }
 .form-paytype .check .icon {
   display: none;
-  background: url('/assets/v2/img/old/pay-check-status.png') no-repeat;
+  background: url('/assets/v2/img/old/pay_check_status.png') no-repeat;
   top: -2px;
   right: -2px;
   width: 23px;
-  height: 26px;
-  background-position: 0 -4px;
+  height: 23px;
+  background-position: 0 0;
   position: absolute;
   overflow: hidden;
 }
@@ -11181,42 +11197,85 @@ textarea {
 }
 .pay-agreement-list li {
   list-style-type: none;
+}
+.pay-agreement-list li.checked .pay-bank {
+  border-color: #85cb4c;
+}
+.pay-agreement-list li.checked .pay-bank:after {
+  position: absolute;
+  content: "";
+  background: url('/assets/v2/img/old/pay_check_status.png') no-repeat;
+  top: -2px;
+  right: -2px;
+  width: 23px;
+  height: 23px;
+  background-position: 0 0;
+  z-index: -1;
+}
+.pay-agreement-list .pay-bank {
+  position: relative;
   margin-bottom: 10px;
   padding: 10px;
-  border: 2px solid #e1e1e1;
+  border: 2px solid #f1f1f1;
+  z-index: 1;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
-.pay-agreement-list li:hover {
-  border-color: #46c37b;
+.pay-agreement-list .pay-bank:hover {
+  border-color: #c1c1c1;
   cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
-.pay-agreement-list li input {
+.pay-agreement-list .pay-bank:hover .closed {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.pay-agreement-list .pay-bank input {
   margin-top: 0;
 }
-.pay-agreement-list li.checked {
-  border-color: #46c37b;
-}
-.pay-agreement-list li .closed {
+.pay-agreement-list .pay-bank .closed {
   float: right;
+  display: block;
+  color: #c1c1c1;
+  z-index: 1;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
-.pay-agreement-list li .name {
+.pay-agreement-list .pay-bank .closed:hover {
+  color: #e83d2c;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.pay-agreement-list .pay-bank .name {
   display: inline-block;
   width: 200px;
 }
 @media (max-width: 767px) {
-  .pay-agreement-list li .name {
+  .pay-agreement-list .pay-bank .name {
     width: 150px;
   }
 }
-.pay-agreement-list li .number {
+.pay-agreement-list .pay-bank .number {
   margin-right: 50px;
 }
 @media (max-width: 767px) {
-  .pay-agreement-list li .number {
+  .pay-agreement-list .pay-bank .number {
     margin-right: 20px;
   }
 }
 .order-pay-state {
-  padding: 40px 300px;
+  padding: 40px 0;
   margin-bottom: 15px;
   color: #659f13;
   border: 1px solid #cddfb4;
