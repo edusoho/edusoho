@@ -13,12 +13,12 @@
         <div class="col-xs-2 tar">
           <span class="esicon esicon-safety {% if progressScore > 90 %}text-success{% elseif progressScore > 60 %}text-warning{% else %}text-danger{% endif %}" style="font-size:32px"></span>
         </div>
-      <div class="col-xs-6">
+      <div class="col-sm-6 col-xs-5">
         <div class="progress" style="margin-top:10px;">
           <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-4 col-xs-5">
         {% if progressScore > 80 %}
           <span class="text-success" style="display:block;margin-top:10px;">安全等级：高</span>
         {% elseif progressScore > 30 %}
@@ -46,11 +46,11 @@
         {% endif %}
       </div>
 
-      <span class="col-xs-3 " style="margin-top: 5px;" >登录密码</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >登录密码</span>
 
-      <span class="col-xs-4 " style="margin-top: 5px;" >登录网校时需要输入的密码</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >登录网校时需要输入的密码</span>
 
-      <a  href="{{ path('settings_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >修改</a>
+      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >修改</a>
     </div>
     <hr>
 
@@ -69,14 +69,14 @@
         {% endif %}
       </div>
 
-      <span class="col-xs-3 " style="margin-top: 5px;" >支付密码</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >支付密码</span>
 
-      <span class="col-xs-4 " style="margin-top: 5px;" >在网校进行消费行为时需要输入的密码</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >在网校进行消费行为时需要输入的密码</span>
 
       {% if hasPayPassword %} 
         <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >重置</a>   
       {% else %}
-        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >设置</a>
+        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >设置</a>
       {% endif %}
       
     </div>
@@ -98,9 +98,9 @@
         {% endif %}
       </div>
 
-      <span class="col-xs-3 " style="margin-top: 5px;" >安全问题</span>
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >安全问题</span>
 
-      <span class="col-xs-4 " style="margin-top: 5px;" >通过设置并且验证安全问题，保护帐号密码安全。</span>
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >通过设置并且验证安全问题，保护帐号密码安全。</span>
 
       <a href="{{ path('settings_security_questions') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
       {% if hasFindPayPasswordQuestion %}
@@ -131,9 +131,9 @@
           {% endif %}
         </div>
 
-        <span class="col-xs-3 " style="margin-top: 5px;" >手机绑定</span>
+        <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >手机绑定</span>
 
-        <span class="col-xs-4 " style="margin-top: 5px;" >增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。</span>
+        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >增加账户登录、购买课程时的安全性，同时还可以找回登录密码，支付密码。</span>
 
         <a href="{{ path('settings_bind_mobile') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
         {% if hasVerifiedMobile %}
@@ -141,7 +141,6 @@
         {% else %}
           绑定
         {% endif %}
-
         </a>
       </div>
     {% endif %}
