@@ -193,7 +193,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
-        if (!isset($field['orderId'])) {
+        if (!array_key_exists('orderId', $fields)) {
             return $this->createMessageResponse('error', '缺少订单，支付失败');
         }
 
@@ -416,14 +416,14 @@ class PayCenterController extends BaseController
 
     protected function createPaymentRequest($order, $requestParams)
     {
-        $options = $this->getPaymentOptions($order['payment']);
-        $request = Payment::createRequest($order['payment'], $options);
-
+        $options       = $this->getPaymentOptions($order['payment']);
+        $request       = Payment::createRequest($order['payment'], $options);
+        $processor     = OrderProcessorFactory::create($order["targetType"]);
         $requestParams = array_merge($requestParams, array(
             'orderSn' => $order['sn'],
             'userId'  => $order['userId'],
-            'title'   => $order['title'],
-            'summary' => '',
+            'title'   => $processor->getTitle($order['targetId']),
+            'summary' => $processor->getSummary($order['targetId']),
             'amount'  => $order['amount']
         ));
         return $request->setParams($requestParams);

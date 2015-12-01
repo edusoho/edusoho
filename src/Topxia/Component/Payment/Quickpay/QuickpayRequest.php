@@ -35,8 +35,8 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $isMobile   = $this->isMobile();
-        $mobileType = $this->mobileType();
+        $isMobile   = $this->isMobile($params['userAgent']);
+        $mobileType = $this->mobileType($params['userAgent']);
 
         $converted                  = array();
         $converted['version']       = 1;
@@ -77,8 +77,8 @@ class QuickpayRequest extends Request
         $converted['agent_bill_id']   = $this->generateOrderToken();
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
-        $converted['goods_name']      = mb_substr($this->filterText($params['title']), 0, 50, 'utf-8');
-        $converted['goods_note']      = '';
+        $converted['goods_name']      = mb_substr($this->filterText($params['title']), 0, 20, 'utf-8');
+        $converted['goods_note']      = mb_substr($this->filterText($params['summary']), 0, 20, 'utf-8');
         $converted['goods_num']       = 1;
         $converted['user_ip']         = $this->getClientIp();
         $converted['ext_param1']      = '';
@@ -129,22 +129,22 @@ class QuickpayRequest extends Request
         }
     }
 
-    public function isMobile()
+    public function isMobile($userAgent)
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android')) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function mobileType()
+    public function mobileType($userAgent)
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad')) {
             return 'IOS';
         }
 
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+        if (strpos($userAgent, 'Android')) {
             return 'Android';
         }
     }

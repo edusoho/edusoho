@@ -53,7 +53,7 @@ class HeepayRequest extends Request
         }
 
         $converted['user_ip']    = str_replace(".", "_", $this->getClientIp());
-        $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 50, 'utf-8'));
+        $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 20, 'utf-8'));
         $converted['remark']     = '';
         $converted['sign']       = $this->signParams($converted);
         return $converted;
@@ -61,7 +61,7 @@ class HeepayRequest extends Request
 
     protected function filterText($text)
     {
-        return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
+        return str_replace(array('#', '%', '&', '+', '《', '》'), array('＃', '％', '＆', '＋', ' ', ' '), $text);
     }
 
     private function generateOrderToken()
