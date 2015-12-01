@@ -28,7 +28,7 @@
         <input type="hidden" name="sms_code" value=""/>
         <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        <div class="order-detail-bg">
+        <div class="order-detail-bg" style="border:none">
         {% if targetType == "course" and course|default(null) %}
           {% include 'TopxiaWebBundle:Order:order-course.html.twig' %}
         {% endif %}

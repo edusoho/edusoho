@@ -90,11 +90,15 @@
   .pay-bank {
     position: relative;
     margin-bottom: 10px;
-    padding: 10px;
-    border: 2px solid @gray-lighter;
+    padding: 18px;
+    border: 2px solid @bg-color;
     z-index: 1;
-    // background-color: @gray
+    background-color: @bg-color;
     .es-transition;
+    color: @gray-darker;
+    @media(max-width: @screen-md-max) {
+      padding: 10px;
+    }
     &:hover {
       border-color: @gray-medium;
       cursor: pointer;

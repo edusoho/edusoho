@@ -10399,7 +10399,7 @@ textarea {
 }
 .order-detail-bg {
   margin-bottom: 20px;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #f1f1f1;
 }
 .order-detail-bg.checkout .order-info {
   padding-top: 30px;
@@ -11215,13 +11215,20 @@ textarea {
 .pay-agreement-list .pay-bank {
   position: relative;
   margin-bottom: 10px;
-  padding: 10px;
-  border: 2px solid #f1f1f1;
+  padding: 18px;
+  border: 2px solid #fafafa;
   z-index: 1;
+  background-color: #fafafa;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  color: #313131;
+}
+@media (max-width: 1199px) {
+  .pay-agreement-list .pay-bank {
+    padding: 10px;
+  }
 }
 .pay-agreement-list .pay-bank:hover {
   border-color: #c1c1c1;
