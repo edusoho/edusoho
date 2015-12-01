@@ -129,12 +129,11 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
-        $payRequestParams = array(
+        $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
             'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
         );
-
         $payment = $request->request->get('payment');
 
         if ($payment == 'quickpay') {
@@ -192,7 +191,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，支付失败。');
         }
 
-        if (!array_key_exists('orderId', $fields)) {
+        if (!array_key_exists('orderId', $field)) {
             return $this->createMessageResponse('error', '缺少订单，支付失败');
         }
 
