@@ -264,7 +264,7 @@ class PayCenterController extends BaseController
         if ($name == 'wxpay') {
             $returnXml   = $GLOBALS['HTTP_RAW_POST_DATA'];
             $returnArray = $this->fromXml($returnXml);
-        } elseif ($name == 'heepay') {
+        } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
         } else {
             $returnArray = $request->request->all();
