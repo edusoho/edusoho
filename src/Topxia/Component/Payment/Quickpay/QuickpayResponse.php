@@ -113,7 +113,7 @@ class QuickpayResponse extends Response
         $authBanks       = $authBankRequest->form();
 
         foreach ($authBanks as $authBank) {
-            $bankAuth = $this->getUserService()->getUserPayAgreementByBankAuth($authBank['bankAuth']);
+            $bankAuth = $this->getUserService()->getUserPayAgreementByUserIdAndBankAuth($order['userId'], $authBank['bankAuth']);
 
             if (empty($bankAuth)) {
                 $field = array(

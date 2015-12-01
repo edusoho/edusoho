@@ -6,7 +6,7 @@ interface UserPayAgreementDao
 {
     public function getUserPayAgreement($id);
 
-    public function getUserPayAgreementByBankAuth($bankAuth);
+    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth);
 
     public function getUserPayAgreementByUserId($userId);
 

@@ -2192,11 +2192,11 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals('农业银行', $authBank['bankName']);
     }
 
-    public function testGetUserPayAgreementByBankAuth()
+    public function testGetUserPayAgreementByUserIdAndBankAuth()
     {
         $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
         $bank     = $this->getUserService()->createUserPayAgreement($field);
-        $authBank = $this->getUserService()->getUserPayAgreementByBankAuth('0eeeee');
+        $authBank = $this->getUserService()->getUserPayAgreementByUserIdAndBankAuth(1, '0eeeee');
         $this->assertEquals('农业银行', $authBank['bankName']);
     }
 

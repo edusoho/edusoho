@@ -1374,9 +1374,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->getUserPayAgreement($id);
     }
 
-    public function getUserPayAgreementByBankAuth($bankAuth)
+    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth)
     {
-        return $this->getUserPayAgreementDao()->getUserPayAgreementByBankAuth($bankAuth);
+        return $this->getUserPayAgreementDao()->getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth);
     }
 
     public function getUserPayAgreementByUserId($userId)
