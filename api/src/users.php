@@ -118,11 +118,17 @@ POST /users/
 $api->post('/', function (Request $request) {
     $fields = $request->request->all();
 
+    if (!ArrayToolkit::requireds($fields, array('email', 'nickname', 'password'))) {
+        return array('message' => '缺少必填字段');
+    }
+
+    $ip = $request->getClientIp();
+    $fields['createdIp'] = $ip;
+
     $authSettings = ServiceKernel::instance()->createService('System.SettingService')->get('auth', array());
 
     if (isset($authSettings['register_protective'])) {
         $type = $authSettings['register_protective'];
-        $ip = $request->getClientIp();
 
         switch ($type) {
             case 'middle':
@@ -168,7 +174,7 @@ $api->post('/', function (Request $request) {
     return filter($user, 'user');
 
     failure:
-    return filter($user, 'user');
+    return array('message' => '已经超出用户注册次数限制，用户注册失败');
 }
 
 );
