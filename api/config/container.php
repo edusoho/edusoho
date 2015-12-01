@@ -19,6 +19,7 @@ $resources = array(
     'Lessons',
     'Thread',
     'Threads',
+    'ChaosThreads',
     'Apps',
     'App',
     'Homework',

@@ -100,6 +100,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->from($this->table,$this->table)
             ->andWhere('groupId = :groupId') 
             ->andWhere('createdTime > :createdTime')
+            ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('isElite = :isElite')
             ->andWhere('isStick = :isStick')
             ->andWhere('type = :type')

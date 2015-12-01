@@ -10,4 +10,5 @@ return array(
     '/^\/api\/courses$/', // @临时
     '/^\/api\/lessons$/', // @临时
     '/^\/api\/articles$/', // @临时
+    '/^\/api\/chaos_threads$/', // @临时
 );
