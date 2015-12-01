@@ -6333,8 +6333,9 @@ textarea {
   max-width: 100%;
   height: auto;
 }
-.modal-backdrop {
-  background-color: rgba(104, 96, 96, 0.55);
+.modal-backdrop.in {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
 }
 .nav-mini > li > a {
   padding: 1px 10px;
