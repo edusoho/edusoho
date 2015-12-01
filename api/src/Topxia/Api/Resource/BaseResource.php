@@ -57,6 +57,7 @@ abstract class BaseResource
             return array(
                 'cursor' => $currentCursor + 1,
                 'offset' => 0,
+                'limit' => $currentLimit,
                 'eof' => true,
             );
         }
@@ -65,6 +66,7 @@ abstract class BaseResource
             return array(
                 'cursor' => $end['updatedTime'] + 1,
                 'offset' => 0,
+                'limit' => $currentLimit,
                 'eof' => true,
             );
         }
@@ -73,12 +75,14 @@ abstract class BaseResource
             $next = array(
                 'cursor' => $currentCursor,
                 'offset' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
                 'eof' => false,
             );
         } else {
             $next = array(
                 'cursor' => $end['updatedTime'] + 1,
                 'offset' => 0,
+                'limit' => $currentLimit,
                 'eof' => false,
             );
         }

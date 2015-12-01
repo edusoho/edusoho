@@ -2,6 +2,8 @@
 
 namespace Topxia\Api\SpecialResponse;
 
+use Topxia\Common\ArrayToolkit;
+
 
 class QiQiuYunV1CourseResponse implements SpecialResponse
 {
@@ -16,18 +18,19 @@ class QiQiuYunV1CourseResponse implements SpecialResponse
                 'type' => $course['type'],
                 'price' => $course['price'],
                 'lessonNum' => $course['lessonNum'],
+                'rating' => $course['rating'],
                 'ratingNum' => $course['ratingNum'],
-                'tags' => $course['tags'],
+                'tags' => ArrayToolkit::column($course['tags'], 'name'),
+                'category' => isset($course['category']['name']) ? $course['category']['name'] : '',
                 'about' => $course['about'],
                 'goals' => $course['goals'],
-                'smallPicture' => $course['smallPicture'],
-                'middlePicture' => $course['middlePicture'],
-                'largePicture' => $course['largePicture'],
+                'picture' => $course['largePicture'],
                 'audiences' => $course['audiences'],
                 'hitNum' => $course['hitNum'],
-                'updatedTime' => $course['updatedTime'],
                 'createdTime' => $course['createdTime'],
+                'updatedTime' => $course['updatedTime'],
             );
+
         }
         $data['resources'] = $resources;
         return $data;

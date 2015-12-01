@@ -12,7 +12,7 @@ class User extends BaseResource
     );
 
     private $_publicFields = array(
-        'id', 'nickname' , 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
+        'id', 'nickname' , 'title', 'roles', 'point', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about', 'createdTime', 'updatedTime',
     );
 
     private $_privateFields = array(
@@ -20,7 +20,7 @@ class User extends BaseResource
         'point', 'coin', 'smallAvatar', 'mediumAvatar', 'largeAvatar', 'about',
         'email', 'emailVerified', 'promoted', 'promotedTime', 'locked', 'lockDeadline',
         'loginTime', 'loginIp', 'approvalTime', 'approvalStatus', 'newMessageNum', 'newNotificationNum',
-        'createdIp', 'createdTime'
+        'createdIp', 'createdTime', 'updatedTime',
     );
 
     private $_profileFields = array(
@@ -78,12 +78,13 @@ class User extends BaseResource
             $res[$key] = $this->getFileUrl($res[$key]);
         }
 
-        foreach (array('promotedTime', 'loginTime', 'approvalTime', 'createdTime', 'updatedTime') as $key) {
+        foreach (array('promotedTime', 'loginTime', 'approvalTime', 'createdTime') as $key) {
             if (!isset($res[$key])) {
                 continue;
             }
             $res[$key] = date('c', $res[$key]);
         }
+        $res['updatedTime'] = date('c', $res['updatedTime']/1000);
 
         return $res;
     }

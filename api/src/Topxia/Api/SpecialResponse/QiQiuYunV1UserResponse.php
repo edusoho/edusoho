@@ -13,6 +13,11 @@ class QiQiuYunV1UserResponse implements SpecialResponse
             } else {
                 $user['roles'] = array('student');
             }
+
+            $user['avatar'] = $user['largeAvatar'];
+            unset($user['smallAvatar']);
+            unset($user['mediumAvatar']);
+            unset($user['largeAvatar']);
         }
 
         return $data;

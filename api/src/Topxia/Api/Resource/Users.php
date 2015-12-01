@@ -18,7 +18,7 @@ class Users extends BaseResource
         }
 
         $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 10);
+        $limit = $request->query->get('limit', 100);
 
         if (isset($conditions['cursor'])) {
             $conditions['updatedTime_GE'] = (int)$conditions['cursor'];
