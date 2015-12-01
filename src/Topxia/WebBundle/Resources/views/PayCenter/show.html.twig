@@ -76,7 +76,7 @@
                     <input class="hidden" type="radio" name='payAgreementId' value="{{payAgreement.id}}" {% if loop.index0 == 0 %}checked{% endif %} />
                     <span class="name">{{payAgreement.bankName}}</span>
                     <span class="number">***{{payAgreement.bankNumber}}</span>
-                    <span class="hidden-xs">储蓄卡</span>
+                    <span class="hidden-xs">{% if payAgreement.type == 0 %}储蓄卡{% else %}信用卡{% endif %}</span>
                     <a href="javascript:;" class="closed visible-lg" data-url="{{ path('pay_center_auth_close')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
                   </div>
                 </li>
