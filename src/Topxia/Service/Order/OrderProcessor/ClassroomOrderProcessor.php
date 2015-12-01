@@ -272,13 +272,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getSummary($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        return strip_tags($classroom['about']);
+        return str_replace(' ', '', strip_tags($classroom['about']));
     }
 
     public function getTitle($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        return strip_tags($classroom['title']);
+        return str_replace(' ', '', strip_tags($classroom['title']));
     }
 
     public function doPaySuccess($success, $order)
