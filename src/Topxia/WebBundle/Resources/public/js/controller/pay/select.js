@@ -52,6 +52,10 @@ define(function(require, exports, module){
                 }
             })
         })
+
+        if (navigator.userAgent.match(/mobile/i)) {
+            $("#heepay").css("display","none");
+        }
     };
 
 });
