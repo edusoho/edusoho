@@ -38,14 +38,14 @@ define(function(require, exports, module){
                 return;
             }
 
-            var self = $(this);
+            var $this = $(this);
             var orderId = $("input[name='orderId']").val();
-            var payAgreementId = $(this).parents(".js-pay-bank").find("input").val();
+            var payAgreementId = $this.closest(".js-pay-bank").find("input").val();
             var payment = $("input[name='payment']").val();
 
-            $.post($(this).data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
+            $.post($this.data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
                 if(response.success){
-                    self.parent('.js-pay-bank').remove();
+                    $this.closest('.js-pay-bank').remove();
                     Notify.success(response.message);
                 }else{
                     Notify.danger(response.message);
