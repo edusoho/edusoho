@@ -238,13 +238,13 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getSummary($targetId)
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
-        return strip_tags($vipLevel['description']);
+        return str_replace(' ', '', strip_tags($vipLevel['description']));
     }
 
     public function getTitle($targetId)
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
-        return strip_tags($vipLevel['name']);
+        return str_replace(' ', '', strip_tags($vipLevel['name']));
     }
 
     public function doPaySuccess($success, $order)
