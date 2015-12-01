@@ -599,11 +599,13 @@ class GroupThreadController extends BaseController
         $page    = $request->query->get('page', '1');
 
         $conditions = array(
-            'category'    => $type,
-            'searchWords' => $keyWord,
-            'page'        => $page,
-            'targetType'  => 'group',
-            'targetId'    => $id
+            'type'    => $type,
+            'words'   => $keyWord,
+            'page'    => $page,
+            'filters' => array(
+                'targetType' => 'group',
+                'targetId'   => $id
+            )
         );
 
         try {

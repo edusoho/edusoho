@@ -12,8 +12,7 @@ define(function(require, exports, module) {
 
 		var SearchPage = Widget.extend({
 			events: {
-				'click .js-btn-clear':  'OnBtnClear',
-				'click .pagination>li>a': 'Onpagination',
+				'click .js-btn-clear':  'OnBtnClear'
 			},
 			setup: function() {
 				Lazyload.init();
@@ -34,50 +33,10 @@ define(function(require, exports, module) {
 		        	speed: 700
 		        });
 			},
-			// ajax共同方法
-			_searchAjax: function(url,type) {
-				$.ajax({
-	        		url: url,
-	        		type: 'GET',
-	        		beforeSend: function(){
-						$searchResult.html('<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>');
-					},
-	        	}).done(function(html) {
-
-	        		$searchResult.html(html);
-
-	        		switch(type) {
-	        			case 'course':
-	        				Lazyload.init();
-	        				break;
-	    				case 'teacher':
-	    					require('topxiawebbundle/util/follow-btn');
-	    					break;
-	        		}
-
-	        	}).fail(function() {
-
-	        		$searchResult.html('<div class="empty">请求失败！</div>');
-	        	});
-			},
-			_getSearchData: function($this) {
-				var url = $this.find("a").data("url");
-	        	var type = $this.find("a").data("type");
-
-	        	this._searchAjax(url,type);
-			},
 			OnBtnClear: function(e) {
 				var $this = $(e.currentTarget);
 
 				$this.siblings('input').val("").end().hide();
-			},
-			// 分页
-			Onpagination: function(e) {
-				e.preventDefault();
-				var $this = $(e.currentTarget);
-				var url = $this.attr("herf");
-
-				//this._searchAjax(url,null);
 			}
 			
 		});
