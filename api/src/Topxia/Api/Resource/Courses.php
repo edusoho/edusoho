@@ -13,7 +13,7 @@ class Courses extends BaseResource
         $conditions = $request->query->all();
 
         $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 100);
+        $limit = $request->query->get('limit', 20);
 
         if (isset($conditions['cursor'])) {
             $conditions['status'] = 'published';

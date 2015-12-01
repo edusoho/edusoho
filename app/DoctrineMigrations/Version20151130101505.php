@@ -27,6 +27,9 @@ class Version20151130101505 extends AbstractMigration
         $this->addSql("ALTER TABLE `course_lesson` ADD `updatedTime` BIGINT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间(毫秒)' AFTER `createdTime`;");
         $this->addSql("ALTER TABLE `course_lesson` ADD INDEX `updatedTime` (`updatedTime`);");
         $this->addSql("UPDATE `course_lesson` SET updatedTime = createdTime * 1000;");
+
+        $this->addSql("ALTER TABLE `article` CHANGE `updatedTime` `updatedTime` BIGINT(10) UNSIGNED NOT NULL DEFAULT '0';");
+        $this->addSql("UPDATE `article` SET updatedTime = updatedTime * 1000;");
     }
 
     /**
