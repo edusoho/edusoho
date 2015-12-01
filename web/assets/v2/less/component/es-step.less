@@ -8,8 +8,8 @@
     float: left;
     padding: 15px;
     list-style-type: none;
-    border-bottom: 2px solid #c1c1c1;
-    color: #c1c1c1;
+    border-bottom: 2px solid @gray-medium;
+    color: @gray-medium;
     font-size: 16px;
     text-align: center;
     .number {
@@ -18,24 +18,25 @@
       line-height: 21px;
       display: inline-block;
       margin-right: 5px;
-      border: 1px solid #c1c1c1;
+      border: 1px solid @gray-medium;
+      background-color: @gray-medium;
+      color: #fff;
       .border-radius(50%);
     }
-    &.done {
+    &.done,
+    &.doing {
       border-color: @brand-primary;
-      color: @brand-primary;
       .number {
         color: #fff;
         background-color: @brand-primary;
         border-color: @brand-primary;
       }
     }
-    &.doing {
-      border-color: @brand-primary;
+    &.done {
       color: @brand-primary;
-      .number {
-        border-color: @brand-primary;
-      }
+    }
+    &.doing {
+      color: @gray-dark;
     }
   }
 }

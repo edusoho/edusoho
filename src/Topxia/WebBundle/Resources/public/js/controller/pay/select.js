@@ -26,12 +26,13 @@ define(function(require, exports, module){
                 window.location.href = $this.data('goto');
             });
 
-        }).on("click" ,'.js-pay-agreement li',function(){
+        }).on("click" ,'.js-pay-bank',function(e){
+            e.stopPropagation();
             var $this = $(this);
             $this.addClass('checked').siblings('li').removeClass('checked');
             $this.find('input').prop("checked", true);
 
-        }).on('click', '.js-pay-agreement .closed', function() {
+        }).on('click', '.js-pay-bank .closed', function() {
 
             if(!confirm('确定解除绑定该银行卡吗')){
                 return;
