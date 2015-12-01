@@ -38,6 +38,7 @@ class ChaosThreads extends BaseResource
         $courseNext = $this->nextCursorPaging($conditions['updatedTime_GE'], $start, $limit, $courseThreads);
         $threads = array_merge($threads, $this->filterCourseThreads($courseThreads));
 
+        // group_thread表的话题
         $conditions = array(
             'updatedTime_GE' => isset($cursors[2]) ? $cursors[2] : 0,
         );
