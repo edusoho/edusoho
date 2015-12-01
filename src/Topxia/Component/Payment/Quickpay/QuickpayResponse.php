@@ -116,7 +116,15 @@ class QuickpayResponse extends Response
             $bankAuth = $this->getUserService()->getUserPayAgreementByBankAuth($authBank['bankAuth']);
 
             if (empty($bankAuth)) {
-                $field = array('userId' => $order['userId'], 'type' => $authBank['type'], 'bankName' => $authBank['bankName'], 'bankNumber' => $authBank['bankNumber'], 'bankAuth' => $authBank['bankAuth'], 'bankId' => $authBank['bankId'], 'createdTime' => time());
+                $field = array(
+                    'userId'      => $order['userId'],
+                    'type'        => $authBank['type'],
+                    'bankName'    => $authBank['bankName'],
+                    'bankNumber'  => $authBank['bankNumber'],
+                    'bankAuth'    => $authBank['bankAuth'],
+                    'bankId'      => $authBank['bankId'],
+                    'createdTime' => time()
+                );
                 $this->getUserService()->createUserPayAgreement($field);
             }
         }

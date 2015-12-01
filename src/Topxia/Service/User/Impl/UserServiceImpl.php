@@ -1386,7 +1386,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function createUserPayAgreement($field)
     {
-        $field = ArrayToolkit::parts($field, array('userId', 'type', 'bankName', 'bankNumber', 'userAuth', 'bankAuth', 'bankId'));
+        $field = ArrayToolkit::parts($field, array('userId', 'type', 'bankName', 'bankNumber', 'userAuth', 'bankAuth', 'bankId', 'createdTime'));
         return $this->getUserPayAgreementDao()->addUserPayAgreement($field);
     }
 
