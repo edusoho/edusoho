@@ -118,6 +118,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
     public function addArticle($article)
     {
+        $article['updatedTime'] = intval(microtime(true)*1000);
         $article = $this->createSerializer()->serialize($article, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $article);
         if ($affected <= 0) {

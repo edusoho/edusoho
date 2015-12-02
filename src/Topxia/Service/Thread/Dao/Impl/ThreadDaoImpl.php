@@ -103,6 +103,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function addThread($fields)
     {
+        $fields['updateTime'] = intval(microtime(true)*1000);
         $this->createSerializer()->serialize($fields, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $fields);

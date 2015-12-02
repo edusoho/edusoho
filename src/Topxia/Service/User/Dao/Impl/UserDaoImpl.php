@@ -167,6 +167,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function addUser($user)
     {
+        $user['updatedTime'] = intval(microtime(true)*1000);
         $affected = $this->getConnection()->insert($this->table, $user);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert user error.');
