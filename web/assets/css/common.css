@@ -1860,7 +1860,9 @@ body.dragging, body.dragging * {
   z-index: 2000;
 }
 
-ul.sortable-list li.placeholder, ol.sortable-list li.placeholder {
+ul.sortable-list li.placeholder, 
+ol.sortable-list li.placeholder,
+.panel-sortable .placeholder {
   margin-bottom: 10px 0;
   width: 100%;
   height: 40px;

@@ -14,7 +14,7 @@
     
     <ul class="homepage-category-nav">
       {% for category in categories %}
-        <li><a href="{{ path('course_explore', {code:category.code,fliter:'all',orderBy:'latest'}) }}">{{ category.name }}</a></li>
+        <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
       <li><a href="{{ path('course_explore') }}">更多</a></li>
     </ul>
