@@ -79,18 +79,28 @@ class QuickpayRequest extends Request
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
         $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 20, 'utf-8');
-        $converted['goods_note']      = mb_substr(urldecode(str_replace('%C2%A0', '', urlencode($this->filterText(str_replace('&nbsp;', '', $params['note']))))), 0, 20, 'utf-8');
-        $converted['goods_num']       = 1;
-        $converted['user_ip']         = $this->getClientIp();
-        $converted['ext_param1']      = '';
-        $converted['ext_param2']      = '';
-        $converted['auth_card_type']  = -1;
-        $converted['timestamp']       = time() * 1000;
-        $sign                         = $this->signParams($converted);
-        $encryptData                  = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
-        $url                          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
-        $result                       = $this->curlRequest($url);
-        $xml                          = simplexml_load_string($result);
+
+        if (strlen($converted['goods_name']) > 20) {
+            $converted['goods_name'] .= '...';
+        }
+
+        $converted['goods_note'] = mb_substr(urldecode(str_replace('%C2%A0', '', urlencode($this->filterText(str_replace('&nbsp;', '', $params['note']))))), 0, 20, 'utf-8');
+
+        if (strlen($converted['goods_note']) > 20) {
+            $converted['goods_name'] .= '...';
+        }
+
+        $converted['goods_num']      = 1;
+        $converted['user_ip']        = $this->getClientIp();
+        $converted['ext_param1']     = '';
+        $converted['ext_param2']     = '';
+        $converted['auth_card_type'] = -1;
+        $converted['timestamp']      = time() * 1000;
+        $sign                        = $this->signParams($converted);
+        $encryptData                 = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
+        $url                         = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
+        $result                      = $this->curlRequest($url);
+        $xml                         = simplexml_load_string($result);
 
         $redir    = (string) $xml->encrypt_data;
         $redirurl = $this->decrypt($redir, $this->options['aes']);

@@ -10,7 +10,7 @@ class OrderProcessorTest extends BaseTestCase
     public function testGetNote()
     {
         $course = array(
-            'title' => 'online test course 1',
+            'title' => 'onlinetestcourse1',
             'about' => '测试'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
@@ -43,13 +43,13 @@ class OrderProcessorTest extends BaseTestCase
     public function testGetTitle()
     {
         $course = array(
-            'title' => 'online test course 1',
+            'title' => 'onlinetestcourse1',
             'about' => '测试'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $processor    = OrderProcessorFactory::create('course');
         $title        = $processor->getTitle(1);
-        $this->assertEquals('online test course 1', $title);
+        $this->assertEquals('onlinetestcourse1', $title);
         $classroom = array(
             'title'      => 'test',
             'id'         => 1,
