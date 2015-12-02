@@ -2646,19 +2646,11 @@ fieldset[disabled] .checkbox label {
   padding-right: 0;
 }
 .input-sm {
-<<<<<<< HEAD
-  height: 30px;
-  padding: 5px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 2px;
-=======
   line-height: 1.5;
   border-radius: 2px;
   height: 40px;
   padding: 8px 12px;
   font-size: 14px;
->>>>>>> master
 }
 select.input-sm {
   height: 30px;
@@ -2669,19 +2661,11 @@ select[multiple].input-sm {
   height: auto;
 }
 .form-group-sm .form-control {
-<<<<<<< HEAD
-  height: 30px;
-  padding: 5px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 2px;
-=======
   line-height: 1.5;
   border-radius: 2px;
   height: 40px;
   padding: 8px 12px;
   font-size: 14px;
->>>>>>> master
 }
 select.form-group-sm .form-control {
   height: 30px;
@@ -2699,19 +2683,11 @@ select[multiple].form-group-sm .form-control {
   min-height: 32px;
 }
 .input-lg {
-<<<<<<< HEAD
-  height: 46px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 2px;
-=======
   line-height: 1.3333333;
   border-radius: 2px;
   height: 40px;
   padding: 8px 12px;
   font-size: 14px;
->>>>>>> master
 }
 select.input-lg {
   height: 46px;
@@ -2722,19 +2698,11 @@ select[multiple].input-lg {
   height: auto;
 }
 .form-group-lg .form-control {
-<<<<<<< HEAD
-  height: 46px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 2px;
-=======
   line-height: 1.3333333;
   border-radius: 2px;
   height: 40px;
   padding: 8px 12px;
   font-size: 14px;
->>>>>>> master
 }
 select.form-group-lg .form-control {
   height: 46px;
@@ -3435,19 +3403,11 @@ tbody.collapse.in {
 .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn {
-<<<<<<< HEAD
-  height: 46px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-  border-radius: 2px;
-=======
   line-height: 1.3333333;
   border-radius: 2px;
   height: 40px;
   padding: 8px 12px;
   font-size: 14px;
->>>>>>> master
 }
 select.input-group-lg > .form-control,
 select.input-group-lg > .input-group-addon,
@@ -3466,19 +3426,11 @@ select[multiple].input-group-lg > .input-group-btn > .btn {
 .input-group-sm > .form-control,
 .input-group-sm > .input-group-addon,
 .input-group-sm > .input-group-btn > .btn {
-<<<<<<< HEAD
-  height: 30px;
-  padding: 5px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 2px;
-=======
   line-height: 1.5;
   border-radius: 2px;
   height: 40px;
   padding: 8px 12px;
   font-size: 14px;
->>>>>>> master
 }
 select.input-group-sm > .form-control,
 select.input-group-sm > .input-group-addon,
@@ -4307,10 +4259,6 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   padding: 8px 15px;
   margin-bottom: 20px;
   list-style: none;
-<<<<<<< HEAD
-  background-color: #f5f5f5;
-=======
->>>>>>> master
   border-radius: 2px;
 }
 .breadcrumb > li {
@@ -5404,17 +5352,9 @@ button.close {
 .modal-content {
   position: relative;
   background-color: #ffffff;
-<<<<<<< HEAD
-  border: 1px solid #999999;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-=======
   border-radius: 2px;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
->>>>>>> master
   background-clip: padding-box;
   outline: 0;
 }
@@ -5476,21 +5416,10 @@ button.close {
 @media (min-width: 768px) {
   .modal-dialog {
     width: 600px;
-<<<<<<< HEAD
-    margin: 30px auto;
-  }
-  .modal-content {
-    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  }
-  .modal-sm {
-    width: 300px;
-=======
     margin: 10% auto;
   }
   .modal-sm {
     width: 400px;
->>>>>>> master
   }
 }
 @media (min-width: 992px) {
