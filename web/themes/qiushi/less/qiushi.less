@@ -36,12 +36,71 @@ body {
   filter: ~"alpha(opacity=@{opacity-ie})";
 }
 
+.navbar-form .form-control {
+  width: 150px;
+  @media(max-width:@screen-md-max){
+    width: 100px;
+  }
+  background-color: #e7e7e7;
+  &:focus {
+    border-color: #e1e1e1;
+  }
+}
+
+.navbar-nav > li > a {
+  @media(max-width:@screen-sm-max){
+    padding: 10px;
+  }
+}
+
+.navbar-mobile .navbar-more {
+  padding: 5px 10px;
+}
+
+.navbar-mobile .nav-mobile {
+  top: -48px;
+}
+
+
+// 工具条
+.qs-toolbar {
+  background-color: @brand-primary;
+  height: 38px;
+  line-height: 38px;
+  color: #fff;
+  .container {
+    position: relative;
+  }
+  .user-info {
+    position: absolute;
+    right: 40px;
+    top: 0;
+    .user-logined {
+      .dropdown-menu {
+        right: 0;
+        left: inherit;
+      }
+      i {
+        margin-right: 5px;
+      }
+    }
+    .user-login {
+      >a {
+        color: #fff;
+        margin: 0 5px;
+      }
+    }
+  }
+}
+
 // 头部
 .qs-header {
-  height: 90px;
+  height: 70px;
+  padding: 10px 0;
   background-color: #fff;
-  @media(max-width: @screen-sm-max) {
-    height: 70px;
+  // overflow: hidden;
+  @media(max-width:@screen-xs-max){
+    height: 50px;
   }
   .navbar-mobile .navbar-more {
     color: @brand-primary;
@@ -49,106 +108,30 @@ body {
   .container {
     position: relative;
   }
-  .logo {
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    margin-left: -100px;
-    z-index: 2;
-    img {
-      max-width: 100%;
-      height: auto;
+  .navbar-header {
+    @media(max-width: @screen-xs-max) {
+      float: none;
+      // margin-right: 10px;
+      text-align: center;
     }
-    @media(max-width: @screen-sm-max) {
-      width: 150px;
-      margin-left: -75px;
+    img {
+      @media(max-width: @screen-xs-max) {
+        width: 150px;
+        height: auto;
+      }
     }
   }
+  
   .navbar-mobile .nav a {
     color: #fff;
   }
-  .user-info {
-    position: absolute;
-    right: 50px;
-    top: 30px;
-    @media(max-width: @screen-sm-max) {
-      top: 20px;
-      right: 0;
-    }
-    .user-logined {
-      .dropdown-menu {
-        right: 0;
-        left: inherit;
-      }
-      >a {
-        padding: 30px 20px !important;
-        @media(max-width: @screen-md-max) {
-          padding: 30px 10px !important;
-        }
-        @media(max-width: @screen-sm-max) {
-          padding: 20px 8px !important;
-        }
-      }
-      i {
-        margin-right: 5px;
-      }
-    }
-    .user-login {
-      margin-top: 5px;
-      >a {
-        margin: 0 5px;
-      }
-    }
-  }
-  .nav-left {
-    float: left;
-    width: 50%;
-    padding-right: 150px;
-    @media(max-width: @screen-md-max) {
-      padding-right: 120px;
-    }
-    @media(max-width: @screen-sm-max) {
-      padding-right: 90px;
-    }
-    .qs-nav {
-      float: right;
-    }
-  }
-  .nav-right {
-    float: right;
-    width: 50%;
-    padding-left: 150px;
-    @media(max-width: @screen-md-max) {
-      padding-left: 120px;
-    }
-    @media(max-width: @screen-sm-max) {
-      padding-left: 90px;
-    }
-    .qs-nav {
-      float: left;
-    }
-  }
-
-  .qs-nav {
-    // height: 90px;
-    // overflow: hidden;
-    // @media(max-width: @screen-sm-max) {
-    //   height: 70px;
-    // }
-    
-    >li>a {
-      font-size: 16px;
-      padding: 35px 20px;
-      color: @gray-dark;
-      @media(max-width: @screen-md-max) {
-        padding: 35px 10px;
-      }
-      @media(max-width: @screen-sm-max) {
-        padding: 25px 8px;
-        font-size: 14px;
-      }
+  .navbar-nav>li {
+    >a {
+      color: #000;
+      .es-transition;
       &:hover {
         color: @brand-primary;
+        .es-transition;
       }
     }
   }
@@ -199,7 +182,8 @@ body {
 
 // 共同课程模块
 .qs-course-item {
-  padding: 10px;
+  // padding: 10px;
+  padding-bottom: 10px;
   margin-bottom: 20px;
   .border-radius;
   background-color: #fff;
@@ -207,6 +191,8 @@ body {
     position: relative;
     margin-bottom: 10px;
     overflow: hidden;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
     img {
       width: 100%;
     }
@@ -241,11 +227,13 @@ body {
     }
   }
   .title {
+    padding: 0 10px;
     height: 40px;
     overflow: hidden;
     margin-bottom: 10px;
   }
   .metas {
+    padding: 0 10px;
     font-size: 12px;
   }
   .course-teacher {
@@ -661,6 +649,10 @@ body {
   }
 }
 
+.footer-main ul li {
+  margin-top: 10px;
+}
+
 .footer-main h3 {
   color: #A2AAB7;
 }
@@ -671,6 +663,7 @@ body {
 
 .es-footer .copyright {
   border: none;
+  line-height: 20px;
 }
 
 

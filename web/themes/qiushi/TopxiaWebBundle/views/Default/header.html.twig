@@ -1,32 +1,6 @@
-<div class="qs-header">
+<div class="qs-toolbar">
   <div class="container">
-    <a class="logo" href="{{ path('homepage') }}">
-      {% if setting('site.logo') %}
-        <img src="{{ asset(setting('site.logo')) }}">    
-      {% else %}
-        {{ setting('site.name', 'EDUSOHO') }} 
-      {% endif %}
-    </a>
-    <div class="visible-xs  navbar-mobile">
-      <a href="javascript:;" class="navbar-more js-navbar-more">
-        <i class="es-icon es-icon-menu"></i>
-      </a>
-      <div class="html-mask"></div>
-      <div class="nav-mobile">
-        <form class="navbar-form" action="/search" method="get">
-          <div class="form-group">
-            <input class="form-control" placeholder="搜索" name="q">
-            <button class="button es-icon es-icon-search"></button>
-          </div>
-        </form>
-        <ul class="nav navbar-nav">
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
-        </ul>
-      </div>
-    </div>
-    <nav class="collapse navbar-collapse">
-      {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null) })) }}
-    </nav>
+    客服电话：4008006219
     <div class="user-info">
       {% if app.user %}
         <div class="dropdown user-logined">
@@ -53,10 +27,52 @@
         </div>
       {% else %}
         <div class="user-login">
-          <a class="link-light" href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a>/
-          <a class="link-light" href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a>
+          <a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a> |
+          <a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a>
         </div>
       {% endif %}
     </div>
+  </div>
+</div>
+
+<div class="qs-header">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="{{ path('homepage') }}">
+        {% if setting('site.logo') %}
+          <img src="{{ asset(setting('site.logo')) }}">    
+        {% else %}
+          <img src="{{ asset('themes/qiushi/img/new/logo.png') }}">  
+        {% endif %}
+      </a>
+    </div>
+    <div class="visible-xs  navbar-mobile">
+      <a href="javascript:;" class="navbar-more js-navbar-more">
+        <i class="es-icon es-icon-menu"></i>
+      </a>
+      <div class="html-mask"></div>
+      <div class="nav-mobile">
+        <form class="navbar-form" action="/search" method="get">
+          <div class="form-group">
+            <input class="form-control" placeholder="搜索" name="q">
+            <button class="button es-icon es-icon-search"></button>
+          </div>
+        </form>
+        <ul class="nav navbar-nav">
+          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+        </ul>
+      </div>
+    </div>
+    <nav class="collapse navbar-collapse pull-right clearfix">
+      <ul class="nav navbar-nav">
+        {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null) })) }}
+      </ul>
+      <form class="navbar-form pull-right visible-lg" action="/search" method="get">
+        <div class="form-group">
+          <input class="form-control" placeholder="搜索" name="q">
+          <button class="button es-icon es-icon-search"></button>
+        </div>
+      </form>
+    </nav>
   </div>
 </div>

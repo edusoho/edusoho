@@ -11,7 +11,7 @@
     <div class="container">
       {% include "TopxiaWebBundle::powered-by.html.twig" %}
       {{ setting('site.analytics')|raw }} 
-      <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
+      <a href="{{ path('course_archive') }}">课程存档</a>
       <div class="mts">
         {% if setting('site.copyright') %}
           课程内容版权均归

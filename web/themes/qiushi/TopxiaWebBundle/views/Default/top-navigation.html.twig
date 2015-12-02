@@ -1,24 +1,3 @@
-{% if isMobile|default(false) %}
-  {% for nav in navigations if nav.isOpen %}
-    {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
-  {% endfor %}
-{% else %}
-  <div class="nav-left clearfix">
-    <ul class="nav navbar-nav qs-nav">
-      {% for nav in navigations if nav.isOpen %}
-        {% if loop.index < 5 %}
-          {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="nav-right clearfix">
-    <ul class="nav navbar-nav qs-nav">
-      {% for nav in navigations if nav.isOpen %}
-        {% if loop.index >= 5 and loop.index < 8 %}
-          {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </div>
-{% endif %}
+{% for nav in navigations if nav.isOpen %}
+  {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
+{% endfor %}
