@@ -1054,6 +1054,18 @@ class ClassroomController extends BaseController
         return $this->createJsonResponse($ids);
     }
 
+    public function getListButtonAction()
+    {
+        $conditions = array(
+            'status' => 'published'
+        );
+        $publishClassroomCount = $this->getClassroomService()->searchClassroomsCount($conditions);
+
+        return $this->render('ClassroomBundle:Classroom:Part/classroom-list-button.html.twig', array(
+            'publishClassroomCount' => $publishClassroomCount
+        ));
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');

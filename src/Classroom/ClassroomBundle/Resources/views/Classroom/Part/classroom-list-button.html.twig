@@ -1,0 +1,5 @@
+{% if publishClassroomCount > 0 %}
+	<a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
+	  查看{{ setting('classroom.name')|default('班级') }}
+	</a>
+{% endif %}
