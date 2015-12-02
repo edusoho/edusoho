@@ -422,7 +422,8 @@ class PayCenterController extends BaseController
             'userId'      => $order['userId'],
             'title'       => $order['title'],
             'targetTitle' => $processor->getTitle($order['targetId']),
-            'summary'     => $processor->getSummary($order['targetId']),
+            'summary'     => '',
+            'note'        => $processor->getNote($order['targetId']),
             'amount'      => $order['amount']
         ));
         return $request->setParams($requestParams);

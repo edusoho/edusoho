@@ -78,7 +78,7 @@ class QuickpayRequest extends Request
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
         $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 20, 'utf-8');
-        $converted['goods_note']      = mb_substr(urldecode(str_replace('%C2%A0', '', urlencode($this->filterText(str_replace('&nbsp;', '', $params['summary']))))), 0, 20, 'utf-8');
+        $converted['goods_note']      = mb_substr(urldecode(str_replace('%C2%A0', '', urlencode($this->filterText(str_replace('&nbsp;', '', $params['note']))))), 0, 20, 'utf-8');
         $converted['goods_num']       = 1;
         $converted['user_ip']         = $this->getClientIp();
         $converted['ext_param1']      = '';
@@ -124,7 +124,7 @@ class QuickpayRequest extends Request
 
         if (!empty($authBanks)) {
             foreach ($authBanks as $authBank) {
-                $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
+                $this->getUserService()->updateUserPayAgreementByUserIdAndBankAuth($order['userId'], $authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
             }
         }
     }

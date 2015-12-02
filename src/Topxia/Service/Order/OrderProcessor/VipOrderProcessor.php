@@ -235,7 +235,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->createOrder($orderInfo);
     }
 
-    public function getSummary($targetId)
+    public function getNote($targetId)
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
         return str_replace(' ', '', strip_tags($vipLevel['description']));

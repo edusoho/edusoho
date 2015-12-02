@@ -7,7 +7,7 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderProcessorTest extends BaseTestCase
 {
-    public function testGetSummary()
+    public function testGetNote()
     {
         $course = array(
             'title' => 'online test course 1',
@@ -15,8 +15,8 @@ class OrderProcessorTest extends BaseTestCase
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $processor    = OrderProcessorFactory::create('course');
-        $summary      = $processor->getSummary(1);
-        $this->assertEquals('测试', $summary);
+        $note         = $processor->getNote(1);
+        $this->assertEquals('测试', $note);
 
         $classroom = array(
             'title'      => 'test',
@@ -27,8 +27,8 @@ class OrderProcessorTest extends BaseTestCase
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $processor = OrderProcessorFactory::create('classroom');
-        $summary   = $processor->getSummary(1);
-        $this->assertEquals('测试班级', $summary);
+        $note      = $processor->getNote(1);
+        $this->assertEquals('测试班级', $note);
 
         $level = array(
             'name'        => 'vip',
@@ -36,8 +36,8 @@ class OrderProcessorTest extends BaseTestCase
         );
         $level     = $this->getLevelService()->createLevel($level);
         $processor = OrderProcessorFactory::create('vip');
-        $summary   = $processor->getSummary(1);
-        $this->assertEquals('测试vip', $summary);
+        $note      = $processor->getNote(1);
+        $this->assertEquals('测试vip', $note);
     }
 
     public function testGetTitle()

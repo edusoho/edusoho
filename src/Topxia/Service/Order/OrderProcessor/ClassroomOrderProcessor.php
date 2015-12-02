@@ -269,7 +269,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getClassroomOrderService()->createOrder($orderInfo);
     }
 
-    public function getSummary($targetId)
+    public function getNote($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
         return str_replace(' ', '', strip_tags($classroom['about']));

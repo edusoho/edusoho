@@ -13,7 +13,7 @@ interface OrderProcessor
 
     public function createOrder($orderInfo, $fields);
 
-    public function getSummary($targetId);
+    public function getNote($targetId);
 
     public function getTitle($targetId);
 }
