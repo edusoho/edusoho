@@ -4,8 +4,7 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
-		require('./header').run();
-
+		require('/bundles/topxiaweb/js/controller/course-manage/header').run();
 		var sortList = function($list) {
 			var data = $list.sortable("serialize").get();
 			$.post($list.data('sortUrl'), {
