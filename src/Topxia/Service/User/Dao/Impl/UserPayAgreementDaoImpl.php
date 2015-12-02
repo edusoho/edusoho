@@ -35,7 +35,6 @@ class UserPayAgreementDaoImpl extends BaseDao implements UserPayAgreementDao
     public function updateUserPayAgreementByBankAuth($bankAuth, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('bankAuth' => $bankAuth));
-        return $this->getUserPayAgreementByUserIdAndBankAuth($bankAuth['userId'], $bankAuth);
     }
 
     public function findUserPayAgreementsByUserId($userId)
