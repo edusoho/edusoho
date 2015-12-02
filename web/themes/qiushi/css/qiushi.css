@@ -249,9 +249,13 @@ body {
 .qs-header .container {
   position: relative;
 }
+.qs-header .navbar-header {
+  margin-top: 3px;
+}
 @media (max-width: 767px) {
   .qs-header .navbar-header {
     float: none;
+    margin-top: 0;
     text-align: center;
   }
 }

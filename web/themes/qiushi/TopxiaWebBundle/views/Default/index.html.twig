@@ -49,7 +49,7 @@
                     {% elseif lesson and "now"|date("U") < lesson.startTime %}
                       <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-warning">即将直播</a>
                     {% elseif lesson and "now"|date("U") > lesson.endTime %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info">往期回顾</a>
+                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info">查看回放</a>
                     {% endif %}
                   </div>
                 </div>
