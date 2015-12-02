@@ -11,7 +11,9 @@ class LoginBindController extends BaseController
     public function indexAction(Request $request, $type)
     {
         if ($request->query->has('_target_path')) {
-            $request->getSession()->set('_target_path', $request->query->get('_target_path'));
+            if (!in_array($request->query->get('_target_path'), $this->getBlacklist())) {
+                $request->getSession()->set('_target_path', $request->query->get('_target_path'));
+            }
         }
 
         $client      = $this->createOAuthClient($type);
@@ -20,6 +22,11 @@ class LoginBindController extends BaseController
         $url = $client->getAuthorizeUrl($callbackUrl);
 
         return $this->redirect($url);
+    }
+
+    protected function getBlacklist()
+    {
+        return array('/partner/logout');
     }
 
     public function callbackAction(Request $request, $type)
@@ -288,6 +295,7 @@ class LoginBindController extends BaseController
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
+            file_put_contents('/var/www/try6.edusoho.cn/a.txt', $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
             $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
