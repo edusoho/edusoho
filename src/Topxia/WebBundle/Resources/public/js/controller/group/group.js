@@ -39,11 +39,12 @@
 
             if ($('#thread_content').length > 0) {
                 // group: group
+                CKEDITOR.env.isCompatible = true;
                 var editor_thread = CKEDITOR.replace('thread_content', {
                     toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
                 });
-                CKEDITOR.env.isCompatible = true;
+
 
                 var validator_thread = new Validator({
                     element: '#user-thread-form',
