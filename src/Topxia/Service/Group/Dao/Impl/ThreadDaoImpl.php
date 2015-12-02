@@ -62,6 +62,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function updateThread($id,$fields)
     {
+        $fields['updatedTime'] = microtime();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getThread($id);

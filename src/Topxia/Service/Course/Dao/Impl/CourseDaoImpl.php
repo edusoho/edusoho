@@ -118,6 +118,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function updateCourse($id, $fields)
     {
+        $fields['updatedTime'] = microtime();
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }

@@ -176,6 +176,7 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function updateUser($id, $fields)
     {
+        $fields['updatedTime'] = microtime();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getUser($id);
     }
