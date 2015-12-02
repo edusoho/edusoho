@@ -2,7 +2,7 @@
         var Notify = require('common/bootstrap-notify');
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);
-        require('ckeditor');
+        require('ckeditor');CKEDITOR.env.isCompatible = true;
 
         function checkUrl(url) {
             var hrefArray = new Array();
@@ -39,8 +39,7 @@
 
             if ($('#thread_content').length > 0) {
                 // group: group
-                CKEDITOR.env.isCompatible = true;
-                console.log(CKEDITOR.env.version);
+                
                 var editor_thread = CKEDITOR.replace('thread_content', {
                     toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
