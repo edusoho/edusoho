@@ -40,6 +40,7 @@
             if ($('#thread_content').length > 0) {
                 // group: group
                 CKEDITOR.env.isCompatible = true;
+                console.log(CKEDITOR.env.version);
                 var editor_thread = CKEDITOR.replace('thread_content', {
                     toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
