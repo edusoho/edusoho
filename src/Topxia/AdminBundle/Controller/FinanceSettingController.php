@@ -2,13 +2,8 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class FinanceSettingController extends BaseController
 {
@@ -16,49 +11,61 @@ class FinanceSettingController extends BaseController
     {
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
-            'enabled' => 0,
+            'enabled'          => 0,
             'disabled_message' => '尚未开启支付模块，无法购买课程。',
-            'bank_gateway' => 'none',
-            'alipay_enabled' => 0,
-            'alipay_key' => '',
-            'alipay_secret' => '',
-            'alipay_account' => '',
-            'alipay_type' => 'direct',
-            'tenpay_enabled' => 0,
-            'tenpay_key' => '',
-            'tenpay_secret' => '',
-            'wxpay_enabled' => 0,
-            'wxpay_key' => '',
-            'wxpay_secret' => '',
-            'wxpay_account' => '',
+            'bank_gateway'     => 'none',
+            'alipay_enabled'   => 0,
+            'alipay_key'       => '',
+            'alipay_secret'    => '',
+            'alipay_account'   => '',
+            'alipay_type'      => 'direct',
+            'tenpay_enabled'   => 0,
+            'tenpay_key'       => '',
+            'tenpay_secret'    => '',
+            'wxpay_enabled'    => 0,
+            'wxpay_key'        => '',
+            'wxpay_secret'     => '',
+            'wxpay_account'    => '',
+            'heepay_enabled'   => 0,
+            'heepay_key'       => '',
+            'heepay_secret'    => '',
+            'quickpay_enabled' => 0,
+            'quickpay_key'     => '',
+            'quickpay_secret'  => '',
+            'quickpay_aes'     => ''
         );
 
         $payment = array_merge($default, $payment);
-        if ($request->getMethod() == 'POST') {
-            $payment = $request->request->all();
-            $payment['alipay_key'] = trim($payment['alipay_key']);
-            $payment['alipay_secret'] = trim($payment['alipay_secret']);
-            $payment['wxpay_key'] = trim($payment['wxpay_key']);
-            $payment['wxpay_secret'] = trim($payment['wxpay_secret']);
 
+        if ($request->getMethod() == 'POST') {
+            $payment                    = $request->request->all();
+            $payment['alipay_key']      = trim($payment['alipay_key']);
+            $payment['alipay_secret']   = trim($payment['alipay_secret']);
+            $payment['wxpay_key']       = trim($payment['wxpay_key']);
+            $payment['wxpay_secret']    = trim($payment['wxpay_secret']);
+            $payment['heepay_key']      = trim($payment['heepay_key']);
+            $payment['heepay_secret']   = trim($payment['heepay_secret']);
+            $payment['quickpay_key']    = trim($payment['quickpay_key']);
+            $payment['quickpay_secret'] = trim($payment['quickpay_secret']);
+            $payment['quickpay_aes']    = trim($payment['quickpay_aes']);
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', "更支付方式设置", $payment);
             $this->setFlashMessage('success', '支付方式设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:payment.html.twig', array(
-            'payment' => $payment,
+            'payment' => $payment
         ));
     }
 
     public function refundAction(Request $request)
     {
         $refundSetting = $this->getSettingService()->get('refund', array());
-        $default = array(
-            'maxRefundDays' => 0,
-            'applyNotification' => '',
+        $default       = array(
+            'maxRefundDays'       => 0,
+            'applyNotification'   => '',
             'successNotification' => '',
-            'failedNotification' => '',
+            'failedNotification'  => ''
         );
 
         $refundSetting = array_merge($default, $refundSetting);
@@ -71,7 +78,7 @@ class FinanceSettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:refund.html.twig', array(
-            'refundSetting' => $refundSetting,
+            'refundSetting' => $refundSetting
         ));
     }
 
@@ -104,5 +111,4 @@ class FinanceSettingController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.AuthService');
     }
-
 }
