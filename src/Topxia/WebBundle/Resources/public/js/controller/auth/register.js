@@ -168,7 +168,7 @@ define(function(require, exports, module) {
             }else{
 
                 validator.addItem({
-                    element: '[name="captcha_num"]',
+                    element: '[name="captcha_code"]',
                     required: true,
                     rule: 'alphanumeric remote',
                     onItemValidated: function(error, message, eleme) {
