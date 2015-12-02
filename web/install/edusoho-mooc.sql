@@ -200,6 +200,7 @@ CREATE TABLE `course` (
   `title` varchar(1024) NOT NULL COMMENT '课程标题',
   `subtitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '课程副标题',
   `status` enum('draft','published','closed') NOT NULL DEFAULT 'draft' COMMENT '课程状态',
+  `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买',
   `type` varchar(255) NOT NULL DEFAULT 'normal' COMMENT '课程类型',
   `maxStudentNum` int(11) NOT NULL DEFAULT '0' COMMENT '直播课程最大学员数上线',
   `price` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程价格',
@@ -251,7 +252,7 @@ CREATE TABLE `course` (
   `periods` int unsigned NOT NULL DEFAULT '1' COMMENT '周期课程的期数',
   `certi` TINYINT unsigned NOT NULL DEFAULT  '0' COMMENT '是否发证',
   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
-  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
+  `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',  
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
@@ -342,6 +343,8 @@ CREATE TABLE `course_lesson` (
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
+  `testMode` ENUM('normal', 'realTime') NULL DEFAULT 'normal' COMMENT '考试模式',
+  `testStartTime` INT(10) NULL DEFAULT '0' COMMENT '实时考试开始时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -1576,3 +1579,40 @@ CREATE TABLE `batch_notification` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='群发通知表';
 
+CREATE TABLE IF NOT EXISTS `course_score_setting` (
+    `courseId` int(10) unsigned NOT NULL COMMENT 'course id主键',
+    `credit` FLOAT(10,1) UNSIGNED COMMENT '可获得学分',
+    `examWeight` int(10) unsigned NOT NULL COMMENT '考试权重',
+    `homeworkWeight` int(10) unsigned NOT NULL COMMENT '作业权重',
+    `otherWeight` INT(10) UNSIGNED NULL COMMENT '其它分权重',
+    `standardScore` int(10) unsigned NOT NULL COMMENT '达标分数',
+    `expectPublishTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '预计发布时间',
+    `publishType` enum('manual','auto') NOT NULL DEFAULT 'manual' COMMENT '发布类型：手动发布，自动发布',
+    `status` enum('scoring','unpublish','published') NOT NULL DEFAULT 'scoring' COMMENT '成绩状态',
+    `publishTime` int(10) unsigned COMMENT '发布时间',
+    `createdTime` int(10) unsigned NOT NULL,
+    PRIMARY KEY  (`courseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课程评分标准表';
+
+CREATE TABLE IF NOT EXISTS `course_member_score` (
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '成绩单ID',
+    `courseId` int(10) unsigned NOT NULL COMMENT 'course id',
+    `userId` int(10) unsigned NOT NULL COMMENT '学员ID',
+    `totalScore` float(10,1) DEFAULT '0.0' COMMENT '总分',
+    `examScore` float(10,1) DEFAULT '0.0' COMMENT '考试成绩',
+    `homeworkScore` float(10,1) DEFAULT '0.0' COMMENT '作业成绩',
+    `otherScore` float(10,1)  DEFAULT '0.0' COMMENT '其它成绩',
+    `importOtherScore` float(10,1)  COMMENT '导入的其它成绩',
+    `createdTime` int(10) unsigned NOT NULL,
+    PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='课程学员得分表';
+
+CREATE TABLE IF NOT EXISTS `recent_post_num` (
+   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+   `ip` varchar(20) NOT NULL COMMENT 'IP',
+   `type` varchar(255) NOT NULL COMMENT '类型',
+   `num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'post次数',
+   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次更新时间',
+   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
