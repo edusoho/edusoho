@@ -2,8 +2,8 @@
 @font-face {font-family: "iconfont";
   src: url('../iconfont/iconfont.eot'); /* IE9*/
   src: url('../iconfont/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../iconfont/iconfont.woff') format('woff'), /* chrome、firefox */
-  url('../iconfont/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('../iconfont/iconfont.woff') format('woff'), /* chrome, firefox */
+  url('../iconfont/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
   url('../iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
 }
 
