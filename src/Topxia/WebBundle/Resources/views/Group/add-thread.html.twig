@@ -48,7 +48,7 @@
 
         <div class="form-group">
           <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">内容</label>
-          <div class="col-xs-7 controls">
+          <div>
             {% if is_feature_enabled('group_reward') %}
             <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% else %}
