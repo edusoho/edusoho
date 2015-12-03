@@ -2,7 +2,7 @@
         var Notify = require('common/bootstrap-notify');
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);
-        require('ckeditor');CKEDITOR.env.isCompatible = true;
+        require('ckeditor');
 
         function checkUrl(url) {
             var hrefArray = new Array();

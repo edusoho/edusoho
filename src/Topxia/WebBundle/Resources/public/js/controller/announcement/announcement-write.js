@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     require('jquery.bootstrap-datetimepicker');
-    require('ckeditor');CKEDITOR.env.isCompatible = true;
+    require('ckeditor');
 
     Validator.addRule(
         'time_check',

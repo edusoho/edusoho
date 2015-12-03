@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     Validator = require('bootstrap.validator'),
     ThreadShowWidget = require('../../../course-thread/show-widget');
     require('jquery.perfect-scrollbar');
-    require('ckeditor');CKEDITOR.env.isCompatible = true;
+    require('ckeditor');
 
     var QuestionPane = Widget.extend({
         _dataInitialized: false,

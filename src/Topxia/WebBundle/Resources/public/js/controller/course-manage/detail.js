@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var DynamicCollection = require('../widget/dynamic-collection4');
     require('jquery.sortable');
-    require('ckeditor');CKEDITOR.env.isCompatible = true;
+    require('ckeditor');
 
     exports.run = function() {
         require('./header').run();

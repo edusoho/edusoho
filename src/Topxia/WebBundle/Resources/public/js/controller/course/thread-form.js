@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');CKEDITOR.env.isCompatible = true;
+    require('ckeditor');
 
     exports.run = function() {
         require('./common').run();
