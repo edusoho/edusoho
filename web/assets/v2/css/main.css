@@ -2139,12 +2139,10 @@ select:-webkit-autofill {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  border: none;
 }
 .navbar-form .form-control.active {
   width: 150px;
-}
-.navbar-form .form-control:focus {
-  border-color: #fff;
 }
 .navbar-form .button {
   position: absolute;
@@ -5173,20 +5171,6 @@ a.homework-essay-textarea-pack-up {
 .media-default .media-body > .content {
   color: #919191;
 }
-.media.media-number .media-body > a {
-  color: #919191;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.media.media-number .media-body > a:hover {
-  color: #46c37b;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
 .media.media-number-o .media-body {
   color: #919191;
 }
@@ -5214,43 +5198,12 @@ a.homework-essay-textarea-pack-up {
 .media.media-number-o:last-child {
   border-bottom: none;
 }
-.media-hot-comment .img-circle {
-  width: 40px;
-  height: 40px;
-}
 .media-hot-comment .comments-info {
+  margin-top: 5px;
   padding-left: 50px;
-}
-.media-hot-comment .comments-info p {
-  margin: 0;
   font-size: 12px;
-  color: #e1e1e1;
-  margin-top: 2px;
-}
-.media-hot-comment .comments-info p a {
-  color: #46c37b;
-  margin-right: 10px;
-}
-.media-hot-comment .comments-info h5 {
-  margin: 0;
-}
-.media-hot-comment .comments-info h5 a {
-  color: #919191;
-  height: 20px;
-  display: inline-block;
-  line-height: 20px;
-  overflow: hidden;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.media-hot-comment .comments-info h5 a:hover {
-  color: #46c37b;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+  color: #c1c1c1;
+  min-height: 34px;
 }
 .media-hot-comment .comments-content {
   padding: 10px;
@@ -5738,9 +5691,9 @@ textarea.form-control-o {
   display: inline-block;
   padding: 6px 10px;
   margin: 5px 5px 5px 0;
-  color: #37b97d;
+  color: #46c37b;
   font-size: 12px;
-  background-color: #e8fbf2;
+  background-color: #cdefdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;

@@ -38,6 +38,3 @@
 .es-header .nav.user-nav > li > a:focus {
   color: #313131;
 }
-.navbar-form .form-control:focus {
-  border-color: #e1e1e1;
-}
