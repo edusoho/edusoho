@@ -68,6 +68,7 @@ body {
   height: 38px;
   line-height: 38px;
   color: #fff;
+  font-size: 12px;
   .container {
     position: relative;
   }
@@ -75,6 +76,16 @@ body {
     position: absolute;
     right: 40px;
     top: 0;
+    padding-left: 0;
+    margin-bottom: 0;
+    @media(max-width: @screen-xs-max) {
+      right: 10px;
+    }
+    >li {
+      list-style-type: none;
+      float: left;
+      margin-left: 15px;
+    }
     .user-logined {
       .dropdown-menu {
         right: 0;
@@ -83,6 +94,12 @@ body {
       i {
         margin-right: 5px;
       }
+    }
+    .avatar-xs {
+      width: 25px !important;
+      height: 25px !important;
+      border: 1px solid #fff;
+      margin-top: -5px;
     }
     .user-login {
       >a {
@@ -198,34 +215,56 @@ body {
     img {
       width: 100%;
     }
-    &:hover {
-      .mask {
-        .opacity(1);
-        .es-transition;
-      }
-      .btn {
-        top: 50%;
-        margin-top: -17px;
-        .es-transition;
-      }
+    // &:hover {
+    //   .mask {
+    //     .opacity(1);
+    //     .es-transition;
+    //   }
+    //   .btn {
+    //     top: 50%;
+    //     margin-top: -17px;
+    //     .es-transition;
+    //   }
+    // }
+    // .mask {
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   background-color: #111;
+    //   background-color: rgba(0, 0, 0, 0.8);
+    //   .opacity(0);
+    //   .es-transition;
+    // }
+    // .btn {
+    //   position: absolute;
+    //   top: 100%;
+    //   left: 50%;
+    //   margin-left: -40px;
+    //   .es-transition;
+    // }
+  }
+  .qs-tag {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    display: inline-block;
+    padding: 2px 5px; 
+    font-size: 12px;
+    // .border-radius;
+    color: #fff;
+    &.qs-tag-danger {
+      // color: @brand-danger;
+      background-color: @brand-danger;
     }
-    .mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #111;
-      background-color: rgba(0, 0, 0, 0.8);
-      .opacity(0);
-      .es-transition;
+    &.qs-tag-info {
+      // color: @brand-info;
+      background-color: @brand-info;
     }
-    .btn {
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -40px;
-      .es-transition;
+    &.qs-tag-warning {
+      // color: @brand-warning;
+      background-color: @brand-warning;
     }
   }
   .title {
@@ -670,23 +709,7 @@ body {
 
 
 // 组件
-.qs-tag {
-  display: inline-block;
-  padding: 4px 10px; 
-  .border-radius;
-  &.qs-tag-danger {
-    color: @brand-danger;
-    background-color: #fce7e7;
-  }
-  &.qs-tag-info {
-    color: @brand-info;
-    background-color: #e7f2fc;
-  }
-  &.qs-tag-warning {
-    color: @brand-warning;
-    background-color: #f1e6d2;
-  }
-}
+
 
 .btn-ghost-default {
   padding: 8px 25px;

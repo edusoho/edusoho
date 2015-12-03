@@ -14,11 +14,11 @@
   <section class="qs-section">
     <div class="container">
       <div class="qs-section-header">
-        <div class="title">直播公开课</div>
-        <div class="subtitle">LIVE COURSE</div>
+        <div class="title">公开课</div>
+        <div class="subtitle">OPEN COURSE</div>
       </div>
       {% set firstCategories = data('Categories',{ group:'course'}) %}
-      <div class="course-filter" id="live-category-tab">
+      <div class="qs-course-cat" id="live-category-tab">
         <ul class="nav nav-pills">
           <li role="presentation" class="active"><a href="#live-category-all"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">全部课程</a></li>
           {% for firstCat in firstCategories if firstCat %}
@@ -29,7 +29,6 @@
             {% endif %}
           {% endfor %}
         </ul>
-        <div class="more"><a href="{{ path('course_explore') }}" class="link-lighter">更多</a></div>
       </div>
 
       <div class="qs-live-course-list tab-content">
@@ -43,15 +42,13 @@
                 <div class="course-img">
                   <a href="{{ path('course_show', {id:course.id}) }}">
                     {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
-                  <div class="mask">
-                    {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">正在直播</a>
-                    {% elseif lesson and "now"|date("U") < lesson.startTime %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-warning">即将直播</a>
-                    {% elseif lesson and "now"|date("U") > lesson.endTime %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info">查看回放</a>
-                    {% endif %}
-                  </div>
+                  {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                    <span class="qs-tag qs-tag-danger">今天 {{ lesson.startTime|date('H:i') }}</span>
+                  {% elseif lesson and "now"|date("U") < lesson.startTime %}
+                    <span class="qs-tag qs-tag-warning">{{ lesson.startTime|date('m-d H:i') }}</span>
+                  {% else %}
+                    <span class="qs-tag qs-tag-info">{{ lesson.startTime|date('m-d H:i') }}</span>
+                  {% endif %}
                 </div>
                 <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
                 <div class="metas clearfix">
@@ -61,11 +58,11 @@
                     {% endif %}
                   </span>
                   {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                    <span class="qs-tag qs-tag-danger pull-right">今天 {{ lesson.startTime|date('H:i') }}</span>
+                    <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary btn-sm pull-right">正在直播</a>
                   {% elseif lesson and "now"|date("U") < lesson.startTime %}
-                    <span class="qs-tag qs-tag-warning pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
-                  {% else %}
-                    <span class="qs-tag qs-tag-info pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
+                    <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-warning btn-sm pull-right">即将直播</a>
+                  {% elseif lesson and "now"|date("U") > lesson.endTime %}
+                    <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info btn-sm pull-right">查看回放</a>
                   {% endif %}
                 </div>
               </div>
@@ -123,6 +120,8 @@
         {% endfor %}
 
       </div>
+      <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('course_explore')}}">更多课程</a></div>
+
     </div>
   </section>
 
@@ -199,28 +198,6 @@
         <div role="tabpanel" class="tab-pane fade active in row" id="category-all" aria-labelledby="home-tab">
           {% for course in recommendCoursesAll if course %}
             {% if loop.index > 3 %}
-              {#<div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="qs-course-item">
-                  <div class="course-img">
-                    <a href="{{ path('course_show', {id:course.id}) }}">
-                      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
-                    <div class="mask">
-                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">立即学习</a>
-                    </div>
-                  </div>
-                  <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
-                  <div class="metas clearfix">
-                    <span class="course-teacher">主讲人：
-                      {% if course.teachers|default(null) %}
-                        {{ course.teachers.0.nickname }}
-                      {% endif %}
-                    </span> 
-                    <span class="price pull-right">
-                      {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
-                    </span>
-                  </div>
-                </div>
-              </div>#}
               <div class="col-lg-3 col-md-4 col-sm-6">
                 {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
               </div>
@@ -236,28 +213,6 @@
 
               <div role="tabpanel" class="tab-pane fade row" id="category-{{firstCat.id}}" aria-labelledby="home-tab">
                 {% for course in recommendCourses if course %}
-                  {#<div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="qs-course-item">
-                      <div class="course-img">
-                        <a href="{{ path('course_show', {id:course.id}) }}">
-                          {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
-                        <div class="mask">
-                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">立即学习</a>
-                        </div>
-                      </div>
-                      <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
-                      <div class="metas clearfix">
-                        <span class="course-teacher">主讲人：
-                          {% if course.teachers|default(null) %}
-                            {{ course.teachers.0.nickname }}
-                          {% endif %}
-                        </span> 
-                        <span class="price pull-right">
-                          {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
-                        </span>
-                      </div>
-                    </div>
-                  </div>#}
                   <div class="col-lg-3 col-md-4 col-sm-6">
                     {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
                   </div>
