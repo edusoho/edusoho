@@ -27,7 +27,7 @@ class OrderProcessorTest extends BaseTestCase
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $processor = OrderProcessorFactory::create('classroom');
-        $note      = $processor->getNote(1);
+        $note      = $processor->getNote($classroom['id']);
         $this->assertEquals('测试班级', $note);
 
     }
@@ -51,7 +51,7 @@ class OrderProcessorTest extends BaseTestCase
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $processor = OrderProcessorFactory::create('classroom');
-        $title     = $processor->getTitle(1);
+        $title     = $processor->getTitle($classroom['id']);
         $this->assertEquals('test', $title);
 
     }
