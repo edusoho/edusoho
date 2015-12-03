@@ -14,6 +14,7 @@ class ArticleSearchAdapter extends AbstractSearchAdapter
                 $article['publishedTime'] = $articleLocal['publishedTime'];
                 $article['thumb']         = $articleLocal['thumb'];
                 $article['id']            = $articleLocal['id'];
+                $article['body']          = $article['content'];
                 $article['category']      = array('name' => $article['category']);
                 array_push($adaptResult, $article);
             }
