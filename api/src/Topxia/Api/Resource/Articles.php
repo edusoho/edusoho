@@ -52,6 +52,9 @@ class Articles extends BaseResource
                 continue;
             }
             foreach ($article['tagIds'] as $tagId) {
+                if (empty($tags[$tagId])) {
+                    continue;
+                }
                 $article['tags'][] = array(
                     'id' => $tagId,
                     'name' => $tags[$tagId]['name'],
