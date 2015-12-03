@@ -3,7 +3,7 @@
     var Validator = require('bootstrap.validator');
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    require('ckeditor');CKEDITOR.env.isCompatible = true;
 
     exports.run = function() {
 

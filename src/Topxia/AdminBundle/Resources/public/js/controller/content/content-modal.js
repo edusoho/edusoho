@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     "use strict";
 
 	var Validator = require('bootstrap.validator');
-    require('ckeditor');
+    require('ckeditor');CKEDITOR.env.isCompatible = true;
     
     Validator.addRule(
         'noNumberFirst',

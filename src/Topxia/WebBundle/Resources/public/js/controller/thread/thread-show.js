@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    require('ckeditor');CKEDITOR.env.isCompatible = true;
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
 

@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-    require('ckeditor');
+    require('ckeditor');CKEDITOR.env.isCompatible = true;
 
     exports.run = function() {
 

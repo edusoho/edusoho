@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    require('ckeditor');CKEDITOR.env.isCompatible = true;
 
     var Widget = require('widget');
     Validator = require('bootstrap.validator');

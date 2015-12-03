@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     require('jquery.nouislider');
     require('jquery.nouislider-css');
     require('jquery.sortable');
-    require('ckeditor');
+    require('ckeditor');CKEDITOR.env.isCompatible = true;
 
     var TestpaperForm = Widget.extend({
 
