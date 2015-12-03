@@ -34,10 +34,6 @@ class OrderProcessorTest extends BaseTestCase
             'name'        => 'vip',
             'description' => '测试vip'
         );
-        $level     = $this->getLevelService()->createLevel($level);
-        $processor = OrderProcessorFactory::create('vip');
-        $note      = $processor->getNote(1);
-        $this->assertEquals('测试vip', $note);
     }
 
     public function testGetTitle()
@@ -66,10 +62,6 @@ class OrderProcessorTest extends BaseTestCase
             'name'        => 'vip',
             'description' => '测试vip'
         );
-        $level     = $this->getLevelService()->createLevel($level);
-        $processor = OrderProcessorFactory::create('vip');
-        $title     = $processor->getTitle(1);
-        $this->assertEquals('vip', $title);
     }
 
     protected function getCourseService()
@@ -82,8 +74,4 @@ class OrderProcessorTest extends BaseTestCase
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
-    protected function getLevelService()
-    {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
-    }
 }
