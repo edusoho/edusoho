@@ -6362,8 +6362,9 @@ textarea {
   max-width: 100%;
   height: auto;
 }
-.modal-backdrop {
-  background-color: rgba(104, 96, 96, 0.55);
+.modal-backdrop.in {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
 }
 .nav-mini > li > a {
   padding: 1px 10px;
@@ -11447,7 +11448,13 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.login-section .logon-tab > a:hover,
+.login-section .logon-tab > a:hover {
+  background-color: #fafafa;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
 .login-section .logon-tab > a.active {
   background-color: #fff;
   -webkit-transition: all 0.3s ease;
@@ -11456,7 +11463,7 @@ textarea {
   transition: all 0.3s ease;
 }
 .login-section .logon-tab > a + a {
-  border-left: 1px solid #e1e1e1;
+  border-left: 1px solid #f5f5f5;
 }
 .login-section .login-main {
   padding: 40px 45px 20px 45px;

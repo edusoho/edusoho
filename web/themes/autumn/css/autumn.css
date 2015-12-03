@@ -63,10 +63,6 @@ a:focus {
 .media.media-number .media-body > a:hover {
   color: #7cb132;
 }
-.btn-tag:hover {
-  color: #7cb132;
-  border-color: #7cb132;
-}
 .media-hot-comment .comments-info p a,
 .media-hot-comment .comments-info h5 a:hover {
   color: #7cb132;
