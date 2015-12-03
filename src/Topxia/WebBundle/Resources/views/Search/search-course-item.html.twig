@@ -14,7 +14,7 @@
       </div>
       <div class="content">{{course.about|raw}}</div>
       <ul class="ul-lesson">
-      {% for lesson in course.lessons |slice(0, 3)%}
+      {% for lesson in course.lessons|default(null)|slice(0, 3)%}
         <li>
           <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
             <i class="es-icon es-icon-chevronright"></i>
