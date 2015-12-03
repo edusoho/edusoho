@@ -20,19 +20,10 @@ class CloudAPIFactory
         $developer = $setting->get('developer', array());
 
         if ($type == 'tui') {
-            // http://115.29.78.158:89
-            // http://es-tui.edusoho.net
             $api = new CloudAPI(array(
                 'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
                 'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
                 'apiUrl' => empty($storage['cloud_api_tui_server']) ? 'http://estui.edusoho.net' : $storage['cloud_api_tui_server'],
-                'debug' => empty($developer['debug']) ? false : true,
-            ));
-        } else if (empty($developer['cloud_api_failover'])) {
-            $api = new CloudAPI(array(
-                'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
-                'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-                'apiUrl' => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
                 'debug' => empty($developer['debug']) ? false : true,
             ));
         } else {

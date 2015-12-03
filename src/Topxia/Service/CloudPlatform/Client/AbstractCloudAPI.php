@@ -26,6 +26,7 @@ class AbstractCloudAPI
         if (!empty($options['apiUrl'])) {
             $this->setApiUrl($options['apiUrl']);
         }
+
         $this->debug = empty($options['debug']) ? false : true;
     }
 
@@ -83,7 +84,7 @@ class AbstractCloudAPI
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
-        $url = $this->apiUrl . '/' . self::VERSION . $uri;
+        $url = $this->apiUrl.'/'.self::VERSION.$uri;
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';
@@ -100,23 +101,26 @@ class AbstractCloudAPI
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } else if ($method == 'PUT') {
+        } else
+        if ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } else if ($method == 'DELETE') {
+        } else
+        if ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } else if ($method == 'PATCH') {
+        } else
+        if ($method == 'PATCH') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {
             if (!empty($params)) {
-                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
 
-        $headers[] = 'Auth-Token: ' . $this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
-        $headers[] = 'API-REQUEST-ID: '. $requestId;
+        $headers[] = 'Auth-Token: '.$this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
+        $headers[] = 'API-REQUEST-ID: '.$requestId;
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -125,7 +129,7 @@ class AbstractCloudAPI
         $curlinfo = curl_getinfo($curl);
 
         $header = substr($response, 0, $curlinfo['header_size']);
-        $body = substr($response, $curlinfo['header_size']);
+        $body   = substr($response, $curlinfo['header_size']);
 
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] CURL_INFO", $curlinfo);
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_HEADER {$header}");
@@ -135,13 +139,12 @@ class AbstractCloudAPI
 
         $context = array(
             'CURLINFO' => $curlinfo,
-            'HEADER' => $header,
-            'BODY' => $body,
+            'HEADER'   => $header,
+            'BODY'     => $body
         );
 
-        if(empty($curlinfo['namelookup_time'])) {
+        if (empty($curlinfo['namelookup_time'])) {
             $this->logger && $this->logger->error("[{$requestId}] NAME_LOOK_UP_TIMEOUT", $context);
-            return array();
         }
 
         if (empty($curlinfo['connect_time'])) {
@@ -172,15 +175,15 @@ class AbstractCloudAPI
     protected function _makeAuthToken($url, $params)
     {
         $matched = preg_match('/:\/\/.*?(\/.*)$/', $url, $matches);
+
         if (!$matched) {
             throw new \RuntimeException('Make AuthToken Error.');
         }
 
-        $text = $matches[1] . "\n" . json_encode($params) . "\n" . $this->secretKey;
+        $text = $matches[1]."\n".json_encode($params)."\n".$this->secretKey;
 
         $hash = md5($text);
 
         return "{$this->accessKey}:{$hash}";
     }
-
 }
