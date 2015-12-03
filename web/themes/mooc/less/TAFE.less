@@ -1,0 +1,86 @@
+//独立模块重写样式
+.TAFE-poster{
+	position: relative;
+	background: @white;
+	margin:0 auto;
+	max-height: 600px;
+	.swiper-slide{
+		margin: 0 auto;
+		width: 100%;
+		height: 100%;
+		visibility: visible;
+	}
+	.swiper-pager{
+		position: absolute;
+		bottom: 20px;
+		z-index: 100;
+		width: 100%;
+		text-align: center;
+		span{
+			border: none;
+			background: @white;
+		}
+		span.swiper-active-switch{
+			background: @color-primary;
+		}
+	}
+}
+.TAFE-download{
+	background: @white;
+	padding: 40px 0;
+	ul{
+		padding: 0 35px;
+	}
+	.TAFE-circle{
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		border-radius:50%;
+		background: @color-primary; 
+		position: absolute;
+	  top: 50%;
+	  margin-top: -4px;
+	}
+	.tab-content{
+		ul{
+			padding: 0;
+		}
+		small{
+			color:@font-lightcolor;
+		}
+		li{
+			padding:0 35px;
+			height: 48px;
+			line-height: 48px;
+			overflow: hidden;
+			position: relative;
+			&:hover{
+				background: #fafafa;
+			}
+			.content{
+				display: inline-block;
+				margin-left: 10px;
+				max-width: 660px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;	
+			  @media (max-width :@screen-sm-max)	{
+			  	max-width: 500px;
+			  }
+			}
+			.es-icon{
+				position: absolute;
+			  top: 50%;
+			  margin-top: -8px;
+			}
+		}
+	}
+}
+.TAFE-section{
+	.course-filter{
+	  a{
+	  	color:@color-primary;
+	  	font-size: 14px;
+	  }	
+	}
+}

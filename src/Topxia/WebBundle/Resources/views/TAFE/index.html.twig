@@ -1,0 +1,209 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'index' %}
+{% block top_content %}
+{# 轮播 #}
+<section class="es-poster swiper-container TAFE-poster">
+  	<div class="swiper-wrapper">
+	  	<div class="swiper-slide">
+	        <a href="/" target="_blank"><img class="img-responsive" src="{{asset("themes/mooc/img/TAFE-banner-1.jpg")}}"></a>
+	    </div>
+	    <div class="swiper-slide">
+	        <a href="/" target="_blank"><img class="img-responsive" src="{{asset("themes/mooc/img/TAFE-banner-2.jpg")}}"></a>
+	    </div>
+	    <div class="swiper-slide">
+	        <a href="/" target="_blank"><img class="img-responsive" src="{{asset("themes/mooc/img/TAFE-banner-3.jpg")}}"></a>
+		</div>
+	 </div> 
+  <div class="swiper-pager"></div>
+</section>
+{# 通知栏 #}
+<div class="alert alert-warning alert-notice announcements-alert hidden-xs" role="alert">
+  <div class="container swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          联系电话：12345678901；许可说明许可说明许可说明许可说明许可说明。
+        </div>
+         <div class="swiper-slide">
+          联系电话：123456789011；许可说明许可说明许可说明许可说明许可说明。
+        </div>
+    </div>
+  </div>
+</div>
+{# 文件下载栏 #}
+<section class="TAFE-download hidden-xs">
+	<div class="container">
+		<ul class="nav nav-tabs clearfix" role="tablist">
+			<li role="parsentation" class="active">
+				<a href="#notice" data-toggle="tab">通知</a>
+			</li>
+			<li role="parsentation">
+				<a href="#download" data-toggle="tab">文件下载</a>
+			</li>
+			<a href="/" class="pull-right mtl">更多</a>
+		</ul>
+		<div class="tab-content">
+		    <div role="tabpanel" class="tab-pane active" id="notice">
+		    	<ul>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    	</ul>
+		    </div>
+		    <div role="tabpanel" class="tab-pane" id="download">
+		    	<ul>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<a href=""><i class="es-icon es-icon-icattachfileblack24px"></i></a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<a  href="/"><i class="es-icon es-icon-icattachfileblack24px"></i></a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<a  href="/"><i class="es-icon es-icon-icattachfileblack24px"></i></a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    		<li class="clearfix">
+		    			<span class="TAFE-circle"></span>
+		    			<a href="/" class="content">【通知】2015级《教师资格证》学员请于2016.1.1日前提交2寸照片。</a>
+		    			<a  href="/"><i class="es-icon es-icon-icattachfileblack24px"></i></a>
+		    			<small class="pull-right">2015－12-01</small>
+		    		</li>
+		    	</ul>
+		    </div>
+	  </div>
+	</div>
+</section>
+{% endblock %}
+{% block content %}
+<section class="TAFE-section" id="course-list">
+    <div class="container">
+      <div class="course-filter section-header clearfix" id="course-filter">
+       推荐课程<a href="/" class="pull-right">更多</a>
+      </div>
+      <div class="section-bodyer">
+        <div class="home-course-list row">
+          <div class="col-md-4 col-sm-6">
+				    <div class="course-item">
+				      <div class="course-img ">
+				        <a href="/course/1">
+				         <img class="img-responsive" src="/assets/img/default/course.png?1.4.1">
+				        </a>
+				      </div>
+				      <div class="course-caption ">
+				        <div class="title"><a href="/course/1">第一门课程</a></div>
+				          <div class="metas clearfix">
+				            <span class="teacher-name">测试管理员</span>
+				            <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>2人</span>
+				          </div>
+				      </div>
+				    </div>
+			  	</div>
+			  	 <div class="col-md-4 col-sm-6">
+				    <div class="course-item">
+				      <div class="course-img ">
+				        <a href="/course/1">
+				         <img class="img-responsive" src="/assets/img/default/course.png?1.4.1">
+				        </a>
+				      </div>
+				      <div class="course-caption ">
+				        <div class="title"><a href="/course/1">第一门课程</a></div>
+				          <div class="metas clearfix">
+				            <span class="teacher-name">测试管理员</span>
+				            <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>2人</span>
+				          </div>
+				      </div>
+				    </div>
+			  	</div>
+			  	 <div class="col-md-4 col-sm-6">
+				    <div class="course-item">
+				      <div class="course-img ">
+				        <a href="/course/1">
+				         <img class="img-responsive" src="/assets/img/default/course.png?1.4.1">
+				        </a>
+				      </div>
+				      <div class="course-caption ">
+				        <div class="title"><a href="/course/1">第一门课程</a></div>
+				          <div class="metas clearfix">
+				            <span class="teacher-name">测试管理员</span>
+				            <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>2人</span>
+				          </div>
+				      </div>
+				    </div>
+			  	</div>
+			  	 <div class="col-md-4 col-sm-6">
+				    <div class="course-item">
+				      <div class="course-img ">
+				        <a href="/course/1">
+				         <img class="img-responsive" src="/assets/img/default/course.png?1.4.1">
+				        </a>
+				      </div>
+				      <div class="course-caption ">
+				        <div class="title"><a href="/course/1">第一门课程</a></div>
+				          <div class="metas clearfix">
+				            <span class="teacher-name">测试管理员</span>
+				            <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>2人</span>
+				          </div>
+				      </div>
+				    </div>
+			  	</div>
+			  	 <div class="col-md-4 col-sm-6">
+				    <div class="course-item">
+				      <div class="course-img ">
+				        <a href="/course/1">
+				         <img class="img-responsive" src="/assets/img/default/course.png?1.4.1">
+				        </a>
+				      </div>
+				      <div class="course-caption ">
+				        <div class="title"><a href="/course/1">第一门课程</a></div>
+				          <div class="metas clearfix">
+				            <span class="teacher-name">测试管理员</span>
+				            <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>2人</span>
+				          </div>
+				      </div>
+				    </div>
+			  	</div>
+			  	 <div class="col-md-4 col-sm-6">
+				    <div class="course-item">
+				      <div class="course-img ">
+				        <a href="/course/1">
+				         <img class="img-responsive" src="/assets/img/default/course.png?1.4.1">
+				        </a>
+				      </div>
+				      <div class="course-caption ">
+				        <div class="title"><a href="/course/1">第一门课程</a></div>
+				          <div class="metas clearfix">
+				            <span class="teacher-name">测试管理员</span>
+				            <span class="student-mun"><i class="es-icon es-icon-people mrm"></i>2人</span>
+				          </div>
+				      </div>
+				    </div>
+			  	</div>
+
+	    </div>
+    </div>
+</section>
+{% endblock %}
