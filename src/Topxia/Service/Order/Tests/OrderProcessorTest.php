@@ -30,10 +30,6 @@ class OrderProcessorTest extends BaseTestCase
         $note      = $processor->getNote(1);
         $this->assertEquals('测试班级', $note);
 
-        $level = array(
-            'name'        => 'vip',
-            'description' => '测试vip'
-        );
     }
 
     public function testGetTitle()
@@ -58,10 +54,6 @@ class OrderProcessorTest extends BaseTestCase
         $title     = $processor->getTitle(1);
         $this->assertEquals('test', $title);
 
-        $level = array(
-            'name'        => 'vip',
-            'description' => '测试vip'
-        );
     }
 
     protected function getCourseService()
