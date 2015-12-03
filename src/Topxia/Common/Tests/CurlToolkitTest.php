@@ -9,20 +9,26 @@ class CurlTookitTest extends BaseTestCase
 {
     public function testRequestWithPostMethod()
     {
-        $method = 'POST';
-        $url    = "http://www.baidu.com";
-        $result = CurlToolkit::request('POST', "http://www.edusoho.com/question/get/token", array());
-        var_dump($result);
+        $url  = "http://v.juhe.cn/postcode/query";
+        $data = array(
+            'postcode' => '310018',
+            'key'      => '1c85799c8c1a6675fb8c312e4b7a09d3'
+
+        );
+        $result = CurlToolkit::request('POST', $url, $data);
+        $this->assertEquals(0, $result['error_code']);
 
     }
 
     public function testRequestWithGetMethod()
     {
-        $url  = "https://api.douban.com/v2/book/17604305";
+        $url  = "http://v.juhe.cn/postcode/query";
         $data = array(
-            'fields' => 'id,title,url'
+            'postcode' => '310018',
+            'key'      => '1c85799c8c1a6675fb8c312e4b7a09d3'
+
         );
         $result = CurlToolkit::request('GET', $url, $data);
-        var_dump($result);
+        $this->assertEquals(0, $result['error_code']);
     }
 }
