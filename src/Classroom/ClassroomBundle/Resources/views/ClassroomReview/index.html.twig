@@ -15,7 +15,7 @@
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="班级名" name="classroomTitle" value="{{ app.request.get('classroomTitle') }}">
+      <input class="form-control" type="text" placeholder="{{setting("classroom.name")|default("班级")}}名" name="classroomTitle" value="{{ app.request.get('classroomTitle') }}">
     </div>
 
     <div class="form-group">
@@ -55,9 +55,9 @@
               </div>
               <div class="mts">
                 {% if classroom %}
-                  <a class="text-success text-sm" href="{{ path('course_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
+                  <a class="text-success text-sm" href="{{ path('classroom_show', {id:review.classroomId}) }}" target="_blank">{{ classrooms[review.classroomId].title }}</a>
                 {% else %}
-                  <span class="text-muted text-sm">班级已删除</span>
+                  <span class="text-muted text-sm">{{setting("classroom.name")|default("班级")}}已删除</span>
                 {% endif %}
               </div>
             </td>
