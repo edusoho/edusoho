@@ -22,13 +22,13 @@ class OrderProcessorTest extends BaseTestCase
             'title'      => 'test',
             'id'         => 1,
             'categoryId' => 1,
-            'status'     => 'published',
-            'about'      => '测试班级'
+            'status'     => 'published'
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $this->getClassroomService()->updateClassroom(1, array('about' => '测试'));
         $processor = OrderProcessorFactory::create('classroom');
         $note      = $processor->getNote($classroom['id']);
-        $this->assertEquals('测试班级', $note);
+        $this->assertEquals('测试', $note);
 
     }
 
