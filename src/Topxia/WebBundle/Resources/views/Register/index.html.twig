@@ -19,7 +19,7 @@
           <div class="form-group mbl">
             <label class="control-label required" for="register_email">邮箱地址</label>
             <div class="controls">
-              <input style="ime-mode:disabled;-webkit-ime-mode:disabled" type="number" id="register_email" name="email" required="required" class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="填写你常用的邮箱作为登录帐号">
+              <input type="email" id="register_email" name="email" required="required" class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="填写你常用的邮箱作为登录帐号">
               <p class="help-block"></p>
             </div>
           </div>
@@ -44,7 +44,7 @@
         <div class="form-group mbl">
           <label class="control-label required" for="register_nickname">用户名</label>
           <div class="controls">
-            <input style="ime-mode:disabled;-webkit-ime-mode:disabled" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="该怎么称呼你？ 中、英文均可，最长18个英文或9个汉字">
+            <input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="该怎么称呼你？ 中、英文均可，最长18个英文或9个汉字">
             <p class="help-block"></p>
           </div>
         </div>
@@ -76,7 +76,7 @@
             <label class="control-label required" for="sms_code">短信验证码</label>
             <div class="controls row" >
               <div class = "col-xs-7" >
-                <input type="text" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                <input type="number" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
                 <p class="help-block"> </p> 
               </div>
               <div class="col-xs-5">
