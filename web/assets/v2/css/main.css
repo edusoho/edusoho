@@ -4921,6 +4921,9 @@ a.homework-essay-textarea-pack-up {
   background: #fff;
   border-bottom: 1px solid #f5f5f5;
 }
+.panel-default > .panel-heading .panel-title {
+  color: #313131;
+}
 .panel-default > .panel-heading .panel-title > i {
   display: none;
 }
