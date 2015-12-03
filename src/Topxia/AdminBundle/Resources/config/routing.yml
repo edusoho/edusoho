@@ -596,7 +596,7 @@ admin_themes_show:
     defaults: { _controller: TopxiaAdminBundle:Theme:show }
 
 admin_themes_config_edit:
-    pattern:  /theme/config/{uri}/edit
+    pattern:  /theme/{uri}/config/edit
     defaults: { _controller: TopxiaAdminBundle:Theme:themeConfigEdit }
 
 admin_setting_user_center:
