@@ -8,8 +8,9 @@
         <td>
           <a class="btn btn-xs btn-info pull-right" href="{{path("admin_app_upgrades")}}">立即更新</a>
           <span class="glyphicon glyphicon-info-sign text-info"></span>
-          最新版本:{{ mainAppUpgrade.package.toVersion }}
-          当前版本: {{ constant('Topxia\\System::VERSION') }}
+          当前版本: {{ constant('Topxia\\System::VERSION') }}&nbsp;
+          下一版本: {{ mainAppUpgrade.package.toVersion }}&nbsp;
+          最新版本: {{ mainAppUpgrade.latestVersion }}
         </td>
       </tr>
     {% else %}

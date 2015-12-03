@@ -6,15 +6,13 @@
 {% endblock %}
 {% block content %}
 <div class="order-pay">
-  <ul class="es-step es-step-3 clearfix">
-    <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>订单确认</li>
-    <li class="doing"><span class="number">2</span>订单支付</li>
-    <li><span class="number">3</span>订单完成</li>
-  </ul>
+  
   <div class="es-section">
-    <div class="section-header">
-      <h1>收银台</h1>
-    </div>
+    <ul class="es-step es-step-3 clearfix">
+      <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>订单确认</li>
+      <li class="doing"><span class="number">2</span>订单支付</li>
+      <li><span class="number">3</span>订单完成</li>
+    </ul>
     <div class="order-pay-body">
       <div class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -22,7 +20,7 @@
         </button>
         订单已提交，请在４８小时内完成支付！逾期订单将被取消。
       </div>
-      <div class="order-detail-bg  checkout">
+      <div class="order-detail-bg  checkout" style="border:none">
         <div class="order-detail  clearfix">
           <div class="order-img hidden-xs">
             {% if order.targetType == "course" and course|default(null) %}
@@ -50,6 +48,7 @@
           </div>
         </div>
       </div>
+      <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% for payment,options in payments %}
@@ -58,9 +57,7 @@
           {% endif %}
         {% endfor %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          
         <div class="form-group order-detail-bg">
-          <div class="pay-type-label">支付方式</div>
           {% for payment, options in payments %}
             <div class="check {% if loop.index == 1 %} active {% endif %}" id="{{payment}}">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
@@ -72,19 +69,23 @@
           {% endfor %}
           {% if payAgreements is not empty %}
           <div class="js-pay-agreement" style="display:none">
-            <ul class="pay-agreement-list">
+            <ul class="pay-agreement-list row">
               {% for payAgreement in payAgreements %}
-                <li class="js-pay-bank clearfix {% if loop.index0 == 0 %}checked{% endif %}">
-                  <input type="radio" name='payAgreementId' value="{{payAgreement.id}}"/ {% if loop.index0 == 0 %}checked{% endif %}>
-                  <span class="name">{{payAgreement.bankName}}</span>
-                  <span class="number">***{{payAgreement.bankNumber}}</span>
-                  <span class="hidden-xs">储蓄卡</span>
-                  <a href="javascript:;" class="closed link-light" data-url="{{ path('pay_center_auth_close')}}">解绑</a>
+                <li class="col-md-6 js-pay-bank {% if loop.index0 == 0 %}checked{% endif %}">
+                  <div class="pay-bank clearfix">
+                    <input class="hidden" type="radio" name='payAgreementId' value="{{payAgreement.id}}" {% if loop.index0 == 0 %}checked{% endif %} />
+                    <span class="name">{{payAgreement.bankName}}</span>
+                    <span class="number">***{{payAgreement.bankNumber}}</span>
+                    <span class="hidden-xs">{% if payAgreement.type == 0 %}储蓄卡{% else %}信用卡{% endif %}</span>
+                    <a href="javascript:;" class="closed visible-lg" data-url="{{ path('pay_center_auth_close')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
+                  </div>
                 </li>
               {% endfor %}
-              <li>
-                <input type="radio" name='payAgreementId' value=""/>
-                添加新卡
+              <li class="col-md-6 js-pay-bank">
+                <div class="pay-bank">
+                  <input class="hidden" type="radio" name='payAgreementId' value=""/>
+                  <span class="color-gray">使用新的银行卡</span>
+                </div>
               </li>
             </ul>
           </div>

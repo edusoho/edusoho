@@ -3,6 +3,7 @@ namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
 
 class QuickpayRequest extends Request
 {
@@ -35,8 +36,8 @@ class QuickpayRequest extends Request
 
     protected function convertParams($params)
     {
-        $isMobile   = $this->isMobile();
-        $mobileType = $this->mobileType();
+        $isMobile   = $this->isMobile($params['userAgent']);
+        $mobileType = $this->mobileType($params['userAgent']);
 
         $converted                  = array();
         $converted['version']       = 1;
@@ -77,19 +78,29 @@ class QuickpayRequest extends Request
         $converted['agent_bill_id']   = $this->generateOrderToken();
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
-        $converted['goods_name']      = mb_substr($this->filterText($params['title']), 0, 50, 'utf-8');
-        $converted['goods_note']      = '';
-        $converted['goods_num']       = 1;
-        $converted['user_ip']         = $this->getClientIp();
-        $converted['ext_param1']      = '';
-        $converted['ext_param2']      = '';
-        $converted['auth_card_type']  = -1;
-        $converted['timestamp']       = time() * 1000;
-        $sign                         = $this->signParams($converted);
-        $encryptData                  = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
-        $url                          = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
-        $result                       = $this->curlRequest($url);
-        $xml                          = simplexml_load_string($result);
+        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 50, 'utf-8');
+
+        if (strlen($converted['goods_name']) >= 50) {
+            $converted['goods_name'] .= '...';
+        }
+
+        $converted['goods_note'] = mb_substr(urldecode(str_replace('%C2%A0', '', urlencode($this->filterText(str_replace('&nbsp;', '', $params['note']))))), 0, 50, 'utf-8');
+
+        if (strlen($converted['goods_note']) >= 50) {
+            $converted['goods_note'] .= '...';
+        }
+
+        $converted['goods_num']      = 1;
+        $converted['user_ip']        = $this->getClientIp();
+        $converted['ext_param1']     = '';
+        $converted['ext_param2']     = '';
+        $converted['auth_card_type'] = -1;
+        $converted['timestamp']      = time() * 1000;
+        $sign                        = $this->signParams($converted);
+        $encryptData                 = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
+        $url                         = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
+        $result                      = $this->curlRequest($url);
+        $xml                         = simplexml_load_string($result);
 
         $redir    = (string) $xml->encrypt_data;
         $redirurl = $this->decrypt($redir, $this->options['aes']);
@@ -124,27 +135,27 @@ class QuickpayRequest extends Request
 
         if (!empty($authBanks)) {
             foreach ($authBanks as $authBank) {
-                $this->getUserService()->updateUserPayAgreementByBankAuth($authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
+                $this->getUserService()->updateUserPayAgreementByUserIdAndBankAuth($order['userId'], $authBank['bankAuth'], array('userAuth' => $userAuth, 'updatedTime' => time()));
             }
         }
     }
 
-    public function isMobile()
+    public function isMobile($userAgent)
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad') || strpos($userAgent, 'Android')) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function mobileType()
+    public function mobileType($userAgent)
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') || strpos($_SERVER['HTTP_USER_AGENT'], 'iPad')) {
+        if (strpos($userAgent, 'iPhone') || strpos($userAgent, 'iPad')) {
             return 'IOS';
         }
 
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Android')) {
+        if (strpos($userAgent, 'Android')) {
             return 'Android';
         }
     }
@@ -180,7 +191,18 @@ class QuickpayRequest extends Request
     {
         $decodeKey = base64_decode($key);
         $iv        = substr($decodeKey, 0, 16);
-        $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv);
+
+        $rijndael = new Rijndael();
+        $rijndael->setIV($iv);
+        $rijndael->setKey($decodeKey);
+        $rijndael->disablePadding();
+
+        $length = strlen($data);
+        $pad    = 16 - ($length % 16);
+        $data   = str_pad($data, $length + $pad, "\0");
+
+        $encrypted = $rijndael->encrypt($data);
+
         return $encrypted;
     }
 
@@ -189,7 +211,12 @@ class QuickpayRequest extends Request
         $decodeKey = base64_decode($key);
         $data      = base64_decode($data);
         $iv        = substr($decodeKey, 0, 16);
-        $encrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv);
+
+        $rijndael = new Rijndael();
+        $rijndael->setIV($iv);
+        $rijndael->setKey($decodeKey);
+        $rijndael->disablePadding();
+        $encrypted = $rijndael->decrypt($data);
 
         return $encrypted;
     }

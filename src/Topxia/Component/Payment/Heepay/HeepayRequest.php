@@ -61,7 +61,18 @@ class HeepayRequest extends Request
 
     protected function filterText($text)
     {
-        return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
+        preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9]*/iu', $text, $results);
+        $title = '';
+
+        if ($results) {
+            foreach ($results[0] as $result) {
+                if (!empty($result)) {
+                    $title .= $result;
+                }
+            }
+        }
+
+        return $title;
     }
 
     private function generateOrderToken()

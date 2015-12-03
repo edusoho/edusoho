@@ -23,8 +23,7 @@ class WxpayResponse extends Response
 
         if (in_array($returnArray['trade_state'], array('SUCCESS'))) {
             $data['status'] = 'success';
-        } else
-        if (in_array($returnArray['trade_state'], array('CLOSED'))) {
+        } elseif (in_array($returnArray['trade_state'], array('CLOSED'))) {
             $data['status'] = 'closed';
         } else {
             $data['status'] = 'unknown';
@@ -116,7 +115,6 @@ class WxpayResponse extends Response
 
     private function fromXml($xml)
     {
-        libxml_disable_entity_loader(true);
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         return $array;
     }
