@@ -45,7 +45,6 @@ class WxpayRequest extends Request
 
     public function fromXml($xml)
     {
-        libxml_disable_entity_loader(true);
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         return $array;
     }

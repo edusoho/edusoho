@@ -26,31 +26,36 @@ define(function(require, exports, module){
                 window.location.href = $this.data('goto');
             });
 
-        }).on("click" ,'.js-pay-agreement li',function(){
+        }).on("click" ,'.js-pay-bank',function(e){
+            e.stopPropagation();
             var $this = $(this);
             $this.addClass('checked').siblings('li').removeClass('checked');
             $this.find('input').prop("checked", true);
 
-        }).on('click', '.js-pay-agreement .closed', function() {
+        }).on('click', '.js-pay-bank .closed', function() {
 
             if(!confirm('确定解除绑定该银行卡吗')){
                 return;
             }
 
-            var self = $(this);
+            var $this = $(this);
             var orderId = $("input[name='orderId']").val();
-            var payAgreementId = $(this).parents(".js-pay-bank").find("input").val();
+            var payAgreementId = $this.closest(".js-pay-bank").find("input").val();
             var payment = $("input[name='payment']").val();
 
-            $.post($(this).data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
+            $.post($this.data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
                 if(response.success){
-                    self.parent('.js-pay-bank').remove();
+                    $this.closest('.js-pay-bank').remove();
                     Notify.success(response.message);
                 }else{
                     Notify.danger(response.message);
                 }
             })
         })
+
+        if (navigator.userAgent.match(/mobile/i)) {
+            $("#heepay").css("display","none");
+        }
     };
 
 });

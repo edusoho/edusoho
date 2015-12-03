@@ -1374,9 +1374,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->getUserPayAgreement($id);
     }
 
-    public function getUserPayAgreementByBankAuth($bankAuth)
+    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth)
     {
-        return $this->getUserPayAgreementDao()->getUserPayAgreementByBankAuth($bankAuth);
+        return $this->getUserPayAgreementDao()->getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth);
     }
 
     public function getUserPayAgreementByUserId($userId)
@@ -1386,13 +1386,13 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function createUserPayAgreement($field)
     {
-        $field = ArrayToolkit::parts($field, array('userId', 'type', 'bankName', 'bankNumber', 'userAuth', 'bankAuth', 'otherId'));
+        $field = ArrayToolkit::parts($field, array('userId', 'type', 'bankName', 'bankNumber', 'userAuth', 'bankAuth', 'bankId', 'createdTime'));
         return $this->getUserPayAgreementDao()->addUserPayAgreement($field);
     }
 
-    public function updateUserPayAgreementByBankAuth($bankAuth, $fields)
+    public function updateUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth, $fields)
     {
-        return $this->getUserPayAgreementDao()->updateUserPayAgreementByBankAuth($bankAuth, $fields);
+        return $this->getUserPayAgreementDao()->updateUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth, $fields);
     }
 
     public function findUserPayAgreementsByUserId($userId)

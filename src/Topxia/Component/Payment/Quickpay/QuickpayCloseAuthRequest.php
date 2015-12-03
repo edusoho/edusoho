@@ -3,6 +3,7 @@ namespace Topxia\Component\Payment\Quickpay;
 
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
 
 class QuickpayCloseAuthRequest extends Request
 {
@@ -85,7 +86,18 @@ class QuickpayCloseAuthRequest extends Request
     {
         $decodeKey = base64_decode($key);
         $iv        = substr($decodeKey, 0, 16);
-        $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv);
+
+        $rijndael = new Rijndael();
+        $rijndael->setIV($iv);
+        $rijndael->setKey($decodeKey);
+        $rijndael->disablePadding();
+
+        $length = strlen($data);
+        $pad    = 16 - ($length % 16);
+        $data   = str_pad($data, $length + $pad, "\0");
+
+        $encrypted = $rijndael->encrypt($data);
+
         return $encrypted;
     }
 
@@ -94,7 +106,12 @@ class QuickpayCloseAuthRequest extends Request
         $decodeKey = base64_decode($key);
         $data      = base64_decode($data);
         $iv        = substr($decodeKey, 0, 16);
-        $encrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decodeKey, $data, MCRYPT_MODE_CBC, $iv);
+
+        $rijndael = new Rijndael();
+        $rijndael->setIV($iv);
+        $rijndael->setKey($decodeKey);
+        $rijndael->disablePadding();
+        $encrypted = $rijndael->decrypt($data);
 
         return $encrypted;
     }

@@ -14,10 +14,10 @@ class UserPayAgreementDaoImpl extends BaseDao implements UserPayAgreementDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
-    public function getUserPayAgreementByBankAuth($bankAuth)
+    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE bankAuth = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($bankAuth)) ?: null;
+        $sql = "SELECT * FROM {$this->table} WHERE  userId =? and bankAuth = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId, $bankAuth)) ?: null;
     }
 
     public function getUserPayAgreementByUserId($userId)
@@ -32,10 +32,9 @@ class UserPayAgreementDaoImpl extends BaseDao implements UserPayAgreementDao
         return $this->getUserPayAgreement($this->getConnection()->lastInsertId());
     }
 
-    public function updateUserPayAgreementByBankAuth($bankAuth, $fields)
+    public function updateUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth, $fields)
     {
-        $this->getConnection()->update($this->table, $fields, array('bankAuth' => $bankAuth));
-        return $this->getUserPayAgreementByBankAuth($bankAuth);
+        return $this->getConnection()->update($this->table, $fields, array('userId' => $userId, 'bankAuth' => $bankAuth));
     }
 
     public function findUserPayAgreementsByUserId($userId)
