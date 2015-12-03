@@ -274,13 +274,86 @@
 }
 
 //小组动态
-.group-dynamic {
+.dynamic-section {
   padding-bottom: 20px;
   background: @bg-color;
 }
 
 .index-group {
-  padding-bottom: 15px;
+  padding-bottom: 3px;
+}
+
+.index-article {
+  .index-recommend-aricle {
+    float: left;
+    width: 35%;
+    padding-left: 0;
+    margin-bottom: 0;
+    @media(max-width: @screen-md-max) {
+      width: 43%;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 28%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    li {
+      position: relative;
+      list-style-type: none;
+      margin-bottom: 12px;
+      overflow: hidden;
+      &.last {
+        margin-bottom: 0;
+      }
+      img {
+        width: 100%;
+      }
+    }
+    .title {
+      position: absolute;
+      bottom: 5px;
+      left: 10px;
+      right: 10px;
+      color: #fff;
+      .text-overflow;
+    }
+  }
+  .index-new-article {
+    float: left;
+    width: 65%;
+    padding-left: 20px;
+    margin-bottom: 0;
+    &.full {
+      width: 100% !important;
+      padding-left: 0;
+    }
+    @media(max-width: @screen-md-max) {
+      width: 57%;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 72%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+      padding-left: 0;
+    }
+    .date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: @gray-medium;
+    }
+    li {
+      position: relative;
+      .text-overflow;
+      margin-bottom: 21px;
+      padding-right: 60px;
+      &.last {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 // 推荐教师
