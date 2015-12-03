@@ -13,15 +13,17 @@
         <span>{{ course.ratingNum|default(0) }}人评价({{ course.studentNum|default(0)}}人学习)</span>
       </div>
       <div class="content">{{course.about|raw}}</div>
-      <ul class="ul-lesson">
-      {% for lesson in course.lessons|default(null)|slice(0, 3)%}
-        <li>
-          <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
-            <i class="es-icon es-icon-chevronright"></i>
-            课时 {{lesson.number}}: {{lesson.title|raw}}
-          </a>
-        </li>
-      {% endfor %}
-      </ul>
+      {% if course.lessons %}
+        <ul class="ul-lesson">
+        {% for lesson in course.lessons|slice(0, 3)%}
+          <li>
+            <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
+              <i class="es-icon es-icon-chevronright"></i>
+              课时 {{lesson.number}}: {{lesson.title|raw}}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
     </div>
   </div>
