@@ -2139,7 +2139,6 @@ select:-webkit-autofill {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  border: none;
 }
 .navbar-form .form-control.active {
   width: 150px;
