@@ -210,6 +210,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             ->andWhere('picture != :pictureNull')
             ->andWhere('tagIds LIKE :tagId')
             ->andWhere('categoryId = :categoryId')
+            ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('categoryId IN (:categoryIds)');
 
         return $builder;
