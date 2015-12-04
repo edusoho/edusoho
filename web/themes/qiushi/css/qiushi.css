@@ -253,8 +253,8 @@ body {
   margin: 0 5px;
 }
 .qs-header {
-  height: 70px;
-  padding: 10px 0;
+  height: 80px;
+  padding: 15px 0;
   background-color: #fff;
 }
 @media (max-width: 767px) {
@@ -844,9 +844,6 @@ body {
 .es-footer .footer-link {
   background: #3D4450;
   border: none;
-}
-.footer-logo {
-  margin-top: 50px;
 }
 .footer-logo > a > img {
   height: auto;
