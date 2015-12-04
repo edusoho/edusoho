@@ -56,7 +56,7 @@
                 {% if featuredArticles %}
                 <ul class="index-recommend-aricle">
                   {% for article in featuredArticles %}
-                  <li {% if loop.index == 2 %}last{% endif %}>
+                  <li class="{% if loop.index == 2 %}last{% endif %}">
                     <a href="{{ path('article_detail', {id:article.id}) }}">
                       {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
                       <div class="image-overlay"></div>
