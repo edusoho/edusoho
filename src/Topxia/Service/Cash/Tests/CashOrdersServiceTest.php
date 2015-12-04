@@ -3,7 +3,7 @@ namespace Topxia\Service\Cash\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 
-class CashOrdersDaoImplTest extends BaseTestCase
+class CashOrdersServiceTest extends BaseTestCase
 {
     public function testAddOrder()
     {
