@@ -5,10 +5,11 @@
   height: 40px;
   margin-bottom: 30px;
   .nav-sort {
-    padding-right: 200px;
-    @media (max-width: @screen-xs-max) {
-      padding-right: 0;
-    }
+    float: left;
+    // padding-right: 200px;
+    // @media (max-width: @screen-xs-max) {
+    //   padding-right: 0;
+    // }
     >li {
       display: inline-block;
     }
@@ -37,9 +38,11 @@
   }
 
   .filter {
-    position: absolute;
-    top: 0;
-    right: 15px;
+    float: right;
+    margin-right: 15px;
+    // position: absolute;
+    // top: 0;
+    // right: 15px;
     .btn {
       background: none;
       padding: 10px 0;

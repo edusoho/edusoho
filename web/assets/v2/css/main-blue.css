@@ -7634,12 +7634,7 @@ textarea {
   margin-bottom: 30px;
 }
 .es-filter .nav-sort {
-  padding-right: 200px;
-}
-@media (max-width: 767px) {
-  .es-filter .nav-sort {
-    padding-right: 0;
-  }
+  float: left;
 }
 .es-filter .nav-sort > li {
   display: inline-block;
@@ -7674,9 +7669,8 @@ textarea {
   color: #0081e6;
 }
 .es-filter .filter {
-  position: absolute;
-  top: 0;
-  right: 15px;
+  float: right;
+  margin-right: 15px;
 }
 .es-filter .filter .btn {
   background: none;
@@ -9226,7 +9220,6 @@ textarea {
 }
 .class-header .class-header-mian {
   position: relative;
-  z-index: 1;
 }
 .class-header .class-header-bg {
   background-color: #fff;
