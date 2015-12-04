@@ -32,7 +32,7 @@ class PlayerController extends BaseController
             $player = "audio-player";
         }
 
-        $url = $this->getPlayUrl($id);
+        $url = $this->getPlayUrl($id, $context);
 
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
@@ -56,7 +56,7 @@ class PlayerController extends BaseController
         return false;
     }
 
-    protected function getPlayUrl($id)
+    protected function getPlayUrl($id, $context)
     {
         $file = $this->getUploadFileService()->getFile($id);
 
@@ -74,20 +74,12 @@ class PlayerController extends BaseController
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token = $this->makeToken('hls.playlist', $file['id']);
-
-                    if ($this->setting("developer.balloon_player")) {
-                        $returnJson = true;
-                    }
+                    $token = $this->makeToken('hls.playlist', $file['id'], $context);
 
                     $params = array(
                         'id'    => $file['id'],
                         'token' => $token['token']
                     );
-
-                    if (isset($returnJson)) {
-                        $params['returnJson'] = $returnJson;
-                    }
 
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
@@ -116,16 +108,22 @@ class PlayerController extends BaseController
         }
     }
 
-    protected function makeToken($type, $fileId)
+    protected function makeToken($type, $fileId, $context)
     {
-        $token = $this->getTokenService()->makeToken($type, array(
+        $fileds = array(
             'data'     => array(
                 'id' => $fileId
             ),
             'times'    => 3,
             'duration' => 3600,
             'userId'   => $this->getCurrentUser()->getId()
-        ));
+        );
+
+        if (isset($context['watchTimeLimit'])) {
+            $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        $token = $this->getTokenService()->makeToken($type, $fileds);
         return $token;
     }
 
