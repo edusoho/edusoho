@@ -1,7 +1,7 @@
 
 {% set mode = mode|default('default') %}
 
-<div class="course-list qs-exellent-course-list">
+<div class="course-list qs-exellent-course-list row">
   {% for course in courses if course %}
     <div class="col-lg-3 col-md-4 col-sm-6">
       {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
