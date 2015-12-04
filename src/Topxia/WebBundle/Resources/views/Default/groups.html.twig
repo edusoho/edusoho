@@ -2,13 +2,13 @@
 <!-- 小组动态 -->
   {% set groups = data('HotGroup',{'count':config.count|default(6)}) %}
   {% if groups %}
-    <section class="group-dynamic">
+    <section class="dynamic-section">
       <div class="container">
         <div class="text-line gray">
           <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
           <!-- <div class="subtitle">参与小组，结交更多同学，关注课程动态。</div> -->
         </div>
-        <div class="group-dynamic-body row">
+        <div class="dynamic-section-main row">
           <div class="col-md-6">
             <div class="panel panel-default index-group">
               <div class="panel-heading">
@@ -44,10 +44,120 @@
             </div>
           </div>
           <div class="col-md-6">
+            <div class="panel panel-default index-article">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  最新资讯
+                  <a class="more" href=""><i class="es-icon es-icon-morehoriz"></i></a>
+                </h3>
+              </div>
+              <div class="panel-body clearfix">
+                {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
+                {% if featuredArticles %}
+                <ul class="index-recommend-aricle">
+                  {% for article in featuredArticles %}
+                  <li class="{% if loop.index == 2 %}last{% endif %}">
+                    <a href="{{ path('article_detail', {id:article.id}) }}">
+                      {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
+                      <div class="image-overlay"></div>
+                      <div class="title">{{ article.title }}</div>
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+
+                <ul class="index-new-article {% if featuredArticles %}{% else %}full{% endif %}">
+                  {% set articles = data('LatestArticles',{'count':6}) %}
+                  {% if articles %}
+                    {% for article in articles %}
+                    <li class="{% if loop.index == 6 %}last{% endif %} clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.updatedTime|smart_time }}</span></li>
+                    {% endfor %}
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div> 
+          <div class="col-md-6">
+            <div class="panel panel-default index-evaluate">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  学员评价
+                </h3>
+              </div>
+              <div class="panel-body">
+                <div class="media media-dynamic">
+                  <div class="media-left">
+                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
+                  </div>
+                  <div class="media-body">
+                    <div class="title text-sm">
+                      <a class="link-light" href="">李小龙</a> 
+                      <span class="score"></span> 
+                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
+                    </div>
+                    <div class="content gray-darker">
+                      老师讲的非常通俗易懂，感谢这门课程！
+                    </div>
+                    <span class="date">2分钟前</span>
+                  </div>
+                </div>
+                <div class="media media-dynamic">
+                  <div class="media-left">
+                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
+                  </div>
+                  <div class="media-body">
+                    <div class="title text-sm">
+                      <a class="link-light" href="">李小龙</a> 
+                      <span class="score"></span> 
+                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
+                    </div>
+                    <div class="content gray-darker">
+                      老师讲的非常通俗易懂，感谢这门课程！
+                    </div>
+                    <span class="date">2分钟前</span>
+                  </div>
+                </div>
+                <div class="media media-dynamic">
+                  <div class="media-left">
+                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
+                  </div>
+                  <div class="media-body">
+                    <div class="title text-sm">
+                      <a class="link-light" href="">李小龙</a> 
+                      <span class="score"></span> 
+                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
+                    </div>
+                    <div class="content gray-darker">
+                      老师讲的非常通俗易懂，感谢这门课程！
+                    </div>
+                    <span class="date">2分钟前</span>
+                  </div>
+                </div>
+                <div class="media media-dynamic">
+                  <div class="media-left">
+                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
+                  </div>
+                  <div class="media-body">
+                    <div class="title text-sm">
+                      <a class="link-light" href="">李小龙</a> 
+                      <span class="score"></span> 
+                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
+                    </div>
+                    <div class="content gray-darker">
+                      老师讲的非常通俗易懂，感谢这门课程！
+                    </div>
+                    <span class="date">2分钟前</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
             <div class="panel panel-default index-dynamic">
               <div class="panel-heading">
                 <h3 class="panel-title">
-                  <i class="es-icon es-icon-recentactors pull-left"></i>学员动态
+                  学员动态
                 </h3>
               </div>
               <div class="panel-body">
