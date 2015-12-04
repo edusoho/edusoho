@@ -108,7 +108,7 @@ class PlayerController extends BaseController
         }
     }
 
-    protected function makeToken($type, $fileId, $context)
+    protected function makeToken($type, $fileId, $context = array())
     {
         $fileds = array(
             'data'     => array(
