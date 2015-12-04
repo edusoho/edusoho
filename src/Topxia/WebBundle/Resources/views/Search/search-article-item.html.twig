@@ -19,12 +19,12 @@
         </a>
       </div>
       <div class="media-body">
-        {{ article.body|plain_text(150) }}
+        {{ article.body|raw}}
       </div>
     </div>
   {% else %}
     <div class="content">
-      {{ article.body|plain_text(150) }}
+      {{ article.body|raw}}
     </div>
   {% endif %}
   
