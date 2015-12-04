@@ -37,7 +37,7 @@
 				{% elseif thread.targetType == 'classroom'%}
 					<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">xxx</a>
 				{% elseif thread.targetType == 'course'%}
-					{% set course = data('Course',{'id':thread.targetId}) %}
+					{% set course = data('Course',{'courseId':thread.targetId}) %}
 					<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
 				{% endif %}
 				<span class="mlm">{{thread.createdTime|smart_time}}</span></p>
