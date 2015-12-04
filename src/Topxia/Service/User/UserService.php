@@ -14,7 +14,7 @@ interface UserService
 
     public function getUserByEmail($email);
 
-    public function findUsersByIds(array $ids);
+    public function findUsersByIds(array $id);
 
     public function findUserProfilesByIds(array $ids);
 
@@ -239,13 +239,13 @@ interface UserService
 
     public function getUserPayAgreement($id);
 
-    public function getUserPayAgreementByBankAuth($bankAuth);
+    public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth);
 
     public function getUserPayAgreementByUserId($userId);
 
     public function createUserPayAgreement($field);
 
-    public function updateUserPayAgreementByBankAuth($bankAuth, $fields);
+    public function updateUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth, $fields);
 
     public function findUserPayAgreementsByUserId($userId);
 
