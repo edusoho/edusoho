@@ -39,9 +39,10 @@ class ThemeController extends BaseController
         $config      = $request->request->get('config');
         $currentData = $request->request->get('currentData');
         $config      = $this->getThemeService()->saveCurrentThemeConfig($config);
+        $template    = $this->getThemetemplate();
 
         if ($currentData) {
-            return $this->render('TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig', array(
+            return $this->render($template, array(
                 'pendant' => $currentData,
                 'uri'     => $uri
             ));
@@ -92,9 +93,9 @@ class ThemeController extends BaseController
     {
         $config = $request->query->get('config');
 
-        $code = "edit".$this->fiterCode($config['code']);
+        //$code = "edit".$this->fiterCode($config['code']);
 
-        return $this->$code($config);
+        return $this->edit($config['code'], $config);
     }
 
     protected function fiterCode($code)
@@ -152,9 +153,9 @@ class ThemeController extends BaseController
         return $themes;
     }
 
-    private function editCourseGridWithConditionIndex($config)
+    private function edit($code, $config)
     {
-        return $this->render('TopxiaWebBundle:Theme:edit-course-grid-with-condition-index-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:Theme:edit-'.$code.'-modal.html.twig', array(
             'config' => $config
         ));
     }
@@ -185,6 +186,21 @@ class ThemeController extends BaseController
         return $this->render('TopxiaWebBundle:Theme:edit-recommend-classroom-modal.html.twig', array(
             'config' => $config
         ));
+    }
+
+    protected function getThemetemplate()
+    {
+        $currentTheme = $this->setting('theme', array('uri' => 'default'));
+
+        if (!empty($currentTheme)) {
+            if ($currentTheme['code'] == 'graceful') {
+                $template = 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig';
+            } else {
+                $template = 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig';
+            }
+        }
+
+        return $template;
     }
 
     protected function getSettingService()
