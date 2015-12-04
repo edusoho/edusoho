@@ -7635,6 +7635,12 @@ textarea {
 }
 .es-filter .nav-sort {
   float: left;
+  padding-right: 300px;
+}
+@media (max-width: 767px) {
+  .es-filter .nav-sort {
+    padding-right: 0;
+  }
 }
 .es-filter .nav-sort > li {
   display: inline-block;
@@ -7669,8 +7675,10 @@ textarea {
   color: #fd5f56;
 }
 .es-filter .filter {
-  float: right;
-  margin-right: 15px;
+  position: absolute;
+  top: 0;
+  right: 15px;
+  width: 300px;
 }
 .es-filter .filter .btn {
   background: none;
