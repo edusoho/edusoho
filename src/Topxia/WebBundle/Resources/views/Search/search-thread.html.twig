@@ -33,7 +33,7 @@
 				<p class="text-sm color-gray">来自
 				
 				{% if thread.targetType == 'group'%}
-					{% set group = data('Grpup',{'groupId':thread.targetId}) %}
+					{% set group = data('Group',{'groupId':thread.targetId}) %}
 					<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">{{group.title|default('')}}</a>
 				{% elseif thread.targetType == 'classroom'%}
 					<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">xxx</a>
