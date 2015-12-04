@@ -13,6 +13,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
+                $modal.modal('hide');
                 var payAgreementId = $("input[name='payAgreementId']").val();
             	$.post($form.attr('action'),$form.serialize(),function(response){
 		            if(response.success){

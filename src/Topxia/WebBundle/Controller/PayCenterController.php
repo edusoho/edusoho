@@ -471,7 +471,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '不是您绑定的银行卡');
         }
 
-        return array('order' => $order, 'user' => $user);
+        return array($order, $user);
     }
 
     protected function getPaymentOptions($payment)
