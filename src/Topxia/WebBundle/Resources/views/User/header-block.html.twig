@@ -4,7 +4,7 @@
       <div class="avatar-bg">
         <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
         {% if 'ROLE_TEACHER' in user.roles %}
-          <span class="icon-user-status"><i class="es-icon es-icon-school"></i></span
+          <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span
         >
         {% endif %}
       </div>
@@ -14,7 +14,7 @@
         <div class="actions">
           <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
           <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
-          <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
+          <button class="btn btn-default btn-sm" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
         </div>
       {% endif %}
       <h2>{{user.nickname}} <small>{{ user.title }}</small></h2>

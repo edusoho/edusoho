@@ -123,6 +123,18 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getConnection()->delete($this->table, array('classroomId' => $classroomId, 'userId' => $userId));
     }
 
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
+    {
+        $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
+        $sql .= " JOIN  `user` As c ON m.classroomId = ?";
+        if ($locked) {
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1";
+        } else {
+            $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
+        }
+        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+    }
+
     public function findMembersByClassroomIdAndRole($classroomId, $role, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -130,6 +142,12 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($classroomId, $role));
+    }
+
+    public function findMemberUserIdsByClassroomId($classroomId)
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE classroomId = ?";
+        return $this->getConnection()->executeQuery($sql, array($classroomId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     private function _createSearchQueryBuilder($conditions)

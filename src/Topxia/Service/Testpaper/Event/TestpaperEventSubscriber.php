@@ -18,10 +18,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             'testpaper.finish' => 'onTestpaperFinish',
             'testpaper.create' => 'onTestpaperCreate',
             'testpaper.update' => 'onTestpaperUpdate',
+            'testpaper.publish'=> 'onTestpaperPublish',
+            'testpaper.close'=>'onTestpaperClose',
             'testpaper.delete' => 'onTestpaperDelete',
-            'testpaper.items.create' => 'onTestpaperItemCreate',
-            'testpaper.items.update' => 'onTestpaperItemUpdate',
-            'testpaper.items.delete' => 'onTestpaperItemDelete'
+            'testpaper.item.update' => 'onTestpaperItemUpdate',
         );
     }
 
@@ -32,11 +32,21 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         //TODO need to use targetHelper class for consistency
         $target = explode('-', $testpaper['target']);
         $course = $this->getCourseService()->getCourse($target[1]);
+        $private = $course['status'] == 'published' ? 0 :1;
+        if($course['parentId']){ 
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']); 
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+            if(array_key_exists('showable',$classroom) && $classroom['showable']== 1) {
+                $private = 0;
+            }else{
+                $private = 1;
+            }
+        }
         $this->getStatusService()->publishStatus(array(
             'type' => 'finished_testpaper',
             'objectType' => 'testpaper',
             'objectId' => $testpaper['id'],
-            'private' => $course['status'] == 'published' ? 0 : 1,
+            'private' => $private,
             'properties' => array(
                 'testpaper' => $this->simplifyTestpaper($testpaper),
                 'result' => $this->simplifyTestpaperResult($testpaperResult),
@@ -46,47 +56,28 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
 
     public function onTestpaperCreate(ServiceEvent $event)
     {
-        $testpaper = $event->getSubject();
-        $items = $event->getArgument('items');
-        $id = $testpaper['id'];
+        $context = $event->getSubject();
+        $testpaper = $context['testpaper'];
+        $argument = $context['argument'];
         $testpaperTarget = explode('-',$testpaper['target']);
         $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-
         if($courseIds){
-            $testpaper['pId'] = $testpaper['id'];
-            unset($testpaper['id']);        
-            foreach ($courseIds as  $courseId) {
-                $testpaper['target'] = "course-".$courseId;
-                $addtestpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-                foreach($items as $item) {
-                    $item['pId'] = $item['id'];
-                    unset($item['id']);
-                    $item['testId'] = $addtestpaper['id'];
-                    $this->getTestpaperService()->createTestpaperItem($item);
-                }
-            }
-
-
-            $lockedTarget = '';
-            foreach ($courseIds as $courseId) {
-                    $lockedTarget .= "'course-".$courseId."',";
-            }
-            $lockedTarget = "(".trim($lockedTarget,',').")";
-            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($id,$lockedTarget),'id');
-
-            $testpaper = $this->getTestpaperService()->getTestpaper($id);
-            $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>$testpaper['metas']);
-            foreach ($testpaperIds as $testpaperId) {
-                $this->getTestpaperService()->editTestpaper($testpaperId, $fields);
-            }
+           $argument['copyId'] = $testpaper['id'];
+           foreach ($courseIds as  $courseId) {
+                $argument['target'] = "course-".$courseId;
+                $this->getTestpaperService()->createTestpaper($argument);
+            } 
         }
     }
 
 
     public function onTestpaperUpdate(ServiceEvent $event)
     {
-        $testpaper = $event->getSubject();
+        $context = $event->getSubject();
+        $testpaper = $context['testpaper'];
+        $argument = $context['argument'];
+
         $testpaperTarget = explode('-',$testpaper['target']);
         $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
@@ -97,12 +88,50 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
                     $lockedTarget .= "'course-".$courseId."',";
             }
             $lockedTarget = "(".trim($lockedTarget,',').")";
-            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
-            unset($testpaper['id'],$testpaper['target'],$testpaper['createdTime'],$testpaper['updatedTime'],$testpaper['pId']);
+            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
             foreach ($testpaperIds as $testpaperId) {
-               $this->getTestpaperService()->editTestpaper($testpaperId,$testpaper);
+               $this->getTestpaperService()->updateTestpaper($testpaperId,$argument);
             }  
         }
+    }
+
+    public function onTestpaperPublish(ServiceEvent $event)
+    {
+        $testpaper = $event->getSubject();
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
+        if($courseIds){
+            $lockedTarget = '';
+            foreach ($courseIds as $courseId) {
+                    $lockedTarget .= "'course-".$courseId."',";
+            }
+            $lockedTarget = "(".trim($lockedTarget,',').")";
+            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
+            foreach ($testpaperIds as $testpaperId) {
+               $this->getTestpaperService()->publishTestpaper($testpaperId);
+            }  
+        }
+    }
+
+    public function onTestpaperClose(ServiceEvent $event)
+    {
+        $testpaper = $event->getSubject();
+        $testpaperTarget = explode('-',$testpaper['target']);
+        $courseId = $testpaperTarget[1];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
+        if($courseIds){
+            $lockedTarget = '';
+            foreach ($courseIds as $courseId) {
+                    $lockedTarget .= "'course-".$courseId."',";
+            }
+            $lockedTarget = "(".trim($lockedTarget,',').")";
+            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
+            foreach ($testpaperIds as $testpaperId) {
+               $this->getTestpaperService()->closeTestpaper($testpaperId);
+            }  
+        }
+
     }
 
     public function onTestpaperDelete(ServiceEvent $event)
@@ -118,116 +147,32 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
                     $lockedTarget .= "'course-".$courseId."',";
             }
             $lockedTarget = "(".trim($lockedTarget,',').")";
-            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaperId,$lockedTarget),'id');
+            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($testpaperId,$lockedTarget),'id');
             foreach ($testpaperIds as $testpaperId) {
               $this->getTestpaperService()->deleteTestpaper($testpaperId);
             }
        }
     }
 
-    public function onTestpaperItemCreate(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $item = $context['item'];
-        $testpaper = $context['testpaper'];
-        $testpaperTarget = explode('-',$testpaper['target']);
-        $courseId = $testpaperTarget[1];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-        if($courseIds){
-            $lockedTarget = '';
-            foreach ($courseIds as $courseId) {
-                $lockedTarget .= "'course-".$courseId."',";
-            }
-            $lockedTarget = "(".trim($lockedTarget,',').")";
-            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
-            $item['pId'] = $item['id'];
-            unset($item['id']);
-            foreach ($testpaperIds as $testpaperId) {
-                $item['testId'] = $testpaperId;
-                $this->getTestpaperService()->createTestpaperItem($item);
-            }
-        }
-    }
-
     public function onTestpaperItemUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
-        $items = $context['items'];
+        $argument = $context['argument'];
         $testpaper = $context['testpaper'];
-
         $testpaperTarget = explode('-',$testpaper['target']);
         $courseId = $testpaperTarget[1];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');
-        //判断是否是一维数组
-        if(array_key_exists('id', $items)){
-
-            if($courseIds){
-                $lockedTarget = ''; 
-                foreach ($courseIds as $courseId) {
-                    $lockedTarget .= "'course-".$courseId."',";
-                }       
-                $lockedTarget = "(".trim($lockedTarget,',').")";
-
-                $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
-                $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemsByPIdAndLockedTestIds($items['id'],$testpaperIds),'id');
-                foreach ($testpaperItemIds as $testpaperItemId) {
-                     $this->getTestpaperService()->editTestpaperItem($testpaperItemId,array('seq'=>$items['seq'],'score'=>$items['score']));
-                }
-            }
-            return; 
-        }
-
-        
         if($courseIds){
             $lockedTarget = '';
             foreach ($courseIds as $courseId) {
                 $lockedTarget .= "'course-".$courseId."',";
             }
             $lockedTarget = "(".trim($lockedTarget,',').")";
-            
-            //重新生成题目
-            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
+            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');
             foreach ($testpaperIds as $testpaperId) {
-                $this->getTestpaperService()->deleteTestpaperItemByTestId($testpaperId);
-                foreach ($items as $item) {
-                    $item['pId'] = $item['id'];
-                    unset($item['id']);
-                    $item['testId'] = $testpaperId;
-                    $this->getTestpaperService()->createTestpaperItem($item);
-                }
-            }
-
-            $testpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
-            $fields = array("score"=>$testpaper['score'],"itemCount"=>$testpaper['itemCount'],"metas"=>$testpaper['metas']);
-            foreach ($testpaperIds as $testpaperId) {
-                $this->getTestpaperService()->editTestpaper($testpaperId, $fields);
+                $this->getTestpaperService()->updateTestpaperItems($testpaperId, $argument);
             }
         }
-    }
-
-    public function onTestpaperItemDelete(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $item = $context['existItem'];
-        $testpaper = $context['testpaper'];
-
-        $testpaperTarget = explode('-',$testpaper['target']);
-        $courseId = $testpaperTarget[1];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId,1),'id');        
-    
-        if($courseIds){
-            $lockedTarget = ''; 
-            foreach ($courseIds as $courseId) {
-                $lockedTarget .= "'course-".$courseId."',";
-            }       
-            $lockedTarget = "(".trim($lockedTarget,',').")";
-
-            $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByPIdAndLockedTarget($testpaper['id'],$lockedTarget),'id');  
-            $testpaperItemIds = ArrayToolkit::column($this->getTestpaperService()->findTestpaperItemsByPIdAndLockedTestIds($item['id'],$testpaperIds),'id');
-            foreach ($testpaperItemIds as $testpaperItemId) {
-                $this->getTestpaperService()->deleteTestpaperItem($testpaperItemId);
-            }
-        }  
     }
 
     protected function simplifyTestpaper($testpaper)
@@ -267,5 +212,10 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     protected function getTestpaperService()
     {
         return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+    }
+
+    private function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 }

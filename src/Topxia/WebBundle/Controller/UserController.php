@@ -75,9 +75,12 @@ class UserController extends BaseController
         $classrooms=array_merge($studentClassrooms,$auditorClassrooms);
 
         $classroomIds=ArrayToolkit::column($classrooms,'classroomId');
-
-        $classrooms=$this->getClassroomService()->findClassroomsByIds($classroomIds);
-
+        $conditions = array(
+            'status'=>'published',
+            'showable'=>'1',
+            'classroomIds' => $classroomIds
+        );
+        $classrooms=$this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
         foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
                 $classroomTeacherIds=array();
@@ -114,7 +117,7 @@ class UserController extends BaseController
         $classroomIds=ArrayToolkit::column($classroomMembers,'classroomId');
         $conditions = array(
             'status'=>'published',
-            'private'=>'0',
+            'showable'=>'1',
             'classroomIds' => $classroomIds
         );
 
@@ -301,10 +304,16 @@ class UserController extends BaseController
         $user['learningNum'] = $this->getCourseService()->findUserLearnCourseCount($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
+        $levels = array();
+        if ($this->isPluginInstalled('vip')) {
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100),'id');
+        }
         return $this->render('TopxiaWebBundle:User:card-show.html.twig', array(
             'user' => $user,
             'profile' => $profile,
-            'isFollowed' => $isFollowed
+            'isFollowed' => $isFollowed,
+            'levels' => $levels,
+            'nowTime' => time(),
         ));
     }
 
@@ -506,5 +515,10 @@ class UserController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

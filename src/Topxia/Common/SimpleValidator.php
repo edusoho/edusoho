@@ -18,7 +18,7 @@ class SimpleValidator
     {
         
         $option = array_merge(
-            array('minLength' => 3, 'maxLength' => 20),
+            array('minLength' => 4, 'maxLength' => 18),
             $option
         );
 
@@ -52,6 +52,11 @@ class SimpleValidator
     public static function mobile($value)
     {
         return !!preg_match('/^1\d{10}$/', $value);
+    }
+
+    public static function numbers($value)
+    {
+        return !!preg_match('/^(\d+,?)*\d+$/', $value);
     }
 
     public static function phone($value)

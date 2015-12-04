@@ -3,7 +3,6 @@ date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor2/autoload.php';
 
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -41,12 +40,15 @@ include __DIR__ . '/src/functions.php';
 
 
 $app = new Silex\Application();
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app['debug'] = true;
 
 $app->view(function (array $result, Request $request) use ($app) {
     return new JsonResponse($result);
 });
+
+include __DIR__ . '/config/container.php';
 
 
 $app->before(function (Request $request) use ($app) {
@@ -87,13 +89,6 @@ $app->error(function (\Exception $e, $code) {
     );
 });
 
-$app->mount('/api/users', include __DIR__ . '/src/users.php' );
-$app->mount('/api/me', include __DIR__ . '/src/me.php' );
-$app->mount('/api/courses', include __DIR__ . '/src/courses.php' );
-$app->mount('/api/announcements', include __DIR__ . '/src/announcements.php' );
-$app->mount('/api/coursethreads', include __DIR__ . '/src/coursethreads.php' );
-$app->mount('/api/mobileschools', include __DIR__ . '/src/mobileschools.php' );
-$app->mount('/api/blacklists', include __DIR__ . '/src/blacklists.php' );
-$app->mount('/api/messages', include __DIR__ . '/src/messages.php' );
-$app->mount('/api/files', include __DIR__ . '/src/files.php' );
+include __DIR__ . '/config/routing.php';
+
 $app->run();

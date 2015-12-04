@@ -30,6 +30,13 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
     }
 
+    public function getOrderByToken($token)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
+        $order = $this->getConnection()->fetchAssoc($sql, array($token));
+        return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
+    }
+
     public function findOrdersByIds(array $ids)
     {
         if(empty($ids)) {
@@ -180,6 +187,12 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
     }
 
+    public function analysisPaidClassroomOrderDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`='paid' AND targetType='classroom'  AND `amount`>0 group by date_format(from_unixtime(`paidTime`),'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
+    }
+
     public function analysisAmount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -196,6 +209,18 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     public function analysisCourseAmountDataByTime($startTime,$endTime)
     {
         $sql="SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='course'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function analysisClassroomAmountDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='classroom'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function analysisVipAmountDataByTime($startTime,$endTime)
+    {
+        $sql="SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='vip'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
         return $this->getConnection()->fetchAll($sql);
     }
 

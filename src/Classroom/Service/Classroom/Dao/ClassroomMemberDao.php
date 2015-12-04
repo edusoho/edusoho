@@ -31,4 +31,8 @@ interface ClassroomMemberDao
     public function findMembersByClassroomIdAndRole($classroomId, $role, $start, $limit);
 
     public function findMembersByClassroomIdAndUserIds($classroomId, $userIds);
+
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked);
+
+    public function findMemberUserIdsByClassroomId($classroomId);
 }

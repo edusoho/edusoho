@@ -21,8 +21,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     public function findTestpapersByIds(array $ids)
     {
-        if(empty($ids)){ 
-            return array(); 
+        if(empty($ids)){
+            return array();
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
@@ -87,10 +87,10 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     }
 
 
-    public function findTestpapersByPIdAndLockedTarget($pId, $lockedTarget)
+    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE pId = ?  AND target IN {$lockedTarget}";
-        return $this->getConnection()->fetchAll($sql,array($pId));
+        $sql = "SELECT * FROM {$this->table} WHERE copyId = ?  AND target IN {$lockedTarget}";
+        return $this->getConnection()->fetchAll($sql,array($copyId));
     }
 
     protected function _createSearchQueryBuilder($conditions)

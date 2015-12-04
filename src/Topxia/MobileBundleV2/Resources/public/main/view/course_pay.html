@@ -14,17 +14,13 @@
 	            <label>
 	                姓名
 	            </label>
-	            <input type="text" placeholder="姓名" ng-model="data.userProfile.truename">
-	            <a class="ui-icon-close" ng-show="data.userProfile.truename.length > 0" ng-click="data.userProfile.truename = '' ">
-	            </a>
+	            <input type="text" placeholder="{{ data.userProfile.truename ? '' : '还没填写真实姓名' }}" ng-model="data.userProfile.truename" readonly>
 	        </div>
 	        <div class="ui-form-item ui-border-b">
 	            <label>
 	                手机
 	            </label>
-	            <input type="text" placeholder="手机" ng-model="data.userProfile.mobile">
-	            <a class="ui-icon-close" ng-show="data.userProfile.mobile.length > 0" ng-click="data.userProfile.mobile = '' ">
-	            </a>
+	            <input type="text" placeholder="{{ data.userProfile.mobile ? '' : '还没填写手机号码' }}" ng-model="data.userProfile.mobile" readonly>
 	        </div>
 	</div>
 

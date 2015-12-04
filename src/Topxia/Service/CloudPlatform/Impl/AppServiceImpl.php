@@ -232,8 +232,8 @@ class AppServiceImpl extends BaseService implements AppService
             $errors[] = 'src目录无写权限';
         }
 
-        if(!is_writeable("{$rootDirectory}/vendor")) {
-            $errors[] = 'vendor目录无写权限';
+        if(!is_writeable("{$rootDirectory}/vendor2")) {
+            $errors[] = 'vendor2目录无写权限';
         }
 
         if(!is_writeable("{$rootDirectory}/plugins")) {
@@ -583,12 +583,14 @@ class AppServiceImpl extends BaseService implements AppService
     {
         $this->createAppClient()->submitRunLog(array(
             'level' => empty($errors) ? 'info' : 'error',
-            'code' => $package['product']['code'],
+            'productId' => $package['productId'],
+            'productName' => $package['product']['name'],
+            'packageId' => $package['id'],
             'type' => $package['type'],
             'fromVersion' => empty($package['fromVersion']) ? '' : $package['fromVersion'],
             'toVersion' => empty($package['toVersion']) ? '' : $package['toVersion'],
             'message' => $message . (empty($errors) ? '成功' : '失败'),
-            'data' => empty($errors) ? '' : $errors,
+            'data' => empty($errors) ? '' : json_encode($errors),
         ));
     }
 

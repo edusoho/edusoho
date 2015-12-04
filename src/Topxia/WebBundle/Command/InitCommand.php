@@ -1,55 +1,51 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Service\User\CurrentUser;
-use Symfony\Component\ClassLoader\ApcClassLoader;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\BlockToolkit;
-
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Bundle\FrameworkBundle\Command\AssetsInstallCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Topxia\Common\BlockToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
 
 class InitCommand extends BaseCommand
 {
 
-	protected function configure()
-	{
-		$this->setName ( 'topxia:init' );
-	}
+    protected function configure()
+    {
+        $this->setName('topxia:init');
+    }
 
-	protected function execute(InputInterface $input, OutputInterface $output)
-	{
-		$output->writeln('<info>开始初始化系统</info>');
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln('<info>开始初始化系统</info>');
 
         $this->installAssets($output);
-		$this->initServiceKernel();
+        $this->initServiceKernel();
 
-		$user = $this->initAdminUser($output);
+        $user = $this->initAdminUser($output);
 
-		$this->initSiteSetting($output);
-		$this->initConsultSetting($output);
-		$this->initRegisterSetting($user, $output);
-		$this->initMailerSetting($output);
-		$this->initPaymentSetting($output);
-		$this->initStorageSetting($output);
+        $this->initSiteSetting($output);
+        $this->initConsultSetting($output);
+        $this->initRegisterSetting($user, $output);
+        $this->initMailerSetting($output);
+        $this->initPaymentSetting($output);
+        $this->initStorageSetting($output);
 
-		$this->initCategory($output);
-		$this->initTag($output);
-		$this->initRefundSetting($output);
-		$this->initThemes($output);
-		$this->initFile($output);
+        $this->initCategory($output);
+        $this->initTag($output);
+        $this->initRefundSetting($output);
+        $this->initThemes($output);
+        $this->initFile($output);
         $this->initDefaultSetting($output);
         $this->initInstallLock($output);
         $this->initBlock($output);
         $this->initCrontabJob($output);
 
-		$output->writeln('<info>初始化系统完毕</info>');
-	}
+        $output->writeln('<info>初始化系统完毕</info>');
+    }
 
     private function installAssets($output)
     {
@@ -60,88 +56,84 @@ class InitCommand extends BaseCommand
         $output->writeln('<info>installAssets成功</info>');
     }
 
-	private function initRefundSetting($output)
-	{
-		$output->write('  初始化退款设置');
+    private function initRefundSetting($output)
+    {
+        $output->write('  初始化退款设置');
 
-		$setting = array(
+        $setting = array(
             'maxRefundDays' => 10,
-            'applyNotification' => '您好，您退款的课程为{{course}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
-            'successNotification' => '您好，您申请退款课程{{course}} 审核通过，将为您退款{{amount}}元。',
-            'failedNotification' => '您好，您申请退款课程{{course}} 审核未通过，请与管理员再协商解决纠纷。',
+            'applyNotification' => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
+            'failedNotification' => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。',
         );
         $setting = $this->getSettingService()->set('refund', $setting);
         $output->writeln(' ...<info>成功</info>');
 
-	}
+    }
 
-	private function initSiteSetting($output)
-	{
-		$output->write('  初始化站点设置');
-
+    private function initSiteSetting($output)
+    {
+        $output->write('  初始化站点设置');
 
         $default = array(
-            'name'=>'EDUSOHO测试站',
-            'slogan'=>'强大的在线教育解决方案',
-            'url'=>'http://demo.edusoho.com',
-            'logo'=>'',
-            'seo_keywords'=>'edusoho, 在线教育软件, 在线在线教育解决方案',
-            'seo_description'=>'edusoho是强大的在线教育开源软件',
-            'master_email'=>'test@edusoho.com',
-            'icp'=>' 浙ICP备13006852号-1',
-            'analytics'=>'',
-            'status'=>'open',
-            'closed_note'=>''
+            'name' => 'EDUSOHO测试站',
+            'slogan' => '强大的在线教育解决方案',
+            'url' => 'http://demo.edusoho.com',
+            'logo' => '',
+            'seo_keywords' => 'edusoho, 在线教育软件, 在线在线教育解决方案',
+            'seo_description' => 'edusoho是强大的在线教育开源软件',
+            'master_email' => 'test@edusoho.com',
+            'icp' => ' 浙ICP备13006852号-1',
+            'analytics' => '',
+            'status' => 'open',
+            'closed_note' => '',
         );
 
         $site = $this->getSettingService()->set('site', $default);
 
+    }
 
-	}
+    private function initConsultSetting($output)
+    {
+        $output->write('  初始化客服设置');
 
-	private function initConsultSetting($output)
-	{
-		$output->write('  初始化客服设置');
-
-
-         $default = array(
+        $default = array(
             'enabled' => 0,
             'worktime' => '9:00 - 17:00',
             'qq' => array(
-                array('name' => '','number' => ''),
-                ),
+                array('name' => '', 'number' => ''),
+            ),
             'qqgroup' => array(
-                array('name' => '','number' => ''),
-                ),
+                array('name' => '', 'number' => ''),
+            ),
             'phone' => array(
-                array('name' => '','number' => ''),
-                ),
+                array('name' => '', 'number' => ''),
+            ),
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',
-            );
-         
+        );
+
         $site = $this->getSettingService()->set('contact', $default);
 
+    }
 
-	}
-
-	private function initAdminUser($output)
-	{
-		$fields = array(
-			'email' => 'test@edusoho.com',
-			'nickname' => '测试管理员',
-			'password' => 'kaifazhe',
-			'roles' => array(),
-			'createdIp' => '127.0.0.1',
-		);
-		$output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
+    private function initAdminUser($output)
+    {
+        $fields = array(
+            'email' => 'test@edusoho.com',
+            'nickname' => '测试管理员',
+            'password' => 'kaifazhe',
+            'roles' => array(),
+            'createdIp' => '127.0.0.1',
+        );
+        $output->write("  创建管理员帐号:{$fields['email']}, 密码：{$fields['password']}   ");
 
         $user = $this->getUserService()->getUserByEmail('test@edusoho.com');
 
-		if (!$user) {
-			$user = $this->getUserService()->register($fields);
-		}
+        if (!$user) {
+            $user = $this->getUserService()->register($fields);
+        }
 
         $currentUser = new CurrentUser();
         $user['currentIp'] = '127.0.0.1';
@@ -149,16 +141,16 @@ class InitCommand extends BaseCommand
         $token = new UsernamePasswordToken($currentUser, null, 'main', $currentUser->getRoles());
         $this->getContainer()->get('security.context')->setToken($token);
 
-		$this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
+        $this->getUserService()->changeUserRoles($user['id'], array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
 
-		$output->writeln(' ...<info>成功</info>');
+        $output->writeln(' ...<info>成功</info>');
 
-		return $user;
-	}
+        return $user;
+    }
 
-	private function initRegisterSetting($user, $output)
-	{
-		$output->write('  初始化注册设置');
+    private function initRegisterSetting($user, $output)
+    {
+        $output->write('  初始化注册设置');
 
         $emailBody = <<<'EOD'
 Hi, {{nickname}}
@@ -179,7 +171,7 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'=>'email',
+            'register_mode' => 'email',
             'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
@@ -191,138 +183,162 @@ EOD;
 
         $auth = $this->getSettingService()->set('auth', $default);
 
-		$output->writeln(' ...<info>成功</info>');
-	}
+        $output->writeln(' ...<info>成功</info>');
+    }
 
-	private function initMailerSetting($output)
-	{
-		$output->write('  初始化邮件服务器设置');
+    private function initMailerSetting($output)
+    {
+        $output->write('  初始化邮件服务器设置');
 
         $default = array(
-            'enabled'=>1,
-            'host'=>'smtp.exmail.qq.com',
-            'port'=>'25',
-            'username'=>'test@edusoho.com',
-            'password'=>'est123',
-            'from'=>'test@edusoho.com',
-            'name'=>'TEST',
+            'enabled' => 1,
+            'host' => 'smtp.exmail.qq.com',
+            'port' => '25',
+            'username' => 'test@edusoho.com',
+            'password' => 'est123',
+            'from' => 'test@edusoho.com',
+            'name' => 'TEST',
         );
         $this->getSettingService()->set('mailer', $default);
 
         $output->writeln(' ...<info>成功</info>');
-	}
+    }
 
-	private function initPaymentSetting($output)
-	{
-		$output->write('  初始化支付设置');
+    private function initPaymentSetting($output)
+    {
+        $output->write('  初始化支付设置');
 
         $default = array(
-	        'enabled'=>0,
-	        'bank_gateway'=>'none',
-	        'alipay_enabled'=>0,
-	        'alipay_key'=>'',
-	        'alipay_secret' => '',
+            'enabled' => 0,
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
         );
         $payment = $this->getSettingService()->set('payment', $default);
 
-		$output->writeln(' ...<info>成功</info>');
-	}
+        $output->writeln(' ...<info>成功</info>');
+    }
 
-	private function initDefaultSetting($output)
+    private function initDefaultSetting($output)
     {
-    	$output->write('  初始化章节的默认设置');
+        $output->write('  初始化章节的默认设置');
         $settingService = $this->getSettingService();
 
         $defaultSetting = array();
-        $defaultSetting['user_name'] ='学员';
-        $defaultSetting['chapter_name'] ='章';
-        $defaultSetting['part_name'] ='节';
+        $defaultSetting['user_name'] = '学员';
+        $defaultSetting['chapter_name'] = '章';
+        $defaultSetting['part_name'] = '节';
 
         $default = $settingService->get('default', array());
         $defaultSetting = array_merge($default, $defaultSetting);
 
         $settingService->set('default', $defaultSetting);
+
+        $setting = array(
+            'rules' => array(
+                'thread' => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum' => 100,
+                    ),
+                ),
+                'threadLoginedUser' => array(
+                    'fiveMuniteRule' => array(
+                        'interval' => 300,
+                        'postNum' => 50,
+                    ),
+                ),
+            ),
+        );
+        $settingService->set('post_num_rules', $setting);
+
+        $settingService->get('developer', array());
+        $developer['cloud_api_failover'] = 1;
+        $settingService->set('developer', $developer);
+
         $output->writeln(' ...<info>成功</info>');
+
     }
 
-	private function initStorageSetting($output)
-	{
-		$output->write('  初始化云服务器设置');
+    private function initStorageSetting($output)
+    {
+        $output->write('  初始化云服务器设置');
 
         $storageSetting = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'upload_mode'=>'local',
+            'upload_mode' => 'local',
             'cloud_api_server' => 'http://api.edusoho.net',
-            'cloud_access_key'=>'',
-            'cloud_bucket'=>'',
-            'cloud_secret_key'=>''
+            'cloud_access_key' => '',
+            'cloud_bucket' => '',
+            'cloud_secret_key' => '',
         );
 
         $storageSetting = $this->getSettingService()->set('storage', $default);
-		
-		$output->writeln(' ...<info>成功</info>');
-	}
 
-	private function initTag($output)
-	{
-		$output->write('  初始化标签');
+        $output->writeln(' ...<info>成功</info>');
+    }
 
-		$defaultTag = $this->getTagService()->getTagByName('默认标签');
-		if (!$defaultTag) {
-			$this->getTagService()->addTag(array('name' => '默认标签'));
-		}
+    private function initTag($output)
+    {
+        $output->write('  初始化标签');
 
-		$output->writeln(' ...<info>成功</info>');
-	}
+        $defaultTag = $this->getTagService()->getTagByName('默认标签');
+        if (!$defaultTag) {
+            $this->getTagService()->addTag(array('name' => '默认标签'));
+        }
 
-	private function initCategory($output)
-	{
-		$output->write('  初始化分类分组');
+        $output->writeln(' ...<info>成功</info>');
+    }
 
-		$categories = $this->getCategoryService()->findAllCategories();
-		foreach ($categories as $category) {
-			$this->getCategoryService()->deleteCategory($category['id']);
-		}
+    private function initCategory($output)
+    {
+        $output->write('  初始化分类分组');
 
-		$groups = $this->getCategoryService()->findAllGroups();
-		foreach ($groups as $group) {
-			$this->getCategoryService()->deleteGroup($group['id']);
-		}
+        $categories = $this->getCategoryService()->findAllCategories();
+        foreach ($categories as $category) {
+            $this->getCategoryService()->deleteCategory($category['id']);
+        }
 
-		$group = $this->getCategoryService()->getGroupByCode('course');
-		if (!$group) {
-			$group = $this->getCategoryService()->addGroup(array(
-				'name' => '课程分类',
-				'code' => 'course',
-				'depth' => 2,
-			));
-		}
+        $groups = $this->getCategoryService()->findAllGroups();
+        foreach ($groups as $group) {
+            $this->getCategoryService()->deleteGroup($group['id']);
+        }
 
-		$category = $this->getCategoryService()->getCategoryByCode('default');
-		if (!$category) {
-			$this->getCategoryService()->createCategory(array(
-				'name' => '默认分类',
-				'code' => 'default',
-				'weight' => 100,
-				'groupId' => $group['id'],
-				'parentId' => 0,
-			));
-		}
+        $group = $this->getCategoryService()->getGroupByCode('course');
+        if (!$group) {
+            $group = $this->getCategoryService()->addGroup(array(
+                'name' => '课程分类',
+                'code' => 'course',
+                'depth' => 2,
+            ));
+        }
 
-		$output->writeln(' ...<info>成功</info>');
-	}
+        $category = $this->getCategoryService()->getCategoryByCode('default');
+        if (!$category) {
+            $this->getCategoryService()->createCategory(array(
+                'name' => '默认分类',
+                'code' => 'default',
+                'weight' => 100,
+                'groupId' => $group['id'],
+                'parentId' => 0,
+            ));
+        }
 
-	private function initFile($output)
-	{
-		$output->write('  初始化文件分组');
+        $output->writeln(' ...<info>成功</info>');
+    }
 
-		$groups = $this->getFileService()->getAllFileGroups();
-		foreach ($groups as $group) {
-			$this->getFileService()->deleteFileGroup($group['id']);
-		}
+    private function initFile($output)
+    {
+        $output->write('  初始化文件分组');
 
-		$this->getFileService()->addFileGroup(array(
+        $groups = $this->getFileService()->getAllFileGroups();
+        foreach ($groups as $group) {
+            $this->getFileService()->deleteFileGroup($group['id']);
+        }
+
+        $this->getFileService()->addFileGroup(array(
             'name' => '默认文件组',
             'code' => 'default',
             'public' => 1,
@@ -397,13 +413,13 @@ EOD;
         $directory = $this->getContainer()->getParameter('topxia.upload.public_directory');
         chmod($directory, 0777);
 
-		$output->writeln(' ...<info>成功</info>');
-	}
+        $output->writeln(' ...<info>成功</info>');
+    }
 
     public function initThemes($output)
     {
-    	$output->write('  初始化主题');
-    	
+        $output->write('  初始化主题');
+
         $this->getSettingService()->set('theme', array('uri' => 'default'));
 
         $output->writeln(' ...<info>成功</info>');
@@ -435,80 +451,80 @@ EOD;
 
     }
 
-    public function initCrontabJob($output){
+    public function initCrontabJob($output)
+    {
         $output->write('  初始化CrontabJob');
-        $this->getCrontabService()->createJob(array(
-            'name'=>'CancelOrderJob', 
-            'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\Order\\\\Job\\\\CancelOrderJob',
-            'jobParams'=>'',
-            'nextExcutedTime'=>time(),
-            'createdTime'=>time()
-        ));
-
-        $this->getCrontabService()->createJob(array(
-            'name'=>'DeleteExpiredTokenJob', 
-            'cycle'=>'everyhour',
-            'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteExpiredTokenJob',
-            'jobParams'=>'',
-            'nextExcutedTime'=>time(),
-            'createdTime'=>time()
-        ));
 
         // $this->getCrontabService()->createJob(array(
-        //     'name'=>'DeleteSessionJob', 
+        //     'name'=>'CancelOrderJob',
         //     'cycle'=>'everyhour',
-        //     'jobClass'=>'Topxia\\\\Service\\\\User\\\\Job\\\\DeleteSessionJob',
+        //     'jobClass'=>'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteExpiredTokenJob',
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
+        //     'nextExcutedTime'=>time(),
+        //     'createdTime'=>time()
+        // ));
+
+        // $this->getCrontabService()->createJob(array(
+        //     'name'=>'DeleteSessionJob',
+        //     'cycle'=>'everyhour',
+        //     'jobClass'=>'Topxia\\Service\\User\\Job\\DeleteSessionJob',
         //     'jobParams'=>'',
         //     'nextExcutedTime'=>time(),
         //     'createdTime'=>time()
         // ));
-        
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+
+        $this->getCrontabService()->setNextExcutedTime(time());
 
         $output->writeln(' ...<info>成功</info>');
     }
 
-	private function initServiceKernel()
-	{
-		$serviceKernel = ServiceKernel::create('dev', false);
+    private function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
 
-		$serviceKernel->setConnection($this->getContainer()->get('database_connection'));
-		$currentUser = new CurrentUser();
-		$currentUser->fromArray(array(
-		    'id' => 0,
-		    'nickname' => '游客',
-		    'currentIp' =>  '127.0.0.1',
-		    'roles' => array(),
-		));
-		$serviceKernel->setCurrentUser($currentUser);
-	}
+        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles' => array(),
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
+    }
 
-	protected function getSettingService()
-	{
-		return $this->getServiceKernel()->createService('System.SettingService');
-	}
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 
-	protected function getCategoryService()
-	{
-		return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-	}
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
 
-	protected function getTagService()
-	{
-		return $this->getServiceKernel()->createService('Taxonomy.TagService');
-	}
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
 
-	protected function getFileService()
-	{
-		return $this->getServiceKernel()->createService('Content.FileService');
-	}
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
+    }
 
-	protected function getUserService()
-	{
-		return $this->getServiceKernel()->createService('User.UserService');
-	}
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
 
     protected function getCrontabService()
     {

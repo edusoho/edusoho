@@ -19,7 +19,7 @@
 
           {% if setting('classroom.enabled')|default(0) %}
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-              <a href="{{path('my_teaching_classrooms')}}">所在{{ setting('classroom.name')|default("班级") }}
+              <a href="{{path('my_teaching_classrooms')}}">所教{{ setting('classroom.name')|default("班级") }}
               </a>
            </li>
           {% endif %}
@@ -97,6 +97,12 @@
         {% if side_nav == 'my-group' %} active {% endif %}">
           <a href="{{path('group_member_center')}}">我的小组</a>
         </li>
+        {% if is_plugin_installed('ClassroomPlan') %}
+          <li class="list-group-item
+          {% if side_nav == 'my-task' %} active {% endif %}" >
+            <a href="{{path('my_task_calendar')}}">我的任务</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>

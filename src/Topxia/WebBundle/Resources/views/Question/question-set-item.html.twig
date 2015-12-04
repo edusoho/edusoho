@@ -19,6 +19,16 @@
       {% if questionStatus == 'previewing' %}{% set questionStatus = 'doing' %}{% endif %}
       {% if question %}
       {% include 'TopxiaWebBundle:Question:question-' ~ question.type ~ '-' ~ questionStatus ~ '.html.twig' %}
+
+
+        {% if questionStatus == 'finished' %}
+          <div class="homework-question-actions text-right">
+            {% include 'TopxiaWebBundle:Question:question-actions.html.twig' with { flags:['favorite', 'analysis'] } %}
+          </div>
+          <div class="homework-question-analysis well editor-text" style="display:none;">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}
+          </div>
+        {% endif %}
+
       {% else %}
       此题已删除。
       {% endif %}

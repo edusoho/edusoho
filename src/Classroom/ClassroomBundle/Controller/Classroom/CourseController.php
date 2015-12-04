@@ -2,9 +2,9 @@
 namespace Classroom\ClassroomBundle\Controller\Classroom;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\WebBundle\Controller\BaseController;
 
 class CourseController extends BaseController
 {
@@ -58,7 +58,7 @@ class CourseController extends BaseController
         if (empty($classroom)) {
             throw $this->createNotFoundException();
         }
-        
+
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
         $currentUser = $this->getUserService()->getCurrentUser();
         $courseMembers = array();
@@ -75,7 +75,10 @@ class CourseController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
+            $classroomName = $this->setting('classroom.name', '班级');
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+        }
         if ($request->query->get('previewAs')) {
             if ($this->getClassroomService()->canManageClassroom($classroomId)) {
                 $previewAs = $request->query->get('previewAs');
@@ -92,13 +95,12 @@ class CourseController extends BaseController
         if ($member && !$member["locked"]) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-        if(!$classroom){
+        if (!$classroom) {
             $classroomDescription = array();
-        }
-        else{
-        $classroomDescription = $classroom['about'];
-        $classroomDescription = strip_tags($classroomDescription,'');
-        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        } else {
+            $classroomDescription = $classroom['about'];
+            $classroomDescription = strip_tags($classroomDescription, '');
+            $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
         return $this->render("ClassroomBundle:Classroom/Course:list.html.twig", array(
             'classroom' => $classroom,
@@ -107,7 +109,7 @@ class CourseController extends BaseController
             'courses' => $courses,
             'courseMembers' => $courseMembers,
             'layout' => $layout,
-            'classroomDescription' => $classroomDescription
+            'classroomDescription' => $classroomDescription,
         ));
     }
 
@@ -116,7 +118,7 @@ class CourseController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $key = $request->request->get("key");
 
-        $conditions = array( "title" => $key );
+        $conditions = array("title" => $key);
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
         $courses = $this->getCourseService()->searchCourses(
@@ -159,7 +161,7 @@ class CourseController extends BaseController
         $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseId');
         $goupCourses = ArrayToolkit::group($childCourses, 'parentId');
         $mapping = array();
-        $classroomIds =  array();
+        $classroomIds = array();
         foreach ($goupCourses as $parentId => $courses) {
             foreach ($courses as $key => $course) {
                 if (!empty($classroomCourses[$course['id']])) {
@@ -223,5 +225,10 @@ class CourseController extends BaseController
     private function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

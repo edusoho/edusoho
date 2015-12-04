@@ -5,7 +5,6 @@
 {% set main_nav = 'orders' %}
 
 {% block main_body %}
-  {#search form#}
   <ul class="nav nav-pills" role="tablist">
     <li role="presentation" {% if app.request.query.get('status')=='' %}class="active"{% endif %}><a href="{{path('my_orders',{status:''})}}">全部订单</a></li>
     <li role="presentation" {% if app.request.query.get('status')=='created' %}class="active"{% endif %}><a href="{{path('my_orders',{status:'created'})}}">待付款<span class="badge">{{waitToBePaidCount}}</span></a></li>
@@ -22,17 +21,16 @@
     </div>
     <div class="form-group">
       <select class="form-control" name="payWays"  onchange="submit();" >
-        {% set options = {'alipay':'支付宝','wxpay':'微信支付','none':'其他支付','':'支付方式'} %}
+
+        {% set options = {'alipay':'支付宝','wxpay':'微信支付','heepay':'网银支付','quickpay':'快捷支付','none':'其他支付','':'支付方式'} %}
         {{ select_options(options, request.get('payWays')) }}
       </select>
     </div>
-
-    {#<button class="btn btn-primary" >搜索</button>#}
-
   </form>
-
-  <table class="table table-striped table-hover" id="orders-table">
-    {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode: 'my'} %}
-  </table>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover" id="orders-table">
+      {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode: 'my'} %}
+    </table>
+  </div>
 {{ web_macro.paginator(paginator) }}
 {% endblock %}

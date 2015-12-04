@@ -452,6 +452,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 		}
 	}
 
+    public function waveUploadFile($id, $field, $diff)
+    {
+      $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);  
+    }
+
     protected function generateKey ($length = 0 )
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

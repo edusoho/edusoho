@@ -1,10 +1,6 @@
 <!-- 侧边栏快捷操作 -->
 <div class="es-bar hidden-xs">
 
-  {% if app.user is empty %}
-    <input type="hidden" id="notLogin">
-  {% endif %}
-
   <!-- 左侧列表 -->
   {% include 'TopxiaWebBundle:EsBar:left-list.html.twig' %}
 
@@ -30,10 +26,6 @@
       {% include 'TopxiaWebBundle:EsBar:ListContent/study-center.html.twig' %}
     </div>
 
-    <!-- 客服 -->
-
-
-
     <!-- 学习历史 -->
     {#<div class="es-bar-main" id="bar-history">
       <div class="bar-main-header">
@@ -52,4 +44,5 @@
 </div>
 
 {% do load_script('es-bar/index') %}
+{% do load_script('notification/notification') %}
 

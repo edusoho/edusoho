@@ -26,7 +26,7 @@ interface UploadFileDao
 
     public function updateFile($id, array $fields);
 
-    public function waveFileUsedCount($id, $diff);
+    public function waveUploadFile($id, $field, $diff);
 
     public function getFileByTargetType($targetType);
 }

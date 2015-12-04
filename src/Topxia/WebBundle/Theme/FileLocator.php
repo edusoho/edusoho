@@ -73,8 +73,23 @@ class FileLocator extends BaseFileLocator
         $resourceBundle = null;
         $bundles = $this->kernel->getBundle($bundleName, false);
         $files = array();
-
         foreach ($bundles as $bundle) {
+            if ($overwriteBundle = $this->getOverwriteBundle($bundleName)) {
+                if ($isResource && file_exists($file = $overwriteBundle->getPath().'/'.$path)) {
+                    if (null !== $resourceBundle) {
+                        throw new \RuntimeException(sprintf('"%s" resource is hidden by a resource from the "%s" derived bundle. Create a "%s" file to override the bundle resource.',
+                            $file,
+                            $resourceBundle,
+                            $themeDir.'/'.$bundles[0]->getName().$overridePath
+                        ));
+                    }
+
+                    if ($first) {
+                        return $file;
+                    }
+                    $files[] = $file;
+                }
+            }
 
             if ($themeDir) {
                 if ($isResource && file_exists($file = $themeDir.'/'.$bundle->getName().$overridePath)) {
@@ -127,6 +142,17 @@ class FileLocator extends BaseFileLocator
     private function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    protected function getOverwriteBundle($currentBundleName)
+    {
+        if ($this->kernel->getContainer()->getParameterBag()->has('template_overwrite_map')) {
+            $map = $this->kernel->getContainer()->getParameterBag()->get('template_overwrite_map');
+            if (array_key_exists($currentBundleName, $map)) {
+                return $this->kernel->getBundle($map[$currentBundleName], true);
+            }
+        }
+        return null;
     }
 
 }

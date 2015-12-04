@@ -34,7 +34,7 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $this->createSerializer()->unserializes($threads, $this->serializeFields);
     }
 
-    public function searchJobsCount($conditions, $orderBy, $start, $limit)
+    public function searchJobsCount($conditions)
     {
         $builder = $this->createSearchQueryBuilder($conditions)
             ->select('COUNT(id)');
@@ -64,14 +64,31 @@ class JobDaoImpl extends BaseDao implements JobDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function findJobByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
+        $job = $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ? : array();
+        return $this->createSerializer()->unserialize($job, $this->serializeFields);
+    }
+
+    public function findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE name = ? AND targetType = ? AND targetId = ?";
+        $job = $this->getConnection()->fetchAssoc($sql, array($jobName, $targetType, $targetId)) ? : array();
+        return $this->createSerializer()->unserialize($job, $this->serializeFields);
+    }
+
     protected function createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
+            ->andWhere("name LIKE :name")
             ->andWhere("cycle = :cycle")
             ->andWhere('jobClass = :jobClass')
             ->andWhere('executing = :executing')
             ->andWhere('nextExcutedTime <= :nextExcutedTime')
+            ->andWhere('nextExcutedTime <= :nextExcutedEndTime')
+            ->andWhere('nextExcutedTime >= :nextExcutedStartTime')
             ->andWhere('creatorId = :creatorId');
         return $builder;
     }

@@ -23,37 +23,42 @@ class GroupThreadController extends BaseController
         }
 
         if($request->getMethod()=="POST"){
-            $threadData = $request->request->all();
+            try{
+                $threadData = $request->request->all();
 
-            $title=trim($threadData['thread']['title']);
-            if(empty($title)){
-                $this->setFlashMessage('danger',"话题名称不能为空！");
+                $title=trim($threadData['thread']['title']);
+                if(empty($title)){
+                    $this->setFlashMessage('danger',"话题名称不能为空！");
 
-                return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
-                    array(
+                    return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
+                        array(
+                        'id'=>$id,
+                        'groupinfo'=>$groupinfo,
+                        'is_groupmember' => $this->getGroupMemberRole($id)
+                        ));
+                }
+                
+                $info=array(
+                    'title'=>$threadData['thread']['title'],
+                    'content'=>$threadData['thread']['content'],
+                    'groupId'=>$id,
+                    'userId'=>$user['id']);
+
+                $thread=$this->getThreadService()->addThread($info);
+
+                if(isset($threadData['file'])){
+                    $file=$threadData['file'];
+                    $this->getThreadService()->addAttach($file,$thread['id']);
+                }
+              
+                return $this->redirect($this->generateUrl('group_thread_show', array(
                     'id'=>$id,
-                    'groupinfo'=>$groupinfo,
-                    'is_groupmember' => $this->getGroupMemberRole($id)
-                    ));
-            }
-            
-            $info=array(
-                'title'=>$threadData['thread']['title'],
-                'content'=>$threadData['thread']['content'],
-                'groupId'=>$id,
-                'userId'=>$user['id']);
-           
-            $thread=$this->getThreadService()->addThread($info);
-
-            if(isset($threadData['file'])){
-                $file=$threadData['file'];
-                $this->getThreadService()->addAttach($file,$thread['id']);
-            }
-          
-            return $this->redirect($this->generateUrl('group_thread_show', array(
-                'id'=>$id,
-                'threadId'=>$thread['id'],
+                    'threadId'=>$thread['id'],
                 )));
+
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage(), '错误提示');   
+            }
             
         }
         return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
@@ -493,67 +498,60 @@ class GroupThreadController extends BaseController
 
     public function postThreadAction(Request $request,$groupId,$threadId)
     {       
-            $user=$this->getCurrentUser();
-            if (!$user->isLogin()) {
+        $user=$this->getCurrentUser();
+        if (!$user->isLogin()) {
             return new Response($this->generateUrl('login'));
-            }
+        }
 
-            if(!$this->getGroupMemberRole($groupId)){
+        if(!$this->getGroupMemberRole($groupId)){
             $this->getGroupService()->joinGroup($user,$groupId);
+        }
+
+        $thread = $this->getThreadService()->getThread($threadId);
+
+        $postContent=$request->request->all();
+
+        $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
+        $content=array(
+        'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
+
+        if(isset($postContent['postId'])){
+             $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId,$postContent['postId']);
+        }else{
+            $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
+
+            if(isset($postContent['file'])){
+                $file=$postContent['file'];
+                $this->getThreadService()->addPostAttach($file,$thread['id'],$post['id']); 
             }
+        }       
+        $message = array(
+            'id' => $groupId,
+            'threadId' =>$thread['id'],
+            'title' =>$thread['title'],
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'page' => $this->getPostPage($post['id'],$threadId),
+            'post' => $post['id'],
+            'type' => 'reply'
+        );
 
-            $thread = $this->getThreadService()->getThread($threadId);
-
-            $postContent=$request->request->all();
-  
-            $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
-            $content=array(
-            'content'=>$postContent['content'],'fromUserId'=>$fromUserId);
-
-            if(isset($postContent['postId'])){
-
-                 $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId,$postContent['postId']);
-
-            }else{
-
-                $post=$this->getThreadService()->postThread($content,$groupId,$user['id'],$threadId);
-
-                if(isset($postContent['file'])){
-                    $file=$postContent['file'];
-                    $this->getThreadService()->addPostAttach($file,$thread['id'],$post['id']); 
-                }
-
-            }       
-            $message = array(
-                'id' => $groupId,
-                'threadId' =>$thread['id'],
-                'title' =>$thread['title'],
-                'userId' => $user['id'],
-                'userName' => $user['nickname'],
-                'page' => $this->getPostPage($post['id'],$threadId),
-                'post' => $post['id'],
-                'type' => 'reply'
-                );
-    
-            if ($user->id != $thread['userId']) {
-                $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', 
-                    $message);
+        if ($user->id != $thread['userId']) {
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
+        }
+        
+        if (empty($fromUserId) && !empty($postContent['postId'])) {
+            $post = $this->getThreadService()->getPost($postContent['postId']);
+            if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
+                $this->getNotifiactionService()->notify($post['userId'], 'group-thread', $message);
             }
-            
-            if (empty($fromUserId) && !empty($postContent['postId'])) {
-                $post = $this->getThreadService()->getPost($postContent['postId']);
-                if ($post['userId'] != $user->id && $post['userId'] != $thread['userId']) {
-                    $this->getNotifiactionService()->notify($post['userId'], 'group-thread', 
-                        $message);
-                }
-            }
+        }
 
-            if (!empty($fromUserId) && $fromUserId != $user->id && $fromUserId != $thread['userId']) {
-                $this->getNotifiactionService()->notify($postContent['fromUserId'], 'group-thread', 
-                    $message);
-            }
+        if (!empty($fromUserId) && $fromUserId != $user->id && $fromUserId != $thread['userId']) {
+            $this->getNotifiactionService()->notify($postContent['fromUserId'], 'group-thread', $message);
+        }
 
-            return $this->createJsonResponse(true);
+        return $this->createJsonResponse(true);
     }
     
     public function searchResultAction(Request $request,$id)

@@ -17,6 +17,12 @@ appService.service('localStore', ['$rootScope', function($rootScope) {
 		localStorage.clear();
 	}
 }]).
+service('ArticleService', ['httpService', function(httpService) {
+
+	this.getArticle = function(callback) {
+		httpService.apiGet("/api/articles/" + arguments[0]['id'], arguments);
+	}
+}]).
 service('CategoryService', ['httpService', function(httpService) {
 
 	this.getCategorieTree = function(callback) {
@@ -322,7 +328,7 @@ service('QuestionService', ['httpService', function(httpService) {
 	}
 }]).
 service('CourseService', ['httpService', function(httpService) {
-
+	
 	this.updateModifyInfo = function(params, callback) {
 		httpService.simplePost("/mapi_v2/Course/updateModifyInfo", arguments);
 	}
@@ -582,6 +588,26 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		options.headers = options.headers || {};
 		options.headers["token"] = $rootScope.token;
 
+		var http = $http(options).success(options.success);
+
+		if (options.error) {
+			http.error(options.error);
+		} else {
+			http.error(function(data) {
+				console.log(data);
+			});
+		}
+	}
+
+	this.apiGet = function(url) {
+
+		params  = arguments[1][0];
+		callback = arguments[1][1];
+		errorCallback = arguments[1][2];
+
+		var options = self.getOptions("get", url, params, callback, errorCallback);
+		options.headers['Auth-Token'] = options.headers['token'];
+		options.headers['token'] = null;
 		var http = $http(options).success(options.success);
 
 		if (options.error) {

@@ -1,23 +1,15 @@
-@font-face {font-family: 'webfont';
-  src: url('/assets/v2/css/fonts/webfont.eot');
-  src: url('/assets/v2/css/fonts/webfont.eot?#iefix') format('embedded-opentype'),
-  url('/assets/v2/css/fonts/webfont.woff') format('woff'),
-  url('/assets/v2/css/fonts/webfont.ttf') format('truetype'),
-  url('/assets/v2/css/fonts/webfont.svg#webfont') format('svg');
-}
-
-// 思源极细字体
-.webfont {
-  font-family: 'webfont' !important;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body { 
-  background: @bg-color;
+  background: #eee;
   word-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  &.bg-blank {
+    background-color: #fff;
+  }
 }
 
 html.nav-active,
@@ -47,16 +39,15 @@ html.nav-active body {
   height: 100%;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.2);
-  -webkit-backface-visibility:hidden;
-}
-
-.tooltip {
-  min-width: 40px;
+  -webkit-backface-visibility: hidden;
 }
 
 #content-container {
   margin: 30px auto;
-  min-height: 500px;
+  min-height: 400px;
+  @media(max-width:@screen-xs-max) {
+    min-height: 250px;
+  }
 }
 
 a:hover, 
@@ -64,8 +55,30 @@ a:focus {
   text-decoration: none;
 }
 
+input:-webkit-autofill, 
+textarea:-webkit-autofill, 
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px @bg-color inset;
+}
+
 .caret {
   border-top: 4px solid;
+}
+
+.tooltip {
+  min-width: 40px;
+}
+
+.affix,
+.affix-bottom {
+  z-index: 1;
+}
+
+// 富文本编辑器
+.cke_chrome {
+  .border-radius();
+  border-color: @gray-light !important;
+  .box-shadow(none) !important;
 }
 
 // 全站公告
@@ -95,11 +108,9 @@ a:focus {
     right: 0;
     width: 30px;
   }
-  a {
-    text-decoration: underline;
-  }
 }
 
+// 站内公告
 .aside-notice {
   padding: 0;
   .swiper-container {
@@ -112,23 +123,5 @@ a:focus {
   .swiper-slide {
     float: none;
     .text-overflow;
-    // a {
-    //   color: @brand-warning;
-    // }
-  }
-}
-
-.icon-user-status {
-  display: block;
-  width: 20px;
-  height: 20px;
-  line-height: 17px;
-  text-align: center;
-  border: 1px solid #fff;
-  background: @brand-danger;
-  color: #fff;
-  .border-radius(50%);
-  i {
-    font-size: 12px;
   }
 }

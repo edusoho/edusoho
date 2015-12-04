@@ -51,7 +51,6 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 </head>
-
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -64,27 +63,27 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
       </div>
       <div class="navbar-collapse collapse">
-
         <ul class="nav navbar-nav">
-          {% for m in menu_children('admin', 'admin', 1) %}
-
-            {% if m.code == "admin_app"%}
+           {% for m in menu_children('admin', 'admin', 1) %}
+            {% if m.code == "admin_app" %}
                {% if not is_granted('ROLE_SUPER_ADMIN') %}
                 {% set parameter = {'postStatus':'all'} %}
                 {% set m = m|array_merge({'router_params':parameter,'router_name':'admin_app_center'}) %}
                {% endif %}
             {% endif %}
 
-            {% if m.code != "admin_system" %}
-                <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ self_macro.menu_link_html(_context, m) }}
-                </li>  
+            {% if m.code == "admin_system" %}
+              {% if is_granted('ROLE_SUPER_ADMIN') %}
+              <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {{ self_macro.menu_link_html(_context, m) }}
+              </li>
+              {% endif %}
             {% else %}    
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                  <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
+                <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
-                  </li>
-                {% endif %}
+                </li>
+              {% endif %}
             {% endif %}
 
           {% endfor %}
@@ -110,7 +109,7 @@
       </div><!--/.navbar-collapse -->
     </div>
   </div>
-
+  
   <div class="container">
     <div class="row">
       {% block content %}
@@ -163,6 +162,8 @@
             {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
           {% endif %}
 
+          {% block content_header %}{% endblock %}
+          
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
@@ -198,6 +199,14 @@
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
+  {% if setting('copyright.thirdCopyright') != 1 %}
+    <div class="fixed-bar">
+      <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+        <i class="es-icon es-icon-help"></i>
+        <span>产品<br/>反馈</span>
+      </a>
+    </div>
+  {% endif %}
 </body>
 </html>
 

@@ -10,6 +10,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\JsonToolkit;
 
 class DeveloperSettingController extends BaseController
 {
@@ -22,8 +23,8 @@ class DeveloperSettingController extends BaseController
             'debug' => '0',
             'app_api_url' => '',
             'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'cloud_api_failover' => '0',
             'cloud_file_server' => '',
+            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
             'hls_encrypted' => '1',
         );
 
@@ -31,15 +32,16 @@ class DeveloperSettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
+
             $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
 
-            $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/api_server.json';
-            $fileSystem = new Filesystem();
-            $fileSystem->remove($serverConfigFile);
+            $this->dealServerConfigFile();
+            $this->dealNetworkLockFile($developerSetting);
 
             $this->setFlashMessage('success', '开发者已保存！');
         }
@@ -48,6 +50,25 @@ class DeveloperSettingController extends BaseController
             'developerSetting' => $developerSetting,
         ));
 
+    }
+
+    protected function dealServerConfigFile()
+    {
+        $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/api_server.json';
+        $fileSystem = new Filesystem();
+        $fileSystem->remove($serverConfigFile);
+    }
+
+    protected function dealNetworkLockFile($developerSetting)
+    {
+        $networkLock = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/data/network.lock';
+        $fileSystem = new Filesystem();
+
+        if(isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
+            $fileSystem->touch($networkLock);
+        } else if(!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0){
+            $fileSystem->remove($networkLock);
+        }
     }
 
     public function versionAction(Request $request)
@@ -82,70 +103,12 @@ class DeveloperSettingController extends BaseController
         }
 
         $setting = $this->getSettingService()->get('magic', array());
-        $setting = $this->prettyPrint(json_encode($setting));
+        $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:magic.html.twig', array(
             'setting' => $setting,
         ));
     }
-
-    protected function prettyPrint( $json )
-    {
-        $result = '';
-        $level = 0;
-        $inQuotes = false;
-        $inEscape = false;
-        $endsLineLevel = NULL;
-        $jsonLength = strlen( $json );
-
-        for( $i = 0; $i < $jsonLength; $i++ ) {
-            $char = $json[$i];
-            $newLineLevel = NULL;
-            $post = "";
-            if( $endsLineLevel !== NULL ) {
-                $newLineLevel = $endsLineLevel;
-                $endsLineLevel = NULL;
-            }
-            if ( $inEscape ) {
-                $inEscape = false;
-            } else if( $char === '"' ) {
-                $inQuotes = !$inQuotes;
-            } else if( ! $inQuotes ) {
-                switch( $char ) {
-                    case '}': case ']':
-                        $level--;
-                        $endsLineLevel = NULL;
-                        $newLineLevel = $level;
-                        break;
-
-                    case '{': case '[':
-                        $level++;
-                    case ',':
-                        $endsLineLevel = $level;
-                        break;
-
-                    case ':':
-                        $post = " ";
-                        break;
-
-                    case " ": case "\t": case "\n": case "\r":
-                        $char = "";
-                        $endsLineLevel = $newLineLevel;
-                        $newLineLevel = NULL;
-                        break;
-                }
-            } else if ( $char === '\\' ) {
-                $inEscape = true;
-            }
-            if( $newLineLevel !== NULL ) {
-                $result .= "\n".str_repeat( "\t", $newLineLevel );
-            }
-            $result .= $char.$post;
-        }
-
-        return $result;
-    }
-
 
     protected function getSettingService()
     {

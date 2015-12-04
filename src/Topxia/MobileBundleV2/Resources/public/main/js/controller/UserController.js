@@ -1,4 +1,4 @@
-app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', '$stateParams', MyInfoController]);
+app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', 'platformUtil', '$stateParams', '$q', MyInfoController]);
 app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
 app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
 app.controller('StudentListController', ['$scope', 'ClassRoomService', '$stateParams', StudentListController]);
@@ -6,12 +6,14 @@ app.controller('StudentListController', ['$scope', 'ClassRoomService', '$statePa
 function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
 {
 	$scope.title = "课程教师";
+	$scope.emptyStr = "该课程暂无教师";
 	var self = this;
 	this.initService = function() {
 		if ("course" == $stateParams.targetType) {
 			self.targetService = self.loadCourseTeachers;
 		} else if ("classroom" == $stateParams.targetType) {
 			$scope.title = "班级教师";
+			$scope.emptyStr = "该班级暂无教师";
 			self.targetService = self.loadClassRoomTeachers;
 		}
 	};
@@ -42,6 +44,7 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 function StudentListController($scope, ClassRoomService, $stateParams)
 {
 	$scope.title = "班级学员";
+	$scope.emptyStr = "该班级暂无学员";
 	ClassRoomService.getStudents({
 		classRoomId : $stateParams.targetId,
 		limit : -1
@@ -50,11 +53,10 @@ function StudentListController($scope, ClassRoomService, $stateParams)
 	});
 }
 
-function MyInfoController($scope, UserService, cordovaUtil, $stateParams) 
+function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $stateParams, $q) 
 {	
 	var self = this;
 	this.uploadAvatar = function(file) {
-		
 		$scope.showLoad();
 		UserService.uploadAvatar({
 			file : file.files[0]
@@ -67,6 +69,26 @@ function MyInfoController($scope, UserService, cordovaUtil, $stateParams)
 			$scope.userinfo.fileId = data.id;
 			$scope.userinfo.mediumAvatar = data.url;
 		});
+	};
+
+	$scope.showSelectImage = function(e) {
+		if (platformUtil.native && platformUtil.android) {
+			e.preventDefault();
+			cordovaUtil.uploadImage(
+				$q,
+				app.host + '/mapi_v2/User/uploadAvatar',
+				{ token : $scope.token },
+				{ file : "" },
+				"image/*"
+			).then(function(data) {
+				if (! data) {
+					alert("该功能仅支持客户端!");
+					return;
+				}
+				$scope.userinfo.fileId = data.id;
+				$scope.userinfo.mediumAvatar = data.url;
+			});
+		}
 	};
 
 	$scope.loadUserInfo = function() {

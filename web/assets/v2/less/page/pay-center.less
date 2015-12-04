@@ -1,128 +1,147 @@
-.pay-center .check {
+// 支付方式
+.form-paytype  {
+  .order-detail-bg {
+    padding: 50px;
+    @media (max-width: @screen-xs-max) {
+      padding: 15px; 
+    } 
+  }
+  .pay-type-label  {
+    display: inline-block;
+    margin-right: 10%;
+    font-size: 18px;
+    @media(max-width: @screen-md-max) {
+      font-size: 16px;
+    }
+    @media (max-width: @screen-xs-max) {
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.form-paytype .check {
   cursor: pointer;
-  width: 150px;
-  height: 58px;
-  border: 2px solid @gray-light;
+  width: 144px;
+  height: 54px;
+  border: 2px solid @gray-lighter;
   position: relative;
   text-align: center;
   font-size: 16px;
-  line-height: 58px;
-  display:inline-block;
-  margin-right:15px;
-  // @media(max-width: @screen-xs-max) {
-  //   margin-right: 5px;
-  //   width: 120px;
-  //   height: 50px;
-  //   line-height: 50px;
-  //   img {
-  //     width: 80px;
-  //   }
-  // }
+  display: inline-block;
+  margin-right: 15px;
+  .es-transition;
+  @media(max-width: @screen-md-max) {
+    margin-right: 5px;
+    width: 100px;
+    height: 40px;
+    line-height: 32px;
+    margin-bottom: 10px;
+    img {
+      width: 80%;
+      height: auto;
+    }
+  }
+  &:hover {
+    border-color: @gray-medium;
+    .es-transition;
+  }
   &.active {
-    border: 2px solid @brand-primary;
+    border: 2px solid @brand-success;
+    .icon {
+      display: block;
+    }
+  }
+  .icon {
+    display: none;
+    background: url('@{img-src}old/pay_check_status.png') no-repeat;
+    top: -2px;
+    right: -2px;
+    width: 23px;
+    height: 23px;
+    background-position: 0 0;
+    position: absolute;
+    overflow: hidden;
   }
 }
 
-.pay-center .uncheck {
-  cursor: pointer;
-  width: 150px;
-  height: 58px;
-  position: relative;
-  text-align:center;
-  font-size: 16px;
-  line-height: 58px;
-  border: 1px solid #cccccc; 
-  margin-bottom: 30px;
-}
-
-.pay-center .uncheck .icon {
-  background: url('@{img-src}old/pay-check-status.png') no-repeat;
-  top: 0px;
-  right: 0px;
-  width: 23px;
-  height: 26px;
-  background-position: 0 -30px;
-  position: absolute;
-  overflow: hidden;
-}
-
-.pay-center .check .icon {
-  background: url('@{img-src}old/pay-check-status.png') no-repeat;
-  top: -1px;
-  right: -1px;
-  width: 23px;
-  height: 26px;
-  background-position: 0 -4px;
-  position: absolute;
-  overflow: hidden;
-}
-
-.pay-center .help {
-  float: left;
-  width: 400px;
-  height: 40px;
-  line-height: 19px;
-  padding-left: 30px;
-  background: url('@{img-src}old/iconfont-caution-block.png') no-repeat;
-  font-size: 12px;
-  color: #666;
-  margin-top: 15px;
-  margin-left: 15px;
-}
-
-// =============新调整=====
-.pay-center .pay-amount {
-  text-align: right;
-  .total-price {
-    float: inherit;
-  }
-}
-
-.order-detail-bg.checkout {
-  .order-detail .order-info {
-    padding-top: 30px;
-    width: 70%;
-    >p {
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-    .pay-rmb {
-      font-size: 18px;
-    }
-  } 
-}
-
-.paystyle  {
-  .order-detail-bg {
-    padding: 50px;
-    margin-bottom: 50px;
-    @media (max-width: @screen-xs-max) {
-      padding-left: 25px; 
-    } 
-    .pay-type-lable  {
-      display: inline-block;
-      margin-right: 10%;
-      font-size: 18px;
-      @media (max-width: @screen-xs-max) {
-        display: block;
+.pay-agreement-list {
+  margin-top: 30px;
+  padding-left: 0;
+  li {
+    list-style-type: none;
+    &.checked {
+      .pay-bank {
+        border-color: @brand-success;
+        &:after {
+          position: absolute;
+          content: "";
+          background: url('@{img-src}old/pay_check_status.png') no-repeat;
+          top: -2px;
+          right: -2px;
+          width: 23px;
+          height: 23px;
+          background-position: 0 0;
+          z-index: -1;
+        }
       }
     }
-    // .check {
-    //   cursor: pointer;
-    //   margin-right: 10%;
-    //   position: relative;
-    //   text-align:center;
-    //   font-size: 16px;
-    //   line-height: 47px;
-    //   padding: 0 5px;
-    //   @media (max-width: @screen-xs-max) {
-    //     display: block;
-    //     margin: 20px auto 0 auto;
-    //   }
-    //   img {
-    //     width: 100%;
-    //   }
-    // }
+  }
+  .pay-bank {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 18px;
+    border: 2px solid @bg-color;
+    z-index: 1;
+    background-color: @bg-color;
+    .es-transition;
+    color: @gray-darker;
+    @media(max-width: @screen-md-max) {
+      padding: 10px;
+    }
+    &:hover {
+      border-color: @gray-medium;
+      cursor: pointer;
+      .es-transition;
+      .closed {
+        .opacity(1);
+      }
+    }
+    input {
+      margin-top: 0;
+    }
+    .closed {
+      float: right;
+      display: block;
+      color: @gray-medium;
+      z-index: 1;
+      .opacity(0);
+      .es-transition;
+      // span {
+      //   font-size: 12px;
+      //   visibility: hidden;
+      // }
+      &:hover {
+        color: @brand-danger;
+        .es-transition;
+        // span {
+        //   visibility: visible;
+        // }
+      }
+    }
+    .name {
+      display: inline-block;
+      width: 200px;
+      @media(max-width: @screen-xs-max) {
+        width: 150px;
+      }
+    }
+    .number {
+      margin-right: 50px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 20px;
+      }
+    }
   }
 }
 

@@ -24,12 +24,15 @@ textarea {
 }
 
 .control-label span.required {
-  color: #f60;
+  color: @brand-primary;
 }
 
 .form-horizontal {
   .form-group {
     margin-bottom: 30px;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 15px;
+    }
   }
   .form-control {
     @media (max-width: @screen-xs-max) {
@@ -40,11 +43,11 @@ textarea {
 
 .form-control {
   color: @gray-dark;
-  .box-shadow(none);
+  // .box-shadow(none);
   border-color: @gray-light;
-  &:focus {
-    .box-shadow(none);
-  }
+  // &:focus {
+  //   .box-shadow(none);
+  // }
   &::-webkit-input-placeholder { 
     color: @gray;
   }

@@ -22,6 +22,7 @@ seajs.config({
         "jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
         "jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
         "jquery.waypoints": "jquery-plugin/waypoints/2.0.5/waypoints.min",
+        "jquery.easy-pie-chart": "jquery-plugin/jquery.easy-pie-chart/jquery.easypiechart.min",
         "mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
         'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
         'echo.js': 'echo.js/1.7.0/index',
@@ -37,6 +38,7 @@ seajs.config({
         'mask': 'arale/overlay/1.1.4/mask',
         'sticky': 'arale/sticky/1.3.1/sticky',
         'cookie': 'arale/cookie/1.0.2/cookie',
+        'messenger': 'arale/messenger/2.0.0/messenger',
         "templatable": "arale/templatable/0.9.1/templatable",
         'placeholder': 'arale/placeholder/1.1.0/placeholder',
         'json': 'gallery/json/1.0.3/json',
@@ -58,7 +60,10 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
-        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker'
+        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
+        'fullcalendar': 'fullcalendar/lang-all.js',
+        'momentmin':'fullcalendar/lib/moment.min.js',
+        'video-player': 'balloon-video-player/1.0.0/index'
     },
 
 	// 预加载项

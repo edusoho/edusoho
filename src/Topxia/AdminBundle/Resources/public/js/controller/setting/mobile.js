@@ -39,6 +39,15 @@ define(function(require, exports, module) {
             });
         });
 
+        $("input[name='enabled']").on("click",function(){
+            $this = $(this);
+            if($this.val() == 1){
+                $this.parents('.form-group').next('.form-group').removeClass('hidden');
+            }else{
+                $this.parents('.form-group').next('.form-group').addClass('hidden');
+            }
+        })
+
         var uploader = new Uploader({
             trigger: '#mobile-splash2-upload',
             name: 'splash2',

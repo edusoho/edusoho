@@ -19,6 +19,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrderBySn($sn, $lock);
     }
 
+    public function getOrderByToken($token)
+    {
+        return $this->getOrderDao()->getOrderByToken($token);
+    }
+
     public function findOrdersByIds(array $ids)
     {
         $orders = $this->getOrderDao()->findOrdersByIds($ids);
@@ -160,6 +165,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisPaidCourseOrderDataByTime($startTime,$endTime);
     }
 
+    public function analysisPaidClassroomOrderDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisPaidClassroomOrderDataByTime($startTime,$endTime);
+    }
+
     public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime)
     {
         return $this->getOrderDao()->analysisExitCourseOrderDataByTime($startTime,$endTime);
@@ -179,6 +189,16 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function analysisCourseAmountDataByTime($startTime,$endTime)
     {
         return $this->getOrderDao()->analysisCourseAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisClassroomAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisClassroomAmountDataByTime($startTime,$endTime);
+    }
+
+    public function analysisVipAmountDataByTime($startTime,$endTime)
+    {
+        return $this->getOrderDao()->analysisVipAmountDataByTime($startTime,$endTime);
     }
 
     protected function generateOrderSn($order)
@@ -238,9 +258,21 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
-    public function createPayRecord($id, $payDate)
+    public function createPayRecord($id, array $payData)
     {
-        $this->getOrderService()->updateOrder($id, array('data'=>json_encode($payData)));
+        $order = $this->getOrder($id);
+        $data = $order['data'];
+
+        if(!is_array($data)){
+            $data = json_decode($order['data'], true);
+        }
+
+        foreach($payData as $key => $value){
+            $data[$key] = $value;
+        }
+
+        $fields = array('data' => $data);
+        $order =$this->updateOrder($id,$fields);
         $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
     }
 

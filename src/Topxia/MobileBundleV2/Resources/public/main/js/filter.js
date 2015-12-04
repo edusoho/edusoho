@@ -60,14 +60,7 @@ filter('lessonLearnStatus', function(){
 	};
 }).
 filter('lessonType', function() {
-	var lessonType = {
-		text  : "图文",
-		video  : "视频",
-		audio  : "音频",
-		testpaper  : "考试",
-		document  : "文档",
-		ppt  : "PPT"
-	};
+
 	return function(lesson) {
 		if (lesson.type == "live") {
 			var returnStr = "";
@@ -90,7 +83,10 @@ filter('lessonType', function() {
 			}
 			return returnStr;
 		}
-		return "<div class='ui-label' >" + lessonType[lesson.type] + "</div>";
+		if (lesson.free == 1) {
+			return "<div class='ui-label'>免费</div>";
+		}
+		return "";
 	}
 }).
 filter('coverIncludePath', function() {
@@ -155,6 +151,32 @@ filter('coverLearnTime', ['$rootScope', function($rootScope){
 	return function(date) {
 		if (! date) {
 			return "还没开始学习";
+		}
+
+	  var currentDates = new Date().getTime() - new Date(date).getTime(),
+	        currentDay = parseInt(currentDates / (60000*60) -1) //减去1小时
+	        if(currentDay >= 24*3){
+	            currentDay = new Date(date).Format("yyyy-MM-dd");
+	        }else if(currentDay >= 24){
+	            currentDay = parseInt(currentDay / 24) + "天前";
+	        }else if(currentDay == 0 ){
+	            var currentD = parseInt(currentDates / 60000);
+	            if(currentD >= 60){
+	                currentDay = "1小时前";
+	            }else{
+	                currentDay = currentD + "分钟前";
+	            }
+	        }else{
+	            currentDay = currentDay + "小时前";
+	        }
+
+	  return currentDay;
+	}
+}]).
+filter('coverArticleTime', ['$rootScope', function($rootScope){
+	return function(date) {
+		if (! date) {
+			return "";
 		}
 
 	  var currentDates = new Date().getTime() - new Date(date).getTime(),

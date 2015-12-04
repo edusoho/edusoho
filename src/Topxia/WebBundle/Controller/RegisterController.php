@@ -52,7 +52,6 @@ class RegisterController extends BaseController
             }
 
             $user = $this->getAuthService()->register($registration);
-            $this->sendRegisterMessage($user);
 
             if(!isset($registration['nickname'])){
                 return  $this->render("TopxiaWebBundle:Register:nickname-update.html.twig",array('user' => $user));        
@@ -529,7 +528,7 @@ class RegisterController extends BaseController
     //validate captcha
     protected function captchaEnabledValidator($authSettings,$registration,$request){
          if (array_key_exists('captcha_enabled',$authSettings) && ($authSettings['captcha_enabled'] == 1) && !isset($registration['mobile'])){                
-            $captchaCodePostedByUser = strtolower($registration['captcha_num']);
+            $captchaCodePostedByUser = strtolower($registration['captcha_code']);
             $captchaCode = $request->getSession()->get('captcha_code');                   
             if (!isset($captchaCodePostedByUser)||strlen($captchaCodePostedByUser)<5){   
                 throw new \RuntimeException('验证码错误。');    

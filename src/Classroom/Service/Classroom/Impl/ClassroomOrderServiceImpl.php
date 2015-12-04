@@ -37,14 +37,15 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 throw $this->createServiceException('班级不存在，创建课程订单失败。');
             }
 
-            if ($classroom['private'] == 1) {
+            if ($classroom['buyable'] == 0) {
                 throw $this->createServiceException('该班级是封闭班级，学员不能自行加入！');
             }
 
             $order = array();
-
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomName = isset($classroomSetting['name'])?$classroomSetting['name']:'班级';
             $order['userId'] = $user['id'];
-            $order['title'] = "购买班级《{$classroom['title']}》";
+            $order['title'] = "购买".$classroomName."《{$classroom['title']}》";
             $order['targetType'] = 'classroom';
             $order['targetId'] = $classroom['id'];
             $order['payment'] = $info['payment'];
@@ -111,8 +112,8 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
-            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是班级学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
+            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
         }
 
         return;
@@ -120,6 +121,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
             throw $this->createServiceException('订单不存在，不能申请退款。');
@@ -131,15 +133,22 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
             $setting = $this->getSettingService()->get('refund');
             $message = ( empty($setting) || empty($setting['applyNotification']) )? '' : $setting['applyNotification'];
+            $classroom = $this->getClassroomService()->getClassroom($order["targetId"]);
+            $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
             if ($message) {
-                $classroom = $this->getClassroomService()->getClassroom($order["targetId"]);
-                $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
                 $variables = array(
-                    'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
+                    'item' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
                 );
                 $message = StringToolkit::template($message, $variables);
-                $this->getNotificationService()->notify($refund['userId'], 'default', $message);
+                $this->getNotificationService()->notify($refund['userId'], 'default', $message);  
             }
+
+            $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>"."{$classroomSetting['name']}，请审核。";
+            $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
+                foreach ($admins as $key => $admin) {
+                    $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+                }
         } elseif ($refund['status'] == 'success') {
             $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);
         }

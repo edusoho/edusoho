@@ -32,6 +32,7 @@ define(function(require, exports, module) {
 
         var $list = $("#course-item-list").sortable({
             distance: 20,
+            itemSelector: '.item-lesson, .item-chapter',
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 sortList($list);
@@ -53,13 +54,23 @@ define(function(require, exports, module) {
                 return ;
             }
             var $btn = $(e.currentTarget);
+            var _isTestPaper = function(){
+                return $btn.parents('.item-chapter')[0];
+            }
+            var _remove_item =function(){
+                if(_isTestPaper()){
+                    $btn.parents('.item-chapter').remove();
+                }else{
+                    $btn.parents('.item-lesson').remove();
+                }
+            }
             $.post($(this).data('url'), function(response) {
-                $btn.parents('.item-lesson').remove();
+                _remove_item();
                 sortList($list);
                 Notify.success('课时已删除！');
             }, 'json');
         });
-
+        
         $list.on('click', '.delete-chapter-btn', function(e) {
             var chapter_name = $(this).data('chapter') ;
             var part_name = $(this).data('part') ; 
@@ -99,6 +110,7 @@ define(function(require, exports, module) {
                 $(id).find('.item-content .unpublish-warning').remove();
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
+                $(id).find('.item-actions .delete-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时发布成功！');
             });
@@ -111,6 +123,7 @@ define(function(require, exports, module) {
                 $(id).find('.item-content').append('<span class="unpublish-warning text-warning">(未发布)</span>');
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
+                $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.btn-link').tooltip();
                 Notify.success('课时已取消发布！');
             });

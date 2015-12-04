@@ -11,15 +11,17 @@
 @import "mixins/spacing.less";              //间距
 @import "mixins/text.less";                 //文字
 
-
-.form-control-lg {
-  height: 38px;
-  padding: 6px 12px;
+.es-icon {
+  line-height: 1;
 }
 
 .p-lg {
   line-height: 30px;
   margin-bottom: 30px;
+}
+
+.label {
+  .border-radius;
 }
 
 // 富文本编辑器样式统一处理
@@ -29,6 +31,17 @@
     height: auto;
   }
 }
+
+// 分割线
+.divider-line {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+// 限制最小高度
+.h400 {
+  min-height: 400px;
+}
+
 // table-cell引起的兼容问题
 .media-body .editor-text img {
   width: 100% \9;
@@ -41,11 +54,6 @@
   display: inline-block;
 }
 
-// .text-default {
-//   text-align: center;
-//   color: @gray-light;
-// }
-
 // 用于空数据
 .empty {
   text-align: center;
@@ -55,26 +63,43 @@
 
 // 字体颜色变化，一般用于a标签
 .link-dark {
-  color: @gray-darker;
+  color: @gray-darker !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
     .es-transition;
   }
 }
 .link-light {
-  color: @gray-dark;
+  color: @gray-dark !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+.link-lighter {
+  color: @gray !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
     .es-transition;
   }
 }
 .link-white {
-  color: #fff;
+  color: #fff !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+
+.link-primary {
+  color: @brand-primary !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
     .es-transition;
   }
 }
@@ -144,14 +169,9 @@ a.transition {
 }
 
 .es-box-shadow {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
-     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
-          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
-  // -webkit-box-shadow: 0 0 6px rgba(0,0,0,0.08);
-  //    -moz-box-shadow: 0 0 6px rgba(0,0,0,0.08);
-  //         box-shadow: 0 0 6px rgba(0,0,0,0.08);
-  
-
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
 }
 
 .border-radius(@border-radius:2px) {

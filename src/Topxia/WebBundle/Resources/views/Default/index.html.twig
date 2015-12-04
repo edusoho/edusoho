@@ -75,7 +75,7 @@
       </div>
       <div class="text-center mvl">
         <a href="{{ path('live_course_explore') }}" class="btn btn-default btn-lg">
-          更多直播 <i class="es-icon es-icon-morehoriz"></i>
+          更多直播 <i class="mrs-o es-icon es-icon-chevronright"></i>
         </a>
       </div>
     </div>
@@ -107,7 +107,7 @@
         </div>
         <div class="text-center mvl">
           <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
-            更多{{ setting('classroom.name')|default("班级") }} <i class="es-icon es-icon-morehoriz"></i>
+            更多{{ setting('classroom.name')|default("班级") }} <i class="mrs-o es-icon es-icon-chevronright"></i>
           </a>
         </div>
       </div>
@@ -136,9 +136,9 @@
                     <div class="media-left">
                       <a href="{{ path('group_show',{id:group.id}) }}">
                         {% if group.logo %}
-                          <img class="avatar-square-md" src="{{file_path(group.logo)}}">
+                          <img class="avatar-square-md" src="{{file_path(group.logo)}}" alt="{{ group.title }}">
                         {% else %}
-                          <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}">
+                          <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}"  alt="{{ group.title }}">
                         {% endif %}
                       </a>
                     </div>
@@ -166,7 +166,7 @@
                 </h3>
               </div>
               <div class="panel-body">
-                {% set statuses = data('LatestStatuses', {mode:'simple', count: 4}) %}
+                {% set statuses = data('LatestStatuses', {mode:'simple', count: 4,private:0}) %}
 
                 {% for status in statuses %}
                   <div class="media media-dynamic">
@@ -212,7 +212,7 @@
       </div>
       <div class="text-center mvl">
         <a href="{{ path('teacher') }}" class="btn btn-default btn-lg">
-          更多教师 <i class="es-icon es-icon-morehoriz"></i>
+          更多教师 <i class="mrs-o es-icon es-icon-chevronright"></i>
         </a>
       </div>
     </div>

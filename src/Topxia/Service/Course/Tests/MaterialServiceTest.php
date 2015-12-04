@@ -53,17 +53,6 @@ class MaterialServiceTest extends BaseTestCase
             'address'=>'test');
         return $this->getCourseService()->createCourse($course);
     }
-    /*
-        课程数据同步
-    */
-    public function testCreateMaterial()
-    {
-        $Material = array('title'=>'material');
-        $Material = $this->getMaterialService()->createMaterial($Material);
-        $this->assertEquals('material', $Material['title']);
-    
-    }
-
 
 
     protected function getUserService()

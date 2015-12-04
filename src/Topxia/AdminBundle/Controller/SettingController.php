@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\JsonToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Service\Util\CloudClientFactory;
@@ -15,6 +16,24 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class SettingController extends BaseController
 {
+    public function postNumRulesAction(Request $request)
+    {
+
+        if ($request->getMethod() == 'POST') {
+            $setting = $request->request->get('setting', array());
+            $this->getSettingService()->set('post_num_rules', $setting);
+            $this->getLogService()->info('system', 'update_settings', "更新PostNumSetting设置", $setting);
+            $this->setFlashMessage('success', '设置已保存！');
+        }
+
+        $setting = $this->getSettingService()->get('post_num_rules', array());
+        $setting = JsonToolkit::prettyPrint(json_encode($setting));
+
+        return $this->render('TopxiaAdminBundle:System:post-num-rules.html.twig', array(
+            'setting' => $setting,
+        ));
+    }
+
     public function mobileAction(Request $request)
     {
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
@@ -22,7 +41,8 @@ class SettingController extends BaseController
         $settingMobile = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled' => 0, // 网校状态
+            'enabled' => 1, // 网校状态
+            'ver' => 1,//是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo
             'appname' => '',
@@ -54,9 +74,18 @@ class SettingController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
+        if(array_key_exists('ver',$mobile) && $mobile['ver']){
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        }else{
+            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        }
+        
+        //是否拥有定制app
+        $hasMobile = isset($result['hasMobile']) ?$result['hasMobile']:0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
             'mobile' => $mobile,
-            'mobileCode' => ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho")
+            'mobileCode' => $mobileCode,
+            'hasMobile'=>$hasMobile
         ));
     }
 
@@ -266,6 +295,10 @@ class SettingController extends BaseController
 
     public function mailerAction(Request $request)
     {
+        if($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array());  
+        }
+
         $mailer = $this->getSettingService()->get('mailer', array());
         $default = array(
             'enabled' => 0,
@@ -280,7 +313,9 @@ class SettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
-            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailer);
+            $mailerWithoutPassword = $mailer;
+            $mailerWithoutPassword['password']='******';
+            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailerWithoutPassword);
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
@@ -629,5 +664,10 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

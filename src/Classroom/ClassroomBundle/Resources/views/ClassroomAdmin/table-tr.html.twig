@@ -68,24 +68,26 @@
     </button>
 
  <ul class="dropdown-menu">
-       <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> 管理班级</a></li>
+       <li><a href="{{path('classroom_manage',{id:classroom.id})}}" target="_blank"><span class="glyphicon glyphicon-edit"></span> 管理{{setting("classroom.name")|default("班级")}}</a></li>
         
         {% if classroom.recommended %}
-          <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'classroomList'}) }}" title="取消班级推荐"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+          <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_classroom_cancel_recommend', {id:classroom.id,ref:'classroomList'}) }}" title="取消{{setting("classroom.name")|default("班级")}}推荐"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
         {% else %}
-          <li><a class="recommend-classroom" href="#modal" data-toggle="modal" data-url="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:'classroomList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐班级</a></li>
+          <li><a class="recommend-classroom" href="#modal" data-toggle="modal" data-url="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:'classroomList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐{{setting("classroom.name")|default("班级")}}</a></li>
         {% endif %}
           
        {% if classroom.status=='published'%}
-       <li><a href="javascript:" class="close-classroom" title="关闭班级({{classroom.title}})" data-url="{{path('admin_classroom_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭班级</a></li>
+       <li><a href="javascript:" class="close-classroom" title="关闭{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_close',{id:classroom.id})}}"><span class="glyphicon glyphicon-off"></span> 关闭{{setting("classroom.name")|default("班级")}}</a></li>
+
+       <li><a href="javascript:" title="发送发布{{setting("classroom.name")|default("班级")}}({{classroom.title}})通知短信" data-url="{{path('sms_prepare',{targetType:'classroom',id:classroom.id})}}" data-toggle="modal" data-target="#modal"><span class="glyphicon glyphicon-envelope"></span> 发送发布通知短信</a></li>
 
        {% else %}
-       <li><a href="javascript:" class="open-classroom" title="发布班级({{classroom.title}})" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>发布班级</a></li>
+       <li><a href="javascript:" class="open-classroom" title="发布{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_open',{id:classroom.id})}}"><span class="glyphicon glyphicon-ok"></span>发布{{setting("classroom.name")|default("班级")}}</a></li>
 
        {% endif %}
 
        {% if classroom.status=='draft'%}
-      <li><a href="javascript:" class="delete-classroom" title="删除班级({{classroom.title}})" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> 删除班级</a></li>
+      <li><a href="javascript:" class="delete-classroom" title="删除{{setting("classroom.name")|default("班级")}}({{classroom.title}})" data-url="{{path('admin_classroom_delete',{id:classroom.id})}}"><span class="glyphicon glyphicon-remove"></span> 删除{{setting("classroom.name")|default("班级")}}</a></li>
       {% endif %}
   </div>
  </td>
