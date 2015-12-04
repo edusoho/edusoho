@@ -23,6 +23,13 @@ define(function(require, exports, module) {
 
             $("#modal").modal('hide');
         });
+        $("#edit-left-course-form").on("click", 'input[type=checkbox]', function(){
+            if($(this).is(':checked')) {
+                $(this).val('checked');
+            } else {
+                $(this).val('');
+            }
+        });
 
     };
 
