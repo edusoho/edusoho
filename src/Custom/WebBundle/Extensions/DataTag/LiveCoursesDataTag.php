@@ -14,9 +14,10 @@ class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
      * @todo  一个课程下有２个直播课时的话，会返回２个相同的课程
      *
      * 可传入的参数：
-     *   categoryId 可选 分类ID
+     *   categoryId   可选 分类ID
      *   categoryCode 可选　分类CODE
-     *   count    必需 课程数量，取值不能超过100
+     *   free         可选 免费课程
+     *   count        必需 课程数量，取值不能超过100
      *
      * @param  array $arguments      参数
      * @return array 课程列表
@@ -95,6 +96,30 @@ class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
         if (!empty($arguments['categoryCode'])) {
             $category                 = $this->getCategoryService()->getCategoryByCode($arguments['categoryCode']);
             $conditions['categoryId'] = empty($category) ? -1 : $category['id'];
+        }
+
+        if (isset($arguments['free'])) {
+            $coinSetting = $this->getSettingService()->get("coin");
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $priceType   = "RMB";
+
+            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
+                $priceType = $coinSetting["price_type"];
+            }
+
+            if ($arguments['free']) {
+                if ($priceType == 'RMB') {
+                    $conditions['price'] = '0.00';
+                } else {
+                    $conditions['coinPrice'] = '0.00';
+                }
+            } else {
+                if ($priceType == 'RMB') {
+                    $conditions['price_GT'] = '0.00';
+                } else {
+                    $conditions['coinPrice_GT'] = '0.00';
+                }
+            }
         }
 
         return $conditions;
