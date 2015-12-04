@@ -653,7 +653,7 @@ class GroupThreadController extends BaseController
                 $thread['lastPostTime']     = $localThread['lastPostTime'];
                 $thread['lastPostMemberId'] = $localThread['lastPostMemberId'];
 
-                array_push($adaptResult, $thread);
+                array_push($filterResult, $thread);
             }
         }
 
