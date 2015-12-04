@@ -96,7 +96,7 @@
           <div class="tab-pane fade active in">
           {% if courses %}
             {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'grid'})) }}
-				    {{ web_macro.paginator(paginator) }} 
+				    <nav class="text-center">{{ web_macro.paginator(paginator) }} </nav>
           {% else %}
             <div class="empty">该分类下无课程</div>
           {% endif %}
