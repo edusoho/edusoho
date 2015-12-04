@@ -8178,9 +8178,9 @@ textarea {
 }
 .index-article .index-recommend-aricle li img {
   width: 100%;
-  height: 183px;
+  height: 103px;
 }
-@media (max-width: 1199px) {
+@media (max-width: 991px) {
   .index-article .index-recommend-aricle li img {
     height: auto;
   }
@@ -8202,6 +8202,7 @@ textarea {
   width: 65%;
   padding-left: 20px;
   margin-bottom: 0;
+  margin-top: 8px;
 }
 .index-article .index-new-article.full {
   width: 100% !important;
