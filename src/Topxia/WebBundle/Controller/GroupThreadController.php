@@ -602,10 +602,10 @@ class GroupThreadController extends BaseController
             'type'    => $type,
             'words'   => $keyWord,
             'page'    => $page,
-            'filters' => array(
+            'filters' => json_encode(array(
                 'targetType' => 'group',
                 'targetId'   => $id
-            )
+            ))
         );
 
         try {
