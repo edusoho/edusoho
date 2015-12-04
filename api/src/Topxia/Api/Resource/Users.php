@@ -21,7 +21,7 @@ class Users extends BaseResource
         $limit = $request->query->get('limit', 100);
 
         if (isset($conditions['cursor'])) {
-            $conditions['updatedTime_GE'] = (int)$conditions['cursor'];
+            $conditions['updatedTime_GE'] = $conditions['cursor'];
             $users = $this->getUserService()->searchUsers($conditions, array('updatedTime', 'ASC'), $start, $limit);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $users);
             return $this->wrap($this->filter($users), $next);

@@ -17,7 +17,7 @@ class Articles extends BaseResource
 
         if (isset($conditions['cursor'])) {
             $conditions['status'] = 'published';
-            $conditions['updatedTime_GE'] = (int)$conditions['cursor'];
+            $conditions['updatedTime_GE'] = $conditions['cursor'];
             $articles = $this->getArticleService()->searchArticles($conditions, array('updatedTime', 'ASC'), $start, $limit);
             $articles = $this->assemblyArticles($articles);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $articles);
