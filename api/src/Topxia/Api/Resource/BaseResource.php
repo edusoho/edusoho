@@ -71,23 +71,13 @@ abstract class BaseResource
             );
         }
 
-        if ($end['updatedTime'] == $currentCursor) {
-            $next = array(
-                'cursor' => $currentCursor,
-                'start' => $currentStart + $currentLimit,
-                'limit' => $currentLimit,
-                'eof' => false,
-            );
-        } else {
-            $next = array(
-                'cursor' => $end['updatedTime'] + 1,
-                'start' => 0,
-                'limit' => $currentLimit,
-                'eof' => false,
-            );
-        }
+        return array(
+            'cursor' => $currentCursor,
+            'start' => $currentStart + $currentLimit,
+            'limit' => $currentLimit,
+            'eof' => false,
+        );
 
-        return $next;
     }
 
     protected function filterHtml($text)
