@@ -1,6 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <!-- 小组动态 -->
   {% set groups = data('HotGroup',{'count':config.count|default(6)}) %}
+  {% set reviews = data('LatestCourseReviews',{'count':config.count|default(6)}) %}
   {% if groups %}
     <section class="dynamic-section">
       <div class="container">
@@ -86,70 +87,32 @@
                 </h3>
               </div>
               <div class="panel-body">
+                {% if reviews %}
+                  {% for review in reviews %}
+                  {% set author = review.User|default(null) %}
+                  {% set course = review.course|default(null) %}
+                  {% if author and course %}
                 <div class="media media-dynamic">
                   <div class="media-left">
-                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
+                  {{ web_macro.user_avatar(author,'','avatar-sm',true) }}
                   </div>
                   <div class="media-body">
                     <div class="title text-sm">
-                      <a class="link-light" href="">李小龙</a> 
-                      <span class="score"></span> 
-                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
+                      {{ web_macro.user_link(author,'link-light') }}
+                      <span class="score">{{web_macro.star(review.rating) }}</span>
+                      发布于 <a class="link-light" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title|plain_text(9) }}》</a>
                     </div>
                     <div class="content gray-darker">
-                      老师讲的非常通俗易懂，感谢这门课程！
+                      {{ review.content|plain_text(50) }}
                     </div>
-                    <span class="date">2分钟前</span>
                   </div>
+                  <span class="date"></span>
                 </div>
-                <div class="media media-dynamic">
-                  <div class="media-left">
-                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
-                  </div>
-                  <div class="media-body">
-                    <div class="title text-sm">
-                      <a class="link-light" href="">李小龙</a> 
-                      <span class="score"></span> 
-                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
-                    </div>
-                    <div class="content gray-darker">
-                      老师讲的非常通俗易懂，感谢这门课程！
-                    </div>
-                    <span class="date">2分钟前</span>
-                  </div>
-                </div>
-                <div class="media media-dynamic">
-                  <div class="media-left">
-                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
-                  </div>
-                  <div class="media-body">
-                    <div class="title text-sm">
-                      <a class="link-light" href="">李小龙</a> 
-                      <span class="score"></span> 
-                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
-                    </div>
-                    <div class="content gray-darker">
-                      老师讲的非常通俗易懂，感谢这门课程！
-                    </div>
-                    <span class="date">2分钟前</span>
-                  </div>
-                </div>
-                <div class="media media-dynamic">
-                  <div class="media-left">
-                    <img class="avatar-sm" src="{{asset('assets/v2/img/card.png')}}" alt="">
-                  </div>
-                  <div class="media-body">
-                    <div class="title text-sm">
-                      <a class="link-light" href="">李小龙</a> 
-                      <span class="score"></span> 
-                      发布于 <a class="link-light" href="">《快速入门EduSoho》</a>
-                    </div>
-                    <div class="content gray-darker">
-                      老师讲的非常通俗易懂，感谢这门课程！
-                    </div>
-                    <span class="date">2分钟前</span>
-                  </div>
-                </div>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                  <div class="empty">还没有评价</div>
+                {% endif %}
               </div>
             </div>
           </div>
