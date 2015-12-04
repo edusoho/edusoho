@@ -14,27 +14,21 @@
   <section class="qs-section">
     <div class="container">
       <div class="qs-section-header">
-        <div class="title">公开课</div>
-        <div class="subtitle">OPEN COURSE</div>
+        <div class="title">直播课</div>
+        <div class="subtitle">LIVE COURSE</div>
       </div>
       {% set firstCategories = data('Categories',{ group:'course'}) %}
       <div class="qs-course-cat" id="live-category-tab">
         <ul class="nav nav-pills">
-          <li role="presentation" class="active"><a href="#live-category-all"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">全部课程</a></li>
-          {% for firstCat in firstCategories if firstCat %}
-            {% if firstCat.parentId == 0 %}
-              <li role="presentation" >
-                <a href="#live-category-{{firstCat.id}}"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">{{ firstCat.name }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
+          <li role="presentation" class="active"><a href="#live-free"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">公开课</a></li>
+          <li role="presentation" ><a href="#live-charge"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">收费课</a></li>
         </ul>
       </div>
 
       <div class="qs-live-course-list tab-content">
-        {% set recentLiveCourses = data('LiveCourses',{ count:4 }) %}
-        <div role="tabpanel" class="tab-pane fade active in row" id="live-category-all" aria-labelledby="home-tab">
-          {% for course in recentLiveCourses if course %}
+        {% set freeLiveCourses = data('LiveCourses',{ free:1, count:4 }) %}
+        <div role="tabpanel" class="tab-pane fade active in row" id="live-free" aria-labelledby="home-tab">
+          {% for course in freeLiveCourses if course %}
             {% set lesson = course['lesson']|default(null) %}
 
             <div class="col-lg-3 col-md-4 col-sm-6">
@@ -68,56 +62,52 @@
               </div>
             </div>
           {% else %}
-            <div class="empty">该分类下暂无直播课程</div>
+            <div class="empty">暂无公开课程</div>
           {% endfor %}
 
         </div>
         
-        {% for firstCat in firstCategories if firstCat %}
-          {% if firstCat.parentId == 0 %}
-            {% set recentLiveCourses = data('LiveCourses',{ categoryId:firstCat.id, count:4 }) %}
-            
-            <div role="tabpanel" class="tab-pane fade row" id="live-category-{{firstCat.id}}" aria-labelledby="home-tab">
-              {% for course in recentLiveCourses if course %}
-                {% set lesson = course['lesson']|default(null) %}
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                  <div class="qs-course-item">
-                    <div class="course-img">
-                      <a href="{{ path('course_show', {id:course.id}) }}">
-                        {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
-                      <div class="mask">
-                        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">正在直播</a>
-                        {% elseif lesson and "now"|date("U") < lesson.startTime %}
-                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-warning">即将直播</a>
-                        {% elseif lesson and "now"|date("U") > lesson.endTime %}
-                          <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info">往期回顾</a>
-                        {% endif %}
-                      </div>
-                    </div>
-                    <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
-                    <div class="metas clearfix">
-                      <span class="course-teacher">主讲人：
-                        {% if course.teachers|default(null) %}
-                          {{ course.teachers.0.nickname }}
-                        {% endif %}
-                      </span> 
-                      {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                        <span class="qs-tag qs-tag-danger pull-right">今天 {{ lesson.startTime|date('H:i') }}</span>
-                      {% elseif lesson and "now"|date("U") < lesson.startTime %}
-                        <span class="qs-tag qs-tag-warning pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
-                      {% else %}
-                        <span class="qs-tag qs-tag-info pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
-                      {% endif %}
-                    </div>
+        {% set chargeLiveCourses = data('LiveCourses',{ free:0, count:4 }) %}
+        
+        <div role="tabpanel" class="tab-pane fade row" id="live-charge" aria-labelledby="home-tab">
+          {% for course in chargeLiveCourses if course %}
+            {% set lesson = course['lesson']|default(null) %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="qs-course-item">
+                <div class="course-img">
+                  <a href="{{ path('course_show', {id:course.id}) }}">
+                    {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}</a>
+                  <div class="mask">
+                    {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-primary">正在直播</a>
+                    {% elseif lesson and "now"|date("U") < lesson.startTime %}
+                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-warning">即将直播</a>
+                    {% elseif lesson and "now"|date("U") > lesson.endTime %}
+                      <a href="{{ path('course_show', {id:course.id}) }}" class="btn btn-info">往期回顾</a>
+                    {% endif %}
                   </div>
                 </div>
-              {% else %}
-                <div class="empty">该分类下暂无直播课程</div>
-              {% endfor %}
+                <div class="title"><a href="{{ path('course_show', {id:course.id}) }}" class="link-dark">{{ course.title }}</a></div>
+                <div class="metas clearfix">
+                  <span class="course-teacher">主讲人：
+                    {% if course.teachers|default(null) %}
+                      {{ course.teachers.0.nickname }}
+                    {% endif %}
+                  </span> 
+                  {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+                    <span class="qs-tag qs-tag-danger pull-right">今天 {{ lesson.startTime|date('H:i') }}</span>
+                  {% elseif lesson and "now"|date("U") < lesson.startTime %}
+                    <span class="qs-tag qs-tag-warning pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
+                  {% else %}
+                    <span class="qs-tag qs-tag-info pull-right">{{ lesson.startTime|date('m-d H:i') }}</span>
+                  {% endif %}
+                </div>
+              </div>
             </div>
-          {% endif %}
-        {% endfor %}
+          {% else %}
+            <div class="empty">暂无直播课程</div>
+          {% endfor %}
+        </div>
 
       </div>
       <div class="section-more"><a class="btn btn-ghost-default" href="{{ path('course_explore')}}">更多课程</a></div>
