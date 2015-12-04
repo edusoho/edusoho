@@ -41,7 +41,7 @@ class LiveCoursesDataTag extends BaseDataTag implements DataTag
 
     private function getRecentLiveCourses($arguments)
     {
-        $recentlessons = $this->getCourseService()->findRecentLiveLesson($arguments['count']);
+        $recentlessons = $this->getCourseService()->findRecentLiveLesson(1000);
 
         $conditions = array(
             'courseIds' => ArrayToolkit::column($recentlessons, 'courseId'),
