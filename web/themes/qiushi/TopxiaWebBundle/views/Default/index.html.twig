@@ -14,7 +14,7 @@
   <section class="qs-section">
     <div class="container">
       <div class="qs-section-header">
-        <div class="title">求是直播</div>
+        <div class="title">直播课</div>
         <div class="subtitle">LIVE COURSE</div>
       </div>
       {% set firstCategories = data('Categories',{ group:'course'}) %}
@@ -231,6 +231,24 @@
       </div>
       <div class="recommend-class-list qs-recommend-class-list row">
         {% for classroom in RecommendClassrooms %}
+        {#<div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="qs-class-item">
+            <div class="class-img">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+              </a>
+            </div>
+            <div class="title"><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{classroom.title}}</a></div>
+            <div class="metas clearfix">
+              共有{{classroom.courseNum}}门课程 
+              {% if classroom.price > 0 %}
+                <span class="price">¥{{classroom.price}}</span>
+              {% else %}
+                <span class="price free">免费</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>#}
         <div class="col-md-3 col-sm-6">
           {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %} 
         </div>

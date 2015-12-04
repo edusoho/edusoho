@@ -124,8 +124,6 @@ interface CourseService
 
     public function findLessonsByTypeAndMediaId($type, $mediaId);
 
-    public function findRecentLiveLesson($count);
-
     public function searchLessons($conditions, $orderBy, $start, $limit);
 
     public function searchLessonCount($conditions);

@@ -4,9 +4,11 @@ namespace Custom\WebBundle\Extensions\DataTag;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
-use Topxia\WebBundle\Extensions\DataTag\CourseBaseDataTag;
+use Topxia\WebBundle\Extensions\DataTag\BaseDataTag;
 
-class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
+//use Topxia\WebBundle\Extensions\DataTag\CourseBaseDataTag;
+
+class LiveCoursesDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取最新课程列表
@@ -120,8 +122,66 @@ class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
         return $conditions;
     }
 
+    protected function getCourseTeachersAndCategories($courses)
+    {
+        $userIds     = array();
+        $categoryIds = array();
+
+        foreach ($courses as $course) {
+            $userIds       = array_merge($userIds, $course['teacherIds']);
+            $categoryIds[] = $course['categoryId'];
+        }
+
+        $users    = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
+        foreach ($users as $key => $user) {
+            if ($user['id'] == $profiles[$user['id']]['id']) {
+                $users[$key]['profile'] = $profiles[$user['id']];
+            }
+        }
+
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+
+        foreach ($courses as &$course) {
+            $teachers = array();
+
+            foreach ($course['teacherIds'] as $teacherId) {
+                $user = $users[$teacherId];
+                unset($user['password']);
+                unset($user['salt']);
+                $teachers[] = $user;
+            }
+
+            $course['teachers'] = $teachers;
+
+            $categoryId = $course['categoryId'];
+
+            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
+                $course['category'] = $categories[$categoryId];
+            }
+        }
+
+        return $courses;
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Custom:Course.CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 }

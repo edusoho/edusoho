@@ -1001,11 +1001,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return LessonSerialize::unserializes($lessons);
     }
 
-    public function findRecentLiveLesson($count)
-    {
-        return $this->getLessonDao()->findRecentLiveLesson($count);
-    }
-
     public function searchLessons($conditions, $orderBy, $start, $limit)
     {
         return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
