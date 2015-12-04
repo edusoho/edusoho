@@ -71,7 +71,7 @@
           <div class="js-pay-agreement" style="display:none">
             <ul class="pay-agreement-list row">
               {% for payAgreement in payAgreements %}
-                <li class="col-md-6 js-pay-bank {% if loop.index0 == 0 %}checked{% endif %}">
+                <li id="unbind-bank-{{payAgreement.id}}" class="col-md-6 js-pay-bank {% if loop.index0 == 0 %}checked{% endif %}">
                   <div class="pay-bank clearfix">
                     <input class="hidden" type="radio" name='payAgreementId' value="{{payAgreement.id}}" {% if loop.index0 == 0 %}checked{% endif %} />
                     <span class="name">{{payAgreement.bankName}}</span>

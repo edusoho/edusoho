@@ -184,42 +184,25 @@ class PayCenterController extends BaseController
 
     public function closeAuthAction(Request $request)
     {
-        $field = $request->request->all();
-        $user  = $this->getCurrentUser();
+        $fields               = $request->request->all();
+        list($order, $user)   = $this->verification($fields);
+        $authBank             = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
+        $requestParams        = array('authBank' => $authBank, 'payment' => $fields['payment'], 'mobile' => $fields['mobile']);
+        $closeAuthBankRequest = $this->createCloseAuthBankRequest($order, $requestParams);
+        $formRequest          = $closeAuthBankRequest->form();
+        return $this->createJsonResponse($formRequest);
+    }
 
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，支付失败。');
-        }
+    public function checkMobileAction(Request $request)
+    {
+        $fields = $request->request->all();
+        $this->verification($fields);
 
-        if (!array_key_exists('orderId', $field)) {
-            return $this->createMessageResponse('error', '缺少订单，支付失败');
-        }
-
-        if (!isset($field['payment'])) {
-            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
-        }
-
-        $order = $this->getOrderService()->getOrder($field["orderId"]);
-
-        if ($user["id"] != $order["userId"]) {
-            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
-        }
-
-        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
-        $authBanks = ArrayToolkit::column($authBanks, 'id');
-
-        if (!in_array($field['payAgreementId'], $authBanks)) {
-            return $this->createMessageResponse('error', '不是您绑定的银行卡，取消绑定失败');
-        }
-
-        try {
-            $this->getUserService()->deleteUserPayAgreements($field['payAgreementId']);
-        } catch (Exception $e) {
-            throw $this->createAccessDeniedException('抱歉，解绑银行卡失败！');
-        }
-
-        $message = array("success" => true, 'message' => '解绑银行卡成功');
-        return $this->createJsonResponse($message);
+        return $this->render('TopxiaWebBundle:PayCenter:checkMobile.html.twig', array(
+            'payAgreementId' => $fields['payAgreementId'],
+            'orderId'        => $fields["orderId"],
+            'payment'        => $fields['payment']
+        ));
     }
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
@@ -433,7 +416,7 @@ class PayCenterController extends BaseController
     {
         $options = $this->getPaymentOptions($params['payment']);
         $request = Payment::createCloseAuthRequest($params['payment'], $options);
-        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'userProfile' => $params['userProfile']));
+        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
     protected function getOrderInfo($order)
@@ -457,6 +440,38 @@ class PayCenterController extends BaseController
     public function generateOrderToken($order, $params)
     {
         return $this->getOrderService()->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
+    }
+
+    public function verification($fields)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录');
+        }
+
+        if (!array_key_exists('orderId', $fields)) {
+            return $this->createMessageResponse('error', '缺少订单');
+        }
+
+        if (!isset($fields['payment'])) {
+            return $this->createMessageResponse('error', '支付方式未开启');
+        }
+
+        $order = $this->getOrderService()->getOrder($fields["orderId"]);
+
+        if ($user["id"] != $order["userId"]) {
+            return $this->createMessageResponse('error', '不是您创建的订单');
+        }
+
+        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
+        $authBanks = ArrayToolkit::column($authBanks, 'id');
+
+        if (!in_array($fields['payAgreementId'], $authBanks)) {
+            return $this->createMessageResponse('error', '不是您绑定的银行卡');
+        }
+
+        return array('order' => $order, 'user' => $user);
     }
 
     protected function getPaymentOptions($payment)
