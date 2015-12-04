@@ -31,15 +31,16 @@
 
 				" target="_blank">{{thread.title|raw}}</a></div>
 				<p class="text-sm color-gray">来自
-				<a class="mls" href="
+				
 				{% if thread.targetType == 'group'%}
-					{{path('group_show',{id:thread.targetId})}}
+					<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">xxx</a>
 				{% elseif thread.targetType == 'classroom'%}
-					{{path('classroom_show',{id:thread.targetId})}}
+					<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">xxx</a>
 				{% elseif thread.targetType == 'course'%}
-					{{path('course_show',{id:thread.targetId})}}
+					{% set course = data('Course',{'id':thread.targetId}) %}
+					<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
 				{% endif %}
-				">xxx</a><span class="mlm">{{thread.createdTime|smart_time}}</span></p>
+				<span class="mlm">{{thread.createdTime|smart_time}}</span></p>
 			</div>
 		</div>
 	{% endfor %}
