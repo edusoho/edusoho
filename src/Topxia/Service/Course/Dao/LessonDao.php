@@ -4,13 +4,12 @@ namespace Topxia\Service\Course\Dao;
 
 interface LessonDao
 {
-
     public function getLesson($id);
 
     public function getLessonByCourseIdAndNumber($courseId, $number);
 
     public function findLessonsByCourseId($courseId);
-    
+
     public function findLessonsByTypeAndMediaId($type, $mediaId);
 
     public function findMinStartTimeByCourseId($courseId);
@@ -25,11 +24,13 @@ interface LessonDao
 
     public function getLessonMaxSeqByCourseId($courseId);
 
-    public function findTimeSlotOccupiedLessonsByCourseId($courseId,$startTime,$endTime,$excludeLessonId=0);
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId = 0);
 
-    public function findTimeSlotOccupiedLessons($startTime,$endTime,$excludeLessonId=0);
+    public function findTimeSlotOccupiedLessons($startTime, $endTime, $excludeLessonId = 0);
 
     public function findLessonsByChapterId($chapterId);
+
+    public function findRecentLiveLesson($count);
 
     public function addLesson($course);
 
@@ -41,11 +42,11 @@ interface LessonDao
 
     public function findLessonsByIds(array $ids);
 
-    public function findLessonsByCopyIdAndLockedCourseIds($copyId ,array $courseIds);
+    public function findLessonsByCopyIdAndLockedCourseIds($copyId, array $courseIds);
 
     public function sumLessonGiveCreditByCourseId($courseId);
 
     public function sumLessonGiveCreditByLessonIds(array $lesonIds);
 
-    public function analysisLessonDataByTime($startTime,$endTime); 
+    public function analysisLessonDataByTime($startTime, $endTime);
 }

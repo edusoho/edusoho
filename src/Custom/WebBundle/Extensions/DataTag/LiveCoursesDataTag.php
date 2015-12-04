@@ -39,16 +39,7 @@ class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
 
     private function getRecentLiveCourses($arguments)
     {
-        $recenntLessonsCondition = array(
-            'status' => 'published',
-            'type'   => 'live'
-        );
-        $recentlessons = $this->getCourseService()->searchLessons(
-            $recenntLessonsCondition,
-            array('startTime', 'DESC'),
-            0,
-            1000
-        );
+        $recentlessons = $this->getCourseService()->findRecentLiveLesson($arguments['count']);
 
         $conditions = array(
             'courseIds' => ArrayToolkit::column($recentlessons, 'courseId'),
@@ -69,6 +60,10 @@ class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
                     continue;
                 }
 
+                if (isset($recentCourses[$lesson['courseId']])) {
+                    continue;
+                }
+
                 $course             = $courses[$lesson['courseId']];
                 $course['lesson']   = $lesson;
                 $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
@@ -77,7 +72,7 @@ class LiveCoursesDataTag extends CourseBaseDataTag implements DataTag
                     break;
                 }
 
-                $recentCourses[] = $course;
+                $recentCourses[$lesson['courseId']] = $course;
                 $i++;
             }
         }
