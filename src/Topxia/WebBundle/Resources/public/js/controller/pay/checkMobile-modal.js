@@ -17,7 +17,7 @@ define(function(require, exports, module) {
                 var payAgreementId = $("input[name='payAgreementId']").val();
             	$.post($form.attr('action'),$form.serialize(),function(response){
 		            if(response.success){
-		            	$('#auth-bank-'+payAgreementId).remove();
+		            	$('#unbind-bank-'+payAgreementId).remove();
 		            	Notify.success(response.message);
 		            }else{
 		            	Notify.danger(response.message);
