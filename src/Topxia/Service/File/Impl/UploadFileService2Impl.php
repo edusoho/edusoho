@@ -3,25 +3,21 @@
 namespace Topxia\Service\File\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\UploadFileService2;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\ServiceKernel;
-    
+
 class UploadFileService2Impl extends BaseService implements UploadFileService2
 {
-	static $implementor = array(
-        'local'=>'File.LocalFileImplementor2',
-        'cloud' => 'File.CloudFileImplementor2',
+    static $implementor = array(
+        'local' => 'File.LocalFileImplementor2',
+        'cloud' => 'File.CloudFileImplementor2'
     );
 
     public function getFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
-        if(empty($file)){
+
+        if (empty($file)) {
             return null;
         }
 
@@ -31,18 +27,24 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function getThinFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
-        if(empty($file)){
+
+        if (empty($file)) {
             return null;
         }
+
         return ArrayToolkit::parts($file, array('id', 'globalId', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
     }
 
     public function getFileByGlobalId($globalId)
     {
         $file = $this->getUploadFileDao()->getFileByGlobalId($globalId);
+
         if (empty($file)) {
             return null;
         }
+
+        //MOCK
+        return $file;
 
         return $this->getFileImplementor($file)->getFile($file);
     }
@@ -50,6 +52,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function findFilesByIds(array $ids)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
+
         if (empty($files)) {
             return array();
         }
@@ -60,7 +63,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
-        $files = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+        $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+
         if (empty($files)) {
             return array();
         }
@@ -77,7 +81,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function getDownloadFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
-        if(empty($file)){
+
+        if (empty($file)) {
             return array('error' => 'not_found', 'message' => '文件不存在，不能下载！');
         }
 
@@ -86,7 +91,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function initUpload($params)
     {
-    	$user = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
+
         if (empty($user)) {
             throw $this->createServiceException("用户未登录，上传初始化失败！");
         }
@@ -95,36 +101,84 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             throw $this->createServiceException("参数缺失，上传初始化失败！");
         }
 
-        $setting = $this->getSettingService()->get('storage');
+        $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
         $implementor = $this->getFileImplementorByStorage($params['storage']);
-        $file = $implementor->prepareUpload($params);
+        $file        = $implementor->prepareUpload($params);
 
-        $resumed = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
+        $resumed    = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
         $outterFile = $this->getUploadFileDao()->getFile($resumed['outerId']);
+
         if ($resumed && $outterFile) {
             $this->getUploadFileDao()->updateFile($resumed['outerId'], array(
-                'filename' => $file['filename'],
-                'targetId' => $file['targetId'],
-                'targetType' => $file['targetType'],
+                'filename'   => $file['filename'],
+                'targetId'   => $file['targetId'],
+                'targetType' => $file['targetType']
             ));
             return $resumed;
         }
 
         $file = $this->getUploadFileDao()->addFile($file);
 
-        $file['bucket'] = $params['bucket'];
-        $file['hash'] = $params['hash'];
+        $file['bucket']        = $params['bucket'];
+        $file['hash']          = $params['hash'];
         $file['processParams'] = empty($params['processParams']) ? array() : $params['processParams'];
+
         if (!empty($file['processParams'])) {
             $file['processParams']['callback'] = $params['processCallback'];
         }
+
         $file['uploadCallback'] = $params['uploadCallback'];
 
         $params = $implementor->initUpload($file);
 
+        // MOCK
+        $params = array('globalId' => time());
+
         $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $params['globalId']));
+
+        //MOCK start
+        $params['outerId']     = $file['id'];
+        $params['uploadModel'] = 'cloud2';
+        $params['uploadUrl']   = 'http://upload.qiniu.com';
+
+        $returnBody = array(
+            'key'       => '$(key)',
+            'filename'  => '$(fname)',
+            'size'      => '$(fsize)',
+            'mimeType'  => '$(mimeType)',
+            'etag'      => '$(etag)',
+            'imageInfo' => '$(imageInfo)',
+            'length'    => '$(avinfo.format.duration)',
+            'userId'    => '$(endUser)',
+            'globalId'  => '$(x:globalId)'
+        );
+        $parts = array();
+
+        foreach ($returnBody as $key => $value) {
+            $parts[] = "\"{$key}\":{$value}";
+        }
+
+        $returnBody = '{'.implode(',', $parts).'}';
+
+        $user                 = $this->getCurrentUser();
+        $policy               = array();
+        $policy['scope']      = 't124testadctaa';
+        $policy['deadline']   = time() + 3600;
+        $policy['endUser']    = (string) $user['id'];
+        $policy['returnBody'] = $returnBody;
+
+        $find          = array('+', '/');
+        $replace       = array('-', '_');
+        $encodedPolicy = str_replace($find, $replace, base64_encode(json_encode($policy)));
+
+        $sign = hash_hmac('sha1', $encodedPolicy, 'QSeulE08D807X6OJNKV1Ea_p43yV0svZgYVqrO-G', true);
+        $sign = str_replace($find, $replace, base64_encode($sign));
+
+        $token                       = 'Ukh9Uys7ONvq-Blktfu6w35vUcQopHRMD9lm2ZdL'.':'.$sign.':'.$encodedPolicy;
+        $params['postData']['token'] = $token;
+        //MOCK end
 
         return $params;
     }
@@ -132,31 +186,29 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function finishedUpload($params)
     {
         $file = $this->getFileByGlobalId($params['globalId']);
+
         if (empty($file['globalId'])) {
             throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
         }
 
         $convertStatus = empty($file['convertParams']) ? 'none' : 'waiting';
 
-    	$file = $this->getUploadFileDao()->updateFile($file['id'], array(
-            'status' => 'ok',
-            'convertStatus' => $convertStatus,
+        $file = $this->getUploadFileDao()->updateFile($file['id'], array(
+            'status'        => 'ok',
+            'convertStatus' => $convertStatus
         ));
     }
 
     public function setFileProcessed($params)
     {
         try {
-
             $file = $this->getUploadFileDao()->getFileByGlobalId($params['globalId']);
 
             $fields = array(
-                'convertStatus' => 'success',
+                'convertStatus' => 'success'
             );
 
             $this->getUploadFileDao()->updateFile($file['id'], $fields);
-
-
         } catch (\Exception $e) {
             $msg = $e->getMessage();
         }
@@ -184,8 +236,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
         if (isset($conditions['source']) && ($conditions['source'] == 'shared') && !empty($conditions['currentUserId'])) {
-            $sharedUsers = $this->getUploadFileShareDao ()->findMySharingContacts ($conditions ['currentUserId']);
-            $sharedUserIds = ArrayToolkit::column ($sharedUsers, 'sourceUserId');
+            $sharedUsers                  = $this->getUploadFileShareDao()->findMySharingContacts($conditions['currentUserId']);
+            $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
             $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
         }
 
@@ -200,12 +252,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function mergeImplFiles($files)
     {
         $groupedFiles = array();
+
         foreach ($files as $file) {
-            $name = $this->getFileImplementorName($file);
+            $name                  = $this->getFileImplementorName($file);
             $groupedFiles[$name][] = $file;
         }
 
         $implFiles = array();
+
         foreach ($groupedFiles as $name => $files) {
             $implFiles = array_merge($implFiles, $this->createFileImplementor($name)->findFiles($files));
         }
@@ -220,7 +274,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     protected function getFileImplementor($file)
     {
-    	return $this->getFileImplementorByStorage($file['storage']);
+        return $this->getFileImplementorByStorage($file['storage']);
     }
 
     protected function getFileImplementorByStorage($storage)
@@ -233,6 +287,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (!array_key_exists($key, self::$implementor)) {
             throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
         }
+
         return $this->createService(self::$implementor[$key]);
     }
 
@@ -245,5 +300,4 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     {
         return $this->createDao('File.UploadFileDao');
     }
-
 }

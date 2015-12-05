@@ -44,9 +44,10 @@ define(function(require, exports, module) {
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                 pick: this.element.find('.file-pick-btn') ,
                 chunked: true,
-                chunkSize: 1024000,
+                chunkSize: 1024 * 1024,
                 chunkRetry: 2,
                 threads: 1,
+                sendAsBinary: true,
                 formData: {
 
                 }
@@ -98,6 +99,19 @@ define(function(require, exports, module) {
             this.element.html(html);
         },
 
+        _initCloud2UploadStatus: function(){
+            return {
+                ctxs: new Array(),
+                currentFileSize: 0,
+                blockSize: 4*1024*1024,
+                chunkSize: 1024*1024,
+                blockIndex:0,
+                currentBlockIndex: 1,
+                chunkIndex:0,
+                currentChunkIndex: 0
+            };
+        },
+
         _registerUploaderEvent: function(uploader) {
             var self = this;
             var $uploader = this.element;
@@ -146,17 +160,45 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadAccept', function(object, ret) {
-                var key = 'file_' + object.file.globalId + '_' + object.file.hash;
-                store.set(key, object.chunk);
+                if(self.get('uploadModel') == 'cloud2'){
+                    var cloud2UploadStatus = self.get('cloud2UploadStatus');
+                    cloud2UploadStatus.currentChunkIndex++;
+                    if(cloud2UploadStatus.currentChunkIndex%4 == 0){
+                        cloud2UploadStatus.currentBlockIndex++;
+                        if(cloud2UploadStatus.currentBlockIndex < cloud2UploadStatus.blockIndex){
+                            uploader.option('server', self.get('uploadUrl')+'/mkblk/'+cloud2UploadStatus.blockSize);
+                        } else if(cloud2UploadStatus.currentBlockIndex == cloud2UploadStatus.blockIndex){
+                            uploader.option('server', self.get('uploadUrl')+'/mkblk/'+(cloud2UploadStatus.currentFileSize%cloud2UploadStatus.blockSize));
+                        }
+                    } else {
+                        var offsetSize = cloud2UploadStatus.currentChunkIndex%4*cloud2UploadStatus.chunkSize;
+                        uploader.option('server', self.get('uploadUrl')+'/bput/'+ret.ctx+'/'+offsetSize);
+                    }
+                    if(cloud2UploadStatus.currentChunkIndex%4 == 0 || cloud2UploadStatus.chunkIndex == cloud2UploadStatus.currentChunkIndex){
+                        cloud2UploadStatus.ctxs.push(ret.ctx);
+                    }
+                    self.set('cloud2UploadStatus', cloud2UploadStatus);
+                } else if(self.get('uploadModel') == 'local'){
+                    var key = 'file_' + object.file.globalId + '_' + object.file.hash;
+                    store.set(key, object.chunk);
+                }
             });
 
             uploader.on('uploadStart', function(file) {
+
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers) {
-                data.file_gid = object.file.gid;
-                data.chunk_number = object.chunk +1;
-                headers['Upload-Token'] = self.get('uploadToken');
+                if(self.get('uploadModel') == 'cloud2'){
+                    $.each(data, function(i, n){
+                        delete data[i];
+                    })
+                    headers.Authorization = "UpToken "+self.get('uploadToken');
+                } else if(self.get('uploadModel') == 'local'){
+                    data.file_gid = object.file.gid;
+                    data.chunk_number = object.chunk +1;
+                    headers['Upload-Token'] = self.get('uploadToken');
+                }
             });
         },
 
@@ -230,22 +272,41 @@ define(function(require, exports, module) {
                             file.uploaderWidget.set('uploadToken', response.postData.token);
                             file.uploaderWidget.set('uploadUrl', response.uploadUrl);
                             file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
-                            file.uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
-
-                            var startUrl = response.uploadProxyUrl + '/chunks/start';
-                            var postData = {file_gid:file.globalId, file_size: file.size, file_name:file.name};
-
-                            $.ajax(startUrl, {
-                                type: 'POST',
-                                data: postData,
-                                dataType: 'json',
-                                headers: {
-                                    'Upload-Token': response.postData.token
-                                },
-                                success: function() {
-                                    deferred.resolve();
+                            file.uploaderWidget.set('uploadModel', response.uploadModel);
+                            
+                            if(response.uploadModel == 'cloud2') {
+                                file.uploaderWidget.set('cloud2UploadStatus', file.uploaderWidget._initCloud2UploadStatus());
+                                var self = file.uploaderWidget;
+                                var cloud2UploadStatus = self.get('cloud2UploadStatus');
+                                cloud2UploadStatus.currentFileSize = file.size;
+                                cloud2UploadStatus.blockIndex = Math.ceil(cloud2UploadStatus.currentFileSize/cloud2UploadStatus.blockSize);
+                                cloud2UploadStatus.chunkIndex = Math.ceil(cloud2UploadStatus.currentFileSize/cloud2UploadStatus.chunkSize);
+                                if(cloud2UploadStatus.blockSize>cloud2UploadStatus.currentFileSize){
+                                    file.uploaderWidget.uploader.option('server', self.get('uploadUrl')+'/mkblk/'+cloud2UploadStatus.currentFileSize);
+                                }else{
+                                    file.uploaderWidget.uploader.option('server', self.get('uploadUrl')+'/mkblk/'+cloud2UploadStatus.blockSize);
                                 }
-                            });
+                                self.set('cloud2UploadStatus',cloud2UploadStatus);
+
+                                deferred.resolve();
+                            } else if(response.uploadModel == 'local'){
+
+                                file.uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
+                                var startUrl = response.uploadProxyUrl + '/chunks/start';
+                                var postData = {file_gid:file.globalId, file_size: file.size, file_name:file.name};
+
+                                $.ajax(startUrl, {
+                                    type: 'POST',
+                                    data: postData,
+                                    dataType: 'json',
+                                    headers: {
+                                        'Upload-Token': response.postData.token
+                                    },
+                                    success: function() {
+                                        deferred.resolve();
+                                    }
+                                });
+                            }
 
                         }, 'json');
 
@@ -256,19 +317,19 @@ define(function(require, exports, module) {
 
                 checkchunk: function(block) {
                     var deferred = WebUploader.Deferred();
+                    if(block.file.uploaderWidget.get('uploadModel')=='local') {
+                        var key = 'file_' + block.file.globalId + '_' + block.file.hash;
+                        var resumedChunk = store.get(key);
 
-                    var key = 'file_' + block.file.globalId + '_' + block.file.hash;
+                        if (resumedChunk === undefined) {
+                            block.file.startUploading = true;
+                        }
 
-                    var resumedChunk = store.get(key);
-
-                    if (resumedChunk === undefined) {
-                        block.file.startUploading = true;
-                    }
-
-                    if (!block.file.startUploading && block.chunk <= resumedChunk) {
-                        deferred.reject();
-                    } else {
-                        block.file.startUploading = true;
+                        if (!block.file.startUploading && block.chunk <= resumedChunk) {
+                            deferred.reject();
+                        } else {
+                            block.file.startUploading = true;
+                        }
                     }
 
                     deferred.resolve();
@@ -277,24 +338,46 @@ define(function(require, exports, module) {
                 },
 
                 finishupload: function(file) {
-                    store.remove('file_' + file.hash);
+
+                    var self = file.uploaderWidget;
                     var deferred = WebUploader.Deferred();
+                    var xhr;
 
-                    var xhr = $.ajax(file.uploaderWidget.get('uploadProxyUrl') + '/chunks/finish', {
-                        type: 'POST',
-                        data: {file_gid:file.gid},
-                        dataType: 'json',
-                        headers: {
-                            'Upload-Token': file.uploaderWidget.get('uploadToken')
-                        }
-                    });
-
-                    xhr.done(function( data, textStatus, xhr ) {
-                        $.post(file.uploaderWidget.get('finishUrl'), data, function() {
-                            deferred.resolve();
-                            file.uploaderWidget.trigger('file.uploaded', file, data);
+                    if(self.get('uploadModel') == 'cloud2'){
+                        var cloud2UploadStatus = self.get('cloud2UploadStatus');
+                        var url=self.get('uploadUrl')+'/mkfile/'+cloud2UploadStatus.currentFileSize;
+                        xhr = new XMLHttpRequest();
+                        xhr.open('POST', url, true);
+                        xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
+                        xhr.onreadystatechange = function(response) {
+                            if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
+                                var data = {globalId:file.gid};
+                                $.post(file.uploaderWidget.get('finishUrl'), data, function() {
+                                    deferred.resolve();
+                                    file.uploaderWidget.trigger('file.uploaded', file, data);
+                                });
+                            }
+                        };
+                        xhr.send(cloud2UploadStatus.ctxs.join(','));
+                    } else if(self.get('uploadModel') == 'local') {
+                        store.remove('file_' + file.hash);
+                        xhr = $.ajax(file.uploaderWidget.get('uploadProxyUrl') + '/chunks/finish', {
+                            type: 'POST',
+                            data: {file_gid:file.gid},
+                            dataType: 'json',
+                            headers: {
+                                'Upload-Token': file.uploaderWidget.get('uploadToken')
+                            }
                         });
-                    });
+
+                        xhr.done(function( data, textStatus, xhr ) {
+                            $.post(file.uploaderWidget.get('finishUrl'), data, function() {
+                                deferred.resolve();
+                                file.uploaderWidget.trigger('file.uploaded', file, data);
+                            });
+                        });
+                    }
+
 
                     return deferred.promise();
                 }
