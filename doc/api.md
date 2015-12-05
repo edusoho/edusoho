@@ -14,7 +14,8 @@
     HTTP Header 中设置：
     ```
     X-EduSoho-Auth-Method: key
-    X-EduSoho-Auth-Key: ${KEY}
+    X-EduSoho-Auth-Key: ${AccessKey}
+    X-EduSoho-Auth-Secret: ${SecretKey}
     X-EduSoho-Auth-Sign: ${SIGN} 
     ```
     `${KEY}`即AccessKey，`${SIGN}`为本次请求的签名

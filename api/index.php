@@ -78,6 +78,21 @@ $app->before(function (Request $request) use ($app) {
     $authMethod = $request->headers->get('X-Auth-Method');
 
     if ($authMethod == 'key') {
+        $accessKey = $request->headers->get('X-Auth-Key');
+        $secretKey = $request->headers->get('X-Auth-Secret');
+
+        if (empty($accessKey) or empty($secretKey)) {
+            throw createAccessDeniedException("Auth Params is invalid.");
+        }
+
+        $settings = ServiceKernel::instance()->createService('System.SettingService')->get('storage', array());
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+            throw createAccessDeniedException("Auth Params is invalid..");
+        }
+
+        if (($accessKey != $settings['cloud_access_key']) || ($secretKey != $settings['cloud_secret_key'])) {
+            throw createAccessDeniedException("Auth Params is invalid...");
+        }
 
     } else {
         $token = $request->headers->get('X-Auth-Token');

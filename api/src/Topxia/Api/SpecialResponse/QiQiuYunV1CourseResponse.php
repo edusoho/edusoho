@@ -9,6 +9,10 @@ class QiQiuYunV1CourseResponse implements SpecialResponse
 {
     public function filter($data)
     {
+        if (isset($data['error'])) {
+            return $data;
+        }
+        
         $resources = array();
         foreach ($data['resources'] as $course) {
             $resources[] = array(
