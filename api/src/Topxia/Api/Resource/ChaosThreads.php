@@ -78,7 +78,7 @@ class ChaosThreads extends BaseResource
                 'targetId' => $thread['groupId'],
                 'targetType' => 'group',
                 'createdTime' => date('c', $thread['createdTime']),
-                'updatedTime' => date('c', $thread['updatedTime']/1000),
+                'updatedTime' => date('c', $thread['updatedTime']),
             );
         }
         return $threads;
@@ -98,7 +98,7 @@ class ChaosThreads extends BaseResource
                 'targetId' => $thread['courseId'],
                 'targetType' => 'course',
                 'createdTime' => date('c', $thread['createdTime']),
-                'updatedTime' => date('c', $thread['updatedTime']/1000),
+                'updatedTime' => date('c', $thread['updatedTime']),
             );
         }
         return $threads;
@@ -128,7 +128,7 @@ class ChaosThreads extends BaseResource
                 'targetId' => $thread['targetId'],
                 'targetType' => $thread['targetType'],
                 'createdTime' => date('c', $thread['createdTime']),
-                'updatedTime' => date('c', $thread['updatedTime']/1000),
+                'updatedTime' => date('c', $thread['updatedTime']),
             );
         }
         return $threads;

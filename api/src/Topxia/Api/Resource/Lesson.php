@@ -10,7 +10,7 @@ class Lesson extends BaseResource
     public function filter(&$res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']/1000);
+        $res['updatedTime'] = date('c', $res['updatedTime']);
         return $res;
     }
 }

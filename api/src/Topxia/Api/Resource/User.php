@@ -84,7 +84,7 @@ class User extends BaseResource
             }
             $res[$key] = date('c', $res[$key]);
         }
-        $res['updatedTime'] = date('c', $res['updatedTime']/1000);
+        $res['updatedTime'] = date('c', $res['updatedTime']);
 
         return $res;
     }

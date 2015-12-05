@@ -21,7 +21,7 @@ class Article extends BaseResource
         $res['picture'] = $this->getFileUrl($res['picture']);
         $res['body'] = $this->filterHtml($res['body']);
         $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']/1000);
+        $res['updatedTime'] = date('c', $res['updatedTime']);
 
         $site = $this->getSettingService()->get('site', array());
         $res['source'] = $site['name'];
