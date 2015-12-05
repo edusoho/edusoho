@@ -1683,6 +1683,11 @@ pay_center_pay:
     defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
     methods: [POST]
 
+pay_center_auth_close:
+    path:   /pay/center/auth_close
+    defaults: { _controller: TopxiaWebBundle:PayCenter:closeAuth}
+    methods: [POST]
+
 pay_return:
     pattern:  /pay/center/pay/{name}/return
     defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }

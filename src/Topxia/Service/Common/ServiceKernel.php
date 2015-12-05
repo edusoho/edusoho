@@ -180,6 +180,7 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('service', $name);
+
             $this->pool[$name] = new $class();
         }
         return $this->pool[$name];

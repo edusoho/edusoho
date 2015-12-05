@@ -45,7 +45,6 @@ class WxpayRequest extends Request
 
     public function fromXml($xml)
     {
-        libxml_disable_entity_loader(true);
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         return $array;
     }
@@ -85,7 +84,7 @@ class WxpayRequest extends Request
         $converted['nonce_str']        = $this->getNonceStr();
         $converted['notify_url']       = $params['notifyUrl'];
         $converted['out_trade_no']     = $params['orderSn'];
-        $converted['spbill_create_ip'] = $this->get_client_ip();
+        $converted['spbill_create_ip'] = $this->getClientIp();
         $converted['total_fee']        = intval($params['amount'] * 100);
         $converted['trade_type']       = 'NATIVE';
         $converted['product_id']       = $params['orderSn'];
@@ -115,21 +114,6 @@ class WxpayRequest extends Request
         }
 
         return $str;
-    }
-
-    private function get_client_ip()
-    {
-        if ($_SERVER['REMOTE_ADDR']) {
-            $cip = $_SERVER['REMOTE_ADDR'];
-        } elseif (getenv("REMOTE_ADDR")) {
-            $cip = getenv("REMOTE_ADDR");
-        } elseif (getenv("HTTP_CLIENT_IP")) {
-            $cip = getenv("HTTP_CLIENT_IP");
-        } else {
-            $cip = "unknown";
-        }
-
-        return $cip;
     }
 
     private function postRequest($url, $params)
