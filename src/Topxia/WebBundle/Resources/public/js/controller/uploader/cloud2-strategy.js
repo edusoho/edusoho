@@ -18,10 +18,6 @@ define(function(require, exports, module) {
 	        self.set('cloud2UploadStatus',cloud2UploadStatus);
         },
         
-        checkChunk: function(block) {
-        	block.file.startUploading = true;
-        },
-
         uploadBeforeSend: function(object, data, headers){
         	var self = this.file.uploaderWidget;
         	$.each(data, function(i, n){

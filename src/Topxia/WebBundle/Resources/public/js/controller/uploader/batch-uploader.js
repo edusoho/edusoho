@@ -149,6 +149,9 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadAccept', function(object, ret) {
+                var key = 'file_' + object.file.globalId + '_' + object.file.hash;
+                store.set(key, object.chunk);
+                
                 var strategy = self.get('strategy');
                 strategy.uploadAccept(object, ret);
             });
@@ -249,17 +252,25 @@ define(function(require, exports, module) {
 
                 checkchunk: function(block) {
                     var deferred = WebUploader.Deferred();
-                    var strategy = block.file.uploaderWidget.get('strategy');
-                    strategy.checkChunk(block);
-                    if(block.file.startUploading) {
-                        deferred.resolve();
-                    } else {
-                        deferred.reject();
+                    var key = 'file_' + block.file.globalId + '_' + block.file.hash;
+                    var resumedChunk = store.get(key);
+
+                    if (resumedChunk === undefined) {
+                        block.file.startUploading = true;
                     }
+
+                    if (!block.file.startUploading && block.chunk <= resumedChunk) {
+                        deferred.reject();
+                    } else {
+                        block.file.startUploading = true;
+                    }
+                    deferred.resolve();
+
                     return deferred.promise();
                 },
 
                 finishupload: function(file) {
+                    store.remove('file_' + file.hash);
                     var self = file.uploaderWidget;
                     var deferred = WebUploader.Deferred();
                     var strategy = self.get('strategy');

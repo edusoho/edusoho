@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
 	var Class = require('class');
-    var store = require('store');
 
     var LocalStrategy = Class.extend({
     	initialize: function(file) {
@@ -25,21 +24,6 @@ define(function(require, exports, module) {
             });
         },
 
-        checkChunk: function(block) {
-            var key = 'file_' + block.file.globalId + '_' + block.file.hash;
-            var resumedChunk = store.get(key);
-
-            if (resumedChunk === undefined) {
-                block.file.startUploading = true;
-            }
-
-            if (!block.file.startUploading && block.chunk <= resumedChunk) {
-                block.file.startUploading = false;
-            } else {
-                block.file.startUploading = true;
-            }
-        },
-
         uploadBeforeSend: function(object, data, headers){
             var self = this.file.uploaderWidget;
             data.file_gid = object.file.gid;
@@ -49,7 +33,6 @@ define(function(require, exports, module) {
 
         finishUpload: function(deferred){
             var file = this.file;
-            store.remove('file_' + file.hash);
             var xhr = $.ajax(file.uploaderWidget.get('uploadProxyUrl') + '/chunks/finish', {
                 type: 'POST',
                 data: {file_gid:file.gid},
@@ -68,8 +51,7 @@ define(function(require, exports, module) {
         },
 
         uploadAccept: function(object, ret){
-            var key = 'file_' + object.file.globalId + '_' + object.file.hash;
-            store.set(key, object.chunk);
+            
         }
     });
 
