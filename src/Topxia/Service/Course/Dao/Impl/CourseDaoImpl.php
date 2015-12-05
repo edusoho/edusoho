@@ -107,7 +107,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
-        $course['updatedTime'] = intval(microtime(true)*1000);
+        $course['updatedTime'] = time();
         $affected = $this->getConnection()->insert(self::TABLENAME, $course);
 
         if ($affected <= 0) {
@@ -119,7 +119,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function updateCourse($id, $fields)
     {
-        $fields['updatedTime'] = intval(microtime(true)*1000);
+        $fields['updatedTime'] = time();
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }
@@ -171,6 +171,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from(self::TABLENAME, 'course')
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('status = :status')
                         ->andWhere('type = :type')
                         ->andWhere('price = :price')
@@ -192,7 +193,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                         ->andWhere('vipLevelId = :vipLevelId')
                         ->andWhere('createdTime >= :startTime')
                         ->andWhere('createdTime <= :endTime')
-                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('categoryId = :categoryId')
                         ->andWhere('smallPicture = :smallPicture')
                         ->andWhere('categoryId IN ( :categoryIds )')

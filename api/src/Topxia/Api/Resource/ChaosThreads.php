@@ -20,6 +20,7 @@ class ChaosThreads extends BaseResource
 
         // thread表的话题
         $conditions = array(
+            'status' => 'open',
             'updateTime_GE' => isset($cursors[0]) ? $cursors[0] : 0,
         );
         $start = isset($starts[0]) ? $starts[0] : 0;
@@ -31,6 +32,7 @@ class ChaosThreads extends BaseResource
 
         // course_thread表的话题
         $conditions = array(
+            'private' => 0,
             'updatedTime_GE' => isset($cursors[1]) ? $cursors[1] : 0,
         );
         $start = isset($starts[1]) ? $starts[1] : 0;

@@ -122,6 +122,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, $this->table)
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('courseId = :courseId')
                         ->andWhere('lessonId = :lessonId')
                         ->andWhere('userId = :userId')
@@ -133,15 +134,14 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
                         ->andWhere('title LIKE :title')
                         ->andWhere('content LIKE :content')
                         ->andWhere('courseId IN (:courseIds)')
-                        ->andWhere('private = :private')
-                        ->andWhere('updatedTime >= :updatedTime_GE');
+                        ->andWhere('private = :private');
 
         return $builder;
     }
 
     public function addThread($fields)
     {
-        $fields['updatedTime'] = intval(microtime(true)*1000);
+        $fields['updatedTime'] = time();
         $affected = $this->getConnection()->insert($this->table, $fields);
 
         if ($affected <= 0) {
@@ -153,7 +153,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function updateThread($id, $fields)
     {
-        $fields['updatedTime'] = intval(microtime(true)*1000);
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getThread($id);

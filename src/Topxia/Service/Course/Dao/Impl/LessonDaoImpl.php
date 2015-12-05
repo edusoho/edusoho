@@ -139,7 +139,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function addLesson($lesson)
     {
-        $lesson['updatedTime'] = intval(microtime(true)*1000);
+        $lesson['updatedTime'] = time();
         $affected = $this->getConnection()->insert($this->table, $lesson);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course lesson error.');
@@ -149,7 +149,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function updateLesson($id, $fields)
     {
-        $fields['updatedTime'] = intval(microtime(true)*1000);
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLesson($id);
     }
@@ -191,6 +191,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere('courseId = :courseId')
+            ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')
             ->andWhere('type = :type')
             ->andWhere('free = :free')
@@ -203,7 +204,6 @@ class LessonDaoImpl extends BaseDao implements LessonDao
             ->andWhere('title LIKE :titleLike')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime')
-            ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('courseId IN ( :courseIds )');
         if(isset($conditions['notLearnedIds'])){
             $builder->andWhere('id NOT IN ( :notLearnedIds)');

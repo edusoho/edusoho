@@ -31,7 +31,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function addThread($thread)
     {
-        $thread['updatedTime'] = intval(microtime(true)*1000);
+        $thread['updatedTime'] = time();
     	$thread = $this->createSerializer()->serialize($thread, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $thread);
         if ($affected <= 0) {
@@ -63,7 +63,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function updateThread($id,$fields)
     {
-        $fields['updatedTime'] = intval(microtime(true)*1000);
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getThread($id);

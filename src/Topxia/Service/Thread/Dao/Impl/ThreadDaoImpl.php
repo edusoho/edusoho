@@ -80,6 +80,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
+            ->andWhere("updateTime >= :updateTime_GE")
             ->andWhere("targetType = :targetType")
             ->andWhere('targetId = :targetId')
             ->andWhere('userId = :userId')
@@ -91,7 +92,6 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             ->andWhere("status = :status")
             ->andWhere("createdTime >= :startTime")
             ->andWhere("createdTime <= :endTime")
-            ->andWhere("updateTime >= :updateTime_GE")
             ->andWhere('title LIKE :title')
             ->andWhere('id NOT IN ( :excludeIds )')
             ->andWhere('targetId IN (:targetIds)')
@@ -103,7 +103,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function addThread($fields)
     {
-        $fields['updateTime'] = intval(microtime(true)*1000);
+        $fields['updateTime'] = time();
         $this->createSerializer()->serialize($fields, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $fields);
@@ -117,7 +117,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function updateThread($id, $fields)
     {
         $this->clearCached();
-        $fields['updateTime'] = intval(microtime(true)*1000);
+        $fields['updateTime'] = time();
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
