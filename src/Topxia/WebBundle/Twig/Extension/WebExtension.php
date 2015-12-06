@@ -346,6 +346,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
+        $names[] = 'materiallib';
 
         $paths = array(
             'common' => 'common',
