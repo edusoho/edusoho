@@ -134,7 +134,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $params = $implementor->initUpload($file);
 
         // MOCK
-        $params = array('globalId' => time());
+        $params = array('globalId' => 10000);
 
         $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $params['globalId']));
 

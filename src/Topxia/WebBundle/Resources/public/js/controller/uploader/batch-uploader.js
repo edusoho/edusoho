@@ -145,19 +145,21 @@ define(function(require, exports, module) {
 
             uploader.on('uploadComplete', function(file) {
                 var key = 'file_' + file.globalId + '_' + file.hash;
-                store.remove('file_' + file.hash);
+                store.remove(key);
             });
 
             uploader.on('uploadAccept', function(object, ret) {
                 var key = 'file_' + object.file.globalId + '_' + object.file.hash;
-                store.set(key, object.chunk);
+                var value = store.get(key);
+                value[object.chunk] = ret;
+                store.set(key, value);
                 
                 var strategy = self.get('strategy');
                 strategy.uploadAccept(object, ret);
             });
 
             uploader.on('uploadStart', function(file) {
-
+                
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers) {
@@ -238,6 +240,12 @@ define(function(require, exports, module) {
                             file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
                             file.uploaderWidget.set('uploadModel', response.uploadModel);
                             
+                            var key = 'file_' + file.globalId + '_' + file.hash;
+                            if(!store.get(key)) {
+                                var value = {};
+                                store.set(key, value);
+                            }
+
                             require.async('./'+response.uploadModel+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file);
                                 file.uploaderWidget.set('strategy', strategy);
@@ -255,25 +263,21 @@ define(function(require, exports, module) {
                     var key = 'file_' + block.file.globalId + '_' + block.file.hash;
                     var resumedChunk = store.get(key);
 
-                    if (resumedChunk === undefined) {
+                    if (resumedChunk === undefined || resumedChunk[block.chunk] === undefined) {
                         block.file.startUploading = true;
-                    }
-
-                    if (!block.file.startUploading && block.chunk <= resumedChunk) {
-                        deferred.reject();
+                        deferred.resolve();
                     } else {
-                        block.file.startUploading = true;
+                        deferred.reject();
+                        var strategy = block.file.uploaderWidget.get('strategy');
+                        strategy.uploadAccept(block, resumedChunk[block.chunk]);
                     }
-                    deferred.resolve();
 
                     return deferred.promise();
                 },
 
                 finishupload: function(file) {
-                    store.remove('file_' + file.hash);
-                    var self = file.uploaderWidget;
                     var deferred = WebUploader.Deferred();
-                    var strategy = self.get('strategy');
+                    var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
