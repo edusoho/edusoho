@@ -137,6 +137,9 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
+                var key = 'file_' + file.globalId + '_' + file.hash;
+                store.remove(key);
+                console.log('uploadSuccess');
             });
 
             uploader.on('beforeFileQueued', function(file) {
@@ -144,8 +147,7 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadComplete', function(file) {
-                var key = 'file_' + file.globalId + '_' + file.hash;
-                store.remove(key);
+                console.log('uploadSuccess');
             });
 
             uploader.on('uploadAccept', function(object, ret) {
@@ -201,6 +203,10 @@ define(function(require, exports, module) {
             } 
 
             return params;
+        },
+
+        _getUploader: function(){
+            return this.uploader;
         },
 
         _initUploaderHook: function() {
@@ -275,14 +281,25 @@ define(function(require, exports, module) {
                     return deferred.promise();
                 },
 
-                finishupload: function(file) {
+                finishupload: function(file, ret, hds) {
                     var deferred = WebUploader.Deferred();
+
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
                         file.uploaderWidget.trigger('file.uploaded', file, data);
+
+                        file.setStatus('complete');
+                        // file.uploaderWidget._getUploader().trigger('uploadSuccess', file, ret, hds);
+
+                        var $li = $('#' + file.id);
+                        $li.find('.file-status').html('已上传');
+                        $li.find('.file-progress-bar').css('width', '0%');
+                        var key = 'file_' + file.globalId + '_' + file.hash;
+                        store.remove(key);
+
                     });
 
                     return deferred.promise();

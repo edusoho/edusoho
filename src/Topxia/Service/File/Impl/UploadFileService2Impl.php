@@ -144,15 +144,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $params['uploadUrl']   = 'http://upload.qiniu.com';
 
         $returnBody = array(
-            'key'       => '$(key)',
-            'filename'  => '$(fname)',
-            'size'      => '$(fsize)',
-            'mimeType'  => '$(mimeType)',
-            'etag'      => '$(etag)',
-            'imageInfo' => '$(imageInfo)',
-            'length'    => '$(avinfo.format.duration)',
-            'userId'    => '$(endUser)',
-            'globalId'  => '$(x:globalId)'
+            'key'             => '$(key)',
+            'filename'        => '$(fname)',
+            'size'            => '$(fsize)',
+            'mimeType'        => '$(mimeType)',
+            'etag'            => '$(etag)',
+            'imageInfo'       => '$(imageInfo)',
+            'length'          => '$(avinfo.format.duration)',
+            'userId'          => '$(endUser)',
+            'globalId'        => '$(x:globalId)',
+            'x:convertParams' => '1234414',
+            'x:globalId'      => $params['globalId']
         );
         $parts = array();
 
