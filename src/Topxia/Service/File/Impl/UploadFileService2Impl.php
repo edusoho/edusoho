@@ -227,6 +227,19 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
     }
 
+    public function reconvertFile($id, $convertCallback)
+    {
+        $file = $this->getFile($id);
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+        $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
+
+        $this->setFileConverting($file['id'], $convertHash);
+
+        return $convertHash;
+    }
+
     protected function _prepareSearchConditions($conditions)
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];

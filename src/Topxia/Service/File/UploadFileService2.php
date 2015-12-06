@@ -32,4 +32,6 @@ interface UploadFileService2
 
     public function waveUploadFile($id, $field, $diff);
 
+    public function reconvertFile($id, $convertCallback);
+
 }
