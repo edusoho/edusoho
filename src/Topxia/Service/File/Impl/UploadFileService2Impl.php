@@ -167,9 +167,9 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
 
         $finishParams = array(
-            "length" => $file['length'],
-            'name'   => $file['filename'],
-            'size'   => $file['fileSize']
+            "length" => $params['length'],
+            'name'   => $params['filename'],
+            'size'   => $params['size']
         );
 
         $result = $implementor->finishedUpload($file['globalId'], $finishParams);
@@ -186,7 +186,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $file = $this->getUploadFileDao()->updateFile($file['id'], array(
             'status'        => 'ok',
-            'convertStatus' => $convertStatus
+            'convertStatus' => $convertStatus,
+            'length'        => $params['length'],
+            'fileName'      => $params['filename'],
+            'fileSize'      => $params['size']
         ));
     }
 
@@ -230,9 +233,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function reconvertFile($id, $convertCallback)
     {
         $file = $this->getFile($id);
+
         if (empty($file)) {
             throw $this->createServiceException('file not exist.');
         }
+
         $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
 
         $this->setFileConverting($file['id'], $convertHash);
