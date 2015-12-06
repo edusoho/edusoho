@@ -137,9 +137,8 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
-                var key = 'file_' + file.globalId + '_' + file.hash;
+                var key = 'file_' + file.hash;
                 store.remove(key);
-                console.log('uploadSuccess');
             });
 
             uploader.on('beforeFileQueued', function(file) {
@@ -151,7 +150,7 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadAccept', function(object, ret) {
-                var key = 'file_' + object.file.globalId + '_' + object.file.hash;
+                var key = 'file_' + object.file.hash;
                 var value = store.get(key);
                 value[object.chunk] = ret;
                 store.set(key, value);
@@ -236,6 +235,13 @@ define(function(require, exports, module) {
 
                         $.support.cors = true;
 
+                        var key = 'file_' + file.hash;
+                        var value = store.get(key);
+                        if(value) {
+                            params.globalId = value.globalId;
+                            params.outerId = value.outerId;
+                        }
+
                         $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
                             file.gid = response.globalId;
                             file.globalId = response.globalId;
@@ -246,9 +252,11 @@ define(function(require, exports, module) {
                             file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
                             file.uploaderWidget.set('uploadMode', response.uploadMode);
                             
-                            var key = 'file_' + file.globalId + '_' + file.hash;
-                            if(!store.get(key)) {
+                            var key = 'file_' + file.hash;
+                            if(response.resumed != 'ok') {
                                 var value = {};
+                                value.globalId = file.globalId;
+                                value.outerId = file.outerId;
                                 store.set(key, value);
                             }
 
@@ -266,7 +274,7 @@ define(function(require, exports, module) {
 
                 checkchunk: function(block) {
                     var deferred = WebUploader.Deferred();
-                    var key = 'file_' + block.file.globalId + '_' + block.file.hash;
+                    var key = 'file_' + block.file.hash;
                     var resumedChunk = store.get(key);
 
                     if (resumedChunk === undefined || resumedChunk[block.chunk] === undefined) {
@@ -283,10 +291,12 @@ define(function(require, exports, module) {
 
                 finishupload: function(file, ret, hds) {
                     var deferred = WebUploader.Deferred();
+                    var key = 'file_' + file.hash;
+                    store.remove(key);
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
-console.log(data);
+
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
                         file.uploaderWidget.trigger('file.uploaded', file, data);
@@ -297,8 +307,6 @@ console.log(data);
                         var $li = $('#' + file.id);
                         $li.find('.file-status').html('已上传');
                         $li.find('.file-progress-bar').css('width', '0%');
-                        var key = 'file_' + file.globalId + '_' + file.hash;
-                        store.remove(key);
 
                     });
 

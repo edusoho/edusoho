@@ -43,18 +43,23 @@ define(function(require, exports, module) {
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
             var url = '/uploader/mkfile/'+cloud2UploadStatus.currentFileSize;
+            var result = {};
             $.ajax({
                 url: url,
                 type:'POST',
+                async: false,
                 data:{
                     'uploadUrl': encodeURI(self.get('uploadUrl')),
                     'content': cloud2UploadStatus.ctxs.join(',')
                 },
                 beforeSend: function(xhr){
                     xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
+                },
+                success:function(data) {
+                    result = eval('('+data+')');
                 }
             });
-            return {globalId: this.file.gid};
+            return $.extend({globalId: this.file.gid}, result);
         },
 
         uploadAccept: function(object, ret){

@@ -12,7 +12,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function getFile($file)
     {
         $api       = CloudAPIFactory::create();
-        $cloudFile = $api->get("/files/{$file['globalId']}");
+        $cloudFile = $api->get("/resources/{$file['globalId']}");
 
         return $this->mergeCloudFile($file, $cloudFile);
     }
@@ -21,7 +21,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     {
         $globalIds  = ArrayToolkit::column($files, 'globalId');
         $api        = CloudAPIFactory::create();
-        $result     = $api->get("/files?ids=".implode(',', $globalIds));
+        $result     = $api->get("/resources?nos=".implode(',', $globalIds));
         $cloudFiles = $result['data'];
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
@@ -36,19 +36,18 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $files;
     }
 
-    public function resumeUpload($hash, $file)
+    public function resumeUpload($globalId, $file)
     {
         $params = array(
-            'bucket'         => $file['bucket'],
-            'fileName'       => $file['filename'],
-            'fileSize'       => $file['fileSize'],
-            'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
-            'processParams'  => empty($file['processParams']) ? '' : $file['processParams'],
-            'extras'         => empty($file['extras']) ? '' : $file['extras']
+            'bucket' => $file['bucket'],
+            'extno'  => $file['extno'],
+            'size'   => $file['size'],
+            'name'   => $file['name'],
+            'hash'   => $file['hash']
         );
 
         $api     = CloudAPIFactory::create();
-        $resumed = $api->post("/files/{$hash}/resume_upload", $params);
+        $resumed = $api->post("/resources/{$globalId}/upload_resume", $params);
 
         if (empty($resumed['resumed']) || ($resumed['resumed'] !== 'ok')) {
             return null;
@@ -91,11 +90,14 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $params = array(
             "extno"  => $file['extno'],
             "bucket" => $file['bucket'],
-            "key"    => $file['key']
+            "key"    => $file['key'],
+            "hash"   => $file['hash'],
+            'name'   => $file['name'],
+            'size'   => $file['size']
         );
 
         $api = CloudAPIFactory::create();
-        return $api->post('/resources/init_upload', $params);
+        return $api->post('/resources/upload_init', $params);
     }
 
     public function getDownloadFile($file)
@@ -106,9 +108,20 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $download;
     }
 
+    public function finishedUpload($globalId, $params)
+    {
+        $params = array(
+            "length" => $params['length'],
+            'name'   => $params['name'],
+            'size'   => $params['size']
+        );
+        $api = CloudAPIFactory::create();
+        return $api->post("/resources/{$globalId}/upload_finish", $params);
+    }
+
     private function mergeCloudFile($file, $cloudFile)
     {
-        $file['hashId']   = $cloudFile['storageKey'];
+        $file['hashId']   = $cloudFile['reskey'];
         $file['fileSize'] = $cloudFile['size'];
 
         $statusMap = array(
@@ -118,6 +131,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'ok'         => 'success',
             'error'      => 'error'
         );
+
         $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
 
         if (empty($cloudFile['processParams']['output'])) {
