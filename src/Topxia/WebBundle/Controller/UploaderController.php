@@ -109,6 +109,20 @@ class UploaderController extends BaseController
         return new Response($result);
     }
 
+    public function mkfileAction(Request $request, $fileSize)
+    {
+        $headers = array(
+            'Authorization:'.$request->headers->get('Authorization')
+        );
+
+        $params = $request->request->all();
+
+        $url    = $params['uploadUrl'].'/mkfile/'.$fileSize;
+        $data   = $params['content'];
+        $result = $this->_post($url, $data, $headers, true);
+        return new Response($result);
+    }
+
     protected function parseToken($request)
     {
         $token  = $request->query->get('token');
@@ -117,7 +131,7 @@ class UploaderController extends BaseController
         return $params;
     }
 
-    protected function _post($url, $params, $headers)
+    protected function _post($url, $params, $headers, $sendAsBinary = false)
     {
         $curl = curl_init();
 
@@ -127,7 +141,12 @@ class UploaderController extends BaseController
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
         curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+
+        if ($sendAsBinary) {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        } else {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
+        }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_URL, $url);
