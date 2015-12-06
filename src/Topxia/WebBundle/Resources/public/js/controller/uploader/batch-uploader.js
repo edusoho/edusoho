@@ -166,7 +166,7 @@ define(function(require, exports, module) {
             });
         },
 
-        _getProcessParams: function(file) {
+        _getDirectives: function(file) {
             var extOutputs = {
                 mp4: 'HLSEncryptedVideo',
                 avi: 'HLSEncryptedVideo',
@@ -226,7 +226,7 @@ define(function(require, exports, module) {
                             fileName: file.name,
                             fileSize: file.size,
                             hash: hash,
-                            processParams: file.uploaderWidget._getProcessParams(file)
+                            directives: file.uploaderWidget._getDirectives(file)
                         }
 
                         $.support.cors = true;

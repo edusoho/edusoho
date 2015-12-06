@@ -136,30 +136,30 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
         $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
 
-        if (empty($cloudFile['processParams']['output'])) {
+        if (empty($cloudFile['directives']['output'])) {
             $file['convertParams'] = array();
             $file['metas2']        = array();
         } else {
             if ($file['type'] == 'video') {
                 $file['convertParams'] = array(
-                    'convertor'    => $cloudFile['processParams']['output'],
-                    'videoQuality' => $cloudFile['processParams']['videoQuality'],
-                    'audioQuality' => $cloudFile['processParams']['audioQuality']
+                    'convertor'    => $cloudFile['directives']['output'],
+                    'videoQuality' => $cloudFile['directives']['videoQuality'],
+                    'audioQuality' => $cloudFile['directives']['audioQuality']
                 );
                 $file['metas2'] = $cloudFile['metas']['levels'];
             } elseif ($file['type'] == 'ppt') {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output']
+                    'convertor' => $cloudFile['directives']['output']
                 );
                 $file['metas2'] = $cloudFile['metas'];
             } elseif ($file['type'] == 'document') {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output']
+                    'convertor' => $cloudFile['directives']['output']
                 );
                 $file['metas2'] = $cloudFile['metas'];
             } elseif ($file['type'] == 'audio') {
                 $file['convertParams'] = array(
-                    'convertor'    => $cloudFile['processParams']['output'],
+                    'convertor'    => $cloudFile['directives']['output'],
                     'videoQuality' => 'normal',
                     'audioQuality' => 'normal'
                 );

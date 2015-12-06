@@ -166,6 +166,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
 
+        if (empty($params['length'])) {
+            $params['length'] = 0;
+        }
+
         $finishParams = array(
             "length" => $params['length'],
             'name'   => $params['filename'],
