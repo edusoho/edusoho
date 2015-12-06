@@ -43,9 +43,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return null;
         }
 
-        //MOCK
-        return $file;
-
         return $this->getFileImplementor($file)->getFile($file);
     }
 
@@ -164,6 +161,22 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function finishedUpload($params)
     {
         $file = $this->getFileByGlobalId($params['globalId']);
+
+        $setting           = $this->getSettingService()->get('storage');
+        $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
+        $implementor       = $this->getFileImplementorByStorage($params['storage']);
+
+        $finishParams = array(
+            "length" => $file['length'],
+            'name'   => $file['filename'],
+            'size'   => $file['fileSize']
+        );
+
+        $result = $implementor->finishedUpload($file['globalId'], $finishParams);
+
+        if (empty($result) || !$result['success']) {
+            throw $this->createServiceException("uploadFile失败，完成上传失败！");
+        }
 
         if (empty($file['globalId'])) {
             throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");

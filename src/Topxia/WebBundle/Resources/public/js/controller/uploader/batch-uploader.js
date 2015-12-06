@@ -291,6 +291,8 @@ define(function(require, exports, module) {
 
                 finishupload: function(file, ret, hds) {
                     var deferred = WebUploader.Deferred();
+                    var key = 'file_' + file.hash;
+                    store.remove(key);
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
@@ -305,8 +307,6 @@ define(function(require, exports, module) {
                         var $li = $('#' + file.id);
                         $li.find('.file-status').html('已上传');
                         $li.find('.file-progress-bar').css('width', '0%');
-                        var key = 'file_' + file.hash;
-                        store.remove(key);
 
                     });
 

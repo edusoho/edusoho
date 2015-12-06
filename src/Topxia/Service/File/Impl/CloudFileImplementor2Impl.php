@@ -12,7 +12,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function getFile($file)
     {
         $api       = CloudAPIFactory::create();
-        $cloudFile = $api->get("/files/{$file['globalId']}");
+        $cloudFile = $api->get("/resources/{$file['globalId']}");
 
         return $this->mergeCloudFile($file, $cloudFile);
     }
@@ -172,9 +172,20 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $download;
     }
 
+    public function finishedUpload($globalId, $params)
+    {
+        $params = array(
+            "length" => $params['length'],
+            'name'   => $params['name'],
+            'size'   => $params['size']
+        );
+        $api = CloudAPIFactory::create();
+        return $api->post("/resources/{$globalId}/upload_finish", $params);
+    }
+
     private function mergeCloudFile($file, $cloudFile)
     {
-        $file['hashId']   = $cloudFile['storageKey'];
+        $file['hashId']   = $cloudFile['reskey'];
         $file['fileSize'] = $cloudFile['size'];
 
         $statusMap = array(
@@ -184,6 +195,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'ok'         => 'success',
             'error'      => 'error'
         );
+
         $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
 
         if (empty($cloudFile['processParams']['output'])) {
