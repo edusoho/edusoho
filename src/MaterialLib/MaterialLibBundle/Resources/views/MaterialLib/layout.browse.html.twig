@@ -22,10 +22,10 @@
         	<button class="btn btn-primary btn-sm">搜索</button>
         	{% if source == "upload" %}
         		<div class="pull-right">
-    				<a class="btn btn-primary file-create-btn"
+    				<a class="btn btn-info btn-sm file-create-btn"
                         data-toggle="modal" data-target="#modal"
                         data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}">
-	               <i class="es-icon es-icon-anonymous-iconfont"></i>上传文件</a>
+	               <i class="glyphicon glyphicon-plus"></i>上传文件</a>
         		</div>
         		{% endif %}
         </form>

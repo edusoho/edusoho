@@ -10,11 +10,11 @@
                 <th width="50%">
                     <div class="pull-right">
                         <div class="btn-group sorting-way" role="group">
-                            <a class="btn btn-infolight btn-xs {% if viewMode == "thumb" %} active {% endif %}" href="{{path('material_lib_browsing', {type: type, viewMode:'thumb', source: source}) }}" title="缩略图">
-                                 <span class="es-icon es-icon-viewmodule"></span>
+                            <a class="btn btn-default btn-xs {% if viewMode == "thumb" %} active {% endif %}" href="{{path('material_lib_browsing', {type: type, viewMode:'thumb', source: source}) }}" title="缩略图">
+                                 <span class="glyphicon glyphicon-th-large"></span>
                             </a>
-                            <a class="btn btn-infolight btn-xs {% if viewMode == "list" %} active {% endif %}" href="{{path('material_lib_browsing', {type: type, viewMode:'list', source: source}) }}" title="列表">
-                                <span class="es-icon es-icon-viewlist"></span>
+                            <a class="btn btn-default btn-xs {% if viewMode == "list" %} active {% endif %}" href="{{path('material_lib_browsing', {type: type, viewMode:'list', source: source}) }}" title="列表">
+                                <span class="glyphicon glyphicon-th-list"></span>
                             </a>
                         </div>                      
                     </div>
