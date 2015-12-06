@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\Service\File\Impl;
 
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor2;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -11,7 +11,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 {
     public function getFile($file)
     {
-        $api = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create();
         $cloudFile = $api->get("/files/{$file['globalId']}");
 
         return $this->mergeCloudFile($file, $cloudFile);
@@ -19,15 +19,17 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function findFiles($files)
     {
-        $globalIds = ArrayToolkit::column($files, 'globalId');
-        $api = CloudAPIFactory::create();
-        $result = $api->get("/files?ids=". implode(',', $globalIds));
+        $globalIds  = ArrayToolkit::column($files, 'globalId');
+        $api        = CloudAPIFactory::create();
+        $result     = $api->get("/files?ids=".implode(',', $globalIds));
         $cloudFiles = $result['data'];
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+
         foreach ($files as $i => $file) {
             if (empty($cloudFiles[$file['globalId']])) {
                 continue;
             }
+
             $files[$i] = $this->mergeCloudFile($file, $cloudFiles[$file['globalId']]);
         }
 
@@ -37,16 +39,17 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function resumeUpload($hash, $file)
     {
         $params = array(
-            'bucket' => $file['bucket'],
-            'fileName' => $file['filename'],
-            'fileSize' => $file['fileSize'],
+            'bucket'         => $file['bucket'],
+            'fileName'       => $file['filename'],
+            'fileSize'       => $file['fileSize'],
             'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
-            'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
-            'extras' => empty($file['extras']) ? '' : $file['extras'],
+            'processParams'  => empty($file['processParams']) ? '' : $file['processParams'],
+            'extras'         => empty($file['extras']) ? '' : $file['extras']
         );
 
-        $api = CloudAPIFactory::create();
+        $api     = CloudAPIFactory::create();
         $resumed = $api->post("/files/{$hash}/resume_upload", $params);
+
         if (empty($resumed['resumed']) || ($resumed['resumed'] !== 'ok')) {
             return null;
         }
@@ -56,106 +59,98 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function prepareUpload($params)
     {
-        $file = array();
+        $file             = array();
         $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
 
-        $pos = strrpos($file['filename'], '.');
-        $file['ext'] = empty( $pos ) ? '' : substr($file['filename'], $pos+1);
+        $pos         = strrpos($file['filename'], '.');
+        $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);
 
-        $file['fileSize'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
-        $file['status'] = 'uploading';
-        $file['targetId'] = $params['targetId'];
+        $file['fileSize']   = empty($params['fileSize']) ? 0 : $params['fileSize'];
+        $file['status']     = 'uploading';
+        $file['targetId']   = $params['targetId'];
         $file['targetType'] = $params['targetType'];
-        $file['storage'] = 'cloud';
+        $file['storage']    = 'cloud';
 
         $file['type'] = FileToolkit::getFileTypeByExtension($file['ext']);
 
         $file['updatedUserId'] = empty($params['userId']) ? 0 : $params['userId'];
-        $file['updatedTime'] = time();
+        $file['updatedTime']   = time();
         $file['createdUserId'] = $file['updatedUserId'];
-        $file['createdTime'] = $file['updatedTime'];
+        $file['createdTime']   = $file['updatedTime'];
 
         // 以下参数在cloud模式下弃用，填充随机值
-        $file['hashId'] = uniqid('NIL') . date('Yndhis');
-        $file['etag'] = $file['hashId'];
+        $file['hashId']      = uniqid('NIL').date('Yndhis');
+        $file['etag']        = $file['hashId'];
         $file['convertHash'] = $file['hashId'];
-        
+
         return $file;
     }
 
     public function initUpload($file)
     {
         $params = array(
-            'outerId' => $file['id'],
-            'bucket' => $file['bucket'],
-            'fileName' => $file['filename'],
-            'fileSize' => $file['fileSize'],
-            'hash' => $file['hash'],
-            'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
-            'processParams' => empty($file['processParams']) ? '' : $file['processParams'],
-            'extras' => empty($file['extras']) ? '' : $file['extras'],
+            "extno"  => $file['extno'],
+            "bucket" => $file['bucket'],
+            "key"    => $file['key']
         );
 
         $api = CloudAPIFactory::create();
-        return $api->post('/files/init_upload', $params);
+        return $api->post('/resources/init_upload', $params);
     }
 
     public function getDownloadFile($file)
     {
-        $api = CloudAPIFactory::create();
-        $download = $api->get("/files/{$file['globalId']}/download");
+        $api              = CloudAPIFactory::create();
+        $download         = $api->get("/files/{$file['globalId']}/download");
         $download['type'] = 'url';
         return $download;
     }
 
     private function mergeCloudFile($file, $cloudFile)
     {
-        $file['hashId'] = $cloudFile['storageKey'];
+        $file['hashId']   = $cloudFile['storageKey'];
         $file['fileSize'] = $cloudFile['size'];
 
         $statusMap = array(
-            'none' => 'none',
-            'waiting' => 'waiting',
+            'none'       => 'none',
+            'waiting'    => 'waiting',
             'processing' => 'doing',
-            'ok' => 'success',
-            'error' => 'error',
+            'ok'         => 'success',
+            'error'      => 'error'
         );
         $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
 
         if (empty($cloudFile['processParams']['output'])) {
             $file['convertParams'] = array();
-            $file['metas2'] = array();
+            $file['metas2']        = array();
         } else {
             if ($file['type'] == 'video') {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
+                    'convertor'    => $cloudFile['processParams']['output'],
                     'videoQuality' => $cloudFile['processParams']['videoQuality'],
-                    'audioQuality' => $cloudFile['processParams']['audioQuality'],
+                    'audioQuality' => $cloudFile['processParams']['audioQuality']
                 );
                 $file['metas2'] = $cloudFile['metas']['levels'];
-
             } elseif ($file['type'] == 'ppt') {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
+                    'convertor' => $cloudFile['processParams']['output']
                 );
                 $file['metas2'] = $cloudFile['metas'];
             } elseif ($file['type'] == 'document') {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
+                    'convertor' => $cloudFile['processParams']['output']
                 );
                 $file['metas2'] = $cloudFile['metas'];
             } elseif ($file['type'] == 'audio') {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['processParams']['output'],
+                    'convertor'    => $cloudFile['processParams']['output'],
                     'videoQuality' => 'normal',
-                    'audioQuality' => 'normal',
+                    'audioQuality' => 'normal'
                 );
                 $file['metas2'] = $cloudFile['metas']['levels'];
             }
         }
 
         return $file;
-
     }
-
 }
