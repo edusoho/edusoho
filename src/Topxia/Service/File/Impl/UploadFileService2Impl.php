@@ -222,6 +222,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $this->getUploadFileDao()->waveFileUsedCount($id, -1);
     }
 
+    public function waveUploadFile($id, $field, $diff)
+    {
+        $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
+    }
+
     protected function _prepareSearchConditions($conditions)
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];

@@ -30,4 +30,6 @@ interface UploadFileService2
 
     public function decreaseFileUsedCount($id);
 
+    public function waveUploadFile($id, $field, $diff);
+
 }

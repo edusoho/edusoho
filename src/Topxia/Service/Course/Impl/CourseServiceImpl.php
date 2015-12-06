@@ -2846,7 +2846,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return $this->createService('File.UploadFileService2');
     }
 
     protected function getMessageService()
