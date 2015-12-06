@@ -3,10 +3,21 @@ define(function(require, exports, module) {
 	var Class = require('class');
 
     var Cloud2Strategy = Class.extend({
-    	initialize: function(file) {
+    	initialize: function(file, response) {
+
+            file.gid = response.globalId;
+            file.globalId = response.globalId;
+            file.outerId = response.outerId;
+
+            file.uploaderWidget.set('uploadToken', response.uploadToken);
+            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
+            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
+            file.uploaderWidget.set('uploadMode', response.uploadMode);
+
             this.file = file;
 	        var self = file.uploaderWidget;
 	        var cloud2UploadStatus = this._initCloud2UploadStatus();
+            
 	        cloud2UploadStatus.currentFileSize = file.size;
 	        cloud2UploadStatus.blockIndex = Math.ceil(cloud2UploadStatus.currentFileSize/cloud2UploadStatus.blockSize);
 	        cloud2UploadStatus.chunkIndex = Math.ceil(cloud2UploadStatus.currentFileSize/cloud2UploadStatus.chunkSize);
@@ -22,6 +33,17 @@ define(function(require, exports, module) {
             file.uploaderWidget.uploader.option('chunkRetry', 2);
             file.uploaderWidget.uploader.option('sendAsBinary', true);
 
+        },
+
+        preupload: function(file, response){
+            file.gid = response.globalId;
+            file.globalId = response.globalId;
+            file.outerId = response.outerId;
+
+            file.uploaderWidget.set('uploadToken', response.uploadToken);
+            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
+            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
+            file.uploaderWidget.set('uploadMode', response.uploadMode);
         },
         
         uploadBeforeSend: function(object, data, headers){
