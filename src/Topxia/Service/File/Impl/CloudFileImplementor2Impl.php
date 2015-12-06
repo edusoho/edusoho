@@ -37,19 +37,18 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $files;
     }
 
-    public function resumeUpload($hash, $file)
+    public function resumeUpload($globalId, $file)
     {
         $params = array(
-            'bucket'         => $file['bucket'],
-            'fileName'       => $file['filename'],
-            'fileSize'       => $file['fileSize'],
-            'uploadCallback' => empty($file['uploadCallback']) ? '' : $file['uploadCallback'],
-            'processParams'  => empty($file['processParams']) ? '' : $file['processParams'],
-            'extras'         => empty($file['extras']) ? '' : $file['extras']
+            'bucket' => $file['bucket'],
+            'extno'  => $file['extno'],
+            'size'   => $file['size'],
+            'name'   => $file['name'],
+            'hash'   => $file['hash']
         );
 
         $api     = CloudAPIFactory::create();
-        $resumed = $api->post("/files/{$hash}/resume_upload", $params);
+        $resumed = $api->post("/resources/{$globalId}/upload_resume", $params);
 
         if (empty($resumed['resumed']) || ($resumed['resumed'] !== 'ok')) {
             return null;
@@ -92,11 +91,14 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $params = array(
             "extno"  => $file['extno'],
             "bucket" => $file['bucket'],
-            "key"    => $file['key']
+            "key"    => $file['key'],
+            "hash"   => $file['hash'],
+            'name'   => $file['name'],
+            'size'   => $file['size']
         );
 
         $api = CloudAPIFactory::create();
-        return $api->post('/resources/init_upload', $params);
+        return $api->post('/resources/upload_init', $params);
     }
 
     public function deleteFile($file)
