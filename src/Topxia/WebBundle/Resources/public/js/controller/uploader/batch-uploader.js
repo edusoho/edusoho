@@ -43,11 +43,7 @@ define(function(require, exports, module) {
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                 pick: this.element.find('.file-pick-btn') ,
-                chunked: true,
-                chunkSize: 1024 * 1024,
-                chunkRetry: 2,
                 threads: 1,
-                sendAsBinary: true,
                 formData: {
 
                 }
@@ -296,6 +292,9 @@ define(function(require, exports, module) {
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
+
+                    data.filename = file.name;
+                    data.size = file.size;
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
