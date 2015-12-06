@@ -191,6 +191,11 @@ define(function(require, exports, module) {
             }
             this.uploader.destroy();
             this.uploader = null;
+        },
+
+        destroy: function() {
+            this._destoryUploader();
+            BaseChooser.superclass.destroy.call(this);
         }
 
     });

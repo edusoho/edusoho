@@ -68,6 +68,7 @@ define(function(require, exports, module) {
 
         destroy: function() {
             if (this.uploader) {
+                this.uploader.stop();
                 this.uploader.destroy();
             }
             BatchUploader.superclass.destroy.call(this);

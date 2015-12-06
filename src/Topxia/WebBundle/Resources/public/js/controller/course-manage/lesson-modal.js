@@ -369,11 +369,11 @@ define(function(require, exports, module) {
 
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
-            videoChooser.destroy();
-            audioChooser.destroy();
-            pptChooser.destroy();
-            documentChooser.destroy();
-            flashChooser.destroy();
+            videoChooser._destoryUploader();
+            audioChooser._destoryUploader();
+            pptChooser._destoryUploader();
+            documentChooser._destoryUploader();
+            flashChooser._destoryUploader();
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);
