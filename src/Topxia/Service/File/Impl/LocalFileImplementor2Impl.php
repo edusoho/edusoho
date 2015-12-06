@@ -103,14 +103,6 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         return $uploadParams;
     }
 
-    public function getMediaInfo($key, $mediaType)
-    {
-    }
-
-    public function reconvertFile($file, $convertCallback, $pipeline = null)
-    {
-    }
-
     public function getDownloadFile($file)
     {
         return $this->getFileWebPath($file);
