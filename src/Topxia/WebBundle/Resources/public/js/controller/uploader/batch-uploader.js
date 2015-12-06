@@ -294,6 +294,8 @@ define(function(require, exports, module) {
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
+                    var key = 'file_' + file.hash;
+                    store.remove(key);
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
@@ -305,8 +307,6 @@ define(function(require, exports, module) {
                         var $li = $('#' + file.id);
                         $li.find('.file-status').html('已上传');
                         $li.find('.file-progress-bar').css('width', '0%');
-                        var key = 'file_' + file.hash;
-                        store.remove(key);
 
                     });
 

@@ -43,9 +43,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return null;
         }
 
-        //MOCK
-        return $file;
-
         return $this->getFileImplementor($file)->getFile($file);
     }
 
