@@ -8,7 +8,6 @@ define(function(require, exports, module) {
 
         var $panel = $('#material-lib-items-panel');
         require('../../../../topxiaweb/js/util/batch-select')($panel);
-        // require('../../../../topxiaweb/js/util/batch-delete')($panel);
 
         $(".tip").tooltip();
 
@@ -104,21 +103,6 @@ define(function(require, exports, module) {
             backdrop: 'static',
             keyboard: false,
             show: false
-        });
-
-        $(".file-create-btn").on('click', function() {
-            var url = "";
-            if ($(this).data("storage") != 'cloud' || typeof(FileReader) == "undefined" || typeof(XMLHttpRequest) == "undefined") {
-                url = $(this).data("normalUrl");
-            } else {
-                url = $(this).data("html5Url");
-            }
-            $("#modal").html('');
-            $("#modal").modal('show');
-
-            $.get(url, function(responseHtml) {
-                $("#modal").html(responseHtml);
-            });
         });
 
         $('.image-preview').colorbox({innerWidth:'70%',innerHeight:'70%',rel:'group1', photo:true, current:'{current} / {total}', title:function() {
