@@ -3,14 +3,6 @@
     <div class="select"><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
     	data-link-count="{{ file.usedCount }}"
     	data-file-name="{{ file.filename }}">
-	{% if file.auditStatus == 'rejected' %}
-    	<a href="#modal" data-toggle="modal" 
-				data-url="{{ path('show_audit_log', {targetType: 'file', targetId: file.id}) }}" title="查看审核记录"><div class="label label-info pull-right audit-status-label">审核驳回</div></a>
-	{% endif %}
-    {% if file.auditStatus != 'rejected' and file.usedCount > 0 %}
-    	{# <div class="label label-primary pull-right audit-status-label">使用中</div> #}
-	{% endif %}
-
 
 	{% if file.convertStatus == 'waiting' %}
 		<div class="label label-default pull-right audit-status-label">等待转码</div>
