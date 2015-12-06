@@ -6,7 +6,12 @@ define(function(require, exports, module) {
     	initialize: function(file) {
             this.file = file;
             var uploaderWidget = file.uploaderWidget;
+            
             uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
+            uploaderWidget.uploader.option('chunked', true);
+            uploaderWidget.uploader.option('chunkSize', 1024*1024);
+            uploaderWidget.uploader.option('chunkRetry', 2);
+
 
             var startUrl = uploaderWidget.get('uploadProxyUrl') + '/chunks/start';
             var postData = {file_gid:file.globalId, file_size: file.size, file_name:file.name};
