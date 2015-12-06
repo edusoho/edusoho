@@ -128,54 +128,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         );
         $params = $implementor->initUpload($initUploadParams);
 
-        // MOCK
-        // $params = array('no' => 10000);
-
         $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $params['no']));
-
-        // //MOCK start
-        // $returnBody = array(
-        //     'key'             => '$(key)',
-        //     'filename'        => '$(fname)',
-        //     'size'            => '$(fsize)',
-        //     'mimeType'        => '$(mimeType)',
-        //     'etag'            => '$(etag)',
-        //     'imageInfo'       => '$(imageInfo)',
-        //     'length'          => '$(avinfo.format.duration)',
-        //     'userId'          => '$(endUser)',
-        //     'globalId'        => '$(x:globalId)',
-        //     'x:convertParams' => '1234414',
-        //     'x:globalId'      => $params['no']
-        // );
-        // $parts = array();
-
-        // foreach ($returnBody as $key => $value) {
-        //     $parts[] = "\"{$key}\":{$value}";
-        // }
-
-        // $returnBody = '{'.implode(',', $parts).'}';
-
-        // $user                 = $this->getCurrentUser();
-        // $policy               = array();
-        // $policy['scope']      = 't124testadctaa';
-        // $policy['deadline']   = time() + 3600;
-        // $policy['endUser']    = (string) $user['id'];
-        // $policy['returnBody'] = $returnBody;
-        // $find                 = array('+', '/');
-        // $replace              = array('-', '_');
-        // $encodedPolicy        = str_replace($find, $replace, base64_encode(json_encode($policy)));
-        // $sign                 = hash_hmac('sha1', $encodedPolicy, 'QSeulE08D807X6OJNKV1Ea_p43yV0svZgYVqrO-G', true);
-        // $sign                 = str_replace($find, $replace, base64_encode($sign));
-        // $token                = 'Ukh9Uys7ONvq-Blktfu6w35vUcQopHRMD9lm2ZdL'.':'.$sign.':'.$encodedPolicy;
-
-        //MOCK end
 
         $result                   = array();
         $result['globalId']       = $file['globalId'];
         $result['outerId']        = $file['id'];
         $result['uploadMode']     = $params['uploadMode'];
-        $result['uploadUrl']      = 'http://upload.qiniu.com';
-        $result['uploadProxyUrl'] = 'http://www.esdev.com';
+        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadProxyUrl'] = '';
         $result['uploadToken']    = $params['uploadToken'];
 
         return $result;
