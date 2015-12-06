@@ -168,16 +168,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         // $sign                 = str_replace($find, $replace, base64_encode($sign));
         // $token                = 'Ukh9Uys7ONvq-Blktfu6w35vUcQopHRMD9lm2ZdL'.':'.$sign.':'.$encodedPolicy;
 
-        // $params                   = array();
-        // $params['globalId']       = $file['globalId'];
-        // $params['outerId']        = $file['id'];
-        // $params['uploadModel']    = 'cloud2';
-        $params['uploadUrl'] = 'http://upload.qiniu.com';
-        // $params['uploadProxyUrl'] = 'http://www.esdev.com';
-        // $params['uploadToken']    = $token;
         //MOCK end
 
-        return $params;
+        $result                   = array();
+        $result['globalId']       = $file['globalId'];
+        $result['outerId']        = $file['id'];
+        $result['uploadMode']     = $params['uploadMode'];
+        $result['uploadUrl']      = 'http://upload.qiniu.com';
+        $result['uploadProxyUrl'] = 'http://www.esdev.com';
+        $result['uploadToken']    = $params['uploadToken'];
+
+        return $result;
     }
 
     public function finishedUpload($params)

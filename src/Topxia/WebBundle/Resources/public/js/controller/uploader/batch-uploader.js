@@ -286,7 +286,7 @@ define(function(require, exports, module) {
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
-
+console.log(data);
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
                         file.uploaderWidget.trigger('file.uploaded', file, data);
