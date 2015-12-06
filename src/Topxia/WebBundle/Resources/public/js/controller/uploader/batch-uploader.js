@@ -186,7 +186,6 @@ define(function(require, exports, module) {
                 pptx: 'ppt',
                 mp3: 'audio'
             };
-            file
 
             var paramsDefault = {
                 'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'},
