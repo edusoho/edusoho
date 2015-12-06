@@ -43,11 +43,7 @@ define(function(require, exports, module) {
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                 pick: this.element.find('.file-pick-btn') ,
-                chunked: true,
-                chunkSize: 1024 * 1024,
-                chunkRetry: 2,
                 threads: 1,
-                sendAsBinary: true,
                 formData: {
 
                 }

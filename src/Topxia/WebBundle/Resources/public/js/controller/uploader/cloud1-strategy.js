@@ -16,6 +16,12 @@ define(function(require, exports, module) {
 	            file.uploaderWidget.uploader.option('server', self.get('uploadUrl')+'/mkblk/'+cloud2UploadStatus.blockSize);
 	        }
 	        self.set('cloud2UploadStatus',cloud2UploadStatus);
+
+            file.uploaderWidget.uploader.option('chunked', true);
+            file.uploaderWidget.uploader.option('chunkSize', cloud2UploadStatus.chunkSize);
+            file.uploaderWidget.uploader.option('chunkRetry', 2);
+            file.uploaderWidget.uploader.option('sendAsBinary', true);
+
         },
         
         uploadBeforeSend: function(object, data, headers){
