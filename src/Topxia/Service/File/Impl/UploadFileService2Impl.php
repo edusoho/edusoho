@@ -103,28 +103,48 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
+        $implementor       = $this->getFileImplementorByStorage($params['storage']);
+        $file              = $implementor->prepareUpload($params);
 
-        $implementor = $this->getFileImplementorByStorage($params['storage']);
-        $file        = $implementor->prepareUpload($params);
+        if (isset($params['outerId'])) {
+            $outterFile       = $this->getUploadFileDao()->getFile($params['outerId']);
+            $initUploadParams = array(
+                'extno'  => $outterFile['id'],
+                'bucket' => 'private',
+                'size'   => $params['fileSize'],
+                'hash'   => $params['hash'],
+                'name'   => $params['fileName']
+            );
+            $resumedResult = $implementor->resumeUpload($outterFile['globalId'], $initUploadParams);
 
-        // $resumed    = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
-        // $outterFile = $this->getUploadFileDao()->getFile($resumed['outerId']);
+            if ($resumedResult['resumed'] == 'ok' && $outterFile) {
+                $file = $this->getUploadFileDao()->updateFile($resumedResult['extno'], array(
+                    'filename'   => $file['filename'],
+                    'targetId'   => $file['targetId'],
+                    'targetType' => $file['targetType']
+                ));
 
-        // if ($resumed && $outterFile) {
-        //     $this->getUploadFileDao()->updateFile($resumed['outerId'], array(
-        //         'filename'   => $file['filename'],
-        //         'targetId'   => $file['targetId'],
-        //         'targetType' => $file['targetType']
-        //     ));
-        //     return $resumed;
-        // }
+                $result                   = array();
+                $result['globalId']       = $file['globalId'];
+                $result['outerId']        = $file['id'];
+                $result['uploadMode']     = $resumedResult['uploadMode'];
+                $result['uploadUrl']      = 'http://upload.edusoho.net';
+                $result['uploadProxyUrl'] = '';
+                $result['uploadToken']    = $resumedResult['uploadToken'];
+                $result['resumed']        = 'ok';
+                return $result;
+            }
+        }
 
         $file = $this->getUploadFileDao()->addFile($file);
 
         $initUploadParams = array(
             'extno'  => $file['id'],
             'bucket' => 'private',
-            'key'    => $file['hashId']
+            'key'    => $file['hashId'],
+            'hash'   => $params['hash'],
+            'name'   => $params['fileName'],
+            'size'   => $params['fileSize']
         );
         $params = $implementor->initUpload($initUploadParams);
 
