@@ -291,11 +291,11 @@ define(function(require, exports, module) {
 
                 finishupload: function(file, ret, hds) {
                     var deferred = WebUploader.Deferred();
+                    var key = 'file_' + file.hash;
+                    store.remove(key);
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
-                    var key = 'file_' + file.hash;
-                    store.remove(key);
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
