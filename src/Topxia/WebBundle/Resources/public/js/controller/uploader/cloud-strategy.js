@@ -3,7 +3,16 @@ define(function(require, exports, module) {
 	var Class = require('class');
 
     var LocalStrategy = Class.extend({
-    	initialize: function(file) {
+    	initialize: function(file, response){
+            file.gid = response.globalId;
+            file.globalId = response.globalId;
+            file.outerId = response.outerId;
+
+            file.uploaderWidget.set('uploadToken', response.uploadToken);
+            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
+            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
+            file.uploaderWidget.set('uploadMode', response.uploadMode);
+
             this.file = file;
             var uploaderWidget = file.uploaderWidget;
             

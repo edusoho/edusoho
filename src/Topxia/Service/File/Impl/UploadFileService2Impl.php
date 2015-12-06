@@ -103,8 +103,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
         $file              = $implementor->prepareUpload($params);
 
-        if (isset($params['outerId'])) {
-            $outterFile       = $this->getUploadFileDao()->getFile($params['outerId']);
+        if (isset($params['id'])) {
+            $outterFile       = $this->getUploadFileDao()->getFile($params['id']);
             $initUploadParams = array(
                 'extno'  => $outterFile['id'],
                 'bucket' => $params['bucket'],

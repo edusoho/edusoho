@@ -234,30 +234,19 @@ define(function(require, exports, module) {
                         var key = 'file_' + file.hash;
                         var value = store.get(key);
                         if(value) {
-                            params.globalId = value.globalId;
-                            params.outerId = value.outerId;
+                            params.id = value.id;
                         }
 
                         $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
-                            file.gid = response.globalId;
-                            file.globalId = response.globalId;
-                            file.outerId = response.outerId;
-
-                            file.uploaderWidget.set('uploadToken', response.uploadToken);
-                            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
-                            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
-                            file.uploaderWidget.set('uploadMode', response.uploadMode);
-                            
                             var key = 'file_' + file.hash;
                             if(response.resumed != 'ok') {
                                 var value = {};
-                                value.globalId = file.globalId;
-                                value.outerId = file.outerId;
+                                value.id = file.id;
                                 store.set(key, value);
                             }
 
                             require.async('./'+response.uploadMode+'-strategy', function(Strategy){
-                                var strategy = new Strategy(file);
+                                var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
                                 deferred.resolve();
                             });
