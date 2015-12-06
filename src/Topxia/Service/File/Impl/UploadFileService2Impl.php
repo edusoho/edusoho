@@ -107,82 +107,38 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $implementor = $this->getFileImplementorByStorage($params['storage']);
         $file        = $implementor->prepareUpload($params);
 
-        $resumed    = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
-        $outterFile = $this->getUploadFileDao()->getFile($resumed['outerId']);
+        // $resumed    = $implementor->resumeUpload($params['hash'], array_merge($file, array('bucket' => $params['bucket'])));
+        // $outterFile = $this->getUploadFileDao()->getFile($resumed['outerId']);
 
-        if ($resumed && $outterFile) {
-            $this->getUploadFileDao()->updateFile($resumed['outerId'], array(
-                'filename'   => $file['filename'],
-                'targetId'   => $file['targetId'],
-                'targetType' => $file['targetType']
-            ));
-            return $resumed;
-        }
+        // if ($resumed && $outterFile) {
+        //     $this->getUploadFileDao()->updateFile($resumed['outerId'], array(
+        //         'filename'   => $file['filename'],
+        //         'targetId'   => $file['targetId'],
+        //         'targetType' => $file['targetType']
+        //     ));
+        //     return $resumed;
+        // }
 
         $file = $this->getUploadFileDao()->addFile($file);
 
-        $file['bucket']        = $params['bucket'];
-        $file['hash']          = $params['hash'];
-        $file['processParams'] = empty($params['processParams']) ? array() : $params['processParams'];
-
-        if (!empty($file['processParams'])) {
-            $file['processParams']['callback'] = $params['processCallback'];
-        }
-
-        $file['uploadCallback'] = $params['uploadCallback'];
-
-        $params = $implementor->initUpload($file);
-
-        // MOCK
-        $params = array('globalId' => 10000);
-
-        $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $params['globalId']));
-
-        //MOCK start
-        $params['outerId']     = $file['id'];
-        $params['uploadModel'] = 'cloud2';
-        $params['uploadUrl']   = 'http://upload.qiniu.com';
-
-        $returnBody = array(
-            'key'             => '$(key)',
-            'filename'        => '$(fname)',
-            'size'            => '$(fsize)',
-            'mimeType'        => '$(mimeType)',
-            'etag'            => '$(etag)',
-            'imageInfo'       => '$(imageInfo)',
-            'length'          => '$(avinfo.format.duration)',
-            'userId'          => '$(endUser)',
-            'globalId'        => '$(x:globalId)',
-            'x:convertParams' => '1234414',
-            'x:globalId'      => $params['globalId']
+        $initUploadParams = array(
+            'extno'  => $file['id'],
+            'bucket' => 'private',
+            'key'    => $file['hashId']
         );
-        $parts = array();
+        $params = $implementor->initUpload($initUploadParams);
 
-        foreach ($returnBody as $key => $value) {
-            $parts[] = "\"{$key}\":{$value}";
-        }
+        $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $params['no']));
 
-        $returnBody = '{'.implode(',', $parts).'}';
+        $result                   = array();
+        $result['globalId']       = $file['globalId'];
+        $result['outerId']        = $file['id'];
+        $result['uploadMode']     = $params['uploadMode'];
+        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadProxyUrl'] = '';
+        $result['uploadToken']    = $params['uploadToken'];
 
-        $user                 = $this->getCurrentUser();
-        $policy               = array();
-        $policy['scope']      = 't124testadctaa';
-        $policy['deadline']   = time() + 3600;
-        $policy['endUser']    = (string) $user['id'];
-        $policy['returnBody'] = $returnBody;
-
-        $find          = array('+', '/');
-        $replace       = array('-', '_');
-        $encodedPolicy = str_replace($find, $replace, base64_encode(json_encode($policy)));
-
-        $sign = hash_hmac('sha1', $encodedPolicy, 'QSeulE08D807X6OJNKV1Ea_p43yV0svZgYVqrO-G', true);
-        $sign = str_replace($find, $replace, base64_encode($sign));
-
-        $token                       = 'Ukh9Uys7ONvq-Blktfu6w35vUcQopHRMD9lm2ZdL'.':'.$sign.':'.$encodedPolicy;
-        $params['postData']['token'] = $token;
-        //MOCK end
-
-        return $params;
+        return $result;
     }
 
     public function finishedUpload($params)

@@ -241,10 +241,10 @@ define(function(require, exports, module) {
                             file.globalId = response.globalId;
                             file.outerId = response.outerId;
 
-                            file.uploaderWidget.set('uploadToken', response.postData.token);
+                            file.uploaderWidget.set('uploadToken', response.uploadToken);
                             file.uploaderWidget.set('uploadUrl', response.uploadUrl);
                             file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
-                            file.uploaderWidget.set('uploadModel', response.uploadModel);
+                            file.uploaderWidget.set('uploadMode', response.uploadMode);
                             
                             var key = 'file_' + file.globalId + '_' + file.hash;
                             if(!store.get(key)) {
@@ -252,7 +252,7 @@ define(function(require, exports, module) {
                                 store.set(key, value);
                             }
 
-                            require.async('./'+response.uploadModel+'-strategy', function(Strategy){
+                            require.async('./'+response.uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file);
                                 file.uploaderWidget.set('strategy', strategy);
                                 deferred.resolve();
@@ -286,7 +286,7 @@ define(function(require, exports, module) {
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
-
+console.log(data);
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();
                         file.uploaderWidget.trigger('file.uploaded', file, data);

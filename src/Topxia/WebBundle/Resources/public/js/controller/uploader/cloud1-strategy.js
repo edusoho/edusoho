@@ -42,11 +42,18 @@ define(function(require, exports, module) {
         finishUpload: function(deferred) {
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
-            var url = self.get('uploadUrl')+'/mkfile/'+cloud2UploadStatus.currentFileSize;
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
-            xhr.send(cloud2UploadStatus.ctxs.join(','));
+            var url = '/uploader/mkfile/'+cloud2UploadStatus.currentFileSize;
+            $.ajax({
+                url: url,
+                type:'POST',
+                data:{
+                    'uploadUrl': encodeURI(self.get('uploadUrl')),
+                    'content': cloud2UploadStatus.ctxs.join(',')
+                },
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
+                }
+            });
             return {globalId: this.file.gid};
         },
 
