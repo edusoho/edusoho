@@ -109,6 +109,11 @@ define(function(require, exports, module) {
             return $(this).data('fileName');
         }});
 
+        $('.select [type=checkbox]').each(function(){
+            console.log($(this).val());
+        });
+
+
     }
 
 });

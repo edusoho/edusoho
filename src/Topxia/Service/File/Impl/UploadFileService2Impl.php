@@ -54,7 +54,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return array();
         }
 
-        return $this->mergeImplFiles($files);
+        return $files;
     }
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
@@ -66,7 +66,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return array();
         }
 
-        return $this->mergeImplFiles($files);
+        return $files;
     }
 
     public function searchFilesCount($conditions)
@@ -238,24 +238,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         return $conditions;
-    }
-
-    protected function mergeImplFiles($files)
-    {
-        $groupedFiles = array();
-
-        foreach ($files as $file) {
-            $name                  = $this->getFileImplementorName($file);
-            $groupedFiles[$name][] = $file;
-        }
-
-        $implFiles = array();
-
-        foreach ($groupedFiles as $name => $files) {
-            $implFiles = array_merge($implFiles, $this->createFileImplementor($name)->findFiles($files));
-        }
-
-        return $implFiles;
     }
 
     protected function getFileImplementorName($file)

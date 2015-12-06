@@ -1,20 +1,8 @@
 <li class="course-grid item-material">
-	<div class="course-item-list-multi">
-    <div class="select"><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
+	<div style="width: 180px; height: 180px; padding: 2px;" class="course-item-list-multi">
+    <div><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
     	data-link-count="{{ file.usedCount }}"
-    	data-file-name="{{ file.filename }}">
-
-	{% if file.convertStatus == 'waiting' %}
-		<div class="label label-default pull-right audit-status-label">等待转码</div>
-    {% elseif file.convertStatus == 'doing' %}
-		<div class="label label-default pull-right audit-status-label">正在转码</div>
-    {% elseif file.convertStatus == 'error' %}
-      	<div class="label label-info pull-right audit-status-label">转码失败</div>
-    {% endif %}
-
-
-	</div>
-
+    	data-file-name="{{ file.filename }}"></div>
 
    	{% if file.type == 'video' %}
 		{% set parentClass = "item-object-video" %}
