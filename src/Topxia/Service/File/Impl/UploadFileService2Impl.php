@@ -107,7 +107,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $outterFile       = $this->getUploadFileDao()->getFile($params['outerId']);
             $initUploadParams = array(
                 'extno'  => $outterFile['id'],
-                'bucket' => 'private',
+                'bucket' => $params['bucket'],
                 'size'   => $params['fileSize'],
                 'hash'   => $params['hash'],
                 'name'   => $params['fileName']
@@ -137,7 +137,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $initUploadParams = array(
             'extno'  => $file['id'],
-            'bucket' => 'private',
+            'bucket' => $params['bucket'],
             'key'    => $file['hashId'],
             'hash'   => $params['hash'],
             'name'   => $params['fileName'],
