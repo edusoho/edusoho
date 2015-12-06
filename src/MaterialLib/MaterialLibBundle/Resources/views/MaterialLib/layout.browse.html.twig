@@ -26,27 +26,26 @@
         	<div class="form-group">
         	  <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
         	</div>
-        	<button class="btn btn-primary">搜索</button>
+        	<button class="btn btn-primary btn-sm">搜索</button>
         	{% if source == "upload" %}
         		<div class="pull-right">
-							<a class="btn btn-info btn-sm file-create-btn"
-								data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:'0', targetType:'materiallib'}) }}"
-	            data-normal-url="{{ path('course_manage_upload_course_files', {id:'0', targetType:'materiallib'}) }}"
-	            data-storage="{{storageSetting.upload_mode}}">
-	               <i class="glyphicon glyphicon-plus"></i>上传文件</a>
+    				<a class="btn btn-primary file-create-btn"
+                        data-toggle="modal" data-target="#modal"
+                        data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}">
+	               <i class="es-icon es-icon-anonymous-iconfont"></i>上传文件</a>
         		</div>
         		{% endif %}
         </form>
         
         <div id="material-lib-items-panel">
 			{% block list %}{% endblock %}
-                <div>
+                <div class="delete-operation">
                     <label class="checkbox-inline">
                         <input type="checkbox" data-role="batch-select" /> 全选
                     </label>
     	            {% if source == "upload" %}
-                  		<button class="btn btn-danger btn-sm mlm" data-role="batch-delete" data-name="资料库文件"  data-url="{{ path('course_manage_upload_course_delete_files', {id:'0', type:type}) }}">
-                            <i class="glyphicon glyphicon-trash"></i> 删除
+                  		<button class="btn btn-info btn-md ml25" data-role="batch-delete" data-name="资料库文件"  data-url="{{ path('materiallib_file_deletes') }}">
+                            <i class="es-icon es-icon-delete"></i> 删除
                         </button>
                     {% endif %}
                 </div>

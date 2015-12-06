@@ -3,11 +3,8 @@
 namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Util\CloudClientFactory;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Topxia\WebBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController {
@@ -28,29 +25,26 @@ class MaterialLibController extends BaseController {
 		$currentUserId = $currentUser['id'];
 		
 		$keyWord = $request->query->get ( 'keyword' ) ?  : "";
-		$sortBy = $request->query->get ( 'sortBy' ) ?  : "latestUpdated";
 		
-		$param = array ();
-		
+		$conditions = array();
+		$conditions['stats'] = 'ok';
+
 		if ($type != 'all') {
-			$param ['type'] = $type;
+			$conditions ['type'] = $type;
 		}
 		
-		if ($keyWord != '') {
-			$param ['filename'] = $keyWord;
+		if (!empty($keyWord)) {
+			$conditions ['filename'] = $keyWord;
 		}
 		
-		$param ['source'] = $source;
-		$param ['currentUserId'] = $currentUserId;
+		$conditions ['source'] = $source;
+		$conditions ['currentUserId'] = $currentUserId;
 
-		$paginator = new Paginator ( $request, $this->getUploadFileService ()->searchFileCount ( $param ), 19 );
+		$paginator = new Paginator ( $request, $this->getUploadFileService ()->searchFilesCount ( $conditions ), 20 );
 		
-		$materialResults = $this->getUploadFileService ()->searchFiles ( $param, $sortBy, $paginator->getOffsetCount (), $paginator->getPerPageCount () );
+		$files = $this->getUploadFileService ()->searchFiles ( $conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount (), $paginator->getPerPageCount () );
 		
-		//Find the owners of all the files. This will be displayed for the files shared by other users.
-		$createdUserIds = ArrayToolkit::column($materialResults, "createdUserId");
-
-		$createdUsers = $this->getUserService()->findUsersByIds($createdUserIds);
+		$createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
 		//Return different views according to current viewing mode
 		if ($viewMode == 'thumb') {
@@ -64,7 +58,7 @@ class MaterialLibController extends BaseController {
 		return $this->render ( $resultPage, array (
 				'currentUserId' => $currentUserId,
 				'type' => $type,
-				'materialResults' => $materialResults,
+				'files' => $files,
 				'createdUsers' => $createdUsers,
 				'paginator' => $paginator,
 				'storageSetting' => $storageSetting,
@@ -74,30 +68,22 @@ class MaterialLibController extends BaseController {
 		) );
 	}
 
-	/**
-	 * Delete a file. Only the owner or the super admin can delete a file.
-	 * @param Request $request HTTP request
-	 * @param unknown $id id of the file to be deleted
-	 * @return \Symfony\Component\HttpFoundation\JsonResponse JSON response
-	 */
-	public function deleteAction(Request $request, $id) {
-		$user = $this->getCurrentUser ();
-		if (!$user->isTeacher() && !$user->isAdmin()) {
-			throw $this->createAccessDeniedException('您无权访问此页面');
-		}
+	public function deleteAction(Request $request, $id)
+	{
+		$file = $this->tryAccessFile($id);
+		$this->getUploadFileService ()->deleteFiles ( array($id) );
+		return $this->createJsonResponse ( true);
+	}
 
-		$file = $this->getUploadFileService()->getFile($id);
-		
-		if (empty ( $file )) {
-			throw $this->createNotFoundException ();
-		}elseif($user["id"] != $file["createdUserId"] && !in_array('ROLE_SUPER_ADMIN', $user['roles'])){
-			//Current user is not either the owner or super admin
-			throw $this->createAccessDeniedException("您没有权限删除此文件！");
-		}else{
-			$this->getUploadFileService ()->deleteFile ( $id );
-			
-			return $this->createJsonResponse ( true);
+	public function deletesAction(Request $request)
+	{
+		$ids = $request->request->get('ids');
+
+		foreach ($ids as $id) {
+			$file = $this->tryAccessFile($id);
+			$this->getUploadFileService ()->deleteFiles ( array($id) );
 		}
+		return $this->createJsonResponse ( true);
 	}
 	
 	/**
@@ -231,173 +217,67 @@ class MaterialLibController extends BaseController {
 		return $this->createJsonResponse ( true );
 	}
 
-	/**
-	 * Preview a file in a pop-up window.
-	 * @param Request $request HTTP request
-	 * @param unknown $fileId file id
-	 * @return \Symfony\Component\HttpFoundation\Response HTTP response
-	 */
-	public function previewAction(Request $request, $fileId) {
-		$user = $this->getCurrentUser ();
-		if (!$user->isTeacher() && !$user->isAdmin()) {
-			throw $this->createAccessDeniedException('您无权访问此页面');
-		}
-
-		$file = $this->getUploadFileService()->getFile($fileId);
+	public function previewAction(Request $request, $id)
+	{
+		$file = $this->tryAccessFile($id);
 		
+		return $this->render ( 'MaterialLibBundle:MaterialLib:preview-modal.html.twig', array (
+			'file' => $file,
+		));
+	}
+
+	public function downloadAction(Request $request, $id)
+	{
+		$file = $this->tryAccessFile($id);
+		return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
+	}
+
+	protected function tryAccessFile($fileId)
+	{
+		$file = $this->getUploadFileService()->getFile($fileId);
 		if (empty ( $file )) {
 			throw $this->createNotFoundException ();
 		}
-		
-		if ($file ['type'] == 'video') {
-			if (! empty ( $file ['metas2'] ) && ! empty ( $file ['metas2'] ['sd'] ['key'] )) {
-				$factory = new CloudClientFactory ();
-				$client = $factory->createClient ();
-				$hls = $client->generateHLSQualitiyListUrl ( $file ['metas2'], 3600 );
-				
-				if (isset ( $file ['convertParams'] ['convertor'] ) && ($file ['convertParams'] ['convertor'] == 'HLSEncryptedVideo')) {
 
-					$token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 3, 'duration' => 3600));
-					
-					$hls = array(
-                        'url' => $this->generateUrl('hls_playlist', array(
-                            'id' => $file['id'], 
-                            'token' => $token['token'],
-                            'line' => $request->query->get('line')
-                        ), true)
-                    );
-				} else {
-					$hls = $client->generateHLSQualitiyListUrl ( $file ['metas2'], 3600 );
-				}
-			}
-		}
-
-		return $this->render ( 'MaterialLibBundle:MaterialLib:preview-modal.html.twig', array (
-				'user' => $user,
-				'file' => $file,
-				'hlsUrl' => (isset ( $hls ) and is_array($hls) and !empty($hls['url'])) ? $hls['url'] : '',
-		));
-	}
-	
-	/**
-	 * Generate HLS key which will be used when preview a file from the cloud.
-	 * @param Request $request HTTP request
-	 * @param unknown $fileId file id
-	 * @param unknown $token token
-	 * @return \Symfony\Component\HttpFoundation\Response HTTP response
-	 */
-	public function hlskeyurlAction(Request $request, $fileId, $token)
-	{
 		$user = $this->getCurrentUser ();
-		if (!$user->isTeacher() && !$user->isAdmin()) {
-			throw $this->createAccessDeniedException('您无权访问此页面');
+		if ($user->isAdmin()) {
+			return $file;
 		}
 
-		$token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
-		
-		if (empty($token)) {
-			$fakeKey = $this->getTokenService()->makeFakeTokenString(16);
-			return new Response($fakeKey);
-		}
-	
-		$file = $this->getUploadFileService()->getFile($fileId);
-		
-		if (empty($file)) {
-			throw $this->createNotFoundException();
-		}
-	
-		if (empty($file['convertParams']['hlsKey'])) {
-			throw $this->createNotFoundException();
-		}
-	
-		return new Response($file['convertParams']['hlsKey']);
-	}
-	
-	/**
-	 * Preview a PPT file.
-	 * @param Request $request HTTP request
-	 * @param unknown $fileId file id
-	 * @return \Symfony\Component\HttpFoundation\JsonResponse JSON response
-	 */
-	public function pptAction(Request $request, $fileId)
-	{
-		$user = $this->getCurrentUser ();
-		if (!$user->isTeacher() && !$user->isAdmin()) {
-			throw $this->createAccessDeniedException('您无权访问此页面');
+		if (!$user->isTeacher()) {
+			throw $this->createAccessDeniedException('您无权访问此文件！');
 		}
 
-		$file = $this->getUploadFileService()->getFile($fileId);
-		
-		if (empty($file) || $file['type'] != 'ppt') {
-			throw $this->createNotFoundException();
+		if ($file['createdUserId'] == $user['id']) {
+			return $file;
 		}
-	
-		if ($file['convertStatus'] != 'success') {
-			if ($file['convertStatus'] == 'error') {
-				$message = sprintf('PPT文档转换失败，请重新转换。');
-				return $this->createJsonResponse(array(
-						'error' => array('code' => 'error', 'message' => $message),
-				));
-			} else {
-				return $this->createJsonResponse(array(
-						'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。'),
-				));
+
+		$shares = $this->getUploadFileService()->findShareHistory($file['createdUserId']);
+		foreach ($shares as $share) {
+			if ($share['targetUserId'] == $user['id']) {
+				return $file;
 			}
 		}
-	
-		$factory = new CloudClientFactory();
-		$client = $factory->createClient();
-	
-		$result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length']. '');
-	
-		return $this->createJsonResponse($result);
-	}
 
-	private function getHeadLeaderInfo()
-	{
-		$storage = $this->getSettingService()->get("storage");
-		if(!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]){
-	
-			$headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-			$headLeaderArray = json_decode($headLeader['metas2'],true);
-			$headLeaders = array();
-			foreach ($headLeaderArray as $key => $value) {
-				$headLeaders[$key] = $value['key'];
-			}
-			$headLeaderHlsKeyUrl = $this->generateUrl('uploadfile_cloud_get_head_leader_hlskey', array(), true);
-	
-			return array(
-					'headLeaders' => $headLeaders,
-					'headLeaderHlsKeyUrl' => $headLeaderHlsKeyUrl,
-					'headLength' => $headLeader['length']
-			);
-		} else {
-			return array(
-					'headLeaders' => '',
-					'headLeaderHlsKeyUrl' => '',
-					'headLength' => 0
-			);
-		}
+		throw $this->createAccessDeniedException('您无权访问此文件！');
 	}
 	
-	protected function getSettingService() {
+	protected function getSettingService()
+	{
 		return $this->getServiceKernel ()->createService ( 'System.SettingService' );
 	}
 
-	private function getUploadFileService() {
-		return $this->getServiceKernel ()->createService ( 'File.UploadFileService' );
+	protected function getUploadFileService()
+	{
+		return $this->getServiceKernel ()->createService ( 'File.UploadFileService2' );
 	}
 
-	protected function getUserService() {
+	protected function getUserService()
+	{
 		return $this->getServiceKernel ()->createService ( 'User.UserService' );
 	}
-	
-	private function getTokenService()
-	{
-		return $this->getServiceKernel()->createService('User.TokenService');
-	}
 
-	private function getNotificationService()
+	protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
