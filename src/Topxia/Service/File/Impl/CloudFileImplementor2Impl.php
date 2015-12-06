@@ -78,7 +78,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['createdTime']   = $file['updatedTime'];
 
         // 以下参数在cloud模式下弃用，填充随机值
-        $file['hashId']      = uniqid('NIL').date('Yndhis');
+        $keySuffix           = date('Ymdhis').'-'.substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+        $key                 = "{$params['targetType']}-{$params['targetId']}/{$keySuffix}";
+        $file['hashId']      = $key;
         $file['etag']        = $file['hashId'];
         $file['convertHash'] = $file['hashId'];
 

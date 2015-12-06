@@ -38,7 +38,7 @@ class UploaderController extends BaseController
             return $this->createJsonResponse(array('error' => '授权码不正确，请重试！'));
         }
 
-        $params = $request->request->all();
+        $params = array_merge($request->request->all(), $params);
         $this->getUploadFileService()->finishedUpload($params);
         return $this->createJsonResponse(true);
     }
