@@ -233,7 +233,7 @@ define(function(require, exports, module) {
 
                         var key = 'file_' + file.hash;
                         var value = store.get(key);
-                        if(value) {
+                        if(value && value.id) {
                             params.id = value.id;
                         }
 
