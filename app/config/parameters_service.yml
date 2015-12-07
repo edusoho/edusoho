@@ -17,3 +17,4 @@ parameters:
         'Testpaper.TestpaperResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperResultDaoImpl'
         'Course.ThreadPostDao' : 'Mooc\Service\Course\Dao\Impl\ThreadPostDaoImpl'
         'Course.ThreadDao' : 'Mooc\Service\Course\Dao\Impl\ThreadDaoImpl'
+        'Testpaper.TestpaperItemResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperItemResultDaoImpl'
