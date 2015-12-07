@@ -105,10 +105,10 @@
                     <div class="title text-sm">
                       {{ web_macro.user_link(author,'link-light') }}
                       <span class="score">{{web_macro.star(review.rating) }}</span>
-                      发布于 <a class="link-light" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title|plain_text(9) }}》</a>
+                      发布于 <a class="link-light" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title|plain_text(10) }}》</a>
                     </div>
                     <div class="content gray-darker">
-                      {{ review.content|plain_text(50) }}
+                      {{ review.content|plain_text(30) }}
                     </div>
                   </div>
                   <span class="date"></span>
