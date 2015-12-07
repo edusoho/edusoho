@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 
     var LocalStrategy = Class.extend({
     	initialize: function(file, response) {
+            this.file = file;
             file.uploaderWidget.uploader.option('server', response.url);
             file.uploaderWidget.uploader.option('formData', response.postParams);
         },
@@ -16,11 +17,12 @@ define(function(require, exports, module) {
             })
         },
 
-        finishUpload: function(deferred) {
-            return {id: this.file.id};
+        uploadAccept: function(object, ret){
+            this.file.fileId = ret.id;
         },
 
-        uploadAccept: function(object, ret){
+        finishUpload: function(deferred) {
+            return {id: this.file.fileId};
         }
     });
 

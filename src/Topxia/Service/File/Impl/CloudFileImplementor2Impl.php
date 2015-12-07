@@ -110,15 +110,19 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $download;
     }
 
-    public function finishedUpload($globalId, $params)
+    public function finishedUpload($file, $params)
     {
+        if (empty($file['globalId'])) {
+            throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
+        }
+
         $params = array(
             "length" => $params['length'],
-            'name'   => $params['name'],
+            'name'   => $params['filename'],
             'size'   => $params['size']
         );
         $api = CloudAPIFactory::create();
-        return $api->post("/resources/{$globalId}/upload_finish", $params);
+        return $api->post("/resources/{$file['globalId']}/upload_finish", $params);
     }
 
     private function mergeCloudFile($file, $cloudFile)

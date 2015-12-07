@@ -166,8 +166,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function finishedUpload($params)
     {
-        $file = $this->getFileByGlobalId($params['globalId']);
-
+        $file              = $this->getUploadFileDao()->getFile($params['id']);
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
@@ -182,24 +181,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             'size'   => $params['size']
         );
 
-        $result = $implementor->finishedUpload($file['globalId'], $finishParams);
+        $result = $implementor->finishedUpload($file, $params);
 
         if (empty($result) || !$result['success']) {
             throw $this->createServiceException("uploadFile失败，完成上传失败！");
         }
 
-        if (empty($file['globalId'])) {
-            throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
-        }
-
-        $convertStatus = empty($file['convertParams']) ? 'none' : 'waiting';
-
         $file = $this->getUploadFileDao()->updateFile($file['id'], array(
-            'status'        => 'ok',
-            'convertStatus' => $convertStatus,
-            'length'        => $params['length'],
-            'fileName'      => $params['filename'],
-            'fileSize'      => $params['size']
+            'status'   => 'ok',
+            'length'   => $params['length'],
+            'fileName' => $params['filename'],
+            'fileSize' => $params['size']
         ));
     }
 

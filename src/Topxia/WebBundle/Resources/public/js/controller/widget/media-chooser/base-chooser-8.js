@@ -172,7 +172,7 @@ define(function(require, exports, module) {
 
             uploader.on('file.uploaded', function(file, data){
                 var item = {
-                    id: file.outerId,
+                    id: file.fileId,
                     status: 'waiting',
                     source: 'self',
                     name: file.name,
