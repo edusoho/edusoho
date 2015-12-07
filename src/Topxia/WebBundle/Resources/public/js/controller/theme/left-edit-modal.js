@@ -15,6 +15,7 @@ define(function(require, exports, module) {
 
             config.code = code;
             config.defaultTitle = currentConfig.defaultTitle;
+            config.defaultSubTitle = currentConfig.defaultSubTitle;
             config.id = $currentItem.attr('id');
 
             $("#"+$currentItem.attr('id')).data('config', config);

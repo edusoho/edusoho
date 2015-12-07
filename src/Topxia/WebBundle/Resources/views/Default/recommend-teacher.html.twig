@@ -4,7 +4,7 @@
     <div class="container">
       <div class="text-line">
         <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
-        <!-- <div class="subtitle">名师汇集，保证教学质量与学习效果。</div> -->
+        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
       </div>
       <div class="row">
         {% for teacher in teachers %}

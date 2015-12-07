@@ -4,7 +4,7 @@
     <div class="container"> 
       <div class="text-line gray"> 
         <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5> 
-        <!-- <div class="subtitle">实时跟踪直播课程，避免课程遗漏。</div> --> 
+        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div> 
       </div>
       <div class="course-list"> 
         <div class="row"> 

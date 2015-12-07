@@ -2,7 +2,7 @@
 <div class="container">
   <div class="text-line">
     <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
-    <!-- <div class="subtitle">精选网校课程，满足你的学习兴趣。</div> -->
+    <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
   </div>
   <div class="course-filter" id="course-filter">
     <ul class="nav nav-pills hidden-xs" role="tablist">
