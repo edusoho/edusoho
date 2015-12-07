@@ -10,4 +10,9 @@ class TestpaperServiceImpl extends BaseTestpaperServiceImpl
     {
         return $this->getTestpaperResultDao()->findUserTestpaperResultsByTestpaperIds($testpaperIds, $userId);
     }
+
+    public function findTestpaperItemResultsByTestIdAndQuestionIdAndStatus($questionId, $testpaperId, $status = true)
+    {
+        return $this->getTestpaperItemResultDao()->findTestpaperItemResultsByTestIdAndQuestionIdAndStatus($questionId, $testpaperId, $status);
+    }
 }
