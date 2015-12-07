@@ -18,9 +18,9 @@ interface UploadFileService2
 
     public function getDownloadFile($id);
 
-	public function initUpload($params);
+    public function initUpload($params);
 
-	public function finishedUpload($params);
+    public function finishedUpload($params);
 
     public function setFileProcessed($params);
 
@@ -30,4 +30,12 @@ interface UploadFileService2
 
     public function decreaseFileUsedCount($id);
 
+    /**
+     * share file
+     */
+    public function addShare($sourceUserId, $targetUserId);
+
+    public function findShareHistory($sourceUserId);
+
+    public function findShareHistoryByUserId($sourceUserId, $targetUserId);
 }
