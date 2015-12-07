@@ -63,8 +63,8 @@ class ThemeController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_theme'));
         }
 
+        $this->getThemeService()->resetCurrentConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-
         return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
             'themeConfig' => $themeConfig['config'],
             'allConfig'   => $themeConfig['allConfig'],
@@ -74,8 +74,17 @@ class ThemeController extends BaseController
 
     public function resetConfigAction(Request $request, $uri)
     {
+        if (!$this->getThemeService()->isAllowedConfig()) {
+            return $this->redirect($this->generateUrl('admin_setting_theme'));
+        }
+
         $this->getThemeService()->resetConfig();
-        return $this->redirect($this->generateUrl('admin_theme_manage', array('uri' => $uri), true));
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+        return $this->render('TopxiaAdminBundle:Theme:edit.html.twig', array(
+            'themeConfig' => $themeConfig['config'],
+            'allConfig'   => $themeConfig['allConfig'],
+            'themeUri'    => $uri
+        ));
     }
 
     public function showAction(Request $request, $uri)
