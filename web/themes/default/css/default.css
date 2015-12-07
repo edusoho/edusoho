@@ -5,8 +5,9 @@ a:focus {
 }
 .link-dark:hover,
 .link-light:hover,
-.link-white {
-  color: #009966;
+.link-white:hover,
+.link-lighter:hover {
+  color: #009966 !important;
 }
 .text-primary,
 .color-primary {
@@ -98,7 +99,6 @@ a:focus {
 .es-filter .nav-sort > li > a:hover,
 .es-filter .nav-sort > li > a.active {
   background-color: #009966;
-  color: #fff;
 }
 .es-filter .filter label:hover {
   color: #009966;

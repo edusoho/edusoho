@@ -39,8 +39,9 @@ a:focus {
 
 .link-dark:hover,
 .link-light:hover,
-.link-white {
-  color: @brand-primary;
+.link-white:hover,
+.link-lighter:hover {
+  color: @brand-primary !important;
 }
 
 .text-primary,
@@ -163,7 +164,6 @@ a:focus {
     &:hover,
     &.active {
       background-color: @brand-primary;
-      color: #fff;
     }
   }
   .filter label:hover {
