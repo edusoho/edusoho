@@ -273,4 +273,9 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     {
         return $this->createDao('File.UploadFileDao');
     }
+
+    protected function getUploadFileShareDao()
+    {
+        return $this->createDao('File.UploadFileShareDao');
+    }
 }
