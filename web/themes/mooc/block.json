@@ -444,5 +444,51 @@
                 ]
             }
         }
+    },
+    "mooc:branch_school_top_banner":
+    {
+        "title": "慕课主题：分校.首页顶部.轮播图 ",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/branch_school_carousel.template.html.twig",
+        "items": {
+            "posters":{
+                "title":"海报",
+                "desc":"首页海报",
+                "count":1,
+                "type":"poster",
+                "default":[
+                    {
+                        "src" : "\/themes\/mooc\/img\/TAFE-banner-1.jpg",
+                        "alt" : "海报1",
+                        "layout" : "tile",
+                        "background" : "#fff",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/mooc\/img\/TAFE-banner-2.jpg",
+                        "alt" : "海报2",
+                        "layout" : "tile",
+                        "background" : "#0984f7",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/mooc\/img\/TAFE-banner-3.jpg",
+                        "alt" : "海报3",
+                        "layout" : "tile",
+                        "background" : "#3b4250",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    }
+                ]
+            }
+        }
     }
 }
