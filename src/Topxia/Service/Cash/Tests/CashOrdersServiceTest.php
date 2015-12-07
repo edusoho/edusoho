@@ -9,9 +9,7 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $order = array(
-            'sn'          => '12238551',
             'status'      => 'created',
-            'title'       => 'hh',
             'amount'      => '100.00',
             'payment'     => 'none',
             'note'        => 'hello',
@@ -19,6 +17,24 @@ class CashOrdersServiceTest extends BaseTestCase
             'createdTime' => time()
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $createOrder['amount']);
+    }
+
+    public function testGetOrderBySn()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $order       = $this->getCashOrdersService()->getOrderBySn($createOrder['sn']);
+        $this->assertEquals('100.00', $order['amount']);
+
     }
 
     /**

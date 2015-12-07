@@ -7,6 +7,10 @@ interface CashOrdersService
 
     public function getOrder($id);
 
+    public function getOrderBySn($sn, $lock = false);
+
+    public function cancelOrder($id, $message, $data);
+
     public function searchOrders($conditions, $orderBy, $start, $limit);
 
     public function searchOrdersCount($conditions);

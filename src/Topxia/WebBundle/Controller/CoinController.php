@@ -6,7 +6,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -86,6 +85,7 @@ class CoinController extends BaseController
 
         // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        var_dump($this->getEnabledPayments());
         return $this->render('TopxiaWebBundle:Coin:index.html.twig', array(
             'payments'      => $this->getEnabledPayments(),
             'account'       => $account,
@@ -267,116 +267,31 @@ class CoinController extends BaseController
 
     public function payAction(Request $request)
     {
-        $formData           = $request->request->all();
-        $user               = $this->getCurrentUser();
-        $formData['userId'] = $user['id'];
+        $formData               = $request->request->all();
+        $user                   = $this->getCurrentUser();
+        $formData['userId']     = $user['id'];
+        $formData['targetType'] = 'coin';
 
-        $order            = $this->getCashOrdersService()->addOrder($formData);
-        $payRequestParams = array(
-            'returnUrl' => $this->generateUrl('coin_order_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('coin_order_pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $this->generateUrl('my_coin', array(), true)
-        );
+        $order = $this->getCashOrdersService()->addOrder($formData);
+        return $this->redirect($this->generateUrl('pay_center_show', array(
+            'sn'         => $order['sn'],
+            'targetType' => $order['targetType']
+        )));
+        // $payRequestParams = array(
+        //     'returnUrl' => $this->generateUrl('coin_order_pay_return', array('name' => $order['payment']), true),
+        //     'notifyUrl' => $this->generateUrl('coin_order_pay_notify', array('name' => $order['payment']), true),
+        //     'showUrl'   => $this->generateUrl('my_coin', array(), true)
+        // );
 
-        return $this->forward('TopxiaWebBundle:Coin:submitPayRequest', array(
-            'order'         => $order,
-            'requestParams' => $payRequestParams
-        ));
-    }
-
-    public function submitPayRequestAction(Request $request, $order, $requestParams)
-    {
-        $paymentRequest = $this->createPaymentRequest($order, $requestParams);
-        $formRequest    = $paymentRequest->form();
-        $params         = $formRequest['params'];
-        $payment        = $request->request->get('payment');
-
-        if ($payment == 'alipay') {
-            return $this->render('TopxiaWebBundle:PayCenter:submit-pay-request.html.twig', array(
-                'form'  => $paymentRequest->form(),
-                'order' => $order
-            ));
-        } elseif ($payment == 'wxpay') {
-            $returnXml = $paymentRequest->unifiedOrder();
-
-            if (!$returnXml) {
-                throw new \RuntimeException("xml数据异常！");
-            }
-
-            $returnArray = $paymentRequest->fromXml($returnXml);
-
-            if ($returnArray['return_code'] == 'SUCCESS') {
-                $url = $returnArray['code_url'];
-                return $this->render('TopxiaWebBundle:PayCenter:wxpay-qrcode.html.twig', array(
-                    'url'   => $url,
-                    'order' => $order
-                ));
-            } else {
-                throw new \RuntimeException($returnArray['return_msg']);
-            }
-        }
-    }
-
-    protected function createPaymentRequest($order, $requestParams)
-    {
-        $options = $this->getPaymentOptions($order['payment']);
-        $request = Payment::createRequest($order['payment'], $options);
-
-        $requestParams = array_merge($requestParams, array(
-            'orderSn' => $order['sn'],
-            'title'   => $order['title'],
-            'summary' => '',
-            'amount'  => $order['amount']
-        ));
-        return $request->setParams($requestParams);
-    }
-
-    public function payReturnAction(Request $request, $name)
-    {
-        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
-        $response = $this->createPaymentResponse($name, $request->query->all());
-
-        $payData = $response->getPayData();
-
-        if ($payData['status'] == "waitBuyerConfirmGoods") {
-            return $this->forward("TopxiaWebBundle:Coin:resultNotice");
-        }
-
-        list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-
-        if ($order['status'] == 'paid' && $success) {
-            $successUrl = $this->generateUrl('my_coin', array(), true);
-        }
-
-        $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
-        return $this->redirect($goto);
+        // return $this->forward('TopxiaWebBundle:Coin:submitPayRequest', array(
+        //     'order'         => $order,
+        //     'requestParams' => $payRequestParams
+        // ));
     }
 
     public function resultNoticeAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Coin:retrun-notice.html.twig');
-    }
-
-    public function payNotifyAction(Request $request, $name)
-    {
-        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-
-        if ($name == 'alipay') {
-            $response = $this->createPaymentResponse($name, $request->request->all());
-        } elseif ($name == 'wxpay') {
-            $returnXml   = $request->getContent();
-            $returnArray = $this->fromXml($returnXml);
-            $response    = $this->createPaymentResponse($name, $returnArray);
-        }
-
-        $payData = $response->getPayData();
-        try {
-            list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-
-            return new Response('success');
-        } catch (\Exception $e) {
-            throw $e;
-        }
     }
 
     protected function createPaymentResponse($name, $params)
@@ -385,48 +300,6 @@ class CoinController extends BaseController
         $response = Payment::createResponse($name, $options);
 
         return $response->setParams($params);
-    }
-
-    protected function getPaymentOptions($payment)
-    {
-        $settings = $this->setting('payment');
-
-        if (empty($settings)) {
-            throw new \RuntimeException('支付参数尚未配置，请先配置。');
-        }
-
-        if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
-        }
-
-        if (empty($settings[$payment.'_enabled'])) {
-            throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
-        }
-
-        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-            throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
-        }
-
-        if ($payment == 'alipay') {
-            $options = array(
-                'key'    => $settings["{$payment}_key"],
-                'secret' => $settings["{$payment}_secret"],
-                'type'   => $settings["{$payment}_type"]
-            );
-        } elseif ($payment == 'wxpay') {
-            $options = array(
-                'key'    => $settings["{$payment}_key"],
-                'secret' => $settings["{$payment}_secret"]
-            );
-        }
-
-        return $options;
-    }
-
-    private function fromXml($xml)
-    {
-        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-        return $array;
     }
 
     protected function getEnabledPayments()

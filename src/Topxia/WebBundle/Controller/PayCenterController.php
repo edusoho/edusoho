@@ -5,6 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Order\OrderType\OrderTypeFactory;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterController extends BaseController
@@ -29,8 +30,15 @@ class PayCenterController extends BaseController
 
         $fields = $request->query->all();
 
-        $order     = $this->getOrderService()->getOrderBySn($fields["sn"]);
-        $orderInfo = $this->getOrderInfo($order);
+        //$order     = $this->getOrderService()->getOrderBySn($fields["sn"]);
+        $order     = OrderTypeFactory::create($fields['targetType'])->getOrderBySn($fields["sn"]);
+        $orderInfo = array();
+
+        if ($order['targetType'] != 'coin') {
+            $orderInfo = $this->getOrderInfo($order);
+        } else {
+            $orderInfo['targetType'] = 'coin';
+        }
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
