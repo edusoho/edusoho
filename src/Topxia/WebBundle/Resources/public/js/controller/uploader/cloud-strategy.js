@@ -3,10 +3,24 @@ define(function(require, exports, module) {
 	var Class = require('class');
 
     var LocalStrategy = Class.extend({
-    	initialize: function(file) {
+    	initialize: function(file, response){
+            file.gid = response.globalId;
+            file.globalId = response.globalId;
+            file.outerId = response.outerId;
+
+            file.uploaderWidget.set('uploadToken', response.uploadToken);
+            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
+            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
+            file.uploaderWidget.set('uploadMode', response.uploadMode);
+
             this.file = file;
             var uploaderWidget = file.uploaderWidget;
+            
             uploaderWidget.uploader.option('server', response.uploadUrl + '/chunks');
+            uploaderWidget.uploader.option('chunked', true);
+            uploaderWidget.uploader.option('chunkSize', 1024*1024);
+            uploaderWidget.uploader.option('chunkRetry', 2);
+
 
             var startUrl = uploaderWidget.get('uploadProxyUrl') + '/chunks/start';
             var postData = {file_gid:file.globalId, file_size: file.size, file_name:file.name};

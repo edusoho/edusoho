@@ -103,11 +103,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
         $file              = $implementor->prepareUpload($params);
 
-        if (isset($params['outerId'])) {
-            $outterFile       = $this->getUploadFileDao()->getFile($params['outerId']);
+        if (isset($params['id'])) {
+            $outterFile       = $this->getUploadFileDao()->getFile($params['id']);
             $initUploadParams = array(
                 'extno'  => $outterFile['id'],
-                'bucket' => 'private',
+                'bucket' => $params['bucket'],
                 'size'   => $params['fileSize'],
                 'hash'   => $params['hash'],
                 'name'   => $params['fileName']
@@ -137,7 +137,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $initUploadParams = array(
             'extno'  => $file['id'],
-            'bucket' => 'private',
+            'bucket' => $params['bucket'],
             'key'    => $file['hashId'],
             'hash'   => $params['hash'],
             'name'   => $params['fileName'],
@@ -166,10 +166,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
 
+        if (empty($params['length'])) {
+            $params['length'] = 0;
+        }
+
         $finishParams = array(
-            "length" => $file['length'],
-            'name'   => $file['filename'],
-            'size'   => $file['fileSize']
+            "length" => $params['length'],
+            'name'   => $params['filename'],
+            'size'   => $params['size']
         );
 
         $result = $implementor->finishedUpload($file['globalId'], $finishParams);
@@ -186,7 +190,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $file = $this->getUploadFileDao()->updateFile($file['id'], array(
             'status'        => 'ok',
-            'convertStatus' => $convertStatus
+            'convertStatus' => $convertStatus,
+            'length'        => $params['length'],
+            'fileName'      => $params['filename'],
+            'fileSize'      => $params['size']
         ));
     }
 
@@ -245,6 +252,26 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function findShareHistoryByUserId($sourceUserId, $targetUserId)
     {
         return $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
+    }
+
+    public function waveUploadFile($id, $field, $diff)
+    {
+        $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
+    }
+
+    public function reconvertFile($id, $convertCallback)
+    {
+        $file = $this->getFile($id);
+
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
+
+        $this->setFileConverting($file['id'], $convertHash);
+
+        return $convertHash;
     }
 
     protected function _prepareSearchConditions($conditions)

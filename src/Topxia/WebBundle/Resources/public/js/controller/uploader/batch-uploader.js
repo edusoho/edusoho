@@ -43,11 +43,7 @@ define(function(require, exports, module) {
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
                 pick: this.element.find('.file-pick-btn') ,
-                chunked: true,
-                chunkSize: 1024 * 1024,
-                chunkRetry: 2,
                 threads: 1,
-                sendAsBinary: true,
                 formData: {
 
                 }
@@ -68,6 +64,7 @@ define(function(require, exports, module) {
 
         destroy: function() {
             if (this.uploader) {
+                this.uploader.stop();
                 this.uploader.destroy();
             }
             BatchUploader.superclass.destroy.call(this);
@@ -169,7 +166,7 @@ define(function(require, exports, module) {
             });
         },
 
-        _getProcessParams: function(file) {
+        _getDirectives: function(file) {
             var extOutputs = {
                 mp4: 'HLSEncryptedVideo',
                 avi: 'HLSEncryptedVideo',
@@ -186,7 +183,6 @@ define(function(require, exports, module) {
                 pptx: 'ppt',
                 mp3: 'audio'
             };
-            file
 
             var paramsDefault = {
                 'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'},
@@ -230,7 +226,7 @@ define(function(require, exports, module) {
                             fileName: file.name,
                             fileSize: file.size,
                             hash: hash,
-                            processParams: file.uploaderWidget._getProcessParams(file)
+                            directives: file.uploaderWidget._getDirectives(file)
                         }
 
                         $.support.cors = true;
@@ -238,30 +234,19 @@ define(function(require, exports, module) {
                         var key = 'file_' + file.hash;
                         var value = store.get(key);
                         if(value) {
-                            params.globalId = value.globalId;
-                            params.outerId = value.outerId;
+                            params.id = value.id;
                         }
 
                         $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
-                            file.gid = response.globalId;
-                            file.globalId = response.globalId;
-                            file.outerId = response.outerId;
-
-                            file.uploaderWidget.set('uploadToken', response.uploadToken);
-                            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
-                            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
-                            file.uploaderWidget.set('uploadMode', response.uploadMode);
-                            
                             var key = 'file_' + file.hash;
                             if(response.resumed != 'ok') {
                                 var value = {};
-                                value.globalId = file.globalId;
-                                value.outerId = file.outerId;
+                                value.id = file.id;
                                 store.set(key, value);
                             }
 
                             require.async('./'+response.uploadMode+'-strategy', function(Strategy){
-                                var strategy = new Strategy(file);
+                                var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
                                 deferred.resolve();
                             });
@@ -296,6 +281,9 @@ define(function(require, exports, module) {
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
+
+                    data.filename = file.name;
+                    data.size = file.size;
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function() {
                         deferred.resolve();

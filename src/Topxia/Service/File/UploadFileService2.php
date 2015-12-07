@@ -10,6 +10,8 @@ interface UploadFileService2
      */
     public function getThinFile($id);
 
+    public function getFileByGlobalId($globalId);
+
     public function findFilesByIds(array $ids);
 
     public function searchFiles($conditions, $orderBy, $start, $limit);
@@ -38,4 +40,9 @@ interface UploadFileService2
     public function findShareHistory($sourceUserId);
 
     public function findShareHistoryByUserId($sourceUserId, $targetUserId);
+
+    public function waveUploadFile($id, $field, $diff);
+
+    public function reconvertFile($id, $convertCallback);
+
 }
