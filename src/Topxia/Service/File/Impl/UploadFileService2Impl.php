@@ -227,9 +227,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
         if (isset($conditions['source']) && ($conditions['source'] == 'shared') && !empty($conditions['currentUserId'])) {
-            $sharedUsers                  = $this->getUploadFileShareDao()->findMySharingContacts($conditions['currentUserId']);
-            $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
-            $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
+            $sharedUsers = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId'], 1);
+
+            if (!empty($sharedUsers)) {
+                $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
+                $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
+            }
         }
 
         if (!empty($conditions['currentUserId'])) {
