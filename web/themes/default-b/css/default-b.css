@@ -132,6 +132,10 @@ a:focus {
 .page-header .badge {
   background-color: #009966 !important;
 }
+.list-group-item.active > .badge,
+.nav-pills > .active > a > .badge {
+  color: #009966;
+}
 /*首页分类导航*/
 .homepage-category-nav {
   list-style: none;
