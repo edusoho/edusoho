@@ -71,5 +71,6 @@
     {% endfor %}
   </tbody>
 </table>
+{% if userCount %}<div class= 'member_count'>会员总数: <font>{{userCount}}</font></div>{% endif %}
  {{ web_macro.paginator(paginator) }} 
 {% endblock %}
