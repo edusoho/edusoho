@@ -72,8 +72,48 @@ class CashAccountServiceTest extends BaseTestCase
     {
         $user   = $this->createUser();
         $change = $this->getCashAccountService()->addChange($user['id']);
-        var_dump($change);
         return $change;
+    }
+
+    public function testGetChangeByUserId()
+    {
+        $user   = $this->createUser();
+        $change = $this->getCashAccountService()->addChange($user['id']);
+        $change = $this->getCashAccountService()->getChangeByUserId($user['id']);
+        return $change;
+    }
+
+    public function testChangeCoin()
+    {
+        $coinSetting = $this->getSettingService()->set('coin', array('coin_name' => '虚拟币'));
+        $user        = $this->createUser();
+        $this->getCashAccountService()->createAccount($user['id']);
+        $result = $this->getCashAccountService()->changeCoin(1, 1, $user['id']);
+        return $result;
+    }
+
+    public function testWaveCashField()
+    {
+        $user    = $this->createUser();
+        $account = $this->getCashAccountService()->createAccount($user['id']);
+        $result  = $this->getCashAccountService()->waveCashField($account['id'], 1);
+        return $result;
+    }
+
+    public function testWaveDownCashField()
+    {
+        $user    = $this->createUser();
+        $account = $this->getCashAccountService()->createAccount($user['id']);
+        $result  = $this->getCashAccountService()->waveDownCashField($account['id'], 1);
+        return $result;
+    }
+
+    public function testReward()
+    {
+        $user    = $this->createUser();
+        $account = $this->getCashAccountService()->createAccount($user['id']);
+        $result  = $this->getCashAccountService()->reward(1, '送', $user['id'], null);
+        return $result;
     }
 
     protected function getCashAccountService()
@@ -84,6 +124,11 @@ class CashAccountServiceTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function createUser()
