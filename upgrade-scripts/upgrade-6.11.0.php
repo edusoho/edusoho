@@ -85,13 +85,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 '1'
             );"
         );
-
-        $currentTheme = $this->getSettingService()->get('theme');
-
-        if ($currentTheme['code'] == 'graceful') {
-            $theme = $this->getTheme('jianmo');
-            $this->getSettingService()->set('theme', $theme);
-        }
     }
 
     protected function getTheme($uri)
